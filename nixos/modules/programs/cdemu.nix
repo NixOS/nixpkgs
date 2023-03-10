@@ -8,27 +8,31 @@ in {
   options = {
     programs.cdemu = {
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = ''
-          <command>cdemu</command> for members of
-          <option>programs.cdemu.group</option>.
+        description = lib.mdDoc ''
+          {command}`cdemu` for members of
+          {option}`programs.cdemu.group`.
         '';
       };
       group = mkOption {
+        type = types.str;
         default = "cdrom";
-        description = ''
-          Group that users must be in to use <command>cdemu</command>.
+        description = lib.mdDoc ''
+          Group that users must be in to use {command}`cdemu`.
         '';
       };
       gui = mkOption {
+        type = types.bool;
         default = true;
-        description = ''
-          Whether to install the <command>cdemu</command> GUI (gCDEmu).
+        description = lib.mdDoc ''
+          Whether to install the {command}`cdemu` GUI (gCDEmu).
         '';
       };
       image-analyzer = mkOption {
+        type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install the image analyzer.
         '';
       };

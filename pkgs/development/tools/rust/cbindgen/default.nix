@@ -1,32 +1,42 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.13.1";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "eqrion";
     repo = "cbindgen";
     rev = "v${version}";
-    sha256 = "1x21g66gri6z9bnnfn7zmnf2lwdf5ing76pcmw0ilx4nzpvfhkg0";
+    hash = "sha256-v5g6/ul6mJtzC4O4WlNopPtFUSbx2Jv79mZL72mucws=";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoSha256 = "sha256-j3/2cFjSDkx0TXCaxYSCLrBbAHrJfJ6hwBcXlDedwh8=";
 
-  cargoSha256 = "13fb8cdg6r0g5jb3vaznvv5aaywrnsl2yp00h4k8028vl8jwwr79";
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
-
-  checkFlags = [
-    # https://github.com/eqrion/cbindgen/issues/338
-    "--skip test_expand"
+  nativeCheckInputs = [
+    python3Packages.cython
   ];
 
-  meta = with stdenv.lib; {
+  checkFlags = [
+    # Disable tests that require rust unstable features
+    # https://github.com/eqrion/cbindgen/issues/338
+    "--skip test_expand"
+    "--skip test_bitfield"
+    "--skip lib_default_uses_debug_build"
+    "--skip lib_explicit_debug_build"
+    "--skip lib_explicit_release_build"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # WORKAROUND: test_body fails when using clang
+    # https://github.com/eqrion/cbindgen/issues/628
+    "--skip test_body"
+  ];
+
+  meta = with lib; {
     description = "A project for generating C bindings from Rust code";
-    homepage = https://github.com/eqrion/cbindgen;
+    homepage = "https://github.com/eqrion/cbindgen";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jtojnar andir ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

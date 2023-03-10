@@ -1,59 +1,83 @@
-{
-  lib, mkDerivation, fetchFromGitHub,
-  cmake, pkgconfig, lxqt-build-tools,
-  qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
-  kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
-  xorg, libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
-  lxmenu-data, pcre, libXdamage
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, kguiaddons
+, kwindowsystem
+, libXdamage
+, libdbusmenu
+, liblxqt
+, libpulseaudio
+, libqtxdg
+, libstatgrab
+, libsysstat
+, lm_sensors
+, lxmenu-data
+, lxqt-build-tools
+, lxqt-globalkeys
+, gitUpdater
+, menu-cache
+, pcre
+, qtbase
+, qtsvg
+, qttools
+, qtx11extras
+, solid
+, xorg
 }:
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.14.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1py3i7qgm6h2iwjwqfjml1rp06s7ls1d7z5i9iizsmfshdzkaq86";
+    sha256 = "TwVM0JY+BMvw6e/mzy82AH5E6pPsffE6oadd0BuCZk0=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
   buildInputs = [
+    alsa-lib
+    kguiaddons
+    kwindowsystem
+    libXdamage
+    libdbusmenu
+    liblxqt
+    libpulseaudio
+    libqtxdg
+    libstatgrab
+    libsysstat
+    lm_sensors
+    lxmenu-data
+    lxqt-globalkeys
+    menu-cache
+    pcre
     qtbase
+    qtsvg
     qttools
     qtx11extras
-    qtsvg
-    libdbusmenu
-    kwindowsystem
     solid
-    kguiaddons
-    liblxqt
-    libqtxdg
-    lxqt-globalkeys
-    libsysstat
-    xorg.libpthreadstubs
     xorg.libXdmcp
-    libstatgrab
-    lm_sensors
-    libpulseaudio
-    alsaLib
-    menu-cache
-    lxmenu-data
-    pcre
-    libXdamage
+    xorg.libXtst
+    xorg.libpthreadstubs
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-panel";
     description = "The LXQt desktop panel";
-    homepage = https://github.com/lxqt/lxqt-panel;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

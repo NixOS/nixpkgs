@@ -1,6 +1,6 @@
 { fetchurl, stdenv, lib
-, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
-, enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
     sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
+
+  enableParallelBuilding = true;
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -46,10 +48,11 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = https://www.gnu.org/software/libiconv/;
+    homepage = "https://www.gnu.org/software/libiconv/";
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
+    mainProgram = "iconv";
 
     # This library is not needed on GNU platforms.
     hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;

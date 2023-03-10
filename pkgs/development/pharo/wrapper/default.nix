@@ -1,4 +1,4 @@
-{ stdenv, file, makeDesktopItem, cog32, spur32, spur64 ? "none" }:
+{ lib, stdenv, file, makeDesktopItem, cog32, spur32, spur64 ? "none" }:
 
 stdenv.mkDerivation rec {
   name = "pharo";
@@ -11,11 +11,9 @@ stdenv.mkDerivation rec {
     genericName = "Pharo Virtual Machine";
     exec = "pharo %F";
     icon = "pharo";
-    terminal = "false";
-    type="Application";
-    startupNotify = "false";
-    categories = "Development;";
-    mimeType = "application/x-pharo-image";
+    startupNotify = false;
+    categories = [ "Development" ];
+    mimeTypes = [ "application/x-pharo-image" ];
   };
   unpackPhase = ''
     cp $src ./pharo-vm.sh
@@ -49,14 +47,14 @@ stdenv.mkDerivation rec {
         http://www.mirandabanda.org/cogblog/about-cog/
     '';
 
-    homepage = http://pharo.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.lukego ];
+    homepage = "http://pharo.org";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)
-    platforms = stdenv.lib.filter
-      (system: with stdenv.lib.systems.elaborate { inherit system; };
+    platforms = lib.filter
+      (system: with lib.systems.elaborate { inherit system; };
          isUnix && !isDarwin)
-      stdenv.lib.platforms.mesaPlatforms;
+      lib.platforms.mesaPlatforms;
   };
 }
 

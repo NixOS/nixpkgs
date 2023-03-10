@@ -17,11 +17,11 @@ in
   options = {
 
     services.torque.mom = {
-      enable = mkEnableOption "torque computing node";
+      enable = mkEnableOption (lib.mdDoc "torque computing node");
 
       serverNode = mkOption {
         type = types.str;
-        description = "Hostname running pbs server.";
+        description = lib.mdDoc "Hostname running pbs server.";
       };
 
     };
@@ -32,7 +32,7 @@ in
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-mom-init = {
-      path = with pkgs; [ torque utillinux procps inetutils ];
+      path = with pkgs; [ torque util-linux procps inetutils ];
 
       script = ''
         pbs_mkdirs -v aux
@@ -60,4 +60,4 @@ in
     };
 
   };
-}      
+}

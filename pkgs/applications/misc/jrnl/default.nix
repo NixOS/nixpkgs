@@ -1,30 +1,71 @@
-{ stdenv
+{ lib
+, fetchFromGitHub
 , python3
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "1.9.8";
+  version = "3.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d254c9c8f24dcf985b98a1d5311337c7f416e6305107eec34c567f58c95b06f4";
+  src = fetchFromGitHub {
+    owner = "jrnl-org";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-e2w0E8t6s0OWx2ROme2GdyzWhmCc6hnMfSdLTZqt3bg=";
   };
 
-  propagatedBuildInputs = [
-    pytz six tzlocal keyring dateutil
-    parsedatetime pycrypto
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
   ];
 
-  # No tests in archive
-  doCheck = false;
+  propagatedBuildInputs = with python3.pkgs; [
+    ansiwrap
+    asteval
+    colorama
+    cryptography
+    keyring
+    parsedatetime
+    python-dateutil
+    pytz
+    pyxdg
+    pyyaml
+    tzlocal
+    ruamel-yaml
+    rich
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://maebert.github.io/jrnl/;
-    description = "A simple command line journal application that stores your journal in a plain text file";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zalakain ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-bdd
+    pytest-xdist
+    pytestCheckHook
+    toml
+  ];
+
+  # Upstream expects a old pytest-bdd version
+  # Once it changes we should update here too
+  # https://github.com/jrnl-org/jrnl/blob/develop/poetry.lock#L732
+  disabledTests = [
+    "bdd"
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich = "^12.2.0"' 'rich = ">=12.2.0, <14.0.0"'
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  pythonImportsCheck = [
+    "jrnl"
+  ];
+
+  meta = with lib; {
+    description = "Simple command line journal application that stores your journal in a plain text file";
+    homepage = "https://jrnl.sh/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ bryanasdev000 zalakain ];
   };
 }

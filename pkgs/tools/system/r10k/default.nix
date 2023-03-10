@@ -5,7 +5,7 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "r10k" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/r10k --prefix PATH : ${lib.makeBinPath [ git gnutar gzip ]}
@@ -15,7 +15,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "Puppet environment and module deployment";
-    homepage    = https://github.com/puppetlabs/r10k;
+    homepage    = "https://github.com/puppetlabs/r10k";
     license     = licenses.asl20;
     maintainers = with maintainers; [ zimbatm manveru nicknovitski ];
     platforms = platforms.unix;

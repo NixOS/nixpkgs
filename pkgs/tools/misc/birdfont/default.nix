@@ -1,28 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, python3, xmlbird,
-cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala_0_44,
+{ lib, stdenv, fetchurl, pkg-config, python3, xmlbird,
+cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala,
 gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "birdfont";
-  version = "2.28.0";
+  version = "2.32.3";
 
   src = fetchurl {
     url = "https://birdfont.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "19i7wzngi695dp4w0235wmfcnagdw3i40mzf89sddr1mqzvipfrz";
+    sha256 = "sha256-ZsYwDS7pgs635P3wPX/PCTuHLX3/Iu97HgVe+qFyjZw=";
   };
 
-  nativeBuildInputs = [ python3 pkgconfig vala_0_44 gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ python3 pkg-config vala gobject-introspection wrapGAppsHook ];
   buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    substituteInPlace install.py \
+      --replace 'platform.version()' '"Nix"'
+
+    patchShebangs .
+  '';
 
   buildPhase = "./build.py";
 
   installPhase = "./install.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
-    homepage = https://birdfont.org;
+    homepage = "https://birdfont.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
   };

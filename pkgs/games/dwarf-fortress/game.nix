@@ -1,18 +1,22 @@
-{ stdenv, lib, fetchurl
-, SDL, dwarf-fortress-unfuck
+{ stdenv
+, lib
+, fetchurl
+, SDL
+, dwarf-fortress-unfuck
 
-# Our own "unfuck" libs for macOS
-, ncurses, fmodex, gcc
+  # Our own "unfuck" libs for macOS
+, ncurses
+, fmodex
+, gcc
 
-, dfVersion, df-hashes
+, dfVersion
+, df-hashes
 }:
 
 with lib;
 
 let
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
-
-  homepage = http://www.bay12games.com/dwarves/;
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
   # Other srcs are avilable like 32-bit mac & win, but I have only
@@ -30,23 +34,27 @@ let
   baseVersion = elemAt dfVersionTriple 1;
   patchVersion = elemAt dfVersionTriple 2;
 
-  game = if hasAttr dfVersion df-hashes
-         then getAttr dfVersion df-hashes
-         else throw "Unknown Dwarf Fortress version: ${dfVersion}";
-  dfPlatform = if hasAttr stdenv.hostPlatform.system platforms
-               then getAttr stdenv.hostPlatform.system platforms
-               else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  sha256 = if hasAttr dfPlatform game
-           then getAttr dfPlatform game
-           else throw "Unsupported dfPlatform: ${dfPlatform}";
+  game =
+    if hasAttr dfVersion df-hashes
+    then getAttr dfVersion df-hashes
+    else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+  dfPlatform =
+    if hasAttr stdenv.hostPlatform.system platforms
+    then getAttr stdenv.hostPlatform.system platforms
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  sha256 =
+    if hasAttr dfPlatform game
+    then getAttr dfPlatform game
+    else throw "Unsupported dfPlatform: ${dfPlatform}";
 
 in
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-${dfVersion}";
+  pname = "dwarf-fortress";
+  version = dfVersion;
 
   src = fetchurl {
-    url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
+    url = "https://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
     inherit sha256;
   };
 
@@ -93,9 +101,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A single-player fantasy game with a randomly generated adventure world";
-    inherit homepage;
+    homepage = "https://www.bay12games.com/dwarves/";
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;
-    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit shazow ];
+    maintainers = with maintainers; [ a1russell robbinch roconnor abbradar numinit shazow ncfavier ];
   };
 }

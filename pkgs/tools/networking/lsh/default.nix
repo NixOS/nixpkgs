@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
-, nettools, lsof, procps }:
+{ lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
+, nettools, lsof, procps, libxcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "lsh-2.0.4";
+  pname = "lsh";
+  version = "2.0.4";
+
   src = fetchurl {
-    url = "mirror://gnu/lsh/${name}.tar.gz";
+    url = "mirror://gnu/lsh/lsh-${version}.tar.gz";
     sha256 = "614b9d63e13ad3e162c82b6405d1f67713fc622a8bc11337e72949d613713091";
   };
 
@@ -29,9 +31,14 @@ stdenv.mkDerivation rec {
     export lsh_cv_sys_unix98_ptys=yes
   '';
 
-  NIX_CFLAGS_COMPILE = "-std=gnu90";
+  # -fcommon: workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: liblsh.a(unix_user.o):/build/lsh-2.0.4/src/server_userauth.h:108: multiple definition of
+  #     `server_userauth_none_preauth'; lshd.o:/build/lsh-2.0.4/src/server_userauth.h:108: first defined here
+  # Should be present in upcoming 2.1 release.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu90 -fcommon";
 
-  buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
+  buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam libxcrypt ];
 
   meta = {
     description = "GPL'd implementation of the SSH protocol";
@@ -42,8 +49,8 @@ stdenv.mkDerivation rec {
       SECSH working group.
     '';
 
-    homepage = http://www.lysator.liu.se/~nisse/lsh/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://www.lysator.liu.se/~nisse/lsh/";
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];

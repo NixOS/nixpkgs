@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
+{ lib, stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -21,9 +21,25 @@ stdenv.mkDerivation rec {
 
   patches = [ ./header-order.patch ./public-buildproject.patch
     (fetchpatch {
-	  url = https://bitbucket.org/giszmo/glob2/commits/c9dc715624318e4fea4abb24e04f0ebdd9cd8d2a/raw;
-	  sha256 = "0017xg5agj3dy0hx71ijdcrxb72bjqv7x6aq7c9zxzyyw0mkxj0k";
-	})
+      url = "https://bitbucket.org/giszmo/glob2/commits/c9dc715624318e4fea4abb24e04f0ebdd9cd8d2a/raw";
+      sha256 = "0017xg5agj3dy0hx71ijdcrxb72bjqv7x6aq7c9zxzyyw0mkxj0k";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/10_pthread_underlinkage.patch";
+      sha256 = "sha256-L9POADlkgQbUQEUmx4s3dxXG9tS0w2IefpRGuQNRMI0=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/link-boost-system.patch";
+      sha256 = "sha256-ne6F2ZowB+TUmg3ePuUoPNxXI0ZJC6HEol3oQQHJTy4=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/scons.patch";
+      sha256 = "sha256-Gah7SoVcd/Aljs0Nqo3YF0lZImUWtrGM4HbbQ4yrhHU=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/boost-1.69.patch";
+      sha256 = "sha256-D7agFR4uyIHxQz690Q8EHPF+rTEoiGUpgkm7r5cL5SI=";
+    })
   ];
 
   postPatch = ''
@@ -32,7 +48,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
+  nativeBuildInputs = [ sconsPackages.scons_latest ];
   buildInputs = [ libGLU libGL SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
   postConfigure = ''
@@ -43,7 +59,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lboost_system";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RTS without micromanagement";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

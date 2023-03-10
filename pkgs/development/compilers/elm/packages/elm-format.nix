@@ -1,40 +1,42 @@
-{ mkDerivation, fetchgit, ansi-terminal, ansi-wl-pprint, base, binary
-, bytestring, cmark, containers, directory, filepath, free, HUnit
-, indents, json, mtl, optparse-applicative, parsec, process
-, QuickCheck, quickcheck-io, split, stdenv, tasty, tasty-golden
-, tasty-hunit, tasty-quickcheck, text
+{ mkDerivation, aeson, ansi-wl-pprint, avh4-lib, base, bimap
+, bytestring, containers, elm-format-lib, elm-format-test-lib
+, fetchgit, hspec, lib, mtl, optparse-applicative, QuickCheck
+, quickcheck-io, relude, tasty, tasty-hspec, tasty-hunit
+, tasty-quickcheck, text
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "elm-format";
-  version = "0.8.3";
+  version = "0.8.6";
   src = fetchgit {
     url = "https://github.com/avh4/elm-format";
-    sha256 = "0n6lrqj6mq044hdyraj3ss5cg74dn8k4z05xmwn2apjpm146iaw8";
-    rev = "b97e3593d564a1e069c0a022da8cbd98ca2c5a4b";
+    sha256 = "1aiq3mv2ycv6bal5hnz6k33bzmnnidzxxs5b6z9y6lvmr0lbf3j4";
+    rev = "7e80dd48dd9b30994e43f4804b2ea7118664e8e0";
+    fetchSubmodules = true;
   };
+  isLibrary = false;
+  isExecutable = true;
+  executableHaskellDepends = [
+    aeson ansi-wl-pprint avh4-lib base bytestring containers
+    elm-format-lib optparse-applicative relude text
+  ];
+  testHaskellDepends = [
+    aeson ansi-wl-pprint avh4-lib base bimap bytestring containers
+    elm-format-lib elm-format-test-lib hspec mtl optparse-applicative
+    QuickCheck quickcheck-io relude tasty tasty-hspec tasty-hunit
+    tasty-quickcheck text
+  ];
+  doHaddock = false;
+  homepage = "https://elm-lang.org";
+  description = "A source code formatter for Elm";
+  license = lib.licenses.bsd3;
+  mainProgram = "elm-format";
   postPatch = ''
     mkdir -p ./generated
     cat <<EOHS > ./generated/Build_elm_format.hs
     module Build_elm_format where
 
     gitDescribe :: String
-    gitDescribe = "0.8.3"
+    gitDescribe = "${version}"
     EOHS
   '';
-  isLibrary = false;
-  isExecutable = true;
-  libraryHaskellDepends = [
-    ansi-terminal ansi-wl-pprint base binary bytestring containers
-    directory filepath free indents json mtl optparse-applicative
-    parsec process split text
-  ];
-  executableHaskellDepends = [ base ];
-  testHaskellDepends = [
-    base cmark containers HUnit mtl parsec QuickCheck quickcheck-io
-    split tasty tasty-golden tasty-hunit tasty-quickcheck text
-  ];
-  doHaddock = false;
-  homepage = "https://elm-lang.org";
-  description = "A source code formatter for Elm";
-  license = stdenv.lib.licenses.bsd3;
 }

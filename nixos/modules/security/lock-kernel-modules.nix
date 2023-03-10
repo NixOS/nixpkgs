@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -11,11 +11,11 @@ with lib;
     security.lockKernelModules = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Disable kernel module loading once the system is fully initialised.
-        Module loading is disabled until the next reboot.  Problems caused
+        Module loading is disabled until the next reboot. Problems caused
         by delayed module loading can be fixed by adding the module(s) in
-        question to <option>boot.kernelModules</option>.
+        question to {option}`boot.kernelModules`.
       '';
     };
   };
@@ -29,20 +29,30 @@ with lib;
             else [ x.fsType ]
         else []) config.system.build.fileSystems;
 
-    systemd.services.disable-kernel-module-loading = rec {
+    systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";
 
+      wants = [ "systemd-udevd.service" ];
       wantedBy = [ config.systemd.defaultUnit ];
 
-      after = [ "systemd-udev-settle.service" "firewall.service" "systemd-modules-load.service" ] ++ wantedBy;
+      after =
+        [ "firewall.service"
+          "systemd-modules-load.service"
+           config.systemd.defaultUnit
+        ];
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = "/bin/sh -c 'echo -n 1 >/proc/sys/kernel/modules_disabled'";
-      };
+      serviceConfig =
+        { Type = "oneshot";
+          RemainAfterExit = true;
+          TimeoutSec = 180;
+        };
+
+      script = ''
+        ${pkgs.udev}/bin/udevadm settle
+        echo -n 1 >/proc/sys/kernel/modules_disabled
+      '';
     };
   };
 }

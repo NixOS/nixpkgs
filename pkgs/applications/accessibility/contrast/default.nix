@@ -1,25 +1,24 @@
 { stdenv
+, lib
 , fetchFromGitLab
 , cairo
-, dbus
 , desktop-file-utils
 , gettext
 , glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , meson
 , ninja
 , pango
-, pkgconfig
+, pkg-config
 , python3
-, rustc
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "contrast";
-  version = "0.0.2";
+  version = "0.0.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,45 +26,52 @@ rustPlatform.buildRustPackage rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    sha256 = "0rm705zrk9rfv31pwbqxrswi5v6vhnghxa8dgxjmcrh00l8dm6j9";
+    sha256 = "cypSbqLwSmauOoWOuppWpF3hvrxiqmkLspxAWzvlUC0=";
   };
 
-  cargoSha256 = "0qj0vmxa1d6war1vb3zgkf1drvk7awm970fw6692hd9msa9c1kkf";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-W4FyqwJpimf0isQRCq9TegpTQPQfsumx40AFQCFG5VQ=";
+  };
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
-    wrapGAppsHook
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
+    wrapGAppsHook4
+    glib # for glib-compile-resources
   ];
 
   buildInputs = [
     cairo
-    dbus
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     pango
   ];
 
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
+    # https://gitlab.gnome.org/World/design/contrast/-/merge_requests/23
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
-    homepage = https://gitlab.gnome.org/World/design/contrast;
-    license = licenses.gpl3;
+    homepage = "https://gitlab.gnome.org/World/design/contrast";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }
 

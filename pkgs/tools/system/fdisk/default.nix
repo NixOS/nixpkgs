@@ -1,10 +1,11 @@
-{ fetchurl, stdenv, parted, libuuid, gettext, guile }:
+{ fetchurl, lib, stdenv, parted, libuuid, gettext, guile }:
 
 stdenv.mkDerivation rec {
-  name = "gnufdisk-2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
+  pname = "gnufdisk";
+  version = "2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
 
   src = fetchurl {
-    url = "mirror://gnu/fdisk/${name}.tar.gz";
+    url = "mirror://gnu/fdisk/gnufdisk-${version}.tar.gz";
     sha256 = "04nd7civ561x2lwcmxhsqbprml3178jfc58fy1v7hzqg5k4nbhy3";
   };
 
@@ -20,10 +21,10 @@ stdenv.mkDerivation rec {
       cfdisk.  It uses GNU Parted.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/fdisk/;
+    homepage = "https://www.gnu.org/software/fdisk/";
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, texinfo
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, texinfo
 , cairo, gd, libcerf, pango, readline, zlib
 , withTeXLive ? false, texlive
 , withLua ? false, lua
+, withCaca ? false, libcaca
 , libX11 ? null
 , libXt ? null
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false, wxGTK32, Cocoa
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
@@ -20,22 +21,24 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.2.8";
+  version = "5.4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "0dxc52d17mpyb2xm24da1nvhlacryv0irwa0q5l1cjj0rx67d9k0";
+    sha256 = "sha256-AvwnkYIA7WTY8MO4T+gblbWc1HrZnycJOa5JfBnydBk=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig texinfo ] ++ lib.optional withQt qttools;
+  nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]
     ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
     ++ lib.optional withLua lua
+    ++ lib.optional withCaca libcaca
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
-    ++ lib.optional withWxGTK wxGTK;
+    ++ lib.optional withWxGTK wxGTK32
+    ++ lib.optional (withWxGTK && stdenv.isDarwin) Cocoa;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
@@ -46,7 +49,9 @@ in
     (if withX then "--with-x" else "--without-x")
     (if withQt then "--with-qt=qt5" else "--without-qt")
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
-  ];
+  ] ++ lib.optional withCaca "--with-caca";
+
+  CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
   postInstall = lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
@@ -59,7 +64,7 @@ in
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = http://www.gnuplot.info/;
+    homepage = "http://www.gnuplot.info/";
     description = "A portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
     license = {
@@ -69,7 +74,7 @@ in
       # be distributed as patches to the released version.  Permission to
       # distribute binaries produced by compiling modified sources is granted,
       # provided you: ...
-      url = https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright;
+      url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
     };
     maintainers = with maintainers; [ lovek323 ];
   };

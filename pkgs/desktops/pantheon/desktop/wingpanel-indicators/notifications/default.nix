@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , ninja
 , vala
@@ -9,46 +10,46 @@
 , granite
 , wingpanel
 , libgee
-, libwnck3
+, libhandy
+, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "2.1.3";
+  version = "6.0.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1lx023z7xxlgwh0br48fw5w7xw673p2sqxwl1gz9f54xx7rv81py";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-MIuyVGI4jSLGQMQUmj/2PIvcRHSJyPO5Pnd1f8JIuXc=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [
+    elementary-notifications
     granite
     gtk3
     libgee
-    libwnck3
+    libhandy
     wingpanel
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Notifications Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-notifications;
+    homepage = "https://github.com/elementary/wingpanel-indicator-notifications";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

@@ -1,4 +1,4 @@
-{ dos2unix, fetchurl, stdenv }:
+{ dos2unix, fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "mkclean";
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     mv release/gcc_linux_*/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
-    description = "mkclean is a command line tool to clean and optimize Matroska (.mkv / .mka / .mks / .mk3d) and WebM (.webm / .weba) files that have already been muxed.";
+  meta = with lib; {
+    description = "Command line tool to clean and optimize Matroska (.mkv / .mka / .mks / .mk3d) and WebM (.webm / .weba) files that have already been muxed";
     homepage = "https://www.matroska.org";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ chrisaw ];
+    maintainers = with maintainers; [ cawilliamson ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

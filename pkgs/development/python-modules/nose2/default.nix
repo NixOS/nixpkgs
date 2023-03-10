@@ -1,31 +1,41 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, python
 , six
 , pythonOlder
-, mock
 , coverage
 }:
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.9.1";
+  version = "0.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16drs4bc2wvgwwi1pf6pmk6c00pl16vs1v7djc4a8kwpsxpibphf";
+    hash = "sha256-lW55ub1VjuCLYgDAWtLHZGW344YMDAU3aGCJKFwyARM=";
   };
 
-  propagatedBuildInputs = [ six coverage ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ mock ];
+  propagatedBuildInputs = [
+    coverage
+    six
+  ];
 
-  # AttributeError: 'module' object has no attribute 'collector'
-  doCheck = false;
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
 
-  meta = with stdenv.lib; {
-    description = "nose2 is the next generation of nicer testing for Python";
-    homepage = https://github.com/nose-devs/nose2;
+  pythonImportsCheck = [
+    "nose2"
+  ];
+
+  meta = with lib; {
+    description = "Test runner for Python";
+    homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
   };
-
 }

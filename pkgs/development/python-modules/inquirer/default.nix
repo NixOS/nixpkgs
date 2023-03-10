@@ -1,32 +1,62 @@
-{ stdenv, buildPythonPackage, fetchPypi, python-editor, readchar, blessings, pytest, pytestcov, pexpect, pytest-mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# native
+, poetry-core
+
+# propagated
+, blessed
+, python-editor
+, readchar
+
+# tests
+, pytest-mock
+, pytestCheckHook
+, pexpect
+}:
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "2.6.3";
+  version = "3.1.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01lf51y3bxsxkghbdk9hr42yvihpwi2s5zpxnra3bx41r35msvjz";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub rec {
+    owner = "magmax";
+    repo = "python-inquirer";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7kq0sZzPeCX7TA5Cl2rg6Uw+9jLz335a+tOrO0+Cyas=";
   };
 
-  propagatedBuildInputs = [ python-editor readchar blessings ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  # No real changes in 2.0.0...e0edfa3
-  postPatch = ''
-   substituteInPlace setup.py \
-     --replace "readchar == 2.0.1" "readchar >= 2.0.0"
-  '';
+  propagatedBuildInputs = [
+    blessed
+    python-editor
+    readchar
+  ];
 
-  checkInputs = [ pytest pytestcov pexpect pytest-mock ];
+  nativeCheckInputs = [
+    pexpect
+    pytest-mock
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest --cov-report=term-missing  --cov inquirer --no-cov-on-fail tests/unit tests/integration
-  '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/magmax/python-inquirer";
+  pythonImportsCheck = [
+    "inquirer"
+  ];
+
+  meta = with lib; {
     description = "A collection of common interactive command line user interfaces, based on Inquirer.js";
+    homepage = "https://github.com/magmax/python-inquirer";
+    changelog = "https://github.com/magmax/python-inquirer/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut ];
   };
 }

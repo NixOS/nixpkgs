@@ -2,25 +2,24 @@
 
 buildGoModule rec {
   pname = "smimesign";
-  version = "v0.0.13";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner  = "github";
-    repo   = "smimesign";
-    rev    = version;
-    sha256 = "0higcg2rdz02c0n50vigg7w7bxc7wlmg1x2ygrbh3iwms5lc74vi";
+    owner = "github";
+    repo = "smimesign";
+    rev = "v${version}";
+    sha256 = "12f8vprp4v78l9ifrlql0mvpyw5qa8nlrh5ajq5js8wljzpx7wsv";
   };
 
-  modSha256 = "1k3gnjzblfk14y19zhlvwysx045nbw0xr5nngh7zj1wcqxhhm206";
+  vendorSha256 = "1cldxykm9qj5rvyfafam45y5xj4f19700s2f9w7ndhxgfp9vahvz";
 
-  buildFlagsArray = "-ldflags=-X main.versionString=${version}";
+  ldflags = [ "-X main.versionString=v${version}" ];
 
   meta = with lib; {
-    description = "An S/MIME signing utility for macOS and Windows that is compatible with Git.";
-
-    homepage    = https://github.com/github/smimesign;
-    license     = licenses.mit;
-    platforms   = platforms.darwin;
+    description = "An S/MIME signing utility for macOS and Windows that is compatible with Git";
+    homepage = "https://github.com/github/smimesign";
+    license = licenses.mit;
+    platforms = platforms.darwin ++ platforms.windows;
     maintainers = [ maintainers.enorris ];
   };
 }

@@ -1,29 +1,40 @@
-{ stdenv, fetchgit, python3, platform-tools, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper
+, socat, go-mtpfs, adbfs-rootless
+}:
 
 stdenv.mkDerivation {
-  pname = "adb-sync";
-  version = "2016-08-31";
+  pname = "adb-sync-unstable";
+  version = "2019-01-01";
 
-  src = fetchgit {
-    url = "https://github.com/google/adb-sync";
-    rev = "7fc48ad1e15129ebe34e9f89b04bfbb68ced144d";
-    sha256 = "1y016bjky5sn58v91jyqfz7vw8qfqnfhb9s9jd32k8y29hy5vy4d";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "adb-sync";
+    rev = "fb7c549753de7a5579ed3400dd9f8ac71f7bf1b1";
+    sha256 = "1kfpdqs8lmnh144jcm1qmfnmigzrbrz5lvwvqqb7021b2jlf69cl";
   };
 
-  buildInputs = [ python3 platform-tools makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 ];
 
-  phases = "installPhase";
+  dontBuild = true;
 
-  installPhase = ''
+  installPhase = let
+    dependencies = lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
+  in ''
+    runHook preInstall
+
     mkdir -p $out/bin
-    cp $src/adb-channel $src/adb-sync $out/bin/
-    patchShebangs $out/bin
-    wrapProgram $out/bin/adb-sync --suffix PATH : ${platform-tools}/bin
+    cp adb-{sync,channel} $out/bin
+
+    wrapProgram $out/bin/adb-sync --suffix PATH : "${dependencies}"
+    wrapProgram $out/bin/adb-channel --suffix PATH : "${dependencies}"
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
-    homepage = https://github.com/google/adb-sync;
+    homepage = "https://github.com/google/adb-sync";
     license = licenses.asl20;
     platforms = platforms.unix;
     hydraPlatforms = [];

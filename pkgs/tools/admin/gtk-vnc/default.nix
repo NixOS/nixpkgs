@@ -1,52 +1,47 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gobject-introspection
 , gnutls
 , cairo
 , glib
-, pkgconfig
+, pkg-config
 , cyrus_sasl
+, pulseaudioSupport ? stdenv.isLinux
 , libpulseaudio
 , libgcrypt
 , gtk3
 , vala
 , gettext
 , perl
-, gnome3
+, python3
+, gnome
 , gdk-pixbuf
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
-  version = "1.0.0";
+  version = "1.3.1";
 
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1060ws037v556rx1qhfrcg02859rscksrzr8fq11himdg4d1y6m8";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "USdjrE4FWdAVi2aCyl3Ro71jPwgvXkNJ1xWOa1+A8c4=";
   };
-
-  patches = [
-    # Fix undeclared gio-unix-2.0 in example program.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk-vnc/commit/8588bc1c8321152ddc5086ca9b2c03a7f511e0d0.patch";
-      sha256 = "0i1iapsbngl1mhnz22dd73mnzk68qc4n51pqdhnm18zqc8pawvh4";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     vala
     gettext
     perl # for pod2man
+    python3
   ];
 
   buildInputs = [
@@ -57,22 +52,27 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     cyrus_sasl
-    libpulseaudio
     gtk3
+  ] ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
+
+  mesonFlags = lib.optionals (!pulseaudioSupport) [
+    "-Dpulseaudio=disabled"
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK VNC widget";
-    homepage = https://wiki.gnome.org/Projects/gtk-vnc;
+    homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

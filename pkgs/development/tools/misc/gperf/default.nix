@@ -1,12 +1,15 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "gperf-3.1";
+  pname = "gperf";
+  version = "3.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gperf/${name}.tar.gz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1qispg6i508rq8pkajh26cznwimbnj06wq9sd85vg95v8nwld1aq";
   };
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Perfect hash function generator";
@@ -25,9 +28,9 @@ stdenv.mkDerivation rec {
       employed by gperf.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/gperf/;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.gnu.org/software/gperf/";
+    platforms = lib.platforms.unix;
   };
 }

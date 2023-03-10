@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
-, dyncall , nanomsg, python37Packages }:
+{ lib, stdenv, fetchFromGitHub, boxfort, meson, libcsptr, pkg-config, gettext
+, cmake, ninja, protobuf, libffi, libgit2, dyncall, nanomsg, nanopbMalloc
+, python3Packages }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.3";
   pname = "criterion";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
     rev = "v${version}";
-    sha256 = "0y1ay8is54k3y82vagdy0jsa3nfkczpvnqfcjm5n9iarayaxaq8p";
+    sha256 = "KT1XvhT9t07/ubsqzrVUp4iKcpVc1Z+saGF4pm2RsgQ=";
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ meson ninja cmake pkg-config protobuf ];
 
   buildInputs = [
     boxfort.dev
@@ -23,20 +22,22 @@ stdenv.mkDerivation rec {
     gettext
     libcsptr
     nanomsg
+    nanopbMalloc
+    libgit2
+    libffi
   ];
 
-  checkInputs = with python37Packages; [ cram ];
+  nativeCheckInputs = with python3Packages; [ cram ];
 
-  cmakeFlags = [ "-DCTESTS=ON" ];
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=`pwd`''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+
+  postPatch = ''
+    patchShebangs ci/isdir.py src/protocol/gen-pb.py
   '';
-  checkTarget = "criterion_tests test";
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
     license = licenses.mit;

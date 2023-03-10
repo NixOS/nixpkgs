@@ -17,13 +17,13 @@ let
   '';
 in {
   options.services.ssm-agent = {
-    enable = mkEnableOption "AWS SSM agent";
+    enable = mkEnableOption (lib.mdDoc "AWS SSM agent");
 
     package = mkOption {
       type = types.path;
-      description = "The SSM agent package to use";
-      default = pkgs.ssm-agent;
-      defaultText = "pkgs.ssm-agent";
+      description = lib.mdDoc "The SSM agent package to use";
+      default = pkgs.ssm-agent.override { overrideEtc = false; };
+      defaultText = literalExpression "pkgs.ssm-agent.override { overrideEtc = false; }";
     };
   };
 
@@ -33,14 +33,41 @@ in {
       after    = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ fake-lsb-release ];
+      path = [ fake-lsb-release pkgs.coreutils ];
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/agent";
+        ExecStart = "${cfg.package}/bin/amazon-ssm-agent";
         KillMode = "process";
-        Restart = "on-failure";
-        RestartSec = "15min";
+        # We want this restating pretty frequently. It could be our only means
+        # of accessing the instance.
+        Restart = "always";
+        RestartSec = "1min";
       };
     };
+
+    # Add user that Session Manager needs, and give it sudo.
+    # This is consistent with Amazon Linux 2 images.
+    security.sudo.extraRules = [
+      {
+        users = [ "ssm-user" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+    # On Amazon Linux 2 images, the ssm-user user is pretty much a
+    # normal user with its own group. We do the same.
+    users.groups.ssm-user = {};
+    users.users.ssm-user = {
+      isNormalUser = true;
+      group = "ssm-user";
+    };
+
+    environment.etc."amazon/ssm/seelog.xml".source = "${cfg.package}/seelog.xml.template";
+
+    environment.etc."amazon/ssm/amazon-ssm-agent.json".source =  "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
+
   };
 }
-

@@ -1,29 +1,52 @@
-{ lib, stdenv, buildPythonPackage, python, fetchFromGitHub, attrs, cryptography, async-timeout, pytest-aiohttp, pytest }:
+{ lib
+, stdenv
+, async-timeout
+, attrs
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pytest-aiohttp
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.20";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = pname;
     rev = version;
-    sha256 = "1nscfwycclfbll709w1q46w6rl0r5c3b85rsc7zwc3ixd1k8aajp";
+    hash = "sha256-Ehafb35H462Ffn6omGh/MDJKQX5qJJZeiIBO3n0IGlA=";
   };
 
-  propagatedBuildInputs = [ attrs cryptography async-timeout ];
+  propagatedBuildInputs = [
+    async-timeout
+    attrs
+    cryptography
+  ];
 
-  checkInputs = [ pytest pytest-aiohttp ];
+  nativeCheckInputs = [
+    pytest-aiohttp
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    # https://github.com/NabuCasa/snitun/issues/61
-    pytest ${lib.optionalString stdenv.isDarwin "-k 'not test_multiplexer_data_channel_abort_full'"} tests/
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61
+    # port binding conflicts
+    "test_snitun_single_runner_timeout"
+    "test_snitun_single_runner_throttling"
+    # ConnectionResetError: [Errno 54] Connection reset by peer
+    "test_peer_listener_timeout"
+  ];
+
+  pythonImportsCheck = [ "snitun" ];
 
   meta = with lib; {
     homepage = "https://github.com/nabucasa/snitun";
     description = "SNI proxy with TCP multiplexer";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
+    platforms = platforms.linux;
   };
 }

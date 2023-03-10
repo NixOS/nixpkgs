@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchurl {
     url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "0cznxw73fzv1n3nj2zsq6nf73rvsbxndp444xkpahdqvlzz0r6zp";
+    sha256 = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
   };
 
   outputs = [ "out" "info" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
   meta = {
-    homepage = https://www.gnu.org/software/sed/;
+    homepage = "https://www.gnu.org/software/sed/";
     description = "GNU sed, a batch stream editor";
 
     longDescription = ''
@@ -30,9 +30,10 @@ stdenv.mkDerivation rec {
       multiple occurrences of a string within a file.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mic92 ];
+    mainProgram = "sed";
   };
 }

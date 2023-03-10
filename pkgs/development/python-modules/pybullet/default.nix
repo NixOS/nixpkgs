@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pybullet";
-  version = "2.6.6";
+  version = "3.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lsvjqij1vb9w8j6lvnq7lppflc7svz4cj37n74q67mb46gq3dxr";
+    sha256 = "sha256-G8ua+4eghr4bLeGPCE0f2rgZTaG/cfJkdDyia6o5w1E=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open-source software for robot simulation, integrated with OpenAI Gym";
-    homepage = https://pybullet.org/;
+    homepage = "https://pybullet.org/";
     license = licenses.zlib;
     maintainers = with maintainers; [ timokau ];
     platforms = platforms.linux;

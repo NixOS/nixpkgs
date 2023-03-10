@@ -1,20 +1,30 @@
-{ fetchurl, stdenv, cmake, ninja }:
+{ fetchurl
+, lib
+, stdenv
+, cmake
+, ninja
+, poppler
+}:
 
 stdenv.mkDerivation rec {
-  name = "poppler-data-0.4.9";
+  pname = "poppler-data";
+  version = "0.4.12";
 
   src = fetchurl {
-    url = "https://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "04i0wgdkn5lhda8cyxd1ll4a2p41pwqrwd47n9mdpl7cx5ypx70z";
+    url = "https://poppler.freedesktop.org/${pname}-${version}.tar.gz";
+    sha256 = "yDW2QKQM41fhuDZmqr2V7f+iTd3dSbja/2OtuFHNq3Q=";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://poppler.freedesktop.org/;
+  meta = with lib; {
+    homepage = "https://poppler.freedesktop.org/";
     description = "Encoding files for Poppler, a PDF rendering library";
     platforms = platforms.all;
     license = licenses.free; # more free licenses combined
-    maintainers = with maintainers; [ ];
+    maintainers = poppler.meta.maintainers;
   };
 }

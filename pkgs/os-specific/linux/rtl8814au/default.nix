@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
-stdenv.mkDerivation rec {
-  name = "rtl8814au-${kernel.version}-${version}";
-  version = "4.3.21";
+stdenv.mkDerivation {
+  pname = "rtl8814au";
+  version = "${kernel.version}-unstable-2022-11-09";
 
   src = fetchFromGitHub {
-    owner = "zebulon2";
-    repo = "rtl8814au";
-    rev = "a58c56a5a6cb99ffb872f07cb67b68197911854f";
-    sha256 = "1ffm67da183nz009gm5v9w1bab081hrm113kk8knl9s5qbqnn13q";
+    owner = "morrownr";
+    repo = "8814au";
+    rev = "932df6f7da6c3a384cf91f33eb195097eb0cb6c5";
+    hash = "sha256-nMQiT59IIhzpePWWDiyCQFmYLWM42L/mG0BKsbEwreo=";
   };
 
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -29,11 +29,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Realtek 8814AU USB WiFi driver";
-    homepage = https://github.com/zebulon2/rtl8814au;
-    license = licenses.gpl2;
+    homepage = "https://github.com/morrownr/8814au";
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.lassulus ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

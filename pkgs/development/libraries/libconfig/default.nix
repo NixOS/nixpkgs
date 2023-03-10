@@ -1,21 +1,32 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, # this also disables building tests.
+  # on static windows cross-compile they fail to build
+  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic)
+}:
 
 stdenv.mkDerivation rec {
   pname = "libconfig";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "https://hyperrealm.github.io/${pname}/dist/${pname}-${version}.tar.gz";
-    sha256 = "1ngs2qx3cx5cbwinc5mvadly0b5n7s86zsc68c404czzfff7lg3w";
+    sha256 = "sha256-VFFm1srAN3RDgdHpzFpUBQlOe/rRakEWmbz/QLuzHuc=";
   };
 
-  doCheck = true;
+  inherit doCheck;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.hyperrealm.com/libconfig;
+  configureFlags = lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
+    ++ lib.optional (!doCheck) "--disable-tests";
+
+  cmakeFlags = lib.optionals (!doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
+
+  meta = with lib; {
+    homepage = "http://www.hyperrealm.com/libconfig";
     description = "A simple library for processing structured configuration files";
     license = licenses.lgpl3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.all;
   };
 }

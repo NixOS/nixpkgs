@@ -1,26 +1,38 @@
-{ stdenv, fetchgit, rustPlatform, pkgconfig, openssl }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  pkg-config,
+  openssl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "eidolon";
   version = "1.4.6";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~nicohman/eidolon";
-    rev = "${version}";
-    sha256 = "1yn3k569pxzw43mmsk97088xpkdc714rks3ncchbb6ccx25kgxrr";
+  src = fetchFromSourcehut {
+    owner = "~nicohman";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Ofc3i+iMmbUgY3bomUk4rM3bEQInTV3rIPz3m0yZw/o=";
   };
-  cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "1i8qfphynwi42pkhhgllxq42dnw9f0dd6f829z94a3g91czyqvsw";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
+  meta = with lib; {
     description = "A single TUI-based registry for drm-free, wine and steam games on linux, accessed through a rofi launch menu";
     homepage = "https://github.com/nicohman/eidolon";
-    license = licenses.gpl3;
-    maintainers = [ maintainers."0x4A6F" ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.linux;
   };
 }

@@ -1,47 +1,33 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, gettext, libcsptr, dyncall
-, nanomsg, python37Packages }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, python3Packages }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2019-09-19";
   pname = "boxfort";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
-    rev = "926bd4ce968592dbbba97ec1bb9aeca3edf29b0d";
-    sha256 = "0mzy4f8qij6ckn5578y3l4rni2470pdkjy5xww7ak99l1kh3p3v6";
+    rev = "v${version}";
+    sha256 = "jmtWTOkOlqVZ7tFya3IrQjr714Y8TzAVY5Cq+RzDuRs=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ meson ninja ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  preConfigure = ''
+    patchShebangs ci/isdir.py
+  '';
 
-  buildInputs = [
-    dyncall
-    gettext
-    libcsptr
-    nanomsg
-  ];
-
-  checkInputs = with python37Packages; [ cram ];
-
-  cmakeFlags = [ "-DBXF_FORK_RESILIENCE=OFF" ];
+  nativeCheckInputs = with python3Packages; [ cram ];
 
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=`pwd`''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
-  '';
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convenient & cross-platform sandboxing C library";
     homepage = "https://github.com/Snaipe/BoxFort";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      thesola10
-      Yumasi
-    ];
+    maintainers = with maintainers; [ thesola10 Yumasi ];
     platforms = platforms.unix;
   };
 }

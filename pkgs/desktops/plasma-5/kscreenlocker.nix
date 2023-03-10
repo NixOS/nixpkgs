@@ -1,17 +1,42 @@
-{
-  mkDerivation,
-  extra-cmake-modules, kdoctools,
-  kcmutils, kcrash, kdeclarative, kdelibs4support, kglobalaccel, kidletime,
-  kwayland, libXcursor, pam, plasma-framework, qtdeclarative, qtx11extras,
-  wayland,
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, kcmutils
+, kcrash
+, kdeclarative
+, kglobalaccel
+, kidletime
+, libkscreen
+, kwayland
+, libXcursor
+, pam
+, plasma-framework
+, qtbase
+, qtdeclarative
+, qtx11extras
+, wayland
+, layer-shell-qt
 }:
 
 mkDerivation {
-  name = "kscreenlocker";
+  pname = "kscreenlocker";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcmutils kcrash kdeclarative kdelibs4support kglobalaccel kidletime kwayland
-    libXcursor pam plasma-framework qtdeclarative qtx11extras wayland
+    kcmutils
+    kcrash
+    kdeclarative
+    kglobalaccel
+    kidletime
+    libkscreen
+    kwayland
+    libXcursor
+    pam
+    plasma-framework
+    qtdeclarative
+    qtx11extras
+    wayland
+    layer-shell-qt
   ];
   outputs = [ "out" "dev" ];
 }

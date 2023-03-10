@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "schedtool";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" "DESTPREFIX=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Query or alter a process' scheduling policy under Linux";
-    homepage = http://freequaos.host.sk/schedtool/;
+    homepage = "https://freequaos.host.sk/schedtool/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

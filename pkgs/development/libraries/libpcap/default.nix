@@ -1,35 +1,48 @@
-{ stdenv, fetchurl, flex, bison }:
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, bluez
+, libxcrypt
+, pkg-config
+, withBluez ? false
+, withRemote ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.9.1";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "153h1378diqyc27jjgz6gg5nxmb4ddk006d9xg69nqavgiikflk3";
+    sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
   };
 
-  nativeBuildInputs = [ flex bison ];
+  buildInputs = lib.optionals withRemote [ libxcrypt ];
+
+  nativeBuildInputs = [ flex bison ]
+    ++ lib.optionals withBluez [ bluez.dev pkg-config ];
 
   # We need to force the autodetection because detection doesn't
-  # work in pure build enviroments.
+  # work in pure build environments.
   configureFlags = [
-    ("--with-pcap=" + {
-      linux = "linux";
-      darwin = "bpf";
-    }.${stdenv.hostPlatform.parsed.kernel.name})
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-    "ac_cv_linux_vers=2"
-  ];
+    "--with-pcap=${if stdenv.isLinux then "linux" else "bpf"}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-universal"
+  ] ++ lib.optionals withRemote [
+    "--enable-remote"
+  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform)
+    [ "ac_cv_linux_vers=2" ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace " -arch i386" ""
+  postInstall = ''
+    if [ "$dontDisableStatic" -ne "1" ]; then
+      rm -f $out/lib/libpcap.a
+    fi
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.tcpdump.org;
+  meta = with lib; {
+    homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

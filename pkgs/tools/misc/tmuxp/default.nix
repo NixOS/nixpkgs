@@ -1,36 +1,42 @@
-{ stdenv, python }:
+{ lib, python3Packages, installShellFiles }:
 
-with python.pkgs;
+let
+  pypkgs = python3Packages;
 
-buildPythonApplication rec {
+in
+pypkgs.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.5.4";
+  version = "1.27.0";
 
-  src = fetchPypi {
+  src = pypkgs.fetchPypi {
     inherit pname version;
-    sha256 = "13qnacqlcih731wfrsalbff1g81inkh6sypvabg5gi7gd7mha49p";
+    sha256 = "sha256-QAk+rcNYjhAgkJX2fa0bl3dHrB4yyYQ/oNlUX3IQMR8=";
   };
-
-  postPatch = ''
-    sed -i 's/==.*$//' requirements/base.txt requirements/test.txt
-  '';
-
-  checkInputs = [
-    pytest
-    pytest-rerunfailures
-  ];
 
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = [
-    click colorama kaptan libtmux
+  nativeBuildInputs = [ installShellFiles ];
+
+  propagatedBuildInputs = with pypkgs; [
+    click
+    colorama
+    kaptan
+    libtmux
   ];
 
-  meta = with stdenv.lib; {
-    description = "Manage tmux workspaces from JSON and YAML";
-    homepage = https://tmuxp.git-pull.com/;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+  postInstall = ''
+    installShellCompletion --cmd tmuxp \
+      --bash <(_TMUXP_COMPLETE=bash_source $out/bin/tmuxp) \
+      --fish <(_TMUXP_COMPLETE=fish_source $out/bin/tmuxp) \
+      --zsh <(_TMUXP_COMPLETE=zsh_source $out/bin/tmuxp)
+  '';
+
+  meta = with lib; {
+    description = "tmux session manager";
+    homepage = "https://tmuxp.git-pull.com/";
+    changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

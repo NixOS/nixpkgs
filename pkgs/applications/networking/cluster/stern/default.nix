@@ -1,36 +1,42 @@
-{ stdenv, lib, buildPackages, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles }:
+let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 
-let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform; in
-
-buildGoPackage rec {
+in
+buildGoModule rec {
   pname = "stern";
-  version = "1.11.0";
-
-  goPackagePath = "github.com/wercker/stern";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
-    owner = "wercker";
+    owner = "stern";
     repo = "stern";
-    rev = version;
-    sha256 = "0xndlq0ks8flzx6rdd4lnkxpkbvdy9sj1jwys5yj7p989ls8by3n";
+    rev = "v${version}";
+    sha256 = "sha256-tqp2H8aWPBgje1zIK673cbr+DShhTQL9VQ0dEL/he7s=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-ud07lWHwQfAHgVenUApwrfxmTjJKVm+pOExdR9pZFxA=";
+
+  subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags =
+    [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
 
   postInstall =
-    let stern = if isCrossBuild then buildPackages.stern else "$bin"; in
+    let stern = if isCrossBuild then buildPackages.stern else "$out";
+    in
     ''
-      mkdir -p $bin/share/bash-completion/completions
-      ${stern}/bin/stern --completion bash > $bin/share/bash-completion/completions/stern
-      mkdir -p $bin/share/zsh/site-functions
-      ${stern}/bin/stern --completion zsh > $bin/share/zsh/site-functions/_stern
+      for shell in bash zsh; do
+        ${stern}/bin/stern --completion $shell > stern.$shell
+        installShellCompletion stern.$shell
+      done
     '';
 
   meta = with lib; {
-    description      = "Multi pod and container log tailing for Kubernetes";
-    homepage         = "https://github.com/wercker/stern";
-    license          = licenses.asl20;
-    maintainers      = with maintainers; [ mbode ];
-    platforms        = platforms.unix;
+    description = "Multi pod and container log tailing for Kubernetes";
+    homepage = "https://github.com/stern/stern";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbode preisschild ];
+    platforms = platforms.unix;
   };
 }

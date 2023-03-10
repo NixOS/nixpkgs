@@ -1,13 +1,14 @@
-{ stdenv, socat, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, socat, fetchFromGitHub, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "mpvc-unstable-2017-03-18";
+stdenv.mkDerivation rec {
+  pname = "mpvc";
+  version = "1.3";
 
   src = fetchFromGitHub {
-    owner = "wildefyr";
+    owner = "lwilletts";
     repo = "mpvc";
-    rev = "aea5c661455248cde7ac9ddba5f63cc790d26512";
-    sha256 = "0qiyvb3ck1wyd3izajwvlq4bwgsbq7x8ya3fgi5i0g2qr39a1qml";
+    rev = version;
+    sha256 = "sha256-wPETEG0BtNBEj3ZyP70byLzIP+NMUKbnjQ+kdvrvK3s=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -17,11 +18,12 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/mpvc --prefix PATH : "${socat}/bin/"
   '';
 
-  buildInputs = [ socat makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ socat ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mpc-like control interface for mpv";
-    homepage = https://github.com/wildefyr/mpvc;
+    homepage = "https://github.com/lwilletts/mpvc";
     license = licenses.mit;
     maintainers = [ maintainers.neeasade ];
     platforms = platforms.linux;

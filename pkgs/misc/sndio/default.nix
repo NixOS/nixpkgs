@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, alsaLib }:
+{ lib, stdenv, fetchurl, alsa-lib, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "sndio";
-  version = "1.6.0";
-  enableParallelBuilding = true;
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ alsaLib ];
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "http://www.sndio.org/sndio-${version}.tar.gz";
-    sha256 = "1havdx3q4mipgddmd2bnygr1yh6y64567m1yqwjapkhsq550dq4r";
+    url = "https://www.sndio.org/sndio-${version}.tar.gz";
+    sha256 = "sha256-8wgm/JwH42nTkk1fzt9qClPA30rh9atQ/pzygFQPaZo=";
   };
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libsndio.7.0.dylib $out/lib/libsndio.7.0.dylib
-    for file in $out/bin/*; do
-      install_name_tool -change libsndio.7.0.dylib $out/lib/libsndio.dylib $file
-    done
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib;
+  configurePlatforms = [];
+
+  postInstall = ''
+    install -Dm644 contrib/sndiod.service $out/lib/systemd/system/sndiod.service
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.sndio.org";
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://www.sndio.org";
     description = "Small audio and MIDI framework part of the OpenBSD project";
     license = licenses.isc;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
   };
 }

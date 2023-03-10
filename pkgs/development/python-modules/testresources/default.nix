@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pbr ];
 
-  checkInputs = [ fixtures testtools ];
+  nativeCheckInputs = [ fixtures testtools ];
 
   checkPhase = ''
     ${python.interpreter} -m testtools.run discover
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pyunit extension for managing expensive test resources";
-    homepage = https://launchpad.net/testresources;
+    homepage = "https://launchpad.net/testresources";
     license = licenses.bsd2;
   };
 }

@@ -47,7 +47,10 @@ in stdenv.mkDerivation {
   pname = "opam";
   version = "1.2.2";
 
-  buildInputs = [ unzip curl ncurses ocaml makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper unzip curl ocaml ];
+  buildInputs = [ ncurses ];
 
   src = srcs.opam;
 
@@ -82,9 +85,9 @@ in stdenv.mkDerivation {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package manager for OCaml";
-    homepage = http://opam.ocamlpro.com/;
+    homepage = "http://opam.ocamlpro.com/";
     maintainers = [ maintainers.henrytill ];
     platforms = platforms.all;
     license = licenses.lgpl21Plus;

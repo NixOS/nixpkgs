@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, gettext, fetchpatch
+{ stdenv, lib, buildPackages, fetchurl, gettext
 , genPosixLockObjOnly ? false
 }: let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -17,35 +17,21 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.36";
+  version = "1.46";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0z696dmhfxm2n6pmr8b857wwljq9h633yi99bhbn7h88f91rigds";
+    sha256 = "sha256-t+EaZCRrvl7zd0jeQ7JFq9cs/NU8muXn/FylnxyBJo0=";
   };
 
-  # Remove gawk buildfix on > 1.36
-  patches = [
-    (fetchpatch {
-      url = "https://dev.gnupg.org/rE7865041c77f4f7005282f10f9b6666b19072fbdf?diff=1";
-      sha256 = "0hs4rpwqq2afpsbqliq451jjaysq2iyzxvd9sx3992b4vnllgqqq";
-    })
-  ];
-
   postPatch = ''
-    # Remove on > 1.36 release: gawk upgrade fix didn't include Makefile regeneration
-    sed 's/-v namespace=errnos_/-v pkg_namespace=errnos_/' -i src/Makefile.in
-
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
-    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
-    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
-  '' + lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
-    ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
   '';
+
+  configureFlags = [
+    # See https://dev.gnupg.org/T6257#164567
+    "--enable-install-gpg-error-config"
+  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely
@@ -56,18 +42,27 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gettext ];
 
   postConfigure =
-    lib.optionalString stdenv.isSunOS
     # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
     # `config.status' run:
     #   ./config.status[1401]: shift: (null): bad number
-    # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
+    # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
     # Thus, re-run it with Bash.
-      "${stdenv.shell} config.status";
+    lib.optionalString stdenv.isSunOS ''
+      ${stdenv.shell} config.status
+    ''
+    # ./configure errorneous decides to use weak symbols on pkgsStatic,
+    # which, together with other defines results in locking functions in
+    # src/posix-lock.c to be no-op, causing tests/t-lock.c to fail.
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      sed '/USE_POSIX_THREADS_WEAK/ d' config.h
+      echo '#undef USE_POSIX_THREADS_WEAK' >> config.h
+    '';
 
   doCheck = true; # not cross
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnupg.org/related_software/libgpg-error/index.html;
+  meta = with lib; {
+    homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
     description = "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''

@@ -1,16 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
-  pname   = "pathspec";
-  version = "0.6.0";
+  pname = "pathspec";
+  version = "0.10.3";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p7ab7jx3wgg7xdj2q8yk99cz3xv2a5p1r8q9kfylnvqn34cr1g2";
+    hash = "sha256-ViAN5Ad9nQeRRlqpCVoB1CGGHkBbUJaVUFHe79aX1vY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   meta = {
     description = "Utility library for gitignore-style pattern matching of file paths";

@@ -1,13 +1,15 @@
 { stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, pkgconfig
+, pkg-config
 
 , qtbase
 , qttools
 , qtsvg
+, qtimageformats
 
 , exiv2
 , opencv4
@@ -18,37 +20,35 @@
 
 mkDerivation rec {
   pname = "nomacs";
-  version = "3.12";
+  version = "3.17.2206";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "12582i5v85da7vwjxj8grj99hxg34ij5cn3b1578wspdfw1xfy1i";
+    sha256 = "1bq7bv4p7w67172y893lvpk90d6fgdpnylynbj2kn8m2hs6khya4";
   };
 
   patches = [
-    ./nomacs-iostream.patch
+    # Add support for Quazip 1.x.
     (fetchpatch {
-      name = "darwin-less-restrictive-opencv.patch";
-      url = "https://github.com/nomacs/nomacs/commit/d182fce4bcd9a25bd15e3de065ca67849a32458c.patch";
-      sha256 = "0j6sviwrjn69nqf59hjn30c4j838h8az7rnlwcx8ymlb21vd9x2h";
+      url = "https://github.com/nomacs/nomacs/pull/576.patch";
+      sha256 = "11ryjvd9jbb0cqagai4a6980jfq8lrcbyw2d7z9yld1f42w9kbxm";
       stripLen = 1;
     })
   ];
-
-  enableParallelBuilding = true;
 
   setSourceRoot = ''
     sourceRoot=$(echo */ImageLounge)
   '';
 
   nativeBuildInputs = [cmake
-                       pkgconfig];
+                       pkg-config];
 
   buildInputs = [qtbase
                  qttools
                  qtsvg
+                 qtimageformats
                  exiv2
                  opencv4
                  libraw
@@ -62,12 +62,13 @@ mkDerivation rec {
                 "-DENABLE_TRANSLATIONS=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
-  meta = with stdenv.lib; {
-    homepage = https://nomacs.org;
+  meta = with lib; {
+    homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
-    maintainers = [maintainers.ahmedtd];
+    maintainers = with lib.maintainers; [ mindavi ];
     license = licenses.gpl3Plus;
-    repositories.git = https://github.com/nomacs/nomacs.git;
     inherit (qtbase.meta) platforms;
+    # Broken on hydra since 2020-08-15: https://hydra.nixos.org/build/125495291 (bump from 3.16 to 3.17 prerelease)
+    broken = stdenv.isDarwin;
   };
 }

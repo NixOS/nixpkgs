@@ -1,11 +1,13 @@
 { stdenv
+, lib
 , fetchurl
 , fetchpatch
-, gnome3
-, pkgconfig
+, gnome
+, pkg-config
 , meson
 , ninja
 , exiv2
+, libheif
 , libjpeg
 , libtiff
 , gst_all_1
@@ -33,12 +35,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.8.3";
+  version = "3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1a0gss9cjcwayrcpkam5kc1giwbfy38jgqxvh33in9gfq9dgrygg";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-l/iv5SJTUhZUHrvx47VG0Spr6zio8OuF8m5naTSq1CU=";
   };
+
+  patches = [
+    # Fix build with libraw 0.21, can be removed on next update
+    # https://hydra.nixos.org/build/209327709/nixlog/1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/da0d3f22a5c3a141211d943e7d963d14090011ec.patch";
+      sha256 = "sha256-/l9US19rKxIUJjZ+oynGLr/9PKJPg9VUuA/VSuIT5AQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -47,7 +58,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -56,14 +67,18 @@ stdenv.mkDerivation rec {
     clutter-gtk
     exiv2
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gtk3
     json-glib
     lcms2
     libchamplain
+    libheif
     libjpeg
     libraw
     librsvg
@@ -93,12 +108,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gthumb";
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libusb }:
+{ lib, fetchFromGitHub, rustPlatform, libusb-compat-0_1 }:
 
 let
   version = "0.6.9";
@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage {
   cargoDepsHook = ''
     ln -s wishbone-tool source
   '';
-  cargoSha256 = "0d5kcwy0cgxqfxf2xysw65ng84q4knhp4fgvh6dwqhf0nsca9gvs";
+  cargoSha256 = "1b12wpmzv7wxidc4hd8hmp8iwqhqlycxh8bdv3rf701sqsazkc5x";
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   meta = with lib; {
     description = "Manipulate a Wishbone device over some sort of bridge";

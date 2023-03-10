@@ -1,23 +1,25 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
-
-# pythonPackages
+{ lib
+, buildPythonPackage
 , django
+, factory_boy
+, fetchFromGitHub
 , pylint-plugin-utils
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.0.13";
-  disabled = !isPy3k;
+  version = "2.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16xfn8zs5khdfh5pdsv3wjjhywzc1qhx7mxi5kpbcvmd6an9qi7s";
+    hash = "sha256-5xEXjNMkOetRM9NDz0S4DsC6v39YQi34s2s+Fs56hYU=";
   };
 
   propagatedBuildInputs = [
@@ -25,15 +27,27 @@ buildPythonPackage rec {
     pylint-plugin-utils
   ];
 
-  # Testing requires checkout from other repositories
-  doCheck = false;
+  nativeCheckInputs = [
+    factory_boy
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AttributeError, AssertionError
+    "external_django_tables2_noerror_meta_class"
+    "external_tastypie_noerror_foreign_key"
+    "func_noerror_model_unicode_lambda"
+    "0001_noerror_initial"
+  ];
+
+  pythonImportsCheck = [
+    "pylint_django"
+  ];
 
   meta = with lib; {
-    description = "A Pylint plugin to analyze Django applications";
+    description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

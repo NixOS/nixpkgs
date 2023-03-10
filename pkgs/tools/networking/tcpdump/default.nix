@@ -1,31 +1,29 @@
-{ stdenv, fetchurl, libpcap, perl }:
+{ lib, stdenv, fetchurl, libpcap, perl }:
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
-  version = "4.9.3";
+  version = "4.99.3";
 
   src = fetchurl {
-    url = "http://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "0434vdcnbqaia672rggjzdn4bb8p8dchz559yiszzdk0sjrprm1c";
+    url = "http://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+    sha256 = "sha256-rXWm7T3A2XMpRbLlSDy0Hci0tSihaTFeSZxoYZUuc7M=";
   };
 
   postPatch = ''
     patchShebangs tests
   '';
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   buildInputs = [ libpcap ];
 
-  configureFlags = stdenv.lib.optional
-    (stdenv.hostPlatform != stdenv.buildPlatform)
-    "ac_cv_linux_vers=2";
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "ac_cv_linux_vers=2";
 
-  meta = {
+  meta = with lib; {
     description = "Network sniffer";
-    homepage = http://www.tcpdump.org/;
-    license = "BSD-style";
-    maintainers = with stdenv.lib.maintainers; [ globin ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.tcpdump.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ globin ];
+    platforms = platforms.unix;
   };
 }

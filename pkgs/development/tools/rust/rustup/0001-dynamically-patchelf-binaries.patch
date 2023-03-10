@@ -1,30 +1,24 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index 4b432785..fa45e87e 100644
+index 73a533b5..408ab815 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -109,10 +109,11 @@ impl Package for DirectoryPackage {
-             match &*part.0 {
-                 "file" => {
-                     if self.copy {
--                        builder.copy_file(path.clone(), &src_path)?
-+                        builder.copy_file(path.clone(), &src_path)?;
+@@ -113,6 +113,7 @@ fn install<'a>(
                      } else {
--                        builder.move_file(path.clone(), &src_path)?
-+                        builder.move_file(path.clone(), &src_path)?;
+                         builder.move_file(path.clone(), &src_path)?
                      }
 +                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()), &src_path)
                  }
                  "dir" => {
                      if self.copy {
-@@ -135,6 +136,22 @@ impl Package for DirectoryPackage {
+@@ -135,6 +136,29 @@ fn components(&self) -> Vec<String> {
      }
  }
  
 +fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
-+    let is_bin = if let Some(p) = src_path.parent() {
-+        p.ends_with("bin")
++    let (is_bin, is_lib) = if let Some(p) = src_path.parent() {
++        (p.ends_with("bin") || p.ends_with("libexec"), p.ends_with("lib"))
 +    } else {
-+        false
++        (false, false)
 +    };
 +
 +    if is_bin {
@@ -34,8 +28,15 @@ index 4b432785..fa45e87e 100644
 +            .arg(dest_path)
 +            .output();
 +    }
++    else if is_lib {
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-rpath")
++            .arg("@libPath@")
++            .arg(dest_path)
++            .output();
++    }
 +}
 +
  #[derive(Debug)]
- pub struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
+ pub(crate) struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
  

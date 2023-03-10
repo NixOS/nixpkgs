@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , python
 , fetchFromGitHub
@@ -31,16 +31,16 @@ buildPythonPackage {
   nativeBuildInputs = [ cython ];
 
   # numpy is optional - if not supplied, tests simply have less coverage
-  checkInputs = [ numpy ];
+  nativeCheckInputs = [ numpy ];
   # checkPhase begins by deleting source dir to force test execution against installed version
   checkPhase = ''
     rm -r code/png
     ${python.interpreter} code/test_png.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage    = https://github.com/scondo/purepng;
+    homepage    = "https://github.com/scondo/purepng";
     license     = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

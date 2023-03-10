@@ -1,5 +1,5 @@
-{ lib
-, python
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -7,7 +7,7 @@
 , rWrapper
 , rPackages
 , pcre
-, lzma
+, xz
 , bzip2
 , zlib
 , icu
@@ -19,30 +19,37 @@
 , cffi
 , tzlocal
 , simplegeneric
-, pytest
+, pytestCheckHook
 , extraRPackages ? []
 }:
 
 buildPythonPackage rec {
-    version = "3.2.5";
+    version = "3.5.8";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "0pnk363klic4smb3jnkm4lnh984c2cpqzawrg2j52hgy8k1bgyrk";
+      sha256 = "sha256-ImEfIbxSeYCH+5gwlwXxolz76L/Sf7/u6gHz01L92yk=";
     };
 
+    patches = [
+      # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
+      # This patch sets R_LIBS_SITE when rpy2 is imported.
+      ./rpy2-3.x-r-libs-site.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
+      substituteInPlace 'requirements.txt' --replace 'pytest' ""
+    '';
+
     buildInputs = [
-      R
       pcre
-      lzma
+      xz
       bzip2
       zlib
       icu
-
-      # is in the upstream `requires` although it shouldn't be -- this is easier than patching it away
-      pytest
     ] ++ (with rPackages; [
       # packages expected by the test framework
       ggplot2
@@ -52,26 +59,14 @@ buildPythonPackage rec {
       DBI
       dbplyr
       hexbin
+      lazyeval
       lme4
       tidyr
     ]) ++ extraRPackages ++ rWrapper.recommendedPackages;
 
-    checkPhase = ''
-      pytest
-    '';
-
     nativeBuildInputs = [
       R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
     ];
-
-    patches = [
-      # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
-      # This patch sets R_LIBS_SITE when rpy2 is imported.
-      ./rpy2-3.x-r-libs-site.patch
-    ];
-    postPatch = ''
-      substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
-    '';
 
     propagatedBuildInputs = [
       ipython
@@ -84,12 +79,14 @@ buildPythonPackage rec {
       simplegeneric
     ];
 
-    checkInputs = [
-      pytest
+    doCheck = !stdenv.isDarwin;
+
+    nativeCheckInputs = [
+      pytestCheckHook
     ];
 
     meta = {
-      homepage = http://rpy.sourceforge.net/rpy2;
+      homepage = "https://rpy2.github.io/";
       description = "Python interface to R";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;

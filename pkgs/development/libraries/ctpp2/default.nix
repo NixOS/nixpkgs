@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "ctpp2";
@@ -9,18 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "1z22zfw9lb86z4hcan9hlvji49c9b7vznh7gjm95gnvsh43zsgx8";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   patchPhase = ''
     # include <unistd.h> to fix undefined getcwd
     sed -ie 's/<stdlib.h>/<stdlib.h>\n#include <unistd.h>/' src/CTPP2FileSourceLoader.cpp
   '';
 
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/ctpp2json contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high performance templating engine";
-    homepage = http://ctpp.havoc.ru;
+    homepage = "http://ctpp.havoc.ru";
     maintainers = [ maintainers.robbinch ];
     platforms = platforms.linux;
     license = licenses.bsd2;

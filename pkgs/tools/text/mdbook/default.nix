@@ -1,25 +1,33 @@
-{ stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
+{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
-  version = "0.3.5";
+  version = "0.4.26";
 
   src = fetchFromGitHub {
-    owner = "rust-lang-nursery";
+    owner = "rust-lang";
     repo = "mdBook";
-    rev = "v${version}";
-    sha256 = "0gcrv54iswphzxxkmak1c7pmmpakiri6jk50j4bxrsplwjr76f7n";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-+K2mbVbOMQDumcPgiPtqDts/RGi+E0lF7Cftt86X/5A=";
   };
 
-  cargoSha256 = "12i9w9dgji36yvvdks0vkjjkh32nbnhz76sgrl2827pj49h9vnn0";
+  cargoHash = "sha256-C9ziW3LUBGR/K+nR3mDr62KoE9p3mn+50nfd/3NFjro=";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  auditable = true; # TODO: remove when this is the default
 
-  meta = with stdenv.lib; {
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  passthru = {
+    tests = {
+      inherit nix;
+    };
+  };
+
+  meta = with lib; {
     description = "Create books from MarkDown";
-    homepage = https://github.com/rust-lang-nursery/mdbook;
+    homepage = "https://github.com/rust-lang/mdBook";
+    changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ licenses.mpl20 ];
-    maintainers = [ maintainers.havvy ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ havvy Frostman ];
   };
 }

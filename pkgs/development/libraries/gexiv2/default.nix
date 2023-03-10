@@ -1,37 +1,84 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, exiv2
+, glib
+, gnome
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.12.0";
+  version = "0.14.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0slj5yj8c90l9pp5i3z74x5r3r4da0xfmbzkfq5k0dkg72q3kxaq";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "5YJ5pv8gtvZPpJlhXaXptXz2W6eFC3L6/fFyIanW1p4=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
-  buildInputs = [ glib ];
-  propagatedBuildInputs = [ exiv2 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    glib
+  ];
+
+  propagatedBuildInputs = [
+    exiv2
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dpython3_girdir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
   ];
 
   doCheck = true;
 
+  preCheck = let
+    libSuffix = if stdenv.isDarwin then "2.dylib" else "so.2";
+  in ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running unit tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p $out/lib
+    ln -s $PWD/gexiv2/libgexiv2.${libSuffix} $out/lib/libgexiv2.${libSuffix}
+  '';
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/gexiv2;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/gexiv2";
     description = "GObject wrapper around the Exiv2 photo metadata library";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

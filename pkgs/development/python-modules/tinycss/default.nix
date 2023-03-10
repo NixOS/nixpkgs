@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "12306fb50e5e9e7eaeef84b802ed877488ba80e35c672867f548c0924a76716e";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ cssutils ];
   nativeBuildInputs = [
     cython
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with pkgs.lib; {
     description = "Complete yet simple CSS parser for Python";
     license = licenses.bsd3;
-    homepage = https://pythonhosted.org/tinycss/;
+    homepage = "https://pythonhosted.org/tinycss/";
     maintainers = [ maintainers.costrouc ];
   };
 }

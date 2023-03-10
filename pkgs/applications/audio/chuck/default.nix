@@ -1,39 +1,31 @@
-{ stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
-, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+{ stdenv, lib, fetchurl, alsa-lib, bison, flex, libsndfile, which, DarwinTools, xcbuild
+, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel, MultitouchSupport
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0.0";
+  version = "1.4.2.0";
   pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "1b17rsf7bv45gfhyhfmpz9d4rkxn24c0m2hgmpfjz3nlp0rf7bic";
+    sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
   };
 
-  nativeBuildInputs = [ flex bison which ];
+  nativeBuildInputs = [ flex bison which ]
+    ++ lib.optionals stdenv.isDarwin [ DarwinTools xcbuild ];
 
   buildInputs = [ libsndfile ]
-    ++ lib.optional (!stdenv.isDarwin) alsaLib
-    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
+    ++ lib.optional (!stdenv.isDarwin) alsa-lib
+    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel MultitouchSupport ];
 
   patches = [ ./darwin-limits.patch ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
-
-  postPatch = ''
-    substituteInPlace src/core/makefile.x/makefile.osx \
-      --replace "weak_framework" "framework" \
-      --replace "MACOSX_DEPLOYMENT_TARGET=10.9" "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET"
-  '';
-
   makeFlags = [ "-C src" "DESTDIR=$(out)/bin" ];
-  buildFlags = [ (if stdenv.isDarwin then "osx" else "linux-alsa") ];
+  buildFlags = [ (if stdenv.isDarwin then "mac" else "linux-alsa") ];
 
   meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
-    homepage = http://chuck.cs.princeton.edu;
+    homepage = "http://chuck.cs.princeton.edu";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];

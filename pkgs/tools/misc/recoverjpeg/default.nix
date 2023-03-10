@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python2, exif, imagemagick }:
+{ lib, stdenv, fetchurl, makeWrapper, python3, exif, imagemagick }:
 
 stdenv.mkDerivation rec {
   pname = "recoverjpeg";
@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ python2 ];
+  buildInputs = [ python3 ];
 
   postFixup = ''
     wrapProgram $out/bin/sort-pictures \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ exif imagemagick ]}
+      --prefix PATH : ${lib.makeBinPath [ exif imagemagick ]}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://rfc1149.net/devel/recoverjpeg.html;
+  meta = with lib; {
+    homepage = "https://rfc1149.net/devel/recoverjpeg.html";
     description = "Recover lost JPEGs and MOV files on a bogus memory card or disk";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dotlambda ];

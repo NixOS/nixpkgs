@@ -2,46 +2,45 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pymysql
-, pytest
-, isPy27
+, pythonOlder
+, setuptools-scm
+, setuptools-scm-git-archive
 }:
 
 buildPythonPackage rec {
   pname = "aiomysql";
-  version = "0.0.20";
-  disabled = isPy27;
+  version = "0.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mxih81zc2k64briirpp5wz4f72l8v05avfyfibaq9fr6lcbih9b";
+    hash = "sha256-rYEos2RuE2xI59httYlN21smBH4/fU4uT48FWwrI6Qg=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    setuptools-scm-git-archive
+  ];
 
   propagatedBuildInputs = [
     pymysql
   ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "PyMySQL>=0.9,<=0.9.2" "PyMySQL"
-  '';
-
-  checkPhase = ''
-    pytest
-  '';
-
-  # tests require mysql database
+  # Tests require MySQL database
   doCheck = false;
+
+  pythonImportsCheck = [
+    "aiomysql"
+  ];
 
   meta = with lib; {
     description = "MySQL driver for asyncio";
-    homepage = https://github.com/aio-libs/aiomysql;
+    homepage = "https://github.com/aio-libs/aiomysql";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

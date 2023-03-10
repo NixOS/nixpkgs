@@ -1,0 +1,36 @@
+--- a/qt-libs.asd
++++ b/qt-libs.asd
+@@ -17,5 +17,4 @@
+   :components ((:file "qt-libs"))
+   :depends-on (:qt-lib-generator
+                :cl-ppcre
+-               :cffi)
+-  :perform (asdf:load-op :after (op c) (uiop:symbol-call :qt-libs :ensure-standalone-libs)))
++               :cffi))
+--- a/qt-libs.lisp
++++ b/qt-libs.lisp
+@@ -94,16 +94,14 @@
+   standalone-dir)
+
+ (defun %ensure-lib-loaded (file)
+-  (let ((file (etypecase file
+-                (pathname file)
+-                (string (installed-library-file file))))
+-        (name (intern (string-upcase (pathname-name file))))
+-        #+sbcl(sb-ext:*muffled-warnings* 'style-warning))
+-    (cffi::register-foreign-library
+-     name `((T ,file))
+-     :search-path (to-directory file))
+-    (unless (cffi:foreign-library-loaded-p name)
+-      (cffi:load-foreign-library name))))
++ (let ((name (make-pathname :name (format nil "lib~a" file)
++                             :type #+unix "so"
++                                   #+darwin "dylib")))
++    (or (find-if (lambda (lib)
++                   (equal (cffi:foreign-library-pathname lib)
++                          (namestring name)))
++                 (cffi:list-foreign-libraries))
++        (cffi:load-foreign-library name))))
+
+ (defun ensure-lib-loaded (file)
+   (cond ((pathnamep file)

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, intltool, ntfs3g, utillinux
+{ lib, stdenv, fetchurl, intltool, ntfs3g, util-linux
 , mediaDir ? "/media/"
 , lockDir ? "/var/lock/pmount"
 , whiteList ? "/etc/pmount.allow"
 }:
 
 # constraint mention in the configure.ac
-assert stdenv.lib.hasSuffix "/" mediaDir;
+assert lib.hasSuffix "/" mediaDir;
 
 stdenv.mkDerivation rec {
   pname = "pmount";
@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
-  buildInputs = [ intltool utillinux ];
+  nativeBuildInputs = [ intltool util-linux ];
+  buildInputs = [ util-linux ];
 
   configureFlags = [
     "--with-media-dir=${mediaDir}"
     "--with-lock-dir=${lockDir}"
     "--with-whitelist=${whiteList}"
-    "--with-mount-prog=${utillinux}/bin/mount"
-    "--with-umount-prog=${utillinux}/bin/umount"
+    "--with-mount-prog=${util-linux}/bin/mount"
+    "--with-umount-prog=${util-linux}/bin/umount"
     "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
   ];
 
@@ -37,9 +38,9 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"
 
   meta = {
-    homepage = https://bazaar.launchpad.net/~fourmond/pmount/main/files;
+    homepage = "https://bazaar.launchpad.net/~fourmond/pmount/main/files";
     description = "Mount removable devices as normal user";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

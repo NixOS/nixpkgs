@@ -1,20 +1,20 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  akonadi, akonadi-mime, calendarsupport, eventviews, kdepim-apps-libs,
-  kdiagram, kldap, kmime, qtbase,
+  akonadi, akonadi-mime, calendarsupport, eventviews,
+  kdiagram, kldap, kmime, pimcommon, qtbase
 }:
 
 mkDerivation {
-  name = "incidenceeditor";
+  pname = "incidenceeditor";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi akonadi-mime calendarsupport eventviews kdepim-apps-libs kdiagram
-    kldap kmime qtbase
+    akonadi akonadi-mime calendarsupport eventviews kdiagram
+    kldap kmime pimcommon qtbase
   ];
   outputs = [ "out" "dev" ];
 }

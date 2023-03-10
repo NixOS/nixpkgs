@@ -4,7 +4,7 @@ with lib;
 
 {
   name = "xautolock";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ ma27 ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 
   nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

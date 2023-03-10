@@ -1,25 +1,53 @@
-{ stdenv, fetchurl, perl
-, CoreServices, ApplicationServices }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, perl
+, CoreServices
+, ApplicationServices
+}:
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2020.02";
+  version = "2022.07";
 
   src = fetchurl {
-    url = "https://www.moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "1kz97yy357lax7xdz4mnnwswn7axhp14nq0dw3n6xbcpap6m82aw";
-   };
+    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
+    hash = "sha256-M37wTRb4JvmUZcZTuSAGAo/iIL5o09z9BylhL09rW0Y=";
+  };
 
-  buildInputs = [ perl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
+  patches = [
+    (fetchpatch {
+      name = "mimalloc-older-macos-fixes.patch";
+      url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
+      stripLen = 1;
+      extraPrefix = "3rdparty/mimalloc/";
+      sha256 = "1gcbn1850vy7xzalhn9ffnsg6x1ywi3fmnxvnal3m6lmb4kz5kb1";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs .
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Configure.pl \
+      --replace '`/usr/bin/arch`' '"${stdenv.hostPlatform.darwinArch}"' \
+      --replace '/usr/bin/arch' "$(type -P true)" \
+      --replace '/usr/' '/nope/'
+    substituteInPlace 3rdparty/dyncall/configure \
+      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+  '';
+
+  buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
   doCheck = false; # MoarVM does not come with its own test suite
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
-    homepage    = "https://www.moarvm.org/";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
+    homepage = "https://moarvm.org";
+    license = licenses.artistic2;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    mainProgram = "moar";
+    platforms = platforms.unix;
   };
 }

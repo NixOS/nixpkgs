@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    sha256 = "0j9awiiw9zf97r60m848absq43k37gghpyw7acxqjazfzd71fxvm";
+    hash = "sha256-578eSYK5H4QSidGSFAIdiDccoqbHME31kEnX2ni4PO0=";
   };
 
   configureFlags = [
@@ -35,7 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Bindings for Xapian";
-    homepage = https://xapian.org/;
+    homepage = "https://xapian.org/";
+    changelog = "https://xapian.org/docs/xapian-bindings-${version}/NEWS";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonringer ];
   };

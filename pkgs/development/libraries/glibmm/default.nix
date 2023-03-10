@@ -1,36 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, glib, libsigcxx, gnome3, darwin }:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome, darwin, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.62.0";
+  version = "2.66.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ziwx6r7k7wbvg4qq1rgrv8zninapgrmhn1hs6926a3krh9ryr9n";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ezhGYt1uw7hsBXAzHTKvBdsr2Zp5FgK3Z7SgslZuwUk=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gnum4 ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    gnum4
+    glib # for glib-compile-schemas
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
   ]);
   propagatedBuildInputs = [ glib libsigcxx ];
 
-  enableParallelBuilding = true;
-
   doCheck = false; # fails. one test needs the net, another /etc/fstab
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ interface to the GLib library";
 
-    homepage = https://gtkmm.org/;
+    homepage = "https://gtkmm.org/";
 
     license = licenses.lgpl2Plus;
 

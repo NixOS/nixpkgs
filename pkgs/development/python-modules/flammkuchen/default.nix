@@ -1,4 +1,4 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , numpy
 , scipy
 , tables
@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "flammkuchen";
-  version = "0.9.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9aab9b229ace70d879b85618a9ce0e88dd6ce35d4dbcdfd60c6b61c33a1b4fb";
+    sha256 = "sha256-KtMGQftoYVNNMtfYeYiaQyMLAySpf9YXLMxj+e/CV5I=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

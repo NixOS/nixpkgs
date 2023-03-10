@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, buildEnv, makeWrapper, lua, luajit, readline
+{ lib, stdenv, fetchFromGitLab, buildEnv, makeWrapper, lua, luajit, readline
 , useLuaJit ? false
 , extraLibraries ? []
 }:
@@ -17,11 +17,12 @@ let
               [ lua ];
   };
 
-  inherit (stdenv.lib) optionalString concatMapStringsSep;
+  inherit (lib) optionalString concatMapStringsSep;
 in
 
 stdenv.mkDerivation {
-  name = "urn-${optionalString (extraLibraries != []) "with-libraries-"}${version}";
+  pname = "urn${optionalString (extraLibraries != []) "-with-libraries"}";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "urn";
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
     sha256 = "0nclr3d8ap0y5cg36i7g4ggdqci6m5q27y9f26b57km8p266kcpy";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   # Any packages that depend on the compiler have a transitive
   # dependency on the Urn runtime support.
   propagatedBuildInputs = [ urn-rt ];
@@ -48,11 +49,12 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${urn-rt}/lib/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://urn-lang.com;
+  meta = with lib; {
+    homepage = "https://urn-lang.com";
     description = "Yet another Lisp variant which compiles to Lua";
     license = licenses.bsd3;
     maintainers = with maintainers; [ CrazedProgrammer ];
+    platforms = platforms.all;
   };
 
   passthru = {

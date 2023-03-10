@@ -1,38 +1,48 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, libX11, libXext, libXi
+{ lib, stdenv, fetchFromGitLab
+, desktop-file-utils, shared-mime-info, ninja, pkg-config
+, libiconv
+, libX11, libXcursor, libXext, libXi
 , freetype, fontconfig
-, libpng, libjpeg
+, libjpeg, libpng, libtiff, libwebp
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "2.1.5";
+  version = "3.0.6";
 
-  src = fetchFromGitHub {
-    owner = "Symbian9";
+  src = fetchFromGitLab {
+    owner = "azelpg";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "0x5jmsprjissqcvwq75pqq9wgv4k9b7cy507hai8xk6xs3vxwgba";
+    rev = "v${version}";
+    hash = "sha256-/shmLdZ4mCBZAeUuqJtCiUjeI8B5f/8dIGPqmXMjZ1I=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    desktop-file-utils # for update-desktop-database
+    shared-mime-info   # for update-mime-info
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
-    libX11 libXext libXi
+    libX11 libXcursor libXext libXi
     freetype fontconfig
-    libpng libjpeg
+    libjpeg libpng libtiff libwebp
     zlib
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  configureFlags = [
-    "--with-freetype-dir=${stdenv.lib.getDev freetype}/include/freetype2"
-  ];
+  preBuild = ''
+    cd build
+  '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Full color painting software for illustration drawing";
-    homepage = "https://osdn.net/projects/azpainter";
+    homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

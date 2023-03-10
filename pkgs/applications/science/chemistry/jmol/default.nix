@@ -12,19 +12,27 @@ let
     exec = "jmol";
     desktopName = "JMol";
     genericName = "Molecular Modeler";
-    mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
-    categories = "Graphics;Education;Science;Chemistry;";
+    mimeTypes = [
+      "chemical/x-pdb"
+      "chemical/x-mdl-molfile"
+      "chemical/x-mol2"
+      "chemical/seq-aa-fasta"
+      "chemical/seq-na-fasta"
+      "chemical/x-xyz"
+      "chemical/x-mdl-sdf"
+    ];
+    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
   };
 in
 stdenv.mkDerivation rec {
-  version = "14.30.2";
+  version = "16.1.3";
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    sha256 = "0f9sxhxyqrd1vvmq566v1zpzzlci37pm9j7alzak766x5dg5yyz1";
+    sha256 = "sha256-k1F4OaER9vg8GIi4eqppeh2f0MtlcBSfd4zkewFp2As=";
   };
 
   patchPhase = ''
@@ -43,11 +51,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      description = "A Java 3D viewer for chemical structures";
-     homepage = https://sourceforge.net/projects/jmol;
+     homepage = "https://sourceforge.net/projects/jmol";
+     sourceProvenance = with sourceTypes; [ binaryBytecode ];
      license = licenses.lgpl2;
      platforms = platforms.all;
-     maintainers = with maintainers; [ timokau mounium ];
+     maintainers = with maintainers; [ mounium ] ++ teams.sage.members;
   };
 }

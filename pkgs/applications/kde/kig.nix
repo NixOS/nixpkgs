@@ -6,8 +6,10 @@
 }:
 
 mkDerivation {
-  name = "kig";
+  pname = "kig";
   meta = {
+    homepage = "https://apps.kde.org/kig/";
+    description = "Interactive geometry";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ raskin ];
   };
@@ -16,4 +18,3 @@ mkDerivation {
     boost karchive kcrash kiconthemes kparts ktexteditor qtsvg qtxmlpatterns
   ];
 }
-

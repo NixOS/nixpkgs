@@ -1,0 +1,36 @@
+diff --git a/data/org.gnome.Shell-disable-extensions.service b/data/org.gnome.Shell-disable-extensions.service
+index de91167c5..1c9965678 100644
+--- a/data/org.gnome.Shell-disable-extensions.service
++++ b/data/org.gnome.Shell-disable-extensions.service
+@@ -11,5 +11,5 @@ ConditionPathExists=%t/gnome-shell-disable-extensions
+ [Service]
+ Type=simple
+ # Disable extensions
+-ExecStart=gsettings set org.gnome.shell disable-user-extensions true
++ExecStart=@gsettings@ set org.gnome.shell disable-user-extensions true
+ Restart=no
+diff --git a/js/ui/extensionDownloader.js b/js/ui/extensionDownloader.js
+index 8bf4646a6..59e88bb4c 100644
+--- a/js/ui/extensionDownloader.js
++++ b/js/ui/extensionDownloader.js
+@@ -114,7 +114,7 @@ async function extractExtensionArchive(bytes, dir) {
+     stream.close_async(GLib.PRIORITY_DEFAULT, null);
+ 
+     const unzip = Gio.Subprocess.new(
+-        ['unzip', '-uod', dir.get_path(), '--', file.get_path()],
++        ['@unzip@/bin/unzip', '-uod', dir.get_path(), '--', file.get_path()],
+         Gio.SubprocessFlags.NONE);
+     await unzip.wait_check_async(null);
+ }
+diff --git a/js/ui/status/keyboard.js b/js/ui/status/keyboard.js
+index bc50f3d37..868eb5abf 100644
+--- a/js/ui/status/keyboard.js
++++ b/js/ui/status/keyboard.js
+@@ -1080,6 +1080,6 @@ class InputSourceIndicator extends PanelMenu.Button {
+         if (xkbVariant.length > 0)
+             description = '%s\t%s'.format(description, xkbVariant);
+ 
+-        Util.spawn(['gkbd-keyboard-display', '-l', description]);
++        Util.spawn(['@libgnomekbd@/bin/gkbd-keyboard-display', '-l', description]);
+     }
+ });

@@ -1,37 +1,70 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, wxPython, pygments, numpy, vtk, traitsui, envisage, apptools
-, nose, mock
-, isPy3k
+{ lib
+, apptools
+, buildPythonPackage
+, envisage
+, fetchPypi
+, numpy
+, packaging
+, pyface
+, pygments
+, pyqt5
+, pythonOlder
+, traitsui
+, vtk
+, wrapQtAppsHook
 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.7.0";
+  version = "4.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.bz2";
-    sha256 = "02rg4j1vkny2piqn3f728kg34m54kgx396g6h5y7ykz2lk3f3h44";
+    sha256 = "sha256-n0J+8spska542S02ibpr7KJMhGDicG2KHJuEKJrT/Z4=";
   };
 
-  # Discovery of 'vtk' in setuptools is not working properly, due to a missing
-  # .egg-info in the vtk package. It does however import and run just fine.
   postPatch = ''
-    substituteInPlace mayavi/__init__.py --replace "'vtk'" ""
+    # building the docs fails with the usual Qt xcb error, so skip:
+    substituteInPlace setup.py \
+      --replace "build.build.run(self)" "build.build.run(self); return"
   '';
 
-  propagatedBuildInputs = [ wxPython pygments numpy vtk traitsui envisage apptools ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
-  checkInputs = [ nose mock ];
+  propagatedBuildInputs = [
+    apptools
+    envisage
+    numpy
+    packaging
+    pyface
+    pygments
+    pyqt5
+    traitsui
+    vtk
+  ];
 
-  disabled = isPy3k; # TODO: This would need pyqt5 instead of wxPython
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  doCheck = false; # Needs X server
+  # Needs X server
+  doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "mayavi"
+  ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  meta = with lib; {
     description = "3D visualization of scientific data in Python";
-    homepage = https://github.com/enthought/mayavi;
-    maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
+    homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ knedlsepp ];
   };
 }

@@ -17,13 +17,14 @@ in
   options = {
 
     services.rdnssd.enable = mkOption {
+      type = types.bool;
       default = false;
       #default = config.networking.enableIPv6;
       description =
-        ''
+        lib.mdDoc ''
           Whether to enable the RDNSS daemon
-          (<command>rdnssd</command>), which configures DNS servers in
-          <filename>/etc/resolv.conf</filename> from RDNSS
+          ({command}`rdnssd`), which configures DNS servers in
+          {file}`/etc/resolv.conf` from RDNSS
           advertisements sent by IPv6 routers.
         '';
     };
@@ -71,8 +72,10 @@ in
 
     users.users.rdnssd = {
       description = "RDNSSD Daemon User";
-      uid = config.ids.uids.rdnssd;
+      isSystemUser = true;
+      group = "rdnssd";
     };
+    users.groups.rdnssd = {};
 
   };
 

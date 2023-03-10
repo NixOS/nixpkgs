@@ -1,13 +1,13 @@
 { stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook,
   # build dependencies
-  alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
+  alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
   freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango,
   xorg, systemd
 }:
 let
 
   deps = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core
@@ -91,14 +91,15 @@ in stdenv.mkDerivation rec {
       $out/opt/pencil/pencil
 
     # fix missing libudev
-    ln -s ${systemd.lib}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
+    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
     wrapProgram $out/opt/pencil/pencil \
       --prefix LD_LIBRARY_PATH : $out/opt/pencil
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI prototyping/mockup tool";
     homepage    = "https://pencil.evolus.vn/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.gpl2; # Commercial license is also available
     maintainers = with maintainers; [ bjornfor prikhi mrVanDalo ];
     platforms   = platforms.linux;

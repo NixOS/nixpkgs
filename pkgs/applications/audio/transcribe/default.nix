@@ -1,42 +1,83 @@
-{ stdenv, fetchzip, wrapGAppsHook, alsaLib, atk, cairo, gdk-pixbuf
-, glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
+{ stdenv
+, fetchzip
+, lib
+, wrapGAppsHook
+, xdg-utils
+, which
+, alsa-lib
+, atk
+, cairo
+, fontconfig
+, gdk-pixbuf
+, glib
+, gst_all_1
+, gtk3
+, libSM
+, libX11
+, libXtst
+, libpng12
+, pango
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "8.72";
+  version = "9.21";
 
-  src = if stdenv.hostPlatform.system == "i686-linux" then
-    fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux32/xscsetup.tar.gz";
-      sha256 = "1h5l7ry9c9awpxfnd29b0wm973ifrhj17xl5d2fdsclw2swsickb";
-    }
-  else if stdenv.hostPlatform.system == "x86_64-linux" then
-    fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux64/xsc64setup.tar.gz";
-      sha256 = "1rpd3ppnx5i5yrnfbjrx7h7dk48kwl99i9lnpa75ap7nxvbiznm0";
-    }
-  else throw "Platform not supported";
+  src =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchzip
+        {
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.21.0.tar.gz";
+          sha256 = "sha256-M0hOJOsTTRxPef8rTO+/KpiP4lr8mtplS9KITaFOFPA=";
+        }
+    else throw "Platform not supported";
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [
+    which
+    xdg-utils
+    wrapGAppsHook
+  ];
 
-  buildInputs = with gst_all_1; [ gst-plugins-base gst-plugins-good
-    gst-plugins-bad gst-plugins-ugly ];
+  buildInputs = with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ];
 
   dontPatchELF = true;
 
-  libPath = with gst_all_1; stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsaLib
-    libX11 libSM libpng12 gstreamer gst-plugins-base zlib
+  libPath = with gst_all_1; lib.makeLibraryPath [
+    stdenv.cc.cc
+    glib
+    gtk3
+    atk
+    fontconfig
+    pango
+    cairo
+    gdk-pixbuf
+    alsa-lib
+    libX11
+    libXtst
+    libSM
+    libpng12
+    gstreamer
+    gst-plugins-base
+    zlib
   ];
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec $out/share/doc
     cp transcribe $out/libexec
     cp xschelp.htb readme_gtk.html $out/share/doc
-    cp -r gtkicons $out/share/icons
-
     ln -s $out/share/doc/xschelp.htb $out/libexec
-
+    # The script normally installs to the home dir
+    sed -i -E 's!BIN_DST=.*!BIN_DST=$out!' install-linux.sh
+    sed -i -e 's!Exec=''${BIN_DST}/transcribe/transcribe!Exec=transcribe!' install-linux.sh
+    sed -i -e 's!''${BIN_DST}/transcribe!''${BIN_DST}/libexec!' install-linux.sh
+    rm -f xschelp.htb readme_gtk.html *.so
+    XDG_DATA_HOME=$out/share bash install-linux.sh -i
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       $out/libexec/transcribe
@@ -53,7 +94,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/transcribe $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software to help transcribe recorded music";
     longDescription = ''
       The Transcribe! application is an assistant for people who want
@@ -64,10 +105,10 @@ stdenv.mkDerivation rec {
       has many transcription-specific features not found on
       conventional music players.
     '';
-    homepage = https://www.seventhstring.com/xscribe/;
+    homepage = "https://www.seventhstring.com/xscribe/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
-    broken = true;
   };
 }

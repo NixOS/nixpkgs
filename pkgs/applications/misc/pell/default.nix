@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scsh, sox, libnotify }:
+{ lib, stdenv, fetchFromGitHub, scsh, sox, libnotify }:
 
 stdenv.mkDerivation rec {
   pname = "pell";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/pell --replace "/usr/share/pell/offline.mp3" "$out/share/offline.mp3"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/pell;
+  meta = with lib; {
+    homepage = "https://github.com/ebzzry/pell";
     description = "A simple host availability monitor";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

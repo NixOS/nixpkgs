@@ -1,20 +1,28 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "aurulent-sans-0.1";
-  owner = "deepfire";
-  repo = "hartke-aurulent-sans";
-  rev = name;
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    tar xf $downloadedFile -C $out/share/fonts --strip=1
+stdenvNoCC.mkDerivation rec {
+  pname = "aurulent-sans";
+  version = "0.1";
+
+  src = fetchFromGitHub {
+    owner = "deepfire";
+    repo = "hartke-aurulent-sans";
+    rev = "${pname}-${version}";
+    hash = "sha256-M/duhgqxXZJq5su9FrsGjZdm+wtO5B5meoDomde+GwY=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.otf -t $out/share/fonts
+
+    runHook postInstall
   '';
-  sha256 = "1l60psfv9x0x9qx9vp1qnhmck7a7kks385m5ycrd3d91irz1j5li";
 
   meta = {
     description = "Aurulent Sans";
     longDescription = "Aurulent Sans is a humanist sans serif intended to be used as an interface font.";
-    homepage = http://delubrum.org/;
+    homepage = "http://delubrum.org/";
     maintainers = with lib.maintainers; [ deepfire ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

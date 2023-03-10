@@ -5,7 +5,7 @@
 , stups-tokens
 , stups-cli-support
 , pytest
-, pytestcov
+, pytest-cov
 , isPy3k
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   patches = [
     # pytest 5 is currently unsupported. Fetch and apply a pr that resolves this.
     (fetchpatch {
-      url = https://github.com/zalando-stups/zign/commit/50140720211e547b0e59f7ddb39a732f0cc73ad7.patch;
+      url = "https://github.com/zalando-stups/zign/commit/50140720211e547b0e59f7ddb39a732f0cc73ad7.patch";
       sha256 = "1zmyvg1z1asaqqsmxvsx0srvxd6gkgavppvg3dblxwhkml01awqk";
     })
   ];
@@ -38,9 +38,9 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   ";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    pytestcov
+    pytest-cov
   ];
 
   meta = with lib; {

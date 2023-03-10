@@ -4,9 +4,10 @@ with lib;
 
 let
 
-  pkg = if config.hardware.sane.snapshot
-    then pkgs.sane-backends-git
-    else pkgs.sane-backends;
+  pkg = pkgs.sane-backends.override {
+    scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
+    scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
+  };
 
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";
@@ -27,12 +28,12 @@ let
   };
 
   env = {
-    SANE_CONFIG_DIR = config.hardware.sane.configDir;
-    LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+    SANE_CONFIG_DIR = "/etc/sane-config";
+    LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; };
+  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -47,57 +48,101 @@ in
     hardware.sane.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable support for SANE scanners.
 
-        <note><para>
-          Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
-        </para></note>
+        ::: {.note}
+        Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
+        :::
       '';
     };
 
     hardware.sane.snapshot = mkOption {
       type = types.bool;
       default = false;
-      description = "Use a development snapshot of SANE scanner drivers.";
+      description = lib.mdDoc "Use a development snapshot of SANE scanner drivers.";
     };
 
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Packages providing extra SANE backends to enable.
 
-        <note><para>
-          The example contains the package for HP scanners.
-        </para></note>
+        ::: {.note}
+        The example contains the package for HP scanners, and the package for
+        Apple AirScan and Microsoft WSD support (supports many
+        vendors/devices).
+        :::
       '';
-      example = literalExample "[ pkgs.hplipWithPlugin ]";
+      example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
+    };
+
+    hardware.sane.disabledDefaultBackends = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "v4l" ];
+      description = lib.mdDoc ''
+        Names of backends which are enabled by default but should be disabled.
+        See `$SANE_CONFIG_DIR/dll.conf` for the list of possible names.
+      '';
     };
 
     hardware.sane.configDir = mkOption {
       type = types.str;
       internal = true;
-      description = "The value of SANE_CONFIG_DIR.";
+      description = lib.mdDoc "The value of SANE_CONFIG_DIR.";
     };
 
     hardware.sane.netConf = mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.16";
-      description = ''
+      description = lib.mdDoc ''
         Network hosts that should be probed for remote scanners.
+      '';
+    };
+
+    hardware.sane.drivers.scanSnap.enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = lib.mdDoc ''
+        Whether to enable drivers for the Fujitsu ScanSnap scanners.
+
+        The driver files are unfree and extracted from the Windows driver image.
+      '';
+    };
+
+    hardware.sane.drivers.scanSnap.package = mkOption {
+      type = types.package;
+      default = pkgs.sane-drivers.epjitsu;
+      defaultText = literalExpression "pkgs.sane-drivers.epjitsu";
+      description = lib.mdDoc ''
+        Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
+
+        The process is described in the `/etc/sane.d/epjitsu.conf` file in
+        the `sane-backends` package.
+      '';
+    };
+
+    hardware.sane.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open ports needed for discovery of scanners on the local network, e.g.
+        needed for Canon scanners (BJNP protocol).
       '';
     };
 
     services.saned.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable saned network daemon for remote connection to scanners.
 
-        saned would be runned from <literal>scanner</literal> user; to allow
-        access to hardware that doesn't have <literal>scanner</literal> group
+        saned would be run from `scanner` user; to allow
+        access to hardware that doesn't have `scanner` group
         you should add needed groups to this user.
       '';
     };
@@ -106,7 +151,7 @@ in
       type = types.lines;
       default = "";
       example = "192.168.0.0/24";
-      description = ''
+      description = lib.mdDoc ''
         Extra saned configuration lines.
       '';
     };
@@ -122,9 +167,12 @@ in
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
+      environment.etc."sane-config".source = config.hardware.sane.configDir;
+      environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
 
       users.groups.scanner.gid = config.ids.gids.scanner;
+      networking.firewall.allowedUDPPorts = mkIf config.hardware.sane.openFirewall [ 8612 ];
     })
 
     (mkIf config.services.saned.enable {
@@ -148,13 +196,14 @@ in
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
           Accept = true;
-          MaxConnections = 1;
+          MaxConnections = 64;
         };
       };
 
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
+        extraGroups = [ "lp" ] ++ optionals config.services.avahi.enable [ "avahi" ];
       };
     })
   ];

@@ -1,33 +1,47 @@
-{ lib
+{ fetchurl
+, fetchpatch
 , stdenv
-, fetchurl
-, meson
-, ninja
-, pkgconfig
+, installShellFiles
+, lib
 , libftdi1
+, libjaylink
 , libusb1
 , pciutils
+, pkg-config
+, jlinkSupport ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "flashrom";
-  version = "1.2";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
+    hash = "sha256-oFMjRFPM0BLnnzRDvcxhYlz5e3/Xy0zdi/v/vosUliM=";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja ];
-  buildInputs = [ libftdi1 libusb1 pciutils ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
+  buildInputs = [ libftdi1 libusb1 pciutils ]
+    ++ lib.optional jlinkSupport libjaylink;
+
+  postPatch = ''
+    substituteInPlace util/flashrom_udev.rules \
+      --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
+  '';
+
+  makeFlags = [ "PREFIX=$(out)" "libinstall" ]
+    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes";
+
+  postInstall = ''
+    install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
+  '';
 
   meta = with lib; {
-    homepage = http://www.flashrom.org;
+    homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ funfunctor fpletz ];
+    maintainers = with maintainers; [ fpletz felixsinger ];
     platforms = platforms.all;
-    # https://github.com/flashrom/flashrom/issues/125
-    badPlatforms = [ "aarch64-linux" ];
+    broken = stdenv.isDarwin; # requires DirectHW
   };
 }

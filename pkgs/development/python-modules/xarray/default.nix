@@ -1,38 +1,52 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
 , numpy
+, packaging
 , pandas
-, python
-, isPy3k
+, pytestCheckHook
+, pythonOlder
+, setuptoolsBuildHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.15.0";
+  version = "2022.12.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c72d160c970725201f769e80fb91cbad68d6ebf21d68fcc371385a6c950459c3";
+    sha256 = "sha256-CD0I5VKnZHx+zhNt+jpLahN5JWvrVbvti43fBfHhTsc=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [numpy pandas];
+  SETUPTOOLS_SCM_PRETEND_VERSION="${version}";
 
-  checkPhase = ''
-    pytest $out/${python.sitePackages}
-  '';
+  nativeBuildInputs = [
+    setuptoolsBuildHook
+    setuptools-scm
+  ];
 
-  # There always seem to be broken tests...
-  doCheck = false;
+  propagatedBuildInputs = [
+    numpy
+    packaging
+    pandas
+  ];
 
-  disabled = !isPy3k;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "xarray"
+  ];
+
+  meta = with lib; {
     description = "N-D labeled arrays and datasets in Python";
-    homepage = https://github.com/pydata/xarray;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://github.com/pydata/xarray";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fridh ];
   };
 }

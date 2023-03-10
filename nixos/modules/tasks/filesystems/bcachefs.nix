@@ -42,17 +42,28 @@ in
 {
   config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
     {
-      system.fsPackages = [ pkgs.bcachefs-tools ];
+      # We do not want to include bachefs in the fsPackages for systemd-initrd
+      # because we provide the unwrapped version of mount.bcachefs
+      # through the extraBin option, which will make it available for use.
+      system.fsPackages = lib.optional (!config.boot.initrd.systemd.enable) pkgs.bcachefs-tools;
+      environment.systemPackages = lib.optional (config.boot.initrd.systemd.enable) pkgs.bcachefs-tools;
 
       # use kernel package with bcachefs support until it's in mainline
       boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
     }
 
     (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
-      # the cryptographic modules are required only for decryption attempts
-      boot.initrd.availableKernelModules = [ "bcachefs" "chacha20" "poly1305" ];
+      # chacha20 and poly1305 are required only for decryption attempts
+      boot.initrd.availableKernelModules = [ "bcachefs" "sha256" "chacha20" "poly1305" ];
 
-      boot.initrd.extraUtilsCommands = ''
+      boot.initrd.systemd.extraBin = {
+        "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
+        "mount.bcachefs" = pkgs.runCommand "mount.bcachefs" {} ''
+          cp -pdv ${pkgs.bcachefs-tools}/bin/.mount.bcachefs.sh-wrapped $out
+        '';
+      };
+
+      boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
       '';
       boot.initrd.extraUtilsCommandsTest = ''

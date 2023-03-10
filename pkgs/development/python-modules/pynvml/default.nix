@@ -1,19 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, substituteAll
 , pythonOlder
 , cudatoolkit
+, addOpenGLRunpath
 }:
 
 buildPythonPackage rec {
   pname = "pynvml";
-  version = "8.0.4";
+  version = "11.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pfykj1amqh1rixp90rg85v1nj6qmx89fahqr6ii4zlcckffmm68";
+    sha256 = "sha256-0CeyG5WxCIufwngRf59ht8Z/jjOnh+n4P3NfD3GsMtA=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
+  ];
 
   propagatedBuildInputs = [ cudatoolkit ];
 
@@ -22,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for the NVIDIA Management Library";
-    homepage = https://www.nvidia.com;
+    homepage = "https://www.nvidia.com";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };

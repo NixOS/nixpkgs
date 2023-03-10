@@ -1,25 +1,34 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, jid }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "jid";
-  version = "0.7.2";
-
-  goPackagePath = "github.com/simeji/jid";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "simeji";
     repo = "jid";
-    rev = version;
-    sha256 = "0p4srp85ilcafrn9d36rzpzg5k5jd7is93p68hamgxqyiiw6a8fi";
+    rev = "v${version}";
+    hash = "sha256-fZzEbVNGsDNQ/FhII+meQvKeyrgxn3wtFW8VfNmJz5U=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-Lq8ouTjPsGhqDwrCMpqkSU7FEGszYwAkwl92vAEZ68w=";
+
+  patches = [
+    # Run go mod tidy
+    ./go-mod.patch
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = jid;
+    version = "v${version}";
+  };
 
   meta = {
     description = "A command-line tool to incrementally drill down JSON";
-    homepage = https://github.com/simeji/jid;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ stesie ];
+    homepage = "https://github.com/simeji/jid";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stesie ];
   };
 }

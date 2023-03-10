@@ -1,0 +1,14 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -61,10 +63,3 @@ include = [
+ exclude = [
+     "/gitlint/tests", #
+ ]
+-
+-[tool.hatch.metadata.hooks.vcs.urls]
+-Homepage = "https://jorisroovers.github.io/gitlint"
+-Documentation = "https://jorisroovers.github.io/gitlint"
+-Source = "https://github.com/jorisroovers/gitlint/tree/main/gitlint-core"
+-Changelog = "https://github.com/jorisroovers/gitlint/blob/main/CHANGELOG.md"
+-'Source Commit' = "https://github.com/jorisroovers/gitlint/tree/{commit_hash}/gitlint-core"
+\ No newline at end of file

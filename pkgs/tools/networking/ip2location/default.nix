@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ip2location";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Look up locations of host names and IP addresses";
     longDescription = ''
       A command-line tool to find the country, region, city,coordinates,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       weather, MCC, MNC, mobile brand name, elevation and usage type of
       any IP address or host name in the IP2Location databases.
     '';
-    homepage = https://www.ip2location.com/free/applications;
+    homepage = "https://www.ip2location.com/free/applications";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.linux;
   };

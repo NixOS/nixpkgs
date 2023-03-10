@@ -1,28 +1,38 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , h5py
 , nose
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "1.16.3";
   pname = "annoy";
+  version = "1.17.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe2779664bd8846f2d67191a7e6010b8df890ac4586336748fd0697f31654379";
+    hash = "sha256-vxd9vq+4H2OyrB4SRrHyairMguc7pGY4c00p2CWBIto=";
   };
 
-  nativeBuildInputs = [ h5py ];
+  nativeBuildInputs = [
+    h5py
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "annoy"
+  ];
+
+  meta = with lib; {
     description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
-    homepage = https://github.com/spotify/annoy;
+    homepage = "https://github.com/spotify/annoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi, nose
 , six
@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "htmllaundry";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e428cba78d5a965e959f5dac2eb7d5f7d627dd889990d5efa8d4e03f3dd768d9";
+    sha256 = "9124f067d3c06ef2613e2cc246b2fde2299802280a8b0e60dc504137085f0334";
   };
 
   buildInputs = [ nose ];
@@ -21,10 +21,10 @@ buildPythonPackage rec {
   # not relevant for me, if releavnt for you, fix it...
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple HTML cleanup utilities";
     license = licenses.bsd3;
-    homepage = https://pypi.org/project/htmllaundry/;
+    homepage = "https://pypi.org/project/htmllaundry/";
   };
 
 }

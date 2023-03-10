@@ -1,13 +1,12 @@
-{ stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ lib, stdenv, fetchFromGitHub, gradle_6, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
-  name = "frostwire-desktop-${version}";
 
   src = fetchFromGitHub {
     owner = "frostwire";
     repo = "frostwire";
-    rev = name;
+    rev = "frostwire-desktop-${version}";
     sha256 = "03wdj2kr8akzx8m1scvg98132zbaxh81qjdsxn2645b3gahjwz0m";
   };
 
@@ -18,14 +17,14 @@ let
     exec = "frostwire";
     icon = "frostwire";
     comment = "Search and explore all kinds of files on the Bittorrent network";
-    categories = "Network;FileTransfer;P2P;";
+    categories = [ "Network" "FileTransfer" "P2P" ];
   };
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
-    inherit src;
-    buildInputs = [ gradle perl ];
+    pname = "frostwire-desktop-deps";
+    inherit version src;
+    buildInputs = [ gradle_6 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       ( cd desktop
@@ -40,14 +39,15 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "11zd98g0d0fdgls4lsskkagwfxyh26spfd6c6g9cahl89czvlg3c";
+    outputHash = "sha256-r6YSrbSJbM3063JrX4tCVKFrJxTaLN4Trc+33jzpwcE=";
   };
 
 in stdenv.mkDerivation {
-  inherit name src;
+  pname = "frostwire-desktop";
+  inherit version src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gradle ];
+  buildInputs = [ gradle_6 ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -84,11 +84,16 @@ in stdenv.mkDerivation {
       --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.frostwire.com/;
+  meta = with lib; {
+    homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
+    broken = true; # at 2022-09-30, errors with changing hash.
   };
 }

@@ -1,37 +1,41 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.6072";
+  version = "0.1.23816";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sbzl6y7974sib14qr2qa6d20cs54h6a3mc1whbxifg87cw02qjn";
+    sha256 = "sha256-Ab22+fEHQry8dRIElFydxQXVWOXLo4Ch8Q26F8qPUDw=";
   };
 
-  modSha256 = "1pxqc2a1hb6bk67sd2c37zwg6n7h0jay3yqsjcs4jc0bqv48gzip";
+  vendorHash = "sha256-8HAiZ0zEJ+nnCsSUrNv0qQlvROCyNXO49fLWnKi6anE=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    substituteInPlace data/data.go \
-      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
-  '';
+  doCheck = false;
+
+  ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
 
   postInstall = ''
-    install -Dm644 -t $out/share/circleci-cli _data/data.yml
+    mv $out/bin/circleci-cli $out/bin/circleci
+
+    installShellCompletion --cmd circleci \
+      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
+      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "circleci";
     license = licenses.mit;
-    homepage = https://circleci.com/;
+    homepage = "https://circleci.com/";
   };
 }

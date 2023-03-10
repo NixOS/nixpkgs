@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , nixosTests
@@ -11,16 +11,17 @@
 , gettext
 , libxml2
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 
 , acl
-, bazaar
+, breezy
 , binutils
 , bzip2
 , coreutils
 , cpio
 , curl
+, debugedit
 , elfutils
 , flatpak
 , gitMinimal
@@ -31,7 +32,6 @@
 , gnutar
 , json-glib
 , libcap
-, libdwarf
 , libsoup
 , libyaml
 , ostree
@@ -44,53 +44,25 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-  version = "1.0.9";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  inherit version;
+  version = "1.2.3";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "00qd770qjsiyd8qhhhyn7zg6jyi283ix5dhjzcfdn9yr3h53kvyn";
+    sha256 = "sha256-4leCWkf3o+ceMPsPgPLZrG5IAfdG9VLfrw5WTj7jUcg=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_xsl
-    gettext
-    libxml2
-    libxslt
-    pkgconfig
-    xmlto
-  ];
-
-  buildInputs = [
-    acl
-    bzip2
-    curl
-    elfutils
-    flatpak
-    glib
-    json-glib
-    libcap
-    libdwarf
-    libsoup
-    libxml2
-    libyaml
-    ostree
-  ];
 
   patches = [
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
+
+    # Hardcode paths
     (substituteAll {
       src = ./fix-paths.patch;
-      bzr = "${bazaar}/bin/bzr";
+      brz = "${breezy}/bin/brz";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
@@ -108,12 +80,42 @@ in stdenv.mkDerivation rec {
     # this on our patch for Flatpak 0.99.
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit glibcLocales python2;
+      inherit glibcLocales;
+      # FIXME use python3 for tests that rely on python2
+      # inherit python2;
     })
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xml_dtd_43
+    docbook_xsl
+    gettext
+    libxml2
+    libxslt
+    pkg-config
+    xmlto
+  ];
+
+  buildInputs = [
+    acl
+    bzip2
+    curl
+    debugedit
+    elfutils
+    flatpak
+    glib
+    json-glib
+    libcap
+    libsoup
+    libxml2
+    libyaml
+    ostree
   ];
 
   configureFlags = [
     "--enable-installed-tests"
+    "--with-system-debugedit"
   ];
 
   makeFlags = [
@@ -123,6 +125,8 @@ in stdenv.mkDerivation rec {
 
   # Some scripts used by tests  need to use shebangs that are available in Flatpak runtimes.
   dontPatchShebangs = true;
+
+  enableParallelBuilding = true;
 
   # Installed tests
   postFixup = ''
@@ -135,7 +139,7 @@ in stdenv.mkDerivation rec {
     installedTestsDependencies = [
       gnupg
       ostree
-      python2
+      # FIXME python2
       gnumake
     ];
 
@@ -144,10 +148,10 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to build flatpaks from source";
-    homepage = https://flatpak.org/;
-    license = licenses.lgpl21;
+    homepage = "https://github.com/flatpak/flatpak-builder";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

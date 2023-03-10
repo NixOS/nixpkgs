@@ -1,24 +1,25 @@
-{
-    stdenv,
-    buildPythonPackage,
-    fetchFromGitHub,
-    six,
-    requests,
-    django,
-    boto3,
-    python,
-    mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, requests
+, django
+, boto3
+, python
+, mock
+, pytestCheckHook
+, pytest-django
 }:
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "6.1.0";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "anymail";
     repo = pname;
-    rev = "v6.1";
-    sha256 = "04jgz3qnsnba18rlqgxyb2g9128pk3ivflnj6695kibxg724fcpv";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-qEYBHsaHo1gmrsa6q7DQiUJurC7cXhv5e/SQ7R3Tkzc=";
   };
 
   propagatedBuildInputs = [
@@ -28,20 +29,26 @@ buildPythonPackage rec {
     boto3
   ];
 
-  checkInputs = [ mock ];
-  checkPhase = ''
-    substituteInPlace setup.py --replace "tests_require=[" "tests_require=[], #"
-    export CONTINUOUS_INTEGRATION=1
-    export ANYMAIL_SKIP_TESTS="sparkpost"
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+    mock
+  ];
 
-  # this package allows multiple email backends
-  # sparkpost is missing because it's not packaged yet
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Require networking
+    "test_debug_logging"
+    "test_no_debug_logging"
+  ];
+
+  pythonImportsCheck = [ "anymail" ];
+
+  DJANGO_SETTINGS_MODULE = "tests.test_settings.settings_3_2";
+
+  meta = with lib; {
     description = "Django email backends and webhooks for Mailgun";
-    homepage = https://github.com/anymail/django-anymail;
+    homepage = "https://github.com/anymail/django-anymail";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ onny ];
   };
 }

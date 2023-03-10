@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXinerama }:
+{ lib, stdenv, fetchurl, libX11, libXinerama }:
 
 stdenv.mkDerivation  rec {
   pname = "libfakeXinerama";
@@ -11,8 +11,6 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ libX11 libXinerama ];
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   buildPhase = ''
     gcc -O2 -Wall fakeXinerama.c -fPIC -o libfakeXinerama.so.1.0 -shared
   '';
@@ -20,15 +18,16 @@ stdenv.mkDerivation  rec {
   installPhase = ''
     mkdir -p $out/lib
     cp libfakeXinerama.so.1.0 $out/lib
+    ln -s libfakeXinerama.so.1.0 $out/lib/libXinerama.so.1.0
     ln -s libXinerama.so.1.0 $out/lib/libXinerama.so.1
     ln -s libXinerama.so.1 $out/lib/libXinerama.so
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://xpra.org/;
+  meta = with lib; {
+    homepage = "http://xpra.org/";
     description = "fakeXinerama for Xpra";
     platforms = platforms.linux;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     license = licenses.gpl2;
   };
 }

@@ -1,17 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "banner-1.3.4";
+  pname = "banner";
+  version = "1.3.5";
 
-  src = fetchurl {
-    url = "http://software.cedar-solutions.com/ftp/software/${name}.tar.gz";
-    sha256 = "04q5ribr0r9s8waky3nk356l0qdhfxw15ipz7lsfgv1fxq3qk6bz";
+  src = fetchFromGitHub {
+    owner = "pronovic";
+    repo = "banner";
+    rev = "BANNER_V${version}";
+    sha256 = "ISSnGzrFSzSj/+KxgeFtaw4H+4Ea5x5S5C8xjcjKWqQ=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://software.cedar-solutions.com/utilities.html;
+  meta = with lib; {
+    homepage = "https://github.com/pronovic/banner";
     description = "Print large banners to ASCII terminals";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
 
     longDescription = ''
       An implementation of the traditional Unix-program used to display

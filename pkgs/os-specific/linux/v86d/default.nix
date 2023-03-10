@@ -1,14 +1,21 @@
-{ stdenv, fetchurl
-, kernel, klibc
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, klibc
 }:
 
-stdenv.mkDerivation rec {
-  name = "v86d-${version}-${kernel.version}";
-  version = "0.1.10";
+let
+  pversion = "0.1.10";
+in stdenv.mkDerivation rec {
+  pname = "v86d";
+  version = "${pversion}-${kernel.version}";
 
-  src = fetchurl {
-    url = "https://github.com/mjanusz/v86d/archive/v86d-${version}.tar.gz";
-    sha256 = "1flnpp8rc945cxr6jr9dlm8mi8gr181zrp2say4269602s1a4ymg";
+  src = fetchFromGitHub {
+    owner = "mjanusz";
+    repo = "v86d";
+    rev = "v86d-${pversion}";
+    hash = "sha256-95LRzVbO/DyddmPwQNNQ290tasCGoQk7FDHlst6LkbA=";
   };
 
   patchPhase = ''
@@ -30,9 +37,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ klibc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon to run x86 code in an emulated environment";
-    homepage = https://github.com/mjanusz/v86d;
+    homepage = "https://github.com/mjanusz/v86d";
     license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms = [ "i686-linux" "x86_64-linux" ];

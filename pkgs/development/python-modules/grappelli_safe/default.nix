@@ -1,18 +1,18 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
-  version = "0.5.2";
+  version = "1.1.1";
   pname = "grappelli_safe";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35b7ccaf9acc54684c73aeefbeaddc63b8a16143bd981bd5b3ebef253def07df";
+    sha256 = "ee34b3e2a3711498b1f8da3d9daa8a1239efdf255a212181742b6a5890fac039";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A snapshot of django-grappelli for the Mezzanine CMS";
     longDescription = ''
       grappelli_safe was created to provide a snapshot of the
@@ -24,8 +24,8 @@ buildPythonPackage rec {
       with Django 1.1 - grappelli_safe was therefore created to
       address these specific issues.
     '';
-    homepage = https://github.com/stephenmcd/grappelli-safe;
-    downloadPage = http://pypi.python.org/pypi/grappelli_safe/;
+    homepage = "https://github.com/stephenmcd/grappelli-safe";
+    downloadPage = "http://pypi.python.org/pypi/grappelli_safe/";
     license = licenses.free;
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.unix;

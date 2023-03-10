@@ -1,25 +1,43 @@
-{ stdenv, fetchgit, cmake, pcre, doxygen }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, pcre2, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "editorconfig-core-c-${meta.version}";
+  pname = "editorconfig-core-c";
+  version = "0.12.5";
 
-  src = fetchgit {
-    url = "https://github.com/editorconfig/editorconfig-core-c.git";
-    rev = "v${meta.version}";
-    sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
+  outputs = [ "out" "dev" ];
+
+  src = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-c";
+    rev = "v${version}";
+    sha256 = "sha256-4p8bomeXtA+zJ3IvWW0UZixdMnjYWYu7yeA6JUwwRb8=";
     fetchSubmodules = true;
-    inherit name;
   };
 
-  buildInputs = [ pcre ];
-  nativeBuildInputs = [ cmake doxygen ];
+  patches = [
+    # Fox broken paths in pkg-config.
+    # https://github.com/editorconfig/editorconfig-core-c/pull/81
+    (fetchpatch {
+      url = "https://github.com/editorconfig/editorconfig-core-c/commit/e0ead79d3bb4179fe9bccd3e5598ed47cc0863a3.patch";
+      sha256 = "t/DiPVyyYoMwFpNG6sD+rLWHheFCbMaILXyey6inGdc=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
+
+  buildInputs = [
+    pcre2
+  ];
 
   # Multiple doxygen can not generate man pages in the same base directory in
-  # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
+  # parallel: https://github.com/doxygen/doxygen/issues/6293
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://editorconfig.org/;
+  meta = with lib; {
+    homepage = "https://editorconfig.org/";
     description = "EditorConfig core library written in C";
     longDescription = ''
       EditorConfig makes it easy to maintain the correct coding style when
@@ -29,10 +47,10 @@ stdenv.mkDerivation rec {
       by those editors. For information on the file format and supported text
       editors, see the EditorConfig website.
     '';
-    downloadPage = https://github.com/editorconfig/editorconfig-core-c;
+    downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
     license = with licenses; [ bsd2 bsd3 ];
-    version = "0.12.1";
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
+    mainProgram = "editorconfig";
   };
 }

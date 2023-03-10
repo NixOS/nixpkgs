@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, openmp }:
 
 stdenv.mkDerivation rec {
-  pname = "vid-stab";
-  version = "0.98b";
-  
-  src = fetchurl {
-    url = "https://github.com/georgmartius/vid.stab/archive/release-${version}.tar.gz";
-    sha256 = "09fh6xbd1f5xp3il3dpvr87skmnp2mm2hfmg4s9rvj4y8zvhn3sk";
+  pname = "vid.stab";
+  version = "unstable-2022-05-30";
+
+  src = fetchFromGitHub {
+    owner = "georgmartius";
+    repo = pname;
+    rev = "90c76aca2cb06c3ff6f7476a7cd6851b39436656";
+    sha256 = "sha256-p1VRnkBeUpET3O2FmaJMyN5/EoSOQLdmRIVbzZcQaKY=";
   };
 
   nativeBuildInputs = [ cmake ];
-  
-  meta = with stdenv.lib; {
+
+  propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
+
+  meta = with lib; {
     description = "Video stabilization library";
-    homepage    = http://public.hronopik.de/vid.stab/;
-    license     = licenses.gpl2;
+    homepage = "http://public.hronopik.de/vid.stab/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }
-

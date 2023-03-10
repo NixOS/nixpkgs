@@ -1,25 +1,21 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-mparser-1.2.3";
-  src = fetchzip {
-    url = https://github.com/cakeplus/mparser/archive/1.2.3.tar.gz;
-    sha256 = "1f8vpagmv0jdm50pxs2xwh2xcmvgaprx4kw871hlml9ahsflxgnw";
+buildDunePackage rec {
+  pname = "mparser";
+  version = "1.3";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "murmour";
+    repo = "mparser";
+    rev = version;
+    sha256 = "16j19v16r42gcsii6a337zrs5cxnf12ig0vaysxyr7sq5lplqhkx";
   };
-
-  buildInputs = [ ocaml findlib ocamlbuild ];
-
-  configurePhase = "ocaml setup.ml -configure";
-  buildPhase = "ocaml setup.ml -build";
-  installPhase = "ocaml setup.ml -install";
-
-  createFindlibDestdir = true;
 
   meta = {
     description = "A simple monadic parser combinator OCaml library";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    homepage = https://github.com/cakeplus/mparser;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.lgpl21Plus;
+    homepage = "https://github.com/murmour/mparser";
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

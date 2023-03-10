@@ -4,9 +4,12 @@ with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
-in
 
+in
 {
+  meta = {
+    maintainers = teams.xfce.members;
+  };
 
   imports = [
     # added 2019-08-18
@@ -32,6 +35,12 @@ in
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
+
+    # added 2022-06-26
+    # thunar has its own module
+    (mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "xfce" "thunarPlugins" ]
+      [ "programs" "thunar" "plugins" ])
   ];
 
   options = {
@@ -39,28 +48,25 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Xfce desktop environment.";
-      };
-
-      thunarPlugins = mkOption {
-        default = [];
-        type = types.listOf types.package;
-        example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
-        description = ''
-          A list of plugin that should be installed with Thunar.
-        '';
+        description = lib.mdDoc "Enable the Xfce desktop environment.";
       };
 
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = "Don't install XFCE desktop components (xfdesktop, panel and notification daemon).";
+        description = lib.mdDoc "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
         type = types.bool;
         default = true;
-        description = "Enable the XFWM (default) window manager.";
+        description = lib.mdDoc "Enable the XFWM (default) window manager.";
+      };
+
+      enableScreensaver = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc "Enable the XFCE screensaver.";
       };
     };
   };
@@ -70,8 +76,8 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
-      gnome3.gnome-themes-extra
-      gnome3.adwaita-icon-theme
+      gnome.gnome-themes-extra
+      gnome.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
@@ -88,19 +94,17 @@ in
       exo
       garcon
       libxfce4ui
-      xfconf
 
       mousepad
       parole
       ristretto
       xfce4-appfinder
+      xfce4-notifyd
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
       xfce4-taskmanager
       xfce4-terminal
-
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
@@ -115,10 +119,12 @@ in
         xfwm4
         xfwm4-themes
       ] ++ optionals (!cfg.noDesktop) [
-        xfce4-notifyd
         xfce4-panel
         xfdesktop
-      ];
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+
+    programs.xfconf.enable = true;
+    programs.thunar.enable = true;
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -129,6 +135,7 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      desktopNames = [ "XFCE" ];
       bgSupport = true;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
@@ -144,9 +151,8 @@ in
     security.polkit.enable = true;
     services.accounts-daemon.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.gnome3.glib-networking.enable = true;
+    services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
-    services.gvfs.package = pkgs.xfce.gvfs;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
@@ -160,8 +166,9 @@ in
 
     # Systemd services
     systemd.packages = with pkgs.xfce; [
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
-    ] ++ optional (!cfg.noDesktop) xfce4-notifyd;
+      xfce4-notifyd
+    ];
 
+    security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
   };
 }

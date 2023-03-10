@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, libpng, python3
+{ lib, stdenv, fetchFromGitHub, libpng, python3
 , libGLU, libGL, qtbase, wrapQtAppsHook, ncurses
 , cmake, flex, lemon
+, makeDesktopItem, copyDesktopItems
 }:
 
 let
-  gitRev    = "6dfe6822e0279a4cc2f1c60e85b42212627285fe";
+  gitRev    = "8b805c674adad536f9dd552b4be75fadcb3c7db6";
   gitBranch = "develop";
   gitTag    = "0.9.3";
 in
   stdenv.mkDerivation {
     pname = "antimony";
-    version = "2019-10-30";
+    version = "2022-11-23";
 
     src = fetchFromGitHub {
       owner  = "mkeeter";
       repo   = "antimony";
       rev    = gitRev;
-      sha256 = "07zlkwlk79czq8dy85b6n3ds3g36l8qy4ix849ady6ia3gm8981j";
+      sha256 = "NmOuBewfHqtAim2cNP62LXgRjVWuVUGweV46sY1qjGk=";
     };
 
     patches = [ ./paths-fix.patch ];
@@ -27,13 +28,31 @@ in
        sed -i "s,python3,${python3.executable}," CMakeLists.txt
     '';
 
+    postInstall = lib.optionalString stdenv.isLinux ''
+      install -Dm644 $src/deploy/icon.svg $out/share/icons/hicolor/scalable/apps/antimony.svg
+      install -Dm644 ${./mimetype.xml} $out/share/mime/packages/antimony.xml
+    '';
+
     buildInputs = [
       libpng python3 python3.pkgs.boost
-      libGLU libGL qtbase wrapQtAppsHook
-      ncurses
+      libGLU libGL qtbase ncurses
     ];
 
-    nativeBuildInputs = [ cmake flex lemon ];
+    nativeBuildInputs = [ cmake flex lemon wrapQtAppsHook copyDesktopItems ];
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "antimony";
+        desktopName = "Antimony";
+        comment="Tree-based Modeler";
+        genericName = "CAD Application";
+        exec = "antimony %f";
+        icon = "antimony";
+        categories = [ "Graphics" "Science" "Engineering" ];
+        mimeTypes = [ "application/x-extension-sb" "application/x-antimony" ];
+        startupWMClass = "antimony";
+      })
+    ];
 
     cmakeFlags= [
       "-DGITREV=${gitRev}"
@@ -41,11 +60,9 @@ in
       "-DGITBRANCH=${gitBranch}"
     ];
 
-    enableParallelBuilding = true;
-
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A computer-aided design (CAD) tool from a parallel universe";
-      homepage    = https://github.com/mkeeter/antimony;
+      homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       maintainers = with maintainers; [ rnhmjoj ];
       platforms   = platforms.linux;

@@ -27,7 +27,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use ConnMan for managing your network connections.
         '';
       };
@@ -35,16 +35,15 @@ in {
       enableVPN = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable ConnMan VPN service.
         '';
       };
 
       extraConfig = mkOption {
         type = types.lines;
-        default = ''
-        '';
-        description = ''
+        default = "";
+        description = lib.mdDoc ''
           Configuration lines appended to the generated connman configuration file.
         '';
       };
@@ -52,7 +51,7 @@ in {
       networkInterfaceBlacklist = mkOption {
         type = with types; listOf str;
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
-        description = ''
+        description = lib.mdDoc ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
       };
@@ -61,9 +60,9 @@ in {
         backend = mkOption {
           type = types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
-          description = ''
+          description = lib.mdDoc ''
             Specify the Wi-Fi backend used.
-            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option>.
+            Currently supported are {option}`wpa_supplicant` or {option}`iwd`.
           '';
         };
       };
@@ -72,9 +71,17 @@ in {
         type = with types; listOf str;
         default = [ ];
         example = [ "--nodnsproxy" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags to pass to connmand
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        description = lib.mdDoc "The connman package / build flavor";
+        default = connman;
+        defaultText = literalExpression "pkgs.connman";
+        example = literalExpression "pkgs.connmanFull";
       };
 
     };
@@ -89,11 +96,13 @@ in {
       assertion = !config.networking.useDHCP;
       message = "You can not use services.connman with networking.useDHCP";
     }{
+      # TODO: connman seemingly can be used along network manager and
+      # connmanFull supports this - so this should be worked out somehow
       assertion = !config.networking.networkmanager.enable;
       message = "You can not use services.connman with networking.networkmanager";
     }];
 
-    environment.systemPackages = [ connman ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.connman = {
       description = "Connection service";
@@ -105,7 +114,7 @@ in {
         BusName = "net.connman";
         Restart = "on-failure";
         ExecStart = toString ([
-          "${pkgs.connman}/sbin/connmand"
+          "${cfg.package}/sbin/connmand"
           "--config=${configFile}"
           "--nodaemon"
         ] ++ optional enableIwd "--wifi=iwd_agent"
@@ -118,11 +127,11 @@ in {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
-      before = [ "connman" ];
+      before = [ "connman.service" ];
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman.vpn";
-        ExecStart = "${pkgs.connman}/sbin/connman-vpnd -n";
+        ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         StandardOutput = "null";
       };
     };
@@ -131,8 +140,8 @@ in {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";
-        before = [ "connman" ];
-        ExecStart = "${pkgs.connman}/sbin/connman-vpnd -n";
+        before = [ "connman.service" ];
+        ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         User = "root";
         SystemdService = "connman-vpn.service";
       };
@@ -142,6 +151,7 @@ in {
       useDHCP = false;
       wireless = {
         enable = mkIf (!enableIwd) true;
+        dbusControlled = true;
         iwd = mkIf enableIwd {
           enable = true;
         };

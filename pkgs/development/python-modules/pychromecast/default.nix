@@ -1,23 +1,51 @@
-{ lib, fetchPypi, buildPythonPackage, requests, zeroconf, protobuf, casttube, isPy3k }:
+{ lib
+, buildPythonPackage
+, casttube
+, fetchPypi
+, pythonOlder
+, protobuf
+, requests
+, zeroconf
+}:
 
 buildPythonPackage rec {
-  pname = "PyChromecast";
-  version = "4.1.1";
+  pname = "pychromecast";
+  version = "13.0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "13cxyxs0cl2cwbx1fkw6b26hrzpllx1wfq2q58fx298yjn3niiby";
+    pname = "PyChromecast";
+    inherit version;
+    hash = "sha256-eS+6PzHklopemcGcdxd0CDoqp+iX6/b14hjjCOM6Rh8=";
   };
 
-  disabled = !isPy3k;
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf>=3.19.1,<4" "protobuf>=3.19.1"
+  '';
 
-  propagatedBuildInputs = [ requests zeroconf protobuf casttube ];
+  propagatedBuildInputs = [
+    casttube
+    protobuf
+    requests
+    zeroconf
+  ];
+
+  # no tests available
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pychromecast"
+  ];
 
   meta = with lib; {
-    description = "Library for Python 3.4+ to communicate with the Google Chromecast";
-    homepage    = https://github.com/balloob/pychromecast;
-    license     = licenses.mit;
+    description = "Library for Python to communicate with the Google Chromecast";
+    homepage = "https://github.com/home-assistant-libs/pychromecast";
+    changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

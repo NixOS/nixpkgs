@@ -1,13 +1,14 @@
-{ stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtsvg, makeWrapper, xdg-utils }:
 
-let
-  version = "1.44.55";
-in mkDerivation {
+mkDerivation rec {
   pname = "mytetra";
-  inherit version;
-  src = fetchurl {
-    url = "https://github.com/xintrea/mytetra_dev/archive/v.${version}.tar.gz";
-    sha256 = "13lmfvschm1xwr0ys2ykhs0bb83m2f39rk1jdd7zf8yxlqki4i6l";
+  version = "1.44.55";
+
+  src = fetchFromGitHub {
+    owner = "xintrea";
+    repo = "mytetra_dev";
+    rev = "v.${version}";
+    sha256 = "sha256-jQXnDoLkqbDZxfsYKPDsTOE7p/BFeA8wEznpbkRVGdw=";
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];
@@ -25,15 +26,16 @@ in mkDerivation {
   '';
 
   postFixup = ''
+    # make xdg-open overrideable at runtime
     wrapProgram $out/bin/mytetra \
-      --prefix PATH : ${xdg_utils}/bin
+      --suffix PATH : ${xdg-utils}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smart manager for information collecting";
-    homepage = https://webhamster.ru/site/page/index/articles/projectcode/138;
+    homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

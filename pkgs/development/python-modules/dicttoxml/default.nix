@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dicttoxml";
-  version = "1.7.4";
+  version = "1.7.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45";
+    sha256 = "sha256-bzbOZEiB21zYlAvum3yz8/a3sye6imfYPT4sqgU4v50=";
   };
 
   # No tests in archive
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Converts a Python dictionary or other native data type into a valid XML string";
-    homepage = https://github.com/quandyfactory/dicttoxml;
+    homepage = "https://github.com/quandyfactory/dicttoxml";
     license = lib.licenses.gpl2;
   };
 }

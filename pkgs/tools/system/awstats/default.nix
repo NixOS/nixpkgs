@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, perlPackages, jdk }:
+{ lib
+, fetchurl
+, perlPackages
+, jdk
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
-  version = "7.7";
+  version = "7.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
-    sha256 = "0z3p77jnpjilajs9yv87r8xla2x1gjqlvrhpbgbh5ih73386v3j2";
+    sha256 = "sha256-YVF47TE9NDFfFaUi2xpdEsqcOV43hbsGKAq/+V2aBUY=";
   };
 
   postPatch = ''
@@ -15,6 +19,7 @@ perlPackages.buildPerlPackage rec {
   '';
 
   outputs = [ "bin" "out" "doc" ]; # bin just links the user-run executable
+
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
   buildInputs = with perlPackages; [ ]; # plugins will need some
@@ -52,11 +57,11 @@ perlPackages.buildPerlPackage rec {
     mv docs "$doc/share/doc/awstats"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    changelog = "https://www.awstats.org/docs/awstats_changelog.txt";
     description = "Real-time logfile analyzer to get advanced statistics";
-    homepage = http://awstats.org;
+    homepage = "https://awstats.org";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
 }
-

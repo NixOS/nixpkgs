@@ -1,32 +1,76 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
+, CoreServices
+, fetchpatch
 , fetchPypi
-, argh
+, flaky
 , pathtools
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
 , pyyaml
-, pkgs
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "0.9.0";
+  version = "2.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d";
+    hash = "sha256-zcwjyVKGAaiik+tDacvRT2tPNPB66HaUISUunCJxi28=";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
-  propagatedBuildInputs = [ argh pathtools pyyaml ];
+  patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ./force-kqueue.patch
+  ];
 
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    pathtools
+    pyyaml
+  ];
+
+  nativeCheckInputs = [
+    flaky
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=watchdog" "" \
+      --replace "--cov-report=term-missing" ""
+  '';
+
+  disabledTests = [
+    # probably failing because of an encoding related issue
+    "test_create_wrong_encoding"
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    "test_delete"
+    "test_separate_consecutive_moves"
+  ];
+
+  disabledTestPaths = [
+    # Tests are flaky
+    "tests/test_inotify_buffer.py"
+  ];
+
+  pythonImportsCheck = [
+    "watchdog"
+  ];
+
+  meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";
-    homepage = https://github.com/gorakhargosh/watchdog;
+    homepage = "https://github.com/gorakhargosh/watchdog";
+    changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

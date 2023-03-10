@@ -1,53 +1,96 @@
-{ stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
+{ lib
+, fetchFromGitHub
+, python3
+, python3Packages
+, mypy
+, glib
+, pango
+, pkg-config
+, libinput
+, libxkbcommon
+, wayland
+, wlroots
+, xcbutilcursor
+}:
 
-let cairocffi-xcffib = python37Packages.cairocffi.override {
-    withXcffib = true;
+let
+  unwrapped = python3Packages.buildPythonPackage rec {
+    pname = "qtile";
+    version = "0.22.1";
+
+    src = fetchFromGitHub {
+      owner = "qtile";
+      repo = "qtile";
+      rev = "v${version}";
+      hash = "sha256-HOyExVKOqZ4OeNM1/AiXQeiUV+EbSJLEjWEibm07ff8=";
+    };
+
+    patches = [
+      ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
+    ];
+
+    postPatch = ''
+      substituteInPlace libqtile/pangocffi.py \
+        --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
+        --replace libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
+        --replace libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
+      substituteInPlace libqtile/backend/x11/xcursors.py \
+        --replace libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
+    '';
+
+    SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+    nativeBuildInputs = [
+      pkg-config
+    ] ++ (with python3Packages; [
+      setuptools-scm
+    ]);
+
+    propagatedBuildInputs = with python3Packages; [
+      xcffib
+      (cairocffi.override { withXcffib = true; })
+      setuptools
+      python-dateutil
+      dbus-python
+      dbus-next
+      mpd2
+      psutil
+      pyxdg
+      pygobject3
+      pywayland
+      pywlroots
+      xkbcommon
+    ];
+
+    buildInputs = [
+      libinput
+      wayland
+      wlroots
+      libxkbcommon
+    ];
+
+    # for `qtile check`, needs `stubtest` and `mypy` commands
+    makeWrapperArgs = [
+      "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
+    ];
+
+    doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
+
+    meta = with lib; {
+      homepage = "http://www.qtile.org/";
+      license = licenses.mit;
+      description = "A small, flexible, scriptable tiling window manager written in Python";
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ kamilchm ];
+    };
   };
 in
+(python3.withPackages (_: [ unwrapped ])).overrideAttrs (_: {
+  # otherwise will be exported as "env", this restores `nix search` behavior
+  name = "${unwrapped.pname}-${unwrapped.version}";
+  # export underlying qtile package
+  passthru = { inherit unwrapped; };
 
-python37Packages.buildPythonApplication rec {
-  name = "qtile-${version}";
-  version = "0.13.0";
-
-  src = fetchFromGitHub {
-    owner = "qtile";
-    repo = "qtile";
-    rev = "v${version}";
-    sha256 = "1lyclnn8hs6wl4w9v5b4hh2q0pvmsn7cyibpskhbpw0cgv7bvi90";
-  };
-
-  patches = [
-    ./0001-Substitution-vars-for-absolute-paths.patch
-    ./0002-Restore-PATH-and-PYTHONPATH.patch
-    ./0003-Restart-executable.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace libqtile/manager.py --subst-var-by out $out
-    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
-    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
-    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
-
-  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib setuptools ];
-
-  postInstall = ''
-    wrapProgram $out/bin/qtile \
-      --run 'export QTILE_WRAPPER=$0' \
-      --run 'export QTILE_SAVED_PYTHONPATH=$PYTHONPATH' \
-      --run 'export QTILE_SAVED_PATH=$PATH'
-  '';
-
-  doCheck = false; # Requires X server.
-
-  meta = with stdenv.lib; {
-    homepage = http://www.qtile.org/;
-    license = licenses.mit;
-    description = "A small, flexible, scriptable tiling window manager written in Python";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kamilchm ];
-  };
-}
+  # restore original qtile attrs
+  inherit (unwrapped) pname version meta;
+})

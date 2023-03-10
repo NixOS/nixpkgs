@@ -1,21 +1,38 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "bottle";
-  version = "0.12.18";
+  version = "0.12.23";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0819b74b145a7def225c0e83b16a4d5711fde751cd92bae467a69efce720f69e";
+    sha256 = "sha256-aD3jqjmfsm6HsnTbz3CxplE4XUWRMXFjh6vcN5LgQWc=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://bottlepy.org;
+  preCheck = ''
+    cd test
+  '';
+
+  disabledTests = [
+    "test_delete_cookie"
+    "test_error"
+    "test_error_in_generator_callback"
+  ];
+
+  meta = with lib; {
+    homepage = "https://bottlepy.org/";
     description = "A fast and simple micro-framework for small web-applications";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ koral ];
   };
 }

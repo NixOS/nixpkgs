@@ -21,17 +21,25 @@ in {
     hardware.enableAllFirmware = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Turn on this option if you want to enable all the firmware.
       '';
     };
 
     hardware.enableRedistributableFirmware = mkOption {
+      default = config.hardware.enableAllFirmware;
+      defaultText = lib.literalExpression "config.hardware.enableAllFirmware";
+      type = types.bool;
+      description = lib.mdDoc ''
+        Turn on this option if you want to enable all the firmware with a license allowing redistribution.
+      '';
+    };
+
+    hardware.wirelessRegulatoryDatabase = mkOption {
       default = false;
       type = types.bool;
-      description = ''
-        Turn on this option if you want to enable all the firmware with a license allowing redistribution.
-        (i.e. free firmware and <literal>firmware-linux-nonfree</literal>)
+      description = lib.mdDoc ''
+        Load the wireless regulatory database at boot.
       '';
     };
 
@@ -43,23 +51,26 @@ in {
   config = mkMerge [
     (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
       hardware.firmware = with pkgs; [
-        firmwareLinuxNonfree
+        linux-firmware
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware
         rtl8723bs-firmware
-        rtlwifi_new-firmware
+        rtl8761b-firmware
+        rtw88-firmware
         zd1211fw
         alsa-firmware
-        openelec-dvb-firmware
-      ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
+        sof-firmware
+        libreelec-dvb-firmware
+      ] ++ optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
+      hardware.wirelessRegulatoryDatabase = true;
     })
     (mkIf cfg.enableAllFirmware {
       assertions = [{
-        assertion = !cfg.enableAllFirmware || (config.nixpkgs.config.allowUnfree or false);
+        assertion = !cfg.enableAllFirmware || config.nixpkgs.config.allowUnfree;
         message = ''
           the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
             This requires nixpkgs.config.allowUnfree to be true.
@@ -70,8 +81,14 @@ in {
         broadcom-bt-firmware
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
-        b43FirmwareCutter
-      ] ++ optional (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) facetimehd-firmware;
+        xow_dongle-firmware
+      ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
+        facetimehd-calibration
+        facetimehd-firmware
+      ];
+    })
+    (mkIf cfg.wirelessRegulatoryDatabase {
+      hardware.firmware = [ pkgs.wireless-regdb ];
     })
   ];
 }

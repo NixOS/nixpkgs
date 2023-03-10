@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, bash }:
+{ lib, python3Packages, bash }:
 
 python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
@@ -20,10 +20,12 @@ python3Packages.buildPythonApplication rec {
     $out/bin/simp_le --test
   '';
 
-  propagatedBuildInputs = with python3Packages; [ acme setuptools_scm josepy idna ];
+  propagatedBuildInputs = with python3Packages; [ acme setuptools-scm josepy idna ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/zenhack/simp_le;
+  nativeCheckInputs = with python3Packages; [ mock ];
+
+  meta = with lib; {
+    homepage = "https://github.com/zenhack/simp_le";
     description = "Simple Let's Encrypt client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ gebner makefu ];

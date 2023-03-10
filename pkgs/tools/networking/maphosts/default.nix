@@ -7,9 +7,10 @@ let
     gemdir = ./.;
   };
 in stdenv.mkDerivation {
-  name = "maphosts-${env.gems.maphosts.version}";
+  pname = "maphosts";
+  version = env.gems.maphosts.version;
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -20,7 +21,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Small command line application for keeping your project hostnames in sync with /etc/hosts";
-    homepage    = https://github.com/mpscholten/maphosts;
+    homepage    = "https://github.com/mpscholten/maphosts";
     license     = licenses.mit;
     maintainers = with maintainers; [ mpscholten nicknovitski ];
     platforms   = platforms.all;

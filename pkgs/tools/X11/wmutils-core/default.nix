@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, libxcb }:
+{ lib, stdenv, fetchFromGitHub, libxcb, xcbutil, xcb-util-cursor }:
 
 stdenv.mkDerivation rec {
   pname = "wmutils-core";
-  version = "1.1";
+  version = "1.7";
 
-  src = fetchurl {
-    url = "https://github.com/wmutils/core/archive/v${version}.tar.gz";
-    sha256 = "0aq95khs154j004b79w9rgm80vpggxfqynha5rckm2cx20d1fa5s";
+  src = fetchFromGitHub {
+    owner = "wmutils";
+    repo = "core";
+    rev = "v${version}";
+    sha256 = "sha256-OKAvJovGu9rMxEe5g4kdL7Foj41kl3zUYIJa04jf0dI=";
   };
 
-  buildInputs = [ libxcb ];
+  buildInputs = [ libxcb xcbutil xcb-util-cursor ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of window manipulation tools";
-    homepage = https://github.com/wmutils/core;
+    homepage = "https://github.com/wmutils/core";
     license = licenses.isc;
     platforms = platforms.unix;
   };

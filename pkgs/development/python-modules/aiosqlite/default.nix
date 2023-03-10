@@ -1,36 +1,49 @@
 { lib
+, aiounittest
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
-, aiounittest
-, isPy27
-, pytest
+, flit-core
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.11.0";
-  disabled = isPy27;
+  version = "0.18.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "jreese";
+    owner = "omnilib";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0pmkp4iy738yv2sl08kvhd0ma6wjqbmfnwid72gvg4zqsr1hnn0z";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
   };
 
-  buildInputs = [
-    setuptools
+  nativeBuildInputs = [
+    flit-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiounittest
+    pytestCheckHook
+  ];
+
+  # Tests are not pick-up automatically by the hook
+  pytestFlagsArray = [
+    "aiosqlite/tests/*.py"
+  ];
+
+  pythonImportsCheck = [
+    "aiosqlite"
   ];
 
   meta = with lib; {
     description = "Asyncio bridge to the standard sqlite3 module";
-    homepage = https://github.com/jreese/aiosqlite;
+    homepage = "https://github.com/jreese/aiosqlite";
+    changelog = "https://github.com/omnilib/aiosqlite/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,41 +1,66 @@
-{ stdenv, cmake, python, fetchFromGitHub, emscriptenRev ? null }:
-
-let
-  defaultVersion = "89";
-
-  # Map from git revs to SHA256 hashes
-  sha256s = {
-    version_89 = "0rh1dq33ilq54szfgi1ajaiaj7rbylai02rhp9zm9vpwp0rw8mij";
-    "1.38.28" = "172s7y5f38736ic8ri3mnbdqcrkadd40a26cxcfwbscc53phl11v";
-  };
-in
+{ lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
+  gtest, lit, nodejs, filecheck, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
-  version = if emscriptenRev == null
-            then defaultVersion
-            else "emscripten-${emscriptenRev}";
-  rev = if emscriptenRev == null
-        then "version_${version}"
-        else emscriptenRev;
   pname = "binaryen";
+  version = "111";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
-    sha256 =
-      if builtins.hasAttr rev sha256s
-      then builtins.getAttr rev sha256s
-      else null;
-    inherit rev;
+    rev = "version_${version}";
+    sha256 = "sha256-wSwLs/YvrH7nswDSbtR6onOMArCdPE2zi6G7oA10U4Y=";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  patches = [
+    # https://github.com/WebAssembly/binaryen/pull/5378
+    (fetchpatch {
+      url = "https://github.com/WebAssembly/binaryen/commit/a96fe1a8422140072db7ad7db421378b87898a0d.patch";
+      sha256 = "sha256-Wred1IoRxcQBi0nLBWpiUSgt2ApGoGsq9GkoO3mSS6o=";
+    })
+    # https://github.com/WebAssembly/binaryen/pull/5391
+    (fetchpatch {
+      url = "https://github.com/WebAssembly/binaryen/commit/f92350d2949934c0e0ce4a27ec8b799ac2a85e45.patch";
+      sha256 = "sha256-fBwdGSIPjF2WKNnD8I0/2hnQvqevdk3NS9fAxutkZG0=";
+    })
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/WebAssembly/binaryen;
+  nativeBuildInputs = [ cmake python3 ];
+
+  preConfigure = ''
+    if [ $doCheck -eq 1 ]; then
+      sed -i '/googletest/d' third_party/CMakeLists.txt
+    else
+      cmakeFlagsArray=($cmakeFlagsArray -DBUILD_TESTS=0)
+    fi
+  '';
+
+  nativeCheckInputs = [ gtest lit nodejs filecheck ];
+  checkPhase = ''
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
+  '';
+
+  tests = [
+    "version" "wasm-opt" "wasm-dis"
+    "crash" "dylink" "ctor-eval"
+    "wasm-metadce" "wasm-reduce" "spec"
+    "lld" "wasm2js" "validator"
+    "example" "unit"
+    # "binaryenjs" "binaryenjs_wasm" # not building this
+    "lit" "gtest"
+  ];
+  doCheck = stdenv.isLinux;
+
+  meta = with lib; {
+    homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = platforms.all;
     maintainers = with maintainers; [ asppsa ];
     license = licenses.asl20;
+  };
+
+  passthru.tests = {
+    inherit emscripten;
   };
 }

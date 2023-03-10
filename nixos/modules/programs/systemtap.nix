@@ -8,9 +8,10 @@ in {
   options = {
     programs.systemtap = {
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = ''
-          Install <command>systemtap</command> along with necessary kernel options.
+        description = lib.mdDoc ''
+          Install {command}`systemtap` along with necessary kernel options.
         '';
       };
     };

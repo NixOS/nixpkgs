@@ -35,13 +35,18 @@ See https://tug.org/texlive/acquire-mirror.html for instructions.
 
 
 ```bash
-curl -L http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
+curl -L https://texlive.info/tlnet-archive/$YEAR/$MONTH/$DAY/tlnet/tlpkg/texlive.tlpdb.xz \
+         | xzcat | sed -rn -f ./tl2nix.sed | uniq > ./pkgs.nix
 ```
 
-This will download a current snapshot of the CTAN package database `texlive.tlpdb.xz`
+This will download the daily snapshot of the CTAN package database `texlive.tlpdb.xz`
 and regenerate all of the sha512 hashes for the current upstream distribution in `pkgs.nix`.
 
+Use the url
+
+https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$YEAR/tlnet-final/tlpkg/texlive.tlpdb.xz
+
+for the final TeX Live release.
 
 ### Build packages locally and generate fix hashes
 
@@ -58,10 +63,9 @@ mv fixedHashes.nix fixedHashes-old.nix
 # start with empty fixedHashes
 echo '{}' > fixedHashes.nix
 
-nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
+nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.awk > ./fixedHashes-new.nix
 
-# The script wrongly includes the nix store path to `biber`, which is a separate nixpkgs package
-grep -v -F '/nix/store/' fixedHashes-new.nix > fixedHashes.nix
+mv fixedHashes-new.nix fixedHashes.nix
 ```
 
 ### Commit changes

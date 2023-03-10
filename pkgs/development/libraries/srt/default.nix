@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, openssl
+{ lib, stdenv, fetchFromGitHub, cmake, openssl
 }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "srt";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
-    sha256 = "01xaq44j95kbgqfl41pnybvqy0yq6wd4wdw88ckylzf0nzp977xz";
+    sha256 = "sha256-qVvoHtROtJjrUd+YpjN/0I6KmiH7c24+pQ4xYTUGPXk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,9 +27,9 @@ stdenv.mkDerivation rec {
     "-UCMAKE_INSTALL_LIBDIR"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Secure, Reliable, Transport";
-    homepage    = https://www.srtalliance.org;
+    homepage    = "https://github.com/Haivision/srt";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ nh2 ];
     platforms   = platforms.all;

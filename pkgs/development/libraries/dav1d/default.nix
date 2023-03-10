@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitLab, fetchpatch
-, meson, ninja, nasm, pkgconfig
+{ lib, stdenv, fetchFromGitLab
+, meson, ninja, nasm, pkg-config
+, xxHash
 , withTools ? false # "dav1d" binary
 , withExamples ? false, SDL2 # "dav1dplay" binary
 , useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
@@ -9,34 +10,30 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.6.0";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "1gr859xzbqrsp892v9zzzgrg8smnnzgc1jmb68qzl54a4g6jrxm0";
+    sha256 = "sha256-RVr7NFVxY+6MBD8NV7eMW8TEWuCgcfqpula1o1VZe0o=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/dav1d/-/commit/e04227c5f6729b460e0b8e5fb52eae2d5acd15ef.patch";
-      sha256 = "18mpvwviqx0x9k6av98vgpjqlzcjd89g8496zsbf57bw5dadij3l";
-    })
-  ];
-
-  nativeBuildInputs = [ meson ninja nasm pkgconfig ];
+  nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).
-  buildInputs = stdenv.lib.optional withExamples SDL2
-    ++ stdenv.lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
+  buildInputs = [ xxHash ]
+    ++ lib.optional withExamples SDL2
+    ++ lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
 
   mesonFlags= [
-    "-Denable_tools=${stdenv.lib.boolToString withTools}"
-    "-Denable_examples=${stdenv.lib.boolToString withExamples}"
+    "-Denable_tools=${lib.boolToString withTools}"
+    "-Denable_examples=${lib.boolToString withExamples}"
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";
     longDescription = ''
       The goal of this project is to provide a decoder for most platforms, and

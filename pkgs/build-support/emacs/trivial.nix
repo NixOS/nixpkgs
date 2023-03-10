@@ -1,12 +1,12 @@
 # trivial builder for Emacs packages
 
-{ lib, stdenv, texinfo, ... }@envargs:
+{ callPackage, lib, ... }@envargs:
 
 with lib;
 
 args:
 
-import ./generic.nix envargs ({
+callPackage ./generic.nix envargs ({
   buildPhase = ''
     runHook preBuild
 

@@ -1,29 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pytest
-, pytestcov
+, pythonOlder
+, pygments
+, pytestCheckHook
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "aiorun";
-  version = "2020.2.1";
+  version = "2022.11.1";
   format = "flit";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0wcj8prkijb889ic8n6varms7xkwy028hhw0imgkd1i0p64lm3m4";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1qXt3HT/0sECOqPRwc0p+5+YZh1kyHSbkZHajcrjvZc=";
   };
 
-  checkInputs = [
-    pytest
-    pytestcov
+  propagatedBuildInputs = [
+    pygments
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
     uvloop
   ];
 
@@ -32,14 +35,15 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-     pytest
-  '';
+  pythonImportsCheck = [
+    "aiorun"
+  ];
 
   meta = with lib; {
     description = "Boilerplate for asyncio applications";
-    homepage = https://github.com/cjrh/aiorun;
+    homepage = "https://github.com/cjrh/aiorun";
+    changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

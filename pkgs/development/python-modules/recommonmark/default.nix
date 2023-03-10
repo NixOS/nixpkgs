@@ -5,21 +5,21 @@
 , CommonMark
 , docutils
 , sphinx
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "recommonmark";
-  version = "0.6.0";
+  version = "0.7.1";
 
-  # PyPI tarball is missing some test files: https://github.com/rtfd/recommonmark/pull/128
   src = fetchFromGitHub {
     owner = "rtfd";
     repo = pname;
     rev = version;
-    sha256 = "0m6qk17irka448vcz5b39yck1qsq90k98dmkx80mni0w00yq9ggd";
+    sha256 = "0kwm4smxbgq0c0ybkxfvlgrfb3gq9amdw94141jyykk9mmz38379";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   propagatedBuildInputs = [ CommonMark docutils sphinx ];
 
   dontUseSetuptoolsCheck = true;
@@ -30,9 +30,12 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
+  doCheck = !isPy3k; # Not yet compatible with latest Sphinx.
+  pythonImportsCheck = [ "recommonmark" ];
+
   meta = {
     description = "A docutils-compatibility bridge to CommonMark";
-    homepage = https://github.com/rtfd/recommonmark;
+    homepage = "https://github.com/rtfd/recommonmark";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];
   };

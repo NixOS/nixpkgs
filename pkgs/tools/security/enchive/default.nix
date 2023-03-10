@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "enchive";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Encrypted personal archives";
-    homepage = https://github.com/skeeto/enchive;
-    license = stdenv.lib.licenses.unlicense;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = "https://github.com/skeeto/enchive";
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

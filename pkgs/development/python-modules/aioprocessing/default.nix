@@ -1,26 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
+, flit-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioprocessing";
-  version = "1.0.1";
-  disabled = !(pythonAtLeast "3.4");
+  version = "2.0.1";
+  format = "flit";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yq1gfsky2kjimwdmzqk893sp6387vbl4bw0sbha5hl6cm3jp5dn";
+    hash = "sha256-/gHHsaOMeBaGEdMEDnPZMDbDt8imSdY23J7Xo7ybG6I=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   # Tests aren't included in pypi package
   doCheck = false;
 
-  meta = {
-    description = "A library that integrates the multiprocessing module with asyncio";
-    homepage = https://github.com/dano/aioprocessing;
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ uskudnik ];
+  pythonImportsCheck = [
+    "aioprocessing"
+  ];
+
+  meta = with lib; {
+    description = "Library that integrates the multiprocessing module with asyncio";
+    homepage = "https://github.com/dano/aioprocessing";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ uskudnik ];
   };
 }

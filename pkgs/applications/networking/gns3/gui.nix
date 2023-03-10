@@ -1,22 +1,19 @@
-{ stable, branch, version, sha256Hash, mkOverride }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+}:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+}:
 
-let
-  # TODO: This package requires qt5Full to launch
-  defaultOverrides = [
-    (mkOverride "psutil" "5.6.3"
-      "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6")
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
-  ];
-
-  python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
-  };
-in python.pkgs.buildPythonPackage rec {
-  name = "${pname}-${version}";
+python3.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -25,24 +22,45 @@ in python.pkgs.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = with python.pkgs; [
-    raven psutil jsonschema # tox for check
-    # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    distro
+    jsonschema
+    psutil
+    sentry-sdk
+    setuptools
+    sip_4 (pyqt5.override { withWebSockets = true; })
   ];
 
   doCheck = false; # Failing
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  postFixup = ''
+      wrapQtApp "$out/bin/gns3"
+  '';
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "psutil==" "psutil>=" \
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
+      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
+  '';
+
+  meta = with lib; {
     description = "Graphical Network Simulator 3 GUI (${branch} release)";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
       requires access to a local or remote GNS3 server (it's recommended to
       download the official GNS3 VM).
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

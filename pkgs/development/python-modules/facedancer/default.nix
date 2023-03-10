@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "library for emulating usb devices";
-    homepage = https://greatscottgadgets.com/greatfet/;
+    homepage = "https://greatscottgadgets.com/greatfet/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mog ];
   };

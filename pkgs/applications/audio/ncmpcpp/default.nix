@@ -1,39 +1,50 @@
-{ stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
-, libiconv, icu, curl
+{ lib
+, stdenv
+, fetchurl
+, boost
+, libmpdclient
+, ncurses
+, pkg-config
+, readline
+, libiconv
+, icu
+, curl
 , outputsSupport ? true # outputs screen
-, visualizerSupport ? false, fftw ? null # visualizer screen
+, visualizerSupport ? false, fftw # visualizer screen
 , clockSupport ? true # clock screen
-, taglibSupport ? true, taglib ? null # tag editor
+, taglibSupport ? true, taglib # tag editor
 }:
 
-assert visualizerSupport -> (fftw != null);
-assert taglibSupport -> (taglib != null);
-
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "ncmpcpp";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchurl {
-    url = "https://ncmpcpp.rybczak.net/stable/${pname}-${version}.tar.bz2";
-    sha256 = "0m0mjb049sl62vx13h9waavysa30mk0rphacksnvf94n13la62v5";
+    url = "https://rybczak.net/ncmpcpp/stable/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-+qv2FXyMsbJKBZryduFi+p+aO5zTgQxDuRKIYMk4Ohs=";
   };
 
+  enableParallelBuilding = true;
+
+  strictDeps = true;
+
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]
-    ++ optional outputsSupport "--enable-outputs"
-    ++ optional visualizerSupport "--enable-visualizer --with-fftw"
-    ++ optional clockSupport "--enable-clock"
-    ++ optional taglibSupport "--with-taglib";
+    ++ lib.optional outputsSupport "--enable-outputs"
+    ++ lib.optional visualizerSupport "--enable-visualizer --with-fftw"
+    ++ lib.optional clockSupport "--enable-clock"
+    ++ lib.optional taglibSupport "--with-taglib";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional taglibSupport taglib;
 
-  buildInputs = [ boost mpd_clientlib ncurses readline libiconv icu curl ]
-    ++ optional visualizerSupport fftw
-    ++ optional taglibSupport taglib;
+  buildInputs = [ boost libmpdclient ncurses readline libiconv icu curl ]
+    ++ lib.optional visualizerSupport fftw
+    ++ lib.optional taglibSupport taglib;
 
-  meta = {
+  meta = with lib; {
     description = "A featureful ncurses based MPD client inspired by ncmpc";
-    homepage    = https://ncmpcpp.rybczak.net/;
+    homepage    = "https://rybczak.net/ncmpcpp/";
+    changelog   = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ jfrankenau koral lovek323 ];
     platforms   = platforms.all;

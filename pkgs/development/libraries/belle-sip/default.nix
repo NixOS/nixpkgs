@@ -1,37 +1,51 @@
-{ stdenv, antlr3_4, libantlr3c, jre, mbedtls, fetchFromGitHub
-  , cmake, zlib, bctoolbox
+{ bctoolbox
+, belr
+, cmake
+, fetchFromGitLab
+, lib
+, libantlr3c
+, mbedtls_2
+, stdenv
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "1.6.3";
+  version = "5.2.23";
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "0q70db1klvhca1af29bm9paka3gyii5hfbzrj4178gclsg7cj8fk";
+    sha256 = "sha256-c73PCM+bRz6CjGRY2AapEcvKC1UqyEfzb7qsicmrkQU=";
   };
 
-  nativeBuildInputs = [ jre cmake ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
-    "-Wno-error=cast-function-type"
-  ];
+    "-Wno-error=stringop-overflow"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs and probably clang
+    "-Wno-error=use-after-free"
+  ]);
 
-  propagatedBuildInputs = [ antlr3_4 libantlr3c mbedtls bctoolbox ];
+  propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];
 
-  # Fails to build with lots of parallel jobs
-  enableParallelBuilding = false;
-
-  meta = with stdenv.lib; {
-    homepage = https://linphone.org/technical-corner/belle-sip;
-    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
-    license = licenses.gpl2;
+  meta = with lib; {
+    homepage = "https://linphone.org/technical-corner/belle-sip";
+    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers. Part of the Linphone project.";
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

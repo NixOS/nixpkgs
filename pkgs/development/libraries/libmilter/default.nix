@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, m4 }:
+{ lib, stdenv, fetchurl, m4, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
-  version = "8.15.2";
+  version = "8.17.1";
 
   src = fetchurl {
     url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
-    sha256 = "0fdl9ndmspqspdlmghzxlaqk56j3yajk52d7jxcg21b7sxglpy94";
+    sha256 = "sha256-BLx2tsiG5tERvn/Y2qMrjOABKKKItrUuBnvCnzhUpuY=";
   };
 
   buildPhase = ''
@@ -28,14 +28,19 @@ stdenv.mkDerivation rec {
       define(\`confLIBGRP', \`root')
       APPENDDEF(\`confENVDEF', \`-DNETINET6')
     EOF
+    export MILTER_SOVER=1
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ];
+  patches = [ ./install.patch ./sharedlib.patch ./darwin.patch ];
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  meta = with stdenv.lib; {
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    fixDarwinDylibNames $out/lib/libmilter.dylib.1
+  '';
+
+  meta = with lib; {
     description = "Sendmail Milter mail filtering API library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

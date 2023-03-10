@@ -1,7 +1,19 @@
-{ stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
-, perl, XMLLibXML, XMLLibXSLT, zlib
-, enableStoneSense ? false,  allegro5, libGLU, libGL
-, enableTWBT ? true, twbt
+{ stdenv
+, buildEnv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, writeScriptBin
+, perl
+, XMLLibXML
+, XMLLibXSLT
+, zlib
+, ruby
+, enableStoneSense ? false
+, allegro5
+, libGLU
+, libGL
 , SDL
 , dfVersion
 }:
@@ -10,24 +22,6 @@ with lib;
 
 let
   dfhack-releases = {
-    "0.43.05" = {
-      dfHackRelease = "0.43.05-r3.1";
-      sha256 = "1ds366i0qcfbn62w9qv98lsqcrm38npzgvcr35hf6ihqa6nc6xrl";
-      xmlRev = "860a9041a75305609643d465123a4b598140dd7f";
-      prerelease = false;
-    };
-    "0.44.05" = {
-      dfHackRelease = "0.44.05-r2";
-      sha256 = "1cwifdhi48a976xc472nf6q2k0ibwqffil5a4llcymcxdbgxdcc9";
-      xmlRev = "2794f8a6d7405d4858bac486a0bb17b94740c142";
-      prerelease = false;
-    };
-    "0.44.09" = {
-      dfHackRelease = "0.44.09-r1";
-      sha256 = "1nkfaa43pisbyik5inj5q2hja2vza5lwidg5z02jyh136jm64hwk";
-      xmlRev = "3c0bf63674d5430deadaf7befaec42f0ec1e8bc5";
-      prerelease = false;
-    };
     "0.44.10" = {
       dfHackRelease = "0.44.10-r2";
       sha256 = "19bxsghxzw3bilhr8sm4axz7p7z8lrvbdsd1vdjf5zbg04rs866i";
@@ -52,11 +46,27 @@ let
       xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd509a";
       prerelease = true;
     };
+    "0.47.04" = {
+      dfHackRelease = "0.47.04-r5";
+      sha256 = "sha256-0s+/LKbqsS/mrxKPDeniqykE5+Gy3ZzCa8yEDzMyssY=";
+      xmlRev = "be0444cc165a1abff053d5893dc1f780f06526b7";
+      prerelease = false;
+    };
+    "0.47.05" = {
+      dfHackRelease = "0.47.05-r7";
+      sha256 = "sha256-vBKUTSjfCnalkBzfjaIKcxUuqsGGOTtoJC1RHJIDlNc=";
+      xmlRev = "f5019a5c6f19ef05a28bd974c3e8668b78e6e2a4";
+      prerelease = false;
+    };
+
   };
 
-  release = if hasAttr dfVersion dfhack-releases
-            then getAttr dfVersion dfhack-releases
-            else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release =
+    if lib.isAttrs dfVersion
+    then dfVersion
+    else if hasAttr dfVersion dfhack-releases
+    then getAttr dfVersion dfhack-releases
+    else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;
 
@@ -88,9 +98,9 @@ let
       exit 1
     fi
   '';
-
-  dfhack = stdenv.mkDerivation {
-    pname = "dfhack-base";
+in
+  stdenv.mkDerivation {
+    pname = "dfhack";
     inherit version;
 
     # Beware of submodules
@@ -102,11 +112,37 @@ let
       fetchSubmodules = true;
     };
 
-    patches = [ ./fix-stonesense.patch ];
+    patches = lib.optional (lib.versionOlder version "0.44.12-r3") (fetchpatch {
+      name = "fix-stonesense.patch";
+      url = "https://github.com/DFHack/stonesense/commit/f5be6fe5fb192f01ae4551ed9217e97fd7f6a0ae.patch";
+      extraPrefix = "plugins/stonesense/";
+      stripLen = 1;
+      hash = "sha256-wje6Mkct29eyMOcJnbdefwBOLJko/s4JcJe52ojuW+8=";
+    }) ++ lib.optional (lib.versionOlder version "0.47.04-r1") (fetchpatch {
+      name = "fix-protobuf.patch";
+      url = "https://github.com/DFHack/dfhack/commit/7bdf958518d2892ee89a7173224a069c4a2190d8.patch";
+      hash = "sha256-p+mKhmYbnhWKNiGPMjbYO505Gcg634n0nudqH0NX3KY=";
+    });
+
+    # gcc 11 fix
+    CXXFLAGS = lib.optionalString (lib.versionOlder version "0.47.05-r3") "-fpermissive";
+
+    # As of
+    # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
+    # dfhack gets its goodies from the directory above the Dwarf_Fortress
+    # executable, which leads to stock Dwarf Fortress and not the built
+    # environment where all the dfhack resources are symlinked to (typically
+    # ~/.local/share/df_linux). This causes errors like `tweak is not a
+    # recognized command` to be reported and dfhack to lose some of its
+    # functionality.
+    postPatch = ''
+      sed -i 's@cached_path = path_string.*@cached_path = getenv("DF_DIR");@' library/Process-linux.cpp
+    '';
+
     nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib SDL ]
-               ++ lib.optionals enableStoneSense [ allegro5 libGLU libGL ];
+      ++ lib.optionals enableStoneSense [ allegro5 libGLU libGL ];
 
     preConfigure = ''
       # Trick build system into believing we have .git
@@ -114,29 +150,22 @@ let
       touch .git/index .git/modules/library/xml/index
     '';
 
-    preBuild = ''
-      export LD_LIBRARY_PATH="$PWD/depends/protobuf''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
+      ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+
+    # dfhack expects an unversioned libruby.so to be present in the hack
+    # subdirectory for ruby plugins to function.
+    postInstall = ''
+      ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
     '';
 
-    cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
-              ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+    passthru = { inherit dfVersion; };
 
-    enableParallelBuilding = true;
-  };
-in
-
-buildEnv {
-  name = "dfhack-${version}";
-
-  passthru = { inherit version dfVersion; };
-
-  paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
-
-  meta = with stdenv.lib; {
-    description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
-    homepage = https://github.com/DFHack/dfhack/;
-    license = licenses.zlib;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];
-  };
-}
+    meta = with lib; {
+      description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
+      homepage = "https://github.com/DFHack/dfhack/";
+      license = licenses.zlib;
+      platforms = [ "x86_64-linux" "i686-linux" ];
+      maintainers = with maintainers; [ robbinch a1russell abbradar numinit ncfavier ];
+    };
+  }

@@ -1,14 +1,14 @@
-{ lib
-, python
-}:
+{ lib, python, fetchFromGitHub }:
 with python.pkgs;
 buildPythonApplication rec {
   pname = "deepTools";
-  version = "3.3.1";
+  version = "3.5.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "08p36p9ncj5s8qf1r7h83x4rnmi63l3yk6mnr3wgpg2qgvwl0hji";
+  src = fetchFromGitHub {
+    owner = "deeptools";
+    repo = "deepTools";
+    rev = version;
+    sha256 = "07v8vb2x4b0mgw0mvcj91vj1fqbcwizwsniysl2cvmv93gad8gbp";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonApplication rec {
     deeptoolsintervals
   ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ nose ];
 
   meta = with lib; {
     homepage = "https://deeptools.readthedocs.io/en/develop";

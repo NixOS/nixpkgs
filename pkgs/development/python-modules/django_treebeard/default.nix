@@ -1,30 +1,42 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, pytest
 , django
+, fetchPypi
+, pytest-django
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "django-treebeard";
-  version = "4.3.1";
+  version = "4.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83aebc34a9f06de7daaec330d858d1c47887e81be3da77e3541fe7368196dd8a";
+    hash = "sha256-hKs1BAJ31STrd5OeI1VoychWy1I8yWVXk7Zv6aPvRos=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [
+    django
+  ];
 
-  # tests fail  "AppRegistryNotReady("Apps aren't loaded yet.")"
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Efficient tree implementations for Django 1.6+";
-    homepage = https://tabo.pe/projects/django-treebeard/;
-    maintainers = with maintainers; [ desiderius ];
+  pythonImportsCheck = [
+    "treebeard"
+  ];
+
+  meta = with lib; {
+    description = "Efficient tree implementations for Django";
+    homepage = "https://tabo.pe/projects/django-treebeard/";
+    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ desiderius ];
   };
-
 }

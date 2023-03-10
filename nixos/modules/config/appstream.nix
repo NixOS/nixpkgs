@@ -6,19 +6,19 @@ with lib;
     appstream.enable = mkOption {
       type = types.bool;
       default = true;
-      description = ''
-        Whether to install files to support the 
-        <link xlink:href="https://www.freedesktop.org/software/appstream/docs/index.html">AppStream metadata specification</link>.
+      description = lib.mdDoc ''
+        Whether to install files to support the
+        [AppStream metadata specification](https://www.freedesktop.org/software/appstream/docs/index.html).
       '';
     };
   };
 
   config = mkIf config.appstream.enable {
-    environment.pathsToLink = [ 
+    environment.pathsToLink = [
       # per component metadata
-      "/share/metainfo" 
+      "/share/metainfo"
       # legacy path for above
-      "/share/appdata" 
+      "/share/appdata"
     ];
   };
 

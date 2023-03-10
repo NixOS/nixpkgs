@@ -1,28 +1,24 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
 , openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tome4";
+  version = "1.7.4";
+
+  src = fetchurl {
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
+    sha256 = "sha256-w1NPM/SMnPAnAl6z9E6Xsj3mEqZtXzFe1IMPmlKr8qQ=";
+  };
 
   desktop = makeDesktopItem {
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "False";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
-    categories = "Game;RolePlaying;";
+    categories = [ "Game" "RolePlaying" ];
     genericName = pname;
-  };
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.6.6";
-
-  src = fetchurl {
-    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "1amx0y49scy9hq71wjvkdzvgclwa2g54vkv4bf40mxyp4pl0bq7m";
   };
 
   prePatch = ''
@@ -41,7 +37,7 @@ in stdenv.mkDerivation rec {
   # disable parallel building as it caused sporadic build failures
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_ttf}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_ttf}/include/SDL2";
 
   makeFlags = [ "config=release" ];
 
@@ -56,7 +52,7 @@ in stdenv.mkDerivation rec {
     install -Dm755 t-engine $dir/t-engine
     cp -r bootstrap game $dir
     makeWrapper $dir/t-engine $out/bin/${pname} \
-      --run "cd $dir"
+      --chdir "$dir"
 
     install -Dm755 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
@@ -70,11 +66,11 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tales of Maj'eyal (rogue-like game)";
-    homepage = https://te4.org/;
+    homepage = "https://te4.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

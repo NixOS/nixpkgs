@@ -1,57 +1,70 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
-, pathlib
+, pythonOlder
 , fetchPypi
+, substituteAll
+, imageio-ffmpeg
+, numpy
 , pillow
 , psutil
-, imageio-ffmpeg
-, pytest
-, numpy
-, isPy3k
-, ffmpeg
-, futures
-, enum34
+, pytestCheckHook
+, tifffile
+, fsspec
+, libGL
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.6.1";
+  version = "2.25.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    sha256 = "1bk7pijmrspdfj9nnlbnw1yiww9w1kyjvlpzy9s5hj6zp4qv4kpl";
+    sha256 = "sha256-uAeWofjDjGl6lAoq1zl+4okA1cTlEGG5pn0WrKhn8z4=";
     inherit pname version;
   };
 
-  checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
-    imageio-ffmpeg ffmpeg
-    ];
-  propagatedBuildInputs = [ numpy pillow ] ++ stdenv.lib.optionals (!isPy3k) [
-    futures
-    enum34
-    pathlib
+  patches = [
+    (substituteAll {
+      src = ./libgl-path.patch;
+      libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
   ];
 
-  checkPhase = ''
+  propagatedBuildInputs = [
+    imageio-ffmpeg
+    numpy
+    pillow
+  ];
+
+  nativeCheckInputs = [
+    fsspec
+    psutil
+    pytestCheckHook
+    tifffile
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_internet'"
+  ];
+
+  preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
-    export IMAGEIO_NO_INTERNET="true"
-    export HOME="$(mktemp -d)"
-    py.test
+    export HOME=$TMPDIR
   '';
 
-  # For some reason, importing imageio also imports xml on Nix, see
-  # https://github.com/imageio/imageio/issues/395
+  disabledTestPaths = [
+    # tries to fetch fixtures over the network
+    "tests/test_freeimage.py"
+    "tests/test_pillow.py"
+    "tests/test_spe.py"
+    "tests/test_swf.py"
+  ];
 
-  # Also, there are tests that test the downloading of ffmpeg if it's not installed.
-  # "Uncomment" those by renaming.
-  postPatch = ''
-    substituteInPlace tests/test_meta.py --replace '"urllib",' "\"urllib\",\"xml\","
-    substituteInPlace tests/test_ffmpeg.py --replace 'test_get_exe_installed' 'get_exe_installed'
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
-    homepage = http://imageio.github.io/;
+    homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ Luflosi ];
   };
-
 }

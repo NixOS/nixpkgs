@@ -1,38 +1,31 @@
-{ stdenv, fetchurl, php, which, makeWrapper, bash, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, php, which, makeWrapper, bash, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "drush-6.1.0";
-
-  meta = with stdenv.lib; {
-    description = "Command-line shell and Unix scripting interface for Drupal";
-    homepage    = https://github.com/drush-ops/drush;
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
-  };
+  pname = "drush";
+  version = "8.4.11";
 
   src = fetchurl {
-    url    = https://github.com/drush-ops/drush/archive/6.1.0.tar.gz;
-    sha256 = "1jgnc4jjyapyn04iczvcz92ic0vq8d1w8xi55ismqyy5cxhqj6bp";
+    url = "https://github.com/drush-ops/drush/releases/download/${version}/drush.phar";
+    sha256 = "sha256-4DD16PQHGZzAGwmm/WNeZ/dDKnlQslcb35AkpiJs5tQ=";
   };
 
-  consoleTable = fetchurl {
-    url    = http://download.pear.php.net/package/Console_Table-1.1.3.tgz;
-    sha256 = "07gbjd7m1fj5dmavr0z20vkqwx1cz2522sj9022p257jifj1yl76";
-  };
+  dontUnpack = true;
 
-  buildInputs = [ php which makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    # install libraries
-    cd lib
-    tar -xf ${consoleTable}
-    cd ..
-
-    mkdir -p "$out"
-    cp -r . "$out/src"
-    mkdir "$out/bin"
-    wrapProgram "$out/src/drush" --prefix PATH : "${stdenv.lib.makeBinPath [ which php bash coreutils ncurses ]}"
-    ln -s "$out/src/drush" "$out/bin/drush"
+    mkdir -p $out/bin
+    install -D $src $out/libexec/drush/drush.phar
+    makeWrapper ${php}/bin/php $out/bin/drush \
+      --add-flags "$out/libexec/drush/drush.phar" \
+      --prefix PATH : "${lib.makeBinPath [ which php bash coreutils ncurses ]}"
   '';
+
+  meta = with lib; {
+    description = "Command-line shell and Unix scripting interface for Drupal";
+    homepage = "https://github.com/drush-ops/drush";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.all;
+  };
 }

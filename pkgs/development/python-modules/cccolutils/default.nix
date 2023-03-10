@@ -1,23 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock, git }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, git
+, gitpython
+, krb5
+, mock
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "CCColUtils";
+  pname = "cccolutils";
   version = "1.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1gwcq4xan9as1j3q9k2zqrywxp46qx0ljwxbck9id2fvilds6ck3";
+    pname = "CCColUtils";
+    inherit version;
+    hash = "sha256-YzKjG43biRbTZKtzSUHHhtzOfcZfzISHDFolqzrBjL8=";
   };
 
-  buildInputs = [ krb5Full ];
-  propagatedBuildInputs = [ nose GitPython mock git ];
+  buildInputs = [
+    krb5
+  ];
 
-  doCheck = isPy3k; # needs unpackaged module to run tests on python2
+  propagatedBuildInputs = [
+    git
+    gitpython
+    mock
+  ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "cccolutils"
+  ];
+
+  meta = with lib; {
     description = "Python Kerberos 5 Credential Cache Collection Utilities";
-    homepage = https://pagure.io/cccolutils;
-    license = licenses.gpl2;
+    homepage = "https://pagure.io/cccolutils";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ disassembler ];
   };
 }

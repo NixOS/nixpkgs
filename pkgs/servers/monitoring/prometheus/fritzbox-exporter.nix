@@ -1,26 +1,27 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "fritzbox-exporter";
-  version = "v1.0-32-g90fc0c5";
-  rev = "90fc0c572d3340803f7c2aafc4b097db7af1f871";
+  version = "unstable-2021-04-13";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "fd36539bd7db191b3734e17934b5f1e78e4e9829";
     owner = "mxschmitt";
     repo = "fritzbox_exporter";
-    sha256 = "08gcc60g187x1d14vh7n7s52zkqgj3fvg5v84i6dw55rmb6zzxri";
+    sha256 = "0w9gdcnfc61q6mzm95i7kphsf1rngn8rb6kz1b6knrh5d8w61p1n";
   };
 
-  goPackagePath = "github.com/mxschmitt/fritzbox_exporter";
+  subPackages = [ "cmd/exporter" ];
 
-  goDeps = ./fritzbox-exporter-deps.nix;
+  vendorSha256 = "0k6bd052pjfg5c1ba1yhni8msv3wl512vfzy2hrk49jibh8h052n";
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) fritzbox; };
+
+  meta = with lib; {
     description = "Prometheus Exporter for FRITZ!Box (TR64 and UPnP)";
-    homepage = https://github.com/ndecker/fritzbox_exporter;
+    homepage = "https://github.com/mxschmitt/fritzbox_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bachp flokli ];
+    maintainers = with maintainers; [ bachp flokli sbruder ];
     platforms = platforms.unix;
   };
 }

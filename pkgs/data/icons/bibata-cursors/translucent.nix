@@ -1,41 +1,26 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
-  version = "unstable-2019-09-13";
-  
+  version = "1.1.2";
+
   src = fetchFromGitHub {
     owner = "Silicasandwhich";
     repo = "Bibata_Cursor_Translucent";
-    rev = "2eed979d817148817ea6bca15c594809aa9c2cb9";
-    sha256 = "1s688v40xx9jbvfncb4kgfnnxkmknji7igqx7c4q1ly9s7imbd1f";
+    rev = "v${version}";
+    sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
   };
-
-  postPatch = ''
-    patchShebangs .
-    substituteInPlace build.sh --replace "gksu " ""
-  '';
-
-  nativeBuildInputs  = [
-    gnome-themes-extra
-    inkscape
-    xcursorgen
-  ];
-
-  buildPhase = ''
-    HOME="$NIX_BUILD_ROOT" ./build.sh
-  '';
 
   installPhase = ''
     install -dm 0755 $out/share/icons
     cp -pr Bibata_* $out/share/icons/
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "Translucent Varient of the Material Based Cursor";
-    homepage = https://github.com/Silicasandwhich/Bibata_Cursor_Translucent;
+    homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill AdsonCicilioti ];
   };
 }

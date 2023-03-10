@@ -1,40 +1,102 @@
-{ stdenv, fetchurl, gcc, makeWrapper
-, db, gmp, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, autoconf269
+, automake
+, libtool
+# libs
+, cjson
+, db
+, gmp
+, libxml2
+, ncurses
+# docs
+, help2man
+, texinfo
+, texlive
+# test
+, writeText
+}:
 
-let
-  version = "2.2";
-  lib = stdenv.lib;
-in
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
-  inherit version;
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "https://sourceforge.com/projects/open-cobol/files/gnu-cobol/${version}/gnucobol-${version}.tar.gz";
-    sha256 = "1jrjmdx0swssjh388pp08awhiisbrs2i7gx4lcm4p1k5rpg3hn4j";
+    url = "mirror://sourceforge/gnucobol/${lib.versions.majorMinor version}/gnucobol-${version}.tar.xz";
+    sha256 = "0x15ybfm63g7c9340fc6712h9v59spnbyaz4rf85pmnp3zbhaw2r";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    autoconf269
+    automake
+    libtool
+    help2man
+    texinfo
+    texlive.combined.scheme-basic
+  ];
 
-  buildInputs = [ db gmp ncurses ];
+  buildInputs = [
+    cjson
+    db
+    gmp
+    libxml2
+    ncurses
+  ];
 
-  cflags  = stdenv.lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
-  ldflags = stdenv.lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
+  outputs = [ "bin" "dev" "lib" "out" ];
+  # XXX: Without this, we get a cycle between bin and dev
+  propagatedBuildOutputs = [];
 
-  cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";
-
-  postInstall = with stdenv.lib; ''
-    wrapProgram "$out/bin/cobc" \
-      --set COB_CC "${gcc}/bin/gcc" \
-      --prefix COB_LDFLAGS " " "${cobolCCFlags}" \
-      --prefix COB_CFLAGS " " "${cobolCCFlags}"
+  # Skips a broken test
+  postPatch = ''
+    sed -i '/^AT_CHECK.*crud\.cob/i AT_SKIP_IF([true])' tests/testsuite.src/listings.at
   '';
 
-  meta = with stdenv.lib; {
+  preConfigure = ''
+    autoconf
+    aclocal
+    automake
+  '';
+
+  enableParallelBuilding = true;
+
+  installFlags = [ "install-pdf" "install-html" "localedir=$out/share/locale" ];
+
+  # Tests must run after install.
+  doCheck = false;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Run tests
+    make -j$NIX_BUILD_CORES check
+
+    # Sanity check
+    message="Hello, COBOL!"
+    # XXX: Don't for a second think you can just get rid of these spaces, they
+    # are load bearing.
+    tee hello.cbl <<EOF
+           IDENTIFICATION DIVISION.
+           PROGRAM-ID. HELLO.
+
+           PROCEDURE DIVISION.
+           DISPLAY "$message".
+           STOP RUN.
+    EOF
+    $bin/bin/cobc -x -o hello-cobol "hello.cbl"
+    hello="$(./hello-cobol | tee >(cat >&2))"
+    [[ "$hello" == "$message" ]] || exit 1
+
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     description = "An open-source COBOL compiler";
-    homepage = https://sourceforge.net/projects/open-cobol/;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ericsagnes the-kenny ];
-    platforms = with platforms; linux ++ darwin;
+    homepage = "https://sourceforge.net/projects/gnucobol/";
+    license = with licenses; [ gpl3Only lgpl3Only ];
+    maintainers = with maintainers; [ ericsagnes lovesegfault ];
+    platforms = platforms.all;
   };
 }

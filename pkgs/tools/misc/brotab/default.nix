@@ -1,29 +1,34 @@
-{ lib, fetchFromGitHub, glibcLocales, python }:
+{ lib, fetchFromGitHub, python }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.0";
+  version = "1.4.2";
   pname = "brotab";
 
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = pname;
     rev = version;
-    sha256 = "17yj5i8p28a7zmixdfa1i4gfc7c2fmdkxlymazasar58dz8m68mw";
+    hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
     requests
     flask
-    requests
-    pytest
     psutil
+    setuptools
   ];
 
-  # test_integration.py requires Chrome browser session
-  checkPhase = ''
-    ${python.interpreter} -m unittest brotab/tests/test_{brotab,utils}.py
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "Flask==2.0.2" "Flask>=2.0.2" \
+      --replace "psutil==5.8.0" "psutil>=5.8.0" \
+      --replace "requests==2.24.0" "requests>=2.24.0"
   '';
-  
+
+  nativeCheckInputs = with python.pkgs; [
+    pytestCheckHook
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/balta2ar/brotab";
     description = "Control your browser's tabs from the command line";

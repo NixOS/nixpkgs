@@ -1,17 +1,16 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  qtbase, qtx11extras,
+{ mkDerivation
+, extra-cmake-modules
+, qtbase, qtx11extras, wayland, plasma-wayland-protocols
 }:
 
 mkDerivation {
-  name = "kguiaddons";
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
-  };
+  pname = "kguiaddons";
+
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtx11extras ];
+  buildInputs = [ qtx11extras wayland plasma-wayland-protocols ];
   propagatedBuildInputs = [ qtbase ];
+
   outputs = [ "out" "dev" ];
+
+  meta.homepage = "https://invent.kde.org/frameworks/kguiaddons";
 }

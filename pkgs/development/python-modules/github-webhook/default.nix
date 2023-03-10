@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "github-webhook";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04jdf595gv97s4br0ym8izca3i6d1nfwcrpi4s26hkvn3czz84sv";
+    sha256 = "b2444dbfd03deda35792bd00ebd1692597c2605c61445da79da6322afaca7a8d";
   };
 
   propagatedBuildInputs = [ flask six ];

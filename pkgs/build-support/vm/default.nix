@@ -1,20 +1,24 @@
-{ pkgs
+{ lib
+, pkgs
 , kernel ? pkgs.linux
-, img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
+, img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
     [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
-      ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
+      ++ pkgs.lib.optional pkgs.stdenv.hostPlatform.isx86 "rtc_cmos"
 }:
 
-with pkgs;
-with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
-
+let
+  inherit (pkgs) bash bashInteractive busybox cpio coreutils e2fsprogs fetchurl kmod rpm
+    stdenv util-linux
+    buildPackages writeScript writeText runCommand;
+in
 rec {
+  qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
 
-  qemu = pkgs.qemu_kvm;
+  qemu = buildPackages.qemu_kvm;
 
-  modulesClosure = makeModulesClosure {
+  modulesClosure = pkgs.makeModulesClosure {
     inherit kernel rootModules;
     firmware = kernel;
   };
@@ -23,7 +27,7 @@ rec {
   hd = "vda"; # either "sda" or "vda"
 
   initrdUtils = runCommand "initrd-utils"
-    { buildInputs = [ nukeReferences ];
+    { nativeBuildInputs = [ buildPackages.nukeReferences ];
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -31,10 +35,12 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libresolv.so.* $out/lib
+      cp -p \
+        ${pkgs.stdenv.cc.libc}/lib/ld-*.so.? \
+        ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
+        $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -45,7 +51,7 @@ rec {
       for i in $out/bin/*; do
           if [ -f "$i" -a ! -L "$i" ]; then
               echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              patchelf --set-interpreter $out/lib/ld-*.so.? --set-rpath $out/lib $i || true
           fi
       done
     ''; # */
@@ -86,6 +92,10 @@ rec {
     done
 
     mount -t devtmpfs devtmpfs /dev
+    ln -s /proc/self/fd /dev/fd
+    ln -s /proc/self/fd/0 /dev/stdin
+    ln -s /proc/self/fd/1 /dev/stdout
+    ln -s /proc/self/fd/2 /dev/stderr
 
     ifconfig lo up
 
@@ -106,7 +116,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose
+    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -115,7 +125,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,cache=loose
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -136,7 +146,7 @@ rec {
   '';
 
 
-  initrd = makeInitrd {
+  initrd = pkgs.makeInitrd {
     contents = [
       { object = stage1Init;
         symlink = "/init";
@@ -151,7 +161,7 @@ rec {
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
-    ${pkgs.utillinux}/bin/hwclock -s
+    ${util-linux}/bin/hwclock -s
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
@@ -191,13 +201,13 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemu-common.qemuSerialDevice} &> /dev/${qemu-common.qemuSerialDevice}
     fi
   '';
 
 
   qemuCommandLinux = ''
-    ${qemuBinary qemu} \
+    ${qemu-common.qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
@@ -205,7 +215,7 @@ rec {
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
@@ -256,21 +266,30 @@ rec {
     eval "$postVM"
   '';
 
-
-  createEmptyImage = {size, fullName}: ''
-    mkdir $out
-    diskImage=$out/disk-image.qcow2
+  /*
+    A bash script fragment that produces a disk image at `destination`.
+   */
+  createEmptyImage = {
+    # Disk image size in MiB
+    size,
+    # Name that will be written to ${destination}/nix-support/full-name
+    fullName,
+    # Where to write the image files, defaulting to $out
+    destination ? "$out"
+  }: ''
+    mkdir -p ${destination}
+    diskImage=${destination}/disk-image.qcow2
     ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
-    mkdir $out/nix-support
-    echo "${fullName}" > $out/nix-support/full-name
+    mkdir ${destination}/nix-support
+    echo "${fullName}" > ${destination}/nix-support/full-name
   '';
 
 
   defaultCreateRootFS = ''
     mkdir /mnt
     ${e2fsprogs}/bin/mkfs.ext4 /dev/${hd}
-    ${utillinux}/bin/mount -t ext4 /dev/${hd} /mnt
+    ${util-linux}/bin/mount -t ext4 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh
@@ -314,10 +333,10 @@ rec {
 
 
   extractFs = {file, fs ? null} :
-    with pkgs; runInLinuxVM (
+    runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file";
-      buildInputs = [ utillinux ];
+      buildInputs = [ util-linux ];
       buildCommand = ''
         ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe loop
@@ -339,10 +358,10 @@ rec {
 
 
   extractMTDfs = {file, fs ? null} :
-    with pkgs; runInLinuxVM (
+    runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file-mtd";
-      buildInputs = [ utillinux mtdutils ];
+      buildInputs = [ pkgs.util-linux pkgs.mtdutils ];
       buildCommand = ''
         ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
@@ -377,7 +396,7 @@ rec {
       diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
       if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
-      ${qemu}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
+      ${qemu}/bin/qemu-img create -F ${attrs.diskImageFormat} -b "$origImage" -f qcow2 $diskImage
     '';
 
     /* Inside the VM, run the stdenv setup script normally, but at the
@@ -389,7 +408,7 @@ rec {
       eval "$origPostHook"
     '';
 
-    origPostHook = if attrs ? postHook then attrs.postHook else "";
+    origPostHook = lib.optionalString (attrs ? postHook) attrs.postHook;
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
@@ -417,7 +436,7 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt${storeDir}
-        ${utillinux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
+        ${util-linux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
 
         # Newer distributions like Fedora 18 require /lib etc. to be
         # symlinked to /usr.
@@ -427,7 +446,7 @@ rec {
           ln -s /usr/sbin /mnt/sbin
           ln -s /usr/lib /mnt/lib
           ln -s /usr/lib64 /mnt/lib64
-          ${utillinux}/bin/mount -t proc none /mnt/proc
+          ${util-linux}/bin/mount -t proc none /mnt/proc
         ''}
 
         echo "unpacking RPMs..."
@@ -445,7 +464,7 @@ rec {
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
           rpm --initdb
 
-        ${utillinux}/bin/mount -o bind /tmp /mnt/tmp
+        ${util-linux}/bin/mount -o bind /tmp /mnt/tmp
 
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
@@ -456,8 +475,8 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
-        ${utillinux}/bin/umount /mnt
+        ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
+        ${util-linux}/bin/umount /mnt
       '';
 
       passthru = { inherit fullName; };
@@ -493,7 +512,8 @@ rec {
      tarball must contain an RPM specfile. */
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    phases = "prepareImagePhase sysInfoPhase buildPhase installPhase";
+    prePhases = [ "prepareImagePhase" "sysInfoPhase" ];
+    dontConfigure = true;
 
     outDir = "rpms/${attrs.diskImage.name}";
 
@@ -509,17 +529,14 @@ rec {
       echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
       if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-      header "installed RPM packages"
+      echo "installed RPM packages"
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-      stopNest
     '';
 
     buildPhase = ''
       eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      srcName="$(stripHash "$src")"
+      srcName="$(rpmspec --srpm -q --qf '%{source}' *.spec)"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
       export HOME=/tmp/home
@@ -543,9 +560,8 @@ rec {
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
-        header "Generated RPM/SRPM: $i"
+        echo "Generated RPM/SRPM: $i"
         rpm -qip $i
-        stopNest
       done
 
       eval "$postInstall"
@@ -572,7 +588,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${stdenv.lib.makeBinPath [ dpkg dpkg glibc lzma ]}
+        PATH=$PATH:${lib.makeBinPath [ pkgs.dpkg pkgs.glibc pkgs.xz ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -587,9 +603,9 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the .debs live.
         mkdir -p /mnt/inst${storeDir}
-        ${utillinux}/bin/mount -o bind ${storeDir} /mnt/inst${storeDir}
-        ${utillinux}/bin/mount -o bind /proc /mnt/proc
-        ${utillinux}/bin/mount -o bind /dev /mnt/dev
+        ${util-linux}/bin/mount -o bind ${storeDir} /mnt/inst${storeDir}
+        ${util-linux}/bin/mount -o bind /proc /mnt/proc
+        ${util-linux}/bin/mount -o bind /dev /mnt/dev
 
         # Misc. files/directories assumed by various packages.
         echo "initialising Dpkg DB..."
@@ -635,10 +651,10 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/inst${storeDir}
-        ${utillinux}/bin/umount /mnt/proc
-        ${utillinux}/bin/umount /mnt/dev
-        ${utillinux}/bin/umount /mnt
+        ${util-linux}/bin/umount /mnt/inst${storeDir}
+        ${util-linux}/bin/umount /mnt/proc
+        ${util-linux}/bin/umount /mnt/dev
+        ${util-linux}/bin/umount /mnt
       '';
 
       passthru = { inherit fullName; };
@@ -652,7 +668,10 @@ rec {
   rpmClosureGenerator =
     {name, packagesLists, urlPrefixes, packages, archs ? []}:
     assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
+    runCommand "${name}.nix" {
+      nativeBuildInputs = [ buildPackages.perl buildPackages.perlPackages.XMLSimple ];
+      inherit archs;
+    } ''
       ${lib.concatImapStrings (i: pl: ''
         gunzip < ${pl} > ./packages_${toString i}.xml
       '') packagesLists}
@@ -691,7 +710,8 @@ rec {
   debClosureGenerator =
     {name, packagesLists, urlPrefix, packages}:
 
-    runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
+    runCommand "${name}.nix"
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in
@@ -821,59 +841,20 @@ rec {
   /* The set of supported Dpkg-based distributions. */
 
   debDistros = {
-
-    # Interestingly, the SHA-256 hashes provided by Ubuntu in
-    # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
-    # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
-
-    ubuntu1204i386 = {
-      name = "ubuntu-12.04-precise-i386";
-      fullName = "Ubuntu 12.04 Precise (i386)";
-      packagesLists =
-        [ (fetchurl {
-            url = mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2;
-            sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
-          })
-          (fetchurl {
-            url = mirror://ubuntu/dists/precise/universe/binary-i386/Packages.bz2;
-            sha256 = "085lkzbnzkc74kfdmwdc32sfqyfz8dr0rbiifk8kx9jih3xjw2jk";
-          })
-        ];
-      urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diffutils" ];
-    };
-
-    ubuntu1204x86_64 = {
-      name = "ubuntu-12.04-precise-amd64";
-      fullName = "Ubuntu 12.04 Precise (amd64)";
-      packagesLists =
-        [ (fetchurl {
-            url = mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2;
-            sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
-          })
-          (fetchurl {
-            url = mirror://ubuntu/dists/precise/universe/binary-amd64/Packages.bz2;
-            sha256 = "0x4hz5aplximgb7gnpvrhkw8m7a40s80rkm5b8hil0afblwlg4vr";
-          })
-        ];
-      urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diffutils" ];
-    };
-
     ubuntu1404i386 = {
       name = "ubuntu-14.04-trusty-i386";
       fullName = "Ubuntu 14.04 Trusty (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2";
             sha256 = "1d5y3v3v079gdq45hc07ja0bjlmzqfwdwwlq0brwxi8m75k3iz7x";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/trusty/universe/binary-i386/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/universe/binary-i386/Packages.bz2";
             sha256 = "03x9w92by320rfklrqhcl3qpwmnxds9c8ijl5zhcb21d6dcz5z1a";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -882,15 +863,15 @@ rec {
       fullName = "Ubuntu 14.04 Trusty (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2";
             sha256 = "1hhzbyqfr5i0swahwnl5gfp5l9p9hspywb1vpihr3b74p1z935bh";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2";
             sha256 = "04560ba8s4z4v5iawknagrkn9q1nzvpn081ycmqvhh73p3p3g1jm";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -899,15 +880,15 @@ rec {
       fullName = "Ubuntu 16.04 Xenial (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz";
             sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz";
             sha256 = "14fid1rqm3sc0wlygcvn0yx5aljf51c2jpd4x0zxij4019316hsh";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -916,49 +897,15 @@ rec {
       fullName = "Ubuntu 16.04 Xenial (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz";
             sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz";
             sha256 = "0mm7gj491yi6q4v0n4qkbsm94s59bvqir6fk60j73w7y4la8rg68";
           })
         ];
-      urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
-    };
-
-    ubuntu1710i386 = {
-      name = "ubuntu-17.10-artful-i386";
-      fullName = "Ubuntu 17.10 Artful (i386)";
-      packagesLists =
-        [ (fetchurl {
-            url = mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz;
-            sha256 = "18yrj4kqdzm39q0527m97h5ing58hkm9yq9iyj636zh2rclym3c8";
-          })
-          (fetchurl {
-            url = mirror://ubuntu/dists/artful/universe/binary-i386/Packages.xz;
-            sha256 = "1v0njw2w80xfmxi7by76cs8hyxlla5h3gqajlpdw5srjgx2qrm2g";
-          })
-        ];
-      urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
-    };
-
-    ubuntu1710x86_64 = {
-      name = "ubuntu-17.10-artful-amd64";
-      fullName = "Ubuntu 17.10 Artful (amd64)";
-      packagesLists =
-        [ (fetchurl {
-            url = mirror://ubuntu/dists/artful/main/binary-amd64/Packages.xz;
-            sha256 = "104g57j1l3vi8wb5f7rgjvjhf82ccs0vwhc59jfc4ynd51z7fqjk";
-          })
-          (fetchurl {
-            url = mirror://ubuntu/dists/artful/universe/binary-amd64/Packages.xz;
-            sha256 = "1qzs95wfy9inaskfx9cf1l5yd3aaqwzy72zzi9xyvkxi75k5gcn4";
-          })
-        ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -967,15 +914,15 @@ rec {
       fullName = "Ubuntu 18.04 Bionic (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz";
             sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz";
             sha256 = "1v75c0dqr0wp0dqd4hnci92qqs4hll8frqdbpswadgxm5chn91bw";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -984,63 +931,129 @@ rec {
       fullName = "Ubuntu 18.04 Bionic (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz";
             sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz";
             sha256 = "1832nqpn4ap95b3sj870xqayrza9in4kih9jkmjax27pq6x15v1r";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian8i386 = {
-      name = "debian-8.11-jessie-i386";
-      fullName = "Debian 8.11 Jessie (i386)";
+    ubuntu2004i386 = {
+      name = "ubuntu-20.04-focal-i386";
+      fullName = "Ubuntu 20.04 Focal (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/focal/main/binary-i386/Packages.xz";
+            sha256 = "sha256-7RAYURoN3RKYQAHpwBS9TIV6vCmpURpphyMJQmV4wLc=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/focal/universe/binary-i386/Packages.xz";
+            sha256 = "sha256-oA551xVE80volUPgkMyvzpQ1d+GhuZd4DAe7dXZnULM=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu2004x86_64 = {
+      name = "ubuntu-20.04-focal-amd64";
+      fullName = "Ubuntu 20.04 Focal (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/focal/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-d1eSH/j+7Zw5NKDJk21EG6SiOL7j6myMHfXLzUP8mGE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/focal/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-RqdG2seJvZU3rKVNsWgLnf9RwkgVMRE1A4IZnX2WudE=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu2204i386 = {
+      name = "ubuntu-22.04-jammy-i386";
+      fullName = "Ubuntu 22.04 Jammy (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-i386/Packages.xz";
+            sha256 = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-i386/Packages.xz";
+            sha256 = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu2204x86_64 = {
+      name = "ubuntu-22.04-jammy-amd64";
+      fullName = "Ubuntu 22.04 Jammy (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    debian10i386 = {
+      name = "debian-10.13-buster-i386";
+      fullName = "Debian 10.13 Buster (i386)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-i386/Packages.xz";
+        hash = "sha256-n9JquhtZgxw3qr9BX0MQoY3ZTIHN0dit+iru3DC31UY=";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
-    debian8x86_64 = {
-      name = "debian-8.11-jessie-amd64";
-      fullName = "Debian 8.11 Jessie (amd64)";
+    debian10x86_64 = {
+      name = "debian-10.13-buster-amd64";
+      fullName = "Debian 10.13 Buster (amd64)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-amd64/Packages.xz";
+        hash = "sha256-YukIIB3u87jgp9oudwklsxyKVKjSL618wFgDSXiFmjU=";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
-    debian9i386 = {
-      name = "debian-9.8-stretch-i386";
-      fullName = "Debian 9.8 Stretch (i386)";
+    debian11i386 = {
+      name = "debian-11.6-bullseye-i386";
+      fullName = "Debian 11.6 Bullseye (i386)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-i386/Packages.xz;
-        sha256 = "1dr3skl35iyj85qlc33lq4whippbqf327vnbcyfqqrv6h86k68mw";
+        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-z9eG7RlvelEnZAaeCfIO+XxTZVL3d+zTA7ShU43l/pw=";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
-    debian9x86_64 = {
-      name = "debian-9.8-stretch-amd64";
-      fullName = "Debian 9.8 Stretch (amd64)";
+    debian11x86_64 = {
+      name = "debian-11.6-bullseye-amd64";
+      fullName = "Debian 11.6 Bullseye (amd64)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz;
-        sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
+        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-mz0eCWdn6uWt40OxsSPheHzEnMeLE52yR/vpb48/VF0=";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
-
-
   };
 
 
@@ -1167,7 +1180,7 @@ rec {
     "passwd"
   ];
 
-  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
+  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" ];
 
 
   /* A set of functions that build the Linux distributions specified
@@ -1177,7 +1190,7 @@ rec {
      of the default image parameters can be given.  In particular,
      `extraPackages' specifies the names of additional packages from
      the distribution that should be included in the image; `packages'
-     allows the entire set of packages to be overriden; and `size'
+     allows the entire set of packages to be overridden; and `size'
      sets the size of the disk in megabytes.  E.g.,
      `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
      size = 8192; }' builds an 8 GiB image containing Firefox in
@@ -1196,4 +1209,4 @@ rec {
      `debDistros' sets. */
   diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
 
-} // import ./windows pkgs
+}

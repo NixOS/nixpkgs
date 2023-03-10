@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre }:
+{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre, nixosTests }:
 
 let version = "0.3.0"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0dm39g3k77sa70zrjsqadidg27a6iqq61jzfdxazpllnrw4mjy4w";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure = ''
     sed -i 's,/etc,'$out'/etc,' src/haka/haka.c
@@ -21,15 +21,16 @@ stdenv.mkDerivation {
     sed -i 's,/etc,'$out'/etc,' doc/user/tool_suite_haka.rst
   '';
 
-  buildInputs = [ cmake swig wireshark check rsync libpcap gawk libedit pcre ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
 
-  enableParallelBuilding = true;
+  passthru.tests = { inherit (nixosTests) haka; };
 
   meta = {
     description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
-    homepage = http://www.haka-security.org/;
-    license = stdenv.lib.licenses.mpl20;
-    maintainers = [ stdenv.lib.maintainers.tvestelind ];
+    homepage = "http://www.haka-security.org/";
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.tvestelind ];
     platforms = [ "x86_64-linux" "i686-linux" ]; # fails on aarch64
   };
 }

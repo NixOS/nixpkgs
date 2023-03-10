@@ -1,25 +1,42 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, python2Packages }:
+{ fetchurl, python, lib }:
 
-let name = "scons";
-in python2Packages.buildPythonApplication {
-  name = "${name}-${version}";
+python.pkgs.buildPythonApplication rec {
+  pname = "scons";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/scons/${name}-${version}.tar.gz";
+    url = "mirror://sourceforge/scons/${pname}-${version}.tar.gz";
     inherit sha256;
   };
 
-  # Fix a regression in 3.0.0 (causes build errors for some packages)
-  patches = stdenv.lib.optional (version == "3.0.0") ./print-statements.patch;
-
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
-    homepage = http://scons.org/;
+  postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
+    substituteInPlace setup.cfg \
+      --replace "build/dist" "dist"
+  '' + lib.optionalString (lib.versionAtLeast version "4.1.0") ''
+    substituteInPlace setup.cfg \
+      --replace "build/doc/man/" ""
+  '';
+
+  # The release tarballs don't contain any tests (runtest.py and test/*):
+  doCheck = lib.versionOlder version "4.0.0";
+
+  postInstall = lib.optionalString (lib.versionAtLeast version "4.1.0") ''
+    mkdir -p "$out/share/man/man1"
+    mv "$out/"*.1 "$out/share/man/man1/"
+  '';
+
+  passthru = {
+    # expose the used python version so tools using this (and extensing scos with other python modules)
+    # can use the exact same python version.
+    inherit python;
+  };
+
+  meta = with lib; {
     description = "An improved, cross-platform substitute for Make";
-    license = licenses.mit;
     longDescription = ''
       SCons is an Open Source software construction tool. Think of
       SCons as an improved, cross-platform substitute for the classic
@@ -28,7 +45,10 @@ in python2Packages.buildPythonApplication {
       SCons is an easier, more reliable and faster way to build
       software.
     '';
+    homepage = "https://scons.org/";
+    changelog = "https://raw.githubusercontent.com/SConsProject/scons/rel_${version}/src/CHANGES.txt";
+    license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
   };
 }

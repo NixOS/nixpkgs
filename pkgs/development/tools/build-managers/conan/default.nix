@@ -1,91 +1,91 @@
-{ lib, python3, git, pkgconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, git
+, pkg-config
+, python3
+, zlib
+}:
 
-let newPython = python3.override {
-  packageOverrides = self: super: {
-    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.0";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
-      };
-    });
-    node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
-      version = "0.6.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
-      };
-    });
-    future = super.future.overridePythonAttrs (oldAttrs: rec {
-      version = "0.16.0";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
-      };
-    });
-    tqdm = super.tqdm.overridePythonAttrs (oldAttrs: rec {
-      version = "4.28.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1fyybgbmlr8ms32j7h76hz5g9xc6nf0644mwhc40a0s5k14makav";
-      };
-    });
-    pluginbase = super.pluginbase.overridePythonAttrs (oldAttrs: rec {
-      version = "0.7";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
-      };
-    });
-  };
-};
-
-in newPython.pkgs.buildPythonApplication rec {
-  version = "1.12.3";
+python3.pkgs.buildPythonApplication rec {
   pname = "conan";
+  version = "2.0.0";
+  format = "setuptools";
 
-  src = newPython.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "1cnfy9b57apps4bfai6r67g0mrvgnqa154z9idv0kf93k1nvx53g";
+  src = fetchFromGitHub {
+    owner = "conan-io";
+    repo = "conan";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yx/MO5QAVKnGraQXJitXxaZooLtBqa+L04s73DwiE14=";
   };
 
-  propagatedBuildInputs = with newPython.pkgs; [
-    colorama deprecation distro fasteners bottle
-    future node-semver patch pygments pluginbase
-    pyjwt pylint pyyaml requests six tqdm
+  propagatedBuildInputs = with python3.pkgs; [
+    bottle
+    colorama
+    python-dateutil
+    distro
+    fasteners
+    jinja2
+    patch-ng
+    pluginbase
+    pygments
+    pyjwt
+    pylint # Not in `requirements.txt` but used in hooks, see https://github.com/conan-io/conan/pull/6152
+    pyyaml
+    requests
+    tqdm
+    urllib3
+  ] ++ lib.optionals stdenv.isDarwin [
+    idna
+    cryptography
+    pyopenssl
   ];
 
-  checkInputs = [
-    pkgconfig
+  nativeCheckInputs = [
     git
-  ] ++ (with newPython.pkgs; [
-    codecov
+    pkg-config
+    zlib
+  ] ++ (with python3.pkgs; [
     mock
-    pytest
-    node-semver
-    nose
     parameterized
+    pytest-xdist
+    pytestCheckHook
     webtest
   ]);
 
-  checkPhase = ''
-    export HOME=$TMPDIR
-    pytest conans/test/{utils,unittests} \
-      -k 'not SVN and not ToolsNetTest'
-  '';
+  pythonImportsCheck = [
+    "conan"
+  ];
 
-  postPatch = ''
-    substituteInPlace conans/requirements_server.txt \
-      --replace "pluginbase>=0.5, < 1.0" "pluginbase>=0.5"
-    substituteInPlace conans/requirements.txt \
-      --replace "PyYAML>=3.11, <3.14.0" "PyYAML"
-  '';
+  pytestFlagsArray = [
+    "-n"
+    "$NIX_BUILD_CORES"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "TestFTP"
+  ];
+
+  disabledTestPaths = [
+    # Requires cmake, meson, autotools, apt-get, etc.
+    "conans/test/functional/command/new_test.py"
+    "conans/test/functional/command/test_install_deploy.py"
+    "conans/test/functional/layout/test_editable_cmake.py"
+    "conans/test/functional/layout/test_in_subfolder.py"
+    "conans/test/functional/layout/test_source_folder.py"
+    "conans/test/functional/toolchains/"
+    "conans/test/functional/tools_versions_test.py"
+    "conans/test/functional/tools/system/package_manager_test.py"
+    "conans/test/functional/util/test_cmd_args_to_string.py"
+    "conans/test/unittests/tools/env/test_env_files.py"
+  ];
 
   meta = with lib; {
-    homepage = https://conan.io;
     description = "Decentralized and portable C/C++ package manager";
+    homepage = "https://conan.io";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
-    platforms = platforms.linux;
   };
 }

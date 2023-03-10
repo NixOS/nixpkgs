@@ -1,45 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, alembic, aiosmtpd, dnspython
-, flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
-, requests, zope_configuration, click, falcon, importlib-resources
-, zope_component, lynx, postfix, authheaders, gunicorn
-}:
+{ newScope, lib, python3 }:
 
-buildPythonPackage rec {
-  pname = "mailman";
-  version = "3.3.0";
-  disabled = !isPy3k;
+let
+  self = lib.makeExtensible (self: let inherit (self) callPackage; in {
+    callPackage = newScope self;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1qph9i93ndahfxi3bb2sd0kjm2c0pkh844ai6zacfmvihl1k3pvy";
-  };
+    python3 = callPackage ./python.nix { inherit python3; };
 
-  propagatedBuildInputs = [
-    alembic aiosmtpd click dnspython falcon flufl_bounce flufl_i18n flufl_lock
-    importlib-resources lazr_config passlib requests zope_configuration
-    zope_component authheaders gunicorn
-  ];
+    hyperkitty = callPackage ./hyperkitty.nix { };
 
-  patchPhase = ''
-    substituteInPlace src/mailman/config/postfix.cfg \
-      --replace /usr/sbin/postmap ${postfix}/bin/postmap
-    substituteInPlace src/mailman/config/schema.cfg \
-      --replace /usr/bin/lynx ${lynx}/bin/lynx
-  '';
+    mailman = callPackage ./package.nix { };
 
-  # Mailman assumes that those scripts in $out/bin are Python scripts. Wrapping
-  # them in shell code breaks this assumption. Use the wrapped version (see
-  # wrapped.nix) if you need the CLI (rather than the Python library).
-  #
-  # This gives a properly wrapped 'mailman' command plus an interpreter that
-  # has all the necessary search paths to execute unwrapped 'master' and
-  # 'runner' scripts.
-  dontWrapPythonPrograms = true;
+    mailman-hyperkitty = callPackage ./mailman-hyperkitty.nix { };
 
-  meta = {
-    homepage = https://www.gnu.org/software/mailman/;
-    description = "Free software for managing electronic mail discussion and newsletter lists";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ peti ];
-  };
-}
+    postorius = callPackage ./postorius.nix { };
+
+    web = callPackage ./web.nix { };
+
+    buildEnvs = { web ? self.web
+                , mailman ? self.mailman
+                , mailman-hyperkitty ? self.mailman-hyperkitty
+                , withHyperkitty ? false
+                , withLDAP ? false
+                }:
+      {
+        mailmanEnv = self.python3.withPackages
+          (ps: [ mailman ps.psycopg2 ]
+            ++ lib.optional withHyperkitty mailman-hyperkitty
+            ++ lib.optionals withLDAP [ ps.python-ldap ps.django-auth-ldap ]);
+        webEnv = self.python3.withPackages
+          (ps: [ web ps.psycopg2 ] ++ lib.optionals withLDAP [ ps.python-ldap ps.django-auth-ldap ]);
+      };
+  });
+
+in self

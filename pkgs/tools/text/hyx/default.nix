@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, memstreamHook }:
 
 stdenv.mkDerivation rec {
-  name = "hyx-0.1.5";
+  pname = "hyx";
+  version = "2021.06.09";
 
   src = fetchurl {
-    url = "https://yx7.cc/code/hyx/${name}.tar.xz";
-    sha256 = "0gd8fbdyw12jwffa5dgcql4ry22xbdhqdds1qwzk1rkcrkgnc1mg";
+    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] version}.tar.xz";
+    sha256 = "sha256-jU8U5YWE1syPBOQ8o4BC7tIYiCo4kknCCwhnMCVtpes=";
   };
 
-  patches = [ ./no-wall-by-default.patch ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "-Wl,-z,relro,-z,now -fpic -pie" ""
+  '';
+
+  buildInputs = lib.optional (stdenv.system == "x86_64-darwin") memstreamHook;
 
   installPhase = ''
     install -vD hyx $out/bin/hyx
@@ -16,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "minimalistic but powerful Linux console hex editor";
-    homepage = https://yx7.cc/code/;
+    homepage = "https://yx7.cc/code/";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -1,27 +1,67 @@
-{ stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
-, glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
-, libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
-, libstartup_notification, wrapGAppsHook
+{ lib, stdenv
+, fetchFromGitLab
+, pkg-config
+, cmake
+, gettext
+, cairo
+, pango
+, pcre
+, glib
+, imlib2
+, gtk3
+, libXinerama
+, libXrender
+, libXcomposite
+, libXdamage
+, libX11
+, libXrandr
+, librsvg
+, libpthreadstubs
+, libXdmcp
+, libstartup_notification
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "tint2";
-  version = "16.7";
+  version = "17.0.2";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "1937z0kixb6r82izj12jy4x8z4n96dfq1hx05vcsvsg1sx3wxgb0";
+    sha256 = "sha256-SqpAjclwu3HN07LAZgvXGzjMK6G+nYLDdl90o1+9aog=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    gettext
+    wrapGAppsHook
+  ];
 
-  nativeBuildInputs = [ pkgconfig cmake gettext wrapGAppsHook ];
+  buildInputs = [
+    cairo
+    pango
+    pcre
+    glib
+    imlib2
+    gtk3
+    libXinerama
+    libXrender
+    libXcomposite
+    libXdamage
+    libX11
+    libXrandr
+    librsvg
+    libpthreadstubs
+    libXdmcp
+    libstartup_notification
+  ];
 
-  buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
-    libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
-    libXdmcp libstartup_notification ];
+  cmakeFlags = [
+    "-Ddocdir=share/doc/${pname}"
+  ];
 
   postPatch = ''
     for f in ./src/launcher/apps-common.c \
@@ -31,10 +71,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://gitlab.com/o9000/tint2;
+  meta = with lib; {
+    homepage = "https://gitlab.com/o9000/tint2";
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

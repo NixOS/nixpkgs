@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "bifunctors";
+  pname = "bifunctors";
   version = "2017-02-07";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "A small bifunctor library for idris";
-    homepage = https://github.com/japesinator/Idris-Bifunctors;
+    homepage = "https://github.com/japesinator/Idris-Bifunctors";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

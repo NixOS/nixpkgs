@@ -1,35 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , coverage
+, fetchFromGitHub
+, poetry-core
 , pytest
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "1.0.1";
+  version = "1.4.5";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b823b03faf5778d1e15fb9f52e104df4da9c1021daeb313b339fccbbfb8dbd5f";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "tarpas";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RHzPLCC33bPEk59rin4CZD3F7fsT1qyRR2HRyDIwszo=";
   };
 
-  propagatedBuildInputs = [ coverage ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
-  # avoid tests which try to import unittest_mixins
-  # unittest_mixins doesn't seem to be very active
-  checkPhase = ''
-    cd test
-    pytest test_{core,process_code,pytest_assumptions}.py
-  '';
+  propagatedBuildInputs = [
+    coverage
+  ];
+
+  # The project does not include tests since version 1.3.0
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "testmon"
+  ];
 
   meta = with lib; {
+    description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
-    description = "This is a py.test plug-in which automatically selects and re-executes only tests affected by recent changes";
-    license = licenses.mit;
-    maintainers = [ maintainers.dmvianna ];
+    changelog = "https://github.com/tarpas/pytest-testmon/releases/tag/v${version}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ dmvianna ];
   };
 }
-

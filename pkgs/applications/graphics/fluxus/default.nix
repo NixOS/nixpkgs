@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, alsaLib
+, alsa-lib
 , bzip2
 , fftw
 , freeglut
@@ -17,31 +17,12 @@
 , ode
 , openal
 , openssl
-, racket
-, scons
+, racket_7_9
+, sconsPackages
 , zlib
 }:
 let
-  libs = [
-    alsaLib
-    bzip2
-    fftw
-    freeglut
-    freetype
-    glew
-    libjack2
-    libGL
-    libGLU
-    libjpeg
-    liblo
-    libpng
-    libsndfile
-    libtiff
-    ode
-    openal
-    openssl
-    zlib
-  ];
+  racket = racket_7_9;
 in
 stdenv.mkDerivation rec {
   pname = "fluxus";
@@ -50,11 +31,11 @@ stdenv.mkDerivation rec {
     owner = "nebogeo";
     repo = "fluxus";
     rev = "ba9aee218dd4a9cfab914ad78bdb6d59e9a37400";
-    hash = "sha256:0mwghpgq4n1khwlmgscirhmcdhi6x00c08q4idi2zcqz961bbs28";
+    sha256 = "0mwghpgq4n1khwlmgscirhmcdhi6x00c08q4idi2zcqz961bbs28";
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fftw
     freeglut.dev
     freetype
@@ -67,16 +48,15 @@ stdenv.mkDerivation rec {
     ode
     openal
     openssl.dev
-    racket
+    racket_7_9
   ];
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ sconsPackages.scons_latest ];
 
   patches = [ ./fix-build.patch ];
   sconsFlags = [
     "RacketPrefix=${racket}"
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
-    "LIBPATH=${stdenv.lib.makeLibraryPath libs}"
     "DESTDIR=build"
   ];
   configurePhase = ''
@@ -87,10 +67,10 @@ stdenv.mkDerivation rec {
     cp -r build$out/* $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Livecoding environment for 3D graphics, sound, and games";
     license = licenses.gpl2;
-    homepage = http://www.pawfal.org/fluxus/;
+    homepage = "http://www.pawfal.org/fluxus/";
     maintainers = [ maintainers.brainrape ];
   };
 }

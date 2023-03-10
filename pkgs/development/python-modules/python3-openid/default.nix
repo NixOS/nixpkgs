@@ -1,12 +1,12 @@
-{ stdenv, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
+{ lib, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
 
 buildPythonPackage rec {
   pname = "python3-openid";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00l5hrjh19740w00b3fnsqldnla41wbr2rics09dl4kyd1fkd3b2";
+    sha256 = "1bxf9a3ny1js422j962zfzl4a9dhj192pvai05whn7j0iy9gdyrk";
   };
 
   propagatedBuildInputs = [ defusedxml ];
@@ -15,9 +15,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenID support for modern servers and consumers";
-    homepage = https://github.com/necaris/python3-openid;
+    homepage = "https://github.com/necaris/python3-openid";
     license = licenses.asl20;
   };
 }

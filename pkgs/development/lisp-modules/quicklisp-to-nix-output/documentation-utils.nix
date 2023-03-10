@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''documentation-utils'';
-  version = ''20190710-git'';
+  baseName = "documentation-utils";
+  version = "20190710-git";
 
-  description = ''A few simple tools to help you with documenting your library.'';
+  description = "A few simple tools to help you with documenting your library.";
 
   deps = [ args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/documentation-utils/2019-07-10/documentation-utils-20190710-git.tgz'';
-    sha256 = ''1n3z8sw75k2jjpsg6ch5g9s4v56y96dbs4338ajrfdsk3pk4wgj3'';
+    url = "http://beta.quicklisp.org/archive/documentation-utils/2019-07-10/documentation-utils-20190710-git.tgz";
+    sha256 = "1n3z8sw75k2jjpsg6ch5g9s4v56y96dbs4338ajrfdsk3pk4wgj3";
   };
 
   packageName = "documentation-utils";

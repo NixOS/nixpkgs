@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, freetds, readline, libiconv }:
+{ lib, stdenv, fetchurl, autoreconfHook, freetds, readline, libiconv }:
 
 let
   mainVersion = "2.5";
@@ -14,10 +14,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     export SYBASE=${freetds}
-
-    substituteInPlace src/cmd_connect.c \
-      --replace CS_TDS_80 CS_TDS_73
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "libct.so" "libct.dylib"
   '';
 
@@ -27,7 +24,18 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  patches = [
+    (fetchurl {
+      # https://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/databases/sqsh/patches/patch-src_cmd_connect_c
+      name = "patch-src_cmd_connect_c.patch";
+      url = "https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/ports/databases/sqsh/patches/patch-src_cmd_connect_c?rev=1.2&content-type=text/plain";
+      sha256 = "1dz97knr2h0a0ca1vq2mx6h8s3ns9jb1a0qraa4wkfmcdi3aqw0j";
+    })
+  ];
+
+  patchFlags = [ "-p0" ];
+
+  meta = with lib; {
     description = "Command line tool for querying Sybase/MSSQL databases";
     longDescription = ''
       Sqsh (pronounced skwish) is short for SQshelL (pronounced s-q-shell),
@@ -35,7 +43,7 @@ in stdenv.mkDerivation rec {
       by Sybase.
     '';
     license = licenses.gpl2;
-    homepage = https://sourceforge.net/projects/sqsh/;
+    homepage = "https://sourceforge.net/projects/sqsh/";
     platforms = platforms.all;
   };
 }

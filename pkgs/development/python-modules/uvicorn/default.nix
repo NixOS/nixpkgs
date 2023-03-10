@@ -1,56 +1,76 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
 , click
 , h11
 , httptools
+, python-dotenv
+, pyyaml
+, typing-extensions
 , uvloop
+, watchfiles
 , websockets
-, wsproto
-, pytest
-, requests
-, isPy27
+, hatchling
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.11.2";
-  disabled = isPy27;
+  version = "0.20.0";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "145c569j4511zw3wglyv9qgd7g1757ypi2blcckpcmahqw11l5p2";
+    hash = "sha256-yca6JI3/aqdZF7SxFeYr84GOeQnLBmbm1dIXjngX9Ng=";
   };
+
+  outputs = [
+    "out"
+    "testsout"
+  ];
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     click
     h11
-    httptools
-    uvloop
-    websockets
-    wsproto
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11==0.8.*" "h11"
-  '';
+  passthru.optional-dependencies.standard = [
+    httptools
+    python-dotenv
+    pyyaml
+    uvloop
+    watchfiles
+    websockets
+  ];
 
-  checkInputs = [ pytest requests ];
-  checkPhase = ''
-    pytest
-  '';
-
-  # LICENCE.md gets propagated without this, causing collisions
-  # see https://github.com/encode/uvicorn/issues/392
   postInstall = ''
-    rm $out/LICENSE.md
+    mkdir $testsout
+    cp -R tests $testsout/tests
   '';
+
+  pythonImportsCheck = [
+    "uvicorn"
+  ];
+
+  # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
+  doCheck = false;
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
-    homepage = https://www.uvicorn.org/;
+    homepage = "https://www.uvicorn.org/";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

@@ -3,8 +3,8 @@
 # (which will eventually become the default version.)
 { gcc6Stdenv, lib, fetchurl, fetchFromGitHub
 
-, which, findutils, m4, gawk
-, python, openjdk, mono, libressl
+, which, m4
+, python2, openjdk, mono, libressl
 , ...
 }:
 
@@ -21,7 +21,7 @@ let
     };
 
     dontConfigure = true;
-    buildPhase = ":";
+    dontBuild = true;
     installPhase = "mkdir -p $out/include && cp -R boost $out/include/";
   };
 
@@ -51,7 +51,7 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono ];
+        nativeBuildInputs = [ python2 openjdk which m4 mono ];
         buildInputs = [ libressl boost ];
 
         inherit patches;
@@ -84,11 +84,11 @@ let
         makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
-          ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
+          ++ lib.optionals (lib.versionOlder version "6.0") [ "fdb_c" ]
           # Needed environment overrides
           ++ [ "KVRELEASE=1"
                "NOSTRIP=1"
-             ] ++ lib.optional officialRelease [ "RELEASE=true" ];
+             ] ++ lib.optionals officialRelease [ "RELEASE=true" ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
@@ -100,7 +100,7 @@ let
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
 
-        '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+        '' + lib.optionalString (lib.versionOlder version "6.0") ''
           # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
         '' + ''
@@ -139,9 +139,9 @@ let
 
         outputs = [ "out" "lib" "dev" "pythonsrc" ];
 
-        meta = with gcc6Stdenv.lib; {
+        meta = with lib; {
           description = "Open source, distributed, transactional key-value store";
-          homepage    = https://www.foundationdb.org;
+          homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
           maintainers = with maintainers; [ thoughtpolice ];

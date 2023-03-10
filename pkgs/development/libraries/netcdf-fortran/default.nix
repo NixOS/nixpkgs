@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, netcdf, hdf5, curl, gfortran }:
+{ lib, stdenv, fetchFromGitHub, netcdf, hdf5, curl, gfortran, CoreFoundation }:
 stdenv.mkDerivation rec {
   pname = "netcdf-fortran";
   version = "4.4.5";
 
-  src = fetchurl {
-    url = "https://github.com/Unidata/netcdf-fortran/archive/v${version}.tar.gz";
-    sha256 = "00qwg4v250yg8kxp68srrnvfbfim241fnlm071p9ila2mihk8r01";
+  src = fetchFromGitHub {
+    owner = "Unidata";
+    repo = "netcdf-fortran";
+    rev = "v${version}";
+    sha256 = "sha256-nC93NcA4VJbrqaLwyhjP10j/t6rQSYcAzKBxclpZVe0=";
   };
 
-  buildInputs = [ netcdf hdf5 curl gfortran ];
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ netcdf hdf5 curl ]
+    ++ lib.optional stdenv.isDarwin CoreFoundation;
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  FFLAGS = [ "-std=legacy" ];
+  FCFLAGS = [ "-std=legacy" ];
+
+  meta = with lib; {
     description = "Fortran API to manipulate netcdf files";
-    homepage = https://www.unidata.ucar.edu/software/netcdf/;
+    homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = licenses.free;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;

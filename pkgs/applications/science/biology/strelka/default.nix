@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake, zlib, python2}:
+{lib, stdenv, fetchFromGitHub, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
   pname = "strelka";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib python2 ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=maybe-uninitialized"
     "-Wno-error=pessimizing-move"
   ];
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Germline and small variant caller";
     license = licenses.gpl3;
-    homepage = https://github.com/Illumina/strelka;
+    homepage = "https://github.com/Illumina/strelka";
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
   };

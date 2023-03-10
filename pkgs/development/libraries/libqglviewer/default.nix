@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmake, qtbase, libGLU, AGL }:
+{ lib, stdenv, fetchurl, qmake, qtbase, libGLU, AGL }:
 
 stdenv.mkDerivation rec {
   pname = "libqglviewer";
@@ -11,13 +11,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase libGLU ]
-    ++ stdenv.lib.optional stdenv.isDarwin AGL;
+    ++ lib.optional stdenv.isDarwin AGL;
+
+  dontWrapQtApps = true;
 
   postPatch = ''
     cd QGLViewer
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ library based on Qt that eases the creation of OpenGL 3D viewers";
     homepage = "http://libqglviewer.com";
     license = licenses.gpl2;

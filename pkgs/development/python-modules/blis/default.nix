@@ -1,37 +1,54 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
 , hypothesis
 , numpy
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.4.1";
+  # Do not update to BLIS 0.9.x until the following issue is resolved:
+  # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
+  version = "0.7.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d69257d317e86f34a7f230a2fd1f021fd2a1b944137f40d8cdbb23bd334cd0c4";
+    hash = "sha256-Ke9MJQB3hakP/C8Ks9O9O3XNLXhWqaSCt9DayNURoJ0=";
   };
+
+  postPatch = ''
+    # See https://github.com/numpy/numpy/issues/21079
+    substituteInPlace blis/benchmark.py \
+      --replace "numpy.__config__.blas_ilp64_opt_info" "numpy.__config__.blas_opt_info"
+  '';
 
   nativeBuildInputs = [
     cython
   ];
 
-
-  checkInputs = [
-    cython
-    hypothesis
+  propagatedBuildInputs = [
     numpy
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
     pytest
   ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "blis"
+  ];
+
+  meta = with lib; {
     description = "BLAS-like linear algebra library";
-    homepage = https://github.com/explosion/cython-blis;
+    homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

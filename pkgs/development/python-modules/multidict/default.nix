@@ -1,29 +1,35 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytest, pytestrunner, pytestcov
-, isPy3k
-, isPy38
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "4.7.4";
+  version = "6.0.4";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d7d428488c67b09b26928950a395e41cc72bb9c3d5abfe9f0521940ee4f796d4";
+    hash = "sha256-NmaQZJLvt2RTwOe5fyz0WbBoLnQCwEialUhJZdvB2kk=";
   };
 
-  checkInputs = [ pytest pytestrunner pytestcov ];
+  postPatch = ''
+    sed -i '/^addopts/d' setup.cfg
+  '';
 
-  disabled = !isPy3k;
-  # pickle files needed for 3.8 https://github.com/aio-libs/multidict/pull/363
-  doCheck = !isPy38;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "multidict" ];
 
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/multidict/blob/v${version}/CHANGES.rst";
     description = "Multidict implementation";
-    homepage = https://github.com/aio-libs/multidict/;
+    homepage = "https://github.com/aio-libs/multidict/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

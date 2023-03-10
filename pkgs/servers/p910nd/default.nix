@@ -1,30 +1,36 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "p910nd";
   version = "0.97";
 
-  src = fetchurl {
-    sha256 = "0vy2qf386dif1nqznmy3j953mq7c4lk6j2hgyzkbmfi4msiq1jaa";
-    url = "mirror://sourceforge/p910nd/${pname}-${version}.tar.bz2";
+  src = fetchFromGitHub {
+    owner = "kenyapcomau";
+    repo = "p910nd";
+    rev = version;
+    hash = "sha256-MM4o7d3L3XIRYWJ/KPM2OltlVfVA/BgMuyhJMm/BS3c=";
   };
 
-  postPatch = ''
-    sed -e "s|/usr||g" -i Makefile
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace Makefile --replace gcc clang
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" "BINDIR=/bin" ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    # Match the man page:
-    mv $out/etc/init.d/p910nd{,.sh}
+  enableParallelBuilding = true;
 
-    # The legacy init script is useful only (and even then...) as an example:
-    mkdir -p $out/share/doc/examples
-    mv $out/etc $out/share/doc/examples
+  # instead of mucking around with the Makefile, just install the bits we need
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm555 -t $out/bin p910nd
+    install -Dm444 -t $out/share/doc/p910nd *.md
+    installManPage p910nd.?
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small printer daemon passing jobs directly to the printer";
     longDescription = ''
       p910nd is a small printer daemon intended for diskless platforms that
@@ -36,9 +42,9 @@ stdenv.mkDerivation rec {
       the AppSocket protocol and has the scheme socket://. LPRng also supports
       this protocol and the syntax is lp=remotehost%9100 in /etc/printcap.
     '';
-    homepage = http://p910nd.sourceforge.net/;
-    downloadPage = https://sourceforge.net/projects/p910nd/;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    homepage = "https://github.com/kenyapcomau/p910nd";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

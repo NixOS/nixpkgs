@@ -14,20 +14,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "121z4sq2m4vsgxwy8hs6d12cc1i4xa5rjiv0nbviyj87jldxapw0";
+      sha256 = "0gqqnqrfayhwhkp0vy3frv68sgc7klyd6mfisx1j3djjvlyc7hmr";
       type = "gem";
     };
-    version = "4.43.0";
+    version = "5.30.0";
   };
   sqlite3 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01ifzp8nwzqppda419c9wcvr8n82ysmisrs0hph9pdmv1lpa4f5i";
+      sha256 = "0lja01cp9xd5m6vmx99zwn4r7s97r1w5cb76gqd8xhbm1wxyzf78";
       type = "gem";
     };
-    version = "1.3.13";
+    version = "1.4.2";
   };
   timetrap = {
     dependencies = ["chronic" "sequel" "sqlite3"];
@@ -35,9 +35,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ylaz9q99hbxnw6h1df6wphmh68fj847d1l4f9jylcx3nzzp5cyd";
+      sha256 = "0pfg5c3kmh1jfaaszw253bi93ixa6cznqmsafrcpccrdg9r8j2k8";
       type = "gem";
     };
-    version = "1.15.1";
+    version = "1.15.2";
   };
 }

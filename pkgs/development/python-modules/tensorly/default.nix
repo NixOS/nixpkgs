@@ -1,45 +1,70 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
-, nose
-, isPy27
 , numpy
+, pytestCheckHook
+, pythonOlder
 , scipy
-, sparse
-, pytorch
 }:
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.4.5";
-  disabled = isPy27;
+  version = "0.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "1ml91yaxwx4msisxbm92yf22qfrscvk58f3z2r1jhi96pw2k4i7x";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6iZvUgsoYf8fDGEuAODgfr4jCkiJwaJXlQUAsaOF9JU=";
   };
 
-  propagatedBuildInputs = [ numpy scipy sparse ];
-  checkInputs = [ pytest nose pytorch ];
-  # also has a cupy backend, but the tests are currently broken
-  # (e.g. attempts to access cupy.qr instead of cupy.linalg.qr)
-  # and this backend also adds a non-optional CUDA dependence,
-  # as well as tensorflow and mxnet backends, but the tests don't
-  # seem to exercise these backend by default
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    nosetests -e "test_cupy"
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "tensorly"
+    "tensorly.base"
+    "tensorly.cp_tensor"
+    "tensorly.tucker_tensor"
+    "tensorly.tt_tensor"
+    "tensorly.tt_matrix"
+    "tensorly.parafac2_tensor"
+    "tensorly.tenalg"
+    "tensorly.decomposition"
+    "tensorly.regression"
+    "tensorly.metrics"
+    "tensorly.random"
+    "tensorly.datasets"
+    "tensorly.plugins"
+    "tensorly.contrib"
+  ];
+
+  pytestFlagsArray = [
+    "tensorly"
+  ];
+
+  disabledTests = [
+    # tries to download data:
+    "test_kinetic"
+    # AssertionError: Partial_SVD took too long, maybe full_matrices set wrongly
+    "test_svd_time"
+  ];
 
   meta = with lib; {
     description = "Tensor learning in Python";
-    homepage = https://tensorly.org/;
+    homepage = "https://tensorly.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
+    broken = stdenv.isLinux && stdenv.isAarch64;  # test failures: test_TTOI and test_validate_tucker_rank
   };
 }

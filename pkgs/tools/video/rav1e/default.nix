@@ -1,33 +1,50 @@
-{ rustPlatform, fetchFromGitHub, fetchurl, stdenv, lib, nasm }:
+{ lib
+, rust
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, cargo-c
+, libgit2
+, nasm
+, zlib
+, libiconv
+, Security
+}:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.3.1";
+  version = "0.6.3";
 
-  src = stdenv.mkDerivation rec {
-    name = "${pname}-${version}-source";
-
-    src = fetchFromGitHub {
-      owner = "xiph";
-      repo = "rav1e";
-      rev = "v${version}";
-      sha256 = "001v29baa77pkab13d7imi71llixyvffqax8kgjwhm1dhsqlm7bl";
-    };
-    cargoLock = fetchurl {
-      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "06l8jj75ma5kvz1m14x58an2zvx12i6wcq70gzq5k47nvj5l0zax";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      cp -R ./* $out/
-      cp ${cargoLock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-XaxxakVwogJlqyZGL275jGSZDLoRLl8SAAg8V+X4cmQ=";
   };
 
-  cargoSha256 = "0n6gkn4iyqk4bijrvcpq884hiihl4mpw1p417w1m0dw7j4y4karn";
+  cargoHash = "sha256-66mVkoqMl+KNCXWsGUbu8nBrazgHP+5dTaT2Ye0btWY=";
 
-  nativeBuildInputs = [ nasm ];
+  auditable = true; # TODO: remove when this is the default
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ cargo-c libgit2 nasm zlib ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
+
+  checkType = "debug";
+
+  postBuild = ''
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+  '';
+
+  postInstall = ''
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+  '';
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";
@@ -37,9 +54,9 @@ rustPlatform.buildRustPackage rec {
       libaom (the reference encoder) is too slow.
       Features: https://github.com/xiph/rav1e#features
     '';
-    inherit (src.src.meta) homepage;
+    homepage = "https://github.com/xiph/rav1e";
+    changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.primeos ];
-    platforms = platforms.all;
+    maintainers = [ ];
   };
 }

@@ -1,62 +1,73 @@
-{ stdenv
+{ lib
+, python3
 , python3Packages
 , fetchFromGitHub
 , systemd
-, xrandr }:
+, xrandr
+, installShellFiles
+, desktop-file-utils }:
 
-let
-  python = python3Packages.python;
-  version = "1.9";
-in
-  stdenv.mkDerivation {
-    pname = "autorandr";
-    inherit version;
+python3.pkgs.buildPythonApplication rec {
+  pname = "autorandr";
+  version = "1.13.3";
+  format = "other";
 
-    buildInputs = [ python ];
+  nativeBuildInputs = [ installShellFiles desktop-file-utils ];
+  propagatedBuildInputs = [ python3Packages.packaging ];
 
-    # no wrapper, as autorandr --batch does os.environ.clear()
-    buildPhase = ''
-      substituteInPlace autorandr.py \
-        --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
-        --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
-    '';
+  buildPhase = ''
+    substituteInPlace autorandr.py \
+      --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
+      --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+  '';
 
-    installPhase = ''
-      runHook preInstall
-      make install TARGETS='autorandr' PREFIX=$out
+  patches = [ ./0001-don-t-use-sys.executable.patch ];
 
-      make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
+  outputs = [ "out" "man" ];
 
-      make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
+  installPhase = ''
+    runHook preInstall
+    make install TARGETS='autorandr' PREFIX=$out
 
-      ${if systemd != null then ''
-        make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
-          SYSTEMD_UNIT_DIR=/lib/systemd/system \
-          UDEV_RULES_DIR=/etc/udev/rules.d
-        substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-          --replace /bin/systemctl "${systemd}/bin/systemctl"
-      '' else ''
-        make install TARGETS='pmutils' DESTDIR=$out \
-          PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
-        make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
-          UDEV_RULES_DIR=/etc/udev/rules.d
-      ''}
+    # zsh completions exist but currently have no make target, use
+    # installShellCompletions for both
+    # see https://github.com/phillipberndt/autorandr/issues/197
+    installShellCompletion --cmd autorandr \
+        --bash contrib/bash_completion/autorandr \
+        --zsh contrib/zsh_completion/_autorandr
 
-      runHook postInstall
-    '';
+    make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
-    src = fetchFromGitHub {
-      owner = "phillipberndt";
-      repo = "autorandr";
-      rev = version;
-      sha256 = "1bb0l7fcm5lcx9y02zdxv7pfdqf4v4gsc5br3v1x9gzjvqj64l7n";
-    };
+    make install TARGETS='manpage' PREFIX=$man
 
-    meta = with stdenv.lib; {
-      homepage = https://github.com/phillipberndt/autorandr/;
-      description = "Automatically select a display configuration based on connected devices";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ coroa globin ];
-      platforms = platforms.unix;
-    };
-  }
+    ${if systemd != null then ''
+      make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
+        SYSTEMD_UNIT_DIR=/lib/systemd/system \
+        UDEV_RULES_DIR=/etc/udev/rules.d
+      substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
+        --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
+    '' else ''
+      make install TARGETS='pmutils' DESTDIR=$out \
+        PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
+      make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+        UDEV_RULES_DIR=/etc/udev/rules.d
+    ''}
+
+    runHook postInstall
+  '';
+
+  src = fetchFromGitHub {
+    owner = "phillipberndt";
+    repo = "autorandr";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-3zWYOOVYpj+s7VKagnbI55MNshM5WtbCFD6q9tRCzes=";
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/phillipberndt/autorandr/";
+    description = "Automatically select a display configuration based on connected devices";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ coroa globin ];
+    platforms = platforms.unix;
+  };
+}

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nodejs }:
+{ lib, stdenv, fetchurl, nodejs }:
 
 stdenv.mkDerivation rec {
   version = "0.10.0";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mv $out/bin/cli.js $out/bin/csslint
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Checks CSS for syntax errors and other problems";
     longDescription = ''
       CSSLint is a tool to help point out problems with your CSS
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       rules to the code that look for problematic patterns or signs of
       inefficiency. The rules are all pluggable, so you can easily
       write your own or omit ones you don't want. '';
-    homepage = https://nodejs.org;
+    homepage = "https://nodejs.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

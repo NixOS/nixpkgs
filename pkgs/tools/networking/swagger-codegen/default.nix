@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.1";
+  version = "2.4.19";
   pname = "swagger-codegen";
 
   jarfilename = "${pname}-cli-${version}.jar";
@@ -11,22 +11,23 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://oss.sonatype.org/content/repositories/releases/io/swagger/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "171qr0zx7i6cykv54vqjf3mplrf7w4a1fpq47wsj861lbf8xm322";
+    url = "mirror://maven/io/swagger/${pname}-cli/${version}/${jarfilename}";
+    sha256 = "04wl5k8k1ziqz7k5w0g7i6zdfn41pbh3k0m8vq434k1886inf8yn";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
-    install -D "$src" "$out/share/java/${jarfilename}"
+    install -D $src $out/share/java/${jarfilename}
 
-    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen \
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
-    homepage = https://github.com/swagger-api/swagger-codegen;
+    homepage = "https://github.com/swagger-api/swagger-codegen";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.jraygauthier ];
   };

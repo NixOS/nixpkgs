@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "lens";
+  pname = "lens";
   version = "2017-09-25";
 
   idrisDeps = [ bifunctors ];
@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "van Laarhoven lenses for Idris";
-    homepage = https://github.com/HuwCampbell/idris-lens;
+    homepage = "https://github.com/HuwCampbell/idris-lens";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

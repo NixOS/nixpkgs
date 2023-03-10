@@ -1,59 +1,83 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 , awkward
-, backports_lzma
-, cachetools
-, lz4
-, pandas
-, pytestrunner
-, pytest
-, pkgconfig
-, mock
+, hatchling
+, importlib-metadata
 , numpy
-, requests
-, uproot-methods
+, packaging
+, pytestCheckHook
+, lz4
+, pytest-timeout
+, scikit-hep-testdata
 , xxhash
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "3.11.3";
+  version = "5.0.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "19rvkxv015lkx0g01sb54y6agdbqbmkpxlyka4z1zf9dx2lx1iq5";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "uproot5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cklLbTO/EooQpq8vavKgloncSlyIX7DW+T9Cauyn6ng=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
-
-  checkInputs = [
-    lz4
-    mock
-    pandas
-    pkgconfig
-    pytest
-    requests
-    xxhash
-  ] ++ lib.optional isPy27 backports_lzma;
-
-  propagatedBuildInputs = [
-    numpy
-    cachetools
-    uproot-methods
-    awkward
+  nativeBuildInputs = [
+    hatchling
   ];
 
-  # skip tests which do network calls
-  # test_compression.py is missing zstandard package
-  checkPhase = ''
-    pytest tests -k 'not hist_in_tree \
-      and not branch_auto_interpretation' \
-      --ignore=tests/test_compression.py
+  propagatedBuildInputs = [
+    awkward
+    numpy
+    packaging
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    lz4
+    pytest-timeout
+    scikit-hep-testdata
+    xxhash
+    zstandard
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
   '';
 
+  disabledTests = [
+    # Tests that try to download files
+    "test_http"
+    "test_no_multipart"
+    "test_fallback"
+    "test_pickle_roundtrip_http"
+  ];
+
+  disabledTestPaths = [
+    # Tests that try to download files
+    "tests/test_0066-fix-http-fallback-freeze.py"
+    "tests/test_0088-read-with-http.py"
+    "tests/test_0220-contiguous-byte-ranges-in-http.py"
+  ];
+
+  pythonImportsCheck = [
+    "uproot"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/scikit-hep/uproot";
     description = "ROOT I/O in pure Python and Numpy";
+    homepage = "https://github.com/scikit-hep/uproot5";
+    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ktf ];
+    maintainers = with maintainers; [ veprbl ];
   };
 }

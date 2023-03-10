@@ -1,18 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, idna }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, idna
+, typing ? null
+}:
 
 buildPythonPackage rec {
   pname = "hyperlink";
-  version = "19.0.0";
+  version = "21.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4288e34705da077fada1111a24a0aa08bb1e76699c9ce49876af722441845654";
+    sha256 = "0sx50lkivsfjxx9zr4yh7l9gll2l9kvl0v0w8w4wk2x5v9bzjyj2";
   };
 
-  propagatedBuildInputs = [ idna ];
+  propagatedBuildInputs = [ idna ]
+    ++ lib.optionals isPy27 [ typing ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A featureful, correct URL for Python";
+    homepage = "https://github.com/python-hyper/hyperlink";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ apeschar ];

@@ -4,29 +4,48 @@
 , jupyterlab_server
 , notebook
 , pythonOlder
+, jupyter-packaging
+, nbclassic
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "1.2.6";
-  disabled = pythonOlder "3.5";
+  version = "3.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mc3nrj7fc5q2ajr09m261j386jsp8qjljg8anghlh8czc9ln4s2";
+    hash = "sha256-UeiJRIrhlO7vjlD2P1xPSH9yj0d77+Q26XSWcvdRHb4=";
   };
 
-  propagatedBuildInputs = [ jupyterlab_server notebook ];
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
+
+  propagatedBuildInputs = [
+    jupyterlab_server
+    notebook
+    nbclassic
+  ];
 
   makeWrapperArgs = [
-    "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"
+    "--set"
+    "JUPYTERLAB_DIR"
+    "$out/share/jupyter/lab"
   ];
 
   # Depends on npm
   doCheck = false;
 
+  pythonImportsCheck = [
+    "jupyterlab"
+  ];
+
   meta = with lib; {
-    description = "Jupyter lab environment notebook server extension.";
+    changelog = "https://github.com/jupyterlab/jupyterlab/releases/tag/v${version}";
+    description = "Jupyter lab environment notebook server extension";
     license = with licenses; [ bsd3 ];
     homepage = "https://jupyter.org/";
     maintainers = with maintainers; [ zimbatm costrouc ];

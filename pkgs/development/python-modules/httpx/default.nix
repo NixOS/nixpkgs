@@ -1,68 +1,130 @@
 { lib
+, stdenv
+, brotli
+, brotlicffi
 , buildPythonPackage
-, fetchFromGitHub
 , certifi
-, hstspreload
 , chardet
-, h11
+, click
+, fetchFromGitHub
 , h2
-, idna
+, hatch-fancy-pypi-readme
+, hatchling
+, httpcore
+, isPyPy
+, multipart
+, pygments
+, python
+, pythonOlder
 , rfc3986
+, rich
 , sniffio
-, isPy27
-, pytest
-, pytestcov
+, socksio
+, pytestCheckHook
+, pytest-asyncio
+, pytest-trio
 , trustme
 , uvicorn
-, trio
-, brotli
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.9.5";
-  disabled = isPy27;
+  version = "0.23.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "140z2j7b5hlcxvfb433hqv5b8irqa88hpq33lzr9m992djbhj2hb";
+    hash = "sha256-1gRBHbGFUkaFvVgHHoXfpo9j0L074SyevFwMY202+uk=";
   };
+
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     certifi
-    hstspreload
-    chardet
-    h11
-    h2
-    idna
+    httpcore
     rfc3986
     sniffio
   ];
 
-  checkInputs = [
-    pytest
-    pytestcov
+  passthru.optional-dependencies = {
+    http2 = [
+      h2
+    ];
+    socks = [
+      socksio
+    ];
+    brotli = if isPyPy then [
+      brotlicffi
+    ] else [
+      brotli
+    ];
+    cli = [
+      click
+      rich
+      pygments
+    ];
+  };
+
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  nativeCheckInputs = [
+    chardet
+    multipart
+    pytestCheckHook
+    pytest-asyncio
+    pytest-trio
     trustme
     uvicorn
-    trio
-    brotli
-  ];
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.socks;
 
   postPatch = ''
-    substituteInPlace setup.py \
-          --replace "h11==0.8.*" "h11"
+    substituteInPlace pyproject.toml \
+      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
   '';
 
-  checkPhase = ''
-    PYTHONPATH=.:$PYTHONPATH pytest
+  # testsuite wants to find installed packages for testing entrypoint
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # httpcore.ConnectError: [Errno 101] Network is unreachable
+    "test_connect_timeout"
+    # httpcore.ConnectError: [Errno -2] Name or service not known
+    "test_async_proxy_close"
+    "test_sync_proxy_close"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_main.py"
+  ];
+
+  pythonImportsCheck = [
+    "httpx"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
     description = "The next generation HTTP client";
-    homepage = https://github.com/encode/httpx;
+    homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc fab ];
   };
 }

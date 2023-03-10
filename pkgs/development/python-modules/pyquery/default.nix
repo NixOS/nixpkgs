@@ -1,30 +1,53 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
 , cssselect
+, fetchPypi
 , lxml
+, pytestCheckHook
+, pythonOlder
+, requests
 , webob
+, webtest
 }:
 
 buildPythonPackage rec {
   pname = "pyquery";
-  version = "1.2.9";
+  version = "2.0.0";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
+    hash = "sha256-lj6NTpAmL/bY3sBy6pcoXcN0ovacrXd29AgqvPah2K4=";
   };
 
-  propagatedBuildInputs = [ cssselect lxml webob ];
+  propagatedBuildInputs = [
+    cssselect
+    lxml
+  ];
 
-  # circular dependency on webtest
-  doCheck = false;
+  pythonImportsCheck = [ "pyquery" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/gawel/pyquery;
-    description = "A jquery-like library for python";
+  checkInputs = [
+    pytestCheckHook
+    requests
+    webob
+    (webtest.overridePythonAttrs (_: {
+      # circular dependency
+      doCheck = false;
+    }))
+  ];
+
+  pytestFlagsArray = [
+    # requires network
+    "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+  ];
+
+  meta = with lib; {
+    description = "A jquery-like library for Python";
+    homepage = "https://github.com/gawel/pyquery";
+    changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
   };
-
 }

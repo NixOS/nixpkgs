@@ -1,32 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , libGL
 , libX11
+, glcontext
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.5.4";
+  version = "5.7.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08badabb6a1bbc9aa9e65fae8ecd3275d8342cb45d9c457b19e32b3312a8b663";
+    hash = "sha256-IPghv2aygRvIZI189/ZEAq//dhn+onH0Km7oX+A+QEE=";
   };
 
-  disabled = !isPy3k;
+  buildInputs = [
+    libGL
+    libX11
+  ];
 
-  buildInputs = [ libGL libX11 ];
+  propagatedBuildInputs = [
+    glcontext
+  ];
 
   # Tests need a display to run.
   doCheck = false;
 
+  pythonImportsCheck = [
+    "moderngl"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/moderngl/moderngl;
-    description = "High performance rendering for Python 3";
+    description = "High performance rendering for Python";
+    homepage = "https://github.com/moderngl/moderngl";
+    changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = licenses.mit;
-    platforms = platforms.linux; # should be mesaPlatforms, darwin build breaks.
     maintainers = with maintainers; [ c0deaddict ];
+    # should be mesaPlatforms, darwin build breaks.
+    platforms = platforms.linux;
   };
 }

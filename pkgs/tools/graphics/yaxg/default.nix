@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper,
+{ lib, stdenv, fetchFromGitHub, makeWrapper,
   maim, slop, ffmpeg, byzanz, libnotify, xdpyinfo }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
-    wrapProgram $out/bin/yaxg --prefix PATH : ${ stdenv.lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
+    wrapProgram $out/bin/yaxg --prefix PATH : ${ lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Yet Another X Grabber script";
     longDescription = ''

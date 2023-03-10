@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1xim0kj5g37p1skgvp8gdylpx949krmx60w3pw6j1m1h7sakmddn";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -23,9 +23,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ftobia/pytest-ordering;
+    homepage = "https://github.com/ftobia/pytest-ordering";
     description = "Pytest plugin to run your tests in a specific order";
     license = licenses.mit;
+    broken = true;  # See https://github.com/NixOS/nixpkgs/pull/122264
     maintainers = with maintainers; [ eadwu ];
   };
 }

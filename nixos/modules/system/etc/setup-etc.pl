@@ -13,8 +13,12 @@ sub atomicSymlink {
     my $tmp = "$target.tmp";
     unlink $tmp;
     symlink $source, $tmp or return 0;
-    rename $tmp, $target or return 0;
-    return 1;
+    if (rename $tmp, $target) {
+        return 1;
+    } else {
+        unlink $tmp;
+        return 0;
+    }
 }
 
 
@@ -87,6 +91,12 @@ my @copied;
 
 sub link {
     my $fn = substr $File::Find::name, length($etc) + 1 or next;
+
+    # nixos-enter sets up /etc/resolv.conf as a bind mount, so skip it.
+    if ($fn eq "resolv.conf" and $ENV{'IN_NIXOS_ENTER'}) {
+        return;
+    }
+
     my $target = "/etc/$fn";
     File::Path::make_path(dirname $target);
     $created{$fn} = 1;
@@ -103,7 +113,7 @@ sub link {
     if (-e "$_.mode") {
         my $mode = read_file("$_.mode"); chomp $mode;
         if ($mode eq "direct-symlink") {
-            atomicSymlink readlink("$static/$fn"), $target or warn;
+            atomicSymlink readlink("$static/$fn"), $target or warn "could not create symlink $target";
         } else {
             my $uid = read_file("$_.uid"); chomp $uid;
             my $gid = read_file("$_.gid"); chomp $gid;
@@ -112,12 +122,15 @@ sub link {
             $gid = getgrnam $gid unless $gid =~ /^\+/;
             chown int($uid), int($gid), "$target.tmp" or warn;
             chmod oct($mode), "$target.tmp" or warn;
-            rename "$target.tmp", $target or warn;
+            unless (rename "$target.tmp", $target) {
+                warn "could not create target $target";
+                unlink "$target.tmp";
+            }
         }
         push @copied, $fn;
         print CLEAN "$fn\n";
     } elsif (-l "$_") {
-        atomicSymlink "$static/$fn", $target or warn;
+        atomicSymlink "$static/$fn", $target or warn "could not create symlink $target";
     }
 }
 
@@ -137,4 +150,10 @@ foreach my $fn (@oldCopied) {
 
 # Rewrite /etc/.clean.
 close CLEAN;
-write_file("/etc/.clean", map { "$_\n" } @copied);
+write_file("/etc/.clean", map { "$_\n" } sort @copied);
+
+# Create /etc/NIXOS tag if not exists.
+# When /etc is not on a persistent filesystem, it will be wiped after reboot,
+# so we need to check and re-create it during activation.
+open TAG, ">>/etc/NIXOS";
+close TAG;

@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, libX11, xorgproto, unzip }:
+{ lib, stdenv, fetchgit, libX11, xorgproto }:
 
-stdenv.mkDerivation {
-  name = "seturgent-2012-08-17";
+stdenv.mkDerivation rec {
+  pname = "seturgent";
+  version = "1.5";
 
-  src = fetchurl {
-    url = "https://github.com/hiltjo/seturgent/archive/ada70dcb15865391e5cdcab27a0739a304a17e03.zip";
-    sha256 = "0q1sr6aljkw2jr9b4xxzbc01qvnd5vk3pxrypif9yd8xjw4wqwri";
+  src = fetchgit {
+    url = "git://git.codemadness.org/seturgent";
+    rev = version;
+    sha256 = "sha256-XW7ms0BVCf1/fuL3PJ970t6sHkmMY1iLYXfS9R60JX0=";
   };
 
   buildInputs = [
-    libX11 xorgproto unzip
+    libX11
+    xorgproto
   ];
 
   installPhase = ''
@@ -17,11 +20,11 @@ stdenv.mkDerivation {
     mv seturgent $out/bin
   '';
 
-  meta = {
-      platforms = stdenv.lib.platforms.linux;
-      description = "Set an application's urgency hint (or not)";
-      maintainers = [ stdenv.lib.maintainers.yarr ];
-      homepage = https://github.com/hiltjo/seturgent;
-      license = stdenv.lib.licenses.mit;
+  meta = with lib; {
+    platforms = platforms.linux;
+    description = "Set an application's urgency hint (or not)";
+    maintainers = with maintainers; [ yarr ];
+    homepage = "https://codemadness.org/seturgent-set-urgency-hints-for-x-applications.html";
+    license = licenses.mit;
   };
 }

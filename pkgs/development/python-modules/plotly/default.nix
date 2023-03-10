@@ -1,38 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, decorator
-, nbformat
 , pytz
 , requests
-, retrying
 , six
+, tenacity
 }:
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "4.4.1";
+  version = "5.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acc94f17452471ca3446c2ce491c4d1affb99b9ddd9eac4e05614ac4318f8780";
+    sha256 = "sha256-Tv70ecLsHYbc2shAW2ynDKZWSad0COOafoSh6i22x4c=";
   };
 
   propagatedBuildInputs = [
-    decorator
-    nbformat
     pytz
     requests
-    retrying
     six
+    tenacity
   ];
 
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
-    homepage = https://plot.ly/python/;
-    license = with lib.licenses; [ mit ];
+    homepage = "https://plot.ly/python/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ];
   };
 }

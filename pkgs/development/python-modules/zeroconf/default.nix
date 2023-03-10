@@ -1,37 +1,78 @@
-{ stdenv
+{ lib
+, stdenv
+, async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ifaddr
-, typing
-, isPy27
+, poetry-core
+, pytest-asyncio
 , pythonOlder
-, python
+, pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.24.4";
-  disabled = isPy27;
+  version = "0.47.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f66d38f16026097572939ab78b1f46a97f556bca415491eb0fd094d0b5827dfe";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jstasiak";
+    repo = "python-zeroconf";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hpbJ7kcyM8S2xAaVjuPzHXl/gcAYk3CX7NHxsbZXQ10=";
   };
 
-  propagatedBuildInputs = [ ifaddr ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
+  ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  propagatedBuildInputs = [
+    async-timeout
+    ifaddr
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} test_zeroconf.py
+  # OSError: [Errno 48] Address already in use
+  doCheck = !stdenv.isDarwin;
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    sed -i '/addopts/d' pyproject.toml
   '';
 
-  meta = with stdenv.lib; {
-    description = "A pure python implementation of multicast DNS service discovery";
-    homepage = https://github.com/jstasiak/python-zeroconf;
-    license = licenses.lgpl21;
+  disabledTests = [
+    # tests that require network interaction
+    "test_close_multiple_times"
+    "test_launch_and_close"
+    "test_launch_and_close_context_manager"
+    "test_launch_and_close_v4_v6"
+    "test_launch_and_close_v6_only"
+    "test_integration_with_listener_ipv6"
+    # Starting with 0.39.0: AssertionError: assert [('add', '_ht..._tcp.local.')]
+    "test_service_browser_expire_callbacks"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_lots_of_names"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "zeroconf"
+    "zeroconf.asyncio"
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
+    description = "Python implementation of multicast DNS service discovery";
+    homepage = "https://github.com/jstasiak/python-zeroconf";
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };
 }

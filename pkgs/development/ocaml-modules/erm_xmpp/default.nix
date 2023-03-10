@@ -1,32 +1,47 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
-, erm_xml, nocrypto
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
+, erm_xml, mirage-crypto, mirage-crypto-rng, base64
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3+20180112";
-  name = "ocaml${ocaml.version}-erm_xmpp-${version}";
+  version = "0.3+20220404";
+  pname = "ocaml${ocaml.version}-erm_xmpp";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "xmpp";
-    rev    = "184dc70fab7d46d09b9148ca4448f07f1e0a2df2";
-    sha256 = "1dsqsfacvd9xqsqjzh6xwbnf2mv1dvhy210riyvjd260q085ch6n";
+    rev    = "e54d54e142ac9770c37e144693473692bf473530";
+    sha256 = "sha256-Ize8Em4LI54Cy1Xuzr9BjQGV7JMr3W6KI1YzI8G1q/U=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
-  propagatedBuildInputs = [ erm_xml nocrypto ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  buildInputs = [ camlp4 ];
+  propagatedBuildInputs = [ erm_xml mirage-crypto mirage-crypto-rng base64 ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase = "ocaml setup.ml -build";
-  installPhase = "ocaml setup.ml -install";
+  strictDeps = true;
+
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out
+    runHook postConfigure
+  '';
+  buildPhase = ''
+    runHook preBuild
+    ocaml setup.ml -build
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
 
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/hannesm/xmpp;
+    homepage = "https://github.com/hannesm/xmpp";
     description = "OCaml based XMPP implementation (fork)";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sternenseemann ];
     inherit (ocaml.meta) platforms;
   };
 }

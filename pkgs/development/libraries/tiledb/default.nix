@@ -13,34 +13,39 @@
 , libpqxx
 , clang-tools
 , catch2
-, python
+, python3
 , gtest
 , doxygen
+, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "1.7.5";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    sha256 = "1fx0db4x0vcahzk5lk2p0ls644s48vfz7mf9qgsr72pplyn1kcnc";
+    sha256 = "sha256-3Z5+QUzo2f24q11j6s8KX2vHLFkipFvGk2VFComWW/o=";
   };
+
+  # (bundled) blosc headers have a warning on some archs that it will be using
+  # unaccelerated routines.
+  cmakeFlags = [
+    "-DTILEDB_WERROR=0"
+  ];
 
   nativeBuildInputs = [
     clang-tools
     cmake
-    python
+    python3
     doxygen
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
-
-  enableParallelBuilding = true;
 
   buildInputs = [
     catch2
@@ -65,11 +70,15 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-tiledb" "doc" ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
+  '';
+
   meta = with lib; {
     description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
-    homepage = https://github.com/TileDB-Inc/TileDB;
+    homepage = "https://github.com/TileDB-Inc/TileDB";
     license = licenses.mit;
-    platforms = [ "x86_64-linux"];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ rakesh4g ];
   };
 

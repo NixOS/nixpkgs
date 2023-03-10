@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "rw";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://sortix.org/rw;
+  meta = with lib; {
+    homepage = "https://sortix.org/rw";
     description = "Block device and byte copying program similar to dd";
     longDescription = ''
       rw is a command line program which copies information between files
@@ -22,7 +22,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     maintainers = with maintainers; [ dtzWill ];
-
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

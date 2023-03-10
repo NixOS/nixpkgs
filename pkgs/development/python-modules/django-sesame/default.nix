@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0k8s44zn2jmasp0w064vrx685fn4pbmdfx8qmhkab1hd5ys6pi44";
   };
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     make test
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "URLs with authentication tokens for automatic login";
-    homepage = https://github.com/aaugustin/django-sesame;
+    homepage = "https://github.com/aaugustin/django-sesame";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];
   };

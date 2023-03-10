@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libiconv, openssl, pcre }:
+{ lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
 
 import ./versions.nix ({ version, sha256 }:
   stdenv.mkDerivation {
@@ -6,11 +6,11 @@ import ./versions.nix ({ version, sha256 }:
     inherit version;
 
     src = fetchurl {
-      url = "mirror://sourceforge/zabbix/ZABBIX%20Latest%20Stable/${version}/zabbix-${version}.tar.gz";
+      url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
       inherit sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       libiconv
       openssl
@@ -19,16 +19,21 @@ import ./versions.nix ({ version, sha256 }:
 
     configureFlags = [
       "--enable-agent"
+      "--enable-ipv6"
       "--with-iconv"
       "--with-libpcre"
       "--with-openssl=${openssl.dev}"
+    ];
+    makeFlags = [
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
     ];
 
     postInstall = ''
       cp conf/zabbix_agentd/*.conf $out/etc/zabbix_agentd.conf.d/
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
       license = licenses.gpl2;

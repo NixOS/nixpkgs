@@ -3,21 +3,23 @@
   extra-cmake-modules, kdoctools,
   qtwebengine,
   kcmutils, kcrash, kdbusaddons, kparts, kwindowsystem,
-  akonadi, grantleetheme, kdepim-apps-libs, kontactinterface, kpimtextedit,
-  mailcommon, libkdepim
+  akonadi, grantleetheme, kontactinterface, kpimtextedit,
+  mailcommon, libkdepim, pimcommon
 }:
 
 mkDerivation {
-  name = "kontact";
+  pname = "kontact";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    homepage = "https://apps.kde.org/kontact/";
+    description = "Personal information manager";
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     qtwebengine
     kcmutils kcrash kdbusaddons kparts kwindowsystem
-    akonadi grantleetheme kdepim-apps-libs kontactinterface kpimtextedit
-    mailcommon libkdepim
+    akonadi grantleetheme kontactinterface kpimtextedit
+    mailcommon libkdepim pimcommon
   ];
 }

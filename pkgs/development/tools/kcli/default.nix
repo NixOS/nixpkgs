@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "kcli";
@@ -11,14 +11,15 @@ buildGoModule rec {
     sha256 = "0whijr2r2j5bvfy8jgmpxsa0zvwk5kfjlpnkw4za5k35q7bjffls";
   };
 
-  modSha256 = "1wcqh3306q9wxb6pnl8cpk73vmy36bjv2gil03j7j4pajs1f2lwn";
+  vendorSha256 = null; #vendorSha256 = "";
 
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A kafka command line browser";
     homepage = "https://github.com/cswank/kcli";
     license = licenses.mit;
     maintainers = with maintainers; [ cswank ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

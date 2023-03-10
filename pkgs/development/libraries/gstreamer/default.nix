@@ -1,29 +1,29 @@
-{ callPackage, CoreServices }:
+{ callPackage, AudioToolbox, AVFoundation, Cocoa, CoreFoundation, CoreMedia, CoreServices, CoreVideo, DiskArbitration, Foundation, IOKit, MediaToolbox, OpenGL, VideoToolbox }:
 
-rec {
+{
   gstreamer = callPackage ./core { inherit CoreServices; };
 
   gstreamermm = callPackage ./gstreamermm { };
 
-  gst-plugins-base = callPackage ./base { inherit gstreamer; };
+  gst-plugins-base = callPackage ./base { inherit Cocoa OpenGL; };
 
-  gst-plugins-good = callPackage ./good { inherit gst-plugins-base; };
+  gst-plugins-good = callPackage ./good { inherit Cocoa; };
 
-  gst-plugins-bad = callPackage ./bad { inherit gst-plugins-base; };
+  gst-plugins-bad = callPackage ./bad { inherit AudioToolbox AVFoundation CoreMedia CoreVideo Foundation MediaToolbox VideoToolbox; };
 
-  gst-plugins-ugly = callPackage ./ugly { inherit gst-plugins-base; };
+  gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
-  gst-rtsp-server = callPackage ./rtsp-server { inherit gst-plugins-base gst-plugins-bad; };
+  gst-plugins-viperfx = callPackage ./viperfx { };
 
-  gst-libav = callPackage ./libav { inherit gst-plugins-base; };
+  gst-rtsp-server = callPackage ./rtsp-server { };
 
-  gst-editing-services = callPackage ./ges { inherit gst-plugins-base; };
+  gst-libav = callPackage ./libav { };
 
-  gst-vaapi = callPackage ./vaapi {
-    inherit gst-plugins-base gstreamer gst-plugins-bad;
-  };
+  gst-devtools = callPackage ./devtools { };
 
-  gst-validate = callPackage ./validate { inherit gst-plugins-base; };
+  gst-editing-services = callPackage ./ges { };
+
+  gst-vaapi = callPackage ./vaapi { };
 
   # note: gst-python is in ./python/default.nix - called under pythonPackages
 }

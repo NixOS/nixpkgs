@@ -1,14 +1,25 @@
-{ stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor
-, libXrandr, libGLU, libGL, libXft, libXfixes, xinput
-, CoreServices }:
-
-let
-  version = "1.6.57";
-in
+{ lib
+, stdenv
+, fetchurl
+, libpng
+, libjpeg
+, libtiff
+, zlib
+, bzip2
+, libXcursor
+, libXrandr
+, libGLU
+, libGL
+, libXext
+, libXft
+, libXfixes
+, xinput
+, CoreServices
+}:
 
 stdenv.mkDerivation rec {
   pname = "fox";
-  inherit version;
+  version = "1.6.57";
 
   src = fetchurl {
     url = "ftp://ftp.fox-toolkit.org/pub/${pname}-${version}.tar.gz";
@@ -16,9 +27,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
-    libXft libGLU libGL libXfixes xinput
-  ] ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
+    libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
+    libXext libXft libGLU libGL libXfixes xinput
+  ] ++ lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
 
@@ -27,6 +38,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
+    broken = stdenv.isDarwin;
     branch = "1.6";
     description = "A C++ based class library for building Graphical User Interfaces";
     longDescription = ''
@@ -35,9 +47,9 @@ stdenv.mkDerivation rec {
         Initially, it was developed for LINUX, but the scope of this project has in the course of time become somewhat more ambitious.
         Current aims are to make FOX completely platform independent, and thus programs written against the FOX library will be only a compile away from running on a variety of platforms.
       '';
-    homepage = http://fox-toolkit.org;
-    license = stdenv.lib.licenses.lgpl3;
+    homepage = "http://fox-toolkit.org";
+    license = lib.licenses.lgpl3;
     maintainers = [];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    platforms = lib.platforms.mesaPlatforms;
   };
 }

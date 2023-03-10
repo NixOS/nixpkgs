@@ -3,22 +3,25 @@
 , lib
 , makeWrapper
 , ncurses
+, stdenv
 }:
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.27.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j184s82bnnhrpm7vdsqg7i3xfm2wqz8jmwqxjkfw87ifgvaha5d";
-   };
+    sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
+  };
 
-  modSha256 = "14qbjv8rnidfqxzqhli7jyj4573s0swwypdj11mpykcrzk9by8xk";
+  vendorHash = "sha256-f82ibPnauUOuZ5D6Rz3Yyt0jiAXvjN8Or3gud+ri6FA=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  doCheck = false;
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   subPackages = [ "." ];
 
@@ -32,8 +35,11 @@ buildGoModule rec {
   meta = with lib; {
     description = "The personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
+    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "wtfutil";
     platforms = platforms.linux ++ platforms.darwin;
+    broken = stdenv.isDarwin;
   };
 }

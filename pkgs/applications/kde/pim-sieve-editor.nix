@@ -2,18 +2,18 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   kdbusaddons, kcrash, kbookmarks, kiconthemes, kio, kpimtextedit,
-  kmailtransport, pimcommon, libksieve
+  kmailtransport, libksieve, pimcommon, qtkeychain, libsecret
 }:
 
 mkDerivation {
-  name = "pim-sieve-editor";
+  pname = "pim-sieve-editor";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kdbusaddons kcrash kbookmarks kiconthemes kio kpimtextedit kmailtransport
-    pimcommon libksieve
+    libksieve pimcommon qtkeychain libsecret
   ];
 }

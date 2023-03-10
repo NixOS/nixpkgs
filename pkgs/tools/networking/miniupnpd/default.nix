@@ -1,25 +1,27 @@
-{ stdenv, lib, fetchurl, iptables, libuuid, pkgconfig
-, which, iproute, gnused, coreutils, gawk, makeWrapper
+{ stdenv, lib, fetchurl, iptables, libuuid, openssl, pkg-config
+, which, iproute2, gnused, coreutils, gawk, makeWrapper
+, nixosTests
 }:
 
 let
-  scriptBinEnv = lib.makeBinPath [ which iproute iptables gnused coreutils gawk ];
+  scriptBinEnv = lib.makeBinPath [ which iproute2 iptables gnused coreutils gawk ];
 in
 stdenv.mkDerivation rec {
-  name = "miniupnpd-2.1.20190502";
+  pname = "miniupnpd";
+  version = "2.3.1";
 
   src = fetchurl {
-    url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "1m8d0g9b0bjwsnqccw1yapp6n0jghmgzwixwjflwmvi2fi6hdp4b";
-    name = "${name}.tar.gz";
+    url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
+    sha256 = "0crv975qqppnj27jba96yysq2911y49vjd74sp9vnjb54z0d9pyi";
   };
 
-  buildInputs = [ iptables libuuid ];
-  nativeBuildInputs= [ pkgconfig makeWrapper ];
+  buildInputs = [ iptables libuuid openssl ];
+  nativeBuildInputs= [ pkg-config makeWrapper ];
 
-  makefile = "Makefile.linux";
 
-  buildFlags = [ "miniupnpd" "genuuid" ];
+  # ./configure is not a standard configure file, errors with:
+  # Option not recognized : --prefix=
+  dontAddPrefix = true;
 
   installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
@@ -30,8 +32,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://miniupnp.free.fr/;
+  passthru.tests = {
+    bittorrent-integration = nixosTests.bittorrent;
+  };
+
+  meta = with lib; {
+    homepage = "https://miniupnp.tuxfamily.org/";
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = platforms.linux;
     license = licenses.bsd3;

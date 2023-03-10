@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Patch ssl.match_hostname for Unicode(idna) domains support";
-    homepage = https://github.com/aio-libs/idna-ssl;
+    homepage = "https://github.com/aio-libs/idna-ssl";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

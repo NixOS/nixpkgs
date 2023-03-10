@@ -1,22 +1,39 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib
+, fetchFromSourcehut
+, buildGoModule
+, buildPythonPackage
+, srht
+, asyncpg
+, aiosmtpd
+, pygit2
+, emailthreads
+, redis
 , python
-, srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
+, unzip
+}:
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.40.3";
+  version = "0.51.11";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "lists.sr.ht";
     rev = version;
-    sha256 = "1s736i5wm04pqa5k7455bdjdi7vjgvq32q1v6mdsp1w7jhgy1ags";
+    sha256 = "sha256-Qb70oOazZfmHpC5r0oMYCFdvfAeKbq3mQA8+M56YYnY=";
   };
 
-  patches = [
-    ./use-srht-path.patch
-  ];
+  listssrht-api = buildGoModule ({
+    inherit src version;
+    pname = "listssrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
-  nativeBuildInputs = srht.nativeBuildInputs;
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   propagatedBuildInputs = [
     srht
@@ -24,6 +41,7 @@ buildPythonPackage rec {
     asyncpg
     aiosmtpd
     emailthreads
+    redis
   ];
 
   preBuild = ''
@@ -31,10 +49,16 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/lists.sr.ht;
+  postInstall = ''
+    ln -s ${listssrht-api}/bin/api $out/bin/listssrht-api
+  '';
+
+  pythonImportsCheck = [ "listssrht" ];
+
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.16.1";
+  pname = "automake";
+  version = "1.16.5";
 
   src = fetchurl {
-    url = "mirror://gnu/automake/${name}.tar.xz";
-    sha256 = "08g979ficj18i1w6w5219bgmns7czr03iadf20mk3lrzl8wbn1ax";
+    url = "mirror://gnu/automake/automake-${version}.tar.xz";
+    sha256 = "0sdl32qxdy7m06iggmkkvf7j520rmmgbsjzbm7fgnxwxdp6mh7gh";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoconf perl ];
   buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;
 
-  # Disable indented log output from Make, otherwise "make.test" will
-  # fail.
-  preCheck = "unset NIX_INDENT_MAKE";
   doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
   doInstallCheck = false; # runs the same thing, fails the same tests
 
@@ -26,18 +25,16 @@ stdenv.mkDerivation rec {
   # "fixed" path in generated files!
   dontPatchShebangs = true;
 
-  meta = {
-    branch = "1.15";
-    homepage = https://www.gnu.org/software/automake/;
+  meta = with lib; {
+    branch = "1.16";
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
-    license = stdenv.lib.licenses.gpl2Plus;
-
+    license = licenses.gpl2Plus;
     longDescription = ''
       GNU Automake is a tool for automatically generating
       `Makefile.in' files compliant with the GNU Coding
       Standards.  Automake requires the use of Autoconf.
     '';
-
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

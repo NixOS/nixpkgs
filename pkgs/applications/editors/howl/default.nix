@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk3, librsvg }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, gtk3, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "howl";
@@ -17,7 +15,7 @@ stdenv.mkDerivation rec {
   # The Makefile uses "/usr/local" if not explicitly overridden
   installFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ gtk3 librsvg ];
   enableParallelBuilding = true;
 
@@ -27,8 +25,8 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  meta = {
-    homepage = https://howl.io/;
+  meta = with lib; {
+    homepage = "https://howl.io/";
     description = "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];

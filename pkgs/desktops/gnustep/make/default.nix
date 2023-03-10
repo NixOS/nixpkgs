@@ -1,16 +1,12 @@
-{ stdenv, fetchurl, clang, which, libobjc }:
+{ lib, stdenv, fetchurl, clang, which, libobjc }:
 
-let
-  version = "2.7.0";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnustep-make";
-  inherit version;
+  version = "2.9.0";
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";
-    sha256 = "1khiygfkz0zhh9b5nybn40g0xnnjxchk24n49hff1bwanszir84h";
+    sha256 = "sha256-oLBmwRJXh5x8hTEd6mnGf23HQe8znbZRT4W2SZLEDSo=";
   };
 
   configureFlags = [
@@ -26,14 +22,17 @@ stdenv.mkDerivation {
     "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"
   ];
 
-  buildInputs = [ clang which libobjc ];
+  nativeBuildInputs = [ clang which ];
+  buildInputs = [ libobjc ];
+
   patches = [ ./fixup-paths.patch ];
   setupHook = ./setup-hook.sh;
   meta = {
     description = "A build manager for GNUstep";
-    homepage = http://gnustep.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://gnustep.org/";
+    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer ];
+    platforms = lib.platforms.unix;
   };
 }

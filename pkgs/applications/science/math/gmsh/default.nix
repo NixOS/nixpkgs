@@ -1,27 +1,55 @@
-{ stdenv, fetchurl, cmake, openblasCompat, gfortran, gmm, fltk, libjpeg
-, zlib, libGL, libGLU, xorg, opencascade-occt }:
+{ lib, stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
+, zlib, libGL, libGLU, xorg, opencascade-occt
+, python ? null, enablePython ? false }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
+assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.5.4";
+  version = "4.11.1";
 
   src = fetchurl {
-    url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "1k9f7qxlwja9i40qy55070sjnr21bl165677mdqw7qyb8d7wgy6c";
+    url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
+    sha256 = "sha256-xf4bfL1AOIioFJKfL9D11p4nYAIioYx4bbW3boAFs2U=";
   };
 
-  buildInputs = [ openblasCompat gmm fltk libjpeg zlib libGLU libGL
-    libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
-    xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
-    opencascade-occt
+  buildInputs = [
+    blas lapack gmm fltk libjpeg zlib opencascade-occt
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes
+    xorg.libXext xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM
+    xorg.libICE
+  ] ++ lib.optional enablePython python;
+
+  enableParallelBuilding = true;
+
+  patches = [ ./fix-python.patch ];
+
+  postPatch = ''
+    substituteInPlace api/gmsh.py --subst-var-by LIBPATH ${placeholder "out"}/lib/libgmsh.so
+  '';
+
+  # N.B. the shared object is used by bindings
+  cmakeFlags = [
+    "-DENABLE_BUILD_SHARED=ON"
+    "-DENABLE_BUILD_DYNAMIC=ON"
+    "-DENABLE_OPENMP=ON"
   ];
 
   nativeBuildInputs = [ cmake gfortran ];
 
+  postFixup = lib.optionalString enablePython ''
+    mkdir -p $out/lib/python${python.pythonVersion}/site-packages
+    mv $out/lib/gmsh.py $out/lib/python${python.pythonVersion}/site-packages
+    mv $out/lib/*.dist-info $out/lib/python${python.pythonVersion}/site-packages
+  '';
+
+  doCheck = true;
+
   meta = {
     description = "A three-dimensional finite element mesh generator";
-    homepage = "http://gmsh.info/";
-    platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "https://gmsh.info/";
+    license = lib.licenses.gpl2Plus;
   };
 }

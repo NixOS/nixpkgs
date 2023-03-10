@@ -19,24 +19,39 @@
 { pkgs
 , lib
 , options
-, transformOptions ? lib.id  # function for additional tranformations of the options
+, transformOptions ? lib.id  # function for additional transformations of the options
+, documentType ? "appendix" # TODO deprecate "appendix" in favor of "none"
+                            #      and/or rename function to moduleOptionDoc for clean slate
+
+  # If you include more than one option list into a document, you need to
+  # provide different ids.
+, variablelistId ? "configuration-variable-list"
+  # String to prefix to the option XML/HTML id attributes.
+, optionIdPrefix ? "opt-"
 , revision ? "" # Specify revision for the options
+# a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
+# used to split the options doc build into a static part (nixos/modules) and a dynamic part
+# (non-nixos modules imported via configuration.nix, other module sources).
+, baseOptionsJSON ? null
+# instead of printing warnings for eg options with missing descriptions (which may be lost
+# by nix build unless -L is given), emit errors instead and fail the build
+, warningsAreErrors ? true
+# allow docbook option docs if `true`. only markdown documentation is allowed when set to
+# `false`, and a different renderer may be used with different bugs and performance
+# characteristics but (hopefully) indistinguishable output.
+, allowDocBook ? true
+# whether lib.mdDoc is required for descriptions to be read as markdown.
+# !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
+, markdownByDefault ? false
 }:
 
 let
-  # Replace functions by the string <function>
-  substFunction = x:
-    if builtins.isAttrs x then lib.mapAttrs (name: substFunction) x
-    else if builtins.isList x then map substFunction x
-    else if lib.isFunction x then "<function>"
-    else x;
-
-  optionsListDesc = lib.flip map optionsListVisible
-   (opt: transformOptions opt
-    // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
-    // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-    // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; }
+  rawOpts = lib.optionAttrSetToDocList options;
+  transformedOpts = map transformOptions rawOpts;
+  filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
+  optionsList = lib.flip map filteredOpts
+   (opt: opt
+    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
    );
 
   # Generate DocBook documentation for a list of packages. This is
@@ -44,11 +59,16 @@ let
   # ../../../lib/options.nix influences.
   #
   # Each element of `relatedPackages` can be either
-  # - a string:  that will be interpreted as an attribute name from `pkgs`,
-  # - a list:    that will be interpreted as an attribute path from `pkgs`,
-  # - an attrset: that can specify `name`, `path`, `package`, `comment`
+  # - a string:  that will be interpreted as an attribute name from `pkgs` and turned into a link
+  #              to search.nixos.org,
+  # - a list:    that will be interpreted as an attribute path from `pkgs` and turned into a link
+  #              to search.nixos.org,
+  # - an attrset: that can specify `name`, `path`, `comment`
   #   (either of `name`, `path` is required, the rest are optional).
-  genRelatedPackages = packages:
+  #
+  # NOTE: No checks against `pkgs` are made to ensure that the referenced package actually exists.
+  # Such checks are not compatible with option docs caching.
+  genRelatedPackages = packages: optName:
     let
       unpack = p: if lib.isString p then { name = p; }
                   else if lib.isList p then { path = p; }
@@ -57,97 +77,98 @@ let
         let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
-          path = args.path or [ args.name ];
-          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
-        in "<listitem>"
-        + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
-        + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
-        + ": ${package.meta.description or "???"}.</para>"
-        + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
-        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
-        + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
-        + "</listitem>";
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
-
-  # Custom "less" that pushes up all the things ending in ".enable*"
-  # and ".package*"
-  optionLess = a: b:
-    let
-      ise = lib.hasPrefix "enable";
-      isp = lib.hasPrefix "package";
-      cmp = lib.splitByAndCompare ise lib.compare
-                                 (lib.splitByAndCompare isp lib.compare lib.compare);
-    in lib.compareLists cmp a.loc b.loc < 0;
-
-  # Remove invisible and internal options.
-  optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
-
-  # Customly sort option list for the man page.
-  optionsList = lib.sort optionLess optionsListDesc;
-
-  # Convert the list of options into an XML file.
-  optionsXML = pkgs.writeText "options.xml" (builtins.toXML optionsList);
+        in ''
+          - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
+              https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
+            )${
+              lib.optionalString (args ? comment) "\n\n  ${args.comment}"
+            }
+        '';
+    in lib.concatMapStrings (p: describe (unpack p)) packages;
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
-  # TODO: declarations: link to github
-  singleAsciiDoc = name: value: ''
-    == ${name}
-
-    ${value.description}
-
-    [discrete]
-    === details
-
-    Type:: ${value.type}
-    ${ if lib.hasAttr "default" value
-       then ''
-        Default::
-        +
-        ----
-        ${builtins.toJSON value.default}
-        ----
-      ''
-      else "No Default:: {blank}"
-    }
-    ${ if value.readOnly
-       then "Read Only:: {blank}"
-      else ""
-    }
-    ${ if lib.hasAttr "example" value
-       then ''
-        Example::
-        +
-        ----
-        ${builtins.toJSON value.example}
-        ----
-      ''
-      else "No Example:: {blank}"
-    }
-  '';
-
-in {
+in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options asciidoc \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      $out
+  '';
+
+  optionsCommonMark = pkgs.runCommand "options.md" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      $out
+  '';
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
+      nativeBuildInputs = [
+        pkgs.brotli
+        pkgs.python3Minimal
+      ];
+      options = builtins.toFile "options.json"
+        (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
+      # merge with an empty set if baseOptionsJSON is null to run markdown
+      # processing on the input options
+      baseJSON =
+        if baseOptionsJSON == null
+        then builtins.toFile "base.json" "{}"
+        else baseOptionsJSON;
     }
     ''
       # Export list of options in different format.
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
-      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix))} $dst/options.json
+      TOUCH_IF_DB=$dst/.used-docbook \
+      python ${./mergeJSON.py} \
+        ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
+        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
+        $baseJSON $options \
+        > $dst/options.json
+
+      brotli -9 < $dst/options.json > $dst/options.json.br
 
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
-    ''; # */
+      echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
+    '';
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
-    optionsXML=${optionsXML}
-    if grep /nixpkgs/nixos/modules $optionsXML; then
+  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
+    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
+      echo 1
+    else
+      echo 0
+    fi >"$out"
+  '';
+
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" {
+    nativeBuildInputs = [
+      pkgs.nixos-render-docs
+    ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      --document-type ${lib.escapeShellArg documentType} \
+      --varlist-id ${lib.escapeShellArg variablelistId} \
+      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
+      ${lib.optionalString markdownByDefault "--markdown-by-default"} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      options.xml
+
+    if grep /nixpkgs/nixos/modules options.xml; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
       echo "caused by an option default that refers to a relative path (see above"
@@ -156,9 +177,6 @@ in {
     fi
 
     ${pkgs.libxslt.bin}/bin/xsltproc \
-      --stringparam revision '${revision}' \
-      -o intermediate.xml ${./options-to-docbook.xsl} $optionsXML
-    ${pkgs.libxslt.bin}/bin/xsltproc \
-      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
+      -o "$out" ${./postprocess-option-descriptions.xsl} options.xml
   '';
 }

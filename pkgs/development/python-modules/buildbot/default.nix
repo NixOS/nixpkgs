@@ -1,15 +1,53 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, future, sqlalchemy,
-  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
-  txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, nixosTests }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, makeWrapper
+, pythonOlder
+, python
+, twisted
+, jinja2
+, msgpack
+, zope_interface
+, sqlalchemy
+, alembic
+, python-dateutil
+, txaio
+, autobahn
+, pyjwt
+, pyyaml
+, treq
+, txrequests
+, pypugjs
+, boto3
+, moto
+, mock
+, lz4
+, setuptoolsTrial
+, buildbot-worker
+, buildbot-pkg
+, buildbot-plugins
+, parameterized
+, git
+, openssh
+, glibcLocales
+, nixosTests
+}:
 
 let
   withPlugins = plugins: buildPythonPackage {
-    name = "${package.name}-with-plugins";
-    phases = [ "installPhase" "fixupPhase" ];
-    buildInputs = [ makeWrapper ];
+    pname = "${package.pname}-with-plugins";
+    inherit (package) version;
+    format = "other";
+
+    dontUnpack = true;
+    dontBuild = true;
+    doCheck = false;
+
+    nativeBuildInputs = [
+      makeWrapper
+    ];
+
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
     installPhase = ''
@@ -25,41 +63,42 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.7.0";
+    version = "3.7.0";
+    format = "setuptools";
+
+    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jj8fh611n7xc3vsfbgpqsllp38cfj3spkr2kz3ara2x7jvh3406";
+      hash = "sha256-YMLT1SP6NenJIUVTvr58GVrtNXHw+bhfgMpZu3revG4=";
     };
 
     propagatedBuildInputs = [
       # core
       twisted
       jinja2
+      msgpack
       zope_interface
       sqlalchemy
-      sqlalchemy_migrate
-      dateutil
+      alembic
+      python-dateutil
       txaio
       autobahn
       pyjwt
       pyyaml
     ]
       # tls
-      ++ twisted.extras.tls;
+      ++ twisted.optional-dependencies.tls;
 
-    checkInputs = [
+    nativeCheckInputs = [
       treq
       txrequests
-      pyjade
+      pypugjs
       boto3
       moto
       mock
-      python-lz4
+      lz4
       setuptoolsTrial
-      isort
-      pylint
-      flake8
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
@@ -79,26 +118,35 @@ let
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
 
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;
 
     preCheck = ''
       export LC_ALL="en_US.UTF-8"
       export PATH="$out/bin:$PATH"
-    '';
 
-    disabled = !isPy3k;
+      # remove testfile which is missing configuration file from sdist
+      rm buildbot/test/integration/test_graphql.py
+      # tests in this file are flaky, see https://github.com/buildbot/buildbot/issues/6776
+      rm buildbot/test/integration/test_try_client.py
+    '';
 
     passthru = {
       inherit withPlugins;
       tests.buildbot = nixosTests.buildbot;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; {
+      description = "An open-source continuous integration framework for automating software build, test, and release processes";
       homepage = "https://buildbot.net/";
-      description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
-      license = licenses.gpl2;
+      changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
+      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      license = licenses.gpl2Only;
+      broken = stdenv.isDarwin;
     };
   };
 in package

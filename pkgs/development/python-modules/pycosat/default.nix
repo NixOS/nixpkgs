@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Bindings to picosat SAT solver";
-    homepage = https://github.com/ContinuumIO/pycosat;
+    homepage = "https://github.com/ContinuumIO/pycosat";
     license = lib.licenses.mit;
   };
 }

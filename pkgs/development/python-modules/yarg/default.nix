@@ -13,14 +13,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
   checkPhase = ''
     nosetests
   '';
 
   meta = with lib; {
     description = "An easy to use PyPI client";
-    homepage = https://yarg.readthedocs.io;
+    homepage = "https://yarg.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

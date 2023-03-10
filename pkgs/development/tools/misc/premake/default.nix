@@ -1,14 +1,11 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
-let baseName = "premake";
+stdenv.mkDerivation rec {
+  pname = "premake";
   version  = "4.3";
-in
-
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${baseName}/${baseName}-${version}-src.zip";
+    url = "mirror://sourceforge/premake/premake-${version}-src.zip";
     sha256 = "1017rd0wsjfyq2jvpjjhpszaa7kmig6q1nimw76qx3cjz2868lrn";
   };
 
@@ -25,11 +22,12 @@ stdenv.mkDerivation {
   premake_cmd = "premake4";
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
-    homepage = http://industriousone.com/premake;
+  meta = with lib; {
     description = "A simple build configuration and project generation tool using lua";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = platforms.unix;
+    homepage = "https://premake.github.io/";
+    license = lib.licenses.bsd3;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "premake4";
+    platforms = platforms.unix;
   };
 }

@@ -1,24 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "5.000";
-in fetchzip rec {
-  name = "gentium-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "gentium";
+  version = "6.101";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+    hash = "sha256-iKD1Q7/lsbZCuJQoJqySQHwplrHv8yzmph+QwKpYgMU=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                                          -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*                             -d $out/share/doc/${name}/documentation
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${pname}-${version}
+    cp -r documentation $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
-  sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
-
   meta = with lib; {
-    homepage = https://software.sil.org/gentium/;
+    homepage = "https://software.sil.org/gentium/";
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
       Gentium is a typeface family designed to enable the diverse ethnic groups

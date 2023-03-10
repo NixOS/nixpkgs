@@ -1,7 +1,8 @@
-{ stdenv, kernel }:
+{ lib, stdenv, kernel }:
 
 stdenv.mkDerivation {
-  name = "x86_energy_perf_policy-${kernel.version}";
+  pname = "x86_energy_perf_policy";
+  version = kernel.version;
 
   src = kernel.src;
 
@@ -16,9 +17,9 @@ stdenv.mkDerivation {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set the energy versus performance policy preference bias on recent X86 processors";
-    homepage = https://www.kernel.org/;
+    homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
     platforms = [ "i686-linux" "x86_64-linux" ]; # x86-specific
   };

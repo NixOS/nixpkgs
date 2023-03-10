@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ounit, expat}:
+{stdenv, lib, fetchurl, ocaml, findlib, ounit, expat}:
 
 let
   pname = "ocaml-expat";
@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "16n2j3y0jc9xgqyshw9plrwqnjiz30vnpbhahmgxlidbycw8rgjz";
   };
 
-  buildInputs = [ocaml findlib ounit expat];
+  nativeBuildInputs = [ocaml findlib ];
+  buildInputs = [ ounit expat];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -43,9 +46,9 @@ stdenv.mkDerivation rec {
   checkTarget = "testall";
 
   meta = {
-    homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
+    homepage = "http://www.xs4all.nl/~mmzeeman/ocaml/";
     description = "An ocaml wrapper for the Expat XML parsing library";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

@@ -1,60 +1,50 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, fetchpatch
-, pkgconfig
+, nix-update-script
 , meson
 , ninja
-, vala
+, pkg-config
 , python3
-, gtk3
+, vala
+, wrapGAppsHook4
+, appcenter
+, elementary-settings-daemon
 , glib
-, granite
+, granite7
+, gtk4
+, libadwaita
 , libgee
-, elementary-icon-theme
-, elementary-gtk-theme
-, gettext
-, libhandy
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "1.1.0";
-
-  repoName = "onboarding";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "onboarding";
     rev = version;
-    sha256 = "17fw95qg7j0mvam90jrvr77hw2ipxb2lkw0xxql1lzwvdx1h0r2k";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-qfkrjIct+Dcf2nep7ixgjC7ILz+gZt4SHGfb1hywwcY=";
   };
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-gtk-theme
-    elementary-icon-theme
+    appcenter # settings schema
+    elementary-settings-daemon # settings schema
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
   ];
 
   postPatch = ''
@@ -62,11 +52,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Onboarding app for new users designed for elementary OS";
-    homepage = https://github.com/elementary/onboarding;
+    homepage = "https://github.com/elementary/onboarding";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.onboarding";
   };
 }

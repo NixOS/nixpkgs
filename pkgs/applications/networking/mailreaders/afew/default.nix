@@ -1,19 +1,23 @@
-{ stdenv, python3Packages, notmuch }:
+{ lib, python3Packages, notmuch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";
-  version = "2.0.0";
+  version = "3.0.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0j60501nm242idf2ig0h7p6wrg58n5v2p6zfym56v9pbvnbmns0s";
+    sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
   };
 
-  nativeBuildInputs = with python3Packages; [ sphinx setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [ sphinx setuptools-scm ];
 
   propagatedBuildInputs = with python3Packages; [
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy
-  ] ++ stdenv.lib.optional (!python3Packages.isPy3k) subprocess32;
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    freezegun notmuch
+  ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${notmuch}/bin"''
@@ -22,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" ];
 
   postBuild =  ''
-    ${python3Packages.python.interpreter} setup.py build_sphinx -b html,man
+    ${python3Packages.python.pythonForBuild.interpreter} setup.py build_sphinx -b html,man
   '';
 
   postInstall = ''
@@ -32,10 +36,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/afewmail/afew;
+  meta = with lib; {
+    homepage = "https://github.com/afewmail/afew";
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;
-    maintainers = with maintainers; [ andir flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

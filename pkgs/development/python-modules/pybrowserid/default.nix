@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , requests, mock }:
 
 buildPythonPackage rec {
@@ -12,13 +12,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for the BrowserID Protocol";
-    homepage    = https://github.com/mozilla/PyBrowserID;
+    homepage    = "https://github.com/mozilla/PyBrowserID";
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 }
 

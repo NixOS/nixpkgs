@@ -1,38 +1,23 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
-, future, psutil, setuptools
+, defusedxml, future, ujson, packaging, psutil, setuptools
 # Optional dependencies:
-, bottle, batinfo, pysnmp
+, bottle, pysnmp
 , hddtemp
 , netifaces # IP module
+, py-cpuinfo
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.3";
+  version = "3.3.1";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "v${version}";
-    sha256 = "15yz8sbw3k3n0729g2zcwsxc5iyhkyrhqza6fnipxxpsskwgqbwp";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-93fghrNktcz+YyPkRl6ZiSZC+3a5TDql6eFZMy6veJc=";
   };
-
-  # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch
-    ++ [
-      (fetchpatch {
-        # Correct unitest
-        url = "https://github.com/nicolargo/glances/commit/abf64ffde31113f5f46ef286703ff061fc57395f.patch";
-        sha256 = "00krahqq89jvbgrqx2359cndmvq5maffhpj163z10s1n7q80kxp1";
-      })
-
-      (fetchpatch {
-        # Fix IP plugin initialization issue
-        url = "https://github.com/nicolargo/glances/commit/48cb5ef8053d823302e7e53490fb22cec2fabb0f.patch";
-        sha256 = "1590qgcr8w3d9ddpgd9mk5j6q6aq29341vr8bi202yjwwiv2bia9";
-      })
-    ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -43,28 +28,28 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
   propagatedBuildInputs = [
-    batinfo
     bottle
+    defusedxml
     future
+    ujson
     netifaces
+    packaging
     psutil
     pysnmp
     setuptools
+    py-cpuinfo
   ] ++ lib.optional stdenv.isLinux hddtemp;
-
-  preConfigure = ''
-    sed -i 's/data_files\.append((conf_path/data_files.append(("etc\/glances"/' setup.py;
-  '';
 
   meta = with lib; {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
-    license = licenses.lgpl3;
+    changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ jonringer primeos koral ];
   };
 }

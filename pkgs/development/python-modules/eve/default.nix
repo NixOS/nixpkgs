@@ -1,14 +1,27 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, events
-, pymongo, simplejson, cerberus, werkzeug }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flask
+, events
+, pymongo
+, simplejson
+, cerberus
+, setuptools
+}:
 
 buildPythonPackage rec {
-  pname = "Eve";
-  version = "1.0";
+  pname = "eve";
+  version = "2.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "ebde455e631b8eb9d38783eedfbd7e416b4477cce3d9988880eb3e477256a11e";
+    inherit version;
+    pname = "Eve";
+    sha256 = "sha256-RZ6dwekCKA+PomBp2Ht7/0elOLLUs/sO0KgdxxTOjtc=";
   };
+
+  disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
     cerberus
@@ -16,20 +29,24 @@ buildPythonPackage rec {
     flask
     pymongo
     simplejson
-    werkzeug
+    setuptools
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "werkzeug==0.15.4" "werkzeug"
+      --replace "flask<2.2" "flask" \
+      --replace "events>=0.3,<0.4" "events>=0.3"
   '';
+
+  pythonImportsCheck = [ "eve" ];
 
   # tests call a running mongodb instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://python-eve.org/";
     description = "Open source Python REST API framework designed for human beings";
+    changelog = "https://github.com/pyeve/eve/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Sample Data generator for Python ";
-    homepage = https://github.com/jespino/sampledata;
+    homepage = "https://github.com/jespino/sampledata";
     license = lib.licenses.bsd3;
   };
 

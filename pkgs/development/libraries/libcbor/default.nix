@@ -1,27 +1,52 @@
-{ stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmocka
 
-stdenv.mkDerivation rec {
+# for passthru.tests
+, libfido2
+, mysql80
+, openssh
+, systemd
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "unstable-2019-07-25";
+  version = "unstable-2023-01-29"; # Musl fix hasn't been released yet.
 
   src = fetchFromGitHub {
     owner = "PJK";
-    repo = pname;
-    rev = "82512d851205fbc7f65d96a0b4a8e1bad2e4f3c6";
-    sha256 = "01hy7n21gxz4gp3gdwm2ywz822p415bj2k9ccxgwz3plvncs4xa1";
+    repo = "libcbor";
+    rev = "cb4162f40d94751141b4d43b07c4add83e738a68";
+    sha256 = "sha256-ZTa+wG1g9KsVoqJG/yqxo2fJ7OhPnaI9QcfOmpOT3pg=";
   };
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ cmocka ];
 
-  doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
+  cmakeFlags = lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON"
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
 
-  NIX_CFLAGS_COMPILE = "-fno-lto";
+  # Tests are restricted while pkgsStatic.cmocka is broken. Tracked at:
+  # https://github.com/NixOS/nixpkgs/issues/213623
+  doCheck = !stdenv.hostPlatform.isStatic
+    && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [ cmocka ];
+
+  passthru.tests = {
+    inherit libfido2 mysql80;
+    openssh = (openssh.override { withFIDO = true; });
+    systemd = (systemd.override {
+      withFido2 = true;
+      withCryptsetup = true;
+    });
+  };
+
+  meta = with lib; {
     description = "CBOR protocol implementation for C and others";
-    homepage = https://github.com/PJK/libcbor;
+    homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };
-}
+})

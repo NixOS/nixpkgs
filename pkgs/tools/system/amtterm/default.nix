@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perl, perlPackages }:
+{ fetchurl, lib, stdenv, makeWrapper, perl, perlPackages }:
 
 
 stdenv.mkDerivation rec {
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   postInstall =
     "wrapProgram $out/bin/amttool --prefix PERL5LIB : $PERL5LIB";
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Intel AMT® SoL client + tools";
-      homepage = https://www.kraxel.org/cgit/amtterm/;
+      homepage = "https://www.kraxel.org/cgit/amtterm/";
       license = licenses.gpl2;
       maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;

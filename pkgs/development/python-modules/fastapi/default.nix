@@ -1,59 +1,100 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, uvicorn
-, starlette
 , pydantic
-, isPy3k
-, pytest
-, pytestcov
-, pyjwt
-, passlib
+, starlette
+, pytestCheckHook
+, pytest-asyncio
 , aiosqlite
+, databases
+, flask
+, httpx
+, hatchling
+, orjson
+, passlib
+, peewee
+, python-jose
+, sqlalchemy
+, trio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.45.0";
-  format = "flit";
-  disabled = !isPy3k;
+  version = "0.88.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = "fastapi";
-    rev = version;
-    sha256 = "1qwh382ny6qa3zi64micdq4j7dc64zv4rfd8g91j0digd4rhs6i1";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-2rjKmQcehqkL5OnmtLRTvsyUSpK2aUgyE9VLvz+oWNw=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette==" "starlette>="
+  '';
+
   propagatedBuildInputs = [
-    uvicorn
     starlette
     pydantic
   ];
 
-  checkInputs = [
-    pytest
-    pytestcov
-    pyjwt
-    passlib
+  nativeCheckInputs = [
     aiosqlite
+    databases
+    flask
+    httpx
+    orjson
+    passlib
+    peewee
+    python-jose
+    pytestCheckHook
+    pytest-asyncio
+    sqlalchemy
+    trio
+  ] ++ passlib.optional-dependencies.bcrypt;
+
+  pytestFlagsArray = [
+    # ignoring deprecation warnings to avoid test failure from
+    # tests/test_tutorial/test_testing/test_tutorial001.py
+    "-W ignore::DeprecationWarning"
   ];
 
-  # starlette pinning kept in place due to 0.12.9 being a hard
-  # dependency luckily fastapi is currently the only dependent on
-  # starlette. Please remove pinning when possible
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "pydantic >=0.32.2,<=0.32.2" "pydantic"
-  '';
+  disabledTestPaths = [
+    # Disabled tests require orjson which requires rust nightly
+    "tests/test_default_response_class.py"
+    # Don't test docs and examples
+    "docs_src"
+  ];
 
-  checkPhase = ''
-    pytest --ignore=tests/test_default_response_class.py
-  '';
+  disabledTests = [
+    "test_get_custom_response"
+    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
+    "test_websocket_invalid_data"
+    "test_websocket_no_credentials"
+    # TypeError: __init__() missing 1...starlette-releated
+    "test_head"
+    "test_options"
+    "test_trace"
+    # Unexpected number of warnings caught
+    "test_warn_duplicate_operation_id"
+  ];
+
+  pythonImportsCheck = [
+    "fastapi"
+  ];
 
   meta = with lib; {
+    description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
-    description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

@@ -1,35 +1,71 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPackages
+, cmake
+, zlib
+, c-ares
+, pkg-config
+, re2
+, openssl
+, protobuf
+, grpc
+, abseil-cpp
+, libnsl
+
+# tests
+, python3
+, arrow-cpp
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.27.1"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
+  version = "1.51.1"; # N.B: if you change this, please update:
+    # pythonPackages.grpcio-tools
+    # pythonPackages.grpcio-status
+
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1yvmqxv6pwzbxw3si47x3anvl2pp3qy1acspmz4v60pd188c1fnc";
+    hash = "sha256-o1C35mtA2lTGgugCKAQyRDNlCnutoJ1ol/DInJNobnc=";
     fetchSubmodules = true;
   };
+
   patches = [
     # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
     (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/198d221e775cf73455eeb863672e7a6274d217f1.patch";
-      sha256 = "11k35w6ffvl192rgzzj2hzyzjhizdgk7i56zdkx6v60zxnyfn7yq";
+      url = "https://github.com/grpc/grpc/commit/2f4cf1d9265c8e10fb834f0794d0e4f3ec5ae10e.patch";
+      sha256 = "0ams3jmgh9yzwmxcg4ifb34znamr7pb4qm0609kvil9xqvkqz963";
+    })
+
+    # Revert gRPC C++ Mutex to be an alias of Abseil, because it breaks dependent packages
+    (fetchpatch {
+      url = "https://github.com/grpc/grpc/commit/931f91b745cd5b2864a0d1787815871d0bd844ae.patch";
+      sha256 = "0vc93g2i4982ys4gzyaxdv9ni25yk10sxq3n7fkz8dypy8sylck7";
+      revert = true;
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
+  propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
+  buildInputs = [ openssl protobuf ]
+    ++ lib.optionals stdenv.isLinux [ libnsl ];
 
-  cmakeFlags =
-    [ "-DgRPC_ZLIB_PROVIDER=package"
-      "-DgRPC_CARES_PROVIDER=package"
-      "-DgRPC_SSL_PROVIDER=package"
-      "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_GFLAGS_PROVIDER=package"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    ];
+  cmakeFlags = [
+    "-DgRPC_ZLIB_PROVIDER=package"
+    "-DgRPC_CARES_PROVIDER=package"
+    "-DgRPC_RE2_PROVIDER=package"
+    "-DgRPC_SSL_PROVIDER=package"
+    "-DgRPC_PROTOBUF_PROVIDER=package"
+    "-DgRPC_ABSL_PROVIDER=package"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_CXX_STANDARD=${passthru.cxxStandard}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+  ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
@@ -37,18 +73,42 @@ stdenv.mkDerivation rec {
     rm -vf BUILD
   '';
 
-  preBuild = ''
+  # When natively compiling, grpc_cpp_plugin is executed from the build directory,
+  # needing to load dynamic libraries from the build directory, so we set
+  # LD_LIBRARY_PATH to enable this. When cross compiling we need to avoid this,
+  # since it can cause the grpc_cpp_plugin executable from buildPackages to
+  # crash if build and host architecture are compatible (e. g. pkgsLLVM).
+  preBuild = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
+    + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
 
   enableParallelBuilds = true;
 
-  meta = with stdenv.lib; {
+  passthru.cxxStandard =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+    in
+    (if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17");
+
+  passthru.tests = {
+    inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
+  };
+
+  meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = [ maintainers.lnl7 maintainers.marsam ];
-    homepage = https://grpc.io/;
+    maintainers = with maintainers; [ lnl7 marsam ];
+    homepage = "https://grpc.io/";
+    platforms = platforms.all;
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
   };
 }

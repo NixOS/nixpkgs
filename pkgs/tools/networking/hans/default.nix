@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, nettools }:
+{ lib, stdenv, fetchFromGitHub, nettools }:
 
 stdenv.mkDerivation rec {
   pname = "hans";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
-    sha256 = "1qnfl7wr5x937b6jx3vhhvnwnrclrqvq7d7zxbfhk74pdwnjy8n4";
+    sha256 = "sha256-r6IDs8Seys94LBNnedcfVX5aW8x//ZN0Yh/DGTg8niA=";
     rev = "v${version}";
     repo = "hans";
     owner = "friedrich";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     install -D -m0755 hans $out/bin/hans
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tunnel IPv4 over ICMP";
     longDescription = ''
       Hans makes it possible to tunnel IPv4 through ICMP echo packets, so you
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       the situation that your Internet access is firewalled, but pings are
       allowed.
     '';
-    homepage = https://code.gerade.org/hans/;
+    homepage = "https://code.gerade.org/hans/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

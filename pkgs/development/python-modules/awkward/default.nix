@@ -1,35 +1,61 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, awkward-cpp
+, hatch-fancy-pypi-readme
+, hatchling
+, numba
 , numpy
-, pandas
-, pyarrow
-, pytestrunner
-, pytest
-, h5py
+, packaging
+, typing-extensions
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "0.12.20";
+  version = "2.0.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13494pnzz68qfnx17975h4c5l15idgg7wxl9r86q7jp5s1pphvb3";
+    hash = "sha256-Kge7BAlBF4L+oibeXIF+tuSNsG1kMjl3WB5PME+RECk=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
-  checkInputs = [ pandas pyarrow pytest h5py ];
-  propagatedBuildInputs = [ numpy ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [
+    awkward-cpp
+    numpy
+    packaging
+  ]  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    numba
+  ];
+
+  disabledTestPaths = [
+    "tests-cuda"
+  ];
+
+  pythonImportsCheck = [
+    "awkward"
+  ];
 
   meta = with lib; {
-    description = "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy";
-    homepage = https://github.com/scikit-hep/awkward-array;
+    description = "Manipulate JSON-like data with NumPy-like idioms";
+    homepage = "https://github.com/scikit-hep/awkward";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.03.0";
+assert lib.versionAtLeast (lib.getVersion ocaml) "4.03.0";
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-syslog";
@@ -13,17 +13,18 @@ stdenv.mkDerivation rec {
     sha256 = "1kqpc55ppzv9n555qgqpda49n7nvkqimzisyjx2a7338r7q4r5bw";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rixed/ocaml-syslog;
+  meta = with lib; {
+    homepage = "https://github.com/rixed/ocaml-syslog";
     description = "Simple wrapper to access the system logger from OCaml";
     license = licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.rixed ];
   };
 }

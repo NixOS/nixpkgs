@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
+{ lib, stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
 
 stdenv.mkDerivation {
   pname = "meritous";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   prePatch = ''
     substituteInPlace Makefile \
       --replace "CPPFLAGS +=" "CPPFLAGS += -DSAVES_IN_HOME -DDATADIR=\\\"$out/share/meritous\\\"" \
-      --replace sld-config ${SDL.dev}/bin/sdl-config
+      --replace sld-config ${lib.getDev SDL}/bin/sdl-config
     substituteInPlace src/audio.c \
       --replace "filename[64]" "filename[256]"
   '';
@@ -29,9 +29,9 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "stackprotector" "fortify" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Action-adventure dungeon crawl game";
-    homepage = http://www.asceai.net/meritous/;
+    homepage = "http://www.asceai.net/meritous/";
     license = licenses.gpl3;
     maintainers = [ maintainers.alexvorobiev ];
     platforms = platforms.linux;

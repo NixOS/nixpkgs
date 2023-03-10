@@ -1,30 +1,19 @@
-{stdenv, fetchurl, ocaml, findlib}:
-let
+{ lib
+, buildDunePackage
+, fetchurl
+}:
+
+buildDunePackage rec {
   pname = "xml-light";
-  version = "2.4";
-in
-stdenv.mkDerivation {
-  name = "ocaml-${pname}-${version}";
+  version = "2.5";
+
+  duneVersion = "3";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/ncannasse/${pname}/archive/${version}.tar.gz";
-    sha256 = "10b55qf6mvdp11ny3h0jv6k6wrs78jr9lhsiswl0xya7z8r8j0a2";
+    url = "https://github.com/ncannasse/xml-light/releases/download/${version}/xml-light-${version}.tbz";
+    hash = "sha256-9YwrPbcK0boICw0wauMvgsy7ldq7ksWZzcRn0eROAD0=";
   };
-
-  buildInputs = [ ocaml findlib ];
-
-  createFindlibDestdir = true;
-
-  buildPhase = ''
-    make all
-    make opt
-  '';
-  
-  installPhase = ''
-    make install_ocamlfind
-    mkdir -p $out/share
-    cp -vai doc $out/share/
-  '';
 
   meta = {
     description = "Minimal Xml parser and printer for OCaml";
@@ -35,9 +24,8 @@ stdenv.mkDerivation {
       entirely written in OCaml, hence it does not require additional C
       library.
     '';
-    homepage = http://tech.motion-twin.com/xmllight.html;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [];
+    homepage = "http://tech.motion-twin.com/xmllight.html";
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

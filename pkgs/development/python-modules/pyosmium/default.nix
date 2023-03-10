@@ -1,30 +1,67 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmake, python
-, libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, nose, shapely, mock, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, python
+, libosmium
+, protozero
+, boost
+, expat
+, bzip2
+, zlib
+, pybind11
+, shapely
+, pythonOlder
+, isPyPy
+, lz4
+, requests
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "2.15.3";
+  version = "3.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1523ym9i4rnwi5kcp7n2lm67kxlhar8xlv91s394ixzwax9bgg7w";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+YJQGPQm2FGOPhNzlXX2GM+ad4QdipJhwViOKGHtqBk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libosmium protozero boost expat bzip2 zlib pybind11 ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libosmium
+    protozero
+    boost
+    expat
+    bzip2
+    zlib
+    pybind11
+    lz4
+  ];
+
+  propagatedBuildInputs = [
+    requests
+  ];
 
   preBuild = "cd ..";
 
-  checkInputs = [ nose shapely ] ++ lib.optionals (!isPy3k) [ mock ];
-
-  checkPhase = "(cd test && ${python.interpreter} run_tests.py)";
+  nativeCheckInputs = [
+    pytestCheckHook
+    shapely
+  ];
 
   meta = with lib; {
     description = "Python bindings for libosmium";
     homepage = "https://osmcode.org/pyosmium";
+    changelog = "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
   };

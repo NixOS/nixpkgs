@@ -1,25 +1,35 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "alertmanager-bot";
-  version = "0.4.0";
-
-  goPackagePath = "github.com/metalmatze/alertmanager-bot";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "metalmatze";
     repo = pname;
     rev = version;
-    sha256 = "10v0fxxcs5s6zmqindr30plyw7p2yg0a64rdw1b2cj2mc1m3byx3";
+    sha256 = "1hjfkksqb675gabzjc221b33h2m4s6qsanmkm382d3fyzqj71dh9";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = null; #vendorSha256 = "";
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    sed "s;/templates/default.tmpl;$out/share&;" -i cmd/alertmanager-bot/main.go
+  '';
+
+  ldflags = [
+    "-s" "-w" "-X main.Version=v${version}" "-X main.Revision=${src.rev}"
+  ];
+
+  postInstall = ''
+    install -Dm644 -t $out/share/templates $src/default.tmpl
+  '';
+
+  meta = with lib; {
     description = "Bot for Prometheus' Alertmanager";
     homepage = "https://github.com/metalmatze/alertmanager-bot";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

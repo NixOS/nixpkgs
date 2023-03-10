@@ -1,58 +1,53 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack
-, mklSupport ? false, mkl ? null
+args@{ callPackage
+, lib
+, ...
 }:
 
-assert !mklSupport || mkl != null;
+# Type aliases
+# Release = {
+#  version: String
+#  hash: String
+#  supportedGpuTargets: List String
+# }
 
-with stdenv.lib;
+let
+  inherit (lib) lists strings trivial;
 
-let version = "2.5.0";
+  computeName = version: "magma_${strings.replaceStrings [ "." ] [ "_" ] version}";
 
-in stdenv.mkDerivation {
-  pname = "magma";
-  inherit version;
-  src = fetchurl {
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "0czspk93cv1fy37zyrrc9k306q4yzfxkhy1y4lj937dx8rz5rm2g";
-    name = "magma-${version}.tar.gz";
+  # buildMagmaPackage :: Release -> Derivation
+  buildMagmaPackage = magmaRelease: callPackage ./generic.nix (
+    (builtins.removeAttrs args [ "callPackage" ]) // {
+      inherit magmaRelease;
+    }
+  );
+
+  # Reverse the list to have the latest release first
+  # magmaReleases :: List Release
+  magmaReleases = lists.reverseList (builtins.import ./releases.nix);
+
+  # The latest release is the first element of the list and will be our default choice
+  # latestReleaseName :: String
+  latestReleaseName = computeName (builtins.head magmaReleases).version;
+
+  # Function to transform our releases into build attributes
+  # toBuildAttrs :: Release -> { name: String, value: Derivation }
+  toBuildAttrs = release: {
+    name = computeName release.version;
+    value = buildMagmaPackage release;
   };
 
-  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake ]
-    ++ (if mklSupport then [ mkl ] else [ liblapack ]);
+  # Add all supported builds as attributes
+  # allBuilds :: AttrSet String Derivation
+  allBuilds = builtins.listToAttrs (lists.map toBuildAttrs magmaReleases);
 
-  doCheck = false;
+  # The latest release will be our default build
+  # defaultBuild :: AttrSet String Derivation
+  defaultBuild.magma = allBuilds.${latestReleaseName};
 
-  MKLROOT = optionalString mklSupport mkl;
+  # builds :: AttrSet String Derivation
+  builds = allBuilds // defaultBuild;
+in
 
-  preConfigure = ''
-    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
-  '';
+builds
 
-  enableParallelBuilding=true;
-  buildFlags = [ "magma" "magma_sparse" ];
-
-  # MAGMA's default CMake setup does not care about installation. So we copy files directly.
-  installPhase = ''
-    mkdir -p $out
-    mkdir -p $out/include
-    mkdir -p $out/lib
-    mkdir -p $out/lib/pkgconfig
-    cp -a ../include/*.h $out/include
-    #cp -a sparse-iter/include/*.h $out/include
-    cp -a lib/*.a $out/lib
-    cat ../lib/pkgconfig/magma.pc.in                   | \
-    sed -e s:@INSTALL_PREFIX@:"$out":          | \
-    sed -e s:@CFLAGS@:"-I$out/include":    | \
-    sed -e s:@LIBS@:"-L$out/lib -lmagma -lmagma_sparse": | \
-    sed -e s:@MAGMA_REQUIRED@::                       \
-        > $out/lib/pkgconfig/magma.pc
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Matrix Algebra on GPU and Multicore Architectures";
-    license = licenses.bsd3;
-    homepage = http://icl.cs.utk.edu/magma/index.html;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tbenst ];
-  };
-}

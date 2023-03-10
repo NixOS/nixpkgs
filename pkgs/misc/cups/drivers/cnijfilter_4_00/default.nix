@@ -1,12 +1,12 @@
 { stdenv, lib, fetchzip,
   autoconf, automake, libtool,
   cups, popt, libtiff, libpng,
-  ghostscript, glib, libusb, libxml2 }:
+  ghostscript, glib, libusb1, libxml2 }:
 
 /* this derivation is basically just a transcription of the rpm .spec
    file included in the tarball */
 
-let arch = 
+let arch =
   if stdenv.hostPlatform.system == "x86_64-linux" then "64"
     else if stdenv.hostPlatform.system == "i686-linux" then "32"
     else throw "Unsupported system ${stdenv.hostPlatform.system}";
@@ -30,9 +30,10 @@ in stdenv.mkDerivation {
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
-  buildInputs = [ autoconf libtool automake
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool
                   cups popt libtiff libpng
-                  ghostscript glib libusb libxml2 ];
+                  ghostscript glib libusb1 libxml2 ];
 
   # patches from https://github.com/tokiclover/bar-overlay/tree/master/net-print/cnijfilter
   patches = [
@@ -41,6 +42,7 @@ in stdenv.mkDerivation {
     ./patches/cnijfilter-4.00-4-ppd.patch
     ./patches/cnijfilter-4.00-5-abi_x86_32.patch
     ./patches/cnijfilter-4.00-6-headers.patch
+    ./patches/cnijfilter-4.00-7-sysctl.patch
   ];
 
   postPatch = ''
@@ -53,10 +55,10 @@ in stdenv.mkDerivation {
 
   configurePhase = ''
     cd libs
-    ./autogen.sh --prefix=$out 
+    ./autogen.sh --prefix=$out
 
     cd ../bscc2sts
-    ./autogen.sh 
+    ./autogen.sh
 
     cd ../cnijnpr
     ./autogen.sh --prefix=$out --enable-libpath=$out/lib/bjlib
@@ -68,25 +70,25 @@ in stdenv.mkDerivation {
     ./autogen.sh --prefix=$out --enable-progpath=$out/bin
 
     cd ../pstocanonij
-    ./autogen.sh --prefix=$out --enable-progpath=$out/bin 
+    ./autogen.sh --prefix=$out --enable-progpath=$out/bin
 
     cd ../backend
     ./autogen.sh --prefix=$out
 
     cd ../backendnet
-    ./autogen.sh --prefix=$out --enable-libpath=$out/lib/bjlib --enable-progpath=$out/bin 
+    ./autogen.sh --prefix=$out --enable-libpath=$out/lib/bjlib --enable-progpath=$out/bin
 
     cd ../cmdtocanonij
     ./autogen.sh --prefix=$out --datadir=$out/share
 
     cd ../cnijbe
-    ./autogen.sh --prefix=$out --enable-progpath=$out/bin 
+    ./autogen.sh --prefix=$out --enable-progpath=$out/bin
 
     cd ../lgmon2
     substituteInPlace src/Makefile.am \
         --replace /usr/include/libusb-1.0 \
-                  ${libusb.dev}/include/libusb-1.0
-    ./autogen.sh --prefix=$out --enable-libpath=$out/lib/bjlib --enable-progpath=$out/bin 
+                  ${libusb1.dev}/include/libusb-1.0
+    ./autogen.sh --prefix=$out --enable-libpath=$out/lib/bjlib --enable-progpath=$out/bin
 
     cd ..;
 
@@ -141,8 +143,12 @@ in stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series.";
-    homepage = https://www.canon-europe.com/support/consumer_products/products/fax__multifunctionals/inkjet/pixma_mg_series/pixma_mg5550.aspx?type=drivers&driverdetailid=tcm:13-1094072;
+    description = "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series";
+    homepage = "https://www.canon-europe.com/support/consumer_products/products/fax__multifunctionals/inkjet/pixma_mg_series/pixma_mg5550.aspx?type=drivers&driverdetailid=tcm:13-1094072";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chpatrick ];

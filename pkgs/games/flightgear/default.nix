@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, wrapQtAppsHook
+{ lib, stdenv, fetchurl, wrapQtAppsHook
 , freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase, qtdeclarative, glew
+, makeDesktopItem, qtbase, qtdeclarative, glew, curl
 }:
 
 let
-  version = "2019.1.1";
+  version = "2020.3.17";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    pname = "flightgear-base";
+    pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "14zm0hzshbca4ych72631hpc4pw2w24zib62ri3lwm8nz6j63qhf";
+      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
+      sha256 = "sha256-Kl66K5rmejaRKFgzps4/a73z8gIp9YcdfJQOFR1U2Og=";
     };
 
-    phases = [ "installPhase" ];
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "189wal08p9lrz757pmazxnf85sfymsqrm3nfvdad95pfp6bg7pyi";
+    sha256 = "sha256-ZnDe3qyiaDrKd/nwa/nR2AYq4yoqVFnd3IqgmJxfGFQ=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
   # a decent icon :-)
   iconsrc = fetchurl {
-    url = "http://wiki.flightgear.org/images/6/62/FlightGear_logo.png";
+    url = "https://wiki.flightgear.org/w/images/6/62/FlightGear_logo.png";
     sha256 = "1ikz413jia55vfnmx8iwrlxvx8p16ggm81mbrj66wam3q7s2dm5p";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     comment = "FlightGear Flight Simulator";
     desktopName = "FlightGear";
     genericName = "Flight simulator";
-    categories = "Game;Simulation";
+    categories = [ "Game" "Simulation" ];
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
-    glew qtdeclarative
+    glew qtdeclarative curl
   ];
 
   postInstall = ''
@@ -69,11 +69,9 @@ stdenv.mkDerivation rec {
     "--set FG_ROOT ${data}/share/FlightGear"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flight simulator";
-    maintainers = with maintainers; [ raskin the-kenny ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
     license = licenses.gpl2;

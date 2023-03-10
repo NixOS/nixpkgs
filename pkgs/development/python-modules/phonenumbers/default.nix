@@ -1,18 +1,39 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.11.4";
+  version = "8.13.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13hfcw89kppm8s2qx0s5bafzxjc0qhm9sxmpf6yqvshz2fn82pk8";
+    hash = "sha256-+L2Sl1unRjt4KK4vleEDe34KuPAj6ej/t8Vg/X9dZtc=";
   };
 
-  meta = {
-    description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers";
-    homepage    = "https://github.com/daviddrysdale/python-phonenumbers";
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ fadenb ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/*.py"
+  ];
+
+  pythonImportsCheck = [
+    "phonenumbers"
+  ];
+
+  meta = with lib; {
+    description = "Python module for handling international phone numbers";
+    homepage = "https://github.com/daviddrysdale/python-phonenumbers";
+    changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fadenb ];
   };
 }

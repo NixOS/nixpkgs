@@ -1,30 +1,90 @@
-{ buildPythonPackage
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, isPy27
+, cython
+, distlib
 , fetchPypi
-, lib
-, recursivePthLoader
+, filelock
+, flaky
+, importlib-metadata
+, importlib-resources
+, pathlib2
+, platformdirs
+, pytest-freezegun
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "16.7.9";
+  version = "20.17.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d62c70883c0342d59c11d0ddac0d954d0431321a41ab20851facf2b222598f3";
+    hash = "sha256-+LknaE78bxzCBsnbKXpXCrmtDlHBb6nkVIfTbRkFwFg=";
   };
 
-  # Doubt this is needed - FRidh 2017-07-07
-  pythonPath = [ recursivePthLoader ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  patches = [ ./virtualenv-change-prefix.patch ];
+  propagatedBuildInputs = [
+    distlib
+    filelock
+    platformdirs
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    importlib-resources
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
-  # Tarball doesn't contain tests
-  doCheck = false;
+  patches = lib.optionals (isPy27) [
+    ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
+  ];
 
-  meta = {
+  nativeCheckInputs = [
+    cython
+    flaky
+    pytest-freezegun
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # Ignore tests which require network access
+    "tests/unit/create/test_creator.py"
+    "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
+  ];
+
+  disabledTests = [
+    # Network access
+    "test_create_no_seed"
+    "test_seed_link_via_app_data"
+    # Permission Error
+    "test_bad_exe_py_info_no_raise"
+  ];
+
+  pythonImportsCheck = [
+    "virtualenv"
+  ];
+
+  meta = with lib; {
     description = "A tool to create isolated Python environments";
-    homepage = http://www.virtualenv.org;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ goibhniu ];
+    homepage = "http://www.virtualenv.org";
+    changelog = "https://github.com/pypa/virtualenv/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

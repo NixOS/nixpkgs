@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "2.11.1";
+  version = "2.13.10";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    sha256="1jijj72cas6k5hckkxqppbv1inlwbca37p0ixzs3vzm2jhnd7z31";
+    sha256="sha256-XnT2ziES94Y4uzWmaxSw7nWegJFQjAqFUG8PkwK5nLU=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-H.." ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
     homepage = "http://catch-lib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ edwtjo knedlsepp ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix ++ [ "x86_64-windows" ];
   };
 }

@@ -1,19 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "1.4.3";
+  version = "3.2.0";
   pname = "xxhash";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b6b1afe7731d7d9cbb0398b4a811ebb5e6be5c174f72c68abf81f919a435de9";
+    sha256 = "sha256-Gv1Hr4lVxdtzD2MK1TrnmM9/rgrLZM67PPlNNcR90Ig=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ifduyue/python-xxhash;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/ifduyue/python-xxhash";
     description = "Python Binding for xxHash https://pypi.org/project/xxhash/";
     license = licenses.bsd2;
     maintainers = [ maintainers.teh ];

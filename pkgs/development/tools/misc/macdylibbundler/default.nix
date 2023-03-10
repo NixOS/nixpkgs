@@ -1,19 +1,26 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, makeWrapper, fetchFromGitHub, cctools }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "macdylibbundler";
-  version = "20180825";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "auriamg";
     repo = "macdylibbundler";
-    rev = "ce13cb585ead5237813b85e68fe530f085fc0a9e";
-    sha256 = "149p3dcnap4hs3nhq5rfvr3m70rrb5hbr5xkj1h0gsfp0d7gvxnj";
+    rev = version;
+    sha256 = "0j4ij48jf5izgymzxxaakf6vc50w9q0761yir6nfj1n6qlnrlidf";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    wrapProgram $out/bin/dylibbundler \
+      --prefix PATH ":" "${cctools}/bin"
+  '';
+
+  meta = with lib; {
     description = "Utility to ease bundling libraries into executables for OSX";
     longDescription = ''
       dylibbundler is a small command-line programs that aims to make bundling
@@ -23,7 +30,7 @@ stdenv.mkDerivation {
       this with a single command on the teminal! It will also work if your
       program uses plug-ins that have dependencies too.
     '';
-    homepage = https://github.com/auriamg/macdylibbundler;
+    homepage = "https://github.com/auriamg/macdylibbundler";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.nomeata ];

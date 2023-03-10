@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qtserialport, qmake }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, qtserialport, qmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "candle";
   version = "1.1";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ];
-  
+
   sourceRoot = "source/src";
 
   installPhase = ''
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtserialport ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRBL controller application with G-Code visualizer written in Qt";
-    homepage = https://github.com/Denvi/Candle;
+    homepage = "https://github.com/Denvi/Candle";
     license = licenses.gpl3;
     maintainers = with maintainers; [ matti-kariluoma ];
   };

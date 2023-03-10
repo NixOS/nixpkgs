@@ -1,58 +1,130 @@
-{ stdenv, fetchFromGitHub, glibcLocales
-, cmake, python3, libpng, zlib
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, pkg-config
+, cmake
+, python3Packages
+, libpng
+, zlib
+, eigen
+, protobuf
+, howard-hinnant-date
+, nlohmann_json
+, boost
+, oneDNN
+, abseil-cpp_202111
+, gtest
+, pythonSupport ? false
+, nsync
+, flatbuffers
 }:
+
+# Python Support
+#
+# When enabling Python support a wheel is made and stored in a `dist` output.
+# This wheel is then installed in a separate derivation.
+
+assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
 
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.1.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "0chbn2wkl1w3msw0zscajinzlaaahg4w3lrpb2l8xgqdwbln0ckj";
-    # TODO: use nix-versions of grpc, onnx, eigen, googletest, etc.
-    # submodules increase src size and compile times significantly
-    # not currently feasible due to how integrated cmake build is with git
+    sha256 = "sha256-paaeq6QeiOzwiibbz0GkYZxEI/V80lvYNYTm6AuyAXQ=";
     fetchSubmodules = true;
   };
 
-  # TODO: build server, and move .so's to lib output
-  outputs = [ "out" "dev" ];
+  patches = [
+    # Use dnnl from nixpkgs instead of submodules
+    (fetchpatch {
+      name = "system-dnnl.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-dnnl.diff?h=python-onnxruntime&id=9c392fb542979981fe0026e0fe3cc361a5f00a36";
+      sha256 = "sha256-+kedzJHLFU1vMbKO9cn8fr+9A5+IxIuiqzOfR2AfJ0k=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
-    python3 # for shared-lib or server
-  ];
+    pkg-config
+    python3Packages.python
+    gtest
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    setuptools
+    wheel
+    pip
+    pythonOutputDistHook
+  ]);
 
   buildInputs = [
-    # technically optional, but highly recommended
     libpng
     zlib
+    howard-hinnant-date
+    nlohmann_json
+    boost
+    oneDNN
+    protobuf
+  ] ++ lib.optionals pythonSupport [
+    nsync
+    python3Packages.numpy
+    python3Packages.pybind11
+    python3Packages.packaging
   ];
+
+  # TODO: build server, and move .so's to lib output
+  # Python's wheel is stored in a separate dist output
+  outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "dist" ];
+
+  enableParallelBuilding = true;
 
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-Donnxruntime_USE_OPENMP=ON"
+    "-Donnxruntime_PREFER_SYSTEM_LIB=ON"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    # flip back to ON next release
-    "-Donnxruntime_ENABLE_LTO=OFF" # https://github.com/microsoft/onnxruntime/issues/2828
+    "-Donnxruntime_ENABLE_LTO=ON"
+    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
+    "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
+    "-Donnxruntime_USE_MPI=ON"
+    "-Deigen_SOURCE_PATH=${eigen.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202111.src}"
+    "-Donnxruntime_USE_DNNL=YES"
+  ] ++ lib.optionals pythonSupport [
+    "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
 
-  # ContribOpTest.StringNormalizerTest sets locale to en_US.UTF-8"
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-  '';
   doCheck = true;
 
-  postInstall = ''
-    rm -r $out/bin   # ctest runner
+  postPatch = ''
+    substituteInPlace cmake/libonnxruntime.pc.cmake.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
   '';
 
-  enableParallelBuilding = true;
+  postBuild = lib.optionalString pythonSupport ''
+    python ../setup.py bdist_wheel
+  '';
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
+    install -m644 -Dt $out/include \
+      ../include/onnxruntime/core/framework/provider_options.h \
+      ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
+      ../include/onnxruntime/core/session/onnxruntime_*.h
+  '';
+
+  passthru = {
+    inherit protobuf;
+    tests = lib.optionalAttrs pythonSupport {
+      python = python3Packages.onnxruntime;
+    };
+  };
+
+  meta = with lib; {
     description = "Cross-platform, high performance scoring engine for ML models";
     longDescription = ''
       ONNX Runtime is a performance-focused complete scoring engine
@@ -64,11 +136,10 @@ stdenv.mkDerivation rec {
       compatibility.
     '';
     homepage = "https://github.com/microsoft/onnxruntime";
-    changelog = "https://github.com/microsoft/onnxruntime/releases";
+    changelog = "https://github.com/microsoft/onnxruntime/releases/tag/v${version}";
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ jonringer puffnfresh ck3d ];
   };
-
 }

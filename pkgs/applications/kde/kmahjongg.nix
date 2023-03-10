@@ -9,11 +9,13 @@
 }:
 
 mkDerivation {
-  name = "kmahjongg";
+  pname = "kmahjongg";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kdeclarative libkmahjongg knewstuff libkdegames ];
   meta = {
+    description = "Mahjongg solitaire";
+    homepage = "https://apps.kde.org/kmahjongg/";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ genesis ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

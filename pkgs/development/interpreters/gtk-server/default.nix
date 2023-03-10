@@ -1,8 +1,10 @@
-{ stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , glib
 , gtk3
 , libffcall
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 }:
 
@@ -19,16 +21,16 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ libffcall glib gtk3 ];
 
   configureOptions = [ "--with-gtk3" ];
 
-  meta = with stdenv.lib; {
-    description = "gtk-server for interpreted GUI programming";
+  meta = with lib; {
     homepage = "http://www.gtk-server.org/";
+    description = "gtk-server for interpreted GUI programming";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.tohl ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

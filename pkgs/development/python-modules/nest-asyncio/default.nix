@@ -5,16 +5,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.3";
+  version = "1.5.6";
   pname = "nest_asyncio";
   disabled = !(pythonAtLeast "3.5");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fznrg32rk6fmvpfdxwwhadh526gdjivmdifg2hiciil2gr8n1s3";
+    sha256 = "sha256-0mfMH/eUQD999pKWTR0qP6lBj/6io/aFmkOf9IL+8pA=";
   };
 
-  # tests not packaged with source dist as of 1.2.3/1.2.3, and
+  # tests not packaged with source dist as of 1.3.2/1.3.2, and
   # can't check tests out of GitHub easily without specific commit IDs (no tagged releases)
   doCheck = false;
   pythonImportsCheck = [ "nest_asyncio" ];

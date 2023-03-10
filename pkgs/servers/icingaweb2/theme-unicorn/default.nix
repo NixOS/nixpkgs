@@ -1,11 +1,17 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub }: with lib; stdenv.mkDerivation rec {
-  name = "icingaweb2-theme-unicorn";
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+}:
+
+stdenv.mkDerivation rec {
+  pname = "icingaweb2-theme-unicorn";
   version = "1.0.2";
 
   srcs = [
     (fetchFromGitHub {
       owner = "Mikesch-mp";
-      repo = name;
+      repo = pname;
       rev = "v${version}";
       sha256 = "1qmcajdf0g70vp2avqa50lfrfigq22k91kggbgn5ablwyg9dki05";
     })
@@ -35,7 +41,7 @@
     cp unicorn.png "$out/public/img/unicorn.png"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Unicorn theme for IcingaWeb 2";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-unicorn";
     license = licenses.publicDomain;

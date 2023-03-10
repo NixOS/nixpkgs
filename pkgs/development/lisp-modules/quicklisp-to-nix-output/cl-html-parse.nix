@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-html-parse'';
-  version = ''20161031-git'';
+  baseName = "cl-html-parse";
+  version = "20200925-git";
 
-  description = ''HTML Parser'';
+  description = "HTML Parser";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-html-parse/2016-10-31/cl-html-parse-20161031-git.tgz'';
-    sha256 = ''0i0nl630p9l6rqylydhfqrlqhl5sfq94a9wglx0dajk8gkkqjbnb'';
+    url = "http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz";
+    sha256 = "14pfd4gwjb8ywr79dqrcznw6h8a1il3g5b6cm5x9aiyr49zdv15f";
   };
 
   packageName = "cl-html-parse";
@@ -18,8 +19,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-html-parse DESCRIPTION HTML Parser SHA256
-    0i0nl630p9l6rqylydhfqrlqhl5sfq94a9wglx0dajk8gkkqjbnb URL
-    http://beta.quicklisp.org/archive/cl-html-parse/2016-10-31/cl-html-parse-20161031-git.tgz
-    MD5 7fe933c461eaf2dd442da189d6827a72 NAME cl-html-parse FILENAME
-    cl-html-parse DEPS NIL DEPENDENCIES NIL VERSION 20161031-git SIBLINGS NIL
+    14pfd4gwjb8ywr79dqrcznw6h8a1il3g5b6cm5x9aiyr49zdv15f URL
+    http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz
+    MD5 3333eedf037a48900c663fceae3e4cfd NAME cl-html-parse FILENAME
+    cl-html-parse DEPS NIL DEPENDENCIES NIL VERSION 20200925-git SIBLINGS NIL
     PARASITES NIL) */

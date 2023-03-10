@@ -1,30 +1,32 @@
-{ stdenv, fetchurl, writeText
-, xorgproto, libX11, libXext, libXrandr
+{ lib, stdenv, fetchurl, writeText
+, xorgproto, libX11, libXext, libXrandr, libxcrypt
 # default header can be obtained from
 # https://git.suckless.org/slock/tree/config.def.h
 , conf ? null }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "slock-1.4";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "slock";
+  version = "1.5";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "0sif752303dg33f14k6pgwq2jp1hjyhqv6x4sy3sj281qvdljf5m";
+    url = "https://dl.suckless.org/tools/slock-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ruHj+/aid/tiWjg4BzuXm2SD57rKTOgvVt4f8ZLbDk0=";
   };
 
-  buildInputs = [ xorgproto libX11 libXext libXrandr ];
+  buildInputs = [ xorgproto libX11 libXext libXrandr libxcrypt ];
 
-  installFlags = [ "DESTDIR=\${out}" "PREFIX=" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   postPatch = "sed -i '/chmod u+s/d' Makefile";
 
-  preBuild = optionalString (conf != null) ''
+  preBuild = lib.optionalString (conf != null) ''
     cp ${writeText "config.def.h" conf} config.def.h
   '';
 
-  meta = {
-    homepage = https://tools.suckless.org/slock;
+  makeFlags = [ "CC:=$(CC)" ];
+
+  meta = with lib; {
+    homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.
@@ -33,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
   };
-}
+})

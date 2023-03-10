@@ -1,10 +1,7 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
-header "exporting $url (r$rev) into $out"
-
-if test "$sshSupport"; then
-    export SVN_SSH="$openssh/bin/ssh"
-fi
+echo "exporting $url (r$rev) into $out"
 
 if test -n "$http_proxy"; then
     # Configure proxy
@@ -25,5 +22,3 @@ fi;
 svn export --trust-server-cert --non-interactive \
     ${ignoreExternals:+--ignore-externals} ${ignoreKeywords:+--ignore-keywords} \
     -r "$rev" "$url" "$out"
-
-stopNest

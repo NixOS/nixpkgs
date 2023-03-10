@@ -1,21 +1,27 @@
-{ stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkgconfig, doxygen,
-  autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
+{ lib, stdenv, fetchFromGitHub
+, mpfr, gnuplot
+, readline
+, libxml2, curl
+, intltool, libiconv, icu, gettext
+, pkg-config, doxygen, autoreconfHook, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.8.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "1vbaza9c7159xf2ym90l0xkyj2mp6c3hbghhsqn29yvz08fda9df";
+    sha256 = "sha256-Chjkpb0v+nzl63UWprEl+BB4+cFtXrLQzTELhf7u/KY=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ intltool pkgconfig autoreconfHook doxygen ];
+  nativeBuildInputs = [ intltool pkg-config autoreconfHook doxygen ];
   buildInputs = [ curl gettext libiconv readline ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   propagatedBuildInputs = [ libxml2 mpfr icu ];
   enableParallelBuilding = true;
 
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
-  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+  '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/qalc.cc \
       --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
   '';
@@ -38,11 +44,12 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced calculator library";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ gebner ];
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
+    mainProgram = "qalc";
     platforms = platforms.all;
   };
 }

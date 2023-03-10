@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , webtest
 , zope_component
 , hupper
-, PasteDeploy
+, pastedeploy
 , plaster
 , plaster-pastedeploy
 , repoze_lru
@@ -13,31 +13,48 @@
 , webob
 , zope_deprecation
 , zope_interface
-, isPy35
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.10.4";
+  version = "2.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d80ccb8cfa550139b50801591d4ca8a5575334adb493c402fce2312f55d07d66";
+    hash = "sha256-+r/XRQOeJq1bCRX8OW6HJcD4o9F7lB+WEezR7XbP59o=";
   };
 
-  checkInputs = [ webtest zope_component ];
+  propagatedBuildInputs = [
+    hupper
+    pastedeploy
+    plaster
+    plaster-pastedeploy
+    repoze_lru
+    translationstring
+    venusian
+    webob
+    zope_deprecation
+    zope_interface
+  ];
 
-  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
+  nativeCheckInputs = [
+    webtest
+    zope_component
+  ];
 
-  # Failing tests
-  # https://github.com/Pylons/pyramid/issues/1899
-  doCheck = !isPy35;
+  pythonImportsCheck = [
+    "pyramid"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "The Pyramid Web Framework, a Pylons project";
-    homepage = https://trypyramid.com/;
+  meta = with lib; {
+    description = "Python web framework";
+    homepage = "https://trypyramid.com/";
+    changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

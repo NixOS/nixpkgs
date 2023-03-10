@@ -1,18 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "uni2ascii-4.18";
+  pname = "uni2ascii";
+  version = "4.18";
+
   src = fetchurl {
-    url = "https://billposer.org/Software/Downloads/${name}.tar.gz";
+    url = "https://billposer.org/Software/Downloads/uni2ascii-${version}.tar.gz";
     sha256 = "03lklnzr6ngs4wqiqa7rifd246f441gfvardbsaa5l6fn9pbn94y";
   };
 
   meta = {
-    license = stdenv.lib.licenses.gpl3;
-    homepage = http://billposer.org/Software/uni2ascii.html;
+    license = lib.licenses.gpl3;
+    homepage = "http://billposer.org/Software/uni2ascii.html";
     description = "Converts between UTF-8 and many 7-bit ASCII equivalents and back";
 
-    longDescription = '' 
+    longDescription = ''
     This package provides conversion in both directions between UTF-8
     Unicode and more than thirty 7-bit ASCII equivalents, including
     RFC 2396 URI format and RFC 2045 Quoted Printable format, the
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     It also provides ways of converting non-ASCII characters to
     similar ASCII characters, e.g. by stripping diacritics.
     '';
-    maintainers = with stdenv.lib.maintainers; [ goibhniu ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ goibhniu ];
+    platforms = lib.platforms.all;
   };
 }

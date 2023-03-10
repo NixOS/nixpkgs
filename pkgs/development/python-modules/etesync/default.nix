@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "etesync";
-  version = "0.9.3";
+  version = "0.12.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i6v7i4xmbpkc1pgpzq8gyl2kvg3a1kpdwp8q6l3l0vf9p5qm06w";
+    sha256 = "f20f7e9922ee789c4b71379676ebfe656b675913fe524f2ee722e1b9ef4e5197";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     vobject
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

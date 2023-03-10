@@ -6,31 +6,30 @@ let
   cfg = config.services.zerotierone;
 in
 {
-  options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
+  options.services.zerotierone.enable = mkEnableOption (lib.mdDoc "ZeroTierOne");
 
   options.services.zerotierone.joinNetworks = mkOption {
     default = [];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
-    description = ''
+    description = lib.mdDoc ''
       List of ZeroTier Network IDs to join on startup
     '';
   };
 
   options.services.zerotierone.port = mkOption {
     default = 9993;
-    example = 9993;
-    type = types.int;
-    description = ''
+    type = types.port;
+    description = lib.mdDoc ''
       Network port used by ZeroTier.
     '';
   };
 
   options.services.zerotierone.package = mkOption {
     default = pkgs.zerotierone;
-    defaultText = "pkgs.zerotierone";
+    defaultText = literalExpression "pkgs.zerotierone";
     type = types.package;
-    description = ''
+    description = lib.mdDoc ''
       ZeroTier One package to use.
     '';
   };
@@ -69,13 +68,14 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # Prevent systemd from potentially changing the MAC address
-    environment.etc."systemd/network/50-zerotier.link".text = ''
-      [Match]
-      OriginalName=zt*
-
-      [Link]
-      AutoNegotiation=false
-      MACAddressPolicy=none
-    '';
+    systemd.network.links."50-zerotier" = {
+      matchConfig = {
+        OriginalName = "zt*";
+      };
+      linkConfig = {
+        AutoNegotiation = false;
+        MACAddressPolicy = "none";
+      };
+    };
   };
 }

@@ -1,81 +1,93 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, cython
-, cymem
-, darwin
-, msgpack-numpy
-, msgpack
-, preshed
-, numpy
-, murmurhash
-, pathlib
-, hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
-, mock
-, wrapt
-, dill
+{ lib
+, stdenv
+, Accelerate
 , blis
+, buildPythonPackage
+, catalogue
+, confection
+, CoreFoundation
+, CoreGraphics
+, CoreVideo
+, cymem
+, cython
+, fetchPypi
+, hypothesis
+, mock
+, murmurhash
+, numpy
+, plac
+, preshed
+, pydantic
+, pytestCheckHook
+, python
+, pythonOlder
 , srsly
+, tqdm
+, typing-extensions
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.3.1";
+  version = "8.1.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
+    hash = "sha256-NcZXy+2wT8W8JHhl1mWSHOw9Ve81+/zj7hogSGtyBoM=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Accelerate CoreFoundation CoreGraphics CoreVideo
-  ]);
-
-  propagatedBuildInputs = [
-   blis
-   cython
-   cymem
-   msgpack-numpy
-   msgpack
-   preshed
-   numpy
-   murmurhash
-   tqdm
-   cytoolz
-   plac
-   six
-   srsly
-   wrapt
-   dill
-   wasabi
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
-
-
-  checkInputs = [
-    hypothesis
-    mock
-    pytest
+  buildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin [
+    Accelerate
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  propagatedBuildInputs = [
+    blis
+    catalogue
+    confection
+    cymem
+    murmurhash
+    numpy
+    plac
+    preshed
+    pydantic
+    srsly
+    tqdm
+    wasabi
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
-  checkPhase = ''
-    pytest thinc/tests
+  nativeCheckInputs = [
+    hypothesis
+    mock
+    pytestCheckHook
+  ];
+
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
   '';
 
-  meta = with stdenv.lib; {
-    description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+  pythonImportsCheck = [
+    "thinc"
+  ];
+
+  meta = with lib; {
+    description = "Library for NLP machine learning";
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu danieldk sdll ];
-    };
+    maintainers = with maintainers; [ aborsu ];
+  };
 }

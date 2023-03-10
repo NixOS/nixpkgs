@@ -1,39 +1,72 @@
-{ stdenv, fetchurl, ant, javac, hdf_java }:
+{ lib, stdenv, fetchurl, ant, jdk, nettools, hdf4, hdf5, makeDesktopItem, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
-  version = "2.14";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/hdf-java/current/src/${pname}-${version}.tar.gz";
-    sha256 = "0lv9djfm7hnp14mcyzbiax3xjb8vkbzhh7bdl6cvgy53pc08784p";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
+    sha256 = "sha256-08De/yy9lZUIxNqccS2nL7IE/2gYo0NPAKcHH46M8rg=";
   };
 
-  nativeBuildInputs = [ ant javac ];
+  patches = [
+    # Hardcode isUbuntu=false to avoid calling hostname to detect os
+    ./0001-Hardcode-isUbuntu-false-to-avoid-hostname-dependency.patch
+  ];
 
-  HDFLIBS = hdf_java;
+  nativeBuildInputs = [
+    ant
+    jdk
+    copyDesktopItems
+  ];
 
-  buildPhase = ''
-    ant run
-    ant package
-  '';
+  HDFLIBS = (hdf4.override { javaSupport = true; }).out;
+  HDF5LIBS = (hdf5.override { javaSupport = true; }).out;
+
+  buildPhase =
+    let
+      arch = if stdenv.isx86_64 then "x86_64" else "aarch64";
+    in
+    ''
+      runHook preBuild
+
+      ant createJPackage -Dmachine.arch=${arch}
+
+      runHook postBuild
+    '';
+
+  desktopItem = makeDesktopItem rec {
+    name = "HDFView";
+    desktopName = name;
+    exec = name;
+    icon = name;
+    comment = meta.description;
+    categories = [ "Science" "DataVisualization" ];
+  };
 
   installPhase = ''
-    mkdir $out
-    # exclude jre
-    cp -r build/HDF_Group/HDFView/*/{lib,share} $out/
-    mkdir $out/bin
-    cp -r build/HDF_Group/HDFView/*/hdfview.sh $out/bin/hdfview
-    chmod +x $out/bin/hdfview
-    substituteInPlace $out/bin/hdfview \
-      --replace "@JAVABIN@" "${javac}/bin/" \
-      --replace "@INSTALLDIR@" "$out"
+    runHook preInstall
+  '' + lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/bin $out/lib
+    cp -a build/dist/HDFView/bin/HDFView $out/bin/
+    cp -a build/dist/HDFView/lib/app $out/lib/
+    cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
+    ln -s ${jdk}/lib/openjdk $out/lib/runtime
+
+    mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
+    cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -a build/dist/HDFView.app $out/Applications/
+  '' + ''
+    runHook postInstall
   '';
 
   meta = {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
-    license = stdenv.lib.licenses.free; # BSD-like
-    homepage = https://support.hdfgroup.org/products/java/index.html;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.free; # BSD-like
+    homepage = "https://portal.hdfgroup.org/display/HDFVIEW/HDFView";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ jiegec ];
   };
 }

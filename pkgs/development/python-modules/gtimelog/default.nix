@@ -1,43 +1,59 @@
-{ stdenv
-, buildPythonPackage
-, pkgs
-, python
-, pygobject3
+{ lib, fetchFromGitHub, makeWrapper
+, glibcLocales, gobject-introspection, gtk3, libsoup, libsecret
+, buildPythonPackage, python
+, pygobject3, freezegun, mock
 }:
 
 buildPythonPackage rec {
   pname = "gtimelog";
-  version = "0.9.1";
+  version = "unstable-2020-05-16";
 
-  src = pkgs.fetchurl {
-    url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
-    sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "80682ddbf9e0d68b8c67257289784f3b49b543d8";
+    sha256 = "0qv2kv7vc3qqlzxsisgg31cmrkkqgnmxspbj10c5fhdmwzzwi0i9";
   };
 
-  buildInputs = [ pkgs.glibcLocales ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    glibcLocales gobject-introspection gtk3 libsoup libsecret
+  ];
 
-  LC_ALL="en_US.UTF-8";
-
-  # TODO: AppIndicator
-  propagatedBuildInputs = [ pkgs.gobject-introspection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];
+  propagatedBuildInputs = [
+    pygobject3 freezegun mock
+  ];
 
   checkPhase = ''
-    substituteInPlace runtests --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
+    substituteInPlace runtests --replace "/usr/bin/env python3" "${python.interpreter}"
     ./runtests
   '';
 
+  pythonImportsCheck = [ "gtimelog" ];
+
   preFixup = ''
-      wrapProgram $out/bin/gtimelog \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
+    wrapProgram $out/bin/gtimelog \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+      --prefix LD_LIBRARY_PATH ":" "${gtk3.out}/lib" \
   '';
 
-  meta = with stdenv.lib; {
-    description = "A small GTK app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-    homepage = https://mg.pov.lt/gtimelog/;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ocharles ];
-    platforms = platforms.unix;
-  };
+  meta = with lib; {
+    description = "A time tracking app";
+    longDescription = ''
+      GTimeLog is a small time tracking application for GNOME.
+      It's main goal is to be as unintrusive as possible.
 
+      To run gtimelog successfully on a system that does not have full GNOME 3
+      installed, the following NixOS options should be set:
+      - programs.dconf.enable = true;
+      - services.gnome.gnome-keyring.enable = true;
+
+      In addition, the following packages should be added to the environment:
+      - gnome.adwaita-icon-theme
+      - gnome.dconf
+    '';
+    homepage = "https://gtimelog.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ oxzi ];
+  };
 }

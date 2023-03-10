@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkg-config, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "system-config-printer";
-  version = "1.5.12";
+  version = "1.5.15";
 
   src = fetchFromGitHub {
     owner = "openPrinting";
     repo = pname;
-    rev = version;
-    sha256 = "1a812jsd9pb02jbz9bq16qj5j6k2kw44g7s1xdqqkg7061rd7mwf";
+    rev = "v${version}";
+    sha256 = "0a3v8fp1dfb5cwwpadc3f6mv608b5yrrqd8ddkmnrngizqwlswsc";
   };
 
   prePatch = ''
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace /bin/bash ${bash}/bin/bash
   '';
 
-  patches = [ ./detect_serverbindir.patch ];
+  patches = [
+    ./detect_serverbindir.patch
+  ];
 
   buildInputs = [
     glib udev libusb1 cups
@@ -34,13 +36,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    intltool pkgconfig
+    intltool pkg-config
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
     python3Packages.wrapPython
     wrapGAppsHook autoreconfHook
   ];
 
   pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
+
+  preConfigure = ''
+    intltoolize --copy --force --automake
+  '';
 
   configureFlags = [
     "--with-udev-rules"
@@ -71,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/openprinting/system-config-printer";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

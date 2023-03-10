@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -26,7 +26,8 @@
 , exiv2
 , ffmpeg
 , flex
-, jasper ? null, withJpeg2k ? false  # disable JPEG2000 support, jasper has unfixed CVE
+, graphviz
+, imagemagick
 , lcms2
 , lensfun
 , libgphoto2
@@ -38,27 +39,28 @@
 , marble
 , libGL
 , libGLU
-, opencv3
+, opencv
 , pcre
 , threadweaver
+, x265
+, jasper
 
 # For panorama and focus stacking
 , enblend-enfuse
 , hugin
 , gnumake
 
+, breeze-icons
 , oxygen
 }:
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "6.2.0";
+  version = "7.9.0";
 
-  src = fetchFromGitHub {
-    owner  = "KDE";
-    repo   = "digikam";
-    rev    = "v${version}";
-    sha256 = "1l1nb1nwicmip2jxhn5gzr7h60igvns0zs3kzp36r6qf4wvg3v2z";
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
+    sha256 = "sha256-w7gKvAkNo8u8QuZ6QDCA1/X+CnyYaYc1vaVWxgMUurQ=";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -70,6 +72,8 @@ mkDerivation rec {
     exiv2
     ffmpeg
     flex
+    graphviz
+    imagemagick
     lcms2
     lensfun
     libgphoto2
@@ -80,8 +84,10 @@ mkDerivation rec {
     libusb1
     libGL
     libGLU
-    opencv3
+    opencv
     pcre
+    x265
+    jasper
 
     qtbase
     qtxmlpatterns
@@ -99,24 +105,27 @@ mkDerivation rec {
     kwidgetsaddons
     kxmlgui
 
+    breeze-icons
     marble
     oxygen
     threadweaver
-  ]
-  ++ lib.optionals withJpeg2k [ jasper ];
-
-  enableParallelBuilding = true;
+  ];
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
+    "-DENABLE_APPSTYLES=on"
+    "-DCMAKE_CXX_FLAGS=-I${libksane}/include/KF5" # fix `#include <ksane_version.h>`
   ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
-    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
@@ -125,8 +134,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = https://www.digikam.org;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://www.digikam.org";
     platforms = platforms.linux;
   };
 }

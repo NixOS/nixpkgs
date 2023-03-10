@@ -1,46 +1,45 @@
-{ stdenv, fetchurl, perlPackages, iproute, perl }:
+{ lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl }:
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.9.0";
+  version = "3.10.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ddclient/${pname}-${version}.tar.gz";
-    sha256 = "0fwyhab8yga2yi1kdfkbqxa83wxhwpagmj1w1mwkg2iffh1fjjlw";
-  };
-
-  # perl packages by default get devdoc which isn't present
   outputs = [ "out" ];
 
-  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 DataValidateIP JSONPP ];
+  src = fetchFromGitHub {
+    owner = "ddclient";
+    repo = "ddclient";
+    rev = "v${version}";
+    sha256 = "sha256-wWUkjXwVNZRJR1rXPn3IkDRi9is9vsRuNC/zq8RpB1E=";
+  };
 
-  # Use iproute2 instead of ifconfig
-  preConfigure = ''
+  postPatch = ''
     touch Makefile.PL
-    substituteInPlace ddclient \
-      --replace 'in the output of ifconfig' 'in the output of ip addr show' \
-      --replace 'ifconfig -a' '${iproute}/sbin/ip addr show' \
-      --replace 'ifconfig $arg' '${iproute}/sbin/ip addr show $arg' \
-      --replace '/usr/bin/perl' '${perl}/bin/perl' # Until we get the patchShebangs fixed (issue #55786) we need to patch this manually
   '';
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = with perlPackages; [ IOSocketINET6 IOSocketSSL JSONPP ];
 
   installPhase = ''
     runHook preInstall
 
+    # patch sheebang ddclient script which only exists after buildPhase
+    preConfigure
     install -Dm755 ddclient $out/bin/ddclient
-    install -Dm644 -t $out/share/doc/ddclient COP* ChangeLog README.* RELEASENOTE
+    install -Dm644 -t $out/share/doc/ddclient COP* README.* ChangeLog.md
 
     runHook postInstall
   '';
 
-  # there are no tests distributed with ddclient
+  # TODO: run upstream tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for updating dynamic DNS service entries";
-    homepage    = https://sourceforge.net/p/ddclient/wiki/Home/;
-    license     = licenses.gpl2Plus;
-    # Mostly since `iproute` is Linux only.
-    platforms   = platforms.linux;
+    homepage = "https://ddclient.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

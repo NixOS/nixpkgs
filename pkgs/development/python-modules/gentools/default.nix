@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchFromGitHub, pytest
-, typing, funcsigs, pythonOlder
+, typing ? null, funcsigs ? null, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,13 +18,13 @@ buildPythonPackage rec {
     lib.optionals (pythonOlder "3.5") [ typing ] ++
     lib.optionals (pythonOlder "3.4") [ funcsigs ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "pytest";
 
   meta = with lib; {
     description = "Tools for generators, generator functions, and generator-based coroutines";
     license = licenses.mit;
-    homepage = https://gentools.readthedocs.io/;
+    homepage = "https://gentools.readthedocs.io/";
     maintainers = with maintainers; [ mredaelli ];
   };
 

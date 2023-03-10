@@ -4,26 +4,28 @@
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
-, isPy3k
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "0.11.0";
+  version = "9.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3f6c1369903856864c7e4a05c2c261563153597172b182382d6332f3acd04016";
+    hash = "sha256-7bP8klNIp2skhNKU8s51zaxQOG6pYMCK9wk6ce5pySA=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   # has no tests
@@ -33,6 +35,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Cosmos DB Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

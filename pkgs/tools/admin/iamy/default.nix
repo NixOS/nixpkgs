@@ -1,27 +1,25 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "iamy";
-  version = "2.3.2";
-
-  goPackagePath = "github.com/99designs/iamy";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "99designs";
     repo = "iamy";
     rev = "v${version}";
-    sha256 = "1fypc6yjnhlpk7zhb2lvah2ikh2zji9sll55rqjbr3i4j02h484z";
+    sha256 = "sha256-oH3ijZaWXI0TdVQN9gzp5ypWzY7OqSxDh7VBoZo42Cs=";
   };
 
-  modSha256 = "0akak573zvz3xg5d7vf0ch2mrmj1jkzcdc29v3kn43f7944c2wcl";
+  vendorSha256 = "sha256-/IUYM3pTvcHXw8t5MW6JUEWdxegFuQC8zkiySp8VEgE=";
 
-  buildFlagsArray = [''-ldflags=
-    -X main.Version=v${version} -s -w
-  ''];
+  ldflags = [
+    "-X main.Version=v${version}" "-s" "-w"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cli tool for importing and exporting AWS IAM configuration to YAML files";
-    homepage = https://github.com/99designs/iamy;
+    homepage = "https://github.com/99designs/iamy";
     license = licenses.mit;
     maintainers = with maintainers; [ suvash ];
   };

@@ -1,27 +1,68 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy37, pyperclip }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# propagates
+, allpairspy
+, approval-utilities
+, beautifulsoup4
+, empty-files
+, mrjob
+, pyperclip
+, pytest
+, typing-extensions
+
+# tests
+, numpy
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  version = "0.2.6";
+  version = "8.2.0";
   pname = "approvaltests";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    rev = version;
-    sha256 = "1k1bj8q1qm89a8xm4az6qk4qswwmgxw5jpdjcxmf93zh5hrcy9h9";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7OeFOPBOs+SXKOQGKxiigVvoY50+bqRo+oDbVYTMQxU=";
   };
 
-  propagatedBuildInputs = [ pyperclip ];
+  propagatedBuildInputs = [
+    allpairspy
+    approval-utilities
+    beautifulsoup4
+    empty-files
+    mrjob
+    pyperclip
+    pytest
+    typing-extensions
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyperclip==1.5.27" "pyperclip>=1.5.27"
-  '';
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # tests expects paths below ApprovalTests.Python directory
+    "test_received_filename"
+    "test_pytest_namer"
+  ];
+
+  pythonImportsCheck = [
+    "approvaltests.approvals"
+    "approvaltests.reporters.generic_diff_reporter_factory"
+  ];
+
+  meta = with lib; {
     description = "Assertion/verification library to aid testing";
-    homepage = https://github.com/approvals/ApprovalTests.Python;
+    homepage = "https://github.com/approvals/ApprovalTests.Python";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

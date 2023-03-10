@@ -1,32 +1,33 @@
-{ stdenv, kernel, fetchFromGitHub }:
+{ lib, stdenv, kernel, fetchFromGitea }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "0.1.5";
+  version = "unstable-2022-11-04";
 
-  src = fetchFromGitHub {
-    owner = "ocerman";
-    repo = "zenpower";
-    rev = "v${version}";
-    sha256 = "1ay1q666bc7czgc95invw523c0ds2gj85wxypc3wi418vfaha5vy";
+  src = fetchFromGitea {
+    domain = "git.exozy.me";
+    owner = "a";
+    repo = "zenpower3";
+    rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
+    sha256 = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  makeFlags = [ "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     install -D zenpower.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon/zenpower/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs.";
-    homepage = "https://github.com/ocerman/zenpower";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ alexbakker ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/Ta180m/zenpower3";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ alexbakker artturin ];
+    platforms = [ "x86_64-linux" ];
     broken = versionOlder kernel.version "4.14";
   };
 }

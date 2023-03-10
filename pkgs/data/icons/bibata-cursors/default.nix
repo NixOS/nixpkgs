@@ -1,51 +1,44 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchurl
+, clickgen
+, attrs
+}:
 
-let
-  py = python3.withPackages(ps: [ ps.pillow ]);
-in stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors";
-  version = "0.4.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
-    owner = "KaizIqbal";
+    owner = "ful1e5";
     repo = "Bibata_Cursor";
     rev = "v${version}";
-    sha256 = "1f7i5jkl21fvrr45zpcj40avkc7camjb1ddrrdlaabbplgz5mcgn";
+    sha256 = "zCk7qgPeae0BfzhxxU2Dk1SOWJQOxiWyJuzH/ri+Gq4=";
   };
 
-  postPatch = ''
-    patchShebangs .
-    substituteInPlace build.sh --replace "sudo" ""
-
-    # Don't generate windows cursors,
-    # they aren't used and aren't installed
-    # by the project's install script anyway.
-    echo "exit 0" > w32-make.sh
-  '';
-
-  nativeBuildInputs  = [
-    gnome-themes-extra
-    inkscape
-    xcursorgen
-    py
-  ];
+  buildInputs = [ clickgen attrs ];
 
   buildPhase = ''
-    HOME="$NIX_BUILD_ROOT" ./build.sh
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Amber' -n 'Bibata-Modern-Amber' -c 'Yellowish and rounded edge bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Classic' -n 'Bibata-Modern-Classic' -c 'Black and rounded edge Bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Ice' -n 'Bibata-Modern-Ice' -c 'White and rounded edge Bibata cursors.'
+
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Original-Amber' -n 'Bibata-Original-Amber' -c 'Yellowish and sharp edge Bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Original-Classic' -n 'Bibata-Original-Classic' -c 'Black and sharp edge Bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Original-Ice' -n 'Bibata-Original-Ice' -c 'White and sharp edge Bibata cursors.'
   '';
 
   installPhase = ''
     install -dm 0755 $out/share/icons
-    for x in Bibata_*; do
-      cp -pr $x/out/X11/$x $out/share/icons/
-    done
+    cp -rf themes/* $out/share/icons/
   '';
 
-  meta = with stdenvNoCC.lib; {
-    description = "Material Based Cursor";
-    homepage = https://github.com/KaizIqbal/Bibata_Cursor;
+  meta = with lib; {
+    description = "Material Based Cursor Theme";
+    homepage = "https://github.com/ful1e5/Bibata_Cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rawkode ];
+    maintainers = with maintainers; [ rawkode AdsonCicilioti ];
   };
 }

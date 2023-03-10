@@ -41,11 +41,12 @@ let
 in
   {
     options.programs.yabar = {
-      enable = mkEnableOption "yabar";
+      enable = mkEnableOption (lib.mdDoc "yabar");
 
       package = mkOption {
         default = pkgs.yabar-unstable;
-        example = literalExample "pkgs.yabar";
+        defaultText = literalExpression "pkgs.yabar-unstable";
+        example = literalExpression "pkgs.yabar";
         type = types.package;
 
         # `yabar-stable` segfaults under certain conditions.
@@ -61,7 +62,7 @@ in
           to use `yabar-unstable'.
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           The package which contains the `yabar` binary.
 
           Nixpkgs provides the `yabar` and `yabar-unstable`
@@ -78,7 +79,7 @@ in
               example = "Droid Sans, FontAwesome Bold 9";
               type = types.str;
 
-              description = ''
+              description = lib.mdDoc ''
                 The font that will be used to draw the status bar.
               '';
             };
@@ -88,7 +89,7 @@ in
               example = "bottom";
               type = types.enum [ "top" "bottom" ];
 
-              description = ''
+              description = lib.mdDoc ''
                 The position where the bar will be rendered.
               '';
             };
@@ -97,7 +98,7 @@ in
               default = {};
               type = types.attrsOf types.str;
 
-              description = ''
+              description = lib.mdDoc ''
                 An attribute set which contains further attributes of a bar.
               '';
             };
@@ -108,7 +109,7 @@ in
                 options.exec = mkOption {
                   example = "YABAR_DATE";
                   type = types.str;
-                  description = ''
+                  description = lib.mdDoc ''
                      The type of the indicator to be executed.
                   '';
                 };
@@ -118,7 +119,7 @@ in
                   example = "right";
                   type = types.enum [ "left" "center" "right" ];
 
-                  description = ''
+                  description = lib.mdDoc ''
                     Whether to align the indicator at the left or right of the bar.
                   '';
                 };
@@ -127,20 +128,20 @@ in
                   default = {};
                   type = types.attrsOf (types.either types.str types.int);
 
-                  description = ''
+                  description = lib.mdDoc ''
                     An attribute set which contains further attributes of a indicator.
                   '';
                 };
               });
 
-              description = ''
+              description = lib.mdDoc ''
                 Indicators that should be rendered by yabar.
               '';
             };
           };
         });
 
-        description = ''
+        description = lib.mdDoc ''
           List of bars that should be rendered by yabar.
         '';
       };

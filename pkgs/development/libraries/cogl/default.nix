@@ -1,17 +1,35 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk-pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
-, mesa, automake, autoconf
-, gstreamerSupport ? true, gst_all_1 }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libGL
+, glib
+, gdk-pixbuf
+, xorg
+, libintl
+, pangoSupport ? true
+, pango
+, cairo
+, gobject-introspection
+, wayland
+, gnome
+, mesa
+, automake
+, autoconf
+, gstreamerSupport ? true
+, gst_all_1
+, harfbuzz
+, OpenGL
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "cogl";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.22.4";
+  version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1q0drs82a8f6glg1v29bb6g2nf15fw0rvdx3d0rgcgfarfaby5sj";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
+    sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 
   patches = [
@@ -21,56 +39,73 @@ in stdenv.mkDerivation rec {
     # could be merged, but dev can not make a new release.
 
     (fetchpatch {
-      url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589;
+      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589";
       sha256 = "0f0d9iddg8zwy853phh7swikg4yzhxxv71fcag36f8gis0j5p998";
     })
 
     (fetchpatch {
-      url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056;
+      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056";
       sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
-    })
-
-    # Fix build with libglvnd headers (these headers used to be provided by mesa)
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/cogl/commit/9c4764224aded552fb855b1c2b85b26d2b894adf.patch";
-      sha256 = "1v9drpzgcd5pq2shhdcw5px7mdiggk6ga13qjbklq8xpd92ac0i1";
     })
   ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig libintl automake autoconf ];
+  nativeBuildInputs = [ pkg-config libintl automake autoconf gobject-introspection ];
 
   configureFlags = [
     "--enable-introspection"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "--enable-kms-egl-platform"
     "--enable-wayland-egl-platform"
     "--enable-wayland-egl-server"
-  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst"
-  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
+    "--enable-gles1"
+    "--enable-gles2"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-glx"
+    "--without-x"
+  ] ++ lib.optionals gstreamerSupport [
+    "--enable-cogl-gst"
+  ];
 
-  propagatedBuildInputs = with xorg; [
-      glib gdk-pixbuf gobject-introspection wayland mesa
-      libGL libXrandr libXfixes libXcomposite libXdamage
-    ]
-    ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer
-                                               gst_all_1.gst-plugins-base ];
+  # TODO: this shouldn't propagate so many things
+  # especially not gobject-introspection
+  propagatedBuildInputs = [
+    glib
+    gdk-pixbuf
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland
+    mesa
+    libGL
+    xorg.libXrandr
+    xorg.libXfixes
+    xorg.libXcomposite
+    xorg.libXdamage
+  ] ++ lib.optionals gstreamerSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ];
 
-  buildInputs = stdenv.lib.optionals pangoSupport [ pango cairo ];
+  buildInputs = lib.optionals pangoSupport [ pango cairo harfbuzz ]
+    ++ lib.optionals stdenv.isDarwin [ OpenGL ];
 
-  COGL_PANGO_DEP_CFLAGS
-    = stdenv.lib.optionalString (stdenv.isDarwin && pangoSupport)
-      "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
+  COGL_PANGO_DEP_CFLAGS = toString (lib.optionals (stdenv.isDarwin && pangoSupport) [
+    "-I${pango.dev}/include/pango-1.0"
+    "-I${cairo.dev}/include/cairo"
+    "-I${harfbuzz.dev}/include/harfbuzz"
+  ]);
 
   #doCheck = true; # all tests fail (no idea why)
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small open source library for using 3D graphics hardware for rendering";
     maintainers = with maintainers; [ lovek323 ];
 
@@ -81,7 +116,7 @@ in stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.unix;
     license = with licenses; [ mit bsd3 publicDomain sgi-b-20 ];
   };
 }

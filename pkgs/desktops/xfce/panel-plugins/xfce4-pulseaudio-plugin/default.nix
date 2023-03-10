@@ -1,7 +1,7 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , automakeAddFlags
-, dbus-glib
-, dbus
+, exo
 , gtk3
 , libpulseaudio
 , libnotify
@@ -16,20 +16,19 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.2";
-  sha256 = "1s996mcniskq42vv7cb9i165pmrfp9c95p5f9rx14hqq8in9mvc5";
+  version = "0.4.5";
+  sha256 = "sha256-oRkvKSDEEepNwWIMDYLH/a034xxFhhOx+vp8O2UfTos=";
 
   nativeBuildInputs = [
     automakeAddFlags
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus.dev}/include/dbus-1.0";
 
   postPatch = ''
     substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
   '';
 
   buildInputs = [
+    exo
     glib
     gtk3
     keybinder3
@@ -41,7 +40,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Adjust the audio volume of the PulseAudio sound system";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

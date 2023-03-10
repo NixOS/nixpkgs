@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, perl, coreutils }:
+{ lib, stdenv, fetchurl, perl, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "berkeley_upc-2.22.0";
+  pname = "berkeley_upc";
+  version = "2020.12.0";
 
   src = fetchurl {
-    url = "http://upc.lbl.gov/download/release/${name}.tar.gz";
-    sha256 = "041l215x8z1cvjcx7kwjdgiaf9rl2d778k6kiv8q09bc68nwd44m";
+    url = "http://upc.lbl.gov/download/release/berkeley_upc-${version}.tar.gz";
+    sha256 = "sha256-JdpFORlXHpCQE+TivoQQnjQlxQN7C8BNfHvTOSwXbYQ=";
   };
 
   postPatch = ''
@@ -15,10 +16,9 @@ stdenv.mkDerivation rec {
   # Used during the configure phase
   ENVCMD = "${coreutils}/bin/env";
 
-  nativeBuildInputs = [ coreutils ];
   buildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compiler for the Berkely Unified Parallel C language";
     longDescription = ''
       Unified Parallel C (UPC) is an extension of the C programming language
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       parallelism is fixed at program startup time, typically with a single
       thread of execution per processor.
     '';
-    homepage = https://upc.lbl.gov/;
+    homepage = "https://upc.lbl.gov/";
     license = licenses.mit;
-    platforms = with platforms; [ linux ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ zimbatm ];
   };
 }

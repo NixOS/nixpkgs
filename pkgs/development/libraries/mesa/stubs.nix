@@ -1,8 +1,10 @@
 { stdenv
 , libglvnd, mesa
-, OpenGL }:
+, OpenGL
+, testers
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit (libglvnd) version;
   pname = "libGL";
   outputs = [ "out" "dev" ];
@@ -52,7 +54,7 @@ stdenv.mkDerivation {
 
     mkdir -p $dev/{,lib/pkgconfig,nix-support}
     echo "$out ${libglvnd} ${libglvnd.dev}" > $dev/nix-support/propagated-build-inputs
-    ln -s ${mesa.dev}/include $dev/include
+    ln -s ${libglvnd.dev}/include $dev/include
 
     genPkgConfig() {
       local name="$1"
@@ -61,9 +63,9 @@ stdenv.mkDerivation {
       cat <<EOF >$dev/lib/pkgconfig/$name.pc
     Name: $name
     Description: $lib library
-    Version: ${mesa.version}
+    Version: ${libglvnd.version}
     Libs: -L${libglvnd.out}/lib -l$lib
-    Cflags: -I${mesa.dev}/include -I${libglvnd.dev}/include
+    Cflags: -I${libglvnd.dev}/include
     EOF
     }
 
@@ -72,4 +74,8 @@ stdenv.mkDerivation {
     genPkgConfig glesv1_cm GLESv1_CM
     genPkgConfig glesv2 GLESv2
   '';
-}
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta.pkgConfigModules = [ "gl" "egl" "glesv1_cm" "glesv2" ];
+})

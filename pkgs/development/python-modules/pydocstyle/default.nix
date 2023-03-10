@@ -1,34 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, mock
-, pytest
-, pytestpep8
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
 , snowballstemmer
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pydocstyle";
-  version = "4.0.1";
+  version = "6.1.1";
   disabled = !isPy3k;
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "1sr8d2fsfpam4f14v4als6g2v6s3n9h138vxlwhd6slb3ll14y4l";
+    sha256 = "sha256-j0WMD2qKDdMaKG2FxrrM/O7zX4waJ1afaRPRv70djkE=";
   };
 
-  propagatedBuildInputs = [ snowballstemmer ];
+  propagatedBuildInputs = [
+    snowballstemmer
+  ];
 
-  checkInputs = [ pytest pytestpep8 mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    # test_integration.py installs packages via pip
-    py.test --pep8 --cache-clear -vv src/tests -k "not test_integration"
-  '';
+  disabledTestPaths = [
+    "src/tests/test_integration.py" # runs pip install
+  ];
 
   meta = with lib; {
     description = "Python docstring style checker";
-    homepage = https://github.com/PyCQA/pydocstyle/;
+    homepage = "https://github.com/PyCQA/pydocstyle";
     license = licenses.mit;
     maintainers = with maintainers; [ dzabraev ];
   };

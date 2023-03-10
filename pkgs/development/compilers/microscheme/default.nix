@@ -1,30 +1,33 @@
-{ stdenv, fetchzip, vim, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, unixtools }:
 
 stdenv.mkDerivation rec {
   pname = "microscheme";
   version = "0.9.3";
 
-  src = fetchzip {
-    name = "${pname}-${version}-src";
-    url = "https://github.com/ryansuchocki/microscheme/archive/v${version}.tar.gz";
-    sha256 = "1r3ng4pw1s9yy1h5rafra1rq19d3vmb5pzbpcz1913wz22qdd976";
+  src = fetchFromGitHub {
+    owner = "ryansuchocki";
+    repo = "microscheme";
+    rev = "v${version}";
+    sha256 = "5qTWsBCfj5DCZ3f9W1bdo6WAc1DZqVxg8D7pwC95duQ=";
   };
 
-  buildInputs = [ makeWrapper vim ];
-
-  installPhase = ''
-    make install PREFIX=$out
+  postPatch = ''
+    substituteInPlace makefile --replace gcc ${stdenv.cc.targetPrefix}cc
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://microscheme.org;
+  nativeBuildInputs = [ makeWrapper unixtools.xxd ];
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  meta = with lib; {
+    homepage = "https://ryansuchocki.github.io/microscheme/";
     description = "A Scheme subset for Atmel microcontrollers";
     longDescription = ''
       Microscheme is a Scheme subset/variant designed for Atmel
       microcontrollers, especially as found on Arduino boards.
     '';
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ ardumont ];
   };
 }

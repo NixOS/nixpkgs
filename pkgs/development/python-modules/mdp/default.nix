@@ -1,23 +1,66 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, future, numpy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, future
+, joblib
+, numpy
+, pytest
+, pythonOlder
+, scikit-learn
+}:
 
 buildPythonPackage rec {
-  pname = "MDP";
-  version = "3.5";
+  pname = "mdp";
+  version = "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
+    pname = "MDP";
+    inherit version;
+    hash = "sha256-rFKmUsy67RhX/xIJhi8Dv5sG0JOxJgb7QQeH2jqmWg4=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ future numpy ];
+  postPatch = ''
+    # https://github.com/mdp-toolkit/mdp-toolkit/issues/92
+    substituteInPlace mdp/utils/routines.py \
+      --replace numx.typeDict numx.sctypeDict
+    substituteInPlace mdp/test/test_NormalizingRecursiveExpansionNode.py \
+      --replace py.test"" "pytest"
+    substituteInPlace mdp/test/test_RecursiveExpansionNode.py \
+      --replace py.test"" "pytest"
+  '';
 
-  # Tests disabled because of missing dependencies not in nix
-  doCheck = false;
+  propagatedBuildInputs = [
+    future
+    numpy
+  ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    joblib
+    pytest
+    scikit-learn
+  ];
+
+  pythonImportsCheck = [
+    "mdp"
+    "bimdp"
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pytest --seed 7710873 mdp
+    pytest --seed 7710873 bimdp
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "Library for building complex data processing software by combining widely used machine learning algorithms";
-    homepage = http://mdp-toolkit.sourceforge.net;
+    homepage = "https://mdp-toolkit.github.io/";
+    changelog = "https://github.com/mdp-toolkit/mdp-toolkit/blob/MDP-${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nico202 ];
   };

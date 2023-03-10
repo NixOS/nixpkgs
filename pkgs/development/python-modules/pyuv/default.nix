@@ -1,28 +1,43 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, isPyPy
-, pkgs
+, pythonAtLeast
+, fetchFromGitHub
+, fetchpatch
+, libuv
 }:
 
 buildPythonPackage rec {
   pname = "pyuv";
-  version = "1.2.0";
-  disabled = isPyPy;  # see https://github.com/saghul/pyuv/issues/49
+  version = "1.4.0";
+  disabled = pythonAtLeast "3.11";
 
-  src = pkgs.fetchurl {
-    url = "https://github.com/saghul/pyuv/archive/${pname}-${version}.tar.gz";
-    sha256 = "19yl1l5l6dq1xr8xcv6dhx1avm350nr4v2358iggcx4ma631rycx";
+  src = fetchFromGitHub {
+    owner = "saghul";
+    repo = "pyuv";
+    rev = "pyuv-${version}";
+    sha256 = "1wiwwdylz66lfsjh6p4iv7pfhzvnhwjk332625njizfhz3gq9fwr";
   };
 
-  patches = [ ./pyuv-external-libuv.patch ];
+  patches = [
+    (fetchpatch {
+      name = "fix-build-with-python3.10.patch";
+      url = "https://github.com/saghul/pyuv/commit/8bddcc27052017b5b9cb89c24dbfdf06737b0dd3.patch";
+      sha256 = "sha256-J/3ky64Ff+gYpN3ksFLNuZ5xgPbBkyOl4LTY6fiHAgk=";
+    })
+  ];
 
-  buildInputs = [ pkgs.libuv ];
+  setupPyBuildFlags = [ "--use-system-libuv" ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [ libuv ];
+
+  doCheck = false; # doesn't work in sandbox
+
+  pythonImportsCheck = [ "pyuv" ];
+
+  meta = with lib; {
     description = "Python interface for libuv";
-    homepage = https://github.com/saghul/pyuv;
-    repositories.git = git://github.com/saghul/pyuv.git;
+    homepage = "https://github.com/saghul/pyuv";
     license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
-
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, watchman }:
+{ lib, buildPythonPackage, fetchPypi, watchman }:
 
 buildPythonPackage rec {
   pname = "pywatchman";
@@ -17,9 +17,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Watchman client for Python";
-    homepage = https://facebook.github.io/watchman/;
+    homepage = "https://facebook.github.io/watchman/";
     license = licenses.bsd3;
   };
 

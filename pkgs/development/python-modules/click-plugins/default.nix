@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
   click, pytest
 }:
 
@@ -15,13 +15,13 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extension module for click to enable registering CLI commands";
-    homepage = https://github.com/click-contrib/click-plugins;
+    homepage = "https://github.com/click-contrib/click-plugins";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

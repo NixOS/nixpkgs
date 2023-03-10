@@ -1,41 +1,48 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
+, fetchpatch
+, autoreconfHook
 , neon
 , procps
 , substituteAll
 , zlib
+, wrapperDir ? "/run/wrappers/bin"
 }:
 
 stdenv.mkDerivation rec {
-  name = "davfs2-1.5.6";
+  pname = "davfs2";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://savannah/davfs2/${name}.tar.gz";
-    sha256 = "00fqadhmhi2bmdar5a48nicmjcagnmaj9wgsvjr6cffmrz6pcx21";
+    url = "mirror://savannah/davfs2/davfs2-${version}.tar.gz";
+    sha256 = "sha256-JR23Wic4DMoTMLG5cXAMXl3MDJDlpHYiKF8BQO3+Oi8=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = [ neon zlib ];
 
   patches = [
-    ./isdir.patch
     ./fix-sysconfdir.patch
+    ./disable-suid.patch
     (substituteAll {
       src = ./0001-umount_davfs-substitute-ps-command.patch;
       ps = "${procps}/bin/ps";
+    })
+    (substituteAll {
+      src = ./0002-Make-sure-that-the-setuid-wrapped-umount-is-invoked.patch;
+      inherit wrapperDir;
     })
   ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  makeFlags = [
-    "sbindir=$(out)/sbin"
-    "ssbindir=$(out)/sbin"
-  ];
-
   meta = {
-    homepage = https://savannah.nongnu.org/projects/davfs2;
+    homepage = "https://savannah.nongnu.org/projects/davfs2";
     description = "Mount WebDAV shares like a typical filesystem";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       Web Distributed Authoring and Versioning (WebDAV), an extension to
@@ -45,6 +52,7 @@ stdenv.mkDerivation rec {
       with no built-in support for WebDAV.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

@@ -1,64 +1,84 @@
 { lib
-, fetchpatch
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, isPy27
+, python3
+, bash
 , cmake
-, protobuf
-, numpy
-, six
-, typing-extensions
-, typing
-, pytestrunner
-, pytest
+, fetchFromGitHub
+, gtest
+, isPy27
 , nbval
+, numpy
+, protobuf
+, pybind11
+, pytestCheckHook
+, six
 , tabulate
+, typing-extensions
+, pythonRelaxDepsHook
 }:
 
-buildPythonPackage rec {
+let
+  gtestStatic = gtest.override { static = true; };
+in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.6.0";
+  version = "1.13.1";
+  format = "setuptools";
 
-  # Due to Protobuf packaging issues this build of Onnx with Python 2 gives
-  # errors on import
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ig33jl3591041lyylxp52yi20rfrcqx3i030hd6al8iabzc721v";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-10MH23XpAv/uDW/2tRFGS2lKU8hnaNBwbIBIgVc7Jpk=";
   };
 
-  # Remove the unqualified requirement for the typing package for running the
-  # tests. typing is already required for the installation, where it is
-  # correctly qualified so as to only be required for sufficiently old Python
-  # versions.
-  # This patch should be in the next release (>1.6).
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/onnx/onnx/commit/c963586d0f8dd5740777b2fd06f04ec60816de9f.patch";
-      sha256 = "1hl26cw5zckc91gmh0bdah87jyprccxiw0f4i5h1gwkq28hm6wbj";
-    })
+  nativeBuildInputs = [
+    cmake
+    pythonRelaxDepsHook
+    pybind11
   ];
 
-  nativeBuildInputs = [ cmake ];
+  pythonRelaxDeps = [ "protobuf" ];
 
   propagatedBuildInputs = [
     protobuf
     numpy
     six
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.5") [ typing ];
+  ];
 
-  checkInputs = [
-    pytestrunner
-    pytest
+  nativeCheckInputs = [
     nbval
+    pytestCheckHook
     tabulate
   ];
 
   postPatch = ''
-    patchShebangs tools/protoc-gen-mypy.py
+    chmod +x tools/protoc-gen-mypy.sh.in
+    patchShebangs tools/protoc-gen-mypy.sh.in
+
+    substituteInPlace setup.py \
+      --replace 'setup_requires.append("pytest-runner")' ""
+
+    # prevent from fetching & building own gtest
+    substituteInPlace CMakeLists.txt \
+      --replace 'include(googletest)' ""
+    substituteInPlace cmake/unittest.cmake \
+      --replace 'googletest)' ')'
+  '';
+
+  preConfigure = ''
+    # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
+    # to lib64 and cmake incorrectly looks for the protobuf library in lib64
+    export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
+  '' + lib.optionalString doCheck ''
+    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a -Dgoogletest_INCLUDE_DIRS=${lib.getDev gtestStatic}/include"
+    export ONNX_BUILD_TESTS=1
+  '';
+
+  preBuild = ''
+    export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
   # The executables are just utility scripts that aren't too important
@@ -66,13 +86,46 @@ buildPythonPackage rec {
     rm -r $out/bin
   '';
 
-  # The setup.py does all the configuration (running CMake)
-  dontConfigure = true;
+  # The setup.py does all the configuration
+  dontUseCmakeConfigure = true;
 
-  meta = {
-    homepage    = http://onnx.ai;
+  doCheck = true;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+
+    # detecting source dir as a python package confuses pytest
+    mv onnx/__init__.py onnx/__init__.py.hidden
+  '';
+  pytestFlagsArray = [ "onnx/test" "onnx/examples" ];
+  disabledTests = [
+    # attempts to fetch data from web
+    "test_bvlc_alexnet_cpu"
+    "test_densenet121_cpu"
+    "test_inception_v1_cpu"
+    "test_inception_v2_cpu"
+    "test_resnet50_cpu"
+    "test_shufflenet_cpu"
+    "test_squeezenet_cpu"
+    "test_vgg19_cpu"
+    "test_zfnet512_cpu"
+  ];
+  disabledTestPaths = [
+    # Unexpected output fields from running code: {'stderr'}
+    "onnx/examples/np_array_tensorproto.ipynb"
+  ];
+  postCheck = ''
+    # run "cpp" tests
+    .setuptools-cmake-build/onnx_gtests
+  '';
+
+  pythonImportsCheck = [
+    "onnx"
+  ];
+
+  meta = with lib; {
     description = "Open Neural Network Exchange";
-    license     = lib.licenses.mit;
-    maintainers = [ lib.maintainers.acairncross ];
+    homepage = "https://onnx.ai";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ acairncross ];
   };
 }

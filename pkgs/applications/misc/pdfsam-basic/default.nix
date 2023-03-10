@@ -1,12 +1,12 @@
-{ stdenv, makeDesktopItem, fetchurl, jdk11, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk19, wrapGAppsHook, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "4.1.1";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    sha256 = "17qb3l7xibhb3fbskddvparrj2cxj4kz9qbril094kxrgbvyc9gs";
+    hash = "sha256-NST5d5dzO26ifKStbgD7qNbumUMQhfUFNE472LR1z5k=";
   };
 
   unpackPhase = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--set JAVA_HOME "${jdk11}" --set PDFSAM_JAVA_PATH "${jdk11}")
+    gappsWrapperArgs+=(--set JAVA_HOME "${jdk19}" --set PDFSAM_JAVA_PATH "${jdk19}")
   '';
 
   installPhase = ''
@@ -35,15 +35,19 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "PDFsam Basic";
     genericName = "PDF Split and Merge";
-    mimeType = "application/pdf;";
-    categories = "Office;Application;";
+    mimeTypes = [ "application/pdf" ];
+    categories = [ "Office" ];
   };
 
-  meta = with stdenv.lib; {
-      homepage = "https://github.com/torakiki/pdfsam";
-      description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
-      license = licenses.agpl3;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ maintainers."1000101" ];
+  meta = with lib; {
+    homepage = "https://github.com/torakiki/pdfsam";
+    description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ _1000101 ];
   };
 }

@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.11.6";
+  pname = "automake";
+  version = "1.11.6";
 
   # TODO: Remove the `aclocal' wrapper when $ACLOCAL_PATH support is
   # available upstream; see
@@ -11,17 +12,16 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/automake/${name}.tar.xz";
+    url = "mirror://gnu/automake/automake-${version}.tar.xz";
     sha256 = "1ffbc6cc41f0ea6c864fbe9485b981679dc5e350f6c4bc6c3512f5a4226936b5";
   };
 
   patches = [ ./fix-test-autoconf-2.69.patch ./fix-perl-5.26.patch ];
 
-  buildInputs = [ perl autoconf ];
+  strictDeps = true;
+  nativeBuildInputs = [ perl autoconf ];
+  buildInputs = [ autoconf ];
 
-  # Disable indented log output from Make, otherwise "make.test" will
-  # fail.
-  preCheck = "unset NIX_INDENT_MAKE";
   doCheck = false; # takes _a lot_ of time, fails 11 of 782 tests
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     branch = "1.11";
-    homepage = https://www.gnu.org/software/automake/;
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
 
     longDescription = ''
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       Standards.  Automake requires the use of Autoconf.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

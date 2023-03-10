@@ -1,39 +1,31 @@
-{ stdenv
+{ lib
+, stdenv
 , desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
+, nix-update-script
 , fetchFromGitHub
 , flatpak
 , gettext
 , glib
-, granite
-, gtk3
-, libgee
+, granite7
+, gtk4
 , meson
 , ninja
-, pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "1.0.1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0camg34skiisfbf9s9awfkdkq72s9jhl4ipmax7dqr33n8a86hic";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-iyqKhyBU9OLlPLy5ZD/GxoOzprbm7uKBkFzjUUoQc5g=";
   };
 
   nativeBuildInputs = [
@@ -41,20 +33,17 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-gtk-theme
-    elementary-icon-theme
     flatpak
     glib
-    granite
-    gtk3
-    libgee
+    granite7
+    gtk4
     libxml2
   ];
 
@@ -63,11 +52,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/sideload;
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/elementary/sideload";
     description = "Flatpak installer, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.sideload";
   };
 }

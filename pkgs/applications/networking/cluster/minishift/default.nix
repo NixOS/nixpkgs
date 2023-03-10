@@ -1,13 +1,13 @@
-{ lib, buildGoPackage, fetchFromGitHub, go-bindata, pkgconfig, makeWrapper
+{ lib, buildGoPackage, fetchFromGitHub, go-bindata, pkg-config, makeWrapper
 , glib, gtk3, libappindicator-gtk3, gpgme, openshift, ostree, libselinux, btrfs-progs
 , lvm2, docker-machine-kvm
 }:
 
 let
-  version = "1.34.0";
+  version = "1.34.3";
 
   # Update these on version bumps according to Makefile
-  centOsIsoVersion = "v1.15.0";
+  centOsIsoVersion = "v1.17.0";
   openshiftVersion = "v3.11.0";
 
 in buildGoPackage rec {
@@ -18,10 +18,10 @@ in buildGoPackage rec {
     owner = "minishift";
     repo = "minishift";
     rev = "v${version}";
-    sha256 = "0nc1g4lmz5ww6rjyyanp9vq4sj6fvi9zf9qjc4lpsmapddhjkdy7";
+    sha256 = "0yhln3kyc0098hbnjyxhbd915g6j7s692c0z8yrhh9gdpc5cr2aa";
   };
 
-  nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
+  nativeBuildInputs = [ pkg-config go-bindata makeWrapper ];
   buildInputs = [ glib gtk3 libappindicator-gtk3 gpgme ostree libselinux btrfs-progs lvm2 ];
 
   goPackagePath = "github.com/minishift/minishift";
@@ -34,12 +34,11 @@ in buildGoPackage rec {
       --replace '"runtime"' ""
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X ${goPackagePath}/pkg/version.minishiftVersion=${version}
-      -X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}
-      -X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/pkg/version.minishiftVersion=${version}"
+    "-X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}"
+    "-X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}"
+  ];
 
   preBuild = ''
     (cd go/src/github.com/minishift/minishift
@@ -48,7 +47,7 @@ in buildGoPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram "$bin/bin/minishift" \
+    wrapProgram "$out/bin/minishift" \
       --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm openshift ]}'
   '';
 
@@ -59,8 +58,8 @@ in buildGoPackage rec {
       a single-node OpenShift cluster inside a VM. You can try out OpenShift
       or develop with it, day-to-day, on your local host.
     '';
-    homepage = https://github.com/minishift/minishift;
-    maintainers = with maintainers; [ fpletz vdemeester ];
+    homepage = "https://github.com/minishift/minishift";
+    maintainers = with maintainers; [ vdemeester ];
     platforms = platforms.linux;
     license = licenses.asl20;
   };

@@ -1,38 +1,22 @@
-{ stdenv, fetchFromGitHub, coq, mathcomp-algebra }:
+{ lib, mkCoqDerivation, coq, mathcomp-algebra, version ? null }:
 
-let
-  version = "20190812";
-in
+mkCoqDerivation {
+  pname = "coq-bits";
+  repo = "bits";
+  inherit version;
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.10" "8.16"; out = "1.1.0"; }
+    { case = range "8.7"  "8.15"; out = "1.0.0"; }
+  ] null;
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-coq-bits-${version}";
+  release."1.1.0".sha256 = "sha256-TCw1kSXeW0ysIdLeNr+EGmpGumEE9i8tinEMp57UXaE=";
+  release."1.0.0".sha256 = "0nv5mdgrd075dpd8bc7h0xc5i95v0pkm0bfyq5rj6ii1s54dwcjl";
 
-  src = fetchFromGitHub {
-    owner = "coq-community";
-    repo = "coq-bits";
-    rev = "f74498a6c67e97d9565e139d62be8eaae7111f06";
-    sha256 = "1ibg37qxgkmpbpvc78qcb179bcnzl149z1kzwdm8n98xk5ibavrf";
-  };
-
-  buildInputs = [ coq ];
   propagatedBuildInputs = [ mathcomp-algebra ];
 
-  enableParallelBuilding = true;
-
-  installPhase = ''
-    make -f Makefile CoqMakefile
-    make -f CoqMakefile COQLIB=$out/lib/coq/${coq.coq-version}/ install
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/coq-community/coq-bits;
+  meta = with lib; {
     description = "A formalization of bitset operations in Coq";
     license = licenses.asl20;
     maintainers = with maintainers; [ ptival ];
-    platforms = coq.meta.platforms;
-  };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.7" "8.8" "8.9" "8.10" ];
   };
 }

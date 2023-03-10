@@ -1,57 +1,89 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python, libgcrypt
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, libxml2
+, findXMLCatalogs
+, gettext
+, python
+, ncurses
+, libxcrypt
+, libgcrypt
 , cryptoSupport ? false
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? libxml2.pythonSupport
+, gnome
 }:
-
-assert pythonSupport -> python != null;
-assert pythonSupport -> libxml2.pythonSupport;
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.34";
+  version = "1.1.37";
+
+  outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
+  outputMan = "bin";
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "0zrzz6kjdyavspzik6fbkpvfpbd25r2qg6py5nnjaabrsr3bvccq";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "Oksn3IAnzNYUZyWVAzbx7FIJKPMg8UTrX6eZCuYSOrQ=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
+  strictDeps = true;
 
-  buildInputs = [ libxml2.dev ]
-    ++ stdenv.lib.optionals pythonSupport [ libxml2.py python ]
-    ++ stdenv.lib.optionals cryptoSupport [ libgcrypt ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  propagatedBuildInputs = [ findXMLCatalogs ];
+  buildInputs = [
+    libxml2.dev libxcrypt
+  ] ++ lib.optionals stdenv.isDarwin [
+    gettext
+  ] ++ lib.optionals pythonSupport [
+    libxml2.py
+    python
+    ncurses
+  ] ++ lib.optionals cryptoSupport [
+    libgcrypt
+  ];
+
+  propagatedBuildInputs = [
+    findXMLCatalogs
+  ];
 
   configureFlags = [
-    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ optional pythonSupport "--with-python=${python}"
-    ++ optional (!cryptoSupport) "--without-crypto";
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+  ] ++ lib.optionals (!cryptoSupport) [
+    "--without-crypto"
+  ];
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
-    moveToOutput share/man/man1 "$bin"
-  '' + optionalString pythonSupport ''
+  '' + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput ${python.libPrefix} "$py"
+    moveToOutput ${python.sitePackages} "$py"
   '';
 
   passthru = {
     inherit pythonSupport;
+
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://xmlsoft.org/XSLT/;
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/libxslt";
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco jtojnar ];
+    broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 }

@@ -1,31 +1,34 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, wxGTK
-, desktop-file-utils, libSM, imagemagick }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libmediainfo, wxGTK32
+, desktop-file-utils, libSM, imagemagick, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation rec {
-  version = "19.09";
+  version = "22.12";
   pname = "mediainfo-gui";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "1a2ssklg12sjsw09y8my9kf35mizi3zj7w002nspcmw28apb1x82";
+    sha256 = "sha256-kyuCc59zjn22A89bsXByBzGp58YdFFwqVKq7PNC3U7w=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libzen libmediainfo wxGTK desktop-file-utils libSM
-                  imagemagick ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libmediainfo wxGTK32 desktop-file-utils libSM imagemagick ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Supplies technical and tag information about a video or audio file (GUI version)";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical
       and tag data for video and audio files.
     '';
-    homepage = https://mediaarea.net/;
+    homepage = "https://mediaarea.net/";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
   };
 }

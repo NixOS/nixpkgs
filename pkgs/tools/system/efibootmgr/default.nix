@@ -1,38 +1,31 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, efivar, popt }:
 
 stdenv.mkDerivation rec {
   pname = "efibootmgr";
-  version = "17";
-
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ efivar popt ];
+  version = "18";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "efibootmgr";
     rev = version;
-    sha256 = "1niicijxg59rsmiw3rsjwy4bvi1n42dynvm01lnp9haixdzdpq03";
+    hash = "sha256-DYYQGALEn2+mRHgqCJsA7OQCF7xirIgQlWexZ9uoKcg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "remove-extra-decl.patch";
-      url = "https://github.com/rhboot/efibootmgr/commit/99b578501643377e0b1994b2a068b790d189d5ad.patch";
-      sha256 = "1sbijvlpv4khkix3vix9mbhzffj8lp8zpnbxm9gnzjz8yssz9p5h";
-    })
-  ];
-  # We have no LTO here since commit 22284b07.
-  postPatch = if stdenv.isi686 then "sed '/^CFLAGS/s/-flto//' -i Make.defaults" else null;
+  nativeBuildInputs = [ pkg-config ];
 
-  makeFlags = [ "EFIDIR=nixos" ];
+  buildInputs = [ efivar popt ];
+
+  makeFlags = [
+    "EFIDIR=nixos"
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+  ];
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
-    homepage = https://github.com/rhboot/efibootmgr;
-    license = licenses.gpl2;
+    homepage = "https://github.com/rhboot/efibootmgr";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

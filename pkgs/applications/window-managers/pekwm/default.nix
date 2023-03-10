@@ -1,40 +1,73 @@
-{ stdenv, fetchurl, pkgconfig
-, libpng, libjpeg
-, libXext, libXft, libXpm, libXrandr, libXinerama }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, awk
+, grep
+, sed
+, runtimeShell
+, cmake
+, libXext
+, libXft
+, libXinerama
+, libXpm
+, libXrandr
+, libjpeg
+, libpng
+, pkg-config
+}:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (self: {
   pname = "pekwm";
-  version = "0.1.17";
+  version = "0.3.0";
 
-  src = fetchurl {
-    url = "https://www.pekwm.org/projects/pekwm/files/${pname}-${version}.tar.bz2";
-    sha256 = "003x6bxj1lb2ljxz3v414bn0rdl6z68c0r185fxwgs1qkyzx67wa";
+  src = fetchFromGitHub {
+    owner = "pekdon";
+    repo = "pekwm";
+    rev = "release-${self.version}";
+    hash= "sha256-hA+TBAs9NMcc5DKIkzyUHWck3Xht+yeCO54xJ6oXXuQ=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpng libjpeg
-  libXext libXft libXpm libXrandr libXinerama ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DAWK=${awk}/bin/awk"
+    "-DGREP=${grep}/bin/grep"
+    "-DSED=${sed}/bin/sed"
+    "-DSH=${runtimeShell}"
+  ];
+
+  buildInputs = [
+    libXext
+    libXft
+    libXinerama
+    libXpm
+    libXrandr
+    libjpeg
+    libpng
+  ];
+
+  meta = {
+    homepage = "https://www.pekwm.se/";
     description = "A lightweight window manager";
     longDescription = ''
-      pekwm is a window manager that once upon a time was based on the
-      aewm++ window manager, but it has evolved enough that it no
-      longer resembles aewm++ at all. It has a much expanded
-      feature-set, including window grouping (similar to ion, pwm, or
-      fluxbox), autoproperties, xinerama, keygrabber that supports
-      keychains, and much more.      
-      - Lightweight and Unobtrusive, a window manager shouldn't be
-        noticed.
+      pekwm is a window manager that once upon a time was based on the aewm++
+      window manager, but it has evolved enough that it no longer resembles
+      aewm++ at all. It has a much expanded feature-set, including window
+      grouping (similar to ion, pwm, or fluxbox), autoproperties, xinerama,
+      keygrabber that supports keychains, and much more.
+
+      - Lightweight and Unobtrusive, a window manager shouldn't be noticed.
       - Very configurable, we all work and think in different ways.
-      - Automatic properties, for all the lazy people, make things
-        appear as they should when starting applications.
+      - Automatic properties, for all the lazy people, make things appear as
+        they should when starting applications.
       - Chainable Keygrabber, usability for everyone.
     '';
-      homepage = http://www.pekwm.org;
-      license = licenses.gpl2;
-      maintainers = [ maintainers.AndersonTorres ];
-      platforms = platforms.linux;
+    changelog = "https://raw.githubusercontent.com/pekwm/pekwm/release-${self.version}/NEWS.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

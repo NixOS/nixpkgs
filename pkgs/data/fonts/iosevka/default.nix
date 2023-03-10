@@ -1,92 +1,137 @@
-{ stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
-, ttfautohint-nox, otfcc
+{ stdenv
+, lib
+, buildNpmPackage
+, fetchFromGitHub
+, darwin
+, remarshal
+, ttfautohint-nox
+  # Custom font set options.
+  # See https://typeof.net/Iosevka/customizer
+  # Can be a raw TOML string, or a Nix attrset.
 
-# Custom font set options.
-# See https://github.com/be5invis/Iosevka#build-your-own-style
-# Ex:
-# privateBuildPlan = {
-#   family = "Iosevka Expanded";
-#
-#   design = [
-#     "sans"
-#     "expanded"
-#   ];
-# };
+  # Ex:
+  # privateBuildPlan = ''
+  #   [buildPlans.iosevka-custom]
+  #   family = "Iosevka Custom"
+  #   spacing = "normal"
+  #   serifs = "sans"
+  #
+  #   [buildPlans.iosevka-custom.variants.design]
+  #   capital-j = "serifless"
+  #
+  #   [buildPlans.iosevka-custom.variants.italic]
+  #   i = "tailed"
+  # '';
+
+  # Or:
+  # privateBuildPlan = {
+  #   family = "Iosevka Custom";
+  #   spacing = "normal";
+  #   serifs = "sans";
+  #
+  #   variants = {
+  #     design.capital-j = "serifless";
+  #     italic.i = "tailed";
+  #   };
+  # }
 , privateBuildPlan ? null
   # Extra parameters. Can be used for ligature mapping.
-  # It must be a raw toml string.
-  #
+  # It must be a raw TOML string.
+
   # Ex:
-  # [[iosevka.compLig]]
-  # unicode = 57808 # 0xe1d0
-  # featureTag = 'XHS0'
-  # sequence = "+>"
+  # extraParameters = ''
+  #   [[iosevka.compLig]]
+  #   unicode = 57808 # 0xe1d0
+  #   featureTag = 'XHS0'
+  #   sequence = "+>"
+  # '';
 , extraParameters ? null
   # Custom font set name. Required if any custom settings above.
-, set ? null }:
+, set ? null
+}:
 
 assert (privateBuildPlan != null) -> set != null;
+assert (extraParameters != null) -> set != null;
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
-
-  version = "2.3.3";
+  version = "20.0.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
-    repo = "Iosevka";
+    repo = "iosevka";
     rev = "v${version}";
-    sha256 = "0k7xij473g5g0lwhb6qpn70v3n2d025dww3nlb7jwbpnp03zliz0";
+    hash = "sha256-JXlv9/P5tBAnRVNCBavG5AtM11Q6mikTN+Qu+u3pLP0=";
   };
 
+  npmDepsHash = "sha256-fecGkN6MEdBP8UokBY/w0TnPOC93KsAISEg3VW0bvHU=";
+
   nativeBuildInputs = [
-    nodejs
-    nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
     remarshal
-    otfcc
     ttfautohint-nox
+  ] ++ lib.optionals stdenv.isDarwin [
+    # libtool
+    darwin.cctools
   ];
 
-  privateBuildPlanJSON =
-    builtins.toJSON { buildPlans.${pname} = privateBuildPlan; };
+  buildPlan =
+    if builtins.isAttrs privateBuildPlan then
+      builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
+    else
+      privateBuildPlan;
+
   inherit extraParameters;
-  passAsFile = [ "privateBuildPlanJSON" "extraParameters" ];
+  passAsFile = [ "extraParameters" ] ++ lib.optionals
+    (
+      !(builtins.isString privateBuildPlan
+        && lib.hasPrefix builtins.storeDir privateBuildPlan)
+    ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
-    ${lib.optionalString (privateBuildPlan != null) ''
-      remarshal -i "$privateBuildPlanJSONPath" -o private-build-plans.toml -if json -of toml
+    ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
+      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
     ''}
+    ${lib.optionalString (builtins.isString privateBuildPlan
+      && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+        cp "$buildPlanPath" private-build-plans.toml
+      ''}
+    ${lib.optionalString (builtins.isString privateBuildPlan
+      && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+        cp "$buildPlan" private-build-plans.toml
+      ''}
     ${lib.optionalString (extraParameters != null) ''
-      echo -e "\n" >> parameters.toml
-      cat "$extraParametersPath" >> parameters.toml
+      echo -e "\n" >> params/parameters.toml
+      cat "$extraParametersPath" >> params/parameters.toml
     ''}
-    ln -s ${
-      nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
-    }/lib/node_modules/iosevka-build-deps/node_modules .
     runHook postConfigure
   '';
 
   buildPhase = ''
+    export HOME=$TMPDIR
     runHook preBuild
-    npm run build --no-update-notifier -- ttf::$pname >/dev/null
+    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES --verbose=9 ttf::$pname
     runHook postBuild
   '';
 
   installPhase = ''
-    fontdir="$out/share/fonts/$pname"
+    runHook preInstall
+    fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
     install "dist/$pname/ttf"/* "$fontdir"
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = "https://be5invis.github.io/Iosevka";
+  meta = with lib; {
+    homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
-    description = ''
-      Slender monospace sans-serif and slab-serif typeface inspired by Pragmata
-      Pro, M+ and PF DIN Mono, designed to be the ideal font for programming.
+    description = "Versatile typeface for code, from code.";
+    longDescription = ''
+      Iosevka is an open-source, sans-serif + slab-serif, monospace +
+      quasi‑proportional typeface family, designed for writing code, using in
+      terminals, and preparing technical documents.
     '';
     license = licenses.ofl;
     platforms = platforms.all;
@@ -96,6 +141,8 @@ stdenv.mkDerivation rec {
       ttuegel
       babariviere
       rileyinman
+      AluisioASG
+      lunik1
     ];
   };
 }

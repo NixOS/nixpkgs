@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "PyWavelets";
-  version = "1.1.1";
+  version = "1.4.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a64b40f6acb4ffbaccce0545d7fc641744f95351f62e4c6aaa40549326008c9";
+    sha256 = "sha256-ZDevPd8IMRjCbY+Xq0OwckuVbJ+Vjp6niGWfaig0upM=";
   };
 
-  checkInputs = [ nose pytest ];
+  nativeCheckInputs = [ nose pytest ];
 
   buildInputs = [ cython ];
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Wavelet transform module";
-    homepage = https://github.com/PyWavelets/pywt;
+    homepage = "https://github.com/PyWavelets/pywt";
     license = licenses.mit;
   };
 

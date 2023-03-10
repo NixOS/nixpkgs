@@ -1,4 +1,4 @@
-{stdenv, composeXcodeWrapper}:
+{stdenv, lib, composeXcodeWrapper}:
 {name, app ? null, bundleId ? null, ...}@args:
 
 assert app != null -> bundleId != null;
@@ -9,7 +9,7 @@ let
   xcodewrapper = composeXcodeWrapper xcodewrapperArgs;
 in
 stdenv.mkDerivation {
-  name = stdenv.lib.replaceChars [" "] [""] name;
+  name = lib.replaceStrings [" "] [""] name;
   buildCommand = ''
     mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     # Open the simulator instance
     open -a "$(readlink "${xcodewrapper}/bin/Simulator")" --args -CurrentDeviceUDID $udid
 
-    ${stdenv.lib.optionalString (app != null) ''
+    ${lib.optionalString (app != null) ''
       # Copy the app and restore the write permissions
       appTmpDir=$(mktemp -d -t appTmpDir)
       cp -r "$(echo ${app}/*.app)" "$appTmpDir"

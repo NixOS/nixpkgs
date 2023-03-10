@@ -12,15 +12,16 @@ to update all non-pinned libraries in that folder.
 """
 
 import argparse
+import json
 import logging
 import os
 import re
 import requests
-import toolz
 from concurrent.futures import ThreadPoolExecutor as Pool
 from packaging.version import Version as _Version
 from packaging.version import InvalidVersion
 from packaging.specifiers import SpecifierSet
+from typing import Optional, Any
 import collections
 import subprocess
 
@@ -32,9 +33,12 @@ EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', '.whl']
 
 PRERELEASES = False
 
+BULK_UPDATE = False
+
 GIT = "git"
 
-import logging
+NIXPKGS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -66,6 +70,22 @@ def _get_values(attribute, text):
     values = regex.findall(text)
     return values
 
+
+def _get_attr_value(attr_path: str) -> Optional[Any]:
+    try:
+        response = subprocess.check_output([
+            "nix",
+            "--extra-experimental-features", "nix-command",
+            "eval",
+            "-f", f"{NIXPKGS_ROOT}/default.nix",
+            "--json",
+            f"{attr_path}"
+        ])
+        return json.loads(response.decode())
+    except (subprocess.CalledProcessError, ValueError):
+        return None
+
+
 def _get_unique_value(attribute, text):
     """Match attribute in text and return unique match.
 
@@ -80,26 +100,33 @@ def _get_unique_value(attribute, text):
     else:
         raise ValueError("no value found for {}".format(attribute))
 
-def _get_line_and_value(attribute, text):
+def _get_line_and_value(attribute, text, value=None):
     """Match attribute in text. Return the line and the value of the attribute."""
-    regex = '({}\s+=\s+"(.*)";)'.format(attribute)
+    if value is None:
+        regex = rf'({attribute}\s+=\s+\"(.*)\";)'
+    else:
+        regex = rf'({attribute}\s+=\s+\"({value})\";)'
     regex = re.compile(regex)
-    value = regex.findall(text)
-    n = len(value)
+    results = regex.findall(text)
+    n = len(results)
     if n > 1:
         raise ValueError("found too many values for {}".format(attribute))
     elif n == 1:
-        return value[0]
+        return results[0]
     else:
         raise ValueError("no value found for {}".format(attribute))
 
 
-def _replace_value(attribute, value, text):
+def _replace_value(attribute, value, text, oldvalue=None):
     """Search and replace value of attribute in text."""
-    old_line, old_value = _get_line_and_value(attribute, text)
+    if oldvalue is None:
+        old_line, old_value = _get_line_and_value(attribute, text)
+    else:
+        old_line, old_value = _get_line_and_value(attribute, text, oldvalue)
     new_line = old_line.replace(old_value, value)
     new_text = text.replace(old_line, new_line)
     return new_text
+
 
 def _fetch_page(url):
     r = requests.get(url)
@@ -107,6 +134,36 @@ def _fetch_page(url):
         return r.json()
     else:
         raise ValueError("request for {} failed".format(url))
+
+
+def _fetch_github(url):
+    headers = {}
+    token = os.environ.get('GITHUB_API_TOKEN')
+    if token:
+        headers["Authorization"] = f"token {token}"
+    r = requests.get(url, headers=headers)
+
+    if r.status_code == requests.codes.ok:
+        return r.json()
+    else:
+        raise ValueError("request for {} failed".format(url))
+
+
+def _hash_to_sri(algorithm, value):
+    """Convert a hash to its SRI representation"""
+    return subprocess.check_output([
+        "nix",
+        "hash",
+        "to-sri",
+        "--type", algorithm,
+        value
+    ]).decode().strip()
+
+
+def _skip_bulk_update(attr_name: str) -> bool:
+    return bool(_get_attr_value(
+        f"{attr_name}.skipBulkUpdate"
+    ))
 
 
 SEMVER = {
@@ -167,11 +224,82 @@ def _get_latest_version_pypi(package, extension, current_version, target):
             break
     else:
         sha256 = None
-    return version, sha256
+    return version, sha256, None
 
 
 def _get_latest_version_github(package, extension, current_version, target):
-    raise ValueError("updating from GitHub is not yet supported.")
+    def strip_prefix(tag):
+        return re.sub("^[^0-9]*", "", tag)
+
+    def get_prefix(string):
+        matches = re.findall(r"^([^0-9]*)", string)
+        return next(iter(matches), "")
+
+    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
+    # this allows us to work with packages which live outside of python-modules
+    attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
+    try:
+        homepage = subprocess.check_output(
+            ["nix", "eval", "-f", f"{NIXPKGS_ROOT}/default.nix", "--raw", f"{attr_path}.src.meta.homepage"])\
+            .decode('utf-8')
+    except Exception as e:
+        raise ValueError(f"Unable to determine homepage: {e}")
+    owner_repo = homepage[len("https://github.com/"):]  # remove prefix
+    owner, repo = owner_repo.split("/")
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases"
+    all_releases = _fetch_github(url)
+    releases = list(filter(lambda x: not x['prerelease'], all_releases))
+
+    if len(releases) == 0:
+        raise ValueError(f"{homepage} does not contain any stable releases")
+
+    versions = map(lambda x: strip_prefix(x['tag_name']), releases)
+    version = _determine_latest_version(current_version, target, versions)
+
+    release = next(filter(lambda x: strip_prefix(x['tag_name']) == version, releases))
+    prefix = get_prefix(release['tag_name'])
+
+    # some attributes require using the fetchgit
+    git_fetcher_args = []
+    if (_get_attr_value(f"{attr_path}.src.fetchSubmodules")):
+        git_fetcher_args.append("--fetch-submodules")
+    if (_get_attr_value(f"{attr_path}.src.fetchLFS")):
+        git_fetcher_args.append("--fetch-lfs")
+    if (_get_attr_value(f"{attr_path}.src.leaveDotGit")):
+        git_fetcher_args.append("--leave-dotGit")
+
+    if git_fetcher_args:
+        algorithm = "sha256"
+        cmd = [
+            "nix-prefetch-git",
+            f"https://github.com/{owner}/{repo}.git",
+            "--hash", algorithm,
+            "--rev", f"refs/tags/{release['tag_name']}"
+        ]
+        cmd.extend(git_fetcher_args)
+        response = subprocess.check_output(cmd)
+        document = json.loads(response.decode())
+        hash = _hash_to_sri(algorithm, document[algorithm])
+    else:
+        try:
+            hash = subprocess.check_output([
+                "nix-prefetch-url",
+                "--type", "sha256",
+                "--unpack",
+                f"{release['tarball_url']}"
+            ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
+        except (subprocess.CalledProcessError, UnicodeError):
+            # this may fail if they have both a branch and a tag of the same name, attempt tag name
+            tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
+            hash = subprocess.check_output([
+                "nix-prefetch-url",
+                "--type", "sha256",
+                "--unpack",
+                tag_url
+            ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
+
+    return version, hash, prefix
 
 
 FETCHERS = {
@@ -186,11 +314,13 @@ DEFAULT_SETUPTOOLS_EXTENSION = 'tar.gz'
 
 FORMATS = {
     'setuptools'        :   DEFAULT_SETUPTOOLS_EXTENSION,
-    'wheel'             :   'whl'
+    'wheel'             :   'whl',
+    'pyproject'         :   'tar.gz',
+    'flit'              :   'tar.gz'
 }
 
 def _determine_fetcher(text):
-    # Count occurences of fetchers.
+    # Count occurrences of fetchers.
     nfetchers = sum(text.count('src = {}'.format(fetcher)) for fetcher in FETCHERS.keys())
     if nfetchers == 0:
         raise ValueError("no fetcher.")
@@ -214,23 +344,19 @@ def _determine_extension(text, fetcher):
     if fetcher == 'fetchPypi':
         try:
             src_format = _get_unique_value('format', text)
-        except ValueError as e:
+        except ValueError:
             src_format = None   # format was not given
 
         try:
             extension = _get_unique_value('extension', text)
-        except ValueError as e:
+        except ValueError:
             extension = None    # extension was not given
 
         if extension is None:
             if src_format is None:
                 src_format = 'setuptools'
-            elif src_format == 'flit':
-                raise ValueError("Don't know how to update a Flit package.")
             elif src_format == 'other':
                 raise ValueError("Don't know how to update a format='other' package.")
-            elif src_format == 'pyproject':
-                raise ValueError("Don't know how to update a pyproject package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':
@@ -240,7 +366,7 @@ def _determine_extension(text, fetcher):
             raise ValueError('url does not point to PyPI.')
 
     elif fetcher == 'fetchFromGitHub':
-        raise ValueError('updating from GitHub is not yet implemented.')
+        extension = "tar.gz"
 
     return extension
 
@@ -251,8 +377,8 @@ def _update_package(path, target):
     with open(path, 'r') as f:
         text = f.read()
 
-    # Determine pname.
-    pname = _get_unique_value('pname', text)
+    # Determine pname. Many files have more than one pname
+    pnames = _get_values('pname', text)
 
     # Determine version.
     version = _get_unique_value('version', text)
@@ -262,7 +388,20 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256 = FETCHERS[fetcher](pname, extension, version, target)
+    # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
+    successful_fetch = False
+    for pname in pnames:
+        if BULK_UPDATE and _skip_bulk_update(f"python3Packages.{pname}"):
+            raise ValueError(f"Bulk update skipped for {pname}")
+        try:
+            new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+            successful_fetch = True
+            break
+        except ValueError:
+            continue
+
+    if not successful_fetch:
+        raise ValueError(f"Unable to find correct package using these pnames: {pnames}")
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
@@ -273,7 +412,37 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
-    text = _replace_value('sha256', new_sha256, text)
+
+    # hashes from pypi are 16-bit encoded sha256's, normalize it to sri to avoid merge conflicts
+    # sri hashes have been the default format since nix 2.4+
+    sri_hash = _hash_to_sri("sha256", new_sha256)
+
+    # retrieve the old output hash for a more precise match
+    if old_hash := _get_attr_value(f"python3Packages.{pname}.src.outputHash"):
+        # fetchers can specify a sha256, or a sri hash
+        try:
+            text = _replace_value('hash', sri_hash, text, old_hash)
+        except ValueError:
+            text = _replace_value('sha256', sri_hash, text, old_hash)
+    else:
+        raise ValueError(f"Unable to retrieve old hash for {pname}")
+
+    if fetcher == 'fetchFromGitHub':
+        # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
+        # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
+        regex = '(rev\s+=\s+[^;]*;)'
+        regex = re.compile(regex)
+        matches = regex.findall(text)
+        n = len(matches)
+
+        if n == 0:
+            raise ValueError("Unable to find rev value for {}.".format(pname))
+        else:
+            # forcefully rewrite rev, incase tagging conventions changed for a release
+            match = matches[0]
+            text = text.replace(match, f'rev = "refs/tags/{prefix}${{version}}";')
+            # incase there's no prefix, just rewrite without interpolation
+            text = text.replace('"${version}";', 'version;')
 
     with open(path, 'w') as f:
         f.write(text)
@@ -315,11 +484,11 @@ def _update(path, target):
         return False
 
 
-def _commit(path, pname, old_version, new_version, **kwargs):
+def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwargs):
     """Commit result.
     """
 
-    msg = f'python: {pname}: {old_version} -> {new_version}'
+    msg = f'{pkgs_prefix}{pname}: {old_version} -> {new_version}'
 
     try:
         subprocess.check_call([GIT, 'add', path])
@@ -333,31 +502,46 @@ def _commit(path, pname, old_version, new_version, **kwargs):
 
 def main():
 
-    parser = argparse.ArgumentParser()
+    epilog = """
+environment variables:
+  GITHUB_API_TOKEN\tGitHub API token used when updating github packages
+    """
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, epilog=epilog)
     parser.add_argument('package', type=str, nargs='+')
     parser.add_argument('--target', type=str, choices=SEMVER.keys(), default='major')
     parser.add_argument('--commit', action='store_true', help='Create a commit for each package update')
+    parser.add_argument('--use-pkgs-prefix', action='store_true', help='Use python3Packages.${pname}: instead of python: ${pname}: when making commits')
 
     args = parser.parse_args()
     target = args.target
 
     packages = list(map(os.path.abspath, args.package))
 
+    if len(packages) > 1:
+        global BULK_UPDATE
+        BULK_UPDATE = true
+
     logging.info("Updating packages...")
 
     # Use threads to update packages concurrently
     with Pool() as p:
-        results = list(p.map(lambda pkg: _update(pkg, target), packages))
+        results = list(filter(bool, p.map(lambda pkg: _update(pkg, target), packages)))
 
     logging.info("Finished updating packages.")
+
+    commit_options = {}
+    if args.use_pkgs_prefix:
+        logging.info("Using python3Packages. prefix for commits")
+        commit_options["pkgs_prefix"] = "python3Packages."
 
     # Commits are created sequentially.
     if args.commit:
         logging.info("Committing updates...")
-        list(map(lambda x: _commit(**x), filter(bool, results)))
+        # list forces evaluation
+        list(map(lambda x: _commit(**x, **commit_options), results))
         logging.info("Finished committing updates")
 
-    count = sum(map(bool, results))
+    count = len(results)
     logging.info("{} package(s) updated".format(count))
 
 

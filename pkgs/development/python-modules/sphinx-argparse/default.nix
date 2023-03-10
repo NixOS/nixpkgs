@@ -1,32 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 , sphinx
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.2.5";
+  version = "0.4.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "05wc8f5hb3jsg2vh2jf7jsyan8d4i09ifrz2c8fp6f7x1zw9iav0";
+    pname = "sphinx_argparse";
+    inherit version;
+    sha256 = "sha256-4PNBhOtW8S+s53T7yHuICr25AXoJmNHsVZsmfpaX5Ek=";
   };
 
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = "py.test";
+  postPatch = ''
+    # Fix tests for python-3.10 and add 3.10 to CI matrix
+    # Should be fixed in versions > 0.3.1
+    # https://github.com/ashb/sphinx-argparse/pull/3
+    substituteInPlace sphinxarg/parser.py \
+      --replace "if action_group.title == 'optional arguments':" "if action_group.title == 'optional arguments' or action_group.title == 'options':"
+  '';
 
   propagatedBuildInputs = [
     sphinx
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "sphinxarg" ];
+
   meta = {
     description = "A sphinx extension that automatically documents argparse commands and options";
-    homepage = https://github.com/ribozz/sphinx-argparse;
+    homepage = "https://github.com/ashb/sphinx-argparse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clacke ];
   };

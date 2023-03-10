@@ -1,2 +1,10 @@
 source 'https://rubygems.org'
+
 gem 'gollum'
+
+# Support for extra markups
+gem 'asciidoctor' # AsciiDoc
+gem 'creole'      # Creole
+gem 'wikicloth'   # MediaWiki
+gem 'org-ruby'    # Org
+gem 'RedCloth'    # Textile

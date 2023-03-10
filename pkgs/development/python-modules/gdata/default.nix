@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Fails with "error: invalid command 'test'"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/gdata-python-client";
     description = "Python client library for Google data APIs";
     license = licenses.asl20;

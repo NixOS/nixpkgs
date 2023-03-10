@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
   pname = "statverif";
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "113jjhi1qkcggbsmbw8fa9ln8vs7vy2r288szks7rn0jjn0wxmbw";
   };
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml ];
 
   patchPhase = "patch -p1 < ${pf-patch}";
   buildPhase = "./build";
@@ -27,8 +29,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Verification of stateful processes (via Proverif)";
     homepage    = "https://markryan.eu/research/statverif/";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.gpl2;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , ecdsa
@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "tlslite-ng";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aw7j50byzab0xwp50m5w5c14fzdzwk2law5a5bn6dn3i5fc6fw2";
+    sha256 = "6ab56f0e9629ce3d807eb528c9112defa9f2e00af2b2961254e8429ca5c1ff00";
   };
 
   buildInputs = [ ecdsa ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure python implementation of SSL and TLS.";
-    homepage = https://pypi.python.org/pypi/tlslite-ng;
+    homepage = "https://pypi.python.org/pypi/tlslite-ng";
     license = licenses.lgpl2;
     maintainers = [ maintainers.erictapen ];
   };

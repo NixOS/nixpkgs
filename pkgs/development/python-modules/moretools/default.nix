@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, pathpy, zetup, pytest
+{ lib, buildPythonPackage, fetchPypi
+, six, path, zetup, pytest
 , decorator }:
 
 buildPythonPackage rec {
@@ -16,14 +16,14 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ zetup ];
-  checkInputs = [ six pathpy pytest ];
+  nativeCheckInputs = [ six path pytest ];
   propagatedBuildInputs = [ decorator ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Many more basic tools for python 2/3 extending itertools, functools, operator and collections
     '';
-    homepage = https://bitbucket.org/userzimmermann/python-moretools;
+    homepage = "https://bitbucket.org/userzimmermann/python-moretools";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

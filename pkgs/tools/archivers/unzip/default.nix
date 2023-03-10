@@ -1,13 +1,14 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , bzip2
 , enableNLS ? false, libnatspec
 }:
 
-stdenv.mkDerivation {
-  name = "unzip-6.0";
+stdenv.mkDerivation rec {
+  pname = "unzip";
+  version = "6.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/infozip/unzip60.tar.gz;
+    url = "mirror://sourceforge/infozip/unzip${lib.replaceStrings ["."] [""] version}.tar.gz";
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 
@@ -41,40 +42,61 @@ stdenv.mkDerivation {
       name = "CVE-2019-13232-3.patch";
       sha256 = "1jvs7dkdqs97qnsqc6hk088alhv8j4c638k65dbib9chh40jd7pf";
     })
-  ] ++ stdenv.lib.optional enableNLS
     (fetchurl {
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";
+      urls = [
+        # original link (will be dead eventually):
+        "https://sources.debian.org/data/main/u/unzip/6.0-26%2Bdeb11u1/debian/patches/06-initialize-the-symlink-flag.patch"
+
+        "https://gist.github.com/veprbl/41261bb781571e2246ea42d3f37795f5/raw/d8533d8c6223150f76b0f31aec03e185fcde3579/06-initialize-the-symlink-flag.patch"
+      ];
+      sha256 = "1h00djdvgjhwfb60wl4qrxbyfsbbnn1qw6l2hkldnif4m8f8r1zj";
+    })
+    (fetchurl {
+      urls = [
+        # original link (will be dead eventually):
+        "https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
+
+        "https://web.archive.org/web/20230106200319/https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
+      ];
+      sha256 = "sha256-on79jElQ+z2ULWAq14RpluAqr9d6itHiZwDkKubBzTc=";
+    })
+  ] ++ lib.optional enableNLS
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
       name = "unzip-6.0-natspec.patch";
       sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
     });
 
   nativeBuildInputs = [ bzip2 ];
-  buildInputs = [ bzip2 ] ++ stdenv.lib.optional enableNLS libnatspec;
+  buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;
 
   makefile = "unix/Makefile";
 
-  NIX_LDFLAGS = "-lbz2" + stdenv.lib.optionalString enableNLS " -lnatspec";
+  NIX_LDFLAGS = "-lbz2" + lib.optionalString enableNLS " -lnatspec";
 
   buildFlags = [
     "generic"
     "D_USE_BZ2=-DUSE_BZIP2"
     "L_BZ2=-lbz2"
-  ];
+  ]
+  # `lchmod` is not available on Linux, so we remove it to fix "not supported" errors (when the zip file contains symlinks).
+  # Alpine (musl) and Debian (glibc) also add this flag.
+  ++ lib.optionals stdenv.isLinux [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
 
   preConfigure = ''
     sed -i -e 's@CF="-O3 -Wall -I. -DASM_CRC $(LOC)"@CF="-O3 -Wall -I. -DASM_CRC -DLARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(LOC)"@' unix/Makefile
   '';
 
   installFlags = [
-    "prefix=${placeholder ''out''}"
+    "prefix=${placeholder "out"}"
   ];
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://www.info-zip.org;
+    homepage = "http://www.info-zip.org";
     description = "An extraction utility for archives compressed in .zip format";
-    license = stdenv.lib.licenses.free; # http://www.info-zip.org/license.html
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.free; # http://www.info-zip.org/license.html
+    platforms = lib.platforms.all;
   };
 }

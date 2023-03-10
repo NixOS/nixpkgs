@@ -1,16 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-fetchzip {
-  name = "sampradaya-2015-05-26";
+stdenvNoCC.mkDerivation rec {
+  pname = "sampradaya";
+  version = "0.5.0";
 
-  url = "https://bitbucket.org/OorNaattaan/sampradaya/raw/afa9f7c6ab17e14bd7dd74d0acaec2f75454dfda/Sampradaya.ttf";
+  src = fetchurl {
+    url = "https://github.com/deepestblue/sampradaya/releases/download/v${version}/Sampradaya.ttf";
+    hash = "sha256-ygKMNzHvbLR2A5HHrfY2C9ZUg0yng+JL3cyg6sBKqeQ=";
+  };
 
-  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/Sampradaya.ttf";
+  dontUnpack = true;
 
-  sha256 = "1pqyj5r5jc7dk8yyzl7i6qq2m9zvahcjj49a66wwzdby5zyw8dqv";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 $src $out/share/fonts/truetype/Sampradaya.ttf
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
-    homepage = https://bitbucket.org/OorNaattaan/sampradaya/;
+    homepage = "https://github.com/deepestblue/sampradaya";
     description = "Unicode-compliant Grantha font";
     maintainers = with maintainers; [ mathnerd314 ];
     license = licenses.ofl; # See font metadata

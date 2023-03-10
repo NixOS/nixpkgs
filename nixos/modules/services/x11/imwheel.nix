@@ -6,37 +6,39 @@ in
   {
     options = {
       services.xserver.imwheel = {
-        enable = mkEnableOption "IMWheel service";
+        enable = mkEnableOption (lib.mdDoc "IMWheel service");
 
         extraOptions = mkOption {
           type = types.listOf types.str;
           default = [ "--buttons=45" ];
           example = [ "--debug" ];
-          description = ''
+          description = lib.mdDoc ''
             Additional command-line arguments to pass to
-            <command>imwheel</command>.
+            {command}`imwheel`.
           '';
         };
 
         rules = mkOption {
           type = types.attrsOf types.str;
           default = {};
-          example = literalExample ''
-            ".*" = '''
-              None,      Up,   Button4, 8
-              None,      Down, Button5, 8
-              Shift_L,   Up,   Shift_L|Button4, 4
-              Shift_L,   Down, Shift_L|Button5, 4
-              Control_L, Up,   Control_L|Button4
-              Control_L, Down, Control_L|Button5
-            ''';
+          example = literalExpression ''
+            {
+              ".*" = '''
+                None,      Up,   Button4, 8
+                None,      Down, Button5, 8
+                Shift_L,   Up,   Shift_L|Button4, 4
+                Shift_L,   Down, Shift_L|Button5, 4
+                Control_L, Up,   Control_L|Button4
+                Control_L, Down, Control_L|Button5
+              ''';
+            }
           '';
-          description = ''
+          description = lib.mdDoc ''
             Window class translation rules.
             /etc/X11/imwheelrc is generated based on this config
             which means this config is global for all users.
-            See <link xlink:href="http://imwheel.sourceforge.net/imwheel.1.html">offical man pages</link>
-            for more informations.
+            See [official man pages](http://imwheel.sourceforge.net/imwheel.1.html)
+            for more information.
           '';
         };
       };
@@ -61,7 +63,8 @@ in
             "--kill"
           ] ++ cfg.extraOptions);
           ExecStop = "${pkgs.procps}/bin/pkill imwheel";
-          Restart = "on-failure";
+          RestartSec = 3;
+          Restart = "always";
         };
       };
     };

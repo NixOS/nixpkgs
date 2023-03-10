@@ -1,18 +1,30 @@
-{stdenv, fetchurl}:
+{ lib
+, stdenv
+, fetchzip
+, cmake
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.99-u4-b5";
+  version = "9.20";
   pname = "monkeys-audio";
 
-  patches = [ ./buildfix.diff ];
-
-  src = fetchurl {
-    url = "https://deb-multimedia.org/pool/main/m/${pname}/${pname}_${version}.orig.tar.gz";
-    sha256 = "0kjfwzfxfx7f958b2b1kf8yj655lp0ppmn0sh57gbkjvj8lml7nz";
+  src = fetchzip {
+    url = "https://monkeysaudio.com/files/MAC_${
+      builtins.concatStringsSep "" (lib.strings.splitString "." version)}_SDK.zip";
+    sha256 = "sha256-8cJ88plR9jrrLdzRHzRotGBrn6qIqOWvl+oOTXxY/TE=";
+    stripRoot = false;
   };
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    description = "APE codec and decompressor";
     platforms = platforms.linux;
-    maintainers = [ ];
+    # This is not considered a GPL license, but it seems rather free although
+    # it's not standard, see a quote of it:
+    # https://github.com/NixOS/nixpkgs/pull/171682#issuecomment-1120260551
+    license = licenses.free;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

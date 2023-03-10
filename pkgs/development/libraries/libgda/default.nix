@@ -1,22 +1,76 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
-, overrideCC, gcc6
-, mysqlSupport ? false, libmysqlclient ? null
-, postgresSupport ? false, postgresql ? null
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, itstool
+, libxml2
+, gtk3
+, openssl
+, gnome
+, gobject-introspection
+, vala
+, libgee
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+, autoconf-archive
+, yelp-tools
+, mysqlSupport ? false
+, libmysqlclient
+, postgresSupport ? false
+, postgresql
 }:
 
-assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
-
-(if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libgda";
-  version = "5.2.9";
+  version = "5.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16vxv2qvysh22s8h9h6irx96sacagxkz0i4qgi1wc6ibly6fvjjr";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1j1l4dwjgw6w4d1v4bl5a4kwyj7bcih8mj700ywm7xakh1xxyv3g";
   };
-  configureFlags = with stdenv.lib; [
-    "--enable-gi-system-install=no"
+
+  patches = [
+    # fix compile error with mysql
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libgda/-/commit/9859479884fad5f39e6c37e8995e57c28b11b1b9.diff";
+      sha256 = "158sncc5bg9lkri1wb0i1ri1nhx4c34rzi47gbfkwphlp7qd4qqv";
+    })
+    (fetchpatch {
+      name = "CVE-2021-39359.patch";
+      url = "https://src.fedoraproject.org/rpms/libgda5/raw/72bb769f12e861e27e883dac5fab34f1ba4bd97e/f/bebdffb4de586fb43fd07ac549121f4b22f6812d.patch";
+      sha256 = "sha256-hIKuY5NEqOzntdlLb541bA4xZU5ypTRmV1u765K6KbM=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    itstool
+    gobject-introspection
+    vala
+    autoreconfHook
+    gtk-doc
+    autoconf-archive
+    yelp-tools
+  ];
+
+  buildInputs = [
+    gtk3
+    openssl
+    libgee
+  ] ++ lib.optionals mysqlSupport [
+    libmysqlclient
+  ] ++ lib.optionals postgresSupport [
+    postgresql
+  ];
+
+  propagatedBuildInputs = [
+    libxml2
+  ];
+
+  configureFlags = [
     "--with-mysql=${if mysqlSupport then "yes" else "no"}"
     "--with-postgres=${if postgresSupport then "yes" else "no"}"
 
@@ -32,22 +86,24 @@ assert postgresSupport -> postgresql != null;
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 gobject-introspection vala ];
-  buildInputs = with stdenv.lib; [ gtk3 openssl libgee ]
-    ++ optional (mysqlSupport) libmysqlclient
-    ++ optional (postgresSupport) postgresql;
-
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Database access library";
-    homepage = https://www.gnome-db.org/;
-    license = [ licenses.lgpl2 licenses.gpl2 ];
-    maintainers = gnome3.maintainers;
-    platforms = platforms.linux ++ platforms.darwin;
+    homepage = "https://www.gnome-db.org/";
+    license = with licenses; [
+      # library
+      lgpl2Plus
+      # CLI tools
+      gpl2Plus
+    ];
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 }

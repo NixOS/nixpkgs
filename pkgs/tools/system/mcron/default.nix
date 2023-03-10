@@ -1,21 +1,21 @@
-{ fetchurl, stdenv, guile, which, ed, libtool }:
+{ fetchurl, lib, stdenv, guile, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "mcron-1.0.6";
+  pname = "mcron";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "mirror://gnu/mcron/${name}.tar.gz";
-    sha256 = "0yvrfzzdy2m7fbqkr61fw01wd9r2jpnbyabxhcsfivgxywknl0fy";
+    url = "mirror://gnu/mcron/mcron-${version}.tar.gz";
+    sha256 = "0bkn235g2ia4f7ispr9d55c7bc18282r3qd8ldhh5q2kiin75zi0";
   };
-
-  patches = [ ./install-vixie-programs.patch ];
 
   # don't attempt to chmod +s files in the nix store
   postPatch = ''
-    substituteInPlace makefile.in --replace "rwxs" "rwx"
+    sed -E -i '/chmod u\+s/d' Makefile.in
   '';
 
-  buildInputs = [ guile which ed libtool ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ guile ];
 
   doCheck = true;
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
       when jobs should be run.  Mcron was written by Dale Mellor.
     '';
 
-    homepage = https://www.gnu.org/software/mcron/;
+    homepage = "https://www.gnu.org/software/mcron/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

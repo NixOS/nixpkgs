@@ -1,42 +1,35 @@
-{ buildGoPackage, fetchFromGitHub, go-bindata, openssh, makeWrapper, lib }:
+{ buildGoModule, fetchFromGitHub, lib, makeWrapper, openssh }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "morph";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    sha256 = "1y6clzi8sfnrv4an26b44r24nnxds1kj9aw3lmjbgxl9yrxxsj1k";
+    sha256 = "sha256-0CHmjqPxBgALGZYjfJFLoLBnoI0U7oZ8WyCtu1bkzZg=";
   };
 
-  goPackagePath = "github.com/dbcdk/morph";
-  goDeps = ./deps.nix;
+  vendorSha256 = "08zzp0h4c4i5hk4whz06a3da7qjms6lr36596vxz0d8q0n7rspr9";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ go-bindata ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X
-    main.version=${version}
-  '';
-
-  prePatch = ''
-    go-bindata -pkg assets -o assets/assets.go data/
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.assetRoot=${placeholder "lib"}"
+  ];
 
   postInstall = ''
     mkdir -p $lib
-    cp -v $src/data/*.nix $lib
-    wrapProgram $bin/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
+    cp -v ./data/*.nix $lib
+    wrapProgram $out/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
   '';
 
-  outputs = [ "out" "bin" "lib" ];
+  outputs = [ "out" "lib" ];
 
   meta = with lib; {
-    description = "Morph is a NixOS host manager written in Golang.";
+    description = "A NixOS host manager written in Golang";
     license = licenses.mit;
     homepage = "https://github.com/dbcdk/morph";
     maintainers = with maintainers; [adamt johanot];

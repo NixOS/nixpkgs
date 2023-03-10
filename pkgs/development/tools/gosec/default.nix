@@ -1,29 +1,38 @@
-{ buildGoPackage
-, lib
+{ lib
+, buildGoModule
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gosec";
-  version = "1.2.0";
-
-  goPackagePath = "github.com/securego/gosec";
-  excludedPackages = ''cmd/tlsconfig'';
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "securego";
-    repo = "gosec";
-    rev = version;
-    sha256 = "1420yl4cjp4v4xv0l0wbahgl6bjhz77lx5va9hqa6abddmqvx1hg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-GB+BAGIVPtyY2Bsm/yDTYjJixLGvGwsIoOLCyy/0AJk=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-5LIIXf+8ZN7WcFSPzsJ5Tt+d40AgF5YI3O1oXms1WgI=";
+
+  subPackages = [
+    "cmd/gosec"
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X main.GitTag=${src.rev}"
+    "-X main.BuildDate=unknown"
+  ];
 
   meta = with lib; {
+    homepage = "https://github.com/securego/gosec";
     description = "Golang security checker";
-    homepage = https://github.com/securego/gosec;
-    license = licenses.asl20 ;
-    maintainers = with maintainers; [ kalbasit ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kalbasit nilp0inter ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

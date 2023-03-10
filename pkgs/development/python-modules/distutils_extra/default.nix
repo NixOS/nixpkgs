@@ -1,21 +1,29 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 }:
 
 buildPythonPackage rec {
   pname = "distutils-extra";
-  version = "2.39";
+  version = "2.47";
+  format = "setuptools";
 
   src = fetchurl {
-    url = "https://launchpad.net/python-distutils-extra/trunk/${version}/+download/python-${pname}-${version}.tar.gz";
-    sha256 = "1bv3h2p9ffbzyddhi5sccsfwrm3i6yxzn0m06fdxkj2zsvs28gvj";
+    url = "https://salsa.debian.org/python-team/modules/python-distutils-extra/-/archive/${version}/python-${pname}-${version}.tar.bz2";
+    hash = "sha256-vIl50yDVt5AW5lteWYqhAPlu8ErroOOJ1N/sfE2fbBU=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://launchpad.net/python-distutils-extra;
+  # Tests are out-dated as the last upstream release is from 2016
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "DistUtilsExtra"
+  ];
+
+  meta = with lib; {
     description = "Enhancements to Python's distutils";
-    license = licenses.gpl2;
+    homepage = "https://launchpad.net/python-distutils-extra";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
   };
-
 }

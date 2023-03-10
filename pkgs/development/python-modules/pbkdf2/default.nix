@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pbkdf2";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # ImportError: No module named test
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
   };
 }

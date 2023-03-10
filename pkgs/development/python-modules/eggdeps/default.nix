@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -7,22 +7,22 @@
 
 buildPythonPackage rec {
   pname = "tl-eggdeps";
-  version = "0.4";
+  version = "1.0";
 
   src = fetchPypi {
     inherit version;
     pname = "tl.eggdeps";
-    sha256 = "a99de5e4652865224daab09b2e2574a4f7c1d0d9a267048f9836aa914a2caf3a";
+    sha256 = "a094ed7961a3dd38fcaaa69cf7a58670038acdff186360166d9e3d964b7a7323";
   };
 
   propagatedBuildInputs = [ zope_interface zope_testing ];
 
-  # tests fail, see http://hydra.nixos.org/build/4316603/log/raw
+  # tests fail, see https://hydra.nixos.org/build/4316603/log/raw
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool which computes a dependency graph between active Python eggs";
-    homepage = http://thomas-lotze.de/en/software/eggdeps/;
+    homepage = "http://thomas-lotze.de/en/software/eggdeps/";
     license = licenses.zpl20;
   };
 

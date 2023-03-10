@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libre-caslon";
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "05aajwny99yqzn1nnq1blx6h7rl54x056y12hyawfbigkzxhscns";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
-    homepage = http://www.impallari.com/librecaslon;
+    homepage = "http://www.impallari.com/librecaslon";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

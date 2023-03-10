@@ -1,37 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-mgmt-common
-, isPy3k
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "10.0.0";
   pname = "azure-mgmt-compute";
+  version = "29.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1s3bx6knxw5dxycp43yimvgrh0i19drzd09asglcwz2x5mr3bpyg";
+    hash = "sha256-LVobrn9dMHyh6FDX6D/tnIOdT2NbEKS40/i8YJisKIg=";
   };
-
-  postInstall = if isPy3k then "" else ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
 
   propagatedBuildInputs = [
     azure-mgmt-common
+    azure-mgmt-core
+  ];
+
+  pythonNamespaces = [
+    "azure.mgmt"
   ];
 
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "azure.mgmt.compute"
+  ];
+
   meta = with lib; {
     description = "This is the Microsoft Azure Compute Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight ];
+    maintainers = with maintainers; [ olcai maxwilson ];
   };
 }

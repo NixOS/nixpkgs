@@ -1,24 +1,37 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gobject-introspection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44
-, glib, systemd, libusb1, vala, hwdata
+{ lib, stdenv, fetchurl, substituteAll, meson, ninja, pkg-config, gettext, gobject-introspection
+, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, python3
+, glib, libusb1, vala, hwdata
 }:
+
+let
+  pythonEnv = python3.pythonForBuild.withPackages(ps: with ps; [
+    setuptools
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.3.3";
+  version = "0.3.10";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/libgusb-${version}.tar.xz";
-    sha256 = "14pbd0812151ga7jrpzi88fcrwkckx6m07ay84l7dzkxbdc44fgr";
+    sha256 = "sha256-DrC5qw+LugxZYxyAnDe2Fu806zyOAAsLm3HPEeSTG9w=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-python-path.patch;
+      python = "${pythonEnv}/bin/python3";
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext
+    meson ninja pkg-config gettext pythonEnv
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44
     gobject-introspection vala
   ];
-  buildInputs = [ systemd glib ];
+  buildInputs = [ glib ];
 
   propagatedBuildInputs = [ libusb1 ];
 
@@ -28,9 +41,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tests try to access USB
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GLib libusb wrapper";
-    homepage = https://github.com/hughsie/libgusb;
+    homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;

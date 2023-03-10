@@ -37,7 +37,7 @@ let
   '';
 in {
   name = "knot";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -45,6 +45,10 @@ in {
   nodes = {
     master = { lib, ... }: {
       imports = [ common ];
+
+      # trigger sched_setaffinity syscall
+      virtualisation.cores = 2;
+
       networking.interfaces.eth1 = {
         ipv4.addresses = lib.mkForce [
           { address = "192.168.0.1"; prefixLength = 24; }
@@ -206,5 +210,7 @@ in {
 
             test(host, "RRSIG", "www.example.com", r"RR set signature is")
             test(host, "DNSKEY", "example.com", r"DNSSEC key is")
+
+    master.log(master.succeed("systemd-analyze security knot.service | grep -v '✓'"))
   '';
 })

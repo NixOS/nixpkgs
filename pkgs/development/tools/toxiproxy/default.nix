@@ -1,26 +1,35 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "toxiproxy";
-  version = "2.1.3";
+  version = "2.5.0";
+
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "toxiproxy";
     rev = "v${version}";
-    sha256 = "1a7yry846iwi9cs9xam2vjbw73fjy45agjrwk214k0n1ziaawz2f";
+    sha256 = "sha256-SL3YHsNeFw8K8lPrzJXAoTkHxS+1sTREfzjawBxdnf0=";
   };
 
-  goPackagePath = "github.com/Shopify/toxiproxy";
-  subPackages = ["cmd" "cli"];
-  buildFlagsArray = "-ldflags=-X github.com/Shopify/toxiproxy.Version=v${version}";
+  vendorSha256 = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
+
+  excludedPackages = [ "test/e2e" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/Shopify/toxiproxy/v2.Version=${version}" ];
+
+  # Fixes tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags = [ "-short" ];
 
   postInstall = ''
-    mv $bin/bin/cli $bin/bin/toxiproxy-cli
-    mv $bin/bin/cmd $bin/bin/toxiproxy-cmd
+    mv $out/bin/cli $out/bin/toxiproxy-cli
+    mv $out/bin/server $out/bin/toxiproxy-server
   '';
 
   meta = {
-    description = "Proxy for for simulating network conditions.";
+    description = "Proxy for for simulating network conditions";
+    homepage = "https://github.com/Shopify/toxiproxy";
     maintainers = with lib.maintainers; [ avnik ];
     license = lib.licenses.mit;
   };

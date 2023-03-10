@@ -1,9 +1,11 @@
-{stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib}:
+{ lib, stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib }:
 
-stdenv.mkDerivation {
-  name = "emboss-6.6.0";
+stdenv.mkDerivation rec {
+  pname = "emboss";
+  version = "6.6.0";
+
   src = fetchurl {
-    url = "ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-6.6.0.tar.gz";
+    url = "ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-${version}.tar.gz";
     sha256 = "7184a763d39ad96bb598bfd531628a34aa53e474db9e7cac4416c2a40ab10c6e";
   };
 
@@ -16,13 +18,13 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description     = "The European Molecular Biology Open Software Suite";
+    description = "The European Molecular Biology Open Software Suite";
     longDescription = ''EMBOSS is a free Open Source software analysis package
     specially developed for the needs of the molecular biology (e.g. EMBnet)
     user community, including libraries. The software automatically copes with
     data in a variety of formats and even allows transparent retrieval of
-    sequence data from the web.''; 
-    license     = "GPL2";
-    homepage    = http://emboss.sourceforge.net/;
+    sequence data from the web.'';
+    license = lib.licenses.gpl2;
+    homepage = "https://emboss.sourceforge.net/";
   };
 }

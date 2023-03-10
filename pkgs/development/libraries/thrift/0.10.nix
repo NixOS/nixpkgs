@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkgconfig, bison
-, flex, twisted
+{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, pkg-config, bison
+, flex
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost zlib libevent openssl python bison flex twisted
+    boost zlib libevent openssl bison flex (python3.withPackages (ps: [ps.twisted]))
   ];
 
   preConfigure = "export PY_PREFIX=$out";
@@ -29,11 +29,18 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-tests=no" ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for scalable cross-language services";
-    homepage = "http://thrift.apache.org/";
+    homepage = "https://thrift.apache.org/";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
+    knownVulnerabilities = [
+      "CVE-2018-1320"
+      "CVE-2018-11798"
+      "CVE-2019-0205"
+      "CVE-2019-0210"
+      "CVE-2020-13949"
+    ];
   };
 }

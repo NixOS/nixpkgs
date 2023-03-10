@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, xz, pkgs }:
+{ lib, stdenvNoCC, fetchurl, cpio, xz, pkgs }:
 
 let
 
@@ -33,7 +33,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
 
   pname = "facetimehd-firmware";
   inherit version;
@@ -43,7 +43,8 @@ stdenv.mkDerivation {
     curlOpts = "-r ${dmgRange}";
   };
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
 
   buildInputs = [ cpio xz ];
 
@@ -54,9 +55,9 @@ stdenv.mkDerivation {
     gunzip -c ${firmwareOut}.gz > $out/lib/firmware/facetimehd/${firmwareOut}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "facetimehd firmware";
-    homepage = https://support.apple.com/kb/DL1877;
+    homepage = "https://support.apple.com/kb/DL1877";
     license = licenses.unfree;
     maintainers = with maintainers; [ womfoo grahamc ];
     platforms = [ "i686-linux" "x86_64-linux" ];

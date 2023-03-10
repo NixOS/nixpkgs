@@ -1,26 +1,33 @@
-{ stdenv, fetchurl, bigloo }:
+{ lib, stdenv, fetchurl, bigloo }:
+
+# Compute the “release” version of bigloo (before the first dash, if any)
+let bigloo-release =
+  let inherit (lib) head splitString; in
+  head (splitString "-" (builtins.parseDrvName bigloo.name).version)
+; in
 
 stdenv.mkDerivation rec {
-  name = "hop-2.5.1";
+  pname = "hop";
+  version = "3.4.4";
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/${name}.tar.gz";
-    sha256 = "1bvp7pc71bln5yvfj87s8750c6l53wjl6f8m12v62q9926adhwys";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/hop-${version}.tar.gz";
+    sha256 = "sha256-GzXh4HC+SFFoUi7SMqu36iYRPAJ6tMnOHd+he6n9k1I=";
   };
+
+  postPatch = ''
+    substituteInPlace configure --replace "(os-tmp)" '(getenv "TMPDIR")'
+  '';
 
   buildInputs = [ bigloo ];
 
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lbigloogc-4.1a";
-  '';
-
   configureFlags = [
     "--bigloo=${bigloo}/bin/bigloo"
-    "--bigloolibdir=${bigloo}/lib/bigloo/4.1a/"
+    "--bigloolibdir=${bigloo}/lib/bigloo/${bigloo-release}/"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
-    homepage = http://hop.inria.fr/;
+    homepage = "http://hop.inria.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ vbgl ];

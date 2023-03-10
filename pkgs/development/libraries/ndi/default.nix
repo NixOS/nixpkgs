@@ -1,22 +1,27 @@
-{ stdenv, requireFile, avahi }:
+{ lib, stdenv, requireFile, avahi, obs-studio-plugins }:
 
+let
+  versionJSON = builtins.fromJSON (builtins.readFile ./version.json);
+in
 stdenv.mkDerivation rec {
   pname = "ndi";
-  version = "4";
+  version = versionJSON.version;
+  majorVersion = builtins.head (builtins.splitVersion version);
+  installerName = "Install_NDI_SDK_v${majorVersion}_Linux";
 
   src = requireFile rec {
-    name    = "InstallNDISDK_v${version}_Linux.tar.gz";
-    sha256  = "1hac5npyg8nifs9ipj34pkn0zjyx8774x3i3h8znhmijx2j2982p";
+    name    = "${installerName}.tar.gz";
+    sha256  = versionJSON.hash;
     message = ''
-      In order to use the NDI SDK, you need to comply with NewTek's license and
-      download the Linux version ${version} tarball from:
+      In order to use NDI SDK version ${version}, you need to comply with
+      NewTek's license and download the appropriate Linux tarball from:
 
-      ${meta.homepage}
+        ${meta.homepage}
 
       Once you have downloaded the file, please use the following command and
       re-run the installation:
 
-      nix-prefetch-url file://\$PWD/${name}
+        \$ nix-prefetch-url file://\$PWD/${name}
     '';
   };
 
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     unpackFile ${src}
-    echo y | ./InstallNDISDK_v4_Linux.sh
+    echo y | ./${installerName}.sh
     sourceRoot="NDI SDK for Linux";
   '';
 
@@ -50,11 +55,17 @@ stdenv.mkDerivation rec {
   # Stripping breaks ndi-record.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (obs-studio-plugins) obs-ndi;
+  };
+  passthru.updateScript = ./update.py;
+
+  meta = with lib; {
     homepage = "https://ndi.tv/sdk/";
     description = "NDI Software Developer Kit";
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };
 }

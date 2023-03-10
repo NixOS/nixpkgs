@@ -1,25 +1,34 @@
-{ buildPythonPackage, lib, fetchPypi
-, ipaddress
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, fetchPypi
+, libmaxminddb
 , mock
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "1.5.2";
   pname = "maxminddb";
+  version = "2.2.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0ce131d901eb11669996b49a59f410efd3da2c6dbe2c0094fe2fef8d85b6336";
+    sha256 = "e37707ec4fab115804670e0fb7aedb4b57075a8b6f80052bdc648d3c005184e5";
   };
 
-  propagatedBuildInputs = [ ipaddress ];
+  buildInputs = [ libmaxminddb ];
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
+
+  # Tests are broken for macOS on python38
+  doCheck = !(stdenv.isDarwin && pythonAtLeast "3.8");
 
   meta = with lib; {
     description = "Reader for the MaxMind DB format";
-    homepage = "https://www.maxmind.com/en/home";
+    homepage = "https://github.com/maxmind/MaxMind-DB-Reader-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

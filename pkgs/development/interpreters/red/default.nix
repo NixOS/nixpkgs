@@ -1,13 +1,13 @@
-{ stdenv, stdenv_32bit, pkgsi686Linux, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, stdenv_32bit, pkgsi686Linux, fetchFromGitHub, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "red";
-  version = "0.6.3";
+  version = "0.6.4";
   src = fetchFromGitHub {
-    rev = "6a43c767fa2e85d668b83f749158a18e62c30f70";
+    rev = "755eb943ccea9e78c2cab0f20b313a52404355cb";
     owner = "red";
     repo = "red";
-    sha256 = "1zh6xc728bs7r4v5jz1jjrdk0xd838xsxmvy9gfg75a3zffm0slr";
+    sha256 = "sha256:045rrg9666zczgrwyyyglivzdzja103s52b0fzj7hqmr1fz68q37";
   };
 
   rebol = fetchurl {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ${r2} -qw red.r tests/hello.red
 
     # Compiling the Red console...
-    ${r2} -qw red.r -r environment/console/console.red
+    ${r2} -qw red.r -r environment/console/CLI/console.red
 
     # Generating docs...
     cd docs
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       New programming language strongly inspired by Rebol, but with a
       broader field of usage thanks to its native-code compiler, from system
@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ uralbash ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.bsd3;
-    homepage = https://www.red-lang.org/;
+    homepage = "https://www.red-lang.org/";
   };
 }

@@ -1,47 +1,94 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, pkgconfig, lcms2, tinyxml, git }:
-
-with lib;
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, expat
+, yaml-cpp
+, ilmbase
+, pystring
+, imath
+, minizip-ng
+# Only required on Linux
+, glew
+, freeglut
+# Only required on Darwin
+, Carbon
+, GLUT
+, Cocoa
+# Python bindings
+, pythonBindings ? true # Python bindings
+, python3Packages
+# Build apps
+, buildApps ? true # Utility applications
+, lcms2
+, openexr_3
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "1.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = "imageworks";
+    owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "12srvxca51czpfjl0gabpidj9n84mw78ivxy5w75qhq2mmc798sb";
+    sha256 = "sha256-l5UUysHdP/gb4Mn5A64XEoHOkthl6Mlb95CuI0l4vXQ=";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  patches = [
+    (fetchpatch {
+      name = "darwin-no-hidden-l.patch";
+      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/48bab7c643ed8d108524d718e5038d836f906682.patch";
+      revert = true;
+      sha256 = "sha256-0DF+lwi2nfkUFG0wYvL3HYbhZS6SqGtPWoOabrFS1Eo=";
+    })
+    (fetchpatch {
+      name = "pkg-config-absolute-path.patch";
+      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/332462e7f5051b7e26ee3d8c22890cd5e71e7c30.patch";
+      sha256 = "sha256-7xHALhnOkKszgFBgPIbiZQaORnEJ+1M6RyoZdFgjElM=";
+    })
+  ];
 
-  # TODO: Investigate whether git can be dropped: It's only used to apply patches
-  nativeBuildInputs = [ cmake pkgconfig git ];
-
-  buildInputs = [ lcms2 tinyxml ] ++ optional stdenv.isDarwin boost;
-
-  postPatch = ''
-    substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
-    substituteInPlace src/pyglue/CMakeLists.txt --replace "-Werror" ""
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # these tests don't like being run headless on darwin. no builtin
+    # way of skipping tests so this is what we're reduced to.
+    substituteInPlace tests/cpu/Config_tests.cpp \
+      --replace 'OCIO_ADD_TEST(Config, virtual_display)' 'static void _skip_virtual_display()' \
+      --replace 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
   '';
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    expat
+    yaml-cpp
+    ilmbase
+    pystring
+    imath
+    minizip-ng
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
+    ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
+    ++ lib.optionals buildApps [
+      lcms2
+      openexr_3
+    ];
 
   cmakeFlags = [
-    "-DUSE_EXTERNAL_LCMS=ON"
-    "-DUSE_EXTERNAL_TINYXML=ON"
-    # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
-    "-DUSE_EXTERNAL_YAML=OFF"
-  ] ++ optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
+    "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
+    # GPU test fails with: freeglut (GPU tests): failed to open display ''
+    "-DOCIO_BUILD_GPU_TESTS=OFF"
+  ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
+    ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
-  postInstall = ''
-    mkdir -p $bin/bin; mv $out/bin $bin/
-  '';
+  # precision issues on non-x86
+  doCheck = stdenv.isx86_64;
 
-  meta = with stdenv.lib; {
-    homepage = https://opencolorio.org;
+  meta = with lib; {
+    homepage = "https://opencolorio.org";
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;
   };
 }

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pyyaml ];
-  checkInputs = [ nose jinja2 mock pytest ];
+  nativeCheckInputs = [ nose jinja2 mock pytest ];
 
   # Needs Babel CLI tool
   doCheck = false;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Media asset management for Python, with glue code for various web frameworks";
-    homepage = https://github.com/miracle2k/webassets/;
+    homepage = "https://github.com/miracle2k/webassets/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];
   };

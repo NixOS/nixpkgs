@@ -1,76 +1,39 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , substituteAll
 , meson
 , ninja
 , python3
-, pkgconfig
+, pkg-config
 , vala
 , granite
 , libgee
 , gettext
 , gtk3
-, appstream
 , gnome-menus
 , json-glib
-, plank
+, elementary-dock
 , bamf
-, switchboard
-, libunity
+, switchboard-with-plugs
 , libsoup
 , wingpanel
 , zeitgeist
 , bc
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.5.0";
-
-  repoName = "applications-menu";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "applications-menu";
     rev = version;
-    sha256 = "1zry9xvcljsn5fnl8qs21x7q8rpwv0sxvp2dmnx3ddqnvj4q2m7d";
+    sha256 = "sha256-WlRrEkX0DGIHYWvUc9G4BbvofzWJwqkiJaJFwQ43GPE=";
   };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
-  nativeBuildInputs = [
-    appstream
-    gettext
-    meson
-    ninja
-    pkgconfig
-    python3
-    vala
-   ];
-
-  buildInputs = [
-    bamf
-    gnome-menus
-    granite
-    gtk3
-    json-glib
-    libgee
-    libsoup
-    libunity
-    plank
-    switchboard
-    wingpanel
-    zeitgeist
-   ];
-
-  mesonFlags = [
-    "--sysconfdir=${placeholder "out"}/etc"
-  ];
 
   patches = [
     (substituteAll {
@@ -79,16 +42,55 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+  ];
+
+  buildInputs = [
+    bamf
+    elementary-dock
+    granite
+    gtk3
+    json-glib
+    libgee
+    libhandy
+    libsoup
+    switchboard-with-plugs
+    wingpanel
+    zeitgeist
+  ] ++
+  # applications-menu has a plugin to search switchboard plugins
+  # see https://github.com/NixOS/nixpkgs/issues/100209
+  # wingpanel's wrapper will need to pick up the fact that
+  # applications-menu needs a version of switchboard with all
+  # its plugins for search.
+  switchboard-with-plugs.buildInputs;
+
+  mesonFlags = [
+    "--sysconfdir=${placeholder "out"}/etc"
+  ];
+
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
-    homepage = https://github.com/elementary/applications-menu;
+    homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

@@ -1,11 +1,16 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ lib, stdenv, fetchurl, makeWrapper }:
 
 let
   options = rec {
+    aarch64-darwin = {
+      version = "2.1.2";
+      system = "arm64-darwin";
+      sha256 = "sha256-H0ALigXcWIypdA+fTf7jERscwbb7QIAfcoxCtGDh0RU=";
+    };
     x86_64-darwin = {
-      version = "1.2.11";
+      version = "2.2.9";
       system = "x86-64-darwin";
-      sha256 = "0lh4gpvi8hl6g6b9321g5pwh8sk3218i7h4lx7p3vd9z0cf3lz85";
+      sha256 = "sha256-b1BLkoLIOELAYBYA9eBmMgm1OxMxJewzNP96C9ADfKY=";
     };
     x86_64-linux = {
       version = "1.3.16";
@@ -51,7 +56,7 @@ stdenv.mkDerivation rec {
     sha256 = cfg.sha256;
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -65,15 +70,15 @@ stdenv.mkDerivation rec {
       --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  postFixup = stdenv.lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
+  postFixup = lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lisp compiler";
-    homepage = http://www.sbcl.org;
+    homepage = "http://www.sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
-    maintainers = [maintainers.raskin maintainers.tohl];
+    maintainers = [ maintainers.raskin ];
     platforms = attrNames options;
   };
 }

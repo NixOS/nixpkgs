@@ -2,24 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "4.5.4";
+  version = "7.0.1";
+  # uses f strings
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e07d9f1a23e9e93ab5c62902833bf3e4b1f65502927379148b6622686223125c";
+    sha256 = "sha256-pKV0oZ7rZ1daUyildgu7tzf6poVhZYap+dpCgflAEJw=";
   };
 
   # No tests in archive
   doCheck = false;
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   meta = {
     description = "Code coverage measurement for python";
-    homepage = http://nedbatchelder.com/code/coverage/;
+    homepage = "https://coverage.readthedocs.io/";
     license = lib.licenses.bsd3;
   };
 }

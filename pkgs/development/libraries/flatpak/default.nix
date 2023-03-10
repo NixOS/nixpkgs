@@ -1,26 +1,25 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
-, docbook_xml_dtd_412
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, docbook_xsl
+, docbook_xml_dtd_45
+, docbook-xsl-nons
 , which
 , libxml2
 , gobject-introspection
 , gtk-doc
 , intltool
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
-, appstream-glib
 , substituteAll
-, glibcLocales
-, yacc
+, runCommand
+, bison
 , xdg-dbus-proxy
 , p11-kit
+, appstream
 , bubblewrap
 , bzip2
+, curl
 , dbus
 , glib
 , gpgme
@@ -35,11 +34,10 @@
 , shared-mime-info
 , desktop-file-utils
 , gtk3
-, fuse
-, malcontent
+, fuse3
 , nixosTests
-, libsoup
-, lzma
+, xz
+, zstd
 , ostree
 , polkit
 , python3
@@ -47,22 +45,23 @@
 , xorg
 , valgrind
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , dconf
 , gsettings-desktop-schemas
 , librsvg
+, makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.6.2";
+  version = "1.14.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "dev" "man" "doc" "installedTests" ];
+  outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "02k9p5n60gz2k85n805n9niic4miw0mfh0i7yk1vrc8vaa5h69wd";
+    url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-yAcR6s9CqZB49jlqplVV3Wv3PuxjF3a3np17cmK293Q="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
     # https://github.com/flatpak/flatpak/issues/1460
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit coreutils gettext glibcLocales socat gtk3;
+      inherit coreutils gettext socat gtk3;
       smi = shared-mime-info;
       dfu = desktop-file-utils;
       hicolorIconTheme = hicolor-icon-theme;
@@ -79,53 +78,43 @@ stdenv.mkDerivation rec {
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
       src = ./fix-paths.patch;
-      p11kit = "${p11-kit.dev}/bin/p11-kit";
-    })
-
-    # Adapt paths exposed to sandbox for NixOS.
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
-      inherit (builtins) storeDir;
+      p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
     # Allow gtk-doc to find schemas using XML_CATALOG_FILES environment variable.
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
 
-    # Don’t hardcode flatpak binary path in launchers stored under user’s profile otherwise they will break after Flatpak update.
-    # https://github.com/NixOS/nixpkgs/issues/43581
-    ./use-flatpak-from-path.patch
-
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
-    # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
-    ./validate-icon-pixbuf.patch
+    # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
+    # and cannot bind FHS paths since those are not available on NixOS.
+    finalAttrs.passthru.icon-validator-patch
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     libxml2
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_xsl
+    docbook_xml_dtd_45
+    docbook-xsl-nons
     which
     gobject-introspection
     gtk-doc
     intltool
     libxslt
-    pkgconfig
+    pkg-config
     xmlto
-    appstream-glib
-    yacc
-    wrapGAppsHook
+    bison
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    appstream
     bubblewrap
     bzip2
+    curl
     dbus
     dconf
     gpgme
@@ -133,14 +122,13 @@ stdenv.mkDerivation rec {
     libarchive
     libcap
     libseccomp
-    libsoup
-    lzma
+    xz
+    zstd
     polkit
     python3
     systemd
     xorg.libXau
-    fuse
-    malcontent
+    fuse3
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
@@ -152,7 +140,7 @@ stdenv.mkDerivation rec {
     ostree
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     valgrind
   ];
 
@@ -164,10 +152,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--localstatedir=/var"
+    "--enable-gtk-doc"
     "--enable-installed-tests"
   ];
 
@@ -176,22 +166,44 @@ stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
   ];
 
-  postPatch = ''
+  postPatch = let
+    vsc-py = python3.withPackages (pp: [
+      pp.pyparsing
+    ]);
+  in ''
     patchShebangs buildutil
     patchShebangs tests
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Use flatpak from PATH in exported assets (e.g. desktop files).
+      --set FLATPAK_BINARY flatpak
+    )
   '';
 
   passthru = {
+    icon-validator-patch = substituteAll {
+      src = ./fix-icon-validation.patch;
+      inherit (builtins) storeDir;
+    };
+
     tests = {
       installedTests = nixosTests.installed-tests.flatpak;
+
+      validate-icon = runCommand "test-icon-validation" { } ''
+        ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        grep format=svg "$out"
+      '';
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-}
+})

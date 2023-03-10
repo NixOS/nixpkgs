@@ -1,17 +1,50 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchFromGitHub
+, brotli
+, lz4
+}:
 
+let
+  kaitai_compress = fetchFromGitHub {
+    owner = "kaitai-io";
+    repo = "kaitai_compress";
+    rev = "12f4cffb45d95b17033ee4f6679987656c6719cc";
+    sha256 = "sha256-l3rGbblUgxO6Y7grlsMEiT3nRIgUZV1VqTyjIgIDtyA=";
+  };
+in
 buildPythonPackage rec {
   pname = "kaitaistruct";
-  version = "0.8";
+  version = "0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1d17c7f6839b3d28fc22b21295f787974786c2201e8788975e72e2a1d109ff5";
+    sha256 = "sha256-oETe4pFz1q+6zye8rDna+JtlTdQYz6AJq4LZF4qa5So=";
   };
 
-  meta = with stdenv.lib; {
+  preBuild = ''
+    ln -s ${kaitai_compress}/python/kaitai kaitai
+    sed '32ipackages = kaitai/compress' -i setup.cfg
+  '';
+
+  propagatedBuildInputs = [
+    brotli
+    lz4
+  ];
+
+  # no tests
+  dontCheck = true;
+
+  pythonImportsCheck = [
+    "kaitaistruct"
+    "kaitai.compress"
+  ];
+
+  meta = with lib; {
     description = "Kaitai Struct: runtime library for Python";
     homepage = "https://github.com/kaitai-io/kaitai_struct_python_runtime";
     license = licenses.mit;
+    maintainers = teams.determinatesystems.members;
   };
 }

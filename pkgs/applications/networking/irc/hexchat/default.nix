@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python3Packages
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
 , enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
-, meson, ninja
+, meson, ninja, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "hexchat";
-  version = "2.14.3";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "08kvp0dcn3bvmlqcfp9312075bwkqkpa8m7zybr88pfp210gfl85";
+    sha256 = "sha256-2IUlNUTL3TOJnDNMds2EWwkfn5NUOQ1ids96Ddo196E=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
 
   buildInputs = [
-    gtk2 lua perl python3 pciutils dbus-glib libcanberra-gtk2 libproxy
+    gtk2 lua perl python3Packages.python python3Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
     libnotify openssl desktop-file-utils
     isocodes
   ];
@@ -30,19 +30,24 @@ stdenv.mkDerivation rec {
     sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
     chmod +x meson_post_install.py
     for f in meson_post_install.py \
-             src/common/make-te.py \
              plugins/perl/generate_header.py \
-             po/validate-textevent-translations
+             plugins/python/generate_plugin.py \
+             po/validate-textevent-translations \
+             src/common/make-te.py
     do
       patchShebangs $f
     done
   '';
 
-  mesonFlags = [ "-Dwith-lua=lua" "-Dwith-text=true" ];
+  mesonFlags = [ "-Dwith-lua=lua" "-Dtext-frontend=true" ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"
+  '';
+
+  meta = with lib; {
     description = "A popular and easy to use graphical IRC (chat) client";
-    homepage = https://hexchat.github.io/;
+    homepage = "https://hexchat.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

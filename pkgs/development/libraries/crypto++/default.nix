@@ -1,45 +1,62 @@
-{ stdenv, fetchFromGitHub, nasm, which }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !enableStatic
+# Multi-threading with OpenMP is disabled by default
+# more info on https://www.cryptopp.com/wiki/OpenMP
+, withOpenMP ? false
+, llvmPackages
+}:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "crypto++";
-  version = "8.2.0";
-  underscoredVersion = strings.replaceStrings ["."] ["_"] version;
+  version = "8.7.0";
+  underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
     repo = "cryptopp";
     rev = "CRYPTOPP_${underscoredVersion}";
-    sha256 = "01zrrzjn14yhkb9fzzl57vmh7ig9a6n6fka45f8za0gf7jpcq3mj";
+    hash = "sha256-KtZXW7+J9a4uKHnK8sqj5WVaIjG3d6tzBBDxa7Wv4AE=";
   };
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     substituteInPlace GNUmakefile \
-        --replace "AR = libtool" "AR = ar" \
-        --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
+      --replace "AR = /usr/bin/libtool" "AR = ar" \
+      --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
   '';
 
-  nativeBuildInputs = optionals stdenv.hostPlatform.isx86 [ nasm which ];
+  buildInputs = lib.optionals (stdenv.cc.isClang && withOpenMP) [ llvmPackages.openmp ];
 
-  preBuild = optionalString stdenv.hostPlatform.isx86 "${stdenv.shell} rdrand-nasm.sh";
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildFlags = [ "shared" "libcryptopp.pc" ];
+
+  buildFlags =
+       lib.optional enableStatic "static"
+    ++ lib.optional enableShared "shared"
+    ++ [ "libcryptopp.pc" ];
+
   enableParallelBuilding = true;
+  hardeningDisable = [ "fortify" ];
+  CXXFLAGS = lib.optionals (withOpenMP) [ "-fopenmp" ];
 
   doCheck = true;
 
-  preInstall = "rm libcryptopp.a"; # built for checks but we don't install static lib into the nix store
+  # always built for checks but install static lib only when necessary
+  preInstall = lib.optionalString (!enableStatic) "rm -f libcryptopp.a";
+
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
-  postInstall = optionalString (!stdenv.hostPlatform.isDarwin) ''
-    ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${versions.majorMinor version}
-    ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${versions.major version}
-  '';
 
-  meta = {
-    description = "Crypto++, a free C++ class library of cryptographic schemes";
+  meta = with lib; {
+    description = "A free C++ class library of cryptographic schemes";
     homepage = "https://cryptopp.com/";
-    changelog = "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt";
+    changelog = [
+      "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt"
+      "https://github.com/weidai11/cryptopp/releases/tag/CRYPTOPP_${underscoredVersion}"
+    ];
     license = with licenses; [ boost publicDomain ];
     platforms = platforms.all;
     maintainers = with maintainers; [ c0bw3b ];

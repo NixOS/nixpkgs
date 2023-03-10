@@ -1,35 +1,55 @@
-{ stdenv, fetchurl, cmake, perl, zlib }:
+{ lib, stdenv
+, cmake
+, fetchurl
+, perl
+, zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+, withZstd ? false
+, zstd
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.6.0";
+  version = "1.9.2";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
-    sha256 = "1zsspz6cbbqah11jkcc894jgxihlm8gicfh54yvny9gc3lsvpi3h";
+    url = "https://libzip.org/download/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-/Wp/dF3j1pz1YD7cnLM9KJDwGY5BUlXQmHoM8Q2CTG8=";
   };
 
-  # Fix pkgconfig file paths
-  postPatch = ''
-    sed -i CMakeLists.txt \
-      -e 's#\\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}#''${CMAKE_INSTALL_FULL_LIBDIR}#' \
-      -e 's#\\''${prefix}/''${CMAKE_INSTALL_INCLUDEDIR}#''${CMAKE_INSTALL_FULL_INCLUDEDIR}#'
-  '';
+  outputs = [ "out" "dev" "man" ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ]
+    ++ lib.optionals withZstd [ zstd ];
+
+  # Don't build the regression tests because they don't build with
+  # pkgsStatic and are not executed anyway.
+  cmakeFlags = [ "-DBUILD_REGRESS=0" ];
 
   preCheck = ''
     # regress/runtest is a generated file
     patchShebangs regress
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.nih.at/libzip;
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
+    homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
+    pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;
+    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
-}
+})

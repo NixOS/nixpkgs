@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, perl, libunwind, buildPackages }:
+{ lib, stdenv, fetchurl, perl, libunwind, buildPackages, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.5";
+  version = "6.2";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1zrhpzjlgfwfl8dd53llswmmharm5rbi0zch7lln5sjris69an4z";
+    sha256 = "sha256-DH04pElBYmjTAEApoiChWnfCIGoDzIgSDzf0bpSRd+g=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
+  # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
+  # The build will silently fall back and -k will not work on RISC-V.
+  buildInputs = [ libunwind ]; # support -k
 
-  configureFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "--enable-mpers=check";
+  configureFlags = [ "--enable-mpers=check" ];
 
-  # fails 1 out of 523 tests with
-  # "strace-k.test: failed test: ../../strace -e getpid -k ../stack-fcall output mismatch"
-  doCheck = false;
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/strace/strace.git";
+    rev-prefix = "v";
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://strace.io/";
     description = "A system call tracer for Linux";
     license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ globin ma27 qyliss ];
   };
 }

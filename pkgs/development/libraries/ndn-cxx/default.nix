@@ -1,27 +1,48 @@
-{ stdenv, fetchFromGitHub, openssl, doxygen
-, boost, sqlite, pkgconfig, python, pythonPackages, wafHook }:
-let
-  version = "0.6.3";
-in
-stdenv.mkDerivation {
+{ lib
+, stdenv
+, fetchFromGitHub
+, doxygen
+, pkg-config
+, python3
+, python3Packages
+, wafHook
+, boost
+, openssl
+, sqlite
+}:
+
+stdenv.mkDerivation rec {
   pname = "ndn-cxx";
-  inherit version;
+  version = "0.8.1";
+
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
-    rev = "a3bf4319ed483a4a6fe2c96b79ec4491d7217f00";
-    sha256 = "076jhrjigisqz5n8dgxwd5fhimg69zhm834m7w9yvf9afgzrr50h";
+    rev = "${pname}-${version}";
+    sha256 = "sha256-nnnxlkYVTSRB6ZcuIUDFol999+amGtqegHXK+06ITK8=";
   };
-  nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
+
+  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
+
+  buildInputs = [ boost openssl sqlite ];
+
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
+    "--with-tests"
   ];
-  meta = with stdenv.lib; {
-    homepage = http://named-data.net/;
-    description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
+
+  doCheck = false; # some tests fail in upstream, some fail because of the sandbox environment
+  checkPhase = ''
+    runHook preCheck
+    LD_PRELOAD=build/libndn-cxx.so build/unit-tests
+    runHook postCheck
+  '';
+
+  meta = with lib; {
+    homepage = "https://named-data.net/";
+    description = "A Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)
       primitives that can be used to implement various NDN applications.
@@ -36,7 +57,7 @@ stdenv.mkDerivation {
       and consuming less resources overall.
     '';
     license = licenses.lgpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ maintainers.sjmackenzie ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sjmackenzie bertof ];
   };
 }

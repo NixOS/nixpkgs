@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, libX11, libXrandr }:
+{ lib, stdenv, fetchzip, libX11, libXrandr, xorgproto }:
 
 stdenv.mkDerivation rec {
-  name = "sct";
+  pname = "sct";
+  version = "0.5";
 
-  src = fetchurl {
-    url = http://www.tedunangst.com/flak/files/sct.c;
-    sha256 = "01f3ndx3s6d2qh2xmbpmhd4962dyh8yp95l87xwrs4plqdz6knhd";
+  src = fetchzip {
+    url = "https://www.umaxx.net/dl/sct-0.5.tar.gz";
+    sha256 = "sha256-nyYcdnCq8KcSUpc0HPCGzJI6NNrrTJLAHqPawfwPR/Q=";
   };
 
-  unpackPhase = "cat ${src} > sct.c";
-  patches = [ ./DISPLAY-segfault.patch ];
+  buildInputs = [ libX11 libXrandr xorgproto ];
 
-  buildInputs = [ libX11 libXrandr ];
-  buildPhase = "cc sct.c -o sct -lm -lX11 -lXrandr";
+  preInstall = ''
+    mkdir -p $out/bin $out/share/man/man1
+  '';
 
-  installPhase = "install -Dt $out/bin sct";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.tedunangst.com/flak/post/sct-set-color-temperature;
+  meta = with lib; {
+    homepage = "https://www.umaxx.net/";
     description = "A minimal utility to set display colour temperature";
-    maintainers = [ maintainers.raskin ];
+    maintainers = with maintainers; [ raskin somasis ];
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
   };

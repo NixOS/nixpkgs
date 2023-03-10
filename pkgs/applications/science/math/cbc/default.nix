@@ -2,14 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cbc";
-  version = "2.10.3";
+  version = "2.10.4";
+
+  # Note: Cbc 2.10.5 contains Clp 1.17.5 which hits this bug
+  # that breaks or-tools https://github.com/coin-or/Clp/issues/130
 
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/Cbc/Cbc-${version}.tgz";
-    sha256 = "1zzcg40ky5v96s7br2hqlkqdspwrn43kf3757g6c35wl29bq6f5d";
+    sha256 = "0zq66j1vvpslswhzi9yfgkv6vmg7yry4pdmfgqaqw2vhyqxnsy39";
   };
 
-  configureFlags = [ "-C" ];
+  # or-tools has a hard dependency on Cbc static libraries, so we build both
+  configureFlags = [ "-C" "--enable-static" ];
 
   enableParallelBuilding = true;
 
@@ -20,11 +24,10 @@ stdenv.mkDerivation rec {
   # FIXME: move share/coin/Data to a separate output?
 
   meta = {
-    homepage = https://projects.coin-or.org/Cbc;
+    homepage = "https://projects.coin-or.org/Cbc";
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    broken = stdenv.isAarch64; # Missing <immintrin.h> after 2.10.0
     description = "A mixed integer programming solver";
   };
 }

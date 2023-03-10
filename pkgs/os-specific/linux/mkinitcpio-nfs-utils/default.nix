@@ -1,13 +1,14 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mkinitcpio-nfs-utils-0.3";
+  pname = "mkinitcpio-nfs-utils";
+  version = "0.3";
 
   src = fetchurl {
-    url = "https://sources.archlinux.org/other/mkinitcpio/${name}.tar.xz";
+    url = "https://sources.archlinux.org/other/mkinitcpio/mkinitcpio-nfs-utils-${version}.tar.xz";
     sha256 = "0fc93sfk41ycpa33083kyd7i4y00ykpbhj5qlw611bjghj4x946j";
     # ugh, upstream...
-    name = "${name}.tar.gz";
+    name = "mkinitcpio-nfs-utils-${version}.tar.gz";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/usr
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://archlinux.org/;
+  meta = with lib; {
+    homepage = "https://archlinux.org/";
     description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
     license = licenses.gpl2;
     platforms  = platforms.linux;

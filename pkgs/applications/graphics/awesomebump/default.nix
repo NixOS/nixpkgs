@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, qtbase, qmake, makeWrapper, qtscript, flex, bison, qtdeclarative }:
+{ mkDerivation, lib, fetchgit, qtbase, qmake, qtscript, flex, bison, qtdeclarative }:
 
 
 let
@@ -11,7 +11,7 @@ let
     fetchSubmodules = true;
   };
 
-  qtnproperty = stdenv.mkDerivation {
+  qtnproperty = mkDerivation {
     name = "qtnproperty";
     inherit src;
     sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
@@ -22,7 +22,7 @@ let
       install -D bin-linux/QtnPEG $out/bin/QtnPEG
     '';
   };
-in stdenv.mkDerivation {
+in mkDerivation {
   pname = "awesomebump";
   inherit version;
 
@@ -30,12 +30,13 @@ in stdenv.mkDerivation {
 
   buildInputs = [ qtbase qtscript qtdeclarative ];
 
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [ qmake ];
 
   preBuild = ''
     ln -sf ${qtnproperty}/bin/QtnPEG Sources/utils/QtnProperty/bin-linux/QtnPEG
   '';
 
+  dontWrapQtApps = true;
   postInstall = ''
     d=$out/libexec/AwesomeBump
 
@@ -44,8 +45,8 @@ in stdenv.mkDerivation {
     cp -prd Bin/Configs Bin/Core $d/
 
     # AwesomeBump expects to find Core and Configs in its current directory.
-    makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
-        --run "cd $d"
+    makeQtWrapper $d/AwesomeBump $out/bin/AwesomeBump \
+        --chdir "$d"
   '';
 
   # $ cd Sources; qmake; make ../workdir/linux-g++-dgb-gl4/obj/glwidget.o
@@ -53,7 +54,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   meta = {
-    homepage = https://github.com/kmkolasinski/AwesomeBump;
+    homepage = "https://github.com/kmkolasinski/AwesomeBump";
     description = "A program to generate normal, height, specular or ambient occlusion textures from a single image";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.eelco ];

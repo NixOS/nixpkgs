@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "bootstrap";
-  version = "4.4.1";
+  version = "5.2.3";
 
   src = fetchurl {
     url = "https://github.com/twbs/bootstrap/releases/download/v${version}/${pname}-${version}-dist.zip";
-    sha256 = "1gdzp54f2xyvbw9hnyjlj4s69jvxkxr3hqclq1c8ajmx39s7rymz";
+    sha256 = "sha256-j6IBaj3uHiBL0WI+BQ3PR36dKME7uYofWPV+D9QM3Tg=";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   dontBuild = true;
   installPhase = ''
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Front-end framework for faster and easier web development";
-    homepage = https://getbootstrap.com/;
-    license = stdenv.lib.licenses.mit;
+    homepage = "https://getbootstrap.com/";
+    license = lib.licenses.mit;
   };
 
 }

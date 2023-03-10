@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   name = "nvidiabl-${version}-${kernel.version}";
-  version = "2017-09-26";
+  version = "2020-10-01";
 
   # We use a fork which adds support for newer kernels -- upstream has been abandoned.
   src = fetchFromGitHub {
     owner = "yorickvP";
     repo = "nvidiabl";
-    rev = "2d909f4dfceb24ce98479fd571411c6ec3b71bea";
-    sha256 = "0dsar8fsaxwywjh6rbrxkhdp142vqjnsyxfz6bgpbqml6slpiqs1";
+    rev = "9e21bdcb7efedf29450373a2e9ff2913d1b5e3ab";
+    sha256 = "1z57gbnayjid2jv782rpfpp13qdchmbr1vr35g995jfnj624nlgy";
   };
 
   hardeningDisable = [ "pic" ];
@@ -26,11 +26,12 @@ stdenv.mkDerivation rec {
     "KVER=${kernel.modDirVersion}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
-    homepage = https://github.com/guillaumezin/nvidiabl;
+    homepage = "https://github.com/yorickvP/nvidiabl";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ yorickvp ];
+    broken = kernel.kernelAtLeast "5.18";
   };
 }

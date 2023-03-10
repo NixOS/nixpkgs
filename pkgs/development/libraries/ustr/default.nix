@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ustr";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./va_args.patch ];
 
   # Work around gcc5 switch to gnu11
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   # Fix detection of stdint.h
   postPatch = ''
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     find $out/lib -name \*debug\* -delete
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.and.org/ustr/;
+  meta = with lib; {
+    homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
     license = licenses.bsd2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

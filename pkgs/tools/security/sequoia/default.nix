@@ -1,77 +1,99 @@
-{ stdenv, fetchFromGitLab, lib, darwin
-, git, nettle, llvmPackages, cargo, rustc
-, rustPlatform, pkgconfig, glib
-, openssl, sqlite, capnproto
-, ensureNewerSourcesForZipFilesHook, pythonSupport ? true, pythonPackages ? null
+{ stdenv
+, fetchFromGitLab
+, fetchpatch
+, lib
+, darwin
+, git
+, nettle
+# Use the same llvmPackages version as Rust
+, llvmPackages_12
+, cargo
+, rustc
+, rustPlatform
+, pkg-config
+, glib
+, openssl
+, sqlite
+, capnproto
+, ensureNewerSourcesForZipFilesHook
+, pythonSupport ? true
+, pythonPackages ? null
 }:
 
 assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.15.0";
+  # Upstream has separate version numbering for the library and the CLI frontend.
+  # This derivation provides the CLI frontend, and thus uses its version number.
+  version = "0.27.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1l6isis0ddb0b306z3cv2f5qz2bhw5pmf42shnrxzg7778dnmwhw";
+    repo = "sequoia";
+    rev = "sq/v${version}";
+    sha256 = "sha256-KhJAXpj47Tvds5SLYwnsNeIlPf9QEopoCzsvvHgCwaI=";
   };
 
-  cargoSha256 = "0cfi42wx93yc9yib9lpxl6ph991ra39yfhw1lr16z2qzzbzj2b1j";
+  cargoSha256 = "sha256-Y7iiZVIT9Vbe4YmTfGTU8p3H3odQKms2FBnnWgvF7mI=";
+
+  patches = [
+    (fetchpatch
+      { url = "https://gitlab.com/sequoia-pgp/sequoia/-/commit/7916f90421ecb9a75e32f0284459bcc9a3fd02b0.patch";
+        sha256 = "sha256-KBBn6XaGzIT0iVzoCYsS0N+OkZzGuWmUmIF2hl49FEI=";
+      }
+    )
+  ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cargo
     rustc
     git
-    llvmPackages.libclang
-    llvmPackages.clang
+    llvmPackages_12.libclang.lib
+    llvmPackages_12.clang
     ensureNewerSourcesForZipFilesHook
+    capnproto
   ] ++
     lib.optionals pythonSupport [ pythonPackages.setuptools ]
   ;
 
-  checkInputs = lib.optionals pythonSupport [
+  nativeCheckInputs = lib.optionals pythonSupport [
     pythonPackages.pytest
-    pythonPackages.pytestrunner
+    pythonPackages.pytest-runner
   ];
 
   buildInputs = [
     openssl
     sqlite
     nettle
-    capnproto
-  ]
-    ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
+  ] ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
   ;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    # Defaults to "ginstall" from some reason, although upstream's Makefiles check uname
+    "INSTALL=install"
   ];
 
   buildFlags = [
     "build-release"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages_12.libclang.lib}/lib";
 
-  postPatch = ''
-    # otherwise, the check fails because we delete the `.git` in the unpack phase
-    substituteInPlace openpgp-ffi/Makefile \
-      --replace 'git grep' 'grep -R'
-    # Without this, the check fails
-    substituteInPlace openpgp-ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-    substituteInPlace ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-  '';
+  # Sometimes, tests fail on CI (ofborg) & hydra without this
+  checkFlags = [
+    # doctest for sequoia-ipc fail for some reason
+    "--skip=macros::assert_send_and_sync"
+    "--skip=macros::time_it"
+  ];
 
   preInstall = lib.optionalString pythonSupport ''
     export installFlags="PYTHONPATH=$PYTHONPATH:$out/${pythonPackages.python.sitePackages}"
   '' + lib.optionalString (!pythonSupport) ''
-    export installFlags="PYTHON=disable"
+    export makeFlags="PYTHON=disable"
   '';
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
@@ -81,12 +103,11 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson doronbehar ];
-    platforms = platforms.all;
-    broken = stdenv.targetPlatform.isDarwin;
+    mainProgram = "sq";
   };
 }

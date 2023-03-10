@@ -1,37 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, attrs
+, hypothesis
 , pytest
-, pytest-doctestplus
-, pytest-remotedata
-, pytest-openfiles
 , pytest-arraydiff
+, pytest-astropy-header
+, pytest-cov
+, pytest-doctestplus
+, pytest-filter-subpackage
+, pytest-mock
+, pytest-openfiles
+, pytest-remotedata
+, setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.5.0";
+  version = "0.10.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f28fb81dcdfa745f423b8f6d0303d97357d775b4128bcc2b3668f1602fd5a0b";
+    sha256 = "sha256-hePGbO7eTOZo9HOzzzd/yyqjxI4k8oqqN3roYATM4hE=";
   };
 
-  propagatedBuildInputs = [
-    pytest
-    pytest-doctestplus
-    pytest-remotedata
-    pytest-openfiles
-    pytest-arraydiff
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  # pytest-astropy is a meta package and has no tests
+  buildInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    hypothesis
+    pytest-arraydiff
+    pytest-astropy-header
+    pytest-cov
+    pytest-doctestplus
+    pytest-filter-subpackage
+    pytest-mock
+    pytest-openfiles
+    pytest-remotedata
+  ];
+
+  # pytest-astropy is a meta package that only propagates requirements
   doCheck = false;
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";
-    homepage = https://astropy.org;
+    homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,23 +1,26 @@
-{ stdenv, fetchFromGitHub, fetchurl, runCommand, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fuzz";
-  version = "0.5.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "rust-fuzz";
     repo = "cargo-fuzz";
-    rev = version;
-    sha256 = "0qy4xb7bxyw2x2ya7zmbkz48wxb69jcnvvj7021f1kyc6wdwcxs7";
+    rev = "v${version}";
+    sha256 = "sha256-vjKo0L7sYrC7qWdOGSJDWpL04tmNjO3QRwAIRHN/DiI=";
   };
 
-  cargoSha256 = "0d24crgx6wrb1p96w2yww7cs474x2pz4i6f26cry8pf5dwqfsqdm";
+  cargoSha256 = "sha256-8XVRMwrBEJ1duQtXzNpuN5wJPUgziJlka4n/nAIqeEc=";
 
-  meta = with stdenv.lib; {
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  doCheck = false;
+
+  meta = with lib; {
     description = "Command line helpers for fuzzing";
-    homepage = https://github.com/rust-fuzz/cargo-fuzz;
+    homepage = "https://github.com/rust-fuzz/cargo-fuzz";
     license = with licenses; [ mit asl20 ];
     maintainers = [ maintainers.ekleog ];
-    platforms = platforms.all;
   };
 }

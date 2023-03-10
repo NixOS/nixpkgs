@@ -1,31 +1,58 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, libiconv }:
+{ stdenv
+, autoconf
+, automake
+, fetchFromGitHub
+, gettext
+, lib
+, libiconv
+, libtool
+, libusb1
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.17";
+  pname = "libmtp";
+  version = "1.1.20";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "1p3r38nvdip40ab1h4scj3mzfjkx6kd14szjqyw9r6wz5pslr8zq";
+  src = fetchFromGitHub {
+    owner = "libmtp";
+    repo = "libmtp";
+    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "sha256-/tyCoEW/rCLfZH2HhA3Nxuij9d/ZJgsfyP4fLlfyNRA=";
   };
 
   outputs = [ "bin" "dev" "out" ];
 
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext
+    libtool
+    pkg-config
+  ];
+
   buildInputs = [ libiconv ];
+
   propagatedBuildInputs = [ libusb1 ];
-  nativeBuildInputs = [ pkgconfig ];
 
-  # tried to install files to /lib/udev, hopefully OK
-  configureFlags = [ "--with-udev=$$bin/lib/udev" ];
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
-  meta = with stdenv.lib; {
-    homepage = http://libmtp.sourceforge.net;
+  configureFlags = [ "--with-udev=${placeholder "out"}/lib/udev" ];
+
+  configurePlatforms = [ "build" "host" ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://github.com/libmtp/libmtp";
     description = "An implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
       libmtp is an implementation of Microsoft's Media Transfer Protocol (MTP)
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
-      '';
+    '';
     platforms = platforms.unix;
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ lovesegfault ];
   };
 }

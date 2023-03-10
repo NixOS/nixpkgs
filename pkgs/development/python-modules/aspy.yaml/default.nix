@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A few extensions to pyyaml";
-    homepage = https://github.com/asottile/aspy.yaml;
+    homepage = "https://github.com/asottile/aspy.yaml";
     license = licenses.mit;
   };
 }

@@ -1,52 +1,92 @@
-{ stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute, ronn }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchurl
 
-stdenv.mkDerivation rec {
+, buildPackages
+, iproute2
+, lzo
+, openssl
+, pkg-config
+, ronn
+, zlib
+}:
+
+let
   pname = "zerotierone";
-  version = "1.4.6";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "1f8hh05wx59dc0fbzdzwq05x0gmrdfl4v103wbcyjmzsbazaw6p3";
+    sha256 = "sha256-MhkGcmt1YPvlePF54XsLVFUX+P979uUqhtJjudRx69g=";
   };
+in stdenv.mkDerivation {
+  inherit pname version src;
 
   preConfigure = ''
-      substituteInPlace ./osdep/ManagedRoute.cpp \
-        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
+    patchShebangs ./doc/build.sh
+    substituteInPlace ./doc/build.sh \
+      --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
-      substituteInPlace ./osdep/ManagedRoute.cpp \
-        --replace '/sbin/ip' '${iproute}/bin/ip'
+    substituteInPlace ./make-linux.mk \
+      --replace '-march=armv6zk' "" \
+      --replace '-mcpu=arm1176jzf-s' ""
 
-      patchShebangs ./doc/build.sh
-      substituteInPlace ./doc/build.sh \
-        --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+    # Upstream does not define the cargo settings necessary to use the vendorized rust-jwt version, so it has to be added manually.
+    # Can be removed once ZeroTierOne's zeroidc no longer uses a git url in Cargo.toml for jwt
+    echo '[source."https://github.com/glimberg/rust-jwt"]
+git = "https://github.com/glimberg/rust-jwt"
+replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
-
-  nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute ];
+  nativeBuildInputs = [
+    pkg-config
+    ronn
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+  ];
+  buildInputs = [
+    iproute2
+    lzo
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    install -Dt "$out/bin/" zerotier-one
-    ln -s $out/bin/zerotier-one $out/bin/zerotier-idtool
-    ln -s $out/bin/zerotier-one $out/bin/zerotier-cli
+  buildFlags = [ "all" "selftest" ];
 
-    mkdir -p $man/share/man/man8
-    for cmd in zerotier-one.8 zerotier-cli.1 zerotier-idtool.1; do
-      cat doc/$cmd | gzip -9n > $man/share/man/man8/$cmd.gz
-    done
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkPhase = ''
+    runHook preCheck
+    ./zerotier-selftest
+    runHook postCheck
+  '';
+
+  installFlags = [ "DESTDIR=$$out/upstream" ];
+
+  postInstall = ''
+    mv $out/upstream/usr/sbin $out/bin
+
+    mkdir -p $man/share
+    mv $out/upstream/usr/share/man $man/share/man
+
+    rm -rf $out/upstream
   '';
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
+  meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
-    homepage = https://www.zerotier.com;
+    homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    platforms = platforms.all;
   };
 }

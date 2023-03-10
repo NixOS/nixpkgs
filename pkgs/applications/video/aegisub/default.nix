@@ -1,118 +1,151 @@
-{ config
+{ lib
+, config
 , stdenv
-, fetchurl
-, fetchpatch
-, libX11
-, wxGTK
-, libiconv
+, fetchFromGitHub
+, boost
+, cmake
+, expat
+, harfbuzz
+, ffmpeg
+, ffms
+, fftw
 , fontconfig
 , freetype
-, libGLU
-, libGL
-, libass
-, fftw
-, ffms
-, ffmpeg
-, pkg-config
-, zlib
+, fribidi
+, glib
 , icu
-, boost
 , intltool
+, libGL
+, libGLU
+, libX11
+, libass
+, libiconv
+, libuchardet
+, luajit
+, pcre
+, pkg-config
+, which
+, wrapGAppsHook
+, wxGTK
+, zlib
 
 , spellcheckSupport ? true
 , hunspell ? null
-
-, automationSupport ? true
-, lua ? null
 
 , openalSupport ? false
 , openal ? null
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib ? null
+, alsa-lib ? null
 
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio ? null
 
 , portaudioSupport ? false
 , portaudio ? null
+
+, useBundledLuaJIT ? false
+, darwin
 }:
 
 assert spellcheckSupport -> (hunspell != null);
-assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
-assert alsaSupport -> (alsaLib != null);
+assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
-with stdenv.lib;
-stdenv.mkDerivation
- rec {
+let
+  luajit52 = luajit.override { enable52Compat = true; };
+  inherit (lib) optional;
+  inherit (darwin.apple_sdk.frameworks) CoreText CoreFoundation AppKit Carbon IOKit Cocoa;
+in
+stdenv.mkDerivation rec {
   pname = "aegisub";
-  version = "3.2.2";
+  version = "3.3.3";
 
-  src = fetchurl {
-    url = "http://ftp.aegisub.org/pub/releases/${pname}-${version}.tar.xz";
-    sha256 = "11b83qazc8h0iidyj1rprnnjdivj1lpphvpa08y53n42bfa36pn5";
+  src = fetchFromGitHub {
+    owner = "wangqr";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-oKhLv81EFudrJaaJ2ga3pVh4W5Hd2YchpjsoYoqRm78=";
   };
 
-  patches = [
-    # Compatibility with ICU 59
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/dd67db47cb2203e7a14058e52549721f6ff16a49.patch";
-      sha256 = "07qqlckiyy64lz8zk1as0vflk9kqnjb340420lp9f0xj93ncssj7";
-    })
-
-    # Compatbility with Boost 1.69
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/c3c446a8d6abc5127c9432387f50c5ad50012561.patch";
-      sha256 = "1n8wmjka480j43b1pr30i665z8hdy6n3wdiz1ls81wyv7ai5yygf";
-    })
-  ];
-
   nativeBuildInputs = [
-    pkg-config
     intltool
+    luajit52
+    pkg-config
+    which
+    cmake
+    wrapGAppsHook
   ];
 
-  buildInputs = with stdenv.lib; [
-    libX11
-    wxGTK
+  buildInputs = [
+    boost
+    expat
+    ffmpeg
+    ffms
+    fftw
     fontconfig
     freetype
-    libGLU
-    libGL
-    libass
-    fftw
-    ffms
-    ffmpeg
-    zlib
+    fribidi
+    glib
+    harfbuzz
     icu
-    boost
+    libGL
+    libGLU
+    libX11
+    libass
     libiconv
+    libuchardet
+    pcre
+    wxGTK
+    zlib
   ]
-    ++ optional spellcheckSupport hunspell
-    ++ optional automationSupport lua
-    ++ optional openalSupport openal
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional portaudioSupport portaudio
-    ;
+  ++ lib.optionals stdenv.isDarwin [
+    CoreText
+    CoreFoundation
+    AppKit
+    Carbon
+    IOKit
+    Cocoa
+  ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional openalSupport openal
+  ++ optional portaudioSupport portaudio
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optional spellcheckSupport hunspell
+  ;
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "bindnow" "relro" ];
+  hardeningDisable = [
+    "bindnow"
+    "relro"
+  ];
 
-  # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
-  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+  patches = lib.optionals (!useBundledLuaJIT) [
+    ./remove-bundled-luajit.patch
+  ];
 
-  # this is fixed upstream though not yet in an officially released version,
-  # should be fine remove on next release (if one ever happens)
-  NIX_LDFLAGS = "-lpthread";
+  # error: unknown type name 'NSUInteger'
+  postPatch = ''
+    substituteInPlace src/dialog_colorpicker.cpp \
+      --replace "NSUInteger" "size_t"
+  '';
 
-  postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
+  env.NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
+  NIX_CFLAGS_LINK = "-L${luajit52}/lib";
 
-  meta = {
+  configurePhase = ''
+    export FORCE_GIT_VERSION=${version}
+    # Workaround for a Nixpkgs bug; remove when the fix arrives
+    mkdir build-dir
+    cd build-dir
+    cmake -DCMAKE_INSTALL_PREFIX=$out ..
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/wangqr/Aegisub";
     description = "An advanced subtitle editor";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
@@ -120,12 +153,10 @@ stdenv.mkDerivation
       audio, and features many powerful tools for styling them, including a
       built-in real-time video preview.
     '';
-    homepage = "http://www.aegisub.org/";
-    # The Aegisub sources are itself BSD/ISC,
-    # but they are linked against GPL'd softwares
-    # - so the resulting program will be GPL
+    # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
+    # softwares - so the resulting program will be GPL
     license = licenses.bsd3;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ AndersonTorres wegank ];
+    platforms = platforms.unix;
   };
 }

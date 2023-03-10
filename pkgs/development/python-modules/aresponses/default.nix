@@ -1,20 +1,25 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-# propagatedBuildInputs
 , aiohttp
-# buildInputs
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 , pytest
 , pytest-asyncio
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aresponses";
-  version = "1.1.2";
+  version = "2.1.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "20a63536d86af6f31f9b0720c561bdc595b6bfe071940e347ab58b11caff9e1b";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "CircleUp";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
   };
 
   propagatedBuildInputs = [
@@ -26,13 +31,29 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  # tests only distributed via git repository, not pypi
-  doCheck = false;
+  nativeCheckInputs = [
+    aiohttp
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Disable tests which requires network access
+    "test_foo"
+    "test_passthrough"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "aresponses"
+  ];
 
   meta = with lib; {
     description = "Asyncio testing server";
     homepage = "https://github.com/circleup/aresponses";
     license = licenses.mit;
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ makefu ];
   };
 }
+

@@ -1,11 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
 , mock
 , blessings
 , nose
-, nose_progressive
 , pillow
 , args
 , pkgs
@@ -22,15 +21,21 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+  propagatedBuildInputs = [ pillow blessings args ];
+
+  # nose-progressive and clint are not actively maintained
+  # no longer compatible as behavior demand 2to3, which was removed
+  # in setuptools>=58
+  doCheck  = false;
+  nativeCheckInputs = [ mock nose pkgs.glibcLocales ];
   checkPhase = ''
     ${python.interpreter} test_clint.py
   '';
 
-  buildInputs = [ mock nose nose_progressive pkgs.glibcLocales ];
-  propagatedBuildInputs = [ pillow blessings args ];
+  pythonImportsCheck = [ "clint" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kennethreitz/clint;
+  meta = with lib; {
+    homepage = "https://github.com/kennethreitz/clint";
     description = "Python Command Line Interface Tools";
     license = licenses.isc;
     maintainers = with maintainers; [ domenkozar ];

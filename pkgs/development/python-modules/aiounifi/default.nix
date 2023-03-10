@@ -1,26 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, aiohttp }:
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, orjson
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "11";
+  version = "44";
+  format = "setuptools";
 
-  disabled = ! isPy3k;
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e751cfd002f54dda76dfd498dcc53cb6fab6bff79773ca7d18c9c7b392046b12";
+  src = fetchFromGitHub {
+    owner = "Kane610";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SRI7c0cmrNSTOEyRbs6JGEg5O9tws+Dwn0G8HUqWEqc=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+    orjson
+  ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-aiohttp
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
+  pythonImportsCheck = [
+    "aiounifi"
+  ];
 
   meta = with lib; {
-    description = "An asynchronous Python library for communicating with Unifi Controller API";
-    homepage    = https://pypi.python.org/pypi/aiounifi/;
-    license     = licenses.mit;
+    description = "Python library for communicating with Unifi Controller API";
+    homepage = "https://github.com/Kane610/aiounifi";
+    changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

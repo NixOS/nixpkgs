@@ -1,4 +1,4 @@
-{ stdenv, zlib, bzip2, lzma, fetchFromGitHub } :
+{ lib, stdenv, zlib, bzip2, xz, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -12,7 +12,13 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ zlib bzip2 lzma ];
+  buildInputs = [ zlib bzip2 xz ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: ./libfml.a(rle.o):/build/source/SeqLib/fermi-lite/rle.h:33: multiple definition of
+  #     `rle_auxtab'; ./libfml.a(misc.o):/build/source/SeqLib/fermi-lite/rle.h:33: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     runHook preInstall
@@ -20,7 +26,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Structural variant and INDEL caller for DNA sequencing data, using genome-wide local assembly";
     license = licenses.gpl3;
     homepage = "https://github.com/walaj/svaba";

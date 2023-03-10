@@ -15,14 +15,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pbr ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
   meta = with lib; {
-    homepage = https://launchpad.net/pylockfile;
+    homepage = "https://launchpad.net/pylockfile";
     description = "Platform-independent advisory file locking capability for Python applications";
     license = licenses.asl20;
   };

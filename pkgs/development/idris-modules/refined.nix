@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "refined";
+  pname = "refined";
   version = "2017-12-28";
 
   ipkgName = "idris-refined";
@@ -17,7 +17,7 @@ build-idris-package  {
 
   meta = {
     description = "Port of Scala/Haskell Refined library to Idris";
-    homepage = https://github.com/janschultecom/idris-refined;
+    homepage = "https://github.com/janschultecom/idris-refined";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

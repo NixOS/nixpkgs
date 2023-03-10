@@ -1,26 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, chmlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wxGTK32
+, chmlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "xchm";
-  version = "1.31";
+  version = "1.35";
 
   src = fetchFromGitHub {
     owner = "rzvncj";
     repo = "xCHM";
     rev = version;
-    sha256 = "1mzafbpc1c211byf8bnwl13by7vi8xvxlaykyrajb1bj0ynbmmgp";
+    sha256 = "sha256-ZJvlllhF7KPz+v6KEVPyJjiz+4LHM2Br/oqI54a2Ews=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ wxGTK30 chmlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
-  configureFlags = [ "--with-wx-prefix=${wxGTK30}" ];
+  buildInputs = [
+    wxGTK32
+    chmlib
+  ];
+
+  configureFlags = [ "--with-wx-prefix=${wxGTK32}" ];
 
   preConfigure = ''
-    export LDFLAGS="$LDFLAGS $(${wxGTK30}/bin/wx-config --libs | sed -e s@-pthread@@) -lwx_gtk2u_aui-3.0"
+    export LDFLAGS="$LDFLAGS $(${wxGTK32}/bin/wx-config --libs | sed -e s@-pthread@@) -lwx_gtk3u_aui-3.2"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A viewer for Microsoft HTML Help files";
     homepage = "https://github.com/rzvncj/xCHM";
     license = licenses.gpl2;

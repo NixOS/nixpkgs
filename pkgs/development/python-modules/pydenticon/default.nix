@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pillow
@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow mock ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/azaghal/pydenticon;
+  meta = with lib; {
+    homepage = "https://github.com/azaghal/pydenticon";
     description = "Library for generating identicons. Port of Sigil (https://github.com/cupcake/sigil) with enhancements";
     license = licenses.bsd0;
   };

@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, six, flask, pygments, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, flask, pygments, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
 
 buildPythonPackage rec {
   pname = "klaus";
-  version = "1.5.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    sha256 = "1432m3ki2g4ma10pfv310q1w4da46b0y2jklb8ajbz8a09ms6mfx";
+    sha256 = "sha256-kQcza2beyekJhRT9RwSdMIkeyapcUDtjgkapK3rocvg=";
   };
 
   prePatch = ''
@@ -17,10 +17,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    six flask pygments dulwich httpauth humanize
+    flask pygments dulwich httpauth humanize
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest requests python-ctags3
   ] ++ lib.optional (!isPy3k) mock;
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The first Git web viewer that Just Works";
-    homepage    = https://github.com/jonashaag/klaus;
+    homepage    = "https://github.com/jonashaag/klaus";
     license     = licenses.isc;
     maintainers = with maintainers; [ pSub ];
   };

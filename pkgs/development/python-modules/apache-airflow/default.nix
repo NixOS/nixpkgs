@@ -1,191 +1,311 @@
 { lib
 , stdenv
+, python
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
-, fetchpatch
 , alembic
+, argcomplete
+, attrs
+, blinker
 , cached-property
-, configparser
+, cattrs
+, clickclick
 , colorlog
+, configupdater
+, connexion
+, cron-descriptor
 , croniter
+, cryptography
+, deprecated
 , dill
 , flask
+, flask-login
 , flask-appbuilder
-, flask-admin
 , flask-caching
-, flask_login
-, flask-swagger
-, flask_wtf
-, flask-bcrypt
-, funcsigs
-, future
-, GitPython
+, flask-session
+, flask-wtf
+, gitpython
+, graphviz
 , gunicorn
+, httpx
 , iso8601
-, json-merge-patch
+, importlib-resources
+, importlib-metadata
+, inflection
+, itsdangerous
 , jinja2
-, ldap3
-, lxml
+, jsonschema
 , lazy-object-proxy
+, linkify-it-py
+, lockfile
 , markdown
+, markupsafe
+, marshmallow-oneofschema
+, mdit-py-plugins
+, numpy
+, openapi-spec-validator
 , pandas
+, pathspec
 , pendulum
 , psutil
 , pygments
+, pyjwt
 , python-daemon
 , python-dateutil
-, requests
+, python-nvd3
+, python-slugify
+, python3-openid
+, pythonOlder
+, pyyaml
+, rich
 , setproctitle
-, snakebite
 , sqlalchemy
+, sqlalchemy-jsonfield
+, swagger-ui-bundle
 , tabulate
 , tenacity
 , termcolor
-, text-unidecode
-, thrift
-, tzlocal
+, typing-extensions
 , unicodecsv
 , werkzeug
-, zope_deprecation
-, enum34
-, typing
-, nose
-, python
-, isPy3k
+, pytestCheckHook
+, freezegun
+, mkYarnPackage
+, writeScript
+
+# Extra airflow providers to enable
+, enabledProviders ? []
 }:
+let
+  version = "2.5.0";
 
-buildPythonPackage rec {
-  pname = "apache-airflow";
-  version = "1.10.5";
-  disabled = (!isPy3k);
-
-  src = fetchFromGitHub rec {
+  airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
-    rev = version;
-    sha256 = "14fmhfwx977c9jdb2kgm93i6acx43l45ggj30rb37r68pzpb6l6h";
+    rev = "refs/tags/${version}";
+    # Download using the git protocol rather than using tarballs, because the
+    # GitHub archive tarballs don't appear to include tests
+    forceFetchGit = true;
+    hash = "sha256-QWUXSG+RSHkF5kP1ZYtx+tHjO0n7hfya9CFA3lBhJHk=";
   };
 
-  patches = [
-       # Not yet accepted: https://github.com/apache/airflow/pull/6562
-     (fetchpatch {
-       name = "avoid-warning-from-abc.collections";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
-       sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
-     })
-       # Not yet accepted: https://github.com/apache/airflow/pull/6561
-     (fetchpatch {
-       name = "pendulum2-compatibility";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
-       sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
-     })
-  ];
+  # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
+  # This replicates this shell script, fixing bugs in yarn.lock and package.json
+
+  airflow-frontend = mkYarnPackage {
+    name = "airflow-frontend";
+
+    src = "${airflow-src}/airflow/www";
+    packageJSON = ./package.json;
+    yarnLock = ./yarn.lock;
+    yarnNix = ./yarn.nix;
+
+    distPhase = "true";
+
+    # The webpack license plugin tries to create /licenses when given the
+    # original relative path
+    postPatch = ''
+      sed -i 's!../../../../licenses/LICENSES-ui.txt!licenses/LICENSES-ui.txt!' webpack.config.js
+    '';
+
+    configurePhase = ''
+      cp -r $node_modules node_modules
+    '';
+
+    buildPhase = ''
+      yarn --offline build
+      find package.json yarn.lock static/css static/js -type f | sort | xargs md5sum > static/dist/sum.md5
+    '';
+
+    installPhase = ''
+      mkdir -p $out/static/
+      cp -r static/dist $out/static
+    '';
+  };
+
+  # Import generated file with metadata for provider dependencies and imports.
+  # Enable additional providers using enabledProviders above.
+  providers = import ./providers.nix;
+  getProviderDeps = provider: map (dep: python.pkgs.${dep}) providers.${provider}.deps;
+  getProviderImports = provider: providers.${provider}.imports;
+  providerDependencies = lib.concatMap getProviderDeps enabledProviders;
+  providerImports = lib.concatMap getProviderImports enabledProviders;
+in
+buildPythonPackage rec {
+  pname = "apache-airflow";
+  inherit version;
+  src = airflow-src;
+
+  disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
     alembic
+    argcomplete
+    attrs
+    blinker
     cached-property
+    cattrs
+    clickclick
     colorlog
-    configparser
+    configupdater
+    connexion
+    cron-descriptor
     croniter
+    cryptography
+    deprecated
     dill
     flask
-    flask-admin
     flask-appbuilder
-    flask-bcrypt
     flask-caching
-    flask_login
-    flask-swagger
-    flask_wtf
-    funcsigs
-    future
-    GitPython
+    flask-session
+    flask-wtf
+    flask-login
+    gitpython
+    graphviz
     gunicorn
+    httpx
     iso8601
-    json-merge-patch
+    importlib-resources
+    inflection
+    itsdangerous
     jinja2
-    ldap3
-    lxml
+    jsonschema
     lazy-object-proxy
+    linkify-it-py
+    lockfile
     markdown
+    markupsafe
+    marshmallow-oneofschema
+    mdit-py-plugins
+    numpy
+    openapi-spec-validator
     pandas
+    pathspec
     pendulum
     psutil
     pygments
+    pyjwt
     python-daemon
     python-dateutil
-    requests
+    python-nvd3
+    python-slugify
+    python3-openid
+    pyyaml
+    rich
     setproctitle
     sqlalchemy
+    sqlalchemy-jsonfield
+    swagger-ui-bundle
     tabulate
     tenacity
     termcolor
-    text-unidecode
-    thrift
-    tzlocal
+    typing-extensions
     unicodecsv
     werkzeug
-    zope_deprecation
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
+  ] ++ providerDependencies;
+
+  buildInputs = [
+    airflow-frontend
   ];
 
-  checkInputs = [
-    snakebite
-    nose
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
   ];
+
+  # By default, source code of providers is included but unusable due to missing
+  # transitive dependencies. To enable a provider, add it to extraProviders
+  # above
+  INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
   postPatch = ''
-
-   substituteInPlace setup.py \
-     --replace "flask>=1.1.0, <2.0" "flask" \
-     --replace "jinja2>=2.10.1, <2.11.0" "jinja2" \
-     --replace "pandas>=0.17.1, <1.0.0" "pandas" \
-     --replace "flask-caching>=1.3.3, <1.4.0" "flask-caching" \
-     --replace "flask-appbuilder>=1.12.5, <2.0.0" "flask-appbuilder" \
-     --replace "pendulum==1.4.4" "pendulum" \
-     --replace "cached_property~=1.5" "cached_property" \
-     --replace "dill>=0.2.2, <0.3" "dill" \
-     --replace "configparser>=3.5.0, <3.6.0" "configparser" \
-     --replace "jinja2>=2.7.3, <=2.10.0" "jinja2" \
-     --replace "funcsigs==1.0.0" "funcsigs" \
-     --replace "flask-swagger==0.2.13" "flask-swagger" \
-     --replace "python-daemon>=2.1.1, <2.2" "python-daemon" \
-     --replace "alembic>=0.9, <1.0" "alembic" \
-     --replace "markdown>=2.5.2, <3.0" "markdown" \
-     --replace "future>=0.16.0, <0.17" "future" \
-     --replace "tenacity==4.12.0" "tenacity" \
-     --replace "text-unidecode==1.2" "text-unidecode" \
-     --replace "tzlocal>=1.4,<2.0.0" "tzlocal" \
-     --replace "sqlalchemy~=1.3" "sqlalchemy" \
-     --replace "gunicorn>=19.5.0, <20.0" "gunicorn" \
-     --replace "werkzeug>=0.14.1, <0.15.0" "werkzeug"
-
-  # dumb-init is only needed for CI and Docker, not relevant for NixOS.
-  substituteInPlace setup.py \
-     --replace "'dumb-init>=1.2.2'," ""
-
-   substituteInPlace tests/core.py \
-     --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace setup.cfg \
+      --replace "colorlog>=4.0.2, <5.0" "colorlog" \
+      --replace "flask-appbuilder==4.1.4" "flask-appbuilder>=4.1.3" \
+      --replace "pathspec~=0.9.0" "pathspec"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Fix failing test on Hydra
+    substituteInPlace airflow/utils/db.py \
+      --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
 
-  checkPhase = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+  # allow for gunicorn processes to have access to Python packages
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : $PYTHONPATH"
+  ];
 
-   airflow version
-   airflow initdb
-   airflow resetdb -y
-   nosetests tests.core.CoreTest
-   ## all tests
-   # nosetests --cover-package=airflow
+  postInstall = ''
+    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    # Needed for pythonImportsCheck below
+    export HOME=$(mktemp -d)
   '';
+
+  pythonImportsCheck = [
+    "airflow"
+  ] ++ providerImports;
+
+  preCheck = ''
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
+
+    airflow version
+    airflow db init
+    airflow db reset -y
+  '';
+
+  pytestFlagsArray = [
+    "tests/core/test_core.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "bash_operator_kill" # psutil.AccessDenied
+  ];
+
+  # Updates yarn.lock and package.json
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl pcre "python3.withPackages (ps: with ps; [ pyyaml ])" yarn2nix
+
+    set -euo pipefail
+
+    # Get new version
+    new_version="$(curl -s https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html |
+      pcregrep -o1 'Airflow ([0-9.]+).' | head -1)"
+    update-source-version ${pname} "$new_version"
+
+    # Update frontend
+    cd ./pkgs/development/python-modules/apache-airflow
+    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
+    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
+    # Revert this commit which seems to break with our version of yarn
+    # https://github.com/apache/airflow/commit/b9e133e40c2848b0d555051a99bf8d2816fd28a7
+    patch -p3 < 0001-Revert-fix-yarn-warning-from-d3-color-27139.patch
+    yarn2nix > yarn.nix
+
+    # update provider dependencies
+    ./update-providers.py
+  '';
+
+  # Note on testing the web UI:
+  # You can (manually) test the web UI as follows:
+  #
+  #   nix shell .#python3Packages.apache-airflow
+  #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
+  #   airflow db init
+  #   airflow standalone
+  #
+  # Then navigate to the localhost URL using the credentials printed, try
+  # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
+  # see if they report success.
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
-    homepage = http://airflow.apache.org/;
+    homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc maintainers.ingenieroariel ];
+    maintainers = with maintainers; [ bhipple gbpdt ingenieroariel ];
   };
 }

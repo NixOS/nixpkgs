@@ -1,45 +1,48 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "1.11.0";
+  version = "22.11.23";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1gl8pnykzifh7pnnvl80f5prmj5ga60dp44inpv9az2k9zaqx3qr";
+    sha256 = "sha256-I41bslYoSGPNm1+Xpf4kHFDnIqLN8vg5cEqbFIpDT5A=";
   };
 
-  preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
-    rm BUILD
+  nativeBuildInputs = [ cmake python3 ];
+
+  postPatch = ''
+    # Fix default value of "test_data_path" to make tests work
+    substituteInPlace tests/test.cpp --replace '"tests/";' '"../tests/";'
   '';
 
-  nativeBuildInputs = [ cmake ];
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DFLATBUFFERS_OSX_BUILD_UNIVERSAL=OFF"
+  ];
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "test";
 
-  meta = {
-    description = "Memory Efficient Serialization Library.";
+  meta = with lib; {
+    description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for
       games and other memory constrained apps. It allows you to directly
       access serialized data without unpacking/parsing it first, while still
       having great forwards/backwards compatibility.
     '';
-    maintainers = [ stdenv.lib.maintainers.teh ];
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    homepage = https://google.github.io/flatbuffers/;
+    homepage = "https://google.github.io/flatbuffers/";
+    license = licenses.asl20;
+    maintainers = [ maintainers.teh ];
+    mainProgram = "flatc";
+    platforms = platforms.unix;
   };
-} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
-  # Remove when updating to the next version.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/google/flatbuffers/commit/2b52494047fb6e97af03e1801b42adc7ed3fd78a.diff";
-      sha256 = "01k07ws0f4w7nnl8nli795wgjm4p94lxd3kva4yf7nf3pg4p8arx";
-    })
-  ];
-})
+}

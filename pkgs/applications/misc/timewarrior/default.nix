@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoctor }:
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.2.0";
-
-  enableParallelBuilding = true;
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     rev = "v${version}";
-    sha256 = "0ci8kb7gdp1dsv6xj30nbz8lidrmn50pbriw26wv8mdhs17rfk7w";
+    sha256 = "00ydikzmxym5jhv6w1ii12a6zw5ighddbzxsw03xg8yabzzfnvzw";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake asciidoctor ];
 
-  meta = with stdenv.lib; {
+  dontUseCmakeBuildDir = true;
+
+  meta = with lib; {
     description = "A command-line time tracker";
     homepage = "https://timewarrior.net";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
+    mainProgram = "timew";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

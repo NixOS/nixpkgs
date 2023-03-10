@@ -1,31 +1,33 @@
 diff --git a/pppd/Makefile.linux b/pppd/Makefile.linux
-index 1ebebec..bf90c62 100644
+index 22837c5..6f6fff5 100644
 --- a/pppd/Makefile.linux
 +++ b/pppd/Makefile.linux
-@@ -120,7 +120,7 @@ CFLAGS   += -DHAS_SHADOW
+@@ -111,8 +111,8 @@ endif
+ 
+ # EAP SRP-SHA1
+ ifdef USE_SRP
+-CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
+-LIBS	+= -lsrp -L/usr/local/ssl/lib
++CFLAGS	+= -DUSE_SRP -DOPENSSL -I@openssl_dev@/include/openssl
++LIBS	+= -lsrp -L@openssl_lib@/lib
+ NEEDCRYPTOLIB = y
+ TARGETS	+= srp-entry
+ EXTRAINSTALL = $(INSTALL) -c -m 555 srp-entry $(BINDIR)/srp-entry
+@@ -143,7 +143,7 @@ CFLAGS   += -DHAS_SHADOW
  #LIBS     += -lshadow $(LIBS)
  endif
  
--ifneq ($(wildcard /usr/include/crypt.h),)
+-ifeq ($(shell echo '\#include <crypt.h>' | $(CC) -E - >/dev/null 2>&1 && echo yes),yes)
 +ifneq ($(wildcard @glibc@/include/crypt.h),)
  CFLAGS  += -DHAVE_CRYPT_H=1
  LIBS	+= -lcrypt
  endif
-@@ -132,7 +132,7 @@ endif
+@@ -155,7 +155,7 @@ endif
  
  ifdef NEEDDES
  ifndef USE_CRYPT
--CFLAGS   += -I/usr/include/openssl
-+CFLAGS   += -I@openssl@/include/openssl
- LIBS     += -lcrypto
+-CFLAGS   += -I$(shell $(CC) --print-sysroot)/usr/include/openssl
++CFLAGS   += -I@openssl_dev@/include/openssl
+ NEEDCRYPTOLIB = y
  else
  CFLAGS   += -DUSE_CRYPT=1
-@@ -178,7 +178,7 @@ LIBS	+= -ldl
- endif
- 
- ifdef FILTER
--ifneq ($(wildcard /usr/include/pcap-bpf.h),)
-+ifneq ($(wildcard @libpcap@/include/pcap-bpf.h),)
- LIBS    += -lpcap
- CFLAGS  += -DPPP_FILTER
- endif

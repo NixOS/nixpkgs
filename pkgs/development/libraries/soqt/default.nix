@@ -1,26 +1,29 @@
-{ fetchhg, stdenv, coin3d, qt5, cmake, pkgconfig }:
+{ fetchFromGitHub, lib, stdenv, coin3d, qtbase, cmake, pkg-config }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "soqt";
-  version = "1.6.0a";
+  version = "2020-12-05-unstable";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/Coin3D/soqt";
-    rev = "5f2afb4890e0059eb27e1671f980d10ebfb9e762";
-    sha256 = "0j9lsci4cx95v16l0jaky0vzh4lbdliwz7wc17442ihjaqiqmv8m";
-    fetchSubrepos = true;
+  src = fetchFromGitHub {
+    owner = "coin3d";
+    repo = "soqt";
+    # rev = "SoQt-${version}";
+    rev = "fb8f655632bb9c9c60e0ff9fa69a5ba22d3ff99d";
+    sha256 = "sha256-YoBq8P3Tag2Sepqxf/qIcJDBhH/gladBmDUj78aacZs=";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ coin3d qt5.qtbase ];
+  buildInputs = [ coin3d qtbase ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = {
-    homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;
-    license = stdenv.lib.licenses.gpl2Plus;
+  dontWrapQtApps = true;
+
+  meta = with lib; {
+    homepage = "https://github.com/coin3d/soqt";
+    license = licenses.bsd3;
     description = "Glue between Coin high-level 3D visualization library and Qt";
-
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ gebner viric ];
+    platforms = platforms.linux;
   };
 }

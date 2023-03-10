@@ -1,54 +1,55 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, btrfs-progs
+, go-md2man
+, installShellFiles
+, util-linux
+, nixosTests
+}:
 
-with lib;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.2.13";
+  version = "1.6.19";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
+    hash = "sha256-Us7NEv2BngV1Q/Bkuv4XOjVjpqThL0LnIH+yciPG3L8=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "bin" "out" "man" ];
+  vendorHash = null;
 
-  buildInputs = [ btrfs-progs go-md2man utillinux ];
-  buildFlags = [ "VERSION=v${version}" ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
-  BUILDTAGS = []
-    ++ optional (btrfs-progs == null) "no_btrfs";
+  buildInputs = [ btrfs-progs ];
+
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
-    make binaries
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
+    runHook postBuild
   '';
 
   installPhase = ''
-    for b in bin/*; do
-      install -Dm555 $b $bin/$b
-    done
-
-    make man
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manFile in man/*; do
-      manName="$(basename "$manFile")" # "docker-build.1"
-      number="$(echo $manName | rev | cut -d'.' -f1 | rev)"
-      mkdir -p "$manRoot/man$number"
-      gzip -c "$manFile" > "$manRoot/man$number/$manName.gz"
-    done
+    runHook preInstall
+    install -Dm555 bin/* -t $out/bin
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = https://containerd.io/;
+  passthru.tests = { inherit (nixosTests) docker; };
+
+  meta = with lib; {
+    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
+    homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pycurl, six }:
+{ lib, buildPythonPackage, fetchPypi, pycurl, six }:
 
 buildPythonPackage rec {
   pname = "urlgrabber";
@@ -11,8 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycurl six ];
 
-  meta = with stdenv.lib; {
-    homepage = http://urlgrabber.baseurl.org;
+  meta = with lib; {
+    homepage = "http://urlgrabber.baseurl.org";
     license = licenses.lgpl2Plus;
     description = "Python module for downloading files";
     maintainers = with maintainers; [ qknight ];

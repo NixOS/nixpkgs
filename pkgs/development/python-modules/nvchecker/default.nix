@@ -1,26 +1,79 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, pytest-httpbin }:
+{ lib
+, aiohttp
+, appdirs
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, flaky
+, installShellFiles
+, packaging
+, pycurl
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, structlog
+, tomli
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.5";
+  version = "2.10";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0973f7c3ea5ad65fb19837e8915882a9f2c2f21f5c2589005478697391fea2fd";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-NxHeHT56JCu8Gn/B4IcvPtgGcWH8V9CUQkJeKFcGk/Q=";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio flaky pytest-httpbin ];
+  nativeBuildInputs = [
+    docutils
+    installShellFiles
+  ];
 
-  # disable `test_ubuntupkg` because it requires network
-  checkPhase = ''
-    py.test -m "not needs_net" --ignore=tests/test_ubuntupkg.py
+  propagatedBuildInputs = [
+    aiohttp
+    appdirs
+    packaging
+    pycurl
+    setuptools
+    structlog
+    tomli
+    tornado
+  ];
+
+  nativeCheckInputs = [
+    flaky
+    pytest-asyncio
+    pytest-httpbin
+    pytestCheckHook
+  ];
+
+  postBuild = ''
+    patchShebangs docs/myrst2man.py
+    make -C docs man
   '';
 
-  disabled = pythonOlder "3.5";
+  postInstall = ''
+    installManPage docs/_build/man/nvchecker.1
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lilydjwg/nvchecker;
+  pythonImportsCheck = [
+    "nvchecker"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_net'"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

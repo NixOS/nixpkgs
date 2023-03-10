@@ -1,19 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "libre-baskerville-1.000";
+stdenvNoCC.mkDerivation rec {
+  pname = "libre-baskerville";
+  version = "1.000";
 
-  owner = "impallari";
-  repo = "Libre-Baskerville";
-  rev = "2fba7c8e0a8f53f86efd3d81bc4c63674b0c613f";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Libre-Baskerville";
+    rev = "2fba7c8e0a8f53f86efd3d81bc4c63674b0c613f";
+    hash = "sha256-1EXi1hxFpc7pFsLbEj1xs9LqjeIf3XBol/8HdKNROUU=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/truetype *.ttf
-    install -m444 -Dt $out/share/doc/${name}    README.md FONTLOG.txt
-  '';
+    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
 
-  sha256 = "1kpji85d1mgwq8b4fh1isznrhsrv32la3wf058rwjmhx5a3l7yaj";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A webfont family optimized for body text";
@@ -23,7 +28,7 @@ fetchFromGitHub rec {
       counters and less contrast that allow it to work on small sizes in any
       screen.
     '';
-    homepage = http://www.impallari.com/projects/overview/libre-baskerville;
+    homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

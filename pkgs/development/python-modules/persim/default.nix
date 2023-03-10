@@ -1,50 +1,75 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
-, scikitlearn
-, numpy
-, matplotlib
-, scipy
+, deprecated
 , hopcroftkarp
-, pytest
+, joblib
+, matplotlib
+, numpy
+, scikit-learn
+, scipy
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.1.2";
+  version = "0.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vz6s49ar7mhg4pj4jcbwb79s8acqj6jc70va5w79pjxb5pw8k2n";
+    hash = "sha256-7w8KJHrc9hBOysFBF9sLJFgXEOqKjZZIFoBTlXALSXU=";
   };
 
   propagatedBuildInputs = [
-    scikitlearn
-    numpy
-    matplotlib
-    scipy
+    deprecated
     hopcroftkarp
+    joblib
+    matplotlib
+    numpy
+    scikit-learn
+    scipy
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-
-    # ignore tests due to python 2.7 fail
-    pytest --ignore test/test_plots.py \
-           --ignore test/test_visuals.py
   '';
+
+  pythonImportsCheck = [
+    "persim"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+    # AttributeError: module 'collections' has no attribute 'Iterable'
+    "test_empyt_diagram_list"
+    "test_empty_diagram_list"
+    "test_fit_diagram"
+    "test_integer_diagrams"
+    "test_lists_of_lists"
+    "test_mixed_pairs"
+    "test_multiple_diagrams"
+    "test_n_pixels"
+    # https://github.com/scikit-tda/persim/issues/67
+    "test_persistenceimager"
+  ];
 
   meta = with lib; {
     description = "Distances and representations of persistence diagrams";
-    homepage = https://persim.scikit-tda.org;
+    homepage = "https://persim.scikit-tda.org";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
+    broken = stdenv.isDarwin;
   };
 }

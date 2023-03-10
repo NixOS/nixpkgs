@@ -1,19 +1,16 @@
-{ stable, branch, version, sha256Hash, mkOverride }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+}:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-let
-  defaultOverrides = [
-    (mkOverride "psutil" "5.6.3"
-      "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6")
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
-  ];
-
-  python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
-  };
-in python.pkgs.buildPythonPackage {
+python3.pkgs.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -25,16 +22,29 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # Only 2.x is problematic:
-    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
-    # yarl 1.4+ only requires Python 3.6+
-    sed -iE "s/yarl==1.3.0//" requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "psutil==" "psutil>=" \
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
+      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
-    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
+  propagatedBuildInputs = with python3.pkgs; [
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async_generator
+    distro
+    importlib-resources
+    jinja2
+    jsonschema
+    multidict
+    prompt-toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    setuptools
+    yarl
+    zipstream
   ];
 
   # Requires network access
@@ -44,16 +54,17 @@ in python.pkgs.buildPythonPackage {
     rm $out/bin/gns3loopback # For Windows only
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
       API.
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

@@ -13,7 +13,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "A modern and powerful project management tool";
-    homepage    = http://taskjuggler.org/;
+    homepage    = "https://taskjuggler.org/";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ manveru nicknovitski ];

@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, future }:
+{ lib, buildPythonPackage, fetchPypi, numpy, future }:
 
 buildPythonPackage rec {
   pname = "autograd";
-  version = "1.3";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i1ylf03b7220n8znk63zg6sgdd3py9wlh1pvqvy03g1fxsi8pd1";
+    sha256 = "sha256-2AvSJRVNHbE8tOrM96GMNYvnIJJkG2hxf5b88dFqzQs=";
   };
 
   propagatedBuildInputs = [ numpy future ];
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   # fixed, enable testing. See: https://github.com/HIPS/autograd/issues/404
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/HIPS/autograd;
+  meta = with lib; {
+    homepage = "https://github.com/HIPS/autograd";
     description = "Compute derivatives of NumPy code efficiently";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

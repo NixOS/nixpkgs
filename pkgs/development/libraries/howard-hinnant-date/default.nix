@@ -1,20 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, curl, tzdata, fetchpatch, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, cmake, tzdata, fetchpatch, substituteAll }:
 
 stdenv.mkDerivation rec {
-  pname = "howard-hinnant-date-unstable";
-  version = "2020-01-24";
+  pname = "howard-hinnant-date";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
-    rev = "9a0ee2542848ab8625984fc8cdbfb9b5414c0082";
-    sha256 = "0yxsn0hj22n61bjywysxqgfv7hj5xvsl6isma95fl8xrimpny083";
+    rev = "v${version}";
+    sha256 = "1qk7pgnk0bpinja28104qha6f7r1xwh5dy3gra7vjkqwl0jdwa35";
   };
 
   patches = [
+    # Add pkg-config file
+    # https://github.com/HowardHinnant/date/pull/538
     (fetchpatch {
-      url = "https://github.com/HowardHinnant/date/commit/e56b2dce7e89a92e1b9b35caa13b3e938c4cedea.patch";
-      sha256 = "0m3qbhq7kmm9qa3jm6d2px7c1dxdj5k9lffgdvqnrwmhxwj1p9n2";
+      name = "output-date-pc-for-pkg-config.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/date/538-output-date-pc-for-pkg-config.patch?id=11f6b4d4206b0648182e7b41cd57dcc9ccea0728";
+      sha256 = "1ma0586jsd89jgwbmd2qlvlc8pshs1pc4zk5drgxi3qvp8ai1154";
+    })
+    # Fix CMake include directory path.
+    # https://github.com/HowardHinnant/date/pull/753
+    (fetchpatch {
+      name = "fix-cmake-include-dir.patch";
+      url = "https://github.com/HowardHinnant/date/commit/8061b53c489b0c8676feedcb65049b27664327b5.patch";
+      hash = "sha256-weZUgu0SDad7EK7msUbVzk1zY4euI0Biafj/5jD4JV4=";
     })
     # Without this patch, this library will drop a `tzdata` directory into
     # `~/Downloads` if it cannot find `/usr/share/zoneinfo`. Make the path it
@@ -26,7 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ curl ];
 
   cmakeFlags = [
     "-DBUILD_TZ_LIB=true"
@@ -36,11 +45,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "A date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ r-burns ];
   };
 }

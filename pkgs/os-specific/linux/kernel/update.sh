@@ -58,5 +58,11 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
   echo "Updated $OLDVER -> $V"
 done
 
+# Update linux-rt
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-rt.sh
+
 # Update linux-libre
 COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-libre.sh
+
+# Update linux-hardened
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/hardened/update.py

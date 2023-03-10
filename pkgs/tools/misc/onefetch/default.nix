@@ -1,34 +1,64 @@
-{ fetchFromGitHub, rustPlatform, stdenv, fetchpatch
-, CoreFoundation, libiconv, libresolv, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, installShellFiles
+, pkg-config
+, zstd
+, stdenv
+, CoreFoundation
+, libresolv
+, Security
+, git
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.2.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1sgpai3gx3w7w3ilmbnmzgdxdim6klkfiqaqxmffpyap6qgksfqs";
+    rev = version;
+    sha256 = "sha256-8YPexoTwtjYWSI2TP6mN3nkN8++3Upy+5AeQhb+HyyY=";
   };
 
-  cargoSha256 = "18z887mklynxpjci6va4i5zhg90j824avykym24vbz9w97nqpdd5";
-
-  buildInputs = with stdenv;
-    lib.optionals isDarwin [ CoreFoundation libiconv libresolv Security ];
+  cargoSha256 = "sha256-FF7JRZsrWyZKIFcOutjnCwgJzrmcOqcPA6bx1m5k7Pk=";
 
   cargoPatches = [
-    # fix wrong version in Cargo.lock
-    (fetchpatch {
-      url = "https://github.com/o2sh/onefetch/commit/b69fe660d72b65d7efac99ac5db3b03a82d8667f.patch";
-      sha256 = "14przkdyd4yd11xpdgyscs70w9gpnh02j3xdzxf6h895w3mn84lx";
-    })
+    # enable pkg-config feature of zstd
+    ./zstd-pkg-config.patch
   ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ cmake installShellFiles pkg-config ];
+
+  buildInputs = [ zstd ]
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  preCheck = ''
+    git init
+    git config user.name nixbld
+    git config user.email nixbld@example.com
+    git add .
+    git commit -m test
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd onefetch \
+      --bash <($out/bin/onefetch --generate bash) \
+      --fish <($out/bin/onefetch --generate fish) \
+      --zsh <($out/bin/onefetch --generate zsh)
+  '';
+
+  meta = with lib; {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
+    changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne figsoda kloenk SuperSandro2000 ];
   };
 }

@@ -3,7 +3,7 @@
 , fetchPypi
 , flexmock
 , pytest
-, pytestcov
+, pytest-cov
 , six
 }:
 
@@ -16,10 +16,10 @@ buildPythonPackage rec {
     sha256 = "86670e1808bcdcd4f70112f43da72ae766f04cd8311d1071ce6e0e0a72e37ee8";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     flexmock
     pytest
-    pytestcov
+    pytest-cov
     six
   ];
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Capture stdout, stderr easily.";
-    homepage = https://github.com/oinume/iocapture;
+    homepage = "https://github.com/oinume/iocapture";
     license = licenses.mit;
   };
 }

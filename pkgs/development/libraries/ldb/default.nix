@@ -1,49 +1,79 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, tdb, talloc, tevent
-, popt, libxslt, docbook_xsl, docbook_xml_dtd_42, cmocka
+{ lib, stdenv
+, fetchurl
+, python3
+, pkg-config
+, readline
+, tdb
+, talloc
+, tevent
+, popt
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, cmocka
+, wafHook
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldb-1.3.3";
+  pname = "ldb";
+  version = "2.6.1";
 
   src = fetchurl {
-    url = "mirror://samba/ldb/${name}.tar.gz";
-    sha256 = "14gsrm7dvyjpbpnc60z75j6fz2p187abm2h353lq95kx2bv70c1b"                                                                                                                                                             ;
+    url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
+    sha256 = "sha256-RnQD9334Z4LDlluxdUQLqi7XUan+uVYBlL2MBr8XNsk=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    wafHook
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+    tdb
+    tevent
+  ];
+
   buildInputs = [
-    python readline tdb talloc tevent popt
-    libxslt docbook_xsl docbook_xml_dtd_42
+    python3
+    readline # required to build python
+    tdb
+    talloc
+    tevent
+    popt
     cmocka
+    libxcrypt
   ];
 
-  patches = [
-    # CVE-2019-3824
-    # downloading the patch from debian as they have ported the patch from samba to ldb but otherwise is identical to
-    # https://bugzilla.samba.org/attachment.cgi?id=14857
-    (fetchurl {
-      name = "CVE-2019-3824.patch";
-      url = "https://sources.debian.org/data/main/l/ldb/2:1.1.27-1+deb9u1/debian/patches/CVE-2019-3824-master-v4-5-02.patch";
-      sha256 = "1idnqckvjh18rh9sbq90rr4sxfviha9nd1ca9pd6lai0y6r6q4yd";
-    })
-  ];
-
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
   preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
   '';
 
-  configureFlags = [
+  wafPath = "buildtools/bin/waf";
+
+  wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+    "--without-ldb-lmdb"
   ];
 
-  stripDebugList = "bin lib modules";
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
 
-  meta = with stdenv.lib; {
+  stripDebugList = [ "bin" "lib" "modules" ];
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A LDAP-like embedded database";
-    homepage = https://ldb.samba.org/;
+    homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
   };

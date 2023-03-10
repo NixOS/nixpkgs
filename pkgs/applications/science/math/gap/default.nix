@@ -1,10 +1,11 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , makeWrapper
-, m4
+, readline
 , gmp
+, pari
+, zlib
 # one of
 # - "minimal" (~400M):
 #     Install the bare minimum of packages required by gap to start.
@@ -23,27 +24,31 @@ let
   # packages absolutely required for gap to start
   # `*` represents the version where applicable
   requiredPackages = [
-    "GAPDoc-*"
-    "primgrp-*"
-    "SmallGrp-*"
+    "gapdoc"
+    "primgrp"
+    "smallgrp"
     "transgrp"
   ];
-  # packages autoloaded by default if available
+  # packages autoloaded by default if available, and their dependencies
   autoloadedPackages = [
     "atlasrep"
-    "autpgrp-*"
-    "alnuth-*"
-    "crisp-*"
+    "autpgrp"
+    "alnuth"
+    "crisp"
     "ctbllib"
-    "FactInt-*"
+    "factint"
     "fga"
-    "irredsol-*"
-    "laguna-*"
-    "polenta-*"
-    "polycyclic-*"
-    "resclasses-*"
-    "sophus-*"
-    "tomlib-*"
+    "irredsol"
+    "laguna"
+    "polenta"
+    "polycyclic"
+    "resclasses"
+    "sophus"
+    "tomlib"
+    "autodoc"  # dependency of atlasrep
+    "io"       # used by atlasrep to fetch data from online sources
+    "radiroot" # dependency of polenta
+    "utils"    # dependency of atlasrep
   ];
   keepAll = keepAllPackages || (packageSet == "full");
   packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
@@ -61,11 +66,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.10.2";
+  version = "4.12.2";
 
   src = fetchurl {
-    url = "https://www.gap-system.org/pub/gap/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
-    sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
+    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    sha256 = "sha256-ZyMIdF63iiIklO6N1nhu3VvDMUVvzGRWrAZL2yjVh6g=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -73,32 +78,27 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [ "--with-gmp=system" ];
-
   buildInputs = [
-    m4
+    readline
     gmp
+    zlib
   ];
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  patches = [
-    # https://github.com/gap-system/gap/pull/3294
-    (fetchpatch {
-      name = "add-make-install-targets.patch";
-      url = "https://github.com/gap-system/gap/commit/3361c172e6c5ff3bb3f01ba9d6f1dd4ad42cea80.patch";
-      sha256 = "1kwp9qnfvmlbpf1c3rs6j5m2jz22rj7a4hb5x1gj9vkpiyn5pdyj";
-    })
+  propagatedBuildInputs = [
+    pari # used at runtime by the alnuth package
   ];
 
-  # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
-  # tests are run twice, once with all packages loaded and once without
-  # checkTarget = "teststandard";
+  # "teststandard" is a superset of the tests run by "check". it takes ~20min
+  # instead of ~1min. tests are run twice, once with all packages loaded and
+  # once without.
+  # installCheckTarget = "teststandard";
 
   doInstallCheck = true;
-  installCheckTarget = "testinstall";
+  installCheckTarget = "check";
 
   preInstallCheck = ''
     # gap tests check that the home directory exists
@@ -114,45 +114,26 @@ stdenv.mkDerivation rec {
     # like the defaults the Makefile, but use gap from PATH instead of the
     # one from builddir
     installCheckFlagsArray+=(
-      "TESTGAP=gap --quitonbreak -b -m 100m -o 1g -q -x 80 -r -A"
-      "TESTGAPauto=gap --quitonbreak -b -m 100m -o 1g -q -x 80 -r"
+      "TESTGAPcore=gap --quitonbreak -b -q -r"
+      "TESTGAPauto=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80"
+      "TESTGAP=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80 -A"
     )
-  '';
-
-  postCheck = ''
-    # The testsuite doesn't exit with a non-zero exit code on failure.
-    # It leaves its logs in dev/log however.
-
-    # grep for error messages
-    if grep ^##### dev/log/*; then
-        exit 1
-    fi
   '';
 
   postBuild = ''
     pushd pkg
-    bash ../bin/BuildPackages.sh
+    # failures are ignored unless --strict is set
+    bash ../bin/BuildPackages.sh ${lib.optionalString (!keepAll) "--strict"}
     popd
   '';
 
-  installTargets = [
-    "install-libgap"
-    "install-headers"
-  ];
-
-  # full `make install` is not yet implemented, just for libgap and headers
   postInstall = ''
-    # Install config.h, which is not currently handled by `make install-headers`
-    cp gen/config.h "$out/include/gap"
-
-    mkdir -p "$out/bin" "$out/share/gap/"
-
-    mkdir -p "$out/share/gap"
-    echo "Copying files to target directory"
-    cp -ar . "$out/share/gap/build-dir"
-
-    makeWrapper "$out/share/gap/build-dir/bin/gap.sh" "$out/bin/gap" \
-      --set GAP_DIR $out/share/gap/build-dir
+    # make install creates an empty pkg dir. since we run "make check" on
+    # installCheckPhase to make sure the installed GAP finds its libraries, we
+    # also install the tst dir. this is probably excessively cautious, see
+    # https://github.com/NixOS/nixpkgs/pull/192548#discussion_r992824942
+    rm -r "$out/share/gap/pkg"
+    cp -ar pkg tst "$out/share/gap"
   '';
 
   preFixup = ''
@@ -162,19 +143,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Computational discrete algebra system";
-    maintainers = with maintainers;
-    [
-      raskin
-      chrisjefferson
-      timokau
-    ];
+    # We are also grateful to ChrisJefferson for previous work on the package,
+    # and to ChrisJefferson and fingolfin for help with GAP-related questions
+    # from the upstream point of view.
+    maintainers = teams.sage.members;
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
-    # keeping all packages increases the package size considerably, wchich
-    # is why a local build is preferable in that situation. The timeframe
-    # is reasonable and that way the binary cache doesn't get overloaded.
+    # keeping all packages increases the package size considerably, which is
+    # why a local build is preferable in that situation. The timeframe is
+    # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
     license = licenses.gpl2;
-    homepage = http://gap-system.org/;
+    homepage = "https://www.gap-system.org";
   };
 }

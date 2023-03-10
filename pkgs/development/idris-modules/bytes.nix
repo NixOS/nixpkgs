@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "bytes";
+  pname = "bytes";
   version = "2018-02-10";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "FFI-based byte buffers for Idris";
-    homepage = https://github.com/ziman/idris-bytes;
+    homepage = "https://github.com/ziman/idris-bytes";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

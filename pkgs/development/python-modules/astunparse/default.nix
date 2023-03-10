@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , six
@@ -19,9 +19,9 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This is a factored out version of unparse found in the Python source distribution";
-    homepage = https://github.com/simonpercivall/astunparse;
+    homepage = "https://github.com/simonpercivall/astunparse";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp ];
   };

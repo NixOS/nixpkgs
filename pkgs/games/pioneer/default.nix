@@ -1,35 +1,68 @@
-{ fetchFromGitHub, stdenv, cmake, pkgconfig, curl, libsigcxx, SDL2
-, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU, libGL
-, glew
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, assimp
+, curl
+, freetype
+#, glew
+, libGL
+, libGLU
+, libpng
+, libsigcxx
+, libvorbis
+, lua5_2
+, mesa
+, SDL2
+, SDL2_image
 }:
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20200203";
+  version = "20220203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "1011xsi94jhw98mhm8kryq8ajig0qfbrdx5xdasi92bd4nk7lcp8";
+    hash = "sha256-HNVg8Lq6k6gQDmgOdpnBwJ57WSEnn5XwtqzmkDU1WGI=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  buildInputs = [
-    curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng
-    assimp libGLU libGL glew
-  ];
-
-  preConfigure = ''
-    export PIONEER_DATA_DIR="$out/share/pioneer/data";
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'string(TIMESTAMP PROJECT_VERSION "%Y%m%d")' 'set(PROJECT_VERSION ${version})'
   '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  buildInputs = [
+    assimp
+    curl
+    freetype
+    libGL
+    libGLU
+    libpng
+    libsigcxx
+    libvorbis
+    lua5_2
+    mesa
+    SDL2
+    SDL2_image
+  ];
+
+  cmakeFlags = [
+    "-DPIONEER_DATA_DIR:PATH=${placeholder "out"}/share/pioneer/data"
+    "-DUSE_SYSTEM_LIBLUA:BOOL=YES"
+  ];
+
+  makeFlags = [ "all" "build-data" ];
+
+  meta = with lib; {
     description = "A space adventure game set in the Milky Way galaxy at the turn of the 31st century";
-    homepage = https://pioneerspacesim.net;
+    homepage = "https://pioneerspacesim.net";
     license = with licenses; [
-        gpl3 cc-by-sa-30
+        gpl3Only cc-by-sa-30
     ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

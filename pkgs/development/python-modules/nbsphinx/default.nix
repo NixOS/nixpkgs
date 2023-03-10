@@ -7,16 +7,19 @@
 , nbformat
 , sphinx
 , traitlets
-, python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.5.1";
+  version = "0.8.12";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kh0d83xavpffdp4xp4hq8xy43l6lyv3d1a25rnc15jcbdf1nghw";
+    hash = "sha256-dlcEFs3svrIdv1w9aqIEztbB3X6+9Ad7XCG4xuzpUz8=";
   };
 
   propagatedBuildInputs = [
@@ -28,14 +31,20 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m nbsphinx
-  '';
+  # The package has not tests
+  doCheck = false;
+
+  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+
+  pythonImportsCheck = [
+    "nbsphinx"
+  ];
 
   meta = with lib; {
     description = "Jupyter Notebook Tools for Sphinx";
-    homepage = https://nbsphinx.readthedocs.io/;
+    homepage = "https://nbsphinx.readthedocs.io/";
+    changelog = "https://github.com/spatialaudio/nbsphinx/blob/${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

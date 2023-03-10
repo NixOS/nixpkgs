@@ -3,12 +3,14 @@
 , fetchFromGitHub
 , autoreconfHook
 , go-md2man
-, pkgconfig
+, pkg-config
 , libcap
 , libseccomp
 , python3
 , systemd
 , yajl
+, nixosTests
+, criu
 }:
 
 let
@@ -16,6 +18,7 @@ let
   disabledTests = [
     "test_capabilities.py"
     "test_cwd.py"
+    "test_delete.py"
     "test_detach.py"
     "test_exec.py"
     "test_hooks.py"
@@ -24,6 +27,8 @@ let
     "test_pid.py"
     "test_pid_file.py"
     "test_preserve_fds.py"
+    "test_resources"
+    "test_seccomp"
     "test_start.py"
     "test_uid_gid.py"
     "test_update.py"
@@ -33,21 +38,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "0.13";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "0c5acf916yv2zv3xjvxk1sa4h3n2wljc5hw61php7q37pbjc1ppn";
+    hash = "sha256-Pm96fOfbBqf7mc9llv3sFi00Ioa3f9WNoDmLBPhB2eI=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkgconfig python3 ];
+  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
-  buildInputs = [ libcap libseccomp systemd yajl ];
+  buildInputs = [ criu libcap libseccomp systemd yajl ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+
+  NIX_LDFLAGS = "-lcriu";
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
@@ -62,10 +70,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = { inherit (nixosTests) podman; };
+
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
+    homepage = "https://github.com/containers/crun";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

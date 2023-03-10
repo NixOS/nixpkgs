@@ -1,24 +1,25 @@
-{ lib, fetchzip, buildDunePackage, alcotest, bos }:
+{ lib, fetchurl, buildDunePackage, ocaml, findlib, alcotest, bos, rresult }:
 
-let version = "3.2.0"; in
-
-buildDunePackage {
+buildDunePackage rec {
   pname = "base64";
-  inherit version;
+  version = "3.5.1";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-base64/archive/v${version}.tar.gz";
-    sha256 = "1ilw3zj0w6cq7i4pvr8m2kv5l5f2y9aldmv72drlwwns013b1gwy";
+  minimalOCamlVersion = "4.03";
+  duneVersion = "3";
+
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-${version}.tbz";
+    hash = "sha256-2P7apZvRL+rnrMCLWSjdR4qsUj9MqNJARw0lAGUcZe0=";
   };
 
-  minimumOCamlVersion = "4.03";
+  nativeBuildInputs = [ findlib ];
 
-  buildInputs = [ alcotest bos ];
-
-  doCheck = true;
+  # otherwise fmt breaks evaluation
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ alcotest bos rresult ];
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-base64;
+    homepage = "https://github.com/mirage/ocaml-base64";
     description = "Base64 encoding and decoding in OCaml";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];

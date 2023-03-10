@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "categories";
+  pname = "categories";
   version = "2018-07-02";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "Category Theory";
-    homepage = https://github.com/danilkolikov/categories;
+    homepage = "https://github.com/danilkolikov/categories";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

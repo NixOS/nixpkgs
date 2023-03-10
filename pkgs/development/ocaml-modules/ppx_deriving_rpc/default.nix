@@ -1,13 +1,17 @@
-{ lib, buildDunePackage, rpclib, ppxlib, ppx_deriving }:
+{ lib, buildDunePackage, rpclib, alcotest, ppxlib, ppx_deriving, yojson }:
 
 buildDunePackage rec {
   pname = "ppx_deriving_rpc";
 
   inherit (rpclib) version src;
 
-  buildInputs = [ ppxlib ];
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
-  propagatedBuildInputs = [ rpclib ppx_deriving ];
+  propagatedBuildInputs = [ ppxlib rpclib ppx_deriving ];
+
+  checkInputs = [ alcotest yojson ];
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-rpc";

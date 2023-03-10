@@ -1,59 +1,50 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, makeWrapper, makeDesktopItem, copyDesktopItems }:
 
-let
+stdenv.mkDerivation rec {
   pname = "sienna";
-  version = "1.0c";
+  version = "1.0d";
+
+  src = fetchurl {
+    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
+    sha256 = "sha256-1bFjhN7jL/PMYMJH1ete6uyHTYsTGgoP60sf/sJTLlU=";
+  };
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/sienna.png";
     sha256 = "12q2rhk39dmb6ir50zafn8dylaad5gns8z3y21mfjabc5l5g02nn";
   };
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [ (makeDesktopItem {
     name = "sienna";
     exec = pname;
     icon = icon;
-    comment = "Fast-paced one button platformer"; 
+    comment = "Fast-paced one button platformer";
     desktopName = "Sienna";
     genericName = "sienna";
-    categories = "Game;";
-  };
+    categories = [ "Game" ];
+  }) ];
 
-in
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  dontUnpack = true;
 
-  src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
-    sha256 = "1x15276fhqspgrrv8fzkp032i2qa8piywc0yy061x59mxhdndzj6";
-  };
-
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love ];
-
-  phases = "installPhase";
-
-  installPhase =
-  ''
+  installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
     cp -v $src $out/share/games/lovegames/${pname}.love
 
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast-paced one button platformer";
+    homepage = "https://tangramgames.dk/games/sienna";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/sienna;
   };
 
 }

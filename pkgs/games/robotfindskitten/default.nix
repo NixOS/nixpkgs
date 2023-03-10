@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, ncurses }:
+{ lib, stdenv, fetchurl, pkg-config, ncurses }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "robotfindskitten";
-  version = "2.7182818.701";
+  version = "2.8284271.702";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/rfk/robotfindskitten-POSIX/mayan_apocalypse_edition/${pname}-${version}.tar.gz";
-    sha256 = "06fp6b4li50mzw83j3pkzqspm6dpgxgxw03b60xkxlkgg5qa6jbp";
+    url = "mirror://sourceforge/project/rfk/robotfindskitten-POSIX/ship_it_anyway/${pname}-${version}.tar.gz";
+    sha256 = "1bwrkxm83r9ajpkd6x03nqvmdfpf5vz6yfy0c97pq3v3ykj74082";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "execgamesdir=$(out)/bin" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Yet another zen simulation; A simple find-the-kitten game";
-    homepage = http://robotfindskitten.org/;
+    homepage = "http://robotfindskitten.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

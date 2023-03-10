@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "logic";
+  pname = "logic";
   version = "2016-12-02";
 
   idrisDeps = [ bifunctors ];
@@ -21,7 +21,7 @@ build-idris-package  {
 
   meta = {
     description = "Propositional logic tools, inspired by the Coq standard library";
-    homepage = https://github.com/yurrriq/idris-logic;
+    homepage = "https://github.com/yurrriq/idris-logic";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

@@ -1,39 +1,55 @@
-{ stdenv, fetchPypi, python }:
+{ lib
+, buildPythonPackage
+, factory_boy
+, faker
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
-python.pkgs.buildPythonPackage rec {
-  pname   = "tld";
-  version = "0.11.9";
+buildPythonPackage rec {
+  pname = "tld";
+  version = "0.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5fe79df74b68ebc33406dfadc69f6484dee8005035a129fdb40b8fabfd06e9f";
+    hash = "sha256-k93l4cBL3xhEl26uRAcGN50h9KsjW3PAXXSD4HT7Vik=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ six ];
-  checkInputs = with python.pkgs; [ factory_boy faker pytestcov tox pytestCheckHook];
-
-  # https://github.com/barseghyanartur/tld/issues/54
-  disabledTests = [
-    "test_1_update_tld_names"
-    "test_1_update_tld_names_command"
-    "test_2_update_tld_names_module"
-  ];
-
-  preCheck = ''
-    export PATH="$PATH:$out/bin"
+  postPatch = ''
+    sed -i "/--cov/d" pytest.ini
   '';
 
-  dontUseSetuptoolsCheck = true;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
+    factory_boy
+    faker
+  ];
+
+  # These tests require network access, but disabledTestPaths doesn't work.
+  # the file needs to be `import`ed by another Python test file, so it
+  # can't simply be removed.
+  preCheck = ''
+    echo > src/tld/tests/test_commands.py
+  '';
 
   pythonImportsCheck = [
     "tld"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/barseghyanartur/tld;
+  meta = with lib; {
     description = "Extracts the top level domain (TLD) from the URL given";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ genesis ];
+    homepage = "https://github.com/barseghyanartur/tld";
+    changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
+    # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
+    # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
+    license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }

@@ -1,23 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, libsamplerate, libsndfile, fftw
-, vampSDK, ladspaH }:
+{ lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
+, vamp-plugin-sdk, ladspaH, meson, ninja, darwin }:
 
-stdenv.mkDerivation {
-  name = "rubberband-1.8.1";
+stdenv.mkDerivation rec {
+  pname = "rubberband";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = http://code.breakfastquay.com/attachments/download/23/rubberband-1.8.1.tar.bz2;
-    sha256 = "0x9bm2nqd6w2f35w2sqcp7h5z34i4w7mdg53m0vzjhffnnq6637z";
+    url = "https://breakfastquay.com/files/releases/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-uVp22lzbOWZ3DGARXs2Dj4QGESD4hMO/3JBPdZMeyao=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsamplerate libsndfile fftw vampSDK ladspaH ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
+  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ] ++ lib.optionals stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
+  makeFlags = [ "AR:=$(AR)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";
-    homepage = https://www.breakfastquay.com/rubberband/index.html;
+    homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

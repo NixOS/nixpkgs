@@ -1,26 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  version = "0.0.1";
+buildGoModule rec {
   pname = "hecate";
+  version = "unstable-2022-05-03";
 
   src = fetchFromGitHub {
-    owner  = "evanmiller";
-    repo   = "hecate";
-    rev    = "v${version}";
-    sha256 = "0ymirsd06z3qa9wi59k696mg8f4mhscw8gc5c5zkd0n3n8s0k0z8";
+    owner = "evanmiller";
+    repo = "hecate";
+    rev = "7637250f4b2c5b777418b35fa11276d11d5128b0";
+    sha256 = "sha256-8L0ukzPF7aECCeZfwZYKcJAJLpPgotkVJ+OSdwQUjhw=";
   };
 
-  goPackagePath = "hecate";
+  vendorSha256 = "sha256-eyMrTrNarNCB3w8EOeJBmCbVxpMZy25sQ19icVARU1M=";
 
-  goDeps = ./deps.nix;
+  ldflags = [ "-s" "-w" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "terminal hex editor";
     longDescription = "The Hex Editor From Hell!";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
   };
 }

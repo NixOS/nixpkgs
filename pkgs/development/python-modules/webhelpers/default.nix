@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , routes
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   # TODO: failing tests https://bitbucket.org/bbangert/webhelpers/pull-request/1/fix-error-on-webob-123/diff
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://webhelpers.readthedocs.org/en/latest/;
+  meta = with lib; {
+    homepage = "https://webhelpers.readthedocs.org/en/latest/";
     description = "Web Helpers";
     license = licenses.free;
     maintainers = with maintainers; [ domenkozar ];

@@ -1,36 +1,44 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, lib
-, fetchpatch
-, sphinx
-, flake8
-, pytest
-, pytestcov
-, pytest-flakes
-, pytestpep8
+, pytestCheckHook
+, pytest-mypy
+, pythonOlder
+, redis
 }:
 
 buildPythonPackage rec {
-  version = "1.5.2";
   pname = "portalocker";
+  version = "2.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17rfgmgwyxyng8q7bvn369cncadqws2wgkg45q6v8337wm9jxins";
+    hash = "sha256-Ay6B1TSojsFzbQP3gLoHPwR6BsR4sG4pN0hvM06VXFE=";
   };
 
-  checkInputs = [
-    sphinx
-    flake8
-    pytest
-    pytestcov
-    pytest-flakes
-    pytestpep8
+  propagatedBuildInputs = [
+    redis
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mypy
+  ];
+
+  disabledTests = [
+    "test_combined" # no longer compatible with setuptools>=58
+  ];
+
+  pythonImportsCheck = [
+    "portalocker"
   ];
 
   meta = with lib; {
     description = "A library to provide an easy API to file locking";
-    homepage = https://github.com/WoLpH/portalocker;
+    homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
     maintainers = with maintainers; [ jonringer ];
     platforms = platforms.unix; # Windows has a dependency on pypiwin32

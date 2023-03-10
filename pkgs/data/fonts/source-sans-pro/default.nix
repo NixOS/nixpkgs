@@ -1,24 +1,32 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "3.006";
-in fetchzip {
+# Source Sans Pro got renamed to Source Sans 3 (see
+# https://github.com/adobe-fonts/source-sans/issues/192). This is the
+# last version named "Pro". It is useful for backward compatibility
+# with older documents/templates/etc.
+
+stdenvNoCC.mkDerivation rec {
   name = "source-sans-pro-${version}";
+  version = "3.006";
 
-  url = "https://github.com/adobe-fonts/source-sans-pro/releases/download/${version}R/source-sans-pro-${version}R.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+    hash = "sha256-1Savijgq3INuUN89MR0t748HOuGseXVw5Kd4hYwuVas=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,variable}
-    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
-    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 OTF/*.otf -t $out/share/fonts/opentype
+    install -Dm444 TTF/*.ttf -t $out/share/fonts/truetype
+    install -Dm444 VAR/*.otf -t $out/share/fonts/variable
+
+    runHook postInstall
   '';
 
-  sha256 = "11jd50cqiq2s0z39rclg73iiw2j5yzgs1glfs9psw5wbbisgysmr";
-
   meta = with lib; {
-    homepage = https://adobe-fonts.github.io/source-sans-pro/;
-    description = "A set of OpenType fonts designed by Adobe for UIs";
+    homepage = "https://adobe-fonts.github.io/source-sans/";
+    description = "Sans serif font family for user interface environments";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];

@@ -1,30 +1,37 @@
-{ stdenv, fetchurl, alsaLib, python, SDL }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, alsa-lib
+, python3
+, SDL
+}:
 
 stdenv.mkDerivation rec {
-  version = "20120105";
   pname = "schismtracker";
+  version = "20220506";
 
-  src = fetchurl {
-    url = "http://schismtracker.org/dl/${pname}-${version}.tar.bz2";
-    sha256 = "1ny7wv2wxm1av299wvpskall6438wjjpadphmqc7c0h6d0zg5kii";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-fK0FBn9e7l1Y/A7taFlaoas6ZPREFhEmskVBqjda6q0=";
   };
 
-  preConfigure = ''
-    # Build fails on Linux with windres.
-    export ac_cv_prog_ac_ct_WINDRES=
-  '';
+  configureFlags = [ "--enable-dependency-tracking" ]
+    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  configureFlags = [ "--enable-dependency-tracking" ];
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
-  buildInputs = [ alsaLib python SDL ];
+  buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
-    homepage = http://schismtracker.org/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
+    homepage = "http://schismtracker.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ftrvxmtrx ];
   };
 }

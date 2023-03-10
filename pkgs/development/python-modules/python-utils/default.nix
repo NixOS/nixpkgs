@@ -1,30 +1,63 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, pytestcov, pytest-flakes, pytestpep8, sphinx, six }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, loguru
+, pytest-asyncio
+, pytest-mypy
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.3.0";
+  version = "3.5.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "34aaf26b39b0b86628008f2ae0ac001b30e7986a8d303b61e1357dfcdad4f6d3";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "WoLpH";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FFBWkq7ct4JWSTH4Ldg+pbG/BAiW33puB7lqFPBjptw=";
   };
 
   postPatch = ''
-    rm -r tests/__pycache__
-    rm tests/*.pyc
+    sed -i '/--cov/d' pytest.ini
+    sed -i '/--mypy/d' pytest.ini
   '';
 
-  checkInputs = [ pytest pytestrunner pytestcov pytest-flakes pytestpep8 sphinx ];
+  passthru.optional-dependencies = {
+    loguru = [
+      loguru
+    ];
+  };
 
-  checkPhase = ''
-    py.test tests
-  '';
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-mypy
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.loguru;
 
-  propagatedBuildInputs = [ six ];
+  pythonImportsCheck = [
+    "python_utils"
+  ];
+
+  pytestFlagsArray = [
+    "_python_utils_tests"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Flaky tests on darwin
+    "test_timeout_generator"
+  ];
 
   meta = with lib; {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
+    changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

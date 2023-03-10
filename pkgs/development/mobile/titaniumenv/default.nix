@@ -8,12 +8,12 @@ rec {
       else throw "Titanium version not supported: "+tiVersion;
     in
     import titaniumSdkFile {
-      inherit (pkgs) stdenv fetchurl unzip makeWrapper;
+      inherit (pkgs) stdenv lib fetchurl unzip makeWrapper;
     };
 
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv python which file jdk nodejs;
-    inherit (pkgs.nodePackages_10_x) alloy titanium;
+    inherit (pkgs) stdenv lib python which file jdk nodejs;
+    inherit (pkgs.nodePackages) alloy titanium;
     inherit (androidenv) composeAndroidPackages;
     inherit (xcodeenv) composeXcodeWrapper;
     inherit titaniumsdk;

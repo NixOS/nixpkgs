@@ -1,21 +1,23 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, six
 }:
 
 buildPythonPackage rec {
   pname = "Twiggy";
-  version = "0.4.7";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44d8aa51110efaab0712b5ec2b015149ad4f28e28f729004aac45d0ad8e19be0";
+    sha256 = "7938840275972f6ce89994a5bdfb0b84f0386301a043a960af6364952e78ffe4";
   };
 
+  propagatedBuildInputs = [ six ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://twiggy.wearpants.org;
+  meta = with lib; {
+    homepage = "http://twiggy.wearpants.org";
     # Taken from http://i.wearpants.org/blog/meet-twiggy/
     description = "Twiggy is the first totally new design for a logger since log4j";
     license     = licenses.bsd3;

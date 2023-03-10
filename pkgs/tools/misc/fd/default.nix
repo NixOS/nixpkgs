@@ -1,30 +1,41 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "7.4.0";
+  version = "8.7.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "108p1p9bxhg4qzwfs6wqcakcvlpqw3w498jkz1vhmg6jp1mbmgdr";
+    hash = "sha256-y7IrwMLQnvz1PeKt8BE9hbEBwQBiUXM4geYbiTjMymw=";
   };
 
-  cargoSha256 = "1nhlarrl0m6as3j2547yf1xxjm88qy3v8jgvhd47z3f5s63bb6w5";
+  cargoHash = "sha256-AstE8KGICgPhqRKlJecrE9iPUUWaOvca6ocWf85IzNo=";
 
-  preFixup = ''
-    install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
+  auditable = true; # TODO: remove when this is the default
 
-    install -Dm644 target/release/build/fd-find-*/out/fd.bash \
-      "$out/share/bash-completion/completions/fd.bash"
-    install -Dm644 target/release/build/fd-find-*/out/fd.fish \
-      "$out/share/fish/vendor_completions.d/fd.fish"
-    install -Dm644 target/release/build/fd-find-*/out/_fd \
-      "$out/share/zsh/site-functions/_fd"
+  nativeBuildInputs = [ installShellFiles ];
+
+  # skip flaky test
+  checkFlags = [
+    "--skip=test_owner_current_group"
+  ];
+
+  postInstall = ''
+    installManPage doc/fd.1
+
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
+    installShellCompletion --zsh contrib/completion/_fd
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests.version = testers.testVersion {
+    package = fd;
+  };
+
+  meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
@@ -33,8 +44,8 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
+    changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ma27 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
   };
 }

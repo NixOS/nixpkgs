@@ -41,7 +41,7 @@ let
     validated =  pkgs.runCommand "nagios-checked.cfg" {preferLocalBuild=true;} ''
       cp ${file} nagios.cfg
       # nagios checks the existence of /var/lib/nagios, but
-      # it does not exists in the build sandbox, so we fake it
+      # it does not exist in the build sandbox, so we fake it
       mkdir lib
       lib=$(readlink -f lib)
       sed -i s@=${nagiosState}@=$lib@ nagios.cfg
@@ -88,34 +88,34 @@ in
 
   options = {
     services.nagios = {
-      enable = mkEnableOption "<link xlink:href='http://www.nagios.org/'>Nagios</link> to monitor your system or network.";
+      enable = mkEnableOption (lib.mdDoc ''[Nagios](http://www.nagios.org/) to monitor your system or network.'');
 
       objectDefs = mkOption {
-        description = "
+        description = lib.mdDoc ''
           A list of Nagios object configuration files that must define
           the hosts, host groups, services and contacts for the
           network that you want Nagios to monitor.
-        ";
+        '';
         type = types.listOf types.path;
-        example = literalExample "[ ./objects.cfg ]";
+        example = literalExpression "[ ./objects.cfg ]";
       };
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = with pkgs; [ nagiosPluginsOfficial ssmtp mailutils ];
-        defaultText = "[pkgs.nagiosPluginsOfficial pkgs.ssmtp pkgs.mailutils]";
-        description = "
-          Packages to be added to the Nagios <envar>PATH</envar>.
+        default = with pkgs; [ monitoring-plugins msmtp mailutils ];
+        defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
+        description = lib.mdDoc ''
+          Packages to be added to the Nagios {env}`PATH`.
           Typically used to add plugins, but can be anything.
-        ";
+        '';
       };
 
       mainConfigFile = mkOption {
         type = types.nullOr types.package;
         default = null;
-        description = "
+        description = lib.mdDoc ''
           If non-null, overrides the main configuration file of Nagios.
-        ";
+        '';
       };
 
       extraConfig = mkOption {
@@ -125,37 +125,38 @@ in
           debug_file = "/var/log/nagios/debug.log";
         };
         default = {};
-        description = "Configuration to add to /etc/nagios.cfg";
+        description = lib.mdDoc "Configuration to add to /etc/nagios.cfg";
       };
 
       validateConfig = mkOption {
         type = types.bool;
         default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
-        description = "if true, the syntax of the nagios configuration file is checked at build time";
+        defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
+        description = lib.mdDoc "if true, the syntax of the nagios configuration file is checked at build time";
       };
 
       cgiConfigFile = mkOption {
         type = types.package;
         default = nagiosCGICfgFile;
-        defaultText = "nagiosCGICfgFile";
-        description = "
+        defaultText = literalExpression "nagiosCGICfgFile";
+        description = lib.mdDoc ''
           Derivation for the configuration file of Nagios CGI scripts
           that can be used in web servers for running the Nagios web interface.
-        ";
+        '';
       };
 
       enableWebInterface = mkOption {
         type = types.bool;
         default = false;
-        description = "
+        description = lib.mdDoc ''
           Whether to enable the Nagios web interface.  You should also
-          enable Apache (<option>services.httpd.enable</option>).
-        ";
+          enable Apache ({option}`services.httpd.enable`).
+        '';
       };
 
       virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExample ''
+        example = literalExpression ''
           { hostName = "example.org";
             adminAddr = "webmaster@example.org";
             enableSSL = true;
@@ -163,9 +164,9 @@ in
             sslServerKey = "/var/lib/acme/example.org/key.pem";
           }
         '';
-        description = ''
-          Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        description = lib.mdDoc ''
+          Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
     };
@@ -192,6 +193,7 @@ in
       path     = [ pkgs.nagios ] ++ cfg.plugins;
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
+      restartTriggers = [ nagiosCfgFile ];
 
       serviceConfig = {
         User = "nagios";
@@ -201,7 +203,6 @@ in
         LogsDirectory = "nagios";
         StateDirectory = "nagios";
         ExecStart = "${pkgs.nagios}/bin/nagios /etc/nagios.cfg";
-        X-ReloadIfChanged = nagiosCfgFile;
       };
     };
 

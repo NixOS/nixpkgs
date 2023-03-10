@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, diffutils, gd, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, diffutils, gd, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "s2png";
@@ -11,14 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0y3crfm0jqprgxamlly713cka2x1bp6z63p1lw9wh4wc37kpira6";
   };
 
-  buildInputs = [ diffutils gd pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ diffutils gd ];
   installFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
   meta = {
-    homepage = https://github.com/dbohdan/s2png/;
+    homepage = "https://github.com/dbohdan/s2png/";
     description = "Store any data in PNG images";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.dbohdan ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.dbohdan ];
+    platforms = lib.platforms.unix;
   };
 }

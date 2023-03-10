@@ -1,0 +1,5 @@
+--- a/sbin/install.config.in.in
++++ b/sbin/install.config.in.in
+@@ -4,1 +4,1 @@
+-SYSCONFDIR="@sysconfdir_POST@"
++SYSCONFDIR="/etc"

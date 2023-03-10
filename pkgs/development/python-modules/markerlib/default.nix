@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -15,14 +15,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/dholth/markerlib/;
+  meta = with lib; {
+    homepage = "https://bitbucket.org/dholth/markerlib/";
     description = "A compiler for PEP 345 environment markers";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

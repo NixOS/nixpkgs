@@ -3,36 +3,35 @@
 , lib
 , autoPatchelfHook
 , wrapQtAppsHook
-, libbsd
-, python27
 , gmpxx
-, ncurses5
 , gnustep
-, libffi
+, libbsd
+, libffi_3_3
+, ncurses6
 }:
+
 stdenv.mkDerivation rec {
   pname = "hopper";
-  version = "4.5.21";
-  rev = "v${lib.versions.major version}";
+  version = "5.5.3";
+  rev = "v4";
 
   src = fetchurl {
-    url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux.pkg.tar.xz";
-    sha256 = "0s733n3hmzpsnrvfryq7kzsvwshd1y9fzm16a64gnii8cmfalrqc";
+    url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux-demo.pkg.tar.xz";
+    hash = "sha256-xq9ZVg1leHm/tq6LYyQLa8p5dDwBd64Jt92uMoE0z58=";
   };
 
   sourceRoot = ".";
 
   nativeBuildInputs = [
-    wrapQtAppsHook
     autoPatchelfHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    libbsd
-    python27
-    gmpxx
-    ncurses5
     gnustep.libobjc
+    libbsd
+    libffi_3_3
+    ncurses6
   ];
 
   installPhase = ''
@@ -54,9 +53,6 @@ stdenv.mkDerivation rec {
       $sourceRoot/opt/hopper-${rev}/lib/libpthread_workqueue.so* \
       $out/lib
 
-    # we already ship libffi.so.7
-    ln -s ${lib.getLib libffi}/lib/libffi.so $out/lib/libffi.so.6
-
     cp -r $sourceRoot/usr/share $out
 
     runHook postInstall
@@ -67,7 +63,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.hopperapp.com/index.html";
     description = "A macOS and Linux Disassembler";
     license = licenses.unfree;

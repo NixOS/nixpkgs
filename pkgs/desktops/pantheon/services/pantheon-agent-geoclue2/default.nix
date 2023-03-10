@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , ninja
 , vala
@@ -10,51 +11,51 @@
 , libgee
 , desktop-file-utils
 , geoclue2
+, granite
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
-  version = "1.0.3";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1fhgdcykn0ykn8fp7inn2akygpglhdwfpdkpnih86kqmqj8siahv";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-DvE0/bR4mVfqCw/c/1h75M8DfCiNPZ2h6Jl6ySk1qxs=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
-   ];
+  ];
 
   buildInputs = [
     geoclue2
+    granite
     gtk3
     libgee
-   ];
+  ];
 
   # This should be provided by a post_install.py script - See -> https://github.com/elementary/pantheon-agent-geoclue2/pull/21
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Pantheon Geoclue2 Agent";
-    homepage = https://github.com/elementary/pantheon-agent-geoclue2;
+    homepage = "https://github.com/elementary/pantheon-agent-geoclue2";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

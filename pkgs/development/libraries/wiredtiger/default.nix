@@ -1,20 +1,12 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool
 
 # Optional Dependencies
 , lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
 , gperftools ? null, leveldb ? null
 }:
 
-with stdenv.lib;
 let
-  mkFlag = trueStr: falseStr: cond: name: val: "--"
-    + (if cond then trueStr else falseStr)
-    + name
-    + optionalString (val != null && cond != false) "=${val}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;
@@ -39,27 +31,27 @@ stdenv.mkDerivation rec {
   buildInputs = [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
 
   configureFlags = [
-    (mkWith   false                   "attach"     null)
-    (mkWith   true                    "builtins"   "")
-    (mkEnable (optBzip2 != null)      "bzip2"      null)
-    (mkEnable false                   "diagnostic" null)
-    (mkEnable false                   "java"       null)
-    (mkEnable (optLeveldb != null)    "leveldb"    null)
-    (mkEnable false                   "python"     null)
-    (mkEnable (optSnappy != null)     "snappy"     null)
-    (mkEnable (optLz4 != null)        "lz4"        null)
-    (mkEnable (optGperftools != null) "tcmalloc"   null)
-    (mkEnable (optZlib != null)       "zlib"       null)
-    (mkWith   (optDb != null)         "berkeleydb" optDb)
-    (mkWith   false                   "helium"     null)
+    (lib.withFeature   false                   "attach")
+    (lib.withFeatureAs true                    "builtins" "")
+    (lib.enableFeature (optBzip2 != null)      "bzip2")
+    (lib.enableFeature false                   "diagnostic")
+    (lib.enableFeature false                   "java")
+    (lib.enableFeature (optLeveldb != null)    "leveldb")
+    (lib.enableFeature false                   "python")
+    (lib.enableFeature (optSnappy != null)     "snappy")
+    (lib.enableFeature (optLz4 != null)        "lz4")
+    (lib.enableFeature (optGperftools != null) "tcmalloc")
+    (lib.enableFeature (optZlib != null)       "zlib")
+    (lib.withFeatureAs (optDb != null)         "berkeleydb" optDb)
+    (lib.withFeature   false                   "helium")
   ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  meta = {
-    homepage = http://wiredtiger.com/;
+  meta = with lib; {
+    homepage = "http://wiredtiger.com/";
     description = "";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;

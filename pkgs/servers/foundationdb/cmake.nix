@@ -33,10 +33,9 @@ let
 
         buildInputs = [ libressl boost ];
         nativeBuildInputs = [ cmake ninja python3 openjdk mono ]
-          ++ lib.optional useClang [ llvmPackages.lld ];
+          ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
-        enableParallelBuilding = true;
         dontFixCmake = true;
 
         cmakeFlags =
@@ -61,12 +60,17 @@ let
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
           ];
 
+        env.NIX_CFLAGS_COMPILE = toString [
+          # Needed with GCC 12
+          "-Wno-error=missing-template-keyword"
+        ];
+
         inherit patches;
 
         # fix up the use of the very weird and custom 'fdb_install' command by just
         # replacing it with cmake's ordinary version.
         postPatch = ''
-          for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do 
+          for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do
             substituteInPlace $x --replace 'fdb_install' 'install'
           done
         '';
@@ -119,12 +123,12 @@ let
 
         outputs = [ "out" "dev" "lib" "pythonsrc" ];
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Open source, distributed, transactional key-value store";
-          homepage    = https://www.foundationdb.org;
+          homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
-          maintainers = with maintainers; [ thoughtpolice ];
+          maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };
 in makeFdb

@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "freeswitch";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ misuzu ];
   };
   nodes = {
@@ -24,6 +24,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   testScript = ''
     node0.wait_for_unit("freeswitch.service")
     # Wait for SIP port to be open
-    node0.wait_for_open_port("5060")
+    node0.wait_for_open_port(5060)
   '';
 })

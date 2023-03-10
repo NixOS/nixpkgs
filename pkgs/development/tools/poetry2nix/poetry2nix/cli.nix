@@ -1,11 +1,9 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 , version
 }:
-
 let
   inherit (pkgs) python3;
-
 in
 pkgs.stdenv.mkDerivation {
   pname = "poetry2nix";
@@ -35,8 +33,8 @@ pkgs.stdenv.mkDerivation {
     mv poetry2nix $out/bin
 
     wrapProgram $out/bin/poetry2nix --prefix PATH ":" ${lib.makeBinPath [
-    pkgs.nix-prefetch-git
-  ]}
+      pkgs.nix-prefetch-git
+    ]}
 
     runHook postInstall
   '';

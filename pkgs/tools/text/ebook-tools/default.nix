@@ -1,25 +1,22 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libxml2, libzip }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, libxml2, libzip }:
 
 stdenv.mkDerivation rec {
-  name = "ebook-tools-0.2.2";
+  pname = "ebook-tools";
+  version = "0.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ebook-tools/${name}.tar.gz";
+    url = "mirror://sourceforge/ebook-tools/ebook-tools-${version}.tar.gz";
     sha256 = "1bi7wsz3p5slb43kj7lgb3r6lb91lvb6ldi556k4y50ix6b5khyb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libxml2 libzip ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libxml2 libzip ];
 
-  preConfigure = 
-    ''
-      NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libzip)"
-    '';
-
-  meta = {
-    homepage = http://ebook-tools.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://ebook-tools.sourceforge.net";
     description = "Tools and library for dealing with various ebook file formats";
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

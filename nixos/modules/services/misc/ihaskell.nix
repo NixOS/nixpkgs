@@ -6,7 +6,7 @@ let
 
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
-    packages = self: cfg.extraPackages self;
+    packages = cfg.extraPackages;
   };
 
 in
@@ -15,22 +15,25 @@ in
   options = {
     services.ihaskell = {
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = "Autostart an IHaskell notebook service.";
+        description = lib.mdDoc "Autostart an IHaskell notebook service.";
       };
 
       extraPackages = mkOption {
-        default = self: [];
-        example = literalExample ''
+        type = types.functionTo (types.listOf types.package);
+        default = haskellPackages: [];
+        defaultText = literalExpression "haskellPackages: []";
+        example = literalExpression ''
           haskellPackages: [
             haskellPackages.wreq
             haskellPackages.lens
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra packages available to ghc when running ihaskell. The
           value must be a function which receives the attrset defined
-          in <varname>haskellPackages</varname> as the sole argument.
+          in {var}`haskellPackages` as the sole argument.
         '';
       };
     };

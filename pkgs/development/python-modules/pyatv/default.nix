@@ -1,24 +1,107 @@
-{ stdenv, buildPythonPackage, fetchPypi, srptools, aiohttp, zeroconf
-, ed25519, cryptography, curve25519-donna, pytest, pytestrunner
-, netifaces, asynctest, virtualenv, toml, filelock, tox }:
+{ lib
+, buildPythonPackage
+, aiohttp
+, bitarray
+, chacha20poly1305-reuseable
+, cryptography
+, deepdiff
+, fetchFromGitHub
+, mediafile
+, miniaudio
+, netifaces
+, protobuf
+, pytest-aiohttp
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, pythonRelaxDepsHook
+, pythonOlder
+, requests
+, srptools
+, zeroconf
+}:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.3.13";
+  version = "0.10.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8fc1a903a9d666e4109127410d35a83458559a86bc0de3fe1ffb3f15d2d653b3";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "postlund";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
   };
 
-  propagatedBuildInputs = [ srptools aiohttp zeroconf ed25519 cryptography curve25519-donna tox ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
 
-  checkInputs = [ pytest pytestrunner netifaces asynctest virtualenv toml filelock ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "async_timeout"
+    "bitarray"
+    "chacha20poly1305-reuseable"
+    "cryptography"
+    "ifaddr"
+    "mediafile"
+    "miniaudio"
+    "protobuf"
+    "requests"
+    "srptools"
+    "zeroconf"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A python client library for the Apple TV";
-    homepage = https://github.com/postlund/pyatv;
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = [
+    aiohttp
+    bitarray
+    chacha20poly1305-reuseable
+    cryptography
+    mediafile
+    miniaudio
+    netifaces
+    protobuf
+    requests
+    srptools
+    zeroconf
+  ];
+
+  nativeCheckInputs = [
+    deepdiff
+    pytest-aiohttp
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
+  disabledTestPaths = [
+    # Test doesn't work in the sandbox
+    "tests/protocols/companion/test_companion_auth.py"
+    "tests/protocols/mrp/test_mrp_auth.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "pyatv"
+  ];
+
+  meta = with lib; {
+    description = "Python client library for the Apple TV";
+    homepage = "https://github.com/postlund/pyatv";
+    changelog = "https://github.com/postlund/pyatv/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ fab ];
   };
 }

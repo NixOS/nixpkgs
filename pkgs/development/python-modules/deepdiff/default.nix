@@ -1,44 +1,66 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, mock
-, jsonpickle
+, fetchFromGitHub
+, click
 , ordered-set
+, orjson
+, clevercsv
+, jsonpickle
 , numpy
 , pytestCheckHook
+, pyyaml
+, toml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "4.0.9";
+  version = "6.2.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5e2343398e90538edaa59c0c99207e996a3a834fdc878c666376f632a760c35a";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "seperman";
+    repo = "deepdiff";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rlMksUi+R48fIEjVv2E3yOETDezTghZ8+Zsypu8fAnQ=";
   };
 
-  # # Extra packages (may not be necessary)
-  checkInputs = [
-    mock
-    numpy
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    # skipped tests require murmur module
-    "test_prep_str_murmur3_64bit"
-    "test_prep_str_murmur3_128bit"
-  ];
+  postPatch = ''
+    substituteInPlace tests/test_command.py \
+      --replace '/tmp/' "$TMPDIR/"
+  '';
 
   propagatedBuildInputs = [
-    jsonpickle
     ordered-set
+    orjson
+  ];
+
+  passthru.optional-dependencies = {
+    cli = [
+      clevercsv
+      click
+      pyyaml
+      toml
+    ];
+  };
+
+  nativeCheckInputs = [
+    jsonpickle
+    numpy
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.cli;
+
+  pythonImportsCheck = [
+    "deepdiff"
   ];
 
   meta = with lib; {
     description = "Deep Difference and Search of any Python object/data";
     homepage = "https://github.com/seperman/deepdiff";
+    changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

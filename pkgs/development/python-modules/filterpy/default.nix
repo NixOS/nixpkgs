@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "4f2a4d39e4ea601b9ab42b2db08b5918a9538c168cff1c6895ae26646f3d73b1";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib ];
 
   # single test fails (even on master branch of repository)
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     pytest --ignore=filterpy/common/tests/test_discretization.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rlabbe/filterpy;
+  meta = with lib; {
+    homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

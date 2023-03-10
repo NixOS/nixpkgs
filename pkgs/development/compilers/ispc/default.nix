@@ -1,42 +1,43 @@
-{stdenv, fetchFromGitHub, cmake, which, m4, python, bison, flex, llvmPackages,
-testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses
+
+  # the default test target is sse4, but that is not supported by all Hydra agents
+, testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.10.0";
-  rev = "v${version}";
+  pname   = "ispc";
+  version = "1.18.1";
+
+  src = fetchFromGitHub {
+    owner  = pname;
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "sha256-WBAVgjQjW4x9JGx6xotPoTVOePsPjBJEyBYA7TCTBvc=";
+  };
+
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ];
+  buildInputs = with llvmPackages; [
+    libllvm libclang openmp ncurses
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace CURSES_CURSES_LIBRARY CURSES_NCURSES_LIBRARY
+    substituteInPlace cmake/GenerateBuiltins.cmake \
+      --replace 'bit 32 64' 'bit 64'
+  '';
 
   inherit testedTargets;
 
-  pname = "ispc";
-
-  src = fetchFromGitHub {
-    owner = "ispc";
-    repo = "ispc";
-    inherit rev;
-    sha256 = "1x07n2gaff3v32yvddrb659mx5gg12bnbsqbyfimp396wn04w60b";
-  };
-
+  # needs 'transcendentals' executable, which is only on linux
   doCheck = stdenv.isLinux;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = with llvmPackages; [
-    which
-    m4
-    python
-    bison
-    flex
-    llvm
-    llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
-  ];
-
-  postPatch = "sed -i -e 's/curses/ncurses/g' CMakeLists.txt";
-
-  # TODO: this correctly catches errors early, but also some things that are just weird and don't seem to be real
-  # errors
-  #configurePhase = ''
-  #  makeFlagsArray=( SHELL="${bash}/bin/bash -o pipefail" )
-  #'';
+  # the compiler enforces -Werror, and -fno-strict-overflow makes it mad.
+  # hilariously this is something of a double negative: 'disable' the
+  # 'strictoverflow' hardening protection actually means we *allow* the compiler
+  # to do strict overflow optimization. somewhat misleading...
+  hardeningDisable = [ "strictoverflow" ];
 
   checkPhase = ''
     export ISPC_HOME=$PWD/bin
@@ -52,16 +53,20 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
+    "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    ];
+    ("-DARM_ENABLED=" + (if stdenv.isAarch64 || stdenv.isAarch32 then "TRUE" else "FALSE"))
+    ("-DX86_ENABLED=" + (if stdenv.isx86_64 || stdenv.isx86_32 then "TRUE" else "FALSE"))
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://ispc.github.io/ ;
+  meta = with lib; {
+    homepage    = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
-    license = licenses.bsd3;
-    platforms = ["x86_64-linux" "x86_64-darwin"]; # TODO: buildable on more platforms?
-    maintainers = [ maintainers.aristid ];
+    license     = licenses.bsd3;
+    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
+    maintainers = with maintainers; [ aristid thoughtpolice athas ];
   };
 }

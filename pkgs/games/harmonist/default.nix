@@ -1,22 +1,19 @@
-{stdenv, fetchurl, buildGoPackage}:
+{lib, fetchurl, buildGoModule}:
 
-buildGoPackage rec {
-
+buildGoModule rec {
   pname = "harmonist";
-  version = "0.3.0";
-
-  goPackagePath = "git.tuxfamily.org/harmonist/harmonist.git";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/harmonist/releases/${pname}-${version}.tar.gz";
-    sha256 = "16bh4zzq7szwcw19n34bslkf81fz3i0p4zqkd8gdi5ixkbm998lm";
+    hash = "sha256-mtvvdim0CNtdM+/VU2j+FE2oLpt0Tz1/tNTa9H/FS6U=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-SrvJXTyLtPZ2PyhSZz/gJvuso9r7e5NbGe7EJRf2XlI=";
 
-  postInstall = "mv $bin/bin/harmonist.git $bin/bin/harmonist";
+  ldflags = [ "-s" "-w" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A stealth coffee-break roguelike game";
     longDescription = ''
       Harmonist is a stealth coffee-break roguelike game. The game has a heavy
@@ -29,6 +26,6 @@ buildGoPackage rec {
     homepage = "https://harmonist.tuxfamily.org/";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [freepotion];
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

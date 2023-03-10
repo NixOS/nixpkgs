@@ -1,5 +1,7 @@
 import ../make-test-python.nix {
-  machine = { pkgs, ... }: {
+  name = "lorri";
+
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../../modules/profiles/minimal.nix ];
     environment.systemPackages = [ pkgs.lorri ];
   };
@@ -18,7 +20,7 @@ import ../make-test-python.nix {
     machine.wait_until_succeeds("grep --fixed-strings 'ready' lorri.stdout")
 
     # Ping the daemon
-    machine.succeed("lorri internal__ping shell.nix")
+    machine.succeed("lorri internal ping shell.nix")
 
     # Wait for the daemon to finish the build
     machine.wait_until_succeeds("grep --fixed-strings 'Completed' lorri.stdout")

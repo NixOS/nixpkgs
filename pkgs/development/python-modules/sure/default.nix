@@ -1,29 +1,54 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , rednose
 , six
 , mock
 , isPyPy
+, pythonOlder
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "sure";
-  version = "1.4.11";
+  version = "2.0.0";
+  format = "setuptools";
+
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3c8d5271fb18e2c69e2613af1ad400d8df090f1456081635bd3171847303cdaa";
+    sha256 = "34ae88c846046742ef074036bf311dc90ab152b7bc09c342b281cebf676727a2";
   };
 
-  buildInputs = [ rednose ];
-  propagatedBuildInputs = [ six mock ];
+  patches = [
+    # https://github.com/gabrielfalcao/sure/issues/169
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/055baa81cd987e566de62a5657513937521a90d4/trunk/python310.diff";
+      sha256 = "sha256-BKylV8xpTOuO/X4hzZKpoIcAQcdAK0kXYENRad7AGPc=";
+    })
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    six
+    mock
+  ];
+
+  nativeCheckInputs = [
+    rednose
+  ];
+
+  doCheck = pythonOlder "3.11";
+
+  pythonImportsCheck = [
+    "sure"
+  ];
+
+  meta = with lib; {
     description = "Utility belt for automated testing";
-    homepage = https://sure.readthedocs.io/en/latest/;
+    homepage = "https://sure.readthedocs.io/";
+    changelog = "https://github.com/gabrielfalcao/sure/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
-
 }

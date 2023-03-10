@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, wrapPython }:
-
-with lib;
+{ stdenv, lib, fetchFromGitHub, wrapPython, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "droopy";
@@ -13,6 +11,17 @@ stdenv.mkDerivation {
     sha256 = "03i1arwyj9qpfyyvccl21lbpz3rnnp1hsadvc0b23nh1z2ng9sff";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/stackp/Droopy/pull/30.patch";
+      sha256 = "Y6jBraKvVQAiScbvLwezSKeWY3vaAbhaNXEGNaItigQ=";
+    })
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/stackp/Droopy/pull/31.patch";
+      sha256 = "1ig054rxn5r0ph4w4fhmrxlh158c97iqqc7dbnc819adn9nw96l5";
+    })
+  ];
+
   nativeBuildInputs = [ wrapPython ];
 
   installPhase = ''
@@ -21,9 +30,9 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mini Web server that let others upload files to your computer";
-    homepage = http://stackp.online.fr/droopy;
+    homepage = "http://stackp.online.fr/droopy";
     license = licenses.bsd3;
     maintainers = [ maintainers.Profpatsch ];
   };

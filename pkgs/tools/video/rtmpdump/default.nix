@@ -1,23 +1,26 @@
-{ stdenv, fetchgit, fetchpatch, zlib
-, gnutlsSupport ? false, gnutls ? null, nettle ? null
-, opensslSupport ? true, openssl ? null
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, zlib
+, gnutlsSupport ? false
+, gnutls
+, nettle
+, opensslSupport ? true
+, openssl
 }:
 
-# Must have an ssl library enabled
 assert (gnutlsSupport || opensslSupport);
-assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSupport;
-assert opensslSupport -> openssl != null && !gnutlsSupport;
 
-with stdenv.lib;
 stdenv.mkDerivation {
   pname = "rtmpdump";
-  version = "2019-03-30";
+  version = "unstable-2021-02-19";
 
   src = fetchgit {
     url = "git://git.ffmpeg.org/rtmpdump";
     # Currently the latest commit is used (a release has not been made since 2011, i.e. '2.4')
-    rev = "c5f04a58fc2aeea6296ca7c44ee4734c18401aa3";
-    sha256 = "07ias612jgmxpam9h418kvlag32da914jsnjsfyafklpnh8gdzjb";
+    rev = "f1b83c10d8beb43fcc70a6e88cf4325499f25857";
+    sha256 = "0vchr0f0d5fi0zaa16jywva5db3x9dyws7clqaq32gwh5drbkvs0";
   };
 
   patches = [
@@ -28,25 +31,28 @@ stdenv.mkDerivation {
     })
   ];
 
-  makeFlags = [ ''prefix=$(out)'' ]
-    ++ optional gnutlsSupport "CRYPTO=GNUTLS"
-    ++ optional opensslSupport "CRYPTO=OPENSSL"
-    ++ optional stdenv.isDarwin "SYS=darwin"
-    ++ optional stdenv.cc.isClang "CC=clang";
+  makeFlags = [
+    "prefix=$(out)"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
+    ++ lib.optional gnutlsSupport "CRYPTO=GNUTLS"
+    ++ lib.optional opensslSupport "CRYPTO=OPENSSL"
+    ++ lib.optional stdenv.isDarwin "SYS=darwin"
+    ++ lib.optional stdenv.cc.isClang "CC=clang";
 
   propagatedBuildInputs = [ zlib ]
-    ++ optionals gnutlsSupport [ gnutls nettle ]
-    ++ optional opensslSupport openssl;
+    ++ lib.optionals gnutlsSupport [ gnutls nettle ]
+    ++ lib.optional opensslSupport openssl;
 
   outputs = [ "out" "dev" ];
 
   separateDebugInfo = true;
 
-  meta = {
+  meta = with lib; {
     description = "Toolkit for RTMP streams";
-    homepage    = "http://rtmpdump.mplayerhq.hu/";
-    license     = licenses.gpl2;
-    platforms   = platforms.unix;
+    homepage = "https://rtmpdump.mplayerhq.hu/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

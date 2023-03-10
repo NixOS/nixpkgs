@@ -2,32 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, jupyter_client
+, jupyter-client
 , ipython
 , ipykernel
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_console";
-  version = "6.1.0";
+  version = "6.5.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06s3kr5vx0l1y1b7fxb04dmrppscl7q69sl9yyfr0d057d1ssvkg";
+    sha256 = "sha256-a5G3tuinFQU7U22yCaL0sCQp17KNsnNzpWomsL69Ygs=";
   };
 
   propagatedBuildInputs = [
-    jupyter_client
+    jupyter-client
     ipython
     ipykernel
-    prompt_toolkit
+    prompt-toolkit
     pygments
   ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   postPatch = ''
     substituteInPlace setup.py \

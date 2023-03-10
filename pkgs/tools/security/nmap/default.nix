@@ -1,26 +1,22 @@
-{ stdenv, fetchurl, fetchpatch, libpcap, pkgconfig, openssl, lua5_3
-, pcre, liblinear, libssh2
-, graphicalSupport ? false
+{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
+, pcre, libssh2
 , libX11 ? null
 , gtk2 ? null
-, python2 ? null
 , makeWrapper ? null
 , withLua ? true
 }:
 
-with stdenv.lib;
-
 stdenv.mkDerivation rec {
-  name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.80";
+  pname = "nmap";
+  version = "7.93";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "1aizfys6l9f9grm82bk878w56mg0zpkfns3spzj157h98875mypw";
+    sha256 = "sha256-Vbz+R5PiWsyWukJ02MQijbVQuOjv1yAEs47FWi3RZlE=";
   };
 
   patches = [ ./zenmap.patch ]
-    ++ optionals stdenv.cc.isClang [(
+    ++ lib.optionals stdenv.cc.isClang [(
       # Fixes a compile error due an ambiguous reference to bind(2) in
       # nping/EchoServer.cc, which is otherwise resolved to std::bind.
       # https://github.com/nmap/nmap/pull/1363
@@ -31,7 +27,7 @@ stdenv.mkDerivation rec {
       }
     )];
 
-  prePatch = optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
         --replace /usr/bin/libtool ar \
         --replace 'AR="libtool"' 'AR="ar"' \
@@ -40,36 +36,27 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
-  ] ++ optionals (!graphicalSupport) [ "--without-ndiff" "--without-zenmap" ];
+    "--with-liblinear=included"
+    "--without-ndiff"
+    "--without-zenmap"
+  ];
 
-  makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
     "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
     "CC=${stdenv.cc.targetPrefix}gcc"
   ];
 
-  pythonPath = with python2.pkgs; optionals graphicalSupport  [
-    pygtk pysqlite pygobject2 pycairo
-  ];
-
-  nativeBuildInputs = [ pkgconfig ] ++ optionals graphicalSupport [ python2.pkgs.wrapPython ];
-  buildInputs = [ pcre liblinear libssh2 libpcap openssl ] ++ optionals graphicalSupport (with python2.pkgs; [
-    python2 libX11 gtk2
-  ]);
-
-  postInstall = optionalString graphicalSupport ''
-    buildPythonPath "$out $pythonPath"
-    patchPythonScript $out/bin/ndiff
-    patchPythonScript $out/bin/zenmap
-  '';
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pcre libssh2 libpcap openssl ];
 
   enableParallelBuilding = true;
 
   doCheck = false; # fails 3 tests, probably needs the net
 
-  meta = {
+  meta = with lib; {
     description = "A free and open source utility for network discovery and security auditing";
-    homepage    = http://www.nmap.org;
+    homepage    = "http://www.nmap.org";
     license     = licenses.gpl2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice fpletz ];

@@ -4,15 +4,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.3.12";
+  version = "1.10.0";
   pname = "bids-validator";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a244b09adfd083292ed1f7ff335676a1e2effbbffe62b02a4abaf377d33ef86";
+    sha256 = "sha256-WJb9EENkYFVgKuByHFJhed/Slt6ayG31LeQk1+14/Ys=";
   };
 
-  propagatedBuildInputs = [ ];
+  # needs packages which are not available in nixpkgs
+  doCheck = false;
+
+  pythonImportsCheck = [ "bids_validator" ];
 
   meta = with lib; {
     description = "Validator for the Brain Imaging Data Structure";

@@ -5,7 +5,7 @@ buildPythonPackage rec {
   pname = "GeoIP";
   version = "1.3.2";
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   propagatedBuildInputs = [
     geoip
   ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "MaxMind GeoIP Legacy Database - Python API";
-    homepage = https://www.maxmind.com/;
+    homepage = "https://www.maxmind.com/";
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.lgpl21Plus;
   };

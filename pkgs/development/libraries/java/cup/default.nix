@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, ant } :
+{ lib, stdenv, fetchurl, jdk, ant } :
 
 stdenv.mkDerivation rec {
   pname = "java-cup";
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www2.cs.tum.edu/projects/cup/;
+    homepage = "http://www2.cs.tum.edu/projects/cup/";
     description = "LALR parser generator for Java";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

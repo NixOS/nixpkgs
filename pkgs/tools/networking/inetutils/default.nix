@@ -1,22 +1,27 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man }:
+{ stdenv, lib, fetchurl, ncurses, perl, help2man
+, apparmorRulesFromClosure
+, libxcrypt
+}:
 
 stdenv.mkDerivation rec {
-  name = "inetutils-1.9.4";
+  pname = "inetutils";
+  version = "2.4";
 
   src = fetchurl {
-    url = "mirror://gnu/inetutils/${name}.tar.gz";
-    sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-F4nWsbGlff4qere1M+6fXf2cv1tZuxuzwmEu0I0PaLI=";
   };
 
+  outputs = ["out" "apparmor"];
+
   patches = [
-    ./whois-Update-Canadian-TLD-server.patch
-    ./service-name.patch
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
-  buildInputs = [ ncurses /* for `talk' */ ];
+  buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
@@ -41,6 +46,23 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "SUIDMODE=" ];
 
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
+    $out/bin/ping {
+      include <abstractions/base>
+      include <abstractions/consoles>
+      include <abstractions/nameservice>
+      include "${apparmorRulesFromClosure { name = "ping"; } [stdenv.cc.libc]}"
+      include <local/bin.ping>
+      capability net_raw,
+      network inet raw,
+      network inet6 raw,
+      mr $out/bin/ping,
+    }
+    EOF
+  '';
+
   meta = with lib; {
     description = "Collection of common network programs";
 
@@ -51,7 +73,7 @@ stdenv.mkDerivation rec {
          traceroute, uucpd, and whois.
       '';
 
-    homepage = https://www.gnu.org/software/inetutils/;
+    homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;
 
     maintainers = with maintainers; [ matthewbauer ];

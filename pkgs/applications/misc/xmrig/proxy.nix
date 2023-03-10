@@ -1,28 +1,54 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, libuuid, openssl
-, donateLevel ? 0
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuv
+, libmicrohttpd
+, openssl
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) CoreServices IOKit;
+in
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
-  version = "5.0.1";
+  version = "6.19.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
     rev = "v${version}";
-    sha256 = "0lp11p4lf03l9x2kcpq1j19z7c1zrdvjmcfh2xyvlbw8pqx0hxkv";
+    hash = "sha256-0vmRwe7PQVifm6HxgpPno9mIFcBZFtxqNdDK4V637ds=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libuv libmicrohttpd libuuid openssl ];
-
   postPatch = ''
-    # Link dynamically against libuuid instead of statically
-    substituteInPlace CMakeLists.txt --replace uuid.a uuid
+    # Link dynamically against libraries instead of statically
+    substituteInPlace CMakeLists.txt \
+      --replace uuid.a uuid
+    substituteInPlace cmake/OpenSSL.cmake \
+      --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
   '';
 
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libuv
+    libmicrohttpd
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    IOKit
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     install -vD xmrig-proxy $out/bin/xmrig-proxy
+
+    runHook postInstall
   '';
 
   meta = with lib; {

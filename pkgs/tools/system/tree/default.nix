@@ -1,59 +1,51 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitLab }:
 
 let
-  version = "1.8.0";
-
   # These settings are found in the Makefile, but there seems to be no
   # way to select one ore the other setting other than editing the file
   # manually, so we have to duplicate the know how here.
-  systemFlags = with stdenv;
-    if isDarwin then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer"
-      LDFLAGS=
-      EXTRA_OBJS=strverscmp.o
-    '' else if isCygwin then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer -DCYGWIN"
-      LDFLAGS=-s
-      TREE_DEST=tree.exe
-      EXTRA_OBJS=strverscmp.o
-    '' else if (isFreeBSD || isOpenBSD) then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer"
-      LDFLAGS=-s
-      EXTRA_OBJS=strverscmp.o
-    '' else
-    ""; # use linux flags by default
+  systemFlags = lib.optionalString stdenv.isDarwin ''
+    CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
+    LDFLAGS=
+  '' + lib.optionalString stdenv.isCygwin ''
+    CFLAGS="-O2 -Wall -fomit-frame-pointer"
+    LDFLAGS=-s
+    TREE_DEST=tree.exe
+  '' + lib.optionalString (stdenv.isFreeBSD || stdenv.isOpenBSD) ''
+    CFLAGS="-O2 -Wall -fomit-frame-pointer"
+    LDFLAGS=-s
+  ''; # use linux flags by default
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tree";
-  inherit version;
+  version = "2.0.4";
 
-  src = fetchurl {
-    url = "http://mama.indstate.edu/users/ice/tree/src/tree-${version}.tgz";
-    sha256 = "1hmpz6k0mr6salv0nprvm1g0rdjva1kx03bdf1scw8a38d5mspbi";
+  src = fetchFromGitLab {
+    owner = "OldManProgrammer";
+    repo = "unix-tree";
+    rev = version;
+    sha256 = "sha256-2voXL31JHh09yBBLuHhYyZsUapiPVF/cgRmTU6wSXk4=";
   };
 
-  configurePhase = ''
-    sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
-    makeFlagsArray=(
-      prefix=$out
-      MANDIR=$out/share/man/man1
-      ${systemFlags}
-      CC="$CC"
-    )
+  preConfigure = ''
+    makeFlagsArray+=(${systemFlags})
   '';
 
-  meta = {
-    homepage = http://mama.indstate.edu/users/ice/tree/;
-    description = "Command to produce a depth indented directory listing";
-    license = stdenv.lib.licenses.gpl2;
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=${placeholder "out"}"
+  ];
 
+  meta = with lib; {
+    homepage = "http://mama.indstate.edu/users/ice/tree/";
+    description = "Command to produce a depth indented directory listing";
+    license = licenses.gpl2;
     longDescription = ''
       Tree is a recursive directory listing command that produces a
       depth indented listing of files, which is colorized ala dircolors if
       the LS_COLORS environment variable is set and output is to tty.
     '';
-
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [stdenv.lib.maintainers.peti];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

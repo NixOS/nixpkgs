@@ -1,36 +1,62 @@
 { lib
 , buildPythonPackage
-, flake8
-, nose2
-, mock
-, requests
+, cryptography
+, fetchFromGitHub
+, mypy
 , pyjwt
-, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, requests
+, responses
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "1.8.0";
+  version = "3.16.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ggxa3av4rwva9h5idg1vfdybr7wkajw7g0sn42k04sxxa0cigwz";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "globus";
+    repo = "globus-sdk-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zl5+22r0KMqdBKIlBe+8xxgh6h9am34USc1dLy+VGyY=";
   };
 
-  checkPhase = ''
-    py.test tests
+  propagatedBuildInputs = [
+    cryptography
+    requests
+    pyjwt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    mypy
+    pytestCheckHook
+    responses
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+    --replace "pyjwt[crypto]>=2.0.0,<3.0.0" "pyjwt[crypto]>=2.0.0,<3.0.0"
   '';
 
-  # No tests in archive
-  doCheck = false;
-  
-  checkInputs = [ flake8 nose2 mock ];
-  
-  propagatedBuildInputs = [ requests pyjwt  ];
- 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  pythonImportsCheck = [
+    "globus_sdk"
+  ];
+
   meta = with lib; {
-    description = "A convenient Pythonic interface to Globus REST APIs, including the Transfer API and the Globus Auth API.";
-    homepage =  https://github.com/globus/globus-sdk-python;
+    description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
+    homepage =  "https://github.com/globus/globus-sdk-python";
+    changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];
   };

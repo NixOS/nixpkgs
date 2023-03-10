@@ -1,9 +1,9 @@
-{ stdenv, writeScript, fetchFromGitHub
+{ lib, stdenv, writeScript, fetchFromGitHub
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
 , enableGlfw ? false, glfw, runtimeShell }:
 
 let
-  inherit (stdenv.lib) optional makeLibraryPath;
+  inherit (lib) optional makeLibraryPath;
 
   wrapperScript = writeScript "glava" ''
     #!${runtimeShell}
@@ -55,8 +55,6 @@ in
 
       substituteInPlace Makefile \
         --replace 'unknown' 'v${version}'
-
-      export CFLAGS="-march=native"
     '';
 
     makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";
@@ -78,11 +76,11 @@ in
       chmod +x $out/bin/glava
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         OpenGL audio spectrum visualizer
       '';
-      homepage = https://github.com/wacossusca34/glava;
+      homepage = "https://github.com/wacossusca34/glava";
       platforms = platforms.linux;
       license = licenses.gpl3;
       maintainers = with maintainers; [

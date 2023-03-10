@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , nose
@@ -19,15 +19,15 @@ buildPythonPackage {
     sha256 = "0mp7rvfdmpfxnka4czw3lv5kkh6gdxh6dm4r6hcln1zzfg9lxp4h";
   };
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
 
-  postPatch = stdenv.lib.optionalString isPy3k ''
+  postPatch = lib.optionalString isPy3k ''
     sed -i -e 's/open *(\([^)]*\))/open(\1, encoding="utf-8")/' setup.py
   '';
 
   checkPhase = "nosetests tests/test.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory-based naive bayesian text classifier";
     homepage = "https://github.com/hickeroar/simplebayes";
     license = licenses.mit;

@@ -1,14 +1,27 @@
-{ fetchurl, stdenv, flex, bison }:
+{ fetchFromGitHub
+, lib
+, stdenv
+, flex
+, bison
+, autoreconfHook
+, pkg-config
+, libtirpc
+}:
 
 stdenv.mkDerivation rec {
-  name = "unfs3-0.9.22";
+  pname = "unfs3";
+  version = "0.10.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/unfs3/${name}.tar.gz";
-    sha256 = "076zkyqkn56q0a8n3h65n1a68fknk4hrrp6mbhajq5s1wp5248j8";
+  src = fetchFromGitHub {
+    owner = "unfs3";
+    repo = pname;
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-5iAriIutBhwyZVS7AG2fnkrHOI7pNAKfYv062Cy0WXw=";
   };
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison autoreconfHook pkg-config ];
+
+  buildInputs = [ libtirpc ];
 
   configureFlags = [ "--disable-shared" ];
 
@@ -24,10 +37,16 @@ stdenv.mkDerivation rec {
          server.
       '';
 
-    homepage = http://unfs3.sourceforge.net/;
+    # The old http://unfs3.sourceforge.net/ has a <meta>
+    # http-equiv="refresh" pointing here, so we can assume that
+    # whoever controls the old URL approves of the "unfs3" github
+    # account.
+    homepage = "https://unfs3.github.io/";
+    changelog = "https://raw.githubusercontent.com/unfs3/unfs3/unfs3-${version}/NEWS";
+    mainProgram = "unfsd";
 
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

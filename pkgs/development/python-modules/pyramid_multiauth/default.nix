@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyramid
@@ -6,19 +6,19 @@
 
 buildPythonPackage rec {
   pname = "pyramid_multiauth";
-  version = "0.9.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lprqjyg3zcji6033p1l3s4nigjigc5423wgivkfhz46vq0jmniy";
+    sha256 = "6d8785558e1d0bbe0d0da43e296efc0fbe0de5071d1f9b1091e891f0e4ec9682";
   };
 
   propagatedBuildInputs = [ pyramid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
-    homepage = https://github.com/mozilla-services/pyramid_multiauth;
+    homepage = "https://github.com/mozilla-services/pyramid_multiauth";
     license = licenses.mpl20;
+    maintainers = with maintainers; [];
   };
-
 }

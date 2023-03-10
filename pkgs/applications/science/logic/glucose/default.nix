@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 stdenv.mkDerivation rec {
   pname = "glucose";
   version = "4.1";
@@ -7,6 +7,11 @@ stdenv.mkDerivation rec {
     url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup-${version}.tgz";
     sha256 = "0aahrkaq7n0z986fpqz66yz946nxardfi6dh8calzcfjpvqiraji";
   };
+
+  postPatch = ''
+    substituteInPlace Main.cc \
+      --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
+  '';
 
   buildInputs = [ zlib ];
 
@@ -18,12 +23,10 @@ stdenv.mkDerivation rec {
     install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${pname}-${version}/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern, parallel SAT solver (sequential version)";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];
-    # Build uses _FPU_EXTENDED macro
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

@@ -12,14 +12,9 @@ in
 
 {
 
-  options.hardware.mwProCapture.enable = mkEnableOption "Magewell Pro Capture family kernel module";
+  options.hardware.mwProCapture.enable = mkEnableOption (lib.mdDoc "Magewell Pro Capture family kernel module");
 
   config = mkIf cfg.enable {
-
-    assertions = singleton {
-      assertion = versionAtLeast kernelPackages.kernel.version "3.2";
-      message = "Magewell Pro Capture family module is not supported for kernels older than 3.2";
-    };
 
     boot.kernelModules = [ "ProCapture" ];
 

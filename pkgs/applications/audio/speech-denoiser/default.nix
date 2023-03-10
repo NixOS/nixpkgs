@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, lv2, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, lv2, meson, ninja }:
 
 let
   speech-denoiser-src = fetchFromGitHub {
@@ -24,17 +24,20 @@ stdenv.mkDerivation  {
 
   src = speech-denoiser-src;
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ lv2 rnnoise-nu ];
+
+  mesonFlags = [ "--prefix=${placeholder "out"}/lib/lv2" ];
 
   postPatch = ''
     substituteInPlace meson.build \
       --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Speech denoise lv2 plugin based on RNNoise library";
-    homepage = https://github.com/lucianodato/speech-denoiser;
+    homepage = "https://github.com/lucianodato/speech-denoiser";
     license = licenses.lgpl3;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

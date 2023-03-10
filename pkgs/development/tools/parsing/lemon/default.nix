@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   pname = "lemon";
   version = "1.69";
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   buildPhase = ''
     sh -xc "$CC ${srcs.lemon} -o lemon"
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
     install -Dvm644 ${srcs.lempar} $out/bin/lempar.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An LALR(1) parser generator";
     longDescription = ''
       The Lemon program is an LALR(1) parser generator that takes a
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
       file using that grammar. Lemon is similar to the much more famous
       programs "yacc" and "bison", but is not compatible with either.
     '';
-    homepage = http://www.hwaci.com/sw/lemon/;
+    homepage = "http://www.hwaci.com/sw/lemon/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
   };

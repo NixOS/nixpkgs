@@ -1,28 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , pythonOlder
-, aenum
+, setuptools
 , pytest
-, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "1.8";
+  version = "5.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "115067100fbb9eb36f530d94b64b4e1e36a8d304537af0847d562ff9ed399c05";
+    hash = "sha256-fHWJWgy/Ven5m2Cf81rG/ZKmFFWiLJsIPVxFe+rr+ms=";
   };
 
-  disabled = !isPy3k;
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.6") [ aenum ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=pglast --cov-report term-missing" ""
+  '';
 
-  checkInputs = [ pytest pytestcov ];
+  nativeCheckInputs = [
+    pytest
+  ];
 
+  # pytestCheckHook doesn't work
+  # ImportError: cannot import name 'parse_sql' from 'pglast'
   checkPhase = ''
     pytest
   '';
@@ -30,7 +40,9 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/lelit/pglast";
     description = "PostgreSQL Languages AST and statements prettifier";
+    changelog = "https://github.com/lelit/pglast/raw/v${version}/CHANGES.rst";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
+    mainProgram = "pgpp";
   };
 }

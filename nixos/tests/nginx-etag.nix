@@ -19,7 +19,7 @@ import ./make-test-python.nix {
         '';
       };
 
-      nesting.clone = lib.singleton {
+      specialisation.pass-checks.configuration = {
         services.nginx.virtualHosts.server = {
           root = lib.mkForce (pkgs.runCommandLocal "testdir2" {} ''
             mkdir "$out"
@@ -37,7 +37,6 @@ import ./make-test-python.nix {
     };
 
     client = { pkgs, lib, ... }: {
-      virtualisation.memorySize = 512;
       environment.systemPackages = let
         testRunner = pkgs.writers.writePython3Bin "test-runner" {
           libraries = [ pkgs.python3Packages.selenium ];
@@ -54,14 +53,14 @@ import ./make-test-python.nix {
 
           driver.implicitly_wait(20)
           driver.get('http://server/')
-          driver.find_element_by_xpath('//div[@foo="bar"]')
+          driver.find_element('xpath', '//div[@foo="bar"]')
           open('/tmp/passed_stage1', 'w')
 
           while not os.path.exists('/tmp/proceed'):
               time.sleep(0.5)
 
           driver.get('http://server/')
-          driver.find_element_by_xpath('//div[@foo="yay"]')
+          driver.find_element('xpath', '//div[@foo="yay"]')
           open('/tmp/passed', 'w')
         '';
       in [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
@@ -70,13 +69,13 @@ import ./make-test-python.nix {
 
   testScript = { nodes, ... }: let
     inherit (nodes.server.config.system.build) toplevel;
-    newSystem = "${toplevel}/fine-tune/child-1";
+    newSystem = "${toplevel}/specialisation/pass-checks";
   in ''
     start_all()
 
     server.wait_for_unit("nginx.service")
     client.wait_for_unit("multi-user.target")
-    client.execute("test-runner &")
+    client.execute("test-runner >&2 &")
     client.wait_for_file("/tmp/passed_stage1")
 
     server.succeed(

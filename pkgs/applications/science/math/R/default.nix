@@ -1,40 +1,51 @@
-{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
+{ lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+, less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+, enableMemoryProfiling ? false
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
+, testers
 }:
 
-stdenv.mkDerivation rec {
-  name = "R-3.6.2";
+assert (!blas.isILP64) && (!lapack.isILP64);
 
-  src = fetchurl {
-    url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0m69pfi0nxyriyb2yz74xfzaxwfkinnf9kpvf1rz727vvmfa8rdx";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "R";
+  version = "4.2.2";
+
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
+    url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-D/YrQuxRr6VxPK7nxP3noMRZQLo5vvjFyUh/7wyVPfU=";
   };
 
   dontUseImakeConfigure = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which openblas curl tcl tk jdk
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
+    bison imake which blas lapack curl tcl tk jdk
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Remove a test which fails on aarch64.
-    # See https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17718
-    ./0001-Disable-test-pending-upstream-fix.patch
   ];
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
+  # https://github.com/NixOS/nixpkgs/issues/146131
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure \
+      --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
+      --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
+      --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+    substituteInPlace tests/Examples/Makefile.in \
+      --replace "test-Examples: test-Examples-Base" "test-Examples:" # do not test the examples
   '';
 
   dontDisableStatic = static;
@@ -42,9 +53,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray=(
       --disable-lto
-      --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-      --with-blas="-L${openblas}/lib -lopenblas"
-      --with-lapack="-L${openblas}/lib -lopenblas"
+      --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
+      --with-blas="-L${blas}/lib -lblas"
+      --with-lapack="-L${lapack}/lib -llapack"
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo
@@ -52,7 +63,8 @@ stdenv.mkDerivation rec {
       --with-jpeglib
       --with-libtiff
       --with-ICU
-      ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
       ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
@@ -62,11 +74,12 @@ stdenv.mkDerivation rec {
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
+      --without-x
       OBJC="clang"
-      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
-      LDFLAGS="-L${libcxx}/lib"
+      CPPFLAGS="-isystem ${lib.getDev libcxx}/include/c++/v1"
+      LDFLAGS="-L${lib.getLib libcxx}/lib"
   '' + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
@@ -81,14 +94,16 @@ stdenv.mkDerivation rec {
   postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
 
   doCheck = true;
-  preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
+  preCheck = "export HOME=$TMPDIR; export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.r-project.org/;
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
+    homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
 
@@ -111,9 +126,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
-    hydraPlatforms = platforms.linux;
 
-    maintainers = with maintainers; [ peti timokau ];
+    maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
   };
-}
+})

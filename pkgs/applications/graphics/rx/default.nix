@@ -1,24 +1,24 @@
-{ stdenv, rustPlatform, fetchFromGitHub, makeWrapper
-, cmake, pkgconfig
+{ lib, stdenv, rustPlatform, fetchFromGitHub, makeWrapper
+, cmake, pkg-config
 , xorg ? null
 , libGL ? null }:
 
-with stdenv.lib;
+with lib;
 
 rustPlatform.buildRustPackage rec {
   pname = "rx";
-  version = "0.3.2";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n5s7v2z13550gkqz7w6dw62jdy60wdi8w1lfa23609b4yhg4w94";
+    sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
-  cargoSha256 = "077cs9bf7f3h5aschcv7pbbnpaq1rg79j7f6pnyrzkmn7gxzicg3";
+  cargoSha256 = "sha256-4hi1U4jl6QA7H8AKHlU+Hqz5iKGYHRXHDsrcqY7imkU=";
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = optionals stdenv.isLinux
   (with xorg; [
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
 
-  postInstall = optional stdenv.isLinux ''
+  postInstall = optionalString stdenv.isLinux ''
     mkdir -p $out/share/applications
     cp $src/rx.desktop $out/share/applications
     wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${libGL}/lib
@@ -37,9 +37,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Modern and extensible pixel editor implemented in Rust";
-    homepage = "https://cloudhead.io/rx/";
+    homepage = "https://rx.cloudhead.io/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ minijackson filalex77 ];
+    maintainers = with maintainers; [ minijackson Br1ght0ne ];
     platforms = [ "x86_64-linux" ];
   };
 }

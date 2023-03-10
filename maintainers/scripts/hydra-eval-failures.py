@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ requests pyquery click ])'
+#!nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ requests pyquery click ])"
 
 # To use, just execute this script with --help to display help.
 
@@ -79,7 +79,7 @@ def cli(jobset):
     and print a summary of failed builds
     """
 
-    url = "http://hydra.nixos.org/jobset/{}".format(jobset)
+    url = "https://hydra.nixos.org/jobset/{}".format(jobset)
 
     # get the last evaluation
     click.echo(click.style(

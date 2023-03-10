@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib }:
 
-stdenv.mkDerivation {
-  name = "gnu-mdk-1.2.10";
+stdenv.mkDerivation rec {
+  pname = "gnu-mdk";
+  version = "1.3.0";
   src = fetchurl {
-    url = https://ftp.gnu.org/gnu/mdk/v1.2.10/mdk-1.2.10.tar.gz;
-    sha256 = "1rwcq2b5vvv7318j92nxc5dayj27dpfhzc4rjiv4ccvsc0x35x5h";
+    url = "mirror://gnu/gnu/mdk/v${version}/mdk-${version}.tar.gz";
+    sha256 = "0bhk3c82kyp8167h71vdpbcr852h5blpnwggcswqqwvvykbms7lb";
   };
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool glib ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ glib ];
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp -v ./misc/*.el $out/share/emacs/site-lisp
@@ -15,8 +16,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GNU MIX Development Kit (MDK)";
-    homepage = https://www.gnu.org/software/mdk/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://www.gnu.org/software/mdk/";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

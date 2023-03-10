@@ -1,34 +1,43 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, buildPackages }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "doctl";
-  version = "${major}.${minor}.${patch}";
-  major = "1";
-  minor = "35";
-  patch = "0";
-  goPackagePath = "github.com/digitalocean/doctl";
+  version = "1.91.0";
 
-  excludedPackages = ''\(doctl-gen-doc\|install-doctl\|release-doctl\)'';
-  buildFlagsArray = let t = goPackagePath; in ''
-     -ldflags=
-        -X ${t}.Major=${major}
-        -X ${t}.Minor=${minor}
-        -X ${t}.Patch=${patch}
-        -X ${t}.Label=release
-   '';
+  vendorSha256 = null;
+
+  doCheck = false;
+
+  subPackages = [ "cmd/doctl" ];
+
+  ldflags = let t = "github.com/digitalocean/doctl"; in [
+    "-X ${t}.Major=${lib.versions.major version}"
+    "-X ${t}.Minor=${lib.versions.minor version}"
+    "-X ${t}.Patch=${lib.versions.patch version}"
+    "-X ${t}.Label=release"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    export HOME=$(mktemp -d) # attempts to write to /homeless-shelter
+    for shell in bash fish zsh; do
+      ${stdenv.hostPlatform.emulator buildPackages} $out/bin/doctl completion $shell > doctl.$shell
+      installShellCompletion doctl.$shell
+    done
+  '';
 
   src = fetchFromGitHub {
-    owner  = "digitalocean";
-    repo   = "doctl";
-    rev    = "v${version}";
-    sha256 = "1blg4xd01vvr8smpii60jlk7rg1cg64115azixw9q022f7cnfiyw";
+    owner = "digitalocean";
+    repo = "doctl";
+    rev = "v${version}";
+    sha256 = "sha256-hX9doUNxqkJujts9yYNvGSTq3nkaan1HqTHZBcO1hCs=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A command line tool for DigitalOcean services";
-    homepage = https://github.com/digitalocean/doctl;
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.siddharthist ];
+    homepage = "https://github.com/digitalocean/doctl";
+    license = licenses.asl20;
+    maintainers = [ maintainers.siddharthist ];
   };
 }

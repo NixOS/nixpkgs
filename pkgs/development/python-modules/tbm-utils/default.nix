@@ -5,33 +5,33 @@
 , pendulum
 , pprintpp
 , wrapt
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tbm-utils";
-  version = "1.0.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fb86b5ab469bafdbef19751abb6dc1e08a3043c373ea915e1b6e20d023b529";
+    sha256 = "1v7pb3yirkhzbv1z5i1qp74vl880f56zvzfj68p08b5jxv64hmr3";
   };
 
+  propagatedBuildInputs = [ attrs pendulum pprintpp wrapt ];
+
+  # this versioning was done to prevent normal pip users from encountering
+  # issues with package failing to build from source, but nixpkgs is better
   postPatch = ''
-    substituteInPlace setup.py --replace ",<19.3" ""
+    substituteInPlace setup.py \
+      --replace "'attrs>=18.2,<19.4'" "'attrs'"
   '';
 
   # No tests in archive.
   doCheck = false;
 
-  disabled = pythonOlder "3.6";
-
-  propagatedBuildInputs = [ attrs pendulum pprintpp wrapt ];
-
   meta = {
-    homepage = https://github.com/thebigmunch/tbm-utils;
-    license = with lib.licenses; [ mit ];
     description = "A commonly-used set of utilities";
+    homepage = "https://github.com/thebigmunch/tbm-utils";
+    license = with lib.licenses; [ mit ];
   };
 
 }

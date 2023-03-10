@@ -1,67 +1,93 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage, isPy3k
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , hypothesis
-, setuptools_scm
+, setuptools-scm
 , six
 , attrs
 , py
 , setuptools
-, pytestcov
 , pytest-timeout
 , pytest-tornado
 , mock
 , tabulate
 , nbformat
 , jsonschema
-, pytest
+, pytestCheckHook
 , colorama
 , pygments
 , tornado
 , requests
-, GitPython
+, gitpython
+, jupyter-server-mathjax
 , notebook
 , jinja2
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "1.1.0";
-  disabled = !isPy3k;
+  version = "3.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qfy7nmlg75vryvrlgd6p0rqrvcclq8n9kd0n4xv5959s9sjy0w0";
+    hash = "sha256-Z3ZzIOlxN09wGhdapZq9OlVHIwOdOfrpCOctFjMNZIs=";
   };
 
-  checkInputs = [
-    hypothesis
-    pytestcov
-    pytest-timeout
-    pytest-tornado
-    jsonschema
-    mock
-    tabulate
-    pytest
+  nativeBuildInputs = [
+    setuptools-scm
   ];
-
-  nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [
     attrs
     py
     setuptools
     six
+    jupyter-server-mathjax
     nbformat
     colorama
     pygments
     tornado
     requests
-    GitPython
+    gitpython
     notebook
     jinja2
-    ];
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+    pytest-timeout
+    pytest-tornado
+    jsonschema
+    mock
+    tabulate
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_apply_filter_no_repo"
+    "test_diff_api_checkpoint"
+    "test_filter_cmd_invalid_filter"
+    "test_inline_merge_source_add"
+    "test_inline_merge_source_patches"
+    "test_inline_merge_source_replace"
+    "test_inline_merge_cells_insertion"
+    "test_inline_merge_cells_replacement"
+    "test_interrogate_filter_no_repo"
+    "test_merge_input_strategy_inline"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "nbdime"
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/jupyter/nbdime;
+    homepage = "https://github.com/jupyter/nbdime";
     description = "Tools for diffing and merging of Jupyter notebooks.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tbenst ];

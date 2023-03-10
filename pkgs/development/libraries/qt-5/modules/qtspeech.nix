@@ -1,7 +1,9 @@
-{ qtModule }:
+{ qtModule, speechd, pkg-config }:
 
 qtModule {
-  name = "qtspeech";
+  pname = "qtspeech";
   qtInputs = [ ];
+  buildInputs = [ speechd ];
+  nativeBuildInputs = [ pkg-config ];
   outputs = [ "out" "dev" ];
 }

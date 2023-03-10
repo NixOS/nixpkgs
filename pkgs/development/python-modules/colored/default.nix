@@ -1,24 +1,34 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "colored";
-  version = "1.4.2";
+  version = "1.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "056fac09d9e39b34296e7618897ed1b8c274f98423770c2980d829fd670955ed";
+    sha256 = "sha256-BP9NTdUUJ0/juZohu1L7lvJojAHpP7p77zciHny1bOA=";
   };
 
-  # No proper test suite
-  doCheck = false;
+  nativeCheckInputs = [ nose ];
 
-  meta = with stdenv.lib; {
-    homepage = https://gitlab.com/dslackw/colored;
+  checkPhase = ''
+    nosetests
+  '';
+
+  pythonImportsCheck = [
+    "colored"
+  ];
+
+  meta = with lib; {
     description = "Simple library for color and formatting to terminal";
+    homepage = "https://gitlab.com/dslackw/colored";
+    changelog = "https://gitlab.com/dslackw/colored/-/raw/${version}/CHANGES.md";
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
-
 }

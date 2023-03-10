@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, bison }:
+{ lib, stdenv, fetchurl, bison }:
 
 stdenv.mkDerivation rec {
-  name = "buddy-2.4";
+  pname = "buddy";
+  version = "2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/buddy/${name}.tar.gz";
+    url = "mirror://sourceforge/buddy/${pname}-${version}.tar.gz";
     sha256 = "0dl86l9xkl33wnkz684xa9axhcxx2zzi4q5lii0axnb9lsk81pyk";
   };
 
@@ -15,11 +16,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://sourceforge.net/projects/buddy/;
+    homepage = "https://sourceforge.net/projects/buddy/";
     description = "Binary decision diagram package";
     license = "as-is";
 
-    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.unix; # Once had cygwin problems
   };
 }

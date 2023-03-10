@@ -1,23 +1,32 @@
-{ stdenv, fetchurl, omake, ocaml, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, omake, ocaml, flex, bison }:
 
-let
-  version = "2.1";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "teyjus";
-  inherit version;
+  version = "unstable-2019-07-26";
 
-  src = fetchurl {
-    url = "https://github.com/teyjus/teyjus/archive/v${version}.tar.gz";
-    sha256 = "0393wpg8v1vvarqy2xh4fdmrwlrl6jaj960kql7cq79mb9p3m269";
+  src = fetchFromGitHub {
+    owner = "teyjus";
+    repo = "teyjus";
+    rev = "e63f40aa9f1d0ea5e7bac41aae5e479c3616545c";
+    sha256 = "sha256-gaAWKd5/DZrIPaaQzx9l0KtCMW9LPw17vvNPsnopZA0=";
   };
 
-  patches = [ ./fix-lex-to-flex.patch ];
+  patches = [
+    ./fix-lex-to-flex.patch
+  ];
 
-  buildInputs = [ omake ocaml flex bison ];
+  postPatch = ''
+    sed -i "/TST/d" source/OMakefile
+    rm -rf source/front/caml
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ omake ocaml flex bison ];
 
   hardeningDisable = [ "format" ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${ocaml}/include";
 
   buildPhase = "omake all";
 
@@ -25,11 +34,11 @@ stdenv.mkDerivation {
 
   installPhase = "mkdir -p $out/bin && cp tj* $out/bin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An efficient implementation of the Lambda Prolog language";
-    homepage = https://github.com/teyjus/teyjus;
-    license = stdenv.lib.licenses.gpl3;
+    homepage = "https://github.com/teyjus/teyjus";
+    license = lib.licenses.gpl3;
     maintainers = [ maintainers.bcdarwin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

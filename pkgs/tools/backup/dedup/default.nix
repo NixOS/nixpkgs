@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lz4, snappy, libsodium
+{ lib, stdenv, fetchurl, lz4, snappy, libsodium
 # For testing
 , coreutils, gawk
 }:
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ coreutils gawk ];
+  nativeCheckInputs = [ coreutils gawk ];
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data deduplication program";
-    homepage = https://git.2f30.org/dedup/file/README.html;
+    homepage = "https://git.2f30.org/dedup/file/README.html";
     license = with licenses; [ bsd0 isc ];
     maintainers = with maintainers; [ dtzWill ];
   };

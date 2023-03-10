@@ -1,23 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "gomodifytags-unstable";
-  version = "2018-09-14";
-  rev = "141225bf62b6e5c9c0c9554a2e993e8c30aebb1d";
-
-  goPackagePath = "github.com/fatih/gomodifytags";
+buildGoModule rec {
+  pname = "gomodifytags";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "fatih";
     repo = "gomodifytags";
-    sha256 = "16qbp594l90qpvf388wlv0kf6wvqj1vz2mqq0g3qcz6dkrc4cjqa";
+    rev = "v${version}";
+    sha256 = "1yhkn9mdvsn9i5v03c5smz32zlhkylnxhkcbjb7llafxzbhzgfm6";
   };
 
+  vendorSha256 = "sha256-8efqJfu+gtoFbhdlDZfb8NsXV9hBDI2pvAQNH18VVhU=";
+
   meta = {
-    description = "Go tool to modify struct field tags.";
-    homepage = https://github.com/fatih/gomodifytags;
-    maintainers = with stdenv.lib.maintainers; [ vdemeester ];
-    license = stdenv.lib.licenses.bsd3;
+    description = "Go tool to modify struct field tags";
+    homepage = "https://github.com/fatih/gomodifytags";
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.bsd3;
   };
 }

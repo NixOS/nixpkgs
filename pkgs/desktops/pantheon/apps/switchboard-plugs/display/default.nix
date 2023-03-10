@@ -1,11 +1,13 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
+, libhandy
 , granite
 , gtk3
 , switchboard
@@ -13,25 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.2.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0mr89kyq034wffzixqlq6lmhyc4jry3dcgxrk306dhks2myindqh";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-d25++3msaS9dg2Rsl7mrAezDn8Lawd3/X0XPH5Zy6Rc=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -39,14 +35,19 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     switchboard
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Switchboard Displays Plug";
-    homepage = https://github.com/elementary/switchboard-plug-display;
-    license = licenses.lgpl2Plus;
+    homepage = "https://github.com/elementary/switchboard-plug-display";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

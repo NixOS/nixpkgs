@@ -1,32 +1,47 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pandoc, haskellPackages, texlive }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pandoc
+, pandocfilters
+, pythonOlder
+, substituteAll
+, texlive
+}:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "unstable-2018-06-18";
+  version = "1.10";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "bebraw";
+    owner = "JessicaTegner";
     repo = pname;
-    rev = "87912f0f17e0a71c1160008df708c876d32e5819";
-    sha256 = "0l6knkxxhmni4lx8hyvbb71svnhza08ivyklqlk5fw637gznc0hx";
+    rev = "v${version}";
+    hash = "sha256:05m585l4sipjzpkrv4yj5s7w45yxhxlym55lkhnavsshlvisinkz";
   };
 
-  postPatch = ''
-    # set pandoc path statically
-    sed -i '/^__pandoc_path = None$/c__pandoc_path = "${pandoc}/bin/pandoc"' pypandoc/__init__.py
+  patches = [
+    (substituteAll {
+      src = ./static-pandoc-path.patch;
+      pandoc = "${lib.getBin pandoc}/bin/pandoc";
+      pandocVersion = pandoc.version;
+    })
+    ./skip-tests.patch
+  ];
 
-    # Fix tests: requires network access
-    substituteInPlace tests.py --replace "pypandoc.convert(url, 'html')" "'GPL2 license'"
-  '';
+  nativeCheckInputs = [
+    texlive.combined.scheme-small
+    pandocfilters
+  ];
 
-  preCheck = ''
-    export PATH="${haskellPackages.pandoc-citeproc}/bin:${texlive.combined.scheme-small}/bin:$PATH"
-  '';
+  pythonImportsCheck = [
+    "pypandoc"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thin wrapper for pandoc";
-    homepage = https://github.com/bebraw/pypandoc;
+    homepage = "https://github.com/JessicaTegner/pypandoc";
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann bennofs ];
   };

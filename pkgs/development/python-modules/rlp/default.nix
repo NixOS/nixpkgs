@@ -1,31 +1,42 @@
-{ lib, fetchPypi, buildPythonPackage, pytest, hypothesis, eth-utils }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, eth-utils
+, hypothesis
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "1.2.0";
+  version = "3.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "27273fc2dbc3513c1e05ea6b8af28aac8745fb09c164e39e2ed2807bf7e1b342";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "pyrlp";
+    rev = "v${version}";
+    sha256 = "sha256-GRCq4FU38e08fREg5fweig5Y60jLT2k3Yj1Jk8OA6XY=";
   };
 
-  checkInputs = [ pytest hypothesis ];
-  propagatedBuildInputs = [ eth-utils ];
-
-  # setuptools-markdown uses pypandoc which is broken at the moment
-  preConfigure = ''
-    substituteInPlace setup.py --replace \'setuptools-markdown\' ""
-    substituteInPlace setup.py --replace "long_description_markdown_filename='README.md'," ""
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'setuptools-markdown'" ""
   '';
 
-  checkPhase = ''
-    pytest .
-  '';
+  propagatedBuildInputs = [
+    eth-utils
+  ];
 
-  meta = {
-    description = "A package for encoding and decoding data in and from Recursive Length Prefix notation";
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "rlp" ];
+
+  meta = with lib; {
+    description = "RLP serialization library";
     homepage = "https://github.com/ethereum/pyrlp";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

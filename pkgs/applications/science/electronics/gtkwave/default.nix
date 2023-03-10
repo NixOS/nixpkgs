@@ -1,16 +1,39 @@
-{ stdenv, fetchurl, glib, gtk3, gperf, pkgconfig, bzip2, tcl, tk, wrapGAppsHook, judy, xz }:
+{ bzip2
+, fetchurl
+, glib
+, gperf
+, gtk3
+, gtk-mac-integration
+, judy
+, lib
+, pkg-config
+, stdenv
+, tcl
+, tk
+, wrapGAppsHook
+, xz
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
-  version = "3.3.104";
+  version = "3.3.114";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "1qvldbnlp3wkqr5ff93f6pdvv9yzij7lxfhpqlizakz08l1xb391";
+    url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
+    sha256 = "sha256-zzpfyrs3qWckzeLkp0A73ye1HpFGzmenlNvkcBfPhKw=";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ glib gtk3 gperf bzip2 tcl tk judy xz ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
+    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+
+  # fix compilation under Darwin
+  # remove these patches upon next release
+  # https://github.com/gtkwave/gtkwave/pull/136
+  patches = [
+    ./0001-Fix-detection-of-quartz-in-gdk-3.0-target.patch
+    ./0002-Check-GDK_WINDOWING_X11-macro-when-using-GtkPlug.patch
+  ];
 
   configureFlags = [
     "--with-tcl=${tcl}/lib"
@@ -21,9 +44,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "VCD/Waveform viewer for Unix and Win32";
-    homepage    = http://gtkwave.sourceforge.net;
-    license     = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    homepage = "https://gtkwave.sourceforge.net";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ thoughtpolice jiegec ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

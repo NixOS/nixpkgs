@@ -5,10 +5,13 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 , cpio
 , xar
+, libdbusmenu
+, libxshmfence
 }:
 
 let
@@ -20,16 +23,16 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.12.3490";
-    x86_64-linux = "3.12.2916";
+    x86_64-darwin = "3.30.4506";
+    x86_64-linux = "3.30.3018";
   }.${system} or throwSystem;
 
-  sha256 = {
-    x86_64-darwin = "0xvhx3r99fl1v1cdqj6sk46kzxv9qi7j754amkhv7knrpmgyp55z";
-    x86_64-linux = "0xx03cpy6kapbjpygwranxjg1a0p8s1xq3cpapvi55rnkbk0qvjw";
+  hash = {
+    x86_64-darwin = "sha256-+htDeNIuucB4qzNBNYoSUH1DbfgouZS08G5hxPtIuzY=";
+    x86_64-linux = "sha256-46WjFA+E9M7RfTOM/Xoho+9ooToSgQiZaMlcZ3lJvBQ=";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful
@@ -44,12 +47,12 @@ let
     '';
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
       kiwi
       toonn
-      worldofpeace
     ];
     platforms = [
       "x86_64-darwin"
@@ -62,21 +65,19 @@ let
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
-      inherit sha256;
+        + "Wire-${version}_amd64.deb";
+      inherit hash;
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Network;InstantMessaging;Chat;VideoConference";
+      categories = [ "Network" "InstantMessaging" "Chat" "VideoConference" ];
       comment = "Secure messenger for everyone";
       desktopName = "Wire";
       exec = "wire-desktop %U";
       genericName = "Secure messenger";
       icon = "wire-desktop";
       name = "wire-desktop";
-      extraEntries = ''
-        StartupWMClass="Wire"
-      '';
+      startupWMClass = "Wire";
     };
 
     dontBuild = true;
@@ -91,11 +92,19 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
 
-    unpackPhase = "dpkg-deb -x $src .";
+    unpackPhase = ''
+      runHook preUnpack
+
+      dpkg-deb -x $src .
+
+      runHook postUnpack
+    '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/bin"
       cp -R "opt" "$out"
       cp -R "usr/share" "$out/share"
@@ -104,10 +113,13 @@ let
       # Desktop file
       mkdir -p "$out/share/applications"
       cp "${desktopItem}/share/applications/"* "$out/share/applications"
+
+      runHook postInstall
     '';
 
     runtimeDependencies = [
-      udev.lib
+      (lib.getLib udev)
+      libdbusmenu
     ];
 
     postFixup = ''
@@ -121,8 +133,8 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-      + "macos%2F${version}/Wire.pkg";
-      inherit sha256;
+        + "macos%2F${version}/Wire.pkg";
+      inherit hash;
     };
 
     buildInputs = [
@@ -131,17 +143,29 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       xar -xf $src
       cd com.wearezeta.zclient.mac.pkg
+
+      runHook postUnpack
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       cat Payload | gunzip -dc | cpio -i
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
       cp -r Wire.app $out/Applications
+
+      runHook postInstall
     '';
   };
 

@@ -1,23 +1,32 @@
-{stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, cctools
+, autoSignDarwinBinariesHook
+, fixDarwinDylibNames
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "20170307";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
-    rev = "8c1978fa4f5662b8849fe712be716958f29cec0e";
-    sha256 = "0zpxvdsrw0vzzp3iaag3wh4z8ygl7fkswgjppp2fz2zhhqh93k2w";
+    rev = "v${version}";
+    sha256 = "sha256-EvCxBwzpi3riSBhlHr6MmIUYKTCp02y5gz7pDJCEC1Q=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  configureFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${cctools}/bin/libtool" ];
+
+  nativeBuildInputs = [ autoreconfHook ]
+    ++ lib.optionals stdenv.isDarwin [ cctools autoSignDarwinBinariesHook fixDarwinDylibNames ];
 
   meta = {
-    homepage = https://liquidsdr.org/;
+    homepage = "https://liquidsdr.org/";
     description = "Digital signal processing library for software-defined radios";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-
 }

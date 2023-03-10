@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # Tests require Xorg and Dbus instance
   doCheck = false;
   propagatedBuildInputs = [ pygobject3
-                            dbus-python ]; 
+                            dbus-python ];
 
   meta = {
     description = "Pure Python interface to DBus notifications";
-    homepage = https://bitbucket.org/takluyver/pynotify2;
+    homepage = "https://bitbucket.org/takluyver/pynotify2";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mog ];
   };

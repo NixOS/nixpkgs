@@ -109,5 +109,5 @@ import ./make-test-python.nix {
         bbworker.fail("nc -z bbmaster 8011")
   '';
 
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ nand0p ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 } {}

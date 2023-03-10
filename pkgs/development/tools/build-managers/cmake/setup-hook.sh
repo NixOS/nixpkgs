@@ -15,6 +15,9 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    # default to CMake defaults if unset
+    : ${cmakeBuildDir:=build}
+
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
@@ -25,9 +28,11 @@ cmakeConfigurePhase() {
     fi
 
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
-        mkdir -p build
-        cd build
-        cmakeDir=${cmakeDir:-..}
+        mkdir -p "$cmakeBuildDir"
+        cd "$cmakeBuildDir"
+        : ${cmakeDir:=..}
+    else
+        : ${cmakeDir:=.}
     fi
 
     if [ -z "${dontAddPrefix-}" ]; then
@@ -48,10 +53,7 @@ cmakeConfigurePhase() {
 
     # on macOS we want to prefer Unix-style headers to Frameworks
     # because we usually do not package the framework
-    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
-
-    # on macOS i686 was only relevant for 10.5 or earlier.
-    cmakeFlags="-DCMAKE_OSX_ARCHITECTURES=x86_64 $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=LAST $cmakeFlags"
 
     # we never want to use the global macOS SDK
     cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
@@ -67,6 +69,24 @@ cmakeConfigurePhase() {
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
     cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib $cmakeFlags"
+
+    # The docdir flag needs to include PROJECT_NAME as per GNU guidelines,
+    # try to extract it from CMakeLists.txt.
+    if [[ -z "$shareDocName" ]]; then
+        local cmakeLists="${cmakeDir}/CMakeLists.txt"
+        if [[ -f "$cmakeLists" ]]; then
+            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
+        fi
+        # The argument sometimes contains garbage or variable interpolation.
+        # When that is the case, let’s fall back to the derivation name.
+        if [[ -z "$shareDocName" ]] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_+-]'; then
+            if [[ -n "${pname-}" ]]; then
+                shareDocName="$pname"
+            else
+                shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+            fi
+        fi
+    fi
 
     # This ensures correct paths with multiple output derivations
     # It requires the project to use variables from GNUInstallDirs module
@@ -87,9 +107,8 @@ cmakeConfigurePhase() {
         cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
     fi
 
-    # Avoid cmake resetting the rpath of binaries, on make install
-    # And build always Release, to ensure optimisation flags
-    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+    # Always build Release, to ensure optimisation flags
+    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} $cmakeFlags"
 
     # Disable user package registry to avoid potential side effects
     # and unecessary attempts to access non-existent home folder
@@ -104,7 +123,7 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+    cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

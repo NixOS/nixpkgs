@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
+{ lib, stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   version = "2017.02.28";
@@ -17,13 +17,14 @@ stdenv.mkDerivation rec {
     comment = "Launcher for Pharo distributions";
     desktopName = "Pharo";
     genericName = "Pharo";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   # because upstream tarball has no top-level directory.
   sourceRoot = ".";
 
-  buildInputs = [ bash pharo unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ bash pharo ];
 
   installPhase = ''
     mkdir -p $prefix/share/pharo-launcher
@@ -55,10 +56,10 @@ stdenv.mkDerivation rec {
      test "$?" == 124 && echo "ok")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Launcher for Pharo distributions";
+    homepage = "https://pharo.org";
     longDescription = ''
-
       Pharo's goal is to deliver a clean, innovative, free open-source
       Smalltalk-inspired environment. By providing a stable and small
       core system, excellent dev tools, and maintained releases, Pharo
@@ -75,8 +76,7 @@ stdenv.mkDerivation rec {
       access it very rapidly from your OS application launcher. As a
       result, launching any image is never more than 3 clicks away.
     '';
-    homepage = http://pharo.org;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
     platforms = pharo.meta.platforms;
   };

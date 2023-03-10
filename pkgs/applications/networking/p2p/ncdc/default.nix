@@ -1,20 +1,23 @@
-{ stdenv, fetchurl, ncurses, zlib, bzip2, sqlite, pkgconfig, glib, gnutls }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, zlib, bzip2, sqlite, pkg-config
+, glib, gnutls, perl, libmaxminddb }:
 
 stdenv.mkDerivation rec {
   pname = "ncdc";
-  version = "1.22.1";
+  version = "1.23.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdc-${version}.tar.gz";
-    sha256 = "1bdgqd07f026qk6vpbxqsin536znd33931m3b4z44prlm9wd6pyi";
+    hash = "sha256-lYgSFAd6Wzwk+7rwIK2g0ITuO1lqfDzB4OaKqsTJteY=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls ];
+  nativeBuildInputs = [ perl pkg-config ];
+  buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls libmaxminddb ];
 
-  meta = with stdenv.lib; {
+  configureFlags = [ "--with-geoip" ];
+
+  meta = with lib; {
     description = "Modern and lightweight direct connect client with a friendly ncurses interface";
-    homepage = https://dev.yorhel.nl/ncdc;
+    homepage = "https://dev.yorhel.nl/ncdc";
     license = licenses.mit;
     platforms = platforms.linux; # arbitrary
     maintainers = with maintainers; [ ehmry ];

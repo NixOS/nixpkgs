@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ chardet ];
 
-  checkInputs = [ hypothesis ];
+  nativeCheckInputs = [ hypothesis ];
 
   meta = with lib; {
-    homepage = https://github.com/audreyr/binaryornot;
+    homepage = "https://github.com/audreyr/binaryornot";
     description = "Ultra-lightweight pure Python package to check if a file is binary or text";
     license = licenses.bsd3;
   };

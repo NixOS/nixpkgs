@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, yosys, symbiyosys, python3
+{ lib, stdenv, fetchFromGitHub
+, yosys, python3
 }:
 
 let
@@ -7,35 +7,45 @@ let
 in
 stdenv.mkDerivation {
   pname = "mcy";
-  version = "2020.02.05";
+  version = "2020.08.03";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "mcy";
-    rev    = "83deeddd12d583a89ad4aa1d2147efa4d6adc33c";
-    sha256 = "1i0cabiqr68zflwzc6z894i4n7k6m3hbfck58vzh8zb9jwxwizav";
+    rev    = "62048e69df13f8e03670424626755ae8ef4c36ff";
+    sha256 = "15xxgzx1zxzx5kshqyrxnfx33cz6cjzxcdcn6z98jhs9bwyvf96f";
   };
 
   buildInputs = [ python ];
   patchPhase = ''
+    chmod +x scripts/create_mutated.sh
+    patchShebangs .
+
     substituteInPlace mcy.py \
       --replace yosys '${yosys}/bin/yosys' \
-      --replace 'os.execvp("mcy-dash"' "os.execvp(\"$out/libexec/mcy/mcy-dash.py\""
+      --replace 'os.execvp("mcy-dash"' "os.execvp(\"$out/bin/mcy-dash\""
+    substituteInPlace mcy-dash.py \
+      --replace 'app.run(debug=True)' 'app.run(host="0.0.0.0",debug=True)' \
+      --replace 'subprocess.Popen(["mcy"' "subprocess.Popen([\"$out/bin/mcy\""
+    substituteInPlace scripts/create_mutated.sh \
+      --replace yosys '${yosys}/bin/yosys'
   '';
 
   # the build needs a bit of work...
   buildPhase = "true";
   installPhase = ''
-    mkdir -p $out/bin $out/libexec/mcy
-    install mcy.py $out/bin/mcy && chmod +x $out/bin/mcy
-    install mcy-dash.py $out/libexec/mcy/mcy-dash.py
+    mkdir -p $out/bin $out/share/mcy/{dash,scripts}
+    install mcy.py      $out/bin/mcy      && chmod +x $out/bin/mcy
+    install mcy-dash.py $out/bin/mcy-dash && chmod +x $out/bin/mcy-dash
+    cp -r dash/.    $out/share/mcy/dash/.
+    cp -r scripts/. $out/share/mcy/scripts/.
   '';
 
   meta = {
     description = "Mutation-based coverage testing for hardware designs, with Yosys";
     homepage    = "https://github.com/YosysHQ/mcy";
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms   = lib.platforms.all;
   };
 }

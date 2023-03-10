@@ -1,4 +1,4 @@
-{ fetchhg, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU, libGL }:
+{ fetchhg, lib, stdenv, cmake, coin3d, motif, libXext, libXmu, libGLU, libGL }:
 
 stdenv.mkDerivation {
   pname = "soxt";
@@ -12,10 +12,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ coin3d motif xlibsWrapper libGLU libGL libXmu ];
+  buildInputs = [ coin3d motif libGLU libGL libXext libXmu ];
 
-  meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;
+  meta = with lib; {
+    homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";
     license = licenses.bsd3;
     description = "A GUI binding for using Open Inventor with Xt/Motif";
     maintainers = with maintainers; [ tmplt ];

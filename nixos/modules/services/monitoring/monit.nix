@@ -9,12 +9,12 @@ in
 {
   options.services.monit = {
 
-    enable = mkEnableOption "Monit";
+    enable = mkEnableOption (lib.mdDoc "Monit");
 
     config = mkOption {
       type = types.lines;
       default = "";
-      description = "monitrc content";
+      description = lib.mdDoc "monitrc content";
     };
 
   };
@@ -43,4 +43,6 @@ in
     };
 
   };
+
+  meta.maintainers = with maintainers; [ ryantm ];
 }

@@ -1,9 +1,8 @@
-{ stdenv
-, lib
+{ lib
 , isPy3k
 , buildPythonPackage
 , fetchPypi
-, Babel
+, babel
 }:
 
 buildPythonPackage rec {
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
   ];
 
   # SyntaxError: Non-ASCII character '\xc3' in file /build/BabelGladeExtractor-0.6.3/babelglade/tests/test_translate.py on line 20, but no encoding declared; see http://python.org/dev/peps/pep-0263/ for details

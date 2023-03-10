@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "jhiccup";
@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Measure JVM application stalls and GC pauses";
-    homepage    = https://www.azul.com/jhiccup/;
-    license     = stdenv.lib.licenses.cc0;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    homepage    = "https://www.azul.com/jhiccup/";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license     = lib.licenses.cc0;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

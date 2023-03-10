@@ -1,34 +1,37 @@
 { buildPythonPackage
 , fetchPypi
+, pythonOlder
 , h5py
 , numpy
 , dill
 , astropy
 , scipy
 , pandas
-, pytest
-, pytestcov
-, pytestrunner
-, coveralls
+, pytestCheckHook
 , lib
 }:
 
 buildPythonPackage rec {
   pname   = "hickle";
-  version = "3.4.5";
+  version = "5.0.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d1qj3yl7635lgkqacz9r8fyhv71396l748ww4wy05ibpignjm2x";
+    hash = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
   };
 
   postPatch = ''
-    substituteInPlace requirements_test.txt \
-      --replace 'astropy<3.1;' 'astropy;' --replace 'astropy<3.0;' 'astropy;'
+    substituteInPlace tox.ini --replace "--cov=./hickle" ""
   '';
 
   propagatedBuildInputs = [ h5py numpy dill ];
-  checkInputs = [ pytest pytestcov pytestrunner coveralls scipy pandas astropy ];
+
+  nativeCheckInputs = [
+    pytestCheckHook scipy pandas astropy
+  ];
+
+  pythonImportsCheck = [ "hickle" ];
 
   meta = {
     description = "Serialize Python data to HDF5";

@@ -1,52 +1,55 @@
-{ boost
+{ lib
+, boost
 , fetchFromGitHub
 , installShellFiles
-, mkDerivationWith
+, mkDerivation
 , muparser
-, pkgconfig
+, pkg-config
 , qmake
 , qtbase
 , qtsvg
 , qttools
 , runtimeShell
-, gcc8Stdenv
 }:
 
-let
-  stdenv = gcc8Stdenv;
-in
-
-# Doesn't build with gcc9
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0-rc1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "0kwj838hqzbw95gl4x6scli9gj3gs72hdmrrkzwq5rjxam18k3f3";
+    sha256 = "sha256-horKTegmvcMg4m5NbZ4nzy4J6Ac/6+E5OkiZl0v6TBc=";
   };
 
-  patches = [
-    ./fix_qt_5_11_build.patch
+  buildInputs = [
+    boost
+    muparser
+    qtbase
+    qtsvg
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    qmake
+    qttools
+  ];
+
+  qmakeFlags = [
+    "MUPARSER_DIR=${muparser}"
+    "BOOST_DIR=${boost.dev}"
   ];
 
   postPatch = ''
     substituteInPlace scripts/postprocess-unix.sh \
       --replace /bin/sh ${runtimeShell}
 
-    substituteInPlace librecad/src/lib/engine/rs_system.cpp \
-      --replace /usr/share $out/share
-
     substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
       --replace __DATE__ 0
   '';
 
-  qmakeFlags = [
-    "MUPARSER_DIR=${muparser}"
-    "BOOST_DIR=${boost.dev}"
-  ];
 
   installPhase = ''
     runHook preInstall
@@ -65,30 +68,11 @@ mkDerivationWith stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [
-    boost
-    muparser
-    qtbase
-    qtsvg
-  ];
-
-  nativeBuildInputs = [
-    installShellFiles
-    pkgconfig
-    qmake
-    qttools
-  ];
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kiwi
-      viric
-    ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kiwi viric ];
     platforms = platforms.linux;
   };
 }

@@ -1,24 +1,36 @@
-{lib, buildPythonPackage, fetchFromGitHub}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
+  pname = "xlsxwriter";
+  version = "3.0.3";
+  format = "setuptools";
 
-  pname = "XlsxWriter";
-  version = "1.2.8";
+  disabled = pythonOlder "3.7";
 
-  # PyPI release tarball doesn't contain tests so let's use GitHub. See:
-  # https://github.com/jmcnamara/XlsxWriter/issues/327
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "jmcnamara";
-    repo = pname;
+    repo = "XlsxWriter";
     rev = "RELEASE_${version}";
-    sha256 = "18q5sxm9jw5sfavdjy5z0yamknwj5fl359jziqllkbj5k2i16lnr";
+    hash = "sha256-9fIxNkOdM+Bz1F9AWq02H3LLQnefxGSAtp9kM2OtJ9M=";
   };
 
-  meta = {
-    description = "A Python module for creating Excel XLSX files";
-    homepage = https://xlsxwriter.readthedocs.io/;
-    maintainers = with lib.maintainers; [ jluttine ];
-    license = lib.licenses.bsd2;
-  };
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
+  pythonImportsCheck = [
+    "xlsxwriter"
+  ];
+
+  meta = with lib; {
+    description = "Module for creating Excel XLSX files";
+    homepage = "https://xlsxwriter.readthedocs.io/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jluttine ];
+  };
 }

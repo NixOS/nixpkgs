@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package {
-  name = "rationals";
+  pname = "rationals";
   version = "2017-04-29";
 
   idrisDeps = [ contrib ];
@@ -18,7 +18,7 @@ build-idris-package {
 
   meta = {
     description = "An idris rational number type built from paths in the Stern Brocot tree";
-    homepage = https://github.com/mcgordonite/idris-binary-rationals;
+    homepage = "https://github.com/mcgordonite/idris-binary-rationals";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

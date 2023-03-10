@@ -1,19 +1,32 @@
-{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig, libGL,
-  freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, curlWithGnuTls
+, zlib
+, glib
+, xorg
+, dbus
+, fontconfig
+, libGL
+, freetype
+, xkeyboard_config
+, makeDesktopItem
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "robo3t";
-  version = "1.3.1";
-  rev = "7419c406";
+  version = "1.4.3";
+  rev = "48f7dfd";
 
   src = fetchurl {
-    url = "https://download-test.robomongo.org/linux/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
-    sha256 = "1mp5i8iahd4qkwgi5ix98hlg17ivw5da27n0drnr0wk458wn99hi";
+    url = "https://github.com/Studio3T/robomongo/releases/download/v${version}/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
+    sha256 = "sha256-pH4q/O3bq45ZZn+s/12iScd0WbfkcLjK4MBdVCMXK00=";
   };
 
   icon = fetchurl {
-    url = "https://github.com/Studio3T/robomongo/raw/${version}/trash/install/linux/robomongo.png";
-    sha256 = "15li8536x600kkfkb3h6mw7y0f2ljkv951pc45dpiw036vldibv2";
+    url = "https://github.com/Studio3T/robomongo/raw/${rev}/install/macosx/robomongo.iconset/icon_128x128.png";
+    sha256 = "sha256-2PkUxBq2ow0wl09k8B6LJJUQ+y4GpnmoAeumKN1u5xg=";
   };
 
   desktopItem = makeDesktopItem {
@@ -23,12 +36,12 @@ stdenv.mkDerivation rec {
     comment = "Query GUI for mongodb";
     desktopName = "Robo3T";
     genericName = "MongoDB management tool";
-    categories = "Development;IDE;mongodb;";
+    categories = [ "Development" "IDE" ];
   };
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
-  ldLibraryPath = stdenv.lib.makeLibraryPath [
+  ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc
     zlib
     glib
@@ -43,9 +56,12 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     libGL
+    curlWithGnuTls
   ];
 
   installPhase = ''
+    runHook preInstall
+
     BASEDIR=$out/lib/robo3t
 
     mkdir -p $BASEDIR/bin
@@ -67,13 +83,16 @@ stdenv.mkDerivation rec {
     makeWrapper $BASEDIR/bin/robo3t $out/bin/robo3t \
       --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
       --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
+
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = https://robomongo.org/;
-    description = "Query GUI for mongodb";
+  meta = with lib; {
+    homepage = "https://robomongo.org/";
+    description = "Query GUI for mongodb. Formerly called Robomongo";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.eperuffo ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ eperuffo ];
   };
 }

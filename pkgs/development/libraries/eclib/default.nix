@@ -1,5 +1,5 @@
-{ stdenv
-, fetchFromGitHub
+{ lib, stdenv
+, fetchurl
 , autoreconfHook
 , pari
 , ntl
@@ -14,34 +14,39 @@ assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
   pname = "eclib";
-  version = "20190909"; # upgrade might break the sage interface
+  version = "20221012"; # upgrade might break the sage interface
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
   # ping @timokau for more info
-  src = fetchFromGitHub {
-    owner = "JohnCremona";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0y1vdi4120gdw56gg2dn3wh625yr9wpyk3wpbsd25w4lv83qq5da";
+  src = fetchurl {
+    # all releases for this project appear on its GitHub releases page
+    # by definition! other distros sometimes update whenever they see
+    # a version bump in configure.ac or a new tag (and this might show
+    # up on repology). however, a version bump or a new tag may not
+    # represent a new release, and a new release might not be tagged.
+    #
+    # see https://github.com/JohnCremona/eclib/issues/64#issuecomment-789788561
+    # for upstream's explanation of the above
+    url = "https://github.com/JohnCremona/eclib/releases/download/${version}/eclib-${version}.tar.bz2";
+    sha256 = "sha256-TPavWyn6BMt7fAo19rrlPICPbK/XKstBruB/ka1adBc=";
   };
   buildInputs = [
     pari
     ntl
     gmp
-  ] ++ stdenv.lib.optionals withFlint [
+  ] ++ lib.optionals withFlint [
     flint
   ];
   nativeBuildInputs = [
     autoreconfHook
   ];
   doCheck = true;
-  meta = with stdenv.lib; {
-    inherit version;
-    description = ''Elliptic curve tools'';
-    homepage = https://github.com/JohnCremona/eclib;
+  meta = with lib; {
+    description = "Elliptic curve tools";
+    homepage = "https://github.com/JohnCremona/eclib";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.all;
   };
 }

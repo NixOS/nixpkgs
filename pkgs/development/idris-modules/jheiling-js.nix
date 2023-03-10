@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "jheiling-js";
+  pname = "jheiling-js";
   version = "2016-03-09";
 
   ipkgName = "js";
@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Js library for Idris";
-    homepage = https://github.com/jheiling/idris-js;
+    homepage = "https://github.com/jheiling/idris-js";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.brainrape ];
   };

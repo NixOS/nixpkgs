@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   pname = "shelfMultiBand";
   version = "0.6.1";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A multiband compressor made from shelving filters.";
-    homepage = https://github.com/magnetophon/shelfMultiBand;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    homepage = "https://github.com/magnetophon/shelfMultiBand";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

@@ -1,23 +1,37 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
-  version = "3.001";
-in fetchzip rec {
-  name = "comfortaa-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "comfortaa";
+  version = "unstable-2021-07-29";
 
-  url = "https://orig00.deviantart.net/40a3/f/2017/093/d/4/comfortaa___font_by_aajohan-d1qr019.zip";
-  postFetch = ''
-    mkdir -p $out/share/fonts $out/share/doc
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/donate.html -d $out/share/doc/${name}
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = pname;
+    rev = "2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b";
+    postFetch = ''
+      # Remove the OTF fonts as they are not needed and cause a hash mismatch
+      rm -rf $out/fonts/{OTF,otf}
+    '';
+    hash = "sha256-4ZBRaQyYlnt9l4NgBHezuCnR3rKTJ37L41RTbGAhd0M=";
+  };
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype $out/share/doc/comfortaa
+    cp fonts/TTF/*.ttf $out/share/fonts/truetype
+    cp FONTLOG.txt README.md $out/share/doc/comfortaa
+
+    runHook postInstall
   '';
-  sha256 = "0z7xr0cnn6ghwivrm5b5awq9bzhnay3y99qq6dkdgfkfdsaz0n9h";
 
   meta = with lib; {
-    homepage = http://aajohan.deviantart.com/art/Comfortaa-font-105395949;
+    homepage = "http://aajohan.deviantart.com/art/Comfortaa-font-105395949";
     description = "A clean and modern font suitable for headings and logos";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

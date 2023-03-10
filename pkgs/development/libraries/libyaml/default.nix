@@ -1,23 +1,23 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "libyaml";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "libyaml";
     rev = version;
-    sha256 = "0839nqcmxjzfgjn39j7740pnlsgmvngpkamiw1lfy1qlcqyc3r4v";
+    sha256 = "18zsnsxc53pans4a01cs4401a2cjk3qi098hi440pj4zijifgcsb";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
-    homepage = https://pyyaml.org/;
+  meta = with lib; {
+    homepage = "https://pyyaml.org/";
     description = "A YAML 1.1 parser and emitter written in C";
     license = licenses.mit;
     platforms = platforms.all;

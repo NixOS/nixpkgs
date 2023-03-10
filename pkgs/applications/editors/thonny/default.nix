@@ -1,17 +1,28 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.2.6";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "19krnxpp3i1n65zafazvdm9mvnjry5rml0y9imj4365q4bkj20g2";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-TxfpzKAsU/5ble4VzJ+4pokCiyJsdisjmNwWfxOMKzE=";
   };
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [ (makeDesktopItem {
+    name = "Thonny";
+    exec = "thonny";
+    icon = "thonny";
+    desktopName = "Thonny";
+    comment     = "Python IDE for beginners";
+    categories  = [ "Development" "IDE" ];
+  }) ];
 
   propagatedBuildInputs = with python3.pkgs; [
     jedi
@@ -34,10 +45,14 @@ buildPythonApplication rec {
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
   '';
 
+  postInstall = ''
+    install -Dm644 ./packaging/icons/thonny-48x48.png $out/share/icons/hicolor/48x48/apps/thonny.png
+  '';
+
   # Tests need a DISPLAY
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python IDE for beginners";
     longDescription = ''
       Thonny is a Python IDE for beginners. It supports different ways
@@ -45,7 +60,7 @@ buildPythonApplication rec {
       evaluation, detailed visualization of the call stack and a mode
       for explaining the concepts of references and heap.
     '';
-    homepage = https://www.thonny.org/;
+    homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

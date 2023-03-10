@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , cxxSupport ? true
 , compat185 ? true
 , dbmSupport ? false
@@ -6,15 +6,16 @@
 # Options from inherited versions
 , version, sha256
 , extraPatches ? [ ]
-, license ? stdenv.lib.licenses.sleepycat
+, license ? lib.licenses.sleepycat
 , drvArgs ? {}
 }:
 
 stdenv.mkDerivation (rec {
-  name = "db-${version}";
+  pname = "db";
+  inherit version;
 
   src = fetchurl {
-    url = "https://download.oracle.com/berkeley-db/${name}.tar.gz";
+    url = "https://download.oracle.com/berkeley-db/${pname}-${version}.tar.gz";
     sha256 = sha256;
   };
 
@@ -27,8 +28,8 @@ stdenv.mkDerivation (rec {
       (if cxxSupport then "--enable-cxx" else "--disable-cxx")
       (if compat185 then "--enable-compat185" else "--disable-compat185")
     ]
-    ++ stdenv.lib.optional dbmSupport "--enable-dbm"
-    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+    ++ lib.optional dbmSupport "--enable-dbm"
+    ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   preConfigure = ''
     cd build_unix
@@ -47,8 +48,8 @@ stdenv.mkDerivation (rec {
     make examples_c examples_cxx
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/index.html;
+  meta = with lib; {
+    homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
     description = "Berkeley DB";
     license = license;
     platforms = platforms.unix;

@@ -3,7 +3,7 @@
 
 let
   desktopItem = name: short: long: description: makeDesktopItem {
-    categories  = "Game;AdventureGame;";
+    categories  = [ "Game" "AdventureGame" ];
     comment     = description;
     desktopName = long;
     exec        = "@out@/bin/${short}";
@@ -51,8 +51,8 @@ let
         runHook postInstall
       '';
 
-      meta = with stdenv.lib; {
-        homepage = https://www.scummvm.org;
+      meta = with lib; {
+        homepage = "https://www.scummvm.org";
         license = licenses.free; # refer to the readme for exact wording
         maintainers = with maintainers; [ peterhoeg ];
         inherit description;
@@ -74,6 +74,21 @@ in {
     files = [ "sky.*" ];
   };
 
+  broken-sword-25 = generic rec {
+    plong = "Broken Sword 2.5";
+    pshort = "sword25";
+    pcode = "sword25";
+    description = "A fan game of the Broken Sword series";
+    version = "1.0";
+    src = fetchurl {
+      url = "mirror://sourceforge/scummvm/${pshort}-v${version}.zip";
+      sha256 = "0ivj1vflfpih5bs5a902mab88s4d77fwm3ya3fk7pammzc8gjqzz";
+    };
+    sourceRoot = ".";
+    docs = [ "README" "license-original.txt" ];
+    files = [ "data.b25c" ];
+  };
+
   drascula-the-vampire-strikes-back = generic rec {
     plong = "Drascula: The Vampire Strikes Back";
     pshort = "drascula";
@@ -93,6 +108,21 @@ in {
     sourceRoot = ".";
     docs = [ "readme.txt" "drascula.doc" ];
     files = [ "Packet.001" ];
+  };
+
+  dreamweb = generic rec {
+    plong = "Dreamweb";
+    pshort = "dreamweb";
+    pcode = "dreamweb";
+    description = "2D point-and-click cyberpunk top-down adventure game";
+    version = "1.1";
+    src = fetchurl {
+      url = "mirror://sourceforge/scummvm/${pshort}-cd-uk-${version}.zip";
+      sha256 = "0hh1p3rd7s0ckvri14lc6wdry9vv0vn4h4744v2n4zg63j8i6vsa";
+    };
+    sourceRoot = ".";
+    docs = [ "license.txt" ];
+    files = [ "DREAMWEB.*" "SPEECH" "track01.flac" ];
   };
 
   flight-of-the-amazon-queen = generic rec {

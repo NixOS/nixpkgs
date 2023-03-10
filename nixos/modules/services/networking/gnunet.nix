@@ -6,12 +6,15 @@ let
 
   cfg = config.services.gnunet;
 
-  homeDir = "/var/lib/gnunet";
+  stateDir = "/var/lib/gnunet";
 
-  configFile = with cfg; pkgs.writeText "gnunetd.conf"
+  configFile = with cfg;
     ''
       [PATHS]
-      SERVICEHOME = ${homeDir}
+      GNUNET_HOME = ${stateDir}
+      GNUNET_RUNTIME_DIR = /run/gnunet
+      GNUNET_USER_RUNTIME_DIR = /run/gnunet
+      GNUNET_DATA_HOME = ${stateDir}/data
 
       [ats]
       WAN_QUOTA_IN = ${toString load.maxNetDownBandwidth} b
@@ -44,7 +47,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run the GNUnet daemon.  GNUnet is GNU's anonymous
           peer-to-peer communication and file sharing framework.
         '';
@@ -54,7 +57,7 @@ in
         quota = mkOption {
           type = types.int;
           default = 1024;
-          description = ''
+          description = lib.mdDoc ''
             Maximum file system usage (in MiB) for file sharing.
           '';
         };
@@ -64,7 +67,7 @@ in
         port = mkOption {
           type = types.port;
           default = 2086;  # assigned by IANA
-          description = ''
+          description = lib.mdDoc ''
             The UDP port for use by GNUnet.
           '';
         };
@@ -74,7 +77,7 @@ in
         port = mkOption {
           type = types.port;
           default = 2086;  # assigned by IANA
-          description = ''
+          description = lib.mdDoc ''
             The TCP port for use by GNUnet.
           '';
         };
@@ -84,7 +87,7 @@ in
         maxNetDownBandwidth = mkOption {
           type = types.int;
           default = 50000;
-          description = ''
+          description = lib.mdDoc ''
             Maximum bandwidth usage (in bits per second) for GNUnet
             when downloading data.
           '';
@@ -93,7 +96,7 @@ in
         maxNetUpBandwidth = mkOption {
           type = types.int;
           default = 50000;
-          description = ''
+          description = lib.mdDoc ''
             Maximum bandwidth usage (in bits per second) for GNUnet
             when downloading data.
           '';
@@ -102,7 +105,7 @@ in
         hardNetUpBandwidth = mkOption {
           type = types.int;
           default = 0;
-          description = ''
+          description = lib.mdDoc ''
             Hard bandwidth limit (in bits per second) when uploading
             data.
           '';
@@ -112,17 +115,17 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.gnunet;
-        defaultText = "pkgs.gnunet";
-        description = "Overridable attribute of the gnunet package to use.";
-        example = literalExample "pkgs.gnunet_git";
+        defaultText = literalExpression "pkgs.gnunet";
+        description = lib.mdDoc "Overridable attribute of the gnunet package to use.";
+        example = literalExpression "pkgs.gnunet_git";
       };
 
       extraOptions = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Additional options that will be copied verbatim in `gnunet.conf'.
-          See `gnunet.conf(5)' for details.
+        description = lib.mdDoc ''
+          Additional options that will be copied verbatim in `gnunet.conf`.
+          See {manpage}`gnunet.conf(5)` for details.
         '';
       };
     };
@@ -137,8 +140,6 @@ in
     users.users.gnunet = {
       group = "gnunet";
       description = "GNUnet User";
-      home = homeDir;
-      createHome = true;
       uid = config.ids.uids.gnunet;
     };
 
@@ -148,17 +149,20 @@ in
     # so install them globally.
     environment.systemPackages = [ cfg.package ];
 
+    environment.etc."gnunet.conf".text = configFile;
+
     systemd.services.gnunet = {
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ configFile ];
       path = [ cfg.package pkgs.miniupnpc ];
-      environment.TMPDIR = "/tmp";
-      serviceConfig.PrivateTmp = true;
-      serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
+      serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";
-      serviceConfig.WorkingDirectory = homeDir;
+      serviceConfig.WorkingDirectory = stateDir;
+      serviceConfig.RuntimeDirectory = "gnunet";
+      serviceConfig.StateDirectory = "gnunet";
     };
 
   };

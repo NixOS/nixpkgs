@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig
-, glib, gtk3, gnome3, gsettings-desktop-schemas, wrapGAppsHook
-, libX11, libXtst, libXfixes, libXcursor
+{ lib, stdenv, fetchurl, pkg-config
+, glib, gtk3, gnome, gsettings-desktop-schemas, wrapGAppsHook
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -8,24 +8,24 @@ stdenv.mkDerivation rec {
   version = "3.32.0";
 
   src = fetchurl {
-   url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+   url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
    sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   buildInputs = [
     glib gtk3 gsettings-desktop-schemas
-    libX11 libXtst libXfixes libXcursor
+    xorg.libX11 xorg.libXtst xorg.libXfixes xorg.libXcursor
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides mouse accessibility enhancements for the GNOME desktop";
     longDescription = ''
       Mousetweaks provides mouse accessibility enhancements for the GNOME
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       The features can be activated and configured through the Universal Access
       panel of the GNOME Control Center.
     '';
-    homepage = https://wiki.gnome.org/Projects/Mousetweaks;
+    homepage = "https://wiki.gnome.org/Projects/Mousetweaks";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.johnazoidberg ];

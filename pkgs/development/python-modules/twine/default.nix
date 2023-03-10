@@ -1,42 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , importlib-metadata
 , keyring
 , pkginfo
-, pyblake2
 , readme_renderer
 , requests
-, requests_toolbelt
-, setuptools_scm
-, tqdm
+, requests-toolbelt
+, rich
+, rfc3986
+, setuptools-scm
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "3.1.1";
-  disabled = pythonOlder "3.6";
+  version = "4.0.2";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d561a5e511f70275e5a485a6275ff61851c16ffcb3a95a602189161112d9f160";
+    sha256 = "sha256-nhAu9f3VogZh64j61GM4gGw70yzx23KWA/42l7G8g8g=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [
+    importlib-metadata
     keyring
     pkginfo
-    pyblake2
     readme_renderer
     requests
-    requests_toolbelt
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    requests-toolbelt
+    rfc3986
+    rich
+    urllib3
+  ];
 
   # Requires network
   doCheck = false;
 
+  pythonImportsCheck = [ "twine" ];
+
   meta = {
     description = "Collection of utilities for interacting with PyPI";
-    homepage = https://github.com/pypa/twine;
+    homepage = "https://github.com/pypa/twine";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
   };

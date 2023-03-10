@@ -1,30 +1,103 @@
 { lib
+, backoff
 , buildPythonPackage
-, fetchPypi
-, requests
-, jinja2
+, fetchFromGitHub
+, geojson
+, google-api-core
+, imagesize
+, ndjson
+, numpy
+, opencv
+  # , opencv-python
+, packaging
 , pillow
+, pydantic
+  # , pygeotile
+, pyproj
+, pytest-cases
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 , rasterio
+, requests
 , shapely
+, tqdm
+, typeguard
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "2.3";
+  version = "3.34.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6b515dc29329e8a3adac9d6b4fef84d80c513743be57ae66b54bcb30060172c6";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Labelbox";
+    repo = "labelbox-python";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-x/XvcGiFS//f/le3JAd2n/tuUy9MBrCsISpkIkCCNis=";
   };
 
-  propagatedBuildInputs = [ jinja2 requests pillow rasterio shapely ];
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "-s -vv -x --reruns 5 --reruns-delay 10 --durations=20" "-s -vv -x --durations=20"
+  '';
 
-  # Test cases are not running on pypi or GitHub
-  doCheck = false;   
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "backoff"
+  ];
+
+  propagatedBuildInputs = [
+    backoff
+    google-api-core
+    ndjson
+    pydantic
+    requests
+    tqdm
+  ];
+
+  passthru.optional-dependencies = {
+    data = [
+      shapely
+      geojson
+      numpy
+      pillow
+      # opencv-python
+      typeguard
+      imagesize
+      pyproj
+      # pygeotile
+      typing-extensions
+      packaging
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytest-cases
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.data;
+
+  disabledTestPaths = [
+    # Requires network access
+    "tests/integration"
+    # Missing requirements
+    "tests/data"
+  ];
+
+  pythonImportsCheck = [
+    "labelbox"
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/Labelbox/Labelbox;
     description = "Platform API for LabelBox";
+    homepage = "https://github.com/Labelbox/labelbox-python";
+    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

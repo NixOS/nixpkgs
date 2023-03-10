@@ -1,87 +1,155 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
+{ lib
+, buildNpmPackage
+, dbus
+, electron
+, fetchFromGitHub
+, glib
+, gnome
+, gtk3
+, jq
 , libsecret
 , makeDesktopItem
 , makeWrapper
-, stdenv
-, udev
+, moreutils
+, nodejs-16_x
+, pkg-config
+, python3
+, rustPlatform
 , wrapGAppsHook
 }:
 
 let
-  inherit (stdenv.hostPlatform) system;
+  description = "A secure and free password manager for all of your devices";
+  icon = "bitwarden";
 
-  pname = "bitwarden";
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs-16_x; };
 
-  version = {
-    x86_64-linux = "1.16.6";
-  }.${system} or "";
-
-  sha256 = {
-    x86_64-linux = "074hqm4gjljc82nhn7h6wsd74567390018fi3v38g7jh7aph10jj";
-  }.${system} or "";
-
-  meta = with stdenv.lib; {
-    description = "A secure and free password manager for all of your devices";
-    homepage = "https://bitwarden.com";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ kiwi ];
-    platforms = [ "x86_64-linux" ];
+  version = "2023.2.0";
+  src = fetchFromGitHub {
+    owner = "bitwarden";
+    repo = "clients";
+    rev = "desktop-v${version}";
+    sha256 = "/k2r+TikxVGlz8cnOq5zF3oUYw4zj31vDAD7OQFQlC4=";
   };
 
-  linux = stdenv.mkDerivation rec {
-    inherit pname version meta;
+  desktop-native = rustPlatform.buildRustPackage rec {
+    pname = "bitwarden-desktop-native";
+    inherit src version;
+    sourceRoot = "source/apps/desktop/desktop_native";
+    cargoSha256 = "sha256-zLftfmWYYUAaMvIT21qhVsHzxnNdQhFBH0fRBwVduAc=";
 
-    src = fetchurl {
-      url = "https://github.com/bitwarden/desktop/releases/download/"
-      + "v${version}/Bitwarden-${version}-amd64.deb";
-      inherit sha256;
-    };
+    patchFlags = [ "-p4" ];
 
-    desktopItem = makeDesktopItem {
-      name = "bitwarden";
-      exec = "bitwarden %U";
-      icon = "bitwarden";
-      comment = "A secure and free password manager for all of your devices";
-      desktopName = "Bitwarden";
-      categories = "Utility";
-    };
-
-    dontBuild = true;
-    dontConfigure = true;
-    dontPatchELF = true;
-    dontWrapGApps = true;
-
-    buildInputs = [ libsecret ] ++ atomEnv.packages;
-
-    nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
-
-    unpackPhase = "dpkg-deb -x $src .";
-
-    installPhase = ''
-      mkdir -p "$out/bin"
-      cp -R "opt" "$out"
-      cp -R "usr/share" "$out/share"
-      chmod -R g-w "$out"
-
-      # Desktop file
-      mkdir -p "$out/share/applications"
-      cp "${desktopItem}/share/applications/"* "$out/share/applications"
-    '';
-
-    runtimeDependencies = [
-      udev.lib
+    nativeBuildInputs = [
+      pkg-config
+      wrapGAppsHook
     ];
 
-    postFixup = ''
-      makeWrapper $out/opt/Bitwarden/bitwarden $out/bin/bitwarden \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libsecret stdenv.cc.cc ] }" \
-        "''${gappsWrapperArgs[@]}"
+    buildInputs = [
+      glib
+      gtk3
+      libsecret
+    ];
+
+    nativeCheckInputs = [
+      dbus
+      (gnome.gnome-keyring.override { useWrappedDaemon = false; })
+    ];
+
+    checkFlags = [
+      "--skip=password::password::tests::test"
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+
+      export HOME=$(mktemp -d)
+      export -f cargoCheckHook runHook _eval _callImplicitHook
+      dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        -- bash -e -c cargoCheckHook
+      runHook postCheck
     '';
   };
 
-in if stdenv.isDarwin
-then throw "Bitwarden has not been packaged for macOS yet"
-else linux
+  desktopItem = makeDesktopItem {
+    name = "bitwarden";
+    exec = "bitwarden %U";
+    inherit icon;
+    comment = description;
+    desktopName = "Bitwarden";
+    categories = [ "Utility" ];
+  };
+
+in
+
+buildNpmPackage' {
+  pname = "bitwarden";
+  inherit src version;
+
+  makeCacheWritable = true;
+  npmBuildFlags = [
+    "--workspace apps/desktop"
+  ];
+  npmDepsHash = "sha256-aFjN1S0+lhHjK3VSYfx0F5X8wSJwRRr6zQpPGt2VpxE=";
+
+  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  nativeBuildInputs = [
+    jq
+    makeWrapper
+    moreutils
+    python3
+  ];
+
+  preBuild = ''
+    jq 'del(.scripts.postinstall)' apps/desktop/package.json | sponge apps/desktop/package.json
+    jq '.scripts.build = ""' apps/desktop/desktop_native/package.json | sponge apps/desktop/desktop_native/package.json
+    cp ${desktop-native}/lib/libdesktop_native.so apps/desktop/desktop_native/desktop_native.linux-x64-musl.node
+  '';
+
+  postBuild = ''
+    pushd apps/desktop
+
+    "$(npm bin)"/electron-builder \
+      --dir \
+      -c.electronDist=${electron}/lib/electron \
+      -c.electronVersion=${electron.version}
+
+    popd
+  '';
+
+  installPhase = ''
+    mkdir $out
+
+    pushd apps/desktop/dist/linux-unpacked
+    mkdir -p $out/opt/Bitwarden
+    cp -r locales resources{,.pak} $out/opt/Bitwarden
+    popd
+
+    makeWrapper '${electron}/bin/electron' "$out/bin/bitwarden" \
+      --add-flags $out/opt/Bitwarden/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
+
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
+
+    pushd apps/desktop/resources/icons
+    for icon in *.png; do
+      dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
+      mkdir -p "$dir"
+      cp "$icon" "$dir"/${icon}.png
+    done
+    popd
+  '';
+
+  meta = with lib; {
+    inherit description;
+    homepage = "https://bitwarden.com";
+    license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ amarshall kiwi ];
+    platforms = [ "x86_64-linux" ];
+  };
+}

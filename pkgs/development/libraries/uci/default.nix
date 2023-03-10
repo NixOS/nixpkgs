@@ -1,25 +1,25 @@
-{ stdenv, cmake, fetchgit, pkgconfig, libubox }:
+{ lib, stdenv, cmake, fetchgit, pkg-config, libubox }:
 
 stdenv.mkDerivation {
   pname = "uci";
-  version = "unstable-2020-01-27";
+  version = "unstable-2021-04-14";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uci.git";
-    rev = "e8d83732f9eb571dce71aa915ff38a072579610b";
-    sha256 = "1si8dh8zzw4j6m7387qciw2akfvl7c4779s8q5ns2ys6dn4sz6by";
+    rev = "4b3db1179747b6a6779029407984bacef851325c";
+    sha256 = "1zflxazazzkrycpflzfg420kzp7kgy4dlz85cms279vk07dc1d52";
   };
 
   hardeningDisable = [ "all" ];
-  cmakeFlags = [ "-D BUILD_LUA:BOOL=OFF" ];
+  cmakeFlags = [ "-DBUILD_LUA=OFF" ];
   buildInputs = [ libubox ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenWrt Unified Configuration Interface";
     homepage = "https://git.openwrt.org/?p=project/uci.git;a=summary";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkgconfig, glib, python, systemd, perl
+{ lib, stdenv, fetchurl, openssl, libcap, curl, which
+, eventlog, pkg-config, glib, python3, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
 , json_c, libuuid, libivykis, mongoc, rabbitmq-c
 , libesmtp
@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "3.25.1";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "05v8vgs4fbzslqjca9zjk7hkiyb6yj4i2v0fi51xan6ypirrdjrl";
+    sha256 = "sha256-VJH2htC4KbabLg/A1mpi9RmRqvruAFR1v6OPqzmUQfc=";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
 
   buildInputs = [
     libcap
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     eventlog
     glib
     perl
-    python
+    python3
     systemd
     riemann_c_client
     protobufc
@@ -48,17 +48,18 @@ stdenv.mkDerivation rec {
     "--with-jsonc=system"
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--without-compile-date"
   ];
 
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.syslog-ng.com;
+  meta = with lib; {
+    homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ fpletz ];
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, gettext, which
-, glib, gtk2
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, pkg-config
+, which
+, glib
+, gtk2
 , enableSoftening ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "dvdisaster";
-  version = "0.79.5";
+  version = "0.79.10";
 
   src = fetchurl {
-    url = "http://dvdisaster.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0f8gjnia2fxcbmhl8b3qkr5b7idl8m855dw7xw2fnmbqwvcm6k4w";
+    url = "https://dvdisaster.jcea.es/downloads/${pname}-${version}.tar.bz2";
+    hash = "sha256-3Qqf9i8aSL9z2uJvm8P/QOPp83nODC3fyLL1iBIgf+g=";
   };
 
-  nativeBuildInputs = [ gettext pkgconfig which ];
+  nativeBuildInputs = [ gettext pkg-config which ];
   buildInputs = [ glib gtk2 ];
 
-  patches = stdenv.lib.optional enableSoftening [
+  patches = lib.optionals enableSoftening [
     ./encryption.patch
     ./dvdrom.patch
   ];
@@ -33,13 +39,14 @@ stdenv.mkDerivation rec {
     "--docdir=share/doc"
     "--with-nls=yes"
     "--with-embedded-src-path=no"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
+  ] ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
 
   # fatal error: inlined-icons.h: No such file or directory
   enableParallelBuilding = false;
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
     pushd regtest
 
     mkdir -p "$TMP"/{log,regtest}
@@ -59,9 +66,11 @@ stdenv.mkDerivation rec {
     done
 
     popd
+    runHook postCheck
   '';
 
   postInstall = ''
+    rm -f $out/bin/dvdisaster-uninstall.sh
     mkdir -pv $out/share/applications
     cp contrib/dvdisaster.desktop $out/share/applications/
 
@@ -72,8 +81,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://dvdisaster.net/;
+  meta = with lib; {
+    homepage = "https://dvdisaster.jcea.es/";
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
       Dvdisaster provides a margin of safety against data loss on CD and

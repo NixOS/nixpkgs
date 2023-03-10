@@ -1,24 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nulltype
+, python-dateutil
+, urllib3
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "3.4.0";
   pname = "plaid-python";
+  version = "11.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbfad84b8c827a14bc5b0ab93e1e5c7117908e5fa4cdecaa44a037298a20b7de";
+    hash = "sha256-du6UqzZthjzkRkkqXzl/019bNMQH/K3tqmFOtA/hm6M=";
   };
 
-  checkInputs = [ pytest ];
-  # Integration tests require API keys and internet access
-  checkPhase = "py.test -rxs ./tests/unit";
+  propagatedBuildInputs = [
+    nulltype
+    python-dateutil
+    urllib3
+  ];
 
-  propagatedBuildInputs = [ requests ];
+  # Tests require a Client IP
+  doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "plaid"
+  ];
+
+  meta = with lib; {
     description = "Python client library for the Plaid API and Link";
-    homepage = https://github.com/plaid/plaid-python;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bhipple ];
+    homepage = "https://github.com/plaid/plaid-python";
+    changelog = "https://github.com/plaid/plaid-python/blob/master/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

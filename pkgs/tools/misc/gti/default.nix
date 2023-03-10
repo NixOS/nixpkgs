@@ -1,24 +1,38 @@
-{ stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
   pname = "gti";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
     rev = "v${version}";
-    sha256 = "1jivnjswlhwjfg5v9nwfg3vfssvqbdxxf9znwmfb5dgfblg9wxw9";
+    sha256 = "sha256-x6ncvnZPPrVcQYwtwkSenW+ri0L6FpuDa7U7uYUqiyk=";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/man/man6
-    cp gti $out/bin
-    cp gti.6 $out/share/man/man6
+  postPatch = ''
+    substituteInPlace Makefile --replace 'CC=cc' 'CC=${stdenv.cc.targetPrefix}cc'
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://r-wos.org/hacks/gti;
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  installPhase = ''
+    install -D gti $out/bin/gti
+    installManPage gti.6
+    installShellCompletion --cmd gti \
+      --bash completions/gti.bash \
+      --zsh completions/gti.zsh
+  '';
+
+  meta = with lib; {
+    homepage = "https://r-wos.org/hacks/gti";
     license = licenses.mit;
     description = "Humorous typo-based git runner; drives a car over the terminal";
     maintainers = with maintainers; [ fadenb ];

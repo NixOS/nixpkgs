@@ -1,41 +1,98 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, numpy
-, pytest
-, pytestrunner
-, glibcLocales
+, pythonOlder
+, isPyPy
+, fetchFromGitHub
+, setuptools-scm
+, fs
+, lxml
+, brotli
+, brotlicffi
+, zopfli
+, unicodedata2
+, lz4
+, scipy
+, munkres
+, matplotlib
+, sympy
+, xattr
+, skia-pathops
+, uharfbuzz
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.2.2";
-  disabled = isPy27;
+  version = "4.38.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "66bb3dfe7efe5972b0145339c063ffaf9539e973f7ff8791df84366eafc65804";
-    extension = "zip";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner  = pname;
+    repo   = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-cdZI2kwR3zzS6eiiXGpeHIp+kgPCPEsTOSTV60pODTM=";
   };
 
-  buildInputs = [
-    numpy
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytest
-    pytestrunner
-    glibcLocales
-  ];
+  passthru.optional-dependencies = let
+    extras = {
+      ufo = [ fs ];
+      lxml = [ lxml ];
+      woff = [ (if isPyPy then brotlicffi else brotli) zopfli ];
+      unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+      graphite = [ lz4 ];
+      interpolatable = [ (if isPyPy then munkres else scipy) ];
+      plot = [ matplotlib ];
+      symfont = [ sympy ];
+      type1 = lib.optional stdenv.isDarwin xattr;
+      pathops = [ skia-pathops ];
+      repacker = [ uharfbuzz ];
+    };
+  in extras // {
+    all = lib.concatLists (lib.attrValues extras);
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.concatLists (lib.attrVals ([
+    "woff"
+    "interpolatable"
+  ] ++ lib.optionals (!skia-pathops.meta.broken) [
+    "pathops" # broken
+  ] ++ [
+    "repacker"
+  ]) passthru.optional-dependencies);
+
+  pythonImportsCheck = [ "fontTools" ];
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
+    # tests want to execute the "fonttools" executable from $PATH
+    export PATH="$out/bin:$PATH"
   '';
 
-  meta = {
-    homepage = https://github.com/fonttools/fonttools;
+  # Timestamp tests have timing issues probably related
+  # to our file timestamp normalization
+  disabledTests = [
+    "test_recalc_timestamp_ttf"
+    "test_recalc_timestamp_otf"
+    "test_ttcompile_timestamp_calcs"
+  ];
+
+  disabledTestPaths = [
+    # avoid test which depend on fs and matplotlib
+    # fs and matplotlib were removed to prevent strong cyclic dependencies
+    "Tests/misc/plistlib_test.py"
+    "Tests/pens"
+    "Tests/ufoLib"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

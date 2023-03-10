@@ -1,17 +1,18 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , fltk13
 , libjpeg
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.14";
+  version = "4.0.20";
   pname = "flmsg";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "0s1prawkpvr7xr7h8w7r0ly90ya3n8h6qsii0x6laqrkgjn9w9iy";
+    sha256 = "sha256-TsYwd2uUGJsweiKigTWBPXA7PtItZeIOxKk3lV3sy24=";
   };
 
   buildInputs = [
@@ -20,14 +21,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   meta = {
     description = "Digital modem message program";
-    homepage = https://sourceforge.net/projects/fldigi/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ dysinger ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://sourceforge.net/projects/fldigi/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dysinger ];
+    platforms = lib.platforms.linux;
   };
 }

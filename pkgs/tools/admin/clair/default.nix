@@ -1,19 +1,38 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, rpm, xz }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, rpm
+, xz
+}:
 
 buildGoModule rec {
   pname = "clair";
-  version = "2.1.2";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "quay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14dh9iv2g138rivvfk135m3l90kk6c1ln1iqxhbi7s99h1jixbqw";
+    hash = "sha256-Dl1wwK4OSv/nvhT7bH6qOdX4/qL3xFdmz5qiYaEm59Y=";
   };
 
-  modSha256 = "0rgkrid58kji39nlmiii95r8shbzr6dwalj5m7qwxy5w1rcaljr5";
+  vendorHash = "sha256-NqEpJHBZfzUQJ+H8CQBDdb37nlwA+JuXhZzfCAyO0Co=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  subPackages = [
+    "cmd/clair"
+    "cmd/clairctl"
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/clair \
@@ -23,6 +42,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Vulnerability Static Analysis for Containers";
     homepage = "https://github.com/quay/clair";
+    changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];
   };

@@ -1,4 +1,4 @@
-{ haskell, haskellPackages, lib, lndir, runCommand, writeText }:
+{ dhall, dhall-docs, haskell, lib, lndir, runCommand, writeText }:
 
 { name
 
@@ -31,27 +31,34 @@
   # space within the Nix store, but if you set the following `source` option to
   # `true` then the package will also include `source.dhall`.
 , source ? false
+
+  # Directory to generate documentation for (i.e. as the `--input` option to the
+  # `dhall-docs` command.)
+  #
+  # If `null`, then no documentation is generated.
+, documentationRoot ? null
+
+  # Base URL prepended to paths copied to the clipboard
+  #
+  # This is used in conjunction with `documentationRoot`, and is unused if
+  # `documentationRoot` is `null`.
+, baseImportUrl ? null
 }:
 
 let
-  # `buildDhallPackage` requires version 1.25.0 or newer of the Haskell
-  # interpreter for Dhall.  Given that the default version is 1.24.0 we choose
-  # the latest available version instead until the default is upgraded.
-  #
   # HTTP support is disabled in order to force that HTTP dependencies are built
   # using Nix instead of using Dhall's support for HTTP imports.
-  dhall =
-    haskell.lib.justStaticExecutables
-      (haskell.lib.appendConfigureFlag
-        haskellPackages.dhall_1_29_0
-        "-f-with-http"
-      );
+  dhallNoHTTP = haskell.lib.compose.appendConfigureFlag "-f-with-http" dhall;
 
   file = writeText "${name}.dhall" code;
 
   cache = ".cache";
 
+  data = ".local/share";
+
   cacheDhall = "${cache}/dhall";
+
+  dataDhall = "${data}/dhall";
 
   sourceFile = "source.dhall";
 
@@ -69,15 +76,27 @@ in
 
     mkdir -p $out/${cacheDhall}
 
-    ${dhall}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
+    ${dhallNoHTTP}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
 
-    SHA_HASH=$(${dhall}/bin/dhall hash <<< $out/${sourceFile})
+    SHA_HASH=$(${dhallNoHTTP}/bin/dhall hash <<< $out/${sourceFile})
 
     HASH_FILE="''${SHA_HASH/sha256:/1220}"
 
-    ${dhall}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
+    ${dhallNoHTTP}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
 
     echo "missing $SHA_HASH" > $out/binary.dhall
 
     ${lib.optionalString (!source) "rm $out/${sourceFile}"}
+
+    ${lib.optionalString (documentationRoot != null) ''
+    mkdir -p $out/${dataDhall}
+
+    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
+      base-import-url = baseImportUrl;
+
+      input = documentationRoot;
+
+      package-name = name;
+    }}
+    ''}
   ''

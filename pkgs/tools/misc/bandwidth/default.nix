@@ -1,38 +1,53 @@
-{ stdenv, fetchurl, nasm }:
+{ lib, stdenv, fetchurl, nasm }:
 
 let
-  arch =
-    if      stdenv.hostPlatform.system == "x86_64-linux" then "bandwidth64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "bandwidth32"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then "bandwidth-mac64"
-    else if stdenv.hostPlatform.system == "i686-darwin" then "bandwidth-mac32"
-    else if stdenv.hostPlatform.system == "i686-cygwin" then "bandwidth-win32"
-    else throw "Unknown architecture";
+  inherit (stdenv.hostPlatform.parsed.cpu) bits;
+  arch = "bandwidth${toString bits}";
 in
 stdenv.mkDerivation rec {
   pname = "bandwidth";
-  version = "1.9.3";
+  version = "1.11.2";
 
   src = fetchurl {
     url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
-    sha256 = "0zpv2qgkbak0llw47qcakhyh2z3zv4d69kasldmpdlpqryd9za84";
+    sha256 = "sha256-mjtvQAOH9rv12XszGdD5hIX197er7Uc74WfVaP32TpM=";
   };
 
-  buildInputs = [ nasm ];
+  postPatch = ''
+    sed -i 's,ar ,$(AR) ,g' OOC/Makefile
+    # Remove unnecessary -m32 for 32-bit targets
+    sed -i 's,-m32,,g' OOC/Makefile
+    # Replace arm64 with aarch64
+    sed -i 's#,arm64#,aarch64#g' Makefile
+    # Fix wrong comment character
+    sed -i 's,# 32,; 32,g' routines-x86-32bit.asm
+    # Fix missing symbol exports for macOS clang
+    echo global _VectorToVector128 >> routines-x86-64bit.asm
+    echo global _VectorToVector256 >> routines-x86-64bit.asm
+  '';
 
-  buildFlags = [ arch ]
-    ++ stdenv.lib.optionals stdenv.cc.isClang [ "CC=clang" "LD=clang" ];
+  nativeBuildInputs = [ nasm ];
+
+  buildFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "ARM_AS=${stdenv.cc.targetPrefix}as"
+    "ARM_CC=$(CC)"
+    "UNAMEPROC=${stdenv.hostPlatform.parsed.cpu.name}"
+    "UNAMEMACHINE=${stdenv.hostPlatform.parsed.cpu.name}"
+    arch
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${arch} $out/bin
-    ln -s ${arch} $out/bin/bandwidth
+    cp ${arch} $out/bin/bandwidth
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://zsmith.co/bandwidth.html;
+  meta = with lib; {
+    homepage = "https://zsmith.co/bandwidth.html";
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.x86 ++ platforms.arm ++ platforms.aarch64;
+    maintainers = with maintainers; [ r-burns ];
   };
 }

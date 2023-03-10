@@ -1,38 +1,61 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, nose
-, numpy
-, six
-, ruamel_yaml
 , msgpack
-, coverage
-, coveralls
+, numpy
+, pandas
+, pydantic
 , pymongo
-, lsof
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "3.0.2";
-  disabled = isPy27; # uses type annotations
+  version = "2022.9.9";
+  format = "setuptools";
 
-  # No tests in Pypi
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1wxqxp0j7i6czdpr2r1imgmy3qbgn2l7d4za2h1lg3hllvx6jra1";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7ToNiRSWxe9nNcaWWmS6bhVqWMEwXN4uiwtjAmuK5qw=";
   };
 
-  checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
-  propagatedBuildInputs = [ six ruamel_yaml ];
-
-  preCheck = ''
+  postPatch = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  propagatedBuildInputs = [
+    msgpack
+    ruamel-yaml
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    numpy
+    pandas
+    pydantic
+    pymongo
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "monty"
+  ];
+
+  disabledTests = [
+    # Test file was removed and re-added after 2022.9.9
+    "test_reverse_readfile_gz"
+    "test_Path_objects"
+    "test_zopen"
+    "test_zpath"
+  ];
 
   meta = with lib; {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
@@ -41,7 +64,8 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = https://github.com/materialsvirtuallab/monty;
+    homepage = "https://github.com/materialsvirtuallab/monty";
+    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

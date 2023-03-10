@@ -1,34 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake
-, boost, python3, eigen
+{ lib, stdenv, fetchFromGitHub, cmake
+, boost, python3, eigen, python3Packages
 , icestorm, trellis
 , llvmPackages
 
-, enableGui ? true
-, wrapQtAppsHook
-, qtbase
+, enableGui ? false
+, wrapQtAppsHook ? null
+, qtbase ? null
 , OpenGL ? null
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-with stdenv; mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2020.02.04";
+  version = "0.5";
 
   srcs = [
     (fetchFromGitHub {
-      owner  = "YosysHQ";
-      repo   = "nextpnr";
-      rev    = "ca733561873cd54be047ae30a94efcd71b3f8be5";
-      sha256 = "176drrq6w53qbwmnksa1b22w9qz3gd1db9hy2lyv8svbcdxd9qwp";
-      name   = "nextpnr";
+      owner = "YosysHQ";
+      repo  = "nextpnr";
+      rev   = "${pname}-${version}";
+      hash  = "sha256-3/a6nVr2v9kK/FFmxZq9LQLAoE/yNRcTGojiFPGRkHU=";
+      name  = "nextpnr";
     })
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr-tests";
-      rev    = "8f93e7e0f897b1b5da469919c9a43ba28b623b2a";
-      sha256 = "0zpd0w49k9l7rs3wmi2v8z5s4l4lad5rprs5l83w13667himpzyc";
+      rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
+      sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
       name   = "nextpnr-tests";
     })
   ];
@@ -39,29 +39,29 @@ with stdenv; mkDerivation rec {
      = [ cmake ]
     ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
-     = [ boostPython python3 eigen ]
+     = [ boostPython python3 eigen python3Packages.apycula ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
-  enableParallelBuilding = true;
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
-      "-DARCH=generic;ice40;ecp5"
+      "-DARCH=generic;ice40;ecp5;gowin"
       "-DBUILD_TESTS=ON"
-      "-DICEBOX_ROOT=${icestorm}/share/icebox"
+      "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
-      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
-      "-DSERIALIZE_CHIPDB=OFF"
+      "-DSERIALIZE_CHIPDBS=OFF"
     ]
-    ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
+    ++ (lib.optional enableGui "-DBUILD_GUI=ON")
     ++ (lib.optional (enableGui && stdenv.isDarwin)
         "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
   patchPhase = with builtins; ''
     # use PyPy for icestorm if enabled
-    substituteInPlace ./ice40/family.cmake \
+    substituteInPlace ./ice40/CMakeLists.txt \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
@@ -75,11 +75,12 @@ with stdenv; mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-generic
     wrapQtApp $out/bin/nextpnr-ice40
     wrapQtApp $out/bin/nextpnr-ecp5
+    wrapQtApp $out/bin/nextpnr-gowin
   '';
 
   meta = with lib; {
     description = "Place and route tool for FPGAs";
-    homepage    = https://github.com/yosyshq/nextpnr;
+    homepage    = "https://github.com/yosyshq/nextpnr";
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice emily ];

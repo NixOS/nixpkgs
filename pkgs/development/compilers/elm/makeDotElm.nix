@@ -3,13 +3,21 @@
 ver: deps:
   let cmds = lib.mapAttrsToList (name: info: let
                pkg = stdenv.mkDerivation {
-                 name = lib.replaceChars ["/"] ["-"] name + "-${info.version}";
+                 name = lib.replaceStrings ["/"] ["-"] name + "-${info.version}";
 
                  src = fetchurl {
                    url = "https://github.com/${name}/archive/${info.version}.tar.gz";
                    meta.homepage = "https://github.com/${name}/";
                    inherit (info) sha256;
                  };
+
+                 configurePhase = ''
+                   true
+                 '';
+
+                 buildPhase = ''
+                   true
+                 '';
 
                  installPhase = ''
                    mkdir -p $out

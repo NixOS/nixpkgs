@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''rfc2388'';
-  version = ''20180831-git'';
+  baseName = "rfc2388";
+  version = "20180831-git";
 
-  description = ''Implementation of RFC 2388'';
+  description = "Implementation of RFC 2388";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/rfc2388/2018-08-31/rfc2388-20180831-git.tgz'';
-    sha256 = ''1r7vvrlq2wl213bm2aknkf34ynpl8y4nbkfir79srrdsl1337z33'';
+    url = "http://beta.quicklisp.org/archive/rfc2388/2018-08-31/rfc2388-20180831-git.tgz";
+    sha256 = "1r7vvrlq2wl213bm2aknkf34ynpl8y4nbkfir79srrdsl1337z33";
   };
 
   packageName = "rfc2388";

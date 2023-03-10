@@ -1,17 +1,18 @@
-{stdenv, fetchurl, ncurses, automake}:
+{lib, stdenv, fetchurl, ncurses, automake}:
 
-stdenv.mkDerivation {
-  name = "aalib-1.4rc5";
+stdenv.mkDerivation rec {
+  pname = "aalib";
+  version = "1.4rc5";
 
   src = fetchurl {
-    url = mirror://sourceforge/aa-project/aalib-1.4rc5.tar.gz;
+    url = "mirror://sourceforge/aa-project/aalib-${version}.tar.gz";
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
   setOutputFlags = false; # Doesn't support all the flags
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "ASCII art graphics library";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
 }

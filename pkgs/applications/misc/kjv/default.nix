@@ -1,43 +1,41 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, readline }:
 
 let
+  patchPrefix = "https://web.archive.org/web/20220422205751/https://github.com/samuelgrf/kjv/commit/";
 
-patch-base = https://github.com/LukeSmithxyz/kjv/commit/;
+  add-apocrypha = fetchpatch {
+    url = patchPrefix + "0856fa0d37b45de0d6b47d163b5ea9a0b7f2c061.patch";
+    sha256 = "1jkajdg4wvpbbwc5mn37i4c8nfis4z0pv5rl7gqs0laj0gpj7jn8";
+  };
 
-add-apocrypha = fetchpatch {
-  url = patch-base + "b92b7622285d10464f9274f11e740bef90705bbc.patch";
-  sha256 = "0n4sj8p9m10fcair4msc129jxkkx5whqzhjbr5k4lfgp6nb1zk8k";
-};
-
-add-install-target = fetchpatch {
-  url = patch-base + "f4ad73539eb73f1890f4b791d8d38dd95900a4a4.patch";
-  sha256 = "1yzj72i5fkzn2i4wl09q6jx7nwn2h4jwm49fc23nxfwchzar9m1q";
-};
-
+  add-install-target = fetchpatch {
+    url = patchPrefix + "50a83256ee45430fb06b7aea1945dd91c6813bc3.patch";
+    sha256 = "0bv9yma67jdj496a6vn6y007c9gwjpg3rzld1i9m9y9xmlzq4yzv";
+  };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kjv";
-  version = "unstable-2018-12-25";
+  version = "unstable-2021-03-11";
 
   src = fetchFromGitHub {
     owner = "bontibon";
-    repo = pname;
-    rev = "fda81a610e4be0e7c5cf242de655868762dda1d4";
-    sha256 = "1favfcjvd3pzz1ywwv3pbbxdg7v37s8vplgsz8ag016xqf5ykqqf";
+    repo = "kjv";
+    rev = "108595dcbb9bb12d40e0309f029b6fb3ccd81309";
+    hash = "sha256-Z6myd9Xn23pYizG+IZVDrP988pYU06QIcpqXtWTcPiw=";
   };
 
   patches = [ add-apocrypha add-install-target ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  buildInputs = [ readline ];
 
-  meta = with stdenv.lib; {
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  meta = with lib; {
     description = "The Bible, King James Version";
     homepage = "https://github.com/bontibon/kjv";
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.jtobin ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ jtobin cafkafk ];
+    mainProgram = "kjv";
   };
 }
-

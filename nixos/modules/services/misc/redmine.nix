@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types;
-  inherit (lib) concatStringsSep literalExample mapAttrsToList;
-  inherit (lib) optional optionalAttrs optionalString singleton versionAtLeast;
+  inherit (lib) mkBefore mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList;
+  inherit (lib) optional optionalAttrs optionalString;
 
   cfg = config.services.redmine;
-
+  format = pkgs.formats.yaml {};
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseYml = pkgs.writeText "database.yml" ''
@@ -20,31 +20,15 @@ let
       ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
   '';
 
-  configurationYml = pkgs.writeText "configuration.yml" ''
-    default:
-      scm_subversion_command: ${pkgs.subversion}/bin/svn
-      scm_mercurial_command: ${pkgs.mercurial}/bin/hg
-      scm_git_command: ${pkgs.gitAndTools.git}/bin/git
-      scm_cvs_command: ${pkgs.cvs}/bin/cvs
-      scm_bazaar_command: ${pkgs.bazaar}/bin/bzr
-      scm_darcs_command: ${pkgs.darcs}/bin/darcs
-
-    ${cfg.extraConfig}
-  '';
-
-  additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
-    config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
-    config.logger.level = Logger::INFO
-
-    ${cfg.extraEnv}
-  '';
+  configurationYml = format.generate "configuration.yml" cfg.settings;
+  additionalEnvironment = pkgs.writeText "additional_environment.rb" cfg.extraEnv;
 
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
   unpack = id: (name: source:
     pkgs.stdenv.mkDerivation {
       name = "redmine-${id}-${name}";
-      buildInputs = [ pkgs.unzip ];
+      nativeBuildInputs = [ pkgs.unzip ];
       buildCommand = ''
         mkdir -p $out
         cd $out
@@ -56,71 +40,80 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "postgresql";
 
 in
-
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "redmine" "extraConfig" ] "Use services.redmine.settings instead.")
+    (mkRemovedOptionModule [ "services" "redmine" "database" "password" ] "Use services.redmine.database.passwordFile instead.")
+  ];
+
+  # interface
   options = {
     services.redmine = {
-      enable = mkEnableOption "Redmine";
+      enable = mkEnableOption (lib.mdDoc "Redmine");
 
       package = mkOption {
         type = types.package;
         default = pkgs.redmine;
-        description = "Which Redmine package to use.";
-        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_7; }";
+        defaultText = literalExpression "pkgs.redmine";
+        description = lib.mdDoc "Which Redmine package to use.";
+        example = literalExpression "pkgs.redmine.override { ruby = pkgs.ruby_2_7; }";
       };
 
       user = mkOption {
         type = types.str;
         default = "redmine";
-        description = "User under which Redmine is ran.";
+        description = lib.mdDoc "User under which Redmine is ran.";
       };
 
       group = mkOption {
         type = types.str;
         default = "redmine";
-        description = "Group under which Redmine is ran.";
+        description = lib.mdDoc "Group under which Redmine is ran.";
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
-        description = "Port on which Redmine is ran.";
+        description = lib.mdDoc "Port on which Redmine is ran.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/redmine";
-        description = "The state directory, logs and plugins are stored here.";
+        description = lib.mdDoc "The state directory, logs and plugins are stored here.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Extra configuration in configuration.yml.
-
-          See <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
+      settings = mkOption {
+        type = format.type;
+        default = {};
+        description = lib.mdDoc ''
+          Redmine configuration ({file}`configuration.yml`). Refer to
+          <https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration>
           for details.
         '';
-        example = literalExample ''
-          email_delivery:
-            delivery_method: smtp
-            smtp_settings:
-              address: mail.example.com
-              port: 25
+        example = literalExpression ''
+          {
+            email_delivery = {
+              delivery_method = "smtp";
+              smtp_settings = {
+                address = "mail.example.com";
+                port = 25;
+              };
+            };
+          }
         '';
       };
 
       extraEnv = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration in additional_environment.rb.
 
-          See <link xlink:href="https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example"/>
+          See <https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example>
           for details.
         '';
-        example = literalExample ''
+        example = ''
           config.logger.level = Logger::DEBUG
         '';
       };
@@ -128,11 +121,11 @@ in
       themes = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Set of themes.";
-        example = literalExample ''
+        description = lib.mdDoc "Set of themes.";
+        example = literalExpression ''
           {
             dkuk-redmine_alex_skin = builtins.fetchurl {
-              url = https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip;
+              url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
               sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
             };
           }
@@ -142,11 +135,11 @@ in
       plugins = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Set of plugins.";
-        example = literalExample ''
+        description = lib.mdDoc "Set of plugins.";
+        example = literalExpression ''
           {
             redmine_env_auth = builtins.fetchurl {
-              url = https://github.com/Intera/redmine_env_auth/archive/0.6.zip;
+              url = "https://github.com/Intera/redmine_env_auth/archive/0.6.zip";
               sha256 = "0yyr1yjd8gvvh832wdc8m3xfnhhxzk2pk3gm2psg5w9jdvd6skak";
             };
           }
@@ -158,51 +151,41 @@ in
           type = types.enum [ "mysql2" "postgresql" ];
           example = "postgresql";
           default = "mysql2";
-          description = "Database engine to use.";
+          description = lib.mdDoc "Database engine to use.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = "Database host address.";
+          description = lib.mdDoc "Database host address.";
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = if cfg.database.type == "postgresql" then 5432 else 3306;
-          defaultText = "3306";
-          description = "Database host port.";
+          defaultText = literalExpression "3306";
+          description = lib.mdDoc "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "redmine";
-          description = "Database name.";
+          description = lib.mdDoc "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "redmine";
-          description = "Database user.";
-        };
-
-        password = mkOption {
-          type = types.str;
-          default = "";
-          description = ''
-            The password corresponding to <option>database.user</option>.
-            Warning: this is stored in cleartext in the Nix store!
-            Use <option>database.passwordFile</option> instead.
-          '';
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/redmine-dbpassword";
-          description = ''
+          description = lib.mdDoc ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
@@ -212,25 +195,77 @@ in
             if mysqlLocal then "/run/mysqld/mysqld.sock"
             else if pgsqlLocal then "/run/postgresql"
             else null;
-          defaultText = "/run/mysqld/mysqld.sock";
+          defaultText = literalExpression "/run/mysqld/mysqld.sock";
           example = "/run/mysqld/mysqld.sock";
-          description = "Path to the unix socket file to use for authentication.";
+          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = "Create the database and database user locally.";
+          description = lib.mdDoc "Create the database and database user locally.";
+        };
+      };
+
+      components = {
+        subversion = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Subversion integration.";
+        };
+
+        mercurial = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Mercurial integration.";
+        };
+
+        git = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "git integration.";
+        };
+
+        cvs = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "cvs integration.";
+        };
+
+        breezy = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "bazaar integration.";
+        };
+
+        imagemagick = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Allows exporting Gant diagrams as PNG.";
+        };
+
+        ghostscript = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Allows exporting Gant diagrams as PDF.";
+        };
+
+        minimagick_font_path = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "MiniMagick font path";
+          example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
       };
     };
   };
 
+  # implementation
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.password != "" || cfg.database.socket != null;
-        message = "one of services.redmine.database.socket, services.redmine.database.passwordFile, or services.redmine.database.password must be set";
+      { assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
+        message = "one of services.redmine.database.socket or services.redmine.database.passwordFile must be set";
       }
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
@@ -241,7 +276,28 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
+      { assertion = cfg.components.imagemagick -> cfg.components.minimagick_font_path != "";
+        message = "services.redmine.components.minimagick_font_path must be configured with a path to a font file if services.redmine.components.imagemagick is set to true.";
+      }
     ];
+
+    services.redmine.settings = {
+      production = {
+        scm_subversion_command = if cfg.components.subversion then "${pkgs.subversion}/bin/svn" else "";
+        scm_mercurial_command = if cfg.components.mercurial then "${pkgs.mercurial}/bin/hg" else "";
+        scm_git_command = if cfg.components.git then "${pkgs.git}/bin/git" else "";
+        scm_cvs_command = if cfg.components.cvs then "${pkgs.cvs}/bin/cvs" else "";
+        scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
+        imagemagick_convert_command = if cfg.components.imagemagick then "${pkgs.imagemagick}/bin/convert" else "";
+        gs_command = if cfg.components.ghostscript then "${pkgs.ghostscript}/bin/gs" else "";
+        minimagick_font_path = "${cfg.components.minimagick_font_path}";
+      };
+    };
+
+    services.redmine.extraEnv = mkBefore ''
+      config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
+      config.logger.level = Logger::INFO
+    '';
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
@@ -296,14 +352,15 @@ in
       environment.REDMINE_LANG = "en";
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
-        imagemagick
-        bazaar
-        cvs
-        darcs
-        gitAndTools.git
-        mercurial
-        subversion
-      ];
+      ]
+      ++ optional cfg.components.subversion subversion
+      ++ optional cfg.components.mercurial mercurial
+      ++ optional cfg.components.git git
+      ++ optional cfg.components.cvs cvs
+      ++ optional cfg.components.breezy breezy
+      ++ optional cfg.components.imagemagick imagemagick
+      ++ optional cfg.components.ghostscript ghostscript;
+
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
         rm -rf "${cfg.stateDir}/public/themes/"*
@@ -338,7 +395,7 @@ in
 
 
         # handle database.passwordFile & permissions
-        DBPASS=$(head -n1 ${cfg.database.passwordFile})
+        DBPASS=${optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"}
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
         sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
         chmod 440 "${cfg.stateDir}/config/database.yml"
@@ -378,17 +435,6 @@ in
     users.groups = optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
-
-    warnings = optional (cfg.database.password != "")
-      ''config.services.redmine.database.password will be stored as plaintext
-      in the Nix store. Use database.passwordFile instead.'';
-
-    # Create database passwordFile default when password is configured.
-    services.redmine.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "redmine-database-password";
-        text = cfg.database.password;
-      })));
 
   };
 

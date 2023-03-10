@@ -1,29 +1,33 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, dos2unix }:
+{ lib
+, stdenv
+, fetchzip
+, autoreconfHook
+, dos2unix
+}:
 
-with stdenv.lib;
-
-let
-  version = "6.14.12";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libpgf";
-  inherit version;
+  version = "7.21.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libpgf/libpgf-src-${version}.tar.gz";
-    sha256 = "1ssqjbh6l5jc04f67n47m9bqcigl46c6lgyabyi6cabnh1frk9dx";
+  src = fetchzip {
+    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}.zip";
+    hash = "sha256-TAWIuikijfyeTRetZWoMMdB/FeGAR7ZjNssVxUevlVg=";
   };
 
-  buildInputs = [ autoconf automake libtool dos2unix ];
+  postPatch = ''
+    find . -type f | xargs dos2unix
+    mv README.txt README
+  '';
 
-  preConfigure = "dos2unix configure.ac; sh autogen.sh";
-
-# configureFlags = optional static "--enable-static --disable-shared";
+  nativeBuildInputs = [
+    autoreconfHook
+    dos2unix
+  ];
 
   meta = {
-    homepage = http://www.libpgf.org/;
+    homepage = "https://www.libpgf.org/";
     description = "Progressive Graphics Format";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

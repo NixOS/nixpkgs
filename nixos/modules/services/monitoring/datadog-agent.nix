@@ -6,7 +6,6 @@ let
   cfg = config.services.datadog-agent;
 
   ddConf = {
-    dd_url              = "https://app.datadoghq.com";
     skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
@@ -14,6 +13,8 @@ let
   }
   // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
+  // optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
+  // optionalAttrs (cfg.site != null) { site = cfg.site; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
   // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
@@ -48,19 +49,13 @@ let
   };
 in {
   options.services.datadog-agent = {
-    enable = mkOption {
-      description = ''
-        Whether to enable the datadog-agent v6 monitoring service
-      '';
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption (lib.mdDoc "Datadog-agent v7 monitoring service");
 
     package = mkOption {
       default = pkgs.datadog-agent;
-      defaultText = "pkgs.datadog-agent";
-      description = ''
-        Which DataDog v6 agent package to use. Note that the provided
+      defaultText = literalExpression "pkgs.datadog-agent";
+      description = lib.mdDoc ''
+        Which DataDog v7 agent package to use. Note that the provided
         package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
         checks.
@@ -69,7 +64,7 @@ in {
     };
 
     apiKeyFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Path to a file containing the Datadog API key to associate the
         agent with your account.
       '';
@@ -77,22 +72,43 @@ in {
       type = types.path;
     };
 
+    ddUrl = mkOption {
+      description = lib.mdDoc ''
+        Custom dd_url to configure the agent with. Useful if traffic to datadog
+        needs to go through a proxy.
+        Don't use this to point to another datadog site (EU) - use site instead.
+      '';
+      default = null;
+      example = "http://haproxy.example.com:3834";
+      type = types.nullOr types.str;
+    };
+
+    site = mkOption {
+      description = lib.mdDoc ''
+        The datadog site to point the agent towards.
+        Set to datadoghq.eu to point it to their EU site.
+      '';
+      default = null;
+      example = "datadoghq.eu";
+      type = types.nullOr types.str;
+    };
+
     tags = mkOption {
-      description = "The tags to mark this Datadog agent";
+      description = lib.mdDoc "The tags to mark this Datadog agent";
       example = [ "test" "service" ];
       default = null;
       type = types.nullOr (types.listOf types.str);
     };
 
     hostname = mkOption {
-      description = "The hostname to show in the Datadog dashboard (optional)";
+      description = lib.mdDoc "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
       type = types.nullOr types.str;
     };
 
     logLevel = mkOption {
-      description = "Logging verbosity.";
+      description = lib.mdDoc "Logging verbosity.";
       default = null;
       type = types.nullOr (types.enum ["DEBUG" "INFO" "WARN" "ERROR"]);
     };
@@ -101,7 +117,7 @@ in {
       default = {};
       type    = types.attrs;
 
-      description = ''
+      description = lib.mdDoc ''
         Extra integrations from the Datadog core-integrations
         repository that should be built and included.
 
@@ -113,22 +129,24 @@ in {
         package set must be provided.
       '';
 
-      example = {
-        ntp = (pythonPackages: [ pythonPackages.ntplib ]);
-      };
+      example = literalExpression ''
+        {
+          ntp = pythonPackages: [ pythonPackages.ntplib ];
+        }
+      '';
     };
 
     extraConfig = mkOption {
       default = {};
       type = types.attrs;
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration options that will be merged into the
-        main config file <filename>datadog.yaml</filename>.
+        main config file {file}`datadog.yaml`.
       '';
      };
 
     enableLiveProcessCollection = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the live process collection agent.
       '';
       default = false;
@@ -136,7 +154,7 @@ in {
     };
 
     enableTraceAgent = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the trace agent.
       '';
       default = false;
@@ -144,7 +162,7 @@ in {
     };
 
     checks = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Configuration for all Datadog checks. Keys of this attribute
         set will be used as the name of the check to create the
         appropriate configuration in `conf.d/$check.d/conf.yaml`.
@@ -183,7 +201,7 @@ in {
     };
 
     diskCheck = mkOption {
-      description = "Disk check config";
+      description = lib.mdDoc "Disk check config";
       type = types.attrs;
       default = {
         init_config = {};
@@ -192,7 +210,7 @@ in {
     };
 
     networkCheck = mkOption {
-      description = "Network check config";
+      description = lib.mdDoc "Network check config";
       type = types.attrs;
       default = {
         init_config = {};
@@ -203,7 +221,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute ];
+    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
 
     users.users.datadog = {
       description = "Datadog Agent User";
@@ -217,7 +235,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2 ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -225,7 +243,7 @@ in {
           Restart = "always";
           RestartSec = 2;
         };
-        restartTriggers = [ datadogPkg ] ++ attrNames etcfiles;
+        restartTriggers = [ datadogPkg ] ++  map (x: x.source) (attrValues etcfiles);
       } attrs;
     in {
       datadog-agent = makeService {
@@ -252,7 +270,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-process-agent}/bin/agent --config /etc/datadog-agent/datadog.yaml
+          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 

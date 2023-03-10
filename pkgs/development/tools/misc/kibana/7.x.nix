@@ -1,37 +1,33 @@
 { elk7Version
 , enableUnfree ? true
+, lib
 , stdenv
 , makeWrapper
 , fetchurl
-, nodejs-10_x
+, nodejs-16_x
 , coreutils
 , which
 }:
 
-with stdenv.lib;
 let
-  nodejs = nodejs-10_x;
+  nodejs = nodejs-16_x;
   inherit (builtins) elemAt;
-  info = splitString "-" stdenv.hostPlatform.system;
+  info = lib.splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
   shas =
-    if enableUnfree
-    then {
-      x86_64-linux  = "1wq4fc2fifkg1qz7nxdfb4yi2biay8cgdz7kl5k0p37sxn0sbkja";
-      x86_64-darwin = "06346kj7bv49py49pmmnmh8m24322m88v1af19909pj9cxgd0p6v";
-    }
-    else {
-      x86_64-linux  = "0ygpmcm6wdcnvw8azwqc5257lyic7yw31rqvm2pw3afhpha62lpj";
-      x86_64-darwin = "0xy81g0bhxp47p29kkkh5llfzqkzqzr5dk50ap2hy0hjw33ld6g1";
+    {
+      x86_64-linux  = "b657d82c8189acc8a8f656ab949e1484aaa98755a16c33f48c318fb17180343f";
+      x86_64-darwin = "ac2b5a639ad83431db25e4161f811111d45db052eb845091e18f847016a34a55";
+      aarch64-linux = "a1f7ab9e874799bf380b94394e5bb1ce28f38019896293dde8797d74ad273e67";
     };
 
 in stdenv.mkDerivation rec {
-  name = "kibana-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "kibana";
   version = elk7Version;
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/kibana/${pname}-${version}-${plat}-${arch}.tar.gz";
     sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
@@ -42,21 +38,21 @@ in stdenv.mkDerivation rec {
     ./disable-nodejs-version-check-7.patch
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/libexec/kibana $out/bin
     mv * $out/libexec/kibana/
     rm -r $out/libexec/kibana/node
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ nodejs coreutils which ]}"
+      --prefix PATH : "${lib.makeBinPath [ nodejs coreutils which ]}"
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Visualize logs and time-stamped data";
-    homepage = http://www.elasticsearch.org/overview/kibana;
-    license = if enableUnfree then licenses.elastic else licenses.asl20;
+    homepage = "http://www.elasticsearch.org/overview/kibana";
+    license = licenses.elastic;
     maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };

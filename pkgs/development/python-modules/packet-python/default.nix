@@ -6,22 +6,22 @@
 
 # For tests/setup.py
 , pytest
-, pytestrunner
+, pytest-runner
 , requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "packet-python";
-  version = "1.41.0";
+  version = "1.44.3";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "685021502293f6b2e733376bcd0fef3f082c1a66c27072d92f483e27e387ad43";
+    sha256 = "sha256-WVfMELOoml7Hx78jy6TAwlFRLuSQu9dtsb6Khs6/cgI=";
   };
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests ];
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    pytestrunner
+    pytest-runner
     requests-mock
   ];
 

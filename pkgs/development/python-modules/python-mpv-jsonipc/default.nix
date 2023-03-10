@@ -1,22 +1,22 @@
 { lib, buildPythonPackage, fetchFromGitHub, requests
-, tqdm, websocket_client, pythonOlder }:
+, tqdm, websocket-client, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";
-  version = "1.1.6";
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = "python-mpv-jsonipc";
     rev = "v${version}";
-    sha256 = "08bs6qrcf5fi72jijmr2w7zs6aa5976dwv04f11ajwhj6i8kfq35";
+    sha256 = "sha256-W9TNtbRhQmwZXhi0TJIDkZRtWhi92/iwL056YIcWnLM=";
   };
 
   # 'mpv-jsonipc' does not have any tests
   doCheck = false;
 
-  propagatedBuildInputs = [ requests tqdm websocket_client ];
+  propagatedBuildInputs = [ requests tqdm websocket-client ];
 
   pythonImportsCheck = [ "python_mpv_jsonipc" ];
 

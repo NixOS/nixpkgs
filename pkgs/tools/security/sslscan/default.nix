@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "sslscan";
-  version = "1.11.13";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     owner = "rbsec";
     repo = "sslscan";
-    rev = "${version}-rbsec";
-    sha256 = "0sa8iw91wi3515lw761j84wagab1x9rxr0mn8m08qj300z2044yk";
+    rev = version;
+    sha256 = "sha256-YUczZYdrFGNYHoVZJ/HRbULgYWILKeo7lqyndSQO2Kw=";
   };
 
   buildInputs = [ openssl ];
 
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tests SSL/TLS services and discover supported cipher suites";
-    homepage = https://github.com/rbsec/sslscan;
-    license = licenses.gpl3;
+    homepage = "https://github.com/rbsec/sslscan";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fpletz globin ];
-    platforms = platforms.all;
   };
 }

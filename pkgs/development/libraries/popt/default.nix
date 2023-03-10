@@ -1,23 +1,26 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "popt-1.16";
+  pname = "popt";
+  version = "1.19";
 
   src = fetchurl {
-    url = "http://rpm5.org/files/popt/${name}.tar.gz";
-    sha256 = "1j2c61nn2n351nhj4d25mnf3vpiddcykq005w2h6kw79dwlysa77";
+    url = "https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${version}.tar.gz";
+    sha256 = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
   };
 
-  patches = stdenv.lib.optionals stdenv.isCygwin [
+  patches = lib.optionals stdenv.isCygwin [
     ./1.16-cygwin.patch
     ./1.16-vpath.patch
   ];
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/rpm-software-management/popt";
     description = "Command line option parsing library";
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

@@ -1,28 +1,22 @@
-{ stdenv, fetchurl, fuse, samba, pkgconfig, glib, autoconf, attr, libsecret }:
+{ lib, stdenv, fetchurl, fuse, samba, pkg-config, glib, autoconf, attr, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "smbnetfs";
-  version = "0.6.1";
+  version = "0.6.3";
   src = fetchurl {
     url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "02iqjnm6pdwc1q38z56akiwdbp0xisr6qwrmxs1lrk5mq7j8x2w4";
+    sha256 = "sha256-6sN7l2n76cP0uvPrZMYaa1mtTyqgXf3culoaxK301WA=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs = [ fuse samba glib attr libsecret ];
 
-  postPatch = ''
-    substituteInPlace src/function.c --replace "attr/xattr.h" "sys/xattr.h"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;
     downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
-    updateWalker = true;
-    inherit version;
-    homepage = https://sourceforge.net/projects/smbnetfs/;
+    homepage = "https://sourceforge.net/projects/smbnetfs/";
   };
 }

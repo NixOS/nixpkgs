@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "Events";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4d9c41a5c160ce504278f219fe56f44242ca63794a0ad638b52d1e087ac2a41";
+    sha256 = "01d9dd2a061f908d74a89fa5c8f07baa694f02a2a5974983663faaf7a97180f5";
   };
 
   meta = with lib; {
-    homepage = https://events.readthedocs.org;
+    homepage = "https://events.readthedocs.org";
     description = "Bringing the elegance of C# EventHanlder to Python";
     license = licenses.bsd3;
   };

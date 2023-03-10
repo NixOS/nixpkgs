@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ant, jdk, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "jdepend";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/jdepend
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Traverses Java class file directories and generates design quality metrics for each Java package";
     homepage = "http://www.clarkware.com/software/JDepend.html";
     license = licenses.bsd3;

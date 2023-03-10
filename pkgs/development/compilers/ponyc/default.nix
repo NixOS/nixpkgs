@@ -1,85 +1,103 @@
-{ stdenv, fetchFromGitHub, llvm, makeWrapper, pcre2, coreutils, which, libressl, libxml2,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll, python3,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
-stdenv.mkDerivation ( rec {
+stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.33.2";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "0jcdr1r3g8sm3q9fcc87d6x98fg581n6hb90hz7r08mzn4bwvysw";
+    sha256 = "sha256-FnzlFTiJrqoUfnys+q9is6OH9yit5ExDiRszQ679QbY=";
+
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ llvm makeWrapper which libxml2 ];
-  propagatedBuildInputs = [ cc ];
+  ponygbenchmark = fetchFromGitHub {
+    owner = "google";
+    repo = "benchmark";
+    rev = "v1.5.4";
+    sha256 = "1dbjdjzkpbsq3jl9ksyg8mw759vkac8qzq1557m73ldnavbhz48x";
+  };
 
-  # Disable problematic networking tests
-  patches = [ ./disable-tests.patch ];
+  nativeBuildInputs = [ cmake makeWrapper which python3 ];
+  buildInputs = [ libxml2 z3 ];
 
-  preBuild = ''
-    # Fix tests
+  # Sandbox disallows network access, so disabling problematic networking tests
+  patches = [
+    ./disable-tests.patch
+    (substituteAll {
+      src = ./make-safe-for-sandbox.patch;
+      googletest = fetchFromGitHub {
+        owner = "google";
+        repo = "googletest";
+        rev = "release-1.10.0";
+        sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
+      };
+    })
+    (fetchpatch {
+      name = "remove-decnet-header.patch";
+      url = "https://github.com/ponylang/ponyc/commit/e5b9b5daec5b19415d519b09954cbd3cf5f34220.patch";
+      hash = "sha256-60cOhBBwQxWLwEx+svtFtJ7POQkHzJo2LDPRJ5L/bNk=";
+    })
+  ];
+
+  postUnpack = ''
+    mkdir -p source/build/build_libs/gbenchmark-prefix/src
+    cp -r "$ponygbenchmark"/ source/build/build_libs/gbenchmark-prefix/src/benchmark
+    chmod -R u+w source/build/build_libs/gbenchmark-prefix/src/benchmark
+  '';
+
+  dontConfigure = true;
+
+  postPatch = ''
+    # Patching Vendor LLVM
+    patchShebangs --host build/build_libs/gbenchmark-prefix/src/benchmark/tools/*.py
+    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-07-28-01-c-exports.diff
     substituteInPlace packages/process/_test.pony \
-        --replace '"/bin/' '"${coreutils}/bin/'
-    substituteInPlace packages/process/_test.pony \
+        --replace '"/bin/' '"${coreutils}/bin/' \
         --replace '=/bin' "${coreutils}/bin"
-
-    # Disabling the stdlib tests
-    substituteInPlace Makefile-ponyc \
-        --replace 'test-ci: all check-version test-core test-stdlib-debug test-stdlib' 'test-ci: all check-version test-core'
-
-    # Remove impure system refs
     substituteInPlace src/libponyc/pkg/package.c \
         --replace "/usr/local/lib" "" \
         --replace "/opt/local/lib" ""
-
-    for file in `grep -irl '/usr/local/opt/libressl/lib' ./*`; do
-      substituteInPlace $file  --replace '/usr/local/opt/libressl/lib' "${stdenv.lib.getLib libressl}/lib"
-    done
-
-    export LLVM_CONFIG=${llvm}/bin/llvm-config
-  '' + stdenv.lib.optionalString ((!stdenv.isDarwin) && (!cc.isClang) && lto) ''
-    export LTO_PLUGIN=`find ${cc.cc}/ -name liblto_plugin.so`
-  '' + stdenv.lib.optionalString ((!stdenv.isDarwin) && (cc.isClang) && lto) ''
-    export LTO_PLUGIN=`find ${cc.cc}/ -name LLVMgold.so`
   '';
 
-  makeFlags = [ "config=release" ] ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
-              ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
-  enableParallelBuilding = true;
+  preBuild = ''
+    make libs build_flags=-j$NIX_BUILD_CORES
+    make configure build_flags=-j$NIX_BUILD_CORES
+  '';
+
+  makeFlags = [
+    "PONYC_VERSION=${version}"
+    "prefix=${placeholder "out"}"
+  ]
+    ++ lib.optionals stdenv.isDarwin [ "bits=64" ]
+    ++ lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   doCheck = true;
 
-  checkTarget = "test-ci";
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" ];
-
-  preCheck = ''
-    export PONYPATH="$out/lib:${stdenv.lib.makeLibraryPath [ pcre2 libressl ]}"
-  '';
-
-  installPhase = ''
-    make config=release prefix=$out ''
-    + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
-    + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
+  installPhase = "make config=release prefix=$out "
+    + lib.optionalString stdenv.isDarwin "bits=64 "
+    + lib.optionalString (stdenv.isDarwin && (!lto)) "lto=no "
     + '' install
-
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
-      --prefix PONYPATH : "${stdenv.lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
+      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
   '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
-    homepage = https://www.ponylang.org;
+    homepage = "https://www.ponylang.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ doublec kamilchm patternspandemic ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 })

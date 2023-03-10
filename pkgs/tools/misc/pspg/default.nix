@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, gnugrep, ncurses, pkgconfig, readline, postgresql }:
+{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, installShellFiles, readline, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pspg";
-  version = "2.6.6";
+  version = "5.7.4";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = pname;
     rev = version;
-    sha256 = "0l20ysr61y99zxvm8cqsgj7arv4m7h7gqq8lrq65bmh9fxncfpsd";
+    sha256 = "sha256-HZ771Q1UXnRds6o3EnZMyeu7Lt3IDFVFiUTc5snU0Bo=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ gnugrep ncurses readline postgresql ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installManPage pspg.1
+    installShellCompletion --bash --cmd pspg bash-completion.sh
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/okbob/pspg";
     description = "Postgres Pager";
     license = licenses.bsd2;

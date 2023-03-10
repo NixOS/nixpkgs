@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, writeText }:
+{ lib, stdenv, fetchurl, writeText, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.34.0";
+  version = "1.39.2";
 
-  src = with stdenv.lib; fetchurl {
-    url = "https://releases.wikimedia.org/mediawiki/${versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "1lckjnharwxh9xb7gxdxrkb0r3xgd0dh4019cnbixn5mmzgc696y";
+  src = fetchurl {
+    url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
+    sha256 = "sha256-3bUdIooZymjNiHHYUBdfa+9Gh0R27RRm8BXPmEbZx6U=";
   };
 
-  prePatch = ''
+  postPatch = ''
     sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
   '';
 
-  phpConfig = writeText "LocalSettings.php" ''
-  <?php
-    return require(getenv('MEDIAWIKI_CONFIG'));
-  ?>
-  '';
-
-  installPhase = ''
+  installPhase = let
+    phpConfig = writeText "LocalSettings.php" ''
+      <?php
+        return require(getenv('MEDIAWIKI_CONFIG'));
+      ?>
+    '';
+  in ''
     runHook preInstall
 
     mkdir -p $out/share/mediawiki
@@ -29,11 +29,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests.mediawiki = nixosTests.mediawiki;
+
+  meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = platforms.all;
-    maintainers = [ maintainers.redvers ];
+    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
   };
 }

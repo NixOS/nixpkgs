@@ -1,40 +1,55 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
-, coverage
-, mock
-, pytest
-, pytestcov
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, eventlet
+, gevent
+, pytestCheckHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "20.0.4";
-  disabled = isPy27;
+  version = "20.1.0";
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626";
+  src = fetchFromGitHub {
+    owner = "benoitc";
+    repo = "gunicorn";
+    rev = version;
+    sha256 = "sha256-xdNHm8NQWlAlflxof4cz37EoM74xbWrNaf6jlwwzHv4=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  patches = [
+    (fetchpatch {
+      # fix eventlet 0.30.3+ compability
+      url = "https://github.com/benoitc/gunicorn/commit/6a8ebb4844b2f28596ffe7421eb9f7d08c8dc4d8.patch";
+      sha256 = "sha256-+iApgohzPZ/cHTGBNb7XkqLaHOVVPF26BnPUsvISoZw=";
+    })
+  ];
 
-  checkInputs = [ pytest mock pytestcov coverage ];
-
-  prePatch = ''
-    substituteInPlace requirements_test.txt --replace "==" ">=" \
-      --replace "coverage>=4.0,<4.4" "coverage"
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=gunicorn --cov-report=xml" ""
   '';
 
-  # better than no tests
-  checkPhase = ''
-    $out/bin/gunicorn --help > /dev/null
-  '';
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    eventlet
+    gevent
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/benoitc/gunicorn";
-    description = "WSGI HTTP Server for UNIX";
+    description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

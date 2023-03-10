@@ -1,8 +1,8 @@
 diff --git a/libmalcontent/tests/meson.build b/libmalcontent/tests/meson.build
-index a8a815a..0b1d242 100644
+index 610bc35..13e0713 100644
 --- a/libmalcontent/tests/meson.build
 +++ b/libmalcontent/tests/meson.build
-@@ -61,9 +61,9 @@ test_programs = [
+@@ -72,9 +72,9 @@ test_programs = [
    ], deps],
  ]
  
@@ -14,7 +14,7 @@ index a8a815a..0b1d242 100644
                                       'libmalcontent-' + libmalcontent_api_version)
  
  foreach program: test_programs
-@@ -94,4 +94,4 @@ foreach program: test_programs
+@@ -105,4 +105,4 @@ foreach program: test_programs
      env: envs,
      args: ['--tap'],
    )
@@ -22,14 +22,35 @@ index a8a815a..0b1d242 100644
 \ No newline at end of file
 +endforeach
 diff --git a/meson_options.txt b/meson_options.txt
-index 96a517d..7cb1ee8 100644
+index d516c70..583cb94 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -3,4 +3,5 @@ option(
-   type: 'boolean',
+@@ -4,6 +4,12 @@ option(
    value: false,
    description: 'enable installed tests'
--)
-\ No newline at end of file
+ )
++option(
++  'installed_test_prefix',
++  type: 'string',
++  value: '',
++  description: 'Prefix for installed tests'
 +)
-+option('installed_test_prefix', type: 'string', value: '', description: 'Prefix for installed tests')
+ option(
+   'pamlibdir',
+   type: 'string',
+diff --git a/pam/tests/meson.build b/pam/tests/meson.build
+index 0560dcb..a74dab2 100644
+--- a/pam/tests/meson.build
++++ b/pam/tests/meson.build
+@@ -12,9 +12,9 @@ test_programs = [
+   ['pam_malcontent', [], deps],
+ ]
+ 
+-installed_tests_metadir = join_paths(datadir, 'installed-tests',
++installed_tests_metadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests',
+                                      'libmalcontent-' + libmalcontent_api_version)
+-installed_tests_execdir = join_paths(libexecdir, 'installed-tests',
++installed_tests_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests',
+                                      'libmalcontent-' + libmalcontent_api_version)
+ 
+ foreach program: test_programs

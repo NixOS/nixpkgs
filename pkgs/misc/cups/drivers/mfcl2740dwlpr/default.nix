@@ -1,4 +1,4 @@
-{ pkgsi686Linux, stdenv, fetchurl, dpkg, makeWrapper, coreutils, ghostscript, gnugrep, gnused, which, perl }:
+{ pkgsi686Linux, lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, ghostscript, gnugrep, gnused, which, perl }:
 
 stdenv.mkDerivation rec {
   pname = "mfcl2740dwlpr";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2740DW\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2740DW \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
         coreutils ghostscript gnugrep gnused which
       ]}
 
@@ -35,9 +35,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L2740DW lpr driver";
-    homepage = http://www.brother.com/;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "http://www.brother.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ stdenv.lib.maintainers.enzime ];
+    maintainers = [ lib.maintainers.Enzime ];
   };
 }

@@ -1,21 +1,31 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "posix_ipc";
-  version = "1.0.4";
+  pname = "posix-ipc";
+  version = "1.1.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ff6c9077633fc62a491d6997c43b094d885bb45a7ca1f36c9a0d647c54b74b14";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "osvenskan";
+    repo = "posix_ipc";
+    rev = "rel${version}";
+    hash = "sha256-xK5CkThqVFVMIxBtgUfHIRNRfmBxKa/DWBYQg7QHl/M=";
   };
 
-  meta = with stdenv.lib; {
+  pythonImportsCheckHook = [
+    "posix_ipc"
+  ];
+
+  meta = with lib; {
     description = "POSIX IPC primitives (semaphores, shared memory and message queues)";
+    homepage = "https://github.com/osvenskan/posix_ipc";
     license = licenses.bsd3;
-    homepage = http://semanchuk.com/philip/posix_ipc/;
+    maintainers = with maintainers; [ ];
   };
-
 }

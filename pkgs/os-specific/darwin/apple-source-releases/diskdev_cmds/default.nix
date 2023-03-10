@@ -1,21 +1,24 @@
-{ stdenv, appleDerivation, xcbuildHook
-, Libc, xnu, libutil }:
+{ lib, appleDerivation, xcbuildHook, Libc, stdenv, macosPackages_11_0_1, xnu
+, fetchurl, libutil }:
 
-appleDerivation {
+let
+  xnu-src = if stdenv.isAarch64 then macosPackages_11_0_1.xnu.src else xnu.src;
+  arch = if stdenv.isAarch64 then "arm" else "i386";
+in appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ libutil ];
 
-  NIX_CFLAGS_COMPILE = "-I.";
+  env.NIX_CFLAGS_COMPILE = "-I.";
   NIX_LDFLAGS = "-lutil";
   patchPhase = ''
     # ugly hacks for missing headers
     # most are bsd related - probably should make this a drv
     unpackFile ${Libc.src}
-    unpackFile ${xnu.src}
-    mkdir System sys machine i386
+    unpackFile ${xnu-src}
+    mkdir System sys machine ${arch}
     cp xnu-*/bsd/sys/disklabel.h sys
     cp xnu-*/bsd/machine/disklabel.h machine
-    cp xnu-*/bsd/i386/disklabel.h i386
+    cp xnu-*/bsd/${arch}/disklabel.h ${arch}
     cp -r xnu-*/bsd/sys System
     cp -r Libc-*/uuid System
     substituteInPlace diskdev_cmds.xcodeproj/project.pbxproj \
@@ -32,7 +35,7 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

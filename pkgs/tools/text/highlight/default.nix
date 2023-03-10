@@ -1,26 +1,30 @@
-{ stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, libxcrypt, pkg-config, swig, perl, gcc }:
 
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "3.55";
+    version = "4.4";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "1cn8m2qk5vl5zcrmg0wlvj9wvpm0gdb5idh9bhh5b6pbl0hm93cr";
+      sha256 = "sha256-XID4kjRTSEXgNlAnDeJJRaCU0AaEbXCma3R78o9mshI=";
     };
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkgconfig swig perl ] ++ optional stdenv.isDarwin gcc;
+    nativeBuildInputs = [ pkg-config swig perl ]
+      ++ lib.optional stdenv.isDarwin gcc;
 
-    buildInputs = [ getopt lua boost ];
+    buildInputs = [ getopt lua boost libxcrypt ];
 
-    prePatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+    postPatch = ''
+      substituteInPlace src/makefile \
+        --replace "shell pkg-config" "shell $PKG_CONFIG"
+      substituteInPlace makefile \
+        --replace 'gzip' 'gzip -n'
+    '' + lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
     '';
@@ -31,21 +35,21 @@ let
 
     # This has to happen _before_ the main build because it does a
     # `make clean' for some reason.
-    preBuild = optionalString (!stdenv.isDarwin) ''
+    preBuild = lib.optionalString (!stdenv.isDarwin) ''
       make -C extras/swig $makeFlags perl
     '';
 
-    postCheck = optionalString (!stdenv.isDarwin) ''
+    postCheck = lib.optionalString (!stdenv.isDarwin) ''
       perl -Iextras/swig extras/swig/testmod.pl
     '';
 
-    preInstall = optionalString (!stdenv.isDarwin) ''
+    preInstall = lib.optionalString (!stdenv.isDarwin) ''
       mkdir -p $out/${perl.libPrefix}
       install -m644 extras/swig/highlight.{so,pm} $out/${perl.libPrefix}
       make -C extras/swig clean # Clean up intermediate files.
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Source code highlighting tool";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;

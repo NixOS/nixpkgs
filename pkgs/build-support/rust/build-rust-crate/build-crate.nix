@@ -1,21 +1,33 @@
-{ lib, stdenv, echo_build_heading, noisily, mkRustcDepArgs, rust }:
+{ lib, stdenv
+, mkRustcDepArgs, mkRustcFeatureArgs, needUnstableCLI
+, rust
+}:
+
 { crateName,
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
   crateType, metadata, crateBin, hasCrateBin,
   extraRustcOpts, verbose, colors,
-  buildTests
+  buildTests,
+  codegenUnits
 }:
 
   let
     baseRustcOpts =
-      [(if release then "-C opt-level=3" else "-C debuginfo=2")]
-      ++ ["-C codegen-units=$NIX_BUILD_CORES"]
-      ++ ["--remap-path-prefix=$NIX_BUILD_TOP=/" ]
-      ++ [(mkRustcDepArgs dependencies crateRenames)]
-      ++ [crateFeatures]
-      ++ extraRustcOpts
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--target ${rust.toRustTarget stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc"
+      [
+        (if release then "-C opt-level=3" else "-C debuginfo=2")
+        "-C codegen-units=${toString codegenUnits}"
+        "--remap-path-prefix=$NIX_BUILD_TOP=/"
+        (mkRustcDepArgs dependencies crateRenames)
+        (mkRustcFeatureArgs crateFeatures)
+      ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+        "--target" (rust.toRustTargetSpec stdenv.hostPlatform)
+      ] ++ lib.optionals (needUnstableCLI dependencies) [
+        "-Z" "unstable-options"
+      ] ++ extraRustcOpts
+      # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
+      # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
+      ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
     ;
     rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
 
@@ -35,8 +47,6 @@
     build_bin = if buildTests then "build_bin_test" else "build_bin";
   in ''
     runHook preBuild
-    ${echo_build_heading colors}
-    ${noisily colors verbose}
 
     # configure & source common build functions
     LIB_RUSTC_OPTS="${libRustcOpts}"
@@ -44,7 +54,6 @@
     LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary}"
     LIB_PATH="${libPath}"
     LIB_NAME="${libName}"
-    source ${./lib.sh}
 
     CRATE_NAME='${lib.replaceStrings ["-"] ["_"] libName}'
 
@@ -60,7 +69,15 @@
 
 
 
-    ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin: ''
+    ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin:
+    let
+      haveRequiredFeature = if bin ? requiredFeatures then
+        # Check that all element in requiredFeatures are also present in crateFeatures
+        lib.intersectLists bin.requiredFeatures crateFeatures == bin.requiredFeatures
+      else
+        true;
+    in
+    if haveRequiredFeature then ''
       mkdir -p target/bin
       BIN_NAME='${bin.name or crateName}'
       ${if !bin ? path then ''
@@ -70,6 +87,8 @@
         BIN_PATH='${bin.path}'
       ''}
         ${build_bin} "$BIN_NAME" "$BIN_PATH"
+    '' else ''
+      echo Binary ${bin.name or crateName} not compiled due to not having all of the required features -- ${lib.escapeShellArg (builtins.toJSON bin.requiredFeatures)} -- enabled.
     '') crateBin)}
 
     ${lib.optionalString buildTests ''

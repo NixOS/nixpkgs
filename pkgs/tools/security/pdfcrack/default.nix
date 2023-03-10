@@ -1,12 +1,15 @@
-{ stdenv, lib, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdfcrack";
-  version = "0.18";
+  version = "0.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/pdfcrack/pdfcrack/pdfcrack-${version}.tar.gz";
-    sha256 = "035s3jzrs3ci0i53x04dzpqp9225c4s52cd722d6zqra5b2sw8w2";
+    hash = "sha256-e4spsY/NXLmErrZA7gbt8J/t5HCbWcMv7k8thoYN5bQ=";
   };
 
   installPhase = ''
@@ -14,10 +17,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://pdfcrack.sourceforge.net/;
+    homepage = "https://pdfcrack.sourceforge.net/";
     description = "Small command line driven tool for recovering passwords and content from PDF files";
-    license = with licenses; [ gpl2 ];
-    platforms = platforms.linux;
+    license = with licenses; [ gpl2Plus ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ qoelet ];
   };
 }

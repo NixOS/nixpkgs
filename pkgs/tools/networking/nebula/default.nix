@@ -1,21 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "nebula";
-  version = "1.1.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nwagk3q2gkirqrk27fisad2c2p2y1lsvz5phax9v5h51p1y79ia";
+    sha256 = "sha256-IsLSlQsrfw3obkz4jHL23BRQY2fviGbPEvs5j0zkdX0=";
   };
 
-  modSha256 = "1sy5mnwn9fxjf3y41lm8gsggid2c0y08iw88m9ng8psaf4qid8ij";
+  vendorSha256 = "sha256-GvMiOEC3Y/pGG++Z+XCgLVADKymUR9shDxjx3xIz8u0=";
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
-  buildFlagsArray = [ "-ldflags='-X main.Build=${version}'" ];
+  ldflags = [ "-X main.Build=${version}" ];
+
+  passthru.tests = {
+    inherit (nixosTests) nebula;
+  };
 
   meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";
@@ -36,8 +40,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/slackhq/nebula";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne numinit ];
   };
 
 }

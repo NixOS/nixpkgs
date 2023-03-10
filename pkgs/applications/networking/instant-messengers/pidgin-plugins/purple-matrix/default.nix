@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib, glib, http-parser, sqlite, olm, libgcrypt } :
+{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, json-glib, glib, http-parser, sqlite, olm, libgcrypt } :
 
 stdenv.mkDerivation rec {
   pname = "purple-matrix-unstable";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1gjm0z4wa5vi9x1xk43rany5pffrwg958n180ahdj9a7sa8a4hpm";
   };
 
-  NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     # glib-2.62 deprecations
     "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
     # override "-O0 -Werror" set by build system
     "-O3" "-Wno-error"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pidgin json-glib glib http-parser sqlite olm libgcrypt ];
 
   makeFlags = [
@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
     "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/matrix-org/purple-matrix;
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # fix build on darwin
+
+  meta = with lib; {
+    homepage = "https://github.com/matrix-org/purple-matrix";
     description = "Matrix support for Pidgin / libpurple";
     license = licenses.gpl2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ symphorien ];
   };
 }

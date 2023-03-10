@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, buildDunePackage, alcotest, ocaml-migrate-parsetree }:
+{ lib, fetchurl, buildDunePackage, ocaml, alcotest, ppxlib }:
 
 buildDunePackage rec {
   pname = "ppx_blob";
-  version = "0.4.0";
+  version = "0.7.2";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/johnwhitington/${pname}/releases/download/${version}/ppx_blob-${version}.tbz";
-    sha256 = "1xmslk1mwdzhy1bydgsjlcb7h544c39hvxa8lywp8w72gaggjl16";
+    sha256 = "00haz1cmplk3j9ysh6j656zrldy60585fmlndmfhpd5332mxrfdw";
   };
 
-  buildInputs = [ alcotest ocaml-migrate-parsetree ];
-  doCheck = true;
+  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [ ppxlib ];
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/johnwhitington/ppx_blob;
+  meta = with lib; {
+    homepage = "https://github.com/johnwhitington/ppx_blob";
     description = "OCaml ppx to include binary data from a file as a string";
     license = licenses.unlicense;
   };

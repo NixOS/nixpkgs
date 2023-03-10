@@ -18,14 +18,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   checkPhase = ''
     nosetests -v
   '';
 
   meta = {
     description = "Allow injecting warning filters during nosetest";
-    homepage = https://github.com/Carreau/nose_warnings_filters;
+    homepage = "https://github.com/Carreau/nose_warnings_filters";
     license = lib.licenses.mit;
   };
 }

@@ -1,40 +1,54 @@
-{ stdenv, fetchurl, cmake, vtk, darwin }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, enableVTK ? true
+, vtk_8
+, ApplicationServices
+, Cocoa
+, enablePython ? false
+, python ? null
+, swig
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.0.5";
   pname = "gdcm";
+  version = "3.0.21";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
-    sha256 = "16d3sf81n4qhwbbx1d80jg6fhrla5paan384c4bbbqvbhm222yby";
+  src = fetchFromGitHub {
+    owner = "malaterre";
+    repo = "GDCM";
+    rev = "v${version}";
+    sha256 = "sha256-BmUJCqCGt+BvVpLG4bzCH4lsqmhWHU0gbOIU2CCIMGU=";
   };
-
-  dontUseCmakeBuildDir = true;
-  preConfigure = ''
-    cmakeDir=$PWD
-    mkdir ../build
-    cd ../build
-  '';
 
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"
     "-DGDCM_BUILD_SHARED_LIBS=ON"
+  ] ++ lib.optionals enableVTK [
     "-DGDCM_USE_VTK=ON"
+  ] ++ lib.optionals enablePython [
+    "-DGDCM_WRAP_PYTHON:BOOL=ON"
+    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
 
-  enableParallelBuilding = true;
-  buildInputs = [ cmake vtk ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices darwin.apple_sdk.frameworks.Cocoa ];
-  propagatedBuildInputs = [ ];
+  nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  buildInputs = lib.optionals enableVTK [
+    vtk_8
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
+    Cocoa
+  ] ++ lib.optionals enablePython [ swig python ];
+
+  meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.
     '';
-    homepage = http://gdcm.sourceforge.net/;
+    homepage = "https://gdcm.sourceforge.net/";
     license = with licenses; [ bsd3 asl20 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ tfmoraes ];
   };
 }
-

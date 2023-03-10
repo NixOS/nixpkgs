@@ -1,50 +1,78 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 # Image file formats
-, libjpeg, libtiff, giflib, libpng, libwebp
+, libjpeg, libtiff, giflib, libpng, libwebp, libjxl
+, libspectre
 # imlib2 can load images from ID3 tags.
-, libid3tag
-, freetype , bzip2, pkgconfig
-, x11Support ? true, xlibsWrapper ? null
+, libid3tag, librsvg, libheif
+, freetype , bzip2, pkg-config
+, x11Support ? true
+, webpSupport ? true
+, svgSupport ? false
+, heifSupport ? false
+, jxlSupport ? false
+, psSupport ? false
+
+# for passthru.tests
+, libcaca
+, diffoscopeMinimal
+, feh
+, icewm
+, openbox
+, fluxbox
+, enlightenment
+, xorg
+, testers
 }:
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.6.1";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.bz2";
-    sha256 = "0v8n3dswx7rxqfd0q03xwc7j2w1mv8lv18rdxv487a1xw5vklfad";
+    url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-cnwak3yIXAgMNyF+R23Ii1o+YNc38b8ECzQ1ILeBy7o=";
   };
 
   buildInputs = [
-    libjpeg libtiff giflib libpng libwebp
+    libjpeg libtiff giflib libpng
     bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper;
+  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
+    ++ optional heifSupport libheif
+    ++ optional svgSupport librsvg
+    ++ optional webpSupport libwebp
+    ++ optional jxlSupport libjxl
+    ++ optional psSupport libspectre;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    substituteInPlace imlib2-config.in \
-      --replace "@my_libs@" ""
-  '';
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
   configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!svgSupport) "--without-svg"
+    ++ optional (!heifSupport) "--without-heif"
     ++ optional (!x11Support) "--without-x";
 
   outputs = [ "bin" "out" "dev" ];
 
-  postInstall = ''
-    moveToOutput bin/imlib2-config "$dev"
-  '';
+  passthru.tests = {
+    inherit
+      libcaca
+      diffoscopeMinimal
+      feh
+      icewm
+      openbox
+      fluxbox
+      enlightenment;
+  };
 
-  meta = with stdenv.lib; {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -56,8 +84,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
-    license = licenses.mit;
+    changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
+    license = licenses.imlib2;
+    pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };
-}
+})

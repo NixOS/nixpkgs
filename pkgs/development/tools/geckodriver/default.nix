@@ -1,36 +1,29 @@
 { lib
-, fetchzip
+, fetchFromGitHub
 , rustPlatform
 , stdenv
-, darwin
+, Security
+, libiconv
 }:
 
-rustPlatform.buildRustPackage {
-  version = "0.26.0";
+rustPlatform.buildRustPackage rec {
+  version = "0.32.2";
   pname = "geckodriver";
-  sourceRoot = "source/testing/geckodriver";
 
-  # Source revisions are noted alongside the binary releases:
-  # https://github.com/mozilla/geckodriver/releases
-  src = (fetchzip {
-    url = "https://hg.mozilla.org/mozilla-central/archive/e9783a644016aa9b317887076618425586730d73.zip/testing";
-    sha256 = "0m86hqyq1jrr49jkc8mnlmx4bdq281hyxhcrrzacyv20nlqwvd8v";
-  }).overrideAttrs (_: {
-    # normally guessed by the url's file extension, force it to unpack properly
-    unpackCmd = "unzip $curSrc";
-  });
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "geckodriver";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-w2zGiRvhuPMo79UsnckSISyCwBcIg5sfXIJLmnT3Tnk=";
+  };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
+  cargoHash = "sha256-8P62yQpGXgswfSnAji0cIJwarx8IW0S5DO5gUMMp5PI=";
 
-  cargoSha256 = "07w5lmvm5w6id0qikcs968n0c69bb6fav63l66bskxcjva67d6dy";
-
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";
-    homepage = https://github.com/mozilla/geckodriver;
+    homepage = "https://github.com/mozilla/geckodriver";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jraygauthier ];
   };

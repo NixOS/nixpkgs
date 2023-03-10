@@ -1,26 +1,25 @@
-{ stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkgconfig, libiconv }:
+{ lib, stdenv, fetchurl, libXext, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
 
-let
-  name = "gv-3.7.4";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "gv";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "mirror://gnu/gv/${name}.tar.gz";
+    url = "mirror://gnu/gv/gv-${version}.tar.gz";
     sha256 = "0q8s43z14vxm41pfa8s5h9kyyzk1fkwjhkiwbf2x70alm6rv6qi1";
   };
 
-  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.isDarwin [
     "--enable-SIGCHLD-fallback"
   ];
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libXext
     Xaw3d
     ghostscriptX
     perl
-    pkgconfig
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];
 
@@ -32,7 +31,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    homepage = https://www.gnu.org/software/gv/;
+    homepage = "https://www.gnu.org/software/gv/";
     description = "PostScript/PDF document viewer";
 
     longDescription = ''
@@ -41,8 +40,8 @@ stdenv.mkDerivation {
       interface for the Ghostscript interpreter.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

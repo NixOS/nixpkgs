@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-indent'';
-  version = ''20190710-git'';
+  baseName = "trivial-indent";
+  version = "20210531-git";
 
-  description = ''A very simple library to allow indentation hints for SWANK.'';
+  description = "A very simple library to allow indentation hints for SWANK.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-indent/2019-07-10/trivial-indent-20190710-git.tgz'';
-    sha256 = ''00s35j8cf1ivwc1l55wprx1a78mvnxaz6innwwb3jan1sl3caycx'';
+    url = "http://beta.quicklisp.org/archive/trivial-indent/2021-05-31/trivial-indent-20210531-git.tgz";
+    sha256 = "1nqkay4kwy365q1qlba07q9x5ng0sxrcii4fpjqcd8nwbx3kbm8b";
   };
 
   packageName = "trivial-indent";
@@ -19,8 +20,8 @@ rec {
 }
 /* (SYSTEM trivial-indent DESCRIPTION
     A very simple library to allow indentation hints for SWANK. SHA256
-    00s35j8cf1ivwc1l55wprx1a78mvnxaz6innwwb3jan1sl3caycx URL
-    http://beta.quicklisp.org/archive/trivial-indent/2019-07-10/trivial-indent-20190710-git.tgz
-    MD5 a5026ac3d68e02fce100761e546a0d77 NAME trivial-indent FILENAME
-    trivial-indent DEPS NIL DEPENDENCIES NIL VERSION 20190710-git SIBLINGS NIL
+    1nqkay4kwy365q1qlba07q9x5ng0sxrcii4fpjqcd8nwbx3kbm8b URL
+    http://beta.quicklisp.org/archive/trivial-indent/2021-05-31/trivial-indent-20210531-git.tgz
+    MD5 3bb7d208d9d0614121c1f57fcffe65c7 NAME trivial-indent FILENAME
+    trivial-indent DEPS NIL DEPENDENCIES NIL VERSION 20210531-git SIBLINGS NIL
     PARASITES NIL) */

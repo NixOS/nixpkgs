@@ -1,62 +1,91 @@
-{ stdenv, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
-# Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
-# available.
+{ lib
+, python3
+, fetchzip
+, fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qttools
+, qtsvg
+, buildEnv
+, aspellDicts
+  # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
+  # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
 }:
 
-let
-  version = "7.0.4";
-  python = let
-    packageOverrides = self: super: {
-      markdown = super.markdown.overridePythonAttrs(old: {
-        src = super.fetchPypi {
-          version = "3.0.1";
-          pname = "Markdown";
-          sha256 = "d02e0f9b04c500cde6637c11ad7c72671f359b87b9fe924b2383649d8841db7c";
-        };
-      });
-
-      chardet = super.chardet.overridePythonAttrs(old: {
-        src = super.fetchPypi {
-          version = "2.3.0";
-          pname = "chardet";
-          sha256 = "e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa";
-        };
-        patches = [];
-      });
-    };
-    in python3.override { inherit packageOverrides; };
-  pythonEnv = python.withPackages (ps: with ps; [
-    pyqt5 docutils pyenchant Markups markdown pygments chardet
-  ]);
-in python.pkgs.buildPythonApplication {
-  inherit version;
+python3.pkgs.buildPythonApplication rec {
   pname = "retext";
+  version = "8.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
-    repo = "retext";
+    repo = pname;
     rev = version;
-    sha256 = "1zcapywspc9v5zf5cxqkcy019np9n41gmryqixj66zsvd544c6si";
+    hash = "sha256-22yqNwIehgTfeElqhN5Jzye7LbcAiseTeoMgenpmsL0=";
   };
 
-  doCheck = false;
+  toolbarIcons = fetchzip {
+    url = "https://github.com/retext-project/retext/archive/icons.zip";
+    hash = "sha256-LQtSFCGWcKvXis9pFDmPqAMd1m6QieHQiz2yykeTdnI=";
+  };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
-  propagatedBuildInputs = [ pythonEnv ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    qttools.dev
+  ];
+
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    chardet
+    docutils
+    markdown
+    markups
+    pyenchant
+    pygments
+    pyqt6
+    pyqt6-webengine
+  ];
+
+  patches = [ ./remove-wheel-check.patch ];
+
+  preConfigure = ''
+    lrelease ReText/locale/*.ts
+  '';
+
+  # prevent double wrapping
+  dontWrapQtApps = true;
 
   postInstall = ''
-    wrapQtApp "$out/bin/retext" \
-      --set ASPELL_CONF "dict-dir ${buildEnv {
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "--set" "ASPELL_CONF" "dict-dir ${buildEnv {
         name = "aspell-all-dicts";
         paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
       }}"
+    )
+
+    cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons
+
+    substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
+      --replace "Exec=ReText-${version}.data/scripts/retext %F" "Exec=$out/bin/retext %F" \
+      --replace "Icon=ReText/icons/retext.svg" "Icon=retext"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/retext-project/retext/;
-    description = "Simple but powerful editor for Markdown and reStructuredText";
-    license = licenses.gpl3;
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "ReText"
+  ];
+
+  meta = with lib; {
+    description = "Editor for Markdown and reStructuredText";
+    homepage = "https://github.com/retext-project/retext/";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;
   };

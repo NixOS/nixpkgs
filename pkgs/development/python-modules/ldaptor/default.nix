@@ -3,35 +3,49 @@
 , fetchPypi
 , twisted
 , passlib
-, pycrypto
-, pyopenssl
 , pyparsing
 , service-identity
+, six
 , zope_interface
-, isPy3k
+, pythonOlder
+, python
 }:
 
 buildPythonPackage rec {
   pname = "ldaptor";
-  version = "19.1.0";
+  version = "21.2.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "64c7b870c77e34e4f5f9cfdf330b9702e89b4dd0f64275704f86c1468312c755";
+    sha256 = "sha256-jEnrGTddSqs+W4NYYGFODLF+VrtaIOGHSAj6W+xno1g=";
   };
 
   propagatedBuildInputs = [
-    twisted passlib pycrypto pyopenssl pyparsing service-identity zope_interface
+    passlib
+    pyparsing
+    six
+    twisted
+    zope_interface
+  ] ++ twisted.optional-dependencies.tls;
+
+  nativeCheckInputs = [
+    twisted
   ];
 
-  disabled = isPy3k;
-
-  # TypeError: None is neither bytes nor unicode
+  # Test creates an excessive amount of temporary files (order of millions).
+  # Cleaning up those files already took over 15 hours already on my zfs
+  # filesystem and is not finished yet.
   doCheck = false;
 
-  meta = {
+  checkPhase = ''
+    trial -j$NIX_BUILD_CORES ldaptor
+  '';
+
+  meta = with lib; {
     description = "A Pure-Python Twisted library for LDAP";
-    homepage = https://github.com/twisted/ldaptor;
-    license = lib.licenses.mit;
+    homepage = "https://github.com/twisted/ldaptor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

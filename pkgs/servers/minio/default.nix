@@ -1,29 +1,51 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
+let
+  # The web client verifies, that the server version is a valid datetime string:
+  # https://github.com/minio/minio/blob/3a0e7347cad25c60b2e51ff3194588b34d9e424c/browser/app/js/web.js#L51-L53
+  #
+  # Example:
+  #   versionToTimestamp "2021-04-22T15-44-28Z"
+  #   => "2021-04-22T15:44:28Z"
+  versionToTimestamp = version:
+    let
+      splitTS = builtins.elemAt (builtins.split "(.*)(T.*)" version) 1;
+    in
+    builtins.concatStringsSep "" [ (builtins.elemAt splitTS 0) (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1)) ];
+in
 buildGoModule rec {
   pname = "minio";
-  version = "2019-10-12T01-39-57Z";
+  version = "2023-02-27T18-10-45Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "14rqwdhk2awdpcavkaqndf85c6aww5saarbfa2skc9z76ccq6114";
+    sha256 = "sha256-0Qz64uNe5rkHOUepzCYUdeyP1ZXzY3Bi1LUvQw2quPA=";
   };
 
-  modSha256 = "1cnccmmqb63l78rnjwh9bivyfr79ixjg106fbgcrn3pwghfag7ma";
+  vendorHash = "sha256-b/2/VTIVJyWNm6j+GyhbOKsIl9B0Nqw2fbpBw20Wicw=";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [''-ldflags=
-    -X github.com/minio/minio/cmd.Version=${version}
-  ''];
+  CGO_ENABLED = 0;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.minio.io/;
+  tags = [ "kqueue" ];
+
+  ldflags = let t = "github.com/minio/minio/cmd"; in [
+    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
+  ];
+
+  passthru.tests.minio = nixosTests.minio;
+
+  meta = with lib; {
+    homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
+    changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;
-    license = licenses.asl20;
+    license = licenses.agpl3Plus;
   };
 }

@@ -1,23 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pytest
-, pytestcov
 , jinja2
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "typesystem";
-  version = "0.2.4";
-  disabled = isPy27;
+  version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "1k0jwcky17zwaz2vx4x2zbsnp270g4mgn7kx5bpl8jgx76qmsnba";
+    hash = "sha256-fjnheHWjIDbJY1iXCRKCpqTCwtUWK9YXbynRCZquQ7c=";
   };
 
   propagatedBuildInputs = [
@@ -25,20 +26,18 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
-    pytest
-    pytestcov
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  # for some reason jinja2 not picking up forms directory (1% of tests)
-  checkPhase = ''
-    pytest --ignore=tests/test_forms.py
-  '';
+  pythonImportsCheck = [
+    "typesystem"
+  ];
 
   meta = with lib; {
     description = "A type system library for Python";
-    homepage = https://github.com/encode/typesystem;
+    homepage = "https://github.com/encode/typesystem";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers =  with maintainers; [ costrouc ];
   };
 }

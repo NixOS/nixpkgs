@@ -1,26 +1,22 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, intltool, file,
   desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
-  libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
+  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook
 }:
 
-let
-  version = "0.54.0";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "subtitleeditor";
-  inherit version;
+  version = "unstable-2019-11-30";
 
   src = fetchFromGitHub {
     owner = "kitone";
     repo = "subtitleeditor";
-    rev = version;
-    sha256 = "0vxcscc9m6gymgj173ahk2g9hlk9588z5fdaavmkpyriqdlhwm11";
+    rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
+    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
   };
 
   nativeBuildInputs =  [
     autoreconfHook
-    pkgconfig
+    pkg-config
     intltool
     file
     wrapGAppsHook
@@ -35,10 +31,13 @@ stdenv.mkDerivation {
     gst_all_1.gstreamermm
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
     hicolor-icon-theme
     libsigcxx
     libxmlxx
-    xdg_utils
+    xdg-utils
     isocodes
   ];
 
@@ -56,9 +55,9 @@ stdenv.mkDerivation {
       and refine existing subtitle. This program also shows sound waves, which
       makes it easier to synchronise subtitles to voices.
       '';
-    homepage = http://kitone.github.io/subtitleeditor/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.plcplc ];
+    homepage = "http://kitone.github.io/subtitleeditor/";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.plcplc ];
   };
 }

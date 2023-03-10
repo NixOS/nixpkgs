@@ -3,10 +3,12 @@
 { stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation {
-  name = "python27-docs-text-2.7.16";
+  pname = "python27-docs-text";
+  version = "2.7.18";
+
   src = fetchurl {
-    url = http://docs.python.org/ftp/python/doc/2.7.16/python-2.7.16-docs-text.tar.bz2;
-    sha256 = "1da7swlykvc013684nywycinfz3v8dqkcmv0zj8p7l5lyi5mq03r";
+    url = "http://www.python.org/ftp/python/doc/2.7.18/python-2.7.18-docs-text.tar.bz2";
+    sha256 = "1wj7mxs52kp5lmn5mvv574sygkfnk00kbz9ya9c03yfq5dd5nvy8";
   };
   installPhase = ''
     mkdir -p $out/share/doc/python27

@@ -1,27 +1,44 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
 , six
-, pytest
-, dateutil
+, pytestCheckHook
+, python-dateutil
 }:
 
 buildPythonPackage rec {
-  version = "0.5.2";
+  version = "0.8.1";
   pname = "javaproperties";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14hrp94cjj44yldf3k71wbq88cmlf01dfadi53gcirnsa56ddz5d";
+    sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
   };
 
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkInputs = [ dateutil pytest ];
-  checkPhase = ''
-    rm tox.ini
-    pytest -k 'not dumps and not time' --ignore=test/test_propclass.py
-  '';
+  propagatedBuildInputs = [
+    six
+  ];
+
+  nativeCheckInputs = [
+    python-dateutil
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "time"
+  ];
+
+  disabledTestPaths = [
+    "test/test_propclass.py"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure API Management Client Library for Python";

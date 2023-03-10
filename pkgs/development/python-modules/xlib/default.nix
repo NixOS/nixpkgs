@@ -1,41 +1,61 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , six
-, setuptools_scm
+, setuptools-scm
 , xorg
 , python
 , mock
 , nose
-, utillinux
+, pytestCheckHook
+, util-linux
 }:
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.25";
+  version = "0.33";
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = version;
-    sha256 = "1nncx7v9chmgh56afg6dklz3479s5zg3kq91mzh4mj512y0skyki";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} runtests.py
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ mock nose utillinux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
-  nativeBuildInputs = [ setuptools_scm ];
-  buildInputs = [ xorg.libX11 ];
-  propagatedBuildInputs = [ six ];
+  buildInputs = [
+    xorg.libX11
+  ];
+
+  propagatedBuildInputs = [
+    six
+  ];
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    nose
+    util-linux
+    xorg.xauth
+    xorg.xorgserver
+  ];
+
+  disabledTestPaths = [
+    # requires x session
+    "test/test_xlib_display.py"
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
     description = "Fully functional X client library for Python programs";
-    homepage = http://python-xlib.sourceforge.net/;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/python-xlib/python-xlib";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
   };
 
 }

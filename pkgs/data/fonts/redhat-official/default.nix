@@ -1,19 +1,29 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let version = "2.2.0"; in
-fetchzip {
-  name = "redhat-official-${version}";
-  url = "https://github.com/RedHatOfficial/RedHatFont/archive/${version}.zip";
+stdenvNoCC.mkDerivation rec {
+  pname = "redhat-official";
+  version = "4.0.3";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+  src = fetchFromGitHub {
+    owner = "RedHatOfficial";
+    repo = "RedHatFont";
+    rev = version;
+    hash = "sha256-r43KtMIedNitb5Arg8fTGB3hrRZoA8oUHVEL24k4LeQ=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    for kind in mono proportional; do
+      install -m444 -Dt $out/share/fonts/opentype fonts/$kind/static/otf/*.otf
+      install -m444 -Dt $out/share/fonts/truetype fonts/$kind/static/ttf/*.ttf
+    done
+
+    runHook postInstall
   '';
 
-  sha256 = "0yb6shgq6jrv3kq9faky66qpdbv4g580c3jl942844grwyngymyj";
-
   meta = with lib; {
-    homepage = https://github.com/RedHatOfficial/RedHatFont;
+    homepage = "https://github.com/RedHatOfficial/RedHatFont";
     description = "Red Hat's Open Source Fonts - Red Hat Display and Red Hat Text";
     license = licenses.ofl;
     platforms = platforms.all;

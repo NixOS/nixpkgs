@@ -16,7 +16,7 @@
 #
 # To use at startup, see hardware.bumblebee options.
 
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, help2man, makeWrapper
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, help2man, makeWrapper
 , glib, libbsd
 , libX11, xorgserver, kmod, xf86videonouveau
 , nvidia_x11, virtualgl, libglvnd
@@ -33,8 +33,6 @@
 }:
 
 let
-  version = "3.2.1";
-
   nvidia_x11s = [ nvidia_x11 ]
                 ++ lib.optional nvidia_x11.useGLVND libglvnd
                 ++ lib.optionals (nvidia_x11_i686 != null)
@@ -54,13 +52,17 @@ let
     url = "https://github.com/Bumblebee-Project/Bumblebee/commit/deceb14cdf2c90ff64ebd1010a674305464587da.patch";
     sha256 = "00c05i5lxz7vdbv445ncxac490vbl5g9w3vy3gd71qw1f0si8vwh";
   };
+  gcc10Patch = fetchpatch {
+    url = "https://github.com/Bumblebee-Project/Bumblebee/commit/f94a118a88cd76e2dbea33d735bd53cf54b486a1.patch";
+    hash = "sha256-3b5tLoMrGYSdg9Hz5bh0c44VIrbSZrY56JpWEyU/Pik=";
+  };
 
 in stdenv.mkDerivation rec {
   pname = "bumblebee";
-  inherit version;
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "https://bumblebee-project.org/${pname}-${version}.tar.gz";
+    url = "https://www.bumblebee-project.org/${pname}-${version}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
@@ -69,6 +71,7 @@ in stdenv.mkDerivation rec {
 
     modprobePatch
     libkmodPatch
+    gcc10Patch
   ];
 
   # By default we don't want to use a display device
@@ -103,7 +106,7 @@ in stdenv.mkDerivation rec {
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
   buildInputs = [ libX11 glib libbsd kmod ];
-  nativeBuildInputs = [ makeWrapper pkgconfig help2man automake111x autoconf ];
+  nativeBuildInputs = [ makeWrapper pkg-config help2man automake111x autoconf ];
 
   # The order of LDPATH is very specific: First X11 then the host
   # environment then the optional sub architecture paths.
@@ -133,11 +136,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${virtualgl}/bin"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Bumblebee-Project/Bumblebee;
+  meta = with lib; {
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
-    platforms = platforms.linux;
+    homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }

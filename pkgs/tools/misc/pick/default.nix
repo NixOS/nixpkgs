@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "pick";
-  version = "2.0.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
-    owner = "calleerlandsson";
+    owner = "mptre";
     repo = "pick";
     rev = "v${version}";
-    sha256 = "0wm3220gqrwldiq0rjdraq5mw3i7d58zwzls8234sx9maf59h0k0";
+    sha256 = "8cgt5KpLfnLwhucn4DQYC/7ot1u24ahJxWG+/1SL584=";
   };
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  PREFIX = placeholder "out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Fuzzy text selection utility";
     license = licenses.mit;

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
     # TODO: not very nice!
     postPatch =
-      let libname = if stdenv.isDarwin then "libaugeas.dylib" else "libaugeas.so";
+      let libname = "libaugeas${stdenv.hostPlatform.extensions.sharedLibrary}";
       in
       ''
         substituteInPlace augeas/ffi.py \
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
     meta = with lib; {
       description = "Pure python bindings for augeas";
-      homepage = https://github.com/hercules-team/python-augeas;
+      homepage = "https://github.com/hercules-team/python-augeas";
       license = licenses.lgpl2Plus;
       platforms = platforms.unix;
     };

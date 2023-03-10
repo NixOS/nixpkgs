@@ -1,54 +1,105 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, which
-, django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, cairocffi
+, django
+, django_tagging
+, fetchFromGitHub
+, fetchpatch
+, gunicorn
+, mock
+, pyparsing
+, python-memcached
+, pythonOlder
+, pytz
+, six
+, txamqp
+, urllib3
+, whisper
 }:
-if django.version != "1.8.19"
-|| django_tagging.version != "0.4.3"
-then throw "graphite-web should be build with django_1_8 and django_tagging_0_4_3"
-else buildPythonPackage rec {
+
+buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.6";
+  version = "1.1.10";
+  format = "setuptools";
 
-  disabled = isPy3k;
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f4c293008ad588456397cd125cdad7f47f4bab5b6dd82b5fb69f5467e7346a2a";
+  src = fetchFromGitHub {
+    owner = "graphite-project";
+    repo = pname;
+    rev = version;
+    hash = "sha256-2HgCBKwLfxJLKMopoIdsEW5k/j3kNAiifWDnJ98a7Qo=";
   };
 
-  propagatedBuildInputs = [
-    django django_tagging whisper pycairo cairocffi
-    ldap memcached pytz urllib3 scandir
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-1.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/9c626006eea36a9fd785e8f811359aebc9774970.patch";
+      sha256 = "sha256-JMmdhLqsaRhUG2FsH+yPNl+cR7O2YLfKFliL2GU0aAk=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-2.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/2f178f490e10efc03cd1d27c72f64ecab224eb23.patch";
+      sha256 = "sha256-NL7K5uekf3NlLa58aFFRPJT9ktjqBeNlWC4Htd0fRQ0=";
+    })
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/run-graphite-devel-server.py \
-      --prefix PATH : ${which}/bin
+  propagatedBuildInputs = [
+    cairocffi
+    django
+    django_tagging
+    gunicorn
+    pyparsing
+    python-memcached
+    pytz
+    six
+    txamqp
+    urllib3
+    whisper
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Django>=1.8,<3.1" "Django" \
+      --replace "django-tagging==0.4.3" "django-tagging"
   '';
 
-  preConfigure = ''
-    # graphite is configured by storing a local_settings.py file inside the
-    # graphite python package. Since that package is stored in the immutable
-    # Nix store we can't modify it. So how do we configure graphite?
-    #
-    # First of all we rename "graphite.local_settings" to
-    # "graphite_local_settings" so that the settings are not looked up in the
-    # graphite package anymore. Secondly we place a directory containing a
-    # graphite_local_settings.py on the PYTHONPATH in the graphite module
-    # <nixpkgs/nixos/modules/services/monitoring/graphite.nix>.
-    substituteInPlace webapp/graphite/settings.py \
-      --replace "graphite.local_settings" " graphite_local_settings"
+  # Carbon-s default installation is /opt/graphite. This env variable ensures
+  # carbon is installed as a regular Python module.
+  GRAPHITE_NO_PREFIX = "True";
 
+  preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  # error: invalid command 'test'
-  doCheck = false;
+  checkInputs = [ mock ];
+  checkPhase = ''
+    runHook preCheck
 
-  meta = with stdenv.lib; {
-    homepage = http://graphite.wikidot.com/;
+    pushd webapp/
+    # avoid confusion with installed module
+    rm -r graphite
+    # redis not practical in test environment
+    substituteInPlace tests/test_tags.py \
+      --replace test_redis_tagdb _dont_test_redis_tagdb
+
+    DJANGO_SETTINGS_MODULE=tests.settings ${python.interpreter} manage.py test
+    popd
+
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [
+    "graphite"
+  ];
+
+  meta = with lib; {
     description = "Enterprise scalable realtime graphing";
-    maintainers = with maintainers; [ offline basvandijk ];
+    homepage = "http://graphiteapp.org/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ offline basvandijk ];
   };
 }

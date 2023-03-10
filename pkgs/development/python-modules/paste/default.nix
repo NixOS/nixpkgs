@@ -1,34 +1,59 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
 , six
-, pytestrunner
-, pytest
 }:
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.2.2";
+  version = "3.5.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "Paste";
-    inherit version;
-    sha256 = "15p95br9x7zjy0cckdy6xmhfg61cg49rhi75jd00svrnz234s7qb";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "cdent";
+    repo = "paste";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lpQMzrRpcG5TqWm/FJn4oo9TV8Skf0ypZVeQC4y8p1U=";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  checkInputs = [ pytestrunner pytest ];
-
-  # Certain tests require network
-  checkPhase = ''
-    py.test -k "not test_cgiapp and not test_proxy"
+  postPatch = ''
+    patchShebangs tests/cgiapp_data/
   '';
 
-  meta = with stdenv.lib; {
-    description = "Tools for using a Web Server Gateway Interface stack";
-    homepage = http://pythonpaste.org/;
-    license = licenses.mit;
-  };
+  propagatedBuildInputs = [
+    setuptools
+    six
+  ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # broken test
+    "test_file_cache"
+    # requires network connection
+    "test_proxy_to_website"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/cdent/paste/issues/72
+    "test_form"
+  ];
+
+  pythonNamespaces = [
+    "paste"
+  ];
+
+  meta = with lib; {
+    description = "Tools for using a Web Server Gateway Interface stack";
+    homepage = "https://pythonpaste.readthedocs.io/";
+    changelog = "https://github.com/cdent/paste/blob/${version}/docs/news.txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

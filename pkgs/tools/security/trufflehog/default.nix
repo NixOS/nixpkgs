@@ -1,38 +1,33 @@
-{ lib, pythonPackages }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+}:
 
-let
-  truffleHogRegexes = pythonPackages.buildPythonPackage rec {
-    pname = "truffleHogRegexes";
-    version = "0.0.4";
-    src = pythonPackages.fetchPypi {
-      inherit pname version;
-      sha256 = "09vrscbb4h4w01gmamlzghxx6cvrqdscylrbdcnbjsd05xl7zh4z";
-    };
+buildGoModule rec {
+  pname = "trufflehog";
+  version = "3.29.0";
+
+  src = fetchFromGitHub {
+    owner = "trufflesecurity";
+    repo = "trufflehog";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iu6MrfRWlfUeVsCoqxp/jFT8gcOieDplx1Jdjk8txOU=";
   };
-in
-  pythonPackages.buildPythonApplication rec {
-    pname = "truffleHog";
-    version = "2.0.97";
 
-    src = pythonPackages.fetchPypi {
-      inherit pname version;
-      sha256 = "034kpv1p4m90286slvc6d4mlrzaf0b5jbd4qaj87hj65wbpcpg8r";
-    };
+  vendorHash = "sha256-Z1QJM2feKFQ8MEVwzYt+MkpDZHiaVWlzq2lbResWQWk=";
 
-    # Relax overly restricted version constraint
-    postPatch = ''
-      substituteInPlace setup.py --replace "GitPython ==" "GitPython >= "
-    '';
+  # Test cases run git clone and require network access
+  doCheck = false;
 
-    propagatedBuildInputs = [ pythonPackages.GitPython truffleHogRegexes ];
+  postInstall = ''
+    rm $out/bin/{generate,snifftest}
+  '';
 
-    # Test cases run git clone and require network access
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/dxa4481/truffleHog;
-      description = "Searches through git repositories for high entropy strings and secrets, digging deep into commit history";
-      license = with lib.licenses; [ gpl2 ];
-      maintainers = with lib.maintainers; [ bhipple ];
-    };
-  }
+  meta = with lib; {
+    description = "Find credentials all over the place";
+    homepage = "https://github.com/trufflesecurity/trufflehog";
+    changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/v${version}";
+    license = with licenses; [ agpl3Only ];
+    maintainers = with maintainers; [ fab ];
+  };
+}

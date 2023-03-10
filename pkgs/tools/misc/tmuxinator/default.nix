@@ -1,4 +1,4 @@
-{ lib, buildRubyGem, ruby }:
+{ lib, buildRubyGem, ruby, installShellFiles }:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "1.1.4";
-  source.sha256 = "06ajfvsmq2040b7nk2ifih3sqxgwzih5j1d25nh4ilgjlrfmha98";
+  version = "3.0.5";
+  source.sha256 = "1ycsx9mvl0jsds4igi6avxclsyl5lndh1mpj2ykvzfz26wdddg6p";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -23,8 +23,8 @@ buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "thor";
-    version = "1.0.1";
-    source.sha256 = "1xbhkmyhlxwzshaqa7swy2bx6vd64mm0wrr8g3jywvxy7hg0cwkm";
+    version = "1.2.1";
+    source.sha256 = "0inl77jh4ia03jw3iqm5ipr76ghal3hyjrd6r8zqsswwvi9j2xdi";
   };
 
   xdg = buildRubyGem rec {
@@ -37,9 +37,15 @@ buildRubyGem rec {
 
   propagatedBuildInputs = [ erubis thor xdg ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion $GEM_HOME/gems/${gemName}-${version}/completion/tmuxinator.{bash,zsh,fish}
+  '';
+
   meta = with lib; {
     description = "Manage complex tmux sessions easily";
-    homepage    = https://github.com/tmuxinator/tmuxinator;
+    homepage    = "https://github.com/tmuxinator/tmuxinator";
     license     = licenses.mit;
     maintainers = with maintainers; [ auntie ericsagnes ];
     platforms   = platforms.unix;

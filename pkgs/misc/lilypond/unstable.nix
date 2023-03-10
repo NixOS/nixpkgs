@@ -1,27 +1,14 @@
-{ stdenv, fetchgit, lilypond, ghostscript, gyre-fonts }:
+{ lib, fetchurl, lilypond }:
 
-let
-
-  version = "2.19.83";
-
-in
-
-lilypond.overrideAttrs (oldAttrs: {
-  inherit version;
-
-  src = fetchgit {
-    url = "https://git.savannah.gnu.org/r/lilypond.git";
-    rev = "release/${version}-1";
-    sha256 = "1ycyx9x76d79jh7wlwyyhdjkyrwnhzqpw006xn2fk35s0jrm2iz0";
+lilypond.overrideAttrs (oldAttrs: rec {
+  version = "2.25.1";
+  src = fetchurl {
+    url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
+    sha256 = "sha256-DchY+4+bWIvTZb4v9q/fAqStkbsxHhvty3eur0ZFYVs=";
   };
 
-  meta = oldAttrs.meta // {
-    broken = stdenv.isDarwin;
+  passthru.updateScript = {
+    command = [ ./update.sh "unstable" ];
+    supportedFeatures = [ "commit" ];
   };
-
-  configureFlags = [
-    "--disable-documentation"
-    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
-    "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
-  ];
 })

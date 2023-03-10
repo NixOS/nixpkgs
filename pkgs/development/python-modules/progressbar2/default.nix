@@ -1,45 +1,45 @@
-{ stdenv
-, python
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest
-, python-utils
-, sphinx
-, flake8
-, pytestpep8
-, pytest-flakes
-, pytestcov
-, pytestcache
-, pytestrunner
 , freezegun
+, pytestCheckHook
+, python-utils
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.47.0";
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7538d02045a1fd3aa2b2834bfda463da8755bd3ff050edc6c5ddff3bc616215f";
+    hash = "sha256-E5OSL8tkWYlErUV1afvrSzrBie9Qta25zvMoTofjlM4=";
   };
 
-  propagatedBuildInputs = [ python-utils ];
-  nativeBuildInputs = [ pytestrunner ];
-  checkInputs = [
-    pytest sphinx flake8 pytestpep8 pytest-flakes pytestcov
-    pytestcache freezegun
-  ];
-  # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} setup.py test --addopts "--ignore=.eggs"
-    runHook postCheck
+  postPatch = ''
+    sed -i "/-cov/d" pytest.ini
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://progressbar-2.readthedocs.io/en/latest/;
-    description = "Text progressbar library for python";
+  propagatedBuildInputs = [
+    python-utils
+  ];
+
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "progressbar"
+  ];
+
+  meta = with lib; {
+    description = "Text progressbar library";
+    homepage = "https://progressbar-2.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    maintainers = with maintainers; [ ashgillman turion ];
   };
 }

@@ -12,6 +12,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   # Added 2019-08-19
   imports = [
     (mkRenamedOptionModule
@@ -20,15 +24,13 @@ in
   ];
 
   options = {
-
-    programs.gnome-terminal.enable = mkEnableOption "GNOME Terminal";
-
+    programs.gnome-terminal.enable = mkEnableOption (lib.mdDoc "GNOME Terminal");
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.gnome3.gnome-terminal ];
-    services.dbus.packages = [ pkgs.gnome3.gnome-terminal ];
-    systemd.packages = [ pkgs.gnome3.gnome-terminal ];
+    environment.systemPackages = [ pkgs.gnome.gnome-terminal ];
+    services.dbus.packages = [ pkgs.gnome.gnome-terminal ];
+    systemd.packages = [ pkgs.gnome.gnome-terminal ];
 
     programs.bash.vteIntegration = true;
     programs.zsh.vteIntegration = true;

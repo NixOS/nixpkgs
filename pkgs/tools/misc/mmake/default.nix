@@ -1,31 +1,33 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mmake";
-  version = "1.2.0";
-
-  goPackagePath = "github.com/tj/mmake";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "tj";
     repo = "mmake";
     rev = "v${version}";
-    sha256 = "1pyqgk04v0f7a28cwq9c40bd2cgrkrv4wqcijdzpgn4bqhrqab4f";
+    sha256 = "sha256-JPsVfLIl06PJ8Nsfu7ogwrttB1G93HTKbZFqUTSV9O8=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-0z+sujzzBl/rtzXbhL4Os+jYfLUuO9PlXshUDxAH9DU=";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tj/mmake;
+  ldflags = [ "-s" "-w" ];
+
+  # Almost all tests require non-local networking, trying to resolve githubusercontent.com.
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = "https://github.com/tj/mmake";
     description = "A small program  which wraps make to provide additional functionality";
     longDescription = ''
       Mmake is a small program  which wraps make to provide additional
       functionality,  such   as  user-friendly  help   output,  remote
       includes,  and   eventually  more.   It  otherwise  acts   as  a
       pass-through to standard make.
-      '';
+    '';
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = [ maintainers.gabesoft ];
   };
 }

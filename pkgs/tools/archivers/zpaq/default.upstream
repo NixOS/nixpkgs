@@ -1,6 +1,0 @@
-url http://mattmahoney.net/dc/zpaq.html
-version_link 'zpaq[0-9]+[.]zip'
-version "[^0-9]*([0-9]+)[^0-9]*" '\1'
-name zpaq
-attribute_name zpaq
-minimize_overwrite

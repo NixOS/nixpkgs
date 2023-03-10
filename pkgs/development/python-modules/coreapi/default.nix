@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
   django,
@@ -29,16 +29,16 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     cd ./tests
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Core API";
-    homepage = https://github.com/core-api/python-client;
+    homepage = "https://github.com/core-api/python-client";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
   };
 }

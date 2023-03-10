@@ -1,36 +1,63 @@
-{ stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, pcre
+, python3
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_45
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "1.90";
+  version = "2.10.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "10qqyvx44llbchwqjyipra0nzqqkb9majpp582ac55imc5b8sxa3";
+  src = fetchFromGitHub {
+    owner = "danmar";
+    repo = "cppcheck";
+    rev = version;
+    hash = "sha256-wr2O9EqDvHaMQwnjFLLtP1XxfUwFa/P6gGqYNNPVyaA=";
   };
 
-  buildInputs = [ pcre ];
-  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
+  buildInputs = [ pcre (python3.withPackages (ps: [ps.pygments])) ];
+  nativeBuildInputs = [ installShellFiles libxslt docbook_xsl docbook_xml_dtd_45 which ];
 
-  makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ];
+  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
 
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postBuild = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
-    mkdir -p $man/share/man/man1
-    cp cppcheck.1 $man/share/man/man1/cppcheck.1
   '';
 
-  meta = with stdenv.lib; {
+  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+
+  postInstall = ''
+    installManPage cppcheck.1
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'int main() {}' > ./installcheck.cpp
+    $out/bin/cppcheck ./installcheck.cpp > /dev/null
+
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     description = "A static analysis tool for C/C++ code";
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
-    homepage = http://cppcheck.sourceforge.net/;
+    homepage = "http://cppcheck.sourceforge.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ joachifm ];

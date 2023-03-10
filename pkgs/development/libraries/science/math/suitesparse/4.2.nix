@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, gfortran, openblas }:
+{ lib, stdenv, fetchurl, gfortran, blas, lapack }:
 
 let
-  int_t = if openblas.blas64 then "int64_t" else "int32_t";
+  int_t = if blas.isILP64 then "int64_t" else "int32_t";
 in
 stdenv.mkDerivation rec {
   version = "4.2.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ openblas ];
+  buildInputs = [ blas lapack ];
 
   preConfigure = ''
     mkdir -p $out/lib
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     "PREFIX=\"$(out)\""
     "INSTALL_LIB=$(out)/lib"
     "INSTALL_INCLUDE=$(out)/include"
-    "BLAS=-lopenblas"
-    "LAPACK="
+    "BLAS=-lblas"
+    "LAPACK=-llapack"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;
+  meta = with lib; {
+    homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "A suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];

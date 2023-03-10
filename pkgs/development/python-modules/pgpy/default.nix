@@ -1,48 +1,49 @@
-{ lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch
-, fetchPypi
-, gpgme, flake8, pytest, pytestcov, pep8-naming, pytest-ordering }:
+{ lib
+, pythonOlder
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, pyasn1
+, cryptography
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pgpy";
-  version = "0.5.2";
+  version = "0.6.0";
+
+  disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SecurityInnovation";
     repo = "PGPy";
-    rev = version;
-    sha256 = "1v2b1dyq1sl48d2gw7vn4hv6sasd9ihpzzcq8yvxj9dgfak2y663";
+    rev = "v${version}";
+    hash = "sha256-47YiHNxmjyCOYHHUV3Zyhs3Att9HZtCXYfbN34ooTxU=";
   };
 
-  propagatedBuildInputs = [
-    six
-    pyasn1
-    cryptography
-    singledispatch
-  ] ++ lib.optional (!isPy3k) enum34;
-
-  checkInputs = [
-    gpgme
-    flake8
-    pytest
-    pytestcov
-    pep8-naming
-    pytest-ordering
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  propagatedBuildInputs = [
+    pyasn1
+    cryptography
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/SecurityInnovation/PGPy;
-    description = "Pretty Good Privacy for Python 2 and 3";
+    homepage = "https://github.com/SecurityInnovation/PGPy";
+    description = "Pretty Good Privacy for Python";
     longDescription = ''
-      PGPy is a Python (2 and 3) library for implementing Pretty Good Privacy
-      into Python programs, conforming to the OpenPGP specification per RFC
-      4880.
+      PGPy is a Python library for implementing Pretty Good Privacy into Python
+      programs, conforming to the OpenPGP specification per RFC 4880.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu dotlambda ];
   };
 }

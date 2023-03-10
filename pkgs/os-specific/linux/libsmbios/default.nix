@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, help2man, gettext
-, libxml2, perl, python3, doxygen }:
-
+{ lib, stdenv, fetchFromGitHub, fetchurl
+, pkg-config, autoreconfHook, help2man, gettext, libxml2, perl, python3, doxygen
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsmbios";
@@ -13,7 +13,15 @@ stdenv.mkDerivation rec {
     sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 
-  nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkgconfig ];
+  patches = [
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/libsmbios/fixes.patch?id=bdc4f67889c958c1266fa5d0cab71c3cd639122f";
+      sha256 = "aVVc52OovDYvqWRyKcRAi62daa9AalkKvnVOGvrTmRk=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkg-config ];
 
   buildInputs = [ python3 ];
 
@@ -29,8 +37,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dell/libsmbios;
+  meta = with lib; {
+    homepage = "https://github.com/dell/libsmbios";
     description = "A library to obtain BIOS information";
     license = with licenses; [ osl21 gpl2Plus ];
     maintainers = with maintainers; [ ];

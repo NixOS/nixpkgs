@@ -1,17 +1,42 @@
-{ stdenv, fetchzip, perl, python, gnuplot, coreutils, gnugrep }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, perl
+, python3
+, gnuplot
+, coreutils
+, gnugrep
+}:
 
 stdenv.mkDerivation rec {
   pname = "gitstats";
   version = "2016-01-08";
 
   # upstream does not make releases
-  src = fetchzip {
-    url = "https://github.com/hoxu/gitstats/archive/55c5c285558c410bb35ebf421245d320ab9ee9fa.zip";
-    sha256 = "1bfcwhksylrpm88vyp33qjby4js31zcxy7w368dzjv4il3fh2i59";
-    name = "${pname}-${version}" + "-src";
+  src = fetchFromGitHub {
+    owner = "hoxu";
+    repo = "gitstats";
+    rev = "55c5c285558c410bb35ebf421245d320ab9ee9fa";
+    sha256 = "sha256-qUQB3aCRbPkbMoMf39kPQ0vil8RjXL8RqjdTryfkzK0=";
   };
 
-  buildInputs = [ perl python ];
+  patches = [
+    # make gitstats compatible with python3
+    # https://github.com/hoxu/gitstats/pull/105
+    (fetchpatch {
+      name = "convert-gitstats-to-use-python3.patch";
+      url = "https://github.com/hoxu/gitstats/commit/ca415668ce6b739ca9fefba6acd29c63b89f4211.patch";
+      hash = "sha256-sgjoj8eQ5CxQBffmhqymsmXb8peuaSbfFoWciLK3LOo=";
+    })
+  ];
+
+  nativeBuildInputs = [ installShellFiles perl ];
+
+  buildInputs = [ python3 ];
+
+  strictDeps = true;
 
   postPatch = ''
     sed -e "s|gnuplot_cmd = .*|gnuplot_cmd = '${gnuplot}/bin/gnuplot'|" \
@@ -20,20 +45,22 @@ stdenv.mkDerivation rec {
         -i gitstats
   '';
 
-  buildPhase = ''
-    make man VERSION="${version}"
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=${version}"
+  ];
+
+  buildFlags = [ "man" ];
+
+  postInstall = ''
+    installManPage doc/gitstats.1
   '';
 
-  installPhase = ''
-    make install PREFIX="$out" VERSION="${version}"
-    install -Dm644 doc/gitstats.1 "$out"/share/man/man1/gitstats.1
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://gitstats.sourceforge.net/;
+  meta = with lib; {
+    homepage = "https://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

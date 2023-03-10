@@ -1,29 +1,30 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, expat
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
 , libmicrohttpd
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "stabber-unstable";
-  version = "2016-11-09";
+  version = "2020-06-08";
 
   src = fetchFromGitHub {
     owner = "boothj5";
     repo = "stabber";
-    rev = "ed75087e4483233eb2cc5472dbd85ddfb7a1d4d4";
-    sha256 = "1l6cibggi9rx6d26j1g92r1m8zm1g899f6z7n4pfqp84mrfqgz0p";
+    rev = "3e5c2200715666aad403d0076e8ab584b329965e";
+    sha256 = "0042nbgagl4gcxa5fj7bikjdi1gbk0jwyqnzc5lswpb0l5y0i1ql";
   };
 
   preAutoreconf = ''
     mkdir m4
   '';
 
-  buildInputs = [ autoreconfHook pkgconfig glib expat libmicrohttpd ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs = [ glib expat libmicrohttpd ];
 
   meta = {
     description = "Stubbed XMPP Server";
-    homepage = https://github.com/boothj5/stabber;
+    homepage = "https://github.com/profanity-im/stabber";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ hschaeidt ];

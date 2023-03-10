@@ -1,21 +1,25 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "kt";
-  version = "12.1.0";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "fgeller";
     repo = "kt";
     rev = "v${version}";
-    sha256 = "014q39bg88vg1xdq1bz6wj982zb148sip3a42hbrinh8qj41y4yg";
+    sha256 = "sha256-1UGsiMMmAyIQZ62hNIi0uzyX2uNL03EWupIazjznqDc=";
   };
 
-  goPackagePath = "github.com/fgeller/kt";
+  vendorSha256 = "sha256-PeNpDro6G78KLN6B2CDhsTKamRTWQyxPJYWuuv6sUyw=";
 
-  meta = with stdenv.lib; {
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
+
+  meta = with lib; {
     description = "Kafka command line tool";
-    homepage = https://github.com/fgeller/kt;
+    homepage = "https://github.com/fgeller/kt";
     maintainers = with maintainers; [ utdemir ];
     platforms = with platforms; unix;
     license = licenses.mit;

@@ -1,21 +1,19 @@
 { stdenv, fetchurl, lib, file
-, pkgconfig
-, gtkVersion ? "3", gtk2 ? null, gtk3 ? null }:
-
-with lib;
+, pkg-config, glib
+, gtkVersion ? "3", gtk2, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "libindicator-gtk${gtkVersion}-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "1";
+  pname = "libindicator-gtk${gtkVersion}";
+  version = "12.10.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libindicator-${version}.tar.gz";
+    url = "https://launchpad.net/libindicator/${lib.versions.majorMinor version}/${version}/+download/libindicator-${version}.tar.gz";
     sha256 = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config glib ];
 
   buildInputs = [ (if gtkVersion == "2" then gtk2 else gtk3) ];
 
@@ -42,9 +40,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 8 out of 8 tests
 
-  meta = {
+  meta = with lib; {
     description = "A set of symbols and convenience functions for Ayatana indicators";
-    homepage = https://launchpad.net/libindicator;
+    homepage = "https://launchpad.net/libindicator";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

@@ -13,39 +13,39 @@ set -u
 
 # https://salsa.debian.org/grub-team/grub-legacy/tree/master/debian/patches
 SERIES=(
-	snapshot.patch
-	menu.lst_gnu-hurd.patch
-	graphics.patch
-	raid.patch
-	raid_cciss.patch
-	xfs_freeze.patch
-	2gb_limit.patch
-	grub-special_device_names.patch
-	grub-xvd_drives.patch
-	initrd_max_address.patch
-	splashimage_help.patch
-	grub-install_addsyncs.patch
-	grub-install_regexp.patch
-	grub-install_aoe_support.patch
-	grub-install_xvd.patch
-	geometry-26kernel.patch
-	print_func.patch
-	mprotect.patch
-	savedefault.patch
-	find-grub-dir.patch
-	intelmac.patch
-	crossreference_manpages.patch
-	ext3_256byte_inode.patch
+    snapshot.patch
+    menu.lst_gnu-hurd.patch
+    graphics.patch
+    raid.patch
+    raid_cciss.patch
+    xfs_freeze.patch
+    2gb_limit.patch
+    grub-special_device_names.patch
+    grub-xvd_drives.patch
+    initrd_max_address.patch
+    splashimage_help.patch
+    grub-install_addsyncs.patch
+    grub-install_regexp.patch
+    grub-install_aoe_support.patch
+    grub-install_xvd.patch
+    geometry-26kernel.patch
+    print_func.patch
+    mprotect.patch
+    savedefault.patch
+    find-grub-dir.patch
+    intelmac.patch
+    crossreference_manpages.patch
+    ext3_256byte_inode.patch
     # Breaks on NixOS.
-	#use_grub-probe_in_grub-install.patch
-	objcopy-absolute.patch
-	no-reorder-functions.patch
+    #use_grub-probe_in_grub-install.patch
+    objcopy-absolute.patch
+    no-reorder-functions.patch
 
-	# We aren't building amd64 binaries, see #244498
-	#fix_amd64_compile.patch
-	modern-automake.patch
-	no-combine-stack-adjustments.patch
-	no-pie.patch
+    # We aren't building amd64 binaries, see #244498
+    #fix_amd64_compile.patch
+    modern-automake.patch
+    no-combine-stack-adjustments.patch
+    no-pie.patch
 )
 
 # Revision mapping to current tip of the 0.97-73 branch.
@@ -63,8 +63,8 @@ in
 EOF
 
 for PATCH in "${SERIES[@]}"; do
-	URL="$prefix/$PATCH"
-	HASH="$(nix-prefetch-url "$URL")"
-	echo "{ url = \"\${prefix}/$PATCH\"; sha256 = \"$HASH\"; }" >> "$FILE"
+    URL="$prefix/$PATCH"
+    HASH="$(nix-prefetch-url "$URL")"
+    echo "{ url = \"\${prefix}/$PATCH\"; sha256 = \"$HASH\"; }" >> "$FILE"
 done
 echo "]" >> "$FILE"

@@ -1,38 +1,57 @@
-{lib, buildPythonPackage, fetchPypi, isPy3k, incremental, ipaddress, twisted
-, automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
-, GeoIP, isPy27}:
+{ lib
+, stdenv
+, automat
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, GeoIP
+, idna
+, incremental
+, lsof
+, mock
+, pyopenssl
+, pytestCheckHook
+, python
+, pythonOlder
+, service-identity
+, twisted
+, zope_interface
+}:
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "19.1.0";
+  version = "23.0.0";
+  format = "setuptools";
 
-  checkInputs = [ pytest mock lsof GeoIP ];
-  propagatedBuildInputs = [
-    incremental twisted automat zope_interface
-    # extra dependencies required by twisted[tls]
-    idna pyopenssl service-identity
-  ] ++ lib.optionals (!isPy3k) [ ipaddress ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19ayn5w9ayxbb1m84l1s9qlb6kv7sz6sg34mzy8bnidc7qnfbn15";
+    hash = "sha256-AiX/rWdokTeEmtmtNK21abDYj5rwRQMABnpfkB6ZQyU=";
   };
 
-  # zope.interface issue
-  doCheck = isPy3k;
-  # Skip a failing test until fixed upstream:
-  # https://github.com/meejah/txtorcon/issues/250
-  checkPhase = ''
-    pytest --ignore=test/test_util.py .
-  '';
+  propagatedBuildInputs = [
+    cryptography
+    incremental
+    twisted
+    automat
+    zope_interface
+  ] ++ twisted.optional-dependencies.tls;
 
-  meta = {
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    lsof
+    GeoIP
+  ];
+
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  meta = with lib; {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
-    homepage = https://github.com/meejah/txtorcon;
-    maintainers = with lib.maintainers; [ jluttine ];
-    # Currently broken on Python 2.7. See
-    # https://github.com/NixOS/nixpkgs/issues/71826
-    broken = isPy27;
-    license = lib.licenses.mit;
+    homepage = "https://github.com/meejah/txtorcon";
+    changelog = "https://github.com/meejah/txtorcon/releases/tag/v${version}";
+    maintainers = with maintainers; [ jluttine exarkun ];
+    license = licenses.mit;
   };
 }

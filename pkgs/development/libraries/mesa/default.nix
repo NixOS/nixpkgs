@@ -1,16 +1,77 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, pkgconfig, intltool, ninja, meson
-, file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
+{ stdenv, lib, fetchurl
+, meson, pkg-config, ninja
+, intltool, bison, flex, file, python3Packages, wayland-scanner
+, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, python3Packages
-, libglvnd
-, enableRadv ? true
-, galliumDrivers ? ["auto"]
-, driDrivers ? ["auto"]
-, vulkanDrivers ? ["auto"]
-, eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
+, libelf, libvdpau
+, libglvnd, libunwind
+, vulkan-loader, glslang
+, galliumDrivers ?
+  if stdenv.isLinux then
+    [
+      "d3d12" # WSL emulated GPU (aka Dozen)
+      "kmsro" # helper driver for display-only devices
+      "nouveau" # Nvidia
+      "radeonsi" # new AMD (GCN+)
+      "r300" # very old AMD
+      "r600" # less old AMD
+      "swrast" # software renderer (aka LLVMPipe)
+      "svga" # VMWare virtualized GPU
+      "virgl" # QEMU virtualized GPU (aka VirGL)
+      "zink" # generic OpenGL over Vulkan, experimental
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "lima" # ARM Mali 4xx
+      "panfrost" # ARM Mali Midgard and up (T/G series)
+      "tegra" # Nvidia Tegra SoCs
+      "v3d" # Broadcom VC5 (Raspberry Pi 4)
+      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+      "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
+      "crocus" # Intel legacy, x86 only
+    ]
+  else [ "auto" ]
+, vulkanDrivers ?
+  if stdenv.isLinux then
+    [
+      "amd" # AMD (aka RADV)
+      "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
+      "swrast" # software renderer (aka Lavapipe)
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
+      # QEMU virtualized GPU (aka VirGL)
+      # Requires ATOMIC_INT_LOCK_FREE == 2.
+      "virtio-experimental"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "imagination-experimental" # PowerVR Rogue (currently N/A)
+      "panfrost" # ARM Mali Midgard and up (T/G series)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [
+      "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
+      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
+    ]
+  else [ "auto" ]
+, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
+, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
-, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
+, enableGalliumNine ? stdenv.isLinux
+, enableOSMesa ? stdenv.isLinux
+, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, enablePatentEncumberedCodecs ? true
+, libclc
+, jdupes
+, rustc
+, rust-bindgen
+, spirv-llvm-translator
+, zstd
+, directx-headers
+, udev
 }:
 
 /** Packaging design:
@@ -24,60 +85,88 @@
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with stdenv.lib;
-
 let
-  version = "19.3.3";
-  branch  = versions.major version;
-in
+  # Release calendar: https://www.mesa3d.org/release-calendar.html
+  # Release frequency: https://www.mesa3d.org/releasing.html#schedule
+  version = "22.3.5";
+  branch  = lib.versions.major version;
 
-stdenv.mkDerivation {
+  withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
+
+  # Align all the Mesa versions used. Required to prevent explosions when
+  # two different LLVMs are loaded in the same process.
+  # FIXME: these should really go into some sort of versioned LLVM package set
+  rust-bindgen' = rust-bindgen.override {
+    rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
+      clang = llvmPackages.clang;
+    };
+  };
+  spirv-llvm-translator' = spirv-llvm-translator.override {
+    inherit (llvmPackages) llvm;
+  };
+
+  haveWayland = lib.elem "wayland" eglPlatforms;
+  haveZink = lib.elem "zink" galliumDrivers;
+  haveDozen = (lib.elem "d3d12" galliumDrivers) || (lib.elem "microsoft-experimental" vulkanDrivers);
+self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
 
   src = fetchurl {
     urls = [
+      "https://archive.mesa3d.org/mesa-${version}.tar.xz"
+      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
-      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "02czqdqf64i3az5p1allnxycyjad3x35cj0hz0017mi5pc84ikl1";
+    sha256 = "3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9";
   };
-
-  prePatch = "patchShebangs .";
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
-    ./opencl-install-dir.patch
+    # fixes pkgsMusl.mesa build
+    ./musl.patch
+
+    ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] # do not prefix user provided dri-drivers-path
-    ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
-      sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";
-    })
-    ++ lib.optionals (lib.versionOlder version "19.1.0") [
-      # do not prefix user provided d3d-drivers-path
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/dcc48664197c7e44684ccfb970a4ae083974d145.patch";
-        sha256 = "1nhs0xpx3hiy8zfb5gx1zd7j7xha6h0hr7yingm93130a5902lkb";
-      })
+  ];
 
-      # don't build libGLES*.so with GLVND
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/b01524fff05eef66e8cd24f1c5aacefed4209f03.patch";
-        sha256 = "1pszr6acx2xw469zq89n156p3bf3xf84qpbjw5fr1sj642lbyh7c";
-      })
-    ];
+  postPatch = ''
+    patchShebangs .
 
-  outputs = [ "out" "dev" "drivers" "osmesa" ];
+    # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
+    substituteInPlace src/util/xmlconfig.c --replace \
+      'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
+    substituteInPlace src/util/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}/share'"
+    substituteInPlace src/amd/vulkan/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}/share'"
+  '';
+
+  outputs = [ "out" "dev" "drivers" ]
+    ++ lib.optional enableOSMesa "osmesa"
+    ++ lib.optional stdenv.isLinux "driversdev"
+    ++ lib.optional enableOpenCL "opencl"
+    # the Dozen drivers depend on libspirv2dxil, but link it statically, and
+    # libspirv2dxil itself is pretty chonky, so relocate it to its own output
+    # in case anything wants to use it at some point
+    ++ lib.optional haveDozen "spirv2dxil";
+
+  # FIXME: this fixes rusticl/iris segfaulting on startup, _somehow_.
+  # Needs more investigating.
+  separateDebugInfo = true;
+
+  preConfigure = ''
+    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '';
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
     "--sysconfdir=/etc"
+    "--datadir=${placeholder "drivers"}/share" # Vendor files
 
     # Don't build in debug mode
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
@@ -86,66 +175,86 @@ stdenv.mkDerivation {
     "-Ddisk-cache-key=${placeholder "drivers"}"
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
-    "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Ddri-drivers=${concatStringsSep "," driDrivers}"
-    "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
-    "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
+    "-Dplatforms=${lib.concatStringsSep "," eglPlatforms}"
+    "-Dgallium-drivers=${lib.concatStringsSep "," galliumDrivers}"
+    "-Dvulkan-drivers=${lib.concatStringsSep "," vulkanDrivers}"
 
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
-    "-Dxvmc-libs-path=${placeholder "drivers"}/lib"
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
-  ] ++ optionals stdenv.isLinux [
+
+    "-Dgallium-nine=${lib.boolToString enableGalliumNine}" # Direct3D in Wine
+    "-Dosmesa=${lib.boolToString enableOSMesa}" # used by wine
+    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+
+    # To enable non-mesa gbm backends to be found (e.g. Nvidia)
+    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
+  ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
-    "-Dosmesa=gallium" # used by wine
-    "-Dgallium-nine=true" # Direct3D in Wine
-  ];
+
+    # Enable RT for Intel hardware
+    "-Dintel-clc=enabled"
+  ] ++ lib.optionals enableOpenCL [
+    # Clover, old OpenCL frontend
+    "-Dgallium-opencl=icd"
+    "-Dopencl-spirv=true"
+
+    # Rusticl, new OpenCL frontend
+    "-Dgallium-rusticl=true" "-Drust_std=2021"
+    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
+  ] ++ lib.optional enablePatentEncumberedCodecs
+    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
+  ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd xorgproto
+    expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-  ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
-    ++ lib.optional withValgrind valgrind-light;
+    zstd
+  ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev ]
+    ++ lib.optionals stdenv.isDarwin [ libunwind ]
+    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
+    ++ lib.optional withValgrind valgrind-light
+    ++ lib.optional haveZink vulkan-loader
+    ++ lib.optional haveDozen directx-headers;
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja
+    meson pkg-config ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako
-  ];
+    python3Packages.python python3Packages.Mako python3Packages.ply
+    jdupes glslang
+  ] ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
-  ] ++ optional stdenv.isLinux libdrm
-    ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
+  ] ++ lib.optional withLibdrm libdrm
+    ++ lib.optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
-  enableParallelBuilding = true;
   doCheck = false;
 
   postInstall = ''
     # Some installs don't have any drivers so this directory is never created.
     mkdir -p $drivers $osmesa
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $drivers/lib
 
-    # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
-    mv -t $drivers/lib       \
-      $out/lib/libxatracker* \
-      $out/lib/libvulkan_*
+    if [ -n "$(shopt -s nullglob; echo "$out/lib/libxatracker"*)" -o -n "$(shopt -s nullglob; echo "$out/lib/libvulkan_"*)" ]; then
+      # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
+      mv -t $drivers/lib       \
+        $out/lib/libxatracker* \
+        $out/lib/libvulkan_*
+    fi
 
-    # Move other drivers to a separate output
-    mv $out/lib/lib*_mesa* $drivers/lib
-
-    # move libOSMesa to $osmesa, as it's relatively big
-    mkdir -p $osmesa/lib
-    mv -t $osmesa/lib/ $out/lib/libOSMesa*
-
-    # move vendor files
-    mv $out/share/ $drivers/
+    if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
+      # Move other drivers to a separate output
+      mv -t $drivers/lib $out/lib/lib*_mesa*
+    fi
 
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
@@ -157,22 +266,53 @@ stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
+  '' + lib.optionalString enableOpenCL ''
+    # Move OpenCL stuff
+    mkdir -p $opencl/lib
+    mv -t "$opencl/lib/"     \
+      $out/lib/gallium-pipe   \
+      $out/lib/lib*OpenCL*
+
+    # We construct our own .icd files that contain absolute paths.
+    mkdir -p $opencl/etc/OpenCL/vendors/
+    echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
+    echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
+  '' + lib.optionalString enableOSMesa ''
+    # move libOSMesa to $osmesa, as it's relatively big
+    mkdir -p $osmesa/lib
+    mv -t $osmesa/lib/ $out/lib/libOSMesa*
+  '' + lib.optionalString (vulkanLayers != []) ''
+    mv -t $drivers/lib $out/lib/libVkLayer*
+    for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
+      substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
+    done
+  '' + lib.optionalString haveDozen ''
+    mkdir -p $spirv2dxil/{bin,lib}
+    mv -t $spirv2dxil/lib $out/lib/libspirv_to_dxil*
+    mv -t $spirv2dxil/bin $out/bin/spirv2dxil
   '';
 
-  # TODO:
-  #  check $out doesn't depend on llvm: builder failures are ignored
-  #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
-  postFixup = optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
+    [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
-    # Update search path used by pkg-config
-    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
-      substituteInPlace "$pc" --replace $out $drivers
+    # Move development files for libraries in $drivers to $driversdev
+    mkdir -p $driversdev/include
+    mv $dev/include/xa_* $dev/include/d3d* -t $driversdev/include || true
+    mkdir -p $driversdev/lib/pkgconfig
+    for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
+      if [ -f "$dev/$pc" ]; then
+        substituteInPlace "$dev/$pc" --replace $out $drivers
+        mv $dev/$pc $driversdev/$pc
+      fi
     done
+
+    # NAR doesn't support hard links, so convert them to symlinks to save space.
+    jdupes --hard-links --link-soft --recurse "$drivers"
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files
@@ -183,18 +323,45 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+    "-UPIPE_SEARCH_DIR"
+    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+  ]);
 
   passthru = {
-    inherit libdrm;
     inherit (libglvnd) driverLink;
+    inherit llvmPackages;
+
+    libdrm = if withLibdrm then libdrm else null;
+
+    tests = lib.optionalAttrs stdenv.isLinux {
+      devDoesNotDependOnLLVM = stdenv.mkDerivation {
+        name = "mesa-dev-does-not-depend-on-llvm";
+        buildCommand = ''
+          echo ${self.dev} >>$out
+        '';
+        disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+      };
+    };
   };
 
-  meta = with stdenv.lib; {
-    description = "An open source implementation of OpenGL";
-    homepage = https://www.mesa3d.org/;
+  meta = with lib; {
+    description = "An open source 3D graphics library";
+    longDescription = ''
+      The Mesa project began as an open-source implementation of the OpenGL
+      specification - a system for rendering interactive 3D graphics. Over the
+      years the project has grown to implement more graphics APIs, including
+      OpenGL ES (versions 1, 2, 3), OpenCL, OpenMAX, VDPAU, VA API, XvMC, and
+      Vulkan.  A variety of device drivers allows the Mesa libraries to be used
+      in many different environments ranging from software emulation to
+      complete hardware acceleration for modern GPUs.
+    '';
+    homepage = "https://www.mesa3d.org/";
+    changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ vcunat ];
+    maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
-}
+};
+
+in self

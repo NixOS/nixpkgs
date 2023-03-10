@@ -1,32 +1,42 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file, libuv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4, lxd }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.9.6";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
-    rev = "v${version}";
-    sha256 = "083il7b5kw3pc7m5p9xjpb9dlvfarc51sni92mkgm9ckc32x9vpp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P6IYl6xcsqXw1ilt6HYw757FL2syy1XePBVGbPAlz6Q=";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkgconfig ];
-  buildInputs = [ libuv ];
+  nativeBuildInputs = [ autoreconfHook file pkg-config ];
+  buildInputs = [ libuv lz4 ];
+
+  enableParallelBuilding = true;
+
+  patches = [
+    # network tests either hang indefinitely, or fail outright
+    ./disable-net-tests.patch
+
+    # missing dir check is flaky
+    ./disable-missing-dir-test.patch
+  ];
 
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/ " "
   '';
 
-  doCheck = false;
-  # Due to
-  #io_uv_recv/success/first                                    [ ERROR ]
-  #Error: test/lib/dir.c:97: No such file or directory
-  #Error: child killed by signal 6 (Aborted)
+  doCheck = true;
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit lxd;
+  };
+
+  meta = with lib; {
     description = ''
       Fully asynchronous C implementation of the Raft consensus protocol
     '';
@@ -39,6 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
-    maintainers = [ maintainers.wucke13 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wucke13 adamcstephens ];
   };
 }

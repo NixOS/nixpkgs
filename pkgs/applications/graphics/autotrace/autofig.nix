@@ -1,7 +1,8 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "autofig-0.1";
+  pname = "autofig";
+  version = "0.1";
 
   src = fetchurl {
     url = "http://autotrace.sourceforge.net/tools/autofig.tar.gz";

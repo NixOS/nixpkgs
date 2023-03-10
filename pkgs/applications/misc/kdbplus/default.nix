@@ -1,9 +1,9 @@
-{ stdenv, requireFile, unzip, rlwrap, bash, zlib }:
+{ lib, stdenv, requireFile, unzip, rlwrap, bash, zlib }:
 
 assert (stdenv.hostPlatform.system == "i686-linux");
 
 let
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.libc stdenv.cc.cc zlib ];
 in
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   dontStrip = true;
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   phases = "unpackPhase installPhase";
   unpackPhase = "mkdir ${pname}-${version} && cd ${pname}-${version} && unzip -qq ${src}";
@@ -68,8 +68,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Analytics and time-series database";
     homepage    = "http://www.kx.com/";
-    license     = stdenv.lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license     = lib.licenses.unfree;
     platforms   = [ "i686-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

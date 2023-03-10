@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 let
   generic = { patches ? [] }:
@@ -17,8 +17,8 @@ let
 
       inherit patches;
 
-      meta = with stdenv.lib; {
-        homepage = https://cfssl.org/;
+      meta = with lib; {
+        homepage = "https://cfssl.org/";
         description = "Cloudflare's certificate manager";
         platforms = platforms.linux;
         license = licenses.bsd2;

@@ -1,28 +1,51 @@
-{ lib, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl, runtimeShell
+, openssl, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "0.8.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
-    owner = "kha";
+    owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0n2ncssjcmp3x5kbnci7xbq5fgcihlr3vaglyhhwzrxkjy2vpmpd";
+    sha256 = "1aq06d66y622n0bbd57dx8s0ajz6cdv1vzaz25wvi4i62sg4x21x";
   };
 
-  cargoSha256 = "1pkg0n7kxckr0zhr8dr12b9fxg5q185kj3r9k2rmnkj2dpa2mxh3";
+  cargoSha256 = "sha256-RzeewQzsV5F5E0xwJF1MpzzQ8usyfQjzlDInOJqZdO8=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [ curl zlib openssl ];
+  OPENSSL_NO_VENDOR = 1;
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  buildFeatures = [ "no-self-update" ];
+
+  patches = lib.optionals stdenv.isLinux [
+    # Run patchelf on the downloaded binaries.
+    # This is necessary because Lean 4 is now dynamically linked.
+    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+        CC = stdenv.cc;
+        cc = "${stdenv.cc}/bin/cc";
+        ar = "${stdenv.cc}/bin/ar";
+        patchelf = patchelf;
+        shell = runtimeShell;
+      } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var cc \
+       --subst-var ar \
+       --subst-var shell
+    '')
+  ];
 
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker leanc; do
+    for link in lean leanpkg leanchecker leanc leanmake lake; do
       ln -s elan $link
     done
     popd
@@ -37,7 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
-    homepage = "https://github.com/Kha/elan";
+    homepage = "https://github.com/leanprover/elan";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
   };

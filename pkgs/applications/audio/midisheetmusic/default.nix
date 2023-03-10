@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , mono, dotnetPackages, makeWrapper
 , gtk2, cups, timidity }:
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     sha256 = "05c6zskj50g29f51lx8fvgzsi3f31z01zj6ssjjrgr7jfs7ak70p";
   };
 
-  checkInputs = (with dotnetPackages; [ NUnitConsole ]);
+  nativeCheckInputs = (with dotnetPackages; [ NUnitConsole ]);
   nativeBuildInputs = [ mono makeWrapper ];
 
   buildPhase = ''
@@ -47,16 +47,16 @@ in stdenv.mkDerivation {
     cp bin/Debug/MidiSheetMusic.exe $out/bin/.MidiSheetMusic.exe
 
     makeWrapper ${mono}/bin/mono $out/bin/midisheetmusic.mono.exe \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ gtk2 cups ]} \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ timidity ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk2 cups ]} \
+      --prefix PATH : ${lib.makeBinPath [ timidity ]} \
       --add-flags $out/bin/.MidiSheetMusic.exe
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert MIDI Files to Piano Sheet Music for two hands";
-    homepage = http://midisheetmusic.com;
+    homepage = "http://midisheetmusic.com";
     license = licenses.gpl2;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,32 +1,39 @@
-{ buildPythonPackage
-, lib
+{ lib
+, aiosmtpd
+, buildPythonPackage
 , fetchPypi
-, requests
-, pytest
-, six
 , werkzeug
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.5.0";
+  version = "0.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a5427909d1dfda10772c1bae4b9803679c0a8f04adb66c338ac607773bfefc2";
+    sha256 = "sha256-8ZtJDHyh7QW/5LxrSQgRgFph5ycfBCTTwPpNQ4k6Xc0=";
   };
 
-  propagatedBuildInputs = [ werkzeug ];
-  checkInputs = [ pytest six requests ];
+  propagatedBuildInputs = [
+    aiosmtpd
+    werkzeug
+  ];
 
-  checkPhase = ''
-    pytest
-  '';
+  # all tests access network: does not work in sandbox
+  doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "pytest_localserver"
+  ];
+
+  meta = with lib; {
     description = "Plugin for the pytest testing framework to test server connections locally";
-    homepage = https://pypi.python.org/pypi/pytest-localserver;
-    license = lib.licenses.mit;
+    homepage = "https://github.com/pytest-dev/pytest-localserver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }
-

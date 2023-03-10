@@ -1,90 +1,106 @@
-# Builder for Agda packages. Mostly inspired by the cabal builder.
+# Builder for Agda packages.
 
-{ stdenv, Agda, glibcLocales
-, writeShellScriptBin
-, extension ? (self: super: {})
-}:
+{ stdenv, lib, self, Agda, runCommand, makeWrapper, writeText, ghcWithPackages, nixosTests }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
-  defaults = self : {
-    # There is no Hackage for Agda so we require src.
-    inherit (self) src name;
-
-    isAgdaPackage = true;
-
-    buildInputs = [ Agda ] ++ self.buildDepends;
-    buildDepends = [];
-
-    buildDependsAgda = stdenv.lib.filter
-      (dep: dep ? isAgdaPackage && dep.isAgdaPackage)
-      self.buildDepends;
-    buildDependsAgdaShareAgda = map (x: x + "/share/agda") self.buildDependsAgda;
-
-    # Not much choice here ;)
-    LANG = "en_US.UTF-8";
-    LOCALE_ARCHIVE = stdenv.lib.optionalString
-      stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
-
-    everythingFile = "Everything.agda";
-
-    propagatedBuildInputs = self.buildDependsAgda;
-    propagatedUserEnvPkgs = self.buildDependsAgda;
-
-    # Immediate source directories under which modules can be found.
-    sourceDirectories = [ ];
-
-    # This is used if we have a top-level element that only serves
-    # as the container for the source and we only care about its
-    # contents. The directories put here will have their
-    # *contents* copied over as opposed to sourceDirectories which
-    # would make a direct copy of the whole thing.
-    topSourceDirectories = [ "src" ];
-
-    # FIXME: `dirOf self.everythingFile` is what we really want, not hardcoded "./"
-    includeDirs = self.buildDependsAgdaShareAgda
-                  ++ self.sourceDirectories ++ self.topSourceDirectories
-                  ++ [ "." ];
-    buildFlags = stdenv.lib.concatMap (x: ["-i" x]) self.includeDirs;
-
-    agdaWithArgs = "${Agda}/bin/agda ${toString self.buildFlags}";
-
-    buildPhase = ''
-      runHook preBuild
-      ${self.agdaWithArgs} ${self.everythingFile}
-      runHook postBuild
+  withPackages' = {
+    pkgs,
+    ghc ? ghcWithPackages (p: with p; [ ieee754 ])
+  }: let
+    pkgs' = if builtins.isList pkgs then pkgs else pkgs self;
+    library-file = writeText "libraries" ''
+      ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
     '';
-
-    installPhase = let
-      srcFiles = self.sourceDirectories
-                 ++ map (x: x + "/*") self.topSourceDirectories;
-    in ''
-      runHook preInstall
-      mkdir -p $out/share/agda
-      cp -pR ${concatStringsSep " " srcFiles} $out/share/agda
-      runHook postInstall
-    '';
-
+    pname = "agdaWithPackages";
+    version = Agda.version;
+  in runCommand "${pname}-${version}" {
+    inherit pname version;
+    nativeBuildInputs = [ makeWrapper ];
     passthru = {
-      env = stdenv.mkDerivation {
-        name = "interactive-${self.name}";
-        inherit (self) LANG LOCALE_ARCHIVE;
-        AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDependsAgdaShareAgda;
-        buildInputs = let
-          # Makes a wrapper available to the user. Very useful in
-          # nix-shell where all dependencies are -i'd.
-          agdaWrapper = writeShellScriptBin "agda" ''
-            exec ${self.agdaWithArgs} "$@"
-          '';
-        in [agdaWrapper] ++ self.buildDepends;
+      unwrapped = Agda;
+      inherit withPackages;
+      tests = {
+        inherit (nixosTests) agda;
+        allPackages = withPackages (lib.filter self.lib.isUnbrokenAgdaPackage (lib.attrValues self));
       };
     };
-  };
+    inherit (Agda) meta;
+  } ''
+    mkdir -p $out/bin
+    makeWrapper ${Agda}/bin/agda $out/bin/agda \
+      --add-flags "--with-compiler=${ghc}/bin/ghc" \
+      --add-flags "--library-file=${library-file}" \
+      --add-flags "--local-interfaces"
+    ln -s ${Agda}/bin/agda-mode $out/bin/agda-mode
+    ''; # Local interfaces has been added for now: See https://github.com/agda/agda/issues/4526
+
+  withPackages = arg: if builtins.isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
+
+  extensions = [
+    "agda"
+    "agda-lib"
+    "agdai"
+    "lagda"
+    "lagda.md"
+    "lagda.org"
+    "lagda.rst"
+    "lagda.tex"
+  ];
+
+  defaults =
+    { pname
+    , meta
+    , buildInputs ? []
+    , everythingFile ? "./Everything.agda"
+    , includePaths ? []
+    , libraryName ? pname
+    , libraryFile ? "${libraryName}.agda-lib"
+    , buildPhase ? null
+    , installPhase ? null
+    , extraExtensions ? []
+    , ...
+    }: let
+      agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
+      includePathArgs = concatMapStrings (path: "-i" + path + " ") (includePaths ++ [(dirOf everythingFile)]);
+    in
+      {
+        inherit libraryName libraryFile;
+
+        isAgdaDerivation = true;
+
+        buildInputs = buildInputs ++ [ agdaWithArgs ];
+
+        buildPhase = if buildPhase != null then buildPhase else ''
+          runHook preBuild
+          agda ${includePathArgs} ${everythingFile}
+          runHook postBuild
+        '';
+
+        installPhase = if installPhase != null then installPhase else ''
+          runHook preInstall
+          mkdir -p $out
+          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          runHook postInstall
+        '';
+
+        # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
+        # we need to set LC_ALL to an UTF-8-supporting locale. However, on
+        # darwin, it seems that there is no standard such locale; luckily,
+        # the referenced issue doesn't seem to surface on darwin. Hence let's
+        # set this only on non-darwin.
+        LC_ALL = lib.optionalString (!stdenv.isDarwin) "C.UTF-8";
+
+        meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
+
+        # Retrieve all packages from the finished package set that have the current package as a dependency and build them
+        passthru.tests = with builtins;
+          lib.filterAttrs (name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)) self;
+      };
 in
-{ mkDerivation = args: let
-      super = defaults self // args self;
-      self  = super // extension self super;
-    in stdenv.mkDerivation self;
+{
+  mkDerivation = args: stdenv.mkDerivation (args // defaults args);
+
+  inherit withPackages withPackages';
 }

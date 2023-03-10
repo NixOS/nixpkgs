@@ -1,12 +1,12 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
 }:
 
 buildPythonPackage rec {
-  version = "1.3";
   pname = "scripttest";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # Tests are not included. See https://github.com/pypa/scripttest/issues/11
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for testing interactive command-line applications";
-    homepage = https://pypi.python.org/pypi/ScriptTest/;
+    homepage = "https://pypi.org/project/scripttest/";
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
-
 }

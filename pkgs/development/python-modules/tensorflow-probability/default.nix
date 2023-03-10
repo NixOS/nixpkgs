@@ -1,48 +1,60 @@
 { lib
+, stdenv
 , fetchFromGitHub
+, bazel_6
 , buildBazelPackage
 , buildPythonPackage
+, cctools
 , python
 , setuptools
 , wheel
+, absl-py
 , tensorflow
 , six
 , numpy
+, dm-tree
+, keras
 , decorator
 , cloudpickle
+, gast
 , hypothesis
 , scipy
+, pandas
+, mpmath
 , matplotlib
 , mock
 , pytest
 }:
 
 let
-  version = "0.7";
+  version = "0.19.0";
   pname = "tensorflow_probability";
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
     name = "${pname}-${version}-py2.py3-none-any.whl";
-
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "v${version}";
-      sha256 = "0sy9gmjcvmwciamqvd7kd9qw2wd7ksklk80815fsn7sj0wiqxjyd";
+      rev = "v" + version;
+      hash = "sha256-ZkQ20Qt/RF/leVP6Kc38tGgPz+C6lEuHvoL+s97oksE=";
     };
-
     nativeBuildInputs = [
       # needed to create the output wheel in installPhase
       python
       setuptools
       wheel
+      absl-py
+      tensorflow
     ];
 
+    bazel = bazel_6;
+
     bazelTarget = ":pip_pkg";
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "0135nxxvkmjzpd80r1g9fdkk9h62g0xlvp32g5zgk0hkma5kq0bx";
+      sha256 = "sha256-pST4R45mWC5j0ngkkRe+hmostaMploW0+BN3WKPt0t0=";
     };
 
     buildAttrs = {
@@ -75,36 +87,35 @@ in buildPythonPackage {
     numpy
     decorator
     cloudpickle
+    gast
+    dm-tree
+    keras
   ];
 
   # Listed here:
-  # https://github.com/tensorflow/probability/blob/f01d27a6f256430f03b14beb14d37def726cb257/testing/run_tests.sh#L58
-  checkInputs = [
+  # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
+  nativeCheckInputs = [
     hypothesis
     pytest
     scipy
+    pandas
+    mpmath
     matplotlib
     mock
   ];
 
-  # actual checks currently fail because for some reason
-  # tf.enable_eager_execution is called too late. Probably because upstream
-  # intents these tests to be run by bazel, not plain pytest.
-  # checkPhase = ''
-  #   # tests need to import from other test files
-  #   export PYTHONPATH="$PWD/tensorflow-probability:$PYTHONPATH"
-  #   py.test
-  # '';
+  # Ideally, we run unit tests with pytest, but in checkPhase, only the Bazel-build wheel is available.
+  # But it seems not guaranteed that running the tests with pytest will even work, see
+  # https://github.com/tensorflow/probability/blob/c2a10877feb2c4c06a4dc58281e69c37a11315b9/CONTRIBUTING.md?plain=1#L69
+  # Ideally, tests would be run using Bazel. For now, lets's do a...
 
   # sanity check
-  checkPhase = ''
-    python -c 'import tensorflow_probability'
-  '';
+  pythonImportsCheck = [ "tensorflow_probability" ];
 
   meta = with lib; {
     description = "Library for probabilistic reasoning and statistical analysis";
-    homepage = https://www.tensorflow.org/probability/;
+    homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [];  # This package is maintainerless.
   };
 }

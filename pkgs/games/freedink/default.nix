@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx
-, pkgconfig, intltool, fontconfig, libzip, zip, zlib }:
+{ lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx
+, pkg-config, intltool, fontconfig, libzip, zip, zlib }:
 
 let
   version = "1.08.20121209";
@@ -25,9 +25,11 @@ in stdenv.mkDerivation rec {
     sha256 = "19xximbcm6506kvpf3s0q96697kmzca3yrjdr6dgphklp33zqsqr";
   };
 
+  nativeBuildInputs = [ pkg-config intltool ];
+
   buildInputs = [
     SDL SDL_mixer SDL_image SDL_ttf SDL_gfx
-    pkgconfig intltool fontconfig libzip zip zlib
+    fontconfig libzip zip zlib
   ];
 
   preConfigure = ''
@@ -51,11 +53,11 @@ in stdenv.mkDerivation rec {
       with close compatibility, under multiple platforms.
     '';
 
-    homepage = http://www.freedink.org/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/freedink/"; # Formerly http://www.freedink.org
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
+    maintainers = [ ];
+    platforms = lib.platforms.all;
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 }

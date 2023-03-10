@@ -1,71 +1,113 @@
 { lib
+, arrow
+, azure-storage-blob
+, boto
 , buildPythonPackage
+, colour
+, email-validator
+, enum34
 , fetchPypi
-, nose
-, pillow
+, flask
+, flask-babelex
+, flask-mongoengine
+, flask-sqlalchemy
+, geoalchemy2
 , mongoengine
+, pillow
+, psycopg2
 , pymongo
-, wtf-peewee
+, pytestCheckHook
+, pythonOlder
+, shapely
 , sqlalchemy
 , sqlalchemy-citext
-, flask-mongoengine
-, flask_sqlalchemy
-, flask-babelex
-, shapely
-, geoalchemy2
-, psycopg2
-, flask
+, sqlalchemy-utils
+, wtf-peewee
 , wtforms
-, isPy27
-, enum34
 }:
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.5.3";
+  version = "1.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Flask-Admin";
     inherit version;
-    sha256 = "ca0be6ec11a6913b73f656c65c444ae5be416c57c75638dd3199376ce6bc7422";
+    hash = "sha256-Qk/8ebew3/8FFVVobqEuhuSN/6ysFL6qMZ+0UCrECYg=";
   };
-
-  checkInputs = [
-    nose
-    pillow
-    mongoengine
-    pymongo
-    wtf-peewee
-    sqlalchemy
-    sqlalchemy-citext
-    flask-mongoengine
-    flask_sqlalchemy
-    flask-babelex
-    shapely
-    geoalchemy2
-    psycopg2
-  ];
 
   propagatedBuildInputs = [
     flask
     wtforms
-  ] ++ lib.optionals isPy27 [ enum34 ];
+  ];
 
-  checkPhase = ''
-    # disable tests that require mongodb, postresql
-    nosetests \
-     -e "mongoengine" \
-     -e "pymongo" \
-     -e "test_form_upload" \
-     -e "test_postgres" \
-     -e "geoa" \
-     flask_admin/tests
-  '';
+  passthru.optional-dependencies = {
+    aws = [
+      boto
+    ];
+    azure = [
+      azure-storage-blob
+    ];
+  };
+
+  nativeCheckInputs = [
+    arrow
+    colour
+    email-validator
+    flask-babelex
+    flask-mongoengine
+    flask-sqlalchemy
+    geoalchemy2
+    mongoengine
+    pillow
+    psycopg2
+    pymongo
+    pytestCheckHook
+    shapely
+    sqlalchemy
+    sqlalchemy-citext
+    sqlalchemy-utils
+    wtf-peewee
+  ];
+
+  disabledTests = [
+    # Incompatible with werkzeug 2.1
+    "test_mockview"
+    # Tests are outdated and don't work with peewee
+    "test_nested_flask_views"
+    "test_export_csv"
+    "test_list_row_actions"
+    "test_column_editable_list"
+    "test_column_filters"
+    "test_export_csv"
+  ];
+
+  disabledTestPaths = [
+    # Tests have additional requirements
+    "flask_admin/tests/geoa/test_basic.py"
+    "flask_admin/tests/mongoengine/test_basic.py"
+    "flask_admin/tests/pymongo/test_basic.py"
+    "flask_admin/tests/sqla/test_basic.py"
+    "flask_admin/tests/sqla/test_form_rules.py"
+    "flask_admin/tests/sqla/test_inlineform.py"
+    "flask_admin/tests/sqla/test_postgres.py"
+    "flask_admin/tests/sqla/test_translation.py"
+    # RuntimeError: Working outside of application context.
+    "flask_admin/tests/sqla/test_multi_pk.py"
+  ];
+
+  pythonImportsCheck = [
+    "flask_admin"
+  ];
 
   meta = with lib; {
-    description = "Simple and extensible admin interface framework for Flask";
-    homepage = https://github.com/flask-admin/flask-admin/;
+    description = "Admin interface framework for Flask";
+    homepage = "https://github.com/flask-admin/flask-admin/";
+    changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

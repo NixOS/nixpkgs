@@ -1,21 +1,55 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, Security
+, autoreconfHook
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "4.3.0";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "1gd613k4qh9yhl0d8yh0flqn2cvm9qb5pp2p0khk31b1fh1p4vin";
+    hash = "sha256-sR/Gjk50kLej5oJzDH1I6/V+7OIRiwtyeg5tEE3fmHk=";
   };
 
-  configureFlags = [ "--enable-all" ];
+  postPatch = ''
+    patchShebangs ./scripts
+    # ocsp tests require network access
+    sed -i -e '/ocsp\.test/d' -e '/ocsp-stapling\.test/d' scripts/include.am
+    # ensure test detects musl-based systems too
+    substituteInPlace scripts/ocsp-stapling2.test \
+      --replace '"linux-gnu"' '"linux-"'
+  '';
 
-  outputs = [ "out" "dev" "doc" "lib" ];
+  # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
+  configureFlags = [
+    "--enable-all"
+    "--enable-base64encode"
+    "--enable-pkcs11"
+    "--enable-writedup"
+    "--enable-reproducible-build"
+    "--enable-tls13"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  outputs = [
+    "dev"
+    "doc"
+    "lib"
+    "out"
+  ];
+
+  propagatedBuildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [ openssl ];
 
   postInstall = ''
      # fix recursive cycle:
@@ -25,11 +59,11 @@ stdenv.mkDerivation rec {
      mkdir -p "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
-    homepage    = "https://www.wolfssl.com/";
-    platforms   = platforms.all;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ mcmtroffaes ];
+    homepage = "https://www.wolfssl.com/";
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
   };
 }

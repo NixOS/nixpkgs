@@ -1,27 +1,23 @@
-{ stdenv, fetchurl, openmpi, automake, autoconf, perl }:
+{ lib, stdenv, fetchFromGitHub, mpi, perl, autoreconfHook }:
 
-let
-  version = "3.0.1";
-  sha256 = "039rh4z3lsj4vqjsqgakk0b7dkrdrkkzj0p1cjikpc9gn36zpghc";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ior";
-  inherit version;
+  version = "3.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/LLNL/ior/archive/${version}.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner = "hpc";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-pSjptDfiPlaToXe1yHyk9MQMC9PqcVSjqAmWLD11iOM=";
   };
 
-  buildInputs = [ openmpi automake autoconf perl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ mpi perl ];
 
   enableParallelBuilding = true;
 
-  preConfigure = "./bootstrap";
-
-  meta = with stdenv.lib; {
-    homepage = https://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/;
+  meta = with lib; {
+    homepage = "https://ior.readthedocs.io/en/latest/";
     description = "Parallel file system I/O performance test";
     license = licenses.gpl2;
     platforms = platforms.linux;

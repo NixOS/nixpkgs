@@ -1,0 +1,48 @@
+diff --git a/effects/internal/texteffect.cpp b/effects/internal/texteffect.cpp
+index 279f406d9..7fe9e8e72 100644
+--- a/effects/internal/texteffect.cpp
++++ b/effects/internal/texteffect.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include "texteffect.h"
+ 
++#include <QPainterPath>
+ #include <QGridLayout>
+ #include <QLabel>
+ #include <QOpenGLTexture>
+diff --git a/effects/internal/timecodeeffect.cpp b/effects/internal/timecodeeffect.cpp
+index 4de3e3497..fd0fa6224 100644
+--- a/effects/internal/timecodeeffect.cpp
++++ b/effects/internal/timecodeeffect.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include "timecodeeffect.h"
+ 
++#include <QPainterPath>
+ #include <QGridLayout>
+ #include <QLabel>
+ #include <QOpenGLTexture>
+diff --git a/ui/graphview.cpp b/ui/graphview.cpp
+index 3e13075cd..c441133a8 100644
+--- a/ui/graphview.cpp
++++ b/ui/graphview.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include "graphview.h"
+ 
++#include <QPainterPath>
+ #include <QPainter>
+ #include <QMouseEvent>
+ #include <QtMath>
+diff --git a/ui/timelineheader.cpp b/ui/timelineheader.cpp
+index f39065b4f..aa7fd638d 100644
+--- a/ui/timelineheader.cpp
++++ b/ui/timelineheader.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include "timelineheader.h"
+ 
++#include <QPainterPath>
+ #include <QPainter>
+ #include <QMouseEvent>
+ #include <QScrollBar>

@@ -1,21 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitLab }:
+{ lib, buildGoModule, fetchgit }:
 
-buildGoPackage {
+buildGoModule {
   pname = "mm";
-  version = "2016.11.04";
+  version = "2020.11.17";
 
-  goPackagePath = "gitlab.com/meutraa/mm";
-
-  src = fetchFromGitLab {
-    owner = "meutraa";
-    repo = "mm";
-    rev = "473fdd97285168054b672dbad2ffc4047324c518";
-    sha256 = "1s8v5gxpw1sms1g3i8nq2x2mmmyz97qkmxs1fzlspfcd6i8vknkp";
+  src = fetchgit {
+    url = "https://git.lost.host/meutraa/mm.git";
+    rev = "e5fa8eeb845aac8f28fc36013ee8a1dbe1e5710c";
+    sha256 = "sha256-SdD4EE/rc85H7xqKB/kU8XFsC63i1sVObPha/zrxFGk=";
   };
 
-  meta = {
+  vendorSha256 = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
+
+  meta = with lib; {
     description = "A file system based matrix client";
-    homepage = https://gitlab.com/meutraa/mm;
-    license = stdenv.lib.licenses.isc;
+    homepage = "https://git.lost.host/meutraa/mm";
+    license = licenses.isc;
+    maintainers = with maintainers; [ ];
   };
 }

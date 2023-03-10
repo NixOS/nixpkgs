@@ -1,93 +1,131 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
+, autoPatchelfHook
 , python-setup-hook
 , self
-, which
 # Dependencies
 , bzip2
-, zlib
-, openssl_1_0_2
 , expat
-, libffi
-, ncurses
-, tcl
-, tk
+, gdbm
+, ncurses6
+, sqlite
+, tcl-8_5
+, tk-8_5
+, tcl-8_6
+, tk-8_6
+, zlib
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , sourceVersion
 , pythonVersion
-, sha256
+, hash
 , passthruFun
 }:
 
 # This version of PyPy is primarily added to speed-up translation of
 # our PyPy source build when developing that expression.
 
-with stdenv.lib;
-
 let
   isPy3k = majorVersion == "3";
-  passthru = passthruFun {
+  passthru = passthruFun rec {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${if isPy3k then "3" else ""}";
-    pythonForBuild = self; # Not possible to cross-compile with.
-    sitePackages = "site-packages";
+    executable = "pypy${lib.optionalString isPy3k "3"}";
+    sitePackages = "lib/${libPrefix}/site-packages";
     hasDistutilsCxxPatch = false;
+
+    # Not possible to cross-compile with.
+    pythonOnBuildForBuild = throw "${pname} does not support cross compilation";
+    pythonOnBuildForHost = self;
+    pythonOnBuildForTarget = throw "${pname} does not support cross compilation";
+    pythonOnHostForHost = throw "${pname} does not support cross compilation";
+    pythonOnTargetForTarget = throw "${pname} does not support cross compilation";
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
 
-  majorVersion = substring 0 1 pythonVersion;
+  majorVersion = lib.versions.major pythonVersion;
 
-  deps = [
-    bzip2
-    zlib
-    openssl_1_0_2
-    expat
-    libffi
-    ncurses
-    tcl
-    tk
-  ];
+  downloadUrls = {
+    aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.bz2";
+    x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+    aarch64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_arm64.tar.bz2";
+    x86_64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_x86_64.tar.bz2";
+  };
 
 in with passthru; stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
-    inherit sha256;
+    url = downloadUrls.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    inherit hash;
   };
 
-  buildInputs = [ which ];
+  buildInputs = [
+    bzip2
+    expat
+    gdbm
+    ncurses6
+    sqlite
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    tcl-8_5
+    tk-8_5
+  ] ++ lib.optionals stdenv.isDarwin [
+    tcl-8_6
+    tk-8_6
+  ];
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
-    mkdir -p $out/lib
+    runHook preInstall
+
+    mkdir -p $out
     echo "Moving files to $out"
-    mv -t $out bin include lib-python lib_pypy site-packages
-
-    mv $out/bin/libpypy*-c.so $out/lib/
-
-    rm $out/bin/*.debug
-
-    echo "Patching binaries"
-    interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
-    patchelf --set-interpreter $interpreter \
-             --set-rpath $out/lib \
-             $out/bin/pypy*
-
-    pushd $out
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --replace-needed "libbz2.so.1.0" "libbz2.so.1" {} \;
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${stdenv.lib.makeLibraryPath deps} {} \;
+    mv -t $out bin include lib
+    mv $out/bin/libpypy*-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+    ${lib.optionalString stdenv.isLinux ''
+      rm $out/bin/*.debug
+    ''}
 
     echo "Removing bytecode"
-    find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
-    popd
+    find . -name "__pycache__" -type d -depth -delete
 
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
 
+    runHook postInstall
+  '';
+
+  preFixup = lib.optionalString stdenv.isLinux ''
+    find $out/{lib,lib_pypy*} -name "*.so" \
+      -exec patchelf \
+        --replace-needed libtinfow.so.6 libncursesw.so.6 \
+        --replace-needed libgdbm.so.4 libgdbm_compat.so.4 {} \;
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool \
+      -change \
+        @rpath/lib${libPrefix}-c.dylib \
+        $out/lib/lib${libPrefix}-c.dylib \
+        $out/bin/${executable}
+    install_name_tool \
+      -change \
+        @rpath/lib${libPrefix}-c.dylib \
+        $out/lib/lib${libPrefix}-c.dylib \
+        $out/bin/${libPrefix}
+    install_name_tool \
+      -change \
+        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtcl8.6.dylib \
+        ${tcl-8_6}/lib/libtcl8.6.dylib \
+        $out/lib/${libPrefix}/_tkinter/*.so
+    install_name_tool \
+      -change \
+        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtk8.6.dylib \
+        ${tk-8_6}/lib/libtk8.6.dylib \
+        $out/lib/${libPrefix}/_tkinter/*.so
   '';
 
   doInstallCheck = true;
@@ -98,12 +136,12 @@ in with passthru; stdenv.mkDerivation {
       "ssl"
       "sys"
       "curses"
-    ] ++ optionals (!isPy3k) [
+    ] ++ lib.optionals (!isPy3k) [
       "Tkinter"
-    ] ++ optionals isPy3k [
+    ] ++ lib.optionals isPy3k [
       "tkinter"
     ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+    imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
   in ''
     echo "Testing whether we can import modules"
     $out/bin/${executable} -c '${imports}'
@@ -116,11 +154,11 @@ in with passthru; stdenv.mkDerivation {
 
   inherit passthru;
 
-  meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
+  meta = with lib; {
+    homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.mapAttrsToList (arch: _: arch) downloadUrls;
   };
 
 }

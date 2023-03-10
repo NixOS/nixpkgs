@@ -1,19 +1,31 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, hypothesis
+, hypothesmith
+, python
+}:
 
 buildPythonPackage rec {
   pname = "mccabe";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07w3p1qm44hgxf3vvwz84kswpsx6s7kvaibzrsx5dzm0hli1i3fx";
+    sha256 = "sha256-NI4CQMM7YLvfTlIxku+RnyjLLD19XHeU90AJKQ8jYyU=";
   };
 
-  buildInputs = [ pytest pytestrunner ];
+  buildInputs = [
+    pytest
+  ];
 
-  meta = with stdenv.lib; {
+  # https://github.com/PyCQA/mccabe/issues/93
+  doCheck = false;
+
+  meta = with lib; {
     description = "McCabe checker, plugin for flake8";
-    homepage = https://github.com/flintwork/mccabe;
+    homepage = "https://github.com/flintwork/mccabe";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

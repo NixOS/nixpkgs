@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
 , coverage, nose, pbkdf2 }:
 
 buildPythonPackage rec {
   pname = "cryptacular";
-  version = "1.5.5";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb4d48716e88e4d050255ff0f065f6d437caa358ceef16ba5840c95cece224f9";
+    sha256 = "7b529cb2b8a3c7e5be77921bf1ebc653d4d3a8f791375cc6f971b20db2404176";
   };
 
   buildInputs = [ coverage nose ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # https://bitbucket.org/dholth/cryptacular/issues/11
   disabled = isPy27 || pythonAtLeast "3.6";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
   };
 }

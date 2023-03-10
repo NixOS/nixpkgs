@@ -1,15 +1,16 @@
-{stdenv, fetchurl}:
-   
-stdenv.mkDerivation {
-  name = "libvolume_id-0.81.1";
-   
+{lib, stdenv, fetchurl}:
+
+stdenv.mkDerivation rec {
+  pname = "libvolume_id";
+  version = "0.81.1";
+
   src = fetchurl {
-    url = https://www.marcuscom.com/downloads/libvolume_id-0.81.1.tar.bz2;
+    url = "https://www.marcuscom.com/downloads/libvolume_id-${version}.tar.bz2";
     sha256 = "029z04vdxxsl8gycm9whcljhv6dy4b12ybsxdb99jr251gl1ifs5";
   };
 
   preBuild = "
-    makeFlagsArray=(prefix=$out E=echo RANLIB=ranlib INSTALL='install -c')
+    makeFlagsArray=(prefix=$out E=echo RANLIB=${stdenv.cc.targetPrefix}ranlib INSTALL='install -c')
   ";
 
   # Work around a broken Makefile.
@@ -18,7 +19,9 @@ stdenv.mkDerivation {
     cp -f libvolume_id.so.0 $out/lib/
   ";
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+    homepage = "http://www.marcuscom.com/downloads/";
   };
 }

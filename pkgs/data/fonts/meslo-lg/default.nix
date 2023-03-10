@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  phases = [ "unpackPhase" "installPhase" ];
   unpackPhase = ''
     unzip -j ${meslo-lg}
     unzip -j ${meslo-lg-dz}
@@ -38,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A customized version of Apple’s Menlo-Regular font";
-    homepage = https://github.com/andreberg/Meslo-Font/;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ balajisivaraman ];
-    platforms = with stdenv.lib.platforms; all;
+    homepage = "https://github.com/andreberg/Meslo-Font/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; all;
   };
 }

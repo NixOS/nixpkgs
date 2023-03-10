@@ -1,28 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "peco";
-  version = "0.5.3";
+  version = "0.5.10";
 
-  goPackagePath = "github.com/peco/peco";
   subPackages = [ "cmd/peco" ];
 
   src = fetchFromGitHub {
     owner = "peco";
     repo = "peco";
     rev = "v${version}";
-    sha256 = "1m3s1jrrhqccgg3frfnq6iprwwi97j13wksckpcyrg51z6y5q041";
+    sha256 = "sha256-Iu2MclUbUYX1FuMnE65Qdk0S+5+K3HW86WIdQrNUyY8=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-+HQz7UUgATdgSWlI1dg2DdQRUSke9MyAtXgLikFhF90=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplistic interactive filtering tool";
-    homepage = https://github.com/peco/peco;
+    homepage = "https://github.com/peco/peco";
+    changelog = "https://github.com/peco/peco/blob/v${version}/Changes";
     license = licenses.mit;
-    # peco should work on Windows or other POSIX platforms, but the go package
-    # declares only linux and darwin.
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

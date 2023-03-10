@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.18.1";
+  version = "0.8.19";
   pname = "leafpad";
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/leafpad/${pname}-${version}.tar.gz";
-    sha256 = "0b0az2wvqgvam7w0ns1j8xp2llslm1rx6h7zcsy06a7j0yp257cm";
+    sha256 = "sha256-B9P3EvTb0KMyUf0d7hTiGv3J+SCQ/HaMEasKxVatvpc=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk2 ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ gtk2 ];
 
   hardeningDisable = [ "format" ];
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     "--enable-chooser"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A notepad clone for GTK 2.0";
-    homepage = http://tarot.freeshell.org/leafpad;
+    homepage = "http://tarot.freeshell.org/leafpad";
     platforms = platforms.linux;
     maintainers = [ maintainers.flosse ];
     license = licenses.gpl3;

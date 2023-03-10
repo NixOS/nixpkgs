@@ -1,31 +1,46 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
-, Mako
-, pytest
-, numpy
-, cffi
-, pytools
-, decorator
 , appdirs
-, six
-, opencl-headers
+, cffi
+, decorator
+, Mako
+, mesa_drivers
+, numpy
 , ocl-icd
+, opencl-headers
+, platformdirs
 , pybind11
+, pytest
+, pytools
+, six
 }:
 
-buildPythonPackage rec {
+let
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2019.1.2";
+  version = "2022.3.1";
 
-  checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers ocl-icd pybind11 ];
+  nativeCheckInputs = [ pytest ];
+  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
-  propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
+  propagatedBuildInputs = [
+    appdirs
+    cffi
+    decorator
+    Mako
+    numpy
+    platformdirs
+    pytools
+    six
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7803f3128dbd28ae6f5b851a80ef586a35b9575406ea7bb068b8e1516f8043f0";
+    sha256 = "sha256-Sj2w/mG1zclSZ1Jt7r1xp+HXlWlNSw/idh8GMLzKNiE=";
   };
 
   # py.test is not needed during runtime, so remove it from `install_requires`
@@ -40,9 +55,9 @@ buildPythonPackage rec {
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for OpenCL";
-    homepage = https://github.com/pyopencl/pyopencl;
+    homepage = "https://github.com/pyopencl/pyopencl";
     license = licenses.mit;
     maintainers = [ maintainers.fridh ];
   };

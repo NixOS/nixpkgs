@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://cr.yp.to/cdb";
+    homepage = "https://cr.yp.to/cdb.html";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.Profpatsch ];
     platforms = lib.platforms.unix;

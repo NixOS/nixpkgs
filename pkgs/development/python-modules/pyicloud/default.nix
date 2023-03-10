@@ -1,52 +1,59 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, fetchFromGitHub
+, certifi
+, click
 , keyring
 , keyrings-alt
-, click
+, pytz
+, requests
 , six
 , tzlocal
-, certifi
-, bitstring
-, unittest2
+, pytest-mock
+, pytestCheckHook
 , future
 }:
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.9.2";
+  version = "1.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1jjkzf7vwms6pymnmdr893830vrymxnq455xnqp21wqhjjiy2amd";
+  src = fetchFromGitHub {
+    owner = "picklepete";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-2E1pdHHt8o7CGpdG+u4xy5OyNCueUGVw5CY8oicYd5w=";
   };
 
   propagatedBuildInputs = [
-    requests
+    certifi
+    click
+    future
     keyring
     keyrings-alt
-    click
+    pytz
+    requests
     six
     tzlocal
-    certifi
-    bitstring
-    future
   ];
 
-  checkInputs = [ unittest2 ];
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postPatch = ''
     sed -i \
-      -e 's!click>=6.0,<7.0!click!' \
-      -e 's!keyring>=8.0,<9.0!keyring!' \
-      -e 's!keyrings.alt>=1.0,<2.0!keyrings.alt!' \
+      -e 's!click>=.*!click!' \
+      -e 's!keyring>=.*!keyring!' \
+      -e 's!keyrings.alt>=.*!keyrings.alt!' \
+      -e 's!tzlocal==.*!tzlocal!' \
       requirements.txt
   '';
 
   meta = with lib; {
     description = "PyiCloud is a module which allows pythonistas to interact with iCloud webservices";
-    homepage = https://github.com/picklepete/pyicloud;
+    homepage = "https://github.com/picklepete/pyicloud";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

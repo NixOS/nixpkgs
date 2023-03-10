@@ -1,8 +1,8 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl
-, openssl, zlib
+, stdenv, lib, fetchurl, nixosTests
+, openssl, zlib, libxcrypt
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
 
@@ -11,21 +11,21 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.1.3";
+  version = "2.7.3";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "0n8bw3d6gikr8c56ycrvksp1sl0b4yfzp19867cxkl3l0daqwrxv";
+    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
+    sha256 = "sha256-sX5RuWUxhDtKmdLDtiGCgbyYi/Ykyf+Q4Z8MvLol0Gc=";
   };
 
-  buildInputs = [ openssl zlib ]
+  buildInputs = [ openssl zlib libxcrypt ]
     ++ lib.optional useLua lua5_3
     ++ lib.optional usePcre pcre
     ++ lib.optional stdenv.isLinux systemd;
 
   # TODO: make it work on bsd as well
   makeFlags = [
-    "PREFIX=\${out}"
+    "PREFIX=${placeholder "out"}"
     ("TARGET=" + (if stdenv.isSunOS  then "solaris"
              else if stdenv.isLinux  then "linux-glibc"
              else if stdenv.isDarwin then "osx"
@@ -40,16 +40,19 @@ stdenv.mkDerivation rec {
     "USE_PCRE_JIT=yes"
   ] ++ lib.optionals useLua [
     "USE_LUA=yes"
+    "LUA_LIB_NAME=lua"
     "LUA_LIB=${lua5_3}/lib"
     "LUA_INC=${lua5_3}/include"
   ] ++ lib.optionals stdenv.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
   ] ++ lib.optionals withPrometheusExporter [
-    "EXTRA_OBJS=contrib/prometheus-exporter/service-prometheus.o"
-  ] ++ lib.optional stdenv.isDarwin "CC=cc";
+    "USE_PROMEX=yes"
+  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.haproxy = nixosTests.haproxy;
 
   meta = with lib; {
     description = "Reliable, high performance TCP/HTTP load balancer";
@@ -62,8 +65,9 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = "https://haproxy.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ fuzzy-id ];
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
+    license = with licenses; [ gpl2Plus lgpl21Only ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

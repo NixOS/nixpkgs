@@ -1,21 +1,27 @@
-{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
+{ fetchurl, lib, mkDerivation, pkg-config, python3, file, bc
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
 mkDerivation rec {
-  version = "2.3.4.3";
+  version = "2.3.6.1";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
-    sha256 = "1rpp6wq0dc0bxwc0pipajv98vi7cpg391nq10d3c4pmpq38m08wx";
+    sha256 = "sha256-xr7SYzQZiY4Bp8w1AxDX2TS/WRyrcln8JYGqTADq+ng=";
   };
 
+  # Needed with GCC 12
+  postPatch = ''
+    sed '1i#include <iterator>' -i src/lyxfind.cpp
+    sed '1i#include <cstring>'  -i src/insets/InsetListings.cpp
+  '';
+
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
-    qtbase qtsvg python file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
+    qtbase qtsvg python3 file/*for libmagic*/ bc
+    hunspell # enchant
   ];
 
   configureFlags = [
@@ -31,12 +37,12 @@ mkDerivation rec {
 
   # python is run during runtime to do various tasks
   qtWrapperArgs = [
-    " --prefix PATH : ${python}/bin"
+    " --prefix PATH : ${python3}/bin"
   ];
 
   meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = http://www.lyx.org;
+    homepage = "http://www.lyx.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vcunat ];
     platforms = platforms.linux;

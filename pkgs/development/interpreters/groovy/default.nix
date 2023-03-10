@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, unzip, which, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, unzip, which, makeWrapper, jdk }:
 
 # at runtime, need jdk
 
 stdenv.mkDerivation rec {
   pname = "groovy";
-  version = "2.5.9";
+  version = "3.0.11";
 
   src = fetchurl {
-    url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "16xq8mz7270kmiq4xb0g52y7ik1bbl2nb8aaz9zw8a9h38rdr9zy";
+    url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
+    sha256 = "85abb44e81f94d794230cf5c2c7f1003e598a5f8a6ae04322f28c6f9efe395f6";
   };
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
     mkdir -p $out
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An agile dynamic language for the Java Platform";
-    homepage = http://groovy-lang.org/;
+    homepage = "http://groovy-lang.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

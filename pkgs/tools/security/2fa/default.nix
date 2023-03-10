@@ -1,23 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  version = "1.1.0";
+buildGoModule rec {
   pname = "2fa";
-
-  goPackagePath = "rsc.io/2fa";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "rsc";
     repo = "2fa";
     rev = "v${version}";
-    sha256 = "0827vl2bxd6m2rbj00x7857cs7cic3mlg5nlhqzd0n73dm5vk2za";
+    sha256 = "sha256-cB5iADZwvJQwwK1GockE2uicFlqFMEAY6xyeXF5lnUY=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://rsc.io/2fa;
+  deleteVendor = true;
+  vendorSha256 = "sha256-4h/+ZNxlJPYY0Kyu2vDE1pDXxC/kGE5JdnagWVOGzAE=";
+
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
+    homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ rvolosatovs ];
     license = licenses.bsd3;
+    maintainers = with maintainers; [ rvolosatovs ];
   };
 }

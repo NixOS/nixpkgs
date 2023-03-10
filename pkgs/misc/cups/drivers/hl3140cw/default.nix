@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk}:
+{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk }:
 
 let
   version = "1.1.4-0";
@@ -17,7 +17,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "cups-brother-hl3140cw";
+  pname = "cups-brother-hl3140cw";
+  inherit version;
   nativeBuildInputs = [ makeWrapper dpkg ];
   buildInputs = [ cups ghostscript a2ps ];
 
@@ -40,14 +41,14 @@ stdenv.mkDerivation {
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/hl3140cw/lpd/brhl3140cwfilter
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_hl3140cw
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/hl3140cw/lpd/brhl3140cwfilter
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_hl3140cw
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2 \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath [ gnused coreutils gawk ] }
+      --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/lpd/filterhl3140cw \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
+      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
 
 
     dpkg-deb -x ${cupsdeb} $out
@@ -65,14 +66,15 @@ stdenv.mkDerivation {
     ln -s $out/opt/brother/Printers/hl3140cw/lpd/filterhl3140cw $out/lib/cups/filter/brother_lpdwrapper_hl3140cw
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/cupswrapper/cupswrapperhl3140cw \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath [ gnused coreutils gawk ] }
+      --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
   '';
 
   meta = {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother hl3140cw printer driver";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=eu_ot&lang=en&prod=hl3140cw_us_eu&os=128";
   };
 }

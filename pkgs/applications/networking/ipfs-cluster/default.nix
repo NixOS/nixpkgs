@@ -1,25 +1,23 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchgx, gx-go }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "ipfs-cluster";
-  version = "0.11.0";
-  rev = "v${version}";
+  version = "1.0.5";
 
-  modSha256 = "03bqwg9nqh7w6j887gzxr2mcn14jc8f07z896b3swg5wzaz1i6hs";
+  vendorHash = "sha256-sLCgPXyOiGaigcVuwUU4+Lmb7SjopWKhCReBzrZyuRs=";
 
   src = fetchFromGitHub {
-    owner = "ipfs";
+    owner = "ipfs-cluster";
     repo = "ipfs-cluster";
-    inherit rev;
-    sha256 = "0q5lanm2zdwwhdwv05fssb34y4y4dha3dq7x1iaabbf70lpqv6yx";
+    rev = "v${version}";
+    hash = "sha256-c0COSf4ktFxkPJwzq/0RyG1JvNUvhdWpeRlrbAirGec=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
-    homepage = https://cluster.ipfs.io/;
+    homepage = "https://ipfscluster.io";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jglukasik ];
+    maintainers = with maintainers; [ Luflosi jglukasik ];
   };
 }
-

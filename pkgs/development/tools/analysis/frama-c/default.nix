@@ -1,20 +1,33 @@
 { lib, stdenv, fetchurl, makeWrapper, writeText
-, autoconf, ncurses, graphviz, doxygen
-, ocamlPackages, ltl2ba, coq, why3,
+, graphviz, doxygen
+, ocamlPackages, ltl2ba, coq, why3
+, gdk-pixbuf, wrapGAppsHook
 }:
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
-    apron
+    apron.dev
+    bigarray-compat
     biniou
     camlzip
     easy-format
-    menhir
+    menhirLib
     mlgmpidl
     num
     ocamlgraph
+    ppx_deriving
+    ppx_deriving_yojson
+    ppx_import
+    stdlib-shims
     why3
+    re
+    result
+    seq
+    sexplib
+    sexplib0
+    parsexp
+    base
     yojson
     zarith
   ];
@@ -23,46 +36,54 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "20.0";
-  slang   = "Calcium";
+  version = "26.1";
+  slang   = "Iron";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "03dvn162djylj2skmk6vv75gh87mm4s5cspkzcrlm5x0rlla2yqn";
+    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    hash = "sha256-UT7ajIyu8e5vzrz2oBKDDrtZqUacgUP/TRi0/kz9Qkg=";
   };
 
-  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
+  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
-  nativeBuildInputs = [ autoconf makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 ]);
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhir camlzip
-    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    dune-site dune-configurator
+    ltl2ba ocamlgraph yojson menhirLib camlzip
+    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    ppx_deriving ppx_import ppx_deriving_yojson
+    gdk-pixbuf
   ];
 
-  enableParallelBuilding = true;
+  buildPhase = ''
+    runHook preBuild
+    dune build -j$NIX_BUILD_CORES --release @install
+    runHook postBuild
+  '';
 
-  fixupPhase = ''
-    for p in $out/bin/frama-c{,-gui};
-    do
-      wrapProgram $p --prefix OCAMLPATH ':' ${ocamlpath}
-    done
+  installFlags = [ "PREFIX=$(out)" ];
+
+  preFixup = ''
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
   '';
 
   # Allow loading of external Frama-C plugins
   setupHook = writeText "setupHook.sh" ''
     addFramaCPath () {
       if test -d "''$1/lib/frama-c/plugins"; then
-        export FRAMAC_PLUGIN="''${FRAMAC_PLUGIN}''${FRAMAC_PLUGIN:+:}''$1/lib/frama-c/plugins"
-        export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/frama-c/plugins"
+        export FRAMAC_PLUGIN="''${FRAMAC_PLUGIN-}''${FRAMAC_PLUGIN:+:}''$1/lib/frama-c/plugins"
+        export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}''$1/lib/frama-c/plugins"
       fi
 
       if test -d "''$1/lib/frama-c"; then
-        export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/frama-c"
+        export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}''$1/lib/frama-c"
       fi
 
       if test -d "''$1/share/frama-c/"; then
-        export FRAMAC_EXTRA_SHARE="''${FRAMAC_EXTRA_SHARE}''${FRAMAC_EXTRA_SHARE:+:}''$1/share/frama-c"
+        export FRAMAC_EXTRA_SHARE="''${FRAMAC_EXTRA_SHARE-}''${FRAMAC_EXTRA_SHARE:+:}''$1/share/frama-c"
       fi
 
     }
@@ -73,9 +94,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
-    homepage    = http://frama-c.com/;
-    license     = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.unix;
+    homepage    = "http://frama-c.com/";
+    license     = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
+    platforms   = lib.platforms.unix;
   };
 }

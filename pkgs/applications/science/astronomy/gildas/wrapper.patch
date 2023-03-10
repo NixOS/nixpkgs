@@ -1,12 +1,13 @@
 diff --new-file -r -u gildas-src-feb17d.orig/admin/wrapper.sh gildas-src-feb17d/admin/wrapper.sh
 --- gildas-src-feb17d.orig/admin/wrapper.sh	1970-01-01 01:00:00.000000000 +0100
 +++ gildas-src-feb17d/admin/wrapper.sh	2017-05-18 21:00:01.660778782 +0200
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,16 @@
 +#!/bin/sh -e
 +
 +export GAG_ROOT_DIR="%%OUT%%"
 +export GAG_PATH="${GAG_ROOT_DIR}/etc"
 +export GAG_EXEC_SYSTEM="libexec"
++export GAG_GAG="${HOME}/.gag"
 +export PYTHONHOME="%%PYTHONHOME%%"
 +if [ -z "\$PYTHONPATH" ]; then
 +  PYTHONPATH="${GAG_ROOT_DIR}/${GAG_EXEC_SYSTEM}/python"

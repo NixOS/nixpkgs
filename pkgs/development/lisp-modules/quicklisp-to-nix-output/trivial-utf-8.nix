@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-utf-8'';
-  version = ''20111001-darcs'';
+  baseName = "trivial-utf-8";
+  version = "20211209-git";
 
-  parasites = [ "trivial-utf-8-tests" ];
+  parasites = [ "trivial-utf-8/doc" "trivial-utf-8/tests" ];
 
-  description = ''System lacks description'';
+  description = "A small library for doing UTF-8-based input and output.";
 
-  deps = [ ];
+  deps = [ args."mgl-pax" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-utf-8/2011-10-01/trivial-utf-8-20111001-darcs.tgz'';
-    sha256 = ''1lmg185s6w3rzsz3xa41k5w9xw32bi288ifhrxincy8iv92w65wb'';
+    url = "http://beta.quicklisp.org/archive/trivial-utf-8/2021-12-09/trivial-utf-8-20211209-git.tgz";
+    sha256 = "1bis8shbdva1diwms2lvhlbdz9rvazqqxi9h8d33vlbw4xai075y";
   };
 
   packageName = "trivial-utf-8";
@@ -19,9 +20,11 @@ rec {
   asdFilesToKeep = ["trivial-utf-8.asd"];
   overrides = x: x;
 }
-/* (SYSTEM trivial-utf-8 DESCRIPTION System lacks description SHA256
-    1lmg185s6w3rzsz3xa41k5w9xw32bi288ifhrxincy8iv92w65wb URL
-    http://beta.quicklisp.org/archive/trivial-utf-8/2011-10-01/trivial-utf-8-20111001-darcs.tgz
-    MD5 0206c4ba7a6c0b9b23762f244aca6614 NAME trivial-utf-8 FILENAME
-    trivial-utf-8 DEPS NIL DEPENDENCIES NIL VERSION 20111001-darcs SIBLINGS NIL
-    PARASITES (trivial-utf-8-tests)) */
+/* (SYSTEM trivial-utf-8 DESCRIPTION
+    A small library for doing UTF-8-based input and output. SHA256
+    1bis8shbdva1diwms2lvhlbdz9rvazqqxi9h8d33vlbw4xai075y URL
+    http://beta.quicklisp.org/archive/trivial-utf-8/2021-12-09/trivial-utf-8-20211209-git.tgz
+    MD5 65603f3c4421a93d5d8c214bb406988d NAME trivial-utf-8 FILENAME
+    trivial-utf-8 DEPS ((NAME mgl-pax FILENAME mgl-pax)) DEPENDENCIES (mgl-pax)
+    VERSION 20211209-git SIBLINGS NIL PARASITES
+    (trivial-utf-8/doc trivial-utf-8/tests)) */

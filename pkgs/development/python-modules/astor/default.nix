@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, fetchpatch }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "astor";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -10,19 +15,20 @@ buildPythonPackage rec {
   };
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test -k 'not check_expressions \
-                and not check_astunparse \
-                and not test_convert_stdlib \
-                and not test_codegen_as_submodule \
-                and not test_positional_only_arguments \
-                and not test_codegen_from_root'
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/berkerpeksag/astor/issues/196
+    "test_convert_stdlib"
+    # https://github.com/berkerpeksag/astor/issues/212
+    "test_huge_int"
+  ];
 
   meta = with lib; {
     description = "Library for reading, writing and rewriting python AST";
-    homepage = https://github.com/berkerpeksag/astor;
+    homepage = "https://github.com/berkerpeksag/astor";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nixy ];
   };

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "028vmd6sj6wn9l1ilw7qfmlpyiysnlzdgdlhwxs6j4fvq0gyrwxk";
   };
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
 
   # UnicodeEncodeError
   doCheck = isPy3k;
@@ -27,7 +27,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Chinese Words Segementation Utilities";
-    homepage = https://github.com/fxsjy/jieba;
+    homepage = "https://github.com/fxsjy/jieba";
     license = licenses.mit;
+    maintainers = teams.tts.members;
   };
 }

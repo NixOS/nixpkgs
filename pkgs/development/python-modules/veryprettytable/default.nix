@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , termcolor
@@ -16,9 +16,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ termcolor colorama ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
-    homepage = https://github.com/smeggingsmegger/VeryPrettyTable;
+    homepage = "https://github.com/smeggingsmegger/VeryPrettyTable";
     license = licenses.free;
   };
 

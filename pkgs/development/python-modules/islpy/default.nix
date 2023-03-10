@@ -2,18 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , isl
-, pytest
-, cffi
+, pybind11
+, pytestCheckHook
+, pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2019.1.2";
+  version = "2022.2.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "834b6b946f33d578d5c6b2f863dd93f7ecc4c0a2bf73407c96ef9f95b6b71bbf";
+    sha256 = "07062ljvznm2dg3r9b3lq98qygxsha8ylxi4zs7hx49l0jw2vbjy";
   };
 
   postConfigure = ''
@@ -21,20 +23,16 @@ buildPythonPackage rec {
       --replace "\"pytest>=2\"," ""
   '';
 
-  buildInputs = [ isl ];
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [
-    cffi
-    six
-  ];
+  buildInputs = [ isl pybind11 ];
+  propagatedBuildInputs = [ six ];
 
-  checkPhase = ''
-    pytest test
-  '';
+  preCheck = "mv islpy islpy.hidden";
+  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "islpy" ];
 
   meta = with lib; {
     description = "Python wrapper around isl, an integer set library";
-    homepage = https://github.com/inducer/islpy;
+    homepage = "https://github.com/inducer/islpy";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

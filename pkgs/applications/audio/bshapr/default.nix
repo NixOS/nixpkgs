@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, xorg, cairo, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "BShapr";
-  version = "0.7";
+  pname = "bshapr";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "BShapr";
     rev = "v${version}";
-    sha256 = "1422xay28jkmqlj5y4vhb57kljy6ysvxh20cxpfxm980m8n54gq5";
+    sha256 = "sha256-9I4DPRl6i/VL8Etw3qLGZkP45BGsbxFxNOvRy3B3I+M=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 cairo lv2
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/sjaehn/BShapr;
+  meta = with lib; {
+    homepage = "https://github.com/sjaehn/BShapr";
     description = "Beat / envelope shaper LV2 plugin";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

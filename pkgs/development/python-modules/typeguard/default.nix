@@ -1,23 +1,33 @@
 { buildPythonPackage
 , fetchPypi
 , pythonOlder
-, stdenv
-, setuptools_scm
-, pytest
+, lib
+, setuptools-scm
+, pytestCheckHook
+, typing-extensions
+, sphinxHook
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.7.1";
+  version = "2.13.3";
+  outputs = [ "out" "doc" ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d545c71e9439c21bcd7c28f5f55b3606e6106f7031ab58375656a1aed483ef2";
+    sha256 = "00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4";
   };
 
-  buildInputs = [ setuptools_scm ];
-  nativeBuildInputs = [ glibcLocales ];
+  buildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    glibcLocales
+    sphinxHook
+    sphinx-autodoc-typehints
+    sphinx-rtd-theme
+  ];
 
   LC_ALL="en_US.utf-8";
 
@@ -25,17 +35,23 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace " --cov" ""
   '';
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook typing-extensions ];
 
-  checkPhase = ''
-    py.test .
-  '';
+  disabledTestPaths = [
+    # mypy tests aren't passing with latest mypy
+    "tests/mypy"
+  ];
+
+  disabledTests = [
+    # not compatible with python3.10
+    "test_typed_dict"
+  ];
 
   disabled = pythonOlder "3.3";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
-    homepage = https://github.com/agronholm/typeguard;
+    homepage = "https://github.com/agronholm/typeguard";
     license = licenses.mit;
   };
 }

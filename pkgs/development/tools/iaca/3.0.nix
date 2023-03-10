@@ -1,10 +1,10 @@
-{ stdenv, requireFile, unzip }:
-with stdenv.lib;
+{ lib, stdenv, requireFile, unzip }:
 
-stdenv.mkDerivation {
-  name = "iaca-3.0";
+stdenv.mkDerivation rec {
+  pname = "iaca";
+  version = "3.0";
   src = requireFile {
-    name = "iaca-version-v3.0-lin64.zip";
+    name = "iaca-version-v${version}-lin64.zip";
     sha256 = "0qd81bxg269cwwvfmdp266kvhcl3sdvhrkfqdrbmanawk0w7lvp1";
     url = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer-download";
   };
@@ -12,11 +12,12 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp iaca $out/bin
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $out/bin/iaca
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $out/bin/iaca
   '';
-  meta = {
+  meta = with lib; {
     description = "Intel Architecture Code Analyzer";
-    homepage = https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/;
+    homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kazcw ];

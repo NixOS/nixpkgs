@@ -1,28 +1,53 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchgit
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, inkex
 , lxml
-, isPy27
+, pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "1.0.0";
-  disabled = ! isPy27;
+  version = "1.2.0";
 
-  propagatedBuildInputs = [ lxml ];
+  disabled = pythonOlder "3.10";
 
-  src = fetchgit {
-    url = "https://github.com/kjellmf/svg2tikz";
-    sha256 = "429428ec435e53672b85cdfbb89bb8af0ff9f8238f5d05970729e5177d252d5f";
-    rev = "ad36f2c3818da13c4136d70a0fd8153acf8daef4";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "xyz2tex";
+    repo = "svg2tikz";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oFcKRcXef1Uz0qFi6Gga/D4u8zW0RjXAnHDlhRr33Ts=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kjellmf/svg2tikz;
-    description = "An SVG to TikZ converter";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "+dairiki.1" ""
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    inkex
+    lxml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "svg2tikz" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/xyz2tex/svg2tikz/blob/${src.rev}/README.md#changes-bug-fixes-and-known-problems-from-the-original";
+    homepage = "https://github.com/xyz2tex/svg2tikz";
+    description = "Set of tools for converting SVG graphics to TikZ/PGF code";
     license = licenses.gpl2Plus;
-    maintainers =  with maintainers; [ gal_bolle ];
+    maintainers = with maintainers; [ dotlambda gal_bolle ];
   };
-
 }

@@ -1,32 +1,47 @@
-{ stdenv, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "2.2.3";
+  version = "3.1.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4334cabf47c167d44ab5a6198837b80deec5d5bad1b5cf70c966c3a330260e8";
+    hash = "sha256-rtLCc1R65yoNXuhpcZwCpkPaFr9QfICVj6rcfgOOP3M=";
   };
 
-  # For Python 3, locale has to be set to en_US.UTF-8 for
-  # tests to pass
-  checkInputs = if isPy3k then [ glibcLocales ] else [];
+  nativeCheckInputs = [
+    pyparsing
+    pytestCheckHook
+  ];
 
-  # py2 likes to reorder tests
-  doCheck = isPy3k;
-  checkPhase = ''
-  runHook preCheck
-  ${if isPy3k then "export LC_ALL=en_US.UTF-8" else ""}
-  PYTHONPATH=`pwd` ${python.interpreter} aenum/test.py
-  runHook postCheck
-  '';
+  pythonImportsCheck = [
+    "aenum"
+  ];
 
+  disabledTests = [
+    # https://github.com/ethanfurman/aenum/issues/27
+    "test_class_nested_enum_and_pickle_protocol_four"
+    "test_pickle_enum_function_with_qualname"
+    "test_stdlib_inheritence"
+    "test_subclasses_with_getnewargs_ex"
+    "test_arduino_headers"
+    "test_c_header_scanner"
+    "test_extend_flag_backwards_stdlib"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
-    maintainers = with stdenv.lib.maintainers; [ vrthra ];
-    license = with stdenv.lib.licenses; [ bsd3 ];
-    homepage = https://bitbucket.org/stoneleaf/aenum;
+    homepage = "https://github.com/ethanfurman/aenum";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ vrthra ];
   };
 }

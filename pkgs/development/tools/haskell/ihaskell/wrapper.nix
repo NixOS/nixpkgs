@@ -1,21 +1,22 @@
-{ stdenv, writeScriptBin, makeWrapper, buildEnv, haskell, ghcWithPackages, jupyter, packages }:
+{ lib, stdenv, writeScriptBin, makeWrapper, buildEnv, haskell, ghcWithPackages, jupyter, packages }:
 let
   ihaskellEnv = ghcWithPackages (self: [
     self.ihaskell
-    (haskell.lib.doJailbreak self.ihaskell-blaze)
-    (haskell.lib.doJailbreak self.ihaskell-diagrams)
-    (haskell.lib.doJailbreak self.ihaskell-display)
+    self.ihaskell-blaze
+    # Doesn't work with latest ihaskell versions missing an unrelated change
+    # https://github.com/IHaskell/IHaskell/issues/1378
+    # self.ihaskell-diagrams
   ] ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
     export GHC_PACKAGE_PATH="$(echo ${ihaskellEnv}/lib/*/package.conf.d| tr ' ' ':'):$GHC_PACKAGE_PATH"
-    export PATH="${stdenv.lib.makeBinPath ([ ihaskellEnv jupyter ])}\${PATH:+':'}$PATH"
+    export PATH="${lib.makeBinPath ([ ihaskellEnv jupyter ])}''${PATH:+:}$PATH"
     ${ihaskellEnv}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${jupyter}/bin/jupyter notebook
   '';
 in
 buildEnv {
   name = "ihaskell-with-packages";
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   paths = [ ihaskellEnv jupyter ];
   postBuild = ''
     ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/

@@ -4,21 +4,17 @@ with lib;
 
 let
   cfg = config.services.thermald;
-in {
+in
+{
   ###### interface
   options = {
     services.thermald = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable thermald, the temperature management daemon.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "thermald, the temperature management daemon");
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable debug logging.
         '';
       };
@@ -26,25 +22,34 @@ in {
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "the thermald manual configuration file.";
+        description = lib.mdDoc "the thermald manual configuration file.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.thermald;
+        defaultText = literalExpression "pkgs.thermald";
+        description = lib.mdDoc "Which thermald package to use.";
       };
     };
   };
 
   ###### implementation
   config = mkIf cfg.enable {
-    services.dbus.packages = [ pkgs.thermald ];
+    services.dbus.packages = [ cfg.package ];
 
     systemd.services.thermald = {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        PrivateNetwork = true;
         ExecStart = ''
-          ${pkgs.thermald}/sbin/thermald \
+          ${cfg.package}/sbin/thermald \
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
-            --dbus-enable
+            --dbus-enable \
+            --adaptive
         '';
       };
     };

@@ -1,33 +1,74 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, breeze-icons
+, gnome-icon-theme
+, numix-icon-theme
+, numix-icon-theme-circle
+, hicolor-icon-theme
+, jdupes
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zafiro-icons";
-  version = "1.0";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
-    rev = "${version}";
-    sha256 = "0gy3c0jkj1icnwcs23b6km9cj9cccv8y5z1w11nfdv91cq3mdhmb";
+    rev = version;
+    sha256 = "sha256-IbFnlUOSADYMNMfvRuRPndxcQbnV12BqMDb9bJRjnoU=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [
+    gtk3
+    jdupes
+  ];
 
   propagatedBuildInputs = [
+    breeze-icons
+    gnome-icon-theme
+    numix-icon-theme
+    numix-icon-theme-circle
     hicolor-icon-theme
+    # still missing parent icon themes: Surfn
   ];
 
   dontDropIconThemeCache = true;
 
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+
   installPhase = ''
-    mkdir -p $out/share/icons/Zafiro-icons
-    cp -a * $out/share/icons/Zafiro-icons
-    gtk-update-icon-cache "$out"/share/icons/Zafiro-icons
+    runHook preInstall
+
+    mkdir -p $out/share/icons
+
+    for theme in Dark Light; do
+      cp -a $theme $out/share/icons/Zafiro-icons-$theme
+
+      # remove unneeded files
+      rm $out/share/icons/Zafiro-icons-$theme/_config.yml
+
+      # remove files with non-ascii characters in name
+      # https://github.com/zayronxio/Zafiro-icons/issues/111
+      rm $out/share/icons/Zafiro-icons-$theme/apps/scalable/βTORRENT.svg
+
+      gtk-update-icon-cache $out/share/icons/Zafiro-icons-$theme
+    done
+
+    jdupes --link-soft --recurse $out/share
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = with lib; {
     description = "Icon pack flat with light colors";
-    homepage = https://github.com/zayronxio/Zafiro-icons;
+    homepage = "https://github.com/zayronxio/Zafiro-icons";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

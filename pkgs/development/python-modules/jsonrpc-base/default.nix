@@ -1,19 +1,41 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
-  version = "1.0.3";
+  version = "2.1.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7bda99589b4566f5027c2aeae122f409d8ccf4c811b278b8cfb616903871efb2";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "emlove";
+    repo = pname;
+    rev = version;
+    hash = "sha256-C03m/zeLIFqsmEMSzt84LMOWAHUcpdEHhaa5hx2NsoQ=";
   };
 
-  propagatedBuildInputs = [ ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  pytestFlagsArray = [
+    "tests.py"
+  ];
+
+  pythonImportsCheck = [
+    "jsonrpc_base"
+  ];
+
+  meta = with lib; {
     description = "A JSON-RPC client library base interface";
-    homepage = https://github.com/armills/jsonrpc-base;
+    homepage = "https://github.com/emlove/jsonrpc-base";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
   };

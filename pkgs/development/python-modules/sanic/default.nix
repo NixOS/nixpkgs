@@ -1,139 +1,135 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, httptools
+, stdenv
 , aiofiles
-, websockets
-, multidict
-, uvloop
-, ujson
-, pytest
-, gunicorn
-, pytestcov
-, aiohttp
 , beautifulsoup4
-, pytest-sanic
-, pytest-sugar
-, pytest-benchmark
-
-# required just httpcore / requests-async
-, h11
-, h2
-, certifi
-, chardet
-, idna
-, requests
-, rfc3986
+, buildPythonPackage
+, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
+, fetchFromGitHub
+, gunicorn
+, httptools
+, multidict
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+, sanic-routing
+, sanic-testing
+, setuptools
+, ujson
 , uvicorn
+, uvloop
+, websockets
+, aioquic
 }:
-
-let
-
-  # This version of sanic depends on two packages that have been deprecated by
-  # their development teams:
-  #
-  # - requests-async [where first line of pypi says to use `http3` instead now]
-  # - httpcore       [where the homepage redirects to `http3` now]
-  #
-  # Since no other packages in nixpkg depend on these right now, define these
-  # packages just as local dependencies here, to avoid bloat.
-
-  httpcore = buildPythonPackage rec {
-    pname = "httpcore";
-    version = "0.3.0";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0n3bamaixxhcm27gf1ws3g6rkamvqx87087c88r6hyyl52si1ycn";
-    };
-
-    propagatedBuildInputs = [ certifi chardet h11 h2 idna rfc3986 ];
-
-    # relax pinned old version of h11
-    postConfigure = ''
-      substituteInPlace setup.py \
-        --replace "h11==0.8.*" "h11"
-      '';
-
-    # LICENCE.md gets propagated without this, causing collisions
-    postInstall = ''
-      rm $out/LICENSE.md
-    '';
-  };
-
-  requests-async = buildPythonPackage rec {
-    pname = "requests-async";
-    version = "0.5.0";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "8731420451383196ecf2fd96082bfc8ae5103ada90aba185888499d7784dde6f";
-    };
-
-    propagatedBuildInputs = [ requests httpcore ];
-
-    # LICENCE.md gets propagated without this, causing collisions
-    postInstall = ''
-      rm $out/LICENSE.md
-    '';
-  };
-
-in
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "19.6.3";
+  version = "22.12.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b1qqsvdjkibrw5kgr0pm7n7jzb1403132wjmb0lx3k5wyvqfi95";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "sanic-org";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Vj780rP5rJ+YsMWlb3BR9LTKT/nTt0C2H3J0X9sysj8=";
   };
 
-  propagatedBuildInputs = [
-    httptools
-    aiofiles
-    websockets
-    multidict
-    requests-async
-    uvloop
-    ujson
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkInputs = [
-    pytest
-    gunicorn
-    pytestcov
-    aiohttp
+  propagatedBuildInputs = [
+    aiofiles
+    aioquic
+    httptools
+    multidict
+    sanic-routing
+    ujson
+    uvloop
+    websockets
+  ];
+
+  nativeCheckInputs = [
     beautifulsoup4
-    pytest-sanic
-    pytest-sugar
-    pytest-benchmark
+    gunicorn
+    pytest-asyncio
+    pytestCheckHook
+    sanic-testing
     uvicorn
   ];
 
-  # Sanic says it needs websockets 7.x, but the changelog for 8.x is actually
-  # nearly compatible with sanic's use. So relax this constraint, with a small
-  # required code change.
-  postConfigure = ''
-    substituteInPlace setup.py --replace \
-      "websockets>=7.0,<8.0"             \
-      "websockets>=7.0,<9.0"
-    substituteInPlace sanic/websocket.py --replace    \
-           "self.websocket.subprotocol = subprotocol" \
-           "self.websocket.subprotocol = subprotocol
-            self.websocket.is_client = False"
+  inherit doCheck;
+
+  preCheck = ''
+    # Some tests depends on sanic on PATH
+    PATH="$out/bin:$PATH"
+    PYTHONPATH=$PWD:$PYTHONPATH
+
+    # needed for relative paths for some packages
+    cd tests
+  '' + lib.optionalString stdenv.isDarwin ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 1024
   '';
 
-  # 10/500 tests ignored due to missing directory and
-  # requiring network access
-  checkPhase = ''
-    pytest --ignore tests/test_blueprints.py \
-           --ignore tests/test_routes.py \
-           --ignore tests/test_worker.py
-  '';
+  # uvloop usage is buggy
+  #SANIC_NO_UVLOOP = true;
+
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+    "-vvv"
+  ];
+
+  disabledTests = [
+    # Require networking
+    "test_full_message"
+    # Server mode mismatch (debug vs production)
+    "test_num_workers"
+    # Racy tests
+    "test_keep_alive_client_timeout"
+    "test_keep_alive_server_timeout"
+    "test_zero_downtime"
+    # sanic.exceptions.SanicException: Cannot setup Sanic Simple Server without a path to a directory
+    "test_load_app_simple"
+    # create defunct python processes
+    "test_reloader_live"
+    "test_reloader_live_with_dir"
+    "test_reload_listeners"
+    # crash the python interpreter
+    "test_host_port_localhost"
+    "test_host_port"
+    "test_server_run"
+    # NoneType object is not subscriptable
+    "test_serve_app_implicit"
+    # AssertionError: assert [] == ['Restarting a process', 'Begin restart termination', 'Starting a process']
+    "test_default_reload_shutdown_order"
+    # App not found.
+    "test_input_is_dir"
+  ];
+
+  disabledTestPaths = [
+    # We are not interested in benchmarks
+    "benchmark/"
+    # unable to create async loop
+    "test_app.py"
+    "test_asgi.py"
+    # occasionally hangs
+    "test_multiprocessing.py"
+  ];
+
+  # avoid usage of nixpkgs-review in darwin since tests will compete usage
+  # for the same local port
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
-    description = "A microframework based on uvloop, httptools, and learnings of flask";
-    homepage = http://github.com/channelcat/sanic/;
+    description = "Web server and web framework";
+    homepage = "https://github.com/sanic-org/sanic/";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc AluisioASG ];
   };
 }

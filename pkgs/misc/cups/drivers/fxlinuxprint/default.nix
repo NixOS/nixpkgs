@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.1.2-1";
 
   src = fetchzip {
-    url = "https://onlinesupport.fujixerox.com/driver_downloads/fxlinuxpdf112119031.zip";
+    url = "https://support-fb.fujifilm.com/driver_downloads/fxlinuxpdf112119031.zip";
     sha256 = "1mv07ch6ysk9bknfmjqsgxb803sj6vfin29s9knaqv17jvgyh0n3";
     curlOpts = "--user-agent Mozilla/5.0";  # HTTP 410 otherwise
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv usr/share/ppd/FujiXerox/* $out/share/cups/model
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fuji Xerox Linux Printer Driver";
     longDescription = ''
       DocuPrint P365/368 d
@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
       DocuCentre-VI C2271/C3370/C3371/C4471/C5571/C6671/C7771
       DocuPrint 3205 d/3208 d/3505 d/3508 d/4405 d/4408 d
     '';
-    homepage = https://onlinesupport.fujixerox.com;
+    homepage = "https://onlinesupport.fujixerox.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ delan ];
     platforms = platforms.linux;

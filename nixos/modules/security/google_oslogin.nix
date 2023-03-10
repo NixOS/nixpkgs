@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.security.googleOsLogin;
-  package = pkgs.google-compute-engine-oslogin;
+  package = pkgs.google-guest-oslogin;
 
 in
 
@@ -16,8 +16,8 @@ in
     security.googleOsLogin.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to enable Google OS Login
+      description = lib.mdDoc ''
+        Whether to enable Google OS Login.
 
         The OS Login package enables the following components:
         AuthorizedKeysCommand to query valid SSH keys from the user's OS Login
@@ -36,7 +36,7 @@ in
     security.pam.services.sshd = {
       makeHomeDir = true;
       googleOsLoginAccountVerification = true;
-      # disabled for now: googleOsLoginAuthentication = true;
+      googleOsLoginAuthentication = true;
     };
 
     security.sudo.extraConfig = ''
@@ -47,8 +47,13 @@ in
       "d /var/google-users.d 750 root root -"
     ];
 
+    systemd.packages = [ package ];
+    systemd.timers.google-oslogin-cache.wantedBy = [ "timers.target" ];
+
     # enable the nss module, so user lookups etc. work
     system.nssModules = [ package ];
+    system.nssDatabases.passwd = [ "cache_oslogin" "oslogin" ];
+    system.nssDatabases.group = [ "cache_oslogin" "oslogin" ];
 
     # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
     # So indirect by a symlink.
@@ -59,10 +64,8 @@ in
         exec ${package}/bin/google_authorized_keys "$@"
       '';
     };
-    services.openssh.extraConfig = ''
-      AuthorizedKeysCommand /etc/ssh/authorized_keys_command_google_oslogin %u
-      AuthorizedKeysCommandUser nobody
-    '';
+    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command_google_oslogin %u";
+    services.openssh.authorizedKeysCommandUser = "nobody";
   };
 
 }

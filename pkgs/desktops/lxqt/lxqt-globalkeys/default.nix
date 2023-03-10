@@ -1,14 +1,27 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, gitUpdater
+}:
 
 mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "0.14.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1ij9abjnqbnkcb7qqk3x7y4amr6l7kkmwhdpc0x2qk4yikn5ijdg";
+    sha256 = "GZ5E8OAx7Wb1bEwqwmYdOVcOXFaTxD1SibADgTWhdbg=";
   };
 
   nativeBuildInputs = [
@@ -26,11 +39,13 @@ mkDerivation rec {
     libqtxdg
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-globalkeys";
     description = "LXQt service for global keyboard shortcuts registration";
-    homepage = https://github.com/lxqt/lxqt-globalkeys;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -1,29 +1,51 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, Babel
+, markupsafe
+, babel
+, pytestCheckHook
+, email-validator
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "2.1";
   pname = "wtforms";
+  version = "3.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "0vyl26y9cg409cfyj8rhqxazsdnd0jipgjw06civhrd53yyi1pzz";
+    pname = "WTForms";
+    inherit version;
+    hash = "sha256-azUbuxLdWK9X/+8FvHhCXQjRkU4P1o7hQUO3reAjxbw=";
   };
 
-  # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
-  # This is fixed in master I believe but not yet in 2.1;
-  doCheck = false;
+  propagatedBuildInputs = [
+    markupsafe
+    babel
+  ];
 
-  propagatedBuildInputs = [ Babel ];
+  passthru.optional-dependencies = {
+    email = [
+      email-validator
+    ];
+  };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/wtforms/wtforms;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "wtforms"
+  ];
+
+  meta = with lib; {
     description = "A flexible forms validation and rendering library for Python";
+    homepage = "https://github.com/wtforms/wtforms";
+    changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ bhipple ];
   };
 
 }

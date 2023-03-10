@@ -1,54 +1,53 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , meson
 , python3
 , ninja
-, pkgconfig
+, pkg-config
 , vala
+, elementary-settings-daemon
 , libgee
 , granite
+, gsettings-desktop-schemas
+, gala
 , gtk3
 , glib
 , polkit
 , zeitgeist
 , switchboard
-, lightlocker
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1dwq9rqswgnnglhrgcpvrp6shn3pb4x8f8f23x84sqakb430idp7";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-k8IQumV8rjV3U4ACm5FxCqzSdwqKBaGAqsv45hsP/7c=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
 
   buildInputs = [
+    elementary-settings-daemon # settings schema
+    gala
     glib
     granite
+    gsettings-desktop-schemas
     gtk3
     libgee
     polkit
     switchboard
-    lightlocker
     zeitgeist
   ];
 
@@ -57,12 +56,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Switchboard Security & Privacy Plug";
-    homepage = https://github.com/elementary/switchboard-plug-security-privacy;
-    license = licenses.lgpl3Plus;
+    homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
 }

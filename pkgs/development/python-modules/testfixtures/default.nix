@@ -1,26 +1,59 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, isPy27
-, mock, pytest, sybil, zope_component, twisted }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, sybil
+, twisted
+, zope_component
+}:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.10.3";
+  version = "7.0.4";
+  format = "setuptools";
+  # DO NOT CONTACT upstream.
+  # https://github.com/simplistix/ is only concerned with internal CI process.
+  # Any attempt by non-standard pip workflows to comment on issues will
+  # be met with hostility.
+  # https://github.com/simplistix/testfixtures/issues/169
+  # https://github.com/simplistix/testfixtures/issues/168
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f22100d4fb841b958f64e71c8820a32dc46f57d4d7e077777b932acd87b7327";
+    hash = "sha256-xSaqiXjBAC8FnxUsSt43WMShJBjfqyspdUrmIwyvPQQ=";
   };
 
-  checkInputs = [ pytest mock sybil zope_component twisted ];
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+    sybil
+    twisted
+    zope_component
+  ];
 
-  doCheck = !isPy27;
-  checkPhase = ''
-    # django is too much hasle to setup at the moment
-    pytest -W ignore::DeprecationWarning --ignore=testfixtures/tests/test_django testfixtures/tests
-  '';
+  disabledTestPaths = [
+    # Django is too much hasle to setup at the moment
+    "testfixtures/tests/test_django"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Simplistix/testfixtures;
-    description = "A collection of helpers and mock objects for unit tests and doc tests";
+  pytestFlagsArray = [
+    "testfixtures/tests"
+  ];
+
+  pythonImportsCheck = [
+    "testfixtures"
+  ];
+
+  meta = with lib; {
+    description = "Collection of helpers and mock objects for unit tests and doc tests";
+    homepage = "https://github.com/Simplistix/testfixtures";
+    changelog = "https://github.com/simplistix/testfixtures/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

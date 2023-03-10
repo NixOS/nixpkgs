@@ -1,25 +1,72 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , openssl
 , cryptography
-, pyasn1
-, idna
-, pytest
+, pytestCheckHook
 , pretend
+, sphinxHook
+, sphinx-rtd-theme
 , flaky
-, glibcLocales
-, six
-, fetchpatch
 }:
 
-with stdenv.lib;
+buildPythonPackage rec {
+  pname = "pyopenssl";
+  version = "23.0.0";
+  format = "setuptools";
 
+  src = fetchPypi {
+    pname = "pyOpenSSL";
+    inherit version;
+    hash = "sha256-wcxfhrys78hNrafTEXXK4bFRjV9g09C7WVpngiqGim8=";
+  };
 
-let
-  # https://github.com/pyca/pyopenssl/issues/791
-  # These tests, we disable in the case that libressl is passed in as openssl.
-  failingLibresslTests = [
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    openssl
+    sphinxHook
+    sphinx-rtd-theme
+  ];
+
+  postPatch = ''
+    # remove cryptography pin
+    sed "/cryptography/ s/,<[0-9]*//g" setup.py
+  '';
+
+  propagatedBuildInputs = [
+    cryptography
+  ];
+
+  nativeCheckInputs = [
+    flaky
+    pretend
+    pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    export LANG="en_US.UTF-8"
+  '';
+
+  disabledTests = [
+    # https://github.com/pyca/pyopenssl/issues/692
+    # These tests, we disable always.
+    "test_set_default_verify_paths"
+    "test_fallback_default_verify_paths"
+    # https://github.com/pyca/pyopenssl/issues/768
+    "test_wantWriteError"
+    # https://github.com/pyca/pyopenssl/issues/1043
+    "test_alpn_call_failure"
+  ] ++ lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) [
+    # https://github.com/pyca/pyopenssl/issues/791
+    # These tests, we disable in the case that libressl is passed in as openssl.
     "test_op_no_compression"
     "test_npn_advertise_error"
     "test_npn_select_error"
@@ -32,82 +79,22 @@ let
     "test_verify_with_revoked"
     "test_set_notAfter"
     "test_set_notBefore"
-  ];
-
-  # these tests are extremely tightly wed to the exact output of the openssl cli tool,
-  # including exact punctuation.
-  failingOpenSSL_1_1Tests = [
+  ] ++ lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1") [
+    # these tests are extremely tightly wed to the exact output of the openssl cli tool, including exact punctuation.
     "test_dump_certificate"
     "test_dump_privatekey_text"
     "test_dump_certificate_request"
     "test_export_text"
+  ] ++ lib.optionals stdenv.is32bit [
+    # https://github.com/pyca/pyopenssl/issues/974
+    "test_verify_with_time"
   ];
 
-  disabledTests = [
-    # https://github.com/pyca/pyopenssl/issues/692
-    # These tests, we disable always.
-    "test_set_default_verify_paths"
-    "test_fallback_default_verify_paths"
-    # https://github.com/pyca/pyopenssl/issues/768
-    "test_wantWriteError"
-  ] ++ (
-    optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
-  ) ++ (
-    optionals (versionAtLeast (getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
-  );
-
-  # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = optionalString (disabledTests != [])
-    "-k 'not ${concatStringsSep " and not " disabledTests}'";
-
-in
-
-
-buildPythonPackage rec {
-  pname = "pyOpenSSL";
-  version = "19.1.0";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507";
+  meta = with lib; {
+    description = "Python wrapper around the OpenSSL library";
+    homepage = "https://github.com/pyca/pyopenssl";
+    changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
-  outputs = [ "out" "dev" ];
-
-  checkPhase = ''
-    runHook preCheck
-    export LANG="en_US.UTF-8"
-    py.test tests ${testExpression}
-    runHook postCheck
-  '';
-
-  patches = [
-    # 4 patches for 2020 bug
-    # https://github.com/pyca/pyopenssl/pull/828
-    (fetchpatch {
-      url = https://github.com/pyca/pyopenssl/commit/0d2fd1a24b30077ead6960bd63b4a9893a57c101.patch;
-      sha256 = "1c27g53qrwxddyx04sxf8yvj7xgbaabla7mc1cgbfd426rncbqf3";
-    })
-    (fetchpatch {
-      url = https://github.com/pyca/pyopenssl/commit/d08a742573c3205348a4eec9a65abaf6c16110c4.patch;
-      sha256 = "18xn8s1wpycz575ivrbsbs0qd2q48z8pdzsjzh8i60xba3f8yj2f";
-    })
-    (fetchpatch {
-      url = https://github.com/pyca/pyopenssl/commit/60b9e10e6da7ccafaf722def630285f54510ed12.patch;
-      sha256 = "0aw8qvy8m0bhgp39lmbcrpprpg4bhpssm327hyrk476wwgajk01j";
-    })
-    (fetchpatch {
-      url = https://github.com/pyca/pyopenssl/commit/7a37cc23fcbe43abe785cd4badd14bdc7acfb175.patch;
-      sha256 = "1c7zb568rs71rsl16p6dq7aixwlkgzfnba4vzmfvbmy3zsnaslq2";
-    })
-  ];
-
-  # Seems to fail unpredictably on Darwin. See http://hydra.nixos.org/build/49877419/nixlog/1
-  # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
-  doCheck = !stdenv.isDarwin;
-
-  nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography pyasn1 idna six ];
-
-  checkInputs = [ pytest pretend flaky glibcLocales ];
 }

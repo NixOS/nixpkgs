@@ -46,7 +46,7 @@ let
 
               # set up process that expects all the keys to be entered
               machine.succeed(
-                  "{} {} {} {} &".format(
+                  "{} {} {} {} >&2 &".format(
                       cmd,
                       "${testReader}",
                       len(inputs),
@@ -64,7 +64,6 @@ let
 
               # wait for reader to be ready
               machine.wait_for_file("${readyFile}")
-              machine.sleep(1)
 
               # send all keys
               for key in inputs:
@@ -78,9 +77,18 @@ let
       with open("${pkgs.writeText "tests.json" (builtins.toJSON tests)}") as json_file:
           tests = json.load(json_file)
 
+      # These environments used to run in the opposite order, causing the
+      # following error at openvt startup.
+      #
+      # openvt: Couldn't deallocate console 1
+      #
+      # This error did not appear in successful runs.
+      # I don't know the exact cause, but I it seems that openvt and X are
+      # fighting over the virtual terminal. This does not appear to be a problem
+      # when the X test runs first.
       keymap_environments = {
-          "VT Keymap": "openvt -sw --",
           "Xorg Keymap": "DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
+          "VT Keymap": "openvt -sw --",
       }
 
       machine.wait_for_x()
@@ -107,8 +115,23 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       altgr.expect = [ "~"       "#"       "{"       "["       "|"       ];
     };
 
-    extraConfig.console.keyMap = "azerty/fr";
+    extraConfig.console.keyMap = "fr";
     extraConfig.services.xserver.layout = "fr";
+  };
+
+  bone = {
+    tests = {
+      layer1.qwerty = [ "f"           "j"                     ];
+      layer1.expect = [ "e"           "n"                     ];
+      layer2.qwerty = [ "shift-f"     "shift-j"     "shift-6" ];
+      layer2.expect = [ "E"           "N"           "$"       ];
+      layer3.qwerty = [ "caps_lock-d" "caps_lock-f"           ];
+      layer3.expect = [ "{"           "}"                     ];
+    };
+
+    extraConfig.console.keyMap = "bone";
+    extraConfig.services.xserver.layout = "de";
+    extraConfig.services.xserver.xkbVariant = "bone";
   };
 
   colemak = {
@@ -117,7 +140,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       homerow.expect = [ "a" "r" "s" "t" "n" "e" "i" "o"         ];
     };
 
-    extraConfig.console.keyMap = "colemak/colemak";
+    extraConfig.console.keyMap = "colemak";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "colemak";
   };
@@ -129,9 +152,13 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       symbols.qwerty = [ "q" "w" "e" "minus" "equal" ];
       symbols.expect = [ "'" "," "." "["     "]"     ];
     };
+
+    extraConfig.console.keyMap = "dvorak";
+    extraConfig.services.xserver.layout = "us";
+    extraConfig.services.xserver.xkbVariant = "dvorak";
   };
 
-  dvp = {
+  dvorak-programmer = {
     tests = {
       homerow.qwerty = [ "a" "s" "d" "f" "j" "k" "l" "semicolon" ];
       homerow.expect = [ "a" "o" "e" "u" "h" "t" "n" "s"         ];
@@ -142,6 +169,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       symbols.expect = [ "&" "[" "{" "}" "(" "=" "*" ")" "+" "]" "!" ];
     };
 
+    extraConfig.console.keyMap = "dvorak-programmer";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "dvp";
   };
@@ -156,6 +184,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       layer3.expect = [ "{"           "}"                     ];
     };
 
+    extraConfig.console.keyMap = "neo";
     extraConfig.services.xserver.layout = "de";
     extraConfig.services.xserver.xkbVariant = "neo";
   };

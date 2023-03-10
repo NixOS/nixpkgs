@@ -1,26 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "timescaledb-parallel-copy";
-  version = "0.2.0";
-
-  owner  = "timescale";
-  repo   = "timescaledb-parallel-copy";
-
-  goPackagePath = with src; "github.com/${owner}/${repo}";
-  goDeps = ./deps.nix;
+buildGoModule rec {
+  pname = "timescaledb-parallel-copy";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
-    inherit owner repo;
-    rev    = version;
-    sha256 = "1z9vf29vrxqs8imbisv681d02p4cfk3hlsrin6hhibxf1h0br9gd";
+    owner = "timescale";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-HxaGKJnLZjPPJXoccAx0XUsCrZiG09c40zeSbHYXm04=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = "sha256-muxtr80EjnRoHG/TCEQwrBwlnARsfqWoYlR0HavMe6U=";
+
+  meta = with lib; {
     description = "Bulk, parallel insert of CSV records into PostgreSQL";
-    homepage    = https://github.com/timescale/timescaledb-parallel-copy;
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/timescale/timescaledb-parallel-copy";
+    license = licenses.asl20;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

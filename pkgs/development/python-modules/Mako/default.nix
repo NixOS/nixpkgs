@@ -1,35 +1,66 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, python
-, markupsafe
-, nose
-, mock
 , isPyPy
+
+# propagates
+, markupsafe
+
+# extras: Babel
+, babel
+
+# tests
+, mock
+, pytestCheckHook
+, lingua
+, chameleon
 }:
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.1.1";
+  version = "1.2.4";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2984a6733e1d472796ceef37ad48c26f4a984bb18119bb2dbc37a44d8f6e75a4";
+    sha256 = "sha256-1go5A9w7sBoYrWqJzb4uTq3GnAvI7x43c7pT1Ew/ejQ=";
   };
 
-  checkInputs = [ markupsafe nose mock ];
-  propagatedBuildInputs = [ markupsafe ];
+  propagatedBuildInputs = [
+    markupsafe
+  ];
 
-  doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  passthru.optional-dependencies = {
+    babel = [
+      babel
+    ];
+  };
 
-  meta = {
+  nativeCheckInputs = [
+    chameleon
+    lingua
+    mock
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.babel;
+
+  disabledTests = lib.optionals isPyPy [
+    # https://github.com/sqlalchemy/mako/issues/315
+    "test_alternating_file_names"
+    # https://github.com/sqlalchemy/mako/issues/238
+    "test_file_success"
+    "test_stdin_success"
+    # fails on pypy2.7
+    "test_bytestring_passthru"
+  ];
+
+  meta = with lib; {
     description = "Super-fast templating language";
-    homepage = http://www.makotemplates.org;
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ domenkozar ];
+    homepage = "https://www.makotemplates.org/";
+    changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

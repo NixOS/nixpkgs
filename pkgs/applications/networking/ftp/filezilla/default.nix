@@ -1,28 +1,29 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-
+, autoreconfHook
 , dbus
 , gettext
 , gnutls
-, gtk2
 , libfilezilla
 , libidn
 , nettle
-, pkgconfig
+, pkg-config
 , pugixml
 , sqlite
 , tinyxml
+, wrapGAppsHook
 , wxGTK30
-, xdg_utils
+, gtk3
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.46.3";
+  version = "3.63.1";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "15bkg9qs07h4pzkxba1gymp8f264dk0zrzd9brx48fcwm7qbzigi";
+    hash = "sha256-TgtcD3n0+LykuiHnE7qXuG1bRcRyPeZ7nBDSO/QXo38=";
   };
 
   configureFlags = [
@@ -30,12 +31,12 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+
   buildInputs = [
     dbus
     gettext
     gnutls
-    gtk2
     libfilezilla
     libidn
     nettle
@@ -43,12 +44,13 @@ stdenv.mkDerivation rec {
     sqlite
     tinyxml
     wxGTK30
-    xdg_utils
+    gtk3
+    xdg-utils
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
     longDescription = ''

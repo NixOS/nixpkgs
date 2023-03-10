@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre8 }:
 
 let
   desktopItem = makeDesktopItem {
@@ -7,16 +7,16 @@ let
     icon = "groove";
     desktopName = "GROOVE Simulator";
     comment = "GRaphs for Object-Oriented VErification";
-    categories = "Science;ComputerScience;";
+    categories = [ "Science" "ComputerScience" ];
   };
 
 in stdenv.mkDerivation rec {
   pname = "groove";
-  version = "5.7.4";
+  version = "5.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/groove/groove/${version}/${pname}-${builtins.replaceStrings ["."] ["_"] version}-bin.zip";
-    sha256 = "1cl3xzl3n8b9a7h5pvnv31bab9j9zaw07ppk8whk8h865dcq1d10";
+    sha256 = "sha256-JwoUlO6F2+8NtCnLC+xm5q0Jm8RIyU1rnuKGmjgJhFU=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper icoutils ];
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     for bin in Generator Imager ModelChecker PrologChecker Simulator Viewer; do
-      makeWrapper ${jre}/bin/java $out/bin/groove-''${bin,,} \
+      makeWrapper ${jre8}/bin/java $out/bin/groove-''${bin,,} \
         --add-flags "-jar $out/share/groove/bin/$bin.jar"
     done
 
@@ -44,10 +44,11 @@ in stdenv.mkDerivation rec {
     icotool -x -i 2 -o $out/share/icons/hicolor/16x16/apps/groove.png groove-green-g.ico
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRaphs for Object-Oriented VErification";
-    homepage = http://groove.cs.utwente.nl/;
+    homepage = "http://groove.cs.utwente.nl/";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];
   };

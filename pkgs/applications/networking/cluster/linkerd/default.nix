@@ -1,24 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ callPackage }:
 
-buildGoModule {
-  pname = "linkerd-unstablle";
-  version = "2019-07-26";
-
-  src = fetchFromGitHub {
-    owner = "linkerd";
-    repo = "linkerd2";
-    rev = "065dd3ec9d4b84c90383b31be16ccadd34a8ab0d";
-    sha256 = "01m8g627sd126as0a74fy9svmymwd41sifd897nhn6kz78a21gq8";
-  };
-
-  modSha256 = "0gahhywpcj16ww4l8s3wjwvavq24fpy258snhyf94ipy6lb797sl";
-
-  subPackages = [ "cli/cmd" ];
-
-  meta = with stdenv.lib; {
-    description = "A service mesh for Kubernetes and beyond.";
-    homepage = https://linkerd.io/;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih ];
-  };
+(callPackage ./generic.nix { }) {
+  channel = "stable";
+  version = "2.12.4";
+  sha256 = "1nl831xjhxyw1r2zvdxy3455sfn1cnn6970n02q7aalmqgz9rpdd";
+  vendorSha256 = "sha256-c7x2vNO6ap5Ecx4+1hKy6PImFuclSQqvkBKr0LPdX4M=";
 }

@@ -1,23 +1,26 @@
-{ stdenv, fetchurl, expat, zlib, geos, libspatialite }:
+{ lib, stdenv, fetchurl, expat, zlib, validatePkgConfig }:
 
 stdenv.mkDerivation rec {
-  name = "readosm-1.1.0";
+  pname = "readosm";
+  version = "1.1.0a";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/readosm-sources/${name}.tar.gz";
-    sha256 = "1v20pnda67imjd70fn0zw30aar525xicy3d3v49md5cvqklws265";
+    url = "https://www.gaia-gis.it/gaia-sins/readosm-${version}.tar.gz";
+    hash = "sha256-23wFHSVs7H7NTDd1q5vIINpaS/cv/U6fQLkR15dw8UU=";
   };
 
-  buildInputs = [ expat zlib geos libspatialite ];
+  nativeBuildInputs = [ validatePkgConfig ];
 
-  configureFlags = [ "--disable-freexl" ];
+  buildInputs = [ expat zlib ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  doCheck = true;
+
+  meta = with lib; {
     description = "An open source library to extract valid data from within an Open Street Map input file";
-    homepage = https://www.gaia-gis.it/fossil/readosm;
-    license = with stdenv.lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.gaia-gis.it/fossil/readosm";
+    license = with licenses; [ mpl11 gpl2Plus lgpl21Plus ];
+    platforms = platforms.unix;
   };
 }

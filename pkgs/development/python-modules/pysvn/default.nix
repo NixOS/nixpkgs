@@ -1,43 +1,68 @@
 { stdenv
+, lib
 , buildPythonPackage
 , fetchurl
-, pkgs
 , isPy3k
 , python
+, apr
+, aprutil
+, bash
+, e2fsprogs
+, expat
+, gcc
+, glibcLocales
+, neon
+, openssl
+, pycxx
+, subversion
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.8.0";
-  disabled = isPy3k;
+  version = "1.9.20";
   format = "other";
 
   src = fetchurl {
-    url = "http://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
-    sha256 = "0srjr2qgxfs69p65d9vvdib2lc142x10w8afbbdrqs7dhi46yn9r";
+    url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
+    hash = "sha256-LbAz+KjEY3nkSJAzJNwlnSRYoWr4i1ITRUPV3ZBH7cc=";
   };
 
-  buildInputs = [ pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
-    ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
+  patches = [
+    ./replace-python-first.patch
+  ];
 
-  # There seems to be no way to pass that path to configure.
-  NIX_CFLAGS_COMPILE="-I${pkgs.aprutil.dev}/include/apr-1";
+  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
+    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
+    ++ lib.optionals stdenv.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
-    ${python.interpreter} setup.py backport
-    ${python.interpreter} setup.py configure \
-      --apr-inc-dir=${pkgs.apr.dev}/include \
-      --apu-inc-dir=${pkgs.aprutil.dev}/include \
-      --apr-lib-dir=${pkgs.apr.out}/lib \
-      --svn-lib-dir=${pkgs.subversion.out}/lib \
-      --svn-bin-dir=${pkgs.subversion.out}/bin \
-      --svn-root-dir=${pkgs.subversion.dev}
-  '' + (if !stdenv.isDarwin then "" else ''
-    sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-  '');
+    ${python.pythonForBuild.interpreter} setup.py backport
+    ${python.pythonForBuild.interpreter} setup.py configure \
+      --apr-inc-dir=${apr.dev}/include \
+      --apu-inc-dir=${aprutil.dev}/include \
+      --pycxx-dir=${pycxx.dev}/include \
+      --svn-inc-dir=${subversion.dev}/include/subversion-1 \
+      --pycxx-src-dir=${pycxx.dev}/src \
+      --apr-lib-dir=${apr.out}/lib \
+      --svn-lib-dir=${subversion.out}/lib \
+      --svn-bin-dir=${subversion.out}/bin
+  '';
 
-  checkPhase = "make -C ../Tests";
+  nativeCheckInputs = [ glibcLocales ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    # It is not only shebangs, some tests also write scripts dynamically
+    # so it is easier to simply search and replace
+    sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
+    make -C ../Tests
+
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
@@ -45,15 +70,16 @@ buildPythonPackage rec {
     cp pysvn/__init__.py $dest/
     cp pysvn/_pysvn*.so $dest/
     mkdir -p $out/share/doc
-    mv -v ../Docs $out/share/doc/pysvn-1.7.2
-    rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
+    mv -v ../Docs $out/share/doc/pysvn-${version}
+    rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Subversion";
-    homepage = http://pysvn.tigris.org/;
+    homepage = "https://pysvn.sourceforge.io/";
     license = licenses.asl20;
-    broken = true;
+    maintainers = with maintainers; [ dotlambda ];
+    # g++: command not found
+    broken = stdenv.isDarwin;
   };
-
 }

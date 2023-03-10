@@ -1,17 +1,17 @@
 { stdenv, lib, fetchFromGitHub, python, makeWrapper
-, eigen, fftw, libtiff, zlib, ants, bc
+, eigen, fftw, libtiff, libpng, zlib, ants, bc
 , qt5, libGL, libGLU, libX11, libXext
-, withGui ? true }:
+, withGui ? true, less }:
 
 stdenv.mkDerivation rec {
   pname = "mrtrix";
-  version = "3.0_RC3_latest";
+  version = "unstable-2021-11-25";
 
   src = fetchFromGitHub {
     owner  = "MRtrix3";
     repo   = "mrtrix3";
-    rev    = version;
-    sha256 = "184nv524p8j94qicjy9l288bqcgl2yxqqs55a7042i0gfsnwp51c";
+    rev    = "994498557037c9e4f7ba67f255820ef84ea899d9";
+    sha256 = "sha256-8eFDS5z4ZxMzi9Khk90KAS4ndma/Syd6JDXM2Fpr0M8=";
     fetchSubmodules = true;
   };
 
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     python
     fftw
     libtiff
-    zlib ] ++ lib.optionals withGui [
+    libpng
+    zlib
+  ] ++ lib.optionals withGui [
     libGL
     libGLU
     libX11
@@ -31,12 +33,20 @@ stdenv.mkDerivation rec {
     qt5.qtsvg
   ];
 
-  installCheckInputs = [ bc ];
+  nativeInstallCheckInputs = [ bc ];
 
   postPatch = ''
-    patchShebangs ./build ./configure ./run_tests ./bin/population_template
+    patchShebangs ./build ./configure ./run_tests ./bin/*
+
+    # patching interpreters before fixup is needed for tests:
+    patchShebangs ./bin/*
+    patchShebangs testing/binaries/data/vectorstats/*py
+
     substituteInPlace ./run_tests  \
-      --replace 'git submodule update --init >> $LOGFILE 2>&1' ""
+      --replace 'git submodule update --init $datadir >> $LOGFILE 2>&1' ""
+
+    substituteInPlace ./build  \
+      --replace '"less -RX "' '"${less}/bin/less -RX "'
   '';
 
   configurePhase = ''
@@ -50,7 +60,13 @@ stdenv.mkDerivation rec {
     (cd testing && ../build)
   '';
 
-  installCheckPhase = "./run_tests";
+  installCheckPhase = ''
+    ./run_tests units
+    ./run_tests binaries
+
+    # can also `./run_tests scripts`, but this fails due to lack of FSL package
+    # (and there's no convenient way to disable individual tests)
+  '';
   doInstallCheck = true;
 
   installPhase = ''
@@ -63,11 +79,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for prog in $out/bin/*; do
-      wrapProgram $prog --prefix PATH : ${lib.makeBinPath [ ants ]}
+      if [[ -x "$prog" ]]; then
+        wrapProgram $prog --prefix PATH : ${lib.makeBinPath [ ants ]}
+      fi
     done
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
     maintainers = with maintainers; [ bcdarwin ];

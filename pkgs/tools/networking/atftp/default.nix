@@ -1,25 +1,58 @@
-{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc }:
+{ lib
+, stdenv
+, autoreconfHook
+, fetchurl
+, gcc
+, makeWrapper
+, pcre2
+, perl
+, ps
+, readline
+, tcp_wrappers
+}:
 
 stdenv.mkDerivation rec {
   pname = "atftp";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/atftp/${pname}-${version}.tar.gz";
-    sha256 = "0hah3fhzl6vfs381883vbvf4d13cdhsyf0x7ncbl55wz9rkq1l0s";
+    hash = "sha256-3yqgicdnD56rQOVZjl0stqWC3FGCkm6lC01pDk438xY=";
   };
 
-  buildInputs = [ readline tcp_wrappers pcre makeWrapper gcc ];
+  # fix test script
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+  ];
+
+  buildInputs = [
+    gcc
+    pcre2
+    readline
+    tcp_wrappers
+  ];
+
+  nativeCheckInputs = [
+    perl
+    ps
+  ];
 
   # Expects pre-GCC5 inline semantics
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  doCheck = false; # fails
+  doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Advanced tftp tools";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    changelog = "https://sourceforge.net/p/atftp/code/ci/v${version}/tree/Changelog";
+    homepage = "https://sourceforge.net/projects/atftp/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

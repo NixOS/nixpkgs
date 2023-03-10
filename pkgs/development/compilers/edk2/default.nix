@@ -1,32 +1,71 @@
-{ stdenv, fetchgit, fetchpatch, libuuid, python3, iasl, bc }:
+{ stdenv
+, clangStdenv
+, fetchFromGitHub
+, fetchpatch
+, libuuid
+, python3
+, bc
+, llvmPackages_9
+, lib
+, buildPackages
+}:
 
 let
-  pythonEnv = python3.withPackages (ps: [ps.tkinter]);
+  pythonEnv = buildPackages.python3.withPackages (ps: [ps.tkinter]);
 
 targetArch = if stdenv.isi686 then
   "IA32"
 else if stdenv.isx86_64 then
   "X64"
+else if stdenv.isAarch32 then
+  "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
 else
   throw "Unsupported architecture";
 
-edk2 = stdenv.mkDerivation {
+buildStdenv = if stdenv.isDarwin then
+  llvmPackages_9.stdenv
+else
+  stdenv;
+
+buildType = if stdenv.isDarwin then
+    "CLANGPDB"
+  else
+    "GCC5";
+
+edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "201911";
+  version = "202211";
+
+  patches = [
+    # pass targetPrefix as an env var
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
+      sha256 = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+    })
+  ];
 
   # submodules
-  src = fetchgit {
-    url = "https://github.com/tianocore/edk2";
+  src = fetchFromGitHub {
+    owner = "tianocore";
+    repo = "edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "1rmvb4w043v25cppsqxqrpzqqcay3yrzsrhhzm2q9bncrj56vm8q";
+    fetchSubmodules = true;
+    sha256 = "sha256-0jE73xPyenAcgJ1mS35oTc5cYw7jJvVYxhPdhTWpKA0=";
   };
 
-  buildInputs = [ libuuid pythonEnv ];
+  nativeBuildInputs = [ pythonEnv ];
+  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.util-linux buildPackages.bash ];
+  strictDeps = true;
 
-  makeFlags = [ "-C BaseTools" ];
-  NIX_CFLAGS_COMPILE = "-Wno-return-type -Wno-error=stringop-truncation";
+  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+  ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
+
+  makeFlags = [ "-C BaseTools" ]
+    ++ lib.optionals (stdenv.cc.isClang) [ "CXX=llvm BUILD_AR=ar BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang BUILD_LD=ld" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -34,22 +73,34 @@ edk2 = stdenv.mkDerivation {
     mkdir -vp $out
     mv -v BaseTools $out
     mv -v edksetup.sh $out
+    # patchShebangs fails to see these when cross compiling
+    for i in $out/BaseTools/BinWrappers/PosixLike/*; do
+      substituteInPlace $i --replace '/usr/bin/env bash' ${buildPackages.bash}/bin/bash
+    done
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intel EFI development kit";
-    homepage = https://sourceforge.net/projects/edk2/;
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrs: stdenv.mkDerivation ({
+    mkDerivation = projectDscPath: attrsOrFun: buildStdenv.mkDerivation (finalAttrs:
+    let
+      attrs = lib.toFunction attrsOrFun finalAttrs;
+    in
+    {
       inherit (edk2) src;
 
-      buildInputs = [ bc pythonEnv ] ++ attrs.buildInputs or [];
+      depsBuildBuild = [ buildPackages.stdenv.cc ] ++ attrs.depsBuildBuild or [];
+      nativeBuildInputs = [ bc pythonEnv ] ++ attrs.nativeBuildInputs or [];
+      strictDeps = true;
+
+      ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
       prePatch = ''
         rm -rf BaseTools
@@ -65,7 +116,7 @@ edk2 = stdenv.mkDerivation {
 
       buildPhase = ''
         runHook preBuild
-        build -a ${targetArch} -b RELEASE -t GCC5 -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
+        build -a ${targetArch} -b RELEASE -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
         runHook postBuild
       '';
 
@@ -74,7 +125,7 @@ edk2 = stdenv.mkDerivation {
         mv -v Build/*/* $out
         runHook postInstall
       '';
-    } // removeAttrs attrs [ "buildInputs" ]);
+    } // removeAttrs attrs [ "nativeBuildInputs" "depsBuildBuild" ]);
   };
 };
 

@@ -1,61 +1,25 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, coq }:
+{ lib, mkCoqDerivation, autoconf, automake, coq, version ? null }:
 
-stdenv.mkDerivation rec {
-  name = "coq${coq.coq-version}-HoTT-${version}";
-  version = "20170921";
-
-  src = fetchFromGitHub {
-    owner = "HoTT";
-    repo = "HoTT";
-    rev = "e3557740a699167e6adb1a65855509d55a392fa1";
-    sha256 = "0zwfp8g62b50vmmbb2kmskj3v6w7qx1pbf43yw0hr7asdz2zbx5v";
-  };
-
-  buildInputs = [ autoconf automake coq ];
-  enableParallelBuilding = true;
-
-  preConfigure = ''
-    patchShebangs ./autogen.sh
-    ./autogen.sh
-
-    mkdir -p "$out/bin"
-  '';
-
-  configureFlags = [
-    "--bindir=$(out)/bin"
-  ];
+mkCoqDerivation {
+  pname = "HoTT";
+  repo = "Coq-HoTT";
+  owner = "HoTT";
+  inherit version;
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.14" "8.16"; out = coq.coq-version; }
+  ] null;
+  releaseRev = v: "V${v}";
+  release."8.16".sha256 = "sha256-xcEbz4ZQ+U7mb0SEJopaczfoRc2GSgF2BGzUSWI0/HY=";
+  release."8.15".sha256 = "sha256-JfeiRZVnrjn3SQ87y6dj9DWNwCzrkK3HBogeZARUn9g=";
+  release."8.14".sha256 = "sha256-7kXk2pmYsTNodHA+Qts3BoMsewvzmCbYvxw9Sgwyvq0=";
 
   patchPhase = ''
     patchShebangs etc
-    patchShebangs hoqc hoqchk hoqdep hoqide hoqtop
   '';
 
-  postBuild = ''
-    patchShebangs hoq-config
-  '';
-
-  # Currently, all the scripts like hoqc and hoqtop assume that the *.vo files are
-  # either (1) in the same directory as the scripts, or (2) in /usr/share/hott.
-  # We fulfill (1), which means that these files are only accessible via hoqtop,
-  # hoqc, etc and not via coqtop, coqc, etc.
-  postInstall = ''
-    mv $out/share/hott/* "$out/bin"
-    rmdir $out/share/hott
-    rmdir $out/share
-  '';
-
-  installFlags = [
-    "COQBIN=${coq}/bin"
-  ];
-
-  meta = with stdenv.lib; {
-    homepage = http://homotopytypetheory.org/;
+  meta = {
+    homepage = "https://homotopytypetheory.org/";
     description = "Homotopy type theory";
-    maintainers = with maintainers; [ siddharthist ];
-    platforms = coq.meta.platforms;
-  };
-
-  passthru = {
-    compatibleCoqVersions = v: v == "8.6";
+    maintainers = with lib.maintainers; [ siddharthist ];
   };
 }

@@ -1,18 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, click
+, twisted
+}:
 
-buildPythonPackage rec {
+let incremental = buildPythonPackage rec {
   pname = "incremental";
-  version = "17.5.0";
+  version = "22.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b751696aaf36eebfab537e458929e194460051ccad279c72b755a167eebd4b3";
+    sha256 = "sha256-kS/uteD34BiOb0IkHS9FAALhG7wJN8ZYZQRYVMJMC9A=";
   };
 
+  propagatedBuildInputs = [
+    click
+  ];
+
+  # escape infinite recursion with twisted
+  doCheck = false;
+
+  nativeCheckInputs = [
+    twisted
+  ];
+
+  checkPhase = ''
+    trial incremental
+  '';
+
+  passthru.tests = {
+    check = incremental.overridePythonAttrs (_: { doCheck = true; });
+  };
+
+  pythonImportsCheck = [ "incremental" ];
+
   meta = with lib; {
-    homepage = https://github.com/twisted/treq;
+    homepage = "https://github.com/twisted/incremental";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-}
+}; in incremental

@@ -16,12 +16,12 @@ buildPythonPackage rec {
   # UnicodeEncodeError on Python 2
   doCheck = isPy3k;
 
-  checkInputs = [  glibcLocales ];
+  nativeCheckInputs = [  glibcLocales ];
   propagatedBuildInputs = [ future ];
 
   meta = with lib; {
     description = "Python parser for the CommonMark Markdown spec";
-    homepage = https://github.com/rolandshoemaker/CommonMark-py;
+    homepage = "https://github.com/rolandshoemaker/CommonMark-py";
     license = licenses.bsd3;
   };
 }

@@ -1,4 +1,7 @@
-{ stdenvNoCC, lib, fetchurl, unzip
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
 , dfVersion
 }:
 
@@ -6,21 +9,6 @@ with lib;
 
 let
   twbt-releases = {
-    "0.43.05" = {
-      twbtRelease = "6.22";
-      sha256 = "0di5d38f6jj9smsz0wjcs1zav4zba6hrk8cbn59kwpb1wamsh5c7";
-      prerelease = false;
-    };
-    "0.44.05" = {
-      twbtRelease = "6.35";
-      sha256 = "0qjkgl7dsqzsd7pdq8a5bihhi1wplfkv1id7sj6dp3swjpsfxp8g";
-      prerelease = false;
-    };
-    "0.44.09" = {
-      twbtRelease = "6.41";
-      sha256 = "0nsq15z05pbhqjvw2xqs1a9b1n2ma0aalhc3vh3mi4cd4k7lxh44";
-      prerelease = false;
-    };
     "0.44.10" = {
       twbtRelease = "6.49";
       sha256 = "1qjkc7k33qhxj2g18njzasccjqsis5y8zrw5vl90h4rs3i8ld9xz";
@@ -41,11 +29,24 @@ let
       sha256 = "07bqy9rkd64h033sxdpigp5zq4xrr0xd36wdr1b21g649mv8j6yw";
       prerelease = false;
     };
+    "0.47.04" = {
+      twbtRelease = "6.xx";
+      dfhackRelease = "0.47.04-r5";
+      sha256 = "sha256-+C3g4KJShCb2VXGQ4mtkDOufXZQ1P+ebDTmUzL3tNyU=";
+      prerelease = true;
+    };
+    "0.47.05" = {
+      twbtRelease = "6.xx";
+      dfhackRelease = "0.47.05-r7";
+      sha256 = "sha256-4xMKuSP5J6pMK+hwjTAcTI0gsLJfw+Xt+vh9CopR4tk=";
+      prerelease = true;
+    };
   };
 
-  release = if hasAttr dfVersion twbt-releases
-            then getAttr dfVersion twbt-releases
-            else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release =
+    if hasAttr dfVersion twbt-releases
+    then getAttr dfVersion twbt-releases
+    else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
 in
 
 stdenvNoCC.mkDerivation rec {
@@ -53,7 +54,11 @@ stdenvNoCC.mkDerivation rec {
   version = release.twbtRelease;
 
   src = fetchurl {
-    url = "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
+    url =
+      if version == "6.xx" then
+        "https://github.com/thurin/df-twbt/releases/download/${release.dfhackRelease}/twbt-${version}-linux64-${release.dfhackRelease}.zip"
+      else
+        "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
     sha256 = release.sha256;
   };
 
@@ -61,7 +66,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputs = [ "lib" "art" "out" ];
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $lib/hack/{plugins,lua} $art/data/art
@@ -70,11 +75,11 @@ stdenvNoCC.mkDerivation rec {
     cp -a *.png $art/data/art/
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;
-    homepage = https://github.com/mifki/df-twbt;
+    homepage = "https://github.com/mifki/df-twbt";
   };
 }

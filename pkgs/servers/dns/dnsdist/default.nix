@@ -1,23 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, systemd
+{ lib, stdenv, fetchurl, pkg-config, systemd
 , boost, libsodium, libedit, re2
 , net-snmp, lua, protobuf, openssl, zlib, h2o
+, nghttp2, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.4.0";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "1h0x5xd13j8xxrrinb7d55851m6n9w0r15wx9m3c50dk7qngldm3";
+    hash = "sha256-fq9vrC8mVlxdhljUKiE3meBfTTvGjnxxbnF030ExWIY=";
   };
 
-  nativeBuildInputs = [ pkgconfig protobuf ];
-  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o ];
+  patches = [
+    # Disable tests requiring networking:
+    # "Error connecting to new server with address 192.0.2.1:53: connecting socket to 192.0.2.1:53: Network is unreachable"
+    ./disable-network-tests.patch
+  ];
+
+  nativeBuildInputs = [ pkg-config protobuf ];
+  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o nghttp2 ];
 
   configureFlags = [
-    "--enable-libsodium"
-    "--enable-re2"
+    "--with-libsodium"
+    "--with-re2"
     "--enable-dnscrypt"
     "--enable-dns-over-tls"
     "--enable-dns-over-https"
@@ -32,10 +39,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (nixosTests) dnsdist;
+  };
+
+  meta = with lib; {
     description = "DNS Loadbalancer";
     homepage = "https://dnsdist.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [ jojosch ];
   };
 }

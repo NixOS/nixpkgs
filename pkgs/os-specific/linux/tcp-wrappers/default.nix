@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libnsl }:
+{ fetchurl, lib, stdenv, libnsl }:
 
 let
   vanillaVersion = "7.6.q";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   # Fix __BEGIN_DECLS usage (even if it wasn't non-standard, this doesn't include sys/cdefs.h)
   patches = [ ./cdecls.patch ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace Makefile \
       --replace '-DNETGROUP' '-DUSE_GETDOMAIN'
   '';
@@ -68,8 +68,8 @@ in stdenv.mkDerivation rec {
       addition to the traditional BSD sockets.
     '';
 
-    homepage = ftp://ftp.porcupine.org/pub/security/index.html;
+    homepage = "ftp://ftp.porcupine.org/pub/security/index.html";
     license = "BSD-style";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,42 +1,77 @@
-{ stdenv, fetchFromGitHub, perlPackages, makeWrapper}:
+{ lib
+, fetchFromGitHub
+, fetchurl
+, buildPythonApplication
+, colorclass
+, installShellFiles
+, pyyaml
+, requests
+, setuptools
+, terminaltables
+}:
 
-perlPackages.buildPerlPackage rec {
+let
+  sha256 = "0r5by5d6wr5zbsaj211s99qg28nr7wm8iri6jxnksx5b375dah6g";
+  # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
+  specVersion = "4.140.0";
+  specSha256 = "0ay54m4aa8bmmpjc7s66rfzqzk4w25h48b9a665y29g67ybb432g";
+  spec = fetchurl {
+    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
+    sha256 = specSha256;
+  };
+
+in
+
+buildPythonApplication rec {
   pname = "linode-cli";
-  version = "1.4.7";
+  version = "5.26.1";
 
   src = fetchFromGitHub {
     owner = "linode";
-    repo = "cli";
-    rev = "v${version}";
-    sha256 = "1wiz067wgxi4z4rz4n9p7dlvx5z4hkl2nxpfvhikl6dri4m2nkkp";
+    repo = pname;
+    rev = version;
+    inherit sha256;
   };
 
-  buildInputs = [ makeWrapper ];
-  propagatedBuildInputs = with perlPackages; [
-    JSON
-    LWP
-    MozillaCA
-    TryTiny
-    WebServiceLinode
+  patches = [
+    ./remove-update-check.patch
   ];
 
-  # Wrap perl scripts so they can find libraries
-  postInstall = ''
-    for n in "$out/bin"/*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB"
-    done
+  # remove need for git history
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "version=get_version()," "version='${version}',"
   '';
 
-  # Has no tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    colorclass
+    pyyaml
+    requests
+    setuptools
+    terminaltables
+  ];
 
-  # Has no "doc" or "devdoc" outputs
-  outputs = [ "out" ];
+  postConfigure = ''
+    python3 -m linodecli bake ${spec} --skip-config
+    cp data-3 linodecli/
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Command-line interface to the Linode platform";
-    homepage = https://github.com/linode/cli;
-    license = with licenses; [ artistic2 gpl2 ];
-    maintainers = with maintainers; [ nixy ];
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd linode-cli --bash <($out/bin/linode-cli --skip-config completion bash)
+  '';
+
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
+    description = "The Linode Command Line Interface";
+    homepage = "https://github.com/linode/linode-cli";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ryantm ];
   };
 }

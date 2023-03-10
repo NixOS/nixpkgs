@@ -1,45 +1,49 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 let
-  pgdbconn = pythonPackages.buildPythonPackage {
+  pgdbconn = python3Packages.buildPythonPackage rec {
     pname = "pgdbconn";
     version = "0.8.0";
+
     src = fetchFromGitHub {
       owner = "perseas";
       repo = "pgdbconn";
-      rev = "26c1490e4f32e4b5b925e5b82014ad106ba5b057";
+      rev = "v${version}";
       sha256 = "09r4idk5kmqi3yig7ip61r6js8blnmac5n4q32cdcbp1rcwzdn6z";
     };
+
     # The tests are impure (they try to access a PostgreSQL server)
     doCheck = false;
-    propagatedBuildInputs = [
-      pythonPackages.psycopg2
-      pythonPackages.pytest
-    ];
+
+    propagatedBuildInputs = with python3Packages; [ psycopg2 pytest ];
   };
 in
 
-pythonPackages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "pyrseas";
-  version = "0.8.0";
+  version = "0.9.1";
+
   src = fetchFromGitHub {
     owner = "perseas";
     repo = "Pyrseas";
-    rev = "2e9be763e61168cf20d28bd69010dc5875bd7b97";
-    sha256 = "1h9vahplqh0rzqjsdq64qqar6hj1bpbc6nl1pqwwgca56385br8r";
+    rev = version;
+    sha256 = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
   };
-  # The tests are impure (they try to access a PostgreSQL server)
-  doCheck = false;
-  propagatedBuildInputs = [
-    pythonPackages.psycopg2
-    pythonPackages.pytest
-    pythonPackages.pyyaml
+
+  propagatedBuildInputs = with python3Packages; [
+    psycopg2
+    pytest
+    pyyaml
     pgdbconn
   ];
+
+  # The tests are impure (they try to access a PostgreSQL server)
+  doCheck = false;
+
   meta = {
     description = "A declarative language to describe PostgreSQL databases";
-    homepage = https://perseas.github.io/;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ pmeunier ];
+    homepage = "https://perseas.github.io/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pmeunier ];
   };
 }

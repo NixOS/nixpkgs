@@ -1,7 +1,8 @@
 { buildPythonPackage
-, stdenv
+, lib
 , python
 , fetchFromGitHub
+, fetchpatch
 , pyopenssl
 , webcolors
 , future
@@ -18,17 +19,24 @@ let
   scriptPython = python.withPackages (ps: with ps; [
     aiohttp
     requests
-    python_magic
+    python-magic
   ]);
+
+  version = "0.3.0";
 in buildPythonPackage {
   pname = "weechat-matrix";
-  version = "unstable-2020-01-21";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "weechat-matrix";
-    rev = "46640df3e0bfb058e97d8abe723bb88fdf4e5177";
-    sha256 = "1j3l43j741csfxsp1nsc74y6wj2wm86c45iraf167g6p0sdzcq8z";
+    rev = version;
+    hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
+  };
+
+  patches = fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
+    sha256 = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
   };
 
   propagatedBuildInputs = [
@@ -49,15 +57,15 @@ in buildPythonPackage {
   dontBuild = true;
   doCheck = false;
 
+  format = "other";
+
   installPhase = ''
     mkdir -p $out/share $out/bin
-    cp $src/main.py $out/share/matrix.py
+    cp main.py $out/share/matrix.py
 
-    cp \
-      $src/contrib/matrix_upload \
-      $src/contrib/matrix_decrypt \
-      $src/contrib/matrix_sso_helper \
-      $out/bin/
+    cp contrib/matrix_upload.py $out/bin/matrix_upload
+    cp contrib/matrix_decrypt.py $out/bin/matrix_decrypt
+    cp contrib/matrix_sso_helper.py $out/bin/matrix_sso_helper
     substituteInPlace $out/bin/matrix_upload \
       --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_sso_helper \
@@ -66,12 +74,17 @@ in buildPythonPackage {
       --replace '/usr/bin/env python3' '${scriptPython}/bin/python'
 
     mkdir -p $out/${python.sitePackages}
-    cp -r $src/matrix $out/${python.sitePackages}/matrix
+    cp -r matrix $out/${python.sitePackages}/matrix
   '';
 
   dontPatchShebangs = true;
+  postFixup = ''
+    addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
+    patchPythonScript $out/share/matrix.py
+    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;

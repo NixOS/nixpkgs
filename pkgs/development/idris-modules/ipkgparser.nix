@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "ipkgparser";
+  pname = "ipkgparser";
   version = "2017-11-14";
 
   idrisDeps = [ contrib effects lightyear ];
@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Parser for Idris iPkg files written in Idris using Lightyear";
-    homepage = https://github.com/emptyflash/idris-ipkg-parser;
+    homepage = "https://github.com/emptyflash/idris-ipkg-parser";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

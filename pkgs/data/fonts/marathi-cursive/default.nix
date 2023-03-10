@@ -1,24 +1,25 @@
-{ lib, fetchzip, p7zip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
-  version = "1.2";
-in fetchzip rec {
-  name = "marathi-cursive-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "marathi-cursive";
+  version = "2.1";
 
-  url = "https://github.com/MihailJP/MarathiCursive/releases/download/${version}/MarathiCursive-${version}.7z";
+  src = fetchurl {
+    url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
+    hash = "sha256-C/z8ALV9bht0SaYqACO5ulSVCk1d6wBwvpVC4ZLgtek=";
+  };
 
-  postFetch = ''
-    ${p7zip}/bin/7z x $downloadedFile
-    cd MarathiCursive
+  installPhase = ''
+    runHook preInstall
 
     install -m444 -Dt $out/share/fonts/marathi-cursive *.otf *.ttf
-    install -m444 -Dt $out/share/doc/${name}           README *.txt
+    install -m444 -Dt $out/share/doc/${pname}-${version} README *.txt
+
+    runHook postInstall
   '';
 
-  sha256 = "0wq4w79x8r5w6ikm9amcmapf0jcdgifs9zf1pbnw3fk4ncz5s551";
-
   meta = with lib; {
-    homepage = https://github.com/MihailJP/MarathiCursive;
+    homepage = "https://github.com/MihailJP/MarathiCursive";
     description = "Modi script font with Graphite and OpenType support";
     maintainers = with maintainers; [ mathnerd314 ];
     license = licenses.mit; # It's the M+ license, M+ is MIT(-ish)

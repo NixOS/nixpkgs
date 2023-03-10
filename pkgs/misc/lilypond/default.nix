@@ -1,26 +1,19 @@
-{ stdenv, fetchgit, ghostscript, texinfo, imagemagick, texi2html, guile
-, python2, gettext, flex, perl, bison, pkgconfig, autoreconfHook, dblatex
+{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
+, python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
-, makeWrapper, t1utils
+, makeWrapper, t1utils, boehmgc, rsync
 , texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf;
+    inherit (texlive) scheme-small lh metafont epsf fontinst;
   }
 }:
 
-let
-
-  version = "2.18.2";
-
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lilypond";
-  inherit version;
+  version = "2.24.1";
 
-  src = fetchgit {
-    url = "https://git.savannah.gnu.org/r/lilypond.git";
-    rev = "release/${version}-1";
-    sha256 = "0fk045fmmb6fcv7jdvkbqr04qlwnxzwclr2gzx3gja714xy6a76x";
+  src = fetchurl {
+    url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
+    sha256 = "sha256-1cWQh1ZKXNbwilK6gOfWUJuRxYXkQ4XcwPo5Jl0YFQk=";
   };
 
   postInstall = ''
@@ -35,7 +28,9 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--disable-documentation"
-    "--with-ncsb-dir=${ghostscript}/share/ghostscript/fonts"
+     # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
+    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
+    "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
   ];
 
   preConfigure = ''
@@ -43,25 +38,28 @@ stdenv.mkDerivation {
     export HOME=$TMPDIR/home
   '';
 
-  nativeBuildInputs = [ makeWrapper pkgconfig autoreconfHook ];
-
-  autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
+  nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkg-config ];
 
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
-      python2 gettext flex perl bison fontconfig freetype pango
-      fontforge help2man groff t1utils
+      python3 gettext perl fontconfig freetype pango
+      fontforge help2man groff t1utils boehmgc rsync
     ];
+
+  autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = {
+    command = [ ./update.sh ];
+    supportedFeatures = [ "commit" ];
+  };
+
+  meta = with lib; {
     description = "Music typesetting system";
-    homepage = http://lilypond.org/;
+    homepage = "http://lilypond.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ marcweber yurrriq ];
     platforms = platforms.all;
   };
-
-  patches = [ ./findlib.patch ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "par2cmdline";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Parchive/par2cmdline;
+  meta = with lib; {
+    homepage = "https://github.com/Parchive/par2cmdline";
     description = "PAR 2.0 compatible file verification and repair tool";
     longDescription = ''
       par2cmdline is a program for creating and using PAR2 files to detect
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       any kind of file.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.muflax ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

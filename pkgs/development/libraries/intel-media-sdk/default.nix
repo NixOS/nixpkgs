@@ -1,26 +1,33 @@
-{ stdenv, fetchurl, autoPatchelfHook, cmake, pkgconfig, libdrm, libpciaccess
-, libva , libX11, libXau, libXdmcp, libpthreadstubs
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtest, libdrm, libpciaccess, libva, libX11
+, libXau, libXdmcp, libpthreadstubs }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
-  version = "19.4.0";
+  version = "23.1.2";
 
-  src = fetchurl {
-    url = "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-${version}.tar.gz";
-    sha256 = "1l8wjb933wdl3vyq6r36a9pgf8n6pm9g9vcp3m393hixwzzl16i8";
+  src = fetchFromGitHub {
+    owner = "Intel-Media-SDK";
+    repo = "MediaSDK";
+    rev = "intel-mediasdk-${version}";
+    hash = "sha256-vtzcKPOxmfEl8IF7/hNGfeZmX+AdrHydeYsyYuB1B4o=";
   };
 
-  # patchelf is needed for binaries in $out/share/samples
-  nativeBuildInputs = [ autoPatchelfHook cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     libdrm libva libpciaccess libX11 libXau libXdmcp libpthreadstubs
   ];
+  nativeCheckInputs = [ gtest ];
 
-  enableParallelBuild = true;
+  cmakeFlags = [
+    "-DBUILD_SAMPLES=OFF"
+    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DUSE_SYSTEM_GTEST=ON"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Intel Media SDK.";
+  doCheck = true;
+
+  meta = with lib; {
+    description = "Intel Media SDK";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
     platforms = [ "x86_64-linux" ];

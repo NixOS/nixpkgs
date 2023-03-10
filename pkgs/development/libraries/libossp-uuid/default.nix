@@ -1,10 +1,8 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
-let version = "1.6.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libossp-uuid";
-  inherit version;
+  version = "1.6.2";
 
   src = fetchurl {
     url = "ftp://ftp.ossp.org/pkg/lib/uuid/uuid-${version}.tar.gz";
@@ -13,12 +11,12 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "ac_cv_va_copy=yes"
-  ] ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   patches = [ ./shtool.patch ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.ossp.org/pkg/lib/uuid/;
+  meta = with lib; {
+    homepage = "http://www.ossp.org/pkg/lib/uuid/";
     description = "OSSP uuid ISO-C and C++ shared library";
     longDescription =
       ''

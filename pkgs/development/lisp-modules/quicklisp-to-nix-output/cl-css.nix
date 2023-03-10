@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-css'';
-  version = ''20140914-git'';
+  baseName = "cl-css";
+  version = "20140914-git";
 
-  description = ''Simple inline CSS generator'';
+  description = "Simple inline CSS generator";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-css/2014-09-14/cl-css-20140914-git.tgz'';
-    sha256 = ''16zjm10qqyv5v0ysvicbiscplrwlfr0assbf01gp73j1m108rn7n'';
+    url = "http://beta.quicklisp.org/archive/cl-css/2014-09-14/cl-css-20140914-git.tgz";
+    sha256 = "16zjm10qqyv5v0ysvicbiscplrwlfr0assbf01gp73j1m108rn7n";
   };
 
   packageName = "cl-css";

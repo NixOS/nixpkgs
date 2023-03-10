@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, patchelf, coreutils, pcsclite
+{ lib, stdenv, fetchurl, patchelf, coreutils, pcsclite
 , zlib, glib, gdk-pixbuf, gtk2, cairo, pango, libX11, atk, openssl
 , runtimeShell }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc zlib glib gdk-pixbuf gtk2 cairo pango libX11 atk openssl
   ];
 
@@ -63,8 +63,8 @@ stdenv.mkDerivation {
     if [ ! -d "\$MDIR/pcsc" ]; then
         ${coreutils}/bin/mkdir -p \$MDIR/pcsc
     fi
-    if [ ! -e "\$MDIR/pcsc/libpcsclite.so.1" ] || [ ! \`${coreutils}/bin/readlink -f "\$MDIR/pcsc/libpcsclite.so.1"\` -ef "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1" ]; then
-        ${coreutils}/bin/ln -sf "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1" "\$MDIR/pcsc/libpcsclite.so.1"
+    if [ ! -e "\$MDIR/pcsc/libpcsclite.so.1" ] || [ ! \`${coreutils}/bin/readlink -f "\$MDIR/pcsc/libpcsclite.so.1"\` -ef "${lib.getLib pcsclite}/lib/libpcsclite.so.1" ]; then
+        ${coreutils}/bin/ln -sf "${lib.getLib pcsclite}/lib/libpcsclite.so.1" "\$MDIR/pcsc/libpcsclite.so.1"
     fi
 
 
@@ -111,12 +111,13 @@ stdenv.mkDerivation {
     '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Moneyplex online banking software";
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     license = licenses.unfree;
-    downloadPage = http://matrica.de/download/download.html;
+    downloadPage = "http://matrica.de/download/download.html";
   };
 
 }

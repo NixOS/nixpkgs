@@ -1,24 +1,26 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "lazygit";
-  version = "0.15.7";
-
-  goPackagePath = "github.com/jesseduffield/lazygit";
-
-  subPackages = [ "." ];
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18scwla36bjpylha4fwis0aa333r14bavzd7xhx4677xgaz7l73j";
+    sha256 = "sha256-A6aFHC4MNNFl7IieR/7aQ3cMzhBXfQwq6sPv+v5Gu4o=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = null;
+  subPackages = [ "." ];
+
+  ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
+
+  meta = with lib; {
     description = "Simple terminal UI for git commands";
     homepage = "https://github.com/jesseduffield/lazygit";
+    changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz equirosa filalex77 ];
+    maintainers = with maintainers; [ equirosa Br1ght0ne ];
   };
 }

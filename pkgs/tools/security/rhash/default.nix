@@ -1,32 +1,51 @@
-{ stdenv, fetchFromGitHub, which }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.3.9";
+  version = "1.4.3";
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
     rev = "v${version}";
-    sha256 = "06i49x1l21h2q7pfnf4crbmjyg8b9ad0qs10ywyyn5sjpi0c21wq";
+    sha256 = "sha256-R+dHYG0DBI1uo+yF/pxoTv/V9WSfph043bH6erZjeCE=";
   };
 
   nativeBuildInputs = [ which ];
 
   # configure script is not autotools-based, doesn't support these options
+  dontAddStaticConfigureFlags = true;
+
   configurePlatforms = [ ];
+
+  configureFlags = [
+    "--ar=${stdenv.cc.targetPrefix}ar"
+    "--target=${stdenv.hostPlatform.config}"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableStatic "lib-static")
+  ];
 
   doCheck = true;
 
   checkTarget = "test-full";
 
-  installTargets = [ "install" "install-lib-shared" "install-lib-so-link" "install-lib-headers" ];
+  installTargets = [
+    "install"
+    "install-lib-headers"
+  ] ++ lib.optionals (!enableStatic) [
+    "install-lib-so-link"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://rhash.sourceforge.net/";
+  meta = with lib; {
+    homepage = "https://rhash.sourceforge.net/";
     description = "Console utility and library for computing and verifying hash sums of files";
     license = licenses.bsd0;
     platforms = platforms.all;
-    maintainers = [ maintainers.andrewrk ];
+    maintainers = with maintainers; [ andrewrk ];
   };
 }

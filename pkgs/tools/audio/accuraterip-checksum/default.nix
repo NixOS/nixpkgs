@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "accuraterip-checksum";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Program for computing the AccurateRip checksum of singletrack WAV files";
-    homepage = https://github.com/leo-bogert/accuraterip-checksum;
+    homepage = "https://github.com/leo-bogert/accuraterip-checksum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;

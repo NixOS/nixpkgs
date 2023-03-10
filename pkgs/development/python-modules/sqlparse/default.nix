@@ -1,34 +1,36 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, installShellFiles
+, pytestCheckHook
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.3.0";
+  version = "0.4.3";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wxqrm9fpn4phz6rqm7kfd1wwkwzx376gs27nnalwx12q0lwlgbw";
+    sha256 = "sha256-acqASEa7EU0uw4DkNgqKNA24PwzPOvzusUBN8Cj1cmg=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  postInstall = ''
+    installManPage docs/sqlformat.1
   '';
 
-  # Package supports 3.x, but tests are clearly 2.x only.
-  doCheck = !isPy3k;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-validating SQL parser for Python";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';
-    homepage = https://github.com/andialbrecht/sqlparse;
+    homepage = "https://github.com/andialbrecht/sqlparse";
     license = licenses.bsd3;
   };
-
 }

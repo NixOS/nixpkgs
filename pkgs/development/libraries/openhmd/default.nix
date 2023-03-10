@@ -1,45 +1,55 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, hidapi
-, withExamples ? true, SDL2 ? null, libGL ? null, glew ? null
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, hidapi
+, SDL2
+, libGL
+, glew
+, withExamples ? true
 }:
 
-with lib;
+let examplesOnOff = if withExamples then "ON" else "OFF"; in
 
-let onoff = if withExamples then "ON" else "OFF"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openhmd";
-  version = "0.3.0-rc1-20181218";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "OpenHMD";
     repo = "OpenHMD";
-    rev = "80d51bea575a5bf71bb3a0b9683b80ac3146596a";
-    sha256 = "09011vnlsn238r5vbb1ab57x888ljaa34xibrnfbm5bl9417ii4z";
+    rev = version;
+    sha256 = "1hkpdl4zgycag5k8njvqpx01apxmm8m8pvhlsxgxpqiqy9a38ccg";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     hidapi
-  ] ++ optionals withExamples [
-    SDL2 libGL glew
+  ] ++ lib.optionals withExamples [
+    SDL2
+    glew
+    libGL
   ];
 
   cmakeFlags = [
     "-DBUILD_BOTH_STATIC_SHARED_LIBS=ON"
-    "-DOPENHMD_EXAMPLE_SIMPLE=${onoff}"
-    "-DOPENHMD_EXAMPLE_SDL=${onoff}"
+    "-DOPENHMD_EXAMPLE_SIMPLE=${examplesOnOff}"
+    "-DOPENHMD_EXAMPLE_SDL=${examplesOnOff}"
     "-DOpenGL_GL_PREFERENCE=GLVND"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
-  postInstall = optionalString withExamples ''
+  postInstall = lib.optionalString withExamples ''
     mkdir -p $out/bin
     install -D examples/simple/simple $out/bin/openhmd-example-simple
     install -D examples/opengl/openglexample $out/bin/openhmd-example-opengl
   '';
 
-  meta = {
-    homepage = "http://www.openhmd.net";
+  meta = with lib; {
+    homepage = "http://www.openhmd.net"; # https does not work
     description = "Library API and drivers immersive technology";
     longDescription = ''
       OpenHMD is a very simple FLOSS C library and a set of drivers
@@ -48,7 +58,7 @@ stdenv.mkDerivation {
       Oculus Rift, HTC Vive, Windows Mixed Reality, and etc.
     '';
     license = licenses.boost;
-    maintainers = [ maintainers.oxij ];
+    maintainers = with maintainers; [ oxij ];
     platforms = platforms.unix;
   };
 }

@@ -1,55 +1,102 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper
-, openal, fluidsynth_1, soundfont-fluid, libGL, SDL2
-, bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, SDL2
+, bzip2
+, cmake
+, fluidsynth
+, game-music-emu
+, gtk3
+, libGL
+, libjpeg
+, libsndfile
+, libvpx
+, mpg123
+, ninja
+, openal
+, pkg-config
+, vulkan-loader
+, zlib
+, zmusic
+}:
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.3.3";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
-    owner = "coelckers";
+    owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "1c4vhnvvwy1rs8xm01kqd486h5xsiccwkf95fjx7912zr49yalks";
+    fetchSubmodules = true;
+    hash = "sha256-F3p2X/hjPV9fuaA7T2bQTP6SlKcfc8GniJgv8BcopGw=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [
-    SDL2 libGL openal fluidsynth_1 bzip2 zlib libjpeg libsndfile mpg123
-    game-music-emu
+  outputs = [ "out" "doc" ];
+
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+    makeWrapper
+    ninja
+    pkg-config
   ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    SDL2
+    bzip2
+    fluidsynth
+    game-music-emu
+    gtk3
+    libGL
+    libjpeg
+    libsndfile
+    libvpx
+    mpg123
+    openal
+    vulkan-loader
+    zlib
+    zmusic
+  ];
 
-  NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
-
-  preConfigure = ''
-    sed -i \
-      -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
-      -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
+  postPatch = ''
+    substituteInPlace tools/updaterevision/UpdateRevision.cmake \
+      --replace "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
+      --replace "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
+      --replace "ret_var(Hash)" "ret_var(\"${src.rev}\")"
   '';
 
-  installPhase = ''
-    install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
-    for i in *.pk3; do
-      install -Dm644 "$i" "$out/lib/gzdoom/$i"
-    done
-    for i in fm_banks/*; do
-      install -Dm644 "$i" "$out/lib/gzdoom/$i"
-    done
-    for i in soundfonts/*; do
-      install -Dm644 "$i" "$out/lib/gzdoom/$i"
-    done
-    mkdir $out/bin
-    makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
+  cmakeFlags = [
+    "-DDYN_GTK=OFF"
+    "-DDYN_OPENAL=OFF"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gzdoom";
+      exec = "gzdoom";
+      desktopName = "GZDoom";
+      categories = [ "Game" ];
+    })
+  ];
+
+  postInstall = ''
+    mv $out/bin/gzdoom $out/share/games/doom/gzdoom
+    makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/coelckers/gzdoom;
-    description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
-    license = licenses.gpl3;
-    platforms = ["x86_64-linux"];
-    maintainers = with maintainers; [ lassulus ];
+  meta = with lib; {
+    homepage = "https://github.com/ZDoom/gzdoom";
+    description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
+    longDescription = ''
+      GZDoom is a feature centric port for all DOOM engine games, based on
+      ZDoom, adding an OpenGL renderer and powerful scripting capabilities.
+    '';
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ azahi lassulus ];
   };
 }

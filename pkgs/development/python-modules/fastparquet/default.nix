@@ -1,30 +1,93 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner,
-thrift, pytest, python-snappy, lz4 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, cython
+, setuptools
+, substituteAll
+, numba
+, numpy
+, pandas
+, cramjam
+, fsspec
+, thrift
+, python-lzo
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.3.3";
+  version = "2023.1.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "1vnxr4r0bia2zi9csjw342l507nic6an4hr5xb3a36ggqlbaa0g5";
+    hash = "sha256-p8JydnrDEl9W4clrOkd+np0NYGP3hVnq+lyyF/zaVk8=";
   };
 
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
+
   postPatch = ''
-    # FIXME: package zstandard
-    # removing the test dependency for now
-    substituteInPlace setup.py --replace "'zstandard'," ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "oldest-supported-numpy" "numpy"
+
+    sed -i '/"git", "status"/d' setup.py
   '';
 
-  nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytest python-snappy lz4 ];
+  propagatedBuildInputs = [
+    cramjam
+    fsspec
+    numba
+    numpy
+    pandas
+    thrift
+  ];
+
+  passthru.optional-dependencies = {
+    lzo = [
+      python-lzo
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Workaround https://github.com/NixOS/nixpkgs/issues/123561
+  preCheck = ''
+    mv fastparquet/test .
+    rm -r fastparquet
+    fastparquet_test="$out"/${python.sitePackages}/fastparquet/test
+    ln -s `pwd`/test "$fastparquet_test"
+  '';
+
+  postCheck = ''
+    rm "$fastparquet_test"
+  '';
+
+  pythonImportsCheck = [
+    "fastparquet"
+  ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";
-    homepage = https://github.com/dask/fastparquet;
+    homepage = "https://github.com/dask/fastparquet";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

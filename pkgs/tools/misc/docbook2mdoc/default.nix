@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, expat }:
+{ lib, stdenv, fetchurl, expat }:
 
 stdenv.mkDerivation rec {
   pname = "docbook2mdoc";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://mdocml.bsd.lv/;
+  meta = with lib; {
+    homepage = "http://mdocml.bsd.lv/";
     description = "converter from DocBook V4.x and v5.x XML into mdoc";
     license = licenses.isc;
     platforms = platforms.all;

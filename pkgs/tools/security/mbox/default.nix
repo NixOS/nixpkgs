@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, openssl, which }:
+{ lib, stdenv, fetchFromGitHub, openssl, which }:
 
 stdenv.mkDerivation {
-  name = "mbox-20140526";
+  pname = "mbox";
+  version = "unstable-2014-05-26";
 
   src = fetchFromGitHub {
     owner = "tsgates";
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
     cd src
     cp {.,}configsbox.h
   '';
-  
+
   doCheck = true;
   checkPhase = ''
     rm tests/test-*vim.sh tests/test-pip.sh
@@ -27,13 +28,12 @@ stdenv.mkDerivation {
     ./testall.sh
   '';
 
-  meta = with stdenv.lib;
-    { description = "Lightweight sandboxing mechanism that any user can use without special privileges";
-      homepage = http://pdos.csail.mit.edu/mbox/;
-      maintainers = with maintainers; [ ehmry ];
-      license = licenses.bsd3;
-      platforms = [ "x86_64-linux" ];
-      broken = true;
-    };
-
+  meta = with lib;    {
+    description = "Lightweight sandboxing mechanism that any user can use without special privileges";
+    homepage = "http://pdos.csail.mit.edu/mbox/";
+    maintainers = with maintainers; [ ehmry ];
+    license = licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
+    broken = true;
+  };
 }

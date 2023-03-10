@@ -1,57 +1,45 @@
-{ stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsaLib }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, alsa-lib, Carbon, CoreAudio, CoreFoundation, CoreMIDI, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
-  version = "217";
+  version = "2.0.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/portmedia/portmidi-src-${version}.zip";
-    sha256 = "03rfsk7z6rdahq2ihy5k13qjzgx757f75yqka88v3gc0pn9ais88";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-bLGqi3b9FHBA43baNDT8jkPBQSXAUDfurQSJHLcy3AE=";
   };
 
-  cmakeFlags = let
-    #base = "${jdk}/jre/lib/${jdk.architecture}";
-  in [
-    "-DPORTMIDI_ENABLE_JAVA=0"
-    /* TODO: Fix Java support.
-    "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
-    "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
-    */
+  cmakeFlags = [
     "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
     "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
     "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
   ];
 
-  # XXX: This is to deactivate Java support.
-  patches = stdenv.lib.singleton (fetchurl {
-    url = "https://raw.github.com/Rogentos/argent-gentoo/master/media-libs/"
-        + "portmidi/files/portmidi-217-cmake-libdir-java-opts.patch";
-    sha256 = "1jbjwan61iqq9fqfpq2a4fd30k3clg7a6j0gfgsw87r8c76kqf6h";
-  });
+  patches = [
+    # Add missing header include
+    ./missing-header.diff
+  ];
 
-  postPatch = ''
-    sed -i -e 's|/usr/local/|'"$out"'|' -e 's|/usr/share/|'"$out"'/share/|' \
-      pm_common/CMakeLists.txt pm_dylib/CMakeLists.txt pm_java/CMakeLists.txt
-    sed -i \
-        -e 's|-classpath .|-classpath '"$(pwd)"'/pm_java|' \
-        -e 's|pmdefaults/|'"$(pwd)"'/pm_java/&|g' \
-        -e 's|jportmidi/|'"$(pwd)"'/pm_java/&|g' \
-        -e 's/WORKING_DIRECTORY pm_java//' \
-        pm_java/CMakeLists.txt
+  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+    ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
   '';
 
-  postInstall = ''
-    ln -s libportmidi.so "$out/lib/libporttime.so"
-  '';
-
-  buildInputs = [ unzip cmake /*jdk*/ alsaLib ];
+  nativeBuildInputs = [ unzip cmake ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon CoreAudio CoreFoundation CoreMIDI CoreServices
+  ];
 
   hardeningDisable = [ "format" ];
 
-  meta = {
-    homepage = http://portmedia.sourceforge.net/portmidi/;
+  meta = with lib; {
+    homepage = "https://github.com/PortMidi/portmidi";
     description = "Platform independent library for MIDI I/O";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
   };
 }

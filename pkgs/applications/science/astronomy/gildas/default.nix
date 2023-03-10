@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, gtk2-x11 , pkgconfig , python3 , gfortran , lesstif
+{ lib, stdenv, fetchurl, gtk2-x11 , pkg-config , python3 , gfortran , lesstif
 , cfitsio , getopt , perl , groff , which, darwin, ncurses
 }:
 
 let
-  python3Env = python3.withPackages(ps: with ps; [ numpy ]);
+  python3Env = python3.withPackages(ps: with ps; [ numpy setuptools ]);
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "feb20a";
-  version = "20200201_a";
+  srcVersion = "feb23a";
+  version = "20230201_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,19 +16,19 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "05f34kpi3pfgf4dsyka7mkcln26yzb2mixnnc306krq0isjm7m26";
+    sha256 = "sha256-A6jtcC8QMtJ7YcNaPiOjwNPDGPAjmRA3jZLEt5iBONE=";
   };
 
-  nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
+  nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
 
   patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
@@ -61,10 +61,11 @@ stdenv.mkDerivation rec {
       extensible. GILDAS is written in Fortran-90, with a
       few parts in C/C++ (mainly keyboard interaction,
       plotting, widgets).'';
-    homepage = http://www.iram.fr/IRAMFR/GILDAS/gildas.html;
-    license = stdenv.lib.licenses.free;
-    maintainers = [ stdenv.lib.maintainers.bzizou stdenv.lib.maintainers.smaret ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://www.iram.fr/IRAMFR/GILDAS/gildas.html";
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.bzizou lib.maintainers.smaret ];
+    platforms = lib.platforms.all;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 
 }

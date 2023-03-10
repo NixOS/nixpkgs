@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
-
-# Optional Dependencies
-, ncurses ? null
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch, pkgsStatic
+, withNcurses ? true, ncurses
 }:
 
 stdenv.mkDerivation rec {
-  name = "gpm-1.20.7";
+  pname = "gpm";
+  version = "unstable-2020-06-17";
 
-  src = fetchurl {
-    url = "https://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
-    sha256 = "13d426a8h403ckpc8zyf7s2p5rql0lqbg2bv0454x0pvgbfbf4gh";
+  src = fetchFromGitHub {
+    owner = "telmich";
+    repo = "gpm";
+    rev = "e82d1a653ca94aa4ed12441424da6ce780b1e530";
+    sha256 = "0ndn6dwc87slvyqp2cnbb02a6hkjwb6zjhs6viysykv06hq7ihy6";
   };
 
   postPatch = ''
@@ -22,19 +23,17 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   patches = [
-    # musl compat patches, safe everywhere
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-musl-missing-headers.patch";
-      sha256 = "1g338m6j1sba84wlqp1r6rpabj5nm6ki577hjalg46czg0lfp20h";
+    (fetchpatch { # pull request telmich/gpm#42
+      url = "https://github.com/kaction/gpm/commit/217b4fe4c9b62298a4e9a54c1f07e3b52b013a09.patch";
+      sha256 = "1f74h12iph4z1dldbxk9imcq11805c3ai2xhbsqvx8jpjrcfp19q";
     })
-    # Touches same code as glibc fix in postPatch above, but on the non-glibc route
+
+    # Pull fix pending upstream inclusion to fix parallel installation:
+    #   https://github.com/telmich/gpm/pull/43
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-musl-portable-sigaction.patch";
-      sha256 = "0hfdqm9977hd5dpzn05y0a6jbj55w1kp4hd9gyzmg9wslmxni4rg";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-sysmacros.patch";
-      sha256 = "0lg4l9phvy2n8gy17qsn6zn0qq52vm8g01pgq5kqpr8sd3fb21c2";
+      name = "parallel-install.patch";
+      url = "https://github.com/telmich/gpm/commit/a88fb82a7afe96e872bb31c554e9ad5888f5a451.patch";
+      sha256 = "0g1jhz9bjw7vqjv922xkhs8xkjxdqh11nj38jj3c8nv5lcil76nx";
     })
   ];
   preConfigure = ''
@@ -44,16 +43,20 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (if ncurses == null then "--without-curses" else "--with-curses")
+    (if withNcurses then "--with-curses" else "--without-curses")
   ];
+
+  enableParallelBuilding = true;
 
   # Provide libgpm.so for compatability
   postInstall = ''
     ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.nico.schottelius.org/software/gpm/;
+  passthru.tests.static = pkgsStatic.gpm;
+
+  meta = with lib; {
+    homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "A daemon that provides mouse support on the Linux console";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.cygwin;

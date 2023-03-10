@@ -1,20 +1,37 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-globalkeys, qtx11extras,
-menu-cache, muparser, pcre }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, lxqt-globalkeys
+, qtx11extras
+, menu-cache
+, muparser
+, pcre
+, gitUpdater
+}:
 
 mkDerivation rec {
   pname = "lxqt-runner";
-  version = "0.14.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "01a8ycpkzcbh85y4025pd3nbpnzxh98ll1xwz4ykz13yvm0l2n1w";
+    sha256 = "fJHTw7xPn7rWVd+H1cDnNmeu3BPlE/ta0VOfJsUfSNs=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -32,11 +49,13 @@ mkDerivation rec {
     pcre
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-runner";
     description = "Tool used to launch programs quickly by typing their names";
-    homepage = https://github.com/lxqt/lxqt-runner;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

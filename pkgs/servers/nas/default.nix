@@ -1,11 +1,9 @@
-{ stdenv, fetchurl, imake, bison, flex, gccmakedep
+{ lib, stdenv, fetchurl, imake, bison, flex, gccmakedep
 , xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
 
-let
+stdenv.mkDerivation rec {
   pname = "nas";
   version = "1.9.4";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.src.tar.gz";
@@ -25,11 +23,11 @@ in stdenv.mkDerivation {
     rm -r $out/nix
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network transparent, client/server audio transport system";
-    homepage = http://radscan.com/nas.html;
+    homepage = "http://radscan.com/nas.html";
     license = licenses.mit;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

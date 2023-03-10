@@ -1,25 +1,36 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, go
+}:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "gox";
-  version = "20181025";
-
-  goPackagePath = "github.com/mitchellh/gox";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mitchellh";
     repo = "gox";
-    rev = "9cc487598128d0963ff9dcc51176e722788ec645";
-    sha256 = "18indkdwq2m1wy95d71lgbf46jxxrfc5km1fys5laapz993h77v6";
+    rev = "v${version}";
+    sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = null;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mitchellh/gox;
+  # This is required for wrapProgram.
+  allowGoReference = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/gox --prefix PATH : ${lib.makeBinPath [ go ]}
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/mitchellh/gox";
     description = "A dead simple, no frills Go cross compile tool";
-    platforms = platforms.all;
     license = licenses.mpl20;
+    maintainers = with maintainers; [ azahi ];
   };
-
 }

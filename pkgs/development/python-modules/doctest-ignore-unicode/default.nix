@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "doctest-ignore-unicode";
@@ -11,9 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Add flag to ignore unicode literal prefixes in doctests";
     license = with licenses; [ asl20 ];
-    homepage = https://github.com/gnublade/doctest-ignore-unicode;
+    homepage = "https://github.com/gnublade/doctest-ignore-unicode";
   };
 }

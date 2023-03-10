@@ -1,25 +1,53 @@
-{ stdenv, fetchurl, gettext, libintl, ncurses, openssl
-, fftw ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fftw ? null
+, gettext
+, libintl
+, ncurses
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "httping";
-  version = "2.5";
+  version = "2.9";
 
-  src = fetchurl {
-    url = "https://vanheusden.com/httping/${pname}-${version}.tgz";
-    sha256 = "1y7sbgkhgadmd93x1zafqc4yp26ssiv16ni5bbi9vmvvdl55m29y";
+  src = fetchFromGitHub {
+    owner = "folkertvanheusden";
+    repo = "HTTPing";
+    rev = "v${version}";
+    hash = "sha256-aExTXXtW03UKMuMjTMx1k/MUpcRMh1PdSPkDGH+Od70=";
   };
 
-  buildInputs = [ fftw libintl ncurses openssl ];
-  nativeBuildInputs = [ gettext ];
+  patches = [
+    # Pull upstream fix for missing <unistd.h>
+    #   https://github.com/folkertvanheusden/HTTPing/pull/8
+    (fetchpatch {
+      name = "add-unistd.patch";
+      url = "https://github.com/folkertvanheusden/HTTPing/commit/aad3c275686344fe9a235faeac4ee3832f3aa8d5.patch";
+      hash = "sha256-bz3AMQTSfSTwUyf9WbkAFWVmFo06ei+Qd55x+RRDREY=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    gettext
+  ];
+
+  buildInputs = [
+    fftw
+    libintl
+    ncurses
+    openssl
+  ];
 
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://vanheusden.com/httping;
+  meta = with lib; {
+    homepage = "https://vanheusden.com/httping";
     description = "ping with HTTP requests";
     longDescription = ''
       Give httping an url, and it'll show you how long it takes to connect,
@@ -27,7 +55,7 @@ stdenv.mkDerivation rec {
       the transmission across the network also takes time! So it measures the
       latency of the webserver + network. It supports IPv6.
     '';
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = [];
     platforms = platforms.linux ++ platforms.darwin;
   };

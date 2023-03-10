@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, perl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
 , makeDesktopItem, which, perlPackages, boost
 }:
 
@@ -6,15 +6,17 @@ stdenv.mkDerivation rec {
   version = "1.3.0";
   pname = "slic3r";
 
-  src = fetchgit {
-    url = "git://github.com/alexrj/Slic3r";
+  src = fetchFromGitHub {
+    owner = "alexrj";
+    repo = "Slic3r";
     rev = version;
-    sha256 = "1pg4jxzb7f58ls5s8mygza8kqdap2c50kwlsdkf28bz1xi611zbi";
+    sha256 = "sha256-cf0QTOzhLyTcbJryCQoTVzU8kfrPV6SLpqi4s36X5N0=";
   };
 
+  nativeBuildInputs = [ makeWrapper which ];
   buildInputs =
   [boost] ++
-  (with perlPackages; [ perl makeWrapper which
+  (with perlPackages; [ perl
     EncodeLocale MathClipper ExtUtilsXSpp
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     comment = "G-code generator for 3D printers";
     desktopName = "Slic3r";
     genericName = "3D printer tool";
-    categories = "Application;Development;";
+    categories = [ "Development" ];
   };
 
   prePatch = ''
@@ -75,16 +77,16 @@ stdenv.mkDerivation rec {
     cp "$desktopItem"/share/applications/* "$out/share/applications/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "G-code generator for 3D printers";
     longDescription = ''
       Slic3r is the tool you need to convert a digital 3D model into printing
       instructions for your 3D printer. It cuts the model into horizontal
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
-    homepage = https://slic3r.org/;
+    homepage = "https://slic3r.org/";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

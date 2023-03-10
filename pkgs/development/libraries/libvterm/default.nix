@@ -1,27 +1,37 @@
-{ stdenv, fetchurl, pkgconfig, glib, ncurses }:
+{ lib, stdenv, fetchurl, pkg-config, glib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "libvterm-0.99.7";
+  pname = "libvterm";
+  version = "0.99.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libvterm/${name}.tar.gz";
+    url = "mirror://sourceforge/libvterm/${pname}-${version}.tar.gz";
     sha256 = "10gaqygmmwp0cwk3j8qflri5caf8vl3f7pwfl2svw5whv8wkn0k2";
   };
 
-  patchPhase = ''
-    sed -i -e s@/usr@$out@ -e /ldconfig/d Makefile
-  '';
-
   preInstall = ''
-    mkdir -p $out/include
-    mkdir -p $out/lib
+    mkdir -p $out/include $out/lib
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib ncurses ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc" \
+      --replace "ldconfig" "" \
+      --replace "/usr" "$out"
 
-  meta = with stdenv.lib; {
-    homepage = http://libvterm.sourceforge.net/;
+    makeFlagsArray+=("PKG_CFG=`${stdenv.cc.targetPrefix}pkg-config --cflags glib-2.0`")
+  '';
+
+  # For headers
+  propagatedBuildInputs = [ glib ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ncurses ];
+
+  meta = with lib; {
+    homepage = "http://libvterm.sourceforge.net/";
     description = "Terminal emulator library to mimic both vt100 and rxvt";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

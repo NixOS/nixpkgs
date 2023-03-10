@@ -1,35 +1,43 @@
-{ fetchurl, stdenv, emacs, curl, check, bc }:
+{ lib
+, stdenv
+, fetchurl
+, bc
+, check
+, curl
+}:
 
 stdenv.mkDerivation rec {
-  name = "recutils-1.8";
+  pname = "recutils";
+  version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/recutils/${name}.tar.gz";
-    sha256 = "14xiln4immfsw8isnvwvq0h23f6z0wilpgsc4qzabnrzb5lsx3nz";
+    url = "mirror://gnu/recutils/${pname}-${version}.tar.gz";
+    hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
-  buildInputs = [ curl emacs ];
+  buildInputs = [
+    curl
+  ];
 
-  checkInputs = [ check bc ];
+  nativeCheckInputs = [
+    bc
+    check
+  ];
+
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/recutils/";
     description = "Tools and libraries to access human-editable, text-based databases";
-
-    longDescription =
-      '' GNU Recutils is a set of tools and libraries to access
-         human-editable, text-based databases called recfiles.  The data is
-         stored as a sequence of records, each record containing an arbitrary
-         number of named fields.
-      '';
-
-    homepage = https://www.gnu.org/software/recutils/;
-
-    license = stdenv.lib.licenses.gpl3Plus;
-
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+    longDescription = ''
+      GNU Recutils is a set of tools and libraries to access human-editable,
+      text-based databases called recfiles. The data is stored as a sequence of
+      records, each record containing an arbitrary number of named fields.
+    '';
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 }

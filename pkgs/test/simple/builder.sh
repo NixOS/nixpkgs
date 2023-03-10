@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 set -x
 
 export NIX_DEBUG=1

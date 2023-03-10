@@ -1,5 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
+, fetchpatch
 , makeWrapper
 , which
 , autoconf
@@ -9,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.023.5";
+  version = "2.023.6";
   pname = "sympow";
 
   src = fetchFromGitLab {
@@ -17,8 +18,17 @@ stdenv.mkDerivation rec {
     owner = "forks";
     repo = "sympow";
     rev = "v${version}";
-    sha256 = "1c5a2pizgqsf3pjkf7rfj20022ym4ixhrddp8ivs2nbzxwz6qvv9";
+    sha256 = "132l0xv00ld1svvv9wh99wfra4zzjv2885h2sq0dsl98wiyvi5zl";
   };
+
+  patches = [
+    ./clean-extra-logfile-output-from-pari.patch
+    (fetchpatch {
+      name = "null-terminate-dupdirname.patch";
+      url = "https://gitlab.com/rezozer/forks/sympow/-/merge_requests/5.diff";
+      sha256 = "sha256-yKjio+qN9teL8L+mb7WOBN/iv545vRIxW20FJU37oO4=";
+    })
+  ];
 
   postUnpack = ''
     patchShebangs .
@@ -61,14 +71,14 @@ stdenv.mkDerivation rec {
     "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compute special values of symmetric power elliptic curve L-functions";
     license = {
       shortName = "sympow";
       fullName = "Custom, BSD-like. See COPYING file.";
       free = true;
     };
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.linux;
   };
 }

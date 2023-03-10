@@ -12,14 +12,14 @@ buildPythonPackage rec {
   LC_ALL="en_US.utf-8";
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test
   '';
 
   meta = with lib; {
-    homepage = https://github.com/pydanny/whichcraft;
+    homepage = "https://github.com/pydanny/whichcraft";
     description = "Cross-platform cross-python shutil.which functionality";
     license = licenses.bsd3;
   };

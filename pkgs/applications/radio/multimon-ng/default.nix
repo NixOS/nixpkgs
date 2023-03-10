@@ -1,30 +1,21 @@
-{ stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
-let
-  version = "1.1.8";
-in
-stdenv.mkDerivation {
+{ lib, stdenv, fetchFromGitHub, cmake, libpulseaudio, libX11 }:
+
+stdenv.mkDerivation rec {
   pname = "multimon-ng";
-  inherit version;
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = version;
-    sha256 = "1973xfyvzl1viz19zr83cgqlx5laxbjrca35rqabn6dlb6xb5xk8";
+    sha256 = "sha256-Qk9zg3aSrEfC16wQqL/EMG6MPobX8dnJ1OLH8EMap0I=";
   };
 
-  buildInputs = [ qt4 libpulseaudio ];
+  buildInputs = lib.optionals stdenv.isLinux [ libpulseaudio libX11 ];
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [ cmake ];
 
-  qmakeFlags = [ "multimon-ng.pro" ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp multimon-ng $out/bin
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multimon is a digital baseband audio protocol decoder";
     longDescription = ''
       multimon-ng a fork of multimon, a digital baseband audio
@@ -36,9 +27,9 @@ stdenv.mkDerivation {
       AFSK2400 AFSK2400_2 AFSK2400_3 HAPN4800 FSK9600 DTMF ZVEI1 ZVEI2
       ZVEI3 DZVEI PZVEI EEA EIA CCIR MORSE CW
     '';
-    homepage = https://github.com/EliasOenal/multimon-ng;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://github.com/EliasOenal/multimon-ng";
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ markuskowa ];
   };
 }

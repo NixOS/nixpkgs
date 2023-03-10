@@ -1,24 +1,62 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, colorama, pytestCheckHook }:
+{ lib
+, stdenv
+, aiocontextvars
+, buildPythonPackage
+, colorama
+, fetchpatch
+, fetchFromGitHub
+, freezegun
+, mypy
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "loguru";
-  version = "0.4.1";
-  
-  disabled = isPy27;
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a6101fd435ac89ba5205a105a26a6ede9e4ddbb4408a6e167852efca47806d11";
+  # No release since Jan 2022, only master is compatible with Python 3.11
+  # https://github.com/Delgan/loguru/issues/740
+  version = "unstable-2023-01-20";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
+
+  src = fetchFromGitHub {
+    owner = "Delgan";
+    repo = pname;
+    rev = "07f94f3c8373733119f85aa8b9ca05ace3325a4b";
+    hash = "sha256-lMGyQbBX3z6186ojs/iew7JMrG91ivPA679T9r+7xYw=";
   };
 
-  checkInputs = [ pytestCheckHook colorama ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
+    aiocontextvars
+  ];
 
-  disabledTests = [ "test_time_rotation_reopening" "test_file_buffering" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    colorama
+    freezegun
+    mypy
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Delgan/loguru;
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "tests/test_multiprocessing.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_rotation_and_retention"
+    "test_rotation_and_retention_timed_file"
+    "test_renaming"
+    "test_await_complete_inheritance"
+  ];
+
+  pythonImportsCheck = [
+    "loguru"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/Delgan/loguru";
     description = "Python logging made (stupidly) simple";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [ jakewaksbaum rmcgibbo ];
   };
 }

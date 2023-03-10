@@ -1,26 +1,29 @@
-{ stdenv, fetchurl, pcre }:
+{ lib, stdenv, fetchurl, autoreconfHook, pcre }:
 
-let version = "1.0.10"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "classads";
-  inherit version;
+  version = "1.0.10";
 
   src = fetchurl {
     url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";
     sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ pcre ];
 
   configureFlags = [
     "--enable-namespace" "--enable-flexible-member"
   ];
-  
+
+  # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+
   meta = {
-    homepage = http://www.cs.wisc.edu/condor/classad/;
+    homepage = "http://www.cs.wisc.edu/condor/classad/";
     description = "The Classified Advertisements library provides a generic means for matching resources";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

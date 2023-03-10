@@ -7,10 +7,27 @@ let
   cfg = xcfg.desktopManager.cde;
 in {
   options.services.xserver.desktopManager.cde = {
-    enable = mkEnableOption "Common Desktop Environment";
+    enable = mkEnableOption (lib.mdDoc "Common Desktop Environment");
+
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = with pkgs.xorg; [
+        xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+      ];
+      defaultText = literalExpression ''
+        with pkgs.xorg; [
+          xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+        ]
+      '';
+      description = lib.mdDoc ''
+        Extra packages to be installed system wide.
+      '';
+    };
   };
 
   config = mkIf (xcfg.enable && cfg.enable) {
+    environment.systemPackages = cfg.extraPackages;
+
     services.rpcbind.enable = true;
 
     services.xinetd.enable = true;
@@ -32,9 +49,10 @@ in {
     users.groups.mail = {};
     security.wrappers = {
       dtmail = {
-        source = "${pkgs.cdesktopenv}/bin/dtmail";
-        group = "mail";
         setgid = true;
+        owner = "root";
+        group = "mail";
+        source = "${pkgs.cdesktopenv}/bin/dtmail";
       };
     };
 
@@ -51,5 +69,5 @@ in {
     }];
   };
 
-  meta.maintainers = [ maintainers.gnidorah ];
+  meta.maintainers = [ ];
 }

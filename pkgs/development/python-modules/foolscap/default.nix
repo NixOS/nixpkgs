@@ -1,40 +1,58 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , mock
-, twisted
 , pyopenssl
+, pytestCheckHook
 , service-identity
+, twisted
 }:
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "0.13.2";
+  version = "21.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8498c7e9eaecb5b19be74b18d55c2086440be08de29f2bb507f9b505757467ff";
+    sha256 = "sha256-6dGFU4YNk1joXXZi2c2L84JtUbTs1ICgXfv0/EU2P4Q=";
   };
 
-  propagatedBuildInputs = [ mock twisted pyopenssl service-identity ];
+  patches = [
+    (fetchpatch {
+      name = "fix-tests-with-twisted-22.10.0.patch";
+      url = "https://github.com/warner/foolscap/commit/c04202eb5d4cf052e650ec2985ea6037605fd79e.patch";
+      hash = "sha256-RldDc18n3WYHdYg0ZmM8PBffIuiGa1NIfdoHs3mEEfc=";
+    })
+  ];
 
-  checkPhase = ''
-    # Either uncomment this, or remove this custom check phase entirely, if
-    # you wish to do battle with the foolscap tests. ~ C.
-    # trial foolscap
-  '';
+  propagatedBuildInputs = [
+    mock
+    twisted
+    pyopenssl
+    service-identity
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://foolscap.lothar.com/;
-    description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Not all dependencies are present
+    "src/foolscap/test/test_connection.py"
+  ];
+
+  pythonImportsCheck = [ "foolscap" ];
+
+  meta = with lib; {
+    description = "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
-      "Foolscap" is the name for the next-generation RPC protocol,
-      intended to replace Perspective Broker (part of Twisted).
-      Foolscap is a protocol to implement a distributed
-      object-capabilities model in Python.
+      "Foolscap" is the name for the next-generation RPC protocol, intended to
+      replace Perspective Broker (part of Twisted). Foolscap is a protocol to
+      implement a distributed object-capabilities model in Python.
     '';
-    # See http://foolscap.lothar.com/trac/browser/LICENSE.
+    homepage = "https://github.com/warner/foolscap";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

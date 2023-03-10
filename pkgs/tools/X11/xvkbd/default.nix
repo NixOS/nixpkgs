@@ -1,31 +1,36 @@
-{ stdenv, fetchurl, imake, libXt, libXaw, libXtst
-, libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
+{ lib, stdenv, fetchurl, libXt, libXaw, libXtst
+, libXi, libXpm, pkg-config, xorgproto, Xaw3d }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xvkbd";
-  version = "3.9";
+  version = "4.1";
   src = fetchurl {
-    url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-3.9.tar.gz";
-    sha256 = "17csj6x5zm3g67izfwhagkal1rbqzpw09lqmmlyrjy3vzgfkf75q";
+    url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-${version}.tar.gz";
+    sha256 = "1x5yldv9y99cw5hzzs73ygdn1z80zns9hz0baa355r711zghfbcm";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
+  nativeBuildInputs = [ pkg-config ] ;
   buildInputs = [ libXt libXaw libXtst xorgproto libXi Xaw3d libXpm ];
-  installTargets = [ "install" "install.man" ];
+
   makeFlags = [
-    "BINDIR=$(out)/bin"
-    "XAPPLOADDIR=$(out)/etc/X11/app-defaults"
-    "MANPATH=$(out)/man"
+    # avoid default libXt location
+    "appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
+    "datarootdir=${placeholder "out"}/share"
   ];
 
-  meta = with stdenv.lib; {
+  preInstall = ''
+    # workaround absence of libXt in $DESTDIR location.
+    mkdir -p $out/share/X11
+  '';
+
+  meta = with lib; {
     description = "Virtual keyboard for X window system";
     longDescription = ''
       xvkbd is a virtual (graphical) keyboard program for X Window System which provides
       facility to enter characters onto other clients (softwares) by clicking on a
       keyboard displayed on the screen.
     '';
-    homepage = http://t-sato.in.coocan.jp/xvkbd;
+    homepage = "http://t-sato.in.coocan.jp/xvkbd";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.linux;

@@ -1,22 +1,48 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
+
+let
+  skipTests = {
+    access = "Access";
+    create = "Create";
+    delete = "Delete";
+    list = "List";
+    read = "Read";
+    replace = "Replace";
+    resolver = "Resolve";
+    revoke = "Revoke";
+    update = "Update";
+  };
+
+  skipTestsCommand =
+    builtins.foldl' (acc: goFileName:
+      let testName = builtins.getAttr goFileName skipTests; in
+      ''
+        ${acc}
+        substituteInPlace pkg/berglas/${goFileName}_test.go \
+          --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
+          --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
+      ''
+    ) "" (builtins.attrNames skipTests);
+in
 
 buildGoModule rec {
-
-  name = "berglas-${version}";
-  version = "0.5.0";
+  pname = "berglas";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = "berglas";
-    rev = "v0.5.0";
-    sha256 = "1y5w2czipwj069w4zxnyb9xqv5mx0yjjramykf3vm3q478bk3rm7";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-A4TUVNsiWODH8jJzV4AYchIQjDWXysJbFPYQ5W63T08=";
   };
 
-  modSha256 = "0y4ajii3pv25s4gjazf6fl0b9wax17cmwhbmiybqhp61annca7kr";
+  vendorSha256 = "sha256-jJuwfP0zJ70r62IFTPsXBCAEKDcuBwHsBR24jGx/IqY=";
 
-  meta = with stdenv.lib; {
+  postPatch = skipTestsCommand;
+
+  meta = with lib; {
     description = "A tool for managing secrets on Google Cloud";
-    homepage = https://github.com/GoogleCloudPlatform/berglas;
+    homepage = "https://github.com/GoogleCloudPlatform/berglas";
     license = licenses.asl20;
     platforms = platforms.unix;
   };

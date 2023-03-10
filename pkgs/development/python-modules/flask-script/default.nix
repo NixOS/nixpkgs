@@ -10,13 +10,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ flask ];
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # No tests in archive
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/smurfix/flask-script;
+    homepage = "https://github.com/smurfix/flask-script";
     description = "Scripting support for Flask";
     license = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];

@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "dom";
+  pname = "dom";
   version = "2017-04-22";
 
   idrisDeps = [ idrisscript html xhr ];
@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris library to interact with the DOM";
-    homepage = https://github.com/pierrebeaucamp/idris-dom;
+    homepage = "https://github.com/pierrebeaucamp/idris-dom";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

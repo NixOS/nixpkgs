@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 
@@ -23,45 +23,42 @@
 , pango
 
 , audioSupport ? mediaSupport
-, pulseaudioSupport ? false
+, pulseaudioSupport ? mediaSupport
 , libpulseaudio
 , apulse
+, alsa-lib
 
 # Media support (implies audio support)
-, mediaSupport ? false
+, mediaSupport ? true
 , ffmpeg
 
 , gmp
 
-# Pluggable transport dependencies
-, python27
-
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, gnome3
+, gnome
 , runtimeShell
 , shared-mime-info
 , gsettings-desktop-schemas
 
 # Hardening
 , graphene-hardened-malloc
-, useHardenedMalloc ? graphene-hardened-malloc != null && builtins.elem stdenv.system graphene-hardened-malloc.meta.platforms
+# Whether to use graphene-hardened-malloc
+, useHardenedMalloc ? true
 
-# Whether to disable multiprocess support to work around crashing tabs
-# TODO: fix the underlying problem instead of this terrible work-around
-, disableContentSandbox ? true
+# Whether to disable multiprocess support
+, disableContentSandbox ? false
 
 # Extra preferences
 , extraPrefs ? ""
 }:
 
-with stdenv.lib;
-
 let
-  libPath = makeLibraryPath libPkgs;
+  libPath = lib.makeLibraryPath libPkgs;
 
   libPkgs = [
+    alsa-lib
     atk
     cairo
     dbus
@@ -81,32 +78,41 @@ let
     stdenv.cc.libc
     zlib
   ]
-  ++ optionals pulseaudioSupport [ libpulseaudio ]
-  ++ optionals mediaSupport [
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals mediaSupport [
     ffmpeg
   ];
 
   # Library search path for the fte transport
-  fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
+  fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.0.5";
+  version = "12.0.3";
 
-  lang = "en-US";
+  lang = "ALL";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "1d4c3mrvqd6v086mwn3rnv776y2j3y45agnd0k5njqnmr53ybn2s";
+      urls = [
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+      ];
+      hash = "sha256-bOGY/RdwD6O7QIuOiBw7OVnZfpumGGso6hwMJJwN2g0=";
     };
 
     i686-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "040nh79hjkg5afvzshzhp7588dbi1pcpjsyk8phfqaapds74ma8y";
+      urls = [
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+      ];
+      hash = "sha256-t1tnEZtiRig2r8GNJpqT+J0XoxCLMyUsI9tX6aa0lYk=";
     };
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
   inherit version;
@@ -123,7 +129,7 @@ stdenv.mkDerivation rec {
     desktopName = "Tor Browser";
     genericName = "Web Browser";
     comment = meta.description;
-    categories = "Network;WebBrowser;Security;";
+    categories = [ "Network" "WebBrowser" "Security" ];
   };
 
   buildCommand = ''
@@ -133,7 +139,7 @@ stdenv.mkDerivation rec {
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
-    tar xf "${src}" -C "$TBB_IN_STORE" --strip-components=2
+    tar xf "$src" -C "$TBB_IN_STORE" --strip-components=2
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter
@@ -150,7 +156,7 @@ stdenv.mkDerivation rec {
     libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
 
     # apulse uses a non-standard library path.  For now special-case it.
-    ${optionalString (audioSupport && !pulseaudioSupport) ''
+    ${lib.optionalString (audioSupport && !pulseaudioSupport) ''
       libPath=${apulse}/lib/apulse:$libPath
     ''}
 
@@ -218,7 +224,7 @@ stdenv.mkDerivation rec {
       clearPref("security.sandbox.content.write_path_whitelist");
     ''}
 
-    ${optionalString (extraPrefs != "") ''
+    ${lib.optionalString (extraPrefs != "") ''
       ${extraPrefs}
     ''}
     EOF
@@ -231,9 +237,10 @@ stdenv.mkDerivation rec {
 
     # Preload extensions by moving into the runtime instead of storing under the
     # user's profile directory.
-    mkdir -p "$TBB_IN_STORE/browser/extensions"
+    # See https://support.mozilla.org/en-US/kb/deploying-firefox-with-extensions
+    mkdir -p "$TBB_IN_STORE/distribution/extensions"
     mv "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/extensions/"* \
-      "$TBB_IN_STORE/browser/extensions"
+      "$TBB_IN_STORE/distribution/extensions"
 
     # Hard-code paths to geoip data files.  TBB resolves the geoip files
     # relative to torrc-defaults_path but if we do not hard-code them
@@ -244,14 +251,14 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
-    WRAPPER_LD_PRELOAD=${optionalString useHardenedMalloc
+    WRAPPER_LD_PRELOAD=${lib.optionalString useHardenedMalloc
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
-    WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      gnome3.adwaita-icon-theme
+    WRAPPER_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
+      gnome.adwaita-icon-theme
       shared-mime-info
     ]}
-    WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
+    WRAPPER_XDG_DATA_DIRS+=":"${lib.concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
       glib
       gsettings-desktop-schemas
       gtk3
@@ -263,7 +270,7 @@ stdenv.mkDerivation rec {
     #! ${runtimeShell}
     set -o errexit -o nounset
 
-    PATH=${makeBinPath [ coreutils ]}
+    PATH=${lib.makeBinPath [ coreutils ]}
     export LC_ALL=C
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
 
@@ -286,24 +293,27 @@ stdenv.mkDerivation rec {
     # TBB will fail if ownership is too permissive
     chmod 0700 "\$HOME/TorBrowser/Data/Tor"
 
-    # Initialize the browser profile state.  Note that the only data
-    # copied from the Store payload is the initial bookmark file, which is
-    # never updated once created.  All other files under user's profile
-    # dir are generated by TBB.
+    # Initialize the browser profile state.
+    # All files under user's profile dir are generated by TBB.
     mkdir -p "\$HOME/TorBrowser/Data/Browser/profile.default"
-    cp -u --no-preserve=mode,owner "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/bookmarks.html" \
-      "\$HOME/TorBrowser/Data/Browser/profile.default/bookmarks.html"
 
-    # Clear out some files that tend to capture store references but are
-    # easily generated by firefox at startup.
-    rm -f "\$HOME/TorBrowser/Data/Browser/profile.default"/{addonStartup.json.lz4,compatibility.ini,extensions.ini,extensions.json}
-    rm -f "\$HOME/TorBrowser/Data/Browser/profile.default"/startupCache/*
+    # Clear some files if the last known store path is different from the new one
+    : "\''${KNOWN_STORE_PATH:=\$HOME/known-store-path}"
+    if ! [ "\$KNOWN_STORE_PATH" -ef $out ]; then
+      echo "Cleanup files with outdated store references"
+      ln -Tsf $out "\$KNOWN_STORE_PATH"
+
+      # Clear out some files that tend to capture store references but are
+      # easily generated by firefox at startup.
+      rm -f "\$HOME/TorBrowser/Data/Browser/profile.default"/{addonStartup.json.lz4,compatibility.ini,extensions.ini,extensions.json}
+      rm -f "\$HOME/TorBrowser/Data/Browser/profile.default"/startupCache/*
+    fi
 
     # XDG
     : "\''${XDG_RUNTIME_DIR:=/run/user/\$(id -u)}"
     : "\''${XDG_CONFIG_HOME:=\$REAL_HOME/.config}"
 
-    ${optionalString pulseaudioSupport ''
+    ${lib.optionalString pulseaudioSupport ''
       # Figure out some envvars for pulseaudio
       : "\''${PULSE_SERVER:=\$XDG_RUNTIME_DIR/pulse/native}"
       : "\''${PULSE_COOKIE:=\$XDG_CONFIG_HOME/pulse/cookie}"
@@ -312,6 +322,16 @@ stdenv.mkDerivation rec {
     # Font cache files capture store paths; clear them out on the off
     # chance that TBB would continue using old font files.
     rm -rf "\$HOME/.cache/fontconfig"
+
+    # Workaround a bug in 12.0.X that Tor directories are not cleaned up and tor gets confused where its socket is
+    rm -rf \$XDG_RUNTIME_DIR/Tor*
+
+    # Manually specify data paths (by default TB attempts to create these in the store)
+    {
+      echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
+      echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
+      echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
+    } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
     #
@@ -338,7 +358,7 @@ stdenv.mkDerivation rec {
       TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
       XAUTHORITY="\''${XAUTHORITY:-\$HOME/.Xauthority}" \
-      DISPLAY="\$DISPLAY" \
+      DISPLAY="\''${DISPLAY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\''${DBUS_SESSION_BUS_ADDRESS:-unix:path=\$XDG_RUNTIME_DIR/bus}" \\
       \
       XDG_DATA_HOME="\$HOME/.local/share" \
@@ -346,6 +366,11 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      MOZ_ENABLE_WAYLAND="\''${MOZ_ENABLE_WAYLAND:-}" \
+      WAYLAND_DISPLAY="\''${WAYLAND_DISPLAY:-}" \
+      XDG_RUNTIME_DIR="\''${XDG_RUNTIME_DIR:-}" \
+      XCURSOR_PATH="\''${XCURSOR_PATH:-}" \
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
@@ -385,11 +410,11 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$libPath $TBB_IN_STORE/TorBrowser/Tor/tor --version >/dev/null
 
     echo "Checking tor-browser wrapper ..."
-    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+      TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
       Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of
@@ -401,12 +426,14 @@ stdenv.mkDerivation rec {
       the `/nix/store`.
     '';
     homepage = "https://www.torproject.org/";
+    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
-    hydraPlatforms = [];
+    maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
+    mainProgram = "tor-browser";
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
     license = licenses.free;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

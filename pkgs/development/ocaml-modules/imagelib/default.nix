@@ -1,27 +1,34 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, decompress }:
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, decompress
+, stdlib-shims
+, alcotest
+}:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
-  version = "20191011";
+  minimalOCamlVersion = "4.08";
+  version = "20221222";
   pname = "imagelib";
-  src = fetchFromGitHub {
-    owner = "rlepigre";
-    repo = "ocaml-imagelib";
-    rev = "03fed7733825cef7e0465163f398f6af810e2e75";
-    sha256 = "0h7vgyss42nhlfqpbdnb54nxq86rskqi2ilx8b87r0hi19hqx463";
+
+  duneVersion = "3";
+
+  src = fetchurl {
+    url = "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";
+    hash = "sha256-BQ2TVxGlpc6temteK84TKXpx0MtHZSykL/TjKN9xGP0=";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/rlepigre/ocaml-imagelib/pull/24/commits/4704fd44adcda62e0d96ea5b1927071326aa6111.patch";
-    sha256 = "0ipjab1hfa2v2pnd8g1k3q2ia0plgiw7crm3fa4w2aqpzdyabkb9";
-  }) ];
+  propagatedBuildInputs = [ decompress stdlib-shims ];
 
-  propagatedBuildInputs = [ decompress ];
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";
+    homepage = "https://github.com/rlepigre/ocaml-imagelib";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    mainProgram = "imagetool";
   };
 }

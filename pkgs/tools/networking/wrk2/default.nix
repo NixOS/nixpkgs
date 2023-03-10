@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luajit, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, luajit, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "wrk2";
@@ -34,9 +34,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Constant throughput, correct latency recording variant of wrk";
-    homepage    = https://github.com/giltene/wrk2;
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    homepage    = "https://github.com/giltene/wrk2";
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

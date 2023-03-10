@@ -1,12 +1,14 @@
-{ stdenv, lib, coreutils, gnused, gawk, fetchurl }:
+{ lib, stdenv, coreutils, gawk, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rsbep";
-  version = "0.1.0";
+  version = "0.2.0";
 
-  src = fetchurl {
-    url = "https://www.thanassis.space/rsbep-0.1.0-ttsiodras.tar.bz2";
-    sha256 = "1zji34kc9srxp0h1s1m7k60mvgsir1wrx1n3wc990jszfplr32zc";
+  src = fetchFromGitHub {
+    owner = "ttsiodras";
+    repo = "rsbep-backup";
+    rev = "v${version}";
+    sha256 = "0is4jgil3wdqbvx9h66xcyzbqy84ndyydnnay2g9k81a4mcz4dns";
   };
 
   postFixup = ''
@@ -18,20 +20,27 @@ stdenv.mkDerivation {
     mv rsbep_chopper $libexecDir
 
     # Fix store dependencies in scripts
-    path="export PATH=$out/bin:$libexecDir:${lib.makeBinPath [ coreutils gnused gawk ]}"
+    path="export PATH=$out/bin:$libexecDir:${lib.makeBinPath [ coreutils gawk ]}"
     sed -i "2i$path" freeze.sh
     sed -i "2i$path" melt.sh
-
-    substituteInPlace freeze.sh --replace /bin/ls ls
 
     # Remove unneded binary
     rm poorZFS.py
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    cd $TMP
+    echo hello > input
+    $out/bin/freeze.sh input > packed
+    $out/bin/melt.sh packed > output
+    diff -u input output
+  '';
+
   meta = with lib; {
     description = "Create resilient backups with Reed-Solomon error correction and byte-spreading";
-    homepage = https://www.thanassis.space/rsbep.html;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.earvstedt ];
+    homepage = "https://www.thanassis.space/rsbep.html";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.erikarvstedt ];
   };
 }

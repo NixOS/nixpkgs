@@ -1,29 +1,39 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, cryptography, jeepney, pygobject3 }:
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, jeepney
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "secretstorage";
-  version = "3.1.1";
+  version = "3.3.3";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "SecretStorage";
     inherit version;
-    sha256 = "14lznnn916ddn6yrd3w2nr2zq49zc8hw53yjz1k9yhd492p9gir0";
+    hash = "sha256-JANTPvNp7KbSuoFxhXbF4PVk1cyhtY9zqLI+fU7uvXc=";
   };
 
   propagatedBuildInputs = [
     cryptography
     jeepney
-    pygobject3
   ];
 
-  # Needs a D-Bus Sesison
+  # Needs a D-Bus session
   doCheck = false;
 
+  pythonImportsCheck = [
+    "secretstorage"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/mitya57/secretstorage;
     description = "Python bindings to FreeDesktop.org Secret Service API";
+    homepage = "https://github.com/mitya57/secretstorage";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teto ];
   };

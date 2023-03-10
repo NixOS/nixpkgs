@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "8.2.0343";
+  version = "9.0.1369";
 
   src = fetchFromGitHub {
     owner = "vim";
     repo = "vim";
     rev = "v${version}";
-    sha256 = "063i52h8v7f87zamrw2ph057f0x2nzwf1s0izrm2psy41cyf4wa3";
+    hash = "sha256-2YjWd07RMyiITnuI3/L0D9MiAxl2+9QVT1nrMBA9/dI=";
   };
 
   enableParallelBuilding = true;
@@ -24,7 +24,7 @@ rec {
     description = "The most popular clone of the VI editor";
     homepage    = "http://www.vim.org";
     license     = licenses.vim;
-    maintainers = with maintainers; [ lovek323 equirosa ];
+    maintainers = with maintainers; [ das_j equirosa ];
     platforms   = platforms.unix;
   };
 }

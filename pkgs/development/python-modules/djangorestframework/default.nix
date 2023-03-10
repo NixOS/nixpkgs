@@ -1,24 +1,51 @@
-{ stdenv, buildPythonPackage, fetchPypi, django, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, coreapi
+, django
+, django-guardian
+, pythonOlder
+, pytest-django
+, pytestCheckHook
+, pytz
+, pyyaml
+, uritemplate
+}:
 
 buildPythonPackage rec {
-  version = "3.11.0";
   pname = "djangorestframework";
-  disabled = isPy27;
+  version = "3.14.0";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = "django-rest-framework";
+    rev = version;
+    sha256 = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
   };
 
-  # Test settings are missing
-  doCheck = false;
+  propagatedBuildInputs = [
+    django
+    pytz
+  ];
 
-  propagatedBuildInputs = [ django ];
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
 
-  meta = with stdenv.lib; {
+    # optional tests
+    coreapi
+    django-guardian
+    pyyaml
+    uritemplate
+  ];
+
+  pythonImportsCheck = [ "rest_framework" ];
+
+  meta = with lib; {
     description = "Web APIs for Django, made easy";
-    homepage = https://www.django-rest-framework.org/;
-    maintainers = with maintainers; [ desiderius ];
+    homepage = "https://www.django-rest-framework.org/";
+    maintainers = with maintainers; [ desiderius SuperSandro2000 ];
     license = licenses.bsd2;
   };
 }

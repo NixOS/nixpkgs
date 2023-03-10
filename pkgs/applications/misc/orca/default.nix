@@ -1,5 +1,5 @@
-{ stdenv
-, pkgconfig
+{ lib
+, pkg-config
 , fetchurl
 , buildPythonApplication
 , autoreconfHook
@@ -8,11 +8,10 @@
 , gettext
 , yelp-tools
 , itstool
-, libxmlxx3
 , python
 , pygobject3
 , gtk3
-, gnome3
+, gnome
 , substituteAll
 , at-spi2-atk
 , at-spi2-core
@@ -35,13 +34,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.34.2";
+  version = "43.1";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0aaagz8mxvfigrsdbmg22q44vf5yhkbw4rh4cnizysbfvijk4dan";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "9ljgSc4WknO4Q0aBBCTW9QkpHwXX7MOnegPZEqo+aEA=";
   };
 
   patches = [
@@ -57,15 +56,14 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
-    pkgconfig
-    libxmlxx3
+    pkg-config
     gettext
     yelp-tools
     itstool
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  pythonPath = [
     pygobject3
     pyatspi
     dbus-python
@@ -92,12 +90,12 @@ buildPythonApplication rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Orca";
     description = "Screen reader";
     longDescription = ''
@@ -108,9 +106,9 @@ buildPythonApplication rec {
       GTK toolkit, the Java platform's Swing toolkit, LibreOffice, Gecko, and
       WebKitGtk. AT-SPI support for the KDE Qt toolkit is being pursued.
 
-      Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.
+      Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, sh }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, sh }:
 
 buildPythonPackage rec {
   pname = "python-packer";
@@ -16,15 +16,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ sh ];
-  
+
   # Tests requires network connections
   doCheck = false;
-  
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "An interface for packer.io";
-    homepage = https://github.com/nir0s/python-packer;
+    homepage = "https://github.com/nir0s/python-packer";
     license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

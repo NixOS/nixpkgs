@@ -1,27 +1,32 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, protobuf, protobufc
 , libsodium, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname   = "libnats";
-  version = "2.1.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner  = "nats-io";
     repo   = "nats.c";
-    rev    = "refs/tags/v${version}";
-    sha256 = "16a0f0gvrmyrqvmh6vinqny3qhm6wyzw5ijnn3r82b1gqlpws0fz";
+    rev    = "v${version}";
+    sha256 = "sha256-L/RS/M0TQJEMXRvdwo03st1VAlIlJ/fCmTvx+0+gCGE=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libsodium openssl protobuf protobufc ];
 
   separateDebugInfo = true;
-  enableParallelBuilding = true;
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  # https://github.com/nats-io/nats.c/issues/542
+  postPatch = ''
+    substituteInPlace src/libnats.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
+  meta = with lib; {
     description = "C API for the NATS messaging system";
     homepage    = "https://github.com/nats-io/nats.c";
     license     = licenses.asl20;

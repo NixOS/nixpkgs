@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
+{ lib, stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "csmith";
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A random generator of C programs";
-    homepage = https://embed.cs.utah.edu/csmith;
+    homepage = "https://embed.cs.utah.edu/csmith";
     # Officially, the license is this: https://github.com/csmith-project/csmith/blob/master/COPYING
     license = licenses.bsd2;
     longDescription = ''

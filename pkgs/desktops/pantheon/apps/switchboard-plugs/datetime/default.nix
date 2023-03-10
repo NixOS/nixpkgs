@@ -1,10 +1,12 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, fetchpatch
+, nix-update-script
 , meson
 , ninja
 , substituteAll
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -16,26 +18,33 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "2.1.6";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "09734c3qc0296zf14rdhl4p6ppga015rz9hhsvlcc3nvyw7kdqkc";
+    sha256 = "10rqhxsqbl1xnz5n84d7m39c3vb71k153989xvyc55djia1wjx96";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      tzdata = tzdata;
+    })
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/switchboard-plug-datetime/pull/100
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-datetime/commit/a90639ed4f185f50d4ae448cd9503203dc24b3f4.patch";
+      sha256 = "0dz0s02ccnds62dqil44k652pc5icka2rfhcx0a5bj1wi5sifnp7";
+    })
+  ];
 
   nativeBuildInputs = [
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -46,20 +55,15 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./timezone.patch;
-      tzdata = "${tzdata}/share/zoneinfo/zone.tab";
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Date & Time Plug";
-    homepage = https://github.com/elementary/switchboard-plug-datetime;
+    homepage = "https://github.com/elementary/switchboard-plug-datetime";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }
