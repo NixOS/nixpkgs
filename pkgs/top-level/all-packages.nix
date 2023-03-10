@@ -17095,6 +17095,8 @@ with pkgs;
 
   infracost = callPackage ../tools/misc/infracost { };
 
+  jetbrains-toolbox = callPackage ../applications/misc/jetbrains-toolbox { };
+
   msp430GccSupport = callPackage ../development/misc/msp430/gcc-support.nix { };
 
   msp430Newlib      = callPackage ../development/misc/msp430/newlib.nix { };
