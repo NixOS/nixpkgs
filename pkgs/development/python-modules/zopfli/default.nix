@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ zopfli ];
   USE_SYSTEM_ZOPFLI = "True";
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "cPython bindings for zopfli";

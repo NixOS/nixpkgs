@@ -15,7 +15,7 @@ let
     python pytest nose cryptography pyyaml requests mock requests-mock
     python-dateutil setuptools;
 
-  version = "4.17";
+  version = "4.18";
 
 in
 
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-1LkWkila0EG3FfjhTohsirpQ/9wXp5IdoTxliRvT4YU=";
+    hash = "sha256-xqiEHfbuyAnQBBzKcWEdGoDSxVYOGI55OCx49YMnNK4=";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];
   buildInputs = [ python perl python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip makeWrapper ];
-  checkInputs = [ nose pytest mock requests-mock ];
+  nativeCheckInputs = [ nose pytest mock requests-mock ];
 
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \

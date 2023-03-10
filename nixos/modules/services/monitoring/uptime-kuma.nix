@@ -7,9 +7,11 @@ let
 in
 {
 
+  meta.maintainers = [ lib.maintainers.julienmalka ];
+
   options = {
     services.uptime-kuma = {
-      enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set.");
+      enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set");
 
       package = mkOption {
         type = types.package;
@@ -18,9 +20,10 @@ in
         description = lib.mdDoc "Uptime Kuma package to use.";
       };
 
+      appriseSupport = mkEnableOption (mdDoc "apprise support for notifications");
+
       settings = lib.mkOption {
-        type =
-          lib.types.submodule { freeformType = with lib.types; attrsOf str; };
+        type = lib.types.submodule { freeformType = with lib.types; attrsOf str; };
         default = { };
         example = {
           PORT = "4000";
@@ -28,7 +31,7 @@ in
         };
         description = lib.mdDoc ''
           Additional configuration for Uptime Kuma, see
-          <https://github.com/louislam/uptime-kuma/wiki/Environment-Variables">
+          <https://github.com/louislam/uptime-kuma/wiki/Environment-Variables>
           for supported values.
         '';
       };
@@ -47,6 +50,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = cfg.settings;
+      path = with pkgs; [ unixtools.ping ] ++ lib.optional cfg.appriseSupport apprise;
       serviceConfig = {
         Type = "simple";
         StateDirectory = "uptime-kuma";

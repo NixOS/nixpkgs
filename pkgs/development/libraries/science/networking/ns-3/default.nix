@@ -101,11 +101,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" "strictoverflow"];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
     description = "A discrete time event network simulator";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ teto rgrunbla ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

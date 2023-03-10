@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bundletool";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${version}/bundletool-all-${version}.jar";
-    sha256 = "sha256-owXj7FSR98IPuaWkUGpv4e6c4c6XIYFsxZZH0OWYcu8=";
+    sha256 = "sha256-50Dn04VixejYfMgXVIstuU5CgC6aB3T99nTnWP95aU0=";
   };
 
   dontUnpack = true;

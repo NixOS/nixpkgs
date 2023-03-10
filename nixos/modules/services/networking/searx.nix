@@ -124,7 +124,7 @@ in
         description = lib.mdDoc ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
-          large instances, but is unecessary for LAN or local-only use.
+          large instances, but is unnecessary for LAN or local-only use.
 
           ::: {.warning}
           The built-in HTTP server logs all queries by default.
@@ -223,7 +223,7 @@ in
         module = "searx.webapp";
         env = [
           "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
-          # searxng compatiblity https://github.com/searxng/searxng/issues/1519
+          # searxng compatibility https://github.com/searxng/searxng/issues/1519
           "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
         ];
         buffer-size = 32768;

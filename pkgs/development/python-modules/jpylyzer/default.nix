@@ -5,6 +5,10 @@
 , six
 , lxml
 , pytestCheckHook
+, doFullCheck ? false  # weird filenames cause issues on some filesystems
+
+# for passthru.tests
+, jpylyzer
 }:
 
 let
@@ -31,20 +35,24 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook lxml ];
+  nativeCheckInputs = [ pytestCheckHook lxml ];
 
-  # don't depend on testFiles on darwin as it may not be extractable due to
-  # weird filenames
-  preCheck = lib.optionalString (!stdenv.isDarwin) ''
+  # don't depend on testFiles unless doFullCheck as it may not be extractable
+  # on some filesystems due to weird filenames
+  preCheck = lib.optionalString doFullCheck ''
     sed -i '/^testFilesDir = /ctestFilesDir = "${testFiles}"' tests/unit/test_testfiles.py
   '';
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals (!doFullCheck) [
     "tests/unit/test_testfiles.py"
   ];
 
   pythonImportsCheck = [ "jpylyzer" ];
 
   disallowedReferences = [ testFiles ];
+
+  passthru.tests = {
+    withFullCheck = jpylyzer.override { doFullCheck = true; };
+  };
 
   meta = with lib; {
     description = "JP2 (JPEG 2000 Part 1) image validator and properties extractor";

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   # I'm not modifying the checkPhase nor adding a pytestCheckHook because the pytest is called
   # within the cmake test phase
-  checkInputs = [ pytest numpy ];
+  nativeCheckInputs = [ pytest numpy ];
 
   meta = with lib; {
     description = "Fast Python library for SEGY files";

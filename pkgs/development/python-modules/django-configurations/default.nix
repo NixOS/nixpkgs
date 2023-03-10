@@ -34,7 +34,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     dj-database-url
     dj-email-url

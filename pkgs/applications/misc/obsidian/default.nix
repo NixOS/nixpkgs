@@ -2,7 +2,7 @@
 , fetchurl
 , lib
 , makeWrapper
-, electron_18
+, electron
 , makeDesktopItem
 , graphicsmagick
 , writeScript
@@ -12,20 +12,20 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "1.0.3";
+  version = "1.1.16";
   appname = "Obsidian";
   meta = with lib; {
     description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     license = licenses.obsidian;
-    maintainers = with maintainers; [ atila conradmearns zaninime opeik ];
+    maintainers = with maintainers; [ atila conradmearns zaninime qbit ];
   };
 
   filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    sha256 = if stdenv.isDarwin then "sha256-DYF9fEpZaP4tD/eeZAegDahR7UZyroqNB9bn2U7sgXs=" else "sha256-MpQk5g4184ZkCAjLU5Ug0ReWgVADskS1QuMcnPdNofs=";
+    sha256 = if stdenv.isDarwin then "sha256-0p9vYHd1+kH+2ZTJ5OPeIEKNOzUGRU/M1xlmtyPOvJo=" else "sha256-zO5RpRkatGd5kJTPrTQ5xAYHntyw/7aQUSpZFUnDMnw=";
   };
 
   icon = fetchurl {
@@ -50,7 +50,7 @@ let
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${electron_18}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar

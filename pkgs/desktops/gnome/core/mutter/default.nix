@@ -17,6 +17,7 @@
 , ninja
 , xvfb-run
 , xkeyboard_config
+, libxcvt
 , libxkbfile
 , libXdamage
 , libxkbcommon
@@ -47,15 +48,15 @@
 , wayland-protocols
 }:
 
-let self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.2";
+  version = "43.3";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "/S63B63DM8wnevhoXlzzkTXhxNeYofnQXojkU9w+u4Q=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+    sha256 = "Z75IINmycMnDxl44lHvwUtLC/xiunnBCHUklnvrACn0=";
   };
 
   patches = [
@@ -66,14 +67,11 @@ let self = stdenv.mkDerivation rec {
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
 
-    # Revert clutter optimization causing issues on X11
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2667
-    # Will be replaced with a proper fix in 43.2
-    # https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/6054
+    # Fix focus regression.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2848
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/7e7a639cc5132cf3355e861235f325540fe56548.patch";
-      sha256 = "NYoKCRh5o1Q15c11a79Hk5tGKq/jOa+e6GpgBjPEepo=";
-      revert = true;
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/12ce58dba4f96f6a948c1d166646d263253e3ee0.patch";
+      sha256 = "CGu11aLFs8VEt8NiIkih+cXZzU82oxY6Ko9QRKOkM98=";
     })
   ];
 
@@ -100,6 +98,7 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    libxcvt
     mesa # needed for gbm
     meson
     ninja
@@ -108,7 +107,7 @@ let self = stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     gi-docgen
-    xorgserver # for cvt command
+    xorgserver
   ];
 
   buildInputs = [
@@ -160,12 +159,12 @@ let self = stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${self}/lib/mutter-11";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
-        if [[ ! -d ${self.libdir} ]]; then
-          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+        if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1
         fi
         touch $out
@@ -173,8 +172,8 @@ let self = stdenv.mkDerivation rec {
     };
 
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "mutter";
+      attrPath = "gnome.mutter";
     };
   };
 
@@ -185,5 +184,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-};
-in self
+})

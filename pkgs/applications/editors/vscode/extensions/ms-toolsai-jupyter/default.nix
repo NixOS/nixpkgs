@@ -1,14 +1,11 @@
 { lib, vscode-utils, jq, moreutils }:
 
-let
-  inherit (vscode-utils) buildVscodeMarketplaceExtension;
-
-in buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "jupyter";
     publisher = "ms-toolsai";
-    version = "2022.11.1003381023";
-    sha256 = "0cbnr52pq0yw6i4yzyrifyrz186l482m9s01h4l7d74fby9ska8h";
+    version = "2023.2.1000411022";
+    sha256 = "sha256-gMK/t/rLXYN3rlHxxVeW0W/FWEP0ZCiEwzM8DY14vYg=";
   };
 
   nativeBuildInputs = [

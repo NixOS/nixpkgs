@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "signify"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

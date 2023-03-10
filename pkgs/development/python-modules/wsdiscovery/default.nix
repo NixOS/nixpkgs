@@ -27,7 +27,7 @@ buildPythonPackage rec {
     netifaces
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

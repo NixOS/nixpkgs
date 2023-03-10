@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Assembler and disassembler for Flash (SWF) bytecode";
-    homepage = "http://flasm.sourceforge.net/";
+    homepage = "https://flasm.sourceforge.net/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;

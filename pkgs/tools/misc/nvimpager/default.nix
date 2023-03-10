@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
 
   doCheck = true;
-  checkInputs = [ lua51Packages.busted util-linux neovim ];
+  nativeCheckInputs = [ lua51Packages.busted util-linux neovim ];
   # filter out one test that fails in the sandbox of nix
   checkPhase = ''
     runHook preCheck

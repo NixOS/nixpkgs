@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pythonOutputDistPhase() { touch $dist; }
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pbr
     build
     git

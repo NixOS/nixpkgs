@@ -2,36 +2,22 @@
 , rustPlatform
 , fetchFromGitHub
 , cmake
-, stdenv
-, CoreFoundation
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.7.5";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-29uxcbqAnWCdxKqVdrMVtorXvSLUC+jlt4YwE19Gh+A=";
+    sha256 = "sha256-wsuXEHwnTP+vl8Gn1mfH+cKoasDdZ+ILiAaJ7510lsI=";
   };
 
-  cargoSha256 = "sha256-VHuzv6Zq83byXDEEyYDtlaPC4DZ3GNJaJfO0ACrrqO8=";
+  cargoSha256 = "sha256-qWat0QIMLmMrbK/QCr3dSyWP27wFFQ+IDQAzLngThQE=";
 
   nativeBuildInputs = [ cmake ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
-
-  # link System as a dylib instead of a framework on macos
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    core_affinity=../$(stripHash $cargoDeps)/core_affinity
-    oldHash=$(sha256sum $core_affinity/src/lib.rs | cut -d " " -f 1)
-    substituteInPlace $core_affinity/src/lib.rs --replace framework dylib
-    substituteInPlace $core_affinity/.cargo-checksum.json \
-      --replace $oldHash $(sha256sum $core_affinity/src/lib.rs | cut -d " " -f 1)
-  '';
 
   meta = with lib; {
     description = "A close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";

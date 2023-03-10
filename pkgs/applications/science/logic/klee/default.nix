@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     cmake
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
 
     # Should appear BEFORE lit, since lit passes through python rather
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   ];
 
   # Silence various warnings during the compilation of fortified bitcode.
-  NIX_CFLAGS_COMPILE = ["-Wno-macro-redefined"];
+  env.NIX_CFLAGS_COMPILE = toString ["-Wno-macro-redefined"];
 
   prePatch = ''
     patchShebangs .

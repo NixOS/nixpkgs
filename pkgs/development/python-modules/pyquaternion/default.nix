@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   pythonImportsCheck = [ "pyquaternion" ];
 
   meta = with lib; {

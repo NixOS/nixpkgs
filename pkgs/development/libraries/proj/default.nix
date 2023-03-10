@@ -5,15 +5,17 @@
 , cmake
 , pkg-config
 , buildPackages
+, callPackage
 , sqlite
 , libtiff
 , curl
 , gtest
 , nlohmann_json
 , python3
+, cacert
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
   version = "9.1.1";
 
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ cacert gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     python = python3.pkgs.pyproj;
+    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
@@ -71,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+})

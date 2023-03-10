@@ -41,7 +41,7 @@ buildPythonApplication rec {
       pydbus
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     faker
     pytest-aiohttp

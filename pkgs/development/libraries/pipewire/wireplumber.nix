@@ -26,7 +26,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.12";
+  version = "0.4.13";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    sha256 = "sha256-2qM6sX807v/3DZXTuBvUSGV8+cPB87rWYb+HTDCm3kw=";
+    sha256 = "sha256-Zz8N6OPwZ4Dwaygiy46C3sN9zPGC12+55S/qns+S+h4=";
   };
 
   nativeBuildInputs = [
@@ -71,9 +71,7 @@ stdenv.mkDerivation rec {
     "-Dsysconfdir=/etc"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A modular session / policy manager for PipeWire";

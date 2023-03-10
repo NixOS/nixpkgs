@@ -1,4 +1,4 @@
-{ mkDerivation, fetchFromGitHub, makeWrapper, lib, php }:
+{ mkDerivation, fetchFromGitHub, makeWrapper, lib, php, php81 }:
 let
   pname = "php-parallel-lint";
   version = "1.3.2";
@@ -10,13 +10,17 @@ mkDerivation {
     owner = "php-parallel-lint";
     repo = "PHP-Parallel-Lint";
     rev = "v${version}";
-    sha256 = "sha256-pTHH19HwqyOj5pSmH7l0JlntNVtMdu4K9Cl+qyrrg9U=";
+    # `.gitattibutes` exclude `box.json` from the archive produced git.
+    forceFetchGit = true;
+    sha256 = "SPP1ynxJad2m5wknGt8z94fW7Ucx8nqLvwZVmlylOgM=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     php.packages.composer
-    php.packages.box
+    # box is only available for PHP ≥ 8.1 but the purpose of this tool is to validate
+    # that project does not use features not available on older PHP versions.
+    php81.packages.box
   ];
 
   buildPhase = ''
@@ -36,7 +40,6 @@ mkDerivation {
   '';
 
   meta = with lib; {
-    broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
     license = licenses.bsd2;
     homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";

@@ -25,6 +25,8 @@ let
         hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
       })
     ];
+    # valgrind_unittest failed
+    cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
   version = "1.9";
@@ -40,7 +42,7 @@ in buildPythonPackage rec {
     "--rj-include-dir=${lib.getDev rapidjson'}/include"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];

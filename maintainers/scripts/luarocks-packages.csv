@@ -11,6 +11,7 @@ compat53,,,,0.7-1,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
+cyan,,,,,,
 cyrussasl,https://github.com/JorjBauer/lua-cyrussasl.git,,,,,
 digestif,https://github.com/astoff/digestif.git,,,0.2-1,5.3,
 dkjson,,,,,,
@@ -18,6 +19,7 @@ fennel,,,,,,misterio77
 fifo,,,,,,
 fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
+haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat
 inspect,,,,,,
 jsregexp,,,,,,
@@ -31,7 +33,7 @@ lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
-lpeglabel,,,,,,
+lpeglabel,,,,1.6.0,,
 lpty,,,,,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
@@ -64,6 +66,7 @@ luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,http://luarocks.org/dev,,,
 luafilesystem,,,,1.8.0-1,,flosse
+lualdap,,,,,,aanderse
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
@@ -99,6 +102,9 @@ sqlite,,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
+teal-language-server,,,http://luarocks.org/dev,,,
+telescope.nvim,,,,,5.1,
+telescope-manix,,,,,,
 tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda

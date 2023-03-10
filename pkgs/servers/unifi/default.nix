@@ -66,7 +66,7 @@ in rec {
   };
 
   unifi7 = generic {
-    version = "7.2.95";
-    sha256 = "sha256-lZrOB8Xrl2/LvDJhtGsQ7Cn5YJ+/hnHuq8ODlOg3R6s=";
+    version = "7.3.83";
+    sha256 = "sha256-mDbF9vfoWjvABxcOIRngStji7xBllgZfUhVA9kF6ERU=";
   };
 }

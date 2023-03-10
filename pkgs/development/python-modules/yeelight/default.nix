@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ifaddr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

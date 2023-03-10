@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
         "-L${variables.libdir}"
         "-Wl,--rpath ${variables.libdir}"
         "-ltcc"
-        "-ldl"
       ];
       variables = rec {
         prefix = "${placeholder "out"}";
@@ -78,6 +77,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+  # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    rm tests/tests2/{108,114}*
+  '';
 
   meta = with lib; {
     homepage = "https://repo.or.cz/tinycc.git";
@@ -106,7 +109,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ joachifm AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
 # TODO: more multiple outputs

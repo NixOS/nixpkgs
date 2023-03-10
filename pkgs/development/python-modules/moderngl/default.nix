@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.7.3";
+  version = "5.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fi7pauMSUSGkSI2ifPg/q1MiApyUg1j2OERcuq20ncQ=";
+    hash = "sha256-IPghv2aygRvIZI189/ZEAq//dhn+onH0Km7oX+A+QEE=";
   };
 
   buildInputs = [

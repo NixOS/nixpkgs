@@ -4,13 +4,26 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/${pname}";
     rev    = "liburing-${version}";
-    sha256 = "sha256-M/jfxZ+5DmFvlAt8sbXrjBTPf2gLd9UyTNymtjD+55g";
+    sha256 = "sha256-vN6lLb5kpgHTKDxwibJPS61sdelILETVtJE2BYgp79k=";
   };
+
+  patches = [
+    # Backported portability fixes from liburing master, needed for pkgsMusl.liburing
+    ./0001-Add-custom-error-function-for-tests.patch
+    ./0002-test-Use-t_error-instead-of-glibc-s-error.patch
+    ./0003-examples-Use-t_error-instead-of-glibc-s-error.patch
+
+    # More portability fixes, in the process of being upstreamed
+    (fetchpatch {
+      url = "https://github.com/axboe/liburing/pull/798/commits/0fbcc44fe1fb2dc6807660b2cff1c2995add095b.patch";
+      hash = "sha256-xOMsw0VpYGst/+Isd2Tmq8CmBDK+uyLw3KNKPnsCSoA=";
+    })
+  ];
 
   separateDebugInfo = true;
   enableParallelBuilding = true;

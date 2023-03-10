@@ -26,12 +26,12 @@
 
 buildPythonApplication rec {
   pname = "streamlit";
-  version = "1.15.0";
+  version = "1.18.1";
   format = "wheel"; # source currently requires pipenv
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-QtBr3INWBwCBab+FzmvzrjGjwVVHC8NCET9wtRVeVbc=";
+    hash = "sha256-lO2QfM/G+4M55f8JCZBwk10SkMp4gXb68KncHm90k7g=";
   };
 
   propagatedBuildInputs = [

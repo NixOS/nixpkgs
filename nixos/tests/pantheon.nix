@@ -15,13 +15,14 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
+    environment.systemPackages = [ pkgs.xdotool ];
   };
 
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-    bob = nodes.machine.config.users.users.bob;
+    user = nodes.machine.users.users.alice;
+    bob = nodes.machine.users.users.bob;
   in ''
     machine.wait_for_unit("display-manager.service")
 
@@ -29,6 +30,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_text("${user.description}")
         # OCR was struggling with this one.
         # machine.wait_for_text("${bob.description}")
+        # Ensure the password box is focused by clicking it.
+        # Workaround for https://github.com/NixOS/nixpkgs/issues/211366.
+        machine.succeed("XAUTHORITY=/var/lib/lightdm/.Xauthority DISPLAY=:0 xdotool mousemove 512 505 click 1")
+        machine.sleep(2)
         machine.screenshot("elementary_greeter_lightdm")
 
     with subtest("Login with elementary-greeter"):
@@ -40,7 +45,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     with subtest("Check that logging in has given the user ownership of devices"):
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-    # TODO: DBus API could eliminate this? Pantheon uses Bamf.
     with subtest("Check if pantheon session components actually start"):
         machine.wait_until_succeeds("pgrep gala")
         machine.wait_for_window("gala")
@@ -48,6 +52,12 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_window("io.elementary.wingpanel")
         machine.wait_until_succeeds("pgrep plank")
         machine.wait_for_window("plank")
+
+    with subtest("Open system settings"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.switchboard >&2 &'")
+        # Wait for all plugins to be loaded before we check if the window is still there.
+        machine.sleep(5)
+        machine.wait_for_window("io.elementary.switchboard")
 
     with subtest("Open elementary terminal"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal >&2 &'")

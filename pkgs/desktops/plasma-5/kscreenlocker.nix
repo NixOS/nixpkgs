@@ -7,6 +7,7 @@
 , kdeclarative
 , kglobalaccel
 , kidletime
+, libkscreen
 , kwayland
 , libXcursor
 , pam
@@ -27,6 +28,7 @@ mkDerivation {
     kdeclarative
     kglobalaccel
     kidletime
+    libkscreen
     kwayland
     libXcursor
     pam

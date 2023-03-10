@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "2.2.5";
+  version = "3.0.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KMfFRf1g75wwWc+y/v0n+S2wkf9rWGj4PxIc614f4bU=";
+    sha256 = "sha256-19xeS3+t6bc3XFaKJEdbe+gQJMrCogyu8yYO8LUSh7Q=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ansible-core
     flaky
     pytest-mock

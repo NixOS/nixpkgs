@@ -1,10 +1,13 @@
 { lib, stdenv, fetchurl, fetchpatch, perl
 , enableGhostscript ? false, ghostscript # for postscript and html output
 , enableHtml ? false, psutils, netpbm # for html output
+, enableIconv ? false, iconv
+, enableLibuchardet ? false, libuchardet # for detecting input file encoding in preconv(1)
 , buildPackages
 , autoreconfHook
 , pkg-config
 , texinfo
+, bison
 , bash
 }:
 
@@ -51,10 +54,14 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
+    # Required due to the patch that changes .ypp files.
+    ++ lib.optional (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") bison;
   buildInputs = [ perl bash ]
     ++ lib.optionals enableGhostscript [ ghostscript ]
-    ++ lib.optionals enableHtml [ psutils netpbm ];
+    ++ lib.optionals enableHtml [ psutils netpbm ]
+    ++ lib.optionals enableIconv [ iconv ]
+    ++ lib.optionals enableLibuchardet [ libuchardet ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the

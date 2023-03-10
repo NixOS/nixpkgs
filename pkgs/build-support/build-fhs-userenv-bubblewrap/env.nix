@@ -212,7 +212,7 @@ in stdenv.mkDerivation {
     cd $out
     ${extraBuildCommands}
     cd $out
-    ${if isMultiBuild then extraBuildCommandsMulti else ""}
+    ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;

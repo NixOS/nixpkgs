@@ -16,7 +16,7 @@ let
   # getAttr-like helper for optional append to string:
   # "Hello" + appendByAttr "a" " " {a = "world";} = "Hello world"
   # "Hello" + appendByAttr "a" " " {} = "Hello"
-  appendByAttr = attr: sep: x: if hasAttr attr x then sep + (getAttr attr x) else "";
+  appendByAttr = attr: sep: x: lib.optionalString (hasAttr attr x) (sep + (getAttr attr x));
 
   # Are there any OM dependencies at all?
   ifDeps = length pkg.omdeps != 0;

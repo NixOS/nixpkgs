@@ -30,7 +30,7 @@ tcl.mkTclDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   meta = with lib; {
-    homepage    = "http://incrtcl.sourceforge.net/";
+    homepage    = "https://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
     license     = licenses.tcltk;
     platforms   = platforms.unix;

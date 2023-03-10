@@ -33,7 +33,7 @@
   # `self` as second, and returns a set of haskell packages
   package-set
 
-, # The final, fully overriden package set usable with the nixpkgs fixpoint
+, # The final, fully overridden package set usable with the nixpkgs fixpoint
   # overriding functionality
   extensible-self
 }:
@@ -73,7 +73,7 @@ let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
+  # manualArgs are the arguments that were explicitly passed to `callPackage`, like:
   #
   # callPackage foo { bar = null; };
   #
@@ -93,8 +93,9 @@ let
       # Converts a returned function to a functor attribute set if necessary
       ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
 
-      # this wraps the `drv` function to add a `overrideScope` function to the result.
+      # this wraps the `drv` function to add `scope` and `overrideScope` to the result.
       drvScope = allArgs: ensureAttrs (drv allArgs) // {
+        inherit scope;
         overrideScope = f:
           let newScope = mkScope (fix' (extends f scope.__unfix__));
           # note that we have to be careful here: `allArgs` includes the auto-arguments that
@@ -253,7 +254,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # a cabal flag with '--flag=myflag'.
     developPackage =
       { root
-      , name ? if builtins.typeOf root == "path" then builtins.baseNameOf root else ""
+      , name ? lib.optionalString (builtins.typeOf root == "path") (builtins.baseNameOf root)
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv

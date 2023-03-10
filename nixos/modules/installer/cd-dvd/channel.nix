@@ -42,7 +42,7 @@ in
   # see discussion in https://github.com/NixOS/nixpkgs/pull/204178#issuecomment-1336289021
   nix.registry.nixpkgs.to = {
     type = "path";
-    path = nixpkgs;
+    path = "${channelSources}/nixos";
   };
 
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required

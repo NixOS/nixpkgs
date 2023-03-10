@@ -40,7 +40,7 @@ buildPythonPackage rec {
     svglib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

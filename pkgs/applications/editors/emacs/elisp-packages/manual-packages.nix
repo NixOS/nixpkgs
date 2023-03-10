@@ -1,7 +1,10 @@
 { lib, pkgs }:
 
-self: with self; {
-
+self:
+let
+  inherit (self) callPackage;
+in
+{
   agda-input = callPackage ./manual-packages/agda-input { };
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
@@ -86,8 +89,8 @@ self: with self; {
   sunrise-commander = callPackage ./manual-packages/sunrise-commander { };
 
   # camelCase aliases for some of the kebab-case expressions above
-  colorThemeSolarized = color-theme-solarized;
-  emacsSessionManagement = session-management-for-emacs;
-  rectMark = rect-mark;
-  sunriseCommander = sunrise-commander;
+  colorThemeSolarized = self.color-theme-solarized;
+  emacsSessionManagement = self.session-management-for-emacs;
+  rectMark = self.rect-mark;
+  sunriseCommander = self.sunrise-commander;
 }

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     skytemple-files
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

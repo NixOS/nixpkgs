@@ -1,23 +1,21 @@
 { lib
+, argcomplete
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , colored
-, enhancements
 , packaging
 , paramiko
 , pytz
 , pyyaml
-, requests
 , rich
 , sshpubkeys
-, typeguard
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ssh-mitm";
-  version = "2.1.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,20 +24,18 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DMXzDgSt1p3ZNGrXnSr79KH33SJNN8U4/94Hoz7Rs+I=";
+    hash = "sha256-bFxpgzomtcFGf0LfLUR05y3+/8DNhND6EKAmCZcYb5E=";
   };
 
   propagatedBuildInputs = [
+    argcomplete
     colored
-    enhancements
     packaging
     paramiko
     pytz
     pyyaml
-    requests
     rich
     sshpubkeys
-    typeguard
   ];
 
   # Module has no tests
@@ -52,7 +48,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool for SSH security audits";
     homepage = "https://github.com/ssh-mitm/ssh-mitm";
-    license = licenses.lgpl3Only;
+    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
 }

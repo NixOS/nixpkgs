@@ -54,8 +54,7 @@ let
       })
     ];
 
-    preBuild = ''
-      ${preBuild}
+    preBuild = preBuild + lib.optionalString stdenv.isLinux ''
       sed -e '/^build crypto\/fipsmodule\/CMakeFiles\/fipsmodule\.dir\/bcm\.c\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=stringop-overflow/' \
           -i build.ninja
     '';
@@ -72,6 +71,11 @@ stdenv.mkDerivation rec {
     inherit (versions.lsquic) sha256;
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
+  '';
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ boringssl' libevent zlib ];

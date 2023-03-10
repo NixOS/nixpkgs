@@ -47,7 +47,7 @@ in
       doc = mkOption {
         type = docFile;
         internal = true;
-        example = "./meta.chapter.xml";
+        example = "./meta.chapter.md";
         description = lib.mdDoc ''
           Documentation prologue for the set of options of each module.  This
           option should be defined at most once per module.

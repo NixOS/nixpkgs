@@ -1,26 +1,19 @@
-{ wander, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, lib, testers }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, wander }:
 
 buildGoModule rec {
   pname = "wander";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "robinovitch61";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G/TrfnmEyomdUCN5nUS9v5iqeUzgZzMLUZnfroQLZuk=";
+    sha256 = "sha256-g9QAdwAqy3OA+nYsSpVLUPv1gn6N12339fgmYFT6Iys=";
   };
 
-  vendorSha256 = "sha256-iTaZ5/0UrLJ3JE3FwQpvjKKrhqklG4n1WFTJhWfj/rI=";
+  vendorHash = "sha256-iTaZ5/0UrLJ3JE3FwQpvjKKrhqklG4n1WFTJhWfj/rI=";
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/robinovitch61/wander/commit/b3d3249541de005404a41c17a15218a4f73f68e5.patch";
-      sha256 = "sha256-z8bdSFcAqnwEu0gupxW/L1o/asyxbvTYIdtLZNmQpz8=";
-    })
-  ];
-
-  ldflags = [ "-X github.com/robinovitch61/wander/cmd.Version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X=github.com/robinovitch61/wander/cmd.Version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

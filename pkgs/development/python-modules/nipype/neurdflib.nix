@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ isodate html5lib sparqlwrapper ];
 
-  checkInputs = [ networkx nose ];
+  nativeCheckInputs = [ networkx nose ];
 
   # Python 2 syntax
   # Failing doctest

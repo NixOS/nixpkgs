@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-YXm4dQRId+lBYzwgr3ci/SMaiNiomvAb8wvWTzPN7O8=";
   };
 
-  checkInputs = [ numpy ];
+  nativeCheckInputs = [ numpy ];
 
   pythonImportsCheck = [ "sgp4" ];
 

@@ -4,33 +4,26 @@
 , autoreconfHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "secp256k1";
 
-  version = "unstable-2022-02-06";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "5dcc6f8dbdb1850570919fc9942d22f728dbc0af";
-    sha256 = "x9qG2S6tBSRseWaFIN9N2fRpY1vkv8idT3d3rfJnmaU=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-wYJIMCoo6ryeQN4ZnvEkJ5/332+AkaOwgplDuQQC5MU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--enable-benchmark=no"
-    "--enable-exhaustive-tests=no"
-    "--enable-experimental"
-    "--enable-module-ecdh"
     "--enable-module-recovery"
-    "--enable-module-schnorrsig"
-    "--enable-tests=yes"
   ];
 
   doCheck = true;
-
-  checkPhase = "./tests";
 
   meta = with lib; {
     description = "Optimized C library for EC operations on curve secp256k1";

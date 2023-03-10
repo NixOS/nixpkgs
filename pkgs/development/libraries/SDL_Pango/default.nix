@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Connects the Pango rendering engine to SDL";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    homepage = "http://sdlpango.sourceforge.net/";
+    homepage = "https://sdlpango.sourceforge.net/";
     maintainers = with maintainers; [ puckipedia ];
   };
 }

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   # have to link to static gcc lib on aarch64-linux explicitly
+  # https://github.com/NixOS/nixpkgs/issues/201254
   NIX_LDFLAGS = lib.optionalString (with stdenv.targetPlatform; isAarch64 && isLinux) "-lgcc";
 
   buildPhase = ''

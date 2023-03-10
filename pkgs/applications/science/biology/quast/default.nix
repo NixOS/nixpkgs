@@ -27,7 +27,7 @@ pythonPackages.buildPythonApplication rec {
       --replace "/bin/bash" "${bash}/bin/bash"
     mkdir -p "$out/${python.sitePackages}"
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-    ${python.interpreter} setup.py install \
+    ${python.pythonForBuild.interpreter} setup.py install \
       --install-lib=$out/${python.sitePackages} \
       --prefix="$out"
   '';

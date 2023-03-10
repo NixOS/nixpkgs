@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-9CV6B7fRHXl73uI2JRv3RiaFczLHHBOd7/8UoCAwK6w=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "Modern replacement for free";

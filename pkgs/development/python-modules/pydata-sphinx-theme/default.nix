@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchPypi
 , sphinx
+, accessible-pygments
 , beautifulsoup4
 , docutils
 , packaging
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pydata-sphinx-theme";
-  version = "0.12.0";
+  version = "0.13.0";
 
   format = "wheel";
 
@@ -21,17 +22,20 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
-    sha256 = "sha256-wX26tno3dPBvNPY3jolvzQZozItdocG6AX5lzx3wr1g=";
+    sha256 = "sha256-+ITUC7adMdlk/xnWBk97zqqmNBk1/bwJLVwknR/wC1I=";
   };
 
   propagatedBuildInputs = [
     sphinx
+    accessible-pygments
     beautifulsoup4
     docutils
     packaging
   ];
 
-  pythonImportsCheck = [ "pydata_sphinx_theme" ];
+  pythonImportsCheck = [
+    "pydata_sphinx_theme"
+  ];
 
   meta = with lib; {
     description = "Bootstrap-based Sphinx theme from the PyData community";

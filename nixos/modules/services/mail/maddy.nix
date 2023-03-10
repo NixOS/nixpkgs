@@ -223,22 +223,59 @@ in {
         '';
       };
 
+      ensureAccounts = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = lib.mdDoc ''
+          List of IMAP accounts which get automatically created. Note that for
+          a complete setup, user credentials for these accounts are required too
+          and can be created using the command `maddyctl creds`.
+          This option does not delete accounts which are not (anymore) listed.
+        '';
+        example = [
+          "user1@localhost"
+          "user2@localhost"
+        ];
+      };
+
     };
   };
 
   config = mkIf cfg.enable {
 
     systemd = {
+
       packages = [ pkgs.maddy ];
-      services.maddy = {
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = [ "maddy" ];
+      services = {
+        maddy = {
+          serviceConfig = {
+            User = cfg.user;
+            Group = cfg.group;
+            StateDirectory = [ "maddy" ];
+          };
+          restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
+          wantedBy = [ "multi-user.target" ];
         };
-        restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
-        wantedBy = [ "multi-user.target" ];
+        maddy-ensure-accounts = {
+          script = ''
+            ${optionalString (cfg.ensureAccounts != []) ''
+              ${concatMapStrings (account: ''
+                if ! ${pkgs.maddy}/bin/maddyctl imap-acct list | grep "${account}"; then
+                  ${pkgs.maddy}/bin/maddyctl imap-acct create ${account}
+                fi
+              '') cfg.ensureAccounts}
+            ''}
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            User= "maddy";
+          };
+          after = [ "maddy.service" ];
+          wantedBy = [ "multi-user.target" ];
+        };
+
       };
+
     };
 
     environment.etc."maddy/maddy.conf" = {

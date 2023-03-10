@@ -26,7 +26,7 @@ buildPythonPackage rec {
                       --replace /bin/echo ${coreutils}/bin/echo
   '';
 
-  checkInputs = [ pytest gcc coreutils ];
+  nativeCheckInputs = [ pytest gcc coreutils ];
   propagatedBuildInputs = [ click bashlex shutilwhich ];
 
   checkPhase = ''

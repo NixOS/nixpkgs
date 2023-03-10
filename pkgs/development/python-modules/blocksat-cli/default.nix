@@ -30,7 +30,7 @@ buildPythonPackage rec {
     zfec
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # disable tests which require being connected to the satellite

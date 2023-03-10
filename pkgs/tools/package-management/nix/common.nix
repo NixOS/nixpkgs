@@ -11,6 +11,8 @@ let
   atLeast25 = lib.versionAtLeast version "2.5pre";
   atLeast27 = lib.versionAtLeast version "2.7pre";
   atLeast210 = lib.versionAtLeast version "2.10pre";
+  atLeast213 = lib.versionAtLeast version "2.13pre";
+  atLeast214 = lib.versionAtLeast version "2.14pre";
 in
 { stdenv
 , autoconf-archive
@@ -37,10 +39,12 @@ in
 , libsodium
 , lowdown
 , mdbook
+, mdbook-linkcheck
 , nlohmann_json
 , openssl
 , perl
 , pkg-config
+, rapidcheck
 , Security
 , sqlite
 , util-linuxMinimal
@@ -83,6 +87,8 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (atLeast24 && enableDocumentation) [
     (lib.getBin lowdown)
     mdbook
+  ] ++ lib.optionals (atLeast213 && enableDocumentation) [
+    mdbook-linkcheck
   ] ++ lib.optionals stdenv.isLinux [
     util-linuxMinimal
   ];
@@ -105,6 +111,8 @@ self = stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
+  ] ++ lib.optionals atLeast214 [
+    rapidcheck
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
@@ -163,8 +171,12 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!atLeast24) [
     # option was removed in 2.4
     "--disable-init-state"
+  ] ++ lib.optionals atLeast214 [
+    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+  ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
+    "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [
@@ -175,6 +187,10 @@ self = stdenv.mkDerivation {
   ];
 
   makeFlags = [
+    # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
+    # of make jobserver. until gcc adds support for this we have to instruct make to use this
+    # old style or LTO builds will run their linking on only one thread, which takes forever.
+    "--jobserver-style=pipe"
     "profiledir=$(out)/etc/profile.d"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";

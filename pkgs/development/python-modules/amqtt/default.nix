@@ -48,7 +48,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-logdog
     pytest-asyncio

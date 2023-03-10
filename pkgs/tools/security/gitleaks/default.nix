@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.15.2";
+  version = "8.16.0";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3hDAkKuKBp3Q61rDWXy4NWgOteSQAjcdom0GzM35hlc=";
+    hash = "sha256-EazTDPJMMUGmGSfQ5d7J1opv/KlapQLZZYxjbzBRaUY=";
   };
 
   vendorHash = "sha256-Ev0/CSpwJDmc+Dvu/bFDzsgsq80rWImJWXNAUqYHgoE=";

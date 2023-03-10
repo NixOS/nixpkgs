@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ olefile ]
     ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
 
-  checkInputs = [ pytestCheckHook pyroma numpy ];
+  nativeCheckInputs = [ pytestCheckHook pyroma numpy ];
 
   buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp libxcrypt tcl lcms2 ]
     ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]

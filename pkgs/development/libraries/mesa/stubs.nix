@@ -1,8 +1,10 @@
 { stdenv
 , libglvnd, mesa
-, OpenGL }:
+, OpenGL
+, testers
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit (libglvnd) version;
   pname = "libGL";
   outputs = [ "out" "dev" ];
@@ -72,4 +74,8 @@ stdenv.mkDerivation {
     genPkgConfig glesv1_cm GLESv1_CM
     genPkgConfig glesv2 GLESv2
   '';
-}
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta.pkgConfigModules = [ "gl" "egl" "glesv1_cm" "glesv2" ];
+})

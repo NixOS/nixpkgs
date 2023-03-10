@@ -11,7 +11,7 @@
 # files.
 
 stdenv.mkDerivation rec {
-  version = "4.1.1";
+  version = "4.2.0";
   pname = "mpfr";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       "https://www.mpfr.org/${pname}-${version}/${pname}-${version}.tar.xz"
       "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
     ];
-    hash = "sha256-/9GVvVZ9uv/DuYsj/QCq0FN2gMmJYXHkT+P/eeKKwz0=";
+    hash = "sha256-BqN43xNQEkjBsttaqXeiyBJq6Emp2be+JUb7Spwm2ZM=";
   };
 
   outputs = [ "out" "dev" "doc" "info" ];

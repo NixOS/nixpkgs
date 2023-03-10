@@ -15,16 +15,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "4.3.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-og/kDSoMaTNi+EpTHEwOlEkT8Y/UL8nLiqwjDFAUACg=";
+    sha256 = "sha256-DOzXsxqOLlETCAVpKpUXAxO+T0pE+2LwnOS99vU2o48=";
   };
 
-  cargoSha256 = "sha256-g3Uzohcy2AS7ybdyZqKQR7ybmSQmit8I9klZ0UIhiv8=";
+  cargoSha256 = "sha256-t/4nfsED29F8v3DkLYCh2A8AJvQvZvU8z6C0PLhTFuM=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
@@ -41,14 +41,12 @@ rustPlatform.buildRustPackage rec {
   # generate the man page
   postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v4.3.2/.github/workflows/publish.yml#L126-L130
+    # https://github.com/latex-lsp/texlab/blob/v5.3.0/.github/workflows/publish.yml#L127-L131
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

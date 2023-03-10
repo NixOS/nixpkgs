@@ -371,7 +371,7 @@ let
         default = null;
         example = "2000::1@1234";
         description = lib.mdDoc ''
-          This address will be used for zone-transfere requests if configured
+          This address will be used for zone-transfer requests if configured
           as a secondary server or notifications in case of a primary server.
           Supply either a plain IPv4 or IPv6 address with an optional port
           number (ip@port).

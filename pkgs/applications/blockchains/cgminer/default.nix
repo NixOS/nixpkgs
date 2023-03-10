@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   #   ld: cgminer-driver-modminer.o:/build/source/miner.h:285:
   #     multiple definition of `bitforce_drv'; cgminer-cgminer.o:/build/source/miner.h:285:
   #     first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     description = "CPU/GPU miner in c for bitcoin";

@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ${python.pythonForBuild.interpreter} setup.py build_cython
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-trio
     which

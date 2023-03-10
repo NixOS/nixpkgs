@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.5.5";
+  version = "4.5.8";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-3R8TAhOxnwKfA/Nc+R9JrLGMkZu9vGqCLbXUa8QGadA=";
+    hash = "sha256-6AitRpyLIq5by9/rXdIC8AChMVKZmR1Eo5GTo+DtGhc=";
   };
 
-  cargoSha256 = "sha256-FHyKGLELX6xpPCAc/m2mqbfXcka35q0fGjeaE57g70M=";
+  cargoHash = "sha256-lSjcsHnw6VZxvxxHUAkVEIZiI58xduInCJDXsFPGzMM=";
 
   postPatch = ''
     files="
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
       --replace /usr/bin/sleep ${coreutils}/bin/sleep
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [ pkg-config cmake rustPlatform.bindgenHook ];
 
   buildInputs = [ systemd fontconfig gtk3 ];
 

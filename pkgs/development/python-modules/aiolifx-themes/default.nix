@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.2.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sWEWfsew758jl6vLB7AQQ3nA83BFHF7YPy1ZaoPt45Y=";
+    hash = "sha256-6bbhjmtgGEifYmtgXrnsCF36oU+jJDmHMPPEO5a7AKQ=";
   };
 
   prePatch = ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     aiolifx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async-timeout
     pytestCheckHook
     pytest-asyncio

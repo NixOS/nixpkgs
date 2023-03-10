@@ -185,7 +185,7 @@ Sample template for a new module review is provided below.
 ##### Comments
 ```
 
-## Individual maintainer list {#reviewing-contributions-indvidual-maintainer-list}
+## Individual maintainer list {#reviewing-contributions-individual-maintainer-list}
 
 When adding users to `maintainers/maintainer-list.nix`, the following
 checks should be performed:

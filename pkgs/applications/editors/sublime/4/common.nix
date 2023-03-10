@@ -3,6 +3,7 @@
 { fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, makeWrapper, wrapGAppsHook
 , writeShellScript, common-updater-scripts, curl
 , openssl_1_1, bzip2, bash, unzip, zip
+, sqlite
 }:
 
 let
@@ -15,7 +16,19 @@ let
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl_1_1 gtk3 cairo pango curl ];
+  neededLibraries = [
+    xorg.libX11
+    xorg.libXtst
+    glib
+    libglvnd
+    openssl_1_1
+    gtk3
+    cairo
+    pango
+    curl
+  ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
+    sqlite
+  ];
 in let
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
@@ -52,7 +65,7 @@ in let
       for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
@@ -67,6 +80,7 @@ in let
 
       # No need to patch these libraries, it works well with our own
       rm libcrypto.so.1.1 libssl.so.1.1
+      ${lib.optionalString (lib.versionAtLeast buildVersion "4145") "rm libsqlite3.so"}
 
       mkdir -p $out
       cp -r * $out/

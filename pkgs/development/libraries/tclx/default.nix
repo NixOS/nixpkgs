@@ -17,7 +17,7 @@ tcl.mkTclDerivation rec {
   '';
 
   meta = {
-    homepage = "http://tclx.sourceforge.net/";
+    homepage = "https://tclx.sourceforge.net/";
     description = "Tcl extensions";
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ kovirobi ];

@@ -8,11 +8,14 @@
 , libGL # libGLU libGL is no longer a big dependency
 , pdfSupport ? true
 , darwin
+, testers
 }:
 
 let
   inherit (lib) optional optionals;
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: let
+  inherit (finalAttrs) pname version;
+in {
   pname = "cairo";
   version = "1.16.0";
 
@@ -132,6 +135,8 @@ in stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.isDarwin glib.flattenInclude;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "A 2D graphics library with support for multiple output devices";
     longDescription = ''
@@ -147,6 +152,11 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "http://cairographics.org/";
     license = with licenses; [ lgpl2Plus mpl10 ];
+    pkgConfigModules = [
+      "cairo-ps"
+      "cairo-svg"
+    ] ++ lib.optional gobjectSupport "cairo-gobject"
+      ++ lib.optional pdfSupport "cairo-pdf";
     platforms = platforms.all;
   };
-}
+})

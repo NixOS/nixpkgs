@@ -27,7 +27,7 @@ toPythonModule (buildPythonApplication rec {
     certifi
     python-dateutil
     flask
-    flaskbabel
+    flask-babel
     gevent
     grequests
     jinja2

@@ -145,7 +145,7 @@ in {
         in lib.mdDoc ''
           Whether to enable the Taskwarrior server.
 
-          More instructions about NixOS in conjuction with Taskserver can be
+          More instructions about NixOS in conjunction with Taskserver can be
           found [in the NixOS manual](${url}).
         '';
       };
@@ -251,7 +251,7 @@ in {
           client id (such as `task 2.3.0`).
 
           The values `all` or `none` have
-          special meaning. Overidden by any entry in the option
+          special meaning. Overridden by any entry in the option
           {option}`services.taskserver.disallowedClientIDs`.
         '';
       };
@@ -566,5 +566,5 @@ in {
     })
   ];
 
-  meta.doc = ./doc.xml;
+  meta.doc = ./default.md;
 }

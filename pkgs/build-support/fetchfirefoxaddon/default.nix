@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   builder = writeScript "xpibuilder" ''
     source $stdenv/setup
 
-    header "firefox addon $name into $out"
+    echo "firefox addon $name into $out"
 
     UUID="${extid}"
     mkdir -p "$out/$UUID"

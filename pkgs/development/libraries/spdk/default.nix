@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-dpdk=${dpdk'}" ];
 
-  NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
+  env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
   # otherwise does not find strncpy when compiling
   NIX_LDFLAGS = "-lbsd";
 

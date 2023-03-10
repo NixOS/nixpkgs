@@ -1,8 +1,8 @@
 diff --git a/jellyfin.ruleset b/jellyfin.ruleset
-index 5ac5f4923..88621857b 100644
+index 1c834de82..bf70fef1e 100644
 --- a/jellyfin.ruleset
 +++ b/jellyfin.ruleset
-@@ -54,6 +54,31 @@
+@@ -54,6 +54,33 @@
      <Rule Id="SA1602" Action="None" />
      <!-- disable warning SA1633: The file header is missing or not located at the top of the file -->
      <Rule Id="SA1633" Action="None" />
@@ -31,6 +31,8 @@ index 5ac5f4923..88621857b 100644
 +    <Rule Id="SA1208" Action="None" />
 +    <!-- disable warning SA1208: The property's documentation summary text should begin with: 'Gets a value indicating whether' -->
 +    <Rule Id="SA1623" Action="None" />
++    <!-- disable warning SA1625: Element documentation should not be copied and pasted -->
++    <Rule Id="SA1625" Action="None" />
    </Rules>
  
    <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.Design">

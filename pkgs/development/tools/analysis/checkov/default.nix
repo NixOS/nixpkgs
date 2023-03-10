@@ -89,7 +89,7 @@ buildPythonApplication rec {
     update_checker
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     aioresponses
     mock
     pytest-asyncio

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     h5py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     netcdf4
   ];

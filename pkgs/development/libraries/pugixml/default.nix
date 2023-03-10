@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}"
   ];
 
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)

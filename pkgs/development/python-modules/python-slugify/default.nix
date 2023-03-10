@@ -26,7 +26,7 @@ buildPythonPackage rec {
     unidecode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

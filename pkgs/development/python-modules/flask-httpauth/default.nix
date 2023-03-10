@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-9xmee60g1baLPwtivd/KdjfFUIfp0C9gWuJuDeR5/ZQ=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ flask ];
 

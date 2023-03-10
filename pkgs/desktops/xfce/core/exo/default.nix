@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "4.16.4";
+  version = "4.18.0";
 
-  sha256 = "sha256-/BKgQYmDaiptzlTTFqDm2aHykTCHm4MIvWnjxKYi6Es=";
+  sha256 = "sha256-oWlKeUD1v2qqb8vY+2Cu9VJ1iThFPVboP12m/ob5KSQ=";
 
   nativeBuildInputs = [
     libxslt
@@ -23,7 +23,7 @@ mkXfceDerivation {
   ];
 
   # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with lib; {
     description = "Application library for Xfce";

@@ -1,7 +1,7 @@
 # Test the firewall module.
 
-import ./make-test-python.nix ( { pkgs, ... } : {
-  name = "firewall";
+import ./make-test-python.nix ( { pkgs, nftables, ... } : {
+  name = "firewall" + pkgs.lib.optionalString nftables "-nftables";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
@@ -11,6 +11,7 @@ import ./make-test-python.nix ( { pkgs, ... } : {
         { ... }:
         { networking.firewall.enable = true;
           networking.firewall.logRefusedPackets = true;
+          networking.nftables.enable = nftables;
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
         };
@@ -23,6 +24,7 @@ import ./make-test-python.nix ( { pkgs, ... } : {
         { ... }:
         { networking.firewall.enable = true;
           networking.firewall.rejectPackets = true;
+          networking.nftables.enable = nftables;
         };
 
       attacker =
@@ -35,10 +37,11 @@ import ./make-test-python.nix ( { pkgs, ... } : {
 
   testScript = { nodes, ... }: let
     newSystem = nodes.walled2.config.system.build.toplevel;
+    unit = if nftables then "nftables" else "firewall";
   in ''
     start_all()
 
-    walled.wait_for_unit("firewall")
+    walled.wait_for_unit("${unit}")
     walled.wait_for_unit("httpd")
     attacker.wait_for_unit("network.target")
 
@@ -54,12 +57,12 @@ import ./make-test-python.nix ( { pkgs, ... } : {
     walled.succeed("ping -c 1 attacker >&2")
 
     # If we stop the firewall, then connections should succeed.
-    walled.stop_job("firewall")
+    walled.stop_job("${unit}")
     attacker.succeed("curl -v http://walled/ >&2")
 
     # Check whether activation of a new configuration reloads the firewall.
     walled.succeed(
-        "${newSystem}/bin/switch-to-configuration test 2>&1 | grep -qF firewall.service"
+        "${newSystem}/bin/switch-to-configuration test 2>&1 | grep -qF ${unit}.service"
     )
   '';
 })

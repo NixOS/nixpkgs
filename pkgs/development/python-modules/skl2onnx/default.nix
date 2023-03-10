@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "scikit-learn" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     onnxruntime
     pandas
     unittestCheckHook

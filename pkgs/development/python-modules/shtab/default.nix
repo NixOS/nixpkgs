@@ -28,7 +28,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bashInteractive
     pytest-timeout
     pytestCheckHook

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "steamtinkerlaunch";
-  version = "11.11";
+  version = "12.0";
 
   src = fetchFromGitHub {
     owner = "sonic2kk";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rWENtgV6spokzkhnmrrzsAQ19dROJ50ofEulU5Jx5IE=";
+    hash = "sha256-cEGERh0INc/xetQhALqc+lp/HNDoy3JdTZr/nHlthYc=";
   };
 
   # hardcode PROGCMD because #150841

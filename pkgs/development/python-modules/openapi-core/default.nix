@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.16.2";
+  version = "0.17.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-i1MeKPVWowB12gE4kIWBjq6zvn2aIVW4ZDK8bKNAP1o=";
+    hash = "sha256-LxCaP8r+89UmV/VfqtA/mWV/CXd6ZfRQnNnM0Jde7ko=";
   };
 
   postPatch = ''
@@ -79,23 +79,15 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     responses
     webob
-  ] ++ passthru.optional-dependencies.flask
-  ++ passthru.optional-dependencies.falcon
-  ++ passthru.optional-dependencies.django
-  ++ passthru.optional-dependencies.starlette
-  ++ passthru.optional-dependencies.requests;
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
-    # AttributeError: 'str' object has no attribute '__name__'
-    #"tests/integration/validation"
     # Requires secrets and additional configuration
-    "tests/integration/contrib/django/"
-    # Unable to detect SECRET_KEY and ROOT_URLCONF
     "tests/integration/contrib/django/"
   ];
 

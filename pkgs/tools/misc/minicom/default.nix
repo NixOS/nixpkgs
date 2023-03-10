@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
       download.
     '';
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

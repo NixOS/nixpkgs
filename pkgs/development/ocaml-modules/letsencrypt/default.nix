@@ -21,15 +21,15 @@
 
 buildDunePackage rec {
   pname = "letsencrypt";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${version}/letsencrypt-v${version}.tbz";
-    sha256 = "f90875f5c9bdcab4c8be5ec7ebe9ea763030fa708e02857300996bb16e7c2070";
+    url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${version}/letsencrypt-${version}.tbz";
+    hash = "sha256-XGroZiNyP0ItOMrXK07nrVqT4Yz9RKXYvZuRkDp089M=";
   };
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   buildInputs = [
     fmt

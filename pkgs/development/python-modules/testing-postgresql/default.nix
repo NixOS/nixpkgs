@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pg8000
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     psycopg2
     sqlalchemy

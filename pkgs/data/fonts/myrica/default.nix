@@ -1,18 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub {
-  name = "myrica-2.011.20160403";
+stdenvNoCC.mkDerivation {
+  pname = "myrica";
+  version = "2.011.20160403";
 
-  owner = "tomokuni";
-  repo = "Myrica";
-  # commit does not exist on any branch on the target repository
-  rev = "b737107723bfddd917210f979ccc32ab3eb6dc20";
-  sha256 = "187rklcibbkai6m08173ca99qn8v7xpdfdv0izpymmavj85axm12";
+  src = fetchFromGitHub {
+    owner = "tomokuni";
+    repo = "Myrica";
+    # commit does not exist on any branch on the target repository
+    rev = "b737107723bfddd917210f979ccc32ab3eb6dc20";
+    hash = "sha256-kx+adbN2DsO81KJFt+FGAPZN+1NpE9xiagKZ4KyaJV0=";
+  };
 
-  postFetch = ''
-    tar --strip-components=1 -xzvf $downloadedFile
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp product/*.TTC $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

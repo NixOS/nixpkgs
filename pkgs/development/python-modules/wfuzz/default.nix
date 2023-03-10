@@ -38,7 +38,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     netaddr
     pytest
     pytestCheckHook

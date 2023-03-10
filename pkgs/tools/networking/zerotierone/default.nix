@@ -15,13 +15,13 @@
 
 let
   pname = "zerotierone";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-p900bw+BGzyMwH91W9NRfYS1ZUW74YaALwr1Gv9BlvQ=";
+    sha256 = "sha256-MhkGcmt1YPvlePF54XsLVFUX+P979uUqhtJjudRx69g=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
@@ -78,6 +78,9 @@ replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
   outputs = [ "out" "man" ];
+
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";

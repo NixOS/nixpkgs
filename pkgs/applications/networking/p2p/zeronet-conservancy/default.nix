@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildPhase = ''
-    ${python3Packages.python.interpreter} -O -m compileall .
+    ${python3Packages.python.pythonForBuild.interpreter} -O -m compileall .
   '';
 
   installPhase = ''

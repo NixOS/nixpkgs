@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl zeromq czmq libsodium ];
 
   # https://github.com/kevinkreiser/prime_server/issues/95
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-variable" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=unused-variable" ];
 
   meta = with lib; {
     description = "Non-blocking (web)server API for distributed computing and SOA based on zeromq";

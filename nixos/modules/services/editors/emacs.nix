@@ -99,5 +99,5 @@ in
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
   };
 
-  meta.doc = ./emacs.xml;
+  meta.doc = ./emacs.md;
 }

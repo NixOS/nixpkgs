@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sed -i 's|use_scm_version=True|version="${version}"|' setup.py
   '';
 
-  checkInputs = [ pytest pytest-runner ];
+  nativeCheckInputs = [ pytest pytest-runner ];
   nativeBuildInputs = [ sphinx setuptools-scm ];
   propagatedBuildInputs = [ sympy ];
 

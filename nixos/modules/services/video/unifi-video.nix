@@ -123,7 +123,7 @@ in
 
     mongodbPackage = mkOption {
       type = types.package;
-      default = pkgs.mongodb-4_0;
+      default = pkgs.mongodb-4_2;
       defaultText = literalExpression "pkgs.mongodb";
       description = lib.mdDoc ''
         The mongodb package to use.
@@ -159,7 +159,7 @@ in
       default = 1024;
       example = 4096;
       description = lib.mdDoc ''
-        Set the maximimum heap size for the JVM in MB.
+        Set the maximum heap size for the JVM in MB.
       '';
     };
 

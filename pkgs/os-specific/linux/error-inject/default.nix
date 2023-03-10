@@ -10,7 +10,7 @@
     version = "4cbe46321b4a81365ff3aafafe63967264dbfec5";
 
     src = fetchgit {
-      url = "git://git.kernel.org/pub/scm/utils/cpu/mce/mce-inject.git";
+      url = "https://git.kernel.org/pub/scm/utils/cpu/mce/mce-inject.git";
       rev = version;
       sha256 = "0gjapg2hrlxp8ssrnhvc19i3r1xpcnql7xv0zjgbv09zyha08g6z";
     };
@@ -40,7 +40,7 @@
     version = "9bd5e2c7886fca72f139cd8402488a2235957d41";
 
     src = fetchgit {
-      url = "git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git";
       rev = version;
       sha256 = "0bh6mzpk2mr4xidkammmkfk21b4dbq793qjg25ryyxd1qv0c6cg4";
     };

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [cmake];
   buildInputs = [gtest];
   cmakeFlags = [ "-Dtest=ON" ];
-  NIX_CFLAGS_COMPILE = "-std=c++11" +
+  env.NIX_CFLAGS_COMPILE = "-std=c++11" +
     lib.optionalString stdenv.isLinux " -pthread";
   postInstall = ''
     mkdir -p $out/include

@@ -1,6 +1,8 @@
-final: prev: let
+final: prev:
+let
   inherit (prev) lib pkgs;
-in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
+in
+(lib.filterAttrs (attr: _: (prev ? "${attr}")) {
   ### Overrides to fix the components of cudatoolkit-redist
 
   # Attributes that don't exist in the previous set are removed.
@@ -19,6 +21,38 @@ in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
   libcusolver = final.addBuildInputs prev.libcusolver [
     prev.libcublas
   ];
+
+  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (oldAttrs:
+    let
+      inherit (prev.backendStdenv) cc;
+    in
+    {
+      # Point NVCC at a compatible compiler
+      # FIXME: non-redist cudatoolkit copy-pastes this code
+
+      # For CMake-based projects:
+      # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+      # https://cmake.org/cmake/help/latest/envvar/CUDAHOSTCXX.html
+      # https://cmake.org/cmake/help/latest/variable/CMAKE_CUDA_HOST_COMPILER.html
+
+      # For non-CMake projects:
+      # We prepend --compiler-bindir to nvcc flags.
+      # Downstream packages can override these, because NVCC
+      # uses the last --compiler-bindir it gets on the command line.
+      # FIXME: this results in "incompatible redefinition" warnings.
+      # https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#compiler-bindir-directory-ccbin
+      postInstall = (oldAttrs.postInstall or "") + ''
+        mkdir -p $out/nix-support
+        cat <<EOF >> $out/nix-support/setup-hook
+        cmakeFlags+=' -DCUDA_HOST_COMPILER=${cc}/bin'
+        cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${cc}/bin'
+        if [ -z "\''${CUDAHOSTCXX-}" ]; then
+          export CUDAHOSTCXX=${cc}/bin;
+        fi
+        export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${cc}/bin'
+        EOF
+      '';
+    });
 
   cuda_nvprof = prev.cuda_nvprof.overrideAttrs (oldAttrs: {
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.addOpenGLRunpath ];

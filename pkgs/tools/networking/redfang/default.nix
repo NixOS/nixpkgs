@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
   buildInputs = [ bluez ];
 

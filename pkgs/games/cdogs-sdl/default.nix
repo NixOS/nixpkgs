@@ -12,14 +12,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cdogs";
-  version = "1.3.1";
+  pname = "cdogs-sdl";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
-    repo = "cdogs-sdl";
+    repo = pname;
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-fKqipk1kiPC6HrkNzxHK2aYe5WDZ3hEbPCwsqK5uQ2s=";
+    sha256 = "sha256-CH0P8OrRUXtuqAHxDKv4ziKYdwGTccLPwpzh4xo7lQc=";
   };
 
   postPatch = ''
@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCDOGS_DATA_DIR=${placeholder "out"}/"
     "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
   ];
 
   nativeBuildInputs = [

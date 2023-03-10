@@ -1,126 +1,190 @@
-{ stdenv
-, lib
-, fetchpatch
-, pkg-config
-, cmake
-, bluez
-, ffmpeg
-, libao
-, gtk3
-, glib
-, libGLU
-, libGL
-, gettext
-, libpthreadstubs
-, libXrandr
-, libXext
-, readline
-, openal
-, libXdmcp
-, portaudio
+{ lib
+, stdenv
 , fetchFromGitHub
-, libusb1
-, libevdev
-, wxGTK30
-, soundtouch
-, miniupnpc
-, mbedtls_2
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, alsa-lib
+, bluez
+, bzip2
+, cubeb
 , curl
-, lzo
+, enet
+, ffmpeg
+, fmt_8
+, hidapi
+, libevdev
+, libGL
+, libiconv
+, libpulseaudio
+, libspng
+, libusb1
+, libXdmcp
+, libXext
+, libXrandr
+, mbedtls_2
+, mgba
+, miniupnpc
+, minizip-ng
+, openal
+, pugixml
+, qtbase
 , sfml
-, libpulseaudio ? null
+, soundtouch
+, udev
+, vulkan-loader
+, xxHash
+, xz
+
+  # Used in passthru
+, common-updater-scripts
+, dolphin-emu
+, jq
+, testers
+, writeShellScript
+
+  # Darwin-only dependencies
+, CoreBluetooth
+, ForceFeedback
+, IOKit
+, moltenvk
+, OpenGL
+, VideoToolbox
 }:
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0";
+  version = "5.0-18498";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = version;
-    sha256 = "07mlfnh0hwvk6xarcg315x7z2j0qbg9g7cm040df9c8psiahc3g6";
+    rev = "46b99671d9158e0ca840c1d8ef249db0f321ced7";
+    sha256 = "sha256-K+OF8o8I1XDLQQcsWC8p8jUuWeb+RoHlBG3cEZ1aWIU=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix FTBFS with glibc 2.26
-    (fetchpatch {
-      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/02_glibc-2.26.patch";
-      name = "02_glibc-2.26.patch";
-      sha256 = "sha256-LBXT3rf5klwmX9YQXt4/iv06GghsWZprNhLGYlKiDqk=";
-    })
-    # Fix FTBFS with GCC 8
-    (fetchpatch {
-      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/03_gcc8.patch";
-      name = "03_gcc8.patch";
-      sha256 = "sha256-uWP6zMjoHYbX6K+oPSQdBn2xWQpvNyhZabMkhtYrSbU=";
-    })
-    # Fix FTBFS with SoundTouch 2.1.2
-    (fetchpatch {
-      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/05_soundtouch-2.1.2.patch";
-      name = "05_soundtouch-2.1.2.patch";
-      sha256 = "sha256-Y7CNM6GQC9GRhlOBLZlxkIpj1CFhIwA5L8lGXur/bwY=";
-    })
-    # Use GTK+3 wxWidgets backend
-    (fetchpatch {
-      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/06_gtk3.patch";
-      name = "06_gtk3.patch";
-      sha256 = "sha256-pu5Q0+8kNwmpf2DoXCXHFqxF0EGTnFXJipkBz1Vh2cs=";
-    })
-  ];
-
-  cmakeFlags = [
-    "-DENABLE_LTO=True"
-  ];
-
   nativeBuildInputs = [
-    pkg-config
     cmake
+    pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    bluez
-    ffmpeg
-    libao
-    libGLU
-    libGL
-    gtk3
-    glib
-    gettext
-    libpthreadstubs
-    libXrandr
-    libXext
-    readline
-    openal
-    libevdev
-    libXdmcp
-    portaudio
-    libpulseaudio
-    libevdev
-    libXdmcp
-    portaudio
-    libusb1
-    libpulseaudio
-    wxGTK30
-    soundtouch
-    miniupnpc
-    mbedtls_2
+    bzip2
+    cubeb
     curl
-    lzo
+    enet
+    ffmpeg
+    fmt_8
+    hidapi
+    libGL
+    libiconv
+    libpulseaudio
+    libspng
+    libusb1
+    libXdmcp
+    mbedtls_2
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qtbase
     sfml
+    soundtouch
+    xxHash
+    xz
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    bluez
+    libevdev
+    libXext
+    libXrandr
+    mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
   ];
+
+  cmakeFlags = [
+    "-DDISTRIBUTOR=NixOS"
+    "-DUSE_SHARED_ENET=ON"
+    "-DDOLPHIN_WC_REVISION=${src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_BRANCH=master"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
+    "-DUSE_BUNDLED_MOLTENVK=OFF"
+    # Bundles the application folder into a standalone executable, so we cannot devendor libraries
+    "-DSKIP_POSTPROCESS_BUNDLE=ON"
+    # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
+    # Note: The updater isn't available on linux, so we dont need to disable it there.
+    "-DENABLE_AUTOUPDATE=OFF"
+  ];
+
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+    # https://bugs.dolphin-emu.org/issues/11807
+    # The .desktop file should already set this, but Dolphin may be launched in other ways
+    "--set QT_QPA_PLATFORM xcb"
+  ];
+
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
+  # Use nix-provided libraries instead of submodules
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "if(NOT APPLE)" "if(true)" \
+      --replace "if(LIBUSB_FOUND AND NOT APPLE)" "if(LIBUSB_FOUND)"
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Only gets installed automatically if the standalone executable is used
+    mkdir -p $out/Applications
+    cp -r ./Binaries/Dolphin.app $out/Applications
+    ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
   '';
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = dolphin-emu;
+      command = "dolphin-emu-nogui --version";
+    };
+
+    updateScript = writeShellScript "dolphin-update-script" ''
+      set -eou pipefail
+      export PATH=${lib.makeBinPath [ curl jq common-updater-scripts ]}
+
+      json="$(curl -s https://dolphin-emu.org/update/latest/beta)"
+      version="$(jq -r '.shortrev' <<< "$json")"
+      rev="$(jq -r '.hash' <<< "$json")"
+      update-source-version dolphin-emu "$version" --rev="$rev"
+    '';
+  };
+
   meta = with lib; {
-    homepage = "https://dolphin-emu.org/";
+    homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    mainProgram = if stdenv.hostPlatform.isDarwin then "Dolphin" else "dolphin-emu";
+    branch = "master";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ashkitten ];
-    # x86_32 is an unsupported platform.
-    # Enable generic build if you really want a JIT-less binary.
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      MP2E
+      ashkitten
+      xfix
+      ivar
+    ];
+    # Requires both LLVM and SDK bump
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

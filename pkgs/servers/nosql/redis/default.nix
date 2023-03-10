@@ -1,27 +1,18 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
-, tcl, which, ps, fetchpatch
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
+, tcl, which, ps, getconf
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.5";
+  version = "7.0.9";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-ZwVMw3tYwSXfk714AAJh7A70Q2omtA84Jix4DlYxXMM=";
+    hash = "sha256-93E1wqR8kVHUAov+o7NEcKtNMk0UhPeahMbzKjz7n2U=";
   };
-
-  patches = [
-    # https://nvd.nist.gov/vuln/detail/CVE-2022-3647
-    (fetchpatch {
-      name = "CVE-2022-3647.patch";
-      url = "https://github.com/redis/redis/commit/0bf90d944313919eb8e63d3588bf63a367f020a3.patch";
-      sha256 = "sha256-R5Tj/bHFTRnvWXiOYvRulqePzU5zvKbGfpO87TLfLWk=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,11 +32,11 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ which tcl ps ];
+  nativeCheckInputs = [ which tcl ps ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-XoGha0DyrtrGXW72Zvnk1FrvULPMYc0FvQj4JFSKxXo=";
+    sha256 = "sha256-k/E3bR63kesHQ/we+ctC0UEYE5YdZ6Lv5lYuXqCOvKA=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/slick-greeter.vala \
       --replace "/usr/bin/numlockx" "${numlockx}/bin/numlockx" \
       --replace "/usr/share/xsessions/" "/run/current-system/sw/share/xsessions/" \
+      --replace "/usr/share/wayland-sessions/" "/run/current-system/sw/share/wayland-sessions/" \
       --replace "/usr/bin/slick-greeter" "${placeholder "out"}/bin/slick-greeter"
 
     substituteInPlace src/session-list.vala \

@@ -5,18 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "4.4";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    hash = "sha256-haLwf3loOvqdqQN/iuVBciQ6nCnuc9AqqOGKvDwLBHE=";
+    hash = "sha256-FKFw7czXzC8F3OXjlLoJEFaqsSgqWz0ZEqd7KjCy5Ik=";
   };
-
-  patches = [
-    ./test-call-bin-directly.patch
-  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     bitstring
@@ -26,21 +22,20 @@ python3.pkgs.buildPythonApplication rec {
     reedsolo
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pyelftools
-    pytest
+    pytestCheckHook
   ];
 
   # tests mentioned in `.github/workflows/test_esptool.yml`
   checkPhase = ''
     runHook preCheck
 
-    export ESPSECURE_PY=$out/bin/espsecure.py
-    export ESPTOOL_PY=$out/bin/esptool.py
-    ${python3.interpreter} test/test_imagegen.py
-    ${python3.interpreter} test/test_espsecure.py
-    ${python3.interpreter} test/test_merge_bin.py
-    ${python3.interpreter} test/test_modules.py
+    pytest test/test_imagegen.py
+    pytest test/test_espsecure.py
+    pytest test/test_merge_bin.py
+    pytest test/test_image_info.py
+    pytest test/test_modules.py
 
     runHook postCheck
   '';
@@ -50,6 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dezgeg dotlambda ] ++ teams.lumiguide.members;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -6,6 +6,7 @@
 , agg
 , alsa-lib
 , desktop-file-utils
+, wrapGAppsHook
 , gtk3
 , intltool
 , libGLU
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TASVideos";
     repo = "desmume";
-    rev = "release_${lib.replaceChars ["."] ["_"] finalAttrs.version}";
+    rev = "release_${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
   };
 
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    wrapGAppsHook
     desktop-file-utils
     intltool
     libtool

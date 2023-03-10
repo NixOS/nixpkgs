@@ -33,7 +33,7 @@ buildPythonPackage rec {
     fountains
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

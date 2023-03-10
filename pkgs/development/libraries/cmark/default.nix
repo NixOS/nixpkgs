@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cmark";
-  version = "0.30.2";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
-    owner = "jgm";
+    owner = "commonmark";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IkNybUe/XYwAvPowym3aqfVyvNdw2t/brRjhOrjVRpA=";
+    sha256 = "sha256-/7TzaZYP8lndkfRPgCpBbazUBytVLXxqWHYktIsGox0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,9 +29,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CommonMark parsing and rendering library and program in C";
-    homepage = "https://github.com/jgm/cmark";
+    homepage = "https://github.com/commonmark/cmark";
+    changelog = "https://github.com/commonmark/cmark/raw/${version}/changelog.txt";
     maintainers = [ maintainers.michelk ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
     license = licenses.bsd2;
   };
 }

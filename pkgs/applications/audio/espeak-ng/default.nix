@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
-  version = "1.51";
+  version = "1.51.1";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
     rev = version;
-    hash = "sha256-KwzMlQ3/JgpNOpuV4zNc0zG9oWEGFbVSJ4bEd3dtD3Y=";
+    hash = "sha256-aAJ+k+kkOS6k835mEW7BvgAIYGhUHxf7Q4P5cKO8XTk=";
   };
 
   patches = lib.optionals mbrolaSupport [

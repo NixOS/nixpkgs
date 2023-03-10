@@ -18,7 +18,7 @@
 , wheel
 , opt-einsum
 , backports_weakref
-, tensorflow-estimator
+, tensorflow-estimator-bin
 , tensorboard
 , cudaSupport ? false
 , cudaPackages ? {}
@@ -49,6 +49,9 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
+  # Python 3.11 still unsupported
+  disabled = pythonAtLeast "3.11";
+
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
     platform = if stdenv.isDarwin then "mac" else "linux";
@@ -73,7 +76,7 @@ in buildPythonPackage {
     opt-einsum
     google-pasta
     wrapt
-    tensorflow-estimator
+    tensorflow-estimator-bin
     tensorboard
     keras-applications
     keras-preprocessing

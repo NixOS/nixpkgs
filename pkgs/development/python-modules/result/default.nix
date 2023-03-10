@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace '"--cov-report=xml",' ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -22,11 +22,12 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A design system for interactive fiction";
     homepage = "http://inform7.com/";
     license = licenses.artistic2;
     maintainers = with maintainers; [ mbbx6spp ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

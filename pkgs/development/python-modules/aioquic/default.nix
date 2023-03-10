@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aioquic" ];
 

@@ -6,7 +6,7 @@ let
   cfg = config.services.privacyidea;
   opt = options.services.privacyidea;
 
-  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; python3 = pkgs.python39; };
+  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; python3 = pkgs.python310; };
   python = uwsgi.python3;
   penv = python.withPackages (const [ pkgs.privacyidea ]);
   logCfg = pkgs.writeText "privacyidea-log.cfg" ''
@@ -41,7 +41,7 @@ let
 
   piCfgFile = pkgs.writeText "privacyidea.cfg" ''
     SUPERUSER_REALM = [ '${concatStringsSep "', '" cfg.superuserRealm}' ]
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///privacyidea'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2:///privacyidea'
     SECRET_KEY = '${cfg.secretKey}'
     PI_PEPPER = '${cfg.pepper}'
     PI_ENCFILE = '${cfg.encFile}'

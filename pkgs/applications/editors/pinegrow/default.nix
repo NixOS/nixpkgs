@@ -10,18 +10,36 @@
 , gtk3
 , wrapGAppsHook
 , makeWrapper
+, pinegrowVersion ? "7"
 }:
+
+let
+  # major version upgrade requires a new license. So keep version 6 around.
+  versions = {
+    "6" = {
+      version = "6.8";
+      src = fetchurl {
+        url = "https://download.pinegrow.com/PinegrowLinux64.${versions."6".version}.zip";
+        hash = "sha256-gqRmu0VR8Aj57UwYYLKICd4FnYZMhM6pTTSGIY5MLMk=";
+      };
+    };
+    "7" = {
+      version = "7.05.2";
+      src = fetchurl {
+        url = "https://github.com/Pinegrow/PinegrowReleases/releases/download/pg${builtins.substring 0 4 (versions."7".version)}/PinegrowLinux64.${versions."7".version}.zip";
+        hash = "sha256-Cvy4JwnQHMp7K0mKtIH8lk1bZ9hwa8nvtmimBK0UAf8=";
+      };
+    };
+  };
+in
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
   # deactivate auto update, because an old 6.21 version is getting mixed up
   # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
-  version = "6.8"; # nixpkgs-update: no auto update
+  version = versions.${pinegrowVersion}.version; # nixpkgs-update: no auto update
 
-  src = fetchurl {
-    url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
-    sha256 = "sha256-gqRmu0VR8Aj57UwYYLKICd4FnYZMhM6pTTSGIY5MLMk=";
-  };
+  src = versions.${pinegrowVersion}.src;
 
   nativeBuildInputs = [
     unzip

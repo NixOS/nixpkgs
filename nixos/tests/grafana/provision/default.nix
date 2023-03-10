@@ -22,9 +22,15 @@ let
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "L /var/lib/grafana/dashboards/test.json 0700 grafana grafana - ${pkgs.writeText "test.json" (builtins.readFile ./test_dashboard.json)}"
-    ];
+    system.activationScripts.setup-grafana = {
+      deps = [ "users" ];
+      text = ''
+        mkdir -p /var/lib/grafana/dashboards
+        chown -R grafana:grafana /var/lib/grafana
+        chmod 0700 -R /var/lib/grafana/dashboards
+        cp ${pkgs.writeText "test.json" (builtins.readFile ./test_dashboard.json)} /var/lib/grafana/dashboards/
+      '';
+    };
   };
 
   extraNodeConfs = {

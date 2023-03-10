@@ -1,25 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, google-cloud-core
 , google-api-core
+, google-cloud-core
 , grpc-google-iam-v1
 , proto-plus
-, mock
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.6.3";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bPipp05loDhXiWlnx5MHt1gFx1Kt47xBIk5hZ3dLyck=";
+    hash = "sha256-npTv+f533JK/J2ceJ6Na7mS90HfKaHORmGnFz1LBzLQ=";
   };
 
   propagatedBuildInputs = [
@@ -27,10 +28,11 @@ buildPythonPackage rec {
     google-cloud-core
     grpc-google-iam-v1
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -47,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Resource Manager API client library";
     homepage = "https://github.com/googleapis/python-resource-manager";
+    changelog = "https://github.com/googleapis/python-resource-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

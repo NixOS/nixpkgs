@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "gsl";
   version = "2.7.1";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "mirror://gnu/gsl/${pname}-${version}.tar.gz";
     sha256 = "sha256-3LD71DBIgyt1f/mUJpGo3XACbV2g/4VgHlJof23us0s=";
@@ -13,8 +15,12 @@ stdenv.mkDerivation rec {
     MACOSX_DEPLOYMENT_TARGET=10.16
   '' else null;
 
+  postInstall = ''
+    moveToOutput bin/gsl-config "$dev"
+  '';
+
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
   doCheck = stdenv.hostPlatform.system != "i686-linux";

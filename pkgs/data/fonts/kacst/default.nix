@@ -1,16 +1,21 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "kacst";
   version = "2.01";
-in
-fetchzip {
-  name = "kacst-${version}";
-  url = "mirror://debian/pool/main/f/fonts-kacst/fonts-kacst_${version}+mry.orig.tar.bz2";
-  sha256 = "sha256-pIO58CXfmKYRKYJ1oI+tjTwlKBRnkZ/CpIM2Xa0CDA4=";
 
-  postFetch = ''
+  src = fetchurl {
+    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}+mry.orig.tar.bz2";
+    hash = "sha256-byiZzpYiMU6kJs+NSISfHPFzAnJtc8toNIbV/fKiMzg=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
-    tar xjf $downloadedFile --strip-components=1 -C $out/share/fonts
+    cp -R kacst $out/share/fonts
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -18,7 +18,7 @@ buildDunePackage rec {
     autoheader
   '';
 
-  buildInputs = [ autoconf ];
+  nativeBuildInputs = [ autoconf ];
 
   hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 

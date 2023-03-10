@@ -2938,6 +2938,9 @@
   "cometblue-lite": [
     "setuptools"
   ],
+  "comm": [
+    "hatchling"
+  ],
   "commandparse": [
     "setuptools"
   ],
@@ -9892,7 +9895,8 @@
     "setuptools"
   ],
   "packaging": [
-    "setuptools"
+    "setuptools",
+    "flit-core"
   ],
   "packbits": [
     "setuptools"
@@ -14254,7 +14258,9 @@
     "setuptools"
   ],
   "rapidfuzz": [
-    "setuptools"
+    "setuptools",
+    "packaging",
+    "scikit-build"
   ],
   "rapidfuzz-capi": [
     "setuptools"
@@ -14949,7 +14955,8 @@
     "setuptools-scm"
   ],
   "scikit-image": [
-    "cython"
+    "cython",
+    "setuptools"
   ],
   "scikit-learn": [
     "cython",
@@ -16893,6 +16900,9 @@
   "trimesh": [
     "setuptools"
   ],
+  "trino": [
+    "setuptools"
+  ],
   "trio": [
     "setuptools"
   ],
@@ -16904,6 +16914,10 @@
   ],
   "troposphere": [
     "setuptools"
+  ],
+  "trove-classifiers": [
+    "setuptools",
+    "calver"
   ],
   "trueskill": [
     "setuptools"

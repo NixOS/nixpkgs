@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, coreutils, python, root }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, coreutils
+, python
+, root
+}:
 
 let
   pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
@@ -16,9 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zQ91yA91VJxZzCqCns52Acd96Xyypat1eQysjh1YUDI=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ root_py ]
-    ++ lib.optional withPython python;
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    root_py
+  ]
+  ++ lib.optional withPython python;
+
+  # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
+  preConfigure = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
 
   cmakeFlags = [
     "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"

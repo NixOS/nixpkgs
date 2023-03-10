@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Opensource disk backup software";
-    homepage = "http://www.partimage.org";
+    homepage = "https://www.partimage.org";
     license = lib.licenses.gpl2;
     maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.linux;

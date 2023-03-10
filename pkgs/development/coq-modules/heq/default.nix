@@ -5,13 +5,13 @@ let fetcher = {rev, repo, owner, sha256, domain, ...}:
     url = "https://${domain}/${owner}/${repo}/download/${repo}-${rev}.zip";
     inherit sha256;
    }; in
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "heq";
   repo = "Heq";
   owner = "gil.hur";
   domain = "sf.snu.ac.kr";
   inherit version fetcher;
-  defaultVersion = if versions.isLt "8.8" coq.coq-version then "0.92" else null;
+  defaultVersion = if lib.versions.isLt "8.8" coq.coq-version then "0.92" else null;
   release."0.92".sha256 = "0cf8y6728n81wwlbpq3vi7l2dbzi7759klypld4gpsjjp1y1fj74";
 
   mlPlugin = true;
@@ -22,6 +22,6 @@ with lib; mkCoqDerivation {
   meta = {
     homepage = "https://ropas.snu.ac.kr/~gil.hur/Heq/";
     description = "Heq : a Coq library for Heterogeneous Equality";
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with lib.maintainers; [ jwiegley ];
   };
 }

@@ -3,35 +3,44 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
+, grpcio
 , grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
+, protobuf
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.14.0";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hJgEFRr65eGuV0xx/4leyBZzdd9jt/SEKm3MApzHCGA=";
+    hash = "sha256-idnWz7o7RuOAZbY+H5STVAVa1rexThDY3Zb5eaI10Ao=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
+
+  nativeCheckInputs = [
+    grpcio
     mock
     pytestCheckHook
   ];

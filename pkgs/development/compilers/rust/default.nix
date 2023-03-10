@@ -81,6 +81,8 @@ in
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
       };
+      cargo-auditable = self.callPackage ./cargo-auditable.nix { };
+      cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
     });
   };

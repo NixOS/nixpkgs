@@ -26,7 +26,7 @@ buildPythonPackage rec {
     aspell
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

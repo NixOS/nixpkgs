@@ -1,39 +1,44 @@
-{ cmake
-, pkg-config
-, boost
+{ asio
+, cmake
 , curl
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
 , gnutls
 , lame
+, lib
 , libev
+, game-music-emu
 , libmicrohttpd
 , libopenmpt
 , mpg123
 , ncurses
-, lib
+, pkg-config
+, portaudio
 , stdenv
 , taglib
 # Linux Dependencies
 , alsa-lib
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
 , pulseaudio
-, systemdSupport ? stdenv.isLinux
+, sndioSupport ? true, sndio
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 # Darwin Dependencies
 , Cocoa
 , SystemConfiguration
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.98.1";
+  version = "0.99.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pnAdlCCqWzR0W8dF9CE48K8yHMVIx3egZlXvibxU18A=";
+    sha256 = "sha256-SbWL36GRIJPSvxZyj6sebJxTkSPsUcsKyC3TmcIq2O0";
   };
 
   outputs = [ "out" "dev" ];
@@ -44,16 +49,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    asio
     curl
     ffmpeg
     gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
     libopenmpt
     mpg123
     ncurses
+    portaudio
     taglib
   ] ++ lib.optionals systemdSupport [
     systemd
@@ -61,6 +68,12 @@ stdenv.mkDerivation rec {
     alsa-lib pulseaudio
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
+  ] ++ lib.optional sndioSupport [
+    sndio
+  ] ++ lib.optional pipewireSupport [
+    pipewire
   ];
 
   cmakeFlags = [

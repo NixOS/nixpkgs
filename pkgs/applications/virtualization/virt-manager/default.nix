@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     cpio
     cdrtools

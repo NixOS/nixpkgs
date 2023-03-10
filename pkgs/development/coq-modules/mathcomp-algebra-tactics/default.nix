@@ -1,14 +1,14 @@
 { lib, mkCoqDerivation, coq, mathcomp-algebra,
   coq-elpi, mathcomp-zify, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   namePrefix = [ "coq" "mathcomp" ];
   pname = "algebra-tactics";
   owner = "math-comp";
   inherit version;
 
-  defaultVersion = with versions;
-     switch [ coq.coq-version mathcomp-algebra.version ] [
+  defaultVersion = with lib.versions;
+     lib.switch [ coq.coq-version mathcomp-algebra.version ] [
        { cases = [ (range "8.13" "8.16") (isGe "1.12") ]; out = "1.0.0"; }
      ] null;
 
@@ -18,6 +18,6 @@ with lib; mkCoqDerivation {
 
   meta = {
     description = "Ring and field tactics for Mathematical Components";
-    maintainers = with maintainers; [ cohencyril ];
+    maintainers = with lib.maintainers; [ cohencyril ];
   };
 }

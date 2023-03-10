@@ -2,14 +2,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "1.0.0";
+  version = "1.1.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "v${version}";
-    sha256 = "0yplsbd5251s8cabazbdqb00jqv8ibbgal7fhj5pfxv5lsz17vkv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J+zQrokrAX5tRU/2RPPSaFDyfsACPHHQYbK5sO99CMs=";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     binaryornot
@@ -17,17 +22,16 @@ python3Packages.buildPythonApplication rec {
     debian
     jinja2
     license-expression
-    requests
     setuptools
     setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
     license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3Plus ];
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = with maintainers; [ FlorianFranzen Luflosi ];
   };
 }

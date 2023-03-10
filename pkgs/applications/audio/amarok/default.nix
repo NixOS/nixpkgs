@@ -4,7 +4,6 @@
 , karchive, kcmutils, kconfig, kdnssd, kguiaddons, kinit, kirigami2, knewstuff, knotifyconfig, ktexteditor, kwindowsystem
 , fftw, phonon, plasma-framework, threadweaver, breeze-icons
 , curl, ffmpeg, gdk-pixbuf, libaio, liblastfm, libmtp, loudmouth, lzo, lz4, mariadb-embedded, pcre, snappy, taglib, taglib_extras
-, pmdk, numactl
 }:
 
 mkDerivation rec {

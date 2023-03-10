@@ -58,7 +58,7 @@ buildPythonPackage rec {
     wget
   ] ++ urllib3.optional-dependencies.secure;
 
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
     pytest-cov
     pytestCheckHook

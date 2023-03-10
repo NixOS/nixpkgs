@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sunpaper";
-  version = "unstable-2022-04-01";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "hexive";
     repo = "sunpaper";
-    rev = "8d518dfddb5e80215ef3b884ff009df1d4bb74c2";
-    sha256 = "sCG7igD2ZwfHoRpR3Kw7dAded4hG2RbMLR/9nH+nZh8=";
+    rev = "v${version}";
+    sha256 = "sha256-8s7SS79wCS0nRR7IpkshP5QWJqqKEeBu6EtFPDM+2cM=";
   };
 
   buildInputs = [

@@ -2,8 +2,6 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_4
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
@@ -26,12 +24,12 @@
 }:
 
 let
-  version = "5.2.0";
+  version = "5.4.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "sha256-ggqU27FAce1tjCZs8MCA7LJlpe6mUwdXlInEZiwtWCo=";
+    hash = "sha256-ocYtm8tOAxBt3wt72WGWuiRuHJt6k12vjZvtqLvcuKE=";
   };
 
   # Update with `eval $(nix-build -A bazel_5.updater)`,
@@ -326,7 +324,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_4}"/bin/bazel \
+        "${bazel_self}"/bin/bazel \
             query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
             --loading_phase_threads=1 \
             --output build) \

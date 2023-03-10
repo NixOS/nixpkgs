@@ -23,20 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.9";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-Sy8EHl4UuDMwRAKDkl7njD9GSzKpy1Cfsgw53On+nxo=";
+    hash = "sha256-blpANUfFam46Vyyc3vaB7vX07CRMtdMZR2n7FOLGgaU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Pe4lNcvJNELAitaGY56EUJ8iN7Dkh8DoUpA/t+aRuqk=";
+    hash = "sha256-vVU/OVwtIPRw1Ohe5EIqovhyd4oYOR7CPISz8Zo74r0=";
   };
 
   nativeBuildInputs = [
@@ -71,8 +70,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     pushd build-aux
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+    chmod +x cargo_build.py meson_post_install.py
+    patchShebangs cargo_build.py meson_post_install.py
     substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
     popd
   '';

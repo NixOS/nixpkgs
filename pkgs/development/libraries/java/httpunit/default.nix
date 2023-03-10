@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://httpunit.sourceforge.net";
+    homepage = "https://httpunit.sourceforge.net";
     platforms = platforms.unix;
     license = licenses.mit;
   };

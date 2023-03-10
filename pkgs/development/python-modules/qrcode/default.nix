@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six pillow pymaging_png setuptools ];
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   meta = with lib; {
     description = "Quick Response code generation for Python";

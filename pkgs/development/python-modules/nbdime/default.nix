@@ -57,7 +57,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-timeout
     pytest-tornado

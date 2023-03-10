@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Collection of powerful tools for manipulating EPROM load files";
-    homepage = "http://srecord.sourceforge.net/";
+    homepage = "https://srecord.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bjornfor ];
     platforms = lib.platforms.unix;

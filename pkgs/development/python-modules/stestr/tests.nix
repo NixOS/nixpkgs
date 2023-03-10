@@ -20,7 +20,7 @@ buildPythonPackage rec {
     pythonOutputDistPhase() { touch $dist; }
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
   ];
 

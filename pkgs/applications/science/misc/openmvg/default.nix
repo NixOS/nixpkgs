@@ -1,25 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, cereal, openmp
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
 , eigen ? null
 , libtiff ? null
+, ceres-solver
+, enableShared ? !stdenv.hostPlatform.isStatic
 , enableExamples ? false
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
-  version = "2.0";
+  version = "unstable-2022-12-30";
   pname = "openmvg";
 
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
-    rev = "v${version}";
-    sha256 = "sha256-6F/xUgZpqY+v6CpwTBhIXI4JdT8HVB0P5JzOL66AVd8=";
+    rev = "e1bbfe801986cd7171f36443a1573b0f69f3702d";
+    sha256 = "sha256-DngfmejNFw5pogTo7Ec5aUey2LUQIojvJybLmtCfvVY=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff ];
+  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ceres-solver ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -27,7 +29,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
     "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
-  ];
+    "-DTARGET_ARCHITECTURE=generic"
+  ] ++ lib.optional enableShared "-DOpenMVG_BUILD_SHARED=ON";
 
   cmakeDir = "./src";
 
@@ -40,11 +43,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mdaiter ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mdaiter bouk ];
   };
 }

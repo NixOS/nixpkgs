@@ -32,6 +32,10 @@ lib.makeScope newScope (self: with self; {
 
   pisces = callPackage ./pisces.nix { };
 
+  plugin-git = callPackage ./plugin-git.nix { };
+
+  puffer = callPackage ./puffer.nix { };
+
   pure = callPackage ./pure.nix { };
 
   sponge = callPackage ./sponge.nix { };

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "psrpcore";
-  version = "0.2.0";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,18 +18,17 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uX99BsQn1Ckl+2Lt4I0EMZLTKeDrX0mtSc9w5aFpvxQ=";
+    hash = "sha256-6d5HQJEH/x+V0rpmQkprMlH1n151KyUF6d4tM9W5TFs=";
   };
 
   propagatedBuildInputs = [
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     xmldiff
   ];
-
 
   pythonImportsCheck = [
     "psrpcore"

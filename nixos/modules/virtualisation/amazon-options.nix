@@ -2,9 +2,6 @@
 let
   inherit (lib) literalExpression types;
 in {
-  imports = [
-    (lib.mkRemovedOptionModule [ "ec2" "hvm" ] "Only HVM instances are supported, so specifying it is no longer necessary.")
-  ];
   options = {
     ec2 = {
       zfs = {
@@ -31,13 +28,13 @@ in {
             options = {
               mount = lib.mkOption {
                 description = lib.mdDoc "Where to mount this dataset.";
-                type = types.nullOr types.string;
+                type = types.nullOr types.str;
                 default = null;
               };
 
               properties = lib.mkOption {
                 description = lib.mdDoc "Properties to set on this dataset.";
-                type = types.attrsOf types.string;
+                type = types.attrsOf types.str;
                 default = {};
               };
             };
@@ -51,6 +48,12 @@ in {
         description = lib.mdDoc ''
           Whether the EC2 instance is using EFI.
         '';
+      };
+      hvm = lib.mkOption {
+        description = "Unused legacy option. While support for non-hvm has been dropped, we keep this option around so that NixOps remains compatible with a somewhat recent `nixpkgs` and machines with an old `stateVersion`.";
+        internal = true;
+        default = true;
+        readOnly = true;
       };
     };
   };

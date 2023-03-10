@@ -4,7 +4,6 @@
 , idnSupport ? true, libidn
 }:
 
-with lib;
 
 stdenv.mkDerivation rec{
   pname = "gloox";
@@ -15,12 +14,19 @@ stdenv.mkDerivation rec{
     sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
   };
 
-  buildInputs = [ ]
-    ++ optional zlibSupport zlib
-    ++ optional sslSupport openssl
-    ++ optional idnSupport libidn;
+  # needed since gcc12
+  postPatch = ''
+    sed '1i#include <ctime>' -i \
+      src/tests/{tag/tag_perf.cpp,zlib/zlib_perf.cpp} \
+      src/examples/*.cpp
+  '';
 
-  meta = {
+  buildInputs = [ ]
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional idnSupport libidn;
+
+  meta = with lib; {
     description = "A portable high-level Jabber/XMPP library for C++";
     homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;

@@ -66,7 +66,7 @@ buildPythonPackage rec {
   '';
 
   # Most tests require credentials to run on IBMQ
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     nbconvert
     nbformat

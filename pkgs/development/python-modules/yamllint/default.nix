@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pathspec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

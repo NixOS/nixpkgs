@@ -345,7 +345,7 @@ lib.composeManyExtensions [
           LIB_DIR = "${lib.getLib pkgs.secp256k1}/lib";
 
           # for actual C toolchain build
-          NIX_CFLAGS_COMPILE = "-I ${lib.getDev pkgs.secp256k1}/include";
+          env.NIX_CFLAGS_COMPILE = "-I ${lib.getDev pkgs.secp256k1}/include";
           NIX_LDFLAGS = "-L ${lib.getLib pkgs.secp256k1}/lib";
         }
       );
@@ -390,7 +390,7 @@ lib.composeManyExtensions [
           scrypto =
             if isWheel then
               (
-                super.cryptography.override { preferWheel = true; }
+                super.cryptography.overridePythonAttrs { preferWheel = true; }
               ) else super.cryptography;
         in
         scrypto.overridePythonAttrs
@@ -457,9 +457,9 @@ lib.composeManyExtensions [
 
         preConfigure = lib.concatStringsSep "\n" [
           (old.preConfigure or "")
-          (if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+          (lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
             MACOSX_DEPLOYMENT_TARGET=10.16
-          '' else "")
+          '')
         ];
 
         preBuild = old.preBuild or "" + ''
@@ -720,7 +720,7 @@ lib.composeManyExtensions [
                 (old.propagatedBuildInputs or [ ])
                 ++ lib.optionals mpiSupport [ self.mpi4py self.openssh ]
               ;
-              preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+              preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
               HDF5_DIR = "${pkgs.hdf5}";
               HDF5_MPI = if mpiSupport then "ON" else "OFF";
               # avoid strict pinning of numpy
@@ -1324,9 +1324,10 @@ lib.composeManyExtensions [
       open3d = super.open3d.overridePythonAttrs (old: {
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.ipywidgets ];
         buildInputs = (old.buildInputs or [ ]) ++ [
-          pkgs.udev
           pkgs.libusb1
-        ] ++ (if lib.versionAtLeast super.open3d.version "0.16.0" then [
+        ] ++ lib.optionals stdenv.isLinux [
+          pkgs.udev
+        ] ++ lib.optionals (lib.versionAtLeast super.open3d.version "0.16.0") [
           pkgs.mesa
           (
             pkgs.symlinkJoin {
@@ -1341,15 +1342,35 @@ lib.composeManyExtensions [
                 )
               ];
             })
-        ] else [ ]);
+        ];
+
+        # Patch the dylib in the binary distribution to point to the nix build of libomp
+        preFixup = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast super.open3d.version "0.16.0") ''
+          install_name_tool -change /opt/homebrew/opt/libomp/lib/libomp.dylib ${pkgs.llvmPackages.openmp}/lib/libomp.dylib $out/lib/python*/site-packages/open3d/cpu/pybind.cpython-*-darwin.so
+        '';
+
         # TODO(Sem Mulder): Add overridable flags for CUDA/PyTorch/Tensorflow support.
         autoPatchelfIgnoreMissingDeps = true;
       });
 
+      # Overrides for building packages based on OpenCV
+      # These flags are inspired by the opencv 4.x package in nixpkgs
       _opencv-python-override =
         old: {
+          # Disable OpenCL on macOS
+          # Can't use cmakeFlags because cmake is called by setup.py
+          CMAKE_ARGS = lib.optionalString stdenv.isDarwin "-DWITH_OPENCL=OFF";
+
           nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
-          buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
+          buildInputs = [
+            self.scikit-build
+          ] ++ lib.optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
+            AVFoundation
+            Cocoa
+            CoreMedia
+            MediaToolbox
+            VideoDecodeAcceleration
+          ]) ++ (old.buildInputs or [ ]);
           dontUseCmakeConfigure = true;
         };
 
@@ -1357,18 +1378,12 @@ lib.composeManyExtensions [
 
       opencv-python-headless = super.opencv-python.overridePythonAttrs self._opencv-python-override;
 
-      opencv-contrib-python = super.opencv-contrib-python.overridePythonAttrs (
-        old: {
-          nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
-          buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
-          dontUseCmakeConfigure = true;
-        }
-      );
+      opencv-contrib-python = super.opencv-contrib-python.overridePythonAttrs self._opencv-python-override;
 
       openexr = super.openexr.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openexr pkgs.ilmbase ];
-          NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
+          env.NIX_CFLAGS_COMPILE = toString [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
         }
       );
 
@@ -1654,7 +1669,6 @@ lib.composeManyExtensions [
 
             propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
               pkgs.cairo
-              pkgs.xlibsWrapper
             ];
 
             mesonFlags = [ "-Dpython=${if self.isPy3k then "python3" else "python"}" ];
@@ -1775,6 +1789,13 @@ lib.composeManyExtensions [
           ++ [ pkgs.freetds ];
       });
 
+      pyopencl = super.pyopencl.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.numpy ];
+          propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ pkgs.ocl-icd pkgs.opencl-headers ];
+        }
+      );
+
       pyopenssl = super.pyopenssl.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openssl ];
@@ -1817,7 +1838,7 @@ lib.composeManyExtensions [
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ (
             if withApplePCSC then [ PCSC ] else [ pcsclite ]
           );
-          NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
+          env.NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
             "-I ${lib.getDev pcsclite}/include/PCSC";
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.swig
@@ -2389,9 +2410,7 @@ lib.composeManyExtensions [
 
       # Stop infinite recursion by using bootstrapped pkg from nixpkgs
       bootstrapped-pip = super.bootstrapped-pip.override {
-        wheel = (pkgs.python3.pkgs.override {
-          python = self.python;
-        }).wheel;
+        wheel = self.python.pkgs.wheel;
       };
 
       watchfiles =
@@ -2704,6 +2723,10 @@ lib.composeManyExtensions [
             'if self.target_name not in ["wheel", "sdist"]:' \
             'if True:'
         '';
+      });
+
+      mkdocs = super.mkdocs.overridePythonAttrs (old: {
+        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [ self.babel ];
       });
     }
   )

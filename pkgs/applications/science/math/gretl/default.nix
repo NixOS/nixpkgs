@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gretl";
-  version = "2022b";
+  version = "2022c";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/${pname}-${version}.tar.xz";
-    sha256 = "sha256-A+LyWPSUBBvnnyBrVSAUCiny24UAztUwy1nmRoDaGjI=";
+    sha256 = "sha256-4QAQTNqbfIX6K3CdtKcVONtCWrkTRvGl2ZXGR1eyQdA=";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    homepage = "http://gretl.sourceforge.net";
+    homepage = "https://gretl.sourceforge.net";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dmrauh ];
     platforms = with platforms; all;

@@ -1,34 +1,29 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
-, setuptools-scm
+, setuptools
 , pint
 , pandas
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pint-pandas";
-  version = "0.2";
+  # Latest release contains bugs and failing tests.
+  version = "unstable-2022-11-24";
+  format = "pyproject";
 
-  src = fetchPypi {
-    pname = "Pint-Pandas";
-    inherit version;
-    sha256 = "sha256-b2DS6ArBAuD5St25IG4PbMpe5C8Lf4kw2MeYAC5B+oc=";
+  src = fetchFromGitHub {
+    owner = "hgrecco";
+    repo = "pint-pandas";
+    rev = "c58a7fcf9123eb65f5e78845077b205e20279b9d";
+    hash = "sha256-gMZNJSJxtSZvgU4o71ws5ZA6tgD2M5c5oOrn62DRyMI=";
   };
 
-  patches = [
-    # Fixes a failing test, see: https://github.com/hgrecco/pint-pandas/issues/107
-    (fetchpatch{
-      url = "https://github.com/hgrecco/pint-pandas/commit/4c31e25609af968665ee60d019b9b5366f328680.patch";
-      sha256 = "vIT0LI4S73D4MBfGI8vtCZAM+Zb4PZ4E3xfpGKNyA4I=";
-    })
-  ];
-
   nativeBuildInputs = [
-    setuptools-scm
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -36,7 +31,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

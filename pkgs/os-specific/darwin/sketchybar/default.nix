@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, memstreamHook, Carbon, Cocoa, SkyLight }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, DisplayServices, SkyLight }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -10,17 +10,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sketchybar";
-  version = "2.8.2";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${version}";
-    sha256 = "sha256-GmM+0h6xxUzW2kpTDZWAiqJAXoQgdsJRlNbvsuxKmZ8=";
+    hash = "sha256-TTpOFupLyCko5+EZJ3kJWu6OD35qfLpM8N7zq+eMvMM=";
   };
 
-  buildInputs = [ Carbon Cocoa SkyLight ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+  buildInputs = [ Carbon Cocoa DisplayServices SkyLight ];
 
   makeFlags = [
     target

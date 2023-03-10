@@ -176,7 +176,7 @@ let
 
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-        type = types.str;
+        type = types.singleLineStr;
         description = lib.mdDoc "The base64 public key of the peer.";
       };
 
@@ -303,7 +303,7 @@ let
           set -e
 
           # If the parent dir does not already exist, create it.
-          # Otherwise, does nothing, keeping existing permisions intact.
+          # Otherwise, does nothing, keeping existing permissions intact.
           mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
 
           if [ ! -f "${values.privateKeyFile}" ]; then
@@ -315,7 +315,7 @@ let
 
   peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
+      keyToUnitName = replaceStrings
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
       unitName = keyToUnitName publicKey;
@@ -461,7 +461,7 @@ let
 
           ${ipPreMove} link add dev "${name}" type wireguard
           ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
-          ${optionalString (values.mtu != null) ''${ipPreMove} link set "${name}" mtu ${toString values.mtu}''}
+          ${optionalString (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''}
 
           ${concatMapStringsSep "\n" (ip:
             ''${ipPostMove} address add "${ip}" dev "${name}"''

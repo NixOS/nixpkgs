@@ -32,7 +32,7 @@ with python3.pkgs; buildPythonApplication rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     pyyaml

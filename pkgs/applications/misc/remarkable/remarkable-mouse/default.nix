@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "remarkable-mouse";
-  version = "7.0.3";
+  version = "7.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e6xJBZmWXAPOHNNUMOGLjbe3QmvW0SRwfMNJVZsM3gw=";
+    sha256 = "sha256-82P9tE3jiUlKBGZCiWDoL+9VJ06Bc+If+aMfcEEU90U=";
   };
 
   propagatedBuildInputs = with python3Packages; [ screeninfo paramiko pynput libevdev ];

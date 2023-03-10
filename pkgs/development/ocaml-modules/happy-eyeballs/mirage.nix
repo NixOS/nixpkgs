@@ -1,7 +1,7 @@
 { buildDunePackage
 , happy-eyeballs
 , duration
-, dns-client
+, dns-client-mirage
 , domain-name
 , ipaddr
 , fmt
@@ -19,8 +19,7 @@ buildDunePackage {
   inherit (happy-eyeballs) src version;
 
   minimalOCamlVersion = "4.08";
-
-  strictDeps = true;
+  duneVersion = "3";
 
   buildInputs = [
     duration
@@ -33,7 +32,7 @@ buildDunePackage {
   ];
 
   propagatedBuildInputs = [
-    dns-client
+    dns-client-mirage
     happy-eyeballs
     logs
     lwt

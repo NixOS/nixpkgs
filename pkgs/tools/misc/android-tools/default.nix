@@ -9,20 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "33.0.3p1";
+  version = "34.0.0";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-viBHzyVgUWdK9a60u/7SdpiVEvgNEZHihkyRkGH5Ydg=";
+    hash = "sha256-+I7FaGk39/svaJw7BQYSPyOZJ2oUZzFksPlUVKTHuXo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "add-macos-platform.patch";
-      url = "https://github.com/nmeum/android-tools/commit/a1ab35b31525966e0f0770047cd82accb36d025b.patch";
-      hash = "sha256-6O3ekDf0qPdzcfINFF8Ae4XOYgnQWTBhvu9SCFSHkXY=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];

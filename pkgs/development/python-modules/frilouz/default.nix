@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0w2qzi4zb10r9iw64151ay01vf0yzyhh0bsjkx1apxp8fs15cdiw";
   };
 
-  checkInputs = [ astunparse ];
+  nativeCheckInputs = [ astunparse ];
 
   preCheck = "cd test";
 

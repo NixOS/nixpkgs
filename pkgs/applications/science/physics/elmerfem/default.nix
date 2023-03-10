@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade, libsForQt5, vtkWithQt5}:
+{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade, libsForQt5, vtk_8_withQt5}:
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     opencascade
-    vtkWithQt5
+    vtk_8_withQt5
   ];
 
   preConfigure = ''

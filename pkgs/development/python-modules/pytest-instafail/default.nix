@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "10lpr6mjcinabqynj6v85bvb1xmapnhqmg50nys1r6hg7zgky9qr";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pytest_instafail" ];
   meta = {
     description = "pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";

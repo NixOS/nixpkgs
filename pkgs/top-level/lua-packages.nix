@@ -30,7 +30,7 @@ let
     lib.concatMapStringsSep ";" (path: "${drv}/${path}") pathListForVersion;
 
 in
-{
+rec {
 
   # Dont take luaPackages from "global" pkgs scope to avoid mixing lua versions
   luaPackages = self;
@@ -59,19 +59,59 @@ in
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  luxio = callPackage ({ fetchurl, which, pkg-config }: buildLuaPackage {
+ lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
+    pname = "lua-resty-core";
+    version = "0.1.24";
+
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-resty-core";
+      rev = "v${version}";
+      sha256 = "sha256-obwyxHSot1Lb2c1dNqJor3inPou+UIBrqldbkNBCQQk=";
+    };
+
+    propagatedBuildInputs = [ lua-resty-lrucache ];
+
+    meta = with lib; {
+      description = "New FFI-based API for lua-nginx-module";
+      homepage = "https://github.com/openresty/lua-resty-core";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ SuperSandro2000 ];
+    };
+  }) {};
+
+ lua-resty-lrucache = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
+    pname = "lua-resty-lrucache";
+    version = "0.13";
+
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-resty-lrucache";
+      rev = "v${version}";
+      sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
+    };
+
+    meta = with lib; {
+      description = "Lua-land LRU Cache based on LuaJIT FFI";
+      homepage = "https://github.com/openresty/lua-resty-lrucache";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ SuperSandro2000 ];
+    };
+  }) {};
+
+  luxio = callPackage ({ fetchurl, which, pkg-config }: buildLuaPackage rec {
     pname = "luxio";
     version = "13";
 
     src = fetchurl {
-      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-${version}.tar.bz2";
       sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
     };
 
     nativeBuildInputs = [ which pkg-config ];
 
     postPatch = ''
-      patchShebangs .
+      patchShebangs const-proc.lua
     '';
 
     preBuild = ''
@@ -80,7 +120,7 @@ in
         INST_LUADIR="$out/share/lua/${lua.luaversion}"
         LUA_BINDIR="$out/bin"
         INSTALL=install
-        );
+      );
     '';
 
     meta = with lib; {
@@ -91,21 +131,22 @@ in
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
-  });
+  }) {};
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs.gnome) zenity;
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
-  vicious = (callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
+  vicious = callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.5.1";
+    version = "2.6.0";
 
     src = fetchFromGitHub {
       owner = "vicious-widgets";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "sha256-geu/g/dFAVxtY1BuJYpZoVtFS/oL66NFnqiLAnJELtI=";
+      sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
     };
 
     buildInputs = [ lua ];
@@ -119,10 +160,10 @@ in
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
       homepage = "https://vicious.rtfd.io";
+      changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms = platforms.linux;
     };
-  }) {});
-
+  }) {};
 }

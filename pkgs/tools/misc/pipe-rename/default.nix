@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-HiElAPgNeICEVbMBfK6syCoQb5smHhBH1MOuo2swci4=";
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   preCheck = ''
     patchShebangs tests/editors/env-editor.py

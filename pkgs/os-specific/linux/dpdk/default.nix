@@ -5,18 +5,24 @@
 , libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
 , doxygen, python3, pciutils
 , withExamples ? []
-, shared ? false }:
+, shared ? false
+, machine ? (
+    if stdenv.isx86_64 then "nehalem"
+    else if stdenv.isAarch64 then "generic"
+    else null
+  )
+}:
 
 let
   mod = kernel != null;
-  dpdkVersion = "22.07";
+  dpdkVersion = "22.11.1";
 in stdenv.mkDerivation rec {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
-    sha256 = "sha256-n2Tf3gdf21cIy2Leg4uP+4kVdf7R4dKusma6yj38m+o=";
+    sha256 = "sha256-3gdkZfcXSg1ScUuQcuSDenJrqsgtj+fcZEytXIz3TUw=";
   };
 
   nativeBuildInputs = [
@@ -63,8 +69,7 @@ in stdenv.mkDerivation rec {
   # kni kernel driver is currently not compatble with 5.11
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
   ++ lib.optional (!shared) "-Ddefault_library=static"
-  ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
-  ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
+  ++ lib.optional (machine != null) "-Dmachine=${machine}"
   ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 

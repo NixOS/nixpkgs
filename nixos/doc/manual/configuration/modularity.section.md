@@ -67,7 +67,13 @@ When using multiple modules, you may need to access configuration values
 defined in other modules. This is what the `config` function argument is
 for: it contains the complete, merged system configuration. That is,
 `config` is the result of combining the configurations returned by every
-module [^1] . For example, here is a module that adds some packages to
+module. (If you're wondering how it's possible that the (indirect) *result*
+of a function is passed as an *input* to that same function: that's
+because Nix is a "lazy" language --- it only computes values when
+they are needed. This works as long as no individual configuration
+value depends on itself.)
+
+For example, here is a module that adds some packages to
 [](#opt-environment.systemPackages) only if
 [](#opt-services.xserver.enable) is set to `true` somewhere else:
 
@@ -125,9 +131,3 @@ in
 
 { imports = [ (netConfig "nixos.localdomain") ]; }
 ```
-
-[^1]: If you're wondering how it's possible that the (indirect) *result*
-    of a function is passed as an *input* to that same function: that's
-    because Nix is a "lazy" language --- it only computes values when
-    they are needed. This works as long as no individual configuration
-    value depends on itself.

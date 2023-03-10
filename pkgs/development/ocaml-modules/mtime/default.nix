@@ -1,8 +1,6 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 
-with lib;
-
-throwIfNot (versionAtLeast ocaml.version "4.08")
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "mtime is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "Monotonic wall-clock time for OCaml";
     homepage = "https://erratique.ch/software/mtime";
     inherit (ocaml.meta) platforms;

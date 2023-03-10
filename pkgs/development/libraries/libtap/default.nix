@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, cmake, perl }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "libtap";

@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: lib/auth_rpc.o:/build/source/lib/../9pfs.h:35: multiple definition of
   #     `logfile'; 9pfs.o:/build/source/9pfs.h:35: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   enableParallelBuilding = true;
 

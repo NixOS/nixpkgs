@@ -15,11 +15,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SsZRyODeYRQk2pVspKzfJbSRX/zjD+M+aaK+YXPu6CE=";
+    sha256 = "sha256-IjFDhkqtMitdcQORerRqwty3ZMP8jamPtb9oMHdre4I=";
   };
 
   nativeBuildInputs = [

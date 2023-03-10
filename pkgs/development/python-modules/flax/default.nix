@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "flax"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     keras
     pytest-xdist
     pytestCheckHook

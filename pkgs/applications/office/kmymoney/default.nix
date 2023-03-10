@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
-  NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
+  env.NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckInputs = [ xvfb-run ];
+  nativeInstallCheckInputs = [ xvfb-run ];
   installCheckPhase =
     lib.optionalString doInstallCheck ''
       xvfb-run -s '-screen 0 1024x768x24' make test \

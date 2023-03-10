@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2022.2";
+  version = "2023.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
-    sha256 = "JlQ5ENdqedYvZnEihWkqO2KnXzHQfLvupG7sfjTmOlQ=";
+    sha256 = "qaaHwbfEpBOaIUvUUeAcqGExoxYfaKo+BzJbBgArv7Y=";
   };
 
   depsBuildBuild = [
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     markupsafe
     pygments
-    toml
+    toml # remove once python311 is the default
     typogrify
   ];
 

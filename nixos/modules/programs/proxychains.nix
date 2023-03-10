@@ -86,7 +86,7 @@ in {
         description = lib.mdDoc "Proxy DNS requests - no leak for DNS data.";
       };
 
-      quietMode = mkEnableOption (lib.mdDoc "Quiet mode (no output from the library).");
+      quietMode = mkEnableOption (lib.mdDoc "Quiet mode (no output from the library)");
 
       remoteDNSSubnet = mkOption {
         type = types.enum [ 10 127 224 ];

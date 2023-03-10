@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.4";
+  version = "43.6";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Hg1tZ4RcGb7J463VlpX5pTHXKg5UKyA6zJD7OBInwrw=";
+    sha256 = "m08hPdloyVL75CJoUPXJVk3f1XimoPiT06K2rhmjd6k=";
   };
 
   patches = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     webkitgtk_5_0
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    GTK_A11Y=none \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs

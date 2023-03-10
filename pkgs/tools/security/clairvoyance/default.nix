@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     aiohttp
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aiounittest
     pytestCheckHook
   ];

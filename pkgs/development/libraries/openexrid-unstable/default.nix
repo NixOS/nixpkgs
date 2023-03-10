@@ -20,7 +20,7 @@ stdenv.mkDerivation {
         --replace g++ c++
   '';
 
-  NIX_CFLAGS_COMPILE=''-I${ilmbase.dev}/include/OpenEXR
+  env.NIX_CFLAGS_COMPILE = ''-I${ilmbase.dev}/include/OpenEXR
                        -I${openexr.dev}/include/OpenEXR
                        -I${openfx.dev}/include/OpenFX
                       '';

@@ -2,13 +2,12 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, pythonAtLeast
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dacite";
-  version = "1.6.0";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,26 +15,31 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "konradhalas";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0nv2bnj3bq2v08ac4p583cnpjq2d6bv5isycgji5i5wg1y082a3d";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aQwQHFWaXwTaA6GQgDcWT6ivE9YtWtHCTOtxDi503+M=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--benchmark-autosave --benchmark-json=benchmark.json" ""
+  '';
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/konradhalas/dacite/issues/167
-    "test_from_dict_with_union_and_wrong_data"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "dacite"
   ];
 
+  disabledTestPaths = [
+    "tests/performance"
+  ];
+
   meta = with lib; {
     description = "Python helper to create data classes from dictionaries";
     homepage = "https://github.com/konradhalas/dacite";
+    changelog = "https://github.com/konradhalas/dacite/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

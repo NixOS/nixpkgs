@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # Darwin gets misdetected as Windows without this
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__unix";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__unix";
 
   patches = [
     (fetchpatch {

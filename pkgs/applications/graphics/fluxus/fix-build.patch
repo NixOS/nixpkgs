@@ -1,16 +1,100 @@
-diff --git a/SConstruct b/SConstruct
-index 32cb644..0b3a208 100644
+scons does not use os environment by default:
+  https://scons.org/doc/2.1.0/HTML/scons-user/x1750.html
+
+nixpkgs' cc-wrapper on the other hand relies on various NIX_* variables
+to be passed through like NIX_CFLAGS_COMPILE_BEFORE.
+
+While at it ported to python3-style print().
 --- a/SConstruct
 +++ b/SConstruct
-@@ -225,6 +225,11 @@ if env['PLATFORM'] == 'posix':
-                     ["asound", "alsa/asoundlib.h"],
-                     ["openal", "AL/al.h"]]
-
-+env.Append(ENV={'PATH': ' ' + os.environ['PATH'], })
-+env.Append(LIBPATH=ARGUMENTS.get('LIBPATH', '').split(':'))
-+env.Append(CCFLAGS=' ' + os.environ.get('NIX_CFLAGS_COMPILE',''))
-+env.Append(CCFLAGS=' -DNULL=0')
-+
- ################################################################################
+@@ -6,7 +6,7 @@
+ # application, then calls the sconscripts for libfluxus and
+ # the fluxus Racket modules
+ 
+-import os, os.path, sys, commands, subprocess
++import os, os.path, sys, subprocess
+ 
+ MajorVersion = "0"
+ MinorVersion = "19"
+@@ -100,6 +100,7 @@ IncludePaths = [
+ paranoid = ' -W -Wcast-qual -Wwrite-strings -Wcast-align -Wpointer-arith -Wconversion -Wredundant-decls -Wunreachable-code -Winline -Wlarger-than-256'
+ 
+ env = Environment(CCFLAGS = '-ggdb -pipe -Wall -O3 -ffast-math -Wno-unused -fPIC -pthread',
++                  ENV = os.environ,
+                   VERSION_NUM = FluxusVersion)
+ env.MergeFlags(ARGUMENTS.get('CCFLAGS', '').split())
+ env.MergeFlags(ARGUMENTS.get('LDFLAGS', '').split())
+@@ -229,9 +230,9 @@ if env['PLATFORM'] == 'posix':
  # Make sure we have these libraries availible
-
+ 
+ if not GetOption('clean'):
+-        print '--------------------------------------------------------'
+-        print 'Fluxus: Configuring Build Environment'
+-        print '--------------------------------------------------------'
++        print('--------------------------------------------------------')
++        print('Fluxus: Configuring Build Environment')
++        print('--------------------------------------------------------')
+         # detect ode precision
+         if not GetOption('clean'):
+           try:
+@@ -240,27 +241,27 @@ if not GetOption('clean'):
+             if isinstance(ode_str[0], str):
+               env.MergeFlags(ode_str[0])
+           except:
+-            print 'WARNING: unable to run ode-config, cannot detect ODE precision'
++            print('WARNING: unable to run ode-config, cannot detect ODE precision')
+ 
+         conf = Configure(env)
+ 
+         # check Racket and OpenAL frameworks on osx
+         if env['PLATFORM'] == 'darwin':
+                 if not conf.CheckHeader('scheme.h'):
+-                        print "ERROR: 'racket3m' must be installed!"
++                        print("ERROR: 'racket3m' must be installed!")
+                         Exit(1)
+                 if racket_framework:
+                   LibList = filter(lambda x: x[0] != 'racket3m', LibList)
+                 # OpenAL should be installed everywhere
+                 if not conf.CheckHeader('OpenAL/al.h'):
+-                        print "ERROR: 'OpenAL' must be installed!"
++                        print("ERROR: 'OpenAL' must be installed!")
+                         Exit(1)
+ 
+         # all libraries are required, and some of them require each other,
+         # hence the order is important, and autoadd=1
+         for (lib,headers) in LibList:
+                 if not conf.CheckLibWithHeader(lib, headers, 'C', autoadd = 1):
+-                        print "ERROR: '%s' must be installed!" % (lib)
++                        print("ERROR: '%s' must be installed!" % (lib))
+                         Exit(1)
+ 
+         if not conf.CheckFunc("dInitODE2"):
+@@ -334,7 +335,7 @@ if not GetOption('clean'):
+ 			])
+ 
+ 	if raco_status != 0:
+-		print "ERROR: Failed to run command 'raco'"
++		print("ERROR: Failed to run command 'raco'")
+ 		Exit(1)
+ 
+ 
+@@ -377,8 +378,8 @@ if not GetOption('clean') and static_modules:
+ 
+ 		app_env['LIBS'].remove("pthread")
+ 		app_env['LIBS'].remove("dl")
+-                app_env['LIBS'].remove("ode")
+-                app_env['LIBS'].remove("sndfile")
++		app_env['LIBS'].remove("ode")
++		app_env['LIBS'].remove("sndfile")
+ 
+ 		# now go through the rest of the libs, removing them from
+ 		# the environment at the same time
+@@ -425,7 +426,7 @@ SConscript(dirs = build_dirs,
+ if not GetOption('clean'):
+     helpmap_status = subprocess.call(["racket", "makehelpmap.scm"], cwd="docs/helpmap")
+     if helpmap_status != 0:
+-        print "ERROR: Failed to build 'docs/helpmap'"
++        print("ERROR: Failed to build 'docs/helpmap'")
+         Exit(1)
+ 
+ ################################################################################

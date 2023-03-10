@@ -20,6 +20,7 @@ with lib;
     ];
 
   config = {
+    system.nixos.variant_id = lib.mkDefault "installer";
 
     # Enable in installer, even if the minimal profile disables it.
     documentation.enable = mkImageMediaOverride true;
@@ -71,7 +72,7 @@ with lib;
     # mounting the storage in a different system.
     services.openssh = {
       enable = true;
-      permitRootLogin = "yes";
+      settings.PermitRootLogin = "yes";
     };
 
     # Enable wpa_supplicant, but don't start it by default.

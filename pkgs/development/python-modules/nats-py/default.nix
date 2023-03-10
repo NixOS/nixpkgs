@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ed25519
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nats-server
     pytestCheckHook
     uvloop

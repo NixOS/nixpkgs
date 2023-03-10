@@ -45,6 +45,11 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+  preConfigure = ''
+    # app bundle for macos
+    substituteInPlace src/diffuse/meson.build data/icons/meson.build --replace "/Applications" "$out/Applications";
+  '';
+
   mesonFlags = [
     "-Db_ndebug=true"
   ];
@@ -63,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Graphical tool for merging and comparing text files";
     license = licenses.gpl2;
     maintainers = with maintainers; [ k3a ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

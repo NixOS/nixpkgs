@@ -48,7 +48,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     requests-mock

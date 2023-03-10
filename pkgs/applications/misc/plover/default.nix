@@ -25,7 +25,7 @@
     # sed on many of the platforms Plover builds for
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
-    checkInputs           = [ pytest mock ];
+    nativeCheckInputs           = [ pytest mock ];
     propagatedBuildInputs = [ babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;

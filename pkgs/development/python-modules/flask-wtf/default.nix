@@ -43,7 +43,7 @@ buildPythonPackage rec {
     email = [ email-validator ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

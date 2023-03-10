@@ -10,9 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-qE5i4dGugm7tR5tgDCpbla/R7hYR/PI8BzrZQ4y6Yz8=";
   };
+
   sourceRoot = "source/octomap";
 
   nativeBuildInputs = [ cmake ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
+  ];
 
   meta = with lib; {
     description = "A probabilistic, flexible, and compact 3D mapping library for robotic systems";

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.14.1";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xS6cyramlcItjRBSSunzm39zcGXdX9s/pvi0tsaTkW8=";
+    hash = "sha256-BKDN2DtLoG+E+R+yBSBpF4PWv+pRLNYZvX/3BqEIxVQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config zip ];
@@ -50,9 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = finalAttrs.pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

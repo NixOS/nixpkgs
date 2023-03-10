@@ -15,8 +15,8 @@ let
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;
       version = "1.8.1";
-      useDune2 = true;
-      minimumOcamlVersion = "4.08.1";
+      duneVersion = "3";
+      minimalOcamlVersion = "4.08.1";
       doCheck = true;
 
       src = fetchFromGitHub {
@@ -28,12 +28,7 @@ let
 
       patches = [ ./comby.patch ];
 
-      nativeBuildInputs = [
-        ocamlPackages.ppx_deriving
-        ocamlPackages.ppx_deriving_yojson
-        ocamlPackages.ppx_sexp_conv
-        ocamlPackages.ppx_sexp_message
-      ] ++ extraNativeInputs;
+      nativeBuildInputs = extraNativeInputs;
 
       buildInputs = [
         ocamlPackages.core
@@ -42,9 +37,13 @@ let
         ocamlPackages.mparser
         ocamlPackages.mparser-pcre
         ocamlPackages.angstrom
+        ocamlPackages.ppx_deriving
+        ocamlPackages.ppx_deriving_yojson
+        ocamlPackages.ppx_sexp_conv
+        ocamlPackages.ppx_sexp_message
       ] ++ extraBuildInputs;
 
-      checkInputs = [ cacert ];
+      nativeCheckInputs = [ cacert ];
 
       meta = {
         description = "Tool for searching and changing code structure";
@@ -87,6 +86,9 @@ mkCombyPackage {
     ocamlPackages.lwt_react
     ocamlPackages.tar-unix
     ocamlPackages.tls
+    ocamlPackages.ppx_jane
+    ocamlPackages.ppx_expect
+    ocamlPackages.dune-configurator
     combyKernel
     combySemantic
   ] ++ (if !stdenv.isAarch32 && !stdenv.isAarch64 then
@@ -97,9 +99,6 @@ mkCombyPackage {
   extraNativeInputs = [
     autoconf
     pkg-config
-    ocamlPackages.ppx_jane
-    ocamlPackages.ppx_expect
-    ocamlPackages.dune-configurator
   ];
 
 }

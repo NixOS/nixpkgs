@@ -26,6 +26,6 @@ buildGoPackage rec {
     description = "docopt CLI tool for shell scripting";
     license = licenses.mit;
     maintainers = [ maintainers.confus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

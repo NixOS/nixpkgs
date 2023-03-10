@@ -18,6 +18,7 @@ args @ {
   lzo,
   xz,
   zlib,
+  zstd,
   CoreFoundation,
 }:
 
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     lzo
     xz
     zlib
+    zstd
   ] ++ lib.optionals stdenv.isLinux [
     attr
     e2fsprogs

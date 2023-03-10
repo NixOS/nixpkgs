@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.4.3";
+  version = "6.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     rev = "refs/tags/${version}";
-    hash = "sha256-EHttGeQUI8SWo8R9zRchguvDA6U8EKhDbBf5jdwl4dI=";
+    hash = "sha256-ZsoWz+35hQS15dbpe1IOzft6JwZygKjv5AQWjVe+8kQ=";
   };
 
   propagatedBuildInputs = [
     ply
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
   ];

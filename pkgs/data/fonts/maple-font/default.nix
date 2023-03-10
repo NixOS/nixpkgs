@@ -5,10 +5,11 @@
 }:
 
 let
-  maple-font = { pname, version, sha256, desc }: stdenv.mkDerivation
+  maple-font = { pname, sha256, desc }: stdenv.mkDerivation
     rec{
 
-      inherit pname version desc;
+      inherit pname desc;
+      version = "6.2";
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
         inherit sha256;
@@ -31,21 +32,26 @@ let
         platforms = platforms.all;
         maintainers = with maintainers; [ oluceps ];
       };
-
     };
+
 in
 {
-  Mono-v5 = maple-font {
+  Mono = maple-font {
     pname = "MapleMono";
-    version = "5.5";
-    sha256 = "sha256-xkZ9NefjWHPjWNW8LGM8CgT2Zrg4j1evvx1K56sUzR8=";
+    sha256 = "sha256-KhG0gQRnHFvpoxdcySSEYWDtOgG4xIm8X0Ua9o1aGTw=";
     desc = "monospace";
   };
-  Mono-NF-v5 = maple-font {
+
+  NF = maple-font {
     pname = "MapleMono-NF";
-    version = "5.5";
-    sha256 = "sha256-cPVGuH1CSfnRvQ4ehBvOVno7CT6Popc1Nnpcn5uJoQY=";
+    sha256 = "sha256-Ov6AEaLy80cwrFtmKWUceI809SwBlHsQf2F86/sc/6A=";
     desc = "Nerd Font";
+  };
+
+  SC-NF = maple-font {
+    pname = "MapleMono-SC-NF";
+    sha256 = "sha256-bb62YGzdE9qvlyuZG7YI16gOxWC+AijlRLY8ET+q5Rg=";
+    desc = "Nerd Font SC";
   };
 
 }

@@ -1,14 +1,14 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3 }:
+{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, nix-update-script }:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-6tRd8boVwWc8qGlklYqA/Kp76VOMvtUJlu/G/InvHkA=";
+    hash = "sha256-tfWimJ9eEFBUxPRVNjgbu8tQNokPbXOxOXO64mFuMfM=";
   };
 
   # Remove some Electron stuff from package.json
@@ -33,16 +33,13 @@ buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 
-  # Override installPhase so we can copy the only folders that matter (app and node_modules)
+  # Override installPhase so we can copy the only directory that matters (app)
   installPhase = ''
     runHook preInstall
 
-    # prune unused deps
-    npm prune --omit dev --no-save $npmFlags
-
     # copy built app and node_modules directories
     mkdir -p $out/lib/node_modules/open-stage-control
-    cp -r app node_modules $out/lib/node_modules/open-stage-control/
+    cp -r app $out/lib/node_modules/open-stage-control/
 
     # copy icon
     install -Dm644 resources/images/logo.png $out/share/icons/hicolor/256x256/apps/open-stage-control.png
@@ -74,7 +71,7 @@ buildNpmPackage rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Libre and modular OSC / MIDI controller";

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # Explicitly specify targets so they don't get stripped.
   makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
     mkdir -p $out/bin

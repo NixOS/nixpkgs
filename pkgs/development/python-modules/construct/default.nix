@@ -22,7 +22,7 @@ buildPythonPackage rec {
     lz4
   ];
 
-  checkInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
+  nativeCheckInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
   disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 

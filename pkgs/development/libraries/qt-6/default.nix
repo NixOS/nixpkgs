@@ -56,6 +56,7 @@ let
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
         inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
         patches = [
+          ./patches/qtbase-qmake-mkspecs-mac.patch
           ./patches/qtbase-qmake-pkg-config.patch
           ./patches/qtbase-tzdir.patch
           # Remove symlink check causing build to bail out and fail.
@@ -139,11 +140,13 @@ let
       };
 
       wrapQtAppsHook = makeSetupHook {
-          deps = [ buildPackages.makeWrapper ];
+        name = "wrap-qt6-apps-hook";
+        propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
       qmake = makeSetupHook {
-        deps = [ self.qtbase.dev ];
+        name = "qmake6-hook";
+        propagatedBuildInputs = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sdlpop";
-  version = "1.22";
+  version = "1.23";
 
   src = fetchFromGitHub {
     owner = "NagyD";
     repo = "SDLPoP";
     rev = "v${version}";
-    sha256 = "1yy5r1r0hv0xggk8qd8bwk2zy7abpv89nikq4flqgi53fc5q9xl7";
+    sha256 = "sha256-UI7NfOC/+druRYL5g2AhIjTPEq4ta1qEThcxgyrFjHY=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper copyDesktopItems ];
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open-source port of Prince of Persia";
     homepage = "https://github.com/NagyD/SDLPoP";
+    changelog = "https://github.com/NagyD/SDLPoP/blob/v${version}/doc/ChangeLog.txt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ iblech ];
     platforms = platforms.unix;

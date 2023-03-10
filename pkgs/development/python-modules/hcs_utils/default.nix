@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ six glibcLocales ];
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   disabled = pythonOlder "3.4";
 

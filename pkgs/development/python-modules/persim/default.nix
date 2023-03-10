@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7w8KJHrc9hBOysFBF9sLJFgXEOqKjZZIFoBTlXALSXU=";
+    hash = "sha256-7w8KJHrc9hBOysFBF9sLJFgXEOqKjZZIFoBTlXALSXU=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -61,13 +61,15 @@ buildPythonPackage rec {
     "test_mixed_pairs"
     "test_multiple_diagrams"
     "test_n_pixels"
+    # https://github.com/scikit-tda/persim/issues/67
+    "test_persistenceimager"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
+    broken = stdenv.isDarwin;
   };
 }

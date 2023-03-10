@@ -20,7 +20,7 @@ buildDunePackage rec {
   pname = "bistro";
   version = "unstable-2022-05-07";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "pveber";
