@@ -4841,7 +4841,8 @@ with pkgs;
 
   geekbench4 = callPackage ../tools/misc/geekbench/4.nix { };
   geekbench5 = callPackage ../tools/misc/geekbench/5.nix { };
-  geekbench = geekbench5;
+  geekbench_6 = callPackage ../tools/misc/geekbench/6.nix { };
+  geekbench = geekbench_6;
 
   gencfsm = callPackage ../tools/security/gencfsm { };
 
