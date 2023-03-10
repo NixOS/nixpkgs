@@ -33,11 +33,12 @@ in stdenv.mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
+  nativeBuildInputs = [ pkg-config perl ];
 
   buildInputs = [ udev ]
     ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
-    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
+    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ]
+    ++ lib.optional withQt wrapQtAppsHook;
 
   propagatedBuildInputs = [ libjpeg ];
 
