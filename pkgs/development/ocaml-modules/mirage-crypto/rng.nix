@@ -5,6 +5,7 @@ buildDunePackage rec {
   pname = "mirage-crypto-rng";
 
   inherit (mirage-crypto) version src;
+  duneVersion = "3";
 
   doCheck = true;
   checkInputs = [ ounit2 randomconv ];
