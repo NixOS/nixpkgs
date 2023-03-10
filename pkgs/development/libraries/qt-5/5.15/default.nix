@@ -11,6 +11,7 @@ Check for any minor version changes.
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
+, buildPackages
 , darwin
 
   # options
@@ -320,11 +321,13 @@ let
         };
       } ../hooks/qmake-hook.sh) { };
 
-      wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
+      wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook ({
         name = "wrap-qt5-apps-hook";
-        propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
+        propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+        depsTargetTargetPropagated = [ qtbase.dev ]
           ++ lib.optional stdenv.isLinux qtwayland.dev;
-      } ../hooks/wrap-qt-apps-hook.sh) { };
+      })
+      ../hooks/wrap-qt-apps-hook.sh) { };
     };
 
   baseScope = makeScopeWithSplicing' {
