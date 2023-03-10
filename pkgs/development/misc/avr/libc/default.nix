@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     incdir = "/avr/include";
+    libdir = "/avr/lib";
   };
 
   meta = with lib; {
