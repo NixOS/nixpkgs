@@ -47,7 +47,7 @@ in
       };
       locations."/".extraConfig = ''
         auth_request /oauth2/auth;
-        error_page 401 = /oauth2/sign_in;
+        error_page 401 = /oauth2/sign_in?rd=$scheme://$host$request_uri;
 
         # pass information via X-User and X-Email headers to backend,
         # requires running with --set-xauthrequest flag
