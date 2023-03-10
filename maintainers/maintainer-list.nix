@@ -13631,6 +13631,12 @@
     githubId = 46294732;
     name = "Sharzy";
   };
+  shassard = {
+    email = "steve@hassard.net";
+    github = "shassard";
+    githubId = 2355041;
+    name = "Stephen Hassard";
+  };
   shawndellysse = {
     email = "sdellysse@gmail.com";
     github = "sdellysse";
