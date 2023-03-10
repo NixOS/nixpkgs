@@ -22,11 +22,6 @@ buildDotnetModule rec {
     sha256 = "sha256-SRWqe8KTjFdgVW7/EYRVUONtDWwxpcZ1GXWFPjKZzpI=";
   };
 
-  patches = [
-    # otherwise installPhase fails with NETSDK1129
-    ./fix-framework.diff
-  ];
-
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
 
@@ -37,6 +32,9 @@ buildDotnetModule rec {
   dotnetFlags = [
     "-p:PublishSingleFile=true"
     "-p:PublishTrimmed=true"
+  ];
+  dotnetInstallFlags = [
+    "--framework=net7.0"
   ];
   selfContainedBuild = true;
 
@@ -58,9 +56,11 @@ buildDotnetModule rec {
 
   postInstall = ''
     buildPlugin() {
+      echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/${pname}/plugins/$1 --configuration Release \
-        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
+        --framework=net7.0
      }
 
      buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
