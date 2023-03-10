@@ -85,5 +85,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://openmoji.org/";
     downloadPage = "https://github.com/hfg-gmuend/openmoji/releases";
     description = "Open-source emojis for designers, developers and everyone else";
+    # TypeError: glob is not a function
+    broken = true; # At 2023-03-10
   };
 }
