@@ -5095,8 +5095,13 @@ self: super: with self; {
 
   jupyter-server = callPackage ../development/python-modules/jupyter-server { };
 
+  jupyter-server-fileid = callPackage ../development/python-modules/jupyter-server-fileid { };
+
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
 
+  jupyter-server-ydoc = callPackage ../development/python-modules/jupyter-server-ydoc { };
+
+  jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
 
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
@@ -12677,6 +12682,8 @@ self: super: with self; {
 
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
+  y-py = callPackage ../development/python-modules/y-py { };
+
   yabadaba = callPackage ../development/python-modules/yabadaba { };
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
@@ -12760,6 +12767,8 @@ self: super: with self; {
   youtube-transcript-api = callPackage ../development/python-modules/youtube-transcript-api { };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
+
+  ypy-websocket = callPackage ../development/python-modules/ypy-websocket { };
 
   yq = callPackage ../development/python-modules/yq {
     inherit (pkgs) jq;
