@@ -5468,6 +5468,8 @@ with pkgs;
     electron = electron_22;
   };
 
+  portal = callPackage ../tools/misc/portal { };
+
   pouf = callPackage ../tools/misc/pouf { };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };

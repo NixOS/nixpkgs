@@ -14711,6 +14711,12 @@
     githubId = 1755789;
     name = "Robert Irelan";
   };
+  tennox = {
+    email = "tennox+nix@txlab.io";
+    github = "tennox";
+    githubId = 2084639;
+    name = "Manu";
+  };
   teozkr = {
     email = "teo@nullable.se";
     github = "nightkr";
