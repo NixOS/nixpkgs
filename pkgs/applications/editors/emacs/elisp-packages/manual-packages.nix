@@ -7,6 +7,8 @@ in
 {
   acm = callPackage ./manual-packages/acm { };
 
+  acm-terminal = callPackage ./manual-packages/acm-terminal { };
+
   agda-input = callPackage ./manual-packages/agda-input { };
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
