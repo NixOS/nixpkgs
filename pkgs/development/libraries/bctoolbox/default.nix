@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
-  version = "5.2.16";
+  version = "5.2.30";
 
   nativeBuildInputs = [
     cmake
