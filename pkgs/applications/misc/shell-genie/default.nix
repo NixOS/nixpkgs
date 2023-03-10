@@ -40,8 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Describe your shell commands in natural language";
     homepage = "https://github.com/dylanjcastillo/shell-genie";
-    # https://github.com/dylanjcastillo/shell-genie/issues/3
-    license = licenses.unfree;
+    license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };
 }

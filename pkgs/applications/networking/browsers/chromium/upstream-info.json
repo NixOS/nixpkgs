@@ -19,22 +19,9 @@
     }
   },
   "beta": {
-    "version": "111.0.5563.64",
-    "sha256": "0x20zqwq051a5j76q1c3m0ddf1hhcm6fgz3b7rqrfamjppia0p3x",
-    "sha256bin64": "1cl7zbsl0ndp5x1g0p1q511mn72iy72sqxycmlrccs9j8jmaiqgw",
-    "deps": {
-      "gn": {
-        "version": "2022-12-12",
-        "url": "https://gn.googlesource.com/gn",
-        "rev": "5e19d2fb166fbd4f6f32147fbb2f497091a54ad8",
-        "sha256": "1b5fwldfmkkbpp5x63n1dxv0nc965hphc8rm8ah7zg44zscm9z30"
-      }
-    }
-  },
-  "dev": {
-    "version": "112.0.5615.12",
-    "sha256": "1kkpfaqr3rzxlj7kn2l8gchvq17w03mcf3aajqv193jazcb083ci",
-    "sha256bin64": "1ci3vmr6q665rp8h7b1y7gmkv4zczjw5ryf0yycwfcll087ym6g6",
+    "version": "112.0.5615.20",
+    "sha256": "0qxifnc2xk2zkmpzc1pzd95ym3i829qzgzd83qh7ah9p64c76f9y",
+    "sha256bin64": "11c7k87fnfhaynhpp2rjzpzydrl096fjx3gw589nvq1lckbg9nsd",
     "deps": {
       "gn": {
         "version": "2023-02-17",
@@ -44,10 +31,23 @@
       }
     }
   },
+  "dev": {
+    "version": "113.0.5638.0",
+    "sha256": "0v4hminx765swv0iakg5qw7rk6zc67cn5p9x625jaizz50ahpfib",
+    "sha256bin64": "07snjlizj30mzcm5fbsg6ibd4jqmcwiykdwrpqmdqq902c3gwc3r",
+    "deps": {
+      "gn": {
+        "version": "2023-02-24",
+        "url": "https://gn.googlesource.com/gn",
+        "rev": "fe330c0ae1ec29db30b6f830e50771a335e071fb",
+        "sha256": "0fj8kfck53hbfz30m8p0mfcqbjs9cjrlfzi03l3h7n7yd88js8i4"
+      }
+    }
+  },
   "ungoogled-chromium": {
-    "version": "110.0.5481.177",
-    "sha256": "1dy9l61r3fpl40ff790dbqqvw9l1svcgd7saz4whl9wm256labvv",
-    "sha256bin64": "0sylaf8b0rzr82dg7safvs5dxqqib26k4j6vlm75vs99dpnlznj2",
+    "version": "111.0.5563.65",
+    "sha256": "1wg84pd50zi5268snkiahnp5191c66bqkbvdz2z8azivm95lwqwp",
+    "sha256bin64": null,
     "deps": {
       "gn": {
         "version": "2022-12-12",
@@ -56,8 +56,8 @@
         "sha256": "1b5fwldfmkkbpp5x63n1dxv0nc965hphc8rm8ah7zg44zscm9z30"
       },
       "ungoogled-patches": {
-        "rev": "110.0.5481.177-1",
-        "sha256": "0rsvkbsrnfkdp3iw4s54kddw8r771h14hf1ivgahmn42yjafkk3n"
+        "rev": "111.0.5563.65-1",
+        "sha256": "06mfm2gaz1nbwqhn2jp34pm52rw1q99i9fq7wh19m0qasdpidis9"
       }
     }
   }

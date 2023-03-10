@@ -7644,6 +7644,18 @@ final: prev:
     meta.homepage = "https://github.com/gorkunov/smartpairs.vim/";
   };
 
+  smartyank-nvim = buildVimPluginFrom2Nix {
+    pname = "smartyank.nvim";
+    version = "2023-02-25";
+    src = fetchFromGitHub {
+      owner = "ibhagwan";
+      repo = "smartyank.nvim";
+      rev = "7e3905578f646503525b2f7018b8afd17861018c";
+      sha256 = "19lp8cpnp3ynr6vc5si3gsfpdw78xs8krmaqlbjsx478ig316y7z";
+    };
+    meta.homepage = "https://github.com/ibhagwan/smartyank.nvim/";
+  };
+
   snap = buildVimPluginFrom2Nix {
     pname = "snap";
     version = "2022-08-03";
