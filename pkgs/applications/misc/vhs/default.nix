@@ -1,8 +1,16 @@
-{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, chromium, makeWrapper }:
+{ stdenvNoCC, callPackage, lib, fetchFromGitHub }:
 
-buildGoModule rec {
+let
   pname = "vhs";
   version = "0.3.0";
+
+  meta = with lib; {
+    description = "A tool for generating terminal GIFs with code";
+    homepage = "https://github.com/charmbracelet/vhs";
+    changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maaslalani penguwin ];
+  };
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
@@ -13,25 +21,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-+BLZ+Ni2dqboqlOEjFNF6oB/vNDlNRCb6AiDH1uSsLw";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+in
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath [ chromium ffmpeg ttyd ]}
-    $out/bin/vhs man > vhs.1
-    installManPage vhs.1
-    installShellCompletion --cmd vhs \
-      --bash <($out/bin/vhs completion bash) \
-      --fish <($out/bin/vhs completion fish) \
-      --zsh <($out/bin/vhs completion zsh)
-  '';
-
-  meta = with lib; {
-    description = "A tool for generating terminal GIFs with code";
-    homepage = "https://github.com/charmbracelet/vhs";
-    changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani penguwin ];
-  };
-}
+if stdenvNoCC.isDarwin
+then callPackage ./darwin.nix { inherit pname version meta src vendorHash; }
+else callPackage ./linux.nix { inherit pname version meta src vendorHash; }
