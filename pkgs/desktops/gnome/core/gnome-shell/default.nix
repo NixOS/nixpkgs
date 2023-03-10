@@ -36,7 +36,7 @@
 , gdm
 , upower
 , ibus
-, libnma
+, libnma-gtk4
 , libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "44.beta";
+  version = "44.rc";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JACs9fFjtpoHtWB7VieWYHWHOx9ITVVLpugBa9VfCEY=";
+    sha256 = "Gy+x3fS7hWj/Du3Wqz19V7ider7iICt7hTmtu6gV55g=";
   };
 
   patches = [
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather
-    libnma
+    libnma-gtk4
 
     # for gnome-extension tool
     bash-completion
@@ -177,6 +177,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dtests=false"
   ];
 
   postPatch = ''
@@ -185,6 +186,12 @@ stdenv.mkDerivation rec {
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell.css
+
+    # FIXME: Probably an upstream issue, report this to upstream.
+    # element include: XInclude error : could not load xxx, and no fallback was found
+    substituteInPlace docs/reference/shell/shell-docs.sgml \
+      --replace '<xi:include href="xml/shell-embedded-window.xml"/>' ' ' \
+      --replace '<xi:include href="xml/shell-gtk-embed.xml"/>' ' '
   '';
 
   postInstall = ''
