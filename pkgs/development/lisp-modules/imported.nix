@@ -39439,9 +39439,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "math" ];
     lispLibs = [ (getAttr "cl-utilities" self) (getAttr "font-discovery" self) (getAttr "gsll" self) (getAttr "vgplot" self) ];
-    meta = {
-      broken = true;
-    };
   });
   mathkit = (build-asdf-system {
     pname = "mathkit";

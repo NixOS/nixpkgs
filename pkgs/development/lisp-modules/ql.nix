@@ -199,6 +199,10 @@ let
     hu_dot_dwim_dot_graphviz = super.hu_dot_dwim_dot_graphviz.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.graphviz ];
     });
+    math = super.math.overrideLispAttrs (o: {
+      patches = [ ./patches/math-no-compile-time-directory.patch ];
+      nativeLibs = [ pkgs.fontconfig ];
+    });
   });
 
   qlpkgs =
