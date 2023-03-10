@@ -20,7 +20,8 @@
 , python3Packages
 , gnome
 , vala
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 , _experimental-update-script-combinators
 , common-updater-scripts
