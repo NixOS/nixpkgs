@@ -15,6 +15,6 @@ buildFishPlugin rec {
     description = "Auto-complete matching pairs in the Fish command line";
     homepage = "https://github.com/jorgebucaran/autopair.fish";
     license = licenses.mit;
-    maintainers = with maintainers; [ kidonng ];
+    maintainers = with maintainers; [ kidonng thehedgeh0g ];
   };
 }
