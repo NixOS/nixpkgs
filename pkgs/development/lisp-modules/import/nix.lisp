@@ -41,8 +41,8 @@
 
 (defun nixify-symbol (string)
   (flet ((fix-special-chars (str)
-           (replace-regexes '("[+]$" "[+][/]" "[+]" "[.]" "[/]")
-                            '("_plus" "_plus/" "_plus_" "_dot_" "_slash_")
+           (replace-regexes '("[_]" "[+]$" "[+][/]" "[+]" "[.]" "[/]")
+                            '("__" "_plus" "_plus/" "_plus_" "_dot_" "_slash_")
                             str)))
     (if (ppcre:scan "^[0-9]" string)
         (str:concat "_" (fix-special-chars string))

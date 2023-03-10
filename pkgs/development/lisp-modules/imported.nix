@@ -3757,7 +3757,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "canonicalized-initargs" ];
     lispLibs = [ (getAttr "cesdi" self) (getAttr "closer-mop" self) (getAttr "compatible-metaclasses" self) (getAttr "enhanced-defclass" self) (getAttr "enhanced-typep" self) (getAttr "object-class" self) ];
   });
-  canonicalized-initargs_tests = (build-asdf-system {
+  canonicalized-initargs__tests = (build-asdf-system {
     pname = "canonicalized-initargs_tests";
     version = "2.0";
     asds = [ "canonicalized-initargs_tests" ];
@@ -4264,7 +4264,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cesdi" ];
     lispLibs = [ (getAttr "closer-mop" self) ];
   });
-  cesdi_tests = (build-asdf-system {
+  cesdi__tests = (build-asdf-system {
     pname = "cesdi_tests";
     version = "1.0.1";
     asds = [ "cesdi_tests" ];
@@ -9009,7 +9009,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-glu" ];
     lispLibs = [ (getAttr "cffi" self) (getAttr "cl-glfw-types" self) ];
   });
-  cl-glfw-opengl-3dfx_multisample = (build-asdf-system {
+  cl-glfw-opengl-3dfx__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-3dfx_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-3dfx_multisample" ];
@@ -9022,7 +9022,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-3dfx_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-3dfx_tbuffer = (build-asdf-system {
+  cl-glfw-opengl-3dfx__tbuffer = (build-asdf-system {
     pname = "cl-glfw-opengl-3dfx_tbuffer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-3dfx_tbuffer" ];
@@ -9035,7 +9035,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-3dfx_tbuffer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-3dfx_texture_compression_fxt1 = (build-asdf-system {
+  cl-glfw-opengl-3dfx__texture__compression__fxt1 = (build-asdf-system {
     pname = "cl-glfw-opengl-3dfx_texture_compression_fxt1";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-3dfx_texture_compression_fxt1" ];
@@ -9048,7 +9048,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-3dfx_texture_compression_fxt1" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_blend_minmax_factor = (build-asdf-system {
+  cl-glfw-opengl-amd__blend__minmax__factor = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_blend_minmax_factor";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_blend_minmax_factor" ];
@@ -9061,7 +9061,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_blend_minmax_factor" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_depth_clamp_separate = (build-asdf-system {
+  cl-glfw-opengl-amd__depth__clamp__separate = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_depth_clamp_separate";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_depth_clamp_separate" ];
@@ -9074,7 +9074,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_depth_clamp_separate" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_draw_buffers_blend = (build-asdf-system {
+  cl-glfw-opengl-amd__draw__buffers__blend = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_draw_buffers_blend";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_draw_buffers_blend" ];
@@ -9087,7 +9087,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_draw_buffers_blend" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_multi_draw_indirect = (build-asdf-system {
+  cl-glfw-opengl-amd__multi__draw__indirect = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_multi_draw_indirect";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_multi_draw_indirect" ];
@@ -9100,7 +9100,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_multi_draw_indirect" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_name_gen_delete = (build-asdf-system {
+  cl-glfw-opengl-amd__name__gen__delete = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_name_gen_delete";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_name_gen_delete" ];
@@ -9113,7 +9113,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_name_gen_delete" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_performance_monitor = (build-asdf-system {
+  cl-glfw-opengl-amd__performance__monitor = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_performance_monitor";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_performance_monitor" ];
@@ -9126,7 +9126,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_performance_monitor" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_sample_positions = (build-asdf-system {
+  cl-glfw-opengl-amd__sample__positions = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_sample_positions";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_sample_positions" ];
@@ -9139,7 +9139,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_sample_positions" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_seamless_cubemap_per_texture = (build-asdf-system {
+  cl-glfw-opengl-amd__seamless__cubemap__per__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_seamless_cubemap_per_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_seamless_cubemap_per_texture" ];
@@ -9152,7 +9152,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_seamless_cubemap_per_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-amd_vertex_shader_tesselator = (build-asdf-system {
+  cl-glfw-opengl-amd__vertex__shader__tesselator = (build-asdf-system {
     pname = "cl-glfw-opengl-amd_vertex_shader_tesselator";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-amd_vertex_shader_tesselator" ];
@@ -9165,7 +9165,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-amd_vertex_shader_tesselator" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_aux_depth_stencil = (build-asdf-system {
+  cl-glfw-opengl-apple__aux__depth__stencil = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_aux_depth_stencil";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_aux_depth_stencil" ];
@@ -9178,7 +9178,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_aux_depth_stencil" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_client_storage = (build-asdf-system {
+  cl-glfw-opengl-apple__client__storage = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_client_storage";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_client_storage" ];
@@ -9191,7 +9191,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_client_storage" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_element_array = (build-asdf-system {
+  cl-glfw-opengl-apple__element__array = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_element_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_element_array" ];
@@ -9204,7 +9204,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_element_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_fence = (build-asdf-system {
+  cl-glfw-opengl-apple__fence = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_fence";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_fence" ];
@@ -9217,7 +9217,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_fence" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_float_pixels = (build-asdf-system {
+  cl-glfw-opengl-apple__float__pixels = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_float_pixels";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_float_pixels" ];
@@ -9230,7 +9230,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_float_pixels" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_flush_buffer_range = (build-asdf-system {
+  cl-glfw-opengl-apple__flush__buffer__range = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_flush_buffer_range";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_flush_buffer_range" ];
@@ -9243,7 +9243,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_flush_buffer_range" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_object_purgeable = (build-asdf-system {
+  cl-glfw-opengl-apple__object__purgeable = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_object_purgeable";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_object_purgeable" ];
@@ -9256,7 +9256,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_object_purgeable" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_rgb_422 = (build-asdf-system {
+  cl-glfw-opengl-apple__rgb__422 = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_rgb_422";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_rgb_422" ];
@@ -9269,7 +9269,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_rgb_422" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_row_bytes = (build-asdf-system {
+  cl-glfw-opengl-apple__row__bytes = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_row_bytes";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_row_bytes" ];
@@ -9282,7 +9282,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_row_bytes" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_specular_vector = (build-asdf-system {
+  cl-glfw-opengl-apple__specular__vector = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_specular_vector";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_specular_vector" ];
@@ -9295,7 +9295,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_specular_vector" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_texture_range = (build-asdf-system {
+  cl-glfw-opengl-apple__texture__range = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_texture_range";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_texture_range" ];
@@ -9308,7 +9308,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_texture_range" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_transform_hint = (build-asdf-system {
+  cl-glfw-opengl-apple__transform__hint = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_transform_hint";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_transform_hint" ];
@@ -9321,7 +9321,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_transform_hint" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_vertex_array_object = (build-asdf-system {
+  cl-glfw-opengl-apple__vertex__array__object = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_vertex_array_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_vertex_array_object" ];
@@ -9334,7 +9334,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_vertex_array_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_vertex_array_range = (build-asdf-system {
+  cl-glfw-opengl-apple__vertex__array__range = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_vertex_array_range";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_vertex_array_range" ];
@@ -9347,7 +9347,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_vertex_array_range" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_vertex_program_evaluators = (build-asdf-system {
+  cl-glfw-opengl-apple__vertex__program__evaluators = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_vertex_program_evaluators";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_vertex_program_evaluators" ];
@@ -9360,7 +9360,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_vertex_program_evaluators" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-apple_ycbcr_422 = (build-asdf-system {
+  cl-glfw-opengl-apple__ycbcr__422 = (build-asdf-system {
     pname = "cl-glfw-opengl-apple_ycbcr_422";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-apple_ycbcr_422" ];
@@ -9373,7 +9373,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-apple_ycbcr_422" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_blend_func_extended = (build-asdf-system {
+  cl-glfw-opengl-arb__blend__func__extended = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_blend_func_extended";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_blend_func_extended" ];
@@ -9386,7 +9386,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_blend_func_extended" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_color_buffer_float = (build-asdf-system {
+  cl-glfw-opengl-arb__color__buffer__float = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_color_buffer_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_color_buffer_float" ];
@@ -9399,7 +9399,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_color_buffer_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_copy_buffer = (build-asdf-system {
+  cl-glfw-opengl-arb__copy__buffer = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_copy_buffer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_copy_buffer" ];
@@ -9412,7 +9412,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_copy_buffer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_depth_buffer_float = (build-asdf-system {
+  cl-glfw-opengl-arb__depth__buffer__float = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_depth_buffer_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_depth_buffer_float" ];
@@ -9425,7 +9425,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_depth_buffer_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_depth_clamp = (build-asdf-system {
+  cl-glfw-opengl-arb__depth__clamp = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_depth_clamp";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_depth_clamp" ];
@@ -9438,7 +9438,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_depth_clamp" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_depth_texture = (build-asdf-system {
+  cl-glfw-opengl-arb__depth__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_depth_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_depth_texture" ];
@@ -9451,7 +9451,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_depth_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_draw_buffers = (build-asdf-system {
+  cl-glfw-opengl-arb__draw__buffers = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_draw_buffers";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_draw_buffers" ];
@@ -9464,7 +9464,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_draw_buffers" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_draw_buffers_blend = (build-asdf-system {
+  cl-glfw-opengl-arb__draw__buffers__blend = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_draw_buffers_blend";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_draw_buffers_blend" ];
@@ -9477,7 +9477,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_draw_buffers_blend" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_draw_elements_base_vertex = (build-asdf-system {
+  cl-glfw-opengl-arb__draw__elements__base__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_draw_elements_base_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_draw_elements_base_vertex" ];
@@ -9490,7 +9490,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_draw_elements_base_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_draw_indirect = (build-asdf-system {
+  cl-glfw-opengl-arb__draw__indirect = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_draw_indirect";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_draw_indirect" ];
@@ -9503,7 +9503,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_draw_indirect" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_draw_instanced = (build-asdf-system {
+  cl-glfw-opengl-arb__draw__instanced = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_draw_instanced";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_draw_instanced" ];
@@ -9516,7 +9516,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_draw_instanced" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_es2_compatibility = (build-asdf-system {
+  cl-glfw-opengl-arb__es2__compatibility = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_es2_compatibility";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_es2_compatibility" ];
@@ -9529,7 +9529,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_es2_compatibility" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_fragment_program = (build-asdf-system {
+  cl-glfw-opengl-arb__fragment__program = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_fragment_program";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_fragment_program" ];
@@ -9542,7 +9542,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_fragment_program" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_fragment_shader = (build-asdf-system {
+  cl-glfw-opengl-arb__fragment__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_fragment_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_fragment_shader" ];
@@ -9555,7 +9555,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_fragment_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_framebuffer_object = (build-asdf-system {
+  cl-glfw-opengl-arb__framebuffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_framebuffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_framebuffer_object" ];
@@ -9568,7 +9568,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_framebuffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_framebuffer_object_deprecated = (build-asdf-system {
+  cl-glfw-opengl-arb__framebuffer__object__deprecated = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_framebuffer_object_deprecated";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_framebuffer_object_deprecated" ];
@@ -9581,7 +9581,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_framebuffer_object_deprecated" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_framebuffer_srgb = (build-asdf-system {
+  cl-glfw-opengl-arb__framebuffer__srgb = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_framebuffer_srgb";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_framebuffer_srgb" ];
@@ -9594,7 +9594,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_framebuffer_srgb" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_geometry_shader4 = (build-asdf-system {
+  cl-glfw-opengl-arb__geometry__shader4 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_geometry_shader4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_geometry_shader4" ];
@@ -9607,7 +9607,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_geometry_shader4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_get_program_binary = (build-asdf-system {
+  cl-glfw-opengl-arb__get__program__binary = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_get_program_binary";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_get_program_binary" ];
@@ -9620,7 +9620,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_get_program_binary" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_gpu_shader5 = (build-asdf-system {
+  cl-glfw-opengl-arb__gpu__shader5 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_gpu_shader5";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_gpu_shader5" ];
@@ -9633,7 +9633,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_gpu_shader5" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_gpu_shader_fp64 = (build-asdf-system {
+  cl-glfw-opengl-arb__gpu__shader__fp64 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_gpu_shader_fp64";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_gpu_shader_fp64" ];
@@ -9646,7 +9646,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_gpu_shader_fp64" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_half_float_pixel = (build-asdf-system {
+  cl-glfw-opengl-arb__half__float__pixel = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_half_float_pixel";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_half_float_pixel" ];
@@ -9659,7 +9659,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_half_float_pixel" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_half_float_vertex = (build-asdf-system {
+  cl-glfw-opengl-arb__half__float__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_half_float_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_half_float_vertex" ];
@@ -9672,7 +9672,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_half_float_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_imaging = (build-asdf-system {
+  cl-glfw-opengl-arb__imaging = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_imaging";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_imaging" ];
@@ -9685,7 +9685,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_imaging" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_imaging_deprecated = (build-asdf-system {
+  cl-glfw-opengl-arb__imaging__deprecated = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_imaging_deprecated";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_imaging_deprecated" ];
@@ -9698,7 +9698,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_imaging_deprecated" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_instanced_arrays = (build-asdf-system {
+  cl-glfw-opengl-arb__instanced__arrays = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_instanced_arrays";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_instanced_arrays" ];
@@ -9711,7 +9711,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_instanced_arrays" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_map_buffer_range = (build-asdf-system {
+  cl-glfw-opengl-arb__map__buffer__range = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_map_buffer_range";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_map_buffer_range" ];
@@ -9724,7 +9724,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_map_buffer_range" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_matrix_palette = (build-asdf-system {
+  cl-glfw-opengl-arb__matrix__palette = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_matrix_palette";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_matrix_palette" ];
@@ -9737,7 +9737,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_matrix_palette" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_multisample = (build-asdf-system {
+  cl-glfw-opengl-arb__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_multisample" ];
@@ -9750,7 +9750,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_multitexture = (build-asdf-system {
+  cl-glfw-opengl-arb__multitexture = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_multitexture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_multitexture" ];
@@ -9763,7 +9763,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_multitexture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_occlusion_query = (build-asdf-system {
+  cl-glfw-opengl-arb__occlusion__query = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_occlusion_query";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_occlusion_query" ];
@@ -9776,7 +9776,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_occlusion_query" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_occlusion_query2 = (build-asdf-system {
+  cl-glfw-opengl-arb__occlusion__query2 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_occlusion_query2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_occlusion_query2" ];
@@ -9789,7 +9789,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_occlusion_query2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_pixel_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-arb__pixel__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_pixel_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_pixel_buffer_object" ];
@@ -9802,7 +9802,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_pixel_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_point_parameters = (build-asdf-system {
+  cl-glfw-opengl-arb__point__parameters = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_point_parameters";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_point_parameters" ];
@@ -9815,7 +9815,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_point_parameters" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_point_sprite = (build-asdf-system {
+  cl-glfw-opengl-arb__point__sprite = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_point_sprite";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_point_sprite" ];
@@ -9828,7 +9828,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_point_sprite" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_provoking_vertex = (build-asdf-system {
+  cl-glfw-opengl-arb__provoking__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_provoking_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_provoking_vertex" ];
@@ -9841,7 +9841,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_provoking_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_robustness = (build-asdf-system {
+  cl-glfw-opengl-arb__robustness = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_robustness";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_robustness" ];
@@ -9854,7 +9854,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_robustness" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_sample_shading = (build-asdf-system {
+  cl-glfw-opengl-arb__sample__shading = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_sample_shading";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_sample_shading" ];
@@ -9867,7 +9867,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_sample_shading" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_sampler_objects = (build-asdf-system {
+  cl-glfw-opengl-arb__sampler__objects = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_sampler_objects";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_sampler_objects" ];
@@ -9880,7 +9880,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_sampler_objects" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_seamless_cube_map = (build-asdf-system {
+  cl-glfw-opengl-arb__seamless__cube__map = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_seamless_cube_map";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_seamless_cube_map" ];
@@ -9893,7 +9893,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_seamless_cube_map" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_separate_shader_objects = (build-asdf-system {
+  cl-glfw-opengl-arb__separate__shader__objects = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_separate_shader_objects";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_separate_shader_objects" ];
@@ -9906,7 +9906,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_separate_shader_objects" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_shader_objects = (build-asdf-system {
+  cl-glfw-opengl-arb__shader__objects = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_shader_objects";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_shader_objects" ];
@@ -9919,7 +9919,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_shader_objects" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_shader_subroutine = (build-asdf-system {
+  cl-glfw-opengl-arb__shader__subroutine = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_shader_subroutine";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_shader_subroutine" ];
@@ -9932,7 +9932,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_shader_subroutine" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_shading_language_100 = (build-asdf-system {
+  cl-glfw-opengl-arb__shading__language__100 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_shading_language_100";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_shading_language_100" ];
@@ -9945,7 +9945,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_shading_language_100" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_shading_language_include = (build-asdf-system {
+  cl-glfw-opengl-arb__shading__language__include = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_shading_language_include";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_shading_language_include" ];
@@ -9958,7 +9958,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_shading_language_include" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_shadow = (build-asdf-system {
+  cl-glfw-opengl-arb__shadow = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_shadow";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_shadow" ];
@@ -9971,7 +9971,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_shadow" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_shadow_ambient = (build-asdf-system {
+  cl-glfw-opengl-arb__shadow__ambient = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_shadow_ambient";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_shadow_ambient" ];
@@ -9984,7 +9984,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_shadow_ambient" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_tessellation_shader = (build-asdf-system {
+  cl-glfw-opengl-arb__tessellation__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_tessellation_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_tessellation_shader" ];
@@ -9997,7 +9997,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_tessellation_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_border_clamp = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__border__clamp = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_border_clamp";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_border_clamp" ];
@@ -10010,7 +10010,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_border_clamp" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_buffer_object" ];
@@ -10023,7 +10023,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_buffer_object_rgb32 = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__buffer__object__rgb32 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_buffer_object_rgb32";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_buffer_object_rgb32" ];
@@ -10036,7 +10036,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_buffer_object_rgb32" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_compression = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__compression = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_compression";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_compression" ];
@@ -10049,7 +10049,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_compression" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_compression_bptc = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__compression__bptc = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_compression_bptc";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_compression_bptc" ];
@@ -10062,7 +10062,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_compression_bptc" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_compression_rgtc = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__compression__rgtc = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_compression_rgtc";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_compression_rgtc" ];
@@ -10075,7 +10075,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_compression_rgtc" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_cube_map = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__cube__map = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_cube_map";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_cube_map" ];
@@ -10088,7 +10088,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_cube_map" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_cube_map_array = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__cube__map__array = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_cube_map_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_cube_map_array" ];
@@ -10101,7 +10101,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_cube_map_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_env_combine = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__env__combine = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_env_combine";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_env_combine" ];
@@ -10114,7 +10114,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_env_combine" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_env_dot3 = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__env__dot3 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_env_dot3";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_env_dot3" ];
@@ -10127,7 +10127,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_env_dot3" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_float = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__float = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_float" ];
@@ -10140,7 +10140,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_gather = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__gather = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_gather";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_gather" ];
@@ -10153,7 +10153,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_gather" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_mirrored_repeat = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__mirrored__repeat = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_mirrored_repeat";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_mirrored_repeat" ];
@@ -10166,7 +10166,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_mirrored_repeat" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_multisample = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_multisample" ];
@@ -10179,7 +10179,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_rectangle = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__rectangle = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_rectangle";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_rectangle" ];
@@ -10192,7 +10192,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_rectangle" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_rg = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__rg = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_rg";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_rg" ];
@@ -10205,7 +10205,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_rg" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_rgb10_a2ui = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__rgb10__a2ui = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_rgb10_a2ui";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_rgb10_a2ui" ];
@@ -10218,7 +10218,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_rgb10_a2ui" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_texture_swizzle = (build-asdf-system {
+  cl-glfw-opengl-arb__texture__swizzle = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_texture_swizzle";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_texture_swizzle" ];
@@ -10231,7 +10231,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_texture_swizzle" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_timer_query = (build-asdf-system {
+  cl-glfw-opengl-arb__timer__query = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_timer_query";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_timer_query" ];
@@ -10244,7 +10244,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_timer_query" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_transform_feedback2 = (build-asdf-system {
+  cl-glfw-opengl-arb__transform__feedback2 = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_transform_feedback2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_transform_feedback2" ];
@@ -10257,7 +10257,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_transform_feedback2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_transpose_matrix = (build-asdf-system {
+  cl-glfw-opengl-arb__transpose__matrix = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_transpose_matrix";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_transpose_matrix" ];
@@ -10270,7 +10270,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_transpose_matrix" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_uniform_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-arb__uniform__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_uniform_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_uniform_buffer_object" ];
@@ -10283,7 +10283,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_uniform_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_array_bgra = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__array__bgra = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_array_bgra";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_array_bgra" ];
@@ -10296,7 +10296,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_array_bgra" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_array_object = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__array__object = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_array_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_array_object" ];
@@ -10309,7 +10309,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_array_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_attrib_64bit = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__attrib__64bit = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_attrib_64bit";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_attrib_64bit" ];
@@ -10322,7 +10322,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_attrib_64bit" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_blend = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__blend = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_blend";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_blend" ];
@@ -10335,7 +10335,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_blend" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_buffer_object" ];
@@ -10348,7 +10348,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_program = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__program = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_program";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_program" ];
@@ -10361,7 +10361,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_program" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_shader = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_shader" ];
@@ -10374,7 +10374,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_vertex_type_2_10_10_10_rev = (build-asdf-system {
+  cl-glfw-opengl-arb__vertex__type__2__10__10__10__rev = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_vertex_type_2_10_10_10_rev";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_vertex_type_2_10_10_10_rev" ];
@@ -10387,7 +10387,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_vertex_type_2_10_10_10_rev" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_viewport_array = (build-asdf-system {
+  cl-glfw-opengl-arb__viewport__array = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_viewport_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_viewport_array" ];
@@ -10400,7 +10400,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_viewport_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-arb_window_pos = (build-asdf-system {
+  cl-glfw-opengl-arb__window__pos = (build-asdf-system {
     pname = "cl-glfw-opengl-arb_window_pos";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-arb_window_pos" ];
@@ -10413,7 +10413,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-arb_window_pos" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_draw_buffers = (build-asdf-system {
+  cl-glfw-opengl-ati__draw__buffers = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_draw_buffers";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_draw_buffers" ];
@@ -10426,7 +10426,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_draw_buffers" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_element_array = (build-asdf-system {
+  cl-glfw-opengl-ati__element__array = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_element_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_element_array" ];
@@ -10439,7 +10439,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_element_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_envmap_bumpmap = (build-asdf-system {
+  cl-glfw-opengl-ati__envmap__bumpmap = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_envmap_bumpmap";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_envmap_bumpmap" ];
@@ -10452,7 +10452,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_envmap_bumpmap" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_fragment_shader = (build-asdf-system {
+  cl-glfw-opengl-ati__fragment__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_fragment_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_fragment_shader" ];
@@ -10465,7 +10465,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_fragment_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_map_object_buffer = (build-asdf-system {
+  cl-glfw-opengl-ati__map__object__buffer = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_map_object_buffer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_map_object_buffer" ];
@@ -10478,7 +10478,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_map_object_buffer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_meminfo = (build-asdf-system {
+  cl-glfw-opengl-ati__meminfo = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_meminfo";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_meminfo" ];
@@ -10491,7 +10491,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_meminfo" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_pixel_format_float = (build-asdf-system {
+  cl-glfw-opengl-ati__pixel__format__float = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_pixel_format_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_pixel_format_float" ];
@@ -10504,7 +10504,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_pixel_format_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_pn_triangles = (build-asdf-system {
+  cl-glfw-opengl-ati__pn__triangles = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_pn_triangles";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_pn_triangles" ];
@@ -10517,7 +10517,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_pn_triangles" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_separate_stencil = (build-asdf-system {
+  cl-glfw-opengl-ati__separate__stencil = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_separate_stencil";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_separate_stencil" ];
@@ -10530,7 +10530,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_separate_stencil" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_text_fragment_shader = (build-asdf-system {
+  cl-glfw-opengl-ati__text__fragment__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_text_fragment_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_text_fragment_shader" ];
@@ -10543,7 +10543,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_text_fragment_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_texture_env_combine3 = (build-asdf-system {
+  cl-glfw-opengl-ati__texture__env__combine3 = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_texture_env_combine3";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_texture_env_combine3" ];
@@ -10556,7 +10556,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_texture_env_combine3" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_texture_float = (build-asdf-system {
+  cl-glfw-opengl-ati__texture__float = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_texture_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_texture_float" ];
@@ -10569,7 +10569,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_texture_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_texture_mirror_once = (build-asdf-system {
+  cl-glfw-opengl-ati__texture__mirror__once = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_texture_mirror_once";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_texture_mirror_once" ];
@@ -10582,7 +10582,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_texture_mirror_once" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_vertex_array_object = (build-asdf-system {
+  cl-glfw-opengl-ati__vertex__array__object = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_vertex_array_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_vertex_array_object" ];
@@ -10595,7 +10595,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_vertex_array_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_vertex_attrib_array_object = (build-asdf-system {
+  cl-glfw-opengl-ati__vertex__attrib__array__object = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_vertex_attrib_array_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_vertex_attrib_array_object" ];
@@ -10608,7 +10608,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ati_vertex_attrib_array_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ati_vertex_streams = (build-asdf-system {
+  cl-glfw-opengl-ati__vertex__streams = (build-asdf-system {
     pname = "cl-glfw-opengl-ati_vertex_streams";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ati_vertex_streams" ];
@@ -10634,7 +10634,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-core" ];
     lispLibs = [ (getAttr "cffi" self) (getAttr "cl-glfw-types" self) ];
   });
-  cl-glfw-opengl-ext_422_pixels = (build-asdf-system {
+  cl-glfw-opengl-ext__422__pixels = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_422_pixels";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_422_pixels" ];
@@ -10647,7 +10647,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_422_pixels" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_abgr = (build-asdf-system {
+  cl-glfw-opengl-ext__abgr = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_abgr";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_abgr" ];
@@ -10660,7 +10660,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_abgr" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_bgra = (build-asdf-system {
+  cl-glfw-opengl-ext__bgra = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_bgra";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_bgra" ];
@@ -10673,7 +10673,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_bgra" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_bindable_uniform = (build-asdf-system {
+  cl-glfw-opengl-ext__bindable__uniform = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_bindable_uniform";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_bindable_uniform" ];
@@ -10686,7 +10686,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_bindable_uniform" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_blend_color = (build-asdf-system {
+  cl-glfw-opengl-ext__blend__color = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_blend_color";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_blend_color" ];
@@ -10699,7 +10699,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_blend_color" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_blend_equation_separate = (build-asdf-system {
+  cl-glfw-opengl-ext__blend__equation__separate = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_blend_equation_separate";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_blend_equation_separate" ];
@@ -10712,7 +10712,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_blend_equation_separate" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_blend_func_separate = (build-asdf-system {
+  cl-glfw-opengl-ext__blend__func__separate = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_blend_func_separate";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_blend_func_separate" ];
@@ -10725,7 +10725,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_blend_func_separate" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_blend_minmax = (build-asdf-system {
+  cl-glfw-opengl-ext__blend__minmax = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_blend_minmax";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_blend_minmax" ];
@@ -10738,7 +10738,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_blend_minmax" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_blend_subtract = (build-asdf-system {
+  cl-glfw-opengl-ext__blend__subtract = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_blend_subtract";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_blend_subtract" ];
@@ -10751,7 +10751,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_blend_subtract" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_clip_volume_hint = (build-asdf-system {
+  cl-glfw-opengl-ext__clip__volume__hint = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_clip_volume_hint";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_clip_volume_hint" ];
@@ -10764,7 +10764,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_clip_volume_hint" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_cmyka = (build-asdf-system {
+  cl-glfw-opengl-ext__cmyka = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_cmyka";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_cmyka" ];
@@ -10777,7 +10777,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_cmyka" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_color_subtable = (build-asdf-system {
+  cl-glfw-opengl-ext__color__subtable = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_color_subtable";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_color_subtable" ];
@@ -10790,7 +10790,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_color_subtable" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_compiled_vertex_array = (build-asdf-system {
+  cl-glfw-opengl-ext__compiled__vertex__array = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_compiled_vertex_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_compiled_vertex_array" ];
@@ -10803,7 +10803,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_compiled_vertex_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_convolution = (build-asdf-system {
+  cl-glfw-opengl-ext__convolution = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_convolution";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_convolution" ];
@@ -10816,7 +10816,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_convolution" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_coordinate_frame = (build-asdf-system {
+  cl-glfw-opengl-ext__coordinate__frame = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_coordinate_frame";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_coordinate_frame" ];
@@ -10829,7 +10829,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_coordinate_frame" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_copy_texture = (build-asdf-system {
+  cl-glfw-opengl-ext__copy__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_copy_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_copy_texture" ];
@@ -10842,7 +10842,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_copy_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_cull_vertex = (build-asdf-system {
+  cl-glfw-opengl-ext__cull__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_cull_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_cull_vertex" ];
@@ -10855,7 +10855,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_cull_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_depth_bounds_test = (build-asdf-system {
+  cl-glfw-opengl-ext__depth__bounds__test = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_depth_bounds_test";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_depth_bounds_test" ];
@@ -10868,7 +10868,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_depth_bounds_test" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_direct_state_access = (build-asdf-system {
+  cl-glfw-opengl-ext__direct__state__access = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_direct_state_access";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_direct_state_access" ];
@@ -10881,7 +10881,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_direct_state_access" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_draw_buffers2 = (build-asdf-system {
+  cl-glfw-opengl-ext__draw__buffers2 = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_draw_buffers2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_draw_buffers2" ];
@@ -10894,7 +10894,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_draw_buffers2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_draw_instanced = (build-asdf-system {
+  cl-glfw-opengl-ext__draw__instanced = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_draw_instanced";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_draw_instanced" ];
@@ -10907,7 +10907,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_draw_instanced" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_draw_range_elements = (build-asdf-system {
+  cl-glfw-opengl-ext__draw__range__elements = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_draw_range_elements";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_draw_range_elements" ];
@@ -10920,7 +10920,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_draw_range_elements" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_fog_coord = (build-asdf-system {
+  cl-glfw-opengl-ext__fog__coord = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_fog_coord";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_fog_coord" ];
@@ -10933,7 +10933,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_fog_coord" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_framebuffer_blit = (build-asdf-system {
+  cl-glfw-opengl-ext__framebuffer__blit = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_framebuffer_blit";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_framebuffer_blit" ];
@@ -10946,7 +10946,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_framebuffer_blit" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_framebuffer_multisample = (build-asdf-system {
+  cl-glfw-opengl-ext__framebuffer__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_framebuffer_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_framebuffer_multisample" ];
@@ -10959,7 +10959,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_framebuffer_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_framebuffer_object = (build-asdf-system {
+  cl-glfw-opengl-ext__framebuffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_framebuffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_framebuffer_object" ];
@@ -10972,7 +10972,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_framebuffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_framebuffer_srgb = (build-asdf-system {
+  cl-glfw-opengl-ext__framebuffer__srgb = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_framebuffer_srgb";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_framebuffer_srgb" ];
@@ -10985,7 +10985,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_framebuffer_srgb" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_geometry_shader4 = (build-asdf-system {
+  cl-glfw-opengl-ext__geometry__shader4 = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_geometry_shader4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_geometry_shader4" ];
@@ -10998,7 +10998,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_geometry_shader4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_gpu_program_parameters = (build-asdf-system {
+  cl-glfw-opengl-ext__gpu__program__parameters = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_gpu_program_parameters";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_gpu_program_parameters" ];
@@ -11011,7 +11011,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_gpu_program_parameters" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_gpu_shader4 = (build-asdf-system {
+  cl-glfw-opengl-ext__gpu__shader4 = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_gpu_shader4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_gpu_shader4" ];
@@ -11024,7 +11024,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_gpu_shader4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_histogram = (build-asdf-system {
+  cl-glfw-opengl-ext__histogram = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_histogram";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_histogram" ];
@@ -11037,7 +11037,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_histogram" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_index_array_formats = (build-asdf-system {
+  cl-glfw-opengl-ext__index__array__formats = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_index_array_formats";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_index_array_formats" ];
@@ -11050,7 +11050,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_index_array_formats" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_index_func = (build-asdf-system {
+  cl-glfw-opengl-ext__index__func = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_index_func";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_index_func" ];
@@ -11063,7 +11063,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_index_func" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_index_material = (build-asdf-system {
+  cl-glfw-opengl-ext__index__material = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_index_material";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_index_material" ];
@@ -11076,7 +11076,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_index_material" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_light_texture = (build-asdf-system {
+  cl-glfw-opengl-ext__light__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_light_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_light_texture" ];
@@ -11089,7 +11089,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_light_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_multi_draw_arrays = (build-asdf-system {
+  cl-glfw-opengl-ext__multi__draw__arrays = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_multi_draw_arrays";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_multi_draw_arrays" ];
@@ -11102,7 +11102,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_multi_draw_arrays" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_multisample = (build-asdf-system {
+  cl-glfw-opengl-ext__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_multisample" ];
@@ -11115,7 +11115,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_packed_depth_stencil = (build-asdf-system {
+  cl-glfw-opengl-ext__packed__depth__stencil = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_packed_depth_stencil";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_packed_depth_stencil" ];
@@ -11128,7 +11128,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_packed_depth_stencil" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_packed_float = (build-asdf-system {
+  cl-glfw-opengl-ext__packed__float = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_packed_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_packed_float" ];
@@ -11141,7 +11141,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_packed_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_packed_pixels = (build-asdf-system {
+  cl-glfw-opengl-ext__packed__pixels = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_packed_pixels";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_packed_pixels" ];
@@ -11154,7 +11154,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_packed_pixels" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_paletted_texture = (build-asdf-system {
+  cl-glfw-opengl-ext__paletted__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_paletted_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_paletted_texture" ];
@@ -11167,7 +11167,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_paletted_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_pixel_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-ext__pixel__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_pixel_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_pixel_buffer_object" ];
@@ -11180,7 +11180,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_pixel_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_pixel_transform = (build-asdf-system {
+  cl-glfw-opengl-ext__pixel__transform = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_pixel_transform";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_pixel_transform" ];
@@ -11193,7 +11193,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_pixel_transform" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_point_parameters = (build-asdf-system {
+  cl-glfw-opengl-ext__point__parameters = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_point_parameters";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_point_parameters" ];
@@ -11206,7 +11206,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_point_parameters" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_polygon_offset = (build-asdf-system {
+  cl-glfw-opengl-ext__polygon__offset = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_polygon_offset";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_polygon_offset" ];
@@ -11219,7 +11219,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_polygon_offset" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_provoking_vertex = (build-asdf-system {
+  cl-glfw-opengl-ext__provoking__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_provoking_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_provoking_vertex" ];
@@ -11232,7 +11232,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_provoking_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_secondary_color = (build-asdf-system {
+  cl-glfw-opengl-ext__secondary__color = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_secondary_color";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_secondary_color" ];
@@ -11245,7 +11245,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_secondary_color" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_separate_shader_objects = (build-asdf-system {
+  cl-glfw-opengl-ext__separate__shader__objects = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_separate_shader_objects";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_separate_shader_objects" ];
@@ -11258,7 +11258,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_separate_shader_objects" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_separate_specular_color = (build-asdf-system {
+  cl-glfw-opengl-ext__separate__specular__color = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_separate_specular_color";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_separate_specular_color" ];
@@ -11271,7 +11271,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_separate_specular_color" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_shader_image_load_store = (build-asdf-system {
+  cl-glfw-opengl-ext__shader__image__load__store = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_shader_image_load_store";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_shader_image_load_store" ];
@@ -11284,7 +11284,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_shader_image_load_store" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_stencil_clear_tag = (build-asdf-system {
+  cl-glfw-opengl-ext__stencil__clear__tag = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_stencil_clear_tag";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_stencil_clear_tag" ];
@@ -11297,7 +11297,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_stencil_clear_tag" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_stencil_two_side = (build-asdf-system {
+  cl-glfw-opengl-ext__stencil__two__side = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_stencil_two_side";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_stencil_two_side" ];
@@ -11310,7 +11310,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_stencil_two_side" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_stencil_wrap = (build-asdf-system {
+  cl-glfw-opengl-ext__stencil__wrap = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_stencil_wrap";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_stencil_wrap" ];
@@ -11323,7 +11323,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_stencil_wrap" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_subtexture = (build-asdf-system {
+  cl-glfw-opengl-ext__subtexture = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_subtexture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_subtexture" ];
@@ -11336,7 +11336,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_subtexture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture = (build-asdf-system {
+  cl-glfw-opengl-ext__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture" ];
@@ -11349,7 +11349,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture3d = (build-asdf-system {
+  cl-glfw-opengl-ext__texture3d = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture3d";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture3d" ];
@@ -11362,7 +11362,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture3d" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_array = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__array = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_array" ];
@@ -11375,7 +11375,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_buffer_object" ];
@@ -11388,7 +11388,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_compression_latc = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__compression__latc = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_compression_latc";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_compression_latc" ];
@@ -11401,7 +11401,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_compression_latc" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_compression_rgtc = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__compression__rgtc = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_compression_rgtc";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_compression_rgtc" ];
@@ -11414,7 +11414,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_compression_rgtc" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_compression_s3tc = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__compression__s3tc = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_compression_s3tc";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_compression_s3tc" ];
@@ -11427,7 +11427,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_compression_s3tc" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_cube_map = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__cube__map = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_cube_map";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_cube_map" ];
@@ -11440,7 +11440,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_cube_map" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_env_combine = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__env__combine = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_env_combine";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_env_combine" ];
@@ -11453,7 +11453,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_env_combine" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_env_dot3 = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__env__dot3 = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_env_dot3";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_env_dot3" ];
@@ -11466,7 +11466,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_env_dot3" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_filter_anisotropic = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__filter__anisotropic = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_filter_anisotropic";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_filter_anisotropic" ];
@@ -11479,7 +11479,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_filter_anisotropic" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_integer = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__integer = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_integer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_integer" ];
@@ -11492,7 +11492,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_integer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_lod_bias = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__lod__bias = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_lod_bias";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_lod_bias" ];
@@ -11505,7 +11505,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_lod_bias" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_mirror_clamp = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__mirror__clamp = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_mirror_clamp";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_mirror_clamp" ];
@@ -11518,7 +11518,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_mirror_clamp" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_object = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__object = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_object" ];
@@ -11531,7 +11531,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_perturb_normal = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__perturb__normal = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_perturb_normal";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_perturb_normal" ];
@@ -11544,7 +11544,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_perturb_normal" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_shared_exponent = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__shared__exponent = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_shared_exponent";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_shared_exponent" ];
@@ -11557,7 +11557,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_shared_exponent" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_snorm = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__snorm = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_snorm";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_snorm" ];
@@ -11570,7 +11570,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_snorm" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_srgb = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__srgb = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_srgb";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_srgb" ];
@@ -11583,7 +11583,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_srgb" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_srgb_decode = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__srgb__decode = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_srgb_decode";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_srgb_decode" ];
@@ -11596,7 +11596,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_srgb_decode" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_texture_swizzle = (build-asdf-system {
+  cl-glfw-opengl-ext__texture__swizzle = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_texture_swizzle";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_texture_swizzle" ];
@@ -11609,7 +11609,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_texture_swizzle" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_timer_query = (build-asdf-system {
+  cl-glfw-opengl-ext__timer__query = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_timer_query";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_timer_query" ];
@@ -11622,7 +11622,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_timer_query" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_transform_feedback = (build-asdf-system {
+  cl-glfw-opengl-ext__transform__feedback = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_transform_feedback";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_transform_feedback" ];
@@ -11635,7 +11635,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_transform_feedback" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_vertex_array = (build-asdf-system {
+  cl-glfw-opengl-ext__vertex__array = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_vertex_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_vertex_array" ];
@@ -11648,7 +11648,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_vertex_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_vertex_array_bgra = (build-asdf-system {
+  cl-glfw-opengl-ext__vertex__array__bgra = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_vertex_array_bgra";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_vertex_array_bgra" ];
@@ -11661,7 +11661,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_vertex_array_bgra" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_vertex_attrib_64bit = (build-asdf-system {
+  cl-glfw-opengl-ext__vertex__attrib__64bit = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_vertex_attrib_64bit";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_vertex_attrib_64bit" ];
@@ -11674,7 +11674,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_vertex_attrib_64bit" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_vertex_shader = (build-asdf-system {
+  cl-glfw-opengl-ext__vertex__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_vertex_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_vertex_shader" ];
@@ -11687,7 +11687,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_vertex_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ext_vertex_weighting = (build-asdf-system {
+  cl-glfw-opengl-ext__vertex__weighting = (build-asdf-system {
     pname = "cl-glfw-opengl-ext_vertex_weighting";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ext_vertex_weighting" ];
@@ -11700,7 +11700,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ext_vertex_weighting" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-gremedy_frame_terminator = (build-asdf-system {
+  cl-glfw-opengl-gremedy__frame__terminator = (build-asdf-system {
     pname = "cl-glfw-opengl-gremedy_frame_terminator";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-gremedy_frame_terminator" ];
@@ -11713,7 +11713,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-gremedy_frame_terminator" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-gremedy_string_marker = (build-asdf-system {
+  cl-glfw-opengl-gremedy__string__marker = (build-asdf-system {
     pname = "cl-glfw-opengl-gremedy_string_marker";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-gremedy_string_marker" ];
@@ -11726,7 +11726,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-gremedy_string_marker" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-hp_convolution_border_modes = (build-asdf-system {
+  cl-glfw-opengl-hp__convolution__border__modes = (build-asdf-system {
     pname = "cl-glfw-opengl-hp_convolution_border_modes";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-hp_convolution_border_modes" ];
@@ -11739,7 +11739,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-hp_convolution_border_modes" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-hp_image_transform = (build-asdf-system {
+  cl-glfw-opengl-hp__image__transform = (build-asdf-system {
     pname = "cl-glfw-opengl-hp_image_transform";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-hp_image_transform" ];
@@ -11752,7 +11752,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-hp_image_transform" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-hp_occlusion_test = (build-asdf-system {
+  cl-glfw-opengl-hp__occlusion__test = (build-asdf-system {
     pname = "cl-glfw-opengl-hp_occlusion_test";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-hp_occlusion_test" ];
@@ -11765,7 +11765,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-hp_occlusion_test" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-hp_texture_lighting = (build-asdf-system {
+  cl-glfw-opengl-hp__texture__lighting = (build-asdf-system {
     pname = "cl-glfw-opengl-hp_texture_lighting";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-hp_texture_lighting" ];
@@ -11778,7 +11778,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-hp_texture_lighting" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ibm_cull_vertex = (build-asdf-system {
+  cl-glfw-opengl-ibm__cull__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-ibm_cull_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ibm_cull_vertex" ];
@@ -11791,7 +11791,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ibm_cull_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ibm_multimode_draw_arrays = (build-asdf-system {
+  cl-glfw-opengl-ibm__multimode__draw__arrays = (build-asdf-system {
     pname = "cl-glfw-opengl-ibm_multimode_draw_arrays";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ibm_multimode_draw_arrays" ];
@@ -11804,7 +11804,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ibm_multimode_draw_arrays" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ibm_rasterpos_clip = (build-asdf-system {
+  cl-glfw-opengl-ibm__rasterpos__clip = (build-asdf-system {
     pname = "cl-glfw-opengl-ibm_rasterpos_clip";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ibm_rasterpos_clip" ];
@@ -11817,7 +11817,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ibm_rasterpos_clip" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ibm_texture_mirrored_repeat = (build-asdf-system {
+  cl-glfw-opengl-ibm__texture__mirrored__repeat = (build-asdf-system {
     pname = "cl-glfw-opengl-ibm_texture_mirrored_repeat";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ibm_texture_mirrored_repeat" ];
@@ -11830,7 +11830,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ibm_texture_mirrored_repeat" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ibm_vertex_array_lists = (build-asdf-system {
+  cl-glfw-opengl-ibm__vertex__array__lists = (build-asdf-system {
     pname = "cl-glfw-opengl-ibm_vertex_array_lists";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ibm_vertex_array_lists" ];
@@ -11843,7 +11843,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ibm_vertex_array_lists" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ingr_blend_func_separate = (build-asdf-system {
+  cl-glfw-opengl-ingr__blend__func__separate = (build-asdf-system {
     pname = "cl-glfw-opengl-ingr_blend_func_separate";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ingr_blend_func_separate" ];
@@ -11856,7 +11856,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ingr_blend_func_separate" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ingr_color_clamp = (build-asdf-system {
+  cl-glfw-opengl-ingr__color__clamp = (build-asdf-system {
     pname = "cl-glfw-opengl-ingr_color_clamp";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ingr_color_clamp" ];
@@ -11869,7 +11869,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ingr_color_clamp" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-ingr_interlace_read = (build-asdf-system {
+  cl-glfw-opengl-ingr__interlace__read = (build-asdf-system {
     pname = "cl-glfw-opengl-ingr_interlace_read";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-ingr_interlace_read" ];
@@ -11882,7 +11882,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-ingr_interlace_read" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-intel_parallel_arrays = (build-asdf-system {
+  cl-glfw-opengl-intel__parallel__arrays = (build-asdf-system {
     pname = "cl-glfw-opengl-intel_parallel_arrays";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-intel_parallel_arrays" ];
@@ -11895,7 +11895,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-intel_parallel_arrays" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_pack_invert = (build-asdf-system {
+  cl-glfw-opengl-mesa__pack__invert = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_pack_invert";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_pack_invert" ];
@@ -11908,7 +11908,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_pack_invert" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_packed_depth_stencil = (build-asdf-system {
+  cl-glfw-opengl-mesa__packed__depth__stencil = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_packed_depth_stencil";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_packed_depth_stencil" ];
@@ -11921,7 +11921,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_packed_depth_stencil" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_program_debug = (build-asdf-system {
+  cl-glfw-opengl-mesa__program__debug = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_program_debug";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_program_debug" ];
@@ -11934,7 +11934,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_program_debug" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_resize_buffers = (build-asdf-system {
+  cl-glfw-opengl-mesa__resize__buffers = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_resize_buffers";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_resize_buffers" ];
@@ -11947,7 +11947,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_resize_buffers" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_shader_debug = (build-asdf-system {
+  cl-glfw-opengl-mesa__shader__debug = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_shader_debug";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_shader_debug" ];
@@ -11960,7 +11960,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_shader_debug" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_trace = (build-asdf-system {
+  cl-glfw-opengl-mesa__trace = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_trace";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_trace" ];
@@ -11973,7 +11973,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_trace" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_window_pos = (build-asdf-system {
+  cl-glfw-opengl-mesa__window__pos = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_window_pos";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_window_pos" ];
@@ -11986,7 +11986,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_window_pos" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesa_ycbcr_texture = (build-asdf-system {
+  cl-glfw-opengl-mesa__ycbcr__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-mesa_ycbcr_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesa_ycbcr_texture" ];
@@ -11999,7 +11999,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesa_ycbcr_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-mesax_texture_stack = (build-asdf-system {
+  cl-glfw-opengl-mesax__texture__stack = (build-asdf-system {
     pname = "cl-glfw-opengl-mesax_texture_stack";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-mesax_texture_stack" ];
@@ -12012,7 +12012,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-mesax_texture_stack" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_conditional_render = (build-asdf-system {
+  cl-glfw-opengl-nv__conditional__render = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_conditional_render";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_conditional_render" ];
@@ -12025,7 +12025,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_conditional_render" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_copy_depth_to_color = (build-asdf-system {
+  cl-glfw-opengl-nv__copy__depth__to__color = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_copy_depth_to_color";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_copy_depth_to_color" ];
@@ -12038,7 +12038,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_copy_depth_to_color" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_copy_image = (build-asdf-system {
+  cl-glfw-opengl-nv__copy__image = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_copy_image";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_copy_image" ];
@@ -12051,7 +12051,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_copy_image" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_depth_buffer_float = (build-asdf-system {
+  cl-glfw-opengl-nv__depth__buffer__float = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_depth_buffer_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_depth_buffer_float" ];
@@ -12064,7 +12064,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_depth_buffer_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_depth_clamp = (build-asdf-system {
+  cl-glfw-opengl-nv__depth__clamp = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_depth_clamp";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_depth_clamp" ];
@@ -12077,7 +12077,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_depth_clamp" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_evaluators = (build-asdf-system {
+  cl-glfw-opengl-nv__evaluators = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_evaluators";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_evaluators" ];
@@ -12090,7 +12090,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_evaluators" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_explicit_multisample = (build-asdf-system {
+  cl-glfw-opengl-nv__explicit__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_explicit_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_explicit_multisample" ];
@@ -12103,7 +12103,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_explicit_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_fence = (build-asdf-system {
+  cl-glfw-opengl-nv__fence = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_fence";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_fence" ];
@@ -12116,7 +12116,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_fence" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_float_buffer = (build-asdf-system {
+  cl-glfw-opengl-nv__float__buffer = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_float_buffer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_float_buffer" ];
@@ -12129,7 +12129,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_float_buffer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_fog_distance = (build-asdf-system {
+  cl-glfw-opengl-nv__fog__distance = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_fog_distance";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_fog_distance" ];
@@ -12142,7 +12142,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_fog_distance" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_fragment_program = (build-asdf-system {
+  cl-glfw-opengl-nv__fragment__program = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_fragment_program";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_fragment_program" ];
@@ -12155,7 +12155,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_fragment_program" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_fragment_program2 = (build-asdf-system {
+  cl-glfw-opengl-nv__fragment__program2 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_fragment_program2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_fragment_program2" ];
@@ -12168,7 +12168,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_fragment_program2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_framebuffer_multisample_coverage = (build-asdf-system {
+  cl-glfw-opengl-nv__framebuffer__multisample__coverage = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_framebuffer_multisample_coverage";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_framebuffer_multisample_coverage" ];
@@ -12181,7 +12181,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_framebuffer_multisample_coverage" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_geometry_program4 = (build-asdf-system {
+  cl-glfw-opengl-nv__geometry__program4 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_geometry_program4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_geometry_program4" ];
@@ -12194,7 +12194,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_geometry_program4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_gpu_program4 = (build-asdf-system {
+  cl-glfw-opengl-nv__gpu__program4 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_gpu_program4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_gpu_program4" ];
@@ -12207,7 +12207,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_gpu_program4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_gpu_program5 = (build-asdf-system {
+  cl-glfw-opengl-nv__gpu__program5 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_gpu_program5";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_gpu_program5" ];
@@ -12220,7 +12220,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_gpu_program5" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_gpu_shader5 = (build-asdf-system {
+  cl-glfw-opengl-nv__gpu__shader5 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_gpu_shader5";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_gpu_shader5" ];
@@ -12233,7 +12233,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_gpu_shader5" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_half_float = (build-asdf-system {
+  cl-glfw-opengl-nv__half__float = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_half_float";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_half_float" ];
@@ -12246,7 +12246,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_half_float" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_light_max_exponent = (build-asdf-system {
+  cl-glfw-opengl-nv__light__max__exponent = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_light_max_exponent";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_light_max_exponent" ];
@@ -12259,7 +12259,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_light_max_exponent" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_multisample_coverage = (build-asdf-system {
+  cl-glfw-opengl-nv__multisample__coverage = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_multisample_coverage";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_multisample_coverage" ];
@@ -12272,7 +12272,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_multisample_coverage" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_multisample_filter_hint = (build-asdf-system {
+  cl-glfw-opengl-nv__multisample__filter__hint = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_multisample_filter_hint";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_multisample_filter_hint" ];
@@ -12285,7 +12285,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_multisample_filter_hint" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_occlusion_query = (build-asdf-system {
+  cl-glfw-opengl-nv__occlusion__query = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_occlusion_query";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_occlusion_query" ];
@@ -12298,7 +12298,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_occlusion_query" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_packed_depth_stencil = (build-asdf-system {
+  cl-glfw-opengl-nv__packed__depth__stencil = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_packed_depth_stencil";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_packed_depth_stencil" ];
@@ -12311,7 +12311,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_packed_depth_stencil" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_parameter_buffer_object = (build-asdf-system {
+  cl-glfw-opengl-nv__parameter__buffer__object = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_parameter_buffer_object";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_parameter_buffer_object" ];
@@ -12324,7 +12324,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_parameter_buffer_object" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_pixel_data_range = (build-asdf-system {
+  cl-glfw-opengl-nv__pixel__data__range = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_pixel_data_range";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_pixel_data_range" ];
@@ -12337,7 +12337,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_pixel_data_range" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_point_sprite = (build-asdf-system {
+  cl-glfw-opengl-nv__point__sprite = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_point_sprite";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_point_sprite" ];
@@ -12350,7 +12350,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_point_sprite" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_present_video = (build-asdf-system {
+  cl-glfw-opengl-nv__present__video = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_present_video";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_present_video" ];
@@ -12363,7 +12363,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_present_video" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_primitive_restart = (build-asdf-system {
+  cl-glfw-opengl-nv__primitive__restart = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_primitive_restart";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_primitive_restart" ];
@@ -12376,7 +12376,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_primitive_restart" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_register_combiners = (build-asdf-system {
+  cl-glfw-opengl-nv__register__combiners = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_register_combiners";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_register_combiners" ];
@@ -12389,7 +12389,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_register_combiners" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_register_combiners2 = (build-asdf-system {
+  cl-glfw-opengl-nv__register__combiners2 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_register_combiners2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_register_combiners2" ];
@@ -12402,7 +12402,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_register_combiners2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_shader_buffer_load = (build-asdf-system {
+  cl-glfw-opengl-nv__shader__buffer__load = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_shader_buffer_load";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_shader_buffer_load" ];
@@ -12415,7 +12415,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_shader_buffer_load" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_shader_buffer_store = (build-asdf-system {
+  cl-glfw-opengl-nv__shader__buffer__store = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_shader_buffer_store";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_shader_buffer_store" ];
@@ -12428,7 +12428,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_shader_buffer_store" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_tessellation_program5 = (build-asdf-system {
+  cl-glfw-opengl-nv__tessellation__program5 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_tessellation_program5";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_tessellation_program5" ];
@@ -12441,7 +12441,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_tessellation_program5" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texgen_emboss = (build-asdf-system {
+  cl-glfw-opengl-nv__texgen__emboss = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texgen_emboss";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texgen_emboss" ];
@@ -12454,7 +12454,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texgen_emboss" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texgen_reflection = (build-asdf-system {
+  cl-glfw-opengl-nv__texgen__reflection = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texgen_reflection";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texgen_reflection" ];
@@ -12467,7 +12467,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texgen_reflection" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_barrier = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__barrier = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_barrier";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_barrier" ];
@@ -12480,7 +12480,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_barrier" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_env_combine4 = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__env__combine4 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_env_combine4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_env_combine4" ];
@@ -12493,7 +12493,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_env_combine4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_expand_normal = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__expand__normal = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_expand_normal";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_expand_normal" ];
@@ -12506,7 +12506,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_expand_normal" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_multisample = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_multisample" ];
@@ -12519,7 +12519,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_rectangle = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__rectangle = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_rectangle";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_rectangle" ];
@@ -12532,7 +12532,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_rectangle" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_shader = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__shader = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_shader";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_shader" ];
@@ -12545,7 +12545,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_shader" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_shader2 = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__shader2 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_shader2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_shader2" ];
@@ -12558,7 +12558,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_shader2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_texture_shader3 = (build-asdf-system {
+  cl-glfw-opengl-nv__texture__shader3 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_texture_shader3";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_texture_shader3" ];
@@ -12571,7 +12571,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_texture_shader3" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_transform_feedback = (build-asdf-system {
+  cl-glfw-opengl-nv__transform__feedback = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_transform_feedback";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_transform_feedback" ];
@@ -12584,7 +12584,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_transform_feedback" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_transform_feedback2 = (build-asdf-system {
+  cl-glfw-opengl-nv__transform__feedback2 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_transform_feedback2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_transform_feedback2" ];
@@ -12597,7 +12597,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_transform_feedback2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_array_range = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__array__range = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_array_range";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_array_range" ];
@@ -12610,7 +12610,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_array_range" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_array_range2 = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__array__range2 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_array_range2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_array_range2" ];
@@ -12623,7 +12623,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_array_range2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_attrib_integer_64bit = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__attrib__integer__64bit = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_attrib_integer_64bit";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_attrib_integer_64bit" ];
@@ -12636,7 +12636,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_attrib_integer_64bit" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_buffer_unified_memory = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__buffer__unified__memory = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_buffer_unified_memory";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_buffer_unified_memory" ];
@@ -12649,7 +12649,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_buffer_unified_memory" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_program = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__program = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_program";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_program" ];
@@ -12662,7 +12662,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_program" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_program2_option = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__program2__option = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_program2_option";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_program2_option" ];
@@ -12675,7 +12675,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_program2_option" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_program3 = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__program3 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_program3";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_program3" ];
@@ -12688,7 +12688,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_program3" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-nv_vertex_program4 = (build-asdf-system {
+  cl-glfw-opengl-nv__vertex__program4 = (build-asdf-system {
     pname = "cl-glfw-opengl-nv_vertex_program4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-nv_vertex_program4" ];
@@ -12701,7 +12701,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-nv_vertex_program4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-oes_read_format = (build-asdf-system {
+  cl-glfw-opengl-oes__read__format = (build-asdf-system {
     pname = "cl-glfw-opengl-oes_read_format";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-oes_read_format" ];
@@ -12714,7 +12714,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-oes_read_format" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-oml_interlace = (build-asdf-system {
+  cl-glfw-opengl-oml__interlace = (build-asdf-system {
     pname = "cl-glfw-opengl-oml_interlace";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-oml_interlace" ];
@@ -12727,7 +12727,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-oml_interlace" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-oml_resample = (build-asdf-system {
+  cl-glfw-opengl-oml__resample = (build-asdf-system {
     pname = "cl-glfw-opengl-oml_resample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-oml_resample" ];
@@ -12740,7 +12740,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-oml_resample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-oml_subsample = (build-asdf-system {
+  cl-glfw-opengl-oml__subsample = (build-asdf-system {
     pname = "cl-glfw-opengl-oml_subsample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-oml_subsample" ];
@@ -12753,7 +12753,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-oml_subsample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-pgi_misc_hints = (build-asdf-system {
+  cl-glfw-opengl-pgi__misc__hints = (build-asdf-system {
     pname = "cl-glfw-opengl-pgi_misc_hints";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-pgi_misc_hints" ];
@@ -12766,7 +12766,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-pgi_misc_hints" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-pgi_vertex_hints = (build-asdf-system {
+  cl-glfw-opengl-pgi__vertex__hints = (build-asdf-system {
     pname = "cl-glfw-opengl-pgi_vertex_hints";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-pgi_vertex_hints" ];
@@ -12779,7 +12779,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-pgi_vertex_hints" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-rend_screen_coordinates = (build-asdf-system {
+  cl-glfw-opengl-rend__screen__coordinates = (build-asdf-system {
     pname = "cl-glfw-opengl-rend_screen_coordinates";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-rend_screen_coordinates" ];
@@ -12792,7 +12792,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-rend_screen_coordinates" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-s3_s3tc = (build-asdf-system {
+  cl-glfw-opengl-s3__s3tc = (build-asdf-system {
     pname = "cl-glfw-opengl-s3_s3tc";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-s3_s3tc" ];
@@ -12805,7 +12805,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-s3_s3tc" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgi_color_table = (build-asdf-system {
+  cl-glfw-opengl-sgi__color__table = (build-asdf-system {
     pname = "cl-glfw-opengl-sgi_color_table";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgi_color_table" ];
@@ -12818,7 +12818,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgi_color_table" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgi_depth_pass_instrument = (build-asdf-system {
+  cl-glfw-opengl-sgi__depth__pass__instrument = (build-asdf-system {
     pname = "cl-glfw-opengl-sgi_depth_pass_instrument";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgi_depth_pass_instrument" ];
@@ -12831,7 +12831,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgi_depth_pass_instrument" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_detail_texture = (build-asdf-system {
+  cl-glfw-opengl-sgis__detail__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_detail_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_detail_texture" ];
@@ -12844,7 +12844,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_detail_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_fog_function = (build-asdf-system {
+  cl-glfw-opengl-sgis__fog__function = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_fog_function";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_fog_function" ];
@@ -12857,7 +12857,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_fog_function" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_multisample = (build-asdf-system {
+  cl-glfw-opengl-sgis__multisample = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_multisample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_multisample" ];
@@ -12870,7 +12870,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_multisample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_pixel_texture = (build-asdf-system {
+  cl-glfw-opengl-sgis__pixel__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_pixel_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_pixel_texture" ];
@@ -12883,7 +12883,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_pixel_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_point_parameters = (build-asdf-system {
+  cl-glfw-opengl-sgis__point__parameters = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_point_parameters";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_point_parameters" ];
@@ -12896,7 +12896,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_point_parameters" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_sharpen_texture = (build-asdf-system {
+  cl-glfw-opengl-sgis__sharpen__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_sharpen_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_sharpen_texture" ];
@@ -12909,7 +12909,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_sharpen_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_texture4d = (build-asdf-system {
+  cl-glfw-opengl-sgis__texture4d = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_texture4d";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_texture4d" ];
@@ -12922,7 +12922,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_texture4d" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_texture_color_mask = (build-asdf-system {
+  cl-glfw-opengl-sgis__texture__color__mask = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_texture_color_mask";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_texture_color_mask" ];
@@ -12935,7 +12935,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_texture_color_mask" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_texture_filter4 = (build-asdf-system {
+  cl-glfw-opengl-sgis__texture__filter4 = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_texture_filter4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_texture_filter4" ];
@@ -12948,7 +12948,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_texture_filter4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgis_texture_select = (build-asdf-system {
+  cl-glfw-opengl-sgis__texture__select = (build-asdf-system {
     pname = "cl-glfw-opengl-sgis_texture_select";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgis_texture_select" ];
@@ -12961,7 +12961,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgis_texture_select" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_async = (build-asdf-system {
+  cl-glfw-opengl-sgix__async = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_async";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_async" ];
@@ -12974,7 +12974,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_async" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_depth_texture = (build-asdf-system {
+  cl-glfw-opengl-sgix__depth__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_depth_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_depth_texture" ];
@@ -12987,7 +12987,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_depth_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_flush_raster = (build-asdf-system {
+  cl-glfw-opengl-sgix__flush__raster = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_flush_raster";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_flush_raster" ];
@@ -13000,7 +13000,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_flush_raster" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_fog_scale = (build-asdf-system {
+  cl-glfw-opengl-sgix__fog__scale = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_fog_scale";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_fog_scale" ];
@@ -13013,7 +13013,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_fog_scale" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_fragment_lighting = (build-asdf-system {
+  cl-glfw-opengl-sgix__fragment__lighting = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_fragment_lighting";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_fragment_lighting" ];
@@ -13026,7 +13026,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_fragment_lighting" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_framezoom = (build-asdf-system {
+  cl-glfw-opengl-sgix__framezoom = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_framezoom";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_framezoom" ];
@@ -13039,7 +13039,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_framezoom" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_igloo_interface = (build-asdf-system {
+  cl-glfw-opengl-sgix__igloo__interface = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_igloo_interface";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_igloo_interface" ];
@@ -13052,7 +13052,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_igloo_interface" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_instruments = (build-asdf-system {
+  cl-glfw-opengl-sgix__instruments = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_instruments";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_instruments" ];
@@ -13065,7 +13065,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_instruments" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_line_quality_hint = (build-asdf-system {
+  cl-glfw-opengl-sgix__line__quality__hint = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_line_quality_hint";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_line_quality_hint" ];
@@ -13078,7 +13078,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_line_quality_hint" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_list_priority = (build-asdf-system {
+  cl-glfw-opengl-sgix__list__priority = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_list_priority";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_list_priority" ];
@@ -13091,7 +13091,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_list_priority" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_pixel_texture = (build-asdf-system {
+  cl-glfw-opengl-sgix__pixel__texture = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_pixel_texture";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_pixel_texture" ];
@@ -13104,7 +13104,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_pixel_texture" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_polynomial_ffd = (build-asdf-system {
+  cl-glfw-opengl-sgix__polynomial__ffd = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_polynomial_ffd";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_polynomial_ffd" ];
@@ -13117,7 +13117,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_polynomial_ffd" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_reference_plane = (build-asdf-system {
+  cl-glfw-opengl-sgix__reference__plane = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_reference_plane";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_reference_plane" ];
@@ -13130,7 +13130,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_reference_plane" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_resample = (build-asdf-system {
+  cl-glfw-opengl-sgix__resample = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_resample";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_resample" ];
@@ -13143,7 +13143,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_resample" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_scalebias_hint = (build-asdf-system {
+  cl-glfw-opengl-sgix__scalebias__hint = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_scalebias_hint";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_scalebias_hint" ];
@@ -13156,7 +13156,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_scalebias_hint" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_shadow = (build-asdf-system {
+  cl-glfw-opengl-sgix__shadow = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_shadow";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_shadow" ];
@@ -13169,7 +13169,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_shadow" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_shadow_ambient = (build-asdf-system {
+  cl-glfw-opengl-sgix__shadow__ambient = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_shadow_ambient";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_shadow_ambient" ];
@@ -13182,7 +13182,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_shadow_ambient" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_slim = (build-asdf-system {
+  cl-glfw-opengl-sgix__slim = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_slim";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_slim" ];
@@ -13195,7 +13195,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_slim" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_sprite = (build-asdf-system {
+  cl-glfw-opengl-sgix__sprite = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_sprite";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_sprite" ];
@@ -13208,7 +13208,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_sprite" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_tag_sample_buffer = (build-asdf-system {
+  cl-glfw-opengl-sgix__tag__sample__buffer = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_tag_sample_buffer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_tag_sample_buffer" ];
@@ -13221,7 +13221,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_tag_sample_buffer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_texture_coordinate_clamp = (build-asdf-system {
+  cl-glfw-opengl-sgix__texture__coordinate__clamp = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_texture_coordinate_clamp";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_texture_coordinate_clamp" ];
@@ -13234,7 +13234,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_texture_coordinate_clamp" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_texture_lod_bias = (build-asdf-system {
+  cl-glfw-opengl-sgix__texture__lod__bias = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_texture_lod_bias";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_texture_lod_bias" ];
@@ -13247,7 +13247,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_texture_lod_bias" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_texture_multi_buffer = (build-asdf-system {
+  cl-glfw-opengl-sgix__texture__multi__buffer = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_texture_multi_buffer";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_texture_multi_buffer" ];
@@ -13260,7 +13260,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_texture_multi_buffer" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sgix_ycrcba = (build-asdf-system {
+  cl-glfw-opengl-sgix__ycrcba = (build-asdf-system {
     pname = "cl-glfw-opengl-sgix_ycrcba";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sgix_ycrcba" ];
@@ -13273,7 +13273,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sgix_ycrcba" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sun_convolution_border_modes = (build-asdf-system {
+  cl-glfw-opengl-sun__convolution__border__modes = (build-asdf-system {
     pname = "cl-glfw-opengl-sun_convolution_border_modes";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sun_convolution_border_modes" ];
@@ -13286,7 +13286,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sun_convolution_border_modes" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sun_global_alpha = (build-asdf-system {
+  cl-glfw-opengl-sun__global__alpha = (build-asdf-system {
     pname = "cl-glfw-opengl-sun_global_alpha";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sun_global_alpha" ];
@@ -13299,7 +13299,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sun_global_alpha" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sun_mesh_array = (build-asdf-system {
+  cl-glfw-opengl-sun__mesh__array = (build-asdf-system {
     pname = "cl-glfw-opengl-sun_mesh_array";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sun_mesh_array" ];
@@ -13312,7 +13312,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sun_mesh_array" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sun_slice_accum = (build-asdf-system {
+  cl-glfw-opengl-sun__slice__accum = (build-asdf-system {
     pname = "cl-glfw-opengl-sun_slice_accum";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sun_slice_accum" ];
@@ -13325,7 +13325,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sun_slice_accum" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sun_triangle_list = (build-asdf-system {
+  cl-glfw-opengl-sun__triangle__list = (build-asdf-system {
     pname = "cl-glfw-opengl-sun_triangle_list";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sun_triangle_list" ];
@@ -13338,7 +13338,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sun_triangle_list" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sun_vertex = (build-asdf-system {
+  cl-glfw-opengl-sun__vertex = (build-asdf-system {
     pname = "cl-glfw-opengl-sun_vertex";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sun_vertex" ];
@@ -13351,7 +13351,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sun_vertex" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-sunx_constant_data = (build-asdf-system {
+  cl-glfw-opengl-sunx__constant__data = (build-asdf-system {
     pname = "cl-glfw-opengl-sunx_constant_data";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-sunx_constant_data" ];
@@ -13364,7 +13364,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-sunx_constant_data" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_1_0 = (build-asdf-system {
+  cl-glfw-opengl-version__1__0 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_1_0";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_1_0" ];
@@ -13377,7 +13377,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_1_0" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_1_1 = (build-asdf-system {
+  cl-glfw-opengl-version__1__1 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_1_1";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_1_1" ];
@@ -13390,7 +13390,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_1_1" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_1_2 = (build-asdf-system {
+  cl-glfw-opengl-version__1__2 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_1_2";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_1_2" ];
@@ -13403,7 +13403,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_1_2" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_1_3 = (build-asdf-system {
+  cl-glfw-opengl-version__1__3 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_1_3";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_1_3" ];
@@ -13416,7 +13416,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_1_3" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_1_4 = (build-asdf-system {
+  cl-glfw-opengl-version__1__4 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_1_4";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_1_4" ];
@@ -13429,7 +13429,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_1_4" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_1_5 = (build-asdf-system {
+  cl-glfw-opengl-version__1__5 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_1_5";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_1_5" ];
@@ -13442,7 +13442,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_1_5" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_2_0 = (build-asdf-system {
+  cl-glfw-opengl-version__2__0 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_2_0";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_2_0" ];
@@ -13455,7 +13455,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_2_0" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-version_2_1 = (build-asdf-system {
+  cl-glfw-opengl-version__2__1 = (build-asdf-system {
     pname = "cl-glfw-opengl-version_2_1";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-version_2_1" ];
@@ -13468,7 +13468,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-version_2_1" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-win_phong_shading = (build-asdf-system {
+  cl-glfw-opengl-win__phong__shading = (build-asdf-system {
     pname = "cl-glfw-opengl-win_phong_shading";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-win_phong_shading" ];
@@ -13481,7 +13481,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "cl-glfw-opengl-win_phong_shading" ];
     lispLibs = [ (getAttr "cl-glfw-opengl-core" self) ];
   });
-  cl-glfw-opengl-win_specular_fog = (build-asdf-system {
+  cl-glfw-opengl-win__specular__fog = (build-asdf-system {
     pname = "cl-glfw-opengl-win_specular_fog";
     version = "20150302-git";
     asds = [ "cl-glfw-opengl-win_specular_fog" ];
@@ -21326,7 +21326,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "class-options" ];
     lispLibs = [ (getAttr "closer-mop" self) ];
   });
-  class-options_tests = (build-asdf-system {
+  class-options__tests = (build-asdf-system {
     pname = "class-options_tests";
     version = "1.0.1";
     asds = [ "class-options_tests" ];
@@ -24332,7 +24332,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "compatible-metaclasses" ];
     lispLibs = [ (getAttr "class-options" self) (getAttr "closer-mop" self) (getAttr "enhanced-find-class" self) ];
   });
-  compatible-metaclasses_tests = (build-asdf-system {
+  compatible-metaclasses__tests = (build-asdf-system {
     pname = "compatible-metaclasses_tests";
     version = "1.0";
     asds = [ "compatible-metaclasses_tests" ];
@@ -25970,7 +25970,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "definitions-systems" ];
     lispLibs = [ (getAttr "canonicalized-initargs" self) (getAttr "enhanced-defclass" self) (getAttr "enhanced-find-class" self) (getAttr "shared-preferences" self) ];
   });
-  definitions-systems_tests = (build-asdf-system {
+  definitions-systems__tests = (build-asdf-system {
     pname = "definitions-systems_tests";
     version = "2.0.1";
     asds = [ "definitions-systems_tests" ];
@@ -27855,7 +27855,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "enhanced-boolean" ];
     lispLibs = [  ];
   });
-  enhanced-boolean_tests = (build-asdf-system {
+  enhanced-boolean__tests = (build-asdf-system {
     pname = "enhanced-boolean_tests";
     version = "1.0";
     asds = [ "enhanced-boolean_tests" ];
@@ -27881,7 +27881,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "enhanced-defclass" ];
     lispLibs = [ (getAttr "closer-mop" self) (getAttr "compatible-metaclasses" self) (getAttr "enhanced-eval-when" self) (getAttr "enhanced-find-class" self) (getAttr "evaled-when" self) (getAttr "shared-preferences" self) (getAttr "simple-guess" self) ];
   });
-  enhanced-defclass_tests = (build-asdf-system {
+  enhanced-defclass__tests = (build-asdf-system {
     pname = "enhanced-defclass_tests";
     version = "2.1";
     asds = [ "enhanced-defclass_tests" ];
@@ -27920,7 +27920,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "enhanced-find-class" ];
     lispLibs = [  ];
   });
-  enhanced-find-class_tests = (build-asdf-system {
+  enhanced-find-class__tests = (build-asdf-system {
     pname = "enhanced-find-class_tests";
     version = "1.0";
     asds = [ "enhanced-find-class_tests" ];
@@ -27959,7 +27959,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "enhanced-typep" ];
     lispLibs = [  ];
   });
-  enhanced-typep_tests = (build-asdf-system {
+  enhanced-typep__tests = (build-asdf-system {
     pname = "enhanced-typep_tests";
     version = "1.0";
     asds = [ "enhanced-typep_tests" ];
@@ -28323,7 +28323,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "evaled-when" ];
     lispLibs = [ (getAttr "trivial-cltl2" self) ];
   });
-  evaled-when_tests = (build-asdf-system {
+  evaled-when__tests = (build-asdf-system {
     pname = "evaled-when_tests";
     version = "1.0";
     asds = [ "evaled-when_tests" ];
@@ -28713,7 +28713,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "fakenil" ];
     lispLibs = [  ];
   });
-  fakenil_tests = (build-asdf-system {
+  fakenil__tests = (build-asdf-system {
     pname = "fakenil_tests";
     version = "1.0";
     asds = [ "fakenil_tests" ];
@@ -29324,7 +29324,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "first-time-value" ];
     lispLibs = [  ];
   });
-  first-time-value_tests = (build-asdf-system {
+  first-time-value__tests = (build-asdf-system {
     pname = "first-time-value_tests";
     version = "1.0.1";
     asds = [ "first-time-value_tests" ];
@@ -34549,7 +34549,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "inheriting-readers" ];
     lispLibs = [ (getAttr "class-options" self) (getAttr "closer-mop" self) (getAttr "compatible-metaclasses" self) ];
   });
-  inheriting-readers_tests = (build-asdf-system {
+  inheriting-readers__tests = (build-asdf-system {
     pname = "inheriting-readers_tests";
     version = "1.0.1";
     asds = [ "inheriting-readers_tests" ];
@@ -42618,7 +42618,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "object-class" ];
     lispLibs = [ (getAttr "closer-mop" self) (getAttr "compatible-metaclasses" self) (getAttr "enhanced-find-class" self) ];
   });
-  object-class_tests = (build-asdf-system {
+  object-class__tests = (build-asdf-system {
     pname = "object-class_tests";
     version = "1.0";
     asds = [ "object-class_tests" ];
@@ -50470,7 +50470,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "shared-preferences" ];
     lispLibs = [ (getAttr "inheriting-readers" self) (getAttr "trivial-garbage" self) ];
   });
-  shared-preferences_tests = (build-asdf-system {
+  shared-preferences__tests = (build-asdf-system {
     pname = "shared-preferences_tests";
     version = "1.1.1";
     asds = [ "shared-preferences_tests" ];
@@ -50769,7 +50769,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "simple-guess" ];
     lispLibs = [  ];
   });
-  simple-guess_tests = (build-asdf-system {
+  simple-guess__tests = (build-asdf-system {
     pname = "simple-guess_tests";
     version = "1.0";
     asds = [ "simple-guess_tests" ];
@@ -55124,7 +55124,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "trivial-jumptables" ];
     lispLibs = [  ];
   });
-  trivial-jumptables_tests = (build-asdf-system {
+  trivial-jumptables__tests = (build-asdf-system {
     pname = "trivial-jumptables_tests";
     version = "1.1";
     asds = [ "trivial-jumptables_tests" ];
@@ -57935,7 +57935,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "with-output-to-stream" ];
     lispLibs = [  ];
   });
-  with-output-to-stream_tests = (build-asdf-system {
+  with-output-to-stream__tests = (build-asdf-system {
     pname = "with-output-to-stream_tests";
     version = "1.0";
     asds = [ "with-output-to-stream_tests" ];
@@ -57974,7 +57974,7 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "with-shadowed-bindings" ];
     lispLibs = [ (getAttr "map-bind" self) ];
   });
-  with-shadowed-bindings_tests = (build-asdf-system {
+  with-shadowed-bindings__tests = (build-asdf-system {
     pname = "with-shadowed-bindings_tests";
     version = "1.0";
     asds = [ "with-shadowed-bindings_tests" ];
