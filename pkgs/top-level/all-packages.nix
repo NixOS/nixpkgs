@@ -117,6 +117,8 @@ with pkgs;
     dontRecurseIntoAttrs (
       import ./pkg-config/defaultPkgConfigPackages.nix pkgs
     );
+  defaultPkgConfigPackagesDataJson =
+    import ./pkg-config/defaultPkgConfigPackagesDataJson.nix pkgs;
 
   ### Nixpkgs maintainer tools
 
@@ -30449,7 +30451,6 @@ with pkgs;
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
   hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
-    inherit (haskellPackages) ghcWithPackages;
     packages = self: with self; [];
   };
 

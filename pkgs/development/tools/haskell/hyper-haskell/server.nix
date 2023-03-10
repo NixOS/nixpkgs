@@ -1,10 +1,11 @@
-{ stdenv, ghcWithPackages, makeWrapper, packages, lib }:
+{ stdenv, haskellPackages, makeWrapper, packages, lib }:
 
 let
-hyperHaskellEnv = ghcWithPackages (self: [ self.hyper-haskell-server ] ++ packages self);
+  hyperHaskellEnv = haskellPackages.ghc.withPackages
+    (self: [ self.hyper-haskell-server ] ++ packages self);
 in stdenv.mkDerivation {
   pname = "hyper-haskell-server-with-packages";
-  version = hyperHaskellEnv.version;
+  version = haskellPackages.hyper-haskell-server.version;
 
   nativeBuildInputs = [ makeWrapper ];
 

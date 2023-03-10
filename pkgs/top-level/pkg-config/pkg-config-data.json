@@ -1,8 +1,4 @@
 {
-  "version": {
-    "major": 0,
-    "minor": 1
-  },
   "modules": {
     "IL": {
       "attrPath": [
@@ -67,36 +63,6 @@
         "qtbase"
       ]
     },
-    "Qt5Qml": {
-      "attrPath": [
-        "qt5",
-        "qtdeclarative"
-      ]
-    },
-    "Qt5QmlModels": {
-      "attrPath": [
-        "qt5",
-        "qtdeclarative"
-      ]
-    },
-    "Qt5Quick": {
-      "attrPath": [
-        "qt5",
-        "qtdeclarative"
-      ]
-    },
-    "Qt5QuickTest": {
-      "attrPath": [
-        "qt5",
-        "qtdeclarative"
-      ]
-    },
-    "Qt5QuickWidgets": {
-      "attrPath": [
-        "qt5",
-        "qtdeclarative"
-      ]
-    },
     "Qt5Sql": {
       "attrPath": [
         "qt5",
@@ -146,9 +112,19 @@
         "libappindicator-gtk3"
       ]
     },
+    "bz2": {
+      "attrPath": [
+        "bzip2_1_1"
+      ]
+    },
     "bzip2": {
       "attrPath": [
         "bzip2"
+      ]
+    },
+    "bzip3": {
+      "attrPath": [
+        "bzip3"
       ]
     },
     "cairo-gobject": {
@@ -181,6 +157,11 @@
         "libdbusmenu-gtk3"
       ]
     },
+    "dbusmenu-jsonloader-0.4": {
+      "attrPath": [
+        "libdbusmenu"
+      ]
+    },
     "egl": {
       "attrPath": [
         "libGL"
@@ -197,6 +178,16 @@
     "fftw3f": {
       "attrPath": [
         "fftwFloat"
+      ]
+    },
+    "fftw3l": {
+      "attrPath": [
+        "fftwLongDouble"
+      ]
+    },
+    "fftw3q": {
+      "attrPath": [
+        "fftwQuad"
       ]
     },
     "form": {
@@ -255,6 +246,16 @@
       ]
     },
     "gl": {
+      "attrPath": [
+        "libGL"
+      ]
+    },
+    "glesv1_cm": {
+      "attrPath": [
+        "libGL"
+      ]
+    },
+    "glesv2": {
       "attrPath": [
         "libGL"
       ]
@@ -351,15 +352,33 @@
         "gtk2-x11"
       ]
     },
+    "gtk+-x11-3.0": {
+      "attrPath": [
+        "gtk3"
+      ]
+    },
+    "gtksourceview-2.0": {
+      "attrPath": [
+        "gnome2",
+        "gtksourceview"
+      ]
+    },
     "gtksourceview-3.0": {
       "attrPath": [
         "gtksourceview3"
       ]
     },
-    "hidapi": {
+    "gtksourceview-4": {
       "attrPath": [
-        "hidapi"
-      ],
+        "gtksourceview4"
+      ]
+    },
+    "gtksourceview-5": {
+      "attrPath": [
+        "gtksourceview5"
+      ]
+    },
+    "hidapi": {
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": true
       }
@@ -450,192 +469,19 @@
         "curl"
       ]
     },
-    "libecpg": {
-      "attrPath": [
-        "postgresql"
-      ]
-    },
-    "libecpg_compat": {
-      "attrPath": [
-        "postgresql"
-      ]
-    },
-    "libgsasl": {
-      "attrPath": [
-        "gsasl"
-      ]
-    },
-    "libidn": {
-      "attrPath": [
-        "libidn"
-      ]
-    },
-    "libjpeg": {
-      "attrPath": [
-        "libjpeg"
-      ]
-    },
-    "liblzma": {
-      "attrPath": [
-        "xz"
-      ]
-    },
-    "libmagic": {
-      "attrPath": [
-        "file"
-      ]
-    },
-    "libmnl": {
-      "attrPath": [
-        "libmnl"
-      ]
-    },
-    "libnotify": {
-      "attrPath": [
-        "libnotify"
-      ]
-    },
-    "libpcap": {
-      "attrPath": [
-        "libpcap"
-      ]
-    },
-    "libpcre": {
-      "attrPath": [
-        "pcre"
-      ]
-    },
-    "libpcre2-16": {
-      "attrPath": [
-        "pcre2"
-      ]
-    },
-    "libpcre2-32": {
-      "attrPath": [
-        "pcre2"
-      ]
-    },
-    "libpcre2-8": {
-      "attrPath": [
-        "pcre2"
-      ]
-    },
-    "libpcre2-posix": {
-      "attrPath": [
-        "pcre2"
-      ]
-    },
-    "libpgtypes": {
-      "attrPath": [
-        "postgresql"
-      ]
-    },
-    "libpng": {
-      "attrPath": [
-        "libpng"
-      ]
-    },
-    "libpq": {
-      "attrPath": [
-        "postgresql"
-      ]
-    },
-    "libpulse": {
-      "attrPath": [
-        "libpulseaudio"
-      ]
-    },
     "libpulse-mainloop-glib": {
-      "attrPath": [
-        "libpulseaudio"
-      ],
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": false
       }
-    },
-    "libpulse-simple": {
-      "attrPath": [
-        "libpulseaudio"
-      ]
-    },
-    "libqrencode": {
-      "attrPath": [
-        "qrencode"
-      ]
-    },
-    "librtlsdr": {
-      "attrPath": [
-        "rtl-sdr"
-      ]
-    },
-    "libsass": {
-      "attrPath": [
-        "libsass"
-      ]
-    },
-    "libsctp": {
-      "attrPath": [
-        "lksctp-tools"
-      ]
-    },
-    "libsecp256k1": {
-      "attrPath": [
-        "secp256k1"
-      ]
-    },
-    "libsodium": {
-      "attrPath": [
-        "libsodium"
-      ]
-    },
-    "libsoup-gnome-2.4": {
-      "attrPath": [
-        "libsoup"
-      ]
-    },
-    "libssh2": {
-      "attrPath": [
-        "libssh2"
-      ]
     },
     "libssl": {
       "attrPath": [
         "openssl"
       ]
     },
-    "libstatgrab": {
-      "attrPath": [
-        "libstatgrab"
-      ]
-    },
-    "libsystemd": {
-      "attrPath": [
-        "systemd"
-      ]
-    },
-    "libturbojpeg": {
-      "attrPath": [
-        "libjpeg"
-      ]
-    },
-    "libudev": {
-      "attrPath": [
-        "systemd"
-      ]
-    },
-    "libxml-2.0": {
-      "attrPath": [
-        "libxml2"
-      ]
-    },
     "libzip": {
       "attrPath": [
         "libzip"
-      ]
-    },
-    "libzmq": {
-      "attrPath": [
-        "zeromq"
       ]
     },
     "menu": {
@@ -668,79 +514,9 @@
         "ncurses"
       ]
     },
-    "netsnmp": {
-      "attrPath": [
-        "net_snmp"
-      ]
-    },
-    "nix-cmd": {
-      "attrPath": [
-        "nix"
-      ]
-    },
-    "nix-expr": {
-      "attrPath": [
-        "nix"
-      ]
-    },
-    "nix-main": {
-      "attrPath": [
-        "nix"
-      ]
-    },
-    "nix-store": {
-      "attrPath": [
-        "nix"
-      ]
-    },
-    "odbc": {
-      "attrPath": [
-        "unixODBC"
-      ]
-    },
-    "ompi": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
-    "ompi-c": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
-    "ompi-cxx": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
-    "ompi-f77": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
-    "ompi-f90": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
-    "ompi-fort": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
-    "openblas": {
-      "attrPath": [
-        "openblasCompat"
-      ]
-    },
     "openssl": {
       "attrPath": [
         "openssl"
-      ]
-    },
-    "orte": {
-      "attrPath": [
-        "openmpi"
       ]
     },
     "panel": {
@@ -753,106 +529,17 @@
         "ncurses"
       ]
     },
-    "pangocairo": {
-      "attrPath": [
-        "pango"
-      ]
-    },
-    "poppler-glib": {
-      "attrPath": [
-        "poppler_gi"
-      ]
-    },
-    "python": {
-      "attrPath": [
-        "python3"
-      ]
-    },
-    "ruby-2.7": {
-      "attrPath": [
-        "ruby_2_7"
-      ]
-    },
-    "ruby-3.0": {
-      "attrPath": [
-        "ruby_3_0"
-      ]
-    },
-    "ruby-3.1": {
-      "attrPath": [
-        "ruby_3_1"
-      ]
-    },
-    "sdl2": {
-      "attrPath": [
-        "SDL2"
-      ]
-    },
-    "sndfile": {
-      "attrPath": [
-        "libsndfile"
-      ]
-    },
-    "sqlite3": {
-      "attrPath": [
-        "sqlite"
-      ]
-    },
-    "taglib": {
-      "attrPath": [
-        "taglib"
-      ]
-    },
-    "taglib_c": {
-      "attrPath": [
-        "taglib"
-      ]
-    },
-    "tdjson": {
-      "attrPath": [
-        "tdlib"
-      ]
-    },
-    "tensorflow": {
-      "attrPath": [
-        "libtensorflow"
-      ]
-    },
-    "uuid": {
-      "attrPath": [
-        "libossp_uuid"
-      ]
-    },
-    "vte-2.91": {
-      "attrPath": [
-        "vte"
-      ]
-    },
     "wayland-client": {
-      "attrPath": [
-        "wayland"
-      ],
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": false
       }
     },
     "wayland-cursor": {
-      "attrPath": [
-        "wayland"
-      ],
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": false
       }
     },
-    "wayland-scanner": {
-      "attrPath": [
-        "wayland"
-      ]
-    },
     "wayland-server": {
-      "attrPath": [
-        "wayland"
-      ],
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": false
       }
@@ -867,103 +554,14 @@
         "webkitgtk"
       ]
     },
-    "x11": {
-      "attrPath": [
-        "xorg",
-        "libX11"
-      ]
-    },
-    "xau": {
-      "attrPath": [
-        "xorg",
-        "libXau"
-      ]
-    },
-    "xcursor": {
-      "attrPath": [
-        "xorg",
-        "libXcursor"
-      ]
-    },
-    "xerces-c": {
-      "attrPath": [
-        "xercesc"
-      ]
-    },
-    "xext": {
-      "attrPath": [
-        "xorg",
-        "libXext"
-      ]
-    },
-    "xft": {
-      "attrPath": [
-        "xorg",
-        "libXft"
-      ]
-    },
-    "xi": {
-      "attrPath": [
-        "xorg",
-        "libXi"
-      ]
-    },
-    "xinerama": {
-      "attrPath": [
-        "xorg",
-        "libXinerama"
-      ]
-    },
-    "xkbcommon": {
-      "attrPath": [
-        "libxkbcommon"
-      ]
-    },
-    "xpm": {
-      "attrPath": [
-        "xorg",
-        "libXpm"
-      ]
-    },
-    "xrandr": {
-      "attrPath": [
-        "xorg",
-        "libXrandr"
-      ]
-    },
-    "xrender": {
-      "attrPath": [
-        "xorg",
-        "libXrender"
-      ]
-    },
-    "xscrnsaver": {
-      "attrPath": [
-        "xorg",
-        "libXScrnSaver"
-      ]
-    },
-    "xtst": {
-      "attrPath": [
-        "xorg",
-        "libXtst"
-      ]
-    },
-    "xxf86vm": {
-      "attrPath": [
-        "xorg",
-        "libXxf86vm"
-      ]
-    },
-    "yaml-0.1": {
-      "attrPath": [
-        "libyaml"
-      ]
-    },
     "zlib": {
       "attrPath": [
         "zlib"
       ]
     }
+  },
+  "version": {
+    "major": 0,
+    "minor": 1
   }
 }
