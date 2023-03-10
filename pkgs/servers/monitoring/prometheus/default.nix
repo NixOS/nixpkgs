@@ -41,6 +41,8 @@ buildGoModule rec {
   pname = "prometheus";
   inherit version;
 
+  outputs = [ "out" "doc" "cli" ];
+
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "prometheus";
@@ -130,6 +132,10 @@ buildGoModule rec {
     mkdir -p "$out/share/doc/prometheus" "$out/etc/prometheus"
     cp -a $src/documentation/* $out/share/doc/prometheus
     cp -a $src/console_libraries $src/consoles $out/etc/prometheus
+  '';
+
+  postInstall = ''
+    moveToOutput bin/promtool $cli
   '';
 
   doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
