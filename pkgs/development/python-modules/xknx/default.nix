@@ -3,8 +3,6 @@
 , fetchFromGitHub
 , cryptography
 , ifaddr
-, voluptuous
-, pyyaml
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder

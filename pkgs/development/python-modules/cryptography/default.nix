@@ -7,8 +7,6 @@
 , setuptools-rust
 , openssl
 , Security
-, packaging
-, six
 , isPyPy
 , cffi
 , pytestCheckHook

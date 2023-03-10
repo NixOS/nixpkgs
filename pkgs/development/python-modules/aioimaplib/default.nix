@@ -1,6 +1,5 @@
 { lib
 , pythonOlder
-, pythonAtLeast
 , asynctest
 , buildPythonPackage
 , docutils

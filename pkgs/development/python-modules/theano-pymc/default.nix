@@ -6,8 +6,6 @@
 , numpy
 , scipy
 , filelock
-, pytest
-, nose
 , parameterized
 }:
 

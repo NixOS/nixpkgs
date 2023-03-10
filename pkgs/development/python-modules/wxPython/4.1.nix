@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , setuptools
 , which
@@ -12,7 +11,6 @@
 , cairo
 , ncurses
 , pango
-, wxGTK
 , gtk3
 , AGL
 , AudioToolbox
@@ -43,9 +41,6 @@
 , webkitgtk
 , autoPatchelfHook
 }:
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
-in
 buildPythonPackage rec {
   pname = "wxPython";
   version = "4.1.1";

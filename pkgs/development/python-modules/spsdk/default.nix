@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, dos2unix
 , pythonRelaxDepsHook
 , asn1crypto
 , astunparse

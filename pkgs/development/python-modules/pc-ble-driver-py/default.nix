@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , git
 , pc-ble-driver
-, pythonAtLeast
 , pythonOlder
 , scikit-build
 , setuptools

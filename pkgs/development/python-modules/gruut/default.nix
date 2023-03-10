@@ -8,7 +8,6 @@
 , jsonlines
 , num2words
 , python-crfsuite
-, python
 , networkx
 , glibcLocales
 , pytestCheckHook

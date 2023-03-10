@@ -8,7 +8,6 @@
 , pythonOlder
 , pyyaml
 , sphinx
-, stdenv
 , unidecode
 }:
 

@@ -1,5 +1,4 @@
 { buildPythonPackage
-, drawio-headless
 , fetchPypi
 , isPy3k
 , lib

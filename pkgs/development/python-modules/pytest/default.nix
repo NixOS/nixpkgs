@@ -3,7 +3,6 @@
 , callPackage
 , pythonOlder
 , fetchPypi
-, isPyPy
 , writeText
 
 # build

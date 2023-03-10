@@ -12,7 +12,6 @@
 , pytest-httpx
 , pytest-mock
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , pythonRelaxDepsHook
 , qcs-api-client

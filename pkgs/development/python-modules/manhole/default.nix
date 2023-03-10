@@ -1,5 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
+{ lib, buildPythonPackage
 , fetchPypi
 , pytest
 , requests

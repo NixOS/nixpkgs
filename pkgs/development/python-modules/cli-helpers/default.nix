@@ -2,13 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, backports_csv
 , configobj
 , mock
 , pytestCheckHook
 , pygments
 , tabulate
-, terminaltables
 , wcwidth
 }:
 

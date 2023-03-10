@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , gfortran
 , glibcLocales
 , numpy

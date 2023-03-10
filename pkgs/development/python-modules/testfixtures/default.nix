@@ -3,7 +3,6 @@
 , fetchPypi
 , mock
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , sybil
 , twisted

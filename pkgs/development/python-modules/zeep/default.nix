@@ -6,7 +6,6 @@
 , cached-property
 , defusedxml
 , fetchFromGitHub
-, fetchpatch
 , freezegun
 , httpx
 , isodate

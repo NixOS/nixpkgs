@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, python
 , pytestCheckHook
 , six
 , paste

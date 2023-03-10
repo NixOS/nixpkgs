@@ -11,7 +11,6 @@
 , pytest-xdist
 , pytestCheckHook
 , tensorflow
-, fetchpatch
 , rich
 }:
 

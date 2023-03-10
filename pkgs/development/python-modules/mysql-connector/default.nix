@@ -1,7 +1,5 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
-, django
 , dnspython
 , fetchFromGitHub
 , protobuf

@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , CoreServices
-, fetchpatch
 , fetchPypi
 , flaky
 , pathtools

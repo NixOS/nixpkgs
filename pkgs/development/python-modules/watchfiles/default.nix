@@ -4,13 +4,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , rustPlatform
-, setuptools-rust
 , pythonOlder
 , dirty-equals
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, python
 , CoreServices
 , libiconv
 }:

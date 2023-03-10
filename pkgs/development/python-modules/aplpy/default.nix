@@ -3,7 +3,6 @@
 , astropy-helpers
 , buildPythonPackage
 , cython
-, fetchpatch
 , fetchPypi
 , matplotlib
 , numpy

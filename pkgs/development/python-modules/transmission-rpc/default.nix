@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
 , poetry-core
 , pydantic
 , pytestCheckHook

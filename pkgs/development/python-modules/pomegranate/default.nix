@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , numpy
 , scipy
 , cython

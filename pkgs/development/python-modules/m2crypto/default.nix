@@ -4,7 +4,6 @@
 , fetchpatch
 , swig2
 , openssl
-, typing
 , parameterized
 }:
 

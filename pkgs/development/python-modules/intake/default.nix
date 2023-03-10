@@ -11,7 +11,6 @@
 , jinja2
 , msgpack
 , msgpack-numpy
-, numpy
 , pandas
 , panel
 , pyarrow

@@ -4,7 +4,6 @@
 , aiosignal
 , attrs
 , autoPatchelfHook
-, buildBazelPackage
 , buildPythonPackage
 , fetchPypi
 , click
@@ -18,7 +17,6 @@
 , frozenlist
 , fsspec
 , gpustat
-, grpc
 , grpcio
 , gym
 , jsonschema
@@ -48,7 +46,6 @@
 , setproctitle
 , smart-open
 , starlette
-, stdenv
 , tabulate
 , tensorboardx
 , uvicorn

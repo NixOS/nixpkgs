@@ -1,7 +1,6 @@
 { lib
 , boto
 , buildPythonPackage
-, fasteners
 , fetchFromGitHub
 , freezegun
 , google-reauth
@@ -10,7 +9,6 @@
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , retry_decorator
 , rsa
 , six

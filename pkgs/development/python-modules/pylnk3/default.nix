@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, twine
 , invoke
 , pythonOlder
 }:

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , isPy27
@@ -10,7 +9,6 @@
 , flaky
 , importlib-metadata
 , importlib-resources
-, pathlib2
 , platformdirs
 , pytest-freezegun
 , pytest-mock

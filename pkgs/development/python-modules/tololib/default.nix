@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitLab
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm

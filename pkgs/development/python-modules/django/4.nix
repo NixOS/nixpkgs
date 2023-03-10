@@ -9,7 +9,6 @@
 , setuptools
 
 # patched in
-, fetchpatch
 , geos
 , gdal
 , withGdal ? false

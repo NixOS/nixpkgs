@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchFromGitHub
 , hatch-requirements-txt

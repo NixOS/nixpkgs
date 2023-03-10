@@ -5,7 +5,6 @@
 , requests
 , six
 , pytestCheckHook
-, pythonOlder
 , requests-toolbelt
 , responses
 }:

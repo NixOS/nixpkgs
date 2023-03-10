@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, pytestCheckHook
 , pythonOlder
 , scipy
 }:

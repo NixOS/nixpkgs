@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , parver
 , pulumi
 , pythonOlder

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPyPy
 , pytest, pytest-cov, pytest-mock, freezegun
-, jinja2, future, binaryornot, click, jinja2-time, requests
+, jinja2, binaryornot, click, jinja2-time, requests
 , python-slugify
 , pyyaml
 }:

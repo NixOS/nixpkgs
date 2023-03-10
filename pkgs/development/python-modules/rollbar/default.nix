@@ -3,7 +3,6 @@
 , blinker
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , httpx
 , mock
 , pytestCheckHook

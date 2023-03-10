@@ -5,7 +5,6 @@
 , gitdb
 , pkgs
 , pythonOlder
-, substituteAll
 , typing-extensions
 }:
 

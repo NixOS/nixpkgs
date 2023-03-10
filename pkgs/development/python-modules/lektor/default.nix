@@ -18,7 +18,6 @@
 , pyopenssl
 , pytest-click
 , pytest-mock
-, pytest-pylint
 , pytestCheckHook
 , python
 , pythonOlder

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, pytz, pytestCheckHook, freezegun }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytz, pytestCheckHook, freezegun }:
 
 buildPythonPackage rec {
   pname = "babel";

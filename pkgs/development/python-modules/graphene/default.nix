@@ -10,7 +10,6 @@
 , pytest-benchmark
 , pytest-mock
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , pytz
 , snapshottest

@@ -8,7 +8,6 @@
 
 # tests
 , pytestCheckHook
-, appdirs
 , packaging
 }:
 

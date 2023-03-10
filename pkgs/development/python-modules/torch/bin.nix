@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchurl
-, isPy37
 , isPy38
 , isPy39
 , isPy310

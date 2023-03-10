@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
 , basemap-data
 , cython
 , geos

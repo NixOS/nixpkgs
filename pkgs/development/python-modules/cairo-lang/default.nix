@@ -17,7 +17,6 @@
 , numpy
 , pipdeptree
 , prometheus-client
-, pytest
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder

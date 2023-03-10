@@ -3,7 +3,6 @@
 , fetchPypi
 , nose
 , pythonOlder
-, pytestCheckHook
 , six
 }:
 

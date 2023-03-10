@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , aws-sam-translator
 , jschema-to-python
 , jsonpatch
@@ -10,7 +9,6 @@
 , networkx
 , pyyaml
 , sarif-om
-, setuptools
 , six
 , mock
 , pydot

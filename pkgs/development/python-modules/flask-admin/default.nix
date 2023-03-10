@@ -5,7 +5,6 @@
 , buildPythonPackage
 , colour
 , email-validator
-, enum34
 , fetchPypi
 , flask
 , flask-babelex

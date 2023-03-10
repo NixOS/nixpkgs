@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , mypy
 , pytestCheckHook
 , python-lsp-server

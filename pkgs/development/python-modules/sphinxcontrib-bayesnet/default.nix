@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
+{ lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";

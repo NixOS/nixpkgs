@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , django
-, djangorestframework
 , falcon
 , fetchFromGitHub
 , flask

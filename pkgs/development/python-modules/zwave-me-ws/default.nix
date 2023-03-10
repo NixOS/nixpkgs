@@ -1,15 +1,7 @@
 { lib
-, aiohttp
-, aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-engineio
-, python-socketio
 , pythonOlder
 , websocket-client
 }:

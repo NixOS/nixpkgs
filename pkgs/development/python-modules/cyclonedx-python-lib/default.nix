@@ -8,7 +8,6 @@
 , packageurl-python
 , poetry-core
 , pytestCheckHook
-, python
 , pythonOlder
 , requirements-parser
 , sortedcontainers

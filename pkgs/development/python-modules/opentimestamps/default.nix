@@ -2,7 +2,6 @@
 , bitcoinlib
 , buildPythonPackage
 , fetchFromGitHub
-, git
 , gitpython
 , pycryptodomex
 , pytestCheckHook

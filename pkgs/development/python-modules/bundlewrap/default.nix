@@ -6,7 +6,6 @@
 , jinja2
 , Mako
 , passlib
-, pytest
 , pyyaml
 , requests
 , rtoml

@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , fetchFromGitHub
 , lib
 , pyopenssl

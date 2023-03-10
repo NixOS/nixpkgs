@@ -11,7 +11,6 @@
 , mypy-extensions
 , pip
 , pytestCheckHook
-, pythonOlder
 , pyyaml
 , requests
 , setuptools

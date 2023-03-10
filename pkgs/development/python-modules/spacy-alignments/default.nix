@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , isPy3k
 , rustPlatform

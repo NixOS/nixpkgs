@@ -12,7 +12,6 @@
 , pytest-services
 , pytestCheckHook
 , python-memcached
-, pythonAtLeast
 , pythonOlder
 , requests-toolbelt
 , routes

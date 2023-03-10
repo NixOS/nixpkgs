@@ -7,7 +7,6 @@
 , argcomplete
 , packaging
 , importlib-metadata
-, pip
 , pytestCheckHook
 }:
 

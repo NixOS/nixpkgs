@@ -4,7 +4,6 @@
 , six
 , setuptools-scm
 , xorg
-, python
 , mock
 , nose
 , pytestCheckHook

@@ -23,7 +23,7 @@
 }:
 
 let
-  pymongo3 = pymongo.overridePythonAttrs(old: rec {
+  pymongo3 = pymongo.overridePythonAttrs(_: rec {
     version = "3.12.3";
     src = fetchPypi {
       pname = "pymongo";

@@ -8,7 +8,6 @@
 , distributed
 , fastparquet
 , fetchFromGitHub
-, fetchpatch
 , fsspec
 , jinja2
 , numpy

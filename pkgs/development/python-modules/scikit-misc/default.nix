@@ -3,7 +3,6 @@
 , buildPythonPackage
 , cython
 , gfortran
-, pytestCheckHook
 , numpy }:
 
 buildPythonPackage rec {

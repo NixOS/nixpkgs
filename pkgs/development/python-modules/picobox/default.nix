@@ -5,7 +5,6 @@
 , flask
 , isPy27
 , pytestCheckHook
-, pythonAtLeast
 , setuptools-scm
 }:
 

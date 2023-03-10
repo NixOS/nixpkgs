@@ -2,7 +2,6 @@
 , fetchPypi
 , buildPythonPackage
 , isPyPy
-, python
 , libev
 , greenlet
 , setuptools

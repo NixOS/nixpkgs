@@ -1,7 +1,6 @@
 { lib
 , attrs
 , buildPythonPackage
-, fetchFromGitHub
 , fetchPypi
 , hatch-vcs
 , hatchling
@@ -9,7 +8,6 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 , tabulate
 }:
 

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, flit
 , pytestCheckHook
 , numpy
 , scipy

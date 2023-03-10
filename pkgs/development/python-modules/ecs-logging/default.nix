@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
-, pytestCheckHook
 , pythonOlder
 }:
 

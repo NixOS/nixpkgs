@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, python
 , pythonOlder
 }:
 

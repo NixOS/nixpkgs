@@ -3,7 +3,6 @@
 , pythonOlder
 , nixosTests
 , fetchPypi
-, alembic
 , aniso8601
 , babel
 , blinker
@@ -29,9 +28,7 @@
 , pytz
 , requests
 , sqlalchemy
-, sqlalchemy-utils
 , sqlalchemy-continuum
-, sqlalchemy-i18n
 , werkzeug
 , wtforms
 , psycopg2 # optional, for postgresql support

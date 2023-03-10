@@ -3,7 +3,6 @@
 , fetchurl
 , lib
 , nixosTests
-, python
 , pythonOlder
 
 # pythonPackages

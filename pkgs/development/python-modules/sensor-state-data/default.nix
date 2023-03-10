@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, home-assistant-bluetooth
 , poetry-core
 , pytestCheckHook
 , pythonOlder

@@ -7,7 +7,6 @@
 , matplotlib
 , ase
 , netcdf4
-, pytest
 , pythonOlder
 , cython
 , cmake

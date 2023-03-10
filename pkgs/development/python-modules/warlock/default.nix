@@ -5,7 +5,6 @@
 , poetry-core
 , jsonpatch
 , jsonschema
-, six
 , pytestCheckHook
 }:
 

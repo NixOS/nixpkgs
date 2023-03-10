@@ -1,5 +1,4 @@
 { lib
-, isPy3k
 , fetchFromGitHub
 , buildPythonPackage
 , flake8-import-order

@@ -60,7 +60,7 @@ buildPythonPackage rec {
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
     withPackages = python-packages:
       (python.withPackages
-        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (_: {
           name = "${hy.name}-env";
           meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
             mainProgram = "hy";

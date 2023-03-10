@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , duet
 , matplotlib
 , networkx

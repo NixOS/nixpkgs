@@ -27,9 +27,7 @@
   linuxHeaders_5_19,
 
   # dependencies for torch.utils.tensorboard
-  pillow, six, future, tensorboard, protobuf,
-
-  isPy3k, pythonOlder,
+  pillow, six, future, tensorboard, protobuf, pythonOlder,
 
   # ROCm dependencies
   rocmSupport ? false,

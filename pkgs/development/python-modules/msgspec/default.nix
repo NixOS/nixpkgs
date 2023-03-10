@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, msgpack
-, pytestCheckHook
 , pythonOlder
 }:
 

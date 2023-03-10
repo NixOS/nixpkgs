@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , robotframework
 , robotframework-pythonlibcore
 , selenium

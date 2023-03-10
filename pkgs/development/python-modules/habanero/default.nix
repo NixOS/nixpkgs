@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , requests
 , tqdm
-, nose
 , vcrpy
 , pytestCheckHook
 , pythonOlder

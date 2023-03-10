@@ -8,7 +8,6 @@
 , oscrypto
 , requests
 , uritools
-, openssl
 , pytestCheckHook
 }:
 

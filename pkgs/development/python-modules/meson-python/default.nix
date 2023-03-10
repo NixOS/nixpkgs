@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
-, colorama
 , meson
 , ninja
 , pyproject-metadata

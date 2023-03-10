@@ -11,7 +11,6 @@
 , pyperclip
 , pyxdg
 , requests
-, substituteAll
 , typing-extensions
 , urwid
 , watchdog

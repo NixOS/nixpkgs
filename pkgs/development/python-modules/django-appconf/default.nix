@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , django
-, six
 , python
 }:
 

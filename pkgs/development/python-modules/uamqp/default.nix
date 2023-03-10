@@ -6,7 +6,6 @@
 , cmake
 , CoreFoundation
 , enum34
-, fetchpatch
 , fetchPypi
 , isPy3k
 , libcxxabi

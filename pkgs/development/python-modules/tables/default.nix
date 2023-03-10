@@ -1,6 +1,5 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , pythonOlder
 , bzip2

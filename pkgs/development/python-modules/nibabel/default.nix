@@ -4,7 +4,6 @@
 , isPy27
 , packaging
 , pytestCheckHook
-, nose
 , numpy
 , h5py
 , pydicom

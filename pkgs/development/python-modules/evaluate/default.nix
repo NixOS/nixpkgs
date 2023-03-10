@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , pythonRelaxDepsHook
-, pytestCheckHook
 , datasets
 , dill
 , fsspec

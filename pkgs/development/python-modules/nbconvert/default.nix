@@ -3,7 +3,6 @@
 , buildPythonPackage
 , defusedxml
 , fetchPypi
-, fetchpatch
 , fetchurl
 , hatchling
 , importlib-metadata

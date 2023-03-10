@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchPypi
 , setuptools
 , setuptools-scm
 , requests

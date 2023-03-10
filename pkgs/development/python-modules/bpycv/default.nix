@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
-, fetchurl
-, writeText
 , blender
 , minexr
 , beautifulsoup4

@@ -9,7 +9,7 @@
 }:
 
 let
-  ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
+  ft = freetype.overrideAttrs (_: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
   version = "3.6.12";

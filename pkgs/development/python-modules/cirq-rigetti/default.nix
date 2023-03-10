@@ -1,6 +1,5 @@
 { buildPythonPackage
 , cirq-core
-, requests
 , pytestCheckHook
 , attrs
 , certifi

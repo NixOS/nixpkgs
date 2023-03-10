@@ -4,7 +4,6 @@
 , cvxopt
 , cvxpy
 , cython
-, doCheck ? true
 , fetchFromGitHub
 , ipython
 , matplotlib

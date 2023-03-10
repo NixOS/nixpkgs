@@ -19,7 +19,6 @@
 , pytestCheckHook
 , python-doi
 , python-slugify
-, pythonAtLeast
 , pythonOlder
 , pyyaml
 , requests

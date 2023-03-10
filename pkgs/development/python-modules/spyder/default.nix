@@ -7,19 +7,16 @@
 , cloudpickle
 , cookiecutter
 , diff-match-patch
-, flake8
 , intervaltree
 , jedi
 , jellyfish
 , keyring
 , matplotlib
-, mccabe
 , nbconvert
 , numpy
 , numpydoc
 , psutil
 , pygments
-, pylint
 , pylint-venv
 , pyls-spyder
 , pyopengl
@@ -28,7 +25,6 @@
 , python-lsp-server
 , pyxdg
 , pyzmq
-, pycodestyle
 , qdarkstyle
 , qstylizer
 , qtawesome

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , attrs
 , buildPythonPackage
 , fetchFromGitHub

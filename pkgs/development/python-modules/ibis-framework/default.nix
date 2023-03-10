@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , atpublic
@@ -35,7 +34,6 @@
 , pytest-randomly
 , pytest-snapshot
 , pytest-xdist
-, python
 , pytz
 , regex
 , rich

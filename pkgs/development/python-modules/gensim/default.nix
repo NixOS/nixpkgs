@@ -6,7 +6,6 @@
 , numpy
 , scipy
 , smart-open
-, testfixtures
 , pyemd
 , pytestCheckHook
 , pythonOlder

@@ -5,7 +5,6 @@
 , pythonOlder
 , setuptools-scm
 , importlib-metadata
-, dbus-python
 , jaraco_classes
 , jeepney
 , secretstorage

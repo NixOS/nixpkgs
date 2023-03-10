@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , duckdb
 , google-cloud-storage
 , mypy

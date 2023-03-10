@@ -10,10 +10,8 @@
 , mock
 , moto
 , psutil
-, pytest-cov
 , pytest-mock
 , pytestCheckHook
-, pytest-runner
 , requests
 , responses
 , sqlalchemy

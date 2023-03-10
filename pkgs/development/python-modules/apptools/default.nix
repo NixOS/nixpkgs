@@ -6,7 +6,6 @@
 , importlib-resources
 , pandas
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , tables
 , traits

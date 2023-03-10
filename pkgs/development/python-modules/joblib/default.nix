@@ -1,5 +1,4 @@
 { lib
-, pythonAtLeast
 , pythonOlder
 , buildPythonPackage
 , fetchPypi

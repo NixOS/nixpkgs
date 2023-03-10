@@ -4,7 +4,6 @@
 , async-timeout
 , pillow
 , fetchPypi
-, pytestCheckHook
 , pythonOlder
 }:
 

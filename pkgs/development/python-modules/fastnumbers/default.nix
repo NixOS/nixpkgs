@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fastnumbers
 , fetchFromGitHub
 , hypothesis
 , pytestCheckHook

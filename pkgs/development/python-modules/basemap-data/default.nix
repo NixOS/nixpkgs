@@ -1,15 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
 , basemap
-, cython
-, geos
-, numpy
-, matplotlib
-, pyproj
-, pyshp
-, python
 , setuptools
 }:
 

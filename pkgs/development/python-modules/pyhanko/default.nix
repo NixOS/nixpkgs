@@ -2,14 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, asn1crypto
 , click
-, cryptography
 , pyhanko-certvalidator
 , pytz
 , pyyaml
 , qrcode
-, requests
 , tzlocal
 , certomancer
 , freezegun

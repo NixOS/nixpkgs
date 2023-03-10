@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub

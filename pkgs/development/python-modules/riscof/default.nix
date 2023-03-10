@@ -1,7 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, git
 , riscv-isac
 , riscv-config
 , jinja2

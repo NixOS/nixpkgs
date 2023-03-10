@@ -1,11 +1,7 @@
 { lib
-, bokeh
 , buildPythonPackage
 , colorcet
 , fetchPypi
-, ipython
-, matplotlib
-, notebook
 , numpy
 , pandas
 , panel

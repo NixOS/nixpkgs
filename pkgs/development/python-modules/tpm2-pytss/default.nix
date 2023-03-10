@@ -8,9 +8,7 @@
 , ibm-sw-tpm2
 , pkgconfig # see nativeBuildInputs
 , pkg-config # see nativeBuildInputs
-, pycparser
 , pytestCheckHook
-, python
 , pyyaml
 , setuptools-scm
 , tpm2-tss

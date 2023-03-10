@@ -1,5 +1,4 @@
 { lib
-, aiohttp
 , aresponses
 , async-modbus
 , async-timeout
