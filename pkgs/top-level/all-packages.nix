@@ -8424,6 +8424,8 @@ with pkgs;
 
   httpx = callPackage ../tools/security/httpx { };
 
+  hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
+
   hurl = callPackage ../tools/networking/hurl { };
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
