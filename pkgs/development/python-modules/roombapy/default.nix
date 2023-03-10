@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     rev = version;
-    sha256 = "sha256-dfeMd/THlj2HQYcLPmeC3AWP3vR/6+8BFU1QtSu5xg4=";
+    hash = "sha256-dfeMd/THlj2HQYcLPmeC3AWP3vR/6+8BFU1QtSu5xg4=";
   };
 
   nativeBuildInputs = [
