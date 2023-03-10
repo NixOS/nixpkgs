@@ -15604,9 +15604,6 @@ with pkgs;
   opam = callPackage ../development/tools/ocaml/opam {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
-  opam_1_2 = callPackage ../development/tools/ocaml/opam/1.2.2.nix {
-    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
-  };
 
   opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
 
