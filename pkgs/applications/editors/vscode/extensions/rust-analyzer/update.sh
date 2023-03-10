@@ -48,4 +48,4 @@ else
     ./"$node_packages"/generate.sh
 fi
 
-echo "Remember to also update the revisionTag and hash in default.nix!"
+echo "Remember to also update the releaseTag and hash in default.nix!"
