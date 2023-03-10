@@ -34,6 +34,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 1024
+  '';
+
   disabledTests = [
     # TypeError: <lambda>() missing 1 required...
     "test_print_with_style"
