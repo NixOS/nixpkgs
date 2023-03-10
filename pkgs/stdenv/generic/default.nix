@@ -77,7 +77,7 @@ let
 
   stdenv = (stdenv-overridable argsStdenv);
 
-  buildCanExecuteHost = buildPlatform.canExecute hostPlatform;
+  buildPlatformCanExecuteHostPlatform = buildPlatform.canExecute hostPlatform;
 
   # The stdenv that we are producing.
   in
@@ -140,7 +140,7 @@ let
         platforms = lib.platforms.all;
       };
 
-      inherit buildPlatform hostPlatform targetPlatform buildCanExecuteHost;
+      inherit buildPlatform hostPlatform targetPlatform buildPlatformCanExecuteHostPlatform;
 
       inherit extraNativeBuildInputs extraBuildInputs
         __extraImpureHostDeps extraSandboxProfile;
