@@ -34,6 +34,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 1024
+  '';
+
   disabledTests = [
     # RuntimeError: no running event loop
     "test_blank_line_fix"

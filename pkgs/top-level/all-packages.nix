@@ -3844,7 +3844,6 @@ with pkgs;
 
   bookstack = callPackage ../servers/web-apps/bookstack { };
 
-  # Upstream recommends qt5.12 and it doesn't build with qt5.15
   boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };

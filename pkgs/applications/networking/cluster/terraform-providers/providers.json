@@ -110,13 +110,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-ouS+0fLs4Zo17ZIqsd7CiYUKQMSNtuwVs3qdZ52qbns=",
+    "hash": "sha256-dOcsD5yJrn+zpX5F0ImIqD9d+iC228Wem/668RtsQNY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.57.1",
+    "rev": "v4.58.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-X4fgw0AJMDDsRuS9MlMu+pnnjxJ33P9QXnpqDXfvfuA="
+    "vendorHash": "sha256-nNQmiPBkIuQSBGDujMZI+dZMwv6xQcd8+nc1cMKrJws="
   },
   "azuread": {
     "hash": "sha256-MGCGfocs16qmJnvMRRD7TRHnPkS17h+oNUkMARAQhLs=",
@@ -382,11 +382,11 @@
     "vendorHash": "sha256-E1gzdES/YVxQq2J47E2zosvud2C/ViBeQ8+RfNHMBAg="
   },
   "fastly": {
-    "hash": "sha256-OODPVNHFW8hnpofWLvzn7qukngB8okZADYI5t9muHpQ=",
+    "hash": "sha256-XvDsL2N/S7DE+9ks8Y6ZY3hcogzUsiF7VymNK7NnmaI=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v3.2.0",
+    "rev": "v4.0.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -467,13 +467,13 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-4K0Pk7tgnOjFdHpe6SZNSt/wU8OBzdB/y99nibW5bAY=",
+    "hash": "sha256-b6vmtr2eHm7YNhRHS96+l6BLHYHgixR8Pw7/jK0tRPI=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.35.0",
+    "rev": "v1.36.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-oSpAq2834Nt+E8l64YhvuXdfUsoTU5rBr2I8+Yz9tkc="
+    "vendorHash": "sha256-zPO+TbJsFrgfjSaSrX5YRop/0LDDw/grNNntaIGiBU0="
   },
   "gridscale": {
     "hash": "sha256-ahYCrjrJPEItGyqbHYtgkIH/RzMyxBQkebSAyd8gwYo=",
@@ -765,13 +765,13 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-ReVP0droWSP+NWV0kQznfCllL/jx0uQKmaGr+CyR8iQ=",
+    "hash": "sha256-bf4t4xcA/K4atLyDVzkeLw5zm9sBz/dUBiivVaz4hNU=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.15.0",
+    "rev": "v3.16.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-aFjsUhdGboN8Hfu2ky6djG0hC/Z9MU2tOWDFXekOGNQ="
+    "vendorHash": "sha256-yF2yk85RLbvmULakODOV2V0Z9dzKfLClUSZTnECdO3o="
   },
   "nomad": {
     "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",
@@ -856,11 +856,11 @@
     "vendorHash": "sha256-aoJDRzackPjWxkrsQclweUFH3Bqdcj1aTJuTHZ7Dh7g="
   },
   "opentelekomcloud": {
-    "hash": "sha256-UIpzv5Tas5jxpaqg1n0KRoJhYj6vRE6DBQ2u701xgzU=",
+    "hash": "sha256-fkEQ4VWGJiPFTA6Wz8AxAiL4DOW+Kewl8T9ywy/yPME=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.33.1",
+    "rev": "v1.33.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-EbUHKM6fKEZk1ey4qTgAd/20OKJu0DoBF0MAOxB7y64="
   },
@@ -883,11 +883,11 @@
     "vendorHash": null
   },
   "pagerduty": {
-    "hash": "sha256-uicfk05Y8p4jQLG+Z8Cd2kI8rToI++13lsg0JUsm7Ew=",
+    "hash": "sha256-9aIYGmcbDgSZqtldLBMRjD0qKJZ3USuwNBpK3bvGrFY=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v2.11.0",
+    "rev": "v2.11.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1045,11 +1045,11 @@
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
   "spotinst": {
-    "hash": "sha256-OroABl6G5nCatoyPxHZkM9I7qidxwMlgFjWC9Ljshik=",
+    "hash": "sha256-a/WXuEIvFsbYGoIDT0vHNM1LoFs7VlqmGXHDszON/rU=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.104.0",
+    "rev": "v1.105.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-juso8uzTjqf/vxUmpiv/07WkqMJRS1CqHQhu6pHf7QY="
   },
