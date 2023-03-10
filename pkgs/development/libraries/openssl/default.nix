@@ -1,12 +1,10 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
+, makeWrapper
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
-# Using c_rehash_shim, based on openssl rehash by default.
-# Setting this to true will use the original perl based c_rehash script.
-, withPerl ? false
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
 , removeReferencesTo
@@ -19,14 +17,6 @@
 # files.
 
 let
-  # Think wrapper around `openssl rehash`, which has the same functionality
-  # and options as perl based c_rehash script.
-  c_rehash_shim = writeShellScript
-    "c_rehash_shim"
-    ''
-    exec /usr/bin/openssl rehash "''${@}"
-    ''
-  ;
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
    stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
@@ -78,12 +68,9 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ perl ]
+    nativeBuildInputs = [ makeWrapper perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
-      # perl is included to allow the interpreter path fixup hook to set the
-      # correct interpreter in c_rehash.
-      ++ lib.optional withPerl perl
       ++ lib.optional withZlib zlib;
 
     # TODO(@Ericson2314): Improve with mass rebuild
@@ -178,29 +165,16 @@ let
 
       # 'etc' is a separate output on static builds only.
       etc=$out
-    '') + lib.optionalString (!stdenv.hostPlatform.isWindows && withPerl)
-      # Fix bin/c_rehash's perl interpreter line
-      #
-      # - openssl 1_0_2: embeds a reference to buildPackages.perl
-      # - openssl 1_1:   emits "#!/usr/bin/env perl"
-      #
-      # In the case of openssl_1_0_2, reset the invalid reference and let the
-      # interpreter hook take care of it.
-      #
-      # In both cases, if withPerl = false, the intepreter line is expected be
-      # "#!/usr/bin/env perl"
-    ''
-      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-    '' + lib.optionalString (!withPerl)
-    # Replace perl based c_rehash script with c_rehash_shim
-    ''
-      substitute \
-        ${c_rehash_shim} \
-        $out/bin/c_rehash \
-        --replace /usr/bin/openssl "${placeholder "bin"}/bin/openssl"
-    '' + ''
+    '') + ''
       mkdir -p $bin
       mv $out/bin $bin/bin
+
+      # c_rehash is a legacy perl script with the same functionality
+      # as `openssl rehash`
+      # this wrapper script is created to maintain backwards compatibility without
+      # depending on perl
+      makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
+        --add-flags "rehash"
 
       mkdir $dev
       mv $out/include $dev/
