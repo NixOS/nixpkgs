@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
+, hatchling
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   # Tests are inplemented in a custom DSL (RSpec)
