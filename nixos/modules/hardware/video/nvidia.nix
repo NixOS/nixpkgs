@@ -382,7 +382,9 @@ in
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
       ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-      ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1";
+      ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
+      # proprietary driver is not compiled with support for X86_KERNEL_IBT
+      ++ optional (!cfg.open && config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "ibt=off";
 
     services.udev.extraRules =
       ''
