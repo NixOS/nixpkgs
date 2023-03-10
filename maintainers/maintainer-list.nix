@@ -11537,6 +11537,12 @@
     githubId = 1368952;
     name = "Pedro Lara Campos";
   };
+  penalty1083 = {
+    email = "penalty1083@outlook.com";
+    github = "penalty1083";
+    githubId = 121009904;
+    name = "penalty1083";
+  };
   penguwin = {
     email = "penguwin@penguwin.eu";
     github = "penguwin";
