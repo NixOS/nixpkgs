@@ -21,14 +21,12 @@ stdenv.mkDerivation rec {
     autoreconf -vfi
   '';
 
-  configureFlags = [ "--prefix=${prefix}" "--sysconfdir=${etc}" ];
-
   doCheck = true;
 
-  meta = {
-    description = "Clean up files in directories based on their age";
-    homepage = homepage;
-    license = license;
-    platforms = [ "x86_64-linux" "aarch64-linux" "darwin" ];
+  meta = with stdenv.lib; {
+    description = "Cleans up files in directories based on their age and/or size.";
+    homepage = https://packages.debian.org/stable/tmpreaper;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.joachifm ];
   };
 }
