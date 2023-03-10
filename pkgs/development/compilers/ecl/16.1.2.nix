@@ -14,16 +14,9 @@
 , threadSupport ? false
 , useBoehmgc ? true
 , boehmgc
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "fas"; program = "ecl"; flags = []; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})
-}:
+, ... }:
 
-let ecl = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ecl";
   version = "16.1.2";
 
@@ -103,14 +96,4 @@ let ecl = stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };
-
-  passthru = let
-    spec' = spec // { pkg = ecl; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-  in {
-    inherit pkgs;
-    withPackages = lispWithPackages pkgs;
-    buildASDFSystem = args: build-asdf-system (args // spec');
-  };
-};
-in ecl
+}

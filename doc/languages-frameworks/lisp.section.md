@@ -285,44 +285,27 @@ loaded.
 
 ## Adding a new Lisp
 
-Three additional functions are exposed, and are meant for wrapping Common Lisp
-derivations: `commonLispPackagesFor`, `lispWithPackages` and`build-asdf-system`.
+The function `wrapLisp` is used to wrap Common Lisp implementations and does this:
 
-`commonLispPackagesFor` returns a package set for the provided Lisp "spec". Such
-a spec is an attribute set of the following keys:
+- Adds the `pkgs` attribute
+- Adds the `withPackages` attribute
+- Adds the `buildASDFSystem` attribute
+- Modifies `override` to take an additional `packageOverrides` argument
 
-- `pkg`: the Lisp package derivation
-- `program`: The name of executable file in `${pkg}/bin/`
-- `flags`: A list of flags to always pass to `program`
+`wrapLisp` takes these arguments:
+
+- `pkg`: the Lisp package
 - `faslExt`: Implementation-specific extension for FASL files
-- `asdf`: The ASDF version to use
+- `program`: The name of executable file in `${pkg}/bin/` (Default: `pkg.pname`)
+- `flags`: A list of flags to always pass to `program` (Default: `[]`)
+- `asdf`: The ASDF version to use (Default: `pkgs.asdf_3_3`)
 
-The `spec` is an argument to every Lisp, and can be customized via `override`:
-
-```
-sbcl.override {
-  spec = {
-    pkg = pkgs.sbcl_2_1_1;
-    flags = [ "--dynamic-space-size" "4096" ];
-    faslExt = "fasl";
-    asdf = pkgs.asdf_3_1;
-  };
-}
-```
-
-`lispWithPackages` returns a function to create wrappers.
-
-`build-asdf-system` is the wrapper around `stdenv.mkDerivation`.
-
-To wrap a new Lisp, include the following in its `passthru`:
+This example wraps CLISP:
 
 ```
-passthru = let
-    spec' = spec // { pkg = sbcl; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-in {
-  inherit pkgs;
-  withPackages = lispWithPackages pkgs;
-  buildASDFSystem = args: build-asdf-system (args // spec');
+wrapLisp {
+  pkg = clisp;
+  faslExt = "fas";
+  flags = ["-E" "UTF8"];
 }
 ```

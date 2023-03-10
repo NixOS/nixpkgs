@@ -17,19 +17,12 @@
   ]
   ++ lib.optionals stdenv.isLinux [ "bindings/glibc" "zlib" ]
   ++ lib.optional x11Support "clx/new-clx"
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "fas"; program = "clisp"; flags = "-E UTF-8"; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})
-}:
+, ... }:
 
 assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
-let clisp = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "2.50pre20171114";
   pname = "clisp";
 
@@ -102,14 +95,4 @@ let clisp = stdenv.mkDerivation rec {
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = lib.platforms.linux;
   };
-
-  passthru = let
-    spec' = spec // { pkg = clisp; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-  in {
-    inherit pkgs;
-    withPackages = lispWithPackages pkgs;
-    buildASDFSystem = args: build-asdf-system (args // spec');
-  };
-
-}; in clisp
+}

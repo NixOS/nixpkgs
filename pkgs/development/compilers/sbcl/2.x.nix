@@ -10,14 +10,7 @@
 , coreCompression ? lib.versionAtLeast version "2.2.6"
 , texinfo
 , version
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "fasl"; program = "sbcl"; flags = []; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})
-}:
+, ... }:
 
 let
   versionMap = {
@@ -74,7 +67,7 @@ let
     };
   };
 
-sbcl = with versionMap.${version};
+in with versionMap.${version};
 
 stdenv.mkDerivation rec {
   pname = "sbcl";
@@ -226,15 +219,4 @@ stdenv.mkDerivation rec {
   '');
 
   meta = sbclBootstrap.meta;
-
-  # For packages
-  passthru = let
-    spec' = spec // { pkg = sbcl; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-  in {
-    inherit pkgs;
-    withPackages = lispWithPackages pkgs;
-    buildASDFSystem = args: build-asdf-system (args // spec');
-  };
-};
-in sbcl
+}

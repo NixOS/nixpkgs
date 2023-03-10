@@ -1,12 +1,5 @@
-{lib, stdenv, fetchurl, ant, jre, jdk
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "abcl"; program = "abcl"; flags = []; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})}:
-let abcl = stdenv.mkDerivation rec {
+{lib, stdenv, fetchurl, ant, jre, jdk, ...}:
+stdenv.mkDerivation rec {
   pname = "abcl";
   version = "1.9.0";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
@@ -47,15 +40,4 @@ let abcl = stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";
   };
-
-  # For packages
-  passthru = let
-    spec' = spec // { pkg = abcl; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-  in {
-    inherit pkgs;
-    withPackages = lispWithPackages pkgs;
-    buildASDFSystem = args: build-asdf-system (args // spec');
-  };
-};
-in abcl
+}

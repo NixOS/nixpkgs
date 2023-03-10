@@ -1,12 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "lx64fsl"; program = "ccl"; flags = ""; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})
-}:
+{ lib, stdenv, fetchurl, fetchpatch, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell, ... }:
 
 let
   options = rec {
@@ -56,7 +48,9 @@ let
     tar czf $out ccl
   '';
 
-ccl = stdenv.mkDerivation rec {
+in
+
+stdenv.mkDerivation rec {
   pname = "ccl";
   version  = "1.12";
 
@@ -131,14 +125,4 @@ ccl = stdenv.mkDerivation rec {
     broken      = (stdenv.isDarwin && stdenv.isx86_64);
     license     = licenses.asl20;
   };
-
-  passthru = let
-    spec' = spec // { pkg = ccl; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-  in {
-    inherit pkgs;
-    withPackages = lispWithPackages pkgs;
-    buildASDFSystem = args: build-asdf-system (args // spec');
-  };
-
-}; in ccl
+}

@@ -15,16 +15,9 @@
 , threadSupport ? true
 , useBoehmgc ? false
 , boehmgc
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "fas"; program = "ecl"; flags = []; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})
-}:
+, ... }:
 
-let ecl = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ecl";
   version = "21.2.1";
 
@@ -90,15 +83,4 @@ let ecl = stdenv.mkDerivation rec {
     platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
-
-  # For packages
-  passthru = let
-    spec' = spec // { pkg = ecl; };
-    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-  in {
-    inherit pkgs;
-    withPackages = lispWithPackages pkgs;
-    buildASDFSystem = args: build-asdf-system (args // spec');
-  };
-
-}; in ecl
+}
