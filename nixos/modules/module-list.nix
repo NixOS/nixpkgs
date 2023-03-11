@@ -440,6 +440,7 @@
   ./services/development/blackfire.nix
   ./services/development/bloop.nix
   ./services/development/distccd.nix
+  ./services/development/gemstash.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
@@ -624,6 +625,7 @@
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
+  ./services/misc/jellyseerr.nix
   ./services/misc/klipper.nix
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix

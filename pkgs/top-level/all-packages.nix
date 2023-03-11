@@ -3846,7 +3846,6 @@ with pkgs;
 
   bookstack = callPackage ../servers/web-apps/bookstack { };
 
-  # Upstream recommends qt5.12 and it doesn't build with qt5.15
   boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
@@ -5049,6 +5048,8 @@ with pkgs;
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
   jellyfin-web = callPackage ../servers/jellyfin/web.nix { };
+
+  jellyseerr = callPackage ../servers/jellyseerr { };
 
   jiten = callPackage ../applications/misc/jiten { };
 
@@ -7747,6 +7748,8 @@ with pkgs;
 
   gitlab-clippy = callPackage ../development/tools/rust/gitlab-clippy { };
 
+  gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
+
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
@@ -8420,6 +8423,8 @@ with pkgs;
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
   httpx = callPackage ../tools/security/httpx { };
+
+  hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
 
   hurl = callPackage ../tools/networking/hurl { };
 
@@ -15601,9 +15606,6 @@ with pkgs;
   opam = callPackage ../development/tools/ocaml/opam {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
-  opam_1_2 = callPackage ../development/tools/ocaml/opam/1.2.2.nix {
-    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
-  };
 
   opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
 
@@ -15622,8 +15624,8 @@ with pkgs;
   picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    # Upstream pony has dropped support for versions compiled with gcc.
-    stdenv = llvmPackages_9.stdenv;
+    # Upstream pony no longer supports GCC
+    stdenv = llvmPackages.stdenv;
   };
 
   blaze = callPackage ../development/libraries/blaze { };
@@ -19391,13 +19393,9 @@ with pkgs;
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  ndn-cxx = callPackage ../development/libraries/ndn-cxx {
-    openssl = openssl_1_1;
-  };
+  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
-  ndn-tools = callPackage ../tools/networking/ndn-tools {
-    openssl = openssl_1_1;
-  };
+  ndn-tools = callPackage ../tools/networking/ndn-tools { };
 
   nfd = callPackage ../servers/nfd { };
 
@@ -19995,6 +19993,8 @@ with pkgs;
   gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
+
+  geph = callPackages ../applications/networking/geph { };
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
@@ -24402,6 +24402,19 @@ with pkgs;
     packages = [];
   };
 
+  radianWrapper = callPackage ../development/r-modules/wrapper-radian.nix {
+    recommendedPackages = with rPackages; [
+      boot class cluster codetools foreign KernSmooth lattice MASS
+      Matrix mgcv nlme nnet rpart spatial survival
+    ];
+    radian = python3Packages.radian;
+    # Override this attribute to register additional libraries.
+    packages = [];
+    # Override this attribute if you want to expose R with the same set of
+    # packages as specified in radian
+    wrapR = false;
+  };
+
   rstudioWrapper = libsForQt5.callPackage ../development/r-modules/wrapper-rstudio.nix {
     recommendedPackages = with rPackages; [
       boot class cluster codetools foreign KernSmooth lattice MASS
@@ -24700,8 +24713,6 @@ with pkgs;
   gamehub = callPackage ../games/gamehub { };
 
   gatling = callPackage ../servers/http/gatling { };
-
-  gitlab-pages = callPackage ../servers/http/gitlab-pages { };
 
   glabels = callPackage ../applications/graphics/glabels { };
 
@@ -31224,6 +31235,8 @@ with pkgs;
 
   lens = callPackage ../applications/networking/cluster/lens { };
 
+  openlens = callPackage ../applications/networking/cluster/openlens { };
+
   leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
 
   libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
@@ -32496,8 +32509,6 @@ with pkgs;
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
-
-  photoflow = callPackage ../applications/graphics/photoflow { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
