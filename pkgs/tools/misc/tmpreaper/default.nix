@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake }:
+{ stdenv, lib, fetchurl, autoconf, automake }:
 
 let
   inherit (stdenv.lib) optional;
