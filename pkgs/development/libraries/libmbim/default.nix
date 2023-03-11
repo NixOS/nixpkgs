@@ -9,7 +9,8 @@
 , help2man
 , systemd
 , bash-completion
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 }:
 

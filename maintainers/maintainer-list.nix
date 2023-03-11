@@ -1832,6 +1832,12 @@
     githubId = 442623;
     name = "Ben Pye";
   };
+  benwbooth = {
+    email = "benwboooth@gmail.com";
+    github = "benwbooth";
+    githubId = 75972;
+    name = "Ben Booth";
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
@@ -11537,6 +11543,12 @@
     githubId = 1368952;
     name = "Pedro Lara Campos";
   };
+  penalty1083 = {
+    email = "penalty1083@outlook.com";
+    github = "penalty1083";
+    githubId = 121009904;
+    name = "penalty1083";
+  };
   penguwin = {
     email = "penguwin@penguwin.eu";
     github = "penguwin";
@@ -13287,6 +13299,12 @@
     github = "savannidgerinel";
     githubId = 8534888;
     name = "Savanni D'Gerinel";
+  };
+  savyajha = {
+    email = "savya.jha@hawkradius.com";
+    github = "savyajha";
+    githubId = 3996019;
+    name = "Savyasachee Jha";
   };
   sayanarijit = {
     email = "sayanarijit@gmail.com";

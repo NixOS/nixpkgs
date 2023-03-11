@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-pagetoc";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "slowsage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SRrlyUkEdC63NbdAv+J9kb5LTCL/GBwMhnUVdTE4nas=";
+    hash = "sha256-rLnGi6s5vNBxBRcim5cvLm5ajclK1q4mfgLCJ/sT1nU=";
   };
 
-  cargoHash = "sha256-Gx6N8VFUnaOvQ290TLeeNj/pVDeK/nUWLjM/KwVAjNo=";
+  cargoHash = "sha256-q3xSngar5/+5pFdiB//spiYQuXiNuRHSWOF6UPzccIU=";
 
   meta = with lib; {
     description = "Table of contents for mdbook (in sidebar)";
