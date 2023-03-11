@@ -17,7 +17,7 @@ def packages():
     return data
 
 
-def latest_packages(packages):
+def latest_packages(packages: bytes):
     latest_packages: dict[str, Packages] = {}
     for package in Packages.iter_paragraphs(packages, use_apt_pkg=False):
         name: str = package['Package']
@@ -33,7 +33,7 @@ def latest_packages(packages):
     return latest_packages
 
 
-def nix_expressions(latest):
+def nix_expressions(latest: dict[str, Packages]):
     channel_strs: list[str] = []
     for channel, package in latest.items():
         print(f"Processing {channel} {package['Version']}")
