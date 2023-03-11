@@ -375,18 +375,6 @@ final: prev:
     meta.homepage = "https://github.com/chrisbra/SudoEdit.vim/";
   };
 
-  VimCompletesMe = buildVimPluginFrom2Nix {
-    pname = "VimCompletesMe";
-    version = "2022-02-18";
-    src = fetchFromGitHub {
-      owner = "ackyshake";
-      repo = "VimCompletesMe";
-      rev = "9adf692d7ae6424038458a89d4a411f0a27d1388";
-      sha256 = "1sndgb3291dyifaa8adri2mb8cgbinbar3nw1fnf67k9ahwycaz0";
-    };
-    meta.homepage = "https://github.com/ackyshake/VimCompletesMe/";
-  };
-
   VimOrganizer = buildVimPluginFrom2Nix {
     pname = "VimOrganizer";
     version = "2020-12-15";
