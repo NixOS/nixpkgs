@@ -1,21 +1,54 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, check, dbus, xvfb-run, glib, gtk, gettext, libiconv, json_c, libintl
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, check
+, dbus
+, xvfb-run
+, glib
+, gtk
+, gettext
+, libiconv
+, json-glib
+, libintl
 }:
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.3.7";
+  version = "0.3.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-QTQiE/jnRSWPHbKMu2zMJ6YwCaXgAb95G74BzkNtTbc=";
+    hash = "sha256-DoqYykR/N17BHQ90GoLvAYluQ3odWPwUGRTacN6BiWU=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext check dbus ];
-  buildInputs = [ libintl libiconv json_c ];
-  propagatedBuildInputs = [ glib gtk ];
-  nativeCheckInputs = [ xvfb-run ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    check
+    dbus
+  ];
+
+  buildInputs = [
+    libintl
+    libiconv
+    json-glib
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk
+  ];
+
+  nativeCheckInputs = [
+    xvfb-run
+  ];
 
   doCheck = !stdenv.isDarwin;
 
