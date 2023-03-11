@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , gtk3
@@ -46,6 +48,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-gPCj2HVS+L3vpeNig77XZ9AFdtqMyWpEo9NKQjXEmeA=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/shotwell/-/commit/cd82759231e5ece2fa0dea40397c9051d15fd5c2.patch";
+      hash = "sha256-Vy2kvUlmPdEEuPB1RTcI5pGYNveeiQ+lId0YVlWo4wU=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
