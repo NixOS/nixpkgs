@@ -9173,6 +9173,12 @@
     githubId = 50230945;
     name = "Marcus Boyd";
   };
+  marcusramberg = {
+    email = "marcus@means.no";
+    github = "marcusramberg";
+    githubId = 5526;
+    name = "Marcus Ramberg";
+  };
   marenz = {
     email = "marenz@arkom.men";
     github = "marenz2569";
