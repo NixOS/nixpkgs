@@ -363,18 +363,6 @@ final: prev:
     meta.homepage = "https://github.com/SpaceVim/SpaceVim/";
   };
 
-  Spacegray-vim = buildVimPluginFrom2Nix {
-    pname = "Spacegray.vim";
-    version = "2021-07-06";
-    src = fetchFromGitHub {
-      owner = "ackyshake";
-      repo = "Spacegray.vim";
-      rev = "c699ca10ed421c462bd1c87a158faaa570dc8e28";
-      sha256 = "0ma8w6p5jh6llka49x5j5ql8fmhv0bx5hhsn5b2phak79yqg1k61";
-    };
-    meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
-  };
-
   SudoEdit-vim = buildVimPluginFrom2Nix {
     pname = "SudoEdit.vim";
     version = "2022-11-03";
