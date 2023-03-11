@@ -39,6 +39,7 @@
 , statix
 , stylish-haskell
 , tabnine
+, taskwarrior
 , tmux
 , tup
 , vim
@@ -894,6 +895,10 @@ self: super: {
       };
     });
 
+  taskwarrior = buildVimPluginFrom2Nix {
+    inherit (taskwarrior) version pname;
+    src = "${taskwarrior.src}/scripts/vim";
+  };
   telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs (old: {
     dependencies = with self; [ sqlite-lua telescope-nvim ];
   });

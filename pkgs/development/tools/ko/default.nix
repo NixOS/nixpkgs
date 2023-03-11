@@ -60,6 +60,6 @@ buildGoModule rec {
       ko also includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao jk vdemeester ];
+    maintainers = with maintainers; [ nickcao jk vdemeester developer-guy ];
   };
 }

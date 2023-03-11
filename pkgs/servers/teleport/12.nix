@@ -1,8 +1,8 @@
 { callPackage, ... }@args:
 callPackage ./generic.nix ({
-  version = "12.0.2";
-  hash = "sha256-9RD4ETQEXnj3d5YID3f3BghwitdqfcDgNhsk8ixWTW4=";
-  vendorHash = "sha256-2sOELuMyg7w/rhnWvnwDiUOsjUfb56JdAbrTGKvGnjs=";
-  cargoHash = "sha256-1ScU5ywq8vz1sWHW2idBsWcB1Xs+aylukBm96dKrwL4=";
-  yarnHash = "sha256-ItRi5EkYrwNB1MIf9l3yyK1BX6vNpL2+H1BlN3Evibg=";
+  version = "12.1.0";
+  hash = "sha256-rM8ehf4Bb+IvbLLeZEfQZnq6ViAp4d3RiYv1lGYbrOc=";
+  vendorHash = "sha256-euzu6GROCZnmawLnh549ETlfLDqKFuUG9YM6klXO3z0=";
+  cargoHash = "sha256-p8N07EITd+EAMJxMqBtg+1kOuqa94e5c3NtT3Z4VL6g=";
+  yarnHash = "sha256-zwKjuP85VCCghpRdwGtaul9VtMF5ByMJ45QU7wgrteg=";
 } // builtins.removeAttrs args [ "callPackage" ])

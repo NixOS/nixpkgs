@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "garbled1";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-08FMNRArzmfmLH6y5Z8QPcRVZJIvU3VIOvdTry3iBGI=";
+    hash = "sha256-7vjdRGnEnMf32pZwoKRxX16hxkyf0CXlncpbBJMQtfI=";
   };
 
   nativeBuildInputs = [

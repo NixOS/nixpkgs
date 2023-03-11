@@ -1267,6 +1267,23 @@ let
         };
       };
 
+      jellyedwards.gitsweep = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "jellyedwards";
+          name = "gitsweep";
+          version = "0.0.15";
+          sha256 = "rKAy84Uiat5VOQXd4OXToNfxAJ6SuWPT47vuiyK4qwg=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/jellyedwards.gitsweep/changelog";
+          description = "VS Code extension which allows you to easily exclude modified or new files so they don't get committed accidentally";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jellyedwards.gitsweep";
+          homepage = "https://github.com/jellyedwards/gitsweep";
+          license = licenses.mit;
+          maintainers = with maintainers; [ MatthieuBarthel ];
+        };
+      };
+
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jkillian";
@@ -1442,8 +1459,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "6.0.5";
-          sha256 = "sha256-vlmLr/1rBreqZifzEwAlhyGzHG28oZa+kmMzRl53tOI=";
+          version = "7.5.1";
+          sha256 = "sha256-AiDYqYF+F69O/aeolIEzqLmg20YN/I4EV6XMa8UgMns=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2597,8 +2614,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.18.0";
-          sha256 = "sha256-HwexlpPW15sXoxPQXDHWcQ8Yvz/5KMtZO4A34rXoXQ8=";
+          version = "2.19.0";
+          sha256 = "sha256-c95u++tkK8hToauulY8faNITUmsCBEeC2B8mHY0oEmA=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

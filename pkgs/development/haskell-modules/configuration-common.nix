@@ -1574,6 +1574,12 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
+    (appendPatch (fetchpatch {
+      name = "hercules-ci-agent-support-cachix-1.3.patch";
+      url = "https://github.com/hercules-ci/hercules-ci-agent/pull/500.diff";
+      sha256 = "sha256-ErrFvzB1NiIJLpsP2wfx5CX8DnH1x5i/ijQZEeuOzeI=";
+      relative = "hercules-ci-agent";
+    }))
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 

@@ -181,11 +181,11 @@ let
       });
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.4";
+        version = "2.0.5.post1";
         src = super.fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-laGOGmryEU29nuTxaK0zBw1jF+Ebr6KNmDzHtYX+kAs=";
+          hash = "sha256-E+sqWILP2fTu2q7BSlYDoJbwEl98PLSGEbO/o8JT8l0=";
         };
         nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
           pytest-xdist
@@ -263,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.0";
+  hassVersion = "2023.3.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,7 +279,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JxTvAUKZj59jL1czTBzPD7+6x1K7xGGGwZAO8f8dkzg=";
+    hash = "sha256-AJJ0w66a8D3kiLHhnoFmnGRWyDJ4OCebwwKTGdprGa0=";
   };
 
   # Secondary source is git for tests
@@ -287,7 +287,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-azH9CnHIY0iOLaF3Iqy+uJ6TuftUs1j4RcpXyRQrQws=";
+    hash = "sha256-KTmMA8P0MhYAiwp073Q3s60budFKHrsBnAJSqYC7zis=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -442,6 +442,7 @@ in python.pkgs.buildPythonApplication rec {
       python
       supportedComponentsWithTests;
     pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;

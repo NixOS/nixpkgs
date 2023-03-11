@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES klein
+    ${python.interpreter} -m twisted.trial klein
   '';
 
   pythonImportsCheck = [

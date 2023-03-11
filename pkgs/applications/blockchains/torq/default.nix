@@ -6,20 +6,20 @@
 
 let
   pname = "torq";
-  version = "0.18.17";
+  version = "0.18.19";
 
   src = fetchFromGitHub {
     owner = "lncapital";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xiA66yGo8b1+zZ7jQ7SFOtNPmqbdna7fUCT21uibrIM=";
+    hash = "sha256-qJIAH8SrB5a7j6ptorEm6fryZj63vDQIUQIgRsVn1us=";
   };
 
   web = buildNpmPackage {
     pname = "${pname}-frontend";
     inherit version;
     src = "${src}/web";
-    npmDepsHash = "sha256-/7x5RWYIB5BChYMnMuFVVaZd0pVkew4i4QrF7hSFnCM=";
+    npmDepsHash = "sha256-WulYJE2pdVa5hquV/7UjR1z9PkglJXOq5fv8nLa4wos=";
 
     # copied from upstream Dockerfile
     npmInstallFlags = [ "--legacy-peer-deps" ];

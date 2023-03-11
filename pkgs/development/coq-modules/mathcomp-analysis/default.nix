@@ -26,10 +26,10 @@ let
   defaultVersion = with versions; lib.switch [ coq.version mathcomp.version ]  [
       { cases = [ (isGe "8.14") (isGe "1.13.0") ];               out = "0.6.1"; }
       { cases = [ (isGe "8.14") (range "1.13" "1.15") ];         out = "0.5.2"; }
-      { cases = [ (isGe "8.13") (range "1.13" "1.14") ];         out = "0.5.1"; }
+      { cases = [ (range "8.13" "8.15") (range "1.13" "1.14") ]; out = "0.5.1"; }
       { cases = [ (range "8.13" "8.15") (range "1.12" "1.14") ]; out = "0.3.13"; }
-      { cases = [ (range "8.11" "8.14") (isGe "1.12.0") ];       out = "0.3.10"; }
-      { cases = [ (range "8.11" "8.13") "1.11.0" ];              out = "0.3.4"; }
+      { cases = [ (range "8.11" "8.14") (range "1.12" "1.13") ]; out = "0.3.10"; }
+      { cases = [ (range "8.11" "8.12") "1.11.0" ];              out = "0.3.4"; }
       { cases = [ (range "8.10" "8.12") "1.11.0" ];              out = "0.3.3"; }
       { cases = [ (range "8.10" "8.11") "1.11.0" ];              out = "0.3.1"; }
       { cases = [ (range "8.8"  "8.11") (range "1.8" "1.10") ];  out = "0.2.3"; }

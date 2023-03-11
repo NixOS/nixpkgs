@@ -1,0 +1,24 @@
+diff --git a/Directory.Build.props b/Directory.Build.props
+index 89137fba..bce300a4 100644
+--- a/Directory.Build.props
++++ b/Directory.Build.props
+@@ -29,16 +29,16 @@
+ 		<RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
+ 		<RollForward>LatestMajor</RollForward>
+ 		<RuntimeIdentifiers>linux-arm;linux-arm64;linux-x64;osx-arm64;osx-x64;win-arm64;win-x64</RuntimeIdentifiers>
+-		<TargetFrameworks>net7.0</TargetFrameworks>
++		<TargetFramework>net7.0</TargetFramework>
+ 		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+ 	</PropertyGroup>
+ 
+ 	<PropertyGroup Condition="'$(OS)' == 'Windows_NT' OR '$(ASFNetFramework)' != ''">
+-		<TargetFrameworks>$(TargetFrameworks);net481</TargetFrameworks>
++		<TargetFramework>$(TargetFramework);net481</TargetFramework>
+ 	</PropertyGroup>
+ 
+ 	<PropertyGroup Condition="'$(ASFNetStandard)' != ''">
+-		<TargetFrameworks>$(TargetFrameworks);netstandard2.1</TargetFrameworks>
++		<TargetFramework>$(TargetFramework);netstandard2.1</TargetFramework>
+ 	</PropertyGroup>
+ 
+ 	<ItemGroup Condition="'$(TargetFramework)' == 'net481' OR '$(TargetFramework)' == 'netstandard2.1'">

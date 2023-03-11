@@ -18,14 +18,14 @@
 
 mkDerivation rec {
   pname = "qcad";
-  version = "3.27.9.2";
+  version = "3.27.9.3";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "sha256-RpyckKXU8WN/bptKp6G5gNVSU3RzNFYnM0eWLf3E2Yg=";
+    sha256 = "sha256-JEUV8TtVYSlO+Gmg/ktMTmTlOmH+2zc6/fLkVHD7eBc=";
   };
 
   patches = [

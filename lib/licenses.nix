@@ -81,7 +81,6 @@ in mkLicense lset) ({
   apsl10 = {
     spdxId = "APSL-1.0";
     fullName = "Apple Public Source License 1.0";
-    url = "https://web.archive.org/web/20040701000000*/http://www.opensource.apple.com/apsl/1.0.txt";
   };
 
   apsl20 = {
@@ -223,6 +222,12 @@ in mkLicense lset) ({
   cc0 = {
     spdxId = "CC0-1.0";
     fullName = "Creative Commons Zero v1.0 Universal";
+  };
+
+  cc-by-nc-nd-30 = {
+    spdxId = "CC-BY-NC-ND-3.0";
+    fullName = "Creative Commons Attribution Non Commercial No Derivative Works 3.0 Unported";
+    free = false;
   };
 
   cc-by-nc-sa-20 = {

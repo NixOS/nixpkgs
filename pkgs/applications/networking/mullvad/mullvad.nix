@@ -15,6 +15,7 @@
 , enableOpenvpn ? true
 , openvpn-mullvad
 , shadowsocks-rust
+, installShellFiles
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
     makeWrapper
     git
+    installShellFiles
   ];
 
   buildInputs = [
@@ -57,6 +59,17 @@ rustPlatform.buildRustPackage rec {
     dest=build/lib/${stdenv.targetPlatform.config}
     mkdir -p $dest
     ln -s ${libwg}/lib/libwg.a $dest
+  '';
+
+  postInstall = ''
+    compdir=$(mktemp -d)
+    for shell in bash zsh fish; do
+      $out/bin/mullvad shell-completions $shell $compdir
+    done
+    installShellCompletion --cmd mullvad \
+      --bash $compdir/mullvad.bash \
+      --zsh $compdir/_mullvad \
+      --fish $compdir/mullvad.fish
   '';
 
   postFixup =

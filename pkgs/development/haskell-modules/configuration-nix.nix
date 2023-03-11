@@ -878,11 +878,34 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
-  cachix = super.cachix.override {
+  cachix = overrideCabal (drv: {
+    version = "1.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.3.1";
+      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+    };
+    buildDepends = [ self.conduit-concurrent-map ];
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+    postPatch = ''
+      sed -i 's/1.3/1.3.1/' cachix.cabal
+    '';
+  }) (super.cachix.override {
     nix = self.hercules-ci-cnix-store.passthru.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
-  };
+  });
+  cachix-api = overrideCabal (drv: {
+    version = "1.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.3.1";
+      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+  }) super.cachix-api;
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });

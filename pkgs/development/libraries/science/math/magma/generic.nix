@@ -8,10 +8,16 @@
 { blas
 , cmake
 , cudaPackages
+  # FIXME: cuda being unfree means ofborg won't eval "magma".
+  # respecting config.cudaSupport -> false by default
+  # -> ofborg eval -> throws "no GPU targets specified".
+  # Probably should delete everything but "magma-cuda" and "magma-hip"
+  # from all-packages.nix
 , cudaSupport ? true
 , fetchurl
 , gfortran
-, gpuTargets ? [ ]
+, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
+, gpuTargets ? [ ] # Non-CUDA targets, that is HIP
 , hip
 , hipblas
 , hipsparse
@@ -36,14 +42,8 @@ let
   #   of the first list *from* the second list. That means:
   #   lists.subtractLists a b = b - a
 
-  # For CUDA
-  supportedCudaSmArches = lists.intersectLists cudaFlags.cudaRealArches supportedGpuTargets;
-  # Subtract the supported SM architectures from the real SM architectures to get the unsupported
-  # SM architectures.
-  unsupportedCudaSmArches = lists.subtractLists supportedCudaSmArches cudaFlags.cudaRealArches;
-
   # For ROCm
-  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.cudaRealArches.
+  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
   rocmArches = lists.map (x: strings.removePrefix "gfx" x) hip.gpuTargets;
@@ -62,18 +62,31 @@ let
       )
       supported;
 
-  # Create the gpuTargetString.
   gpuTargetString = strings.concatStringsSep "," (
     if gpuTargets != [ ] then
     # If gpuTargets is specified, it always takes priority.
       gpuArchWarner supportedCustomGpuTargets unsupportedCustomGpuTargets
-    else if cudaSupport then
-      gpuArchWarner supportedCudaSmArches unsupportedCudaSmArches
     else if rocmSupport then
       gpuArchWarner supportedRocmArches unsupportedRocmArches
+    else if cudaSupport then
+      [ ] # It's important we pass explicit -DGPU_TARGET to reset magma's defaults
     else
       throw "No GPU targets specified"
   );
+
+  # E.g. [ "80" "86" "90" ]
+  cudaArchitectures = (builtins.map cudaFlags.dropDot cudaCapabilities);
+
+  cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
+  minArch =
+    let
+      minArch' = builtins.head (builtins.sort builtins.lessThan cudaArchitectures);
+    in
+    # If this fails some day, something must've changed and we should re-validate our assumptions
+    assert builtins.stringLength minArch' == 2;
+    # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
+    "${minArch'}0";
+
 
   cuda_joined = symlinkJoin {
     name = "cuda-redist-${cudaVersion}";
@@ -82,10 +95,15 @@ let
       cuda_cudart # cuda_runtime.h
       libcublas
       libcusparse
+    ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
       cuda_nvprof # <cuda_profiler_api.h>
+    ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+      cuda_profiler_api # <cuda_profiler_api.h>
     ];
   };
 in
+
+assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
 
 stdenv.mkDerivation {
   pname = "magma";
@@ -116,7 +134,11 @@ stdenv.mkDerivation {
     openmp
   ];
 
-  cmakeFlags = lists.optionals cudaSupport [
+  cmakeFlags = [
+    "-DGPU_TARGET=${gpuTargetString}"
+  ] ++ lists.optionals cudaSupport [
+    "-DCMAKE_CUDA_ARCHITECTURES=${cudaArchitecturesString}"
+    "-DMIN_ARCH=${minArch}" # Disarms magma's asserts
     "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/cc"
     "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/c++"
     "-DMAGMA_ENABLE_CUDA=ON"
@@ -126,14 +148,10 @@ stdenv.mkDerivation {
     "-DMAGMA_ENABLE_HIP=ON"
   ];
 
-  # NOTE: We must set GPU_TARGET in preConfigure in this way because it may contain spaces.
-  preConfigure = ''
-    cmakeFlagsArray+=("-DGPU_TARGET=${gpuTargetString}")
-  ''
   # NOTE: The stdenv's CXX is used when compiling the CMake test to determine the version of
   #   CUDA available. This isn't necessarily the same as cudatoolkit.cc, so we must set
   #   CUDAHOSTCXX.
-  + strings.optionalString cudaSupport ''
+  preConfigure = strings.optionalString cudaSupport ''
     export CUDAHOSTCXX=${cudatoolkit.cc}/bin/c++
   '';
 

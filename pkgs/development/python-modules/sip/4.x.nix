@@ -21,16 +21,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  installCheckPhase = let
-    modules = [
-      sip-module
-      "sipconfig"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
-  '';
+  pythonImportsCheck = [ sip-module "sipconfig" ];
 
   doCheck = true;
 

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "bpycv";
-  version = "0.2.43";
+  version = "0.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6LXhKuNkX3yKeZARLXmOVNAUQhJghtzKhnszJ1G/a8U=";
+    sha256 = "sha256-4N4rCVhbfJx7H7jS88QR3EcRupISIhnLuZ+cgfwIzg4=";
   };
 
   propagatedBuildInputs = [

@@ -13,14 +13,19 @@
 buildDotnetModule rec {
   pname = "archisteamfarm";
   # nixpkgs-update: no auto update
-  version = "5.4.2.13";
+  version = "5.4.3.2";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4DaqIsHfijA0hkhlsC6qQ1n+HC0zwdMtXiswOPOVpM4=";
+    sha256 = "sha256-SRWqe8KTjFdgVW7/EYRVUONtDWwxpcZ1GXWFPjKZzpI=";
   };
+
+  patches = [
+    # otherwise installPhase fails with NETSDK1129
+    ./fix-framework.diff
+  ];
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -59,6 +64,7 @@ buildDotnetModule rec {
      }
 
      buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
      buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
   '';
 

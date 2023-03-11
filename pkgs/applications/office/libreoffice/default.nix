@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , lib
+, substituteAll
 , pam
 , python3
 , libxslt
@@ -88,7 +89,6 @@
 , gdb
 , commonsLogging
 , librdf_rasqal
-, wrapGAppsHook
 , gnome
 , glib
 , ncurses
@@ -102,15 +102,32 @@
 , mkDerivation ? null
 , qtbase ? null
 , qtx11extras ? null
+, qtwayland ? null
 , ki18n ? null
 , kconfig ? null
 , kcoreaddons ? null
 , kio ? null
 , kwindowsystem ? null
-, wrapQtAppsHook ? null
 , variant ? "fresh"
 , symlinkJoin
 , postgresql
+# The rest are used only in passthru, for the wrapper
+, kauth ? null
+, kcompletion ? null
+, kconfigwidgets ? null
+, kglobalaccel ? null
+, kitemviews ? null
+, knotifications ? null
+, ktextwidgets ? null
+, kwidgetsaddons ? null
+, kxmlgui ? null
+, phonon ? null
+, qtdeclarative ? null
+, qtquickcontrols ? null
+, qtsvg ? null
+, qttools ? null
+, solid ? null
+, sonnet ? null
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
@@ -354,33 +371,24 @@ in
 
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
-    mkdir -p $out/bin $out/share/desktop
-
-    mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
-
-    for a in sbase scalc sdraw smath swriter simpress soffice unopkg; do
-      ln -s $out/lib/libreoffice/program/$a $out/bin/$a
-    done
-
-    ln -s $out/bin/soffice $out/bin/libreoffice
+    mkdir -p $out/share
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
-
-    for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" \
-        --replace "Exec=libreoffice${major}.${minor}" "Exec=libreoffice"
-    done
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
 
+    # Install dolphin templates, like debian does
+    install -D extras/source/shellnew/soffice.* --target-directory="$out/share/templates/.source"
+    cp ${substituteAll {src = ./soffice-template.desktop; app="Writer";  ext="odt"; type="text";        }} $out/share/templates/soffice.odt.desktop
+    cp ${substituteAll {src = ./soffice-template.desktop; app="Calc";    ext="ods"; type="spreadsheet"; }} $out/share/templates/soffice.ods.desktop
+    cp ${substituteAll {src = ./soffice-template.desktop; app="Impress"; ext="odp"; type="presentation";}} $out/share/templates/soffice.odp.desktop
+    cp ${substituteAll {src = ./soffice-template.desktop; app="Draw";    ext="odg"; type="drawing";     }} $out/share/templates/soffice.odg.desktop
+
     mkdir -p $dev
     cp -r include $dev
-  '' + optionalString kdeIntegration ''
-    for prog in $out/bin/*; do
-      wrapQtApp $prog
-    done
   '';
 
+  # Wrapping is done in ./wrapper.nix
   dontWrapQtApps = true;
 
   configureFlags = [
@@ -464,8 +472,7 @@ in
     jdk17
     libtool
     pkg-config
-  ]
-  ++ [ (if kdeIntegration then wrapQtAppsHook else wrapGAppsHook) ];
+  ];
 
   buildInputs = with xorg; [
     ArchiveZip
@@ -557,20 +564,56 @@ in
     zip
     zlib
   ]
-  ++ (with gst_all_1; [
-    gst-libav
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-  ])
+  ++ passthru.gst_packages
   ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ]
   ++ optionals (lib.versionAtLeast (lib.versions.majorMinor version) "7.4") [ libwebp ];
 
   passthru = {
     inherit srcs;
     jdk = jre';
+    inherit kdeIntegration;
+    # For the wrapper.nix
+    inherit gtk3;
+    # Although present in qtPackages, we need qtbase.qtPluginPrefix and
+    # qtbase.qtQmlPrefix
+    inherit qtbase;
+    gst_packages = with gst_all_1; [
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ];
+    qmlPackages = [
+      ki18n
+      knotifications
+      qtdeclarative
+      qtquickcontrols
+      qtwayland
+      solid
+      sonnet
+    ];
+    qtPackages = [
+      kauth
+      kcompletion
+      kconfigwidgets
+      kglobalaccel
+      ki18n
+      kio
+      kitemviews
+      ktextwidgets
+      kwidgetsaddons
+      kwindowsystem
+      kxmlgui
+      phonon
+      qtbase
+      qtdeclarative
+      qtsvg
+      qttools
+      qtwayland
+      sonnet
+    ];
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

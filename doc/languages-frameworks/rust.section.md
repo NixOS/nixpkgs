@@ -13,7 +13,7 @@ into your `configuration.nix` or bring them into scope with `nix-shell -p rustc 
 
 For other versions such as daily builds (beta and nightly),
 use either `rustup` from nixpkgs (which will manage the rust installation in your home directory),
-or use a community maintained [Rust overlay](#using-community-rust-overlays).
+or use [community maintained Rust toolchains](#using-community-maintained-rust-toolchains).
 
 ## `buildRustPackage`: Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
 
@@ -686,31 +686,61 @@ $ cargo build
 $ cargo test
 ```
 
-### Controlling Rust Version Inside `nix-shell` {#controlling-rust-version-inside-nix-shell}
+## Using community maintained Rust toolchains {#using-community-maintained-rust-toolchains}
 
-To control your rust version (i.e. use nightly) from within `shell.nix` (or
-other nix expressions) you can use the following `shell.nix`
+::: {.note}
+Note: The following projects cannot be used within nixpkgs since [IFD](#ssec-import-from-derivation) is disallowed.
+To package things that require Rust nightly, `RUSTC_BOOTSTRAP = true;` can sometimes be used as a hack.
+:::
+
+There are two community maintained approaches to Rust toolchain management:
+- [oxalica's Rust overlay](https://github.com/oxalica/rust-overlay)
+- [fenix](https://github.com/nix-community/fenix)
+
+Despite their names, both projects provides a similar set of packages and overlays under different APIs.
+
+Oxalica's overlay allows you to select a particular Rust version without you providing a hash or a flake input,
+but comes with a larger git repository than fenix.
+
+Fenix also provides rust-analyzer nightly in addition to the Rust toolchains.
+
+Both oxalica's overlay and fenix better integrate with nix and cache optimizations.
+Because of this and ergonomics, either of those community projects
+should be preferred to the Mozilla's Rust overlay ([nixpkgs-mozilla](https://github.com/mozilla/nixpkgs-mozilla)).
+
+The following documentation demonstrates examples using fenix and oxalica's Rust overlay
+with `nix-shell` and building derivations. More advanced usages like flake usage
+are documented in their own repositories.
+
+### Using Rust nightly with `nix-shell` {#using-rust-nightly-with-nix-shell}
+
+Here is a simple `shell.nix` that provides Rust nightly (default profile) using fenix:
 
 ```nix
-# Latest Nightly
-with import <nixpkgs> {};
-let src = fetchFromGitHub {
-      owner = "mozilla";
-      repo = "nixpkgs-mozilla";
-      # commit from: 2019-05-15
-      rev = "9f35c4b09fd44a77227e79ff0c1b4b6a69dff533";
-      hash = "sha256-18h0nvh55b5an4gmlgfbvwbyqj91bklf1zymis6lbdh75571qaz0=";
-   };
+with import <nixpkgs> { };
+let
+  fenix = callPackage
+    (fetchFromGitHub {
+      owner = "nix-community";
+      repo = "fenix";
+      # commit from: 2023-03-03
+      rev = "e2ea04982b892263c4d939f1cc3bf60a9c4deaa1";
+      hash = "sha256-AsOim1A8KKtMWIxG+lXh5Q4P2bhOZjoUhFWJ1EuZNNk=";
+    })
+    { };
 in
-with import "${src.out}/rust-overlay.nix" pkgs pkgs;
-stdenv.mkDerivation {
+mkShell {
   name = "rust-env";
-  buildInputs = [
-    # Note: to use stable, just replace `nightly` with `stable`
-    latest.rustChannels.nightly.rust
+  nativeBuildInputs = [
+    # Note: to use stable, just replace `default` with `stable`
+    fenix.default.toolchain
 
-    # Add some extra dependencies from `pkgs`
-    pkg-config openssl
+    # Example Build-time Additional Dependencies
+    pkg-config
+  ];
+  buildInputs = [
+    # Example Run-time Additional Dependencies
+    openssl
   ];
 
   # Set Environment Variables
@@ -718,116 +748,66 @@ stdenv.mkDerivation {
 }
 ```
 
-Now run:
+Save this to `shell.nix`, then run:
 
 ```ShellSession
 $ rustc --version
-rustc 1.26.0-nightly (188e693b3 2018-03-26)
+rustc 1.69.0-nightly (13471d3b2 2023-03-02)
 ```
 
 To see that you are using nightly.
 
-## Using community Rust overlays {#using-community-rust-overlays}
+Oxalica's Rust overlay has more complete examples of `shell.nix` (and cross compilation) under its
+[`examples` directory](https://github.com/oxalica/rust-overlay/tree/e53e8853aa7b0688bc270e9e6a681d22e01cf299/examples).
 
-There are two community maintained approaches to Rust toolchain management:
-- [oxalica's Rust overlay](https://github.com/oxalica/rust-overlay)
-- [fenix](https://github.com/nix-community/fenix)
+### Using Rust nightly in a derivation with `buildRustPackage` {#using-rust-nightly-in-a-derivation-with-buildrustpackage}
 
-Oxalica's overlay allows you to select a particular Rust version and components.
-See [their documentation](https://github.com/oxalica/rust-overlay#rust-overlay) for more
-detailed usage.
+You can also use Rust nightly to build rust packages using `makeRustPlatform`.
+The below snippet demonstrates invoking `buildRustPackage` with a Rust toolchain from oxalica's overlay:
 
-Fenix is an alternative to `rustup` and can also be used as an overlay.
-
-Both oxalica's overlay and fenix better integrate with nix and cache optimizations.
-Because of this and ergonomics, either of those community projects
-should be preferred to the Mozilla's Rust overlay (`nixpkgs-mozilla`).
-
-### How to select a specific `rustc` and toolchain version {#how-to-select-a-specific-rustc-and-toolchain-version}
-
-You can consume the oxalica overlay and use it to grab a specific Rust toolchain version.
-Here is an example `shell.nix` showing how to grab the current stable toolchain:
 ```nix
-{ pkgs ? import <nixpkgs> {
-    overlays = [
-      (import (fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
-    ];
-  }
-}:
-pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
-    pkg-config
-    rust-bin.stable.latest.minimal
-  ];
-}
-```
-
-You can try this out by:
-1. Saving that to `shell.nix`
-2. Executing `nix-shell --pure --command 'rustc --version'`
-
-As of writing, this prints out `rustc 1.56.0 (09c42c458 2021-10-18)`.
-
-### How to use an overlay toolchain in a derivation  {#how-to-use-an-overlay-toolchain-in-a-derivation}
-
-You can also use an overlay's Rust toolchain with `buildRustPackage`.
-The below snippet demonstrates invoking `buildRustPackage` with an oxalica overlay selected Rust toolchain:
-```nix
-with import <nixpkgs> {
+with import <nixpkgs>
+{
   overlays = [
     (import (fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
   ];
 };
+let
+  rustPlatform = makeRustPlatform {
+    cargo = rust-bin.stable.latest.minimal;
+    rustc = rust-bin.stable.latest.minimal;
+  };
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
   version = "12.1.1";
-  nativeBuildInputs = [
-    rust-bin.stable.latest.minimal
-  ];
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = version;
-    hash = "sha256-1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps=";
+    hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
-  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
+  cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = licenses.unlicense;
-    maintainers = [ maintainers.tailhook ];
+    license = with licenses; [ mit unlicense ];
+    maintainers = with maintainers; [ tailhook ];
   };
 }
 ```
 
 Follow the below steps to try that snippet.
-1. create a new directory
 1. save the above snippet as `default.nix` in that directory
-1. cd into that directory and run `nix-build`
+2. cd into that directory and run `nix-build`
 
-### Rust overlay installation {#rust-overlay-installation}
-
-You can use this overlay by either changing your local nixpkgs configuration,
-or by adding the overlay declaratively in a nix expression,  e.g. in `configuration.nix`.
-For more information see [the manual on installing overlays](#sec-overlays-install).
-
-### Declarative Rust overlay installation {#declarative-rust-overlay-installation}
-
-This snippet shows how to use oxalica's Rust overlay.
-Add the following to your `configuration.nix`, `home-configuration.nix`, `shell.nix`, or similar:
-
-```nix
-{ pkgs ? import <nixpkgs> {
-    overlays = [
-      (import (builtins.fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
-      # Further overlays go here
-    ];
-  };
-};
-```
-
-Note that this will fetch the latest overlay version when rebuilding your system.
+Fenix also has examples with `buildRustPackage`,
+[crane](https://github.com/ipetkov/crane),
+[naersk](https://github.com/nix-community/naersk),
+and cross compilation in its [Examples](https://github.com/nix-community/fenix#examples) section.

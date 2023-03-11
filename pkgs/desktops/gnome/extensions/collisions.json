@@ -36,6 +36,10 @@
       "SomaFm-Radio@alireza6677.gmail.com",
       "SomaFm-Radio@cajhne.gmail.com"
     ],
+    "virtualbox-applet": [
+      "vbox-applet@gs.eros2.info",
+      "vbox-applet@buba98"
+    ],
     "transparent-window": [
       "transparent-window@pbxqdown.github.com",
       "transparentwindows.mdirshad07"
@@ -95,6 +99,10 @@
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "virtualbox-applet": [
+      "vbox-applet@gs.eros2.info",
+      "vbox-applet@buba98"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
@@ -149,6 +157,10 @@
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "virtualbox-applet": [
+      "vbox-applet@gs.eros2.info",
+      "vbox-applet@buba98"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
@@ -195,6 +207,10 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "virtualbox-applet": [
+      "vbox-applet@gs.eros2.info",
+      "vbox-applet@buba98"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
@@ -236,6 +252,10 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "virtualbox-applet": [
+      "vbox-applet@gs.eros2.info",
+      "vbox-applet@buba98"
     ],
     "battery-time": [
       "batime@martin.zurowietz.de",

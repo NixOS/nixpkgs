@@ -205,6 +205,7 @@
   ./programs/nbd.nix
   ./programs/neovim.nix
   ./programs/nethoscope.nix
+  ./programs/nexttrace.nix
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nm-applet.nix
@@ -439,6 +440,7 @@
   ./services/development/blackfire.nix
   ./services/development/bloop.nix
   ./services/development/distccd.nix
+  ./services/development/gemstash.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
@@ -623,6 +625,7 @@
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
+  ./services/misc/jellyseerr.nix
   ./services/misc/klipper.nix
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
@@ -1128,6 +1131,7 @@
   ./services/web-apps/baget.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/calibre-web.nix
+  ./services/web-apps/coder.nix
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix

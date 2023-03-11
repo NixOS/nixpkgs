@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hodapp gebner ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

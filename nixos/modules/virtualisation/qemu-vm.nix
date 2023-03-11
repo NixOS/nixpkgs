@@ -895,7 +895,7 @@ in
 
         ${optionalString cfg.writableStore ''
           echo "mounting overlay filesystem on /nix/store..."
-          mkdir -p 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
+          mkdir -p -m 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
           mount -t overlay overlay $targetRoot/nix/store \
             -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
         ''}
@@ -1097,7 +1097,7 @@ in
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "/bin/mkdir -p 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
+          ExecStart = "/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
         };
       };
     };

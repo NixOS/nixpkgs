@@ -16,16 +16,16 @@
 
 buildGo120Module rec {
   pname = "evcc";
-  version = "0.113.0";
+  version = "0.114.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-ikpcuOihkghRMsSj1gy4FxqZ/ojH4bk218O3LUkEHIQ=";
+    hash = "sha256-c+XHSO6waDyju8oXFWGYeaCCqyaYdU2JLXr+NDXijdU=";
   };
 
-  vendorHash = "sha256-xzD/CKecRG0qKICVwuUGh8wTgVCz0iwYzcXmUZFLLso=";
+  vendorHash = "sha256-O58Y9mfHmNUWtHmdO3hvZQbFlcqfZs0GmQDcx2RKRUs=";
 
   npmDeps = fetchNpmDeps {
     inherit src;

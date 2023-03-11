@@ -4,6 +4,8 @@ let
 
 inherit (builtins) length;
 
+asciiTable = import ./ascii-table.nix;
+
 in
 
 rec {
@@ -33,8 +35,6 @@ rec {
     typeOf
     unsafeDiscardStringContext
     ;
-
-  asciiTable = import ./ascii-table.nix;
 
   /* Concatenate a list of strings.
 

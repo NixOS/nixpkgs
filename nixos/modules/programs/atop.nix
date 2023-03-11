@@ -142,6 +142,7 @@ in
               # convert remainings logs and start eventually
               atop.serviceConfig.ExecStartPre = pkgs.writeShellScript "atop-update-log-format" ''
                 set -e -u
+                shopt -s nullglob
                 for logfile in "$LOGPATH"/atop_*
                 do
                   ${atop}/bin/atopconvert "$logfile" "$logfile".new

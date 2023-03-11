@@ -2220,11 +2220,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-amdgpu";
-    version = "21.0.0";
+    version = "23.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-21.0.0.tar.bz2";
-      sha256 = "125dq85n46yqmnmr2hknxwcqicwlvz2b2phf0m963fpg9l1j6y30";
+      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-23.0.0.tar.xz";
+      sha256 = "0qf0kjh6pww5abxmqa4c9sfa2qq1hq4p8qcgqpfd1kpkcvmg012g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2572,11 +2572,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoqxl = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-qxl";
-    version = "0.1.5";
+    version = "0.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.5.tar.bz2";
-      sha256 = "14jc24znnahhmz4kqalafmllsg8awlz0y6gpgdpk5ih38ph851mi";
+      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.6.tar.xz";
+      sha256 = "0pwncx60r1xxk8kpp9a46ga5h7k7hjqf14726v0gra27vdc9blra";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2700,11 +2700,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosuncg6 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-suncg6";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2";
-      sha256 = "04fgwgk02m4nimlv67rrg1wnyahgymrn6rb2cjj1l8bmzkii4glr";
+      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.3.tar.xz";
+      sha256 = "16c3g5m0f5y9nx2x6w9jdzbs9yr6xhq31j37dcffxbsskmfxq57w";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2716,11 +2716,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunffb = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-sunffb";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.2.tar.bz2";
-      sha256 = "07z3ngifwg2d4jgq8pms47n5lr2yn0ai72g86xxjnb3k20n5ym7s";
+      url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.3.tar.xz";
+      sha256 = "0pf4ddh09ww7sxpzs5gr9pxh3gdwkg3f54067cp802nkw1n8vypi";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2732,11 +2732,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunleo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-sunleo";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2";
-      sha256 = "1gacm0s6rii4x5sx9py5bhvs50jd4vs3nnbwjdjymyf31kpdirl3";
+      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.3.tar.xz";
+      sha256 = "1px670aiqyzddl1nz3xx1lmri39irajrqw6dskirs2a64jgp3dpc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2780,11 +2780,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotrident = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-trident";
-    version = "1.3.8";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-trident-1.3.8.tar.bz2";
-      sha256 = "0gxcar434kx813fxdpb93126lhmkl3ikabaljhcj5qn3fkcijlcy";
+      url = "mirror://xorg/individual/driver/xf86-video-trident-1.4.0.tar.xz";
+      sha256 = "16qqn1brz50mwcy42zi1wsw9af56qadsaaiwm9hn1p6plyf22xkz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

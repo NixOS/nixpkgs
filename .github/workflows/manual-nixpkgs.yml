@@ -8,6 +8,7 @@ on:
       - master
     paths:
       - 'doc/**'
+      - 'lib/**'
 
 jobs:
   nixpkgs:

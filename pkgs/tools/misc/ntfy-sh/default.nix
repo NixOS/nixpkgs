@@ -10,16 +10,16 @@ let
 in
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    sha256 = "sha256-XjSPlaKYkUbiQQQHc/Sm6jWl9oJwOotZBzP6OBmrZLk=";
+    sha256 = "sha256-pBwlFkkXDgPhGfn2bhwuJTGQz+O0ADhPUU2Fogl98zA=";
   };
 
-  vendorSha256 = "sha256-an1OseJT+0StTGFfEXob42X2V+9xIaav5tJh4cjDJ0c=";
+  vendorSha256 = "sha256-XePJaXD83731r5CJG1PHnpU6s+443yq8mrqx7ZPU8Gs=";
 
   doCheck = false;
 
