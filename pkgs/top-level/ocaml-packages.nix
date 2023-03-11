@@ -615,8 +615,6 @@ let
       git-binary = pkgs.git;
     };
 
-    gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
-
     graphics =
     if lib.versionOlder "4.09" ocaml.version
     then callPackage ../development/ocaml-modules/graphics { }
