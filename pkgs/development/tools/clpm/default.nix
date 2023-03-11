@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (wrapLisp sbcl)
+    sbcl
   ];
 
   propagatedBuildInputs = [
