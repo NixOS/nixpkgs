@@ -138,8 +138,15 @@ resholve.mkDerivation rec {
       setup() {
         bats_load_library bats-support
         bats_load_library bats-assert
+        bats_load_library bats-file
 
         bats_require_minimum_version 1.5.0
+
+        TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
+      }
+
+      teardown() {
+        temp_del "$TEST_TEMP_DIR"
       }
 
       @test echo_hi {
@@ -152,10 +159,17 @@ resholve.mkDerivation rec {
         assert_line --index 0 "cp: missing file operand"
         assert_line --index 1 "Try 'cp --help' for more information."
       }
+
+      @test file_exists {
+        echo "hi" > "$TEST_TEMP_DIR/hello.txt"
+        assert_file_exist "$TEST_TEMP_DIR/hello.txt"
+        run cat "$TEST_TEMP_DIR/hello.txt"
+        assert_output "hi"
+      }
     '';
     passAsFile = [ "testScript" ];
   } ''
-    ${bats.withLibraries (p: [ p.bats-support p.bats-assert ])}/bin/bats "$testScriptPath"
+    ${bats.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ])}/bin/bats "$testScriptPath"
     touch "$out"
   '';
 
