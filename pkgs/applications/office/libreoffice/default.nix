@@ -154,6 +154,7 @@ let
   mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
 
   srcs = {
+    primary = primary-src;
     third_party =
       map (x: ((fetchurl { inherit (x) url sha256 name; }) // { inherit (x) md5name md5; }))
         (importVariant "download.nix" ++ [
