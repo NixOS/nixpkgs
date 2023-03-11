@@ -10,18 +10,18 @@ let
   pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
-      (bin.core.out // { pname = "core"; tlType = "bin"; })
-      (bin.core.doc // { pname = "core"; tlType = "doc"; })
+      (bin.core.out // { pname = "core"; version = "0"; tlType = "bin"; })
+      (bin.core.doc // { pname = "core"; version = "0"; tlType = "doc"; })
     ];
   };
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs (lib.attrValues pkgSet));
     splitBin = builtins.partition (p: p.tlType == "bin") all;
-    bin = mkUniqueOutPaths splitBin.right
+    bin = splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
           (lib.getBin ghostscript);
-    nonbin = mkUniqueOutPaths splitBin.wrong;
+    nonbin = splitBin.wrong;
 
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
@@ -35,15 +35,13 @@ let
 
   sortedUniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
 
-  mkUniqueOutPaths = pkgs: lib.unique
-    (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
-
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
   texmf = (buildEnv {
     name = "${name}-texmf";
 
-    paths = pkgList.nonbin;
+    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+    paths = lib.catAttrs "outPath" pkgList.nonbin;
 
     nativeBuildInputs = [ perl bin.core.out ];
 
@@ -72,7 +70,9 @@ in (buildEnv {
   inherit name;
 
   ignoreCollisions = false;
-  paths = pkgList.bin ++ [ doc ];
+
+  # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+  paths = lib.catAttrs "outPath" pkgList.bin ++ [ doc ];
   pathsToLink = [
     "/"
     "/bin" # ensure these are writeable directories
