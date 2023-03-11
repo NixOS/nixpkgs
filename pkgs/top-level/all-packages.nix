@@ -32271,6 +32271,8 @@ with pkgs;
     stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
+  nimdow = callPackage ../applications/window-managers/nimdow { };
+
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
