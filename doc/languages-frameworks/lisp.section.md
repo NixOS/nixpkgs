@@ -27,11 +27,11 @@ FASLs available to wrappers. Any other use-cases, such as producing SBCL
 executables with `sb-ext:save-lisp-and-die`, are achieved via overriding the
 `buildPhase` etc.
 
-In addition, Lisps have the `packageOverrides` argument, which can be used
-(through `override`) to substitute any package in the scope of their
-`pkgs`. This will be useful together with `overrideLispAttrs` when dealing with
-slashy ASDF systems, because they should stay in the main package and be build
-by specifying the `systems` argument to `build-asdf-system`.
+In addition, Lisps have the `withOverrides` function, which can be used to
+substitute any package in the scope of their `pkgs`. This will be useful
+together with `overrideLispAttrs` when dealing with slashy ASDF systems, because
+they should stay in the main package and be build by specifying the `systems`
+argument to `build-asdf-system`.
 
 ## The 90% use case example
 
@@ -152,8 +152,7 @@ function, which is the same as `build-asdf-system`, except for the `lisp`
 argument which is set to the given CL implementation.
 
 It can be used to define packages outside Nixpkgs, and, for example, add them
-into the package scope with `override` and `packageOverrides`, both of which
-will be discussed later on.
+into the package scope with `withOverrides` which will be discussed later on.
 
 ### Including an external package in scope
 
@@ -173,11 +172,9 @@ let
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
-  sbcl' = sbcl.override {
-    packageOverrides = self: super: {
-      inherit alexandria;
-    };
-  };
+  sbcl' = sbcl.withOverrides (self: super: {
+    inherit alexandria;
+  });
 in sbcl'.pkgs.alexandria
 ```
 
@@ -203,26 +200,23 @@ sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
 
 ## Overriding packages in scope
 
-Packages can be woven into a new scope by using `override` with
-`packageOverrides`:
+Packages can be woven into a new scope by using `withOverrides`:
 
 ```
 let
-  sbcl' = sbcl.override {
-    packageOverrides = self: super: {
-      alexandria = super.alexandria.overrideLispAttrs (oldAttrs: rec {
-        pname = "alexandria";
-        version = "1.4";
-        src = fetchFromGitLab {
-          domain = "gitlab.common-lisp.net";
-          owner = "alexandria";
-          repo = "alexandria";
-          rev = "v${version}";
-          hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
-        };
-      });
-    };
-  };
+  sbcl' = sbcl.withOverrides (self: super: {
+    alexandria = super.alexandria.overrideLispAttrs (oldAttrs: rec {
+      pname = "alexandria";
+      version = "1.4";
+      src = fetchFromGitLab {
+        domain = "gitlab.common-lisp.net";
+        owner = "alexandria";
+        repo = "alexandria";
+        rev = "v${version}";
+        hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
+      };
+    });
+  });
 in builtins.elemAt sbcl'.pkgs.bordeaux-threads.lispLibs 0
 ```
 
@@ -246,7 +240,8 @@ ecl.pkgs.alexandria.overrideLispAttrs (oldAttrs: {
 })
 ```
 
-See the respective section for how to weave it back into `ecl.pkgs`.
+See the respective section on using `withOverrides` for how to weave it back
+into `ecl.pkgs`.
 
 Note that sometimes the slashy systems might not only have more dependencies
 than the main one, but create a circular dependency between `.asd`
@@ -285,12 +280,9 @@ loaded.
 
 ## Adding a new Lisp
 
-The function `wrapLisp` is used to wrap Common Lisp implementations and does this:
-
-- Adds the `pkgs` attribute
-- Adds the `withPackages` attribute
-- Adds the `buildASDFSystem` attribute
-- Modifies `override` to take an additional `packageOverrides` argument
+The function `wrapLisp` is used to wrap Common Lisp implementations. It adds the
+`pkgs`, `withPackages`, `withOverrides` and `buildASDFSystem` attributes to the
+derivation.
 
 `wrapLisp` takes these arguments:
 
@@ -299,6 +291,7 @@ The function `wrapLisp` is used to wrap Common Lisp implementations and does thi
 - `program`: The name of executable file in `${pkg}/bin/` (Default: `pkg.pname`)
 - `flags`: A list of flags to always pass to `program` (Default: `[]`)
 - `asdf`: The ASDF version to use (Default: `pkgs.asdf_3_3`)
+- `packageOverrides`: Package overrides config (Default: `(self: super: {})`)
 
 This example wraps CLISP:
 

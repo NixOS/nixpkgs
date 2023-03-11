@@ -286,25 +286,26 @@ let
       '';
     });
 
-  wrapLisp = { pkg, faslExt, program ? pkg.pname, flags ? [], asdf ? pkgs.asdf_3_3 }:
+  wrapLisp = {
+    pkg
+    , faslExt
+    , program ? pkg.pname
+    , flags ? []
+    , asdf ? pkgs.asdf_3_3
+    , packageOverrides ? (self: super: {})
+  }:
     let
       spec = { inherit pkg faslExt program flags asdf; };
-      pkgs = commonLispPackagesFor spec;
+      pkgs = (commonLispPackagesFor spec).overrideScope' packageOverrides;
       withPackages = lispWithPackages pkgs;
-      override =
-        { packageOverrides ? (self: super: {}) , ... } @ attrs:
-        let
-          pkg' = spec.pkg.override attrs;
-          spec' = spec // { pkg = pkg'; };
-          pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-          withPackages = lispWithPackages pkgs;
-        in pkg' // {
-          inherit pkgs withPackages override;
-          buildASDFSystem = args: build-asdf-system (args // spec');
+      withOverrides = packageOverrides:
+        wrapLisp {
+          inherit pkg faslExt program flags asdf;
+          inherit packageOverrides;
         };
-    in pkg // {
-      inherit pkgs withPackages override;
       buildASDFSystem = args: build-asdf-system (args // spec);
+    in pkg // {
+      inherit pkgs withPackages withOverrides buildASDFSystem;
     };
 
 in wrapLisp
