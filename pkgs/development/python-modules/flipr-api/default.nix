@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cnico";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-IAxB3i/HkwO5sjDh2aBCtijOcG0VIbatQjTWIh0inoM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IAxB3i/HkwO5sjDh2aBCtijOcG0VIbatQjTWIh0inoM=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for Flipr API";
     homepage = "https://github.com/cnico/flipr-api";
+    changelog = "https://github.com/cnico/flipr-api/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
