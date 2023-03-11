@@ -33,8 +33,6 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  sortedUniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
-
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
   texmf = (buildEnv {
@@ -123,9 +121,9 @@ in (buildEnv {
     # now filter hyphenation patterns and formats
   (let
     hyphens = lib.filter (p: p.hasHyphens or false && p.tlType == "run") pkgList.splitBin.wrong;
-    hyphenPNames = sortedUniqueStrings (map (p: p.pname) hyphens);
+    hyphenPNames = lib.sort (a: b: a < b) (map (p: p.pname) hyphens);
     formats = lib.filter (p: p.hasFormats or false && p.tlType == "run") pkgList.splitBin.wrong;
-    formatPNames = sortedUniqueStrings (map (p: p.pname) formats);
+    formatPNames = lib.sort (a: b: a < b) (map (p: p.pname) formats);
     # sed expression that prints the lines in /start/,/end/ except for /end/
     section = start: end: "/${start}/,/${end}/{ /${start}/p; /${end}/!p; };\n";
     script =
