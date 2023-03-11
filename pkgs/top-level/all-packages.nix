@@ -30896,7 +30896,8 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = javaPackages.compiler.openjdk18;
+    jdk = jdk19.override { enableJavaFX = true; };
+    gradle = gradle_7;
   };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
