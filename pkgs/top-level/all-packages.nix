@@ -15087,6 +15087,10 @@ with pkgs;
 
   hop = callPackage ../development/compilers/hop { };
 
+  hop-cli = callPackage ../tools/admin/hop-cli {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
   };
