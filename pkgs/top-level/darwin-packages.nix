@@ -21,6 +21,13 @@ makeScopeWithSplicing' {
   f = (self: let
   inherit (self) mkDerivation callPackage;
 
+  clang-unwrapped-build = let
+    clang-unwrapped = pkgs.llvmPackages.clang-unwrapped;
+  in
+    if clang-unwrapped ? override
+    then clang-unwrapped.override { targetPackages.stdenv.cc.bintools = buildPackages.binutils; }
+    else clang-unwrapped; # when clang-unwrapped is bootstrapped and not overridable
+
   # Must use pkgs.callPackage to avoid infinite recursion.
 
   # Open source packages that are built from source
@@ -74,7 +81,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (pkgs.llvmPackages) llvm;
+    clang-unwrapped = clang-unwrapped-build;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -87,7 +95,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (pkgs.llvmPackages) llvm;
+    clang-unwrapped = clang-unwrapped-build;
     dualAs = true;
   };
 
@@ -112,6 +121,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+    clang-unwrapped = clang-unwrapped-build;
   };
 
   cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {

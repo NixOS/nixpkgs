@@ -2,6 +2,7 @@
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
+, targetPackages
 }:
 
 let
@@ -30,6 +31,8 @@ let
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
       "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
+      "-DCLANG_DEFAULT_LINKER=${targetPackages.stdenv.cc.bintools}/bin/${stdenv.targetPlatform.config}-ld"
     ];
 
     patches = [

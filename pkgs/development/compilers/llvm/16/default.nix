@@ -279,7 +279,9 @@ in let
     };
 
     clangNoLibc = wrapCCWith rec {
-      cc = tools.clang-unwrapped;
+      cc = tools.clang-unwrapped.override {
+        targetPackages.stdenv.cc.bintools = bintoolsNoLibc';
+      };
       libcxx = null;
       bintools = bintoolsNoLibc';
       extraPackages = [
@@ -293,7 +295,9 @@ in let
     };
 
     clangNoCompilerRt = wrapCCWith rec {
-      cc = tools.clang-unwrapped;
+      cc = tools.clang-unwrapped.override {
+        targetPackages.stdenv.cc.bintools = bintoolsNoLibc';
+      };
       libcxx = null;
       bintools = bintoolsNoLibc';
       extraPackages = [ ];

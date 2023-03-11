@@ -1,7 +1,7 @@
 # Create a cctools-compatible bintools that uses equivalent tools from LLVM in place of the ones
 # from cctools when possible.
 
-{ lib, stdenv, makeWrapper, cctools-port, llvmPackages, enableManpages ? stdenv.targetPlatform == stdenv.hostPlatform }:
+{ lib, stdenv, makeWrapper, cctools-port, llvmPackages, clang-unwrapped, enableManpages ? stdenv.targetPlatform == stdenv.hostPlatform }:
 
 let
   inherit (stdenv) targetPlatform hostPlatform;
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
 
   '' + lib.optionalString useClangAssembler ''
     # Use the clang-integrated assembler instead of using `as` from cctools.
-    makeWrapper "${lib.getBin llvmPackages.clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
+    makeWrapper "${lib.getBin clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
       --add-flags "-x assembler -integrated-as -c"
 
   '' + ''
