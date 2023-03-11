@@ -2,7 +2,7 @@
 , stdenv
 , runCommand
 , fetchurl
-, fetchpatch
+, fetchpatch2
 , perl
 , python3
 , ruby
@@ -72,7 +72,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.39.90";
+  version = "2.39.91";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gnWGbDUppxXCPK442/Lt0xDYGIVGpHxaL3CdGT96X8A=";
+    hash = "sha256-kuim9ZlFBSnrC9VS5PwtH2kYMetNicr/uW+1gdLINtM=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -100,19 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
       wpebackend_fdo = libwpe-fdo;
     })
 
-    # Various build fixes for 2.39.90, should be part of final release
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1445126808
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/5f8dc9d4cc01a31e53670acdcf7a9c4ea4626f58.patch";
-      hash = "sha256-dTok1QK93Fp8RFED4wgbVdLErUnmIB4Xsm/VPutmQuw=";
+    # Various build fixes for 2.39.91, should be part of final release
+    # https://src.fedoraproject.org/rpms/webkitgtk/blob/1c16daccce69d47df5381968e9c7be8ed72e4f90/f/fix-installed-headers.patch
+    (fetchpatch2 {
+      url = "https://github.com/WebKit/WebKit/commit/53a8890833684fe813efd7b7a2b7417dbfa7b826.patch";
+      hash = "sha256-utenJzQMr8AUMRT6CL06hi5sXPiXEJJmM7Vht+qxiw8=";
     })
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/f51987a0f316621a0ab324696c9a576bbaf1e686.patch";
-      hash = "sha256-TZVrrH4+JS2I/ist7MdMLsuk9X/Nyx62AcODvzGkdx8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/fe4fdc28cd214d36425d861791d05d1afaee60f5.patch";
-      hash = "sha256-p1LNyvc6kGRhptov6AKVl2Rc+rrRnzHEtpF/AhqbA+E=";
+    (fetchpatch2 {
+      url = "https://github.com/WebKit/WebKit/commit/10c9256883bf38b9fbcfbc91577783d4df90d1bd.patch";
+      hash = "sha256-eXMRh9oEcBeOiJvj+kRJHEIUwnviBvlI2JdBS6MVxtk=";
     })
   ];
 
