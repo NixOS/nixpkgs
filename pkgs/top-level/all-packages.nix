@@ -31094,6 +31094,8 @@ with pkgs;
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
+  kubernetes-metrics-server = callPackage ../applications/networking/cluster/kubernetes-metrics-server { };
+
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
 
   kubent = callPackage ../applications/networking/cluster/kubent { };
