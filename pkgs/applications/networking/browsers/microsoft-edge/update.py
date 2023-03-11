@@ -1,9 +1,10 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3Packages.packaging python3Packages.debian
 
-from urllib import request
-import gzip
 import base64
+import gzip
+import textwrap
+from urllib import request
 
 from debian.deb822 import Packages
 from debian.debian_support import Version
@@ -44,27 +45,31 @@ def nix_expressions(latest):
         sri = 'sha256-' + \
             base64.b64encode(bytes.fromhex(package['SHA256'])).decode('ascii')
 
-        channel_strs.append(f'''
-    {channel} = import ./browser.nix {{
-      channel = "{channel}";
-      version = "{version}";
-      revision = "{revision}";
-      sha256 = "{sri}";
-    }};''')
+        channel_str = textwrap.dedent(
+            f'''\
+            {channel} = import ./browser.nix {{
+              channel = "{channel}";
+              version = "{version}";
+              revision = "{revision}";
+              sha256 = "{sri}";
+            }};'''
+        )
+        channel_strs.append(channel_str)
     return channel_strs
 
 
 def write_expression():
     latest = latest_packages(packages())
     channel_strs = nix_expressions(latest)
-    nix_expr = f'''{{{''.join(channel_strs)}
-  }}'''
+    nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}'
 
-    print(f'''
-This script will update the default.nix file with the following contents:
-{nix_expr}\n
-Are you sure you want to continue [y/N]?
-  ''')
+    print(textwrap.dedent(
+        '''
+        This script will update the default.nix file with the following contents:
+        {}\n
+        Are you sure you want to continue [y/N]?
+        '''
+    ).format(nix_expr))
     response = input('> ')
     if response.lower() != 'y':
         print('Aborting')
