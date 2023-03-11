@@ -1,5 +1,4 @@
 { buildPythonPackage
-, cudaSupport ? torch.cudaSupport or false # by default uses the value from torch
 , fetchFromGitHub
 , lib
 , libjpeg_turbo
@@ -15,7 +14,7 @@
 }:
 
 let
-  inherit (torch) cudaPackages cudaCapabilities;
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
   inherit (cudaPackages) cudatoolkit cudaFlags cudaVersion;
 
   # NOTE: torchvision doesn't use cudnn; torch does!
