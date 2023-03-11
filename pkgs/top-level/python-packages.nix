@@ -10463,6 +10463,8 @@ self: super: with self; {
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
+  scikit-rf = callPackage ../development/python-modules/scikit-rf { };
+
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
