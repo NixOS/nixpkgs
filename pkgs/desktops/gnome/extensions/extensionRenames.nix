@@ -12,6 +12,9 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+  "PersianCalendar@oxygenws.com" = "persian-calendar";
+  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
+
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
 
