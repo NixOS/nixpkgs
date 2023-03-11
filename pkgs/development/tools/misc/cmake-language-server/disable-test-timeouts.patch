@@ -1,10 +1,10 @@
 diff --git a/tests/test_server.py b/tests/test_server.py
-index 2d09bb2..59a122a 100644
+index f349329..d130a2e 100644
 --- a/tests/test_server.py
 +++ b/tests/test_server.py
-@@ -26,7 +26,7 @@ from pygls.lsp.types import (
- )
- from pygls.server import LanguageServer
+@@ -27,7 +27,7 @@ from pygls.server import LanguageServer
+ 
+ from cmake_language_server.server import CMakeLanguageServer
  
 -CALL_TIMEOUT = 2
 +CALL_TIMEOUT = None
