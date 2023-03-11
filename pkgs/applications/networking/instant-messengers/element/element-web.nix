@@ -13,26 +13,26 @@
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = import ./pin.nix;
+  inherit (pinData.hashes) webSrcHash webYarnHash;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
     piwik = false; # disable analytics
   };
 
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes"] // {
     pname = "element-web";
-    inherit (pinData) version;
 
     src = fetchFromGitHub {
       owner = "vector-im";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = pinData.webSrcHash;
+      repo = finalAttrs.pname;
+      rev = "v${finalAttrs.version}";
+      sha256 = webSrcHash;
     };
 
     offlineCache = fetchYarnDeps {
-      yarnLock = src + "/yarn.lock";
-      sha256 = pinData.webYarnHash;
+      yarnLock = finalAttrs.src + "/yarn.lock";
+      sha256 = webYarnHash;
     };
 
     nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
@@ -59,7 +59,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      export VERSION=${version}
+      export VERSION=${finalAttrs.version}
       yarn build:res --offline
       yarn build:module_system --offline
       yarn build:bundle --offline
@@ -72,7 +72,7 @@ let
 
       cp -R webapp $out
       cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
-      echo "${version}" > "$out/version"
+      echo "${finalAttrs.version}" > "$out/version"
       jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
       runHook postInstall
@@ -81,15 +81,15 @@ let
     meta = {
       description = "A glossy Matrix collaboration client for the web";
       homepage = "https://element.io/";
-      changelog = "https://github.com/vector-im/element-web/blob/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/vector-im/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
       maintainers = lib.teams.matrix.members;
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
     };
-  };
+  });
 in
 if (conf == { }) then unwrapped else
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "${unwrapped.pname}-wrapped";
   inherit (unwrapped) version meta;
 
