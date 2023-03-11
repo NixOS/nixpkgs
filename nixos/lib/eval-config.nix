@@ -9,10 +9,20 @@
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
 evalConfigArgs@
-{ # !!! system can be set modularly, would be nice to remove,
-  #     however, removing or changing this default is too much
-  #     of a breaking change. To set it modularly, pass `null`.
-  system ? builtins.currentSystem
+{
+  modules
+, modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
+, prefix ? []
+
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
+
+  # --- deprecated arguments ----------
+  # them being set emits warnings below
+, # !!! See comment about args in lib/modules.nix
+  extraArgs ? null
+, # !!! See comment about check in lib/modules.nix
+  check ? null
 , # !!! is this argument needed any more? The pkgs argument can
   # be set modularly anyway.
   pkgs ? null
@@ -20,23 +30,21 @@ evalConfigArgs@
   #     we can add modules that are included in specialisations, regardless
   #     of inheritParentConfig.
   baseModules ? import ../modules/module-list.nix
-, # !!! See comment about args in lib/modules.nix
-  extraArgs ? {}
-, # !!! See comment about args in lib/modules.nix
-  specialArgs ? {}
-, modules
-, modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
-, # !!! See comment about check in lib/modules.nix
-  check ? true
-, prefix ? []
-, lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                  in if e == "" then [] else [(import e)]
+, # !!! system can be set modularly, would be nice to remove,
+  #     however, removing or changing this default is too much
+  #     of a breaking change. To set it modularly, don't define it.
+  system ? null
+, # !!! the nixos lib eval shims already use the minmial necessary lib
+  #     for bootstrapping the module evaluation itself.
+  #     This evaluation bootstrapping should be endogenous
+  #     to the lib eval shim and not be changed under its feet via
+  #     intransparent lib overloading. For all the rest, i.e. pass
+  #     a custom lib to the module system, use _module.args.lib.
+  lib ? import ../../lib
+  # -----------------------------------
 }:
-
-let pkgs_ = pkgs;
-in
-
 let
   evalModulesMinimal = (import ./default.nix {
     inherit lib;
@@ -44,36 +52,19 @@ let
     featureFlags.minimalModules = { };
   }).evalModules;
 
-  pkgsModule = rec {
-    _file = ./eval-config.nix;
-    key = _file;
-    config = {
-      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
-      # this.  Since the latter defaults to the former, the former should
-      # default to the argument. That way this new default could propagate all
-      # they way through, but has the last priority behind everything else.
-      nixpkgs.system = lib.mkIf (system != null) (lib.mkDefault system);
-
-      _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
-    };
-  };
+  inherit (import ./eval-config-legacy.nix { inherit lib evalConfigArgs; })
+    legacyModules
+    legacyPkgsModules;
 
   withWarnings = x:
     lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
     lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+    lib.warnIf (evalConfigArgs?pkgs) "The pkgs argument to eval-config.nix is deprecated. Please set config.pkgs instead."
+    lib.warnIf (evalConfigArgs?system) "The system argument to eval-config.nix is deprecated. Please set config.nixpkgs.system instead."
+    lib.warnIf (evalConfigArgs?baseModules) "The baseModules argument to eval-config.nix is deprecated."
+    lib.warnIf (evalConfigArgs?extraModules) "The extraModules argument to eval-config.nix is deprecated."
+    lib.warnIf (evalConfigArgs?lib) "The lib argument to eval-config.nix is deprecated. Please set config._module.args.lib instead."
     x;
-
-  legacyModules =
-    lib.optional (evalConfigArgs?extraArgs) {
-      config = {
-        _module.args = extraArgs;
-      };
-    }
-    ++ lib.optional (evalConfigArgs?check) {
-      config = {
-        _module.check = lib.mkDefault check;
-      };
-    };
 
   allUserModules =
     let
@@ -89,7 +80,7 @@ let
 
   noUserModules = evalModulesMinimal ({
     inherit prefix specialArgs;
-    modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
+    modules = baseModules ++ extraModules ++ legacyPkgsModules ++ [ modulesModule ];
   });
 
   # Extra arguments that are useful for constructing a similar configuration.
