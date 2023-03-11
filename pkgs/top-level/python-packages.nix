@@ -4784,6 +4784,8 @@ self: super: with self; {
 
   ipwhl = callPackage ../development/python-modules/ipwhl { };
 
+  ipwhois = callPackage ../development/python-modules/ipwhois { };
+
   ipy = callPackage ../development/python-modules/IPy { };
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
