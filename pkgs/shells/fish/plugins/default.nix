@@ -1,9 +1,7 @@
-{ lib, newScope }:
+{ lib, newScope, config }:
 
 lib.makeScope newScope (self: with self; {
   autopair = callPackage ./autopair.nix { };
-
-  autopair-fish = callPackage ./autopair-fish.nix { };
 
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
@@ -41,4 +39,6 @@ lib.makeScope newScope (self: with self; {
   sponge = callPackage ./sponge.nix { };
 
   tide = callPackage ./tide.nix { };
+} // lib.optionalAttrs config.allowAliases {
+  autopair-fish = self.autopair; # Added 2023-03-10
 })
