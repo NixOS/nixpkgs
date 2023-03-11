@@ -10,32 +10,31 @@
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
-  version = "4.4.4";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-    sha256 = "sha256-KVsBE0ueWewmoVY/vzxX2sKhRTzityPNR+wmTwZBWiI=";
+    hash = "sha256-RrfyB7RvYWkVCbjblLIPOFcZjUR/fJHk1Em1HP74kmY=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
-  buildInputs = [ stdenv.cc.cc ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
-    cp -r geekbench.plar geekbench4 geekbench_x86_64 $out/bin
+    cp -r geekbench.plar geekbench-workload.plar geekbench6 geekbench_x86_64 geekbench_avx2 $out/bin
 
-    for f in geekbench4 geekbench_x86_64 ; do
+    for f in geekbench6 geekbench_x86_64 geekbench_avx2 ; do
       wrapProgram $out/bin/$f \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
           addOpenGLRunpath.driverLink
           ocl-icd
           vulkan-loader
-       ]}"
+        ]}"
     done
 
     runHook postInstall
@@ -48,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = [ maintainers.michalrus ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "geekbench4";
+    mainProgram = "geekbench6";
   };
 }
