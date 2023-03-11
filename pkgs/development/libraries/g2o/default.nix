@@ -20,9 +20,6 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ eigen suitesparse blas lapack libGLU qtbase libqglviewer ];
 
-  # Silence noisy warning
-  CXXFLAGS = "-Wno-deprecated-copy";
-
   dontWrapQtApps = true;
 
   cmakeFlags = [
