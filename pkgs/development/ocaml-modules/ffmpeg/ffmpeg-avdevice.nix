@@ -1,6 +1,7 @@
 { lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
 , AppKit
 , AudioToolbox
+, AVFoundation
 , Cocoa
 , CoreImage
 , ForceFeedback
@@ -20,7 +21,17 @@ buildDunePackage {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit AudioToolbox Cocoa CoreImage ForceFeedback OpenGL VideoToolbox ];
+  ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    AudioToolbox
+    AVFoundation
+    Cocoa
+    CoreImage
+    ForceFeedback
+    OpenGL
+    VideoToolbox
+  ];
+
   propagatedBuildInputs = [ ffmpeg-av ffmpeg.dev ];
 
   doCheck = true;
