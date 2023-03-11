@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/railwayapp/cli";
     changelog = "https://github.com/railwayapp/cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Crafter ];
+    maintainers = with maintainers; [ Crafter techknowlogick ];
   };
 }
