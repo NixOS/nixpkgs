@@ -4,10 +4,9 @@
 , texlive
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "sagetex";
   version = "3.6.1";
-  passthru.tlType = "run";
 
   src = fetchFromGitHub {
     owner = "sagemath";
@@ -30,6 +29,11 @@ stdenv.mkDerivation rec {
     cp -va *.sty *.cfg *.def "$path/"
   '';
 
+  passthru = {
+    tlType = "run";
+    pkgs = [ finalAttrs.finalPackage ];
+  };
+
   meta = with lib; {
     description = "Embed code, results of computations, and plots from Sage into LaTeX documents";
     homepage = "https://github.com/sagemath/sagetex";
@@ -37,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ alexnortung ];
     platforms = platforms.all;
   };
-}
+})
