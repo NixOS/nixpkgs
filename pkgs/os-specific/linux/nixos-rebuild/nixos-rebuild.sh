@@ -34,6 +34,7 @@ targetHost=
 remoteSudo=
 verboseScript=
 noFlake=
+pathToConfig=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
 
@@ -145,6 +146,9 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         k="$1"; shift 1
         lockFlags+=("$i" "$j" "$k")
+        ;;
+      --system|--closure)
+        pathToConfig="$1"; shift 1
         ;;
       *)
         log "$0: unknown option \`$i'"
@@ -514,18 +518,22 @@ fi
 if [ -z "$rollback" ]; then
     log "building the system configuration..."
     if [[ "$action" = switch || "$action" = boot ]]; then
-        if [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
-        else
-            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
+        if [[ -z $pathToConfig ]]; then
+            if [[ -z $flake ]]; then
+                pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
+            else
+                pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
+            fi
         fi
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
-        if [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
-        else
-            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
+        if [[ -z $pathToConfig ]];
+            if [[ -z $flake ]]; then
+                pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
+            else
+                pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
+            fi
         fi
     elif [ "$action" = build-vm ]; then
         if [[ -z $flake ]]; then
