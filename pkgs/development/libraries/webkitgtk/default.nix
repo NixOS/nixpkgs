@@ -2,7 +2,6 @@
 , stdenv
 , runCommand
 , fetchurl
-, fetchpatch
 , perl
 , python3
 , ruby
@@ -98,21 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
-    })
-
-    # Various build fixes for 2.39.90, should be part of final release
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1445126808
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/5f8dc9d4cc01a31e53670acdcf7a9c4ea4626f58.patch";
-      hash = "sha256-dTok1QK93Fp8RFED4wgbVdLErUnmIB4Xsm/VPutmQuw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/f51987a0f316621a0ab324696c9a576bbaf1e686.patch";
-      hash = "sha256-TZVrrH4+JS2I/ist7MdMLsuk9X/Nyx62AcODvzGkdx8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/fe4fdc28cd214d36425d861791d05d1afaee60f5.patch";
-      hash = "sha256-p1LNyvc6kGRhptov6AKVl2Rc+rrRnzHEtpF/AhqbA+E=";
     })
   ];
 
