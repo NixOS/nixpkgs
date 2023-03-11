@@ -23891,13 +23891,7 @@ with pkgs;
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
-  vte = callPackage ../development/libraries/vte {
-    # Needs GCC ≥10 but aarch64 defaults to GCC 9.
-    stdenv =
-      if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "10"
-      then clangStdenv
-      else stdenv;
-  };
+  vte = callPackage ../development/libraries/vte { };
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
