@@ -8,6 +8,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , sqlalchemy
 }:
 
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-3RRHXkM8/GoIcO6Y1EZGbnp/X5gzYkW/PV4bzGay6ZI=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "sqlalchemy"
+  ];
 
   propagatedBuildInputs = [
     sqlalchemy
@@ -78,7 +87,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
-    # https://github.com/encode/databases/issues/530
-    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };
 }
