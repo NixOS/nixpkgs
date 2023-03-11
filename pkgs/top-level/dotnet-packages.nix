@@ -333,13 +333,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage rec {
     pname = "Nuget";
-    version = "5.6.0.6489";
+    version = "6.3.1.1";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "linux-packaging-nuget";
       rev = "upstream/${version}.bin";
-      sha256 = "sha256-71vjM7a+F0DNTY+dML3UBSkrVyXv/k5rdl7iXBKSpNM=";
+      sha256 = "sha256-D7F4B23HK5ElY68PYKVDsyi8OF0DLqqUqQzj5CpMfkc=";
     };
 
     # configurePhase breaks the binary and results in
