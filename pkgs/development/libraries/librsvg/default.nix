@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
     rustc
     cargo-auditable-cargo-wrapper
     python3Packages.docutils
-    vala
     rustPlatform.cargoSetupHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
@@ -72,6 +71,7 @@ stdenv.mkDerivation rec {
     bzip2
     pango
     libintl
+    vala
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Foundation
