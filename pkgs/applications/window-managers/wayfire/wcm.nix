@@ -1,27 +1,61 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, wayland, wrapGAppsHook
-, gtk3, libevdev, libxml2, wayfire, wayland-protocols, wf-config, wf-shell
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland
+, wrapGAppsHook
+, wayfire
+, wf-shell
+, wf-config
+, wayland-scanner
+, wayland-protocols
+, gtk3
+, libevdev
+, libxml2
 }:
 
 stdenv.mkDerivation rec {
   pname = "wcm";
-  version = "0.7.0";
+  version = "0.7.5";
 
-  src = fetchurl {
-    url = "https://github.com/WayfireWM/wcm/releases/download/v${version}/wcm-${version}.tar.xz";
-    sha256 = "19za1fnlf5hz4n4mxxwqcr5yxp6mga9ah539ifnjnqrgvj19cjlj";
+  src = fetchFromGitHub {
+    owner = "WayfireWM";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-LJR9JGl49o4O6LARofz3jOeAqseGcmzVhMnhk/aobUU=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    gtk3 libevdev libxml2 wayfire wayland
-    wayland-protocols wf-config wf-shell
+    wayfire
+    wf-config
+    wf-shell
+    wayland
+    wayland-protocols
+    gtk3
+    libevdev
+    libxml2
+  ];
+
+  mesonFlags = [
+    "-Denable_wdisplays=false"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/WayfireWM/wcm";
     description = "Wayfire Config Manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 ];
+    maintainers = with maintainers; [ qyliss wucke13 rewine ];
     platforms = platforms.unix;
   };
 }
