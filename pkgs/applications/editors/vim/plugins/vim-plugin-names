@@ -474,7 +474,6 @@ https://github.com/tjdevries/nlua.nvim/,,
 https://github.com/mcchrish/nnn.vim/,,
 https://github.com/shortcuts/no-neck-pain.nvim/,HEAD,
 https://github.com/folke/noice.nvim/,HEAD,
-https://github.com/arcticicestudio/nord-vim/,,
 https://github.com/shaunsingh/nord.nvim/,,
 https://github.com/andersevenrud/nordic.nvim/,,
 https://github.com/jlesquembre/nterm.nvim/,,
@@ -754,6 +753,7 @@ https://github.com/junegunn/vader.vim/,,
 https://github.com/jbyuki/venn.nvim/,,
 https://github.com/vhda/verilog_systemverilog.vim/,,
 https://github.com/vifm/vifm.vim/,,
+https://github.com/nordtheme/vim/,,nord-vim
 https://github.com/dracula/vim/,,dracula-vim
 https://github.com/embark-theme/vim/,,embark-vim
 https://github.com/catppuccin/vim/,HEAD,catppuccin-vim
