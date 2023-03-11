@@ -4,24 +4,20 @@
 }:
 let
   cdefs_h = fetchurl {
-    name = "sys-cdefs.h";
-    url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
+    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
     sha256 = "16l3dqnfq0f20rzbkhc38v74nqcsh9n3f343bpczqq8b1rz6vfrh";
   };
   queue_h = fetchurl {
-    name = "sys-queue.h";
-    url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-queue.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
+    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-queue.h";
     sha256 = "12qm82id7zys92a1qh2l1qf2wqgq6jr4qlbjmqyfffz3s3nhfd61";
   };
   tree_h = fetchurl {
-    name = "sys-tree.h";
-    url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-tree.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
+    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
   stack_chk_fail_local_c = fetchurl {
-    name = "__stack_chk_fail_local.c";
-    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?id=9afbe3cbbf4c30ff23c733218c3c03d7e8c6461d";
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?h=3.10-stable";
     sha256 = "1nhkzzy9pklgjcq2yg89d3l18jif331srd3z3vhy5qwxl1spv6i9";
   };
 
