@@ -30545,6 +30545,8 @@ with pkgs;
 
   pureref = callPackage ../applications/graphics/pureref { };
 
+  servo = callPackage ../applications/networking/browsers/servo {};
+
   shepherd = nodePackages."@nerdwallet/shepherd";
 
   inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
