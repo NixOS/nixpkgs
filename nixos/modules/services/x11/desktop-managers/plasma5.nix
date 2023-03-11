@@ -505,7 +505,6 @@ in
             spectacle
             systemsettings
 
-            ark
             dolphin
             dolphin-plugins
             ffmpegthumbs
@@ -513,6 +512,7 @@ in
             kio-extras
           ];
           optionalPackages = [
+            ark
             elisa
             gwenview
             okular
