@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   homepage = "https://packages.debian.org/sid/tmpreaper";
   description = "Clean up files in directories based on their age";
   license = "GPL-2.0-only";
-  maintainers = with stdenv.lib.maintainers; [ maintainer ];
 
   buildInputs = [ autoconf automake ];
   doCheck = false;
