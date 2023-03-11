@@ -2254,7 +2254,9 @@ self: super: with self; {
 
   dask-yarn = callPackage ../development/python-modules/dask-yarn { };
 
-  databases = callPackage ../development/python-modules/databases { };
+  databases = callPackage ../development/python-modules/databases {
+    sqlalchemy = sqlalchemy_1;
+  };
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
 
@@ -3302,7 +3304,9 @@ self: super: with self; {
 
   fastai = callPackage ../development/python-modules/fastai { };
 
-  fastapi = callPackage ../development/python-modules/fastapi { };
+  fastapi = callPackage ../development/python-modules/fastapi {
+    sqlalchemy = sqlalchemy_1;
+  };
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
@@ -11138,6 +11142,7 @@ self: super: with self; {
   spyse-python = callPackage ../development/python-modules/spyse-python { };
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
+  sqlalchemy_1 = callPackage ../development/python-modules/sqlalchemy/1.nix { };
 
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
 
