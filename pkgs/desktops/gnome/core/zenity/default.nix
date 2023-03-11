@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zenity";
-  version = "3.90.0";
+  version = "3.91.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "XsvlcxBVqYfiDB+vBQdfECLd4wenLp0UUiRA1IHWhtA=";
+    sha256 = "N2GeCYAwgXj9vPaDItmaB7MzbBwLuY7ysyycsQkCI5k=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://wiki.gnome.org/Projects/Zenity";
+    license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
