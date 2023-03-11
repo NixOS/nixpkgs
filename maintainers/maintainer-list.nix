@@ -15011,6 +15011,12 @@
       fingerprint = "7F3E EEAA EE66 93CC 8782  042A 7550 7BE2 56F4 0CED";
     }];
   };
+  Tungsten842 = {
+    name = "Tungsten842";
+    email = "886724vf@anonaddy.me";
+    github = "Tungsten842";
+    githubId = 24614168;
+  };
   tiagolobocastro = {
     email = "tiagolobocastro@gmail.com";
     github = "tiagolobocastro";
