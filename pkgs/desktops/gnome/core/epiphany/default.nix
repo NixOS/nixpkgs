@@ -4,6 +4,7 @@
 , ninja
 , gettext
 , fetchurl
+, fetchpatch2
 , pkg-config
 , gtk4
 , glib
@@ -42,6 +43,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "33X7U1yAQbzvhNZSWGfVEjw58MaIUDxGBhTNs3Tp+Sk=";
   };
+
+  patches = [
+    # Fix compatibility with WebkitGTk 2.39.91
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1295.patch";
+      hash = "sha256-xlgGaAzMYgwSty992EKWK5emkyZxyLoCw/HI+Uz74go=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
