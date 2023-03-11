@@ -9196,6 +9196,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  LuisChDev = {
+    name = "Luis Chavarriaga";
+    email = "luischa123@gmail.com";
+    github = "LuisChDev";
+    githubId = 24978009;
+  };
   luispedro = {
     email = "luis@luispedro.org";
     github = "luispedro";

@@ -845,6 +845,7 @@
   ./services/networking/ergochat.nix
   ./services/networking/eternal-terminal.nix
   ./services/networking/expressvpn.nix
+  ./services/networking/nordvpn.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
   ./services/networking/firefox-syncserver.nix
