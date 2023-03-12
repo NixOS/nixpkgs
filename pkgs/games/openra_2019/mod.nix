@@ -23,7 +23,7 @@ let
 # Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
 in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   name = "${pname}-${version}";
-  pname = "openra-${mod.name}";
+  pname = "openra_2019-${mod.name}";
   inherit (mod) version;
 
   srcs = [
