@@ -14364,7 +14364,6 @@ with pkgs;
 
   clasp-common-lisp = callPackage ../development/compilers/clasp {
     llvmPackages = llvmPackages_15;
-    stdenv = llvmPackages_15.stdenv;
   };
 
   clean = callPackage ../development/compilers/clean { };

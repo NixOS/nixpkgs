@@ -1,23 +1,16 @@
 { lib
-, stdenv
+, llvmPackages
 , fetchFromGitHub
 , fetchFromGitLab
-, llvmPackages
-, glibcLocales
 , gmp
-, zlib
-, ncurses
 , boost
 , libelf
 , git
 , sbcl
-, libbsd
-, libffi
 , ninja
 , pkg-config
 , fmt
 , ctags
-, libedit
 }:
 
 let
@@ -302,6 +295,7 @@ let
     sha256 = "AzZlONf7SNxCa9+SKQFC/rA6fx6rhWH96caZSmKnlsU=";
     fetchSubmodules = true;
   };
+  stdenv = llvmPackages.stdenv;
 in
 stdenv.mkDerivation rec {
   pname = "clasp";
@@ -311,38 +305,30 @@ stdenv.mkDerivation rec {
     owner = "clasp-developers";
     repo = "clasp";
     rev = version;
-    sha256 = "gvUqUb0dftW1miiBcAPJur0wOunox4y2SUYeeJpR9R4=";
     fetchSubmodules = true;
+    sha256 = "gvUqUb0dftW1miiBcAPJur0wOunox4y2SUYeeJpR9R4=";
   };
 
-  nativeBuildInputs = [ git sbcl ninja pkg-config ] ++ (with llvmPackages; [
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    ctags
+    git
+    sbcl
+    ninja
+    pkg-config
+  ] ++ (with llvmPackages; [
     llvm
-    clang
-    lld
   ]);
 
-  buildInputs = with llvmPackages;
-    [
-      libllvm
-      llvm
-      clang
-      clang-unwrapped
-    ] ++ [
-      gmp
-      zlib
-      ncurses
-      libbsd
-      boost
-      libelf
-      libffi
-      (boost.override {
-        enableStatic = true;
-        enableShared = false;
-      })
-      fmt
-      ctags
-      libedit
-    ];
+  buildInputs = [
+    gmp
+    boost
+    libelf
+    fmt
+  ] ++ (with llvmPackages; [
+    libclang
+  ]);
 
   postPatch = ''
     echo "creating directories found in ${src}/repos.sexp"
@@ -394,32 +380,31 @@ stdenv.mkDerivation rec {
     cp -rfT "${cando}" extensions/cando/
     cp -rfT "${seqan-clasp}" extensions/seqan-clasp/
     cp -rfT "${seqan}" extensions/seqan-clasp/seqan/
-
-    chmod -R u+rwX src
-    make -C src/lisp/modules/asdf -j$NIX_BUILD_CORES
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     echo "executing workaround for '/homeless-shelter'"
-    export XDG_CACHE_HOME=$(pwd)/.cache
+    export XDG_CACHE_HOME=$PWD/.cache
     mkdir -p "$XDG_CACHE_HOME"
 
     echo "executing koga with ${sbcl}/bin/sbcl"
     ${sbcl}/bin/sbcl --script koga \
       --skip-sync \
-      --prefix=$out \
-      --cc=${llvmPackages.clang}/bin/clang \
-      --cxx=${llvmPackages.clang}/bin/clang++ \
       --pkg-config=${pkg-config}/bin/pkg-config \
+      --cc=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc \
+      --cxx=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++ \
       --ctags=${ctags}/bin/ctags \
       --jobs=$NIX_BUILD_CORES \
-      --bin-path=$out/bin \
-      --lib-path=$out/lib \
-      --share-path=$out/share
+      --prefix=$out/ \
+      --bin-path=$out/bin/ \
+      --lib-path=$out/lib/clasp/ \
+      --share-path=$out/share/clasp/ \
+      --reproducible-build \
+      --extensions=seqan-clasp
 
-    # TODO --prefix not actually used?
-    substituteInPlace build/build.ninja \
-      --replace /usr/local $out
+    runHook postConfigure
   '';
 
   preBuild = ''
@@ -427,14 +412,18 @@ stdenv.mkDerivation rec {
   '';
 
   # Long build, high RAM requirement
+  enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    description =
-      "A Common Lisp implementation based on LLVM with C++ integration";
+    description = "A Common Lisp implementation based on LLVM with C++ integration";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ raskin phossil OPNA2608 ];
-    platforms = platforms.linux;
+    # https://github.com/clasp-developers/clasp/blob/95e8cedcd5c5f8f1c064e7cab4e640f00a175d90/src/core/corePackage.cc#L1293
+    # "Currently only x86_64 and i386 is supported"
+    platforms = platforms.x86;
+    # Untested
+    broken = stdenv.isDarwin;
     homepage = "https://clasp-developers.github.io/";
   };
 }
