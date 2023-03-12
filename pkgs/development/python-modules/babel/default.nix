@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 
 # tests
-, backports-zoneinfo
 , freezegun
 , pytestCheckHook
 , pytz
@@ -27,14 +27,15 @@ buildPythonPackage rec {
     pytz
   ];
 
+  # including backports.zoneinfo for python<3.9 yields infinite recursion
+  doCheck = pythonAtLeast "3.9";
+
   nativeCheckInputs = [
     # via setup.py
     freezegun
     pytestCheckHook
     # via tox.ini
     pytz
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
   disabledTests = [

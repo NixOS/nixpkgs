@@ -10486,6 +10486,8 @@ self: super: with self; {
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
+  scikit-rf = callPackage ../development/python-modules/scikit-rf { };
+
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikits-samplerate = callPackage ../development/python-modules/scikits-samplerate {
@@ -11936,6 +11938,8 @@ self: super: with self; {
   txdbus = callPackage ../development/python-modules/txdbus { };
 
   txgithub = callPackage ../development/python-modules/txgithub { };
+
+  txi2p-tahoe = callPackage ../development/python-modules/txi2p-tahoe { };
 
   txredisapi = callPackage ../development/python-modules/txredisapi { };
 
