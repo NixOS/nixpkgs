@@ -37,6 +37,7 @@ buildPythonPackage rec {
       binary protocol to issues commands to the Pulse Hub.
     '';
     homepage = "https://github.com/atmurray/aiopulse";
+    changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
