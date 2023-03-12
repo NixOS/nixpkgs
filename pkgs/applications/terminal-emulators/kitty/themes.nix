@@ -1,27 +1,36 @@
-{ fetchFromGitHub, lib, stdenv }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "kitty-themes";
-  version = "unstable-2023-01-08";
+  version = "unstable-2023-03-08";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
-    repo = pname;
-    rev = "e0bb9d751033e82e455bf658744872c83f04b89d";
-    sha256 = "sha256-ol/AWScGsskoxOEW32aGkJFgg8V6pIujoYIMQaVskWM=";
+    repo = "kitty-themes";
+    rev = "c01fcbd694353507c3cc7f657179bad1f32140a7";
+    hash = "sha256-heJayOz/2Bey/zAwL2PR1OsfGyCPqMyxT1XzwHLhQ0w=";
   };
 
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
-    mkdir -p $out/themes
-    mv themes.json $out
-    mv themes/*.conf $out/themes
+    runHook preInstall
+
+    install -Dm644 -t $out/share/kitty-themes/ themes.json
+    mv themes $out/share/kitty-themes
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty-themes";
     description = "Themes for the kitty terminal emulator";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nelsonjeppesen ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ AndersonTorres nelsonjeppesen ];
+    platforms = lib.platforms.all;
   };
 }
