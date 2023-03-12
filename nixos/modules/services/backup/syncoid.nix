@@ -21,7 +21,7 @@ let
   # delegating permissions, if it doesn't exist we delegate it to the parent
   # dataset (if it exists). This should solve the case of provisoning new
   # datasets.
-  buildAllowCommand = permissions: dataset: (
+  buildAllowCommand = permissions: user: dataset: (
     "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
       # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
 
@@ -34,7 +34,7 @@ let
         ${lib.escapeShellArgs [
           "/run/booted-system/sw/bin/zfs"
           "allow"
-          cfg.user
+          user
           (concatStringsSep "," permissions)
           dataset
         ]}
@@ -43,7 +43,7 @@ let
           ${lib.escapeShellArgs [
             "/run/booted-system/sw/bin/zfs"
             "allow"
-            cfg.user
+            user
             (concatStringsSep "," permissions)
             # Remove the last part of the path
             (builtins.dirOf dataset)
@@ -59,20 +59,20 @@ let
   # knowing if the allow command did execute on the parent dataset or
   # not in the pre-hook. We can't run the same if in the post hook
   # since the dataset should have been created at this point.
-  buildUnallowCommand = permissions: dataset: (
+  buildUnallowCommand = permissions: user: dataset: (
     "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
       # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
       ${lib.escapeShellArgs [
         "/run/booted-system/sw/bin/zfs"
         "unallow"
-        cfg.user
+        user
         (concatStringsSep "," permissions)
         dataset
       ]}
       ${lib.optionalString ((builtins.dirOf dataset) != ".") (lib.escapeShellArgs [
         "/run/booted-system/sw/bin/zfs"
         "unallow"
-        cfg.user
+        user
         (concatStringsSep "," permissions)
         # Remove the last part of the path
         (builtins.dirOf dataset)
@@ -202,6 +202,16 @@ in
 
           recursive = mkEnableOption (lib.mdDoc ''the transfer of child datasets'');
 
+          user = mkOption {
+            type = types.str;
+            example = "backup-to-\${target}";
+            description = lib.mdDoc ''
+              The local user for this transfer command, overriding {option}`services.syncoid.user`.
+              With privilege delegation (i.e. with a user other than `root`), and when multiple commands involve the same dataset, it is important to use a different local user for each of those commands, as otherwise permissions can get removed when one command finishes, but the others are still in progress.
+              If different users are to use the same SSH key file, then that file has to be owned and readable by a group that the users have in common, but not be owned by any of the users, or OpenSSH will refuse to use the key as that user (e.g. `users.users.backup-to-''${target}.group = "backup"` and {command}`chown root:backup $sshKey ; chmod 640 $sshKey`).
+            '';
+          };
+
           sshKey = mkOption {
             type = types.nullOr types.path;
             # Prevent key from being copied to store
@@ -281,6 +291,7 @@ in
         };
         config = {
           source = mkDefault name;
+          user = mkDefault cfg.user;
           sshKey = mkDefault cfg.sshKey;
           localSourceAllow = mkDefault cfg.localSourceAllow;
           localTargetAllow = mkDefault cfg.localTargetAllow;
@@ -326,11 +337,11 @@ in
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
               ExecStartPre =
-                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
+                (map (buildAllowCommand c.localSourceAllow c.user) (localDatasetName c.source)) ++
+                (map (buildAllowCommand c.localTargetAllow c.user) (localDatasetName c.target));
               ExecStopPost =
-                (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
+                (map (buildUnallowCommand c.localSourceAllow c.user) (localDatasetName c.source)) ++
+                (map (buildUnallowCommand c.localTargetAllow c.user) (localDatasetName c.target));
               ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
@@ -345,7 +356,7 @@ in
                 c.source
                 c.target
               ]);
-              User = cfg.user;
+              User = c.user;
               Group = cfg.group;
               StateDirectory = [ "syncoid" ];
               StateDirectoryMode = "700";
