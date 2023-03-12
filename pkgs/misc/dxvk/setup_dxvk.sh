@@ -42,7 +42,7 @@ usage() {
     exit 1
 }
 
-case "$1" in
+case "${1:-}" in
     uninstall|install)
         action=$1
         shift
