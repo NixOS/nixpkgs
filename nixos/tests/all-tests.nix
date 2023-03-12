@@ -217,6 +217,7 @@ in {
   extra-python-packages = handleTest ./extra-python-packages.nix {};
   evcc = handleTest ./evcc.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
+  fcitx5 = handleTest ./fcitx5 {};
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
