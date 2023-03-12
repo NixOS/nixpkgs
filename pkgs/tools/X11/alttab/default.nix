@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     description = "X11 window switcher designed for minimalistic window managers or standalone X11 session";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.sgraf ];
+    maintainers = [ ];
   };
 }
