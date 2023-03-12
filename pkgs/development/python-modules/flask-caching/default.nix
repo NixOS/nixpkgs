@@ -5,6 +5,7 @@
 , fetchPypi
 , cachelib
 , flask
+, asgiref
 , pytest-asyncio
 , pytest-xprocess
 , pytestCheckHook
@@ -21,12 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-JLYMVS1ZqWBcwbakLFbNs5qCoo2rRTK77bkiKuVOy04=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
+  '';
+
   propagatedBuildInputs = [
     cachelib
     flask
   ];
 
   nativeCheckInputs = [
+    asgiref
     pytest-asyncio
     pytest-xprocess
     pytestCheckHook
