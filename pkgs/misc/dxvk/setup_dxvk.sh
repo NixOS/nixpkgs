@@ -261,5 +261,5 @@ done
 
 for srcpath in "${!paths[@]}"; do
     ${action}_file "$srcpath" "${paths["$srcpath"]}"
-    ${action}_override "$(basename srcpath)"
+    ${action}_override "$(basename "$srcpath" .dll)"
 done
