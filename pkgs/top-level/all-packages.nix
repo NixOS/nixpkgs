@@ -7759,7 +7759,9 @@ with pkgs;
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
-  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly {
+    libgit2 = libgit2_1_5;
+  };
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
@@ -10397,7 +10399,7 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy = callPackage ../tools/misc/ntfy { python = python39; };
+  ntfy = callPackage ../tools/misc/ntfy { };
 
   ntfy-sh = callPackage ../tools/misc/ntfy-sh { };
 
@@ -26161,6 +26163,20 @@ with pkgs;
 
   iproute2 = callPackage ../os-specific/linux/iproute { };
 
+  ipu6-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
+
+  ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {};
+
+  ipu6ep-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {
+    ipuVersion = "ipu6ep";
+  };
+
+  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
+    ipu6-camera-bin = ipu6ep-camera-bin;
+  };
+
+  ivsc-firmware = callPackage ../os-specific/linux/firmware/ivsc-firmware { };
+
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
@@ -37472,6 +37488,10 @@ with pkgs;
     lisp-compiler = sbcl;
   };
   maxima-ecl = maxima.override {
+    lisp-compiler = ecl;
+  };
+  # old version temporarily kept for sage
+  maxima-ecl-5_45 = callPackage ../applications/science/math/maxima/5.45.nix {
     lisp-compiler = ecl;
   };
 
