@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.83";
+  version = "0.85";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "sha256-kNhU6OR9IUNPL72D90nhq2X5vmVW7YUmpnq/EOUvG/8=";
+    hash = "sha256-K9D7hn0WVUrJrJbRph0fJh5hAyKfxF9vNJcRlD8srqY=";
   };
 
   nativeBuildInputs = [ pkg-config bison ];
@@ -17,10 +17,16 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
   preConfigure = lib.optionals stdenv.isDarwin ''
-    # The configure script assumes dependencies on Darwin are install via
+    # The configure script assumes dependencies on Darwin are installed via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
     substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
+  '';
+
+  patches = [ ./darwin.patch ];
+
+  preBuild = ''
+    buildFlagsArray+=(CFLAGS="-DHAVE_STRLCPY=1 -DHAVE_STRLCAT=1 -DHAVE_STRNSTR=1 -DHAVE_STRMODE=1")
   '';
 
   doInstallCheck = true;

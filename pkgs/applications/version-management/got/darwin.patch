@@ -1,0 +1,12 @@
+diff --git a/template/template.c b/template/template.c
+index e62c9e0d..a18fc983 100644
+--- a/template/template.c
++++ b/template/template.c
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <getopt.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ 
