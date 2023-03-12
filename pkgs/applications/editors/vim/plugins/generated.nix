@@ -3010,6 +3010,18 @@ final: prev:
     meta.homepage = "https://github.com/andviro/flake8-vim/";
   };
 
+  flatten-nvim = buildVimPluginFrom2Nix {
+    pname = "flatten.nvim";
+    version = "2023-03-11";
+    src = fetchFromGitHub {
+      owner = "willothy";
+      repo = "flatten.nvim";
+      rev = "438c8b8ff8bc02e5c6650d55ec0094f56697f70a";
+      sha256 = "1kby1448pqi3fgmmkkfd5ms1ln13hab3g4xnnm1cy9bppa441p24";
+    };
+    meta.homepage = "https://github.com/willothy/flatten.nvim/";
+  };
+
   flit-nvim = buildVimPluginFrom2Nix {
     pname = "flit.nvim";
     version = "2023-03-04";
