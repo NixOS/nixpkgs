@@ -3,7 +3,7 @@
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
-, fcitx, ibus, uim #IME
+, fcitx5, fcitx5-gtk, ibus, uim #IME
 , wrapGAppsHook #color picker in mlconfig
 , Cocoa #Darwin
 }:
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     vte
     m17n_lib
 
-    fcitx
+    fcitx5
+    fcitx5-gtk
     ibus
   ] ++ lib.optionals (stdenv.system != "aarch64-linux") [
     # FIXME Currently broken on aarch64-linux
