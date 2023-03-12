@@ -25461,6 +25461,8 @@ with pkgs;
 
   proximity-sort = callPackage ../tools/misc/proximity-sort { };
 
+  psql2csv = callPackage ../tools/misc/psql2csv { };
+
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
   public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
