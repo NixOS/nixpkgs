@@ -18,6 +18,7 @@ python3.pkgs.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3.pkgs; [
+    commonmark
     aiohttp
     asyncpg
     commonmark

@@ -9,13 +9,14 @@
 , python-markdown-math
 , pythonOlder
 , pyyaml
+, setuptools
 , textile
 }:
 
 buildPythonPackage rec {
   pname = "markups";
   version = "4.0.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -24,6 +25,10 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docutils
