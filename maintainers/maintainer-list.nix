@@ -16585,6 +16585,12 @@
     githubId = 687198;
     name = "Yuri Aisaka";
   };
+  yuriy-chumak = {
+    email = "yuriy.chumak@mail.com";
+    github = "yuriy-chumak";
+    githubId = 2684656;
+    name = "Yuriy Chumak";
+  };
   yurkobb = {
     name = "Yury Bulka";
     email = "setthemfree@privacyrequired.com";
