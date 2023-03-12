@@ -36948,6 +36948,10 @@ with pkgs;
 
   openra_2019 = openraPackages_2019.engines.release;
 
+  openraPackages = recurseIntoAttrs (callPackage ../games/openra {});
+
+  openra = openraPackages.engines.release;
+
   openrw = callPackage ../games/openrw {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
   };
