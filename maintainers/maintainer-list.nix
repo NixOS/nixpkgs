@@ -678,6 +678,12 @@
     githubId = 36147;
     name = "Alireza Meskin";
   };
+  alizter = {
+    email = "alizter@gmail.com";
+    github = "Alizter";
+    githubId = 8614547;
+    name = "Ali Caglayan";
+  };
   alkasm = {
     email = "alexreynolds00@gmail.com";
     github = "alkasm";
