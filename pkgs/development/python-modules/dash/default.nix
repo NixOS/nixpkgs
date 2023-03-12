@@ -74,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
+    changelog = "https://github.com/plotly/dash/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ antoinerg ];
   };
