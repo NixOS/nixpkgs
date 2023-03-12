@@ -37483,6 +37483,10 @@ with pkgs;
   maxima-ecl = maxima.override {
     lisp-compiler = ecl;
   };
+  # old version temporarily kept for sage
+  maxima-ecl-5_45 = callPackage ../applications/science/math/maxima/5.45.nix {
+    lisp-compiler = ecl;
+  };
 
   mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
