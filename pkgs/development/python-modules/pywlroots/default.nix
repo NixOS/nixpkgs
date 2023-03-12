@@ -9,7 +9,7 @@
 , pixman
 , pythonOlder
 , udev
-, wlroots
+, wlroots_0_16
 , wayland
 , pywayland
 , xkbcommon
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
-  buildInputs = [ libinput libxkbcommon pixman xorg.libxcb udev wayland wlroots ];
+  buildInputs = [ libinput libxkbcommon pixman xorg.libxcb udev wayland wlroots_0_16 ];
   propagatedBuildInputs = [ cffi pywayland xkbcommon ];
   nativeCheckInputs = [ pytestCheckHook ];
 
