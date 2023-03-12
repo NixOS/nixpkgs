@@ -7,13 +7,13 @@
 
 callPackage ./generic.nix {
   pname = "sm64ex-coop";
-  version = "0.pre+date=2022-08-05";
+  version = "unstable-2023-02-22";
 
   src = fetchFromGitHub {
     owner = "djoslin0";
     repo = "sm64ex-coop";
-    rev = "68634493de4cdd9db263e0f4f0b9b6772a60d30a";
-    sha256 = "sha256-3Ve93WGyBd8SAA0TBrpIrhj+ernjn1q7qXSi9mp36cQ=";
+    rev = "8746a503086793c87860daadfaeaaf0a31b2d6cf";
+    sha256 = "sha256-iwJsq0FN9npxveIoMiB7zL5j1V72IExtEpzGj6lwLXQ=";
   };
 
   extraNativeBuildInputs = [
