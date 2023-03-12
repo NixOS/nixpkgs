@@ -12,6 +12,8 @@
 , extra-cmake-modules
 , fontconfig
 , go
+, testers
+, turbo
 }:
 let
   version = "1.8.3";
@@ -81,6 +83,8 @@ rustPlatform.buildRustPackage rec {
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion { package = turbo; };
 
   meta = with lib; {
     description = "High-performance build system for JavaScript and TypeScript codebases";

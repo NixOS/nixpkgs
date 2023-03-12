@@ -11,17 +11,17 @@
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "unstable-2023-01-08";
+  version = "0.1.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "regen100";
-    repo = pname;
-    rev = "60c376a5fda29835060687569cb212350a292116";
-    hash = "sha256-vNG43sZy2wMetY5mbgxIoei5jCCj1f8vWiovWtwzbPc=";
+    repo = "cmake-language-server";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ExEAi47hxxEJeoT3FCwpRwJrf3URnI47/5FDL7fS5sY=";
   };
 
-  PDM_PEP517_SCM_VERSION = "2023.1";
+  PDM_PEP517_SCM_VERSION = version;
 
   patches = [
     # Test timeouts occasionally cause the build to fail

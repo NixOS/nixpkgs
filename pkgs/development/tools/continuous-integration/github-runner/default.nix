@@ -21,7 +21,7 @@ buildDotnetModule rec {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-bzCa3OI8/pE8K9U38RN0xWbLkjJPA4mUlsrbH1etpG4=";
+    hash = "sha256-gGIYlYM4Rf7Ils2rThsQHWIkLDt5Htg4NDuJhxvl1rU=";
     # Required to obtain HEAD's Git commit hash
     leaveDotGit = true;
   };
