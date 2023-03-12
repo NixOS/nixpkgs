@@ -7,6 +7,7 @@
 , python-socketio
 , pythonOlder
 , requests
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'python-socketio[client]<5' 'python-socketio[client]<6'
+      --replace "websocket-client~=1.3.1" "websocket-client"
   '';
 
   propagatedBuildInputs = [
     python-dateutil
     requests
     python-socketio
+    websocket-client
   ] ++ python-socketio.optional-dependencies.client;
 
   nativeCheckInputs = [
