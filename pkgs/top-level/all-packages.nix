@@ -10525,6 +10525,8 @@ with pkgs;
 
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
+  ol = callPackage ../development/compilers/ol { };
+
   ola = callPackage ../applications/misc/ola { };
 
   olive-editor = libsForQt5.callPackage ../applications/video/olive-editor {
