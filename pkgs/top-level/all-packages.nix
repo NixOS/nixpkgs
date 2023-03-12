@@ -2503,7 +2503,7 @@ with pkgs;
     ;
   };
 
-  kitty-themes  = callPackage ../misc/kitty-themes { };
+  kitty-themes  = callPackage ../applications/terminal-emulators/kitty/themes.nix { };
 
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
