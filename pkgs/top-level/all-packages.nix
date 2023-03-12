@@ -39091,6 +39091,8 @@ with pkgs;
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
+  wmenu = callPackage ../applications/misc/wmenu { };
+
   bemenu = callPackage ../applications/misc/bemenu { };
 
   _9menu = callPackage ../applications/misc/9menu { };
