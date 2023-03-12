@@ -12,10 +12,10 @@
 }:
 
 let
-  version = "1.25";
+  version = "2.0";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-zgMGx7vQaucvbQb37A7jN3SZWmXeceCoOBPstnrsm9s=";
+    sha256 = "sha256-niQWFfV4zWkLtDMRAA3r3s9qnFCnCCsAGVLxj28h3cI=";
   };
 in
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4U/ChooesjhZSvxvk9dZrpZ/X0lf62+LEn72Ubrm2eM=";
+    sha256 = "sha256-PWH+XLKraFfjXovnZpREXBaQVyOyP8yIMYDMiF6ddXg=";
   };
 
   # postPatch:
