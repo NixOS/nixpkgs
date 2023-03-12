@@ -46,12 +46,12 @@
         "version": "1.1.77"
       },
       "stable": {
-        "name": "factorio_headless_x64-1.1.74.tar.xz",
+        "name": "factorio_headless_x64-1.1.76.tar.xz",
         "needsAuth": false,
-        "sha256": "1lqxprmai3vrm3hf9zdj9c9c6w05086nzn0vy88zy7xm2dgw7ylv",
+        "sha256": "19xx6sv382ijwv8nbqw3c3izckvqkpsf949bn4g09qmg7b663g94",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.74/headless/linux64",
-        "version": "1.1.74"
+        "url": "https://factorio.com/get-download/1.1.76/headless/linux64",
+        "version": "1.1.76"
       }
     }
   }
