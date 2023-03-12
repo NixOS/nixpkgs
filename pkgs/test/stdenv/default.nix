@@ -6,6 +6,7 @@
 , lib
 , runCommand
 , testers
+, emptyFile
 }:
 
 let
@@ -273,4 +274,58 @@ in
       };
 
   };
+
+  cleanAttrs_version_is_optional =
+    assert (stdenv.mkDerivation {
+      __cleanAttrs = true;
+      name = "hi";
+    })?version == false;
+
+    # test ok, now make nix-build happy.
+    emptyFile;
+
+  /*
+    Changes to mkDerivation and friends must not cause attributes to be added
+    unless absolutely necessary.
+   */
+  cleanAttrs_does_not_leak_impl_details_and_is_lazy =
+    assert builtins.attrNames (stdenv.mkDerivation {
+      name = "hello";
+      version = "1.0";
+      __cleanAttrs = true;
+      outputs = ["out" "dev"];
+      passthru.my-foo = throw "no need to eval this passthru.foo value";
+      someNonStandardAttr = throw "no need to eval most derivation attributes";
+      meta.maintainers = with lib.maintainers; [ roberth ];
+    }) == [
+      "all"
+      "dev"
+
+      # drvPath is an implementation detail, but still required by Nix as of 2023
+      # https://github.com/NixOS/nix/issues/6507
+      "drvPath"
+
+      "internals"
+      "meta"
+
+      # a public attribute from passthru
+      "my-foo"
+
+      "name"
+      "out" "outPath" "outputName" "outputs"
+
+      # overriding is always messing with internals, but not
+                       # covered by cleanAttrs. It would be disproportionately
+                       # disruptive.
+      "overrideAttrs"
+
+      # type = "derivation";
+      "type"
+
+      # optional, but specified in our case
+      "version"
+    ];
+
+    # test ok, now make nix-build happy.
+    emptyFile;
 }
