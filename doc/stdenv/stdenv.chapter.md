@@ -377,6 +377,17 @@ Benefits of `__cleanAttrs`:
  - Package authors know which variables are intended for use by the builder. They can change the builder environment with confidence that they don't break consumers of their package.
  - It is a little bit more efficient in terms of CPU cycles and memory use.
 
+#### `__structuredAttrs` {#var-__structuredAttrs}
+
+When `__structuredAttrs = true` is passed to `mkDerivation`, derivation attributes are serialized in JSON format and made available to the builder through a `.attrs.json` file. This will
+
+ - allow large values to be passed,
+ - eliminate the need for `passAsFile`,
+ - allow for finer grained settings such as [`outputChecks`](https://nixos.org/manual/nix/unstable/language/advanced-attributes.html?highlight=__struct#adv-attr-outputChecks),
+ - turn non-nested arrays into bash arrays rather than a concatenated string.
+
+See [`__structuredAttrs` in the Nix manual](https://nixos.org/manual/nix/unstable/language/advanced-attributes.html#adv-attr-structuredAttrs).
+
 #### `passthru` {#var-stdenv-passthru}
 
 This is an attribute set which can be filled with arbitrary values. For example:

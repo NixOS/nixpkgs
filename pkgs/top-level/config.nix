@@ -48,7 +48,7 @@ let
     };
 
     structuredAttrsByDefault = mkMassRebuild {
-      feature = "set `__structuredAttrs` to true by default";
+      feature = "set [`__structuredAttrs`](#var-__structuredAttrs) to true by default";
     };
 
     enableParallelBuildingByDefault = mkMassRebuild {
