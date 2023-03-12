@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       simple API and more.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ken-matsui ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 })
