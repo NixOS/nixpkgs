@@ -16,19 +16,18 @@
 , libspectre
 , openjpeg
 , djvulibre
-, gtest
 , qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-reader";
-  version = "5.10.28";
+  version = "5.10.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0jHhsxEjBbu3ktvjX1eKnkZDwzRk9MrUSJSdYeOvWtI=";
+    sha256 = "sha256-IpgmTmnrPWc9EFZVM+S2nFxdpPjbgXqEWUnK/O9FmUg=";
   };
 
   patches = [ ./use-pkg-config.diff ];
@@ -56,7 +55,10 @@ stdenv.mkDerivation rec {
     libspectre
     djvulibre
     openjpeg
-    gtest
+  ];
+
+  qmakeFlags = [
+    "DEFINES+=VERSION=${version}"
   ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
