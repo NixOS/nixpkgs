@@ -45,6 +45,8 @@ stdenv.mkDerivation {
     sha256 = "0b4lpkidwx0lf8slczjji652yll6g5zgmm5lmisnb4s7gf8r8nkk";
   };
 
+  patches = [ ./5.2.0-CVE-2023-25193.patch ];
+
   postPatch = ''
     patchShebangs src/*.py test
   '' + lib.optionalString stdenv.isDarwin ''
