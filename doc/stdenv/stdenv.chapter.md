@@ -4,7 +4,9 @@ The standard build environment in the Nix Packages collection provides an enviro
 
 ## Using `stdenv` {#sec-using-stdenv}
 
-To build a package with the standard environment, you use the function `stdenv.mkDerivation`, instead of the primitive built-in function `derivation`, e.g.
+To build a package with the standard environment, you use the function `stdenv.mkDerivation`. It calls the built-in `derivation` function for you, and turns its result into a package attribute set.
+
+A minimal invocation looks as follows.
 
 ```nix
 stdenv.mkDerivation {
@@ -361,6 +363,19 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
 ### Special variables {#special-variables}
+
+#### `__cleanAttrs` {#var-__cleanAttrs}
+
+By default, `mkDerivation` will expose its arguments in the returned package attribute set. This is unnecessary and leads to some confusion and doubt.
+
+When `__cleanAttrs = true;` is passed to `mkDerivation`, it will return a minimal set of package attributes, which package authors can extend via [`passthru`](#var-stdenv-passthru).
+
+Benefits of `__cleanAttrs`:
+
+ - Users don't have to sift through unnecessary attributes when exploring a package in the `nix repl`.
+ - Users can confidently use non-standard attributes that a package provides.
+ - Package authors know which variables are intended for use by the builder. They can change the builder environment with confidence that they don't break consumers of their package.
+ - It is a little bit more efficient in terms of CPU cycles and memory use.
 
 #### `passthru` {#var-stdenv-passthru}
 
