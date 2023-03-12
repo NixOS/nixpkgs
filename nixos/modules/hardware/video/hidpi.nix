@@ -13,6 +13,7 @@ with lib;
 
 
     # Disable font anti-aliasing, hinting, and sub-pixel rendering by default
+    # See recommendations in fonts/fontconfig.nix
     fonts.fontconfig = {
       antialias = mkDefault false;
       hinting.enable = mkDefault false;
