@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "vikunja-api";
-  version = "0.20.3";
+  version = "0.20.4";
 
   src = fetchFromGitea {
     domain = "kolaente.dev";
     owner = "vikunja";
     repo = "api";
     rev = "v${version}";
-    hash = "sha256-krmshpv7X8Ua61NUSZGTT1+avoBBNSFuxPa93go3qBY=";
+    hash = "sha256-SkZf8LFU4/HFEWVEEj7Gl2jVwIL834GRwyua4cw9nh4=";
   };
 
   nativeBuildInputs =
