@@ -38924,6 +38924,12 @@ with pkgs;
 
   wineasio = callPackage ../applications/emulators/wineasio { };
 
+  wine-nine = callPackage ../applications/emulators/wine-nine-standalone {
+    nine32 = pkgsi686Linux.wine-nine-standalone-unwrapped;
+    nine64 = wine-nine-standalone-unwrapped;
+  };
+  wine-nine-standalone-unwrapped = callPackage ../applications/emulators/wine-nine-standalone/nine.nix { };
+
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
 
   with-shell = callPackage ../applications/misc/with-shell { };
