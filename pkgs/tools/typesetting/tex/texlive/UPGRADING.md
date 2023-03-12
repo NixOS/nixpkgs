@@ -56,6 +56,8 @@ This will download the daily snapshot of the CTAN package database
 numbers and sha512 hashes) for the selected upstream distribution. Then replace
 `tlpdb.nix` with the generated file.
 
+The test `pkgs.tests.texlive.tlpdb-nix` verifies that the file `tlpdb.nix`
+in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
 ### Build packages locally and generate fix hashes
 
