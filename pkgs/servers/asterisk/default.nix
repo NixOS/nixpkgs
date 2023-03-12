@@ -6,6 +6,7 @@
   autoconf, libtool, automake, fetchpatch,
   python39, writeScript,
   withOpus ? true,
+  ldapSupport ? false, openldap
 }:
 
 let
@@ -29,13 +30,16 @@ let
   ];
   common = {version, sha256, externals}: stdenv.mkDerivation {
     inherit version;
-    pname = "asterisk";
+    pname = "asterisk"
+    + lib.optionalString ldapSupport "-ldap";
+
 
     buildInputs = [ jansson libedit libxml2 libxslt ncurses openssl sqlite
                     dmidecode libuuid newt
                     lua speex
                     srtp wget curl iksemel ]
-                  ++ lib.optionals withOpus [ libopus opusfile libogg ];
+                  ++ lib.optionals withOpus [ libopus opusfile libogg ]
+                  ++ lib.optionals ldapSupport [ openldap ];
     nativeBuildInputs = [ util-linux pkg-config autoconf libtool automake ];
 
     patches = [
