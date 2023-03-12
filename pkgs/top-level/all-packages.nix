@@ -4315,6 +4315,8 @@ with pkgs;
 
   csvkit = callPackage ../tools/text/csvkit { };
 
+  csvquote = callPackage ../tools/text/csvquote { };
+
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
@@ -26610,6 +26612,8 @@ with pkgs;
   govers = callPackage ../development/tools/govers { };
 
   govendor = callPackage ../development/tools/govendor { };
+
+  goverview = callPackage ../tools/security/goverview { };
 
   go-tools = callPackage ../development/tools/go-tools { };
 

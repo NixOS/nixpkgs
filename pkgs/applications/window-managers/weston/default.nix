@@ -6,6 +6,7 @@
 , pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
 , libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
+, buildDemo ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     "-Dremoting=false" # TODO
     "-Dpipewire=${lib.boolToString (pipewire != null)}"
     "-Dimage-webp=${lib.boolToString (libwebp != null)}"
-    "-Ddemo-clients=false"
+    (lib.mesonBool "demo-clients" buildDemo)
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
     # TODO:
