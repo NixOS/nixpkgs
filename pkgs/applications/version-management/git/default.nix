@@ -190,7 +190,8 @@ stdenv.mkDerivation (finalAttrs: {
           @a=(
             '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
-            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr',
+            '${coreutils}/bin/ls'
             ${lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}
           );
         }
