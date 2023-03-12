@@ -2,7 +2,7 @@
 , buildPythonPackage
 , python
 , fetchFromGitHub
-, poetry-core
+, hatchling
 , beautifulsoup4
 , lxml
 , jinja2
@@ -25,12 +25,11 @@ buildPythonPackage rec {
     substituteInPlace ./tests/unit/conftest.py --replace \
        "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
       "\"${placeholder "out"}/${python.sitePackages}/reqif\""
-    substituteInPlace pyproject.toml --replace "^" ">="
     substituteInPlace requirements.txt --replace "==" ">="
   '';
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   propagatedBuildInputs = [
