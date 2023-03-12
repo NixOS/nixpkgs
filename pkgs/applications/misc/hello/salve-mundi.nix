@@ -1,3 +1,8 @@
+/*
+  This file showcases various techniques and features of Nixpkgs, whereas the
+  regular hello serves as more of an introductory package definition.
+  Salve mundi is latin for hello world.
+*/
 { callPackage
 , lib
 , stdenv
