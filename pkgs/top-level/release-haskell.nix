@@ -303,6 +303,7 @@ let
 
             # musl only supports linux, not darwin.
             "x86_64-darwin"
+            "aarch64-darwin"
           ]
           {
             inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
@@ -319,7 +320,10 @@ let
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
-            "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
+
+            # Static doesn't work on darwin
+            "x86_64-darwin"
+            "aarch64-darwin"
           ] {
             haskellPackages = {
               inherit (packagePlatforms pkgs.pkgsStatic.haskellPackages)
