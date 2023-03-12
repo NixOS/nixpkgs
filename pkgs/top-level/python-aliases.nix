@@ -55,7 +55,7 @@ mapAliases ({
   class-registry = phx-class-registry; # added 2021-10-05
   codespell = throw "codespell has been promoted to a top-level attribute"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
-  CommonMark = commonmark; # added 2023-02-19
+  CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
