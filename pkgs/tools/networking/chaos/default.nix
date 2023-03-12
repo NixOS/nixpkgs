@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "chaos";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "chaos-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NA78zMge9AsfqO1px1FWCDKmWy1a0h8dtTotpgLazh4=";
+    hash = "sha256-3snVQKmtIhyWNBbSLnBQIvz0bEFs8ur5FhTne3gb/h4=";
   };
 
-  vendorHash = "sha256-KkT/mgU1BOwJcjxOBMCMq0hyxZAyoh25bi+s3ka6TOg=";
+  vendorHash = "sha256-tyH3gqD5HpEvIoki0XnGDKD08iW8tENkCPuLC9GUDQk=";
 
   subPackages = [
     "cmd/chaos/"
