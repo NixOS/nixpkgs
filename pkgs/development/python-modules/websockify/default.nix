@@ -23,7 +23,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WebSockets support for any application/server";
     homepage = "https://github.com/kanaka/websockify";
-    license = licenses.lgpl3;
+    changelog = "https://github.com/novnc/websockify/releases/tag/v${version}";
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ ];
   };
 }
