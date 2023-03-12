@@ -1,24 +1,44 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, jwcrypto
 , numpy
+, pytestCheckHook
+, pythonOlder
+, redis
+, requests
+, simplejson
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
   pname = "websockify";
+  version = "0.11.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6c4cc1bc132abb4a99834bcb1b4bd72f51d35a08d08093a817646ecc226ac44e";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "novnc";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-82Fk9qbiiCD5Rts1d14sK/njeN7DcjKMKPqE7S/1WHs=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    jwcrypto
+    numpy
+    redis
+    requests
+    simplejson
+  ];
 
-  # Ran 0 tests in 0.000s
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "websockify" ];
+  pythonImportsCheck = [
+    "websockify"
+  ];
 
   meta = with lib; {
     description = "WebSockets support for any application/server";
