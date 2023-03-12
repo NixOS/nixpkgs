@@ -502,6 +502,9 @@ stdenv.mkDerivation (finalAttrs: {
     # more frequent development builds
     "-Dman=true"
 
+    # Temporary disable the ukify tool. see https://github.com/NixOS/nixpkgs/pull/216826#issuecomment-1465228824
+    "-Dukify=false"
+
     "-Defi=${lib.boolToString withEfi}"
     "-Dgnu-efi=${lib.boolToString withEfi}"
   ] ++ lib.optionals withEfi [
