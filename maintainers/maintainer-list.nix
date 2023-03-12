@@ -4276,6 +4276,12 @@
     githubId = 701128;
     name = "Eike Kettner";
   };
+  eken = {
+    email = "edvin.kallstrom@protonmail.com";
+    github = "Eken-beep";
+    name = "Edvin Källström";
+    githubId = 84442052;
+  };
   ekleog = {
     email = "leo@gaspard.io";
     matrix = "@leo:gaspard.ninja";
