@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "spur.py";
-    rev = version;
-    sha256 = "sha256-YlwezAE7V4ykFsp+bJ2nYRp6HG4I9Bk7Lhq6f1Inn0s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YlwezAE7V4ykFsp+bJ2nYRp6HG4I9Bk7Lhq6f1Inn0s=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to run commands and manipulate files locally or over SSH";
     homepage = "https://github.com/mwilliamson/spur.py";
+    changelog = "https://github.com/mwilliamson/spur.py/blob/0.3.23/CHANGES";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
   };
