@@ -30,7 +30,7 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix;
+    orig = import ./tlpdb.nix;
     removeSelfDep = lib.mapAttrs
       (n: p: if p ? deps then p // { deps = lib.filter (dn: n != dn) p.deps; }
                          else p);
@@ -146,6 +146,14 @@ let
     hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
   };
 
+  tlpdb-nix = runCommand "tlpdb.nix" {
+    inherit tlpdb;
+    tl2nix = ./tl2nix.sed;
+  }
+  ''
+    xzcat "$tlpdb" | sed -rn -f "$tl2nix" | uniq > "$out"
+  '';
+
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
@@ -187,7 +195,7 @@ let
 
 in
   tl // {
-    inherit bin combine;
+    inherit bin combine tlpdb-nix;
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
