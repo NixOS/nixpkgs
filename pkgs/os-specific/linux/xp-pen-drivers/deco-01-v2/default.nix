@@ -20,12 +20,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xp-pen-deco-01-v2-driver";
-  version = "3.2.3.220323-1";
+  version = "3.3.9.230222-1";
 
   src = fetchzip {
     url = "https://www.xp-pen.com/download/file/id/1936/pid/440/ext/gz.html#.tar.gz";
     name = "xp-pen-deco-01-v2-driver-${version}.tar.gz";
-    sha256 = "sha256-n/yutkRsjcIRRhB4q1yqEmaa03/1SO8RigJi/ZkfLbk=";
+    sha256 = "sha256-xrRDxH7e00dISXb+lTtrnui+fNFpX7bLke2o+aTjJNk=";
   };
 
   nativeBuildInputs = [
