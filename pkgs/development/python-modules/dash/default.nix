@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.7.0";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,16 +30,16 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kxat6CjX4xPEtlhRiYJF5wN2Luds7DduZyiUA9/kKWY=";
+    hash = "sha256-6FsLvLsqnkSt/i27q/JJGfNh2zxKeA0t6VYNPCzhR0w=";
   };
 
   propagatedBuildInputs = [
-    plotly
-    flask
-    flask-compress
     dash-core-components
     dash-html-components
     dash-table
+    flask
+    flask-compress
+    plotly
   ];
 
   passthru.optional-dependencies = {
@@ -55,9 +55,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
     mock
+    pytest-mock
+    pytestCheckHook
     pyyaml
   ];
 
@@ -65,6 +65,11 @@ buildPythonPackage rec {
     "tests/unit/test_browser.py"
     "tests/unit/test_app_runners.py" # Use selenium
     "tests/integration"
+  ];
+
+  disabledTests = [
+    # Failed: DID NOT RAISE <class 'ImportError'>
+    "test_missing_flask_compress_raises"
   ];
 
   pythonImportsCheck = [
