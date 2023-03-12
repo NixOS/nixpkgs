@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "spur";
-  version = "0.3.22";
+  version = "0.3.23";
   format = "setuptools";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "spur.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-YlwezAE7V4ykFsp+bJ2nYRp6HG4I9Bk7Lhq6f1Inn0s=";
+    hash = "sha256-LTkZ1p2P9fsD+gZEQZaCS68Q6nGc4qFGMNtH75gQmXQ=";
   };
 
   propagatedBuildInputs = [
