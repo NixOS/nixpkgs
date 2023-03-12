@@ -286,6 +286,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
+    ssh2 = callPackage ../development/php-packages/ssh2 { };
+
     swoole = callPackage ../development/php-packages/swoole { };
 
     xdebug = callPackage ../development/php-packages/xdebug { };
