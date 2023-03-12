@@ -620,7 +620,7 @@ let
           optionalString config.services.homed.enable ''
             password sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' + ''
-            password sufficient pam_unix.so nullok sha512
+            password sufficient pam_unix.so nullok yescrypt
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
