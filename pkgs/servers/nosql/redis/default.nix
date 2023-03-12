@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lua, pkg-config, nixosTests
+{ lib, stdenv, fetchurl, fetchpatch, lua, pkg-config, nixosTests
 , tcl, which, ps, getconf
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
     hash = "sha256-93E1wqR8kVHUAov+o7NEcKtNMk0UhPeahMbzKjz7n2U=";
   };
+
+  patches = [
+    # Fix flaky test tests/unit/memefficiency.tcl
+    (fetchpatch {
+      url = "https://github.com/redis/redis/commit/bfe50a30edff6837897964ac3374c082b0d9e5da.patch";
+      sha256 = "sha256-0GMiygbO7LbL1rnuOByOJYE2BKUSI+yy6YH781E2zBw=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
