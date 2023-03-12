@@ -8693,6 +8693,12 @@
     githubId = 542154;
     name = "Lorenz Leutgeb";
   };
+  lugarun = {
+    email = "lfschmidt.me@gmail.com";
+    github = "lugarun";
+    githubId = 5767106;
+    name = "Lukas Schmidt";
+  };
   luis = {
     email = "luis.nixos@gmail.com";
     github = "Luis-Hebendanz";
