@@ -665,6 +665,7 @@
   ./services/misc/prowlarr.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
+  ./services/misc/readarr.nix
   ./services/misc/redmine.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rippled.nix
