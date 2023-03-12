@@ -45,15 +45,15 @@ let
     else null;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.0-62";
+  version = "7.1.1-0";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = version;
-    hash = "sha256-K74BWxGTpkaE+KBrdOCVd+m/2MJP6YUkB2CFh/YEHyI=";
+    rev = finalAttrs.version;
+    hash = "sha256-FaoiB8qnzgREaslEXRituToIbU9tK3FnvC5ptFkctjA=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -136,4 +136,4 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     mainProgram = "magick";
   };
-}
+})
