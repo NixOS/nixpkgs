@@ -5224,6 +5224,12 @@
     githubId = 3036816;
     name = "Edgar Aroutiounian";
   };
+  fxttr = {
+    name = "Florian Büstgens";
+    email = "fb@fx-ttr.de";
+    github = "fxttr";
+    githubId = 16306293;
+  };
   fzakaria = {
     name = "Farid Zakaria";
     email = "farid.m.zakaria@gmail.com";
