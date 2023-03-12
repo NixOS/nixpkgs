@@ -233,6 +233,17 @@
     };
     version = "3.2.4";
   };
+  bulma-clean-theme = {
+    dependencies = ["jekyll" "jekyll-seo-tag"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1qvnl0xgzxbgyniv5m52mm5mr4rmgn3mqx0qa9xhl3lj75mfdfgh";
+      type = "gem";
+    };
+    version = "0.13.1";
+  };
   byebug = {
     groups = ["default"];
     platforms = [];
