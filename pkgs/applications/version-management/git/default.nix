@@ -28,7 +28,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.39.2";
+  version = "2.40.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "R1918Tc7LNTkOHBhhRdZZtXBH2jE2x5IwmJXxD3c8tY=";
+    hash = "sha256-sXpZj79Ycp7xO1d0ZeuTstSE3xIBUYtwi1BE/2I79G0=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -213,8 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
-                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
-      wrapProgram $out/libexec/git-core/git-add--interactive \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
