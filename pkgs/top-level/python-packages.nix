@@ -1211,6 +1211,8 @@ self: super: with self; {
 
   bc-detect-secrets = callPackage ../development/python-modules/bc-detect-secrets { };
 
+  bc-jsonpath-ng = callPackage ../development/python-modules/bc-jsonpath-ng { };
+
   bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
