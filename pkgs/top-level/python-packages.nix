@@ -11978,6 +11978,8 @@ self: super: with self; {
 
   types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
 
+  types-ujson = callPackage ../development/python-modules/types-ujson { };
+
   types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
