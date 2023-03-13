@@ -13316,6 +13316,8 @@ with pkgs;
     nodejs = nodejs_latest;
   };
 
+  wasm-tools = callPackage ../tools/misc/wasm-tools { };
+
   wasmedge = callPackage ../development/tools/wasmedge {
     llvmPackages = llvmPackages_12;
     inherit (darwin.apple_sdk.frameworks) Foundation;
