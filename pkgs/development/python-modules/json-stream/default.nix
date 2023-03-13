@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, iconv
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -22,6 +24,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    iconv
   ];
 
   propagatedBuildInputs = [
