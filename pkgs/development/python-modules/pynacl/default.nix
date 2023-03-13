@@ -26,14 +26,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sphinxHook
+    cffi
   ];
 
   buildInputs = [
     libsodium
-  ];
-
-  propagatedNativeBuildInputs = [
-    cffi
   ];
 
   propagatedBuildInputs = [

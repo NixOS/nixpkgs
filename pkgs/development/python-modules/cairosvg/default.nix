@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
-  propagatedNativeBuildInputs = [ cairocffi ];
+  nativeBuildInputs = [ cairocffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

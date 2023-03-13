@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ cffi six argon2-cffi-bindings ]
     ++ lib.optional (!isPy3k) enum34;
 
-  propagatedNativeBuildInputs = [
+  nativeBuildInputs = [
     argon2-cffi-bindings
     cffi
   ];

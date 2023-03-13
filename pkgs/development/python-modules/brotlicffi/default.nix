@@ -22,7 +22,7 @@ buildPythonPackage rec {
     brotli
   ];
 
-  propagatedNativeBuildInputs = [
+  nativeBuildInputs = [
     cffi
   ];
 

@@ -34,7 +34,7 @@ buildPythonPackage {
     nosetests --exclude=test_tvp_1d ${lib.optionalString stdenv.isDarwin " --exclude=test_tv2_1d"}
   '';
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   buildInputs = [ blas lapack ];
 

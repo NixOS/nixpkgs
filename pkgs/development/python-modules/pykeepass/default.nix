@@ -22,7 +22,7 @@ buildPythonPackage rec {
     argon2-cffi python-dateutil
   ];
 
-  propagatedNativeBuildInputs = [ argon2-cffi ];
+  nativeBuildInputs = [ argon2-cffi ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest tests.tests

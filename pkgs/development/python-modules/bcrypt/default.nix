@@ -43,6 +43,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-rust
+    cffi
     rustPlatform.cargoSetupHook
     cargo
     rustc
@@ -52,10 +53,6 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   propagatedBuildInputs = [
-    cffi
-  ];
-
-  propagatedNativeBuildInputs = [
     cffi
   ];
 
