@@ -7475,6 +7475,18 @@ final: prev:
     meta.homepage = "https://github.com/cakebaker/scss-syntax.vim/";
   };
 
+  searchbox-nvim = buildVimPluginFrom2Nix {
+    pname = "searchbox-nvim";
+    version = "2022-11-01";
+    src = fetchFromGitHub {
+      owner = "VonHeikemen";
+      repo = "searchbox.nvim";
+      rev = "110949af8963185b4e732b45ae57beb731bfcede";
+      hash = "sha256-Bx4Msp96hlcYVDvDC3gBv78zmde0T5XacxgiZt+LULU=";
+    };
+    meta.homepage = "https://github.com/VonHeikemen/searchbox.nvim";
+  };
+
   securemodelines = buildVimPluginFrom2Nix {
     pname = "securemodelines";
     version = "2019-02-09";
