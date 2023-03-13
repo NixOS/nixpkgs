@@ -40490,6 +40490,8 @@ with pkgs;
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
+  fable = callPackage ../development/tools/fable { };
+
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {
