@@ -62,13 +62,4 @@
     name = "fix-em-ice-bonding";
     patch = ./fix-em-ice-bonding.patch;
   };
-
-  # https://lore.kernel.org/linux-wireless/ZAx0TWRBlGfv7pNl@kroah.com/T/#m11e6e0915ab8fa19ce8bc9695ab288c0fe018edf
-  fix-brcmfmac = {
-    name = "fix-brcmfmac";
-    patch = fetchpatch {
-      url = "https://lore.kernel.org/linux-wireless/20230311141914.24444-1-marcan@marcan.st/raw";
-      sha256 = "sha256-Fjap48Lef8Mi1i0t13/rT2SoYcbO8HJuXhJMn7HK3Ds=";
-    };
-  };
 }
