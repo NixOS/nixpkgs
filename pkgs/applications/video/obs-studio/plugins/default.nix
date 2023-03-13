@@ -6,6 +6,8 @@
 # - Add plugin to it's own directory (because of future patches).
 
 {
+  advanced-scene-switcher = qt6Packages.callPackage ./advanced-scene-switcher { };
+
   droidcam-obs = callPackage ./droidcam-obs { };
 
   input-overlay = qt6Packages.callPackage ./input-overlay.nix { };

@@ -8684,6 +8684,12 @@
       fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
     }];
   };
+  longer = {
+    email = "michal@mieszczak.com.pl";
+    name = "Michał Mieszczak";
+    github = "LongerHV";
+    githubId = 46924944;
+  };
   lourkeur = {
     name = "Louis Bettens";
     email = "louis@bettens.info";
