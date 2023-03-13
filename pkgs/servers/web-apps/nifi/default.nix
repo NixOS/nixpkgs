@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nifi.apache.org";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ izorkin ];
+    knownVulnerabilities = [ "CVE-2023-22832" ];
   };
 }
