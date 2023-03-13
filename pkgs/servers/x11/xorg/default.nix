@@ -896,7 +896,7 @@ self: with self; {
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libX11-1.8.4.tar.xz";
-      sha256 = "sha256-yaKHpa76mATOPPr89Rb+lu0/fo5FwOLuWehMhnV99Rg=";
+      sha256 = "067mgmsqck78b7pf5h25irz3zvcnzqbgbz7s7k70967smsjqg8n9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3328,7 +3328,7 @@ self: with self; {
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/xserver/xorg-server-21.1.7.tar.xz";
-      sha256 = "sha256-2cYLLdDsUjJspqsg2w5JCx/09Wb1nKdC1lMuknlYd7s=";
+      sha256 = "1fvpb1wr4bjksr1ag77mcvsz87qb947dn85blrn34lpcs0nhpinr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
