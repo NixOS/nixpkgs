@@ -38,7 +38,7 @@ python.pkgs.buildPythonPackage rec {
   propagatedBuildInputs = with python.pkgs; ([
     ruamel-yaml
     python-magic
-    CommonMark
+    commonmark
     aiohttp
     yarl
     mautrix

@@ -831,6 +831,19 @@ self: super: {
       propagatedBuildInputs = [ sniprun-bin ];
     };
 
+  # The GitHub repository returns 404, which breaks the update script
+  Spacegray-vim = buildVimPluginFrom2Nix {
+    pname = "Spacegray.vim";
+    version = "2021-07-06";
+    src = fetchFromGitHub {
+      owner = "ackyshake";
+      repo = "Spacegray.vim";
+      rev = "c699ca10ed421c462bd1c87a158faaa570dc8e28";
+      sha256 = "0ma8w6p5jh6llka49x5j5ql8fmhv0bx5hhsn5b2phak79yqg1k61";
+    };
+    meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
+  };
+
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
     postPatch = let
       libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -1105,7 +1118,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-MR9n2+B2TUNnWxZhBbXZCBereLxYntBxLfx9g14vDUw=";
+          cargoHash = "sha256-BFUC6fQ5LpTKx2ztCuFVzXTWzSDl03VYsmVcxBXbiT4=";
         };
       in
       ''
@@ -1333,6 +1346,19 @@ self: super: {
     };
   });
 
+  # The GitHub repository returns 404, which breaks the update script
+  VimCompletesMe = buildVimPluginFrom2Nix {
+    pname = "VimCompletesMe";
+    version = "2022-02-18";
+    src = fetchFromGitHub {
+      owner = "ackyshake";
+      repo = "VimCompletesMe";
+      rev = "9adf692d7ae6424038458a89d4a411f0a27d1388";
+      sha256 = "1sndgb3291dyifaa8adri2mb8cgbinbar3nw1fnf67k9ahwycaz0";
+    };
+    meta.homepage = "https://github.com/ackyshake/VimCompletesMe/";
+  };
+
   vimsence = super.vimsence.overrideAttrs (old: {
     meta = with lib; {
       description = "Discord rich presence for Vim";
@@ -1355,15 +1381,6 @@ self: super: {
 
   vimshell-vim = super.vimshell-vim.overrideAttrs (old: {
     dependencies = with self; [ vimproc-vim ];
-  });
-
-  vim-trailing-whitespace = super.vim-trailing-whitespace.overrideAttrs (old: {
-    patches = [(fetchpatch {
-      # https://github.com/bronson/vim-trailing-whitespace/pull/30
-      name = "fix-add-dynamic-TerminalOpen-for-both-vim-and-nvim.patch";
-      url = "https://github.com/bronson/vim-trailing-whitespace/commit/99ef803ebdc01d62b418a3e9386d5f10797bfac3.patch";
-      hash = "sha256-cyanHUKxhbY8c6EkAbpUq7QcEBQABCwZ6NoEUOpd2F8=";
-    })];
   });
 
   vim-zettel = super.vim-zettel.overrideAttrs (old: {

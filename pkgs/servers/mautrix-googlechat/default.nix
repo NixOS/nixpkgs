@@ -51,7 +51,7 @@
     yarl
     asyncpg
     ruamel-yaml
-    CommonMark
+    commonmark
     python-magic
     protobuf3
     mautrix

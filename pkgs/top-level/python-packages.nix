@@ -1975,7 +1975,7 @@ self: super: with self; {
 
   commoncode = callPackage ../development/python-modules/commoncode { };
 
-  CommonMark = callPackage ../development/python-modules/commonmark { };
+  commonmark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
 
@@ -10465,6 +10465,8 @@ self: super: with self; {
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
+  scikit-rf = callPackage ../development/python-modules/scikit-rf { };
+
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
@@ -11907,6 +11909,8 @@ self: super: with self; {
   txdbus = callPackage ../development/python-modules/txdbus { };
 
   txgithub = callPackage ../development/python-modules/txgithub { };
+
+  txi2p-tahoe = callPackage ../development/python-modules/txi2p-tahoe { };
 
   txredisapi = callPackage ../development/python-modules/txredisapi { };
 

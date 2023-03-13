@@ -5,6 +5,10 @@ let
   inherit (self) callPackage;
 in
 {
+  acm = callPackage ./manual-packages/acm { };
+
+  acm-terminal = callPackage ./manual-packages/acm-terminal { };
+
   agda-input = callPackage ./manual-packages/agda-input { };
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
@@ -48,6 +52,10 @@ in
   jam-mode = callPackage ./manual-packages/jam-mode { };
 
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
+
+  lsp-bridge = callPackage ./manual-packages/lsp-bridge {
+    inherit (pkgs) python3 git go gopls pyright;
+  };
 
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
