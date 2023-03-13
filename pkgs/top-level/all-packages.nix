@@ -18293,6 +18293,8 @@ with pkgs;
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
+  kubernetes-polaris = callPackage ../tools/security/kubernetes-polaris { };
+
   kubescape = callPackage ../tools/security/kubescape { };
 
   kubesec = callPackage ../tools/security/kubesec { };
