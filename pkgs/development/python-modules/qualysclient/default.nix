@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "woodtechie1428";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
+    hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
+    changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
