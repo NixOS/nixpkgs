@@ -16,18 +16,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
   ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
-  preConfigure = lib.optionals stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
     substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
-  '' ++ lib.optional stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     fgrep -Rl @HOST_FREEBSD_TRUE@ . | xargs sed -e 's,@HOST_FREEBSD_TRUE@,,' -i
   '';
 
   patches = [ ./darwin.patch ];
 
-  preBuild = lib.optionals stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     buildFlagsArray+=(CFLAGS="-DHAVE_STRLCPY=1 -DHAVE_STRLCAT=1 -DHAVE_STRNSTR=1 -DHAVE_STRMODE=1")
   '';
 
