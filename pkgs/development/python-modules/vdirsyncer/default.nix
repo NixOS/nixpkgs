@@ -35,9 +35,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click-log>=0.3.0, <0.4.0" "click-log>=0.3.0, <0.5.0"
-
     sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
   '';
 
