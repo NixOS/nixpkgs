@@ -400,8 +400,6 @@ in
     core = "flycast";
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
-    patches = [ ./fix-flycast-makefile.patch ];
     meta = {
       description = "Flycast libretro port";
       license = lib.licenses.gpl2Only;
@@ -735,7 +733,6 @@ in
   picodrive = mkLibretroCore {
     core = "picodrive";
     dontConfigure = true;
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
     meta = {
       description = "Fast MegaDrive/MegaCD/32X emulator";
       license = "MAME";
