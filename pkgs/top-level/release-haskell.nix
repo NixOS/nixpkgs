@@ -471,6 +471,22 @@ let
               ;
             };
           };
+
+      pkgsCross.wasi32 = {
+        haskellPackages = {
+          inherit (packagePlatforms pkgs.pkgsCross.wasi32.haskellPackages)
+            ghc
+            hello
+          ;
+        };
+
+        haskell.packages.ghcHEAD = {
+          inherit (packagePlatforms pkgs.pkgsCross.wasi32.haskell.packages.ghcHEAD)
+            ghc
+            hello
+          ;
+        };
+      };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the

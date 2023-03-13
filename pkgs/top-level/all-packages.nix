@@ -15740,8 +15740,8 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = dontRecurseIntoAttrs
-    # JS backend is only available for GHC >= 9.6
-    (if stdenv.hostPlatform.isGhcjs
+    # JS and wasm backends are only available for GHC >= 9.6
+    (if stdenv.hostPlatform.isGhcjs || stdenv.hostPlatform.isWasm
      then haskell.packages.native-bignum.ghc96
      # Prefer native-bignum to avoid linking issues with gmp
      else if stdenv.hostPlatform.isStatic

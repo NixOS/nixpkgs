@@ -36,11 +36,15 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
+, # TODO(@sternenseemann): this is ugly as hell
+  libffiAttr ? "libffi"
+
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
               || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
-              || stdenv.targetPlatform.isGhcjs)
+              || stdenv.targetPlatform.isGhcjs
+              || stdenv.targetPlatform.isWasm)
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -52,6 +56,7 @@
   enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp
                          && lib.meta.availableOn stdenv.targetPlatform gmp)
                        || stdenv.targetPlatform.isGhcjs
+                       || stdenv.targetPlatform.isWasm
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -62,11 +67,12 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs && !isWasm
 
 , # Whether to build terminfo.
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
-                     || stdenv.targetPlatform.isGhcjs)
+                     || stdenv.targetPlatform.isGhcjs
+                     || stdenv.targetPlatform.isWasm)
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -203,7 +209,7 @@ let
     # https://gitlab.haskell.org/ghc/ghc/-/issues/22081
     ++ lib.optional enableDwarf elfutils
     ++ lib.optional (!enableNativeBignum) gmp
-    ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows && !targetPlatform.isGhcjs) libiconv;
+    ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows && !targetPlatform.isGhcjs && !targetPlatform.isWasm) libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
   # GHC doesn't seem to have {LLC,OPT}_HOST
@@ -226,9 +232,11 @@ let
       then targetCC.bintools
       else targetCC.bintools.bintools;
     # Same goes for strip.
+    # Additionally, if we are using LLVM bintools, they will be always wrapped.
     strip =
       # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-      if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+      if (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+         || targetCC.bintools.isLLVM
       then targetCC.bintools
       else targetCC.bintools.bintools;
   };
@@ -365,8 +373,8 @@ stdenv.mkDerivation ({
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetPackages.${libffiAttr}.dev}/include"
+    "--with-ffi-libraries=${targetPackages.${libffiAttr}.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"

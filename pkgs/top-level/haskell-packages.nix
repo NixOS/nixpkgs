@@ -347,7 +347,7 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghc94 = compiler.ghc945;
-    ghc962 = callPackage ../development/compilers/ghc/9.6.2.nix {
+    ghc962 = callPackage ../development/compilers/ghc/9.6.2.nix ({
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
         if stdenv.hostPlatform.isAarch32 then
@@ -366,9 +366,13 @@ in {
       # Support range >= 11 && < 16
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
       llvmPackages = pkgs.llvmPackages_15;
-    };
+    } // pkgs.lib.optionalAttrs stdenv.targetPlatform.isWasm {
+      # Use GHC/tweag's custom libffi for wasm
+      libffi = pkgs.targetPackages.libffi-wasm-ghc;
+      libffiAttr = "libffi-wasm-ghc";
+    });
     ghc96 = compiler.ghc962;
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
         if stdenv.hostPlatform.isAarch32 then
@@ -384,10 +388,14 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      # 2023-01-15: Support range >= 10 && < 15
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
-      llvmPackages = pkgs.llvmPackages_14;
-    };
+      # 2023-07-04: Support range >= 10 && < 16
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+      llvmPackages = pkgs.llvmPackages_15;
+    } // pkgs.lib.optionalAttrs stdenv.targetPlatform.isWasm {
+      # Use GHC/tweag's custom libffi for wasm
+      libffi = pkgs.targetPackages.libffi-wasm-ghc;
+      libffiAttr = "libffi-wasm-ghc";
+    });
 
     ghcjs = compiler.ghcjs810;
     ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
