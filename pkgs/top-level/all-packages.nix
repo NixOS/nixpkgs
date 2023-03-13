@@ -13076,6 +13076,8 @@ with pkgs;
 
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
 
+  unzrip = callPackage ../tools/compression/unzrip { };
+
   up = callPackage ../tools/misc/up { };
 
   upbound = callPackage ../development/tools/upbound { };
