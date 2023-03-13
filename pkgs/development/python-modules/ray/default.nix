@@ -159,6 +159,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ billhuang ];
     platforms = [ "x86_64-linux" ];
