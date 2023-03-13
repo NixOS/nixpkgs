@@ -30383,6 +30383,8 @@ with pkgs;
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
+  halp = callPackage ../tools/misc/halp { };
+
   manga-cli = callPackage ../tools/misc/manga-cli { };
 
   hamster = callPackage ../applications/misc/hamster { };
