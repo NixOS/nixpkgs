@@ -96,30 +96,59 @@ in
   config = mkIf cfg.enable {
     warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.configDir}' - minio minio - -"
-    ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
+    systemd = lib.mkMerge [{
+      tmpfiles.rules = [
+        "d '${cfg.configDir}' - minio minio - -"
+      ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
 
-    systemd.services.minio = {
-      description = "Minio Object Storage";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
-        Type = "simple";
-        User = "minio";
-        Group = "minio";
-        LimitNOFILE = 65536;
-        EnvironmentFile =
-          if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-          else null;
+      services.minio = {
+        description = "Minio Object Storage";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
+          Type = "simple";
+          User = "minio";
+          Group = "minio";
+          LimitNOFILE = 65536;
+          EnvironmentFile =
+            if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
+            else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
+            else null;
+        };
+        environment = {
+          MINIO_REGION = "${cfg.region}";
+          MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
+        };
       };
-      environment = {
-        MINIO_REGION = "${cfg.region}";
-        MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
-      };
-    };
+    }
+
+      (lib.mkIf (cfg.rootCredentialsFile != null) {
+        services.minio.unitConfig.ConditionPathExists = cfg.rootCredentialsFile;
+
+        paths.minio-root-credentials = {
+          wantedBy = [ "multi-user.target" ];
+
+          pathConfig = {
+            PathChanged = [ config.services.minio.rootCredentialsFile ];
+            Unit = "minio-restart.service";
+          };
+        };
+
+        services.minio-restart = {
+          description = "Restart MinIO";
+
+          script = ''
+            systemctl restart minio.service
+          '';
+
+          serviceConfig = {
+            Type = "oneshot";
+            Restart = "on-failure";
+            RestartSec = 5;
+          };
+        };
+      })];
 
     users.users.minio = {
       group = "minio";
