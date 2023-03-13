@@ -1593,6 +1593,8 @@ with pkgs;
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
+  speedtest-go = callPackage ../tools/networking/speedtest-go { };
+
   speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
