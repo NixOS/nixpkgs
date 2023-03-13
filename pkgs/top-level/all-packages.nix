@@ -17263,7 +17263,7 @@ with pkgs;
     antlr4_11
     antlr4_12;
 
-  antlr4 = antlr4_11;
+  antlr4 = antlr4_12;
 
   antlr = antlr4;
 
