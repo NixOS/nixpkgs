@@ -64,11 +64,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "43.1";
+  version = "43.4.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6YvGt4Sv0E8pfbXo5sWZEOLNCQMycQd08m3I3omvT8c=";
+    sha256 = "sha256-AA+XBRroJHJJOSsB+/uiCv7lZiZxlscNVEChisBY2Z4=";
   };
 
   patches = [
@@ -164,6 +164,8 @@ stdenv.mkDerivation rec {
       substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {

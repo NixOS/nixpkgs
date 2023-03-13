@@ -1,17 +1,21 @@
-{ fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "MPH-2B-Damase-2";
+stdenvNoCC.mkDerivation rec {
+  pname = "mph-2b-damase";
+  version = "2";
 
-  url = "http://www.wazu.jp/downloads/damase_v.2.zip";
+  src = fetchzip {
+    url = "https://web.archive.org/web/20160322114946/http://www.wazu.jp/downloads/damase_v.2.zip";
+    hash = "sha256-4x78D+c3ZBxfhTQQ4+gyxvrsuztHF2ItXLh4uA0PxvU=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
-  sha256 = "0yzf12z6fpbgycqwiz88f39iawdhjabadfa14wxar3nhl9n434ql";
-
-  meta = {
-  };
+  meta = { };
 }

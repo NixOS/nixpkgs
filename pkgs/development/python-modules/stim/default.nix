@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
 

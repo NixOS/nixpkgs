@@ -1,24 +1,28 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchFromGitHub, stdenvNoCC }:
 
-let
-  version = "7.0.96";
-in fetchFromGitHub {
-  name = "material-design-icons-${version}";
-  owner  = "Templarian";
-  repo   = "MaterialDesign-Webfont";
-  rev    = "v${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "material-design-icons";
+  version = "7.1.96";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/{eot,truetype,woff,woff2}
-    mv $out/fonts/*.eot $out/share/fonts/eot/
-    mv $out/fonts/*.ttf $out/share/fonts/truetype/
-    mv $out/fonts/*.woff $out/share/fonts/woff/
-    mv $out/fonts/*.woff2 $out/share/fonts/woff2/
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+  src = fetchFromGitHub {
+    owner = "Templarian";
+    repo = "MaterialDesign-Webfont";
+    rev = "v${version}";
+    sha256 = "sha256-qS7zJQkd0Q5wYLgYXa63fD3Qi2T5JWD6vXW2FoFzZxo=";
+    sparseCheckout = [ "fonts" ];
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/share/fonts/"{eot,truetype,woff,woff2}
+    cp fonts/*.eot "$out/share/fonts/eot/"
+    cp fonts/*.ttf "$out/share/fonts/truetype/"
+    cp fonts/*.woff "$out/share/fonts/woff/"
+    cp fonts/*.woff2 "$out/share/fonts/woff2/"
+
+    runHook postInstall
   '';
-  sha256 = "sha256-l60LRXLwLh+7Ls3kMTJ5eDTVpVMcqtshMv/ehIk8fCk=";
 
   meta = with lib; {
     description = "7000+ Material Design Icons from the Community";
@@ -30,6 +34,6 @@ in fetchFromGitHub {
     homepage = "https://materialdesignicons.com";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vlaci ];
+    maintainers = with maintainers; [ vlaci PlayerNameHere ];
   };
 }

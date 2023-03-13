@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 cc0 ];
     maintainers = with maintainers; [ taeer olynch ];
     mainProgram = "argon2";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.all;
   };
 }

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "2.1.2";
+  version = "2.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     rev = "refs/tags/${version}";
-    hash = "sha256-TuAqd9r/iExBa9uxU3386C12ZD+LEJai7DkJtcoupEs=";
+    hash = "sha256-HQzU6no/DV2QOC+LV7kUSrygTwgAvfMSmYIKaBd/PCE=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     coreutils
     pytest-aiohttp

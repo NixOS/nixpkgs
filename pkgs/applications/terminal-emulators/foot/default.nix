@@ -18,7 +18,7 @@
 , wayland-scanner
 , pkg-config
 , utf8proc
-, allowPgo ? true
+, allowPgo ? !stdenv.hostPlatform.isMusl
 , python3  # for PGO
 # for clang stdenv check
 , foot

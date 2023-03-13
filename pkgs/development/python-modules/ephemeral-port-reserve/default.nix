@@ -20,7 +20,7 @@ buildPythonPackage {
     hash = "sha256-R6NRpfaT05PO/cTWgCakiGfCuCyucjVOXbAezn5x1cU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -28,6 +28,8 @@ buildPythonPackage {
     # can't find hostname in our darwin build environment
     "test_fqdn"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "ephemeral_port_reserve"

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

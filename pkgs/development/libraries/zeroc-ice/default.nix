@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "bin" "dev" ];
 
   doCheck = true;
-  checkInputs = with python3.pkgs; [ passlib ];
+  nativeCheckInputs = with python3.pkgs; [ passlib ];
   checkPhase = with lib; let
     # these tests require network access so we need to skip them.
     brokenTests = map escapeRegex [

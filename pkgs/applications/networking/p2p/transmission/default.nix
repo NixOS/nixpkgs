@@ -25,7 +25,7 @@
 , enableQt ? false
 , qt5
 , nixosTests
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
 , enableCli ? true
 , installLib ? false
@@ -50,8 +50,8 @@ in stdenv.mkDerivation {
   patches = [
     # fix build with openssl 3.0
     (fetchurl {
-      url = "https://salsa.debian.org/debian/transmission/-/raw/debian/3.00-2.1/debian/patches/openssl3-compat.patch";
-      hash = "sha256-v+SDTW/lCtc8B3TuhQB1pmjW/QRAGLtYncaImNNwpes=";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
+      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
     })
   ];
 

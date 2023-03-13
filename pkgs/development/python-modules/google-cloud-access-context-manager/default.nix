@@ -3,23 +3,25 @@
 , fetchPypi
 , google-api-core
 , pythonOlder
+, protobuf
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.1.15";
+  version = "0.1.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W6Nb+H2CaULQ7Hp1hYxtnF9ITYa++Usc7XVoPkQPnVk=";
+    hash = "sha256-+L5Rre6LHpSlc+yzdQpMLSvURLHd412apDes5zwzdgc=";
   };
 
   propagatedBuildInputs = [
     google-api-core
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   # No tests in repo
   doCheck = false;

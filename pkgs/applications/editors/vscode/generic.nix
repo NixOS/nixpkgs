@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
+, unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
 
@@ -72,7 +72,8 @@ let
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
         nodePackages.asar
-        (wrapGAppsHook.override { inherit makeWrapper; })
+        # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+        (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
       ];
 
     dontBuild = true;
@@ -134,6 +135,9 @@ let
 
       # this fixes bundled ripgrep
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
+
+      # see https://github.com/gentoo/gentoo/commit/4da5959
+      chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
     '';
 
     inherit meta;
@@ -162,6 +166,7 @@ let
       icu
       libunwind
       libuuid
+      lttng-ust
       openssl
       zlib
 

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "siril";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1NPMTHPbYKPmaG+xRyKFU4/4Iio2ptn+HOvnsg4hoFE=";
+    sha256 = "sha256-KFCA3fUMVFHmh1BdKed5/dkq0EeYcmoWec97WX9ZHUc=";
   };
 
   nativeBuildInputs = [

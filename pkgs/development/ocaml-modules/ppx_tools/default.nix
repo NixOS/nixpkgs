@@ -58,8 +58,6 @@ then
     inherit pname src meta;
     inherit (param) version buildInputs nativeBuildInputs;
     duneVersion = "3";
-
-    strictDeps = true;
   }
 else
   stdenv.mkDerivation {

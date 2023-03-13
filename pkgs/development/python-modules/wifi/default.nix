@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "/sbin/iwlist" "${wirelesstools}/bin/iwlist"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

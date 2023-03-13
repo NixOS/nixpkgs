@@ -27,7 +27,7 @@ buildPythonPackage rec {
     "taggit"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
   ];
 

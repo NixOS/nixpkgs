@@ -1,15 +1,17 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, python-dateutil
 , aiohttp
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, python-dateutil
 , pythonOlder
+, requests
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.0.9";
+  version = "3.1.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,17 +20,23 @@ buildPythonPackage rec {
     owner = "automicus";
     repo = "PyISY";
     rev = "refs/tags/v${version}";
-    hash = "sha256-95MUOxWR4YUce0fFcasKc6YjoSHTGhXJcUAg0mbXxCs=";
+    hash = "sha256-OvWdKr8RlXRnAUMHSPhJDacvKeRa8QGPmGPQWLG2ouk=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setuptools-git-version" "" \
       --replace 'version_format="{tag}"' 'version="${version}"'
   '';
 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     aiohttp
+    colorlog
     python-dateutil
     requests
   ];

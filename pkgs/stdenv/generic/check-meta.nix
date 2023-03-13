@@ -57,9 +57,8 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
-  hasUnsupportedPlatform = attrs:
-    (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-      lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or []));
+  hasUnsupportedPlatform =
+    pkg: !(lib.meta.availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
@@ -93,14 +92,14 @@ let
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
-    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+    isNonSource attrs.meta.sourceProvenance;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
   # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
@@ -243,7 +242,7 @@ let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
         else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
@@ -269,10 +268,11 @@ let
     license = let
       licenseType = either (attrsOf anything) str; # TODO disallow `str` licenses, use a module
     in either licenseType (listOf licenseType);
-    sourceProvenance = either (listOf (attrsOf anything)) (attrsOf anything);
+    sourceProvenance = listOf lib.types.attrs;
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
-    platforms = listOf str;
+    pkgConfigModules = listOf str;
+    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;
@@ -322,7 +322,7 @@ let
         }"
     else
       "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if config.checkMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+  checkMeta = meta: lib.optionals config.checkMeta (lib.remove null (lib.mapAttrsToList checkMetaAttr meta));
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];

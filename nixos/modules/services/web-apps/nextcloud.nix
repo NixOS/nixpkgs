@@ -79,7 +79,7 @@ in {
       (which can be opened e.g. by running `nixos-help`).
     '')
     (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
-      Use services.nextcloud.nginx.enableImagemagick instead.
+      Use services.nextcloud.enableImagemagick instead.
     '')
   ];
 
@@ -1146,5 +1146,5 @@ in {
     }
   ]);
 
-  meta.doc = ./nextcloud.xml;
+  meta.doc = ./nextcloud.md;
 }

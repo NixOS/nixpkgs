@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2022.12.12";
+  version = "2023.2.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-AnGoXAeasPwbErTwWZJHzSnvxx4MreHrgbYHKLZQfRA=";
+    sha256 = "sha256-LyX/wHd4FnI9RrmwV6IDhz8gWJlBwG3Up64JYaIVdmM=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pydevccu
     pytest-aiohttp
     pytestCheckHook

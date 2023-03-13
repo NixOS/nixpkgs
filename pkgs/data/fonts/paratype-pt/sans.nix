@@ -1,20 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "paratype-pt-sans";
+stdenvNoCC.mkDerivation rec {
+  pname = "paratype-pt-sans";
+  version = "2.005";
 
-  urls = [
-    "https://company.paratype.com/system/attachments/629/original/ptsans.zip"
-    "http://rus.paratype.ru/system/attachments/629/original/ptsans.zip"
-  ];
+  src = fetchzip {
+    urls = [
+      "https://company.paratype.com/system/attachments/629/original/ptsans.zip"
+      "http://rus.paratype.ru/system/attachments/629/original/ptsans.zip"
+    ];
+    stripRoot = false;
+    hash = "sha256-34TqYXtWzkAstaGQBhJy+/hVk5tg6ZvHZ/kvUroWVLs=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 *.txt -t $out/share/doc/paratype
+
+    runHook postInstall
   '';
-
-  sha256 = "01fkd417gv98jf3a6zyfi9w2dkqsbddy1vacga2672yf0kh1z1r0";
 
   meta = with lib; {
     homepage = "http://www.paratype.ru/public/";
@@ -29,4 +35,3 @@ fetchzip {
     maintainers = with maintainers; [ raskin ];
   };
 }
-

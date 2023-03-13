@@ -48,7 +48,7 @@ buildPythonPackage rec {
     shapely
   ];
 
-  checkInputs = [ onnx ];
+  nativeCheckInputs = [ onnx ];
 
   pythonImportsCheck = [ "easyocr" ];
 

@@ -21,6 +21,7 @@
 , gobject-introspection-unwrapped
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
+, testers
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages pythonModules)
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
@@ -145,12 +146,14 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gobject-introspection";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
+    pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 

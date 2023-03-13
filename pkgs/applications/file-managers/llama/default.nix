@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "llama";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "llama";
     rev = "v${version}";
-    sha256 = "sha256-32UyFy269rifw4Hjw18FO0F79sDNW8dgJ2MdGXSzLWo=";
+    sha256 = "sha256-mJUxi2gqTMcodznCUDb2iB6j/p7bMUhhBLtZMbvfE1c=";
   };
 
-  vendorSha256 = "sha256-nngto104p/qJpWM1NlmEqcrJThXSeCfcoXCzV1CClYQ=";
+  vendorHash = "sha256-nngto104p/qJpWM1NlmEqcrJThXSeCfcoXCzV1CClYQ=";
 
   meta = with lib; {
     description = "Terminal file manager";

@@ -1,8 +1,6 @@
 { appleDerivation, darwin-stubs }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   # Not strictly necessary, since libSystem depends on it, but it's nice to be explicit so we
   # can easily find out what's impure.
   __propagatedImpureHostDeps = [

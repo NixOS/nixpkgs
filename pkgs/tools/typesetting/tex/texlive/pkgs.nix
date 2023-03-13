@@ -1,4 +1,4 @@
-tl: { # no indentation
+{ # no indentation
 "12many" = {
   revision = 15878;
   stripPrefix = 0;
@@ -226,9 +226,11 @@ tl: { # no indentation
 "acro" = {
   revision = 62925;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
+  deps = [
+    "etoolbox"
+    "l3kernel"
+    "l3packages"
+  ];
   sha512.run = "25c0dc9cda98db7ead55613aea92946cd90e7edfa1213d59966eb8fdd93ae1bc7b532f7849c43fb8fa77291b23dc5d8dc80cba4584c991a7b38e55564bd59ea3";
   sha512.doc = "c827f8dc5fa88b67e84e48d0cfb6d47aa5bfa98fbceed86e6262d98111a956d425d0a2f3cf54b18cba7593dfac17accc2cbe71cc04f1ea2157c511d670c41daa";
   hasRunfiles = true;
@@ -356,9 +358,11 @@ tl: { # no indentation
 "adjustbox" = {
   revision = 64967;
   stripPrefix = 0;
-  deps."collectbox" = tl."collectbox";
-  deps."graphics" = tl."graphics";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "collectbox"
+    "graphics"
+    "xkeyval"
+  ];
   sha512.run = "ac12b052b2112d5bcd942888ab69fa20aca6e2b392bf868959b8573ee8611d93042de3f90eace1519a89d0da64d2dcb3046e26fb0f86f46ea3e673e2a2aee2c8";
   sha512.doc = "d48b405a472df491b3ac6db23b126a70acda26e4dc2baf8e60569f110af2c4c740708c84fad9b70f689022e8747013198c98ea0bb3c6798f1dd8065a431d1ba5";
   sha512.source = "08da88fe2a344716e7184ac2cadf564a90def84c03af8270a2f5e906ae720a7794dcb2707af5e41ab41406b01021029f4272c3e2844e9e36cd913ab56f049ba3";
@@ -514,12 +518,14 @@ tl: { # no indentation
 };
 "aleph" = {
   revision = 62387;
-  deps."cm" = tl."cm";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."lambda" = tl."lambda";
-  deps."latex" = tl."latex";
-  deps."plain" = tl."plain";
+  deps = [
+    "cm"
+    "hyphen-base"
+    "knuth-lib"
+    "lambda"
+    "latex"
+    "plain"
+  ];
   hasFormats = true;
   sha512.run = "222d0c7045ddfdde5f0ca0ebe20a029c32fd0d4f35326c5ead6bf4ebbcadc86a2a2ff609bca3a6c3a04a09828c50c885f49ef9da0e6e548c18c2633400865c7f";
   sha512.doc = "77d2daaacfa99d7f4ed5b70706751936bed5ae00ac67490e428d900b5fee3d78797d2324039743cbf0cb06a3a03dba17643d67d9057d020a95a536c860d5e78e";
@@ -802,12 +808,14 @@ tl: { # no indentation
 };
 "amstex" = {
   revision = 63708;
-  deps."amsfonts" = tl."amsfonts";
-  deps."cm" = tl."cm";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."plain" = tl."plain";
-  deps."tex" = tl."tex";
+  deps = [
+    "amsfonts"
+    "cm"
+    "hyphen-base"
+    "knuth-lib"
+    "plain"
+    "tex"
+  ];
   hasFormats = true;
   sha512.run = "d92156cc5a01152776378c8809993b2ccbc9e917125d2ecfd2a06482401008385928e279a8832f328f7a8f4f3eeb746f9725e4986e4eb2f478c20a432ea8698e";
   sha512.doc = "ba87f3c3858ad7d86de6bcc03e50c5407e83f9de4bd3b3c63e3ce612fc5f933fba0d10bbad88525bae0a1f489adbd02643687f650874409962ee5b29447e14e8";
@@ -913,7 +921,9 @@ tl: { # no indentation
 "antomega" = {
   revision = 21933;
   stripPrefix = 0;
-  deps."omega" = tl."omega";
+  deps = [
+    "omega"
+  ];
   sha512.run = "af2cbe945ac3495e94fbf69797c05d9a7cd8c3874148c54c602a4a152c669638cf7a861949a3cc2d08aa21f378b57beffddf2d13e3afc1157c74472c348f5405";
   sha512.doc = "298b2e796736f7598a83a2d4fee53f48e78d0c8b255cc09c686371a3a05a4d36736cef96d812281cfd3fe1024af433f32e117c1c60d7559809220ed8dd5e56a9";
   sha512.source = "7ee92461e60834af1f736f387823788a44d680171d9a7acbfd71c858885e190f724b5db11074efb74faf63b471af5c34688af1be5b765de67b170dbcf123fe2f";
@@ -1615,9 +1625,11 @@ tl: { # no indentation
 "auto-pst-pdf" = {
   revision = 56596;
   stripPrefix = 0;
-  deps."ifplatform" = tl."ifplatform";
-  deps."iftex" = tl."iftex";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "ifplatform"
+    "iftex"
+    "xkeyval"
+  ];
   sha512.run = "5c1f85a0ec5aa4173181b087a1f5f8e30be6d8c21c3461999a85b42032d45292aa6f8aae4922a5e97d073fff5b2c9d114cd30f5d5bb73ef523718e891ce59473";
   sha512.doc = "73d6f4b2e298eedc537a46c1e69bce9e160eb28e6bc2f631596a4fd3aa658d8b51d6dfddb6748b7e629fe564a2ced5e55bcd766650616d936a4197e368b2fcd7";
   sha512.source = "199e9fefcb2f96f1ad9e33abeecedcff9c72f20614c48951197703ff65901763ef88f425af08021b1843f30c3ee8e3a9756095ad4b165772b829a29c6e5515f2";
@@ -1627,7 +1639,9 @@ tl: { # no indentation
 "auto-pst-pdf-lua" = {
   revision = 54779;
   stripPrefix = 0;
-  deps."iftex" = tl."iftex";
+  deps = [
+    "iftex"
+  ];
   sha512.run = "053adb8525158b1c0703333bc9a20d3923468da54db4400f83c8c651820a01a9569542afb5502b56abf7034122fe5baf17ea6d2e7d7dbe53acdc7c2f9b1de68d";
   sha512.doc = "dc7647af18502d3f7d88cb9dde9a4bc467204a78d6f6ef441d7593aeb2f9776532eddb94350081619986a0dece023c2ece54d3dce554188f5b62056b7a1a96b8";
   hasRunfiles = true;
@@ -2324,8 +2338,10 @@ tl: { # no indentation
 "bangla" = {
   revision = 60159;
   stripPrefix = 0;
-  deps."charissil" = tl."charissil";
-  deps."doulossil" = tl."doulossil";
+  deps = [
+    "charissil"
+    "doulossil"
+  ];
   sha512.run = "adeed1b1f42ef1c76406c376d5f672870feedd4ccdc8db382b057dea6dceecca6e53de7d2c0ca154def6b0be67c05aa46e959c89829f564a3acc6805462bb4bc";
   sha512.doc = "d62d6a72c268421033767b3d2c131583e62e0c139ea3e101094752616498111badc5f0544294e836715dc7b3fffd5da9d9e4d3a4103fd2090f38e7ee31afe5be";
   hasRunfiles = true;
@@ -2545,17 +2561,19 @@ tl: { # no indentation
 "beamer" = {
   revision = 64388;
   stripPrefix = 0;
-  deps."amscls" = tl."amscls";
-  deps."amsfonts" = tl."amsfonts";
-  deps."amsmath" = tl."amsmath";
-  deps."atbegshi" = tl."atbegshi";
-  deps."etoolbox" = tl."etoolbox";
-  deps."geometry" = tl."geometry";
-  deps."hyperref" = tl."hyperref";
-  deps."iftex" = tl."iftex";
-  deps."pgf" = tl."pgf";
-  deps."translator" = tl."translator";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "amscls"
+    "amsfonts"
+    "amsmath"
+    "atbegshi"
+    "etoolbox"
+    "geometry"
+    "hyperref"
+    "iftex"
+    "pgf"
+    "translator"
+    "xcolor"
+  ];
   sha512.run = "27118c5f5dd76a6c7cd0fb74fd8420c5a0b30655ffd57a1677f7e92163f81992ecfaa13cfbf9e2a0d47069980d0364848bcb0c24b120163833fed09c589f54ba";
   sha512.doc = "52512e5966c4b6f6b7d4660c61115d8ec3fea2b4e3dfd065fcbf4ea6bb9fb1895f48a69f092482932a73c74004b14026fb844ab3d358af706ead011a63053339";
   hasRunfiles = true;
@@ -2847,7 +2865,9 @@ tl: { # no indentation
 "beaulivre" = {
   revision = 64280;
   stripPrefix = 0;
-  deps."colorist" = tl."colorist";
+  deps = [
+    "colorist"
+  ];
   sha512.run = "7fa9fac71a151bc1e100ed3ad4261cb4d76df8734d424ba5600f73d526f48183f3d7024426be5c35114b20e6ff341f3cf735dfafaa96d17a42a4d7fc0e54179a";
   sha512.doc = "d489dadc440661b8c8ceb645a5a2ffbc50c5461d9fb1ac9964be76907aa250f657a1b6bbb7a4f8674babdece60958ce1f089a953e6597af971ace22184eb2d1a";
   hasRunfiles = true;
@@ -3024,7 +3044,9 @@ tl: { # no indentation
 };
 "bib2gls" = {
   revision = 65104;
-  deps."glossaries-extra" = tl."glossaries-extra";
+  deps = [
+    "glossaries-extra"
+  ];
   sha512.run = "009e393b3083a3260642cb36dc463c714689d1b32d07885c9d20092e4f7386d05118c452e6f97001120f70558a69aa58d757ae0998cefe10e164bb172e432fbf";
   sha512.doc = "2a22e662fa0c41581a3c9d9496f97854ea2faa0d01970ab0cc0542048d0ebdcfcbf7ddc7fcf519510d99300eb6634f1c7688874cf02cf6052962d903c5810887";
   sha512.source = "da69973053fda82589612813834134837cf9680f4257a6336aed08213df0ff4c34dbef3c7edb833c7987549599cc48ae82dec36bac96dda003e3de3d1422bc6d";
@@ -3042,9 +3064,11 @@ tl: { # no indentation
 };
 "bibcop" = {
   revision = 65306;
-  deps."fancyvrb" = tl."fancyvrb";
-  deps."iexec" = tl."iexec";
-  deps."verbatimcopy" = tl."verbatimcopy";
+  deps = [
+    "fancyvrb"
+    "iexec"
+    "verbatimcopy"
+  ];
   sha512.run = "d0b510a55ba24daf97727cd7b81174839276c4c8d467ec2ca1ea9729341d214fedfdd0b05650e33525e67f0c29b46e5e5337d8e08af8d07ba208b91b5ee526cc";
   sha512.doc = "1d36da4a989a59a1a044f310232207a9dd2d20a9cbb55dd5b0f2c52674d1a3ac54cba16de2e634e520a1a4e1e186ceff871ef701165313b4dcac615306700dff";
   sha512.source = "66dedb1e1cebd4cffc1aa411caf621b819c3a718561d899bc144574afd84313205bb14a0966838e0ddb77ad9dd7ab5fdf3570e1131bcb6138d4b27a9189ba4d3";
@@ -3084,11 +3108,13 @@ tl: { # no indentation
 "biblatex" = {
   revision = 63878;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."kvoptions" = tl."kvoptions";
-  deps."logreq" = tl."logreq";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."url" = tl."url";
+  deps = [
+    "etoolbox"
+    "kvoptions"
+    "logreq"
+    "pdftexcmds"
+    "url"
+  ];
   sha512.run = "a879c80e266b55d653dead15774e5b08ae827a5bbd8a17d7a6e2f9bf240bbc5be88a0c01df9d4b1ef7ccd3a55d0c7e4ef9b65018bcfd13b209ea370c951cb539";
   sha512.doc = "c941c5c976981fec48a86fafec6a7e8f80d36d1aa766f1b8fc798a2ed934f2f7f1ec17467743afc3e9e4d8fce21d0cd95bdfd378be35c7cd4ef239e49872ff7c";
   hasRunfiles = true;
@@ -3393,11 +3419,13 @@ tl: { # no indentation
 "biblatex-ms" = {
   revision = 64180;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."kvoptions" = tl."kvoptions";
-  deps."logreq" = tl."logreq";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."url" = tl."url";
+  deps = [
+    "etoolbox"
+    "kvoptions"
+    "logreq"
+    "pdftexcmds"
+    "url"
+  ];
   sha512.run = "cef1cecae6fa89d761f5eda158e495e40e0e77500eec84e4a08df7bacfa3a03fffe1b8e50b27e9456cbd6f393fae6293e61df69faa21e5a245e18c2b13722d86";
   sha512.doc = "9dce37ce0bc21b81bfbaeb2855b81089fb32c3a8b4547ec8197638d1063f2b126f4e94e3dab6164beab71abb66f8a2cce9e4f7efd5494295556156c55679f586";
   hasRunfiles = true;
@@ -3684,7 +3712,9 @@ tl: { # no indentation
 };
 "bibtex" = {
   revision = 64491;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "fadbb6ca18794e52b40a7083db41c5f1d42e47ce93daed7a551bf8e263f8aac8302578f23fe915c3706e4e3603cbdc9cafc55b07c895542a60eb1670ce07d628";
   sha512.doc = "6e1433e40fd604e391be05b9b68449cb6804488a42aac802d8960407930f99ae4450b77afe1baae4fe9b4d20b48c359472cf6c1e0a67d6f0a4a87cbffaaf1d8c";
   hasRunfiles = true;
@@ -3897,7 +3927,9 @@ tl: { # no indentation
 "bitset" = {
   revision = 53837;
   stripPrefix = 0;
-  deps."bigintcalc" = tl."bigintcalc";
+  deps = [
+    "bigintcalc"
+  ];
   sha512.run = "b1c9121312404d3daf6907623972c35e0f36cfb4197e589bd937c145506cb5a2d9d8c1f665ae3b4d3ec093e55bb146c0b67cd0858425b704fe29989b9924ccb7";
   sha512.doc = "a5a3ba9d27dc3d9658c1d261f798fdc5e6dc4cedd85287ef77d2a0341048d71f8575d4fbd711e499233e0991c51765953931d87d40dd22fa2a4e8ecb9f2a8dab";
   sha512.source = "40580c17ac81137d533eb013ed14bc092281b354ce42883c0a3c33ee7843be7ebed0ce642746ba9e173bedf8ee6f6c243b65e692ef2a50654ada23e323166c89";
@@ -4951,7 +4983,9 @@ tl: { # no indentation
 "cbfonts" = {
   revision = 54080;
   stripPrefix = 0;
-  deps."cbfonts-fd" = tl."cbfonts-fd";
+  deps = [
+    "cbfonts-fd"
+  ];
   sha512.run = "0e7cecfdfa102113f75f46f9c8bc76f578fca6c967128bb8b203af76cc64cbefd123ae87a8b04a9780f498517bd9f660d12e2dc586220f2c12cc8aa76f1aa40a";
   sha512.doc = "a069b7ca1b46e5656a05a5e38a0f9ea5c3ab1e5301edc47d7fdd43817a8f5d641980c2e54b7731dcbcf16e12f0dff17df5a816d66f7bd2b613232788815bb8e0";
   hasRunfiles = true;
@@ -5311,7 +5345,9 @@ tl: { # no indentation
 "chemformula" = {
   revision = 61719;
   stripPrefix = 0;
-  deps."units" = tl."units";
+  deps = [
+    "units"
+  ];
   sha512.run = "907efcb72ebf3a315bffc11a8d78caa82b510993b4a4de1da8a960bbd6c66bdf5bc202933fce5f4f0626ad4507a5095b571487beb2414bc49bd37e735f0299f1";
   sha512.doc = "c839fed7313744c6abb77fd4f803524c47af7f9ca0e4b533b307a198cc2fefc072541d58afca8cfab6a17b85ecdda4d3bacd451ac9616b47a448560a97f3b62a";
   hasRunfiles = true;
@@ -5613,11 +5649,13 @@ tl: { # no indentation
 "churchslavonic" = {
   revision = 42751;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."fonts-churchslavonic" = tl."fonts-churchslavonic";
-  deps."hyphen-churchslavonic" = tl."hyphen-churchslavonic";
-  deps."oberdiek" = tl."oberdiek";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "etoolbox"
+    "fonts-churchslavonic"
+    "hyphen-churchslavonic"
+    "oberdiek"
+    "xcolor"
+  ];
   sha512.run = "6c572235b95bb1f8407addefdefa1d7d3facc09b963f4d65d2be317986eb6523db9a8ff7104f15c526962ea8fbd0e1430b68867bf619cebc9b494f5cc04bfb07";
   sha512.doc = "90d563afc8248ded0ea4f30ff685e2fd9da8dec7ea92a3d4313040905be883af3f11393a031ec85ad39e9e51d374557e0f1f373a78caf855d2048fc4e0393e37";
   hasRunfiles = true;
@@ -5673,14 +5711,16 @@ tl: { # no indentation
 };
 "citation-style-language" = {
   revision = 65357;
-  deps."filehook" = tl."filehook";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."lua-uca" = tl."lua-uca";
-  deps."lualibs" = tl."lualibs";
-  deps."luatex" = tl."luatex";
-  deps."luaxml" = tl."luaxml";
-  deps."url" = tl."url";
+  deps = [
+    "filehook"
+    "l3kernel"
+    "l3packages"
+    "lua-uca"
+    "lualibs"
+    "luatex"
+    "luaxml"
+    "url"
+  ];
   sha512.run = "4260ef2c25c7350e01a0bb7b7372a63da723c81a473ecad7346962c49ce35b68d5385863bf3ad742bd4da79720d4d240293f65677e01cdc41993509a5999cd21";
   sha512.doc = "19c2336b57d8da88dcf22a92e54872a0d9548d5b2f9433ef155534c29f935988056240064ee863fa4a86caaa93dd0e4873725342c698bddabcbc90b771fb8d60";
   hasRunfiles = true;
@@ -5729,12 +5769,14 @@ tl: { # no indentation
 "cjk" = {
   revision = 60865;
   stripPrefix = 0;
-  deps."arphic" = tl."arphic";
-  deps."cns" = tl."cns";
-  deps."garuda-c90" = tl."garuda-c90";
-  deps."norasi-c90" = tl."norasi-c90";
-  deps."uhc" = tl."uhc";
-  deps."wadalab" = tl."wadalab";
+  deps = [
+    "arphic"
+    "cns"
+    "garuda-c90"
+    "norasi-c90"
+    "uhc"
+    "wadalab"
+  ];
   sha512.run = "b13712912e479dab68cab9027042be8cb11047ebf9c034f532c857e83d28f19dfea5a1748685cfe1847c7372f2d0982f79736525694d937c88962c5262094585";
   sha512.doc = "a8c6b2d4d0899b841ccc32b378855d61bdaa65d5f68fd408df3894d386bcde18f384410f34e6f33ee2a5ce770e1e663a05ab038d9b7483012a3cb414739c3705";
   sha512.source = "88be587328daedfed3bdcb289b1a03343bd7257ae180a9e0857a6b00f173f601eccd8e5978dd29c2d95fbab180fcfd5135a682c5218325fc6b664f2cd505213c";
@@ -5752,7 +5794,9 @@ tl: { # no indentation
 "cjk-ko" = {
   revision = 63561;
   stripPrefix = 0;
-  deps."cjk" = tl."cjk";
+  deps = [
+    "cjk"
+  ];
   sha512.run = "be65ef03300b8fccc4012ece68570a86797e36267ea2f531fead77659cf7bf2a315cca1a3e3386f8d1dc09cbb3b44b20dafb3e0e0cbd53bddb1a368c984937b0";
   sha512.doc = "3ffcae00a4a0dcd175fcf864c3c0c578d7926917216b4a785c0a46074ef013eafe9458ba9010d14f081c63ab4ee0941d0597dace373eb178369de9caa210a16b";
   hasRunfiles = true;
@@ -5842,8 +5886,10 @@ tl: { # no indentation
 "clicks" = {
   revision = 64602;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "etoolbox"
+    "xkeyval"
+  ];
   sha512.run = "7218b2bf0f28a0ed382e4884aa30b59c2d8bff76a3d7a09461e5e3ebf1f41648889005db3c79fe203a4d3753a65f76a48058582e25f57e61d972e8256657712e";
   sha512.doc = "fc84edae6c263a889ea5b1d7a99b5fdf2c22bbb45c9c104e63d821a80b498d1932e654034f289a7470a15cb2ea6082eb8d8fedce24b21b9ccbd5e4304043d6b3";
   sha512.source = "ff19c270587c08c28db6cad54e2a58ce23f6041b08b6d611b7ffe6fe2b6506c1a7ae33ded3fe3ec59cee3fcfc276e6a1dc3750291b4f7691255066805ca90158";
@@ -6232,4417 +6278,4495 @@ tl: { # no indentation
 "collection-basic" = {
   revision = 59159;
   stripPrefix = 0;
-  deps."amsfonts" = tl."amsfonts";
-  deps."bibtex" = tl."bibtex";
-  deps."cm" = tl."cm";
-  deps."colorprofiles" = tl."colorprofiles";
-  deps."dvipdfmx" = tl."dvipdfmx";
-  deps."dvips" = tl."dvips";
-  deps."ec" = tl."ec";
-  deps."enctex" = tl."enctex";
-  deps."etex" = tl."etex";
-  deps."etex-pkg" = tl."etex-pkg";
-  deps."glyphlist" = tl."glyphlist";
-  deps."graphics-def" = tl."graphics-def";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."hyphenex" = tl."hyphenex";
-  deps."ifplatform" = tl."ifplatform";
-  deps."iftex" = tl."iftex";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."knuth-local" = tl."knuth-local";
-  deps."kpathsea" = tl."kpathsea";
-  deps."lua-alt-getopt" = tl."lua-alt-getopt";
-  deps."luahbtex" = tl."luahbtex";
-  deps."luatex" = tl."luatex";
-  deps."makeindex" = tl."makeindex";
-  deps."metafont" = tl."metafont";
-  deps."mflogo" = tl."mflogo";
-  deps."mfware" = tl."mfware";
-  deps."modes" = tl."modes";
-  deps."pdftex" = tl."pdftex";
-  deps."plain" = tl."plain";
-  deps."tex" = tl."tex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."texlive-common" = tl."texlive-common";
-  deps."texlive-en" = tl."texlive-en";
-  deps."texlive-msg-translations" = tl."texlive-msg-translations";
-  deps."texlive-scripts" = tl."texlive-scripts";
-  deps."tlshell" = tl."tlshell";
-  deps."unicode-data" = tl."unicode-data";
-  deps."xdvi" = tl."xdvi";
+  deps = [
+    "amsfonts"
+    "bibtex"
+    "cm"
+    "colorprofiles"
+    "dvipdfmx"
+    "dvips"
+    "ec"
+    "enctex"
+    "etex"
+    "etex-pkg"
+    "glyphlist"
+    "graphics-def"
+    "hyph-utf8"
+    "hyphen-base"
+    "hyphenex"
+    "ifplatform"
+    "iftex"
+    "knuth-lib"
+    "knuth-local"
+    "kpathsea"
+    "lua-alt-getopt"
+    "luahbtex"
+    "luatex"
+    "makeindex"
+    "metafont"
+    "mflogo"
+    "mfware"
+    "modes"
+    "pdftex"
+    "plain"
+    "tex"
+    "tex-ini-files"
+    "texlive-common"
+    "texlive-en"
+    "texlive-msg-translations"
+    "texlive-scripts"
+    "tlshell"
+    "unicode-data"
+    "xdvi"
+  ];
   sha512.run = "4241bc3a3ef21502faa9a2e0b16295126c357fc15813a625306552b40f9da804164abccce642f4ec1e677092f81d61381958b87fcf515120a12f9b7a19055370";
 };
 "collection-bibtexextra" = {
   revision = 65257;
   stripPrefix = 0;
-  deps."aaai-named" = tl."aaai-named";
-  deps."aichej" = tl."aichej";
-  deps."ajl" = tl."ajl";
-  deps."amsrefs" = tl."amsrefs";
-  deps."annotate" = tl."annotate";
-  deps."apacite" = tl."apacite";
-  deps."apalike-ejor" = tl."apalike-ejor";
-  deps."apalike2" = tl."apalike2";
-  deps."archaeologie" = tl."archaeologie";
-  deps."authordate" = tl."authordate";
-  deps."beebe" = tl."beebe";
-  deps."besjournals" = tl."besjournals";
-  deps."bestpapers" = tl."bestpapers";
-  deps."bib2gls" = tl."bib2gls";
-  deps."bibarts" = tl."bibarts";
-  deps."bibcop" = tl."bibcop";
-  deps."biber" = tl."biber";
-  deps."biber-ms" = tl."biber-ms";
-  deps."bibexport" = tl."bibexport";
-  deps."bibhtml" = tl."bibhtml";
-  deps."biblatex" = tl."biblatex";
-  deps."biblatex-abnt" = tl."biblatex-abnt";
-  deps."biblatex-ajc2020unofficial" = tl."biblatex-ajc2020unofficial";
-  deps."biblatex-anonymous" = tl."biblatex-anonymous";
-  deps."biblatex-apa" = tl."biblatex-apa";
-  deps."biblatex-apa6" = tl."biblatex-apa6";
-  deps."biblatex-archaeology" = tl."biblatex-archaeology";
-  deps."biblatex-arthistory-bonn" = tl."biblatex-arthistory-bonn";
-  deps."biblatex-bath" = tl."biblatex-bath";
-  deps."biblatex-bookinarticle" = tl."biblatex-bookinarticle";
-  deps."biblatex-bookinother" = tl."biblatex-bookinother";
-  deps."biblatex-bwl" = tl."biblatex-bwl";
-  deps."biblatex-caspervector" = tl."biblatex-caspervector";
-  deps."biblatex-chem" = tl."biblatex-chem";
-  deps."biblatex-chicago" = tl."biblatex-chicago";
-  deps."biblatex-claves" = tl."biblatex-claves";
-  deps."biblatex-cv" = tl."biblatex-cv";
-  deps."biblatex-dw" = tl."biblatex-dw";
-  deps."biblatex-enc" = tl."biblatex-enc";
-  deps."biblatex-ext" = tl."biblatex-ext";
-  deps."biblatex-fiwi" = tl."biblatex-fiwi";
-  deps."biblatex-gb7714-2015" = tl."biblatex-gb7714-2015";
-  deps."biblatex-german-legal" = tl."biblatex-german-legal";
-  deps."biblatex-gost" = tl."biblatex-gost";
-  deps."biblatex-historian" = tl."biblatex-historian";
-  deps."biblatex-ieee" = tl."biblatex-ieee";
-  deps."biblatex-ijsra" = tl."biblatex-ijsra";
-  deps."biblatex-iso690" = tl."biblatex-iso690";
-  deps."biblatex-jura2" = tl."biblatex-jura2";
-  deps."biblatex-juradiss" = tl."biblatex-juradiss";
-  deps."biblatex-license" = tl."biblatex-license";
-  deps."biblatex-lncs" = tl."biblatex-lncs";
-  deps."biblatex-lni" = tl."biblatex-lni";
-  deps."biblatex-luh-ipw" = tl."biblatex-luh-ipw";
-  deps."biblatex-manuscripts-philology" = tl."biblatex-manuscripts-philology";
-  deps."biblatex-mla" = tl."biblatex-mla";
-  deps."biblatex-morenames" = tl."biblatex-morenames";
-  deps."biblatex-ms" = tl."biblatex-ms";
-  deps."biblatex-multiple-dm" = tl."biblatex-multiple-dm";
-  deps."biblatex-musuos" = tl."biblatex-musuos";
-  deps."biblatex-nature" = tl."biblatex-nature";
-  deps."biblatex-nejm" = tl."biblatex-nejm";
-  deps."biblatex-nottsclassic" = tl."biblatex-nottsclassic";
-  deps."biblatex-opcit-booktitle" = tl."biblatex-opcit-booktitle";
-  deps."biblatex-oxref" = tl."biblatex-oxref";
-  deps."biblatex-philosophy" = tl."biblatex-philosophy";
-  deps."biblatex-phys" = tl."biblatex-phys";
-  deps."biblatex-publist" = tl."biblatex-publist";
-  deps."biblatex-readbbl" = tl."biblatex-readbbl";
-  deps."biblatex-realauthor" = tl."biblatex-realauthor";
-  deps."biblatex-sbl" = tl."biblatex-sbl";
-  deps."biblatex-science" = tl."biblatex-science";
-  deps."biblatex-shortfields" = tl."biblatex-shortfields";
-  deps."biblatex-socialscienceshuberlin" = tl."biblatex-socialscienceshuberlin";
-  deps."biblatex-software" = tl."biblatex-software";
-  deps."biblatex-source-division" = tl."biblatex-source-division";
-  deps."biblatex-spbasic" = tl."biblatex-spbasic";
-  deps."biblatex-subseries" = tl."biblatex-subseries";
-  deps."biblatex-swiss-legal" = tl."biblatex-swiss-legal";
-  deps."biblatex-trad" = tl."biblatex-trad";
-  deps."biblatex-true-citepages-omit" = tl."biblatex-true-citepages-omit";
-  deps."biblatex-unified" = tl."biblatex-unified";
-  deps."biblatex-vancouver" = tl."biblatex-vancouver";
-  deps."biblatex2bibitem" = tl."biblatex2bibitem";
-  deps."biblist" = tl."biblist";
-  deps."bibtexperllibs" = tl."bibtexperllibs";
-  deps."bibtopic" = tl."bibtopic";
-  deps."bibtopicprefix" = tl."bibtopicprefix";
-  deps."bibunits" = tl."bibunits";
-  deps."biolett-bst" = tl."biolett-bst";
-  deps."bookdb" = tl."bookdb";
-  deps."breakcites" = tl."breakcites";
-  deps."cell" = tl."cell";
-  deps."chbibref" = tl."chbibref";
-  deps."chembst" = tl."chembst";
-  deps."chicago" = tl."chicago";
-  deps."chicago-annote" = tl."chicago-annote";
-  deps."chicagoa" = tl."chicagoa";
-  deps."chscite" = tl."chscite";
-  deps."citation-style-language" = tl."citation-style-language";
-  deps."citeall" = tl."citeall";
-  deps."citeref" = tl."citeref";
-  deps."collection-latex" = tl."collection-latex";
-  deps."collref" = tl."collref";
-  deps."compactbib" = tl."compactbib";
-  deps."crossrefware" = tl."crossrefware";
-  deps."custom-bib" = tl."custom-bib";
-  deps."din1505" = tl."din1505";
-  deps."dk-bib" = tl."dk-bib";
-  deps."doipubmed" = tl."doipubmed";
-  deps."ecobiblatex" = tl."ecobiblatex";
-  deps."econ-bst" = tl."econ-bst";
-  deps."economic" = tl."economic";
-  deps."fbs" = tl."fbs";
-  deps."figbib" = tl."figbib";
-  deps."footbib" = tl."footbib";
-  deps."francais-bst" = tl."francais-bst";
-  deps."gbt7714" = tl."gbt7714";
-  deps."geschichtsfrkl" = tl."geschichtsfrkl";
-  deps."harvard" = tl."harvard";
-  deps."harvmac" = tl."harvmac";
-  deps."hep-bibliography" = tl."hep-bibliography";
-  deps."historische-zeitschrift" = tl."historische-zeitschrift";
-  deps."icite" = tl."icite";
-  deps."ietfbibs" = tl."ietfbibs";
-  deps."ijqc" = tl."ijqc";
-  deps."inlinebib" = tl."inlinebib";
-  deps."iopart-num" = tl."iopart-num";
-  deps."is-bst" = tl."is-bst";
-  deps."jbact" = tl."jbact";
-  deps."jmb" = tl."jmb";
-  deps."jneurosci" = tl."jneurosci";
-  deps."jurabib" = tl."jurabib";
-  deps."ksfh_nat" = tl."ksfh_nat";
-  deps."listbib" = tl."listbib";
-  deps."logreq" = tl."logreq";
-  deps."ltb2bib" = tl."ltb2bib";
-  deps."luabibentry" = tl."luabibentry";
-  deps."margbib" = tl."margbib";
-  deps."multibib" = tl."multibib";
-  deps."multibibliography" = tl."multibibliography";
-  deps."munich" = tl."munich";
-  deps."nar" = tl."nar";
-  deps."newcastle-bst" = tl."newcastle-bst";
-  deps."nmbib" = tl."nmbib";
-  deps."notes2bib" = tl."notes2bib";
-  deps."notex-bst" = tl."notex-bst";
-  deps."oscola" = tl."oscola";
-  deps."perception" = tl."perception";
-  deps."plainyr" = tl."plainyr";
-  deps."pnas2009" = tl."pnas2009";
-  deps."rsc" = tl."rsc";
-  deps."showtags" = tl."showtags";
-  deps."sort-by-letters" = tl."sort-by-letters";
-  deps."splitbib" = tl."splitbib";
-  deps."turabian-formatting" = tl."turabian-formatting";
-  deps."uni-wtal-ger" = tl."uni-wtal-ger";
-  deps."uni-wtal-lin" = tl."uni-wtal-lin";
-  deps."urlbst" = tl."urlbst";
-  deps."usebib" = tl."usebib";
-  deps."vak" = tl."vak";
-  deps."windycity" = tl."windycity";
-  deps."xcite" = tl."xcite";
-  deps."zootaxa-bst" = tl."zootaxa-bst";
+  deps = [
+    "aaai-named"
+    "aichej"
+    "ajl"
+    "amsrefs"
+    "annotate"
+    "apacite"
+    "apalike-ejor"
+    "apalike2"
+    "archaeologie"
+    "authordate"
+    "beebe"
+    "besjournals"
+    "bestpapers"
+    "bib2gls"
+    "bibarts"
+    "bibcop"
+    "biber"
+    "biber-ms"
+    "bibexport"
+    "bibhtml"
+    "biblatex"
+    "biblatex-abnt"
+    "biblatex-ajc2020unofficial"
+    "biblatex-anonymous"
+    "biblatex-apa"
+    "biblatex-apa6"
+    "biblatex-archaeology"
+    "biblatex-arthistory-bonn"
+    "biblatex-bath"
+    "biblatex-bookinarticle"
+    "biblatex-bookinother"
+    "biblatex-bwl"
+    "biblatex-caspervector"
+    "biblatex-chem"
+    "biblatex-chicago"
+    "biblatex-claves"
+    "biblatex-cv"
+    "biblatex-dw"
+    "biblatex-enc"
+    "biblatex-ext"
+    "biblatex-fiwi"
+    "biblatex-gb7714-2015"
+    "biblatex-german-legal"
+    "biblatex-gost"
+    "biblatex-historian"
+    "biblatex-ieee"
+    "biblatex-ijsra"
+    "biblatex-iso690"
+    "biblatex-jura2"
+    "biblatex-juradiss"
+    "biblatex-license"
+    "biblatex-lncs"
+    "biblatex-lni"
+    "biblatex-luh-ipw"
+    "biblatex-manuscripts-philology"
+    "biblatex-mla"
+    "biblatex-morenames"
+    "biblatex-ms"
+    "biblatex-multiple-dm"
+    "biblatex-musuos"
+    "biblatex-nature"
+    "biblatex-nejm"
+    "biblatex-nottsclassic"
+    "biblatex-opcit-booktitle"
+    "biblatex-oxref"
+    "biblatex-philosophy"
+    "biblatex-phys"
+    "biblatex-publist"
+    "biblatex-readbbl"
+    "biblatex-realauthor"
+    "biblatex-sbl"
+    "biblatex-science"
+    "biblatex-shortfields"
+    "biblatex-socialscienceshuberlin"
+    "biblatex-software"
+    "biblatex-source-division"
+    "biblatex-spbasic"
+    "biblatex-subseries"
+    "biblatex-swiss-legal"
+    "biblatex-trad"
+    "biblatex-true-citepages-omit"
+    "biblatex-unified"
+    "biblatex-vancouver"
+    "biblatex2bibitem"
+    "biblist"
+    "bibtexperllibs"
+    "bibtopic"
+    "bibtopicprefix"
+    "bibunits"
+    "biolett-bst"
+    "bookdb"
+    "breakcites"
+    "cell"
+    "chbibref"
+    "chembst"
+    "chicago"
+    "chicago-annote"
+    "chicagoa"
+    "chscite"
+    "citation-style-language"
+    "citeall"
+    "citeref"
+    "collection-latex"
+    "collref"
+    "compactbib"
+    "crossrefware"
+    "custom-bib"
+    "din1505"
+    "dk-bib"
+    "doipubmed"
+    "ecobiblatex"
+    "econ-bst"
+    "economic"
+    "fbs"
+    "figbib"
+    "footbib"
+    "francais-bst"
+    "gbt7714"
+    "geschichtsfrkl"
+    "harvard"
+    "harvmac"
+    "hep-bibliography"
+    "historische-zeitschrift"
+    "icite"
+    "ietfbibs"
+    "ijqc"
+    "inlinebib"
+    "iopart-num"
+    "is-bst"
+    "jbact"
+    "jmb"
+    "jneurosci"
+    "jurabib"
+    "ksfh_nat"
+    "listbib"
+    "logreq"
+    "ltb2bib"
+    "luabibentry"
+    "margbib"
+    "multibib"
+    "multibibliography"
+    "munich"
+    "nar"
+    "newcastle-bst"
+    "nmbib"
+    "notes2bib"
+    "notex-bst"
+    "oscola"
+    "perception"
+    "plainyr"
+    "pnas2009"
+    "rsc"
+    "showtags"
+    "sort-by-letters"
+    "splitbib"
+    "turabian-formatting"
+    "uni-wtal-ger"
+    "uni-wtal-lin"
+    "urlbst"
+    "usebib"
+    "vak"
+    "windycity"
+    "xcite"
+    "zootaxa-bst"
+  ];
   sha512.run = "db80edc251a62547b401d922c954a40dc3887b01a59952bf20829b67953e26083c98249dba83157b0e9db4b0b2b2802f5965d9360b332d45fe4d69762ef38c62";
 };
 "collection-binextra" = {
   revision = 65204;
   stripPrefix = 0;
-  deps."a2ping" = tl."a2ping";
-  deps."adhocfilelist" = tl."adhocfilelist";
-  deps."arara" = tl."arara";
-  deps."asymptote" = tl."asymptote";
-  deps."bibtex8" = tl."bibtex8";
-  deps."bibtexu" = tl."bibtexu";
-  deps."bundledoc" = tl."bundledoc";
-  deps."checklistings" = tl."checklistings";
-  deps."chklref" = tl."chklref";
-  deps."chktex" = tl."chktex";
-  deps."clojure-pamphlet" = tl."clojure-pamphlet";
-  deps."cluttex" = tl."cluttex";
-  deps."collection-basic" = tl."collection-basic";
-  deps."ctan-o-mat" = tl."ctan-o-mat";
-  deps."ctan_chk" = tl."ctan_chk";
-  deps."ctanbib" = tl."ctanbib";
-  deps."ctanify" = tl."ctanify";
-  deps."ctanupload" = tl."ctanupload";
-  deps."ctie" = tl."ctie";
-  deps."cweb" = tl."cweb";
-  deps."de-macro" = tl."de-macro";
-  deps."detex" = tl."detex";
-  deps."digestif" = tl."digestif";
-  deps."dtl" = tl."dtl";
-  deps."dtxgen" = tl."dtxgen";
-  deps."dvi2tty" = tl."dvi2tty";
-  deps."dviasm" = tl."dviasm";
-  deps."dvicopy" = tl."dvicopy";
-  deps."dvidvi" = tl."dvidvi";
-  deps."dviinfox" = tl."dviinfox";
-  deps."dviljk" = tl."dviljk";
-  deps."dviout-util" = tl."dviout-util";
-  deps."dvipng" = tl."dvipng";
-  deps."dvipos" = tl."dvipos";
-  deps."dvisvgm" = tl."dvisvgm";
-  deps."findhyph" = tl."findhyph";
-  deps."fragmaster" = tl."fragmaster";
-  deps."git-latexdiff" = tl."git-latexdiff";
-  deps."gsftopk" = tl."gsftopk";
-  deps."hook-pre-commit-pkg" = tl."hook-pre-commit-pkg";
-  deps."installfont" = tl."installfont";
-  deps."ketcindy" = tl."ketcindy";
-  deps."lacheck" = tl."lacheck";
-  deps."latex-git-log" = tl."latex-git-log";
-  deps."latex-papersize" = tl."latex-papersize";
-  deps."latex2man" = tl."latex2man";
-  deps."latex2nemeth" = tl."latex2nemeth";
-  deps."latexdiff" = tl."latexdiff";
-  deps."latexfileversion" = tl."latexfileversion";
-  deps."latexindent" = tl."latexindent";
-  deps."latexmk" = tl."latexmk";
-  deps."latexpand" = tl."latexpand";
-  deps."light-latex-make" = tl."light-latex-make";
-  deps."listings-ext" = tl."listings-ext";
-  deps."ltxfileinfo" = tl."ltxfileinfo";
-  deps."ltximg" = tl."ltximg";
-  deps."luajittex" = tl."luajittex";
-  deps."make4ht" = tl."make4ht";
-  deps."match_parens" = tl."match_parens";
-  deps."mflua" = tl."mflua";
-  deps."mkjobtexmf" = tl."mkjobtexmf";
-  deps."optexcount" = tl."optexcount";
-  deps."patgen" = tl."patgen";
-  deps."pdfbook2" = tl."pdfbook2";
-  deps."pdfcrop" = tl."pdfcrop";
-  deps."pdfjam" = tl."pdfjam";
-  deps."pdflatexpicscale" = tl."pdflatexpicscale";
-  deps."pdftex-quiet" = tl."pdftex-quiet";
-  deps."pdftosrc" = tl."pdftosrc";
-  deps."pdfxup" = tl."pdfxup";
-  deps."pfarrei" = tl."pfarrei";
-  deps."pkfix" = tl."pkfix";
-  deps."pkfix-helper" = tl."pkfix-helper";
-  deps."purifyeps" = tl."purifyeps";
-  deps."pythontex" = tl."pythontex";
-  deps."seetexk" = tl."seetexk";
-  deps."spix" = tl."spix";
-  deps."srcredact" = tl."srcredact";
-  deps."sty2dtx" = tl."sty2dtx";
-  deps."synctex" = tl."synctex";
-  deps."tex4ebook" = tl."tex4ebook";
-  deps."texaccents" = tl."texaccents";
-  deps."texcount" = tl."texcount";
-  deps."texdef" = tl."texdef";
-  deps."texdiff" = tl."texdiff";
-  deps."texdirflatten" = tl."texdirflatten";
-  deps."texdoc" = tl."texdoc";
-  deps."texdoctk" = tl."texdoctk";
-  deps."texfot" = tl."texfot";
-  deps."texlive-scripts-extra" = tl."texlive-scripts-extra";
-  deps."texliveonfly" = tl."texliveonfly";
-  deps."texloganalyser" = tl."texloganalyser";
-  deps."texlogfilter" = tl."texlogfilter";
-  deps."texlogsieve" = tl."texlogsieve";
-  deps."texosquery" = tl."texosquery";
-  deps."texplate" = tl."texplate";
-  deps."texware" = tl."texware";
-  deps."tie" = tl."tie";
-  deps."tlcockpit" = tl."tlcockpit";
-  deps."tpic2pdftex" = tl."tpic2pdftex";
-  deps."typeoutfileinfo" = tl."typeoutfileinfo";
-  deps."web" = tl."web";
-  deps."xindex" = tl."xindex";
-  deps."xindy" = tl."xindy";
-  deps."xpdfopen" = tl."xpdfopen";
+  deps = [
+    "a2ping"
+    "adhocfilelist"
+    "arara"
+    "asymptote"
+    "bibtex8"
+    "bibtexu"
+    "bundledoc"
+    "checklistings"
+    "chklref"
+    "chktex"
+    "clojure-pamphlet"
+    "cluttex"
+    "collection-basic"
+    "ctan-o-mat"
+    "ctan_chk"
+    "ctanbib"
+    "ctanify"
+    "ctanupload"
+    "ctie"
+    "cweb"
+    "de-macro"
+    "detex"
+    "digestif"
+    "dtl"
+    "dtxgen"
+    "dvi2tty"
+    "dviasm"
+    "dvicopy"
+    "dvidvi"
+    "dviinfox"
+    "dviljk"
+    "dviout-util"
+    "dvipng"
+    "dvipos"
+    "dvisvgm"
+    "findhyph"
+    "fragmaster"
+    "git-latexdiff"
+    "gsftopk"
+    "hook-pre-commit-pkg"
+    "installfont"
+    "ketcindy"
+    "lacheck"
+    "latex-git-log"
+    "latex-papersize"
+    "latex2man"
+    "latex2nemeth"
+    "latexdiff"
+    "latexfileversion"
+    "latexindent"
+    "latexmk"
+    "latexpand"
+    "light-latex-make"
+    "listings-ext"
+    "ltxfileinfo"
+    "ltximg"
+    "luajittex"
+    "make4ht"
+    "match_parens"
+    "mflua"
+    "mkjobtexmf"
+    "optexcount"
+    "patgen"
+    "pdfbook2"
+    "pdfcrop"
+    "pdfjam"
+    "pdflatexpicscale"
+    "pdftex-quiet"
+    "pdftosrc"
+    "pdfxup"
+    "pfarrei"
+    "pkfix"
+    "pkfix-helper"
+    "purifyeps"
+    "pythontex"
+    "seetexk"
+    "spix"
+    "srcredact"
+    "sty2dtx"
+    "synctex"
+    "tex4ebook"
+    "texaccents"
+    "texcount"
+    "texdef"
+    "texdiff"
+    "texdirflatten"
+    "texdoc"
+    "texdoctk"
+    "texfot"
+    "texlive-scripts-extra"
+    "texliveonfly"
+    "texloganalyser"
+    "texlogfilter"
+    "texlogsieve"
+    "texosquery"
+    "texplate"
+    "texware"
+    "tie"
+    "tlcockpit"
+    "tpic2pdftex"
+    "typeoutfileinfo"
+    "web"
+    "xindex"
+    "xindy"
+    "xpdfopen"
+  ];
   sha512.run = "4297ddb3f20775c97c2ac4782060ad2c2da469fb68eda24d98c0c84a07403215aaa4e221b82459300887769e9355cb4425f4fe599d5d8413e38f1be5c7f8fab9";
 };
 "collection-context" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."collection-basic" = tl."collection-basic";
-  deps."context" = tl."context";
-  deps."context-account" = tl."context-account";
-  deps."context-algorithmic" = tl."context-algorithmic";
-  deps."context-animation" = tl."context-animation";
-  deps."context-annotation" = tl."context-annotation";
-  deps."context-bnf" = tl."context-bnf";
-  deps."context-chromato" = tl."context-chromato";
-  deps."context-cmscbf" = tl."context-cmscbf";
-  deps."context-cmttbf" = tl."context-cmttbf";
-  deps."context-construction-plan" = tl."context-construction-plan";
-  deps."context-cyrillicnumbers" = tl."context-cyrillicnumbers";
-  deps."context-degrade" = tl."context-degrade";
-  deps."context-fancybreak" = tl."context-fancybreak";
-  deps."context-filter" = tl."context-filter";
-  deps."context-french" = tl."context-french";
-  deps."context-fullpage" = tl."context-fullpage";
-  deps."context-gantt" = tl."context-gantt";
-  deps."context-gnuplot" = tl."context-gnuplot";
-  deps."context-handlecsv" = tl."context-handlecsv";
-  deps."context-inifile" = tl."context-inifile";
-  deps."context-layout" = tl."context-layout";
-  deps."context-letter" = tl."context-letter";
-  deps."context-lettrine" = tl."context-lettrine";
-  deps."context-mathsets" = tl."context-mathsets";
-  deps."context-notes-zh-cn" = tl."context-notes-zh-cn";
-  deps."context-rst" = tl."context-rst";
-  deps."context-ruby" = tl."context-ruby";
-  deps."context-simplefonts" = tl."context-simplefonts";
-  deps."context-simpleslides" = tl."context-simpleslides";
-  deps."context-title" = tl."context-title";
-  deps."context-transliterator" = tl."context-transliterator";
-  deps."context-typearea" = tl."context-typearea";
-  deps."context-typescripts" = tl."context-typescripts";
-  deps."context-vim" = tl."context-vim";
-  deps."context-visualcounter" = tl."context-visualcounter";
-  deps."jmn" = tl."jmn";
-  deps."npp-for-context" = tl."npp-for-context";
+  deps = [
+    "collection-basic"
+    "context"
+    "context-account"
+    "context-algorithmic"
+    "context-animation"
+    "context-annotation"
+    "context-bnf"
+    "context-chromato"
+    "context-cmscbf"
+    "context-cmttbf"
+    "context-construction-plan"
+    "context-cyrillicnumbers"
+    "context-degrade"
+    "context-fancybreak"
+    "context-filter"
+    "context-french"
+    "context-fullpage"
+    "context-gantt"
+    "context-gnuplot"
+    "context-handlecsv"
+    "context-inifile"
+    "context-layout"
+    "context-letter"
+    "context-lettrine"
+    "context-mathsets"
+    "context-notes-zh-cn"
+    "context-rst"
+    "context-ruby"
+    "context-simplefonts"
+    "context-simpleslides"
+    "context-title"
+    "context-transliterator"
+    "context-typearea"
+    "context-typescripts"
+    "context-vim"
+    "context-visualcounter"
+    "jmn"
+    "npp-for-context"
+  ];
   sha512.run = "5bd74e1a434549cf31ce31777e9a32f90baa14148e6658633945508a46dbf6611644c4212b53812bb32a399e850517369e3d89bb0e495c89e6f2a979090ed765";
 };
 "collection-fontsextra" = {
   revision = 64952;
   stripPrefix = 0;
-  deps."aboensis" = tl."aboensis";
-  deps."academicons" = tl."academicons";
-  deps."accanthis" = tl."accanthis";
-  deps."adforn" = tl."adforn";
-  deps."adfsymbols" = tl."adfsymbols";
-  deps."aesupp" = tl."aesupp";
-  deps."alegreya" = tl."alegreya";
-  deps."alfaslabone" = tl."alfaslabone";
-  deps."algolrevived" = tl."algolrevived";
-  deps."allrunes" = tl."allrunes";
-  deps."almendra" = tl."almendra";
-  deps."almfixed" = tl."almfixed";
-  deps."andika" = tl."andika";
-  deps."anonymouspro" = tl."anonymouspro";
-  deps."antiqua" = tl."antiqua";
-  deps."antt" = tl."antt";
-  deps."archaic" = tl."archaic";
-  deps."archivo" = tl."archivo";
-  deps."arev" = tl."arev";
-  deps."arimo" = tl."arimo";
-  deps."arvo" = tl."arvo";
-  deps."asana-math" = tl."asana-math";
-  deps."asapsym" = tl."asapsym";
-  deps."ascii-font" = tl."ascii-font";
-  deps."aspectratio" = tl."aspectratio";
-  deps."astro" = tl."astro";
-  deps."atkinson" = tl."atkinson";
-  deps."augie" = tl."augie";
-  deps."auncial-new" = tl."auncial-new";
-  deps."aurical" = tl."aurical";
-  deps."b1encoding" = tl."b1encoding";
-  deps."barcodes" = tl."barcodes";
-  deps."baskervald" = tl."baskervald";
-  deps."baskervaldx" = tl."baskervaldx";
-  deps."baskervillef" = tl."baskervillef";
-  deps."bbding" = tl."bbding";
-  deps."bbm" = tl."bbm";
-  deps."bbm-macros" = tl."bbm-macros";
-  deps."bbold" = tl."bbold";
-  deps."bbold-type1" = tl."bbold-type1";
-  deps."bboldx" = tl."bboldx";
-  deps."belleek" = tl."belleek";
-  deps."bera" = tl."bera";
-  deps."berenisadf" = tl."berenisadf";
-  deps."beuron" = tl."beuron";
-  deps."bguq" = tl."bguq";
-  deps."bitter" = tl."bitter";
-  deps."blacklettert1" = tl."blacklettert1";
-  deps."boisik" = tl."boisik";
-  deps."bookhands" = tl."bookhands";
-  deps."boondox" = tl."boondox";
-  deps."braille" = tl."braille";
-  deps."brushscr" = tl."brushscr";
-  deps."cabin" = tl."cabin";
-  deps."caladea" = tl."caladea";
-  deps."calligra" = tl."calligra";
-  deps."calligra-type1" = tl."calligra-type1";
-  deps."cantarell" = tl."cantarell";
-  deps."carlito" = tl."carlito";
-  deps."carolmin-ps" = tl."carolmin-ps";
-  deps."cascadia-code" = tl."cascadia-code";
-  deps."ccicons" = tl."ccicons";
-  deps."cfr-initials" = tl."cfr-initials";
-  deps."cfr-lm" = tl."cfr-lm";
-  deps."charissil" = tl."charissil";
-  deps."cherokee" = tl."cherokee";
-  deps."chivo" = tl."chivo";
-  deps."cinzel" = tl."cinzel";
-  deps."clara" = tl."clara";
-  deps."clearsans" = tl."clearsans";
-  deps."cm-lgc" = tl."cm-lgc";
-  deps."cm-mf-extra-bold" = tl."cm-mf-extra-bold";
-  deps."cm-unicode" = tl."cm-unicode";
-  deps."cmathbb" = tl."cmathbb";
-  deps."cmbright" = tl."cmbright";
-  deps."cmexb" = tl."cmexb";
-  deps."cmll" = tl."cmll";
-  deps."cmpica" = tl."cmpica";
-  deps."cmsrb" = tl."cmsrb";
-  deps."cmtiup" = tl."cmtiup";
-  deps."cmupint" = tl."cmupint";
-  deps."cochineal" = tl."cochineal";
-  deps."coelacanth" = tl."coelacanth";
-  deps."collection-basic" = tl."collection-basic";
-  deps."comfortaa" = tl."comfortaa";
-  deps."comicneue" = tl."comicneue";
-  deps."concmath-fonts" = tl."concmath-fonts";
-  deps."concmath-otf" = tl."concmath-otf";
-  deps."cookingsymbols" = tl."cookingsymbols";
-  deps."cooperhewitt" = tl."cooperhewitt";
-  deps."cormorantgaramond" = tl."cormorantgaramond";
-  deps."countriesofeurope" = tl."countriesofeurope";
-  deps."courier-scaled" = tl."courier-scaled";
-  deps."courierten" = tl."courierten";
-  deps."crimson" = tl."crimson";
-  deps."crimsonpro" = tl."crimsonpro";
-  deps."cryst" = tl."cryst";
-  deps."cuprum" = tl."cuprum";
-  deps."cyklop" = tl."cyklop";
-  deps."dancers" = tl."dancers";
-  deps."dantelogo" = tl."dantelogo";
-  deps."dejavu" = tl."dejavu";
-  deps."dejavu-otf" = tl."dejavu-otf";
-  deps."dice" = tl."dice";
-  deps."dictsym" = tl."dictsym";
-  deps."dingbat" = tl."dingbat";
-  deps."domitian" = tl."domitian";
-  deps."doublestroke" = tl."doublestroke";
-  deps."doulossil" = tl."doulossil";
-  deps."dozenal" = tl."dozenal";
-  deps."drm" = tl."drm";
-  deps."droid" = tl."droid";
-  deps."dsserif" = tl."dsserif";
-  deps."duerer" = tl."duerer";
-  deps."duerer-latex" = tl."duerer-latex";
-  deps."dutchcal" = tl."dutchcal";
-  deps."ean" = tl."ean";
-  deps."ebgaramond" = tl."ebgaramond";
-  deps."ebgaramond-maths" = tl."ebgaramond-maths";
-  deps."ecc" = tl."ecc";
-  deps."eco" = tl."eco";
-  deps."eczar" = tl."eczar";
-  deps."eiad" = tl."eiad";
-  deps."eiad-ltx" = tl."eiad-ltx";
-  deps."ektype-tanka" = tl."ektype-tanka";
-  deps."electrum" = tl."electrum";
-  deps."elvish" = tl."elvish";
-  deps."epigrafica" = tl."epigrafica";
-  deps."epsdice" = tl."epsdice";
-  deps."erewhon" = tl."erewhon";
-  deps."erewhon-math" = tl."erewhon-math";
-  deps."esrelation" = tl."esrelation";
-  deps."esstix" = tl."esstix";
-  deps."esvect" = tl."esvect";
-  deps."etbb" = tl."etbb";
-  deps."euler-math" = tl."euler-math";
-  deps."eulervm" = tl."eulervm";
-  deps."euxm" = tl."euxm";
-  deps."fbb" = tl."fbb";
-  deps."fdsymbol" = tl."fdsymbol";
-  deps."fetamont" = tl."fetamont";
-  deps."feyn" = tl."feyn";
-  deps."fge" = tl."fge";
-  deps."fira" = tl."fira";
-  deps."firamath" = tl."firamath";
-  deps."firamath-otf" = tl."firamath-otf";
-  deps."foekfont" = tl."foekfont";
-  deps."fonetika" = tl."fonetika";
-  deps."fontawesome" = tl."fontawesome";
-  deps."fontawesome5" = tl."fontawesome5";
-  deps."fontmfizz" = tl."fontmfizz";
-  deps."fonts-churchslavonic" = tl."fonts-churchslavonic";
-  deps."forum" = tl."forum";
-  deps."fourier" = tl."fourier";
-  deps."fouriernc" = tl."fouriernc";
-  deps."frcursive" = tl."frcursive";
-  deps."frederika2016" = tl."frederika2016";
-  deps."frimurer" = tl."frimurer";
-  deps."garamond-libre" = tl."garamond-libre";
-  deps."garamond-math" = tl."garamond-math";
-  deps."genealogy" = tl."genealogy";
-  deps."gentium-tug" = tl."gentium-tug";
-  deps."gfsartemisia" = tl."gfsartemisia";
-  deps."gfsbodoni" = tl."gfsbodoni";
-  deps."gfscomplutum" = tl."gfscomplutum";
-  deps."gfsdidot" = tl."gfsdidot";
-  deps."gfsdidotclassic" = tl."gfsdidotclassic";
-  deps."gfsneohellenic" = tl."gfsneohellenic";
-  deps."gfsneohellenicmath" = tl."gfsneohellenicmath";
-  deps."gfssolomos" = tl."gfssolomos";
-  deps."gillcm" = tl."gillcm";
-  deps."gillius" = tl."gillius";
-  deps."gnu-freefont" = tl."gnu-freefont";
-  deps."gofonts" = tl."gofonts";
-  deps."gothic" = tl."gothic";
-  deps."greenpoint" = tl."greenpoint";
-  deps."grotesq" = tl."grotesq";
-  deps."gudea" = tl."gudea";
-  deps."hacm" = tl."hacm";
-  deps."hamnosys" = tl."hamnosys";
-  deps."hands" = tl."hands";
-  deps."hep-font" = tl."hep-font";
-  deps."hep-math-font" = tl."hep-math-font";
-  deps."heros-otf" = tl."heros-otf";
-  deps."heuristica" = tl."heuristica";
-  deps."hfbright" = tl."hfbright";
-  deps."hfoldsty" = tl."hfoldsty";
-  deps."hindmadurai" = tl."hindmadurai";
-  deps."ibarra" = tl."ibarra";
-  deps."ifsym" = tl."ifsym";
-  deps."imfellenglish" = tl."imfellenglish";
-  deps."inconsolata" = tl."inconsolata";
-  deps."initials" = tl."initials";
-  deps."inriafonts" = tl."inriafonts";
-  deps."inter" = tl."inter";
-  deps."ipaex-type1" = tl."ipaex-type1";
-  deps."iwona" = tl."iwona";
-  deps."jablantile" = tl."jablantile";
-  deps."jamtimes" = tl."jamtimes";
-  deps."josefin" = tl."josefin";
-  deps."junicode" = tl."junicode";
-  deps."kixfont" = tl."kixfont";
-  deps."kpfonts" = tl."kpfonts";
-  deps."kpfonts-otf" = tl."kpfonts-otf";
-  deps."kurier" = tl."kurier";
-  deps."lato" = tl."lato";
-  deps."lexend" = tl."lexend";
-  deps."lfb" = tl."lfb";
-  deps."libertine" = tl."libertine";
-  deps."libertinegc" = tl."libertinegc";
-  deps."libertinus" = tl."libertinus";
-  deps."libertinus-fonts" = tl."libertinus-fonts";
-  deps."libertinus-otf" = tl."libertinus-otf";
-  deps."libertinus-type1" = tl."libertinus-type1";
-  deps."libertinust1math" = tl."libertinust1math";
-  deps."librebaskerville" = tl."librebaskerville";
-  deps."librebodoni" = tl."librebodoni";
-  deps."librecaslon" = tl."librecaslon";
-  deps."librefranklin" = tl."librefranklin";
-  deps."libris" = tl."libris";
-  deps."lineara" = tl."lineara";
-  deps."linguisticspro" = tl."linguisticspro";
-  deps."lobster2" = tl."lobster2";
-  deps."logix" = tl."logix";
-  deps."lxfonts" = tl."lxfonts";
-  deps."ly1" = tl."ly1";
-  deps."magra" = tl."magra";
-  deps."marcellus" = tl."marcellus";
-  deps."mathabx" = tl."mathabx";
-  deps."mathabx-type1" = tl."mathabx-type1";
-  deps."mathdesign" = tl."mathdesign";
-  deps."mdputu" = tl."mdputu";
-  deps."mdsymbol" = tl."mdsymbol";
-  deps."merriweather" = tl."merriweather";
-  deps."miama" = tl."miama";
-  deps."mintspirit" = tl."mintspirit";
-  deps."missaali" = tl."missaali";
-  deps."mlmodern" = tl."mlmodern";
-  deps."mnsymbol" = tl."mnsymbol";
-  deps."montserrat" = tl."montserrat";
-  deps."mpfonts" = tl."mpfonts";
-  deps."mweights" = tl."mweights";
-  deps."newcomputermodern" = tl."newcomputermodern";
-  deps."newpx" = tl."newpx";
-  deps."newtx" = tl."newtx";
-  deps."newtxsf" = tl."newtxsf";
-  deps."newtxtt" = tl."newtxtt";
-  deps."niceframe-type1" = tl."niceframe-type1";
-  deps."nimbus15" = tl."nimbus15";
-  deps."nkarta" = tl."nkarta";
-  deps."noto" = tl."noto";
-  deps."noto-emoji" = tl."noto-emoji";
-  deps."notomath" = tl."notomath";
-  deps."nunito" = tl."nunito";
-  deps."obnov" = tl."obnov";
-  deps."ocherokee" = tl."ocherokee";
-  deps."ocr-b" = tl."ocr-b";
-  deps."ocr-b-outline" = tl."ocr-b-outline";
-  deps."ogham" = tl."ogham";
-  deps."oinuit" = tl."oinuit";
-  deps."old-arrows" = tl."old-arrows";
-  deps."oldlatin" = tl."oldlatin";
-  deps."oldstandard" = tl."oldstandard";
-  deps."opensans" = tl."opensans";
-  deps."orkhun" = tl."orkhun";
-  deps."oswald" = tl."oswald";
-  deps."overlock" = tl."overlock";
-  deps."pacioli" = tl."pacioli";
-  deps."pagella-otf" = tl."pagella-otf";
-  deps."paratype" = tl."paratype";
-  deps."phaistos" = tl."phaistos";
-  deps."phonetic" = tl."phonetic";
-  deps."pigpen" = tl."pigpen";
-  deps."playfair" = tl."playfair";
-  deps."plex" = tl."plex";
-  deps."plex-otf" = tl."plex-otf";
-  deps."plimsoll" = tl."plimsoll";
-  deps."poiretone" = tl."poiretone";
-  deps."poltawski" = tl."poltawski";
-  deps."prodint" = tl."prodint";
-  deps."punk" = tl."punk";
-  deps."punk-latex" = tl."punk-latex";
-  deps."punknova" = tl."punknova";
-  deps."pxtxalfa" = tl."pxtxalfa";
-  deps."qualitype" = tl."qualitype";
-  deps."quattrocento" = tl."quattrocento";
-  deps."raleway" = tl."raleway";
-  deps."recycle" = tl."recycle";
-  deps."roboto" = tl."roboto";
-  deps."romande" = tl."romande";
-  deps."rosario" = tl."rosario";
-  deps."rsfso" = tl."rsfso";
-  deps."sansmathaccent" = tl."sansmathaccent";
-  deps."sansmathfonts" = tl."sansmathfonts";
-  deps."sauter" = tl."sauter";
-  deps."sauterfonts" = tl."sauterfonts";
-  deps."schola-otf" = tl."schola-otf";
-  deps."scholax" = tl."scholax";
-  deps."schulschriften" = tl."schulschriften";
-  deps."semaphor" = tl."semaphor";
-  deps."shobhika" = tl."shobhika";
-  deps."simpleicons" = tl."simpleicons";
-  deps."skull" = tl."skull";
-  deps."sourcecodepro" = tl."sourcecodepro";
-  deps."sourcesanspro" = tl."sourcesanspro";
-  deps."sourceserifpro" = tl."sourceserifpro";
-  deps."spectral" = tl."spectral";
-  deps."srbtiks" = tl."srbtiks";
-  deps."starfont" = tl."starfont";
-  deps."staves" = tl."staves";
-  deps."step" = tl."step";
-  deps."stepgreek" = tl."stepgreek";
-  deps."stickstoo" = tl."stickstoo";
-  deps."stix" = tl."stix";
-  deps."stix2-otf" = tl."stix2-otf";
-  deps."stix2-type1" = tl."stix2-type1";
-  deps."superiors" = tl."superiors";
-  deps."svrsymbols" = tl."svrsymbols";
-  deps."symbats3" = tl."symbats3";
-  deps."tapir" = tl."tapir";
-  deps."tempora" = tl."tempora";
-  deps."tengwarscript" = tl."tengwarscript";
-  deps."termes-otf" = tl."termes-otf";
-  deps."tfrupee" = tl."tfrupee";
-  deps."theanodidot" = tl."theanodidot";
-  deps."theanomodern" = tl."theanomodern";
-  deps."theanooldstyle" = tl."theanooldstyle";
-  deps."tinos" = tl."tinos";
-  deps."tpslifonts" = tl."tpslifonts";
-  deps."trajan" = tl."trajan";
-  deps."twemoji-colr" = tl."twemoji-colr";
-  deps."txfontsb" = tl."txfontsb";
-  deps."txuprcal" = tl."txuprcal";
-  deps."typicons" = tl."typicons";
-  deps."umtypewriter" = tl."umtypewriter";
-  deps."universa" = tl."universa";
-  deps."universalis" = tl."universalis";
-  deps."uppunctlm" = tl."uppunctlm";
-  deps."urwchancal" = tl."urwchancal";
-  deps."venturisadf" = tl."venturisadf";
-  deps."wsuipa" = tl."wsuipa";
-  deps."xcharter" = tl."xcharter";
-  deps."xcharter-math" = tl."xcharter-math";
-  deps."xits" = tl."xits";
-  deps."yfonts" = tl."yfonts";
-  deps."yfonts-otf" = tl."yfonts-otf";
-  deps."yfonts-t1" = tl."yfonts-t1";
-  deps."yinit-otf" = tl."yinit-otf";
-  deps."zlmtt" = tl."zlmtt";
+  deps = [
+    "aboensis"
+    "academicons"
+    "accanthis"
+    "adforn"
+    "adfsymbols"
+    "aesupp"
+    "alegreya"
+    "alfaslabone"
+    "algolrevived"
+    "allrunes"
+    "almendra"
+    "almfixed"
+    "andika"
+    "anonymouspro"
+    "antiqua"
+    "antt"
+    "archaic"
+    "archivo"
+    "arev"
+    "arimo"
+    "arvo"
+    "asana-math"
+    "asapsym"
+    "ascii-font"
+    "aspectratio"
+    "astro"
+    "atkinson"
+    "augie"
+    "auncial-new"
+    "aurical"
+    "b1encoding"
+    "barcodes"
+    "baskervald"
+    "baskervaldx"
+    "baskervillef"
+    "bbding"
+    "bbm"
+    "bbm-macros"
+    "bbold"
+    "bbold-type1"
+    "bboldx"
+    "belleek"
+    "bera"
+    "berenisadf"
+    "beuron"
+    "bguq"
+    "bitter"
+    "blacklettert1"
+    "boisik"
+    "bookhands"
+    "boondox"
+    "braille"
+    "brushscr"
+    "cabin"
+    "caladea"
+    "calligra"
+    "calligra-type1"
+    "cantarell"
+    "carlito"
+    "carolmin-ps"
+    "cascadia-code"
+    "ccicons"
+    "cfr-initials"
+    "cfr-lm"
+    "charissil"
+    "cherokee"
+    "chivo"
+    "cinzel"
+    "clara"
+    "clearsans"
+    "cm-lgc"
+    "cm-mf-extra-bold"
+    "cm-unicode"
+    "cmathbb"
+    "cmbright"
+    "cmexb"
+    "cmll"
+    "cmpica"
+    "cmsrb"
+    "cmtiup"
+    "cmupint"
+    "cochineal"
+    "coelacanth"
+    "collection-basic"
+    "comfortaa"
+    "comicneue"
+    "concmath-fonts"
+    "concmath-otf"
+    "cookingsymbols"
+    "cooperhewitt"
+    "cormorantgaramond"
+    "countriesofeurope"
+    "courier-scaled"
+    "courierten"
+    "crimson"
+    "crimsonpro"
+    "cryst"
+    "cuprum"
+    "cyklop"
+    "dancers"
+    "dantelogo"
+    "dejavu"
+    "dejavu-otf"
+    "dice"
+    "dictsym"
+    "dingbat"
+    "domitian"
+    "doublestroke"
+    "doulossil"
+    "dozenal"
+    "drm"
+    "droid"
+    "dsserif"
+    "duerer"
+    "duerer-latex"
+    "dutchcal"
+    "ean"
+    "ebgaramond"
+    "ebgaramond-maths"
+    "ecc"
+    "eco"
+    "eczar"
+    "eiad"
+    "eiad-ltx"
+    "ektype-tanka"
+    "electrum"
+    "elvish"
+    "epigrafica"
+    "epsdice"
+    "erewhon"
+    "erewhon-math"
+    "esrelation"
+    "esstix"
+    "esvect"
+    "etbb"
+    "euler-math"
+    "eulervm"
+    "euxm"
+    "fbb"
+    "fdsymbol"
+    "fetamont"
+    "feyn"
+    "fge"
+    "fira"
+    "firamath"
+    "firamath-otf"
+    "foekfont"
+    "fonetika"
+    "fontawesome"
+    "fontawesome5"
+    "fontmfizz"
+    "fonts-churchslavonic"
+    "forum"
+    "fourier"
+    "fouriernc"
+    "frcursive"
+    "frederika2016"
+    "frimurer"
+    "garamond-libre"
+    "garamond-math"
+    "genealogy"
+    "gentium-tug"
+    "gfsartemisia"
+    "gfsbodoni"
+    "gfscomplutum"
+    "gfsdidot"
+    "gfsdidotclassic"
+    "gfsneohellenic"
+    "gfsneohellenicmath"
+    "gfssolomos"
+    "gillcm"
+    "gillius"
+    "gnu-freefont"
+    "gofonts"
+    "gothic"
+    "greenpoint"
+    "grotesq"
+    "gudea"
+    "hacm"
+    "hamnosys"
+    "hands"
+    "hep-font"
+    "hep-math-font"
+    "heros-otf"
+    "heuristica"
+    "hfbright"
+    "hfoldsty"
+    "hindmadurai"
+    "ibarra"
+    "ifsym"
+    "imfellenglish"
+    "inconsolata"
+    "initials"
+    "inriafonts"
+    "inter"
+    "ipaex-type1"
+    "iwona"
+    "jablantile"
+    "jamtimes"
+    "josefin"
+    "junicode"
+    "kixfont"
+    "kpfonts"
+    "kpfonts-otf"
+    "kurier"
+    "lato"
+    "lexend"
+    "lfb"
+    "libertine"
+    "libertinegc"
+    "libertinus"
+    "libertinus-fonts"
+    "libertinus-otf"
+    "libertinus-type1"
+    "libertinust1math"
+    "librebaskerville"
+    "librebodoni"
+    "librecaslon"
+    "librefranklin"
+    "libris"
+    "lineara"
+    "linguisticspro"
+    "lobster2"
+    "logix"
+    "lxfonts"
+    "ly1"
+    "magra"
+    "marcellus"
+    "mathabx"
+    "mathabx-type1"
+    "mathdesign"
+    "mdputu"
+    "mdsymbol"
+    "merriweather"
+    "miama"
+    "mintspirit"
+    "missaali"
+    "mlmodern"
+    "mnsymbol"
+    "montserrat"
+    "mpfonts"
+    "mweights"
+    "newcomputermodern"
+    "newpx"
+    "newtx"
+    "newtxsf"
+    "newtxtt"
+    "niceframe-type1"
+    "nimbus15"
+    "nkarta"
+    "noto"
+    "noto-emoji"
+    "notomath"
+    "nunito"
+    "obnov"
+    "ocherokee"
+    "ocr-b"
+    "ocr-b-outline"
+    "ogham"
+    "oinuit"
+    "old-arrows"
+    "oldlatin"
+    "oldstandard"
+    "opensans"
+    "orkhun"
+    "oswald"
+    "overlock"
+    "pacioli"
+    "pagella-otf"
+    "paratype"
+    "phaistos"
+    "phonetic"
+    "pigpen"
+    "playfair"
+    "plex"
+    "plex-otf"
+    "plimsoll"
+    "poiretone"
+    "poltawski"
+    "prodint"
+    "punk"
+    "punk-latex"
+    "punknova"
+    "pxtxalfa"
+    "qualitype"
+    "quattrocento"
+    "raleway"
+    "recycle"
+    "roboto"
+    "romande"
+    "rosario"
+    "rsfso"
+    "sansmathaccent"
+    "sansmathfonts"
+    "sauter"
+    "sauterfonts"
+    "schola-otf"
+    "scholax"
+    "schulschriften"
+    "semaphor"
+    "shobhika"
+    "simpleicons"
+    "skull"
+    "sourcecodepro"
+    "sourcesanspro"
+    "sourceserifpro"
+    "spectral"
+    "srbtiks"
+    "starfont"
+    "staves"
+    "step"
+    "stepgreek"
+    "stickstoo"
+    "stix"
+    "stix2-otf"
+    "stix2-type1"
+    "superiors"
+    "svrsymbols"
+    "symbats3"
+    "tapir"
+    "tempora"
+    "tengwarscript"
+    "termes-otf"
+    "tfrupee"
+    "theanodidot"
+    "theanomodern"
+    "theanooldstyle"
+    "tinos"
+    "tpslifonts"
+    "trajan"
+    "twemoji-colr"
+    "txfontsb"
+    "txuprcal"
+    "typicons"
+    "umtypewriter"
+    "universa"
+    "universalis"
+    "uppunctlm"
+    "urwchancal"
+    "venturisadf"
+    "wsuipa"
+    "xcharter"
+    "xcharter-math"
+    "xits"
+    "yfonts"
+    "yfonts-otf"
+    "yfonts-t1"
+    "yinit-otf"
+    "zlmtt"
+  ];
   sha512.run = "e0c3a3142ca8dcdcdc0d7c5328e1624736f20bfe9e3757bad95d0e361b73ecdf3bc53e9d19f42ef5d91b74cbdf4fca1ee62b79f53d4d5a5f8aed47f51553d77e";
 };
 "collection-fontsrecommended" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."avantgar" = tl."avantgar";
-  deps."bookman" = tl."bookman";
-  deps."charter" = tl."charter";
-  deps."cm-super" = tl."cm-super";
-  deps."cmextra" = tl."cmextra";
-  deps."collection-basic" = tl."collection-basic";
-  deps."courier" = tl."courier";
-  deps."euro" = tl."euro";
-  deps."euro-ce" = tl."euro-ce";
-  deps."eurosym" = tl."eurosym";
-  deps."fpl" = tl."fpl";
-  deps."helvetic" = tl."helvetic";
-  deps."lm" = tl."lm";
-  deps."lm-math" = tl."lm-math";
-  deps."manfnt-font" = tl."manfnt-font";
-  deps."marvosym" = tl."marvosym";
-  deps."mathpazo" = tl."mathpazo";
-  deps."mflogo-font" = tl."mflogo-font";
-  deps."ncntrsbk" = tl."ncntrsbk";
-  deps."palatino" = tl."palatino";
-  deps."pxfonts" = tl."pxfonts";
-  deps."rsfs" = tl."rsfs";
-  deps."symbol" = tl."symbol";
-  deps."tex-gyre" = tl."tex-gyre";
-  deps."tex-gyre-math" = tl."tex-gyre-math";
-  deps."times" = tl."times";
-  deps."tipa" = tl."tipa";
-  deps."txfonts" = tl."txfonts";
-  deps."utopia" = tl."utopia";
-  deps."wasy" = tl."wasy";
-  deps."wasy-type1" = tl."wasy-type1";
-  deps."wasysym" = tl."wasysym";
-  deps."zapfchan" = tl."zapfchan";
-  deps."zapfding" = tl."zapfding";
+  deps = [
+    "avantgar"
+    "bookman"
+    "charter"
+    "cm-super"
+    "cmextra"
+    "collection-basic"
+    "courier"
+    "euro"
+    "euro-ce"
+    "eurosym"
+    "fpl"
+    "helvetic"
+    "lm"
+    "lm-math"
+    "manfnt-font"
+    "marvosym"
+    "mathpazo"
+    "mflogo-font"
+    "ncntrsbk"
+    "palatino"
+    "pxfonts"
+    "rsfs"
+    "symbol"
+    "tex-gyre"
+    "tex-gyre-math"
+    "times"
+    "tipa"
+    "txfonts"
+    "utopia"
+    "wasy"
+    "wasy-type1"
+    "wasysym"
+    "zapfchan"
+    "zapfding"
+  ];
   sha512.run = "eaa6e54780a0813a88102258ee3bd7a4640787be0b89eff4ba2c9cc19298bf3e2799ffab4e03e49f20131d07fbac9f601a7223fc1b47257dd0feeb04797c56a8";
 };
 "collection-fontutils" = {
   revision = 61207;
   stripPrefix = 0;
-  deps."accfonts" = tl."accfonts";
-  deps."afm2pl" = tl."afm2pl";
-  deps."albatross" = tl."albatross";
-  deps."collection-basic" = tl."collection-basic";
-  deps."dosepsbin" = tl."dosepsbin";
-  deps."dvipsconfig" = tl."dvipsconfig";
-  deps."epstopdf" = tl."epstopdf";
-  deps."fontinst" = tl."fontinst";
-  deps."fontools" = tl."fontools";
-  deps."fontware" = tl."fontware";
-  deps."lcdftypetools" = tl."lcdftypetools";
-  deps."luafindfont" = tl."luafindfont";
-  deps."metatype1" = tl."metatype1";
-  deps."mf2pt1" = tl."mf2pt1";
-  deps."ps2eps" = tl."ps2eps";
-  deps."ps2pk" = tl."ps2pk";
-  deps."psutils" = tl."psutils";
-  deps."t1utils" = tl."t1utils";
-  deps."ttfutils" = tl."ttfutils";
+  deps = [
+    "accfonts"
+    "afm2pl"
+    "albatross"
+    "collection-basic"
+    "dosepsbin"
+    "dvipsconfig"
+    "epstopdf"
+    "fontinst"
+    "fontools"
+    "fontware"
+    "lcdftypetools"
+    "luafindfont"
+    "metatype1"
+    "mf2pt1"
+    "ps2eps"
+    "ps2pk"
+    "psutils"
+    "t1utils"
+    "ttfutils"
+  ];
   sha512.run = "430c95b7e104cb837b7424ebb17ab7ee1aefd99d70aaceefff8a1924fa949329aebe0d5a28b939fabf28d3c5dfc2dcb466147e1396514d5dcf4f64af231db8a7";
 };
 "collection-formatsextra" = {
   revision = 62226;
   stripPrefix = 0;
-  deps."aleph" = tl."aleph";
-  deps."antomega" = tl."antomega";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
-  deps."edmac" = tl."edmac";
-  deps."eplain" = tl."eplain";
-  deps."hitex" = tl."hitex";
-  deps."jadetex" = tl."jadetex";
-  deps."lambda" = tl."lambda";
-  deps."lollipop" = tl."lollipop";
-  deps."mltex" = tl."mltex";
-  deps."mxedruli" = tl."mxedruli";
-  deps."omega" = tl."omega";
-  deps."omegaware" = tl."omegaware";
-  deps."otibet" = tl."otibet";
-  deps."passivetex" = tl."passivetex";
-  deps."psizzl" = tl."psizzl";
-  deps."startex" = tl."startex";
-  deps."texsis" = tl."texsis";
-  deps."xmltex" = tl."xmltex";
-  deps."xmltexconfig" = tl."xmltexconfig";
+  deps = [
+    "aleph"
+    "antomega"
+    "collection-basic"
+    "collection-latex"
+    "edmac"
+    "eplain"
+    "hitex"
+    "jadetex"
+    "lambda"
+    "lollipop"
+    "mltex"
+    "mxedruli"
+    "omega"
+    "omegaware"
+    "otibet"
+    "passivetex"
+    "psizzl"
+    "startex"
+    "texsis"
+    "xmltex"
+    "xmltexconfig"
+  ];
   sha512.run = "6c7f0a1829789edea6a42d45f13f482abc0aa1ecc66b0ba4b70197efff349df75c9a89a98f21537cf6f3751b608fc3ee10ac842613deaf2aa21005374a23bab2";
 };
 "collection-games" = {
   revision = 64827;
   stripPrefix = 0;
-  deps."bartel-chess-fonts" = tl."bartel-chess-fonts";
-  deps."chess" = tl."chess";
-  deps."chess-problem-diagrams" = tl."chess-problem-diagrams";
-  deps."chessboard" = tl."chessboard";
-  deps."chessfss" = tl."chessfss";
-  deps."chinesechess" = tl."chinesechess";
-  deps."collection-latex" = tl."collection-latex";
-  deps."crossword" = tl."crossword";
-  deps."crosswrd" = tl."crosswrd";
-  deps."customdice" = tl."customdice";
-  deps."egameps" = tl."egameps";
-  deps."gamebook" = tl."gamebook";
-  deps."gamebooklib" = tl."gamebooklib";
-  deps."go" = tl."go";
-  deps."hanoi" = tl."hanoi";
-  deps."havannah" = tl."havannah";
-  deps."hexboard" = tl."hexboard";
-  deps."hexgame" = tl."hexgame";
-  deps."hmtrump" = tl."hmtrump";
-  deps."horoscop" = tl."horoscop";
-  deps."jeuxcartes" = tl."jeuxcartes";
-  deps."jigsaw" = tl."jigsaw";
-  deps."labyrinth" = tl."labyrinth";
-  deps."logicpuzzle" = tl."logicpuzzle";
-  deps."mahjong" = tl."mahjong";
-  deps."musikui" = tl."musikui";
-  deps."nimsticks" = tl."nimsticks";
-  deps."onedown" = tl."onedown";
-  deps."othello" = tl."othello";
-  deps."othelloboard" = tl."othelloboard";
-  deps."pas-crosswords" = tl."pas-crosswords";
-  deps."psgo" = tl."psgo";
-  deps."realtranspose" = tl."realtranspose";
-  deps."reverxii" = tl."reverxii";
-  deps."rubik" = tl."rubik";
-  deps."schwalbe-chess" = tl."schwalbe-chess";
-  deps."sgame" = tl."sgame";
-  deps."skak" = tl."skak";
-  deps."skaknew" = tl."skaknew";
-  deps."soup" = tl."soup";
-  deps."sudoku" = tl."sudoku";
-  deps."sudokubundle" = tl."sudokubundle";
-  deps."wargame" = tl."wargame";
-  deps."xq" = tl."xq";
-  deps."xskak" = tl."xskak";
+  deps = [
+    "bartel-chess-fonts"
+    "chess"
+    "chess-problem-diagrams"
+    "chessboard"
+    "chessfss"
+    "chinesechess"
+    "collection-latex"
+    "crossword"
+    "crosswrd"
+    "customdice"
+    "egameps"
+    "gamebook"
+    "gamebooklib"
+    "go"
+    "hanoi"
+    "havannah"
+    "hexboard"
+    "hexgame"
+    "hmtrump"
+    "horoscop"
+    "jeuxcartes"
+    "jigsaw"
+    "labyrinth"
+    "logicpuzzle"
+    "mahjong"
+    "musikui"
+    "nimsticks"
+    "onedown"
+    "othello"
+    "othelloboard"
+    "pas-crosswords"
+    "psgo"
+    "realtranspose"
+    "reverxii"
+    "rubik"
+    "schwalbe-chess"
+    "sgame"
+    "skak"
+    "skaknew"
+    "soup"
+    "sudoku"
+    "sudokubundle"
+    "wargame"
+    "xq"
+    "xskak"
+  ];
   sha512.run = "0ea226457c553c3db93d7415f1a9e33721b7a41ac17ef049aa52aaeb27a91169769f12532443c34664ccaf4cc76a26761a5d5d0b0a7fa1ccbd2f0142e8d29d67";
 };
 "collection-humanities" = {
   revision = 65216;
   stripPrefix = 0;
-  deps."adtrees" = tl."adtrees";
-  deps."bibleref" = tl."bibleref";
-  deps."bibleref-lds" = tl."bibleref-lds";
-  deps."bibleref-mouth" = tl."bibleref-mouth";
-  deps."bibleref-parse" = tl."bibleref-parse";
-  deps."collection-latex" = tl."collection-latex";
-  deps."covington" = tl."covington";
-  deps."diadia" = tl."diadia";
-  deps."dramatist" = tl."dramatist";
-  deps."dvgloss" = tl."dvgloss";
-  deps."ecltree" = tl."ecltree";
-  deps."edfnotes" = tl."edfnotes";
-  deps."eledform" = tl."eledform";
-  deps."eledmac" = tl."eledmac";
-  deps."expex" = tl."expex";
-  deps."gb4e" = tl."gb4e";
-  deps."gmverse" = tl."gmverse";
-  deps."jura" = tl."jura";
-  deps."juraabbrev" = tl."juraabbrev";
-  deps."juramisc" = tl."juramisc";
-  deps."jurarsp" = tl."jurarsp";
-  deps."langnames" = tl."langnames";
-  deps."ledmac" = tl."ledmac";
-  deps."lexikon" = tl."lexikon";
-  deps."lexref" = tl."lexref";
-  deps."ling-macros" = tl."ling-macros";
-  deps."linguex" = tl."linguex";
-  deps."liturg" = tl."liturg";
-  deps."metrix" = tl."metrix";
-  deps."nnext" = tl."nnext";
-  deps."parallel" = tl."parallel";
-  deps."parrun" = tl."parrun";
-  deps."phonrule" = tl."phonrule";
-  deps."plari" = tl."plari";
-  deps."play" = tl."play";
-  deps."poemscol" = tl."poemscol";
-  deps."poetry" = tl."poetry";
-  deps."poetrytex" = tl."poetrytex";
-  deps."qobitree" = tl."qobitree";
-  deps."qtree" = tl."qtree";
-  deps."reledmac" = tl."reledmac";
-  deps."rrgtrees" = tl."rrgtrees";
-  deps."rtklage" = tl."rtklage";
-  deps."screenplay" = tl."screenplay";
-  deps."screenplay-pkg" = tl."screenplay-pkg";
-  deps."sides" = tl."sides";
-  deps."stage" = tl."stage";
-  deps."textglos" = tl."textglos";
-  deps."thalie" = tl."thalie";
-  deps."theatre" = tl."theatre";
-  deps."tree-dvips" = tl."tree-dvips";
-  deps."verse" = tl."verse";
-  deps."xyling" = tl."xyling";
+  deps = [
+    "adtrees"
+    "bibleref"
+    "bibleref-lds"
+    "bibleref-mouth"
+    "bibleref-parse"
+    "collection-latex"
+    "covington"
+    "diadia"
+    "dramatist"
+    "dvgloss"
+    "ecltree"
+    "edfnotes"
+    "eledform"
+    "eledmac"
+    "expex"
+    "gb4e"
+    "gmverse"
+    "jura"
+    "juraabbrev"
+    "juramisc"
+    "jurarsp"
+    "langnames"
+    "ledmac"
+    "lexikon"
+    "lexref"
+    "ling-macros"
+    "linguex"
+    "liturg"
+    "metrix"
+    "nnext"
+    "parallel"
+    "parrun"
+    "phonrule"
+    "plari"
+    "play"
+    "poemscol"
+    "poetry"
+    "poetrytex"
+    "qobitree"
+    "qtree"
+    "reledmac"
+    "rrgtrees"
+    "rtklage"
+    "screenplay"
+    "screenplay-pkg"
+    "sides"
+    "stage"
+    "textglos"
+    "thalie"
+    "theatre"
+    "tree-dvips"
+    "verse"
+    "xyling"
+  ];
   sha512.run = "d2ae12a0b914be72772dadc60021220990f037f40a2ef4f95038cdd603c80e039f94009910aed38513b4a7938ec99ecf2f035a0dbe221b9e166ccd8aa977c30b";
 };
 "collection-langarabic" = {
   revision = 59594;
   stripPrefix = 0;
-  deps."alkalami" = tl."alkalami";
-  deps."alpha-persian" = tl."alpha-persian";
-  deps."amiri" = tl."amiri";
-  deps."arabi" = tl."arabi";
-  deps."arabi-add" = tl."arabi-add";
-  deps."arabic-book" = tl."arabic-book";
-  deps."arabluatex" = tl."arabluatex";
-  deps."arabtex" = tl."arabtex";
-  deps."bidi" = tl."bidi";
-  deps."bidihl" = tl."bidihl";
-  deps."collection-basic" = tl."collection-basic";
-  deps."dad" = tl."dad";
-  deps."ghab" = tl."ghab";
-  deps."hvarabic" = tl."hvarabic";
-  deps."hyphen-arabic" = tl."hyphen-arabic";
-  deps."hyphen-farsi" = tl."hyphen-farsi";
-  deps."imsproc" = tl."imsproc";
-  deps."kurdishlipsum" = tl."kurdishlipsum";
-  deps."lshort-persian" = tl."lshort-persian";
-  deps."luabidi" = tl."luabidi";
-  deps."na-box" = tl."na-box";
-  deps."persian-bib" = tl."persian-bib";
-  deps."quran" = tl."quran";
-  deps."sexam" = tl."sexam";
-  deps."simurgh" = tl."simurgh";
-  deps."texnegar" = tl."texnegar";
-  deps."tram" = tl."tram";
-  deps."xepersian" = tl."xepersian";
-  deps."xepersian-hm" = tl."xepersian-hm";
-  deps."xindy-persian" = tl."xindy-persian";
+  deps = [
+    "alkalami"
+    "alpha-persian"
+    "amiri"
+    "arabi"
+    "arabi-add"
+    "arabic-book"
+    "arabluatex"
+    "arabtex"
+    "bidi"
+    "bidihl"
+    "collection-basic"
+    "dad"
+    "ghab"
+    "hvarabic"
+    "hyphen-arabic"
+    "hyphen-farsi"
+    "imsproc"
+    "kurdishlipsum"
+    "lshort-persian"
+    "luabidi"
+    "na-box"
+    "persian-bib"
+    "quran"
+    "sexam"
+    "simurgh"
+    "texnegar"
+    "tram"
+    "xepersian"
+    "xepersian-hm"
+    "xindy-persian"
+  ];
   sha512.run = "3fdcf41fafd94373254281f3f7ee9f2a2e136cfa1adc1dd38e4b5cd6f90d0364e6a20d3284fcf255f245158352421e28cfb794c673b8b96399a20343ed991fc2";
 };
 "collection-langchinese" = {
   revision = 63995;
   stripPrefix = 0;
-  deps."arphic" = tl."arphic";
-  deps."arphic-ttf" = tl."arphic-ttf";
-  deps."asymptote-by-example-zh-cn" = tl."asymptote-by-example-zh-cn";
-  deps."asymptote-faq-zh-cn" = tl."asymptote-faq-zh-cn";
-  deps."asymptote-manual-zh-cn" = tl."asymptote-manual-zh-cn";
-  deps."cns" = tl."cns";
-  deps."collection-langcjk" = tl."collection-langcjk";
-  deps."ctex" = tl."ctex";
-  deps."ctex-faq" = tl."ctex-faq";
-  deps."exam-zh" = tl."exam-zh";
-  deps."fandol" = tl."fandol";
-  deps."fduthesis" = tl."fduthesis";
-  deps."hanzibox" = tl."hanzibox";
-  deps."hyphen-chinese" = tl."hyphen-chinese";
-  deps."impatient-cn" = tl."impatient-cn";
-  deps."install-latex-guide-zh-cn" = tl."install-latex-guide-zh-cn";
-  deps."latex-notes-zh-cn" = tl."latex-notes-zh-cn";
-  deps."lshort-chinese" = tl."lshort-chinese";
-  deps."nanicolle" = tl."nanicolle";
-  deps."njurepo" = tl."njurepo";
-  deps."pgfornament-han" = tl."pgfornament-han";
-  deps."qyxf-book" = tl."qyxf-book";
-  deps."texlive-zh-cn" = tl."texlive-zh-cn";
-  deps."texproposal" = tl."texproposal";
-  deps."tlmgr-intro-zh-cn" = tl."tlmgr-intro-zh-cn";
-  deps."upzhkinsoku" = tl."upzhkinsoku";
-  deps."xpinyin" = tl."xpinyin";
-  deps."xtuthesis" = tl."xtuthesis";
-  deps."zhlineskip" = tl."zhlineskip";
-  deps."zhlipsum" = tl."zhlipsum";
-  deps."zhmetrics" = tl."zhmetrics";
-  deps."zhmetrics-uptex" = tl."zhmetrics-uptex";
-  deps."zhnumber" = tl."zhnumber";
-  deps."zhspacing" = tl."zhspacing";
+  deps = [
+    "arphic"
+    "arphic-ttf"
+    "asymptote-by-example-zh-cn"
+    "asymptote-faq-zh-cn"
+    "asymptote-manual-zh-cn"
+    "cns"
+    "collection-langcjk"
+    "ctex"
+    "ctex-faq"
+    "exam-zh"
+    "fandol"
+    "fduthesis"
+    "hanzibox"
+    "hyphen-chinese"
+    "impatient-cn"
+    "install-latex-guide-zh-cn"
+    "latex-notes-zh-cn"
+    "lshort-chinese"
+    "nanicolle"
+    "njurepo"
+    "pgfornament-han"
+    "qyxf-book"
+    "texlive-zh-cn"
+    "texproposal"
+    "tlmgr-intro-zh-cn"
+    "upzhkinsoku"
+    "xpinyin"
+    "xtuthesis"
+    "zhlineskip"
+    "zhlipsum"
+    "zhmetrics"
+    "zhmetrics-uptex"
+    "zhnumber"
+    "zhspacing"
+  ];
   sha512.run = "d10096b2d83dc0378361184a64c347918e75dd51f48d962893371534c375dd8880e8febb1aaf1207e5ce04e59860f629f10c99bbf6304239e1147a5072194137";
 };
 "collection-langcjk" = {
   revision = 61912;
   stripPrefix = 0;
-  deps."adobemapping" = tl."adobemapping";
-  deps."c90" = tl."c90";
-  deps."cjk" = tl."cjk";
-  deps."cjk-gs-integrate" = tl."cjk-gs-integrate";
-  deps."cjkpunct" = tl."cjkpunct";
-  deps."cjkutils" = tl."cjkutils";
-  deps."collection-basic" = tl."collection-basic";
-  deps."dnp" = tl."dnp";
-  deps."fixjfm" = tl."fixjfm";
-  deps."garuda-c90" = tl."garuda-c90";
-  deps."jfmutil" = tl."jfmutil";
-  deps."norasi-c90" = tl."norasi-c90";
-  deps."pxtatescale" = tl."pxtatescale";
-  deps."xcjk2uni" = tl."xcjk2uni";
-  deps."xecjk" = tl."xecjk";
-  deps."zitie" = tl."zitie";
-  deps."zxjafont" = tl."zxjafont";
+  deps = [
+    "adobemapping"
+    "c90"
+    "cjk"
+    "cjk-gs-integrate"
+    "cjkpunct"
+    "cjkutils"
+    "collection-basic"
+    "dnp"
+    "fixjfm"
+    "garuda-c90"
+    "jfmutil"
+    "norasi-c90"
+    "pxtatescale"
+    "xcjk2uni"
+    "xecjk"
+    "zitie"
+    "zxjafont"
+  ];
   sha512.run = "6b00955359e063df2a7c02f2d44f88e6190d65834b8e5c77e9c67e44b8c9de9cee612cd298e79fe3cd598fd58996ace0829d3a5463cdc25b543e7565b1455e31";
 };
 "collection-langcyrillic" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."babel-belarusian" = tl."babel-belarusian";
-  deps."babel-bulgarian" = tl."babel-bulgarian";
-  deps."babel-russian" = tl."babel-russian";
-  deps."babel-serbian" = tl."babel-serbian";
-  deps."babel-serbianc" = tl."babel-serbianc";
-  deps."babel-ukrainian" = tl."babel-ukrainian";
-  deps."churchslavonic" = tl."churchslavonic";
-  deps."cmcyr" = tl."cmcyr";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
-  deps."cyrillic" = tl."cyrillic";
-  deps."cyrillic-bin" = tl."cyrillic-bin";
-  deps."cyrplain" = tl."cyrplain";
-  deps."disser" = tl."disser";
-  deps."eskd" = tl."eskd";
-  deps."eskdx" = tl."eskdx";
-  deps."gost" = tl."gost";
-  deps."hyphen-belarusian" = tl."hyphen-belarusian";
-  deps."hyphen-bulgarian" = tl."hyphen-bulgarian";
-  deps."hyphen-churchslavonic" = tl."hyphen-churchslavonic";
-  deps."hyphen-mongolian" = tl."hyphen-mongolian";
-  deps."hyphen-russian" = tl."hyphen-russian";
-  deps."hyphen-serbian" = tl."hyphen-serbian";
-  deps."hyphen-ukrainian" = tl."hyphen-ukrainian";
-  deps."lcyw" = tl."lcyw";
-  deps."lh" = tl."lh";
-  deps."lhcyr" = tl."lhcyr";
-  deps."lshort-bulgarian" = tl."lshort-bulgarian";
-  deps."lshort-mongol" = tl."lshort-mongol";
-  deps."lshort-russian" = tl."lshort-russian";
-  deps."lshort-ukr" = tl."lshort-ukr";
-  deps."mongolian-babel" = tl."mongolian-babel";
-  deps."montex" = tl."montex";
-  deps."mpman-ru" = tl."mpman-ru";
-  deps."numnameru" = tl."numnameru";
-  deps."pst-eucl-translation-bg" = tl."pst-eucl-translation-bg";
-  deps."ruhyphen" = tl."ruhyphen";
-  deps."russ" = tl."russ";
-  deps."serbian-apostrophe" = tl."serbian-apostrophe";
-  deps."serbian-date-lat" = tl."serbian-date-lat";
-  deps."serbian-def-cyr" = tl."serbian-def-cyr";
-  deps."serbian-lig" = tl."serbian-lig";
-  deps."t2" = tl."t2";
-  deps."texlive-ru" = tl."texlive-ru";
-  deps."texlive-sr" = tl."texlive-sr";
-  deps."ukrhyph" = tl."ukrhyph";
-  deps."xecyrmongolian" = tl."xecyrmongolian";
+  deps = [
+    "babel-belarusian"
+    "babel-bulgarian"
+    "babel-russian"
+    "babel-serbian"
+    "babel-serbianc"
+    "babel-ukrainian"
+    "churchslavonic"
+    "cmcyr"
+    "collection-basic"
+    "collection-latex"
+    "cyrillic"
+    "cyrillic-bin"
+    "cyrplain"
+    "disser"
+    "eskd"
+    "eskdx"
+    "gost"
+    "hyphen-belarusian"
+    "hyphen-bulgarian"
+    "hyphen-churchslavonic"
+    "hyphen-mongolian"
+    "hyphen-russian"
+    "hyphen-serbian"
+    "hyphen-ukrainian"
+    "lcyw"
+    "lh"
+    "lhcyr"
+    "lshort-bulgarian"
+    "lshort-mongol"
+    "lshort-russian"
+    "lshort-ukr"
+    "mongolian-babel"
+    "montex"
+    "mpman-ru"
+    "numnameru"
+    "pst-eucl-translation-bg"
+    "ruhyphen"
+    "russ"
+    "serbian-apostrophe"
+    "serbian-date-lat"
+    "serbian-def-cyr"
+    "serbian-lig"
+    "t2"
+    "texlive-ru"
+    "texlive-sr"
+    "ukrhyph"
+    "xecyrmongolian"
+  ];
   sha512.run = "43ba5d0f21162fbdb6fd0e9dc7c990fa845918704020da8ca5c6770139370be55f4b707f98708c28b472f9500ee25ea734bdd96c5541a22e66b69c03ae777ad0";
 };
 "collection-langczechslovak" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."babel-czech" = tl."babel-czech";
-  deps."babel-slovak" = tl."babel-slovak";
-  deps."cnbwp" = tl."cnbwp";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
-  deps."cs" = tl."cs";
-  deps."csbulletin" = tl."csbulletin";
-  deps."cslatex" = tl."cslatex";
-  deps."csplain" = tl."csplain";
-  deps."cstex" = tl."cstex";
-  deps."hyphen-czech" = tl."hyphen-czech";
-  deps."hyphen-slovak" = tl."hyphen-slovak";
-  deps."lshort-czech" = tl."lshort-czech";
-  deps."lshort-slovak" = tl."lshort-slovak";
-  deps."texlive-cz" = tl."texlive-cz";
-  deps."vlna" = tl."vlna";
+  deps = [
+    "babel-czech"
+    "babel-slovak"
+    "cnbwp"
+    "collection-basic"
+    "collection-latex"
+    "cs"
+    "csbulletin"
+    "cslatex"
+    "csplain"
+    "cstex"
+    "hyphen-czech"
+    "hyphen-slovak"
+    "lshort-czech"
+    "lshort-slovak"
+    "texlive-cz"
+    "vlna"
+  ];
   sha512.run = "719c321173ca12660891080dae509080934f72d13a9417b2c40a22add963c7c5a1ee95d3b306f0d6c26b0db97d69979c27fbb15d1690849aa03b06d4b0193a67";
 };
 "collection-langenglish" = {
   revision = 63184;
   stripPrefix = 0;
-  deps."amiweb2c-guide" = tl."amiweb2c-guide";
-  deps."amscls-doc" = tl."amscls-doc";
-  deps."amslatex-primer" = tl."amslatex-primer";
-  deps."around-the-bend" = tl."around-the-bend";
-  deps."ascii-chart" = tl."ascii-chart";
-  deps."biblatex-cheatsheet" = tl."biblatex-cheatsheet";
-  deps."collection-basic" = tl."collection-basic";
-  deps."components" = tl."components";
-  deps."comprehensive" = tl."comprehensive";
-  deps."dickimaw" = tl."dickimaw";
-  deps."docsurvey" = tl."docsurvey";
-  deps."dtxtut" = tl."dtxtut";
-  deps."first-latex-doc" = tl."first-latex-doc";
-  deps."fontinstallationguide" = tl."fontinstallationguide";
-  deps."forest-quickstart" = tl."forest-quickstart";
-  deps."gentle" = tl."gentle";
-  deps."guide-to-latex" = tl."guide-to-latex";
-  deps."happy4th" = tl."happy4th";
-  deps."hyphen-english" = tl."hyphen-english";
-  deps."impatient" = tl."impatient";
-  deps."intro-scientific" = tl."intro-scientific";
-  deps."knuth-errata" = tl."knuth-errata";
-  deps."knuth-hint" = tl."knuth-hint";
-  deps."knuth-pdf" = tl."knuth-pdf";
-  deps."l2tabu-english" = tl."l2tabu-english";
-  deps."latex-brochure" = tl."latex-brochure";
-  deps."latex-course" = tl."latex-course";
-  deps."latex-doc-ptr" = tl."latex-doc-ptr";
-  deps."latex-for-undergraduates" = tl."latex-for-undergraduates";
-  deps."latex-graphics-companion" = tl."latex-graphics-companion";
-  deps."latex-refsheet" = tl."latex-refsheet";
-  deps."latex-veryshortguide" = tl."latex-veryshortguide";
-  deps."latex-web-companion" = tl."latex-web-companion";
-  deps."latex2e-help-texinfo" = tl."latex2e-help-texinfo";
-  deps."latex4wp" = tl."latex4wp";
-  deps."latexcheat" = tl."latexcheat";
-  deps."latexcourse-rug" = tl."latexcourse-rug";
-  deps."latexfileinfo-pkgs" = tl."latexfileinfo-pkgs";
-  deps."lshort-english" = tl."lshort-english";
-  deps."macros2e" = tl."macros2e";
-  deps."math-into-latex-4" = tl."math-into-latex-4";
-  deps."maths-symbols" = tl."maths-symbols";
-  deps."memdesign" = tl."memdesign";
-  deps."memoirchapterstyles" = tl."memoirchapterstyles";
-  deps."metafont-beginners" = tl."metafont-beginners";
-  deps."metapost-examples" = tl."metapost-examples";
-  deps."patgen2-tutorial" = tl."patgen2-tutorial";
-  deps."pictexsum" = tl."pictexsum";
-  deps."plain-doc" = tl."plain-doc";
-  deps."short-math-guide" = tl."short-math-guide";
-  deps."simplified-latex" = tl."simplified-latex";
-  deps."svg-inkscape" = tl."svg-inkscape";
-  deps."tamethebeast" = tl."tamethebeast";
-  deps."tds" = tl."tds";
-  deps."tex-font-errors-cheatsheet" = tl."tex-font-errors-cheatsheet";
-  deps."tex-nutshell" = tl."tex-nutshell";
-  deps."tex-overview" = tl."tex-overview";
-  deps."tex-refs" = tl."tex-refs";
-  deps."tex-vpat" = tl."tex-vpat";
-  deps."texbytopic" = tl."texbytopic";
-  deps."texonly" = tl."texonly";
-  deps."titlepages" = tl."titlepages";
-  deps."tlc2" = tl."tlc2";
-  deps."tlmgrbasics" = tl."tlmgrbasics";
-  deps."undergradmath" = tl."undergradmath";
-  deps."visualfaq" = tl."visualfaq";
-  deps."webguide" = tl."webguide";
-  deps."xetexref" = tl."xetexref";
-  deps."yet-another-guide-latex2e" = tl."yet-another-guide-latex2e";
+  deps = [
+    "amiweb2c-guide"
+    "amscls-doc"
+    "amslatex-primer"
+    "around-the-bend"
+    "ascii-chart"
+    "biblatex-cheatsheet"
+    "collection-basic"
+    "components"
+    "comprehensive"
+    "dickimaw"
+    "docsurvey"
+    "dtxtut"
+    "first-latex-doc"
+    "fontinstallationguide"
+    "forest-quickstart"
+    "gentle"
+    "guide-to-latex"
+    "happy4th"
+    "hyphen-english"
+    "impatient"
+    "intro-scientific"
+    "knuth-errata"
+    "knuth-hint"
+    "knuth-pdf"
+    "l2tabu-english"
+    "latex-brochure"
+    "latex-course"
+    "latex-doc-ptr"
+    "latex-for-undergraduates"
+    "latex-graphics-companion"
+    "latex-refsheet"
+    "latex-veryshortguide"
+    "latex-web-companion"
+    "latex2e-help-texinfo"
+    "latex4wp"
+    "latexcheat"
+    "latexcourse-rug"
+    "latexfileinfo-pkgs"
+    "lshort-english"
+    "macros2e"
+    "math-into-latex-4"
+    "maths-symbols"
+    "memdesign"
+    "memoirchapterstyles"
+    "metafont-beginners"
+    "metapost-examples"
+    "patgen2-tutorial"
+    "pictexsum"
+    "plain-doc"
+    "short-math-guide"
+    "simplified-latex"
+    "svg-inkscape"
+    "tamethebeast"
+    "tds"
+    "tex-font-errors-cheatsheet"
+    "tex-nutshell"
+    "tex-overview"
+    "tex-refs"
+    "tex-vpat"
+    "texbytopic"
+    "texonly"
+    "titlepages"
+    "tlc2"
+    "tlmgrbasics"
+    "undergradmath"
+    "visualfaq"
+    "webguide"
+    "xetexref"
+    "yet-another-guide-latex2e"
+  ];
   sha512.run = "94b1ee572454d4a791ab0637cf272f97a35dc5284c8a97a68715fcef36887eaa92ddb78f95722a6281d35c70fa6e5e4b6548ba8ca79fb69d9734c480383bdec2";
 };
 "collection-langeuropean" = {
   revision = 64723;
   stripPrefix = 0;
-  deps."armtex" = tl."armtex";
-  deps."babel-albanian" = tl."babel-albanian";
-  deps."babel-bosnian" = tl."babel-bosnian";
-  deps."babel-breton" = tl."babel-breton";
-  deps."babel-croatian" = tl."babel-croatian";
-  deps."babel-danish" = tl."babel-danish";
-  deps."babel-dutch" = tl."babel-dutch";
-  deps."babel-estonian" = tl."babel-estonian";
-  deps."babel-finnish" = tl."babel-finnish";
-  deps."babel-friulan" = tl."babel-friulan";
-  deps."babel-hungarian" = tl."babel-hungarian";
-  deps."babel-icelandic" = tl."babel-icelandic";
-  deps."babel-irish" = tl."babel-irish";
-  deps."babel-kurmanji" = tl."babel-kurmanji";
-  deps."babel-latin" = tl."babel-latin";
-  deps."babel-latvian" = tl."babel-latvian";
-  deps."babel-macedonian" = tl."babel-macedonian";
-  deps."babel-norsk" = tl."babel-norsk";
-  deps."babel-occitan" = tl."babel-occitan";
-  deps."babel-piedmontese" = tl."babel-piedmontese";
-  deps."babel-romanian" = tl."babel-romanian";
-  deps."babel-romansh" = tl."babel-romansh";
-  deps."babel-samin" = tl."babel-samin";
-  deps."babel-scottish" = tl."babel-scottish";
-  deps."babel-slovenian" = tl."babel-slovenian";
-  deps."babel-swedish" = tl."babel-swedish";
-  deps."babel-turkish" = tl."babel-turkish";
-  deps."babel-welsh" = tl."babel-welsh";
-  deps."collection-basic" = tl."collection-basic";
-  deps."finbib" = tl."finbib";
-  deps."gloss-occitan" = tl."gloss-occitan";
-  deps."hrlatex" = tl."hrlatex";
-  deps."huaz" = tl."huaz";
-  deps."hulipsum" = tl."hulipsum";
-  deps."hyphen-croatian" = tl."hyphen-croatian";
-  deps."hyphen-danish" = tl."hyphen-danish";
-  deps."hyphen-dutch" = tl."hyphen-dutch";
-  deps."hyphen-estonian" = tl."hyphen-estonian";
-  deps."hyphen-finnish" = tl."hyphen-finnish";
-  deps."hyphen-friulan" = tl."hyphen-friulan";
-  deps."hyphen-hungarian" = tl."hyphen-hungarian";
-  deps."hyphen-icelandic" = tl."hyphen-icelandic";
-  deps."hyphen-irish" = tl."hyphen-irish";
-  deps."hyphen-kurmanji" = tl."hyphen-kurmanji";
-  deps."hyphen-latin" = tl."hyphen-latin";
-  deps."hyphen-latvian" = tl."hyphen-latvian";
-  deps."hyphen-lithuanian" = tl."hyphen-lithuanian";
-  deps."hyphen-macedonian" = tl."hyphen-macedonian";
-  deps."hyphen-norwegian" = tl."hyphen-norwegian";
-  deps."hyphen-occitan" = tl."hyphen-occitan";
-  deps."hyphen-piedmontese" = tl."hyphen-piedmontese";
-  deps."hyphen-romanian" = tl."hyphen-romanian";
-  deps."hyphen-romansh" = tl."hyphen-romansh";
-  deps."hyphen-slovenian" = tl."hyphen-slovenian";
-  deps."hyphen-swedish" = tl."hyphen-swedish";
-  deps."hyphen-turkish" = tl."hyphen-turkish";
-  deps."hyphen-uppersorbian" = tl."hyphen-uppersorbian";
-  deps."hyphen-welsh" = tl."hyphen-welsh";
-  deps."kaytannollista-latexia" = tl."kaytannollista-latexia";
-  deps."lithuanian" = tl."lithuanian";
-  deps."lshort-dutch" = tl."lshort-dutch";
-  deps."lshort-estonian" = tl."lshort-estonian";
-  deps."lshort-finnish" = tl."lshort-finnish";
-  deps."lshort-slovenian" = tl."lshort-slovenian";
-  deps."lshort-turkish" = tl."lshort-turkish";
-  deps."nevelok" = tl."nevelok";
-  deps."rojud" = tl."rojud";
-  deps."swebib" = tl."swebib";
-  deps."turkmen" = tl."turkmen";
+  deps = [
+    "armtex"
+    "babel-albanian"
+    "babel-bosnian"
+    "babel-breton"
+    "babel-croatian"
+    "babel-danish"
+    "babel-dutch"
+    "babel-estonian"
+    "babel-finnish"
+    "babel-friulan"
+    "babel-hungarian"
+    "babel-icelandic"
+    "babel-irish"
+    "babel-kurmanji"
+    "babel-latin"
+    "babel-latvian"
+    "babel-macedonian"
+    "babel-norsk"
+    "babel-occitan"
+    "babel-piedmontese"
+    "babel-romanian"
+    "babel-romansh"
+    "babel-samin"
+    "babel-scottish"
+    "babel-slovenian"
+    "babel-swedish"
+    "babel-turkish"
+    "babel-welsh"
+    "collection-basic"
+    "finbib"
+    "gloss-occitan"
+    "hrlatex"
+    "huaz"
+    "hulipsum"
+    "hyphen-croatian"
+    "hyphen-danish"
+    "hyphen-dutch"
+    "hyphen-estonian"
+    "hyphen-finnish"
+    "hyphen-friulan"
+    "hyphen-hungarian"
+    "hyphen-icelandic"
+    "hyphen-irish"
+    "hyphen-kurmanji"
+    "hyphen-latin"
+    "hyphen-latvian"
+    "hyphen-lithuanian"
+    "hyphen-macedonian"
+    "hyphen-norwegian"
+    "hyphen-occitan"
+    "hyphen-piedmontese"
+    "hyphen-romanian"
+    "hyphen-romansh"
+    "hyphen-slovenian"
+    "hyphen-swedish"
+    "hyphen-turkish"
+    "hyphen-uppersorbian"
+    "hyphen-welsh"
+    "kaytannollista-latexia"
+    "lithuanian"
+    "lshort-dutch"
+    "lshort-estonian"
+    "lshort-finnish"
+    "lshort-slovenian"
+    "lshort-turkish"
+    "nevelok"
+    "rojud"
+    "swebib"
+    "turkmen"
+  ];
   sha512.run = "4a234c1f9b66d04df7f897ad38e6af56666917106e1a299e00dbccd6a5ba55c635beee78550c410cd4c631c3e91ea250adc79e8e3b29bc473d3e721c5adf75e4";
 };
 "collection-langfrench" = {
   revision = 63147;
   stripPrefix = 0;
-  deps."aeguill" = tl."aeguill";
-  deps."annee-scolaire" = tl."annee-scolaire";
-  deps."apprendre-a-programmer-en-tex" = tl."apprendre-a-programmer-en-tex";
-  deps."apprends-latex" = tl."apprends-latex";
-  deps."babel-basque" = tl."babel-basque";
-  deps."babel-french" = tl."babel-french";
-  deps."basque-book" = tl."basque-book";
-  deps."basque-date" = tl."basque-date";
-  deps."bib-fr" = tl."bib-fr";
-  deps."bibleref-french" = tl."bibleref-french";
-  deps."booktabs-fr" = tl."booktabs-fr";
-  deps."collection-basic" = tl."collection-basic";
-  deps."droit-fr" = tl."droit-fr";
-  deps."e-french" = tl."e-french";
-  deps."epslatex-fr" = tl."epslatex-fr";
-  deps."expose-expl3-dunkerque-2019" = tl."expose-expl3-dunkerque-2019";
-  deps."facture" = tl."facture";
-  deps."formation-latex-ul" = tl."formation-latex-ul";
-  deps."frenchmath" = tl."frenchmath";
-  deps."frletter" = tl."frletter";
-  deps."frpseudocode" = tl."frpseudocode";
-  deps."hyphen-basque" = tl."hyphen-basque";
-  deps."hyphen-french" = tl."hyphen-french";
-  deps."impatient-fr" = tl."impatient-fr";
-  deps."impnattypo" = tl."impnattypo";
-  deps."l2tabu-french" = tl."l2tabu-french";
-  deps."latex2e-help-texinfo-fr" = tl."latex2e-help-texinfo-fr";
-  deps."letgut" = tl."letgut";
-  deps."lshort-french" = tl."lshort-french";
-  deps."mafr" = tl."mafr";
-  deps."matapli" = tl."matapli";
-  deps."profcollege" = tl."profcollege";
-  deps."proflabo" = tl."proflabo";
-  deps."proflycee" = tl."proflycee";
-  deps."tabvar" = tl."tabvar";
-  deps."tdsfrmath" = tl."tdsfrmath";
-  deps."texlive-fr" = tl."texlive-fr";
-  deps."translation-array-fr" = tl."translation-array-fr";
-  deps."translation-dcolumn-fr" = tl."translation-dcolumn-fr";
-  deps."translation-natbib-fr" = tl."translation-natbib-fr";
-  deps."translation-tabbing-fr" = tl."translation-tabbing-fr";
-  deps."variations" = tl."variations";
-  deps."visualfaq-fr" = tl."visualfaq-fr";
-  deps."visualtikz" = tl."visualtikz";
+  deps = [
+    "aeguill"
+    "annee-scolaire"
+    "apprendre-a-programmer-en-tex"
+    "apprends-latex"
+    "babel-basque"
+    "babel-french"
+    "basque-book"
+    "basque-date"
+    "bib-fr"
+    "bibleref-french"
+    "booktabs-fr"
+    "collection-basic"
+    "droit-fr"
+    "e-french"
+    "epslatex-fr"
+    "expose-expl3-dunkerque-2019"
+    "facture"
+    "formation-latex-ul"
+    "frenchmath"
+    "frletter"
+    "frpseudocode"
+    "hyphen-basque"
+    "hyphen-french"
+    "impatient-fr"
+    "impnattypo"
+    "l2tabu-french"
+    "latex2e-help-texinfo-fr"
+    "letgut"
+    "lshort-french"
+    "mafr"
+    "matapli"
+    "profcollege"
+    "proflabo"
+    "proflycee"
+    "tabvar"
+    "tdsfrmath"
+    "texlive-fr"
+    "translation-array-fr"
+    "translation-dcolumn-fr"
+    "translation-natbib-fr"
+    "translation-tabbing-fr"
+    "variations"
+    "visualfaq-fr"
+    "visualtikz"
+  ];
   sha512.run = "baec84c93e0b9313b29f807831da39da40902afdbc2305e193e9d4805c631a1e44695c0bc148e973d9021146cc25da9b22b0130b29fe4ff9834667ec83dff9b6";
 };
 "collection-langgerman" = {
   revision = 55706;
   stripPrefix = 0;
-  deps."apalike-german" = tl."apalike-german";
-  deps."babel-german" = tl."babel-german";
-  deps."bibleref-german" = tl."bibleref-german";
-  deps."booktabs-de" = tl."booktabs-de";
-  deps."collection-basic" = tl."collection-basic";
-  deps."csquotes-de" = tl."csquotes-de";
-  deps."dehyph" = tl."dehyph";
-  deps."dehyph-exptl" = tl."dehyph-exptl";
-  deps."dhua" = tl."dhua";
-  deps."dtk-bibliography" = tl."dtk-bibliography";
-  deps."etdipa" = tl."etdipa";
-  deps."etoolbox-de" = tl."etoolbox-de";
-  deps."fifinddo-info" = tl."fifinddo-info";
-  deps."german" = tl."german";
-  deps."germbib" = tl."germbib";
-  deps."germkorr" = tl."germkorr";
-  deps."hausarbeit-jura" = tl."hausarbeit-jura";
-  deps."hyphen-german" = tl."hyphen-german";
-  deps."koma-script-examples" = tl."koma-script-examples";
-  deps."l2picfaq" = tl."l2picfaq";
-  deps."l2tabu" = tl."l2tabu";
-  deps."latexcheat-de" = tl."latexcheat-de";
-  deps."lshort-german" = tl."lshort-german";
-  deps."lualatex-doc-de" = tl."lualatex-doc-de";
-  deps."microtype-de" = tl."microtype-de";
-  deps."milog" = tl."milog";
-  deps."quran-de" = tl."quran-de";
-  deps."r_und_s" = tl."r_und_s";
-  deps."schulmathematik" = tl."schulmathematik";
-  deps."templates-fenn" = tl."templates-fenn";
-  deps."templates-sommer" = tl."templates-sommer";
-  deps."termcal-de" = tl."termcal-de";
-  deps."texlive-de" = tl."texlive-de";
-  deps."tipa-de" = tl."tipa-de";
-  deps."translation-arsclassica-de" = tl."translation-arsclassica-de";
-  deps."translation-biblatex-de" = tl."translation-biblatex-de";
-  deps."translation-chemsym-de" = tl."translation-chemsym-de";
-  deps."translation-ecv-de" = tl."translation-ecv-de";
-  deps."translation-enumitem-de" = tl."translation-enumitem-de";
-  deps."translation-europecv-de" = tl."translation-europecv-de";
-  deps."translation-filecontents-de" = tl."translation-filecontents-de";
-  deps."translation-moreverb-de" = tl."translation-moreverb-de";
-  deps."udesoftec" = tl."udesoftec";
-  deps."uhrzeit" = tl."uhrzeit";
-  deps."umlaute" = tl."umlaute";
-  deps."voss-mathcol" = tl."voss-mathcol";
+  deps = [
+    "apalike-german"
+    "babel-german"
+    "bibleref-german"
+    "booktabs-de"
+    "collection-basic"
+    "csquotes-de"
+    "dehyph"
+    "dehyph-exptl"
+    "dhua"
+    "dtk-bibliography"
+    "etdipa"
+    "etoolbox-de"
+    "fifinddo-info"
+    "german"
+    "germbib"
+    "germkorr"
+    "hausarbeit-jura"
+    "hyphen-german"
+    "koma-script-examples"
+    "l2picfaq"
+    "l2tabu"
+    "latexcheat-de"
+    "lshort-german"
+    "lualatex-doc-de"
+    "microtype-de"
+    "milog"
+    "quran-de"
+    "r_und_s"
+    "schulmathematik"
+    "templates-fenn"
+    "templates-sommer"
+    "termcal-de"
+    "texlive-de"
+    "tipa-de"
+    "translation-arsclassica-de"
+    "translation-biblatex-de"
+    "translation-chemsym-de"
+    "translation-ecv-de"
+    "translation-enumitem-de"
+    "translation-europecv-de"
+    "translation-filecontents-de"
+    "translation-moreverb-de"
+    "udesoftec"
+    "uhrzeit"
+    "umlaute"
+    "voss-mathcol"
+  ];
   sha512.run = "19b9f47b68ca6068900c413d8216e13c20d25ab084cdcbd500694a18a10cbaa35ba5681be09392e0b20873788519a436c28c1ea89a728e3f546083ce0883c15c";
 };
 "collection-langgreek" = {
   revision = 65038;
   stripPrefix = 0;
-  deps."babel-greek" = tl."babel-greek";
-  deps."begingreek" = tl."begingreek";
-  deps."betababel" = tl."betababel";
-  deps."cbfonts" = tl."cbfonts";
-  deps."cbfonts-fd" = tl."cbfonts-fd";
-  deps."collection-basic" = tl."collection-basic";
-  deps."gfsbaskerville" = tl."gfsbaskerville";
-  deps."gfsporson" = tl."gfsporson";
-  deps."greek-fontenc" = tl."greek-fontenc";
-  deps."greek-inputenc" = tl."greek-inputenc";
-  deps."greekdates" = tl."greekdates";
-  deps."greektex" = tl."greektex";
-  deps."greektonoi" = tl."greektonoi";
-  deps."hyphen-ancientgreek" = tl."hyphen-ancientgreek";
-  deps."hyphen-greek" = tl."hyphen-greek";
-  deps."ibycus-babel" = tl."ibycus-babel";
-  deps."ibygrk" = tl."ibygrk";
-  deps."kerkis" = tl."kerkis";
-  deps."levy" = tl."levy";
-  deps."lgreek" = tl."lgreek";
-  deps."lgrmath" = tl."lgrmath";
-  deps."mkgrkindex" = tl."mkgrkindex";
-  deps."talos" = tl."talos";
-  deps."teubner" = tl."teubner";
-  deps."xgreek" = tl."xgreek";
-  deps."yannisgr" = tl."yannisgr";
+  deps = [
+    "babel-greek"
+    "begingreek"
+    "betababel"
+    "cbfonts"
+    "cbfonts-fd"
+    "collection-basic"
+    "gfsbaskerville"
+    "gfsporson"
+    "greek-fontenc"
+    "greek-inputenc"
+    "greekdates"
+    "greektex"
+    "greektonoi"
+    "hyphen-ancientgreek"
+    "hyphen-greek"
+    "ibycus-babel"
+    "ibygrk"
+    "kerkis"
+    "levy"
+    "lgreek"
+    "lgrmath"
+    "mkgrkindex"
+    "talos"
+    "teubner"
+    "xgreek"
+    "yannisgr"
+  ];
   sha512.run = "800991b6bb8ac7772ad030ad665b812abd9b294498f7b7678be721ccc87d54607e267bd189a0591ebead2c6ecb64047e5b5581c374f067c3b1575b6d442cc6c9";
 };
 "collection-langitalian" = {
   revision = 55129;
   stripPrefix = 0;
-  deps."amsldoc-it" = tl."amsldoc-it";
-  deps."amsmath-it" = tl."amsmath-it";
-  deps."amsthdoc-it" = tl."amsthdoc-it";
-  deps."antanilipsum" = tl."antanilipsum";
-  deps."babel-italian" = tl."babel-italian";
-  deps."codicefiscaleitaliano" = tl."codicefiscaleitaliano";
-  deps."collection-basic" = tl."collection-basic";
-  deps."fancyhdr-it" = tl."fancyhdr-it";
-  deps."fixltxhyph" = tl."fixltxhyph";
-  deps."frontespizio" = tl."frontespizio";
-  deps."hyphen-italian" = tl."hyphen-italian";
-  deps."itnumpar" = tl."itnumpar";
-  deps."l2tabu-italian" = tl."l2tabu-italian";
-  deps."latex4wp-it" = tl."latex4wp-it";
-  deps."layaureo" = tl."layaureo";
-  deps."lshort-italian" = tl."lshort-italian";
-  deps."psfrag-italian" = tl."psfrag-italian";
-  deps."texlive-it" = tl."texlive-it";
-  deps."verifica" = tl."verifica";
+  deps = [
+    "amsldoc-it"
+    "amsmath-it"
+    "amsthdoc-it"
+    "antanilipsum"
+    "babel-italian"
+    "codicefiscaleitaliano"
+    "collection-basic"
+    "fancyhdr-it"
+    "fixltxhyph"
+    "frontespizio"
+    "hyphen-italian"
+    "itnumpar"
+    "l2tabu-italian"
+    "latex4wp-it"
+    "layaureo"
+    "lshort-italian"
+    "psfrag-italian"
+    "texlive-it"
+    "verifica"
+  ];
   sha512.run = "6ec5e8a62e3c1ed8e3c23542381091d38c77af507af7088a55e44f1e34b85d01ec19342db4541d9d6cd712c0929d54a3fc663e1d8fde3c53fef0d6fc43be4994";
 };
 "collection-langjapanese" = {
   revision = 64603;
   stripPrefix = 0;
-  deps."ascmac" = tl."ascmac";
-  deps."asternote" = tl."asternote";
-  deps."babel-japanese" = tl."babel-japanese";
-  deps."bxbase" = tl."bxbase";
-  deps."bxcjkjatype" = tl."bxcjkjatype";
-  deps."bxghost" = tl."bxghost";
-  deps."bxjaholiday" = tl."bxjaholiday";
-  deps."bxjalipsum" = tl."bxjalipsum";
-  deps."bxjaprnind" = tl."bxjaprnind";
-  deps."bxjatoucs" = tl."bxjatoucs";
-  deps."bxjscls" = tl."bxjscls";
-  deps."bxorigcapt" = tl."bxorigcapt";
-  deps."bxwareki" = tl."bxwareki";
-  deps."collection-langcjk" = tl."collection-langcjk";
-  deps."convbkmk" = tl."convbkmk";
-  deps."endnotesj" = tl."endnotesj";
-  deps."gckanbun" = tl."gckanbun";
-  deps."gentombow" = tl."gentombow";
-  deps."haranoaji" = tl."haranoaji";
-  deps."haranoaji-extra" = tl."haranoaji-extra";
-  deps."ieejtran" = tl."ieejtran";
-  deps."ifptex" = tl."ifptex";
-  deps."ifxptex" = tl."ifxptex";
-  deps."ipaex" = tl."ipaex";
-  deps."japanese-mathformulas" = tl."japanese-mathformulas";
-  deps."japanese-otf" = tl."japanese-otf";
-  deps."jieeetran" = tl."jieeetran";
-  deps."jlreq" = tl."jlreq";
-  deps."jlreq-deluxe" = tl."jlreq-deluxe";
-  deps."jpneduenumerate" = tl."jpneduenumerate";
-  deps."jpnedumathsymbols" = tl."jpnedumathsymbols";
-  deps."jsclasses" = tl."jsclasses";
-  deps."kanbun" = tl."kanbun";
-  deps."lshort-japanese" = tl."lshort-japanese";
-  deps."luatexja" = tl."luatexja";
-  deps."mendex-doc" = tl."mendex-doc";
-  deps."morisawa" = tl."morisawa";
-  deps."pbibtex-base" = tl."pbibtex-base";
-  deps."pbibtex-manual" = tl."pbibtex-manual";
-  deps."platex" = tl."platex";
-  deps."platex-tools" = tl."platex-tools";
-  deps."platexcheat" = tl."platexcheat";
-  deps."plautopatch" = tl."plautopatch";
-  deps."ptex" = tl."ptex";
-  deps."ptex-base" = tl."ptex-base";
-  deps."ptex-fontmaps" = tl."ptex-fontmaps";
-  deps."ptex-fonts" = tl."ptex-fonts";
-  deps."ptex-manual" = tl."ptex-manual";
-  deps."ptex2pdf" = tl."ptex2pdf";
-  deps."pxbase" = tl."pxbase";
-  deps."pxchfon" = tl."pxchfon";
-  deps."pxcjkcat" = tl."pxcjkcat";
-  deps."pxjahyper" = tl."pxjahyper";
-  deps."pxjodel" = tl."pxjodel";
-  deps."pxrubrica" = tl."pxrubrica";
-  deps."pxufont" = tl."pxufont";
-  deps."texlive-ja" = tl."texlive-ja";
-  deps."uplatex" = tl."uplatex";
-  deps."uptex" = tl."uptex";
-  deps."uptex-base" = tl."uptex-base";
-  deps."uptex-fonts" = tl."uptex-fonts";
-  deps."wadalab" = tl."wadalab";
-  deps."zxjafbfont" = tl."zxjafbfont";
-  deps."zxjatype" = tl."zxjatype";
+  deps = [
+    "ascmac"
+    "asternote"
+    "babel-japanese"
+    "bxbase"
+    "bxcjkjatype"
+    "bxghost"
+    "bxjaholiday"
+    "bxjalipsum"
+    "bxjaprnind"
+    "bxjatoucs"
+    "bxjscls"
+    "bxorigcapt"
+    "bxwareki"
+    "collection-langcjk"
+    "convbkmk"
+    "endnotesj"
+    "gckanbun"
+    "gentombow"
+    "haranoaji"
+    "haranoaji-extra"
+    "ieejtran"
+    "ifptex"
+    "ifxptex"
+    "ipaex"
+    "japanese-mathformulas"
+    "japanese-otf"
+    "jieeetran"
+    "jlreq"
+    "jlreq-deluxe"
+    "jpneduenumerate"
+    "jpnedumathsymbols"
+    "jsclasses"
+    "kanbun"
+    "lshort-japanese"
+    "luatexja"
+    "mendex-doc"
+    "morisawa"
+    "pbibtex-base"
+    "pbibtex-manual"
+    "platex"
+    "platex-tools"
+    "platexcheat"
+    "plautopatch"
+    "ptex"
+    "ptex-base"
+    "ptex-fontmaps"
+    "ptex-fonts"
+    "ptex-manual"
+    "ptex2pdf"
+    "pxbase"
+    "pxchfon"
+    "pxcjkcat"
+    "pxjahyper"
+    "pxjodel"
+    "pxrubrica"
+    "pxufont"
+    "texlive-ja"
+    "uplatex"
+    "uptex"
+    "uptex-base"
+    "uptex-fonts"
+    "wadalab"
+    "zxjafbfont"
+    "zxjatype"
+  ];
   sha512.run = "d9f73ff10afe2c91f9f6ad0e92ddcf8425ed7f51c7f08d291451775bcfcf3421d8d2afd78c7dbdceef995ac5a4262df89afce2b35e6c2dd064e8a310e1025f67";
 };
 "collection-langkorean" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."baekmuk" = tl."baekmuk";
-  deps."cjk-ko" = tl."cjk-ko";
-  deps."collection-langcjk" = tl."collection-langcjk";
-  deps."kotex-oblivoir" = tl."kotex-oblivoir";
-  deps."kotex-plain" = tl."kotex-plain";
-  deps."kotex-utf" = tl."kotex-utf";
-  deps."kotex-utils" = tl."kotex-utils";
-  deps."lshort-korean" = tl."lshort-korean";
-  deps."nanumtype1" = tl."nanumtype1";
-  deps."pmhanguljamo" = tl."pmhanguljamo";
-  deps."uhc" = tl."uhc";
-  deps."unfonts-core" = tl."unfonts-core";
-  deps."unfonts-extra" = tl."unfonts-extra";
+  deps = [
+    "baekmuk"
+    "cjk-ko"
+    "collection-langcjk"
+    "kotex-oblivoir"
+    "kotex-plain"
+    "kotex-utf"
+    "kotex-utils"
+    "lshort-korean"
+    "nanumtype1"
+    "pmhanguljamo"
+    "uhc"
+    "unfonts-core"
+    "unfonts-extra"
+  ];
   sha512.run = "2d93df728d34137c8f9a884aa2871a2980e806672006f2c5f0c5f79412d5789c6f94958363cfc9a78b5a97a7d76bbb6cb157b2cb2a8a283f7afdfd838fa24883";
 };
 "collection-langother" = {
   revision = 59564;
   stripPrefix = 0;
-  deps."aalok" = tl."aalok";
-  deps."akshar" = tl."akshar";
-  deps."amsldoc-vn" = tl."amsldoc-vn";
-  deps."aramaic-serto" = tl."aramaic-serto";
-  deps."babel-azerbaijani" = tl."babel-azerbaijani";
-  deps."babel-esperanto" = tl."babel-esperanto";
-  deps."babel-georgian" = tl."babel-georgian";
-  deps."babel-hebrew" = tl."babel-hebrew";
-  deps."babel-indonesian" = tl."babel-indonesian";
-  deps."babel-interlingua" = tl."babel-interlingua";
-  deps."babel-malay" = tl."babel-malay";
-  deps."babel-sorbian" = tl."babel-sorbian";
-  deps."babel-thai" = tl."babel-thai";
-  deps."babel-vietnamese" = tl."babel-vietnamese";
-  deps."bangla" = tl."bangla";
-  deps."bangtex" = tl."bangtex";
-  deps."bengali" = tl."bengali";
-  deps."burmese" = tl."burmese";
-  deps."chhaya" = tl."chhaya";
-  deps."cjhebrew" = tl."cjhebrew";
-  deps."collection-basic" = tl."collection-basic";
-  deps."ctib" = tl."ctib";
-  deps."ebong" = tl."ebong";
-  deps."ethiop" = tl."ethiop";
-  deps."ethiop-t1" = tl."ethiop-t1";
-  deps."fc" = tl."fc";
-  deps."fonts-tlwg" = tl."fonts-tlwg";
-  deps."hindawi-latex-template" = tl."hindawi-latex-template";
-  deps."hyphen-afrikaans" = tl."hyphen-afrikaans";
-  deps."hyphen-armenian" = tl."hyphen-armenian";
-  deps."hyphen-coptic" = tl."hyphen-coptic";
-  deps."hyphen-esperanto" = tl."hyphen-esperanto";
-  deps."hyphen-ethiopic" = tl."hyphen-ethiopic";
-  deps."hyphen-georgian" = tl."hyphen-georgian";
-  deps."hyphen-indic" = tl."hyphen-indic";
-  deps."hyphen-indonesian" = tl."hyphen-indonesian";
-  deps."hyphen-interlingua" = tl."hyphen-interlingua";
-  deps."hyphen-sanskrit" = tl."hyphen-sanskrit";
-  deps."hyphen-thai" = tl."hyphen-thai";
-  deps."hyphen-turkmen" = tl."hyphen-turkmen";
-  deps."latex-mr" = tl."latex-mr";
-  deps."latexbangla" = tl."latexbangla";
-  deps."latino-sine-flexione" = tl."latino-sine-flexione";
-  deps."lshort-thai" = tl."lshort-thai";
-  deps."lshort-vietnamese" = tl."lshort-vietnamese";
-  deps."marathi" = tl."marathi";
-  deps."ntheorem-vn" = tl."ntheorem-vn";
-  deps."padauk" = tl."padauk";
-  deps."quran-bn" = tl."quran-bn";
-  deps."quran-ur" = tl."quran-ur";
-  deps."sanskrit" = tl."sanskrit";
-  deps."sanskrit-t1" = tl."sanskrit-t1";
-  deps."thaienum" = tl."thaienum";
-  deps."thaispec" = tl."thaispec";
-  deps."unicode-alphabets" = tl."unicode-alphabets";
-  deps."velthuis" = tl."velthuis";
-  deps."vntex" = tl."vntex";
-  deps."wnri" = tl."wnri";
-  deps."wnri-latex" = tl."wnri-latex";
-  deps."xetex-devanagari" = tl."xetex-devanagari";
+  deps = [
+    "aalok"
+    "akshar"
+    "amsldoc-vn"
+    "aramaic-serto"
+    "babel-azerbaijani"
+    "babel-esperanto"
+    "babel-georgian"
+    "babel-hebrew"
+    "babel-indonesian"
+    "babel-interlingua"
+    "babel-malay"
+    "babel-sorbian"
+    "babel-thai"
+    "babel-vietnamese"
+    "bangla"
+    "bangtex"
+    "bengali"
+    "burmese"
+    "chhaya"
+    "cjhebrew"
+    "collection-basic"
+    "ctib"
+    "ebong"
+    "ethiop"
+    "ethiop-t1"
+    "fc"
+    "fonts-tlwg"
+    "hindawi-latex-template"
+    "hyphen-afrikaans"
+    "hyphen-armenian"
+    "hyphen-coptic"
+    "hyphen-esperanto"
+    "hyphen-ethiopic"
+    "hyphen-georgian"
+    "hyphen-indic"
+    "hyphen-indonesian"
+    "hyphen-interlingua"
+    "hyphen-sanskrit"
+    "hyphen-thai"
+    "hyphen-turkmen"
+    "latex-mr"
+    "latexbangla"
+    "latino-sine-flexione"
+    "lshort-thai"
+    "lshort-vietnamese"
+    "marathi"
+    "ntheorem-vn"
+    "padauk"
+    "quran-bn"
+    "quran-ur"
+    "sanskrit"
+    "sanskrit-t1"
+    "thaienum"
+    "thaispec"
+    "unicode-alphabets"
+    "velthuis"
+    "vntex"
+    "wnri"
+    "wnri-latex"
+    "xetex-devanagari"
+  ];
   sha512.run = "3db7709c3545df3713dc0a7df73f676f9f34df5fdc157c6a2d6a124a5bbd14f6f5f1f2938092e76be19417f9dd5ff4f84513c84beddafbe5c9747abd7fa597c0";
 };
 "collection-langpolish" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."babel-polish" = tl."babel-polish";
-  deps."bredzenie" = tl."bredzenie";
-  deps."cc-pl" = tl."cc-pl";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
-  deps."gustlib" = tl."gustlib";
-  deps."gustprog" = tl."gustprog";
-  deps."hyphen-polish" = tl."hyphen-polish";
-  deps."lshort-polish" = tl."lshort-polish";
-  deps."mex" = tl."mex";
-  deps."mwcls" = tl."mwcls";
-  deps."pl" = tl."pl";
-  deps."polski" = tl."polski";
-  deps."przechlewski-book" = tl."przechlewski-book";
-  deps."qpxqtx" = tl."qpxqtx";
-  deps."tap" = tl."tap";
-  deps."tex-virtual-academy-pl" = tl."tex-virtual-academy-pl";
-  deps."texlive-pl" = tl."texlive-pl";
-  deps."utf8mex" = tl."utf8mex";
+  deps = [
+    "babel-polish"
+    "bredzenie"
+    "cc-pl"
+    "collection-basic"
+    "collection-latex"
+    "gustlib"
+    "gustprog"
+    "hyphen-polish"
+    "lshort-polish"
+    "mex"
+    "mwcls"
+    "pl"
+    "polski"
+    "przechlewski-book"
+    "qpxqtx"
+    "tap"
+    "tex-virtual-academy-pl"
+    "texlive-pl"
+    "utf8mex"
+  ];
   sha512.run = "fc0d08f70aeb83869109290e6d1585d513097dcd4e17791752ecd3d26ac202838afb5931f78ceaeeaf72c63b18fe9183edd650c075d03188f24cb2caded178de";
 };
 "collection-langportuguese" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."babel-portuges" = tl."babel-portuges";
-  deps."beamer-tut-pt" = tl."beamer-tut-pt";
-  deps."collection-basic" = tl."collection-basic";
-  deps."cursolatex" = tl."cursolatex";
-  deps."feupphdteses" = tl."feupphdteses";
-  deps."hyphen-portuguese" = tl."hyphen-portuguese";
-  deps."latex-via-exemplos" = tl."latex-via-exemplos";
-  deps."latexcheat-ptbr" = tl."latexcheat-ptbr";
-  deps."lshort-portuguese" = tl."lshort-portuguese";
-  deps."numberpt" = tl."numberpt";
-  deps."ordinalpt" = tl."ordinalpt";
-  deps."xypic-tut-pt" = tl."xypic-tut-pt";
+  deps = [
+    "babel-portuges"
+    "beamer-tut-pt"
+    "collection-basic"
+    "cursolatex"
+    "feupphdteses"
+    "hyphen-portuguese"
+    "latex-via-exemplos"
+    "latexcheat-ptbr"
+    "lshort-portuguese"
+    "numberpt"
+    "ordinalpt"
+    "xypic-tut-pt"
+  ];
   sha512.run = "16d67d288fb702807b43dcf8da044a45206c27c5cf0d953688fc341966fb166db8cec69b727b1de079b9bf434f024f7338eaf34529510cab7881147d1635b43d";
 };
 "collection-langspanish" = {
   revision = 54141;
   stripPrefix = 0;
-  deps."babel-catalan" = tl."babel-catalan";
-  deps."babel-galician" = tl."babel-galician";
-  deps."babel-spanish" = tl."babel-spanish";
-  deps."collection-basic" = tl."collection-basic";
-  deps."es-tex-faq" = tl."es-tex-faq";
-  deps."hyphen-catalan" = tl."hyphen-catalan";
-  deps."hyphen-galician" = tl."hyphen-galician";
-  deps."hyphen-spanish" = tl."hyphen-spanish";
-  deps."l2tabu-spanish" = tl."l2tabu-spanish";
-  deps."latex2e-help-texinfo-spanish" = tl."latex2e-help-texinfo-spanish";
-  deps."latexcheat-esmx" = tl."latexcheat-esmx";
-  deps."lshort-spanish" = tl."lshort-spanish";
-  deps."texlive-es" = tl."texlive-es";
+  deps = [
+    "babel-catalan"
+    "babel-galician"
+    "babel-spanish"
+    "collection-basic"
+    "es-tex-faq"
+    "hyphen-catalan"
+    "hyphen-galician"
+    "hyphen-spanish"
+    "l2tabu-spanish"
+    "latex2e-help-texinfo-spanish"
+    "latexcheat-esmx"
+    "lshort-spanish"
+    "texlive-es"
+  ];
   sha512.run = "88bdc5cefd5519bc80e50e2d808abf32aae8f7c730023afab3babb82ab817dc034c78d42b4143135df187343de7164a8fd94dc95c5ec8909e317a2f5628de15e";
 };
 "collection-latex" = {
   revision = 63515;
   stripPrefix = 0;
-  deps."ae" = tl."ae";
-  deps."amscls" = tl."amscls";
-  deps."amsmath" = tl."amsmath";
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."auxhook" = tl."auxhook";
-  deps."babel" = tl."babel";
-  deps."babel-english" = tl."babel-english";
-  deps."babelbib" = tl."babelbib";
-  deps."bigintcalc" = tl."bigintcalc";
-  deps."bitset" = tl."bitset";
-  deps."bookmark" = tl."bookmark";
-  deps."carlisle" = tl."carlisle";
-  deps."collection-basic" = tl."collection-basic";
-  deps."colortbl" = tl."colortbl";
-  deps."epstopdf-pkg" = tl."epstopdf-pkg";
-  deps."etexcmds" = tl."etexcmds";
-  deps."fancyhdr" = tl."fancyhdr";
-  deps."firstaid" = tl."firstaid";
-  deps."fix2col" = tl."fix2col";
-  deps."geometry" = tl."geometry";
-  deps."gettitlestring" = tl."gettitlestring";
-  deps."graphics" = tl."graphics";
-  deps."graphics-cfg" = tl."graphics-cfg";
-  deps."grfext" = tl."grfext";
-  deps."hopatch" = tl."hopatch";
-  deps."hycolor" = tl."hycolor";
-  deps."hyperref" = tl."hyperref";
-  deps."intcalc" = tl."intcalc";
-  deps."kvdefinekeys" = tl."kvdefinekeys";
-  deps."kvoptions" = tl."kvoptions";
-  deps."kvsetkeys" = tl."kvsetkeys";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-bin" = tl."latex-bin";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latex-lab" = tl."latex-lab";
-  deps."latexconfig" = tl."latexconfig";
-  deps."letltxmacro" = tl."letltxmacro";
-  deps."ltxcmds" = tl."ltxcmds";
-  deps."ltxmisc" = tl."ltxmisc";
-  deps."mfnfss" = tl."mfnfss";
-  deps."mptopdf" = tl."mptopdf";
-  deps."natbib" = tl."natbib";
-  deps."oberdiek" = tl."oberdiek";
-  deps."pagesel" = tl."pagesel";
-  deps."pdfescape" = tl."pdfescape";
-  deps."pslatex" = tl."pslatex";
-  deps."psnfss" = tl."psnfss";
-  deps."pspicture" = tl."pspicture";
-  deps."refcount" = tl."refcount";
-  deps."rerunfilecheck" = tl."rerunfilecheck";
-  deps."stringenc" = tl."stringenc";
-  deps."tools" = tl."tools";
-  deps."uniquecounter" = tl."uniquecounter";
-  deps."url" = tl."url";
+  deps = [
+    "ae"
+    "amscls"
+    "amsmath"
+    "atbegshi"
+    "atveryend"
+    "auxhook"
+    "babel"
+    "babel-english"
+    "babelbib"
+    "bigintcalc"
+    "bitset"
+    "bookmark"
+    "carlisle"
+    "collection-basic"
+    "colortbl"
+    "epstopdf-pkg"
+    "etexcmds"
+    "fancyhdr"
+    "firstaid"
+    "fix2col"
+    "geometry"
+    "gettitlestring"
+    "graphics"
+    "graphics-cfg"
+    "grfext"
+    "hopatch"
+    "hycolor"
+    "hyperref"
+    "intcalc"
+    "kvdefinekeys"
+    "kvoptions"
+    "kvsetkeys"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-bin"
+    "latex-fonts"
+    "latex-lab"
+    "latexconfig"
+    "letltxmacro"
+    "ltxcmds"
+    "ltxmisc"
+    "mfnfss"
+    "mptopdf"
+    "natbib"
+    "oberdiek"
+    "pagesel"
+    "pdfescape"
+    "pslatex"
+    "psnfss"
+    "pspicture"
+    "refcount"
+    "rerunfilecheck"
+    "stringenc"
+    "tools"
+    "uniquecounter"
+    "url"
+  ];
   sha512.run = "c73220abd1545907a1d8de37cb534d2c6bd2534f1b55f03c069f39f535c326d4b1852f8415d9876ca52645db939ad7a11c55f550a2096ccd4b8dd8be6a4114d6";
 };
 "collection-latexextra" = {
   revision = 65353;
   stripPrefix = 0;
-  deps."2up" = tl."2up";
-  deps."a0poster" = tl."a0poster";
-  deps."a4wide" = tl."a4wide";
-  deps."a5comb" = tl."a5comb";
-  deps."abraces" = tl."abraces";
-  deps."abspos" = tl."abspos";
-  deps."abstract" = tl."abstract";
-  deps."accessibility" = tl."accessibility";
-  deps."accsupp" = tl."accsupp";
-  deps."achemso" = tl."achemso";
-  deps."acro" = tl."acro";
-  deps."acronym" = tl."acronym";
-  deps."acroterm" = tl."acroterm";
-  deps."actuarialangle" = tl."actuarialangle";
-  deps."actuarialsymbol" = tl."actuarialsymbol";
-  deps."addfont" = tl."addfont";
-  deps."addlines" = tl."addlines";
-  deps."adjmulticol" = tl."adjmulticol";
-  deps."adjustbox" = tl."adjustbox";
-  deps."adrconv" = tl."adrconv";
-  deps."advdate" = tl."advdate";
-  deps."akktex" = tl."akktex";
-  deps."akletter" = tl."akletter";
-  deps."alertmessage" = tl."alertmessage";
-  deps."alnumsec" = tl."alnumsec";
-  deps."alphalph" = tl."alphalph";
-  deps."alterqcm" = tl."alterqcm";
-  deps."altfont" = tl."altfont";
-  deps."altsubsup" = tl."altsubsup";
-  deps."amsaddr" = tl."amsaddr";
-  deps."animate" = tl."animate";
-  deps."anonchap" = tl."anonchap";
-  deps."answers" = tl."answers";
-  deps."anyfontsize" = tl."anyfontsize";
-  deps."appendix" = tl."appendix";
-  deps."appendixnumberbeamer" = tl."appendixnumberbeamer";
-  deps."apptools" = tl."apptools";
-  deps."arabicfront" = tl."arabicfront";
-  deps."arcs" = tl."arcs";
-  deps."arraycols" = tl."arraycols";
-  deps."arrayjobx" = tl."arrayjobx";
-  deps."arraysort" = tl."arraysort";
-  deps."arydshln" = tl."arydshln";
-  deps."asciilist" = tl."asciilist";
-  deps."askinclude" = tl."askinclude";
-  deps."assignment" = tl."assignment";
-  deps."assoccnt" = tl."assoccnt";
-  deps."association-matrix" = tl."association-matrix";
-  deps."atenddvi" = tl."atenddvi";
-  deps."atendofenv" = tl."atendofenv";
-  deps."attachfile" = tl."attachfile";
-  deps."aurl" = tl."aurl";
-  deps."authoraftertitle" = tl."authoraftertitle";
-  deps."authorarchive" = tl."authorarchive";
-  deps."authorindex" = tl."authorindex";
-  deps."autofancyhdr" = tl."autofancyhdr";
-  deps."autonum" = tl."autonum";
-  deps."autopdf" = tl."autopdf";
-  deps."autopuncitems" = tl."autopuncitems";
-  deps."avremu" = tl."avremu";
-  deps."axessibility" = tl."axessibility";
-  deps."background" = tl."background";
-  deps."bankstatement" = tl."bankstatement";
-  deps."bashful" = tl."bashful";
-  deps."basicarith" = tl."basicarith";
-  deps."bchart" = tl."bchart";
-  deps."beamer-rl" = tl."beamer-rl";
-  deps."beamer2thesis" = tl."beamer2thesis";
-  deps."beamerappendixnote" = tl."beamerappendixnote";
-  deps."beameraudience" = tl."beameraudience";
-  deps."beamerauxtheme" = tl."beamerauxtheme";
-  deps."beamercolorthemeowl" = tl."beamercolorthemeowl";
-  deps."beamerdarkthemes" = tl."beamerdarkthemes";
-  deps."beamerposter" = tl."beamerposter";
-  deps."beamersubframe" = tl."beamersubframe";
-  deps."beamertheme-arguelles" = tl."beamertheme-arguelles";
-  deps."beamertheme-cuerna" = tl."beamertheme-cuerna";
-  deps."beamertheme-detlevcm" = tl."beamertheme-detlevcm";
-  deps."beamertheme-epyt" = tl."beamertheme-epyt";
-  deps."beamertheme-focus" = tl."beamertheme-focus";
-  deps."beamertheme-light" = tl."beamertheme-light";
-  deps."beamertheme-metropolis" = tl."beamertheme-metropolis";
-  deps."beamertheme-npbt" = tl."beamertheme-npbt";
-  deps."beamertheme-phnompenh" = tl."beamertheme-phnompenh";
-  deps."beamertheme-pure-minimalistic" = tl."beamertheme-pure-minimalistic";
-  deps."beamertheme-saintpetersburg" = tl."beamertheme-saintpetersburg";
-  deps."beamertheme-simpledarkblue" = tl."beamertheme-simpledarkblue";
-  deps."beamertheme-simpleplus" = tl."beamertheme-simpleplus";
-  deps."beamertheme-tcolorbox" = tl."beamertheme-tcolorbox";
-  deps."beamertheme-trigon" = tl."beamertheme-trigon";
-  deps."beamertheme-upenn-bc" = tl."beamertheme-upenn-bc";
-  deps."beamerthemeamurmaple" = tl."beamerthemeamurmaple";
-  deps."beamerthemejltree" = tl."beamerthemejltree";
-  deps."beamerthemelalic" = tl."beamerthemelalic";
-  deps."beamerthemenirma" = tl."beamerthemenirma";
-  deps."beamerthemenord" = tl."beamerthemenord";
-  deps."bearwear" = tl."bearwear";
-  deps."beaulivre" = tl."beaulivre";
-  deps."beton" = tl."beton";
-  deps."bewerbung" = tl."bewerbung";
-  deps."bez123" = tl."bez123";
-  deps."bhcexam" = tl."bhcexam";
-  deps."bibletext" = tl."bibletext";
-  deps."bigfoot" = tl."bigfoot";
-  deps."bigints" = tl."bigints";
-  deps."bilingualpages" = tl."bilingualpages";
-  deps."biochemistry-colors" = tl."biochemistry-colors";
-  deps."bithesis" = tl."bithesis";
-  deps."bizcard" = tl."bizcard";
-  deps."blindtext" = tl."blindtext";
-  deps."blkarray" = tl."blkarray";
-  deps."block" = tl."block";
-  deps."blowup" = tl."blowup";
-  deps."bnumexpr" = tl."bnumexpr";
-  deps."boites" = tl."boites";
-  deps."bold-extra" = tl."bold-extra";
-  deps."book-of-common-prayer" = tl."book-of-common-prayer";
-  deps."bookcover" = tl."bookcover";
-  deps."bookest" = tl."bookest";
-  deps."booklet" = tl."booklet";
-  deps."bookshelf" = tl."bookshelf";
-  deps."boolexpr" = tl."boolexpr";
-  deps."bophook" = tl."bophook";
-  deps."boxedminipage" = tl."boxedminipage";
-  deps."boxhandler" = tl."boxhandler";
-  deps."bracketkey" = tl."bracketkey";
-  deps."braket" = tl."braket";
-  deps."breakurl" = tl."breakurl";
-  deps."bubblesort" = tl."bubblesort";
-  deps."bullcntr" = tl."bullcntr";
-  deps."bxcalc" = tl."bxcalc";
-  deps."bxdpx-beamer" = tl."bxdpx-beamer";
-  deps."bxdvidriver" = tl."bxdvidriver";
-  deps."bxenclose" = tl."bxenclose";
-  deps."bxnewfont" = tl."bxnewfont";
-  deps."bxpapersize" = tl."bxpapersize";
-  deps."bxpdfver" = tl."bxpdfver";
-  deps."bxtexlogo" = tl."bxtexlogo";
-  deps."calcage" = tl."calcage";
-  deps."calctab" = tl."calctab";
-  deps."calculator" = tl."calculator";
-  deps."calrsfs" = tl."calrsfs";
-  deps."cals" = tl."cals";
-  deps."calxxxx-yyyy" = tl."calxxxx-yyyy";
-  deps."cancel" = tl."cancel";
-  deps."canoniclayout" = tl."canoniclayout";
-  deps."capt-of" = tl."capt-of";
-  deps."captcont" = tl."captcont";
-  deps."captdef" = tl."captdef";
-  deps."carbohydrates" = tl."carbohydrates";
-  deps."cases" = tl."cases";
-  deps."casyl" = tl."casyl";
-  deps."catchfile" = tl."catchfile";
-  deps."catchfilebetweentags" = tl."catchfilebetweentags";
-  deps."catechis" = tl."catechis";
-  deps."catoptions" = tl."catoptions";
-  deps."cbcoptic" = tl."cbcoptic";
-  deps."ccaption" = tl."ccaption";
-  deps."cclicenses" = tl."cclicenses";
-  deps."cd" = tl."cd";
-  deps."cd-cover" = tl."cd-cover";
-  deps."cdcmd" = tl."cdcmd";
-  deps."cdpbundl" = tl."cdpbundl";
-  deps."cellprops" = tl."cellprops";
-  deps."cellspace" = tl."cellspace";
-  deps."censor" = tl."censor";
-  deps."centeredline" = tl."centeredline";
-  deps."centerlastline" = tl."centerlastline";
-  deps."changebar" = tl."changebar";
-  deps."changelayout" = tl."changelayout";
-  deps."changelog" = tl."changelog";
-  deps."changepage" = tl."changepage";
-  deps."changes" = tl."changes";
-  deps."chappg" = tl."chappg";
-  deps."chapterfolder" = tl."chapterfolder";
-  deps."cheatsheet" = tl."cheatsheet";
-  deps."checkend" = tl."checkend";
-  deps."chet" = tl."chet";
-  deps."chextras" = tl."chextras";
-  deps."childdoc" = tl."childdoc";
-  deps."chkfloat" = tl."chkfloat";
-  deps."chletter" = tl."chletter";
-  deps."chngcntr" = tl."chngcntr";
-  deps."chronology" = tl."chronology";
-  deps."circ" = tl."circ";
-  deps."circledsteps" = tl."circledsteps";
-  deps."circledtext" = tl."circledtext";
-  deps."classics" = tl."classics";
-  deps."classpack" = tl."classpack";
-  deps."clefval" = tl."clefval";
-  deps."cleveref" = tl."cleveref";
-  deps."clicks" = tl."clicks";
-  deps."clipboard" = tl."clipboard";
-  deps."clistmap" = tl."clistmap";
-  deps."clock" = tl."clock";
-  deps."clrdblpg" = tl."clrdblpg";
-  deps."clrstrip" = tl."clrstrip";
-  deps."cmdstring" = tl."cmdstring";
-  deps."cmdtrack" = tl."cmdtrack";
-  deps."cmsd" = tl."cmsd";
-  deps."cnltx" = tl."cnltx";
-  deps."cntformats" = tl."cntformats";
-  deps."cntperchap" = tl."cntperchap";
-  deps."codebox" = tl."codebox";
-  deps."codedoc" = tl."codedoc";
-  deps."codehigh" = tl."codehigh";
-  deps."codepage" = tl."codepage";
-  deps."codesection" = tl."codesection";
-  deps."collcell" = tl."collcell";
-  deps."collectbox" = tl."collectbox";
-  deps."collection-latexrecommended" = tl."collection-latexrecommended";
-  deps."collection-pictures" = tl."collection-pictures";
-  deps."colophon" = tl."colophon";
-  deps."color-edits" = tl."color-edits";
-  deps."colordoc" = tl."colordoc";
-  deps."colorframed" = tl."colorframed";
-  deps."colorinfo" = tl."colorinfo";
-  deps."coloring" = tl."coloring";
-  deps."colorist" = tl."colorist";
-  deps."colorspace" = tl."colorspace";
-  deps."colortab" = tl."colortab";
-  deps."colorwav" = tl."colorwav";
-  deps."colorweb" = tl."colorweb";
-  deps."colourchange" = tl."colourchange";
-  deps."combelow" = tl."combelow";
-  deps."combine" = tl."combine";
-  deps."comma" = tl."comma";
-  deps."commado" = tl."commado";
-  deps."commedit" = tl."commedit";
-  deps."comment" = tl."comment";
-  deps."commonunicode" = tl."commonunicode";
-  deps."competences" = tl."competences";
-  deps."concepts" = tl."concepts";
-  deps."concprog" = tl."concprog";
-  deps."conditext" = tl."conditext";
-  deps."constants" = tl."constants";
-  deps."continue" = tl."continue";
-  deps."contour" = tl."contour";
-  deps."contracard" = tl."contracard";
-  deps."conv-xkv" = tl."conv-xkv";
-  deps."cooking" = tl."cooking";
-  deps."cooking-units" = tl."cooking-units";
-  deps."cool" = tl."cool";
-  deps."coolfn" = tl."coolfn";
-  deps."coollist" = tl."coollist";
-  deps."coolstr" = tl."coolstr";
-  deps."coolthms" = tl."coolthms";
-  deps."cooltooltips" = tl."cooltooltips";
-  deps."coop-writing" = tl."coop-writing";
-  deps."coordsys" = tl."coordsys";
-  deps."copyedit" = tl."copyedit";
-  deps."copyrightbox" = tl."copyrightbox";
-  deps."coseoul" = tl."coseoul";
-  deps."counttexruns" = tl."counttexruns";
-  deps."courseoutline" = tl."courseoutline";
-  deps."coursepaper" = tl."coursepaper";
-  deps."coverpage" = tl."coverpage";
-  deps."cprotect" = tl."cprotect";
-  deps."cprotectinside" = tl."cprotectinside";
-  deps."crbox" = tl."crbox";
-  deps."create-theorem" = tl."create-theorem";
-  deps."crefthe" = tl."crefthe";
-  deps."crossreference" = tl."crossreference";
-  deps."crossreftools" = tl."crossreftools";
-  deps."crumbs" = tl."crumbs";
-  deps."csquotes" = tl."csquotes";
-  deps."css-colors" = tl."css-colors";
-  deps."csvmerge" = tl."csvmerge";
-  deps."csvsimple" = tl."csvsimple";
-  deps."cuisine" = tl."cuisine";
-  deps."currency" = tl."currency";
-  deps."currfile" = tl."currfile";
-  deps."currvita" = tl."currvita";
-  deps."cutwin" = tl."cutwin";
-  deps."cv" = tl."cv";
-  deps."cv4tw" = tl."cv4tw";
-  deps."cweb-latex" = tl."cweb-latex";
-  deps."cyber" = tl."cyber";
-  deps."cybercic" = tl."cybercic";
-  deps."darkmode" = tl."darkmode";
-  deps."dashbox" = tl."dashbox";
-  deps."dashrule" = tl."dashrule";
-  deps."dashundergaps" = tl."dashundergaps";
-  deps."dataref" = tl."dataref";
-  deps."datatool" = tl."datatool";
-  deps."datax" = tl."datax";
-  deps."dateiliste" = tl."dateiliste";
-  deps."datenumber" = tl."datenumber";
-  deps."datestamp" = tl."datestamp";
-  deps."datetime" = tl."datetime";
-  deps."datetime2" = tl."datetime2";
-  deps."datetime2-bahasai" = tl."datetime2-bahasai";
-  deps."datetime2-basque" = tl."datetime2-basque";
-  deps."datetime2-breton" = tl."datetime2-breton";
-  deps."datetime2-bulgarian" = tl."datetime2-bulgarian";
-  deps."datetime2-catalan" = tl."datetime2-catalan";
-  deps."datetime2-croatian" = tl."datetime2-croatian";
-  deps."datetime2-czech" = tl."datetime2-czech";
-  deps."datetime2-danish" = tl."datetime2-danish";
-  deps."datetime2-dutch" = tl."datetime2-dutch";
-  deps."datetime2-en-fulltext" = tl."datetime2-en-fulltext";
-  deps."datetime2-english" = tl."datetime2-english";
-  deps."datetime2-esperanto" = tl."datetime2-esperanto";
-  deps."datetime2-estonian" = tl."datetime2-estonian";
-  deps."datetime2-finnish" = tl."datetime2-finnish";
-  deps."datetime2-french" = tl."datetime2-french";
-  deps."datetime2-galician" = tl."datetime2-galician";
-  deps."datetime2-german" = tl."datetime2-german";
-  deps."datetime2-greek" = tl."datetime2-greek";
-  deps."datetime2-hebrew" = tl."datetime2-hebrew";
-  deps."datetime2-icelandic" = tl."datetime2-icelandic";
-  deps."datetime2-irish" = tl."datetime2-irish";
-  deps."datetime2-it-fulltext" = tl."datetime2-it-fulltext";
-  deps."datetime2-italian" = tl."datetime2-italian";
-  deps."datetime2-latin" = tl."datetime2-latin";
-  deps."datetime2-lsorbian" = tl."datetime2-lsorbian";
-  deps."datetime2-magyar" = tl."datetime2-magyar";
-  deps."datetime2-norsk" = tl."datetime2-norsk";
-  deps."datetime2-polish" = tl."datetime2-polish";
-  deps."datetime2-portuges" = tl."datetime2-portuges";
-  deps."datetime2-romanian" = tl."datetime2-romanian";
-  deps."datetime2-russian" = tl."datetime2-russian";
-  deps."datetime2-samin" = tl."datetime2-samin";
-  deps."datetime2-scottish" = tl."datetime2-scottish";
-  deps."datetime2-serbian" = tl."datetime2-serbian";
-  deps."datetime2-slovak" = tl."datetime2-slovak";
-  deps."datetime2-slovene" = tl."datetime2-slovene";
-  deps."datetime2-spanish" = tl."datetime2-spanish";
-  deps."datetime2-swedish" = tl."datetime2-swedish";
-  deps."datetime2-turkish" = tl."datetime2-turkish";
-  deps."datetime2-ukrainian" = tl."datetime2-ukrainian";
-  deps."datetime2-usorbian" = tl."datetime2-usorbian";
-  deps."datetime2-welsh" = tl."datetime2-welsh";
-  deps."dblfloatfix" = tl."dblfloatfix";
-  deps."dbshow" = tl."dbshow";
-  deps."debate" = tl."debate";
-  deps."decimal" = tl."decimal";
-  deps."decorule" = tl."decorule";
-  deps."delimtxt" = tl."delimtxt";
-  deps."democodetools" = tl."democodetools";
-  deps."denisbdoc" = tl."denisbdoc";
-  deps."diabetes-logbook" = tl."diabetes-logbook";
-  deps."diagbox" = tl."diagbox";
-  deps."diagnose" = tl."diagnose";
-  deps."dialogl" = tl."dialogl";
-  deps."dichokey" = tl."dichokey";
-  deps."dimnum" = tl."dimnum";
-  deps."dinbrief" = tl."dinbrief";
-  deps."directory" = tl."directory";
-  deps."dirtytalk" = tl."dirtytalk";
-  deps."dlfltxb" = tl."dlfltxb";
-  deps."dnaseq" = tl."dnaseq";
-  deps."doclicense" = tl."doclicense";
-  deps."docmfp" = tl."docmfp";
-  deps."docmute" = tl."docmute";
-  deps."docshots" = tl."docshots";
-  deps."doctools" = tl."doctools";
-  deps."documentation" = tl."documentation";
-  deps."docutils" = tl."docutils";
-  deps."doi" = tl."doi";
-  deps."dotarrow" = tl."dotarrow";
-  deps."dotlessi" = tl."dotlessi";
-  deps."dotseqn" = tl."dotseqn";
-  deps."download" = tl."download";
-  deps."dox" = tl."dox";
-  deps."dpfloat" = tl."dpfloat";
-  deps."dprogress" = tl."dprogress";
-  deps."drac" = tl."drac";
-  deps."draftcopy" = tl."draftcopy";
-  deps."draftfigure" = tl."draftfigure";
-  deps."draftwatermark" = tl."draftwatermark";
-  deps."dtk" = tl."dtk";
-  deps."dtxdescribe" = tl."dtxdescribe";
-  deps."dtxgallery" = tl."dtxgallery";
-  deps."ducksay" = tl."ducksay";
-  deps."duckuments" = tl."duckuments";
-  deps."dvdcoll" = tl."dvdcoll";
-  deps."dynamicnumber" = tl."dynamicnumber";
-  deps."dynblocks" = tl."dynblocks";
-  deps."ean13isbn" = tl."ean13isbn";
-  deps."easy" = tl."easy";
-  deps."easy-todo" = tl."easy-todo";
-  deps."easybook" = tl."easybook";
-  deps."easyfig" = tl."easyfig";
-  deps."easyfloats" = tl."easyfloats";
-  deps."easyformat" = tl."easyformat";
-  deps."easylist" = tl."easylist";
-  deps."easyreview" = tl."easyreview";
-  deps."ebezier" = tl."ebezier";
-  deps."ecclesiastic" = tl."ecclesiastic";
-  deps."econlipsum" = tl."econlipsum";
-  deps."ecv" = tl."ecv";
-  deps."ed" = tl."ed";
-  deps."edichokey" = tl."edichokey";
-  deps."edmargin" = tl."edmargin";
-  deps."eemeir" = tl."eemeir";
-  deps."efbox" = tl."efbox";
-  deps."egplot" = tl."egplot";
-  deps."ehhline" = tl."ehhline";
-  deps."einfart" = tl."einfart";
-  deps."elegantbook" = tl."elegantbook";
-  deps."elegantnote" = tl."elegantnote";
-  deps."elegantpaper" = tl."elegantpaper";
-  deps."elements" = tl."elements";
-  deps."ellipsis" = tl."ellipsis";
-  deps."elmath" = tl."elmath";
-  deps."elocalloc" = tl."elocalloc";
-  deps."elpres" = tl."elpres";
-  deps."elzcards" = tl."elzcards";
-  deps."emarks" = tl."emarks";
-  deps."embedall" = tl."embedall";
-  deps."embedfile" = tl."embedfile";
-  deps."embrac" = tl."embrac";
-  deps."emptypage" = tl."emptypage";
-  deps."emulateapj" = tl."emulateapj";
-  deps."endfloat" = tl."endfloat";
-  deps."endheads" = tl."endheads";
-  deps."endnotes" = tl."endnotes";
-  deps."endnotes-hy" = tl."endnotes-hy";
-  deps."engpron" = tl."engpron";
-  deps."engrec" = tl."engrec";
-  deps."enotez" = tl."enotez";
-  deps."enumitem" = tl."enumitem";
-  deps."enumitem-zref" = tl."enumitem-zref";
-  deps."envbig" = tl."envbig";
-  deps."environ" = tl."environ";
-  deps."envlab" = tl."envlab";
-  deps."epigraph" = tl."epigraph";
-  deps."epigraph-keys" = tl."epigraph-keys";
-  deps."epiolmec" = tl."epiolmec";
-  deps."eq-pin2corr" = tl."eq-pin2corr";
-  deps."eqell" = tl."eqell";
-  deps."eqlist" = tl."eqlist";
-  deps."eqnalign" = tl."eqnalign";
-  deps."eqname" = tl."eqname";
-  deps."eqparbox" = tl."eqparbox";
-  deps."errata" = tl."errata";
-  deps."erw-l3" = tl."erw-l3";
-  deps."esami" = tl."esami";
-  deps."esdiff" = tl."esdiff";
-  deps."esieecv" = tl."esieecv";
-  deps."esindex" = tl."esindex";
-  deps."esint" = tl."esint";
-  deps."esint-type1" = tl."esint-type1";
-  deps."etaremune" = tl."etaremune";
-  deps."etextools" = tl."etextools";
-  deps."etl" = tl."etl";
-  deps."etoc" = tl."etoc";
-  deps."eukdate" = tl."eukdate";
-  deps."eulerpx" = tl."eulerpx";
-  deps."europasscv" = tl."europasscv";
-  deps."europecv" = tl."europecv";
-  deps."everyhook" = tl."everyhook";
-  deps."everypage" = tl."everypage";
-  deps."exam" = tl."exam";
-  deps."exam-n" = tl."exam-n";
-  deps."exam-randomizechoices" = tl."exam-randomizechoices";
-  deps."examdesign" = tl."examdesign";
-  deps."example" = tl."example";
-  deps."examplep" = tl."examplep";
-  deps."exceltex" = tl."exceltex";
-  deps."excludeonly" = tl."excludeonly";
-  deps."exercise" = tl."exercise";
-  deps."exercisebank" = tl."exercisebank";
-  deps."exercisepoints" = tl."exercisepoints";
-  deps."exercises" = tl."exercises";
-  deps."exesheet" = tl."exesheet";
-  deps."exframe" = tl."exframe";
-  deps."exp-testopt" = tl."exp-testopt";
-  deps."expdlist" = tl."expdlist";
-  deps."export" = tl."export";
-  deps."exsheets" = tl."exsheets";
-  deps."exsol" = tl."exsol";
-  deps."extract" = tl."extract";
-  deps."facsimile" = tl."facsimile";
-  deps."factura" = tl."factura";
-  deps."familytree" = tl."familytree";
-  deps."fancyhandout" = tl."fancyhandout";
-  deps."fancylabel" = tl."fancylabel";
-  deps."fancynum" = tl."fancynum";
-  deps."fancypar" = tl."fancypar";
-  deps."fancyqr" = tl."fancyqr";
-  deps."fancyslides" = tl."fancyslides";
-  deps."fancytabs" = tl."fancytabs";
-  deps."fancytooltips" = tl."fancytooltips";
-  deps."fbox" = tl."fbox";
-  deps."fcolumn" = tl."fcolumn";
-  deps."fetchcls" = tl."fetchcls";
-  deps."fewerfloatpages" = tl."fewerfloatpages";
-  deps."ffcode" = tl."ffcode";
-  deps."ffslides" = tl."ffslides";
-  deps."fgruler" = tl."fgruler";
-  deps."fifo-stack" = tl."fifo-stack";
-  deps."figsize" = tl."figsize";
-  deps."filecontents" = tl."filecontents";
-  deps."filecontentsdef" = tl."filecontentsdef";
-  deps."filedate" = tl."filedate";
-  deps."fileinfo" = tl."fileinfo";
-  deps."filemod" = tl."filemod";
-  deps."fink" = tl."fink";
-  deps."finstrut" = tl."finstrut";
-  deps."fithesis" = tl."fithesis";
-  deps."fixcmex" = tl."fixcmex";
-  deps."fixfoot" = tl."fixfoot";
-  deps."fixme" = tl."fixme";
-  deps."fixmetodonotes" = tl."fixmetodonotes";
-  deps."fjodor" = tl."fjodor";
-  deps."flabels" = tl."flabels";
-  deps."flacards" = tl."flacards";
-  deps."flagderiv" = tl."flagderiv";
-  deps."flashcards" = tl."flashcards";
-  deps."flashmovie" = tl."flashmovie";
-  deps."flexipage" = tl."flexipage";
-  deps."flipbook" = tl."flipbook";
-  deps."flippdf" = tl."flippdf";
-  deps."floatflt" = tl."floatflt";
-  deps."floatrow" = tl."floatrow";
-  deps."flowfram" = tl."flowfram";
-  deps."fmp" = tl."fmp";
-  deps."fmtcount" = tl."fmtcount";
-  deps."fn2end" = tl."fn2end";
-  deps."fnbreak" = tl."fnbreak";
-  deps."fncychap" = tl."fncychap";
-  deps."fncylab" = tl."fncylab";
-  deps."fnpara" = tl."fnpara";
-  deps."fnpct" = tl."fnpct";
-  deps."fnumprint" = tl."fnumprint";
-  deps."foilhtml" = tl."foilhtml";
-  deps."foliono" = tl."foliono";
-  deps."fontaxes" = tl."fontaxes";
-  deps."fontsetup" = tl."fontsetup";
-  deps."fontsize" = tl."fontsize";
-  deps."fonttable" = tl."fonttable";
-  deps."footmisc" = tl."footmisc";
-  deps."footmisx" = tl."footmisx";
-  deps."footnotebackref" = tl."footnotebackref";
-  deps."footnoterange" = tl."footnoterange";
-  deps."footnpag" = tl."footnpag";
-  deps."forarray" = tl."forarray";
-  deps."foreign" = tl."foreign";
-  deps."forloop" = tl."forloop";
-  deps."formlett" = tl."formlett";
-  deps."forms16be" = tl."forms16be";
-  deps."formular" = tl."formular";
-  deps."fragments" = tl."fragments";
-  deps."frame" = tl."frame";
-  deps."framed" = tl."framed";
-  deps."frankenstein" = tl."frankenstein";
-  deps."frege" = tl."frege";
-  deps."froufrou" = tl."froufrou";
-  deps."ftcap" = tl."ftcap";
-  deps."ftnxtra" = tl."ftnxtra";
-  deps."fullblck" = tl."fullblck";
-  deps."fullminipage" = tl."fullminipage";
-  deps."fullwidth" = tl."fullwidth";
-  deps."functional" = tl."functional";
-  deps."fundus-calligra" = tl."fundus-calligra";
-  deps."fundus-cyr" = tl."fundus-cyr";
-  deps."fundus-sueterlin" = tl."fundus-sueterlin";
-  deps."fvextra" = tl."fvextra";
-  deps."fwlw" = tl."fwlw";
-  deps."g-brief" = tl."g-brief";
-  deps."gatherenum" = tl."gatherenum";
-  deps."gauss" = tl."gauss";
-  deps."gcard" = tl."gcard";
-  deps."gcite" = tl."gcite";
-  deps."gender" = tl."gender";
-  deps."genmpage" = tl."genmpage";
-  deps."gensymb" = tl."gensymb";
-  deps."getfiledate" = tl."getfiledate";
-  deps."getitems" = tl."getitems";
-  deps."gindex" = tl."gindex";
-  deps."ginpenc" = tl."ginpenc";
-  deps."gitfile-info" = tl."gitfile-info";
-  deps."gitinfo" = tl."gitinfo";
-  deps."gitinfo2" = tl."gitinfo2";
-  deps."gitlog" = tl."gitlog";
-  deps."gitstatus" = tl."gitstatus";
-  deps."gitver" = tl."gitver";
-  deps."globalvals" = tl."globalvals";
-  deps."gloss" = tl."gloss";
-  deps."glossaries" = tl."glossaries";
-  deps."glossaries-danish" = tl."glossaries-danish";
-  deps."glossaries-dutch" = tl."glossaries-dutch";
-  deps."glossaries-english" = tl."glossaries-english";
-  deps."glossaries-estonian" = tl."glossaries-estonian";
-  deps."glossaries-extra" = tl."glossaries-extra";
-  deps."glossaries-finnish" = tl."glossaries-finnish";
-  deps."glossaries-french" = tl."glossaries-french";
-  deps."glossaries-german" = tl."glossaries-german";
-  deps."glossaries-irish" = tl."glossaries-irish";
-  deps."glossaries-italian" = tl."glossaries-italian";
-  deps."glossaries-magyar" = tl."glossaries-magyar";
-  deps."glossaries-nynorsk" = tl."glossaries-nynorsk";
-  deps."glossaries-polish" = tl."glossaries-polish";
-  deps."glossaries-portuges" = tl."glossaries-portuges";
-  deps."glossaries-serbian" = tl."glossaries-serbian";
-  deps."glossaries-slovene" = tl."glossaries-slovene";
-  deps."glossaries-spanish" = tl."glossaries-spanish";
-  deps."gmdoc" = tl."gmdoc";
-  deps."gmdoc-enhance" = tl."gmdoc-enhance";
-  deps."gmiflink" = tl."gmiflink";
-  deps."gmutils" = tl."gmutils";
-  deps."gmverb" = tl."gmverb";
-  deps."grabbox" = tl."grabbox";
-  deps."gradient-text" = tl."gradient-text";
-  deps."grading-scheme" = tl."grading-scheme";
-  deps."graphbox" = tl."graphbox";
-  deps."graphicscache" = tl."graphicscache";
-  deps."graphicx-psmin" = tl."graphicx-psmin";
-  deps."graphicxbox" = tl."graphicxbox";
-  deps."graphpaper" = tl."graphpaper";
-  deps."grayhints" = tl."grayhints";
-  deps."grfpaste" = tl."grfpaste";
-  deps."grid" = tl."grid";
-  deps."grid-system" = tl."grid-system";
-  deps."gridpapers" = tl."gridpapers";
-  deps."gridset" = tl."gridset";
-  deps."gridslides" = tl."gridslides";
-  deps."gs1" = tl."gs1";
-  deps."guitlogo" = tl."guitlogo";
-  deps."ha-prosper" = tl."ha-prosper";
-  deps."hackthefootline" = tl."hackthefootline";
-  deps."halloweenmath" = tl."halloweenmath";
-  deps."handin" = tl."handin";
-  deps."handout" = tl."handout";
-  deps."handoutwithnotes" = tl."handoutwithnotes";
-  deps."hang" = tl."hang";
-  deps."hanging" = tl."hanging";
-  deps."hardwrap" = tl."hardwrap";
-  deps."harnon-cv" = tl."harnon-cv";
-  deps."harpoon" = tl."harpoon";
-  deps."hc" = tl."hc";
-  deps."he-she" = tl."he-she";
-  deps."hep-acronym" = tl."hep-acronym";
-  deps."hep-float" = tl."hep-float";
-  deps."hep-math" = tl."hep-math";
-  deps."hep-text" = tl."hep-text";
-  deps."hep-title" = tl."hep-title";
-  deps."hereapplies" = tl."hereapplies";
-  deps."hhtensor" = tl."hhtensor";
-  deps."hideanswer" = tl."hideanswer";
-  deps."highlightlatex" = tl."highlightlatex";
-  deps."histogr" = tl."histogr";
-  deps."hitec" = tl."hitec";
-  deps."hitreport" = tl."hitreport";
-  deps."hletter" = tl."hletter";
-  deps."hobsub" = tl."hobsub";
-  deps."hpsdiss" = tl."hpsdiss";
-  deps."href-ul" = tl."href-ul";
-  deps."hrefhide" = tl."hrefhide";
-  deps."huawei" = tl."huawei";
-  deps."hvextern" = tl."hvextern";
-  deps."hvindex" = tl."hvindex";
-  deps."hvlogos" = tl."hvlogos";
-  deps."hvpygmentex" = tl."hvpygmentex";
-  deps."hvqrurl" = tl."hvqrurl";
-  deps."hwemoji" = tl."hwemoji";
-  deps."hypdestopt" = tl."hypdestopt";
-  deps."hypdoc" = tl."hypdoc";
-  deps."hypdvips" = tl."hypdvips";
-  deps."hyper" = tl."hyper";
-  deps."hyperbar" = tl."hyperbar";
-  deps."hypernat" = tl."hypernat";
-  deps."hyperxmp" = tl."hyperxmp";
-  deps."hyphenat" = tl."hyphenat";
-  deps."identkey" = tl."identkey";
-  deps."idxcmds" = tl."idxcmds";
-  deps."idxlayout" = tl."idxlayout";
-  deps."iexec" = tl."iexec";
-  deps."ifallfalse" = tl."ifallfalse";
-  deps."iffont" = tl."iffont";
-  deps."ifmslide" = tl."ifmslide";
-  deps."ifmtarg" = tl."ifmtarg";
-  deps."ifnextok" = tl."ifnextok";
-  deps."ifoddpage" = tl."ifoddpage";
-  deps."ifthenx" = tl."ifthenx";
-  deps."iitem" = tl."iitem";
-  deps."image-gallery" = tl."image-gallery";
-  deps."imakeidx" = tl."imakeidx";
-  deps."import" = tl."import";
-  deps."incgraph" = tl."incgraph";
-  deps."indextools" = tl."indextools";
-  deps."inline-images" = tl."inline-images";
-  deps."inlinedef" = tl."inlinedef";
-  deps."inlinelabel" = tl."inlinelabel";
-  deps."inputenx" = tl."inputenx";
-  deps."inputtrc" = tl."inputtrc";
-  deps."interactiveworkbook" = tl."interactiveworkbook";
-  deps."interfaces" = tl."interfaces";
-  deps."intopdf" = tl."intopdf";
-  deps."inversepath" = tl."inversepath";
-  deps."invoice" = tl."invoice";
-  deps."invoice-class" = tl."invoice-class";
-  deps."invoice2" = tl."invoice2";
-  deps."iso" = tl."iso";
-  deps."iso10303" = tl."iso10303";
-  deps."isodate" = tl."isodate";
-  deps."isodoc" = tl."isodoc";
-  deps."isonums" = tl."isonums";
-  deps."isopt" = tl."isopt";
-  deps."isorot" = tl."isorot";
-  deps."isotope" = tl."isotope";
-  deps."issuulinks" = tl."issuulinks";
-  deps."iwhdp" = tl."iwhdp";
-  deps."jlabels" = tl."jlabels";
-  deps."jmsdelim" = tl."jmsdelim";
-  deps."jobname-suffix" = tl."jobname-suffix";
-  deps."jslectureplanner" = tl."jslectureplanner";
-  deps."jumplines" = tl."jumplines";
-  deps."jvlisting" = tl."jvlisting";
-  deps."kalendarium" = tl."kalendarium";
-  deps."kantlipsum" = tl."kantlipsum";
-  deps."kerntest" = tl."kerntest";
-  deps."keycommand" = tl."keycommand";
-  deps."keyfloat" = tl."keyfloat";
-  deps."keyindex" = tl."keyindex";
-  deps."keyparse" = tl."keyparse";
-  deps."keyreader" = tl."keyreader";
-  deps."keystroke" = tl."keystroke";
-  deps."keyval2e" = tl."keyval2e";
-  deps."keyvaltable" = tl."keyvaltable";
-  deps."kix" = tl."kix";
-  deps."knowledge" = tl."knowledge";
-  deps."koma-moderncvclassic" = tl."koma-moderncvclassic";
-  deps."koma-script-sfs" = tl."koma-script-sfs";
-  deps."komacv" = tl."komacv";
-  deps."komacv-rg" = tl."komacv-rg";
-  deps."ktv-texdata" = tl."ktv-texdata";
-  deps."l3build" = tl."l3build";
-  deps."labbook" = tl."labbook";
-  deps."labels" = tl."labels";
-  deps."labels4easylist" = tl."labels4easylist";
-  deps."labelschanged" = tl."labelschanged";
-  deps."lambdax" = tl."lambdax";
-  deps."lastpackage" = tl."lastpackage";
-  deps."lastpage" = tl."lastpage";
-  deps."latex-amsmath-dev" = tl."latex-amsmath-dev";
-  deps."latex-base-dev" = tl."latex-base-dev";
-  deps."latex-bin-dev" = tl."latex-bin-dev";
-  deps."latex-firstaid-dev" = tl."latex-firstaid-dev";
-  deps."latex-graphics-dev" = tl."latex-graphics-dev";
-  deps."latex-lab-dev" = tl."latex-lab-dev";
-  deps."latex-tools-dev" = tl."latex-tools-dev";
-  deps."latex-uni8" = tl."latex-uni8";
-  deps."latexcolors" = tl."latexcolors";
-  deps."latexdemo" = tl."latexdemo";
-  deps."latexgit" = tl."latexgit";
-  deps."layouts" = tl."layouts";
-  deps."lazylist" = tl."lazylist";
-  deps."lccaps" = tl."lccaps";
-  deps."lcd" = tl."lcd";
-  deps."lcg" = tl."lcg";
-  deps."leading" = tl."leading";
-  deps."leaflet" = tl."leaflet";
-  deps."lebhart" = tl."lebhart";
-  deps."lectures" = tl."lectures";
-  deps."lectureslides" = tl."lectureslides";
-  deps."leftidx" = tl."leftidx";
-  deps."leftindex" = tl."leftindex";
-  deps."leipzig" = tl."leipzig";
-  deps."lengthconvert" = tl."lengthconvert";
-  deps."lettre" = tl."lettre";
-  deps."lettrine" = tl."lettrine";
-  deps."lewis" = tl."lewis";
-  deps."lhelp" = tl."lhelp";
-  deps."libgreek" = tl."libgreek";
-  deps."limap" = tl."limap";
-  deps."linegoal" = tl."linegoal";
-  deps."linop" = tl."linop";
-  deps."lipsum" = tl."lipsum";
-  deps."lisp-on-tex" = tl."lisp-on-tex";
-  deps."listing" = tl."listing";
-  deps."listingsutf8" = tl."listingsutf8";
-  deps."listlbls" = tl."listlbls";
-  deps."listliketab" = tl."listliketab";
-  deps."listofsymbols" = tl."listofsymbols";
-  deps."lkproof" = tl."lkproof";
-  deps."lmake" = tl."lmake";
-  deps."locality" = tl."locality";
-  deps."logbox" = tl."logbox";
-  deps."logical-markup-utils" = tl."logical-markup-utils";
-  deps."logpap" = tl."logpap";
-  deps."longfbox" = tl."longfbox";
-  deps."longfigure" = tl."longfigure";
-  deps."longnamefilelist" = tl."longnamefilelist";
-  deps."loops" = tl."loops";
-  deps."lsc" = tl."lsc";
-  deps."lstaddons" = tl."lstaddons";
-  deps."lstfiracode" = tl."lstfiracode";
-  deps."lt3graph" = tl."lt3graph";
-  deps."lt3rawobjects" = tl."lt3rawobjects";
-  deps."ltablex" = tl."ltablex";
-  deps."ltabptch" = tl."ltabptch";
-  deps."ltxdockit" = tl."ltxdockit";
-  deps."ltxguidex" = tl."ltxguidex";
-  deps."ltxkeys" = tl."ltxkeys";
-  deps."ltxnew" = tl."ltxnew";
-  deps."ltxtools" = tl."ltxtools";
-  deps."lua-check-hyphen" = tl."lua-check-hyphen";
-  deps."lua-physical" = tl."lua-physical";
-  deps."luatodonotes" = tl."luatodonotes";
-  deps."macrolist" = tl."macrolist";
-  deps."macroswap" = tl."macroswap";
-  deps."magaz" = tl."magaz";
-  deps."magicnum" = tl."magicnum";
-  deps."magicwatermark" = tl."magicwatermark";
-  deps."mailing" = tl."mailing";
-  deps."mailmerge" = tl."mailmerge";
-  deps."makebarcode" = tl."makebarcode";
-  deps."makebase" = tl."makebase";
-  deps."makebox" = tl."makebox";
-  deps."makecell" = tl."makecell";
-  deps."makecirc" = tl."makecirc";
-  deps."makecmds" = tl."makecmds";
-  deps."makecookbook" = tl."makecookbook";
-  deps."makedtx" = tl."makedtx";
-  deps."makeglos" = tl."makeglos";
-  deps."makelabels" = tl."makelabels";
-  deps."makerobust" = tl."makerobust";
-  deps."mandi" = tl."mandi";
-  deps."manfnt" = tl."manfnt";
-  deps."manuscript" = tl."manuscript";
-  deps."manyind" = tl."manyind";
-  deps."marginfit" = tl."marginfit";
-  deps."marginfix" = tl."marginfix";
-  deps."marginnote" = tl."marginnote";
-  deps."markdown" = tl."markdown";
-  deps."mathalpha" = tl."mathalpha";
-  deps."mathastext" = tl."mathastext";
-  deps."mathexam" = tl."mathexam";
-  deps."mathfam256" = tl."mathfam256";
-  deps."mathfont" = tl."mathfont";
-  deps."maybemath" = tl."maybemath";
-  deps."mcaption" = tl."mcaption";
-  deps."mceinleger" = tl."mceinleger";
-  deps."mcexam" = tl."mcexam";
-  deps."mcite" = tl."mcite";
-  deps."mciteplus" = tl."mciteplus";
-  deps."mdframed" = tl."mdframed";
-  deps."media4svg" = tl."media4svg";
-  deps."media9" = tl."media9";
-  deps."medstarbeamer" = tl."medstarbeamer";
-  deps."meetingmins" = tl."meetingmins";
-  deps."memexsupp" = tl."memexsupp";
-  deps."memory" = tl."memory";
-  deps."mensa-tex" = tl."mensa-tex";
-  deps."menu" = tl."menu";
-  deps."menucard" = tl."menucard";
-  deps."menukeys" = tl."menukeys";
-  deps."metalogox" = tl."metalogox";
-  deps."metanorma" = tl."metanorma";
-  deps."metastr" = tl."metastr";
-  deps."method" = tl."method";
-  deps."metre" = tl."metre";
-  deps."mfirstuc" = tl."mfirstuc";
-  deps."mftinc" = tl."mftinc";
-  deps."mi-solns" = tl."mi-solns";
-  deps."midpage" = tl."midpage";
-  deps."mindflow" = tl."mindflow";
-  deps."minibox" = tl."minibox";
-  deps."minidocument" = tl."minidocument";
-  deps."minifp" = tl."minifp";
-  deps."minimalist" = tl."minimalist";
-  deps."minipage-marginpar" = tl."minipage-marginpar";
-  deps."minitoc" = tl."minitoc";
-  deps."minorrevision" = tl."minorrevision";
-  deps."minted" = tl."minted";
-  deps."minutes" = tl."minutes";
-  deps."mla-paper" = tl."mla-paper";
-  deps."mleftright" = tl."mleftright";
-  deps."mlist" = tl."mlist";
-  deps."mmap" = tl."mmap";
-  deps."mnotes" = tl."mnotes";
-  deps."moderncv" = tl."moderncv";
-  deps."modernposter" = tl."modernposter";
-  deps."moderntimeline" = tl."moderntimeline";
-  deps."modref" = tl."modref";
-  deps."modroman" = tl."modroman";
-  deps."modular" = tl."modular";
-  deps."monofill" = tl."monofill";
-  deps."moodle" = tl."moodle";
-  deps."moreenum" = tl."moreenum";
-  deps."morefloats" = tl."morefloats";
-  deps."morehype" = tl."morehype";
-  deps."moresize" = tl."moresize";
-  deps."moreverb" = tl."moreverb";
-  deps."morewrites" = tl."morewrites";
-  deps."movie15" = tl."movie15";
-  deps."mparhack" = tl."mparhack";
-  deps."mpostinl" = tl."mpostinl";
-  deps."msc" = tl."msc";
-  deps."msg" = tl."msg";
-  deps."mslapa" = tl."mslapa";
-  deps."mtgreek" = tl."mtgreek";
-  deps."multenum" = tl."multenum";
-  deps."multiaudience" = tl."multiaudience";
-  deps."multibbl" = tl."multibbl";
-  deps."multicap" = tl."multicap";
-  deps."multicolrule" = tl."multicolrule";
-  deps."multidef" = tl."multidef";
-  deps."multienv" = tl."multienv";
-  deps."multiexpand" = tl."multiexpand";
-  deps."multifootnote" = tl."multifootnote";
-  deps."multilang" = tl."multilang";
-  deps."multiple-choice" = tl."multiple-choice";
-  deps."multirow" = tl."multirow";
-  deps."mversion" = tl."mversion";
-  deps."mwe" = tl."mwe";
-  deps."mycv" = tl."mycv";
-  deps."mylatex" = tl."mylatex";
-  deps."mylatexformat" = tl."mylatexformat";
-  deps."nag" = tl."nag";
-  deps."nameauth" = tl."nameauth";
-  deps."namespc" = tl."namespc";
-  deps."ncclatex" = tl."ncclatex";
-  deps."ncctools" = tl."ncctools";
-  deps."needspace" = tl."needspace";
-  deps."nestquot" = tl."nestquot";
-  deps."newcommand" = tl."newcommand";
-  deps."newenviron" = tl."newenviron";
-  deps."newfile" = tl."newfile";
-  deps."newlfm" = tl."newlfm";
-  deps."newspaper" = tl."newspaper";
-  deps."newunicodechar" = tl."newunicodechar";
-  deps."newvbtm" = tl."newvbtm";
-  deps."newverbs" = tl."newverbs";
-  deps."nextpage" = tl."nextpage";
-  deps."nfssext-cfr" = tl."nfssext-cfr";
-  deps."nicefilelist" = tl."nicefilelist";
-  deps."niceframe" = tl."niceframe";
-  deps."nicetext" = tl."nicetext";
-  deps."nidanfloat" = tl."nidanfloat";
-  deps."ninecolors" = tl."ninecolors";
-  deps."nlctdoc" = tl."nlctdoc";
-  deps."noconflict" = tl."noconflict";
-  deps."noindentafter" = tl."noindentafter";
-  deps."noitcrul" = tl."noitcrul";
-  deps."nolbreaks" = tl."nolbreaks";
-  deps."nomencl" = tl."nomencl";
-  deps."nomentbl" = tl."nomentbl";
-  deps."nonfloat" = tl."nonfloat";
-  deps."nonumonpart" = tl."nonumonpart";
-  deps."nopageno" = tl."nopageno";
-  deps."normalcolor" = tl."normalcolor";
-  deps."notes" = tl."notes";
-  deps."notespages" = tl."notespages";
-  deps."notestex" = tl."notestex";
-  deps."notoccite" = tl."notoccite";
-  deps."nowidow" = tl."nowidow";
-  deps."nox" = tl."nox";
-  deps."ntheorem" = tl."ntheorem";
-  deps."numberedblock" = tl."numberedblock";
-  deps."numname" = tl."numname";
-  deps."numprint" = tl."numprint";
-  deps."numspell" = tl."numspell";
-  deps."ocg-p" = tl."ocg-p";
-  deps."ocgx" = tl."ocgx";
-  deps."ocgx2" = tl."ocgx2";
-  deps."ocr-latex" = tl."ocr-latex";
-  deps."octavo" = tl."octavo";
-  deps."oldstyle" = tl."oldstyle";
-  deps."onlyamsmath" = tl."onlyamsmath";
-  deps."opcit" = tl."opcit";
-  deps."opencolor" = tl."opencolor";
-  deps."optidef" = tl."optidef";
-  deps."optional" = tl."optional";
-  deps."options" = tl."options";
-  deps."orcidlink" = tl."orcidlink";
-  deps."orientation" = tl."orientation";
-  deps."outline" = tl."outline";
-  deps."outliner" = tl."outliner";
-  deps."outlines" = tl."outlines";
-  deps."outlining" = tl."outlining";
-  deps."overlays" = tl."overlays";
-  deps."overpic" = tl."overpic";
-  deps."padcount" = tl."padcount";
-  deps."pagecolor" = tl."pagecolor";
-  deps."pagecont" = tl."pagecont";
-  deps."pagegrid" = tl."pagegrid";
-  deps."pagenote" = tl."pagenote";
-  deps."pagerange" = tl."pagerange";
-  deps."pageslts" = tl."pageslts";
-  deps."palette" = tl."palette";
-  deps."pangram" = tl."pangram";
-  deps."paper" = tl."paper";
-  deps."papercdcase" = tl."papercdcase";
-  deps."papermas" = tl."papermas";
-  deps."papertex" = tl."papertex";
-  deps."paracol" = tl."paracol";
-  deps."parades" = tl."parades";
-  deps."paralist" = tl."paralist";
-  deps."paresse" = tl."paresse";
-  deps."parnotes" = tl."parnotes";
-  deps."parsa" = tl."parsa";
-  deps."parselines" = tl."parselines";
-  deps."pas-cours" = tl."pas-cours";
-  deps."pas-cv" = tl."pas-cv";
-  deps."pas-tableur" = tl."pas-tableur";
-  deps."patch" = tl."patch";
-  deps."patchcmd" = tl."patchcmd";
-  deps."pauldoc" = tl."pauldoc";
-  deps."pawpict" = tl."pawpict";
-  deps."pax" = tl."pax";
-  deps."pbalance" = tl."pbalance";
-  deps."pbox" = tl."pbox";
-  deps."pbsheet" = tl."pbsheet";
-  deps."pdf14" = tl."pdf14";
-  deps."pdfcol" = tl."pdfcol";
-  deps."pdfcolmk" = tl."pdfcolmk";
-  deps."pdfcomment" = tl."pdfcomment";
-  deps."pdfcprot" = tl."pdfcprot";
-  deps."pdfmarginpar" = tl."pdfmarginpar";
-  deps."pdfoverlay" = tl."pdfoverlay";
-  deps."pdfpagediff" = tl."pdfpagediff";
-  deps."pdfpc" = tl."pdfpc";
-  deps."pdfpc-movie" = tl."pdfpc-movie";
-  deps."pdfprivacy" = tl."pdfprivacy";
-  deps."pdfreview" = tl."pdfreview";
-  deps."pdfscreen" = tl."pdfscreen";
-  deps."pdfslide" = tl."pdfslide";
-  deps."pdfsync" = tl."pdfsync";
-  deps."pdfwin" = tl."pdfwin";
-  deps."pdfx" = tl."pdfx";
-  deps."pecha" = tl."pecha";
-  deps."perltex" = tl."perltex";
-  deps."permute" = tl."permute";
-  deps."petiteannonce" = tl."petiteannonce";
-  deps."pgfmath-xfp" = tl."pgfmath-xfp";
-  deps."phfcc" = tl."phfcc";
-  deps."phfextendedabstract" = tl."phfextendedabstract";
-  deps."phffullpagefigure" = tl."phffullpagefigure";
-  deps."phfnote" = tl."phfnote";
-  deps."phfparen" = tl."phfparen";
-  deps."phfqit" = tl."phfqit";
-  deps."phfquotetext" = tl."phfquotetext";
-  deps."phfsvnwatermark" = tl."phfsvnwatermark";
-  deps."phfthm" = tl."phfthm";
-  deps."philex" = tl."philex";
-  deps."phonenumbers" = tl."phonenumbers";
-  deps."photo" = tl."photo";
-  deps."photobook" = tl."photobook";
-  deps."picture" = tl."picture";
-  deps."piff" = tl."piff";
-  deps."pkgloader" = tl."pkgloader";
-  deps."placeins" = tl."placeins";
-  deps."plantslabels" = tl."plantslabels";
-  deps."plates" = tl."plates";
-  deps."plweb" = tl."plweb";
-  deps."pmboxdraw" = tl."pmboxdraw";
-  deps."polynom" = tl."polynom";
-  deps."polynomial" = tl."polynomial";
-  deps."polytable" = tl."polytable";
-  deps."postcards" = tl."postcards";
-  deps."poster-mac" = tl."poster-mac";
-  deps."postnotes" = tl."postnotes";
-  deps."powerdot" = tl."powerdot";
-  deps."ppr-prv" = tl."ppr-prv";
-  deps."ppt-slides" = tl."ppt-slides";
-  deps."practicalreports" = tl."practicalreports";
-  deps."precattl" = tl."precattl";
-  deps."prelim2e" = tl."prelim2e";
-  deps."preprint" = tl."preprint";
-  deps."pressrelease" = tl."pressrelease";
-  deps."prettyref" = tl."prettyref";
-  deps."prettytok" = tl."prettytok";
-  deps."preview" = tl."preview";
-  deps."printlen" = tl."printlen";
-  deps."probsoln" = tl."probsoln";
-  deps."program" = tl."program";
-  deps."progress" = tl."progress";
-  deps."progressbar" = tl."progressbar";
-  deps."projlib" = tl."projlib";
-  deps."proofread" = tl."proofread";
-  deps."properties" = tl."properties";
-  deps."prosper" = tl."prosper";
-  deps."protex" = tl."protex";
-  deps."protocol" = tl."protocol";
-  deps."psfragx" = tl."psfragx";
-  deps."pstool" = tl."pstool";
-  deps."pstring" = tl."pstring";
-  deps."pxgreeks" = tl."pxgreeks";
-  deps."pygmentex" = tl."pygmentex";
-  deps."python" = tl."python";
-  deps."pythonimmediate" = tl."pythonimmediate";
-  deps."qcm" = tl."qcm";
-  deps."qstest" = tl."qstest";
-  deps."qsymbols" = tl."qsymbols";
-  deps."quicktype" = tl."quicktype";
-  deps."quiz2socrative" = tl."quiz2socrative";
-  deps."quotchap" = tl."quotchap";
-  deps."quoting" = tl."quoting";
-  deps."quotmark" = tl."quotmark";
-  deps."ran_toks" = tl."ran_toks";
-  deps."randtext" = tl."randtext";
-  deps."rccol" = tl."rccol";
-  deps."rcs-multi" = tl."rcs-multi";
-  deps."rcsinfo" = tl."rcsinfo";
-  deps."readablecv" = tl."readablecv";
-  deps."readarray" = tl."readarray";
-  deps."realboxes" = tl."realboxes";
-  deps."recipe" = tl."recipe";
-  deps."recipebook" = tl."recipebook";
-  deps."recipecard" = tl."recipecard";
-  deps."rectopma" = tl."rectopma";
-  deps."refcheck" = tl."refcheck";
-  deps."refenums" = tl."refenums";
-  deps."reflectgraphics" = tl."reflectgraphics";
-  deps."refman" = tl."refman";
-  deps."refstyle" = tl."refstyle";
-  deps."regcount" = tl."regcount";
-  deps."regexpatch" = tl."regexpatch";
-  deps."register" = tl."register";
-  deps."regstats" = tl."regstats";
-  deps."relenc" = tl."relenc";
-  deps."relsize" = tl."relsize";
-  deps."repeatindex" = tl."repeatindex";
-  deps."repltext" = tl."repltext";
-  deps."rescansync" = tl."rescansync";
-  deps."returntogrid" = tl."returntogrid";
-  deps."rgltxdoc" = tl."rgltxdoc";
-  deps."rjlparshap" = tl."rjlparshap";
-  deps."rlepsf" = tl."rlepsf";
-  deps."rmpage" = tl."rmpage";
-  deps."robustcommand" = tl."robustcommand";
-  deps."robustindex" = tl."robustindex";
-  deps."romanbar" = tl."romanbar";
-  deps."romanbarpagenumber" = tl."romanbarpagenumber";
-  deps."romanneg" = tl."romanneg";
-  deps."romannum" = tl."romannum";
-  deps."rotfloat" = tl."rotfloat";
-  deps."rotpages" = tl."rotpages";
-  deps."roundbox" = tl."roundbox";
-  deps."rterface" = tl."rterface";
-  deps."rtkinenc" = tl."rtkinenc";
-  deps."rulerbox" = tl."rulerbox";
-  deps."rulercompass" = tl."rulercompass";
-  deps."runcode" = tl."runcode";
-  deps."rvwrite" = tl."rvwrite";
-  deps."sanitize-umlaut" = tl."sanitize-umlaut";
-  deps."sauerj" = tl."sauerj";
-  deps."saveenv" = tl."saveenv";
-  deps."savefnmark" = tl."savefnmark";
-  deps."savesym" = tl."savesym";
-  deps."savetrees" = tl."savetrees";
-  deps."scale" = tl."scale";
-  deps."scalebar" = tl."scalebar";
-  deps."scalerel" = tl."scalerel";
-  deps."scanpages" = tl."scanpages";
-  deps."schedule" = tl."schedule";
-  deps."schooldocs" = tl."schooldocs";
-  deps."scontents" = tl."scontents";
-  deps."scrambledenvs" = tl."scrambledenvs";
-  deps."scrlayer-fancyhdr" = tl."scrlayer-fancyhdr";
-  deps."scrlttr2copy" = tl."scrlttr2copy";
-  deps."sdaps" = tl."sdaps";
-  deps."sdrt" = tl."sdrt";
-  deps."secdot" = tl."secdot";
-  deps."secnum" = tl."secnum";
-  deps."sectionbox" = tl."sectionbox";
-  deps."sectionbreak" = tl."sectionbreak";
-  deps."sectsty" = tl."sectsty";
-  deps."seealso" = tl."seealso";
-  deps."selectp" = tl."selectp";
-  deps."selinput" = tl."selinput";
-  deps."semantex" = tl."semantex";
-  deps."semantic" = tl."semantic";
-  deps."semantic-markup" = tl."semantic-markup";
-  deps."semesterplanner" = tl."semesterplanner";
-  deps."semioneside" = tl."semioneside";
-  deps."semproc" = tl."semproc";
-  deps."semtex" = tl."semtex";
-  deps."sepfootnotes" = tl."sepfootnotes";
-  deps."seqsplit" = tl."seqsplit";
-  deps."sesstime" = tl."sesstime";
-  deps."sf298" = tl."sf298";
-  deps."sffms" = tl."sffms";
-  deps."sfmath" = tl."sfmath";
-  deps."shadethm" = tl."shadethm";
-  deps."shadow" = tl."shadow";
-  deps."shadowtext" = tl."shadowtext";
-  deps."shapepar" = tl."shapepar";
-  deps."shdoc" = tl."shdoc";
-  deps."shipunov" = tl."shipunov";
-  deps."shorttoc" = tl."shorttoc";
-  deps."show2e" = tl."show2e";
-  deps."showcharinbox" = tl."showcharinbox";
-  deps."showdim" = tl."showdim";
-  deps."showexpl" = tl."showexpl";
-  deps."showlabels" = tl."showlabels";
-  deps."sidecap" = tl."sidecap";
-  deps."sidenotes" = tl."sidenotes";
-  deps."sidenotesplus" = tl."sidenotesplus";
-  deps."silence" = tl."silence";
-  deps."sillypage" = tl."sillypage";
-  deps."simplecd" = tl."simplecd";
-  deps."simplecv" = tl."simplecv";
-  deps."simpleinvoice" = tl."simpleinvoice";
-  deps."simplivre" = tl."simplivre";
-  deps."sitem" = tl."sitem";
-  deps."skb" = tl."skb";
-  deps."skdoc" = tl."skdoc";
-  deps."skeldoc" = tl."skeldoc";
-  deps."skeycommand" = tl."skeycommand";
-  deps."skeyval" = tl."skeyval";
-  deps."skills" = tl."skills";
-  deps."skrapport" = tl."skrapport";
-  deps."slantsc" = tl."slantsc";
-  deps."smalltableof" = tl."smalltableof";
-  deps."smart-eqn" = tl."smart-eqn";
-  deps."smartref" = tl."smartref";
-  deps."smartunits" = tl."smartunits";
-  deps."snapshot" = tl."snapshot";
-  deps."snaptodo" = tl."snaptodo";
-  deps."snotez" = tl."snotez";
-  deps."soulpos" = tl."soulpos";
-  deps."soulutf8" = tl."soulutf8";
-  deps."spacingtricks" = tl."spacingtricks";
-  deps."spark-otf" = tl."spark-otf";
-  deps."sparklines" = tl."sparklines";
-  deps."sphack" = tl."sphack";
-  deps."splitindex" = tl."splitindex";
-  deps."spot" = tl."spot";
-  deps."spotcolor" = tl."spotcolor";
-  deps."spreadtab" = tl."spreadtab";
-  deps."spverbatim" = tl."spverbatim";
-  deps."srbook-mem" = tl."srbook-mem";
-  deps."srcltx" = tl."srcltx";
-  deps."sseq" = tl."sseq";
-  deps."sslides" = tl."sslides";
-  deps."stack" = tl."stack";
-  deps."stackengine" = tl."stackengine";
-  deps."standalone" = tl."standalone";
-  deps."stdclsdv" = tl."stdclsdv";
-  deps."stdpage" = tl."stdpage";
-  deps."stealcaps" = tl."stealcaps";
-  deps."stex" = tl."stex";
-  deps."storebox" = tl."storebox";
-  deps."storecmd" = tl."storecmd";
-  deps."stringstrings" = tl."stringstrings";
-  deps."sttools" = tl."sttools";
-  deps."stubs" = tl."stubs";
-  deps."studenthandouts" = tl."studenthandouts";
-  deps."styledcmd" = tl."styledcmd";
-  deps."subdepth" = tl."subdepth";
-  deps."subdocs" = tl."subdocs";
-  deps."subeqn" = tl."subeqn";
-  deps."subeqnarray" = tl."subeqnarray";
-  deps."subfigmat" = tl."subfigmat";
-  deps."subfigure" = tl."subfigure";
-  deps."subfiles" = tl."subfiles";
-  deps."subfloat" = tl."subfloat";
-  deps."substitutefont" = tl."substitutefont";
-  deps."substr" = tl."substr";
-  deps."supertabular" = tl."supertabular";
-  deps."suppose" = tl."suppose";
-  deps."svg" = tl."svg";
-  deps."svgcolor" = tl."svgcolor";
-  deps."svn" = tl."svn";
-  deps."svn-multi" = tl."svn-multi";
-  deps."svn-prov" = tl."svn-prov";
-  deps."svninfo" = tl."svninfo";
-  deps."swfigure" = tl."swfigure";
-  deps."swungdash" = tl."swungdash";
-  deps."syntax" = tl."syntax";
-  deps."syntrace" = tl."syntrace";
-  deps."synttree" = tl."synttree";
-  deps."tabbing" = tl."tabbing";
-  deps."tabfigures" = tl."tabfigures";
-  deps."tableaux" = tl."tableaux";
-  deps."tablefootnote" = tl."tablefootnote";
-  deps."tableof" = tl."tableof";
-  deps."tablestyles" = tl."tablestyles";
-  deps."tablists" = tl."tablists";
-  deps."tabls" = tl."tabls";
-  deps."tablvar" = tl."tablvar";
-  deps."tabstackengine" = tl."tabstackengine";
-  deps."tabto-ltx" = tl."tabto-ltx";
-  deps."tabu" = tl."tabu";
-  deps."tabularborder" = tl."tabularborder";
-  deps."tabularcalc" = tl."tabularcalc";
-  deps."tabularew" = tl."tabularew";
-  deps."tabularray" = tl."tabularray";
-  deps."tabulary" = tl."tabulary";
-  deps."tagging" = tl."tagging";
-  deps."tagpair" = tl."tagpair";
-  deps."tagpdf" = tl."tagpdf";
-  deps."talk" = tl."talk";
-  deps."tamefloats" = tl."tamefloats";
-  deps."tasks" = tl."tasks";
-  deps."tcldoc" = tl."tcldoc";
-  deps."tcolorbox" = tl."tcolorbox";
-  deps."tdclock" = tl."tdclock";
-  deps."technics" = tl."technics";
-  deps."ted" = tl."ted";
-  deps."templatetools" = tl."templatetools";
-  deps."termcal" = tl."termcal";
-  deps."termlist" = tl."termlist";
-  deps."termsim" = tl."termsim";
-  deps."testhyphens" = tl."testhyphens";
-  deps."testidx" = tl."testidx";
-  deps."tex-label" = tl."tex-label";
-  deps."tex-locale" = tl."tex-locale";
-  deps."texlogos" = tl."texlogos";
-  deps."texmate" = tl."texmate";
-  deps."texments" = tl."texments";
-  deps."texpower" = tl."texpower";
-  deps."texshade" = tl."texshade";
-  deps."texsurgery" = tl."texsurgery";
-  deps."textcsc" = tl."textcsc";
-  deps."textfit" = tl."textfit";
-  deps."textmerg" = tl."textmerg";
-  deps."textpos" = tl."textpos";
-  deps."textualicomma" = tl."textualicomma";
-  deps."texvc" = tl."texvc";
-  deps."theoremref" = tl."theoremref";
-  deps."thinsp" = tl."thinsp";
-  deps."thmtools" = tl."thmtools";
-  deps."threadcol" = tl."threadcol";
-  deps."threeparttable" = tl."threeparttable";
-  deps."threeparttablex" = tl."threeparttablex";
-  deps."thumb" = tl."thumb";
-  deps."thumbs" = tl."thumbs";
-  deps."thumby" = tl."thumby";
-  deps."ticket" = tl."ticket";
-  deps."tipauni" = tl."tipauni";
-  deps."titlecaps" = tl."titlecaps";
-  deps."titlefoot" = tl."titlefoot";
-  deps."titlepic" = tl."titlepic";
-  deps."titleref" = tl."titleref";
-  deps."titlesec" = tl."titlesec";
-  deps."titling" = tl."titling";
-  deps."to-be-determined" = tl."to-be-determined";
-  deps."tocbibind" = tl."tocbibind";
-  deps."tocdata" = tl."tocdata";
-  deps."tocloft" = tl."tocloft";
-  deps."tocvsec2" = tl."tocvsec2";
-  deps."todo" = tl."todo";
-  deps."todonotes" = tl."todonotes";
-  deps."tokcycle" = tl."tokcycle";
-  deps."tokenizer" = tl."tokenizer";
-  deps."toolbox" = tl."toolbox";
-  deps."topfloat" = tl."topfloat";
-  deps."topiclongtable" = tl."topiclongtable";
-  deps."totalcount" = tl."totalcount";
-  deps."totcount" = tl."totcount";
-  deps."totpages" = tl."totpages";
-  deps."translations" = tl."translations";
-  deps."transparent" = tl."transparent";
-  deps."trfsigns" = tl."trfsigns";
-  deps."trimspaces" = tl."trimspaces";
-  deps."trivfloat" = tl."trivfloat";
-  deps."trsym" = tl."trsym";
-  deps."truncate" = tl."truncate";
-  deps."tucv" = tl."tucv";
-  deps."turnthepage" = tl."turnthepage";
-  deps."twoinone" = tl."twoinone";
-  deps."twoup" = tl."twoup";
-  deps."txgreeks" = tl."txgreeks";
-  deps."type1cm" = tl."type1cm";
-  deps."typed-checklist" = tl."typed-checklist";
-  deps."typeface" = tl."typeface";
-  deps."typoaid" = tl."typoaid";
-  deps."typogrid" = tl."typogrid";
-  deps."uassign" = tl."uassign";
-  deps."ucs" = tl."ucs";
-  deps."uebungsblatt" = tl."uebungsblatt";
-  deps."umoline" = tl."umoline";
-  deps."underlin" = tl."underlin";
-  deps."underoverlap" = tl."underoverlap";
-  deps."undolabl" = tl."undolabl";
-  deps."uni-titlepage" = tl."uni-titlepage";
-  deps."unicodefonttable" = tl."unicodefonttable";
-  deps."unisc" = tl."unisc";
-  deps."unitconv" = tl."unitconv";
-  deps."units" = tl."units";
-  deps."unravel" = tl."unravel";
-  deps."upmethodology" = tl."upmethodology";
-  deps."upquote" = tl."upquote";
-  deps."uri" = tl."uri";
-  deps."ushort" = tl."ushort";
-  deps."uspace" = tl."uspace";
-  deps."utf8add" = tl."utf8add";
-  deps."uwmslide" = tl."uwmslide";
-  deps."variablelm" = tl."variablelm";
-  deps."varindex" = tl."varindex";
-  deps."varsfromjobname" = tl."varsfromjobname";
-  deps."varwidth" = tl."varwidth";
-  deps."vcell" = tl."vcell";
-  deps."vdmlisting" = tl."vdmlisting";
-  deps."verbasef" = tl."verbasef";
-  deps."verbatimbox" = tl."verbatimbox";
-  deps."verbatimcopy" = tl."verbatimcopy";
-  deps."verbdef" = tl."verbdef";
-  deps."verbments" = tl."verbments";
-  deps."verifiche" = tl."verifiche";
-  deps."version" = tl."version";
-  deps."versions" = tl."versions";
-  deps."versonotes" = tl."versonotes";
-  deps."vertbars" = tl."vertbars";
-  deps."vgrid" = tl."vgrid";
-  deps."vhistory" = tl."vhistory";
-  deps."vmargin" = tl."vmargin";
-  deps."volumes" = tl."volumes";
-  deps."vpe" = tl."vpe";
-  deps."vruler" = tl."vruler";
-  deps."vtable" = tl."vtable";
-  deps."vwcol" = tl."vwcol";
-  deps."wallcalendar" = tl."wallcalendar";
-  deps."wallpaper" = tl."wallpaper";
-  deps."warning" = tl."warning";
-  deps."warpcol" = tl."warpcol";
-  deps."was" = tl."was";
-  deps."webquiz" = tl."webquiz";
-  deps."widetable" = tl."widetable";
-  deps."widows-and-orphans" = tl."widows-and-orphans";
-  deps."williams" = tl."williams";
-  deps."willowtreebook" = tl."willowtreebook";
-  deps."withargs" = tl."withargs";
-  deps."wordcount" = tl."wordcount";
-  deps."wordlike" = tl."wordlike";
-  deps."worksheet" = tl."worksheet";
-  deps."wrapfig" = tl."wrapfig";
-  deps."wrapfig2" = tl."wrapfig2";
-  deps."wrapstuff" = tl."wrapstuff";
-  deps."wtref" = tl."wtref";
-  deps."xargs" = tl."xargs";
-  deps."xassoccnt" = tl."xassoccnt";
-  deps."xbmks" = tl."xbmks";
-  deps."xcntperchap" = tl."xcntperchap";
-  deps."xcolor-material" = tl."xcolor-material";
-  deps."xcolor-solarized" = tl."xcolor-solarized";
-  deps."xcomment" = tl."xcomment";
-  deps."xcookybooky" = tl."xcookybooky";
-  deps."xcpdftips" = tl."xcpdftips";
-  deps."xdoc" = tl."xdoc";
-  deps."xellipsis" = tl."xellipsis";
-  deps."xfakebold" = tl."xfakebold";
-  deps."xfor" = tl."xfor";
-  deps."xhfill" = tl."xhfill";
-  deps."xifthen" = tl."xifthen";
-  deps."xint" = tl."xint";
-  deps."xkcdcolors" = tl."xkcdcolors";
-  deps."xltabular" = tl."xltabular";
-  deps."xmpincl" = tl."xmpincl";
-  deps."xnewcommand" = tl."xnewcommand";
-  deps."xoptarg" = tl."xoptarg";
-  deps."xpatch" = tl."xpatch";
-  deps."xpeek" = tl."xpeek";
-  deps."xprintlen" = tl."xprintlen";
-  deps."xpunctuate" = tl."xpunctuate";
-  deps."xsavebox" = tl."xsavebox";
-  deps."xsim" = tl."xsim";
-  deps."xstring" = tl."xstring";
-  deps."xtab" = tl."xtab";
-  deps."xurl" = tl."xurl";
-  deps."xwatermark" = tl."xwatermark";
-  deps."xytree" = tl."xytree";
-  deps."yafoot" = tl."yafoot";
-  deps."yagusylo" = tl."yagusylo";
-  deps."yaletter" = tl."yaletter";
-  deps."ycbook" = tl."ycbook";
-  deps."ydoc" = tl."ydoc";
-  deps."yplan" = tl."yplan";
-  deps."zebra-goodies" = tl."zebra-goodies";
-  deps."zed-csp" = tl."zed-csp";
-  deps."ziffer" = tl."ziffer";
-  deps."zref" = tl."zref";
-  deps."zref-check" = tl."zref-check";
-  deps."zref-clever" = tl."zref-clever";
-  deps."zref-vario" = tl."zref-vario";
-  deps."zwgetfdate" = tl."zwgetfdate";
-  deps."zwpagelayout" = tl."zwpagelayout";
+  deps = [
+    "2up"
+    "a0poster"
+    "a4wide"
+    "a5comb"
+    "abraces"
+    "abspos"
+    "abstract"
+    "accessibility"
+    "accsupp"
+    "achemso"
+    "acro"
+    "acronym"
+    "acroterm"
+    "actuarialangle"
+    "actuarialsymbol"
+    "addfont"
+    "addlines"
+    "adjmulticol"
+    "adjustbox"
+    "adrconv"
+    "advdate"
+    "akktex"
+    "akletter"
+    "alertmessage"
+    "alnumsec"
+    "alphalph"
+    "alterqcm"
+    "altfont"
+    "altsubsup"
+    "amsaddr"
+    "animate"
+    "anonchap"
+    "answers"
+    "anyfontsize"
+    "appendix"
+    "appendixnumberbeamer"
+    "apptools"
+    "arabicfront"
+    "arcs"
+    "arraycols"
+    "arrayjobx"
+    "arraysort"
+    "arydshln"
+    "asciilist"
+    "askinclude"
+    "assignment"
+    "assoccnt"
+    "association-matrix"
+    "atenddvi"
+    "atendofenv"
+    "attachfile"
+    "aurl"
+    "authoraftertitle"
+    "authorarchive"
+    "authorindex"
+    "autofancyhdr"
+    "autonum"
+    "autopdf"
+    "autopuncitems"
+    "avremu"
+    "axessibility"
+    "background"
+    "bankstatement"
+    "bashful"
+    "basicarith"
+    "bchart"
+    "beamer-rl"
+    "beamer2thesis"
+    "beamerappendixnote"
+    "beameraudience"
+    "beamerauxtheme"
+    "beamercolorthemeowl"
+    "beamerdarkthemes"
+    "beamerposter"
+    "beamersubframe"
+    "beamertheme-arguelles"
+    "beamertheme-cuerna"
+    "beamertheme-detlevcm"
+    "beamertheme-epyt"
+    "beamertheme-focus"
+    "beamertheme-light"
+    "beamertheme-metropolis"
+    "beamertheme-npbt"
+    "beamertheme-phnompenh"
+    "beamertheme-pure-minimalistic"
+    "beamertheme-saintpetersburg"
+    "beamertheme-simpledarkblue"
+    "beamertheme-simpleplus"
+    "beamertheme-tcolorbox"
+    "beamertheme-trigon"
+    "beamertheme-upenn-bc"
+    "beamerthemeamurmaple"
+    "beamerthemejltree"
+    "beamerthemelalic"
+    "beamerthemenirma"
+    "beamerthemenord"
+    "bearwear"
+    "beaulivre"
+    "beton"
+    "bewerbung"
+    "bez123"
+    "bhcexam"
+    "bibletext"
+    "bigfoot"
+    "bigints"
+    "bilingualpages"
+    "biochemistry-colors"
+    "bithesis"
+    "bizcard"
+    "blindtext"
+    "blkarray"
+    "block"
+    "blowup"
+    "bnumexpr"
+    "boites"
+    "bold-extra"
+    "book-of-common-prayer"
+    "bookcover"
+    "bookest"
+    "booklet"
+    "bookshelf"
+    "boolexpr"
+    "bophook"
+    "boxedminipage"
+    "boxhandler"
+    "bracketkey"
+    "braket"
+    "breakurl"
+    "bubblesort"
+    "bullcntr"
+    "bxcalc"
+    "bxdpx-beamer"
+    "bxdvidriver"
+    "bxenclose"
+    "bxnewfont"
+    "bxpapersize"
+    "bxpdfver"
+    "bxtexlogo"
+    "calcage"
+    "calctab"
+    "calculator"
+    "calrsfs"
+    "cals"
+    "calxxxx-yyyy"
+    "cancel"
+    "canoniclayout"
+    "capt-of"
+    "captcont"
+    "captdef"
+    "carbohydrates"
+    "cases"
+    "casyl"
+    "catchfile"
+    "catchfilebetweentags"
+    "catechis"
+    "catoptions"
+    "cbcoptic"
+    "ccaption"
+    "cclicenses"
+    "cd"
+    "cd-cover"
+    "cdcmd"
+    "cdpbundl"
+    "cellprops"
+    "cellspace"
+    "censor"
+    "centeredline"
+    "centerlastline"
+    "changebar"
+    "changelayout"
+    "changelog"
+    "changepage"
+    "changes"
+    "chappg"
+    "chapterfolder"
+    "cheatsheet"
+    "checkend"
+    "chet"
+    "chextras"
+    "childdoc"
+    "chkfloat"
+    "chletter"
+    "chngcntr"
+    "chronology"
+    "circ"
+    "circledsteps"
+    "circledtext"
+    "classics"
+    "classpack"
+    "clefval"
+    "cleveref"
+    "clicks"
+    "clipboard"
+    "clistmap"
+    "clock"
+    "clrdblpg"
+    "clrstrip"
+    "cmdstring"
+    "cmdtrack"
+    "cmsd"
+    "cnltx"
+    "cntformats"
+    "cntperchap"
+    "codebox"
+    "codedoc"
+    "codehigh"
+    "codepage"
+    "codesection"
+    "collcell"
+    "collectbox"
+    "collection-latexrecommended"
+    "collection-pictures"
+    "colophon"
+    "color-edits"
+    "colordoc"
+    "colorframed"
+    "colorinfo"
+    "coloring"
+    "colorist"
+    "colorspace"
+    "colortab"
+    "colorwav"
+    "colorweb"
+    "colourchange"
+    "combelow"
+    "combine"
+    "comma"
+    "commado"
+    "commedit"
+    "comment"
+    "commonunicode"
+    "competences"
+    "concepts"
+    "concprog"
+    "conditext"
+    "constants"
+    "continue"
+    "contour"
+    "contracard"
+    "conv-xkv"
+    "cooking"
+    "cooking-units"
+    "cool"
+    "coolfn"
+    "coollist"
+    "coolstr"
+    "coolthms"
+    "cooltooltips"
+    "coop-writing"
+    "coordsys"
+    "copyedit"
+    "copyrightbox"
+    "coseoul"
+    "counttexruns"
+    "courseoutline"
+    "coursepaper"
+    "coverpage"
+    "cprotect"
+    "cprotectinside"
+    "crbox"
+    "create-theorem"
+    "crefthe"
+    "crossreference"
+    "crossreftools"
+    "crumbs"
+    "csquotes"
+    "css-colors"
+    "csvmerge"
+    "csvsimple"
+    "cuisine"
+    "currency"
+    "currfile"
+    "currvita"
+    "cutwin"
+    "cv"
+    "cv4tw"
+    "cweb-latex"
+    "cyber"
+    "cybercic"
+    "darkmode"
+    "dashbox"
+    "dashrule"
+    "dashundergaps"
+    "dataref"
+    "datatool"
+    "datax"
+    "dateiliste"
+    "datenumber"
+    "datestamp"
+    "datetime"
+    "datetime2"
+    "datetime2-bahasai"
+    "datetime2-basque"
+    "datetime2-breton"
+    "datetime2-bulgarian"
+    "datetime2-catalan"
+    "datetime2-croatian"
+    "datetime2-czech"
+    "datetime2-danish"
+    "datetime2-dutch"
+    "datetime2-en-fulltext"
+    "datetime2-english"
+    "datetime2-esperanto"
+    "datetime2-estonian"
+    "datetime2-finnish"
+    "datetime2-french"
+    "datetime2-galician"
+    "datetime2-german"
+    "datetime2-greek"
+    "datetime2-hebrew"
+    "datetime2-icelandic"
+    "datetime2-irish"
+    "datetime2-it-fulltext"
+    "datetime2-italian"
+    "datetime2-latin"
+    "datetime2-lsorbian"
+    "datetime2-magyar"
+    "datetime2-norsk"
+    "datetime2-polish"
+    "datetime2-portuges"
+    "datetime2-romanian"
+    "datetime2-russian"
+    "datetime2-samin"
+    "datetime2-scottish"
+    "datetime2-serbian"
+    "datetime2-slovak"
+    "datetime2-slovene"
+    "datetime2-spanish"
+    "datetime2-swedish"
+    "datetime2-turkish"
+    "datetime2-ukrainian"
+    "datetime2-usorbian"
+    "datetime2-welsh"
+    "dblfloatfix"
+    "dbshow"
+    "debate"
+    "decimal"
+    "decorule"
+    "delimtxt"
+    "democodetools"
+    "denisbdoc"
+    "diabetes-logbook"
+    "diagbox"
+    "diagnose"
+    "dialogl"
+    "dichokey"
+    "dimnum"
+    "dinbrief"
+    "directory"
+    "dirtytalk"
+    "dlfltxb"
+    "dnaseq"
+    "doclicense"
+    "docmfp"
+    "docmute"
+    "docshots"
+    "doctools"
+    "documentation"
+    "docutils"
+    "doi"
+    "dotarrow"
+    "dotlessi"
+    "dotseqn"
+    "download"
+    "dox"
+    "dpfloat"
+    "dprogress"
+    "drac"
+    "draftcopy"
+    "draftfigure"
+    "draftwatermark"
+    "dtk"
+    "dtxdescribe"
+    "dtxgallery"
+    "ducksay"
+    "duckuments"
+    "dvdcoll"
+    "dynamicnumber"
+    "dynblocks"
+    "ean13isbn"
+    "easy"
+    "easy-todo"
+    "easybook"
+    "easyfig"
+    "easyfloats"
+    "easyformat"
+    "easylist"
+    "easyreview"
+    "ebezier"
+    "ecclesiastic"
+    "econlipsum"
+    "ecv"
+    "ed"
+    "edichokey"
+    "edmargin"
+    "eemeir"
+    "efbox"
+    "egplot"
+    "ehhline"
+    "einfart"
+    "elegantbook"
+    "elegantnote"
+    "elegantpaper"
+    "elements"
+    "ellipsis"
+    "elmath"
+    "elocalloc"
+    "elpres"
+    "elzcards"
+    "emarks"
+    "embedall"
+    "embedfile"
+    "embrac"
+    "emptypage"
+    "emulateapj"
+    "endfloat"
+    "endheads"
+    "endnotes"
+    "endnotes-hy"
+    "engpron"
+    "engrec"
+    "enotez"
+    "enumitem"
+    "enumitem-zref"
+    "envbig"
+    "environ"
+    "envlab"
+    "epigraph"
+    "epigraph-keys"
+    "epiolmec"
+    "eq-pin2corr"
+    "eqell"
+    "eqlist"
+    "eqnalign"
+    "eqname"
+    "eqparbox"
+    "errata"
+    "erw-l3"
+    "esami"
+    "esdiff"
+    "esieecv"
+    "esindex"
+    "esint"
+    "esint-type1"
+    "etaremune"
+    "etextools"
+    "etl"
+    "etoc"
+    "eukdate"
+    "eulerpx"
+    "europasscv"
+    "europecv"
+    "everyhook"
+    "everypage"
+    "exam"
+    "exam-n"
+    "exam-randomizechoices"
+    "examdesign"
+    "example"
+    "examplep"
+    "exceltex"
+    "excludeonly"
+    "exercise"
+    "exercisebank"
+    "exercisepoints"
+    "exercises"
+    "exesheet"
+    "exframe"
+    "exp-testopt"
+    "expdlist"
+    "export"
+    "exsheets"
+    "exsol"
+    "extract"
+    "facsimile"
+    "factura"
+    "familytree"
+    "fancyhandout"
+    "fancylabel"
+    "fancynum"
+    "fancypar"
+    "fancyqr"
+    "fancyslides"
+    "fancytabs"
+    "fancytooltips"
+    "fbox"
+    "fcolumn"
+    "fetchcls"
+    "fewerfloatpages"
+    "ffcode"
+    "ffslides"
+    "fgruler"
+    "fifo-stack"
+    "figsize"
+    "filecontents"
+    "filecontentsdef"
+    "filedate"
+    "fileinfo"
+    "filemod"
+    "fink"
+    "finstrut"
+    "fithesis"
+    "fixcmex"
+    "fixfoot"
+    "fixme"
+    "fixmetodonotes"
+    "fjodor"
+    "flabels"
+    "flacards"
+    "flagderiv"
+    "flashcards"
+    "flashmovie"
+    "flexipage"
+    "flipbook"
+    "flippdf"
+    "floatflt"
+    "floatrow"
+    "flowfram"
+    "fmp"
+    "fmtcount"
+    "fn2end"
+    "fnbreak"
+    "fncychap"
+    "fncylab"
+    "fnpara"
+    "fnpct"
+    "fnumprint"
+    "foilhtml"
+    "foliono"
+    "fontaxes"
+    "fontsetup"
+    "fontsize"
+    "fonttable"
+    "footmisc"
+    "footmisx"
+    "footnotebackref"
+    "footnoterange"
+    "footnpag"
+    "forarray"
+    "foreign"
+    "forloop"
+    "formlett"
+    "forms16be"
+    "formular"
+    "fragments"
+    "frame"
+    "framed"
+    "frankenstein"
+    "frege"
+    "froufrou"
+    "ftcap"
+    "ftnxtra"
+    "fullblck"
+    "fullminipage"
+    "fullwidth"
+    "functional"
+    "fundus-calligra"
+    "fundus-cyr"
+    "fundus-sueterlin"
+    "fvextra"
+    "fwlw"
+    "g-brief"
+    "gatherenum"
+    "gauss"
+    "gcard"
+    "gcite"
+    "gender"
+    "genmpage"
+    "gensymb"
+    "getfiledate"
+    "getitems"
+    "gindex"
+    "ginpenc"
+    "gitfile-info"
+    "gitinfo"
+    "gitinfo2"
+    "gitlog"
+    "gitstatus"
+    "gitver"
+    "globalvals"
+    "gloss"
+    "glossaries"
+    "glossaries-danish"
+    "glossaries-dutch"
+    "glossaries-english"
+    "glossaries-estonian"
+    "glossaries-extra"
+    "glossaries-finnish"
+    "glossaries-french"
+    "glossaries-german"
+    "glossaries-irish"
+    "glossaries-italian"
+    "glossaries-magyar"
+    "glossaries-nynorsk"
+    "glossaries-polish"
+    "glossaries-portuges"
+    "glossaries-serbian"
+    "glossaries-slovene"
+    "glossaries-spanish"
+    "gmdoc"
+    "gmdoc-enhance"
+    "gmiflink"
+    "gmutils"
+    "gmverb"
+    "grabbox"
+    "gradient-text"
+    "grading-scheme"
+    "graphbox"
+    "graphicscache"
+    "graphicx-psmin"
+    "graphicxbox"
+    "graphpaper"
+    "grayhints"
+    "grfpaste"
+    "grid"
+    "grid-system"
+    "gridpapers"
+    "gridset"
+    "gridslides"
+    "gs1"
+    "guitlogo"
+    "ha-prosper"
+    "hackthefootline"
+    "halloweenmath"
+    "handin"
+    "handout"
+    "handoutwithnotes"
+    "hang"
+    "hanging"
+    "hardwrap"
+    "harnon-cv"
+    "harpoon"
+    "hc"
+    "he-she"
+    "hep-acronym"
+    "hep-float"
+    "hep-math"
+    "hep-text"
+    "hep-title"
+    "hereapplies"
+    "hhtensor"
+    "hideanswer"
+    "highlightlatex"
+    "histogr"
+    "hitec"
+    "hitreport"
+    "hletter"
+    "hobsub"
+    "hpsdiss"
+    "href-ul"
+    "hrefhide"
+    "huawei"
+    "hvextern"
+    "hvindex"
+    "hvlogos"
+    "hvpygmentex"
+    "hvqrurl"
+    "hwemoji"
+    "hypdestopt"
+    "hypdoc"
+    "hypdvips"
+    "hyper"
+    "hyperbar"
+    "hypernat"
+    "hyperxmp"
+    "hyphenat"
+    "identkey"
+    "idxcmds"
+    "idxlayout"
+    "iexec"
+    "ifallfalse"
+    "iffont"
+    "ifmslide"
+    "ifmtarg"
+    "ifnextok"
+    "ifoddpage"
+    "ifthenx"
+    "iitem"
+    "image-gallery"
+    "imakeidx"
+    "import"
+    "incgraph"
+    "indextools"
+    "inline-images"
+    "inlinedef"
+    "inlinelabel"
+    "inputenx"
+    "inputtrc"
+    "interactiveworkbook"
+    "interfaces"
+    "intopdf"
+    "inversepath"
+    "invoice"
+    "invoice-class"
+    "invoice2"
+    "iso"
+    "iso10303"
+    "isodate"
+    "isodoc"
+    "isonums"
+    "isopt"
+    "isorot"
+    "isotope"
+    "issuulinks"
+    "iwhdp"
+    "jlabels"
+    "jmsdelim"
+    "jobname-suffix"
+    "jslectureplanner"
+    "jumplines"
+    "jvlisting"
+    "kalendarium"
+    "kantlipsum"
+    "kerntest"
+    "keycommand"
+    "keyfloat"
+    "keyindex"
+    "keyparse"
+    "keyreader"
+    "keystroke"
+    "keyval2e"
+    "keyvaltable"
+    "kix"
+    "knowledge"
+    "koma-moderncvclassic"
+    "koma-script-sfs"
+    "komacv"
+    "komacv-rg"
+    "ktv-texdata"
+    "l3build"
+    "labbook"
+    "labels"
+    "labels4easylist"
+    "labelschanged"
+    "lambdax"
+    "lastpackage"
+    "lastpage"
+    "latex-amsmath-dev"
+    "latex-base-dev"
+    "latex-bin-dev"
+    "latex-firstaid-dev"
+    "latex-graphics-dev"
+    "latex-lab-dev"
+    "latex-tools-dev"
+    "latex-uni8"
+    "latexcolors"
+    "latexdemo"
+    "latexgit"
+    "layouts"
+    "lazylist"
+    "lccaps"
+    "lcd"
+    "lcg"
+    "leading"
+    "leaflet"
+    "lebhart"
+    "lectures"
+    "lectureslides"
+    "leftidx"
+    "leftindex"
+    "leipzig"
+    "lengthconvert"
+    "lettre"
+    "lettrine"
+    "lewis"
+    "lhelp"
+    "libgreek"
+    "limap"
+    "linegoal"
+    "linop"
+    "lipsum"
+    "lisp-on-tex"
+    "listing"
+    "listingsutf8"
+    "listlbls"
+    "listliketab"
+    "listofsymbols"
+    "lkproof"
+    "lmake"
+    "locality"
+    "logbox"
+    "logical-markup-utils"
+    "logpap"
+    "longfbox"
+    "longfigure"
+    "longnamefilelist"
+    "loops"
+    "lsc"
+    "lstaddons"
+    "lstfiracode"
+    "lt3graph"
+    "lt3rawobjects"
+    "ltablex"
+    "ltabptch"
+    "ltxdockit"
+    "ltxguidex"
+    "ltxkeys"
+    "ltxnew"
+    "ltxtools"
+    "lua-check-hyphen"
+    "lua-physical"
+    "luatodonotes"
+    "macrolist"
+    "macroswap"
+    "magaz"
+    "magicnum"
+    "magicwatermark"
+    "mailing"
+    "mailmerge"
+    "makebarcode"
+    "makebase"
+    "makebox"
+    "makecell"
+    "makecirc"
+    "makecmds"
+    "makecookbook"
+    "makedtx"
+    "makeglos"
+    "makelabels"
+    "makerobust"
+    "mandi"
+    "manfnt"
+    "manuscript"
+    "manyind"
+    "marginfit"
+    "marginfix"
+    "marginnote"
+    "markdown"
+    "mathalpha"
+    "mathastext"
+    "mathexam"
+    "mathfam256"
+    "mathfont"
+    "maybemath"
+    "mcaption"
+    "mceinleger"
+    "mcexam"
+    "mcite"
+    "mciteplus"
+    "mdframed"
+    "media4svg"
+    "media9"
+    "medstarbeamer"
+    "meetingmins"
+    "memexsupp"
+    "memory"
+    "mensa-tex"
+    "menu"
+    "menucard"
+    "menukeys"
+    "metalogox"
+    "metanorma"
+    "metastr"
+    "method"
+    "metre"
+    "mfirstuc"
+    "mftinc"
+    "mi-solns"
+    "midpage"
+    "mindflow"
+    "minibox"
+    "minidocument"
+    "minifp"
+    "minimalist"
+    "minipage-marginpar"
+    "minitoc"
+    "minorrevision"
+    "minted"
+    "minutes"
+    "mla-paper"
+    "mleftright"
+    "mlist"
+    "mmap"
+    "mnotes"
+    "moderncv"
+    "modernposter"
+    "moderntimeline"
+    "modref"
+    "modroman"
+    "modular"
+    "monofill"
+    "moodle"
+    "moreenum"
+    "morefloats"
+    "morehype"
+    "moresize"
+    "moreverb"
+    "morewrites"
+    "movie15"
+    "mparhack"
+    "mpostinl"
+    "msc"
+    "msg"
+    "mslapa"
+    "mtgreek"
+    "multenum"
+    "multiaudience"
+    "multibbl"
+    "multicap"
+    "multicolrule"
+    "multidef"
+    "multienv"
+    "multiexpand"
+    "multifootnote"
+    "multilang"
+    "multiple-choice"
+    "multirow"
+    "mversion"
+    "mwe"
+    "mycv"
+    "mylatex"
+    "mylatexformat"
+    "nag"
+    "nameauth"
+    "namespc"
+    "ncclatex"
+    "ncctools"
+    "needspace"
+    "nestquot"
+    "newcommand"
+    "newenviron"
+    "newfile"
+    "newlfm"
+    "newspaper"
+    "newunicodechar"
+    "newvbtm"
+    "newverbs"
+    "nextpage"
+    "nfssext-cfr"
+    "nicefilelist"
+    "niceframe"
+    "nicetext"
+    "nidanfloat"
+    "ninecolors"
+    "nlctdoc"
+    "noconflict"
+    "noindentafter"
+    "noitcrul"
+    "nolbreaks"
+    "nomencl"
+    "nomentbl"
+    "nonfloat"
+    "nonumonpart"
+    "nopageno"
+    "normalcolor"
+    "notes"
+    "notespages"
+    "notestex"
+    "notoccite"
+    "nowidow"
+    "nox"
+    "ntheorem"
+    "numberedblock"
+    "numname"
+    "numprint"
+    "numspell"
+    "ocg-p"
+    "ocgx"
+    "ocgx2"
+    "ocr-latex"
+    "octavo"
+    "oldstyle"
+    "onlyamsmath"
+    "opcit"
+    "opencolor"
+    "optidef"
+    "optional"
+    "options"
+    "orcidlink"
+    "orientation"
+    "outline"
+    "outliner"
+    "outlines"
+    "outlining"
+    "overlays"
+    "overpic"
+    "padcount"
+    "pagecolor"
+    "pagecont"
+    "pagegrid"
+    "pagenote"
+    "pagerange"
+    "pageslts"
+    "palette"
+    "pangram"
+    "paper"
+    "papercdcase"
+    "papermas"
+    "papertex"
+    "paracol"
+    "parades"
+    "paralist"
+    "paresse"
+    "parnotes"
+    "parsa"
+    "parselines"
+    "pas-cours"
+    "pas-cv"
+    "pas-tableur"
+    "patch"
+    "patchcmd"
+    "pauldoc"
+    "pawpict"
+    "pax"
+    "pbalance"
+    "pbox"
+    "pbsheet"
+    "pdf14"
+    "pdfcol"
+    "pdfcolmk"
+    "pdfcomment"
+    "pdfcprot"
+    "pdfmarginpar"
+    "pdfoverlay"
+    "pdfpagediff"
+    "pdfpc"
+    "pdfpc-movie"
+    "pdfprivacy"
+    "pdfreview"
+    "pdfscreen"
+    "pdfslide"
+    "pdfsync"
+    "pdfwin"
+    "pdfx"
+    "pecha"
+    "perltex"
+    "permute"
+    "petiteannonce"
+    "pgfmath-xfp"
+    "phfcc"
+    "phfextendedabstract"
+    "phffullpagefigure"
+    "phfnote"
+    "phfparen"
+    "phfqit"
+    "phfquotetext"
+    "phfsvnwatermark"
+    "phfthm"
+    "philex"
+    "phonenumbers"
+    "photo"
+    "photobook"
+    "picture"
+    "piff"
+    "pkgloader"
+    "placeins"
+    "plantslabels"
+    "plates"
+    "plweb"
+    "pmboxdraw"
+    "polynom"
+    "polynomial"
+    "polytable"
+    "postcards"
+    "poster-mac"
+    "postnotes"
+    "powerdot"
+    "ppr-prv"
+    "ppt-slides"
+    "practicalreports"
+    "precattl"
+    "prelim2e"
+    "preprint"
+    "pressrelease"
+    "prettyref"
+    "prettytok"
+    "preview"
+    "printlen"
+    "probsoln"
+    "program"
+    "progress"
+    "progressbar"
+    "projlib"
+    "proofread"
+    "properties"
+    "prosper"
+    "protex"
+    "protocol"
+    "psfragx"
+    "pstool"
+    "pstring"
+    "pxgreeks"
+    "pygmentex"
+    "python"
+    "pythonimmediate"
+    "qcm"
+    "qstest"
+    "qsymbols"
+    "quicktype"
+    "quiz2socrative"
+    "quotchap"
+    "quoting"
+    "quotmark"
+    "ran_toks"
+    "randtext"
+    "rccol"
+    "rcs-multi"
+    "rcsinfo"
+    "readablecv"
+    "readarray"
+    "realboxes"
+    "recipe"
+    "recipebook"
+    "recipecard"
+    "rectopma"
+    "refcheck"
+    "refenums"
+    "reflectgraphics"
+    "refman"
+    "refstyle"
+    "regcount"
+    "regexpatch"
+    "register"
+    "regstats"
+    "relenc"
+    "relsize"
+    "repeatindex"
+    "repltext"
+    "rescansync"
+    "returntogrid"
+    "rgltxdoc"
+    "rjlparshap"
+    "rlepsf"
+    "rmpage"
+    "robustcommand"
+    "robustindex"
+    "romanbar"
+    "romanbarpagenumber"
+    "romanneg"
+    "romannum"
+    "rotfloat"
+    "rotpages"
+    "roundbox"
+    "rterface"
+    "rtkinenc"
+    "rulerbox"
+    "rulercompass"
+    "runcode"
+    "rvwrite"
+    "sanitize-umlaut"
+    "sauerj"
+    "saveenv"
+    "savefnmark"
+    "savesym"
+    "savetrees"
+    "scale"
+    "scalebar"
+    "scalerel"
+    "scanpages"
+    "schedule"
+    "schooldocs"
+    "scontents"
+    "scrambledenvs"
+    "scrlayer-fancyhdr"
+    "scrlttr2copy"
+    "sdaps"
+    "sdrt"
+    "secdot"
+    "secnum"
+    "sectionbox"
+    "sectionbreak"
+    "sectsty"
+    "seealso"
+    "selectp"
+    "selinput"
+    "semantex"
+    "semantic"
+    "semantic-markup"
+    "semesterplanner"
+    "semioneside"
+    "semproc"
+    "semtex"
+    "sepfootnotes"
+    "seqsplit"
+    "sesstime"
+    "sf298"
+    "sffms"
+    "sfmath"
+    "shadethm"
+    "shadow"
+    "shadowtext"
+    "shapepar"
+    "shdoc"
+    "shipunov"
+    "shorttoc"
+    "show2e"
+    "showcharinbox"
+    "showdim"
+    "showexpl"
+    "showlabels"
+    "sidecap"
+    "sidenotes"
+    "sidenotesplus"
+    "silence"
+    "sillypage"
+    "simplecd"
+    "simplecv"
+    "simpleinvoice"
+    "simplivre"
+    "sitem"
+    "skb"
+    "skdoc"
+    "skeldoc"
+    "skeycommand"
+    "skeyval"
+    "skills"
+    "skrapport"
+    "slantsc"
+    "smalltableof"
+    "smart-eqn"
+    "smartref"
+    "smartunits"
+    "snapshot"
+    "snaptodo"
+    "snotez"
+    "soulpos"
+    "soulutf8"
+    "spacingtricks"
+    "spark-otf"
+    "sparklines"
+    "sphack"
+    "splitindex"
+    "spot"
+    "spotcolor"
+    "spreadtab"
+    "spverbatim"
+    "srbook-mem"
+    "srcltx"
+    "sseq"
+    "sslides"
+    "stack"
+    "stackengine"
+    "standalone"
+    "stdclsdv"
+    "stdpage"
+    "stealcaps"
+    "stex"
+    "storebox"
+    "storecmd"
+    "stringstrings"
+    "sttools"
+    "stubs"
+    "studenthandouts"
+    "styledcmd"
+    "subdepth"
+    "subdocs"
+    "subeqn"
+    "subeqnarray"
+    "subfigmat"
+    "subfigure"
+    "subfiles"
+    "subfloat"
+    "substitutefont"
+    "substr"
+    "supertabular"
+    "suppose"
+    "svg"
+    "svgcolor"
+    "svn"
+    "svn-multi"
+    "svn-prov"
+    "svninfo"
+    "swfigure"
+    "swungdash"
+    "syntax"
+    "syntrace"
+    "synttree"
+    "tabbing"
+    "tabfigures"
+    "tableaux"
+    "tablefootnote"
+    "tableof"
+    "tablestyles"
+    "tablists"
+    "tabls"
+    "tablvar"
+    "tabstackengine"
+    "tabto-ltx"
+    "tabu"
+    "tabularborder"
+    "tabularcalc"
+    "tabularew"
+    "tabularray"
+    "tabulary"
+    "tagging"
+    "tagpair"
+    "tagpdf"
+    "talk"
+    "tamefloats"
+    "tasks"
+    "tcldoc"
+    "tcolorbox"
+    "tdclock"
+    "technics"
+    "ted"
+    "templatetools"
+    "termcal"
+    "termlist"
+    "termsim"
+    "testhyphens"
+    "testidx"
+    "tex-label"
+    "tex-locale"
+    "texlogos"
+    "texmate"
+    "texments"
+    "texpower"
+    "texshade"
+    "texsurgery"
+    "textcsc"
+    "textfit"
+    "textmerg"
+    "textpos"
+    "textualicomma"
+    "texvc"
+    "theoremref"
+    "thinsp"
+    "thmtools"
+    "threadcol"
+    "threeparttable"
+    "threeparttablex"
+    "thumb"
+    "thumbs"
+    "thumby"
+    "ticket"
+    "tipauni"
+    "titlecaps"
+    "titlefoot"
+    "titlepic"
+    "titleref"
+    "titlesec"
+    "titling"
+    "to-be-determined"
+    "tocbibind"
+    "tocdata"
+    "tocloft"
+    "tocvsec2"
+    "todo"
+    "todonotes"
+    "tokcycle"
+    "tokenizer"
+    "toolbox"
+    "topfloat"
+    "topiclongtable"
+    "totalcount"
+    "totcount"
+    "totpages"
+    "translations"
+    "transparent"
+    "trfsigns"
+    "trimspaces"
+    "trivfloat"
+    "trsym"
+    "truncate"
+    "tucv"
+    "turnthepage"
+    "twoinone"
+    "twoup"
+    "txgreeks"
+    "type1cm"
+    "typed-checklist"
+    "typeface"
+    "typoaid"
+    "typogrid"
+    "uassign"
+    "ucs"
+    "uebungsblatt"
+    "umoline"
+    "underlin"
+    "underoverlap"
+    "undolabl"
+    "uni-titlepage"
+    "unicodefonttable"
+    "unisc"
+    "unitconv"
+    "units"
+    "unravel"
+    "upmethodology"
+    "upquote"
+    "uri"
+    "ushort"
+    "uspace"
+    "utf8add"
+    "uwmslide"
+    "variablelm"
+    "varindex"
+    "varsfromjobname"
+    "varwidth"
+    "vcell"
+    "vdmlisting"
+    "verbasef"
+    "verbatimbox"
+    "verbatimcopy"
+    "verbdef"
+    "verbments"
+    "verifiche"
+    "version"
+    "versions"
+    "versonotes"
+    "vertbars"
+    "vgrid"
+    "vhistory"
+    "vmargin"
+    "volumes"
+    "vpe"
+    "vruler"
+    "vtable"
+    "vwcol"
+    "wallcalendar"
+    "wallpaper"
+    "warning"
+    "warpcol"
+    "was"
+    "webquiz"
+    "widetable"
+    "widows-and-orphans"
+    "williams"
+    "willowtreebook"
+    "withargs"
+    "wordcount"
+    "wordlike"
+    "worksheet"
+    "wrapfig"
+    "wrapfig2"
+    "wrapstuff"
+    "wtref"
+    "xargs"
+    "xassoccnt"
+    "xbmks"
+    "xcntperchap"
+    "xcolor-material"
+    "xcolor-solarized"
+    "xcomment"
+    "xcookybooky"
+    "xcpdftips"
+    "xdoc"
+    "xellipsis"
+    "xfakebold"
+    "xfor"
+    "xhfill"
+    "xifthen"
+    "xint"
+    "xkcdcolors"
+    "xltabular"
+    "xmpincl"
+    "xnewcommand"
+    "xoptarg"
+    "xpatch"
+    "xpeek"
+    "xprintlen"
+    "xpunctuate"
+    "xsavebox"
+    "xsim"
+    "xstring"
+    "xtab"
+    "xurl"
+    "xwatermark"
+    "xytree"
+    "yafoot"
+    "yagusylo"
+    "yaletter"
+    "ycbook"
+    "ydoc"
+    "yplan"
+    "zebra-goodies"
+    "zed-csp"
+    "ziffer"
+    "zref"
+    "zref-check"
+    "zref-clever"
+    "zref-vario"
+    "zwgetfdate"
+    "zwpagelayout"
+  ];
   sha512.run = "15a6199c93d8a3b2dbbde8761f9889ea8d8ea3720500a9718e405a6146a8d460828e6c1010a3436c547e1bcb28e98fb7ac964c1facad4ed6c2b843b372e9bd89";
 };
 "collection-latexrecommended" = {
   revision = 63547;
   stripPrefix = 0;
-  deps."anysize" = tl."anysize";
-  deps."attachfile2" = tl."attachfile2";
-  deps."beamer" = tl."beamer";
-  deps."booktabs" = tl."booktabs";
-  deps."breqn" = tl."breqn";
-  deps."caption" = tl."caption";
-  deps."cite" = tl."cite";
-  deps."cmap" = tl."cmap";
-  deps."collection-latex" = tl."collection-latex";
-  deps."crop" = tl."crop";
-  deps."ctable" = tl."ctable";
-  deps."eso-pic" = tl."eso-pic";
-  deps."etoolbox" = tl."etoolbox";
-  deps."euenc" = tl."euenc";
-  deps."euler" = tl."euler";
-  deps."everysel" = tl."everysel";
-  deps."everyshi" = tl."everyshi";
-  deps."extsizes" = tl."extsizes";
-  deps."fancybox" = tl."fancybox";
-  deps."fancyref" = tl."fancyref";
-  deps."fancyvrb" = tl."fancyvrb";
-  deps."filehook" = tl."filehook";
-  deps."float" = tl."float";
-  deps."fontspec" = tl."fontspec";
-  deps."footnotehyper" = tl."footnotehyper";
-  deps."fp" = tl."fp";
-  deps."grffile" = tl."grffile";
-  deps."hologo" = tl."hologo";
-  deps."index" = tl."index";
-  deps."infwarerr" = tl."infwarerr";
-  deps."jknapltx" = tl."jknapltx";
-  deps."koma-script" = tl."koma-script";
-  deps."l3experimental" = tl."l3experimental";
-  deps."latexbug" = tl."latexbug";
-  deps."lineno" = tl."lineno";
-  deps."listings" = tl."listings";
-  deps."lwarp" = tl."lwarp";
-  deps."mathspec" = tl."mathspec";
-  deps."mathtools" = tl."mathtools";
-  deps."mdwtools" = tl."mdwtools";
-  deps."memoir" = tl."memoir";
-  deps."metalogo" = tl."metalogo";
-  deps."microtype" = tl."microtype";
-  deps."ms" = tl."ms";
-  deps."newfloat" = tl."newfloat";
-  deps."ntgclass" = tl."ntgclass";
-  deps."parskip" = tl."parskip";
-  deps."pdflscape" = tl."pdflscape";
-  deps."pdfmanagement-testphase" = tl."pdfmanagement-testphase";
-  deps."pdfpages" = tl."pdfpages";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."polyglossia" = tl."polyglossia";
-  deps."psfrag" = tl."psfrag";
-  deps."ragged2e" = tl."ragged2e";
-  deps."rcs" = tl."rcs";
-  deps."sansmath" = tl."sansmath";
-  deps."section" = tl."section";
-  deps."seminar" = tl."seminar";
-  deps."sepnum" = tl."sepnum";
-  deps."setspace" = tl."setspace";
-  deps."subfig" = tl."subfig";
-  deps."textcase" = tl."textcase";
-  deps."thumbpdf" = tl."thumbpdf";
-  deps."translator" = tl."translator";
-  deps."typehtml" = tl."typehtml";
-  deps."ucharcat" = tl."ucharcat";
-  deps."underscore" = tl."underscore";
-  deps."unicode-math" = tl."unicode-math";
-  deps."xcolor" = tl."xcolor";
-  deps."xkeyval" = tl."xkeyval";
-  deps."xltxtra" = tl."xltxtra";
-  deps."xunicode" = tl."xunicode";
+  deps = [
+    "anysize"
+    "attachfile2"
+    "beamer"
+    "booktabs"
+    "breqn"
+    "caption"
+    "cite"
+    "cmap"
+    "collection-latex"
+    "crop"
+    "ctable"
+    "eso-pic"
+    "etoolbox"
+    "euenc"
+    "euler"
+    "everysel"
+    "everyshi"
+    "extsizes"
+    "fancybox"
+    "fancyref"
+    "fancyvrb"
+    "filehook"
+    "float"
+    "fontspec"
+    "footnotehyper"
+    "fp"
+    "grffile"
+    "hologo"
+    "index"
+    "infwarerr"
+    "jknapltx"
+    "koma-script"
+    "l3experimental"
+    "latexbug"
+    "lineno"
+    "listings"
+    "lwarp"
+    "mathspec"
+    "mathtools"
+    "mdwtools"
+    "memoir"
+    "metalogo"
+    "microtype"
+    "ms"
+    "newfloat"
+    "ntgclass"
+    "parskip"
+    "pdflscape"
+    "pdfmanagement-testphase"
+    "pdfpages"
+    "pdftexcmds"
+    "polyglossia"
+    "psfrag"
+    "ragged2e"
+    "rcs"
+    "sansmath"
+    "section"
+    "seminar"
+    "sepnum"
+    "setspace"
+    "subfig"
+    "textcase"
+    "thumbpdf"
+    "translator"
+    "typehtml"
+    "ucharcat"
+    "underscore"
+    "unicode-math"
+    "xcolor"
+    "xkeyval"
+    "xltxtra"
+    "xunicode"
+  ];
   sha512.run = "4e445e9830476058f6b878f306516de2fdf1b174011dd79e6a7d875adf104f2a15cdceefc7045a8ae404399d3a08d8cd4eda8fc5af317ea043b03e6c648a73b1";
 };
 "collection-luatex" = {
   revision = 65354;
   stripPrefix = 0;
-  deps."addliga" = tl."addliga";
-  deps."auto-pst-pdf-lua" = tl."auto-pst-pdf-lua";
-  deps."barracuda" = tl."barracuda";
-  deps."bezierplot" = tl."bezierplot";
-  deps."checkcites" = tl."checkcites";
-  deps."chickenize" = tl."chickenize";
-  deps."chinese-jfm" = tl."chinese-jfm";
-  deps."cloze" = tl."cloze";
-  deps."collection-basic" = tl."collection-basic";
-  deps."combofont" = tl."combofont";
-  deps."cstypo" = tl."cstypo";
-  deps."ctablestack" = tl."ctablestack";
-  deps."ekdosis" = tl."ekdosis";
-  deps."emoji" = tl."emoji";
-  deps."emojicite" = tl."emojicite";
-  deps."enigma" = tl."enigma";
-  deps."innerscript" = tl."innerscript";
-  deps."interpreter" = tl."interpreter";
-  deps."kanaparser" = tl."kanaparser";
-  deps."ligtype" = tl."ligtype";
-  deps."linebreaker" = tl."linebreaker";
-  deps."lt3luabridge" = tl."lt3luabridge";
-  deps."lua-typo" = tl."lua-typo";
-  deps."lua-uca" = tl."lua-uca";
-  deps."lua-ul" = tl."lua-ul";
-  deps."lua-uni-algos" = tl."lua-uni-algos";
-  deps."lua-visual-debug" = tl."lua-visual-debug";
-  deps."lua-widow-control" = tl."lua-widow-control";
-  deps."luaaddplot" = tl."luaaddplot";
-  deps."luacas" = tl."luacas";
-  deps."luacensor" = tl."luacensor";
-  deps."luacode" = tl."luacode";
-  deps."luacolor" = tl."luacolor";
-  deps."luahyphenrules" = tl."luahyphenrules";
-  deps."luaimageembed" = tl."luaimageembed";
-  deps."luaindex" = tl."luaindex";
-  deps."luainputenc" = tl."luainputenc";
-  deps."luaintro" = tl."luaintro";
-  deps."luakeys" = tl."luakeys";
-  deps."lualatex-doc" = tl."lualatex-doc";
-  deps."lualatex-math" = tl."lualatex-math";
-  deps."lualatex-truncate" = tl."lualatex-truncate";
-  deps."lualibs" = tl."lualibs";
-  deps."luamathalign" = tl."luamathalign";
-  deps."luamodulartables" = tl."luamodulartables";
-  deps."luamplib" = tl."luamplib";
-  deps."luaoptions" = tl."luaoptions";
-  deps."luaotfload" = tl."luaotfload";
-  deps."luapackageloader" = tl."luapackageloader";
-  deps."luaprogtable" = tl."luaprogtable";
-  deps."luaquotes" = tl."luaquotes";
-  deps."luarandom" = tl."luarandom";
-  deps."luatex85" = tl."luatex85";
-  deps."luatexbase" = tl."luatexbase";
-  deps."luatexko" = tl."luatexko";
-  deps."luatextra" = tl."luatextra";
-  deps."luatruthtable" = tl."luatruthtable";
-  deps."luavlna" = tl."luavlna";
-  deps."luaxml" = tl."luaxml";
-  deps."lutabulartools" = tl."lutabulartools";
-  deps."minim" = tl."minim";
-  deps."minim-math" = tl."minim-math";
-  deps."minim-mp" = tl."minim-mp";
-  deps."minim-pdf" = tl."minim-pdf";
-  deps."minim-xmp" = tl."minim-xmp";
-  deps."newpax" = tl."newpax";
-  deps."nodetree" = tl."nodetree";
-  deps."odsfile" = tl."odsfile";
-  deps."optex" = tl."optex";
-  deps."pdfarticle" = tl."pdfarticle";
-  deps."pdfextra" = tl."pdfextra";
-  deps."penlight" = tl."penlight";
-  deps."piton" = tl."piton";
-  deps."placeat" = tl."placeat";
-  deps."plantuml" = tl."plantuml";
-  deps."pyluatex" = tl."pyluatex";
-  deps."scikgtex" = tl."scikgtex";
-  deps."selnolig" = tl."selnolig";
-  deps."showhyphenation" = tl."showhyphenation";
-  deps."showkerning" = tl."showkerning";
-  deps."spacekern" = tl."spacekern";
-  deps."spelling" = tl."spelling";
-  deps."stricttex" = tl."stricttex";
-  deps."truthtable" = tl."truthtable";
-  deps."tsvtemplate" = tl."tsvtemplate";
-  deps."typewriter" = tl."typewriter";
-  deps."uninormalize" = tl."uninormalize";
-  deps."yamlvars" = tl."yamlvars";
+  deps = [
+    "addliga"
+    "auto-pst-pdf-lua"
+    "barracuda"
+    "bezierplot"
+    "checkcites"
+    "chickenize"
+    "chinese-jfm"
+    "cloze"
+    "collection-basic"
+    "combofont"
+    "cstypo"
+    "ctablestack"
+    "ekdosis"
+    "emoji"
+    "emojicite"
+    "enigma"
+    "innerscript"
+    "interpreter"
+    "kanaparser"
+    "ligtype"
+    "linebreaker"
+    "lt3luabridge"
+    "lua-typo"
+    "lua-uca"
+    "lua-ul"
+    "lua-uni-algos"
+    "lua-visual-debug"
+    "lua-widow-control"
+    "luaaddplot"
+    "luacas"
+    "luacensor"
+    "luacode"
+    "luacolor"
+    "luahyphenrules"
+    "luaimageembed"
+    "luaindex"
+    "luainputenc"
+    "luaintro"
+    "luakeys"
+    "lualatex-doc"
+    "lualatex-math"
+    "lualatex-truncate"
+    "lualibs"
+    "luamathalign"
+    "luamodulartables"
+    "luamplib"
+    "luaoptions"
+    "luaotfload"
+    "luapackageloader"
+    "luaprogtable"
+    "luaquotes"
+    "luarandom"
+    "luatex85"
+    "luatexbase"
+    "luatexko"
+    "luatextra"
+    "luatruthtable"
+    "luavlna"
+    "luaxml"
+    "lutabulartools"
+    "minim"
+    "minim-math"
+    "minim-mp"
+    "minim-pdf"
+    "minim-xmp"
+    "newpax"
+    "nodetree"
+    "odsfile"
+    "optex"
+    "pdfarticle"
+    "pdfextra"
+    "penlight"
+    "piton"
+    "placeat"
+    "plantuml"
+    "pyluatex"
+    "scikgtex"
+    "selnolig"
+    "showhyphenation"
+    "showkerning"
+    "spacekern"
+    "spelling"
+    "stricttex"
+    "truthtable"
+    "tsvtemplate"
+    "typewriter"
+    "uninormalize"
+    "yamlvars"
+  ];
   sha512.run = "44e1041adf14954f5da71342247dd8863057ff52db1a05525c01caa87a4f27084580aab0b375c96bdb05e4ab718afebfdd2254146ed1cd69b2abccfa975e0330";
 };
 "collection-mathscience" = {
   revision = 65312;
   stripPrefix = 0;
-  deps."12many" = tl."12many";
-  deps."accents" = tl."accents";
-  deps."alg" = tl."alg";
-  deps."algobox" = tl."algobox";
-  deps."algorithm2e" = tl."algorithm2e";
-  deps."algorithmicx" = tl."algorithmicx";
-  deps."algorithms" = tl."algorithms";
-  deps."algpseudocodex" = tl."algpseudocodex";
-  deps."algxpar" = tl."algxpar";
-  deps."aligned-overset" = tl."aligned-overset";
-  deps."amscdx" = tl."amscdx";
-  deps."amstex" = tl."amstex";
-  deps."annotate-equations" = tl."annotate-equations";
-  deps."apxproof" = tl."apxproof";
-  deps."autobreak" = tl."autobreak";
-  deps."axodraw2" = tl."axodraw2";
-  deps."backnaur" = tl."backnaur";
-  deps."begriff" = tl."begriff";
-  deps."binomexp" = tl."binomexp";
-  deps."biocon" = tl."biocon";
-  deps."bitpattern" = tl."bitpattern";
-  deps."bodeplot" = tl."bodeplot";
-  deps."bohr" = tl."bohr";
-  deps."boldtensors" = tl."boldtensors";
-  deps."bosisio" = tl."bosisio";
-  deps."bpchem" = tl."bpchem";
-  deps."bropd" = tl."bropd";
-  deps."bussproofs" = tl."bussproofs";
-  deps."bussproofs-extra" = tl."bussproofs-extra";
-  deps."bytefield" = tl."bytefield";
-  deps."calculation" = tl."calculation";
-  deps."cartonaugh" = tl."cartonaugh";
-  deps."cascade" = tl."cascade";
-  deps."causets" = tl."causets";
-  deps."ccfonts" = tl."ccfonts";
-  deps."ccool" = tl."ccool";
-  deps."chemarrow" = tl."chemarrow";
-  deps."chemcompounds" = tl."chemcompounds";
-  deps."chemcono" = tl."chemcono";
-  deps."chemexec" = tl."chemexec";
-  deps."chemformula" = tl."chemformula";
-  deps."chemgreek" = tl."chemgreek";
-  deps."chemmacros" = tl."chemmacros";
-  deps."chemnum" = tl."chemnum";
-  deps."chemobabel" = tl."chemobabel";
-  deps."chemplants" = tl."chemplants";
-  deps."chemschemex" = tl."chemschemex";
-  deps."chemsec" = tl."chemsec";
-  deps."chemstyle" = tl."chemstyle";
-  deps."clrscode" = tl."clrscode";
-  deps."clrscode3e" = tl."clrscode3e";
-  deps."codeanatomy" = tl."codeanatomy";
-  deps."collection-fontsrecommended" = tl."collection-fontsrecommended";
-  deps."collection-latex" = tl."collection-latex";
-  deps."commath" = tl."commath";
-  deps."commutative-diagrams" = tl."commutative-diagrams";
-  deps."complexity" = tl."complexity";
-  deps."computational-complexity" = tl."computational-complexity";
-  deps."concmath" = tl."concmath";
-  deps."concrete" = tl."concrete";
-  deps."conteq" = tl."conteq";
-  deps."correctmathalign" = tl."correctmathalign";
-  deps."cryptocode" = tl."cryptocode";
-  deps."csassignments" = tl."csassignments";
-  deps."cvss" = tl."cvss";
-  deps."decision-table" = tl."decision-table";
-  deps."delim" = tl."delim";
-  deps."delimseasy" = tl."delimseasy";
-  deps."delimset" = tl."delimset";
-  deps."derivative" = tl."derivative";
-  deps."diffcoeff" = tl."diffcoeff";
-  deps."digiconfigs" = tl."digiconfigs";
-  deps."dijkstra" = tl."dijkstra";
-  deps."drawmatrix" = tl."drawmatrix";
-  deps."drawstack" = tl."drawstack";
-  deps."dyntree" = tl."dyntree";
-  deps."easing" = tl."easing";
-  deps."ebproof" = tl."ebproof";
-  deps."econometrics" = tl."econometrics";
-  deps."eltex" = tl."eltex";
-  deps."emf" = tl."emf";
-  deps."endiagram" = tl."endiagram";
-  deps."engtlc" = tl."engtlc";
-  deps."eolang" = tl."eolang";
-  deps."eqexpl" = tl."eqexpl";
-  deps."eqnarray" = tl."eqnarray";
-  deps."eqnnumwarn" = tl."eqnnumwarn";
-  deps."euclideangeometry" = tl."euclideangeometry";
-  deps."extarrows" = tl."extarrows";
-  deps."extpfeil" = tl."extpfeil";
-  deps."faktor" = tl."faktor";
-  deps."fascicules" = tl."fascicules";
-  deps."fixdif" = tl."fixdif";
-  deps."fixmath" = tl."fixmath";
-  deps."fnspe" = tl."fnspe";
-  deps."formal-grammar" = tl."formal-grammar";
-  deps."fouridx" = tl."fouridx";
-  deps."functan" = tl."functan";
-  deps."galois" = tl."galois";
-  deps."gastex" = tl."gastex";
-  deps."gene-logic" = tl."gene-logic";
-  deps."ghsystem" = tl."ghsystem";
-  deps."glosmathtools" = tl."glosmathtools";
-  deps."gotoh" = tl."gotoh";
-  deps."grundgesetze" = tl."grundgesetze";
-  deps."gu" = tl."gu";
-  deps."helmholtz-ellis-ji-notation" = tl."helmholtz-ellis-ji-notation";
-  deps."hep" = tl."hep";
-  deps."hep-reference" = tl."hep-reference";
-  deps."hepnames" = tl."hepnames";
-  deps."hepparticles" = tl."hepparticles";
-  deps."hepthesis" = tl."hepthesis";
-  deps."hepunits" = tl."hepunits";
-  deps."ibrackets" = tl."ibrackets";
-  deps."includernw" = tl."includernw";
-  deps."interval" = tl."interval";
-  deps."ionumbers" = tl."ionumbers";
-  deps."isomath" = tl."isomath";
-  deps."jkmath" = tl."jkmath";
-  deps."jupynotex" = tl."jupynotex";
-  deps."karnaugh" = tl."karnaugh";
-  deps."karnaugh-map" = tl."karnaugh-map";
-  deps."karnaughmap" = tl."karnaughmap";
-  deps."kvmap" = tl."kvmap";
-  deps."letterswitharrows" = tl."letterswitharrows";
-  deps."lie-hasse" = tl."lie-hasse";
-  deps."logicproof" = tl."logicproof";
-  deps."longdivision" = tl."longdivision";
-  deps."lpform" = tl."lpform";
-  deps."lplfitch" = tl."lplfitch";
-  deps."lstbayes" = tl."lstbayes";
-  deps."mathcommand" = tl."mathcommand";
-  deps."mathcomp" = tl."mathcomp";
-  deps."mathfixs" = tl."mathfixs";
-  deps."mathlig" = tl."mathlig";
-  deps."mathpartir" = tl."mathpartir";
-  deps."mathpunctspace" = tl."mathpunctspace";
-  deps."mathsemantics" = tl."mathsemantics";
-  deps."matlab-prettifier" = tl."matlab-prettifier";
-  deps."matrix-skeleton" = tl."matrix-skeleton";
-  deps."mattens" = tl."mattens";
-  deps."mecaso" = tl."mecaso";
-  deps."membranecomputing" = tl."membranecomputing";
-  deps."memorygraphs" = tl."memorygraphs";
-  deps."messagepassing" = tl."messagepassing";
-  deps."mgltex" = tl."mgltex";
-  deps."mhchem" = tl."mhchem";
-  deps."mhequ" = tl."mhequ";
-  deps."miller" = tl."miller";
-  deps."mismath" = tl."mismath";
-  deps."multiobjective" = tl."multiobjective";
-  deps."namedtensor" = tl."namedtensor";
-  deps."natded" = tl."natded";
-  deps."nath" = tl."nath";
-  deps."nchairx" = tl."nchairx";
-  deps."nicematrix" = tl."nicematrix";
-  deps."nuc" = tl."nuc";
-  deps."nucleardata" = tl."nucleardata";
-  deps."numerica" = tl."numerica";
-  deps."numerica-plus" = tl."numerica-plus";
-  deps."numerica-tables" = tl."numerica-tables";
-  deps."objectz" = tl."objectz";
-  deps."oplotsymbl" = tl."oplotsymbl";
-  deps."ot-tableau" = tl."ot-tableau";
-  deps."oubraces" = tl."oubraces";
-  deps."pascaltriangle" = tl."pascaltriangle";
-  deps."perfectcut" = tl."perfectcut";
-  deps."pfdicons" = tl."pfdicons";
-  deps."physconst" = tl."physconst";
-  deps."physics" = tl."physics";
-  deps."physunits" = tl."physunits";
-  deps."pinoutikz" = tl."pinoutikz";
-  deps."pm-isomath" = tl."pm-isomath";
-  deps."polexpr" = tl."polexpr";
-  deps."prftree" = tl."prftree";
-  deps."principia" = tl."principia";
-  deps."proba" = tl."proba";
-  deps."proof-at-the-end" = tl."proof-at-the-end";
-  deps."prooftrees" = tl."prooftrees";
-  deps."pseudo" = tl."pseudo";
-  deps."pseudocode" = tl."pseudocode";
-  deps."pythonhighlight" = tl."pythonhighlight";
-  deps."qsharp" = tl."qsharp";
-  deps."rank-2-roots" = tl."rank-2-roots";
-  deps."rbt-mathnotes" = tl."rbt-mathnotes";
-  deps."rec-thy" = tl."rec-thy";
-  deps."rest-api" = tl."rest-api";
-  deps."revquantum" = tl."revquantum";
-  deps."ribbonproofs" = tl."ribbonproofs";
-  deps."rmathbr" = tl."rmathbr";
-  deps."sankey" = tl."sankey";
-  deps."sasnrdisplay" = tl."sasnrdisplay";
-  deps."sciposter" = tl."sciposter";
-  deps."sclang-prettifier" = tl."sclang-prettifier";
-  deps."scratchx" = tl."scratchx";
-  deps."sesamanuel" = tl."sesamanuel";
-  deps."sfg" = tl."sfg";
-  deps."shuffle" = tl."shuffle";
-  deps."simplebnf" = tl."simplebnf";
-  deps."simpler-wick" = tl."simpler-wick";
-  deps."simples-matrices" = tl."simples-matrices";
-  deps."simplewick" = tl."simplewick";
-  deps."sistyle" = tl."sistyle";
-  deps."siunits" = tl."siunits";
-  deps."siunitx" = tl."siunitx";
-  deps."skmath" = tl."skmath";
-  deps."spalign" = tl."spalign";
-  deps."spbmark" = tl."spbmark";
-  deps."stanli" = tl."stanli";
-  deps."statex" = tl."statex";
-  deps."statex2" = tl."statex2";
-  deps."statistics" = tl."statistics";
-  deps."statistik" = tl."statistik";
-  deps."statmath" = tl."statmath";
-  deps."steinmetz" = tl."steinmetz";
-  deps."stmaryrd" = tl."stmaryrd";
-  deps."structmech" = tl."structmech";
-  deps."struktex" = tl."struktex";
-  deps."substances" = tl."substances";
-  deps."subsupscripts" = tl."subsupscripts";
-  deps."subtext" = tl."subtext";
-  deps."susy" = tl."susy";
-  deps."syllogism" = tl."syllogism";
-  deps."sympytexpackage" = tl."sympytexpackage";
-  deps."synproof" = tl."synproof";
-  deps."t-angles" = tl."t-angles";
-  deps."tablor" = tl."tablor";
-  deps."tensind" = tl."tensind";
-  deps."tensor" = tl."tensor";
-  deps."tex-ewd" = tl."tex-ewd";
-  deps."textgreek" = tl."textgreek";
-  deps."textopo" = tl."textopo";
-  deps."thermodynamics" = tl."thermodynamics";
-  deps."thmbox" = tl."thmbox";
-  deps."tiscreen" = tl."tiscreen";
-  deps."turnstile" = tl."turnstile";
-  deps."ulqda" = tl."ulqda";
-  deps."unitsdef" = tl."unitsdef";
-  deps."venn" = tl."venn";
-  deps."witharrows" = tl."witharrows";
-  deps."xymtex" = tl."xymtex";
-  deps."yhmath" = tl."yhmath";
-  deps."youngtab" = tl."youngtab";
-  deps."yquant" = tl."yquant";
-  deps."ytableau" = tl."ytableau";
-  deps."zx-calculus" = tl."zx-calculus";
+  deps = [
+    "12many"
+    "accents"
+    "alg"
+    "algobox"
+    "algorithm2e"
+    "algorithmicx"
+    "algorithms"
+    "algpseudocodex"
+    "algxpar"
+    "aligned-overset"
+    "amscdx"
+    "amstex"
+    "annotate-equations"
+    "apxproof"
+    "autobreak"
+    "axodraw2"
+    "backnaur"
+    "begriff"
+    "binomexp"
+    "biocon"
+    "bitpattern"
+    "bodeplot"
+    "bohr"
+    "boldtensors"
+    "bosisio"
+    "bpchem"
+    "bropd"
+    "bussproofs"
+    "bussproofs-extra"
+    "bytefield"
+    "calculation"
+    "cartonaugh"
+    "cascade"
+    "causets"
+    "ccfonts"
+    "ccool"
+    "chemarrow"
+    "chemcompounds"
+    "chemcono"
+    "chemexec"
+    "chemformula"
+    "chemgreek"
+    "chemmacros"
+    "chemnum"
+    "chemobabel"
+    "chemplants"
+    "chemschemex"
+    "chemsec"
+    "chemstyle"
+    "clrscode"
+    "clrscode3e"
+    "codeanatomy"
+    "collection-fontsrecommended"
+    "collection-latex"
+    "commath"
+    "commutative-diagrams"
+    "complexity"
+    "computational-complexity"
+    "concmath"
+    "concrete"
+    "conteq"
+    "correctmathalign"
+    "cryptocode"
+    "csassignments"
+    "cvss"
+    "decision-table"
+    "delim"
+    "delimseasy"
+    "delimset"
+    "derivative"
+    "diffcoeff"
+    "digiconfigs"
+    "dijkstra"
+    "drawmatrix"
+    "drawstack"
+    "dyntree"
+    "easing"
+    "ebproof"
+    "econometrics"
+    "eltex"
+    "emf"
+    "endiagram"
+    "engtlc"
+    "eolang"
+    "eqexpl"
+    "eqnarray"
+    "eqnnumwarn"
+    "euclideangeometry"
+    "extarrows"
+    "extpfeil"
+    "faktor"
+    "fascicules"
+    "fixdif"
+    "fixmath"
+    "fnspe"
+    "formal-grammar"
+    "fouridx"
+    "functan"
+    "galois"
+    "gastex"
+    "gene-logic"
+    "ghsystem"
+    "glosmathtools"
+    "gotoh"
+    "grundgesetze"
+    "gu"
+    "helmholtz-ellis-ji-notation"
+    "hep"
+    "hep-reference"
+    "hepnames"
+    "hepparticles"
+    "hepthesis"
+    "hepunits"
+    "ibrackets"
+    "includernw"
+    "interval"
+    "ionumbers"
+    "isomath"
+    "jkmath"
+    "jupynotex"
+    "karnaugh"
+    "karnaugh-map"
+    "karnaughmap"
+    "kvmap"
+    "letterswitharrows"
+    "lie-hasse"
+    "logicproof"
+    "longdivision"
+    "lpform"
+    "lplfitch"
+    "lstbayes"
+    "mathcommand"
+    "mathcomp"
+    "mathfixs"
+    "mathlig"
+    "mathpartir"
+    "mathpunctspace"
+    "mathsemantics"
+    "matlab-prettifier"
+    "matrix-skeleton"
+    "mattens"
+    "mecaso"
+    "membranecomputing"
+    "memorygraphs"
+    "messagepassing"
+    "mgltex"
+    "mhchem"
+    "mhequ"
+    "miller"
+    "mismath"
+    "multiobjective"
+    "namedtensor"
+    "natded"
+    "nath"
+    "nchairx"
+    "nicematrix"
+    "nuc"
+    "nucleardata"
+    "numerica"
+    "numerica-plus"
+    "numerica-tables"
+    "objectz"
+    "oplotsymbl"
+    "ot-tableau"
+    "oubraces"
+    "pascaltriangle"
+    "perfectcut"
+    "pfdicons"
+    "physconst"
+    "physics"
+    "physunits"
+    "pinoutikz"
+    "pm-isomath"
+    "polexpr"
+    "prftree"
+    "principia"
+    "proba"
+    "proof-at-the-end"
+    "prooftrees"
+    "pseudo"
+    "pseudocode"
+    "pythonhighlight"
+    "qsharp"
+    "rank-2-roots"
+    "rbt-mathnotes"
+    "rec-thy"
+    "rest-api"
+    "revquantum"
+    "ribbonproofs"
+    "rmathbr"
+    "sankey"
+    "sasnrdisplay"
+    "sciposter"
+    "sclang-prettifier"
+    "scratchx"
+    "sesamanuel"
+    "sfg"
+    "shuffle"
+    "simplebnf"
+    "simpler-wick"
+    "simples-matrices"
+    "simplewick"
+    "sistyle"
+    "siunits"
+    "siunitx"
+    "skmath"
+    "spalign"
+    "spbmark"
+    "stanli"
+    "statex"
+    "statex2"
+    "statistics"
+    "statistik"
+    "statmath"
+    "steinmetz"
+    "stmaryrd"
+    "structmech"
+    "struktex"
+    "substances"
+    "subsupscripts"
+    "subtext"
+    "susy"
+    "syllogism"
+    "sympytexpackage"
+    "synproof"
+    "t-angles"
+    "tablor"
+    "tensind"
+    "tensor"
+    "tex-ewd"
+    "textgreek"
+    "textopo"
+    "thermodynamics"
+    "thmbox"
+    "tiscreen"
+    "turnstile"
+    "ulqda"
+    "unitsdef"
+    "venn"
+    "witharrows"
+    "xymtex"
+    "yhmath"
+    "youngtab"
+    "yquant"
+    "ytableau"
+    "zx-calculus"
+  ];
   sha512.run = "30620c4a12471f0b880cb45857c52e2540984852c5f17753ef5dde259e92224fcad2f1c3dcae357c8475aacf4552b6704a67e99331edc073ffbd595e47a533b1";
 };
 "collection-metapost" = {
   revision = 64878;
   stripPrefix = 0;
-  deps."automata" = tl."automata";
-  deps."bbcard" = tl."bbcard";
-  deps."blockdraw_mp" = tl."blockdraw_mp";
-  deps."bpolynomial" = tl."bpolynomial";
-  deps."cmarrows" = tl."cmarrows";
-  deps."collection-basic" = tl."collection-basic";
-  deps."drv" = tl."drv";
-  deps."dviincl" = tl."dviincl";
-  deps."emp" = tl."emp";
-  deps."epsincl" = tl."epsincl";
-  deps."expressg" = tl."expressg";
-  deps."exteps" = tl."exteps";
-  deps."featpost" = tl."featpost";
-  deps."feynmf" = tl."feynmf";
-  deps."feynmp-auto" = tl."feynmp-auto";
-  deps."fiziko" = tl."fiziko";
-  deps."garrigues" = tl."garrigues";
-  deps."gmp" = tl."gmp";
-  deps."hatching" = tl."hatching";
-  deps."hershey-mp" = tl."hershey-mp";
-  deps."latexmp" = tl."latexmp";
-  deps."mcf2graph" = tl."mcf2graph";
-  deps."metago" = tl."metago";
-  deps."metaobj" = tl."metaobj";
-  deps."metaplot" = tl."metaplot";
-  deps."metapost" = tl."metapost";
-  deps."metapost-colorbrewer" = tl."metapost-colorbrewer";
-  deps."metauml" = tl."metauml";
-  deps."mfpic" = tl."mfpic";
-  deps."mfpic4ode" = tl."mfpic4ode";
-  deps."minim-hatching" = tl."minim-hatching";
-  deps."mp3d" = tl."mp3d";
-  deps."mparrows" = tl."mparrows";
-  deps."mpattern" = tl."mpattern";
-  deps."mpcolornames" = tl."mpcolornames";
-  deps."mpgraphics" = tl."mpgraphics";
-  deps."mptrees" = tl."mptrees";
-  deps."piechartmp" = tl."piechartmp";
-  deps."repere" = tl."repere";
-  deps."roex" = tl."roex";
-  deps."roundrect" = tl."roundrect";
-  deps."shapes" = tl."shapes";
-  deps."slideshow" = tl."slideshow";
-  deps."splines" = tl."splines";
-  deps."suanpan" = tl."suanpan";
-  deps."textpath" = tl."textpath";
-  deps."threeddice" = tl."threeddice";
+  deps = [
+    "automata"
+    "bbcard"
+    "blockdraw_mp"
+    "bpolynomial"
+    "cmarrows"
+    "collection-basic"
+    "drv"
+    "dviincl"
+    "emp"
+    "epsincl"
+    "expressg"
+    "exteps"
+    "featpost"
+    "feynmf"
+    "feynmp-auto"
+    "fiziko"
+    "garrigues"
+    "gmp"
+    "hatching"
+    "hershey-mp"
+    "latexmp"
+    "mcf2graph"
+    "metago"
+    "metaobj"
+    "metaplot"
+    "metapost"
+    "metapost-colorbrewer"
+    "metauml"
+    "mfpic"
+    "mfpic4ode"
+    "minim-hatching"
+    "mp3d"
+    "mparrows"
+    "mpattern"
+    "mpcolornames"
+    "mpgraphics"
+    "mptrees"
+    "piechartmp"
+    "repere"
+    "roex"
+    "roundrect"
+    "shapes"
+    "slideshow"
+    "splines"
+    "suanpan"
+    "textpath"
+    "threeddice"
+  ];
   sha512.run = "c17510f676b4aec1887893083e00438be77d879e44e52aedeb040ae1eb593d1d688fefc8eaa48939db0f83e8d1743cea3030490e73d8c3d65689b3e4db21f016";
 };
 "collection-music" = {
   revision = 64966;
   stripPrefix = 0;
-  deps."abc" = tl."abc";
-  deps."autosp" = tl."autosp";
-  deps."bagpipe" = tl."bagpipe";
-  deps."chordbars" = tl."chordbars";
-  deps."chordbox" = tl."chordbox";
-  deps."collection-latex" = tl."collection-latex";
-  deps."ddphonism" = tl."ddphonism";
-  deps."figbas" = tl."figbas";
-  deps."gchords" = tl."gchords";
-  deps."gregoriotex" = tl."gregoriotex";
-  deps."gtrcrd" = tl."gtrcrd";
-  deps."guitar" = tl."guitar";
-  deps."guitarchordschemes" = tl."guitarchordschemes";
-  deps."guitartabs" = tl."guitartabs";
-  deps."harmony" = tl."harmony";
-  deps."latex4musicians" = tl."latex4musicians";
-  deps."leadsheets" = tl."leadsheets";
-  deps."lilyglyphs" = tl."lilyglyphs";
-  deps."lyluatex" = tl."lyluatex";
-  deps."m-tx" = tl."m-tx";
-  deps."musical" = tl."musical";
-  deps."musicography" = tl."musicography";
-  deps."musixguit" = tl."musixguit";
-  deps."musixtex" = tl."musixtex";
-  deps."musixtex-fonts" = tl."musixtex-fonts";
-  deps."musixtnt" = tl."musixtnt";
-  deps."octave" = tl."octave";
-  deps."piano" = tl."piano";
-  deps."pmx" = tl."pmx";
-  deps."pmxchords" = tl."pmxchords";
-  deps."songbook" = tl."songbook";
-  deps."songproj" = tl."songproj";
-  deps."songs" = tl."songs";
-  deps."xml2pmx" = tl."xml2pmx";
-  deps."xpiano" = tl."xpiano";
+  deps = [
+    "abc"
+    "autosp"
+    "bagpipe"
+    "chordbars"
+    "chordbox"
+    "collection-latex"
+    "ddphonism"
+    "figbas"
+    "gchords"
+    "gregoriotex"
+    "gtrcrd"
+    "guitar"
+    "guitarchordschemes"
+    "guitartabs"
+    "harmony"
+    "latex4musicians"
+    "leadsheets"
+    "lilyglyphs"
+    "lyluatex"
+    "m-tx"
+    "musical"
+    "musicography"
+    "musixguit"
+    "musixtex"
+    "musixtex-fonts"
+    "musixtnt"
+    "octave"
+    "piano"
+    "pmx"
+    "pmxchords"
+    "songbook"
+    "songproj"
+    "songs"
+    "xml2pmx"
+    "xpiano"
+  ];
   sha512.run = "5d416eca3382c36a869959d850de6ffb4606c1a15c5adeae2ed0f8800c4a95cb068b4fbacb8d835ba4b0b4880b05f603b4e0ba36b98e357ec5ba637d0fb59100";
 };
 "collection-pictures" = {
   revision = 65359;
   stripPrefix = 0;
-  deps."adigraph" = tl."adigraph";
-  deps."aobs-tikz" = tl."aobs-tikz";
-  deps."askmaps" = tl."askmaps";
-  deps."asyfig" = tl."asyfig";
-  deps."asypictureb" = tl."asypictureb";
-  deps."autoarea" = tl."autoarea";
-  deps."bardiag" = tl."bardiag";
-  deps."beamerswitch" = tl."beamerswitch";
-  deps."binarytree" = tl."binarytree";
-  deps."blochsphere" = tl."blochsphere";
-  deps."bloques" = tl."bloques";
-  deps."blox" = tl."blox";
-  deps."bodegraph" = tl."bodegraph";
-  deps."bondgraph" = tl."bondgraph";
-  deps."bondgraphs" = tl."bondgraphs";
-  deps."braids" = tl."braids";
-  deps."bxeepic" = tl."bxeepic";
-  deps."byo-twemojis" = tl."byo-twemojis";
-  deps."byrne" = tl."byrne";
-  deps."cachepic" = tl."cachepic";
-  deps."callouts" = tl."callouts";
-  deps."celtic" = tl."celtic";
-  deps."chemfig" = tl."chemfig";
-  deps."circuit-macros" = tl."circuit-macros";
-  deps."circuitikz" = tl."circuitikz";
-  deps."coffeestains" = tl."coffeestains";
-  deps."collection-basic" = tl."collection-basic";
-  deps."combinedgraphics" = tl."combinedgraphics";
-  deps."curve" = tl."curve";
-  deps."curve2e" = tl."curve2e";
-  deps."curves" = tl."curves";
-  deps."dcpic" = tl."dcpic";
-  deps."diagmac2" = tl."diagmac2";
-  deps."ditaa" = tl."ditaa";
-  deps."doc-pictex" = tl."doc-pictex";
-  deps."dot2texi" = tl."dot2texi";
-  deps."dottex" = tl."dottex";
-  deps."dpcircling" = tl."dpcircling";
-  deps."dratex" = tl."dratex";
-  deps."drs" = tl."drs";
-  deps."duotenzor" = tl."duotenzor";
-  deps."dynkin-diagrams" = tl."dynkin-diagrams";
-  deps."ecgdraw" = tl."ecgdraw";
-  deps."eepic" = tl."eepic";
-  deps."ellipse" = tl."ellipse";
-  deps."endofproofwd" = tl."endofproofwd";
-  deps."epspdf" = tl."epspdf";
-  deps."epspdfconversion" = tl."epspdfconversion";
-  deps."esk" = tl."esk";
-  deps."euflag" = tl."euflag";
-  deps."fast-diagram" = tl."fast-diagram";
-  deps."fig4latex" = tl."fig4latex";
-  deps."figchild" = tl."figchild";
-  deps."figput" = tl."figput";
-  deps."fitbox" = tl."fitbox";
-  deps."flowchart" = tl."flowchart";
-  deps."forest" = tl."forest";
-  deps."genealogytree" = tl."genealogytree";
-  deps."getmap" = tl."getmap";
-  deps."gincltex" = tl."gincltex";
-  deps."gnuplottex" = tl."gnuplottex";
-  deps."gradientframe" = tl."gradientframe";
-  deps."grafcet" = tl."grafcet";
-  deps."graph35" = tl."graph35";
-  deps."graphicxpsd" = tl."graphicxpsd";
-  deps."graphviz" = tl."graphviz";
-  deps."gtrlib-largetrees" = tl."gtrlib-largetrees";
-  deps."harveyballs" = tl."harveyballs";
-  deps."here" = tl."here";
-  deps."hf-tikz" = tl."hf-tikz";
-  deps."hobby" = tl."hobby";
-  deps."hvfloat" = tl."hvfloat";
-  deps."istgame" = tl."istgame";
-  deps."kblocks" = tl."kblocks";
-  deps."kinematikz" = tl."kinematikz";
-  deps."knitting" = tl."knitting";
-  deps."knittingpattern" = tl."knittingpattern";
-  deps."ladder" = tl."ladder";
-  deps."lapdf" = tl."lapdf";
-  deps."latex-make" = tl."latex-make";
-  deps."liftarm" = tl."liftarm";
-  deps."lpic" = tl."lpic";
-  deps."lroundrect" = tl."lroundrect";
-  deps."luamesh" = tl."luamesh";
-  deps."luasseq" = tl."luasseq";
-  deps."maker" = tl."maker";
-  deps."makeshape" = tl."makeshape";
-  deps."mathspic" = tl."mathspic";
-  deps."mercatormap" = tl."mercatormap";
-  deps."milsymb" = tl."milsymb";
-  deps."miniplot" = tl."miniplot";
-  deps."mkpic" = tl."mkpic";
-  deps."modiagram" = tl."modiagram";
-  deps."neuralnetwork" = tl."neuralnetwork";
-  deps."nl-interval" = tl."nl-interval";
-  deps."nndraw" = tl."nndraw";
-  deps."numericplots" = tl."numericplots";
-  deps."pb-diagram" = tl."pb-diagram";
-  deps."penrose" = tl."penrose";
-  deps."petri-nets" = tl."petri-nets";
-  deps."pgf" = tl."pgf";
-  deps."pgf-blur" = tl."pgf-blur";
-  deps."pgf-cmykshadings" = tl."pgf-cmykshadings";
-  deps."pgf-interference" = tl."pgf-interference";
-  deps."pgf-periodictable" = tl."pgf-periodictable";
-  deps."pgf-pie" = tl."pgf-pie";
-  deps."pgf-soroban" = tl."pgf-soroban";
-  deps."pgf-spectra" = tl."pgf-spectra";
-  deps."pgf-umlcd" = tl."pgf-umlcd";
-  deps."pgf-umlsd" = tl."pgf-umlsd";
-  deps."pgfgantt" = tl."pgfgantt";
-  deps."pgfkeyx" = tl."pgfkeyx";
-  deps."pgfmolbio" = tl."pgfmolbio";
-  deps."pgfmorepages" = tl."pgfmorepages";
-  deps."pgfopts" = tl."pgfopts";
-  deps."pgfornament" = tl."pgfornament";
-  deps."pgfplots" = tl."pgfplots";
-  deps."picinpar" = tl."picinpar";
-  deps."pict2e" = tl."pict2e";
-  deps."pictex" = tl."pictex";
-  deps."pictex2" = tl."pictex2";
-  deps."pinlabel" = tl."pinlabel";
-  deps."pixelart" = tl."pixelart";
-  deps."pmgraph" = tl."pmgraph";
-  deps."postage" = tl."postage";
-  deps."prerex" = tl."prerex";
-  deps."productbox" = tl."productbox";
-  deps."ptolemaicastronomy" = tl."ptolemaicastronomy";
-  deps."puyotikz" = tl."puyotikz";
-  deps."pxpgfmark" = tl."pxpgfmark";
-  deps."pxpic" = tl."pxpic";
-  deps."qcircuit" = tl."qcircuit";
-  deps."qrcode" = tl."qrcode";
-  deps."quantikz" = tl."quantikz";
-  deps."randbild" = tl."randbild";
-  deps."randomwalk" = tl."randomwalk";
-  deps."realhats" = tl."realhats";
-  deps."reotex" = tl."reotex";
-  deps."robotarm" = tl."robotarm";
-  deps."rviewport" = tl."rviewport";
-  deps."sa-tikz" = tl."sa-tikz";
-  deps."schemabloc" = tl."schemabloc";
-  deps."scratch" = tl."scratch";
-  deps."scratch3" = tl."scratch3";
-  deps."scsnowman" = tl."scsnowman";
-  deps."setdeck" = tl."setdeck";
-  deps."signchart" = tl."signchart";
-  deps."simplenodes" = tl."simplenodes";
-  deps."simpleoptics" = tl."simpleoptics";
-  deps."smartdiagram" = tl."smartdiagram";
-  deps."spath3" = tl."spath3";
-  deps."spectralsequences" = tl."spectralsequences";
-  deps."strands" = tl."strands";
-  deps."swimgraf" = tl."swimgraf";
-  deps."syntaxdi" = tl."syntaxdi";
-  deps."table-fct" = tl."table-fct";
-  deps."texdraw" = tl."texdraw";
-  deps."ticollege" = tl."ticollege";
-  deps."tikz-3dplot" = tl."tikz-3dplot";
-  deps."tikz-among-us" = tl."tikz-among-us";
-  deps."tikz-bagua" = tl."tikz-bagua";
-  deps."tikz-bayesnet" = tl."tikz-bayesnet";
-  deps."tikz-bbox" = tl."tikz-bbox";
-  deps."tikz-cd" = tl."tikz-cd";
-  deps."tikz-dependency" = tl."tikz-dependency";
-  deps."tikz-dimline" = tl."tikz-dimline";
-  deps."tikz-ext" = tl."tikz-ext";
-  deps."tikz-feynhand" = tl."tikz-feynhand";
-  deps."tikz-feynman" = tl."tikz-feynman";
-  deps."tikz-imagelabels" = tl."tikz-imagelabels";
-  deps."tikz-inet" = tl."tikz-inet";
-  deps."tikz-kalender" = tl."tikz-kalender";
-  deps."tikz-karnaugh" = tl."tikz-karnaugh";
-  deps."tikz-ladder" = tl."tikz-ladder";
-  deps."tikz-lake-fig" = tl."tikz-lake-fig";
-  deps."tikz-layers" = tl."tikz-layers";
-  deps."tikz-mirror-lens" = tl."tikz-mirror-lens";
-  deps."tikz-nef" = tl."tikz-nef";
-  deps."tikz-network" = tl."tikz-network";
-  deps."tikz-opm" = tl."tikz-opm";
-  deps."tikz-optics" = tl."tikz-optics";
-  deps."tikz-page" = tl."tikz-page";
-  deps."tikz-palattice" = tl."tikz-palattice";
-  deps."tikz-planets" = tl."tikz-planets";
-  deps."tikz-qtree" = tl."tikz-qtree";
-  deps."tikz-relay" = tl."tikz-relay";
-  deps."tikz-sfc" = tl."tikz-sfc";
-  deps."tikz-swigs" = tl."tikz-swigs";
-  deps."tikz-timing" = tl."tikz-timing";
-  deps."tikz-trackschematic" = tl."tikz-trackschematic";
-  deps."tikz-truchet" = tl."tikz-truchet";
-  deps."tikzbricks" = tl."tikzbricks";
-  deps."tikzcodeblocks" = tl."tikzcodeblocks";
-  deps."tikzducks" = tl."tikzducks";
-  deps."tikzfill" = tl."tikzfill";
-  deps."tikzinclude" = tl."tikzinclude";
-  deps."tikzlings" = tl."tikzlings";
-  deps."tikzmark" = tl."tikzmark";
-  deps."tikzmarmots" = tl."tikzmarmots";
-  deps."tikzorbital" = tl."tikzorbital";
-  deps."tikzpackets" = tl."tikzpackets";
-  deps."tikzpagenodes" = tl."tikzpagenodes";
-  deps."tikzpeople" = tl."tikzpeople";
-  deps."tikzpfeile" = tl."tikzpfeile";
-  deps."tikzpingus" = tl."tikzpingus";
-  deps."tikzposter" = tl."tikzposter";
-  deps."tikzscale" = tl."tikzscale";
-  deps."tikzsymbols" = tl."tikzsymbols";
-  deps."tikztosvg" = tl."tikztosvg";
-  deps."tile-graphic" = tl."tile-graphic";
-  deps."timing-diagrams" = tl."timing-diagrams";
-  deps."tipfr" = tl."tipfr";
-  deps."tkz-base" = tl."tkz-base";
-  deps."tkz-berge" = tl."tkz-berge";
-  deps."tkz-doc" = tl."tkz-doc";
-  deps."tkz-euclide" = tl."tkz-euclide";
-  deps."tkz-fct" = tl."tkz-fct";
-  deps."tkz-graph" = tl."tkz-graph";
-  deps."tkz-orm" = tl."tkz-orm";
-  deps."tkz-tab" = tl."tkz-tab";
-  deps."tkzexample" = tl."tkzexample";
-  deps."tonevalue" = tl."tonevalue";
-  deps."tqft" = tl."tqft";
-  deps."tsemlines" = tl."tsemlines";
-  deps."tufte-latex" = tl."tufte-latex";
-  deps."twemojis" = tl."twemojis";
-  deps."tzplot" = tl."tzplot";
-  deps."utfsym" = tl."utfsym";
-  deps."venndiagram" = tl."venndiagram";
-  deps."visualpstricks" = tl."visualpstricks";
-  deps."wheelchart" = tl."wheelchart";
-  deps."worldflags" = tl."worldflags";
-  deps."xistercian" = tl."xistercian";
-  deps."xpicture" = tl."xpicture";
-  deps."xput" = tl."xput";
-  deps."xypic" = tl."xypic";
+  deps = [
+    "adigraph"
+    "aobs-tikz"
+    "askmaps"
+    "asyfig"
+    "asypictureb"
+    "autoarea"
+    "bardiag"
+    "beamerswitch"
+    "binarytree"
+    "blochsphere"
+    "bloques"
+    "blox"
+    "bodegraph"
+    "bondgraph"
+    "bondgraphs"
+    "braids"
+    "bxeepic"
+    "byo-twemojis"
+    "byrne"
+    "cachepic"
+    "callouts"
+    "celtic"
+    "chemfig"
+    "circuit-macros"
+    "circuitikz"
+    "coffeestains"
+    "collection-basic"
+    "combinedgraphics"
+    "curve"
+    "curve2e"
+    "curves"
+    "dcpic"
+    "diagmac2"
+    "ditaa"
+    "doc-pictex"
+    "dot2texi"
+    "dottex"
+    "dpcircling"
+    "dratex"
+    "drs"
+    "duotenzor"
+    "dynkin-diagrams"
+    "ecgdraw"
+    "eepic"
+    "ellipse"
+    "endofproofwd"
+    "epspdf"
+    "epspdfconversion"
+    "esk"
+    "euflag"
+    "fast-diagram"
+    "fig4latex"
+    "figchild"
+    "figput"
+    "fitbox"
+    "flowchart"
+    "forest"
+    "genealogytree"
+    "getmap"
+    "gincltex"
+    "gnuplottex"
+    "gradientframe"
+    "grafcet"
+    "graph35"
+    "graphicxpsd"
+    "graphviz"
+    "gtrlib-largetrees"
+    "harveyballs"
+    "here"
+    "hf-tikz"
+    "hobby"
+    "hvfloat"
+    "istgame"
+    "kblocks"
+    "kinematikz"
+    "knitting"
+    "knittingpattern"
+    "ladder"
+    "lapdf"
+    "latex-make"
+    "liftarm"
+    "lpic"
+    "lroundrect"
+    "luamesh"
+    "luasseq"
+    "maker"
+    "makeshape"
+    "mathspic"
+    "mercatormap"
+    "milsymb"
+    "miniplot"
+    "mkpic"
+    "modiagram"
+    "neuralnetwork"
+    "nl-interval"
+    "nndraw"
+    "numericplots"
+    "pb-diagram"
+    "penrose"
+    "petri-nets"
+    "pgf"
+    "pgf-blur"
+    "pgf-cmykshadings"
+    "pgf-interference"
+    "pgf-periodictable"
+    "pgf-pie"
+    "pgf-soroban"
+    "pgf-spectra"
+    "pgf-umlcd"
+    "pgf-umlsd"
+    "pgfgantt"
+    "pgfkeyx"
+    "pgfmolbio"
+    "pgfmorepages"
+    "pgfopts"
+    "pgfornament"
+    "pgfplots"
+    "picinpar"
+    "pict2e"
+    "pictex"
+    "pictex2"
+    "pinlabel"
+    "pixelart"
+    "pmgraph"
+    "postage"
+    "prerex"
+    "productbox"
+    "ptolemaicastronomy"
+    "puyotikz"
+    "pxpgfmark"
+    "pxpic"
+    "qcircuit"
+    "qrcode"
+    "quantikz"
+    "randbild"
+    "randomwalk"
+    "realhats"
+    "reotex"
+    "robotarm"
+    "rviewport"
+    "sa-tikz"
+    "schemabloc"
+    "scratch"
+    "scratch3"
+    "scsnowman"
+    "setdeck"
+    "signchart"
+    "simplenodes"
+    "simpleoptics"
+    "smartdiagram"
+    "spath3"
+    "spectralsequences"
+    "strands"
+    "swimgraf"
+    "syntaxdi"
+    "table-fct"
+    "texdraw"
+    "ticollege"
+    "tikz-3dplot"
+    "tikz-among-us"
+    "tikz-bagua"
+    "tikz-bayesnet"
+    "tikz-bbox"
+    "tikz-cd"
+    "tikz-dependency"
+    "tikz-dimline"
+    "tikz-ext"
+    "tikz-feynhand"
+    "tikz-feynman"
+    "tikz-imagelabels"
+    "tikz-inet"
+    "tikz-kalender"
+    "tikz-karnaugh"
+    "tikz-ladder"
+    "tikz-lake-fig"
+    "tikz-layers"
+    "tikz-mirror-lens"
+    "tikz-nef"
+    "tikz-network"
+    "tikz-opm"
+    "tikz-optics"
+    "tikz-page"
+    "tikz-palattice"
+    "tikz-planets"
+    "tikz-qtree"
+    "tikz-relay"
+    "tikz-sfc"
+    "tikz-swigs"
+    "tikz-timing"
+    "tikz-trackschematic"
+    "tikz-truchet"
+    "tikzbricks"
+    "tikzcodeblocks"
+    "tikzducks"
+    "tikzfill"
+    "tikzinclude"
+    "tikzlings"
+    "tikzmark"
+    "tikzmarmots"
+    "tikzorbital"
+    "tikzpackets"
+    "tikzpagenodes"
+    "tikzpeople"
+    "tikzpfeile"
+    "tikzpingus"
+    "tikzposter"
+    "tikzscale"
+    "tikzsymbols"
+    "tikztosvg"
+    "tile-graphic"
+    "timing-diagrams"
+    "tipfr"
+    "tkz-base"
+    "tkz-berge"
+    "tkz-doc"
+    "tkz-euclide"
+    "tkz-fct"
+    "tkz-graph"
+    "tkz-orm"
+    "tkz-tab"
+    "tkzexample"
+    "tonevalue"
+    "tqft"
+    "tsemlines"
+    "tufte-latex"
+    "twemojis"
+    "tzplot"
+    "utfsym"
+    "venndiagram"
+    "visualpstricks"
+    "wheelchart"
+    "worldflags"
+    "xistercian"
+    "xpicture"
+    "xput"
+    "xypic"
+  ];
   sha512.run = "cad55c99deb26ad1a6f12c60d5a7a0b35f250bad69f982e74163b9bbf027483104914989540c8169a05cdf0f5a853259c00c816ccddf858d0a970fc8b3eca9f9";
 };
 "collection-plaingeneric" = {
   revision = 65277;
   stripPrefix = 0;
-  deps."abbr" = tl."abbr";
-  deps."abstyles" = tl."abstyles";
-  deps."apnum" = tl."apnum";
-  deps."autoaligne" = tl."autoaligne";
-  deps."barr" = tl."barr";
-  deps."bitelist" = tl."bitelist";
-  deps."borceux" = tl."borceux";
-  deps."c-pascal" = tl."c-pascal";
-  deps."catcodes" = tl."catcodes";
-  deps."chronosys" = tl."chronosys";
-  deps."collection-basic" = tl."collection-basic";
-  deps."colorsep" = tl."colorsep";
-  deps."compare" = tl."compare";
-  deps."crossrefenum" = tl."crossrefenum";
-  deps."cweb-old" = tl."cweb-old";
-  deps."dinat" = tl."dinat";
-  deps."dirtree" = tl."dirtree";
-  deps."docbytex" = tl."docbytex";
-  deps."dowith" = tl."dowith";
-  deps."eijkhout" = tl."eijkhout";
-  deps."encxvlna" = tl."encxvlna";
-  deps."epigram" = tl."epigram";
-  deps."epsf" = tl."epsf";
-  deps."epsf-dvipdfmx" = tl."epsf-dvipdfmx";
-  deps."expex-acro" = tl."expex-acro";
-  deps."expkv" = tl."expkv";
-  deps."expkv-cs" = tl."expkv-cs";
-  deps."expkv-def" = tl."expkv-def";
-  deps."expkv-opt" = tl."expkv-opt";
-  deps."fenixpar" = tl."fenixpar";
-  deps."figflow" = tl."figflow";
-  deps."fixpdfmag" = tl."fixpdfmag";
-  deps."fltpoint" = tl."fltpoint";
-  deps."fntproof" = tl."fntproof";
-  deps."font-change" = tl."font-change";
-  deps."fontch" = tl."fontch";
-  deps."fontname" = tl."fontname";
-  deps."gates" = tl."gates";
-  deps."getoptk" = tl."getoptk";
-  deps."gfnotation" = tl."gfnotation";
-  deps."gobble" = tl."gobble";
-  deps."graphics-pln" = tl."graphics-pln";
-  deps."gtl" = tl."gtl";
-  deps."hlist" = tl."hlist";
-  deps."hyplain" = tl."hyplain";
-  deps."inputnormalization" = tl."inputnormalization";
-  deps."insbox" = tl."insbox";
-  deps."js-misc" = tl."js-misc";
-  deps."kastrup" = tl."kastrup";
-  deps."lambda-lists" = tl."lambda-lists";
-  deps."langcode" = tl."langcode";
-  deps."lecturer" = tl."lecturer";
-  deps."letterspacing" = tl."letterspacing";
-  deps."librarian" = tl."librarian";
-  deps."listofitems" = tl."listofitems";
-  deps."localloc" = tl."localloc";
-  deps."mathdots" = tl."mathdots";
-  deps."metatex" = tl."metatex";
-  deps."midnight" = tl."midnight";
-  deps."mkpattern" = tl."mkpattern";
-  deps."modulus" = tl."modulus";
-  deps."multido" = tl."multido";
-  deps."namedef" = tl."namedef";
-  deps."navigator" = tl."navigator";
-  deps."newsletr" = tl."newsletr";
-  deps."nth" = tl."nth";
-  deps."ofs" = tl."ofs";
-  deps."olsak-misc" = tl."olsak-misc";
-  deps."outerhbox" = tl."outerhbox";
-  deps."path" = tl."path";
-  deps."pdf-trans" = tl."pdf-trans";
-  deps."pdfmsym" = tl."pdfmsym";
-  deps."pitex" = tl."pitex";
-  deps."placeins-plain" = tl."placeins-plain";
-  deps."plainpkg" = tl."plainpkg";
-  deps."plipsum" = tl."plipsum";
-  deps."plnfss" = tl."plnfss";
-  deps."plstmary" = tl."plstmary";
-  deps."poormanlog" = tl."poormanlog";
-  deps."present" = tl."present";
-  deps."pwebmac" = tl."pwebmac";
-  deps."random" = tl."random";
-  deps."randomlist" = tl."randomlist";
-  deps."resumemac" = tl."resumemac";
-  deps."ruler" = tl."ruler";
-  deps."schemata" = tl."schemata";
-  deps."shade" = tl."shade";
-  deps."simplekv" = tl."simplekv";
-  deps."soul" = tl."soul";
-  deps."swrule" = tl."swrule";
-  deps."systeme" = tl."systeme";
-  deps."tabto-generic" = tl."tabto-generic";
-  deps."termmenu" = tl."termmenu";
-  deps."tex-ps" = tl."tex-ps";
-  deps."tex4ht" = tl."tex4ht";
-  deps."texapi" = tl."texapi";
-  deps."texdate" = tl."texdate";
-  deps."texdimens" = tl."texdimens";
-  deps."texinfo" = tl."texinfo";
-  deps."timetable" = tl."timetable";
-  deps."tracklang" = tl."tracklang";
-  deps."transparent-io" = tl."transparent-io";
-  deps."treetex" = tl."treetex";
-  deps."trigonometry" = tl."trigonometry";
-  deps."ulem" = tl."ulem";
-  deps."upca" = tl."upca";
-  deps."varisize" = tl."varisize";
-  deps."xii" = tl."xii";
-  deps."xii-lat" = tl."xii-lat";
-  deps."xintsession" = tl."xintsession";
-  deps."xlop" = tl."xlop";
-  deps."yax" = tl."yax";
-  deps."zztex" = tl."zztex";
+  deps = [
+    "abbr"
+    "abstyles"
+    "apnum"
+    "autoaligne"
+    "barr"
+    "bitelist"
+    "borceux"
+    "c-pascal"
+    "catcodes"
+    "chronosys"
+    "collection-basic"
+    "colorsep"
+    "compare"
+    "crossrefenum"
+    "cweb-old"
+    "dinat"
+    "dirtree"
+    "docbytex"
+    "dowith"
+    "eijkhout"
+    "encxvlna"
+    "epigram"
+    "epsf"
+    "epsf-dvipdfmx"
+    "expex-acro"
+    "expkv"
+    "expkv-cs"
+    "expkv-def"
+    "expkv-opt"
+    "fenixpar"
+    "figflow"
+    "fixpdfmag"
+    "fltpoint"
+    "fntproof"
+    "font-change"
+    "fontch"
+    "fontname"
+    "gates"
+    "getoptk"
+    "gfnotation"
+    "gobble"
+    "graphics-pln"
+    "gtl"
+    "hlist"
+    "hyplain"
+    "inputnormalization"
+    "insbox"
+    "js-misc"
+    "kastrup"
+    "lambda-lists"
+    "langcode"
+    "lecturer"
+    "letterspacing"
+    "librarian"
+    "listofitems"
+    "localloc"
+    "mathdots"
+    "metatex"
+    "midnight"
+    "mkpattern"
+    "modulus"
+    "multido"
+    "namedef"
+    "navigator"
+    "newsletr"
+    "nth"
+    "ofs"
+    "olsak-misc"
+    "outerhbox"
+    "path"
+    "pdf-trans"
+    "pdfmsym"
+    "pitex"
+    "placeins-plain"
+    "plainpkg"
+    "plipsum"
+    "plnfss"
+    "plstmary"
+    "poormanlog"
+    "present"
+    "pwebmac"
+    "random"
+    "randomlist"
+    "resumemac"
+    "ruler"
+    "schemata"
+    "shade"
+    "simplekv"
+    "soul"
+    "swrule"
+    "systeme"
+    "tabto-generic"
+    "termmenu"
+    "tex-ps"
+    "tex4ht"
+    "texapi"
+    "texdate"
+    "texdimens"
+    "texinfo"
+    "timetable"
+    "tracklang"
+    "transparent-io"
+    "treetex"
+    "trigonometry"
+    "ulem"
+    "upca"
+    "varisize"
+    "xii"
+    "xii-lat"
+    "xintsession"
+    "xlop"
+    "yax"
+    "zztex"
+  ];
   sha512.run = "6a6e3140f67c0903ba5a50cb0a127c3e64e0b9d0c55d2e732e5906ca6572f1122d8e79787da7c19326bfb4839782178f937775dc562b39fb9d11c8dac9c3b0bd";
 };
 "collection-pstricks" = {
   revision = 65367;
   stripPrefix = 0;
-  deps."auto-pst-pdf" = tl."auto-pst-pdf";
-  deps."bclogo" = tl."bclogo";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-plaingeneric" = tl."collection-plaingeneric";
-  deps."dsptricks" = tl."dsptricks";
-  deps."luapstricks" = tl."luapstricks";
-  deps."makeplot" = tl."makeplot";
-  deps."pdftricks" = tl."pdftricks";
-  deps."pdftricks2" = tl."pdftricks2";
-  deps."pedigree-perl" = tl."pedigree-perl";
-  deps."psbao" = tl."psbao";
-  deps."pst-2dplot" = tl."pst-2dplot";
-  deps."pst-3d" = tl."pst-3d";
-  deps."pst-3dplot" = tl."pst-3dplot";
-  deps."pst-abspos" = tl."pst-abspos";
-  deps."pst-am" = tl."pst-am";
-  deps."pst-antiprism" = tl."pst-antiprism";
-  deps."pst-arrow" = tl."pst-arrow";
-  deps."pst-asr" = tl."pst-asr";
-  deps."pst-bar" = tl."pst-bar";
-  deps."pst-barcode" = tl."pst-barcode";
-  deps."pst-bezier" = tl."pst-bezier";
-  deps."pst-blur" = tl."pst-blur";
-  deps."pst-bspline" = tl."pst-bspline";
-  deps."pst-calculate" = tl."pst-calculate";
-  deps."pst-calendar" = tl."pst-calendar";
-  deps."pst-cie" = tl."pst-cie";
-  deps."pst-circ" = tl."pst-circ";
-  deps."pst-coil" = tl."pst-coil";
-  deps."pst-contourplot" = tl."pst-contourplot";
-  deps."pst-cox" = tl."pst-cox";
-  deps."pst-dart" = tl."pst-dart";
-  deps."pst-dbicons" = tl."pst-dbicons";
-  deps."pst-diffraction" = tl."pst-diffraction";
-  deps."pst-electricfield" = tl."pst-electricfield";
-  deps."pst-eps" = tl."pst-eps";
-  deps."pst-eucl" = tl."pst-eucl";
-  deps."pst-exa" = tl."pst-exa";
-  deps."pst-feyn" = tl."pst-feyn";
-  deps."pst-fill" = tl."pst-fill";
-  deps."pst-fit" = tl."pst-fit";
-  deps."pst-flags" = tl."pst-flags";
-  deps."pst-fr3d" = tl."pst-fr3d";
-  deps."pst-fractal" = tl."pst-fractal";
-  deps."pst-fun" = tl."pst-fun";
-  deps."pst-func" = tl."pst-func";
-  deps."pst-gantt" = tl."pst-gantt";
-  deps."pst-geo" = tl."pst-geo";
-  deps."pst-geometrictools" = tl."pst-geometrictools";
-  deps."pst-gr3d" = tl."pst-gr3d";
-  deps."pst-grad" = tl."pst-grad";
-  deps."pst-graphicx" = tl."pst-graphicx";
-  deps."pst-hsb" = tl."pst-hsb";
-  deps."pst-infixplot" = tl."pst-infixplot";
-  deps."pst-intersect" = tl."pst-intersect";
-  deps."pst-jtree" = tl."pst-jtree";
-  deps."pst-knot" = tl."pst-knot";
-  deps."pst-labo" = tl."pst-labo";
-  deps."pst-layout" = tl."pst-layout";
-  deps."pst-lens" = tl."pst-lens";
-  deps."pst-light3d" = tl."pst-light3d";
-  deps."pst-lsystem" = tl."pst-lsystem";
-  deps."pst-magneticfield" = tl."pst-magneticfield";
-  deps."pst-marble" = tl."pst-marble";
-  deps."pst-math" = tl."pst-math";
-  deps."pst-mirror" = tl."pst-mirror";
-  deps."pst-moire" = tl."pst-moire";
-  deps."pst-node" = tl."pst-node";
-  deps."pst-ob3d" = tl."pst-ob3d";
-  deps."pst-ode" = tl."pst-ode";
-  deps."pst-optexp" = tl."pst-optexp";
-  deps."pst-optic" = tl."pst-optic";
-  deps."pst-osci" = tl."pst-osci";
-  deps."pst-ovl" = tl."pst-ovl";
-  deps."pst-pad" = tl."pst-pad";
-  deps."pst-pdf" = tl."pst-pdf";
-  deps."pst-pdgr" = tl."pst-pdgr";
-  deps."pst-perspective" = tl."pst-perspective";
-  deps."pst-platon" = tl."pst-platon";
-  deps."pst-plot" = tl."pst-plot";
-  deps."pst-poker" = tl."pst-poker";
-  deps."pst-poly" = tl."pst-poly";
-  deps."pst-pulley" = tl."pst-pulley";
-  deps."pst-qtree" = tl."pst-qtree";
-  deps."pst-rputover" = tl."pst-rputover";
-  deps."pst-rubans" = tl."pst-rubans";
-  deps."pst-shell" = tl."pst-shell";
-  deps."pst-sigsys" = tl."pst-sigsys";
-  deps."pst-slpe" = tl."pst-slpe";
-  deps."pst-solarsystem" = tl."pst-solarsystem";
-  deps."pst-solides3d" = tl."pst-solides3d";
-  deps."pst-soroban" = tl."pst-soroban";
-  deps."pst-spectra" = tl."pst-spectra";
-  deps."pst-spinner" = tl."pst-spinner";
-  deps."pst-stru" = tl."pst-stru";
-  deps."pst-support" = tl."pst-support";
-  deps."pst-text" = tl."pst-text";
-  deps."pst-thick" = tl."pst-thick";
-  deps."pst-tools" = tl."pst-tools";
-  deps."pst-tree" = tl."pst-tree";
-  deps."pst-turtle" = tl."pst-turtle";
-  deps."pst-tvz" = tl."pst-tvz";
-  deps."pst-uml" = tl."pst-uml";
-  deps."pst-vectorian" = tl."pst-vectorian";
-  deps."pst-vehicle" = tl."pst-vehicle";
-  deps."pst-venn" = tl."pst-venn";
-  deps."pst-vowel" = tl."pst-vowel";
-  deps."pst2pdf" = tl."pst2pdf";
-  deps."pstricks" = tl."pstricks";
-  deps."pstricks-add" = tl."pstricks-add";
-  deps."pstricks_calcnotes" = tl."pstricks_calcnotes";
-  deps."uml" = tl."uml";
-  deps."vaucanson-g" = tl."vaucanson-g";
-  deps."vocaltract" = tl."vocaltract";
+  deps = [
+    "auto-pst-pdf"
+    "bclogo"
+    "collection-basic"
+    "collection-plaingeneric"
+    "dsptricks"
+    "luapstricks"
+    "makeplot"
+    "pdftricks"
+    "pdftricks2"
+    "pedigree-perl"
+    "psbao"
+    "pst-2dplot"
+    "pst-3d"
+    "pst-3dplot"
+    "pst-abspos"
+    "pst-am"
+    "pst-antiprism"
+    "pst-arrow"
+    "pst-asr"
+    "pst-bar"
+    "pst-barcode"
+    "pst-bezier"
+    "pst-blur"
+    "pst-bspline"
+    "pst-calculate"
+    "pst-calendar"
+    "pst-cie"
+    "pst-circ"
+    "pst-coil"
+    "pst-contourplot"
+    "pst-cox"
+    "pst-dart"
+    "pst-dbicons"
+    "pst-diffraction"
+    "pst-electricfield"
+    "pst-eps"
+    "pst-eucl"
+    "pst-exa"
+    "pst-feyn"
+    "pst-fill"
+    "pst-fit"
+    "pst-flags"
+    "pst-fr3d"
+    "pst-fractal"
+    "pst-fun"
+    "pst-func"
+    "pst-gantt"
+    "pst-geo"
+    "pst-geometrictools"
+    "pst-gr3d"
+    "pst-grad"
+    "pst-graphicx"
+    "pst-hsb"
+    "pst-infixplot"
+    "pst-intersect"
+    "pst-jtree"
+    "pst-knot"
+    "pst-labo"
+    "pst-layout"
+    "pst-lens"
+    "pst-light3d"
+    "pst-lsystem"
+    "pst-magneticfield"
+    "pst-marble"
+    "pst-math"
+    "pst-mirror"
+    "pst-moire"
+    "pst-node"
+    "pst-ob3d"
+    "pst-ode"
+    "pst-optexp"
+    "pst-optic"
+    "pst-osci"
+    "pst-ovl"
+    "pst-pad"
+    "pst-pdf"
+    "pst-pdgr"
+    "pst-perspective"
+    "pst-platon"
+    "pst-plot"
+    "pst-poker"
+    "pst-poly"
+    "pst-pulley"
+    "pst-qtree"
+    "pst-rputover"
+    "pst-rubans"
+    "pst-shell"
+    "pst-sigsys"
+    "pst-slpe"
+    "pst-solarsystem"
+    "pst-solides3d"
+    "pst-soroban"
+    "pst-spectra"
+    "pst-spinner"
+    "pst-stru"
+    "pst-support"
+    "pst-text"
+    "pst-thick"
+    "pst-tools"
+    "pst-tree"
+    "pst-turtle"
+    "pst-tvz"
+    "pst-uml"
+    "pst-vectorian"
+    "pst-vehicle"
+    "pst-venn"
+    "pst-vowel"
+    "pst2pdf"
+    "pstricks"
+    "pstricks-add"
+    "pstricks_calcnotes"
+    "uml"
+    "vaucanson-g"
+    "vocaltract"
+  ];
   sha512.run = "508276fe37018f3d9773fc7cda0cb37edcdd28e9cf8ab54ed5be16b07c2066de4626a561bbe387c7bba0fb82d4102be406efd721a4b5dc90110b8560083d2b07";
 };
 "collection-publishers" = {
   revision = 65221;
   stripPrefix = 0;
-  deps."aastex" = tl."aastex";
-  deps."abnt" = tl."abnt";
-  deps."abntex2" = tl."abntex2";
-  deps."abntexto" = tl."abntexto";
-  deps."acmart" = tl."acmart";
-  deps."acmconf" = tl."acmconf";
-  deps."active-conf" = tl."active-conf";
-  deps."adfathesis" = tl."adfathesis";
-  deps."afparticle" = tl."afparticle";
-  deps."afthesis" = tl."afthesis";
-  deps."aguplus" = tl."aguplus";
-  deps."aiaa" = tl."aiaa";
-  deps."anonymous-acm" = tl."anonymous-acm";
-  deps."anufinalexam" = tl."anufinalexam";
-  deps."aomart" = tl."aomart";
-  deps."apa" = tl."apa";
-  deps."apa6" = tl."apa6";
-  deps."apa6e" = tl."apa6e";
-  deps."apa7" = tl."apa7";
-  deps."arsclassica" = tl."arsclassica";
-  deps."articleingud" = tl."articleingud";
-  deps."asaetr" = tl."asaetr";
-  deps."ascelike" = tl."ascelike";
-  deps."asmeconf" = tl."asmeconf";
-  deps."asmejour" = tl."asmejour";
-  deps."aucklandthesis" = tl."aucklandthesis";
-  deps."bangorcsthesis" = tl."bangorcsthesis";
-  deps."bangorexam" = tl."bangorexam";
-  deps."bath-bst" = tl."bath-bst";
-  deps."beamer-fuberlin" = tl."beamer-fuberlin";
-  deps."beamer-verona" = tl."beamer-verona";
-  deps."beilstein" = tl."beilstein";
-  deps."bfh-ci" = tl."bfh-ci";
-  deps."bgteubner" = tl."bgteubner";
-  deps."bjfuthesis" = tl."bjfuthesis";
-  deps."bmstu" = tl."bmstu";
-  deps."bmstu-iu8" = tl."bmstu-iu8";
-  deps."br-lex" = tl."br-lex";
-  deps."brandeis-dissertation" = tl."brandeis-dissertation";
-  deps."brandeis-problemset" = tl."brandeis-problemset";
-  deps."brandeis-thesis" = tl."brandeis-thesis";
-  deps."buctthesis" = tl."buctthesis";
-  deps."cascadilla" = tl."cascadilla";
-  deps."cesenaexam" = tl."cesenaexam";
-  deps."chem-journal" = tl."chem-journal";
-  deps."chifoot" = tl."chifoot";
-  deps."chs-physics-report" = tl."chs-physics-report";
-  deps."cje" = tl."cje";
-  deps."classicthesis" = tl."classicthesis";
-  deps."cleanthesis" = tl."cleanthesis";
-  deps."cmpj" = tl."cmpj";
-  deps."collection-latex" = tl."collection-latex";
-  deps."confproc" = tl."confproc";
-  deps."cquthesis" = tl."cquthesis";
-  deps."dccpaper" = tl."dccpaper";
-  deps."dithesis" = tl."dithesis";
-  deps."ebook" = tl."ebook";
-  deps."ebsthesis" = tl."ebsthesis";
-  deps."ecothesis" = tl."ecothesis";
-  deps."ejpecp" = tl."ejpecp";
-  deps."ekaia" = tl."ekaia";
-  deps."elbioimp" = tl."elbioimp";
-  deps."els-cas-templates" = tl."els-cas-templates";
-  deps."elsarticle" = tl."elsarticle";
-  deps."elteikthesis" = tl."elteikthesis";
-  deps."emisa" = tl."emisa";
-  deps."erdc" = tl."erdc";
-  deps."estcpmm" = tl."estcpmm";
-  deps."etsvthor" = tl."etsvthor";
-  deps."facture-belge-simple-sans-tva" = tl."facture-belge-simple-sans-tva";
-  deps."fbithesis" = tl."fbithesis";
-  deps."fcavtex" = tl."fcavtex";
-  deps."fcltxdoc" = tl."fcltxdoc";
-  deps."fei" = tl."fei";
-  deps."ftc-notebook" = tl."ftc-notebook";
-  deps."gaceta" = tl."gaceta";
-  deps."gammas" = tl."gammas";
-  deps."geradwp" = tl."geradwp";
-  deps."gradstudentresume" = tl."gradstudentresume";
-  deps."grant" = tl."grant";
-  deps."gsemthesis" = tl."gsemthesis";
-  deps."gzt" = tl."gzt";
-  deps."h2020proposal" = tl."h2020proposal";
-  deps."hagenberg-thesis" = tl."hagenberg-thesis";
-  deps."har2nat" = tl."har2nat";
-  deps."hecthese" = tl."hecthese";
-  deps."hep-paper" = tl."hep-paper";
-  deps."hfutexam" = tl."hfutexam";
-  deps."hfutthesis" = tl."hfutthesis";
-  deps."hithesis" = tl."hithesis";
-  deps."hitszbeamer" = tl."hitszbeamer";
-  deps."hitszthesis" = tl."hitszthesis";
-  deps."hobete" = tl."hobete";
-  deps."hu-berlin-bundle" = tl."hu-berlin-bundle";
-  deps."hustthesis" = tl."hustthesis";
-  deps."icsv" = tl."icsv";
-  deps."ieeeconf" = tl."ieeeconf";
-  deps."ieeepes" = tl."ieeepes";
-  deps."ieeetran" = tl."ieeetran";
-  deps."ijmart" = tl."ijmart";
-  deps."ijsra" = tl."ijsra";
-  deps."imac" = tl."imac";
-  deps."imtekda" = tl."imtekda";
-  deps."inkpaper" = tl."inkpaper";
-  deps."iodhbwm" = tl."iodhbwm";
-  deps."iscram" = tl."iscram";
-  deps."jacow" = tl."jacow";
-  deps."jmlr" = tl."jmlr";
-  deps."jnuexam" = tl."jnuexam";
-  deps."jourcl" = tl."jourcl";
-  deps."jpsj" = tl."jpsj";
-  deps."kdgdocs" = tl."kdgdocs";
-  deps."kdpcover" = tl."kdpcover";
-  deps."kfupm-math-exam" = tl."kfupm-math-exam";
-  deps."kluwer" = tl."kluwer";
-  deps."ksp-thesis" = tl."ksp-thesis";
-  deps."ku-template" = tl."ku-template";
-  deps."langsci" = tl."langsci";
-  deps."langsci-avm" = tl."langsci-avm";
-  deps."limecv" = tl."limecv";
-  deps."lion-msc" = tl."lion-msc";
-  deps."llncs" = tl."llncs";
-  deps."llncsconf" = tl."llncsconf";
-  deps."lni" = tl."lni";
-  deps."lps" = tl."lps";
-  deps."matc3" = tl."matc3";
-  deps."matc3mem" = tl."matc3mem";
-  deps."mcmthesis" = tl."mcmthesis";
-  deps."mentis" = tl."mentis";
-  deps."mlacls" = tl."mlacls";
-  deps."mluexercise" = tl."mluexercise";
-  deps."mnras" = tl."mnras";
-  deps."modeles-factures-belges-assocs" = tl."modeles-factures-belges-assocs";
-  deps."msu-thesis" = tl."msu-thesis";
-  deps."mucproc" = tl."mucproc";
-  deps."mugsthesis" = tl."mugsthesis";
-  deps."muling" = tl."muling";
-  deps."musuos" = tl."musuos";
-  deps."muthesis" = tl."muthesis";
-  deps."mynsfc" = tl."mynsfc";
-  deps."nature" = tl."nature";
-  deps."navydocs" = tl."navydocs";
-  deps."nddiss" = tl."nddiss";
-  deps."ndsu-thesis" = tl."ndsu-thesis";
-  deps."ndsu-thesis-2022" = tl."ndsu-thesis-2022";
-  deps."nih" = tl."nih";
-  deps."nihbiosketch" = tl."nihbiosketch";
-  deps."njustthesis" = tl."njustthesis";
-  deps."njuthesis" = tl."njuthesis";
-  deps."njuvisual" = tl."njuvisual";
-  deps."nostarch" = tl."nostarch";
-  deps."novel" = tl."novel";
-  deps."nrc" = tl."nrc";
-  deps."nwafuthesis" = tl."nwafuthesis";
-  deps."nwejm" = tl."nwejm";
-  deps."onrannual" = tl."onrannual";
-  deps."opteng" = tl."opteng";
-  deps."oup-authoring-template" = tl."oup-authoring-template";
-  deps."philosophersimprint" = tl."philosophersimprint";
-  deps."pittetd" = tl."pittetd";
-  deps."pkuthss" = tl."pkuthss";
-  deps."powerdot-fuberlin" = tl."powerdot-fuberlin";
-  deps."powerdot-tuliplab" = tl."powerdot-tuliplab";
-  deps."pracjourn" = tl."pracjourn";
-  deps."prociagssymp" = tl."prociagssymp";
-  deps."proposal" = tl."proposal";
-  deps."prtec" = tl."prtec";
-  deps."ptptex" = tl."ptptex";
-  deps."qrbill" = tl."qrbill";
-  deps."quantumarticle" = tl."quantumarticle";
-  deps."resphilosophica" = tl."resphilosophica";
-  deps."resumecls" = tl."resumecls";
-  deps."revtex" = tl."revtex";
-  deps."revtex4" = tl."revtex4";
-  deps."revtex4-1" = tl."revtex4-1";
-  deps."rutitlepage" = tl."rutitlepage";
-  deps."ryersonsgsthesis" = tl."ryersonsgsthesis";
-  deps."ryethesis" = tl."ryethesis";
-  deps."sageep" = tl."sageep";
-  deps."sapthesis" = tl."sapthesis";
-  deps."schule" = tl."schule";
-  deps."scientific-thesis-cover" = tl."scientific-thesis-cover";
-  deps."scripture" = tl."scripture";
-  deps."scrjrnl" = tl."scrjrnl";
-  deps."sduthesis" = tl."sduthesis";
-  deps."se2thesis" = tl."se2thesis";
-  deps."seu-ml-assign" = tl."seu-ml-assign";
-  deps."seuthesis" = tl."seuthesis";
-  deps."seuthesix" = tl."seuthesix";
-  deps."shortmathj" = tl."shortmathj";
-  deps."shtthesis" = tl."shtthesis";
-  deps."smflatex" = tl."smflatex";
-  deps."soton" = tl."soton";
-  deps."sphdthesis" = tl."sphdthesis";
-  deps."spie" = tl."spie";
-  deps."sr-vorl" = tl."sr-vorl";
-  deps."srdp-mathematik" = tl."srdp-mathematik";
-  deps."stellenbosch" = tl."stellenbosch";
-  deps."suftesi" = tl."suftesi";
-  deps."sugconf" = tl."sugconf";
-  deps."tabriz-thesis" = tl."tabriz-thesis";
-  deps."technion-thesis-template" = tl."technion-thesis-template";
-  deps."texilikechaps" = tl."texilikechaps";
-  deps."texilikecover" = tl."texilikecover";
-  deps."thesis-ekf" = tl."thesis-ekf";
-  deps."thesis-gwu" = tl."thesis-gwu";
-  deps."thesis-qom" = tl."thesis-qom";
-  deps."thesis-titlepage-fhac" = tl."thesis-titlepage-fhac";
-  deps."thuaslogos" = tl."thuaslogos";
-  deps."thubeamer" = tl."thubeamer";
-  deps."thucoursework" = tl."thucoursework";
-  deps."thuthesis" = tl."thuthesis";
-  deps."timbreicmc" = tl."timbreicmc";
-  deps."tlc-article" = tl."tlc-article";
-  deps."topletter" = tl."topletter";
-  deps."toptesi" = tl."toptesi";
-  deps."tuda-ci" = tl."tuda-ci";
-  deps."tudscr" = tl."tudscr";
-  deps."tugboat" = tl."tugboat";
-  deps."tugboat-plain" = tl."tugboat-plain";
-  deps."tui" = tl."tui";
-  deps."turabian" = tl."turabian";
-  deps."uaclasses" = tl."uaclasses";
-  deps."uafthesis" = tl."uafthesis";
-  deps."uantwerpendocs" = tl."uantwerpendocs";
-  deps."ucalgmthesis" = tl."ucalgmthesis";
-  deps."ucbthesis" = tl."ucbthesis";
-  deps."ucdavisthesis" = tl."ucdavisthesis";
-  deps."ucsmonograph" = tl."ucsmonograph";
-  deps."ucthesis" = tl."ucthesis";
-  deps."udes-genie-these" = tl."udes-genie-these";
-  deps."uestcthesis" = tl."uestcthesis";
-  deps."ufrgscca" = tl."ufrgscca";
-  deps."uhhassignment" = tl."uhhassignment";
-  deps."uiucredborder" = tl."uiucredborder";
-  deps."uiucthesis" = tl."uiucthesis";
-  deps."ukbill" = tl."ukbill";
-  deps."ulthese" = tl."ulthese";
-  deps."umbclegislation" = tl."umbclegislation";
-  deps."umich-thesis" = tl."umich-thesis";
-  deps."umthesis" = tl."umthesis";
-  deps."unam-thesis" = tl."unam-thesis";
-  deps."unamth-template" = tl."unamth-template";
-  deps."unamthesis" = tl."unamthesis";
-  deps."unbtex" = tl."unbtex";
-  deps."unifith" = tl."unifith";
-  deps."unigrazpub" = tl."unigrazpub";
-  deps."unitn-bimrep" = tl."unitn-bimrep";
-  deps."univie-ling" = tl."univie-ling";
-  deps."unizgklasa" = tl."unizgklasa";
-  deps."unswcover" = tl."unswcover";
-  deps."uothesis" = tl."uothesis";
-  deps."uowthesis" = tl."uowthesis";
-  deps."uowthesistitlepage" = tl."uowthesistitlepage";
-  deps."urcls" = tl."urcls";
-  deps."uspatent" = tl."uspatent";
-  deps."ut-thesis" = tl."ut-thesis";
-  deps."utexasthesis" = tl."utexasthesis";
-  deps."uwa-colours" = tl."uwa-colours";
-  deps."uwa-letterhead" = tl."uwa-letterhead";
-  deps."uwa-pcf" = tl."uwa-pcf";
-  deps."uwa-pif" = tl."uwa-pif";
-  deps."uwthesis" = tl."uwthesis";
-  deps."vancouver" = tl."vancouver";
-  deps."wsemclassic" = tl."wsemclassic";
-  deps."xduthesis" = tl."xduthesis";
-  deps."xduts" = tl."xduts";
-  deps."xmuthesis" = tl."xmuthesis";
-  deps."yathesis" = tl."yathesis";
-  deps."yazd-thesis" = tl."yazd-thesis";
-  deps."yb-book" = tl."yb-book";
-  deps."york-thesis" = tl."york-thesis";
+  deps = [
+    "aastex"
+    "abnt"
+    "abntex2"
+    "abntexto"
+    "acmart"
+    "acmconf"
+    "active-conf"
+    "adfathesis"
+    "afparticle"
+    "afthesis"
+    "aguplus"
+    "aiaa"
+    "anonymous-acm"
+    "anufinalexam"
+    "aomart"
+    "apa"
+    "apa6"
+    "apa6e"
+    "apa7"
+    "arsclassica"
+    "articleingud"
+    "asaetr"
+    "ascelike"
+    "asmeconf"
+    "asmejour"
+    "aucklandthesis"
+    "bangorcsthesis"
+    "bangorexam"
+    "bath-bst"
+    "beamer-fuberlin"
+    "beamer-verona"
+    "beilstein"
+    "bfh-ci"
+    "bgteubner"
+    "bjfuthesis"
+    "bmstu"
+    "bmstu-iu8"
+    "br-lex"
+    "brandeis-dissertation"
+    "brandeis-problemset"
+    "brandeis-thesis"
+    "buctthesis"
+    "cascadilla"
+    "cesenaexam"
+    "chem-journal"
+    "chifoot"
+    "chs-physics-report"
+    "cje"
+    "classicthesis"
+    "cleanthesis"
+    "cmpj"
+    "collection-latex"
+    "confproc"
+    "cquthesis"
+    "dccpaper"
+    "dithesis"
+    "ebook"
+    "ebsthesis"
+    "ecothesis"
+    "ejpecp"
+    "ekaia"
+    "elbioimp"
+    "els-cas-templates"
+    "elsarticle"
+    "elteikthesis"
+    "emisa"
+    "erdc"
+    "estcpmm"
+    "etsvthor"
+    "facture-belge-simple-sans-tva"
+    "fbithesis"
+    "fcavtex"
+    "fcltxdoc"
+    "fei"
+    "ftc-notebook"
+    "gaceta"
+    "gammas"
+    "geradwp"
+    "gradstudentresume"
+    "grant"
+    "gsemthesis"
+    "gzt"
+    "h2020proposal"
+    "hagenberg-thesis"
+    "har2nat"
+    "hecthese"
+    "hep-paper"
+    "hfutexam"
+    "hfutthesis"
+    "hithesis"
+    "hitszbeamer"
+    "hitszthesis"
+    "hobete"
+    "hu-berlin-bundle"
+    "hustthesis"
+    "icsv"
+    "ieeeconf"
+    "ieeepes"
+    "ieeetran"
+    "ijmart"
+    "ijsra"
+    "imac"
+    "imtekda"
+    "inkpaper"
+    "iodhbwm"
+    "iscram"
+    "jacow"
+    "jmlr"
+    "jnuexam"
+    "jourcl"
+    "jpsj"
+    "kdgdocs"
+    "kdpcover"
+    "kfupm-math-exam"
+    "kluwer"
+    "ksp-thesis"
+    "ku-template"
+    "langsci"
+    "langsci-avm"
+    "limecv"
+    "lion-msc"
+    "llncs"
+    "llncsconf"
+    "lni"
+    "lps"
+    "matc3"
+    "matc3mem"
+    "mcmthesis"
+    "mentis"
+    "mlacls"
+    "mluexercise"
+    "mnras"
+    "modeles-factures-belges-assocs"
+    "msu-thesis"
+    "mucproc"
+    "mugsthesis"
+    "muling"
+    "musuos"
+    "muthesis"
+    "mynsfc"
+    "nature"
+    "navydocs"
+    "nddiss"
+    "ndsu-thesis"
+    "ndsu-thesis-2022"
+    "nih"
+    "nihbiosketch"
+    "njustthesis"
+    "njuthesis"
+    "njuvisual"
+    "nostarch"
+    "novel"
+    "nrc"
+    "nwafuthesis"
+    "nwejm"
+    "onrannual"
+    "opteng"
+    "oup-authoring-template"
+    "philosophersimprint"
+    "pittetd"
+    "pkuthss"
+    "powerdot-fuberlin"
+    "powerdot-tuliplab"
+    "pracjourn"
+    "prociagssymp"
+    "proposal"
+    "prtec"
+    "ptptex"
+    "qrbill"
+    "quantumarticle"
+    "resphilosophica"
+    "resumecls"
+    "revtex"
+    "revtex4"
+    "revtex4-1"
+    "rutitlepage"
+    "ryersonsgsthesis"
+    "ryethesis"
+    "sageep"
+    "sapthesis"
+    "schule"
+    "scientific-thesis-cover"
+    "scripture"
+    "scrjrnl"
+    "sduthesis"
+    "se2thesis"
+    "seu-ml-assign"
+    "seuthesis"
+    "seuthesix"
+    "shortmathj"
+    "shtthesis"
+    "smflatex"
+    "soton"
+    "sphdthesis"
+    "spie"
+    "sr-vorl"
+    "srdp-mathematik"
+    "stellenbosch"
+    "suftesi"
+    "sugconf"
+    "tabriz-thesis"
+    "technion-thesis-template"
+    "texilikechaps"
+    "texilikecover"
+    "thesis-ekf"
+    "thesis-gwu"
+    "thesis-qom"
+    "thesis-titlepage-fhac"
+    "thuaslogos"
+    "thubeamer"
+    "thucoursework"
+    "thuthesis"
+    "timbreicmc"
+    "tlc-article"
+    "topletter"
+    "toptesi"
+    "tuda-ci"
+    "tudscr"
+    "tugboat"
+    "tugboat-plain"
+    "tui"
+    "turabian"
+    "uaclasses"
+    "uafthesis"
+    "uantwerpendocs"
+    "ucalgmthesis"
+    "ucbthesis"
+    "ucdavisthesis"
+    "ucsmonograph"
+    "ucthesis"
+    "udes-genie-these"
+    "uestcthesis"
+    "ufrgscca"
+    "uhhassignment"
+    "uiucredborder"
+    "uiucthesis"
+    "ukbill"
+    "ulthese"
+    "umbclegislation"
+    "umich-thesis"
+    "umthesis"
+    "unam-thesis"
+    "unamth-template"
+    "unamthesis"
+    "unbtex"
+    "unifith"
+    "unigrazpub"
+    "unitn-bimrep"
+    "univie-ling"
+    "unizgklasa"
+    "unswcover"
+    "uothesis"
+    "uowthesis"
+    "uowthesistitlepage"
+    "urcls"
+    "uspatent"
+    "ut-thesis"
+    "utexasthesis"
+    "uwa-colours"
+    "uwa-letterhead"
+    "uwa-pcf"
+    "uwa-pif"
+    "uwthesis"
+    "vancouver"
+    "wsemclassic"
+    "xduthesis"
+    "xduts"
+    "xmuthesis"
+    "yathesis"
+    "yazd-thesis"
+    "yb-book"
+    "york-thesis"
+  ];
   sha512.run = "550fb7f9dd937a7ac66772d7a9f733c9ccd07b79a18d5faa333c66db823528848c8d1f7ac726ef97c4d5df3a87ae807646d5b932ddfa82e256ce3c6d1e917d3b";
 };
 "collection-texworks" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."collection-basic" = tl."collection-basic";
-  deps."texworks" = tl."texworks";
+  deps = [
+    "collection-basic"
+    "texworks"
+  ];
   sha512.run = "b1f38877115fb6efc9b63a5591c399b799f3a258e342d5e198b74b582628461ad67ea7c1ab76e5ae83a3e8e538c62ac3e7c5b3d3f1d29c093331843067cfec57";
 };
 "collection-wintools" = {
@@ -10653,49 +10777,51 @@ tl: { # no indentation
 "collection-xetex" = {
   revision = 64951;
   stripPrefix = 0;
-  deps."arabxetex" = tl."arabxetex";
-  deps."awesomebox" = tl."awesomebox";
-  deps."bidi-atbegshi" = tl."bidi-atbegshi";
-  deps."bidicontour" = tl."bidicontour";
-  deps."bidipagegrid" = tl."bidipagegrid";
-  deps."bidipresentation" = tl."bidipresentation";
-  deps."bidishadowtext" = tl."bidishadowtext";
-  deps."businesscard-qrcode" = tl."businesscard-qrcode";
-  deps."collection-basic" = tl."collection-basic";
-  deps."cqubeamer" = tl."cqubeamer";
-  deps."fixlatvian" = tl."fixlatvian";
-  deps."font-change-xetex" = tl."font-change-xetex";
-  deps."fontbook" = tl."fontbook";
-  deps."fontwrap" = tl."fontwrap";
-  deps."interchar" = tl."interchar";
-  deps."na-position" = tl."na-position";
-  deps."philokalia" = tl."philokalia";
-  deps."ptext" = tl."ptext";
-  deps."realscripts" = tl."realscripts";
-  deps."simple-resume-cv" = tl."simple-resume-cv";
-  deps."simple-thesis-dissertation" = tl."simple-thesis-dissertation";
-  deps."tetragonos" = tl."tetragonos";
-  deps."ucharclasses" = tl."ucharclasses";
-  deps."unicode-bidi" = tl."unicode-bidi";
-  deps."unimath-plain-xetex" = tl."unimath-plain-xetex";
-  deps."unisugar" = tl."unisugar";
-  deps."xebaposter" = tl."xebaposter";
-  deps."xechangebar" = tl."xechangebar";
-  deps."xecolor" = tl."xecolor";
-  deps."xecyr" = tl."xecyr";
-  deps."xeindex" = tl."xeindex";
-  deps."xelatex-dev" = tl."xelatex-dev";
-  deps."xesearch" = tl."xesearch";
-  deps."xespotcolor" = tl."xespotcolor";
-  deps."xetex" = tl."xetex";
-  deps."xetex-itrans" = tl."xetex-itrans";
-  deps."xetex-pstricks" = tl."xetex-pstricks";
-  deps."xetex-tibetan" = tl."xetex-tibetan";
-  deps."xetexconfig" = tl."xetexconfig";
-  deps."xetexfontinfo" = tl."xetexfontinfo";
-  deps."xetexko" = tl."xetexko";
-  deps."xevlna" = tl."xevlna";
-  deps."zbmath-review-template" = tl."zbmath-review-template";
+  deps = [
+    "arabxetex"
+    "awesomebox"
+    "bidi-atbegshi"
+    "bidicontour"
+    "bidipagegrid"
+    "bidipresentation"
+    "bidishadowtext"
+    "businesscard-qrcode"
+    "collection-basic"
+    "cqubeamer"
+    "fixlatvian"
+    "font-change-xetex"
+    "fontbook"
+    "fontwrap"
+    "interchar"
+    "na-position"
+    "philokalia"
+    "ptext"
+    "realscripts"
+    "simple-resume-cv"
+    "simple-thesis-dissertation"
+    "tetragonos"
+    "ucharclasses"
+    "unicode-bidi"
+    "unimath-plain-xetex"
+    "unisugar"
+    "xebaposter"
+    "xechangebar"
+    "xecolor"
+    "xecyr"
+    "xeindex"
+    "xelatex-dev"
+    "xesearch"
+    "xespotcolor"
+    "xetex"
+    "xetex-itrans"
+    "xetex-pstricks"
+    "xetex-tibetan"
+    "xetexconfig"
+    "xetexfontinfo"
+    "xetexko"
+    "xevlna"
+    "zbmath-review-template"
+  ];
   sha512.run = "457c4e7a3e2089adc69173950c5d3fa177c6e03c5936c49328bbd3c276d9940ba5aca974aea4b97c5dd51b6ec1ca9ebe28861e730aef63b1312589e0cb16df1e";
 };
 "collref" = {
@@ -11070,17 +11196,19 @@ tl: { # no indentation
 };
 "context" = {
   revision = 58167;
-  deps."amsfonts" = tl."amsfonts";
-  deps."lm" = tl."lm";
-  deps."lm-math" = tl."lm-math";
-  deps."luatex" = tl."luatex";
-  deps."manfnt-font" = tl."manfnt-font";
-  deps."metapost" = tl."metapost";
-  deps."mflogo-font" = tl."mflogo-font";
-  deps."mptopdf" = tl."mptopdf";
-  deps."pdftex" = tl."pdftex";
-  deps."stmaryrd" = tl."stmaryrd";
-  deps."xetex" = tl."xetex";
+  deps = [
+    "amsfonts"
+    "lm"
+    "lm-math"
+    "luatex"
+    "manfnt-font"
+    "metapost"
+    "mflogo-font"
+    "mptopdf"
+    "pdftex"
+    "stmaryrd"
+    "xetex"
+  ];
   hasFormats = true;
   sha512.run = "61fcc778837ecff88bb0e80e39e2acb3ee64e2c26e4069f7634e5dc6c74dc93caab78e4b0088ed58f494d6dcd3a5084bc55cd471baaeb292dc208cf2a241bf69";
   sha512.doc = "ee4458cd6d45a41652ae24b3b82bea5cfa2d8b9c14cf4ba1357f9f07d6572f8ba83e350b74659c471ebf5068f33f5c5762a11669ab2a4f5adb3db41f392956dd";
@@ -11089,7 +11217,9 @@ tl: { # no indentation
 "context-account" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "755ddb4c62a496873d5362df01307163c79d2a6c3fabce6ea01b442c16dad2f23d72909df71dd44eb4fbbf5c57366e20eb49bfce240807c2e2a9a52cbd76680a";
   sha512.doc = "b19f6d0330e5da99a961304f8c022609dedb2dc3a8cc4607cb9b2ca7eda38f9c8b972316bb9fac92cc36166e1c0822afaebda2c5e2d87db1e1efd2781f51956e";
   hasRunfiles = true;
@@ -11097,7 +11227,9 @@ tl: { # no indentation
 "context-algorithmic" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "72d4bbfe723b4012f8701c2786f96009bbed3c6b4bd2129f7153306f172e72218920e222f97ee6d5ee4b863e9e915fc38dd92b0c42066385fde35c5c3d0cc42a";
   sha512.doc = "19ba676dc7822bc0a6583d6e9e031f3780977835c10d901e1ae02fca781719a0e015ac79cfc35c908a8de40a19614fcd17a35c604c9311b50972d0706d6f07e1";
   hasRunfiles = true;
@@ -11105,7 +11237,9 @@ tl: { # no indentation
 "context-animation" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "19691ca3325b3f72154ac8439e616a128b5f3ba8c9447bb1e92979e175daa902cd756853a2b6e6a34a84fbe96e02771a0c6ef27ed5bbb7eac94f62dd72d571f1";
   sha512.doc = "a06227508c2dc343598fc6878e2b17b56341f5dd86a473957318eb94ecc6e150adaedf7346ffb931eda184651efd00d8f60e36ec6ea50e9ac94e2ed096058293";
   hasRunfiles = true;
@@ -11113,7 +11247,9 @@ tl: { # no indentation
 "context-annotation" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "bb66132ed1e4f146c407bb3b2852c451b82d3d06de1dc25ddec6e692d17f4d994d1a67cfd7ff711dc2de7a4ce7259b1768d6efcfb58856321d5ea5b15271cd34";
   sha512.doc = "4491012c8172beb64478b2de5557ed8f97701cfcb3996a8a5ff9990048d79ddce8cc2796dbf4c08812bc8963c0d318f9d79d2d4c2d14bc372f06dbc28e012c3d";
   hasRunfiles = true;
@@ -11121,7 +11257,9 @@ tl: { # no indentation
 "context-bnf" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "53e5d3d7c977aab648bb024942263a8aed5da6314506825ace02556db890ea23400c6de714ddf6380235c942dfc02e127736579b6be1c5b0b0ecc65d25fb0d6b";
   sha512.doc = "d7ab60c2f8571ce2e2e96b82c1f97b140c5750324efb73275062a8d301d530279a3f9c19f6a6feebd6d7c72727d94f469d9aad05ad67cde5dbd3de9f695dad31";
   hasRunfiles = true;
@@ -11129,7 +11267,9 @@ tl: { # no indentation
 "context-chromato" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "52e11c6953e7c2e2f9a3a20b8885fd12f5abef32d32da5ae5415b0321d37ac5ff8ff5bece3d522e1f785470cef542568cd56abd509d26671da9298c3d0ba27cc";
   sha512.doc = "5c7c7f03050b0a17dadf23a09dced356a036c6b95ca76aeb0fda583dbc490d82222de64299c121224efaccc78b62364a1bc56daf020c177865c29e343529f040";
   hasRunfiles = true;
@@ -11137,7 +11277,9 @@ tl: { # no indentation
 "context-cmscbf" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "cb0e5849ac3168a4ecdd1545edd029a1622ecf1c46d29eec97b28a66f65305e6b4d3a9c83e24d78e1596c8009ad5c9a0e25fa7e09448c3e0ea492e62bc933ea8";
   sha512.doc = "8f45989c08f09381ccbf2942a08c0b13792917a18d5b2e92fb45c7ac2f4b4538f5ffd633da0348e12835c03a6f79b0ea7044f1ebea5770365a83d2d097a56df4";
   hasRunfiles = true;
@@ -11145,7 +11287,9 @@ tl: { # no indentation
 "context-cmttbf" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "e3bc048c09bfdf114efa25077fa4e6a6c20b4d0e2ba337cefa0a8a82348fd3376f82cae0c85b029b863b7a5db9d9552b4fc5f5487d5ed5f6d88484181ea98ced";
   sha512.doc = "2b55367f236330a07120229902405213a495de2ba455f333bc23e1c1abbe0f0a4be16ee95415f613d41572916722e3d023a71698f74e5e37f34a8de4fdca6e47";
   hasRunfiles = true;
@@ -11153,7 +11297,9 @@ tl: { # no indentation
 "context-construction-plan" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "b292f8e271fcac88eaedc376257ae16a401a6c31009eaa3d4faeefba25c33d034f57d30ba4638e85b76ffd0d24ef4d541dfbceb1bc0b5c806a8412d239a32146";
   sha512.doc = "605e09bedb9e2ad1e98a621c0a4842f28592c93507c3da31f8c6437e95e63a47e795b38fa0263d7fa81fa3b8838f21d2426c8705f8e17ac1d827923cf5e88784";
   hasRunfiles = true;
@@ -11161,7 +11307,9 @@ tl: { # no indentation
 "context-cyrillicnumbers" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "14a90656d706d68ce441301aa6bccf2033c36f9c8d8605ec9dedeeedb71a5670dae325a5a198b2ca25373eb2b495e57fff31b85089c6c0fb987738c76ac636b2";
   sha512.doc = "d95b1df26033aaff0a9f6759268ac3e68bff02556001e3f9b2bae1db68aa13c839a87047a6ae0a296f8e5817398ba35b7cbacc4f194dd93cf72684904190e7e3";
   hasRunfiles = true;
@@ -11169,7 +11317,9 @@ tl: { # no indentation
 "context-degrade" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "b2df5bbee492b7137180bfe7b0b826f4149b8231b78cb839ac9716f02b622e5b3a0eb5964e12625650a224ae463714bb7cafbecae6061a6e3120022d2f545d52";
   sha512.doc = "8f24fd70547ecfcbb163df2e3e4450525f0e56583b6984f61fb04559142bd838287e79c9b9d8cdef2c26a882688074b5010615e6d818a11f2f5812d88e31cd82";
   hasRunfiles = true;
@@ -11177,7 +11327,9 @@ tl: { # no indentation
 "context-fancybreak" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "1e8e51de47c67a3287dfa4386f9c09b4dfaa494d9b59fe8d117a3a1b65a5041add24c36227f2d2d7fb3bf2ec34d6a5a8b6658d275b63f55793d05dea08722b10";
   sha512.doc = "6082670766d63da902d2a53f2a6ee89fcdce942fd73439fea8326ef3117e6a5483b86d9d4271d2f3d9546a5fe44277721cd15510a9da392db36356b44ae2f36d";
   hasRunfiles = true;
@@ -11185,7 +11337,9 @@ tl: { # no indentation
 "context-filter" = {
   revision = 62070;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "c2534b543fd5444776a054f43fafa393040af5bcb67f869d61d200a4a1d0355f1d81c64adab683d15a6be806a21dfc9ad661995bbe51da3c0bfb841ade4b077f";
   sha512.doc = "a9c2ea88b0e2514840c368ea7686894dda4b86c93ec8f34989238ffdf5704f1c1898d0ee5e0724035314d2d37803f1a1afdd445dd802a94f5ff4223148f81767";
   hasRunfiles = true;
@@ -11193,7 +11347,9 @@ tl: { # no indentation
 "context-french" = {
   revision = 54215;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "aed7a7f91e909e8b9b7efc5e0b45c67d5ed3e084c5019e1ddd68d8e9e969c0579b1dbbe4e25d74ca22b256324358ed34f3f54a92e2fb3a012a6aa43797e8aaa7";
   sha512.doc = "926a054d12f59d45dbe538eaed4087ed2c9f3321f1051c7006fe651af95d2275788030ee9371ffd39a7f7f8a4022776c19721323ab82871f061dca365c081728";
   hasRunfiles = true;
@@ -11201,7 +11357,9 @@ tl: { # no indentation
 "context-fullpage" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "280a16b47e04f3099a2f960435bf1c22ec623553303e339df4d06135b768cee6565e20a0c4e0c080d8c6f621a32d862ba6203daacdbf9ecd03b62829dd0014fd";
   sha512.doc = "1d4ff98bae26e0d6ec1ce1ca58fac82f8592158f8635eeac737546873f1f468b2ad7a82b9f8956b770fdc0c01443a9327c509265cdecb90d83dca15462cfa23b";
   hasRunfiles = true;
@@ -11209,8 +11367,10 @@ tl: { # no indentation
 "context-gantt" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
-  deps."hatching" = tl."hatching";
+  deps = [
+    "context"
+    "hatching"
+  ];
   sha512.run = "e0c61179f4ecdf93c13dbfe19f59487fbce55e1a0dece76ac025a88a452e7168c5e3b84e53c01bcae4cc412993be36eb554dc5f7299fc1205f4070aa07a834cf";
   sha512.doc = "a5cc76238f8377dc8d06869bf23a1367c880b57ba62ab8c8331886cbed145427e2819ba92965924fc7a78579d28b7c1cf331acf7f199cf72672ccb64962c9367";
   hasRunfiles = true;
@@ -11218,7 +11378,9 @@ tl: { # no indentation
 "context-gnuplot" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "d3d7dce105707bd8fd903038e458cae614ec63da7932231e1f659570ec3a7960ea0fab338a8405f2ca8ce8b03946b58db8255333d2a4ab5a659566f4d272b0b0";
   sha512.doc = "40e471b27d53ced33590792ac62992a220357c6db1c78cba901197362a36817bc14b049f2573ee2e5b5adad5182c5bea2880c4f7a2477bcd1a06ee7ccf88b0b9";
   hasRunfiles = true;
@@ -11226,7 +11388,9 @@ tl: { # no indentation
 "context-handlecsv" = {
   revision = 51306;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "10f862b7152e0efe2a8444fcf847ade2aad2c1499e146b94643a7e08a438359c2f7d1927e7e9773f3dd14475fb4535d17fb4f29ff053e7a29c9463f40c6e5598";
   sha512.doc = "39330dfaf22a83181086343ac9ea7d64025fbe779e55161b33e5a9a9802e0928bb1c16941aeb307da641835aefdfe2e431becbc0cfe40ad8bb33a3816b9b177b";
   hasRunfiles = true;
@@ -11234,7 +11398,9 @@ tl: { # no indentation
 "context-inifile" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "9dd9b61cd2b5700b0e2b6e59bf4040de9431820c659f121c2681e454ddb4b34454270eac6c442836c90f8a1819761ce0d7659684a1f0c8876fec1f947a0b16f7";
   sha512.doc = "9635bc80ae7222c6a38004ad5f985004634b7db9596e03a23123ad71bbf177639bb1b028bdfe79d51b75c1c429c327f65c2b5e0720723d8bcdf63f4939312850";
   hasRunfiles = true;
@@ -11242,7 +11408,9 @@ tl: { # no indentation
 "context-layout" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "6cad00783d0bc91000ca0e0c8350fe2a2e99f7fefccd375d5bb2f1a144fc04a59f83122dcd490fc0596b1dc9fd0c0a779bfa35932362927ed50ed8df39ec359e";
   sha512.doc = "4ecf7bfe5fbc78453cc116cf7a657f4b6ac7fc21ca7dd6da5beb0ea1af0c1fd48d6a74ab516213f49d1e29cb8bd47fbcc94145157472e3ea22b291f494fc3d1f";
   hasRunfiles = true;
@@ -11250,7 +11418,9 @@ tl: { # no indentation
 "context-letter" = {
   revision = 60787;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "558836a8c95743270f627a18dfe7a29ffc7a2eaeb4cf663d589ef5c07eab4dad6f09db31511379c90a41d1e9e7da5766e8dc3c8bb0902fa06bda4fb33caa97c9";
   sha512.doc = "94e1bf68371f3e8c426cfff5c471f93c86ce51fdd92dfad59669d32cc73d86de606113ece55d13a0f25ac4a26f16916407de9175b84acc79ba107156c20cd20a";
   hasRunfiles = true;
@@ -11258,7 +11428,9 @@ tl: { # no indentation
 "context-lettrine" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "79e4e246a7bb0a300db53425e2769a3ef61bc0249ce57840c0b9037805e86eadbd1ef4ab8a110fd806584393feef00f498418732cfd53922aed6df67c561e535";
   sha512.doc = "ab32697b6c309b1099b809c33182ffc48bb3019c8d520269cbb616b61e8f20678cc2cf4e7e971e06cadb22ffcee0d502deedf21aa95d8d372d1840e4fb4a6591";
   hasRunfiles = true;
@@ -11266,7 +11438,9 @@ tl: { # no indentation
 "context-mathsets" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "e4c689c745d06c61d6f693a9832001aa8c79d51664c2a5d6d0c6148a95b30870063f50eecca31ac0924193c6dab8c12cd5ccaca16eeaf5f83a99cef1a8889ec3";
   sha512.doc = "f2c33244814da8e8838483038f507fe6b3e146f37691e55a37bb5355985d2af4c5fc423318133c4f13837a3e66a4fe72d5c14f6721bb5ee0417a59691b86d3f1";
   hasRunfiles = true;
@@ -11274,14 +11448,18 @@ tl: { # no indentation
 "context-notes-zh-cn" = {
   revision = 23171;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "a05cd68d609fb9427ca07f64ba1b9ad85762464a3294653c8a790c0a6a41d6af43aab72a1eb7ef0d56a299db2f54af5666dbe974f9fdac014f624350c8bfe50a";
   sha512.doc = "4261b8aeb5b3cbebde2890af1b7039c6f557ce36f4979228f40f9e5e99b19aa5c457ed6842f4501f4dc32f51f58d9fcd0764028b9d5c74fd07d41c8c866220a1";
 };
 "context-rst" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "f93173c1b27afe538d670c791048f495fa3f236cf75511d43b33172d140ac47fa3b5f11c674db5d515733b8ef9cfa7ac2d3c46b78b624768ee95a21884dae904";
   sha512.doc = "536f63f9fa02e37c38f445974dab1f75b38abf0769379ee1735001972db71be10d51a1782e850ddd75d73f2a6f1375cf043684c0fae1a88b20a1650248870f9a";
   hasRunfiles = true;
@@ -11289,7 +11467,9 @@ tl: { # no indentation
 "context-ruby" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "e219c6da61585d88f8e899278d1c85f0903ed32b6c7368cdb6076697230a0e79f5f88f53dd98514394fa09e7580c1c6b7c167d81c010107f3399dffb18b13d95";
   sha512.doc = "179e501b428bd87a49830a68236008ea6e962b80e79ab45a0e75a7b86a7fc11025ac38ad463c459c6d290aa5ac8627da5849d1fd8f7502ea7d97696b53ed2647";
   hasRunfiles = true;
@@ -11297,7 +11477,9 @@ tl: { # no indentation
 "context-simplefonts" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "7c817f4a25a8883ce052c9657a3d6117042e8538fadc8d67b4b0194abd69238045c09d365e90e555d5b04d83a1ef82039ca9631aec00eb1f80b56fbefa729cd3";
   sha512.doc = "238babc7694bf85c81e3079b5d72feabc9c9eeea4f3b625a57ecb133d70ac745334ca0426097dccfe53e3ffe108ac0859be4da7625bb6b683abec1101367ac06";
   hasRunfiles = true;
@@ -11305,7 +11487,9 @@ tl: { # no indentation
 "context-simpleslides" = {
   revision = 63903;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "2db8348769d60d38266ad3798264864a0453b38c769db02ddaee072e795596fd48cc201caa5023d980c1a748c41a30e4c560ece68def59deb3c467bec2e60f64";
   sha512.doc = "532a9a142b30c8fe2ff3431d24988ef96e5da63276cd0084fe8b69b3e9cb572a0beab8d7ee4291d00a4b1d725f3d23ed47632811fde7e2aca41998c5d44a0481";
   hasRunfiles = true;
@@ -11313,7 +11497,9 @@ tl: { # no indentation
 "context-title" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "bc7d6cbd373cb6d6214489ed97117929ba381626c854a0a5a950bfa44c06214991d7a90290793c825c96e6d22ba1f6807054d4553d1d3980d9d9bc0e6dabafda";
   sha512.doc = "3b910eeca8c8a442939873e082a4025523472b267ed3268e63cbf5fbe0821c9db8d8d183058d139aa02233dfdb6be7e23fb9df360a490f7d551875c59753c7c0";
   hasRunfiles = true;
@@ -11321,7 +11507,9 @@ tl: { # no indentation
 "context-transliterator" = {
   revision = 61127;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "f919d3f9e6ab25932cfaeadfc07f86ebdbe00d84dc21236e4775930fc3866cee69cf9a25d373e13655f4396a3c395ea6ea103a28ffb4f00a4e95b7ceaec155c9";
   sha512.doc = "8473c1ca7b48009055f5c33031ec60f80d84dc43396789b0c0c7e6d65bcf014a237088dca07211beae4bfb80377f55cf12a9f379995cff50f52143fc4bc81295";
   hasRunfiles = true;
@@ -11329,7 +11517,9 @@ tl: { # no indentation
 "context-typearea" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "c4a2f2317b146b31102273e9b616d403d4ee836a61fae96bd9315670b0bdd5f9d94ecde00b53d2ea5f7073773bd8af5c322b07c3b05bf7ad5262a9f0e0b623a1";
   sha512.doc = "7171bc5c5e82b3897f75421e745e876c2aea84e9e9cb74badd6dedc75666b8f9ddb8b6d11c523ea64be6b57dca4f84555827afa32a0c90f6df1c31b68b1f6395";
   hasRunfiles = true;
@@ -11337,7 +11527,9 @@ tl: { # no indentation
 "context-typescripts" = {
   revision = 60422;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "a13d06b9a792cbd2352016df508a7860e45b541d04cef1c9d9c8b5a6199120a71dfd69f990700c4a76ac31ec11209caef431a190b9045bdc46cc44f88cbef0a3";
   sha512.doc = "3d948f22da14b1d481817477235657cee714e4a2a69834729c20e18157f1175890ddc7fce992e8f5f27e26cd6d08186ff1521e2186681557cfff1a4778267324";
   hasRunfiles = true;
@@ -11345,8 +11537,10 @@ tl: { # no indentation
 "context-vim" = {
   revision = 62071;
   stripPrefix = 0;
-  deps."context" = tl."context";
-  deps."context-filter" = tl."context-filter";
+  deps = [
+    "context"
+    "context-filter"
+  ];
   sha512.run = "12100c7aa3eb555cf9dbe72454a96e63feda52329a8a192ff86ba30477acab4ebaaf84c15a79f16d4e3f95cef02baf8146e5810b8c9e8e94c25ba1317bf4fc2c";
   sha512.doc = "0f49e22b9e1d465f46727a9e952e095eceab55e77a2559fe497cf14690377f77ca42aa23ce7eaca659e9b0983e5a950b36733eef49b0473fd33a8f783edb43b1";
   hasRunfiles = true;
@@ -11354,7 +11548,9 @@ tl: { # no indentation
 "context-visualcounter" = {
   revision = 47085;
   stripPrefix = 0;
-  deps."context" = tl."context";
+  deps = [
+    "context"
+  ];
   sha512.run = "da7799ee31a4298f8e8cb02cb4e480fa49fb4188b776df877648c663c93523636bdd7fa6ca5eb403fc8f3483064bf223fed042c1d27eb0817c224ddf8e21c673";
   sha512.doc = "1788355ea4109e7e2bbaa9bbc3798f60a814d549d082638a59a453cc5fb39b54ff8a00471a28a96a5501e91899874ae19981ae0f8a09b6353d19275b851b9f80";
   sha512.source = "39bba551e9f0bb8d70c0b60a2b0fba3d7cad30555d4052fc6ae722bfd9cb79d5cca784474a9f1847faccccb1618662bc4dd2fadd1fdacaf2f4cc9c035b5501ec";
@@ -11663,7 +11859,9 @@ tl: { # no indentation
 "create-theorem" = {
   revision = 64104;
   stripPrefix = 0;
-  deps."crefthe" = tl."crefthe";
+  deps = [
+    "crefthe"
+  ];
   sha512.run = "dcb4f947d6d0fed303d53c19e29049070b1c3ca47fb0d78c0c1c3455f6de59ea2aa98640ac88549bb8f00f1b5cd4320a84f92f98d08a0ee788eb47417a86486d";
   sha512.doc = "4c84bebff2a93f8326fb8ce795a9fe2193194f70d49b5448b51d25a98378336bc931a60d762dc12bcfb2fffc362663391347a4b89e69336fb47efd23dcae4499";
   hasRunfiles = true;
@@ -11750,9 +11948,11 @@ tl: { # no indentation
 "crumbs" = {
   revision = 64602;
   stripPrefix = 0;
-  deps."catchfile" = tl."catchfile";
-  deps."etoolbox" = tl."etoolbox";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "catchfile"
+    "etoolbox"
+    "xkeyval"
+  ];
   sha512.run = "f4e3e045665c16d02c6b1cf2d43957fcbfe38ceb17b6bed9445803d4134a3ad2c22b552230ed685d42c33864169c782c9ef51ba47669d7a975e699ec532a1f76";
   sha512.doc = "b6e13f1177eace8e349648dd376e3252b34ada5e84c0a676631ef313507064c68624936730fe9780707bced36f05d4103cd9aa33a4bd511cd23836ed2ab38d03";
   sha512.source = "5220b2d854c11d4c0734ec22dded6c1259d470c416c08fec4d4fff35714bd56126f5c4f8785e958454c1a3854541b9d8cb571d4f7a86b636b1c12e739c52072d";
@@ -11778,7 +11978,9 @@ tl: { # no indentation
 "cs" = {
   revision = 41553;
   stripPrefix = 0;
-  deps."cmexb" = tl."cmexb";
+  deps = [
+    "cmexb"
+  ];
   sha512.run = "bc956c595d4460f35c64c92e7730a7cc9cd3af95301afba56c49bcf8415666863de926733409ce1afd99ba767fe3a3fa45c68f2dcc912b69c6f72b618289fb30";
   hasRunfiles = true;
 };
@@ -11800,19 +12002,21 @@ tl: { # no indentation
 };
 "cslatex" = {
   revision = 62387;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."cm" = tl."cm";
-  deps."csplain" = tl."csplain";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "cm"
+    "csplain"
+    "everyshi"
+    "firstaid"
+    "hyphen-base"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "a65516275b53ce0e2487193b537759da447137898915f577c66893d6408c664b7cb830941dac2e80b2922c1597719cc879f66d3378216bfa2dc190e1bf502675";
   sha512.doc = "d1be033b7355bb3431193a9a39bdd1e269c7f3a97333c2b753ffdf795ad45a366893267a13472463805ed428760de680aae3377b25ef39bf5522a0186f80f899";
@@ -11821,16 +12025,18 @@ tl: { # no indentation
 };
 "csplain" = {
   revision = 62771;
-  deps."cm" = tl."cm";
-  deps."cs" = tl."cs";
-  deps."enctex" = tl."enctex";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."luatex" = tl."luatex";
-  deps."luatex85" = tl."luatex85";
-  deps."plain" = tl."plain";
-  deps."tex" = tl."tex";
-  deps."tex-ini-files" = tl."tex-ini-files";
+  deps = [
+    "cm"
+    "cs"
+    "enctex"
+    "hyph-utf8"
+    "hyphen-base"
+    "luatex"
+    "luatex85"
+    "plain"
+    "tex"
+    "tex-ini-files"
+  ];
   hasFormats = true;
   sha512.run = "c4dbe1721fc2281cba7e426f6c75d35671cfeddf77a947f147a33c651090bc90528583445736bc2933c2d3986424e1b3ac4984e93cfae5f0ad1cfe41902f63cb";
   hasRunfiles = true;
@@ -11839,7 +12045,9 @@ tl: { # no indentation
 "csquotes" = {
   revision = 64389;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
+  deps = [
+    "etoolbox"
+  ];
   sha512.run = "68427cbe486f3b53bdb24869a3ad52cf6a006d7872ff9408560d9e4b0f1e8184fcb437d54e10f11d7a3585ff8ff7ad40ab4a95aa66091bb69a75a3e8e60aede8";
   sha512.doc = "ceba04fab9ec257c6bbc2fc903e3888bae9ef6bfa5664c8e01da14ee2b1482005aece22b6bf4fa7fb893c2dc1b0cb7f762eb048e0b2c039be80ef73b0bfef131";
   hasRunfiles = true;
@@ -11947,43 +12155,45 @@ tl: { # no indentation
 "ctex" = {
   revision = 63891;
   stripPrefix = 0;
-  deps."adobemapping" = tl."adobemapping";
-  deps."atbegshi" = tl."atbegshi";
-  deps."beamer" = tl."beamer";
-  deps."cjk" = tl."cjk";
-  deps."cjkpunct" = tl."cjkpunct";
-  deps."ec" = tl."ec";
-  deps."epstopdf-pkg" = tl."epstopdf-pkg";
-  deps."etoolbox" = tl."etoolbox";
-  deps."everyhook" = tl."everyhook";
-  deps."fandol" = tl."fandol";
-  deps."fontspec" = tl."fontspec";
-  deps."iftex" = tl."iftex";
-  deps."infwarerr" = tl."infwarerr";
-  deps."kvoptions" = tl."kvoptions";
-  deps."kvsetkeys" = tl."kvsetkeys";
-  deps."latex-bin" = tl."latex-bin";
-  deps."ltxcmds" = tl."ltxcmds";
-  deps."luatexja" = tl."luatexja";
-  deps."mptopdf" = tl."mptopdf";
-  deps."ms" = tl."ms";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."platex-tools" = tl."platex-tools";
-  deps."svn-prov" = tl."svn-prov";
-  deps."tipa" = tl."tipa";
-  deps."tools" = tl."tools";
-  deps."ttfutils" = tl."ttfutils";
-  deps."ulem" = tl."ulem";
-  deps."uplatex" = tl."uplatex";
-  deps."xcjk2uni" = tl."xcjk2uni";
-  deps."xecjk" = tl."xecjk";
-  deps."xetex" = tl."xetex";
-  deps."xkeyval" = tl."xkeyval";
-  deps."xpinyin" = tl."xpinyin";
-  deps."xunicode" = tl."xunicode";
-  deps."zhmetrics" = tl."zhmetrics";
-  deps."zhmetrics-uptex" = tl."zhmetrics-uptex";
-  deps."zhnumber" = tl."zhnumber";
+  deps = [
+    "adobemapping"
+    "atbegshi"
+    "beamer"
+    "cjk"
+    "cjkpunct"
+    "ec"
+    "epstopdf-pkg"
+    "etoolbox"
+    "everyhook"
+    "fandol"
+    "fontspec"
+    "iftex"
+    "infwarerr"
+    "kvoptions"
+    "kvsetkeys"
+    "latex-bin"
+    "ltxcmds"
+    "luatexja"
+    "mptopdf"
+    "ms"
+    "pdftexcmds"
+    "platex-tools"
+    "svn-prov"
+    "tipa"
+    "tools"
+    "ttfutils"
+    "ulem"
+    "uplatex"
+    "xcjk2uni"
+    "xecjk"
+    "xetex"
+    "xkeyval"
+    "xpinyin"
+    "xunicode"
+    "zhmetrics"
+    "zhmetrics-uptex"
+    "zhnumber"
+  ];
   sha512.run = "eea93d70d6c7768d8157841db4d4aadc3077422dba7b9cfa9bd4235dc547a43f694c9d3e0002fc2aefa3d8b8823f2478bee712a46cf62742bd30b7cffa7edcdf";
   sha512.doc = "9e23c44358c6060f071a5233ec81efa1efad1f280ebfbb025b7d4c5f6070d4480ad34b961591af429637dc2131b2147051a191e7ea20aa52ec6081bbdbe057fc";
   sha512.source = "1c0033fd3ee4585c3f81490e89c24f2224fe49966068b30fea229dd9c84b6d0b54e5ab2abbd6e500d211c9403fdaf418c3c7c04dead4cc2119912ac8c8000d42";
@@ -12006,7 +12216,9 @@ tl: { # no indentation
 };
 "ctie" = {
   revision = 62387;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "c1c69127e1157c15086beb269e1925feaf63eebbc45baec018ce97196a2fc42638bb3107a4c1d065e98a08e490d238d2bffe1827f27f9015ffa5be88be53d6bf";
   sha512.doc = "494a3e6569a77b434f66a56f1fa44d4651dc23e7cdcacb101043ed55cc6e32551f148e67976b67b88507da2fe05a0b006c810fb737f9364d47cb010438c7b39e";
   version = "1.1";
@@ -12185,7 +12397,9 @@ tl: { # no indentation
 "cyrillic" = {
   revision = 63613;
   stripPrefix = 0;
-  deps."cyrillic-bin" = tl."cyrillic-bin";
+  deps = [
+    "cyrillic-bin"
+  ];
   sha512.run = "1b8889d33e5433b32d0b84bd31ef7ea96fe338456ef8e1732ea6c254dfe2f21d3600766b1e51bafa4ddbf0144e8420ad8ba6ad593eaa32c3d45dde99b0b4ec8c";
   sha512.doc = "b0b1d24d3e8887c5b9c251922157de7cf042845009c07e62fd324ba850dff9f39bc6ebad04ab216ad69070da93f77f68693d1be57cd15b038374f0253329c8fa";
   sha512.source = "4dc564f475a883cb75ae0fad6b5aecb936c1ab9cdaae857dc7cdfb3d8f06f6534542c36b053cc7b74f455a2646f081060c670b35f1eda5fa69418b1c1f97e5dd";
@@ -12273,10 +12487,12 @@ tl: { # no indentation
 "datatool" = {
   revision = 52663;
   stripPrefix = 0;
-  deps."fp" = tl."fp";
-  deps."substr" = tl."substr";
-  deps."xfor" = tl."xfor";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "fp"
+    "substr"
+    "xfor"
+    "xkeyval"
+  ];
   sha512.run = "323b1526a32eb4e0d81db77278d66ebb6ac91fa357f7f76c8ac1f199efdc4be17ae4f8fb83fe55f3ac9cfb8a18d163a85d6c21cc11c26e4dea0db5f85dc12dd5";
   sha512.doc = "32b5391c7197bc29783bab0c93a5225784fea999f69bdd8b1b5c152ed338716f82dbedfdb6cd19064ee409407c0b808e5f410e6090cda6d1f8ded2ca41f3ace9";
   sha512.source = "e149a3be96ee0161b2bd872ab73e74c36ea638f0a1f0a48e0268093bdff2c2c1cfabe5c0a4d3ca8ef7ee4c02bd03710c5c1b2ff9c1b543ed792a444160814493";
@@ -12331,9 +12547,11 @@ tl: { # no indentation
 "datetime2" = {
   revision = 63102;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."tracklang" = tl."tracklang";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "etoolbox"
+    "tracklang"
+    "xkeyval"
+  ];
   sha512.run = "7f2ad65f95e3881e5016647bff85b10138faaa7d26d097bdce0ec7b30cc0d913a43c2a45b0caa69a6669e54725122cf1a86117d0d4f543caba67058423af7f62";
   sha512.doc = "d43970aea6c7971ed6a3564a6681caea0e0f5606607496d9ec51d6c2fa741dd6c28754c9e9f06cde0ad1a79280b53629eb427faf820d00549468a650cbd0eac8";
   sha512.source = "511c10e67c7d77ee10d8d75704628313a1598636ce82a5ce114942854b3a9d2da237ed12fdab986f13b04ce3c2123933db91b850360b309aa52305575a7cf2d4";
@@ -12532,7 +12750,9 @@ tl: { # no indentation
 "datetime2-it-fulltext" = {
   revision = 54779;
   stripPrefix = 0;
-  deps."iftex" = tl."iftex";
+  deps = [
+    "iftex"
+  ];
   sha512.run = "29a67f9c4414d08adce673ac2b501e92be5822470511b55677b041fa1d89b55760246fea08ba0f4cac7ef6f8e7ff52498f0459d50f94bf2bc6b3e4a944976a99";
   sha512.doc = "24bceb74337abc4ae74bbf9101bd32cc65371d60a0461cec91c8e3ecc3822c848eb8c7f0bc8706ec1b2118294df659b44f3139c3a3ed1c0c243f9654ae1b3d6d";
   sha512.source = "89a91a69a45100324b24c5cca3e0bdedc8dec2a466c414e65044f55a6c1ec3c715946dd5c5ed942fc9dc8f6a597fe5f2075dd7d05c88d241da4bccb27ba9cb3d";
@@ -12771,12 +12991,14 @@ tl: { # no indentation
 "debate" = {
   revision = 64846;
   stripPrefix = 0;
-  deps."listings" = tl."listings";
-  deps."listingsutf8" = tl."listingsutf8";
-  deps."pdfcol" = tl."pdfcol";
-  deps."tcolorbox" = tl."tcolorbox";
-  deps."xcolor" = tl."xcolor";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "listings"
+    "listingsutf8"
+    "pdfcol"
+    "tcolorbox"
+    "xcolor"
+    "xkeyval"
+  ];
   sha512.run = "88f9ff3f473dfbd84509adfe4491d15b7c20229361afde9cbce382be0441378cd6bb7d306c9b0a424dc065f34ab2d86eca8a0334d00fd3a5bae513776c418815";
   sha512.doc = "ba5e90ecc8c1733cdb78233099cdc95e09d02786df11606b3f823f2b1b60934cd2881c873ad7afa192ee1b0ff5ad91121896cb30e7405ee3ae9bc960d26e7f9c";
   sha512.source = "b9c0b94eea82d7b684aa358788a5ee3cb9709738137827b7a4f70ddd0d02ad92b6feecf03d0de7dd08c1ab233f17db3c973cfafef98134be33a41d6a8d7c4da6";
@@ -12818,8 +13040,10 @@ tl: { # no indentation
 "dehyph-exptl" = {
   revision = 62734;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "13c7fe78927fb7e85155284d47fe597e173647efea8d7077e06f55c358b2b851e3b65820829859d4d770b81af836f308a2b9e0e5c3ddb17f1644d1cf803adc63";
   sha512.doc = "812af78620465987b65654b1b0e270ac911a18019106c54d24622b4f146534f9474b691247e8cde140c1101bf48d843fb1238e5713f9a59a79e969b9314ae895";
@@ -13186,11 +13410,13 @@ tl: { # no indentation
 "docshots" = {
   revision = 65141;
   stripPrefix = 0;
-  deps."fancyvrb" = tl."fancyvrb";
-  deps."iexec" = tl."iexec";
-  deps."pdfcrop" = tl."pdfcrop";
-  deps."pgf" = tl."pgf";
-  deps."pgf-blur" = tl."pgf-blur";
+  deps = [
+    "fancyvrb"
+    "iexec"
+    "pdfcrop"
+    "pgf"
+    "pgf-blur"
+  ];
   sha512.run = "1d4ce9b3bd39d12bc4fc2630c3f9116e7030d623700e951fa99e5bd25fcb2965765d5bf32a709eb9ea2ebd39382ef1ef33205ddd24c6cd5e9b75136de0ff18c2";
   sha512.doc = "7ab3122caf188621a0f5045b9d8dff1361b6577c6e80d6f6bf20a9e81703e7060936162356e4c34c44bea6f8611ae8819eafd8abf745a28346ce3d8b065596f8";
   sha512.source = "1913dbf266953cd42e9a840e140b00fc785f12f610d0e5c84f70a1eb3bef06b8a4cd5c612c682a8c6ab2fb8ff355fe416cbbe70ef366e123f13419bcaaa1abbc";
@@ -13672,7 +13898,9 @@ tl: { # no indentation
 };
 "dvipdfmx" = {
   revision = 61101;
-  deps."glyphlist" = tl."glyphlist";
+  deps = [
+    "glyphlist"
+  ];
   sha512.run = "6dd78f4b5cabb51c3bd9988fa46bf90a5a79b3d3293257a4c563a8a76a5a03eb167ce3ec0d4ce6ed05412a551eb201f2379a50a97ac5355ebe833f7b34cee4b4";
   sha512.doc = "00dce9b36eefd1788bbe455b2e5104efd9afc8bd891aeafb2cd9bdee406eeb25ab520e42e614e9d2363eb6a7273232bc3c4805bacd82a22099c5ffc438e852cb";
   hasRunfiles = true;
@@ -13808,11 +14036,13 @@ tl: { # no indentation
 "easyfloats" = {
   revision = 57204;
   stripPrefix = 0;
-  deps."caption" = tl."caption";
-  deps."environ" = tl."environ";
-  deps."etoolbox" = tl."etoolbox";
-  deps."float" = tl."float";
-  deps."pgf" = tl."pgf";
+  deps = [
+    "caption"
+    "environ"
+    "etoolbox"
+    "float"
+    "pgf"
+  ];
   sha512.run = "2d02a55fc3d50e5fb79ebe8188300db47aaecb42089843033c569ee0508a38f81e9409d872535e1f7fe3b13a067bdabbf8249073b803c8d232d08aa1d5520d48";
   sha512.doc = "d6e96d7af908e83b67b77f0432e6ffcdcc55b64bc63ac360e42291f16adec4ab6655a423f5fc8f31180071afc5645f47b7ecb2c1c80af719b6cb0cc6e77948da";
   sha512.source = "b21681d30b8963127d603bf81b140851b5e8ea17b63d5979bc05bcfa68efd67460b9f0d0419a69c44606a4d569f5840b3c8d6f0ce7b0cf18d86c1fa104776b5a";
@@ -14133,7 +14363,9 @@ tl: { # no indentation
 "einfart" = {
   revision = 64280;
   stripPrefix = 0;
-  deps."minimalist" = tl."minimalist";
+  deps = [
+    "minimalist"
+  ];
   sha512.run = "0038664f40f0cf5c940d44d618876e98f1419058b7bfe27e741d536743c4ca208bd728aa4a193544956efa30c0e970ffbb04559e751b116037c8760d34a615f6";
   sha512.doc = "89cb6a140802ed0395bbad43c3bdaeca5879e4564d0f9ae15f333f243490788651bdef214d2aafa5c44c0d720e8fbfc66f3dd584b544d80ad3058015cb883553";
   hasRunfiles = true;
@@ -14566,7 +14798,9 @@ tl: { # no indentation
 "environ" = {
   revision = 56615;
   stripPrefix = 0;
-  deps."trimspaces" = tl."trimspaces";
+  deps = [
+    "trimspaces"
+  ];
   sha512.run = "c8dec70e56651a89ae8da15abc0ad81cc2edb4487837469238e2adc0e7c58cae4c5da82b637a3336839b50103e3d846c5cee8c73141488f644469a0f3e9d363f";
   sha512.doc = "78d4d3f570470619c938687a6c9a6925aad901d781e3e893bd731a49bb8eca62bf1870e68d84f7125e10d91d7bec02a323ae42278ff59c04d7e33eefa2261496";
   sha512.source = "b30607d21bbf5ddf1c7d36bd9173a16d91bdfcfa004782be50e50f17bf54d94e943d5e524e2331b75f3ce65e81193ba98e69ab56c38959d632007f5b0a87bd6a";
@@ -14585,13 +14819,15 @@ tl: { # no indentation
 "eolang" = {
   revision = 65289;
   stripPrefix = 0;
-  deps."amsfonts" = tl."amsfonts";
-  deps."amsmath" = tl."amsmath";
-  deps."fancyvrb" = tl."fancyvrb";
-  deps."iexec" = tl."iexec";
-  deps."pgf" = tl."pgf";
-  deps."pgfopts" = tl."pgfopts";
-  deps."stmaryrd" = tl."stmaryrd";
+  deps = [
+    "amsfonts"
+    "amsmath"
+    "fancyvrb"
+    "iexec"
+    "pgf"
+    "pgfopts"
+    "stmaryrd"
+  ];
   sha512.run = "2c98181e8dccb936d3f87812a5aa7f3bfb1faf5796a790f3d41ecf94f0331a5069341c2843c81f058c4374a0bc4e31b316e7e30045d0e44f729579bea76f1308";
   sha512.doc = "90e0a7e29708b4dcc79e9f7492bd218fa84eb0860bf33651fad77eda0e161cabbba20b1bf57aafbaa1077da3335a78436ee9ab3f33965e5e091eb080058cf2e7";
   sha512.source = "197fefc52cb241227dea65c14d11a427f0190c6ad6fca97ea6a330471d44c736ad40578338d342c3ace689739e861cc380198c5c05f4648dd0ad423e5ac60da2";
@@ -14639,25 +14875,27 @@ tl: { # no indentation
 };
 "eplain" = {
   revision = 64721;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."dehyph" = tl."dehyph";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."pdftex" = tl."pdftex";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "dehyph"
+    "everyshi"
+    "firstaid"
+    "hyph-utf8"
+    "hyphen-base"
+    "knuth-lib"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "pdftex"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "fda8158ae2bdc96187b6e6ace2a94be3e0f68201adbc02553b48a3848481352ac10ddd72babcbc2835e089ce751ade7dfa6cfd1c642c94155c2861db865f5c29";
   sha512.doc = "60902b2422d2f5d7570a19daf7f586df7882505d7c156539699a0aa47a0f3bde5688dcbdc92c8a6a9878f11392bc9b9f147626aad230eecd2740d56f104928ed";
@@ -14903,7 +15141,9 @@ tl: { # no indentation
 "esint-type1" = {
   revision = 15878;
   stripPrefix = 0;
-  deps."esint" = tl."esint";
+  deps = [
+    "esint"
+  ];
   sha512.run = "5a663d01e9241adf1961c922c588888561f495e6378fdd7aaa90954c3e51c5f0f8e6dc1e1947c9f03ce3472e1aab3dde1b35e6b5f0814f5e2cda564a31a45a1f";
   sha512.doc = "081a225225f503fac403d306fac3ee3b2747341ef5c4ee9420f49a56ca959c7757f154c24f90ed9506041b13464ea216e6edb52f29790d189ea7b33c7c797f8e";
   hasRunfiles = true;
@@ -15877,12 +16117,14 @@ tl: { # no indentation
 "ffcode" = {
   revision = 65170;
   stripPrefix = 0;
-  deps."environ" = tl."environ";
-  deps."microtype" = tl."microtype";
-  deps."minted" = tl."minted";
-  deps."pgf" = tl."pgf";
-  deps."tcolorbox" = tl."tcolorbox";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "environ"
+    "microtype"
+    "minted"
+    "pgf"
+    "tcolorbox"
+    "xkeyval"
+  ];
   sha512.run = "e76c0605b8a074d1827a73a3ba4e9fae40ade590b01e90ee10593c4484e0a534cebb556bf49389fa03355424910cc349b73fbae2827153fc717be69d38d007e0";
   sha512.doc = "c5302e1113f5d1a05517c4877efd710bc6931bac62157001ea540f0b40388c95202dd457fb1362f8b30dc313a48d9742fcd5c6c6a7e5f3404755a3eafa01041a";
   sha512.source = "2863c642dddba771bc4507ed2f0e4a3c4ff12ab4291fb397a2e0f8859776bbba7442a85fefe87d655d0c6236b5e40878ba29cfa19f71870f6932f38247657f5f";
@@ -16606,12 +16848,14 @@ tl: { # no indentation
 "fontspec" = {
   revision = 63386;
   stripPrefix = 0;
-  deps."euenc" = tl."euenc";
-  deps."iftex" = tl."iftex";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."lm" = tl."lm";
-  deps."xunicode" = tl."xunicode";
+  deps = [
+    "euenc"
+    "iftex"
+    "l3kernel"
+    "l3packages"
+    "lm"
+    "xunicode"
+  ];
   sha512.run = "fc4516b96eefa9cb896488510f5ac531446acfa7993abc2f361751e06fe95128afbaadad393dd7ce8c22ea731c81ba99cd8182ce8205c55f78f64a69ba815996";
   sha512.doc = "e765756f93f1aeb03acf0f15d3388c3a39156f2bc46e951ab5c2e4596ac9babd975af025c0881078f58caeacc3281d3769a701f112b17f10ac474d12b4eac897";
   sha512.source = "286db8b9c512c02f2333860b5ff2c980b8b5680de92fc896c95611f2cf1587077f47f9c0aa0e520ad0f64c6f031f8a2fb310f67034ebaca286076d7764bfbc99";
@@ -16721,13 +16965,15 @@ tl: { # no indentation
 "forest" = {
   revision = 57398;
   stripPrefix = 0;
-  deps."elocalloc" = tl."elocalloc";
-  deps."environ" = tl."environ";
-  deps."etoolbox" = tl."etoolbox";
-  deps."inlinedef" = tl."inlinedef";
-  deps."l3packages" = tl."l3packages";
-  deps."pgf" = tl."pgf";
-  deps."pgfopts" = tl."pgfopts";
+  deps = [
+    "elocalloc"
+    "environ"
+    "etoolbox"
+    "inlinedef"
+    "l3packages"
+    "pgf"
+    "pgfopts"
+  ];
   sha512.run = "edc3341b84e7e89fba3bb76004562c0bc889f944ed33474ba9cf5ed5e63a690202e851a30f44158caa8351b874b8e91659bd91c50d59ec43de9460869e4213f1";
   sha512.doc = "fdaec77023176fc2f7510a9e3b4dcc587898e1f96886340222f932c0d93b1002ad35fba8a38a036f713e41814f3dc6b3f75a5657ae485b15ffea43089895bcae";
   sha512.source = "45f912d17d29568e6ee267814d63bc14c20bb0d91c62b39c21301dd611c50db3b5f7de5f16b519da0f2b4d15609727144c34b16a620abb85114a42344cdaf24f";
@@ -17144,7 +17390,9 @@ tl: { # no indentation
 "garuda-c90" = {
   revision = 60832;
   stripPrefix = 0;
-  deps."fonts-tlwg" = tl."fonts-tlwg";
+  deps = [
+    "fonts-tlwg"
+  ];
   sha512.run = "a806538598cae0365968ab20936631a052dc65f9f6056c39197f7b1c7a5aad717a7a8b72ed2a1af347f8ce91f27d7dcd74b758db8f01fc7810a8d658990bcc28";
   sha512.source = "58f62ec8020489b69743c0591129967730f9ad0729f7cca343ab6e6fa6675122a1e37bf73f090cae050cb695a14dbfb3c52346e3c528e660484d2cb576aaca65";
   hasRunfiles = true;
@@ -17191,9 +17439,11 @@ tl: { # no indentation
 "gbt7714" = {
   revision = 64633;
   stripPrefix = 0;
-  deps."bibtex" = tl."bibtex";
-  deps."natbib" = tl."natbib";
-  deps."url" = tl."url";
+  deps = [
+    "bibtex"
+    "natbib"
+    "url"
+  ];
   sha512.run = "f2f869bf4d507ac76ee576f1bb739bc5e5681d3f2cb1db64841f90dfb22a9b18aab04c5722e231280cb94f055ab002ed99fc965bdbb3d2bdeb8d953f704e73b2";
   sha512.doc = "17b79fb795d0b2a0f2c696da83ee1196750c1fef15c77d33353d6742443d43287b5bb96c349be8e58b0df538f4585f45b353234bb100318cbbc6de6f14192da9";
   sha512.source = "0d7e44fdd1106800d2dac2cac49dfe4c9154498837e27880f0193fbc8033f2a74fe5670f79c929ce2216fef216288e5e072f1ccddd23cec85b6265ad569d21d0";
@@ -17307,8 +17557,10 @@ tl: { # no indentation
 "geometry" = {
   revision = 61719;
   stripPrefix = 0;
-  deps."graphics" = tl."graphics";
-  deps."iftex" = tl."iftex";
+  deps = [
+    "graphics"
+    "iftex"
+  ];
   sha512.run = "ed64996404299bd8379197b293baed752ff064e04eec87ffafdfd55cf21c2c48174560eb1c3bcdb0b06190badb9d9cc699aaa7a2ac8a5c537b0c818a423770fc";
   sha512.doc = "a58ab22ae6df349d81b5ddf18a4e9b7dbb5804a497bbaff42acde18ca59fe8a19bfee34293debc23e44c690456e6a1b1d87614fbb85dc6cb3b3b7d330fc866d7";
   sha512.source = "f4e1e8c0f5b8f443c8f5e6ad948cb1736ed944384daec20e9402c871872e86248b3167c72e07fc94fe32ef6ab36c17d2f177135ccf99f68d1c892af0a695bcbf";
@@ -17633,13 +17885,15 @@ tl: { # no indentation
 };
 "glossaries" = {
   revision = 64919;
-  deps."amsmath" = tl."amsmath";
-  deps."datatool" = tl."datatool";
-  deps."etoolbox" = tl."etoolbox";
-  deps."mfirstuc" = tl."mfirstuc";
-  deps."tracklang" = tl."tracklang";
-  deps."xfor" = tl."xfor";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "amsmath"
+    "datatool"
+    "etoolbox"
+    "mfirstuc"
+    "tracklang"
+    "xfor"
+    "xkeyval"
+  ];
   sha512.run = "a805158d4c2741c4efc707bfe417032903630d3f235c7431a3767e47592d8b9be2d64f6a14f21a0c7a3f4b37cbcba90d501c0ab1a551fe16357745960f362a1b";
   sha512.doc = "24e43bacdaf3d3680b49460849f2d4eb652f2e2103558edecff0cb78d261d0275e5f416c7fe83857fbe09f7016643849ee5f030e4b3db167f469960d7791489b";
   sha512.source = "5240de5d2c942ec2eba38e76073f230265ce74dda641622acc8aad4c5856c1e8a749d01829ac39fc4b83479d9d24346270507c0f4bc5b957b7f4f3d07c4e898e";
@@ -18010,8 +18264,10 @@ tl: { # no indentation
 "graphics" = {
   revision = 64892;
   stripPrefix = 0;
-  deps."graphics-cfg" = tl."graphics-cfg";
-  deps."graphics-def" = tl."graphics-def";
+  deps = [
+    "graphics-cfg"
+    "graphics-def"
+  ];
   sha512.run = "e123ddcd0af8ddd37519076b86a443ff74af4da4a960446708c344a2fe75b700a4700db71414cfe06470532ef863926e5e45b9292f81dfed07f60323543e92cf";
   sha512.doc = "9ff56bfcb46f79ea455797e6582a04ce4e8539b395c988382359cdc7eff81544861b85f3b9303acf12a3f05b66aa52311d776cf3d12404b976068369f3947e08";
   sha512.source = "a23d65d454559f6f84f3a810357d31153bec5d44c8ccbf142b1ed14eeebda7cb7c385de9b5da7ce225db169f05e6d155263a097421c84af6e845b1acdbe36902";
@@ -18931,23 +19187,25 @@ tl: { # no indentation
 };
 "hitex" = {
   revision = 65130;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."etex" = tl."etex";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "etex"
+    "everyshi"
+    "firstaid"
+    "hyphen-base"
+    "knuth-lib"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "5a88c0f4d7bddc0161ce24bbe17884a93469f9ffb56ea6a2dcd3045cb97e5c9d09941e44e365483bc5126e1c9c6970ad151e19573d93b1472534333a507f1c63";
   sha512.doc = "3016748caa430c75689e27459c002abc8f68d4aa1c2d0be04b1f82981c44f7a3fd748f900aab5e4c37b16a56f884d5c0cf7d42323288c74cb51b72c19e0b08aa";
@@ -19082,8 +19340,10 @@ tl: { # no indentation
 "href-ul" = {
   revision = 64880;
   stripPrefix = 0;
-  deps."hyperref" = tl."hyperref";
-  deps."ulem" = tl."ulem";
+  deps = [
+    "hyperref"
+    "ulem"
+  ];
   sha512.run = "fd3ddb8d494b5b6a80bddf3e28747cb872452d8bf56e0e59cdbd19e811a235683ac0aff7e92e358f7b9f352cfc2b6c03f2263248cc13e147e4dad649fb331381";
   sha512.doc = "9318e6fd357b9705e95db7600dea3b3b1fe2e7bcb0dffec4bf92b5375a8d7feaaf1574188bfeaefa71f05f6aa3728b51d9c7c72908cc66945a3bc8d5391583d9";
   sha512.source = "cea37410dbfd8094c4028b96f03d8ac631a32f349098ad5acdbdd484a789d2da58a21f65745d647e05075226d8ad3e1c2217850a312afe522206e900c0b00eed";
@@ -19120,33 +19380,35 @@ tl: { # no indentation
 "huawei" = {
   revision = 65264;
   stripPrefix = 0;
-  deps."biblatex" = tl."biblatex";
-  deps."cjk" = tl."cjk";
-  deps."currfile" = tl."currfile";
-  deps."datetime" = tl."datetime";
-  deps."enumitem" = tl."enumitem";
-  deps."fancyhdr" = tl."fancyhdr";
-  deps."footmisc" = tl."footmisc";
-  deps."geometry" = tl."geometry";
-  deps."graphics" = tl."graphics";
-  deps."hyperref" = tl."hyperref";
-  deps."l3packages" = tl."l3packages";
-  deps."lastpage" = tl."lastpage";
-  deps."libertine" = tl."libertine";
-  deps."makecell" = tl."makecell";
-  deps."microtype" = tl."microtype";
-  deps."minted" = tl."minted";
-  deps."paralist" = tl."paralist";
-  deps."pgf" = tl."pgf";
-  deps."setspace" = tl."setspace";
-  deps."svg" = tl."svg";
-  deps."tcolorbox" = tl."tcolorbox";
-  deps."textpos" = tl."textpos";
-  deps."titling" = tl."titling";
-  deps."tools" = tl."tools";
-  deps."ulem" = tl."ulem";
-  deps."wrapfig" = tl."wrapfig";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "biblatex"
+    "cjk"
+    "currfile"
+    "datetime"
+    "enumitem"
+    "fancyhdr"
+    "footmisc"
+    "geometry"
+    "graphics"
+    "hyperref"
+    "l3packages"
+    "lastpage"
+    "libertine"
+    "makecell"
+    "microtype"
+    "minted"
+    "paralist"
+    "pgf"
+    "setspace"
+    "svg"
+    "tcolorbox"
+    "textpos"
+    "titling"
+    "tools"
+    "ulem"
+    "wrapfig"
+    "xcolor"
+  ];
   sha512.run = "d181f45f8211714674697a8e2e203b3169cb1be998687f315418dca664cb09533b5e3b5f7b1cda0db628401d263d7ca816c2ce1c29da48f1550ea9100d9e2523";
   sha512.doc = "3b4112d8b5389ab26034ff126744aa4299cbc5f42630a00a7e7b4245e4355ed0abe42718100439af3cb5b1642db4567b6d16e69ffe852cae0c5c9aa20e8cd7f9";
   sha512.source = "93271d9361e0cbf9fff9890f2617c96a381b631332041a576309a28af77150afc1da99f7596d3b89d0685584115cdbfd46d1b5fa7706b7ae4af88984e8fae8ab";
@@ -19306,23 +19568,25 @@ tl: { # no indentation
 "hyperref" = {
   revision = 65014;
   stripPrefix = 0;
-  deps."atbegshi" = tl."atbegshi";
-  deps."auxhook" = tl."auxhook";
-  deps."bitset" = tl."bitset";
-  deps."etexcmds" = tl."etexcmds";
-  deps."gettitlestring" = tl."gettitlestring";
-  deps."hycolor" = tl."hycolor";
-  deps."intcalc" = tl."intcalc";
-  deps."kvdefinekeys" = tl."kvdefinekeys";
-  deps."kvsetkeys" = tl."kvsetkeys";
-  deps."letltxmacro" = tl."letltxmacro";
-  deps."ltxcmds" = tl."ltxcmds";
-  deps."pdfescape" = tl."pdfescape";
-  deps."refcount" = tl."refcount";
-  deps."rerunfilecheck" = tl."rerunfilecheck";
-  deps."stringenc" = tl."stringenc";
-  deps."url" = tl."url";
-  deps."zapfding" = tl."zapfding";
+  deps = [
+    "atbegshi"
+    "auxhook"
+    "bitset"
+    "etexcmds"
+    "gettitlestring"
+    "hycolor"
+    "intcalc"
+    "kvdefinekeys"
+    "kvsetkeys"
+    "letltxmacro"
+    "ltxcmds"
+    "pdfescape"
+    "refcount"
+    "rerunfilecheck"
+    "stringenc"
+    "url"
+    "zapfding"
+  ];
   sha512.run = "b0e32f4792039b1e48f4deab6b33a53a0bc32549a6fddada1156880c3ad21bf566d69389c4ae626fc1a844f3b0b94f24a4b1331a9e52b89e4619993bc81c5db5";
   sha512.doc = "97bc2f11dc6b023347817fb18ff91ce6ed4d2a9e22ad3f17aea29781a0bacf6173f13e59e64229c6f62a9b2e67f7b1fdf513db11fb6759a5373b7a1d38d703c8";
   sha512.source = "f8d405385e10f1d818c6c97ca7919886e3b520e661e465e0f516a36ed884de8011cf907b72dc49f0437741df096af2f49837af4d31fb46159efe7867466292a6";
@@ -19348,8 +19612,10 @@ tl: { # no indentation
 "hyphen-afrikaans" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "0f969847994b3b377c752c23f802e8c51b4076efc2d43ad2560a72b83cea3bf0a64d7df18a59afe4289a4547a9f23cf81b0c365a499be85a2467579941fa9700";
   hasRunfiles = true;
@@ -19357,8 +19623,10 @@ tl: { # no indentation
 "hyphen-ancientgreek" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "3f91560ecf78c5540fd4f5d9890f6aa7a57bcd3a41095985785505b82e40793b91a5da3a01bdc021b11c32db3dd7030a104686b34b496c9094acfb85509cd007";
   hasRunfiles = true;
@@ -19366,16 +19634,20 @@ tl: { # no indentation
 "hyphen-arabic" = {
   revision = 54568;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "85012062097dd4b624cb39c68b293169a25ab3c9cd15b4474c3a3ffbe4b8ab13d6856c6c70a580da45a2d210952df2d9760682da3917cfd24d17772dc2ccce7f";
 };
 "hyphen-armenian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "59538414bf5a4701199100fbd9d5247999a36bc28c7c6ef2a28deb9024e01605d48839f00f345c848365853ac3a9f1aab7402f44860532d7a5c099d2f27ee189";
   sha512.source = "d25e6347545e00a809db1dc8e48ef3fe67678b9ec93a1f3619d2a5a3d786d6e411c2e9f905120e3c5d01d9489c0a83035ce8025836249c88ee768bf07b8e2ca7";
@@ -19390,8 +19662,10 @@ tl: { # no indentation
 "hyphen-basque" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "b90680dc5692824d60ca603e8bdd2fcade7cc772c8c0f9538d579704fb16165db2baf0c466ccaff46d92491b4a678fa86a127c0d106dbef6d640dfd2f887663d";
   sha512.source = "75a20da77fa056c719ecc1f014bb09c67f62f1c4a3abe04b7cadf45c7a4e06e4492cb0d34a8025f19f3ee5e3330e488212885095335d4a7e97baa5b106576223";
@@ -19400,8 +19674,10 @@ tl: { # no indentation
 "hyphen-belarusian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "19b9bd10d2357d0cb6ecc9ddb5e46b65b3c0eec1b2917a78311f255c1609bbb86595ce617d331271a72de934ae4001597f4a04d61b3810e34f3b197b21cab193";
   hasRunfiles = true;
@@ -19409,8 +19685,10 @@ tl: { # no indentation
 "hyphen-bulgarian" = {
   revision = 58685;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "9763e6ece053594b01cd9255a8a3551eb6b86ab082f6f9283664e256c55d43b9513b624774a650d83215d656334751f569496030187c1c78e2fe80f2d10f2f1f";
   hasRunfiles = true;
@@ -19418,8 +19696,10 @@ tl: { # no indentation
 "hyphen-catalan" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "37189e09ee902f2c5145f30180b51211091b07d7d04125c98f1b7c424ad27f6899424b78cd17c559509076eeeb957b4f268fb4130807e7fafb461174fed8200b";
   hasRunfiles = true;
@@ -19427,8 +19707,10 @@ tl: { # no indentation
 "hyphen-chinese" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "a78b70095fcfe297e2d85a49108affd5d48451ff4740461eed46d395410a665011614c9a89dff37e9477ee3803de6ebaa68595ac39222f2968a4124355ea7fa7";
   hasRunfiles = true;
@@ -19436,8 +19718,10 @@ tl: { # no indentation
 "hyphen-churchslavonic" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "c44b3f5fec7b44958336dcfb1a43c5b71fd1715262278863f5fcd74d7ec0cc6f1d572b741256d791e6979f15e4b0fcda8058725e27f17e1deb6e5df5fdb007ab";
   hasRunfiles = true;
@@ -19445,8 +19729,10 @@ tl: { # no indentation
 "hyphen-coptic" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "fe36adfe900e23f2b0c3e9c3a3d96b608c49bf597222537d355d6a68e2f87f587db78a1921ab1c9a80ea175529e353524c35e99b83ef7f5515ab7c0aacd2f680";
   hasRunfiles = true;
@@ -19454,8 +19740,10 @@ tl: { # no indentation
 "hyphen-croatian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "8355d0aa95bb2e72bfc45015f9ae9f6a138f94441387a4daadfec5be4060878f6e69d05eab15432d99c256c1a3f68c122d5c915164fe343459d658a4543ddf42";
   hasRunfiles = true;
@@ -19463,8 +19751,10 @@ tl: { # no indentation
 "hyphen-czech" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "f5c8b08c2db716dfa6d36fcf337b4e18372978d04e28ff2c8ed0a0b3866f4bb3efb7b498fedbfde5052fc504b8677ae553c2dce73701e219632d8c5460d7e826";
   hasRunfiles = true;
@@ -19472,8 +19762,10 @@ tl: { # no indentation
 "hyphen-danish" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "954543a3fb81ff00d9c58315ba59d7a5e3430217dda6c1453bcb7ffb0516025dea4b877eb9d66c9f80ccc69d3d4895bdc6ae1b611d8394435fa647b8b806559d";
   hasRunfiles = true;
@@ -19481,8 +19773,10 @@ tl: { # no indentation
 "hyphen-dutch" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "111371e47ca29069a5a9144d694858dd899b19e2b38d0c793b1e4884c69ae2d62398aacb4cd89e23246fc025e42872875bc808c1f327ac1502fac88c962e6c14";
   hasRunfiles = true;
@@ -19491,8 +19785,10 @@ tl: { # no indentation
 "hyphen-english" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "a305cf89138e4327844d43a7e21773e31ac97a4655e4d58ae9a46dc0df565e432330debf704c37b4ad552561357521eba0b676755544ceb9c4f21ace09d6dd2c";
   hasRunfiles = true;
@@ -19500,8 +19796,10 @@ tl: { # no indentation
 "hyphen-esperanto" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "ed2976e9fb3eec5d2f0759348b284129e43bf161db571dd21270335388b8aec57e1b8393bc9b246f8a6e9cde22f93a4cb3c1a03dcadd64fdda3d70b576789050";
   hasRunfiles = true;
@@ -19509,8 +19807,10 @@ tl: { # no indentation
 "hyphen-estonian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "0eb91153214aaca8c3b5816f5315f9afdeb7c19521c87c79ea2b35e82217bfb23c8bb774baf810206f4413fc663e441ebe6b4962880ca0dbcda9209d2acce3b8";
   hasRunfiles = true;
@@ -19518,8 +19818,10 @@ tl: { # no indentation
 "hyphen-ethiopic" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "a1532603758e7f774acba7c13ee74f0046ff187598ca86b2e93b91da31317f03fdbab5d4d7c0814978fb2ac159bd6e5a48e6e734c19758da21ad0a031844f52b";
   sha512.source = "9d6c8c1b0ce5c40d388937328461336a97fcf1fe780fa6198e029f12ef118d9d98f6eec03ea217743851f0217217d6548298df9336fcf33e6c4c196bbdb9eef0";
@@ -19528,16 +19830,20 @@ tl: { # no indentation
 "hyphen-farsi" = {
   revision = 54568;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "5b02582769a55bb07d81e748e83170c16aca1c33b0a240cf547fa9c2212f2be52223e258229c760ddc5dd730419bd9e761614cc4fb3b3ba8102841bb779af511";
 };
 "hyphen-finnish" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "6aa171d77952165cdcb1b667885f16dd382124ed70ed1db80a9a89553d972720d8ff5f0da1b36669e02c3030d9ff362ab77ba1fa2ba45cddfb460018f0c0191d";
   hasRunfiles = true;
@@ -19545,8 +19851,10 @@ tl: { # no indentation
 "hyphen-french" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "b9d2d05311a90f4caa6c4e8aa8a2e80e9c15fc3552f03f0ac6ec70d386610612715deb6e778247248355a3a209fb2413d6d2aee12f18bc35d5a334870b612507";
   hasRunfiles = true;
@@ -19554,8 +19862,10 @@ tl: { # no indentation
 "hyphen-friulan" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "d1775a9b6e6b7fa155e44c93271e2ccb41bd1ec143ea0cf624841ad48a123db924dd134e6e60b862a808ad2058ed5b86cb34d98e5728b9dccd3997ba2f06932e";
   hasRunfiles = true;
@@ -19563,8 +19873,10 @@ tl: { # no indentation
 "hyphen-galician" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "2d707542f80dc94ad20c0daa776df23b773a5e6ccb261e11db675e1e89f5f303a4f5cd50d97f491cc7ea8b0f3c0d3f6391707812a95d4e72cca3afa7815e566f";
   sha512.source = "b9925168b1f9ae5139ffc3bd34810cc05a27475cfae31e98fd0d7618575fc994ca95d7479506024abec2c33bb20121811244d69c490df18a29d6c93fe02174c6";
@@ -19573,8 +19885,10 @@ tl: { # no indentation
 "hyphen-georgian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "edaf041a2f92b0f7dbf28042c81838e8fd781cf9c3ad529c314227c94917ce4e8728ca676f8bd42e2a81bae76b11aabc1e22896e3ef9cd38ca4b718bc58fa0cb";
   hasRunfiles = true;
@@ -19582,9 +19896,11 @@ tl: { # no indentation
 "hyphen-german" = {
   revision = 59807;
   stripPrefix = 0;
-  deps."dehyph" = tl."dehyph";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "dehyph"
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "c27389dea67ffd0d45419d484b0c72577b2d5b8234266483add078b970d5d994d41f7cf9a1509ad93efe9489501f986127ea717135c5f57588094393e0d7219e";
   hasRunfiles = true;
@@ -19592,8 +19908,10 @@ tl: { # no indentation
 "hyphen-greek" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "3da84f41aaf7e5d4be0ce609e4d119e65c9189ff6662051cb7e879e9e373d990ef1c59ac7cfead1bdbc6e55b52d4b3ed28d157b22dbec43e5226f16872d5a7de";
   sha512.doc = "865aaf1f9f0fbe130f9006e41ef677713667832745fc24c28cffe805a540a19f7104a3f0fef3258ba0e16c1c456959904887899a4c584338c58de7fcc80c5419";
@@ -19603,8 +19921,10 @@ tl: { # no indentation
 "hyphen-hungarian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "868a4c3f4d0eda078054026bd1ec35e05c2f4013e093bf58147bfa2d861814242b55a900ce60384767558c9552ff9d41cf447e2a157bae83bd2877251012d96b";
   sha512.doc = "164180f0485e16a49ba83dcb4721902e8a29f399032d4f5a59d55e424b8178a25dedd9fb99919d9d772142342fb78fe0dbf7a5303382a0b7feae4a381b76f8bb";
@@ -19613,8 +19933,10 @@ tl: { # no indentation
 "hyphen-icelandic" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "69add7ccde189e86810e2a82692a260de9a9fcc0ba011352881d202d4f4c94c4dbd84fe36dff40ef9b9ad3e8e990947cc61022307790f13cad56744f3ef5e41f";
   hasRunfiles = true;
@@ -19622,8 +19944,10 @@ tl: { # no indentation
 "hyphen-indic" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "765be1c13ef3445b056b61c24460cc2f18bad038c04541bf4773c7f61c6d26be25d3079b260a1b9623e2f01155ec52eb5bc87b0ea9234e50a5ca24dd8a7a5937";
   hasRunfiles = true;
@@ -19631,8 +19955,10 @@ tl: { # no indentation
 "hyphen-indonesian" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "3f04a63010c02d77cb229c90aec9f1079557493958573be9ce992ac5ae3c229f01f9abc0cac785d9340ff48aa169a01f8b327ecb2e255bef57f1fe85d04d1d2a";
   hasRunfiles = true;
@@ -19640,8 +19966,10 @@ tl: { # no indentation
 "hyphen-interlingua" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "dfed82ea70f25d452726b5cd03d8e060bddc23cbbc5deebab2ddad93ce6744c38d357327fbe570bf7a1444f62cee0cc422a6c7d066d6693a238d851b4fe46e32";
   hasRunfiles = true;
@@ -19649,8 +19977,10 @@ tl: { # no indentation
 "hyphen-irish" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "478a77c4ab8231a3041c3427075f16c072f58a394eced8ff0cd5da6544f3f2fd65722f33fd8344e18060c96f09bd18b90af71f8508639fc9c59d29d704d9e348";
   hasRunfiles = true;
@@ -19658,8 +19988,10 @@ tl: { # no indentation
 "hyphen-italian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "4e79ee31893d6c948a3aac8588d4beb75d89f89df973b1e39cd63894e008af55f8dca774194d7eb105fb0aef692b17bb645d5bd85cca7debafd74aabf241bc30";
   hasRunfiles = true;
@@ -19668,8 +20000,10 @@ tl: { # no indentation
 "hyphen-kurmanji" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "e5114da178fc841b1079130c01f8729ac94f0e3592dbd479f44a978ea009fd75b410d6130d9badd6227d115d8f6dad3ed4b553dbfbf4f80be5d1c2adf108e2fa";
   hasRunfiles = true;
@@ -19677,8 +20011,10 @@ tl: { # no indentation
 "hyphen-latin" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "9d0db7fcad4ca764379957fa22f9daede79898bcacfbdb62abe54318a52dd82a66f8e39542c18008e3f6b6d0db284b1e9b891531d3c8f3c9cf22c764e83d57b3";
   hasRunfiles = true;
@@ -19687,8 +20023,10 @@ tl: { # no indentation
 "hyphen-latvian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "85aeadb0cb3c5de9ef48057132ccd958d17f014b07b56b9ebe2186a709c4e7646fad260e156718e43ec3eac88681654f88c9b53a6d71fb3eaee934dcb4439ed9";
   hasRunfiles = true;
@@ -19696,8 +20034,10 @@ tl: { # no indentation
 "hyphen-lithuanian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "7a691e3c55c768b9ea5ef13552dc42025ab613df0a0d5c0d54aad58b63da11a93e59bc53e6a8211d5e054cbea8500846da01e9619bbee723d648e2d369a49d55";
   hasRunfiles = true;
@@ -19705,8 +20045,10 @@ tl: { # no indentation
 "hyphen-macedonian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "f88208291212874df493151581205d1b270b2d4278176c42e11edac9b344b73c2ee859f93b6947e4a6003a00abc4d3753024add9caf84f114c8a0cec72aa8c8d";
   hasRunfiles = true;
@@ -19714,8 +20056,10 @@ tl: { # no indentation
 "hyphen-mongolian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "159562a8feb25918bc422e7dc78a46423c7fff2f3c61016a0162761411999a5555be3c6e36cf967d5034f65c12f4b0834ae0c0423c2f3ab17a65034b1803dc72";
   hasRunfiles = true;
@@ -19723,8 +20067,10 @@ tl: { # no indentation
 "hyphen-norwegian" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "8b02e90bfcdf3c6d4bd1966b21e0512069f1749c638d537e9553f68e61e0bc325db8d3b462f45650db4376c7a769c2cde3e0c0601d7de272898a23cd2251c064";
   hasRunfiles = true;
@@ -19732,8 +20078,10 @@ tl: { # no indentation
 "hyphen-occitan" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "b0743d1f6083dac7a347e22aed19d0c5d76119582e4862557a55b817b17dddaa69a2150f14daf6b08689278dd61b27c1b6ed45df5601dd6327bf185a7a46a5c6";
   hasRunfiles = true;
@@ -19741,8 +20089,10 @@ tl: { # no indentation
 "hyphen-piedmontese" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "fa7fc73edd582ba20b8236507385f0a30f477bb9c79e35fea56aa4020be966b9c4a16a327848dd051fa4cf6e6117ef8a51eb92ed6cb72f6993cb290fa5cd5ca3";
   hasRunfiles = true;
@@ -19750,8 +20100,10 @@ tl: { # no indentation
 "hyphen-polish" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "5580b3865ff8d20d475cb962b0257b909ff0e410b6776cb8153145fb0ee42b2f777069413bc6b3622c8c52318aba1ba836210e8972c5b6a47ef978c24fc8848a";
   hasRunfiles = true;
@@ -19760,8 +20112,10 @@ tl: { # no indentation
 "hyphen-portuguese" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "9d9ab3e616522ab9837bb7c7509127f998c442e96f96ee6b6fc0fdc9ac53fd03319d0c0ce28e23a35f1ae0ebb840cdeb19e8ab6444549c33059b28e7b307486e";
   hasRunfiles = true;
@@ -19769,8 +20123,10 @@ tl: { # no indentation
 "hyphen-romanian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "124a93a633731dc1b3d6cbf2fc9b8489bf0737911a0c25ea44dbdfffa07c165ba5804dfd7e9cbe0be3b6eceb9fd6e95daefcae2356ee140f644416bbe1b13507";
   hasRunfiles = true;
@@ -19778,8 +20134,10 @@ tl: { # no indentation
 "hyphen-romansh" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "a69d3881493c70cfd58e3d79ed76ce6f18bbcb43e1683f31270eafeb743b366a3c52c9945ff94db333e88ca18145263ba74002f5e78bb42d7aefa48c66af7955";
   hasRunfiles = true;
@@ -19787,9 +20145,11 @@ tl: { # no indentation
 "hyphen-russian" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."ruhyphen" = tl."ruhyphen";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+    "ruhyphen"
+  ];
   hasHyphens = true;
   sha512.run = "f17852dffbb8f5c337b8316b92c2b0a60a318df491231047d9c0930d55d8b2be3274ec94d0d87085d53e06e89c585d47250f046300bf3890ce751f6f2052d348";
   hasRunfiles = true;
@@ -19797,8 +20157,10 @@ tl: { # no indentation
 "hyphen-sanskrit" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "e84b6ca93e922c9c6edf03f4dbec1fae9eef2462379ef2fd0f3508a5048b54819c5ba12e0d76bafe1336666ca74ba95e27f63224fa048068bc515f3bc41f6eba";
   sha512.doc = "95c6ae15687118ffc9019c8634347a602e6590b4a1d18bc060e57fe548a81f097070322975be1f62fa2685c5affff7f31b4854b0ec941bbcb9377ecf16986cea";
@@ -19807,8 +20169,10 @@ tl: { # no indentation
 "hyphen-serbian" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "390aa9c116b6db7b362fc57aa0758a4c489c5fe33c718fb37675b17a9772a463ce532a2ace3e1ef90275b4afef5ea8d6cff71a7abe625d84e3f461c115306452";
   hasRunfiles = true;
@@ -19817,8 +20181,10 @@ tl: { # no indentation
 "hyphen-slovak" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "a0786980e0cda7029a72075023520acdc998b83226e85deb0b8186ee4293560321517d507f74fbe68f1d68a16cd8af67aae68baead9176f9cc687bcc7d0a72e1";
   hasRunfiles = true;
@@ -19826,8 +20192,10 @@ tl: { # no indentation
 "hyphen-slovenian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "a605c9149ae452df8b2c25aa0f6bcdde53150e4485147a065f1f56c9740c3544c5c7f9c6049aea913916a62aabaf40777cf6f0f76a858e485c0bd09826a6ef5b";
   hasRunfiles = true;
@@ -19835,8 +20203,10 @@ tl: { # no indentation
 "hyphen-spanish" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "d6783537ff44a326b83c2004afd63f5bdbd162fa4865138c2e6d34c9e6a103ac41dd7b382454646b09c74970f8e0d5827a5f4af617936f74fd300b2054a096d4";
   sha512.doc = "263fd9480c5f225c7e36169b86e846baa64745b83c1072c9602e873f2e7cf8e63b07ab85b29e9d4263656faff58a39fe83e1eba34517b8ba34720f189c8e7f43";
@@ -19847,8 +20217,10 @@ tl: { # no indentation
 "hyphen-swedish" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "5f993ae6b22eadb87b6a1839bfa7d78a0dccc1107c5afbec8c248ed001018da38bb179e29f2430cffa90283221b20c5475346a8d5566edf16152266257f2a37d";
   hasRunfiles = true;
@@ -19856,8 +20228,10 @@ tl: { # no indentation
 "hyphen-thai" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "8336eee03250859ab4328ad3c1fe437d2af688ef56b43be49c45838965ffe033befa84cdf600e9f48cdf60cbbfbff44450c830bd4c34556f680c5096ed3aecc4";
   hasRunfiles = true;
@@ -19865,8 +20239,10 @@ tl: { # no indentation
 "hyphen-turkish" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "5c7023e01bf59af4d36bd451f51ae00c445711c7ecf109c9d835f1d689446d7b0b1b2627b7f9e84e4f4a8ceff52227ff280ac64481e1d29d538a30e093dace85";
   sha512.source = "2aa80889b9657b03b6beb6510b6790fba13811b97abbac186eaf4d3f40212b41db0dd2d21583429820faad558b0415a09aa8254d2edd96812cf6396fb18ccf5c";
@@ -19875,8 +20251,10 @@ tl: { # no indentation
 "hyphen-turkmen" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "c984bb7f09c5816c36a7a790f16df1750ee90f36e2130994ecd1db63f26afb650245985699a80da9b4d7004ad67106771d8c7b79262438369aee3f52fd8374cf";
   sha512.source = "a496f681db0b4b85d82ec1dd60c057f63b6d1c1b52d391e7bee98d3d6e1fb596701c91f2ca400d0df13b96ec7a43d275646b7d2874fe1e4efc9d9b2b47f6cc5d";
@@ -19885,9 +20263,11 @@ tl: { # no indentation
 "hyphen-ukrainian" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."ukrhyph" = tl."ukrhyph";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+    "ukrhyph"
+  ];
   hasHyphens = true;
   sha512.run = "05a9111b358c659159c6edfd38b9ce3d78febd794cc82968dc3e2acdc3612786304721fbd07f00f0a8278f4c2e46a1bfad821b5da45e60546d6acb5bf9068d08";
   hasRunfiles = true;
@@ -19895,8 +20275,10 @@ tl: { # no indentation
 "hyphen-uppersorbian" = {
   revision = 58609;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "b2cb1bcd953ffabbd3f5acd8c72e9c60415fd300004de56ee446fc77d381aac1db65d613a2f591d3d0e45f2a12ff5340457ae3061b4c77de502923932383bdcb";
   hasRunfiles = true;
@@ -19904,8 +20286,10 @@ tl: { # no indentation
 "hyphen-welsh" = {
   revision = 58652;
   stripPrefix = 0;
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "hyph-utf8"
+    "hyphen-base"
+  ];
   hasHyphens = true;
   sha512.run = "12a23e0b9d00eb4381e3c97ecbb449faf5a73b755a17fc0301f1cbad5d0babb370aeec16dcdd316cefb56e142873abaa685288b1a1d3c7dcb76a07a9ef127ac6";
   hasRunfiles = true;
@@ -20053,8 +20437,10 @@ tl: { # no indentation
 "iexec" = {
   revision = 64908;
   stripPrefix = 0;
-  deps."tools" = tl."tools";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "tools"
+    "xkeyval"
+  ];
   sha512.run = "7e6c55383a22d2b47858e02b0d7023a7d130a089c550c0d4aa387035374ba6e0266b35a2f825e4d0bc4fb084bab42686df610f8f6f9007ff155bf7c150383cb1";
   sha512.doc = "2b55ea3e886043af3e137be5e23388d1d0311e64f695b3774d85be2305e5ea8389a4139e4b3c84989187d66066ffadeccb0d8b70a5347ecfc6dfef750d28b2ba";
   sha512.source = "d4f8b3b253189de2e303c00c5c8e42cd539eaf7eb0cd20feff54473086056fff2e6f8be3bebc071a261c68adffa55f198505dc81df4d095f3ab2dc6932b8e7a1";
@@ -20742,64 +21128,66 @@ tl: { # no indentation
 };
 "jadetex" = {
   revision = 63654;
-  deps."amsfonts" = tl."amsfonts";
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."auxhook" = tl."auxhook";
-  deps."babel" = tl."babel";
-  deps."bigintcalc" = tl."bigintcalc";
-  deps."bitset" = tl."bitset";
-  deps."cm" = tl."cm";
-  deps."colortbl" = tl."colortbl";
-  deps."cyrillic" = tl."cyrillic";
-  deps."dehyph" = tl."dehyph";
-  deps."ec" = tl."ec";
-  deps."etexcmds" = tl."etexcmds";
-  deps."everyshi" = tl."everyshi";
-  deps."fancyhdr" = tl."fancyhdr";
-  deps."firstaid" = tl."firstaid";
-  deps."gettitlestring" = tl."gettitlestring";
-  deps."graphics" = tl."graphics";
-  deps."graphics-cfg" = tl."graphics-cfg";
-  deps."graphics-def" = tl."graphics-def";
-  deps."hycolor" = tl."hycolor";
-  deps."hyperref" = tl."hyperref";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."iftex" = tl."iftex";
-  deps."infwarerr" = tl."infwarerr";
-  deps."intcalc" = tl."intcalc";
-  deps."kvdefinekeys" = tl."kvdefinekeys";
-  deps."kvoptions" = tl."kvoptions";
-  deps."kvsetkeys" = tl."kvsetkeys";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latexconfig" = tl."latexconfig";
-  deps."letltxmacro" = tl."letltxmacro";
-  deps."ltxcmds" = tl."ltxcmds";
-  deps."marvosym" = tl."marvosym";
-  deps."passivetex" = tl."passivetex";
-  deps."pdfescape" = tl."pdfescape";
-  deps."pdftex" = tl."pdftex";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."psnfss" = tl."psnfss";
-  deps."refcount" = tl."refcount";
-  deps."rerunfilecheck" = tl."rerunfilecheck";
-  deps."stmaryrd" = tl."stmaryrd";
-  deps."symbol" = tl."symbol";
-  deps."tex" = tl."tex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."tipa" = tl."tipa";
-  deps."tools" = tl."tools";
-  deps."ulem" = tl."ulem";
-  deps."unicode-data" = tl."unicode-data";
-  deps."uniquecounter" = tl."uniquecounter";
-  deps."url" = tl."url";
-  deps."wasysym" = tl."wasysym";
-  deps."zapfding" = tl."zapfding";
+  deps = [
+    "amsfonts"
+    "atbegshi"
+    "atveryend"
+    "auxhook"
+    "babel"
+    "bigintcalc"
+    "bitset"
+    "cm"
+    "colortbl"
+    "cyrillic"
+    "dehyph"
+    "ec"
+    "etexcmds"
+    "everyshi"
+    "fancyhdr"
+    "firstaid"
+    "gettitlestring"
+    "graphics"
+    "graphics-cfg"
+    "graphics-def"
+    "hycolor"
+    "hyperref"
+    "hyph-utf8"
+    "hyphen-base"
+    "iftex"
+    "infwarerr"
+    "intcalc"
+    "kvdefinekeys"
+    "kvoptions"
+    "kvsetkeys"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "latexconfig"
+    "letltxmacro"
+    "ltxcmds"
+    "marvosym"
+    "passivetex"
+    "pdfescape"
+    "pdftex"
+    "pdftexcmds"
+    "psnfss"
+    "refcount"
+    "rerunfilecheck"
+    "stmaryrd"
+    "symbol"
+    "tex"
+    "tex-ini-files"
+    "tipa"
+    "tools"
+    "ulem"
+    "unicode-data"
+    "uniquecounter"
+    "url"
+    "wasysym"
+    "zapfding"
+  ];
   hasFormats = true;
   sha512.run = "75b9c8be4f87b51798826f5ea070ff9877e8bfa2fbee5112972e9e0fc81a76dcb7081c2fe9eed645f53a38dd85443dfdb394004b2970c2ff5a91b32dc1cab909";
   sha512.doc = "f70f85a12d730fc9dfb29da57a6f95239c10aa8ba7b9453ae884cae81399609fb99ccac3bfbc41f0c5f360ef80bd3f78b2f8479a826412bf573e9c5336d7e8ca";
@@ -21193,17 +21581,19 @@ tl: { # no indentation
 "kdpcover" = {
   revision = 65150;
   stripPrefix = 0;
-  deps."anyfontsize" = tl."anyfontsize";
-  deps."geometry" = tl."geometry";
-  deps."graphics" = tl."graphics";
-  deps."microtype" = tl."microtype";
-  deps."pgf" = tl."pgf";
-  deps."setspace" = tl."setspace";
-  deps."textpos" = tl."textpos";
-  deps."tools" = tl."tools";
-  deps."xcolor" = tl."xcolor";
-  deps."xifthen" = tl."xifthen";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "anyfontsize"
+    "geometry"
+    "graphics"
+    "microtype"
+    "pgf"
+    "setspace"
+    "textpos"
+    "tools"
+    "xcolor"
+    "xifthen"
+    "xkeyval"
+  ];
   sha512.run = "d68fa467a50f7d1648e51b918201b76c199920e39915a3c5fcc72cd75c4b11b0924082cf8c01363fe5af998c66ffae71137e7f9635e147ed40ed5e7cd4fd63cb";
   sha512.doc = "880f981153526b41cc128677d950e52b4ff5449adc4fbb3b0004a983bcc7222fb64714ca033b605172fe0b52107e6cc8ff0fcbd1778bf7aa6b9d20fa994ef452";
   sha512.source = "e67cc3eede96c42506beb03d8e4e7db1b5fd4a7ed15026a060c3a5db559c0abc7fe0f9e24c22b23d2aff7c7979005f0c26d250607129d29b6d4bc9babc0e11be";
@@ -21409,7 +21799,9 @@ tl: { # no indentation
 "koma-script" = {
   revision = 64685;
   stripPrefix = 0;
-  deps."footmisc" = tl."footmisc";
+  deps = [
+    "footmisc"
+  ];
   sha512.run = "2fe2a07d56107390a191c016c29f7bf77700647b7996957a3802aa89b9b7eacc4cefe1c444b6faa688a147a8b0d9c5d80fca511dc2454a15ada6ddaf6aa3ccb2";
   hasRunfiles = true;
   version = "3.38";
@@ -21449,8 +21841,10 @@ tl: { # no indentation
 "kotex-oblivoir" = {
   revision = 64928;
   stripPrefix = 0;
-  deps."kotex-utf" = tl."kotex-utf";
-  deps."memoir" = tl."memoir";
+  deps = [
+    "kotex-utf"
+    "memoir"
+  ];
   sha512.run = "17a5f52990cfdf57fdc8ffdc3fc417a15ab52e21296a95b6b1698166ac215937bc26db8aeac7b38459cdf3411480045af85aec491884cd89f00896916a7702e0";
   sha512.doc = "5ef9480a78f216dcf11fe06d8766ba66817a86faa7d0003af77a1fe1079f5e8a8c527bcd333e5fe02153f6ca0b0a82eaa206eb1c5bb7b9517b9ef2865faadc4b";
   hasRunfiles = true;
@@ -21467,7 +21861,9 @@ tl: { # no indentation
 "kotex-utf" = {
   revision = 63690;
   stripPrefix = 0;
-  deps."cjk-ko" = tl."cjk-ko";
+  deps = [
+    "cjk-ko"
+  ];
   sha512.run = "be75556f3857a405d235f920866f8089f105a57f9accff07a541fe110bb8124e049ebe75368ce3282bcd329cc6a02eed0ccffdfad49020986d61221839cae4b5";
   sha512.doc = "7226874594b10ee48e8aea30a72e6d6f4db9f770d5d5830dc83a41f828bfe36b0b11f679aff02722e457150548860f1ad719758e6ffd239bbf9ac18d907acded";
   hasRunfiles = true;
@@ -21475,7 +21871,9 @@ tl: { # no indentation
 };
 "kotex-utils" = {
   revision = 38727;
-  deps."kotex-utf" = tl."kotex-utf";
+  deps = [
+    "kotex-utf"
+  ];
   sha512.run = "569e9677ef0f346e5a53f4cc84302a8ddf2b4ad85708f4ab8ba7d076ebf339ec60998a41fa92fa815167e9bfc37085ebfd921dd13a60b017a0574e4a5d205802";
   sha512.doc = "a46c5d09d119fa2fe8b9acea87a37776536e3216b776af6b7037fc5b0a522af5c1a58baf081e60f06c9a4054e8ac2372458c276c779038a030dc92efdfa3aef6";
   hasRunfiles = true;
@@ -21563,9 +21961,11 @@ tl: { # no indentation
 "kvmap" = {
   revision = 56361;
   stripPrefix = 0;
-  deps."amsmath" = tl."amsmath";
-  deps."l3experimental" = tl."l3experimental";
-  deps."pgf" = tl."pgf";
+  deps = [
+    "amsmath"
+    "l3experimental"
+    "pgf"
+  ];
   sha512.run = "54a107c866519e6ce6cb69bd8c13ae085813c4adf235592e32cbfb2bd7eb8039ff8e1fe165f43892367a28ac0984874581424e733b1d3722796204df96d840f3";
   sha512.doc = "41fb3957c91e3127b5d7c78fe2114cb4fe6c8167e6f7f2bbf3a5b7c0fdb12c0ac79e47d84fad54c4b6a3165114c333c575eea01d5c0c886c19b21643ab0fb03f";
   sha512.source = "5dae9b0972acc7c95b148fb13d9008b27591aa9ff9065c1c43dc799c5096f89a8b6b2da97b17bb5e544b1a10702cf247d9cecaa39d9790993996276741c0d792";
@@ -21642,7 +22042,9 @@ tl: { # no indentation
 };
 "l3build" = {
   revision = 64987;
-  deps."luatex" = tl."luatex";
+  deps = [
+    "luatex"
+  ];
   sha512.run = "25d5696ec1f33dcb90be757a1b0fe16950c82f1db243b1490ed24b6acd94dac836b163e64f1279a66dbd7496cb60072cd9e6ad631cbb2ff532e8d51cb44fabbc";
   sha512.doc = "0293c819fad182fdb6928ec2b7a9c3daa20ca53f9e243bea80951645a9ed0f2f0daca095c22dcaca55bb43fff52cca4dff76237d87eff25e6aa0a36215789d25";
   sha512.source = "051e6b948ebb9f02581bfbe22f07b12148b9dcb0b779ef98deec8c0f613b77b11c8ae9c32c8c59f50ca5cd104e13f2216b979d636867d79db4044b0c7ef2be1c";
@@ -21651,7 +22053,9 @@ tl: { # no indentation
 "l3experimental" = {
   revision = 63089;
   stripPrefix = 0;
-  deps."l3kernel" = tl."l3kernel";
+  deps = [
+    "l3kernel"
+  ];
   sha512.run = "aa8f499d84578afcd72e29a48e8c5ff337d2b1acb4cbf3b4b3754925d60e2bf1f2003e82bafc859701c295d61f572305135bb5d078c194fd0d747059ac69f2ea";
   sha512.doc = "71236121e4ca1395e433802a627aae1689f9b0aa55413d87317a0e9c0d0f9cf0ddd47bb7509160f0956d153b6ef9819362fbb95344e3ccb9fa1c8733ac4a427f";
   sha512.source = "8aea8b5a80af397443bf3d25c489a02622a63ddd5efbec9335952af310f9888c25e0a18fbdc3694927caf38af63f89bc518e72927fee6343fba48805b25b90ea";
@@ -21660,7 +22064,9 @@ tl: { # no indentation
 "l3kernel" = {
   revision = 65299;
   stripPrefix = 0;
-  deps."l3backend" = tl."l3backend";
+  deps = [
+    "l3backend"
+  ];
   sha512.run = "9cbcf410a7d6aaf5477805feb48e19fd751e418718c261a4cea1305322dc8ac7eb6a14af9337de0393b5c6aa49b6496116b9e10c0a1338511aedb307d196f6b2";
   sha512.doc = "da9d55dbb019ac88b891ba276c27af91a4747e4c8289804a5fdb52555c81c6a293eaa0adef12157ce4147cce20841902090aed8e2dd58084ecedf1d051b55f83";
   sha512.source = "37be0d6c2adea6e62c2b24eff707ecb261e7ffed0d9e774ed43095aaadf859fe7b96d992cd5b20870a14737327c903d8b3d80b2983fce730d7ed168ef939ac08";
@@ -21669,7 +22075,9 @@ tl: { # no indentation
 "l3packages" = {
   revision = 65300;
   stripPrefix = 0;
-  deps."l3kernel" = tl."l3kernel";
+  deps = [
+    "l3kernel"
+  ];
   sha512.run = "b163a5f7eccdd650faad6ed6d2539f54d7343f9f11335e54cbedddfad9b1ba06899365583ec44c59bb7b67efe8a2f507b8217f52a3f65d194967981521b39195";
   sha512.doc = "c39241a45eac0e1da5be990bee94b99547b22bec1469aba31a999fadff334bbc701f38ba47b01300da578eadc3778af75c77d3180c970e5d0c22de9a09be2692";
   sha512.source = "40f19b6e8ef60aead350679a8451b62ec2f833b5413fbc96c706bbd33a020652ed5fcd86b8da6b9b5ee8c812e3aa07371e0e63c7ece51bc21c97e562a5b27fff";
@@ -21814,10 +22222,12 @@ tl: { # no indentation
 "latex" = {
   revision = 65161;
   stripPrefix = 0;
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latexconfig" = tl."latexconfig";
-  deps."luatex" = tl."luatex";
-  deps."pdftex" = tl."pdftex";
+  deps = [
+    "latex-fonts"
+    "latexconfig"
+    "luatex"
+    "pdftex"
+  ];
   sha512.run = "de95ba089738862d57b1139a21da57a8263cbe9ff81a7ab43608ce23fde57b4630057a95c99ecb7be712bc864e0c07a56429019d7aa9f63c01f47a995d5d567d";
   sha512.doc = "68ecd2a5c85afe7b39402db416bb7ad0f8e5662c77d77c0839a470f3f70da65377560fbcb5a6952e997da70868533f29a4b7c65d3f7dd63db13aa95ee7159b23";
   sha512.source = "59d3d31147fc8a31c6348c2a5f371cd4dc69d2367f9ced0c62150c5d14ead49b4e195c328ad4791638e61b93f69143c0c93bbed5551b31e4de1284a4aa7b6d73";
@@ -21844,60 +22254,64 @@ tl: { # no indentation
 };
 "latex-bin" = {
   revision = 62387;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."dehyph" = tl."dehyph";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."graphics" = tl."graphics";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latexconfig" = tl."latexconfig";
-  deps."lm" = tl."lm";
-  deps."luahbtex" = tl."luahbtex";
-  deps."luaotfload" = tl."luaotfload";
-  deps."luatex" = tl."luatex";
-  deps."pdftex" = tl."pdftex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "dehyph"
+    "everyshi"
+    "firstaid"
+    "graphics"
+    "hyph-utf8"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "latexconfig"
+    "lm"
+    "luahbtex"
+    "luaotfload"
+    "luatex"
+    "pdftex"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "91b6749a7fc520500812c203a1acb0701e7984e5e309eaf0c4815bc7ea0b507f3eeaaae3a6ad715ee53f018b8e38c695c4ff9567f26222cd2c52ba24e1a03c1f";
   sha512.doc = "30f9001ed8236f01555f8a21ff8286ea409d75583876f8ba795e1a819dea14cb3f2b3dff31e0258cf5deb75ae2fd9201e33260ef1f32c2ce53fb86bfa4e59f83";
 };
 "latex-bin-dev" = {
   revision = 62387;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."dehyph" = tl."dehyph";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-base-dev" = tl."latex-base-dev";
-  deps."latex-firstaid-dev" = tl."latex-firstaid-dev";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latex-graphics-dev" = tl."latex-graphics-dev";
-  deps."latexconfig" = tl."latexconfig";
-  deps."lm" = tl."lm";
-  deps."luahbtex" = tl."luahbtex";
-  deps."luaotfload" = tl."luaotfload";
-  deps."luatex" = tl."luatex";
-  deps."pdftex" = tl."pdftex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "dehyph"
+    "everyshi"
+    "firstaid"
+    "hyph-utf8"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-base-dev"
+    "latex-firstaid-dev"
+    "latex-fonts"
+    "latex-graphics-dev"
+    "latexconfig"
+    "lm"
+    "luahbtex"
+    "luaotfload"
+    "luatex"
+    "pdftex"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "dade40731ce41c6a0304cb7472255f2d6c8b1fed45b619282aa747b3ebbdfd707da18947f06c8896d72605b324ffa58c3c7195bd90629531ef1fb54a91f1310c";
   sha512.doc = "7434698038dd90f10c51743e238cfcf0d85da2067d458f399e557b855c7ae6fd4e013ef4272e710eb9695d3e4f8757acae95c41a9e704a393202aafc11218754";
@@ -21960,7 +22374,9 @@ tl: { # no indentation
 "latex-graphics-dev" = {
   revision = 64899;
   stripPrefix = 0;
-  deps."graphics-cfg" = tl."graphics-cfg";
+  deps = [
+    "graphics-cfg"
+  ];
   sha512.run = "33e2d6ed2e3076219a0438b8d8461110e7edf3a9b0534455d2fc43837a3766d12bdc8d912414bf88bdbd9b10a54a5b8b2045ff3a3cef42ed7cdc49a2d8664d5a";
   sha512.doc = "ab0be817107e89a4d87c8e5ce68d20ec06eba0ae37ccf79d2dae1e916fc9ae8e2b1c7f7d9701daeffa5bfb931a881d63cfd188393e075c943d91fccf3eb1753c";
   sha512.source = "cb5f6a80b7178dfd1074235d5e1c7a3a2830d4c7eb037cf9e5d51a2770ed85140be7648e288cd5d67f64955212b29d8dc37fe359c0b7a27fc065cdecdc198de7";
@@ -22308,7 +22724,9 @@ tl: { # no indentation
 };
 "lcdftypetools" = {
   revision = 52851;
-  deps."glyphlist" = tl."glyphlist";
+  deps = [
+    "glyphlist"
+  ];
   sha512.run = "3f3cc8f7cce233eb36315b21db408847a267ff393d6d4118de61c4b03ec408f3f29b2d41fdcf84995bfbf5d07bcb25984d7ffc76458d4f2dc12fdb6dfb85e23f";
   sha512.doc = "5a1dd1e2fd79351afc65d6786b24aebd9681a2b9e92755b44a836b47da5ceb1817f085483f306991a113dc0c26edfcd84839dec93bb46a003034536f31b31e5f";
 };
@@ -22359,7 +22777,9 @@ tl: { # no indentation
 "lebhart" = {
   revision = 64280;
   stripPrefix = 0;
-  deps."colorist" = tl."colorist";
+  deps = [
+    "colorist"
+  ];
   sha512.run = "4b1411cfb2cef9639554ef01af946a53d49ae429649af78a9213a79f695d0014cb3c0ef9cb13c3d0f85e0286e27b5ba214ae85ba6f2c94a32655131e4898ddb8";
   sha512.doc = "06c091c1a7c05c9c8f3de49b1bb0499e7f95273fd048de20aa59cf67bdd100d623735e8c214e81fe4b2ecbc3ef1dc83911789bd4a6f008baf62bfb12233642d1";
   hasRunfiles = true;
@@ -22545,7 +22965,9 @@ tl: { # no indentation
 "lh" = {
   revision = 15878;
   stripPrefix = 0;
-  deps."ec" = tl."ec";
+  deps = [
+    "ec"
+  ];
   sha512.run = "265aeba5ee99cbec2eca77a273a9e4857d78280e0ff17089a358e7f85d0595025e259b2edd471ce5287479531fe37cfeeaeba405ac9cabc7ac9616242815b6cf";
   sha512.doc = "33f1cd39b2e68caa750ca5867bebbbc43c9948a7606f6fe44ba3bd8be84661fb562b5472ec57ccc3f6c18ef2823188c2f81ca4444b562f935e6f041d8ec0f39d";
   sha512.source = "a81d3d7295101718dc4e66c6daafca8c480b281d7219956b0007adb4fd7e0f35959277931254fc778bf69c581b7d15ccf445f5037b589cee937211c39f59529e";
@@ -22571,10 +22993,12 @@ tl: { # no indentation
 "libertine" = {
   revision = 64359;
   stripPrefix = 0;
-  deps."fontaxes" = tl."fontaxes";
-  deps."iftex" = tl."iftex";
-  deps."mweights" = tl."mweights";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "fontaxes"
+    "iftex"
+    "mweights"
+    "xkeyval"
+  ];
   sha512.run = "7b95b6612f5b46298cddf459184f11752a4b050110bd1d0271e43e364aa5da58c9e27d3b72119b76e863a19ab0987ea408d749ecf18ff40da1ab8a585e31c7cf";
   sha512.doc = "c33beec53a939a5b9f672e0c5a7aea7a3b3047e4f1f1e68b7d4d64cd03a7f73da2bbce2a4c56199f71519d4c364a3e0ccddf8f93f24dc9eb1fd3896fd035ec77";
   hasRunfiles = true;
@@ -23052,7 +23476,9 @@ tl: { # no indentation
 "logreq" = {
   revision = 53003;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
+  deps = [
+    "etoolbox"
+  ];
   sha512.run = "df61c0c6c0b8520f5ec38780d8eb69cfd5fccd21f5120e48eee71e02b004d3da4cc9cb9371a36766852e3ca09a3db86655f1a2639a49741f00134cff1246acd2";
   sha512.doc = "fa9277da81dfb3aa235bd795780e8d3e629558fede90fa9234528b50a11507e59e65e49a0ca787af037186890392dfd45bf6de7bd859cec369626fb7d57b543f";
   hasRunfiles = true;
@@ -23060,8 +23486,10 @@ tl: { # no indentation
 };
 "lollipop" = {
   revision = 45678;
-  deps."cm" = tl."cm";
-  deps."hyphen-base" = tl."hyphen-base";
+  deps = [
+    "cm"
+    "hyphen-base"
+  ];
   hasFormats = true;
   sha512.run = "81557b83acfa4ad42dfa6fb1a65ea42bc33885da444ee23bc3c67a899df7b3ac2c19a1607305b5ec10b503980365c5d29ac3598339fc186a05417ea5bca60a78";
   sha512.doc = "206dee2be733e3ac04b5b259862b60fb3641fc44ea182da601ca54a010ff8e42f254dd01c03be7bcdd2a6258110c567a596ee82b4eb74d04ca8ed70e50cd6a86";
@@ -23612,15 +24040,17 @@ tl: { # no indentation
 };
 "luahbtex" = {
   revision = 62387;
-  deps."cm" = tl."cm";
-  deps."etex" = tl."etex";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."luatex" = tl."luatex";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "cm"
+    "etex"
+    "hyph-utf8"
+    "hyphen-base"
+    "knuth-lib"
+    "luatex"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "daafa6e417e7c366dde221488b91708f8c1302cf6db849b91a82bd74619f0b91e16430680aabeb27e43d1469262c9f799cd0bd6547635ac6ad54ef8e2dae5703";
   sha512.doc = "5d2915af80990896181a70c24dd3c51748fbaa6f3f9b96b67b1b40bc8ab36d39293e8f76c0f3dabdaffb252423eec61375b6f5aa859a1310236f7d39d6f2fcf3";
@@ -23668,15 +24098,17 @@ tl: { # no indentation
 };
 "luajittex" = {
   revision = 62774;
-  deps."cm" = tl."cm";
-  deps."etex" = tl."etex";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."luatex" = tl."luatex";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "cm"
+    "etex"
+    "hyph-utf8"
+    "hyphen-base"
+    "knuth-lib"
+    "luatex"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "f7503044bf237ca6d6e33a3a067bba0d73dfecfee7e77b5ebd4f3d6417dd24f7aa263cb08e7ffb86708574ecda31d5c7d89b42d2ad2179119393b99129f8077d";
   sha512.doc = "3924029e274913999cf54e2f3a4d3ef85dbfbb4ee93a629b8eeb77c796557c3086eb447fa74d2d7a6f33a17f433f38ceb033f7e1633e240bbb135b4239b588f7";
@@ -23706,8 +24138,10 @@ tl: { # no indentation
 "lualatex-math" = {
   revision = 61464;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."filehook" = tl."filehook";
+  deps = [
+    "etoolbox"
+    "filehook"
+  ];
   sha512.run = "16c945e72165acd9f4bcf20f81e6c5df9ec22f19d45cbb8f076763d2d1a1a2e230938dabbadfcc065e3a060487885ac2edb223aae22d12f6981f5fca5c0f951f";
   sha512.doc = "f5a8db238ae096b7b1a2eaa84643f063cd28e08b328cbcc780171a60c571e858a1cd1941a8ea9053392a8c65b965a81c8cd585ce2accb27e797e3e4e8ad3a127";
   sha512.source = "e04a36a2280fbccb9572539ebc9bafba4edb7ccada25c4b3faadaa61c2f4458d9e9a90e54fa00b5ba675e59f42ed2d076b39918e5c126e2f619f2f69ff904d81";
@@ -23775,10 +24209,12 @@ tl: { # no indentation
 };
 "luaotfload" = {
   revision = 64616;
-  deps."lm" = tl."lm";
-  deps."lua-alt-getopt" = tl."lua-alt-getopt";
-  deps."lua-uni-algos" = tl."lua-uni-algos";
-  deps."lualibs" = tl."lualibs";
+  deps = [
+    "lm"
+    "lua-alt-getopt"
+    "lua-uni-algos"
+    "lualibs"
+  ];
   sha512.run = "70f27796fdfe61e0337239a2962052eb2896478358fca0f271287db06a1d2de2f83cd7394d0ec6c281e9a5779ec396e2993f53b8b045ed7a09cb17f100a4a477";
   sha512.doc = "9e1c223ec2589f32640aefd2692d031b8ba324da30a814eea98768443eeb76d92d2700c320e6f96006e54635d31a655cae0a27c76931e7640748889ead4fbfb4";
   sha512.source = "3ed04272b887f434bfe2dd166974889318597e22c57109647946f2b255efca2fb6d1ecc1f02485a1bf387e77956c64a9f42c4af237b29f9fc7a38400d8cfbef1";
@@ -23788,7 +24224,9 @@ tl: { # no indentation
 "luapackageloader" = {
   revision = 54779;
   stripPrefix = 0;
-  deps."iftex" = tl."iftex";
+  deps = [
+    "iftex"
+  ];
   sha512.run = "7f2558dc265746f143520c2c6f3bf2ed05ac8c54988e573519321a7fb5a2a991220d0eb8906893f77964dc01f0e3f16b783dcd20f809042a11d29cd137f557fd";
   sha512.doc = "64719d715fc98bc09ab17db5f2053ea3e34d703adda6677f50ffe178a974230e8a03a9019b995238d073580e1faa745e655a7207468965ccb9f67bfccb5b5a49";
   hasRunfiles = true;
@@ -23836,14 +24274,16 @@ tl: { # no indentation
 };
 "luatex" = {
   revision = 64839;
-  deps."cm" = tl."cm";
-  deps."etex" = tl."etex";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "cm"
+    "etex"
+    "hyph-utf8"
+    "hyphen-base"
+    "knuth-lib"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "3789aa894fa2472f763275ddb045178acb51bbcbfa5f88d0dfee5498932089519b273ca5f6bf413992578638a7331e88b69f976db75cb9aeb50bf7d5f0396a69";
   sha512.doc = "f7c0807c1b4548666efa133330f1ecae7d85a0465357c5dc90f77d65b34d73e8755fe825155f2688a066f73f3cd9c76cab29a7ab06ce4406854177db4242fb51";
@@ -23861,7 +24301,9 @@ tl: { # no indentation
 "luatexbase" = {
   revision = 52663;
   stripPrefix = 0;
-  deps."ctablestack" = tl."ctablestack";
+  deps = [
+    "ctablestack"
+  ];
   sha512.run = "cb187dcd0f9e454a3b9d021b802ac6f7d09c3eee68adb5da31035f5b7bb36d2938ca940505ee08c8410ee0e5e5c81ffdd21617ea5ba0e9ca7b58abb6ede3defb";
   sha512.doc = "5dc696009e84662fc56443d7a5d61b3f30adbfeae3cf7176e81e676087d0fe580cb0575add49999ea8d5651850b7562c775b0727de01934465f3613ab7344be3";
   sha512.source = "ebb46d5d4c3f6ccfdbc758f9dab64d7e83c2fe988f7da6852dfd5e786bc757f2438f86010a695eb2e780a02830f15dea941de7fb5bdd6e6561df0774b476dd5a";
@@ -23871,7 +24313,9 @@ tl: { # no indentation
 "luatexja" = {
   revision = 65267;
   stripPrefix = 0;
-  deps."luatexbase" = tl."luatexbase";
+  deps = [
+    "luatexbase"
+  ];
   sha512.run = "6f146fd9d98d931094653b6e2d2357ba1f23c7c539489bc6e21db884b3da8a91dd822f3c301a4fc22168331b9760a96e61c6c0cc5c197585c2b02ffd96d6ca8e";
   sha512.doc = "f7b5adca5278dbdb05d2bab6eb4c5449c07f4ea6bca6548397bda6a27b73fbe5ce9c6e4dbd9ca19bde9b3b950157d783a1e73040c08ae60f661a486168653f91";
   sha512.source = "58ec25306a8203494cb029bb9866d847537723acaeef83b5a0899b9bd27e3045291a4aebfd3e094215f99282d4d744799b876cf26bf9a46908b502cec07863bf";
@@ -24354,7 +24798,9 @@ tl: { # no indentation
 "mathabx-type1" = {
   revision = 21129;
   stripPrefix = 0;
-  deps."mathabx" = tl."mathabx";
+  deps = [
+    "mathabx"
+  ];
   sha512.run = "ae2272ac7d79a3bb1a655000a2d5fa1c3d948363763abe194cbac4084d5ef60492648977660c3d9dfbc2c70bea3c207d031d2147097fb1d7af503aa80f257d1c";
   sha512.doc = "2504e85d659cba06fa25ae4e154309a6d3dcba2ac8bae0d4066b6637f19081987b0bc774902365e5b723f4b6c35cad07709e316ec1893a018baabc699d755e8b";
   hasRunfiles = true;
@@ -24465,8 +24911,10 @@ tl: { # no indentation
 "mathpazo" = {
   revision = 52663;
   stripPrefix = 0;
-  deps."fpl" = tl."fpl";
-  deps."palatino" = tl."palatino";
+  deps = [
+    "fpl"
+    "palatino"
+  ];
   sha512.run = "72bfba52e37abd933cb7b1b19dd813c3c76438591c94f9c407cabb8a44c8c67f78fae04442027287e5bf30b7239c3703ece4271194716882773eeb50d4cb2f47";
   sha512.doc = "94e624f2cea50bf3534300d3332dd61e1bc5b4c834603356831d0f9bf4c6bdc34af5d31df002c10430d4945c2c71dbf7c156b7b05ba08c657cc2d960839c2a35";
   sha512.source = "bd6aba477ca38c9778d7d23460420f485ac5658e9514ac2260475a50b6ee7e2ff736bac81a4548fb4aebae952a406a0de1bef01bd7d8fe4984080ab835d328d4";
@@ -24818,8 +25266,10 @@ tl: { # no indentation
 };
 "metafont" = {
   revision = 62387;
-  deps."kpathsea" = tl."kpathsea";
-  deps."modes" = tl."modes";
+  deps = [
+    "kpathsea"
+    "modes"
+  ];
   hasFormats = true;
   sha512.run = "4e287680b7b14497133165a45ed668dd326e587a305475d90f4b545aa1973a0e6001fef2e3a9afa5fd2f343497d109f4670fcc0f4c0263b20624dbbad1f21bd3";
   sha512.doc = "07e574fce34949b71ea0b156c394db80bdd9c9a3018afbdadf786fa431674b6fd0c2f79e8f9a72c872b17b2dbedb755c0ce3def552740a99e63d65e28fc3d2b0";
@@ -24884,7 +25334,9 @@ tl: { # no indentation
 };
 "metapost" = {
   revision = 62387;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "d807a22bd0f3358d1986a477834c19b2fce636e4ea96f52f745220a165726505849ac4a1048bd4be49cf9e42e098a55df2a4c9b4d267dddbe2fb093ba3029d6d";
   sha512.doc = "384730c3f784bb026bb29ee69dc95d179c53636c405e1a037477269e9a3a95d8c296729d7bb54037ca4a76e5ef00eff4876c4538203e400db8c4f0850c48b259";
   hasRunfiles = true;
@@ -24963,17 +25415,19 @@ tl: { # no indentation
 };
 "mex" = {
   revision = 58661;
-  deps."enctex" = tl."enctex";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."hyphen-polish" = tl."hyphen-polish";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."pdftex" = tl."pdftex";
-  deps."pl" = tl."pl";
-  deps."plain" = tl."plain";
-  deps."tex" = tl."tex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."utf8mex" = tl."utf8mex";
+  deps = [
+    "enctex"
+    "hyph-utf8"
+    "hyphen-base"
+    "hyphen-polish"
+    "knuth-lib"
+    "pdftex"
+    "pl"
+    "plain"
+    "tex"
+    "tex-ini-files"
+    "utf8mex"
+  ];
   hasFormats = true;
   sha512.run = "a79d6a1ecb15f7962826773d7eab4b1ffd86a5c15f8076f096fecf63df1bd661449eb7d14251a57a1eb2bede030ddf93aac170fc3c59ae0a124da6cef69e55be";
   sha512.doc = "091f2825376718d8c2190555af7ef54d0ae5202425d57b986fba861df2f8604301df5a121ccfcfcdc91032d07dcda8289fb8de5d81c487b93b0e202a2a5a658e";
@@ -25016,8 +25470,10 @@ tl: { # no indentation
 };
 "mflua" = {
   revision = 62774;
-  deps."luatex" = tl."luatex";
-  deps."metafont" = tl."metafont";
+  deps = [
+    "luatex"
+    "metafont"
+  ];
   hasFormats = true;
   sha512.run = "fa735fa117e7bd433339efbb709caa5fc25007088500dd5e4f6999cc417d188fd43435f74d526186880ac857f9bfc52e1fb7f1055974cea959e28536150b1a19";
   hasRunfiles = true;
@@ -25075,12 +25531,14 @@ tl: { # no indentation
 "mhchem" = {
   revision = 61456;
   stripPrefix = 0;
-  deps."amsmath" = tl."amsmath";
-  deps."chemgreek" = tl."chemgreek";
-  deps."graphics" = tl."graphics";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."tools" = tl."tools";
+  deps = [
+    "amsmath"
+    "chemgreek"
+    "graphics"
+    "l3kernel"
+    "l3packages"
+    "tools"
+  ];
   sha512.run = "fffeb1ce083d8eb3da6543409e5cc735c9699f9145114c8325c336b93d2dab2a9976fc448c6324318407c3af888cb91cc7764fcf3bd24369e4940f00dda66429";
   sha512.doc = "cd4c41a329489149b3f2bc79dd50e0517707681f452888394870459d10888095a0cbb7b7c18500f04264c6c85f791d9af9d799b1b4e221e991af32690e7405ba";
   hasRunfiles = true;
@@ -25292,21 +25750,23 @@ tl: { # no indentation
 "minted" = {
   revision = 65252;
   stripPrefix = 0;
-  deps."catchfile" = tl."catchfile";
-  deps."etoolbox" = tl."etoolbox";
-  deps."fancyvrb" = tl."fancyvrb";
-  deps."float" = tl."float";
-  deps."framed" = tl."framed";
-  deps."fvextra" = tl."fvextra";
-  deps."graphics" = tl."graphics";
-  deps."ifplatform" = tl."ifplatform";
-  deps."kvoptions" = tl."kvoptions";
-  deps."lineno" = tl."lineno";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."tools" = tl."tools";
-  deps."upquote" = tl."upquote";
-  deps."xcolor" = tl."xcolor";
-  deps."xstring" = tl."xstring";
+  deps = [
+    "catchfile"
+    "etoolbox"
+    "fancyvrb"
+    "float"
+    "framed"
+    "fvextra"
+    "graphics"
+    "ifplatform"
+    "kvoptions"
+    "lineno"
+    "pdftexcmds"
+    "tools"
+    "upquote"
+    "xcolor"
+    "xstring"
+  ];
   sha512.run = "faf543c7f48371cca2a4af7d1e4e1e9b16c13673908417ec982d773dac561ab9e467f79bed230f5c0e359fc82c5cfff1f83e18cb6261279943d1e5a2f117ea2f";
   sha512.doc = "41640837e53d5b9cdce55a8f29707fe4f654da19813efbc1770df39b8f00aabdf600032dd504a8cebe23b4ef91e226014a94e031c52d0458f0684c5a53bd276a";
   sha512.source = "384af78dba5447f7169804597afba5b42f8860cabe691e2490d90248ed798880d11471e8cad7ede8a4b1dbaf7b9684dea05ae54719c7637b8f5b6d953fd0ba98";
@@ -25420,25 +25880,27 @@ tl: { # no indentation
 };
 "mltex" = {
   revision = 62145;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."dehyph" = tl."dehyph";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latexconfig" = tl."latexconfig";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "dehyph"
+    "everyshi"
+    "firstaid"
+    "hyph-utf8"
+    "hyphen-base"
+    "knuth-lib"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "latexconfig"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "e04f33b83474e58c4725abbba21ae56659920ad2929faba7f25b47befeeb7e207e36888e1dbf7260ecc95c126e1732f6f5dced3d277db7c3889f2b08590b04dc";
   sha512.doc = "e9d5a1cfdc6183bf99ef369b447c73e9ec5926952a80a75708db4fc6343ffc1a10d599276c13f295005f7c8c56e2e35ad9edc9dee3ee06928fa8c7b267d82bbf";
@@ -25499,16 +25961,18 @@ tl: { # no indentation
 "moderncv" = {
   revision = 62128;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."fancyhdr" = tl."fancyhdr";
-  deps."graphics" = tl."graphics";
-  deps."hyperref" = tl."hyperref";
-  deps."iftex" = tl."iftex";
-  deps."l3packages" = tl."l3packages";
-  deps."microtype" = tl."microtype";
-  deps."tools" = tl."tools";
-  deps."url" = tl."url";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "etoolbox"
+    "fancyhdr"
+    "graphics"
+    "hyperref"
+    "iftex"
+    "l3packages"
+    "microtype"
+    "tools"
+    "url"
+    "xcolor"
+  ];
   sha512.run = "988cc5f400af4ecdfc0730a63d7f2a13fde81b9120f198622a5e2d145ca94e1d5bc952e261ef2f4cacefda8a23626119975fd1e00b44f4a66b1fbb7f4c011d40";
   sha512.doc = "9527fa84fffc4eb2ac92dab59cf0e5ae87a6f5befd4ed05acdd85cc7050dcc669f8b814ef928e69bb1c1e8bb3bd774aca1f85acf6b750a1c9555a3165eba0281";
   hasRunfiles = true;
@@ -25602,7 +26066,9 @@ tl: { # no indentation
 "montex" = {
   revision = 29349;
   stripPrefix = 0;
-  deps."cbfonts" = tl."cbfonts";
+  deps = [
+    "cbfonts"
+  ];
   sha512.run = "9676cef9e0fbe7a0196b1ea0fb3ea4f0399a3ee8ed76ef06e824848a57922dc4f7cc1f50a1fcea47fc265465407653447ab80e80dbac3c4bc00488d0929f87bc";
   sha512.doc = "1965f31e28a9f54d86a495b4b8cea50dc59f409d066918dedf77f86448b60ea547565dcf2069ee0e0a646d53f34d244868600951c4b1a4d4e099fe50e3c2b477";
   hasRunfiles = true;
@@ -25767,7 +26233,9 @@ tl: { # no indentation
 };
 "mptopdf" = {
   revision = 61520;
-  deps."plain" = tl."plain";
+  deps = [
+    "plain"
+  ];
   hasFormats = true;
   sha512.run = "3e5bb2983ea7329e4d3a48a29a5902d0245b0bd07f6cc3d272358701bd7df8bef808cd23810a70ab60209dea2d8788624e98497c6c04c917a59874a84ed94a30";
   sha512.doc = "7bb6c2bc9dd0bceddb4b5aaa8d7143c40fb41baac2065cfbaf14642acb33bb7f05703d7b8469da0e92453ec10f0b8252d00b05588d7846835d622be097a83f8d";
@@ -26049,7 +26517,9 @@ tl: { # no indentation
 };
 "musixtnt" = {
   revision = 40307;
-  deps."musixtex" = tl."musixtex";
+  deps = [
+    "musixtex"
+  ];
   sha512.run = "eab6332d626f199e46dcd03ea546abbc4446b41c4b0354c066790ebfde154c6fa90f861dcff77206318b58a31565d884576899629520e78b3285bac673d1f4bf";
   sha512.doc = "2da473ad2425064747187da005e01d6844731c536b75095828a85d358ffb1344331ef483c0cebe79b346b4fa96a358a1e416cce7d7cfcce6b1242cf3c0a3645e";
   hasRunfiles = true;
@@ -26183,7 +26653,9 @@ tl: { # no indentation
 "namedef" = {
   revision = 55881;
   stripPrefix = 0;
-  deps."l3kernel" = tl."l3kernel";
+  deps = [
+    "l3kernel"
+  ];
   sha512.run = "c413d600911ab1107554ec2aacadc80fad12a95e7486817c002274f282e047915d06f4878e68e423af649569752cd27d7c1b3a802a9abff68e91038719b2fd28";
   sha512.doc = "72031cf2858a3b68092c852c216f96aaea212c721e47d90e870c8153f83db921590246fb11b59009d431754720791e3c625fb3abd7bdd9010cd1a49894023ebb";
   sha512.source = "adff08a774126c8faff52ba14044a8e2140f9586358dab6ce95e7a941706bf57c32acf0ad75282bd3b01dec8a73fea105c0c65a1453f5903d5eaeb3fe0349b15";
@@ -26460,7 +26932,9 @@ tl: { # no indentation
 "newtx" = {
   revision = 62369;
   stripPrefix = 0;
-  deps."kastrup" = tl."kastrup";
+  deps = [
+    "kastrup"
+  ];
   sha512.run = "07c63e655ebb6381bb7eaa4f0f1a35054894ee6db55992cb8fadc04a2dc62470767a12661a8cc697c8d15df40861835463ff7a0bad449f9fb86b59093642b89c";
   sha512.doc = "e615ce1c1a9478358af27885cd9c0b8d7ad152a3fb437ab705bf682d5849bd705a248de2d879ea9b4de0833984c15b0ad59c4da7da88c9e12d21fff9e4fd9efa";
   hasRunfiles = true;
@@ -26591,7 +27065,9 @@ tl: { # no indentation
 "nimbus15" = {
   revision = 58839;
   stripPrefix = 0;
-  deps."fontools" = tl."fontools";
+  deps = [
+    "fontools"
+  ];
   sha512.run = "9e39f92dea1fa293d6249d16877dd6b2d990d1d48cfd31f4ac1d66233b97ff178d2b70f428978a084fc9a50b9dd994adb6a8ad29375e54f5d5ccf6ca7ed62f64";
   sha512.doc = "8fb9ece6ca17549572a0d79a541397c6545dc01ac0422a5270314bba1cb83b1451fb0f56e34f449cc3d3de326e063e4ea1f2ea03a0fbda7342e9d0a101fb5ed1";
   hasRunfiles = true;
@@ -26791,7 +27267,9 @@ tl: { # no indentation
 "norasi-c90" = {
   revision = 60831;
   stripPrefix = 0;
-  deps."fonts-tlwg" = tl."fonts-tlwg";
+  deps = [
+    "fonts-tlwg"
+  ];
   sha512.run = "5f65927546348815b07c93003a2b0922403d274bfa3d1665d4649c9dbc737df924958c2fd61c1d06cd5e7c1862aff392c8d1e9d827f4ae79e70d9b76467f651d";
   sha512.source = "8fb30cc3a1e762ec15c813fff0191b08b64a0d259dbdd21a9edcf70c6eb1b327cff5ef3f48b9dba0b7d99d1ec31b3accef65deca7285e27790261ca659bd525d";
   hasRunfiles = true;
@@ -27083,13 +27561,15 @@ tl: { # no indentation
 "oberdiek" = {
   revision = 64463;
   stripPrefix = 0;
-  deps."auxhook" = tl."auxhook";
-  deps."grfext" = tl."grfext";
-  deps."grffile" = tl."grffile";
-  deps."iftex" = tl."iftex";
-  deps."infwarerr" = tl."infwarerr";
-  deps."kvoptions" = tl."kvoptions";
-  deps."pdftexcmds" = tl."pdftexcmds";
+  deps = [
+    "auxhook"
+    "grfext"
+    "grffile"
+    "iftex"
+    "infwarerr"
+    "kvoptions"
+    "pdftexcmds"
+  ];
   sha512.run = "b3f9d5918b24d6191515b459709afb9364a28f44a8b1ad3adc98c2d10c9a4f10316c80070c575fe4a6a06405bcead5bed312ab75553a32d254b2a80b2afbfb8f";
   sha512.doc = "b7f756ceb7dc619bc1941dfc56c5dd2f151e33c57c51444a11dbe74280a23ac27886da05b4b8d0f33dfe9839a5538cbac5e9d506338c89fb223d82867a3f839c";
   sha512.source = "688768a47cf782c817cc23e6e527e41c1893fc084702c2ab85e2e4b7df4b3d515033dbae0ea26bf904f6fae77dfce41d21a7b59415fbf67449a3aacc7047afd0";
@@ -27333,16 +27813,18 @@ tl: { # no indentation
 };
 "optex" = {
   revision = 65185;
-  deps."amsfonts" = tl."amsfonts";
-  deps."cm" = tl."cm";
-  deps."ec" = tl."ec";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."librarian" = tl."librarian";
-  deps."lm" = tl."lm";
-  deps."luaotfload" = tl."luaotfload";
-  deps."luatex" = tl."luatex";
-  deps."rsfs" = tl."rsfs";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "amsfonts"
+    "cm"
+    "ec"
+    "hyphen-base"
+    "librarian"
+    "lm"
+    "luaotfload"
+    "luatex"
+    "rsfs"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "a30b58b6dc9a1e06c3bf2fe196532ca88e5bf9ebae5e36f5ec2b9f146f95f18a70df2b15698bbcfc51300cef2c1b25c28521885c2ac1a44c6bb8cc485eed8739";
   sha512.doc = "8b7b46ab7984a0d1f590adabefb99085734532dd0dede6c429fdaa2bcaa3c2dcd1d0e70d37ae3cf9a109ab018f0fd29a7bc36250b8bf5d12c41ee4fa21bf9ccd";
@@ -27845,7 +28327,9 @@ tl: { # no indentation
 };
 "patgen" = {
   revision = 62387;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "e4b04bdc28d75de619307567716d2c29b41286a82cdafd6eca45df36baf67588cee94c4c320abadee4e3103fac8b33ba9367114875e56f198665388fc93e341d";
   sha512.doc = "dcf16fddb0085e8a8984047ff9e500c8b7fdd7d6b24b4f6154f464e05fe137b807c13d910881fda96e617cf80780ed1e75ccfe0fda2477b1d9b95990baf5f279";
   version = "2.4";
@@ -28096,10 +28580,12 @@ tl: { # no indentation
 "pdfpages" = {
   revision = 65319;
   stripPrefix = 0;
-  deps."eso-pic" = tl."eso-pic";
-  deps."graphics" = tl."graphics";
-  deps."oberdiek" = tl."oberdiek";
-  deps."tools" = tl."tools";
+  deps = [
+    "eso-pic"
+    "graphics"
+    "oberdiek"
+    "tools"
+  ];
   sha512.run = "c29f811574dde6dcd717255d40df7234d0916d6e7e4fe4c25e62639123bcdf4464e3e285c335c11bf2a289e8ca6391278611a0073fbd3ac8a071790717b2778a";
   sha512.doc = "d91c5ae383beb5b4d16d69d09124c1e9598d3abebecc5d1f63319a90c8784c361fda0bc68626db752c8b9a3dc3f6b691a1be6d6ed7d16169278228f68b876b2e";
   sha512.source = "869945d91d96e3a7936515a84bc4cfaad96193bb198a0a4db88300d1bfcf61ac971c6144820fcdb52045f4fa3511af8ec4045f999bbf8ef07d869d43e68dbee2";
@@ -28164,15 +28650,17 @@ tl: { # no indentation
 };
 "pdftex" = {
   revision = 64690;
-  deps."cm" = tl."cm";
-  deps."dehyph" = tl."dehyph";
-  deps."etex" = tl."etex";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."kpathsea" = tl."kpathsea";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
+  deps = [
+    "cm"
+    "dehyph"
+    "etex"
+    "hyph-utf8"
+    "hyphen-base"
+    "knuth-lib"
+    "kpathsea"
+    "plain"
+    "tex-ini-files"
+  ];
   hasFormats = true;
   sha512.run = "f35a908deb539efbcab7f7db6b8d1c0aba08f1e6aa1fe39c4f7235d2cfddb61e14252fb71f90df1023a6a30809240dfb45905ff21a0d899a5c480e1b007212ec";
   sha512.doc = "018e860e5fc2222cac7d1f00498d74f3ccac00a10d0d226f2b2dd49d9941381ffc5341dea728155c3c0a4b39482b5b7c08e94c26cda99cb561b5044a6098beec";
@@ -28342,12 +28830,14 @@ tl: { # no indentation
 "pgf" = {
   revision = 59210;
   stripPrefix = 0;
-  deps."atveryend" = tl."atveryend";
-  deps."fp" = tl."fp";
-  deps."graphics" = tl."graphics";
-  deps."ms" = tl."ms";
-  deps."pdftexcmds" = tl."pdftexcmds";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "atveryend"
+    "fp"
+    "graphics"
+    "ms"
+    "pdftexcmds"
+    "xcolor"
+  ];
   sha512.run = "c02a5b4a0f3aab13d39166c30bd456603de012ce6089662ab0b7c091ac906eb5c1719543246db97ac49cc109ad05c1b1d59330a64a43f82689cddcc86a465d06";
   sha512.doc = "360aaf8f3a2b2f531c9f24c777fdc687bae4a40b2d03f99f081765690a94711f63902abc3e9a602fc2d2d5bf93d3611cf40e7082fab7176fc0fba07876485238";
   sha512.source = "f2779d8172a81882263bd1ff7ec17766fe1273cb824e7fdf695704dfb4575ff0aa3a77ca264e4c57e4c4cb232bfc87782532dcdb69de00eeb1ea3cc23392bb7f";
@@ -28391,9 +28881,11 @@ tl: { # no indentation
 "pgf-pie" = {
   revision = 63603;
   stripPrefix = 0;
-  deps."carlisle" = tl."carlisle";
-  deps."latex" = tl."latex";
-  deps."pgf" = tl."pgf";
+  deps = [
+    "carlisle"
+    "latex"
+    "pgf"
+  ];
   sha512.run = "3e5cdb5def0918ab1c3d38d35bb85f07711144d1fcaf0f3af8b2c5e0eacd9af6c3b92bc6e1f45438e40d7f5838770b91ab513970cdd9a3f7dad2918eefb875f6";
   sha512.doc = "ac151cb61ea4fc440ffeeea9b987f6dd648b53596934900f41437f787bedcabe2ca8dd53c37828aab816e9334d0d26573f81000333e50d0761d70c586a5d87e3";
   hasRunfiles = true;
@@ -28418,8 +28910,10 @@ tl: { # no indentation
 "pgf-umlcd" = {
   revision = 63386;
   stripPrefix = 0;
-  deps."latex" = tl."latex";
-  deps."pgf" = tl."pgf";
+  deps = [
+    "latex"
+    "pgf"
+  ];
   sha512.run = "a55281a157a2a347f1c9d82679cd663f4493e03123d14dbef0d71582613772252b693a25b3d3e5b72b948c4fd12d0d7b0354d2e38083583b550d7cfb5e634d93";
   sha512.doc = "6d798d93590d859d69bda9f0bd391049db91e2d4fb6f0b019a6f76eeaae9e73c9f249ec356cf5a5d4505af6948d4c70c2ad4685c1c41a7ba40ec62d3d8a9dd00";
   hasRunfiles = true;
@@ -28428,8 +28922,10 @@ tl: { # no indentation
 "pgf-umlsd" = {
   revision = 55342;
   stripPrefix = 0;
-  deps."latex" = tl."latex";
-  deps."pgf" = tl."pgf";
+  deps = [
+    "latex"
+    "pgf"
+  ];
   sha512.run = "6b015603e3daa362e473d795d32fa785ce247b58ec9f88872fe4bdb4fa660000bd87da2369de556f998485a6fcb6dd49aaca549b0470b41adacba5a278453197";
   sha512.doc = "968d23fcc4f114bab204ec53281975a6fee5f81635ece256351198075cd8463a706954f463beacc162180459fdb3652657f2c060a71c588681f8de6e788a4e6a";
   hasRunfiles = true;
@@ -28438,7 +28934,9 @@ tl: { # no indentation
 "pgfgantt" = {
   revision = 52662;
   stripPrefix = 0;
-  deps."pgf" = tl."pgf";
+  deps = [
+    "pgf"
+  ];
   sha512.run = "0269703fc00f10981d5ce8958159a24814b9f410c1b00516608c039b1ea8a3381392bf1d89e98f3011d42210047bf2e1fec2f103467087f9172e143d9ab6fcf1";
   sha512.doc = "4890ae174c92db8df7befcef30d03724ae52fa4b26ac796d247a703794ce745ee892f0d2ab8a4f62e96a5e5f792791a6f7e8b9e71f1c0f11b68e8cbcf5165472";
   sha512.source = "668987bd37aebd38697c02bc39d85371c7d40613aba13c0f3b62ece8145608057cf3f76cda03de6df25f7ba820359ff2ba1c340aa1b9ebff94bbd42aed39e401";
@@ -28482,7 +28980,9 @@ tl: { # no indentation
 "pgfopts" = {
   revision = 56615;
   stripPrefix = 0;
-  deps."pgf" = tl."pgf";
+  deps = [
+    "pgf"
+  ];
   sha512.run = "7d672d626428c37fa749a810c57be43c6102e1325a6d3e16c57bc560b6d65a57bae94e619a73f3e0efb46ce7b4783d05a6e98c64b1e90c6e0f94f1dd9acd676f";
   sha512.doc = "ff82e0502fdeefe6afe90aad4e7615de9be4ef8e2e6a69e7a537202af77aed00c0895269ceed3d38e0f34345efbdd771d22b0c8759fcb46ff8e91ce639dcd21d";
   sha512.source = "758da1f3daa0ef888b484ea657fdd4384102868e4eee543bc97e73f103b67c367277f5c00efd06a2080f9ac3fb82c909cd30f641363120e70357450179dab6c5";
@@ -28507,7 +29007,9 @@ tl: { # no indentation
 "pgfplots" = {
   revision = 61719;
   stripPrefix = 0;
-  deps."pgf" = tl."pgf";
+  deps = [
+    "pgf"
+  ];
   sha512.run = "8244e65860f37d74d05535a627ef6cd321407a69a142d156bae190c562a9402a0d7e927df732c32cc5f556dede1b51f7aeca5d7d3a26167348a21f2e3d8be5ac";
   sha512.doc = "720a77c574c81e7c3619e3b988c8a359bd6cf284ad3fa7c795eb01c371ede85ad727dde8e5f19d8f683947b5dc5752324581e364c59e8a644b5ae34d6b75a96f";
   sha512.source = "d840015854794de1a311f1d8a9935a93c71a098c46fb1c5cec8a57228a924685f75ea76fc9cf2a9f9f30ed39920bbf2092fbdef2645ddaa5ad5a3787839c1d2a";
@@ -28945,24 +29447,26 @@ tl: { # no indentation
 };
 "platex" = {
   revision = 65305;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-base-dev" = tl."latex-base-dev";
-  deps."latex-firstaid-dev" = tl."latex-firstaid-dev";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."ptex" = tl."ptex";
-  deps."ptex-fonts" = tl."ptex-fonts";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "everyshi"
+    "firstaid"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-base-dev"
+    "latex-firstaid-dev"
+    "latex-fonts"
+    "ptex"
+    "ptex-fonts"
+    "tex-ini-files"
+    "unicode-data"
+  ];
   hasFormats = true;
   sha512.run = "53a9c0137d35110ce5b1875875f2b5e20d9db884b62bf25eea4a9d9c2724ff6e779680c060ee2aad5ebf36372045b3ef7d711658f6d50af4999e409f5860c09f";
   sha512.doc = "7b47db806f6a79ab99c19833f3cbbfdb2bae594f370ccb51288df95c262680a7a789888952edb542321d899f6efa0d4aaec6b9d00adec8826b8a10c4db2d3c27";
@@ -29163,8 +29667,10 @@ tl: { # no indentation
 "polski" = {
   revision = 60322;
   stripPrefix = 0;
-  deps."hyphen-polish" = tl."hyphen-polish";
-  deps."pl" = tl."pl";
+  deps = [
+    "hyphen-polish"
+    "pl"
+  ];
   sha512.run = "24bdb98990f66e89085056e6ad3e0930dd16d0f4bbd07a2c9a49931796e143505276d2025fee21b2b52d927c3b2992d31f4edae4668cdb549f6f00ef43dc1c69";
   sha512.doc = "755e7625d5ee1e4457e7ee518469d585c9c1e566c57bf147c62195555ae91dadb68f469127cb18a7c30cda1468129db09cb09b1974f5273d41c9491a6e1d5ffc";
   sha512.source = "8e216956a95df02134cf411d170a75309c3f167a5bf7d78f77c4e47950c8a5da52e523e367f5ce60492fc0ab7cb205e9b57835b883225752731ca094d7c507b8";
@@ -29182,12 +29688,14 @@ tl: { # no indentation
 "polyglossia" = {
   revision = 65144;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."filehook" = tl."filehook";
-  deps."fontspec" = tl."fontspec";
-  deps."iftex" = tl."iftex";
-  deps."makecmds" = tl."makecmds";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "etoolbox"
+    "filehook"
+    "fontspec"
+    "iftex"
+    "makecmds"
+    "xkeyval"
+  ];
   sha512.run = "65d91b180f748592c2eb7a98232b7b438c762a56100294995454e54d7759ef00076d63d90660fcded3d0ee5aa03d1a4b328ff3706db1926be2546140325e8e96";
   sha512.doc = "88867dbf5e218720a13e0ffeaf0ecc3784adbf5097c99cfc193f35be1c99c82c459e0e27b1e1d72cee1020549bc6131b8da03a47beef42f59d53b4fd4fe036c4";
   sha512.source = "e037d2a8c0bebf37a8ed3dcdae764dd2cda3d780379ba70a67eb46447936816e8c43122d691bdf58122fcc7a96f2bcf3d6710d71bf5bb378cf0418efd40ae37f";
@@ -29299,18 +29807,20 @@ tl: { # no indentation
 "ppt-slides" = {
   revision = 65194;
   stripPrefix = 0;
-  deps."crumbs" = tl."crumbs";
-  deps."enumitem" = tl."enumitem";
-  deps."hyperref" = tl."hyperref";
-  deps."pagecolor" = tl."pagecolor";
-  deps."pgf" = tl."pgf";
-  deps."pgfopts" = tl."pgfopts";
-  deps."qrcode" = tl."qrcode";
-  deps."seqsplit" = tl."seqsplit";
-  deps."tikzpagenodes" = tl."tikzpagenodes";
-  deps."tools" = tl."tools";
-  deps."varwidth" = tl."varwidth";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "crumbs"
+    "enumitem"
+    "hyperref"
+    "pagecolor"
+    "pgf"
+    "pgfopts"
+    "qrcode"
+    "seqsplit"
+    "tikzpagenodes"
+    "tools"
+    "varwidth"
+    "xcolor"
+  ];
   sha512.run = "8741def8d57db17bef3490c881a615340290283860e9978e105b7ba0768b5fbf02023722109dd2f6860e9fa8d44fe7cf742eb2a97ae08d1199a6dea9f73503f2";
   sha512.doc = "6528e50797dae2dd928d11f78bdcb3368177412823657baccba10c194bebce97384ed55d10c5307c13aa06883a156abd57a944acc26f9237a138df22b5a33658";
   sha512.source = "42dd3fdc96d1ffbf39deba0e2e292392a9aa6a2b266d7787448b93996f12c966abff0b643281fec8b336a395b283e2e88fafb365f616455e3393645cd7c3a55c";
@@ -29396,9 +29906,11 @@ tl: { # no indentation
 "prettytok" = {
   revision = 63842;
   stripPrefix = 0;
-  deps."filecontentsdef" = tl."filecontentsdef";
-  deps."l3kernel" = tl."l3kernel";
-  deps."precattl" = tl."precattl";
+  deps = [
+    "filecontentsdef"
+    "l3kernel"
+    "precattl"
+  ];
   sha512.run = "8b9f5e9fec9d50b9f688115e00ad6fde21adfb9cef69e020fb297abcfe489cc6fde08d2ad4b72ea5f6b8e0b7499a97c798e8c0bd306d298427fcd19b6365c300";
   sha512.doc = "8dc2afdc9920817b13050bdb6d92164e9322a18fd1d7a7adc7a1655c8dd68181b00faef22c09f9bce45be0744e179c978ba40c6f841e3c2cdba1c88225f7486f";
   hasRunfiles = true;
@@ -29700,9 +30212,11 @@ tl: { # no indentation
 "psnfss" = {
   revision = 54694;
   stripPrefix = 0;
-  deps."graphics" = tl."graphics";
-  deps."symbol" = tl."symbol";
-  deps."zapfding" = tl."zapfding";
+  deps = [
+    "graphics"
+    "symbol"
+    "zapfding"
+  ];
   sha512.run = "f7d1acebcd1d32a691221f396220358f3bb15dff2e2cebec4b537b1b790b68d8ce1164711983a52b4f04d6e470df2e3e5fec63bb1d3bf39fe205d5f0351299de";
   sha512.doc = "d1c14edccdf43ed2c786394bc04e9fd683b683532a9dc18d592f918ee8899234d23feb738128aa1418f441288cdbf0c6de832f8c4d98023926baeace36365a1d";
   sha512.source = "6862a7e74be6a575996e6f45a2236db810f1c030d3a0c53b2b97c2e803fc7e29010108e4597d637b8abedd63b1f956da268f62ca2c609accaa4d035be7bfd8ed";
@@ -30475,7 +30989,9 @@ tl: { # no indentation
 "pst-uml" = {
   revision = 15878;
   stripPrefix = 0;
-  deps."multido" = tl."multido";
+  deps = [
+    "multido"
+  ];
   sha512.run = "e4ff8ea9b7fb9f530e33280de3e9eb20d653c0c062fa80611a544daf74da0b1dd2481b43d8f5258f9ebc1d1bf95b393b32c7152ab8464a9e980cefa105c45ceb";
   sha512.doc = "d8aa92785c241b6346762d98349d8464ce604afceb8774ef160e8c24e0a40d3fd8dba7cac3f78cbf38cbf6cfebb79939ad3c76e6b4014c1028859aba38123efe";
   sha512.source = "8b7e551154c1b1966046268ed3353b6c78c3a66bfa20f44c7fba3b58f661f2585b71d49d2dd673368f732b2f9446dc7783bad4ae5248169a79721d330a49514c";
@@ -30568,13 +31084,15 @@ tl: { # no indentation
 };
 "ptex" = {
   revision = 62464;
-  deps."cm" = tl."cm";
-  deps."etex" = tl."etex";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."plain" = tl."plain";
-  deps."ptex-base" = tl."ptex-base";
-  deps."ptex-fonts" = tl."ptex-fonts";
+  deps = [
+    "cm"
+    "etex"
+    "hyphen-base"
+    "knuth-lib"
+    "plain"
+    "ptex-base"
+    "ptex-fonts"
+  ];
   hasFormats = true;
   sha512.run = "6e2e40d86740a24550cb4f55630db81bdc777daf87533cb23b4fe041439d00e10cbb7b5fab92e33828c87945e710ea3579d76a8e0fdae0b8ba069b5eb33968c3";
   sha512.doc = "96aed9e990d013c7f5310a5ec86a1f7465d0de8503009669a5e10ccf4d3ed8767bf1408cfb04cfa8876e02640bc4a3b07249c331cc6190e391cb4a5b8aeafa35";
@@ -30824,10 +31342,12 @@ tl: { # no indentation
 "pythonimmediate" = {
   revision = 65349;
   stripPrefix = 0;
-  deps."currfile" = tl."currfile";
-  deps."l3packages" = tl."l3packages";
-  deps."precattl" = tl."precattl";
-  deps."saveenv" = tl."saveenv";
+  deps = [
+    "currfile"
+    "l3packages"
+    "precattl"
+    "saveenv"
+  ];
   sha512.run = "970cd28032c551271f97fcae614a03f012684b0f1a09904284ff35e9461195a1e5b8a6f51c12c4e7dc7b54720d13a34d9bbe471469a03c0fd00ddc49d8462d9c";
   sha512.doc = "68068245368180f4dff747a18abdc068a2f0fddcc5b3cf3e63403d99ceaf56ddc5ee17bb32ebefb42f92268d3b681c5c5feb94aa76823b90478d77f0b3e511bd";
   hasRunfiles = true;
@@ -31409,8 +31929,10 @@ tl: { # no indentation
 "rerunfilecheck" = {
   revision = 63869;
   stripPrefix = 0;
-  deps."atveryend" = tl."atveryend";
-  deps."uniquecounter" = tl."uniquecounter";
+  deps = [
+    "atveryend"
+    "uniquecounter"
+  ];
   sha512.run = "464daf4ee4f443f4ff329e28b928df94e83e83696e3e5604de7b51beb61c25a0ce50dc00b35d2cc8d0cabb32d10bc28c3c06069f5dd7eafd9fdb2d44a3adf313";
   sha512.doc = "7c570d38c989aaeb7db5271501c5384ba8b8601396f629d7ffee32baaf1c289592bb5d69d2cb2784cfb2008fdc047098d43dc20803e4b90eac59848c15dd0cb7";
   sha512.source = "2d987c01bc0f67708080d4578f308444ed3220a37ee11ef1a95c2a9bfa0ab49a46ab46d291153f0c748935f473124d70212a821233b22f1e606be6183e4afe81";
@@ -31962,7 +32484,9 @@ tl: { # no indentation
 "saveenv" = {
   revision = 65346;
   stripPrefix = 0;
-  deps."precattl" = tl."precattl";
+  deps = [
+    "precattl"
+  ];
   sha512.run = "e0e368dcf3add9d59b22d8e04da1de9110d6f1ad2e31cd2cd44f894ea1d7f0cbd4eb41b500637e896eb179539e19c4a1d0601035e2404726dfc98677f9db0927";
   sha512.doc = "2016c815add27dca5b498f4cca3ce69c9c18f544b9651305d5d9a9a7a10b30fe187c526da37813218388f8305fc3df83257b2e9b6289171febb770c7d59d9274";
   hasRunfiles = true;
@@ -32056,307 +32580,327 @@ tl: { # no indentation
 "scheme-basic" = {
   revision = 54191;
   stripPrefix = 0;
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
+  deps = [
+    "collection-basic"
+    "collection-latex"
+  ];
   sha512.run = "027a1cd0dd4fc5da2427864bb49fc885a00bec6e8a74da24ce9cd781c69bf4288ddfc3c790307ed48052a8fc00c1989d3939b253da6638370adbb1c43348749b";
 };
 "scheme-bookpub" = {
   revision = 63547;
   stripPrefix = 0;
-  deps."barcodes" = tl."barcodes";
-  deps."biber" = tl."biber";
-  deps."biblatex" = tl."biblatex";
-  deps."bookcover" = tl."bookcover";
-  deps."caption" = tl."caption";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
-  deps."enumitem" = tl."enumitem";
-  deps."fontspec" = tl."fontspec";
-  deps."latexmk" = tl."latexmk";
-  deps."lipsum" = tl."lipsum";
-  deps."listings" = tl."listings";
-  deps."markdown" = tl."markdown";
-  deps."memoir" = tl."memoir";
-  deps."microtype" = tl."microtype";
-  deps."minted" = tl."minted";
-  deps."novel" = tl."novel";
-  deps."octavo" = tl."octavo";
-  deps."pdfpages" = tl."pdfpages";
-  deps."pgf" = tl."pgf";
-  deps."qrcode" = tl."qrcode";
-  deps."shapes" = tl."shapes";
-  deps."titlesec" = tl."titlesec";
-  deps."tocloft" = tl."tocloft";
-  deps."tufte-latex" = tl."tufte-latex";
-  deps."willowtreebook" = tl."willowtreebook";
+  deps = [
+    "barcodes"
+    "biber"
+    "biblatex"
+    "bookcover"
+    "caption"
+    "collection-basic"
+    "collection-latex"
+    "enumitem"
+    "fontspec"
+    "latexmk"
+    "lipsum"
+    "listings"
+    "markdown"
+    "memoir"
+    "microtype"
+    "minted"
+    "novel"
+    "octavo"
+    "pdfpages"
+    "pgf"
+    "qrcode"
+    "shapes"
+    "titlesec"
+    "tocloft"
+    "tufte-latex"
+    "willowtreebook"
+  ];
   sha512.run = "0ea47f8907821e273a581c52494b6a4e9a511a71e11ebfb05756eaded6e5132fc548312cb6365cc4c1906b4e8ffb14ee5ed496484fe5e2a2611e154091d23cf6";
 };
 "scheme-context" = {
   revision = 59636;
   stripPrefix = 0;
-  deps."antt" = tl."antt";
-  deps."asana-math" = tl."asana-math";
-  deps."ccicons" = tl."ccicons";
-  deps."collection-context" = tl."collection-context";
-  deps."collection-metapost" = tl."collection-metapost";
-  deps."dejavu" = tl."dejavu";
-  deps."eulervm" = tl."eulervm";
-  deps."gentium-tug" = tl."gentium-tug";
-  deps."iwona" = tl."iwona";
-  deps."kurier" = tl."kurier";
-  deps."ly1" = tl."ly1";
-  deps."manfnt-font" = tl."manfnt-font";
-  deps."marvosym" = tl."marvosym";
-  deps."mflogo-font" = tl."mflogo-font";
-  deps."poltawski" = tl."poltawski";
-  deps."pxfonts" = tl."pxfonts";
-  deps."tex-gyre" = tl."tex-gyre";
-  deps."tex-gyre-math" = tl."tex-gyre-math";
-  deps."txfonts" = tl."txfonts";
-  deps."wasy" = tl."wasy";
-  deps."xits" = tl."xits";
+  deps = [
+    "antt"
+    "asana-math"
+    "ccicons"
+    "collection-context"
+    "collection-metapost"
+    "dejavu"
+    "eulervm"
+    "gentium-tug"
+    "iwona"
+    "kurier"
+    "ly1"
+    "manfnt-font"
+    "marvosym"
+    "mflogo-font"
+    "poltawski"
+    "pxfonts"
+    "tex-gyre"
+    "tex-gyre-math"
+    "txfonts"
+    "wasy"
+    "xits"
+  ];
   sha512.run = "0b041f3c27ef88e7baec105b7cb24fa65c4b1f092f155482d584d9041ced4f329251f0b0d32f7019c15fff3c57b4d17f057cf39781f8be16a4e8c0ce4838163e";
 };
 "scheme-full" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-bibtexextra" = tl."collection-bibtexextra";
-  deps."collection-binextra" = tl."collection-binextra";
-  deps."collection-context" = tl."collection-context";
-  deps."collection-fontsextra" = tl."collection-fontsextra";
-  deps."collection-fontsrecommended" = tl."collection-fontsrecommended";
-  deps."collection-fontutils" = tl."collection-fontutils";
-  deps."collection-formatsextra" = tl."collection-formatsextra";
-  deps."collection-games" = tl."collection-games";
-  deps."collection-humanities" = tl."collection-humanities";
-  deps."collection-langarabic" = tl."collection-langarabic";
-  deps."collection-langchinese" = tl."collection-langchinese";
-  deps."collection-langcjk" = tl."collection-langcjk";
-  deps."collection-langcyrillic" = tl."collection-langcyrillic";
-  deps."collection-langczechslovak" = tl."collection-langczechslovak";
-  deps."collection-langenglish" = tl."collection-langenglish";
-  deps."collection-langeuropean" = tl."collection-langeuropean";
-  deps."collection-langfrench" = tl."collection-langfrench";
-  deps."collection-langgerman" = tl."collection-langgerman";
-  deps."collection-langgreek" = tl."collection-langgreek";
-  deps."collection-langitalian" = tl."collection-langitalian";
-  deps."collection-langjapanese" = tl."collection-langjapanese";
-  deps."collection-langkorean" = tl."collection-langkorean";
-  deps."collection-langother" = tl."collection-langother";
-  deps."collection-langpolish" = tl."collection-langpolish";
-  deps."collection-langportuguese" = tl."collection-langportuguese";
-  deps."collection-langspanish" = tl."collection-langspanish";
-  deps."collection-latex" = tl."collection-latex";
-  deps."collection-latexextra" = tl."collection-latexextra";
-  deps."collection-latexrecommended" = tl."collection-latexrecommended";
-  deps."collection-luatex" = tl."collection-luatex";
-  deps."collection-mathscience" = tl."collection-mathscience";
-  deps."collection-metapost" = tl."collection-metapost";
-  deps."collection-music" = tl."collection-music";
-  deps."collection-pictures" = tl."collection-pictures";
-  deps."collection-plaingeneric" = tl."collection-plaingeneric";
-  deps."collection-pstricks" = tl."collection-pstricks";
-  deps."collection-publishers" = tl."collection-publishers";
-  deps."collection-texworks" = tl."collection-texworks";
-  deps."collection-xetex" = tl."collection-xetex";
+  deps = [
+    "collection-basic"
+    "collection-bibtexextra"
+    "collection-binextra"
+    "collection-context"
+    "collection-fontsextra"
+    "collection-fontsrecommended"
+    "collection-fontutils"
+    "collection-formatsextra"
+    "collection-games"
+    "collection-humanities"
+    "collection-langarabic"
+    "collection-langchinese"
+    "collection-langcjk"
+    "collection-langcyrillic"
+    "collection-langczechslovak"
+    "collection-langenglish"
+    "collection-langeuropean"
+    "collection-langfrench"
+    "collection-langgerman"
+    "collection-langgreek"
+    "collection-langitalian"
+    "collection-langjapanese"
+    "collection-langkorean"
+    "collection-langother"
+    "collection-langpolish"
+    "collection-langportuguese"
+    "collection-langspanish"
+    "collection-latex"
+    "collection-latexextra"
+    "collection-latexrecommended"
+    "collection-luatex"
+    "collection-mathscience"
+    "collection-metapost"
+    "collection-music"
+    "collection-pictures"
+    "collection-plaingeneric"
+    "collection-pstricks"
+    "collection-publishers"
+    "collection-texworks"
+    "collection-xetex"
+  ];
   sha512.run = "bda507842fde5239d7f45169ff78690bd96066d1834cdcc6a0dcbd3e3439308c694ce4be6a91d1f155ebe5e29d46173fe13c83bcd4356969da95fb7cca1b4e38";
 };
 "scheme-gust" = {
   revision = 59755;
   stripPrefix = 0;
-  deps."amslatex-primer" = tl."amslatex-primer";
-  deps."amstex" = tl."amstex";
-  deps."antt" = tl."antt";
-  deps."bibtex8" = tl."bibtex8";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-context" = tl."collection-context";
-  deps."collection-fontsrecommended" = tl."collection-fontsrecommended";
-  deps."collection-fontutils" = tl."collection-fontutils";
-  deps."collection-langpolish" = tl."collection-langpolish";
-  deps."collection-latex" = tl."collection-latex";
-  deps."collection-latexrecommended" = tl."collection-latexrecommended";
-  deps."collection-metapost" = tl."collection-metapost";
-  deps."collection-plaingeneric" = tl."collection-plaingeneric";
-  deps."collection-texworks" = tl."collection-texworks";
-  deps."collection-xetex" = tl."collection-xetex";
-  deps."comment" = tl."comment";
-  deps."comprehensive" = tl."comprehensive";
-  deps."concrete" = tl."concrete";
-  deps."cyklop" = tl."cyklop";
-  deps."dvidvi" = tl."dvidvi";
-  deps."dviljk" = tl."dviljk";
-  deps."fontinstallationguide" = tl."fontinstallationguide";
-  deps."gustprog" = tl."gustprog";
-  deps."impatient" = tl."impatient";
-  deps."iwona" = tl."iwona";
-  deps."metafont-beginners" = tl."metafont-beginners";
-  deps."metapost-examples" = tl."metapost-examples";
-  deps."poltawski" = tl."poltawski";
-  deps."seetexk" = tl."seetexk";
-  deps."seminar" = tl."seminar";
-  deps."tds" = tl."tds";
-  deps."tex4ht" = tl."tex4ht";
-  deps."texdoc" = tl."texdoc";
+  deps = [
+    "amslatex-primer"
+    "amstex"
+    "antt"
+    "bibtex8"
+    "collection-basic"
+    "collection-context"
+    "collection-fontsrecommended"
+    "collection-fontutils"
+    "collection-langpolish"
+    "collection-latex"
+    "collection-latexrecommended"
+    "collection-metapost"
+    "collection-plaingeneric"
+    "collection-texworks"
+    "collection-xetex"
+    "comment"
+    "comprehensive"
+    "concrete"
+    "cyklop"
+    "dvidvi"
+    "dviljk"
+    "fontinstallationguide"
+    "gustprog"
+    "impatient"
+    "iwona"
+    "metafont-beginners"
+    "metapost-examples"
+    "poltawski"
+    "seetexk"
+    "seminar"
+    "tds"
+    "tex4ht"
+    "texdoc"
+  ];
   sha512.run = "2b3e2e3d31c8fca7297729e910ada06a0d0282b618c92487b7a0da686938dc1f6f3b0881c7d1f8f3d002806ad8860c25802637c77919e21ca54ae8a23ef08ae7";
 };
 "scheme-infraonly" = {
   revision = 54191;
   stripPrefix = 0;
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."kpathsea" = tl."kpathsea";
-  deps."texlive-scripts" = tl."texlive-scripts";
+  deps = [
+    "hyphen-base"
+    "kpathsea"
+    "texlive-scripts"
+  ];
   sha512.run = "f3e449bf0b34deb9ae776685f386245c4ca9644f2175ae51e9c62faa00e3cfac30fa2aa07fbd83b15b21d487ca368c09a18742d2434047783350698ced3b20b9";
 };
 "scheme-medium" = {
   revision = 54074;
   stripPrefix = 0;
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-binextra" = tl."collection-binextra";
-  deps."collection-context" = tl."collection-context";
-  deps."collection-fontsrecommended" = tl."collection-fontsrecommended";
-  deps."collection-fontutils" = tl."collection-fontutils";
-  deps."collection-langczechslovak" = tl."collection-langczechslovak";
-  deps."collection-langenglish" = tl."collection-langenglish";
-  deps."collection-langeuropean" = tl."collection-langeuropean";
-  deps."collection-langfrench" = tl."collection-langfrench";
-  deps."collection-langgerman" = tl."collection-langgerman";
-  deps."collection-langitalian" = tl."collection-langitalian";
-  deps."collection-langpolish" = tl."collection-langpolish";
-  deps."collection-langportuguese" = tl."collection-langportuguese";
-  deps."collection-langspanish" = tl."collection-langspanish";
-  deps."collection-latex" = tl."collection-latex";
-  deps."collection-latexrecommended" = tl."collection-latexrecommended";
-  deps."collection-luatex" = tl."collection-luatex";
-  deps."collection-mathscience" = tl."collection-mathscience";
-  deps."collection-metapost" = tl."collection-metapost";
-  deps."collection-plaingeneric" = tl."collection-plaingeneric";
-  deps."collection-texworks" = tl."collection-texworks";
-  deps."collection-xetex" = tl."collection-xetex";
+  deps = [
+    "collection-basic"
+    "collection-binextra"
+    "collection-context"
+    "collection-fontsrecommended"
+    "collection-fontutils"
+    "collection-langczechslovak"
+    "collection-langenglish"
+    "collection-langeuropean"
+    "collection-langfrench"
+    "collection-langgerman"
+    "collection-langitalian"
+    "collection-langpolish"
+    "collection-langportuguese"
+    "collection-langspanish"
+    "collection-latex"
+    "collection-latexrecommended"
+    "collection-luatex"
+    "collection-mathscience"
+    "collection-metapost"
+    "collection-plaingeneric"
+    "collection-texworks"
+    "collection-xetex"
+  ];
   sha512.run = "fdfbbd8fc370bfb0ea35ed9f3137b62eddd3e54777963668b3dfe7af6328a92f37c74e190e7f506ec27a3efbe44458941360599a4061a2765d0072af56808d60";
 };
 "scheme-minimal" = {
   revision = 54191;
   stripPrefix = 0;
-  deps."collection-basic" = tl."collection-basic";
+  deps = [
+    "collection-basic"
+  ];
   sha512.run = "ac177b74d9d5b9fa599831275a4084a0eeb7b764a6ed837d8f14f8391f0e6c0757f7b2d4a8e71868e0c8ea4d497f29d78c4c73fb9e6311dbecf29626516bbf82";
 };
 "scheme-small" = {
   revision = 54191;
   stripPrefix = 0;
-  deps."babel-basque" = tl."babel-basque";
-  deps."babel-czech" = tl."babel-czech";
-  deps."babel-danish" = tl."babel-danish";
-  deps."babel-dutch" = tl."babel-dutch";
-  deps."babel-english" = tl."babel-english";
-  deps."babel-finnish" = tl."babel-finnish";
-  deps."babel-french" = tl."babel-french";
-  deps."babel-german" = tl."babel-german";
-  deps."babel-hungarian" = tl."babel-hungarian";
-  deps."babel-italian" = tl."babel-italian";
-  deps."babel-norsk" = tl."babel-norsk";
-  deps."babel-polish" = tl."babel-polish";
-  deps."babel-portuges" = tl."babel-portuges";
-  deps."babel-spanish" = tl."babel-spanish";
-  deps."babel-swedish" = tl."babel-swedish";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-latex" = tl."collection-latex";
-  deps."collection-latexrecommended" = tl."collection-latexrecommended";
-  deps."collection-metapost" = tl."collection-metapost";
-  deps."collection-xetex" = tl."collection-xetex";
-  deps."ec" = tl."ec";
-  deps."eurosym" = tl."eurosym";
-  deps."hyphen-basque" = tl."hyphen-basque";
-  deps."hyphen-czech" = tl."hyphen-czech";
-  deps."hyphen-danish" = tl."hyphen-danish";
-  deps."hyphen-dutch" = tl."hyphen-dutch";
-  deps."hyphen-english" = tl."hyphen-english";
-  deps."hyphen-finnish" = tl."hyphen-finnish";
-  deps."hyphen-french" = tl."hyphen-french";
-  deps."hyphen-german" = tl."hyphen-german";
-  deps."hyphen-hungarian" = tl."hyphen-hungarian";
-  deps."hyphen-italian" = tl."hyphen-italian";
-  deps."hyphen-norwegian" = tl."hyphen-norwegian";
-  deps."hyphen-polish" = tl."hyphen-polish";
-  deps."hyphen-portuguese" = tl."hyphen-portuguese";
-  deps."hyphen-spanish" = tl."hyphen-spanish";
-  deps."hyphen-swedish" = tl."hyphen-swedish";
-  deps."lm" = tl."lm";
-  deps."lualibs" = tl."lualibs";
-  deps."luaotfload" = tl."luaotfload";
-  deps."luatexbase" = tl."luatexbase";
-  deps."revtex" = tl."revtex";
-  deps."synctex" = tl."synctex";
-  deps."times" = tl."times";
-  deps."tipa" = tl."tipa";
-  deps."ulem" = tl."ulem";
-  deps."upquote" = tl."upquote";
-  deps."zapfding" = tl."zapfding";
+  deps = [
+    "babel-basque"
+    "babel-czech"
+    "babel-danish"
+    "babel-dutch"
+    "babel-english"
+    "babel-finnish"
+    "babel-french"
+    "babel-german"
+    "babel-hungarian"
+    "babel-italian"
+    "babel-norsk"
+    "babel-polish"
+    "babel-portuges"
+    "babel-spanish"
+    "babel-swedish"
+    "collection-basic"
+    "collection-latex"
+    "collection-latexrecommended"
+    "collection-metapost"
+    "collection-xetex"
+    "ec"
+    "eurosym"
+    "hyphen-basque"
+    "hyphen-czech"
+    "hyphen-danish"
+    "hyphen-dutch"
+    "hyphen-english"
+    "hyphen-finnish"
+    "hyphen-french"
+    "hyphen-german"
+    "hyphen-hungarian"
+    "hyphen-italian"
+    "hyphen-norwegian"
+    "hyphen-polish"
+    "hyphen-portuguese"
+    "hyphen-spanish"
+    "hyphen-swedish"
+    "lm"
+    "lualibs"
+    "luaotfload"
+    "luatexbase"
+    "revtex"
+    "synctex"
+    "times"
+    "tipa"
+    "ulem"
+    "upquote"
+    "zapfding"
+  ];
   sha512.run = "6267151dd73cb8b751ad47b79f9c698b465ad5ae5494d462cf5b3b4e7446a3c014a715381bc6a79eaacfd1ba6efb37c6c1bafbd5e1f82e8db751bbaa9a943013";
 };
 "scheme-tetex" = {
   revision = 59715;
   stripPrefix = 0;
-  deps."acronym" = tl."acronym";
-  deps."amslatex-primer" = tl."amslatex-primer";
-  deps."bbm" = tl."bbm";
-  deps."bbm-macros" = tl."bbm-macros";
-  deps."bbold" = tl."bbold";
-  deps."bibtex8" = tl."bibtex8";
-  deps."cmbright" = tl."cmbright";
-  deps."collection-basic" = tl."collection-basic";
-  deps."collection-context" = tl."collection-context";
-  deps."collection-fontsrecommended" = tl."collection-fontsrecommended";
-  deps."collection-fontutils" = tl."collection-fontutils";
-  deps."collection-formatsextra" = tl."collection-formatsextra";
-  deps."collection-langcjk" = tl."collection-langcjk";
-  deps."collection-langcyrillic" = tl."collection-langcyrillic";
-  deps."collection-langczechslovak" = tl."collection-langczechslovak";
-  deps."collection-langenglish" = tl."collection-langenglish";
-  deps."collection-langeuropean" = tl."collection-langeuropean";
-  deps."collection-langfrench" = tl."collection-langfrench";
-  deps."collection-langgerman" = tl."collection-langgerman";
-  deps."collection-langgreek" = tl."collection-langgreek";
-  deps."collection-langitalian" = tl."collection-langitalian";
-  deps."collection-langother" = tl."collection-langother";
-  deps."collection-langpolish" = tl."collection-langpolish";
-  deps."collection-langportuguese" = tl."collection-langportuguese";
-  deps."collection-langspanish" = tl."collection-langspanish";
-  deps."collection-latex" = tl."collection-latex";
-  deps."collection-latexrecommended" = tl."collection-latexrecommended";
-  deps."collection-mathscience" = tl."collection-mathscience";
-  deps."collection-metapost" = tl."collection-metapost";
-  deps."collection-pictures" = tl."collection-pictures";
-  deps."collection-plaingeneric" = tl."collection-plaingeneric";
-  deps."collection-pstricks" = tl."collection-pstricks";
-  deps."ctie" = tl."ctie";
-  deps."cweb" = tl."cweb";
-  deps."detex" = tl."detex";
-  deps."dtl" = tl."dtl";
-  deps."dvi2tty" = tl."dvi2tty";
-  deps."dvicopy" = tl."dvicopy";
-  deps."dvidvi" = tl."dvidvi";
-  deps."dviljk" = tl."dviljk";
-  deps."eplain" = tl."eplain";
-  deps."eulervm" = tl."eulervm";
-  deps."gentle" = tl."gentle";
-  deps."lshort-english" = tl."lshort-english";
-  deps."mltex" = tl."mltex";
-  deps."multirow" = tl."multirow";
-  deps."nomencl" = tl."nomencl";
-  deps."patgen" = tl."patgen";
-  deps."pst-pdf" = tl."pst-pdf";
-  deps."rsfs" = tl."rsfs";
-  deps."seetexk" = tl."seetexk";
-  deps."siunits" = tl."siunits";
-  deps."subfigure" = tl."subfigure";
-  deps."supertabular" = tl."supertabular";
-  deps."tamethebeast" = tl."tamethebeast";
-  deps."tds" = tl."tds";
-  deps."tex-refs" = tl."tex-refs";
-  deps."tie" = tl."tie";
-  deps."web" = tl."web";
-  deps."xpdfopen" = tl."xpdfopen";
+  deps = [
+    "acronym"
+    "amslatex-primer"
+    "bbm"
+    "bbm-macros"
+    "bbold"
+    "bibtex8"
+    "cmbright"
+    "collection-basic"
+    "collection-context"
+    "collection-fontsrecommended"
+    "collection-fontutils"
+    "collection-formatsextra"
+    "collection-langcjk"
+    "collection-langcyrillic"
+    "collection-langczechslovak"
+    "collection-langenglish"
+    "collection-langeuropean"
+    "collection-langfrench"
+    "collection-langgerman"
+    "collection-langgreek"
+    "collection-langitalian"
+    "collection-langother"
+    "collection-langpolish"
+    "collection-langportuguese"
+    "collection-langspanish"
+    "collection-latex"
+    "collection-latexrecommended"
+    "collection-mathscience"
+    "collection-metapost"
+    "collection-pictures"
+    "collection-plaingeneric"
+    "collection-pstricks"
+    "ctie"
+    "cweb"
+    "detex"
+    "dtl"
+    "dvi2tty"
+    "dvicopy"
+    "dvidvi"
+    "dviljk"
+    "eplain"
+    "eulervm"
+    "gentle"
+    "lshort-english"
+    "mltex"
+    "multirow"
+    "nomencl"
+    "patgen"
+    "pst-pdf"
+    "rsfs"
+    "seetexk"
+    "siunits"
+    "subfigure"
+    "supertabular"
+    "tamethebeast"
+    "tds"
+    "tex-refs"
+    "tie"
+    "web"
+    "xpdfopen"
+  ];
   sha512.run = "fe8b53391733392a72be2e2c80892ec68fbdb749c70636c307825c8bfd6284945c9961610fd19f8b5d6b03ec50f0a1543c7d159f5f2a19534d71b221addfb708";
 };
 "schola-otf" = {
@@ -32556,12 +33100,14 @@ tl: { # no indentation
 "sdaps" = {
   revision = 65345;
   stripPrefix = 0;
-  deps."environ" = tl."environ";
-  deps."lastpage" = tl."lastpage";
-  deps."pgf" = tl."pgf";
-  deps."qrcode" = tl."qrcode";
-  deps."sectsty" = tl."sectsty";
-  deps."translator" = tl."translator";
+  deps = [
+    "environ"
+    "lastpage"
+    "pgf"
+    "qrcode"
+    "sectsty"
+    "translator"
+  ];
   sha512.run = "57559707a9a5a2a924a767b25ed2f86759826a31788fb2662aa2e3ad2889b2266009ec9754c48ce923561c7587c78b23ab56731322a619b4a225775b7beb91b2";
   sha512.doc = "fe1f636c2c21159e5c17aaa75ca0bc89fb1b6ab8dda8d475045efcb3eaf489a876fe9caa4cd077e27b51f37292c5141347233ed6103ebe4f20573ff0899e445b";
   sha512.source = "3f5d1073699a71e9e89a3c71704b8b2800925041145a60454cae0ce2fe7f468e5200c7273afb70c64306a347f4037bc0698b3af223f82d755658d54f2d8c08fe";
@@ -32684,7 +33230,9 @@ tl: { # no indentation
 "semantex" = {
   revision = 65183;
   stripPrefix = 0;
-  deps."semtex" = tl."semtex";
+  deps = [
+    "semtex"
+  ];
   sha512.run = "057b229640da956b4c36653cc1e4057317d9fb2123a69aa144078b52192a2aa8d43660a41124fd91b147ebba5473ca43c30a70fc55881daa52f6b7ded05666b3";
   sha512.doc = "6cddaebc42ce355e536fc515b726cc6344f885efd67041b564a4b8c2bd297969aa5aded0a989c5a4b3a30d574af977e44880e2ef8be8d3fae052ef44c9d6b2f9";
   hasRunfiles = true;
@@ -33085,32 +33633,34 @@ tl: { # no indentation
 "shtthesis" = {
   revision = 62441;
   stripPrefix = 0;
-  deps."alphalph" = tl."alphalph";
-  deps."biber" = tl."biber";
-  deps."biblatex" = tl."biblatex";
-  deps."biblatex-gb7714-2015" = tl."biblatex-gb7714-2015";
-  deps."booktabs" = tl."booktabs";
-  deps."caption" = tl."caption";
-  deps."colortbl" = tl."colortbl";
-  deps."ctex" = tl."ctex";
-  deps."datetime" = tl."datetime";
-  deps."enumitem" = tl."enumitem";
-  deps."fancyhdr" = tl."fancyhdr";
-  deps."fmtcount" = tl."fmtcount";
-  deps."lastpage" = tl."lastpage";
-  deps."latexmk" = tl."latexmk";
-  deps."listings" = tl."listings";
-  deps."lua-alt-getopt" = tl."lua-alt-getopt";
-  deps."lualatex-math" = tl."lualatex-math";
-  deps."mathtools" = tl."mathtools";
-  deps."ntheorem" = tl."ntheorem";
-  deps."tex-gyre" = tl."tex-gyre";
-  deps."tocvsec2" = tl."tocvsec2";
-  deps."transparent" = tl."transparent";
-  deps."undolabl" = tl."undolabl";
-  deps."unicode-math" = tl."unicode-math";
-  deps."xits" = tl."xits";
-  deps."xstring" = tl."xstring";
+  deps = [
+    "alphalph"
+    "biber"
+    "biblatex"
+    "biblatex-gb7714-2015"
+    "booktabs"
+    "caption"
+    "colortbl"
+    "ctex"
+    "datetime"
+    "enumitem"
+    "fancyhdr"
+    "fmtcount"
+    "lastpage"
+    "latexmk"
+    "listings"
+    "lua-alt-getopt"
+    "lualatex-math"
+    "mathtools"
+    "ntheorem"
+    "tex-gyre"
+    "tocvsec2"
+    "transparent"
+    "undolabl"
+    "unicode-math"
+    "xits"
+    "xstring"
+  ];
   sha512.run = "da3b02cc3558a337d7d35018fad00faf6d9183f3f4bc5b5b31e168a11dcfa705a77cad6c42f3fe3d98ce67f50d94ca1f75a82999d5a27837ea8fba6c01602594";
   sha512.doc = "04f1ccf2bef9e11364d7f066ed1a7fc218e39ef7a08824eb65537d88ed03097399eb01d07ba6d0a34e7456fc6de1291ea4f1c9264074eecd2e1af341c42e9197";
   hasRunfiles = true;
@@ -33299,7 +33849,9 @@ tl: { # no indentation
 "simplivre" = {
   revision = 64280;
   stripPrefix = 0;
-  deps."minimalist" = tl."minimalist";
+  deps = [
+    "minimalist"
+  ];
   sha512.run = "9ab406b3c577d9f683d5e4ed8303f4791f9b2a75200ab9cd2eded6699a580eba2cacf6da16b0848f407d7bd04c1fc6afe3881552ee0f4d57b1fb5c32154174fb";
   sha512.doc = "4167bcb50e182f7eeb163b5d3ed4e53e65599aa3acfc7ce4bbb20db5d185bace58e28e24f9091e172fa6c516dcfaf948c1fae93efc68398f0708f42b67e5990a";
   hasRunfiles = true;
@@ -33342,8 +33894,10 @@ tl: { # no indentation
 "siunitx" = {
   revision = 65207;
   stripPrefix = 0;
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
+  deps = [
+    "l3kernel"
+    "l3packages"
+  ];
   sha512.run = "6116eebfaa5f9b0ae3e63f4c0b26c91c358e48b62651c215c25ac5352385c01e06ff28fcd5422085de0330bdd6ad6d79b5b4ee5cb9a200ed8ffaab515ca261e2";
   sha512.doc = "77eedc2cdf10ab386728fac623ed6d0ba895b4bb70c0934086251d96679b38eeedddb7408adcd6005289a20f3bbd4ec7811336509197c51d6be19e5a0cfc9b4d";
   sha512.source = "58faa7f7a5809a935303a7e9a779453cef8a5dcc43ded0fd16658e32f170a5052095c8f24d44542c80310cd24463583f5136a6d4986ce559ad3cd92ae8446c6b";
@@ -33586,8 +34140,10 @@ tl: { # no indentation
 "soulpos" = {
   revision = 60772;
   stripPrefix = 0;
-  deps."oberdiek" = tl."oberdiek";
-  deps."soul" = tl."soul";
+  deps = [
+    "oberdiek"
+    "soul"
+  ];
   sha512.run = "2b4d2fcaa687ff7d229706e563f739356a450a8ef02180f3c98432b11d027cd097fa895c3c971a944329b8657c74b4d2cf566110919e511e6883706561332678";
   sha512.doc = "9577aa2c77e9cafea54eee0ee032acd7c1343d6eb66b76fc25d694b524630bd2f41043187671cd444c9cdd0ccc8b9064e6c71365492cbdbd46517a061efc87cc";
   hasRunfiles = true;
@@ -33881,7 +34437,9 @@ tl: { # no indentation
 "stackengine" = {
   revision = 60019;
   stripPrefix = 0;
-  deps."listofitems" = tl."listofitems";
+  deps = [
+    "listofitems"
+  ];
   sha512.run = "15327eda5a6eda2b58055efc419ef50b8d8cf8c35283bcc41ee85e354f61ede6efeabf5e75bbb4cd022b95e52109bce1ee2e28fc701c5940723f3b15dd44c75a";
   sha512.doc = "a0edeaed3766af88d1c5e0508fd285382850bfd072cf4f6fdc1c329c8ca9f5e1eb5fe75357d9a86dd8b2476381747c9a3f7cd7dad0d7c32419bef0d37849928b";
   hasRunfiles = true;
@@ -33899,11 +34457,13 @@ tl: { # no indentation
 "standalone" = {
   revision = 64677;
   stripPrefix = 0;
-  deps."adjustbox" = tl."adjustbox";
-  deps."currfile" = tl."currfile";
-  deps."filemod" = tl."filemod";
-  deps."gincltex" = tl."gincltex";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "adjustbox"
+    "currfile"
+    "filemod"
+    "gincltex"
+    "xkeyval"
+  ];
   sha512.run = "8e74a676232ffe9fbe93ee3a1095c0c29cd65bd23f8e4602308d8fc1abfde9025c01e8ba379782d4c79d3349b4298806419735c624436a7b0c93e2170c592efb";
   sha512.doc = "358fb3b29f4c2d37d03b7d98ee02b35ff8571ffaf30b8d3fa1a9b0f74965ca4b0bcbf2a7172b8771dd3f1240c7dad1acccc7710dad302411dc43a301149597cd";
   sha512.source = "a29880dfca00e77b19ee828333c72f7c95a26470b8edd5ecea53bae3300868266ad4aa0db2bc6e16f72c14493b43659434ef4880b025b5bccad3305d0ea18b33";
@@ -34279,7 +34839,9 @@ tl: { # no indentation
 "subfiles" = {
   revision = 56977;
   stripPrefix = 0;
-  deps."import" = tl."import";
+  deps = [
+    "import"
+  ];
   sha512.run = "8f842b0debcae3110f0a4b2f59047cd55c2726d128bf3e159f2745a4b8a645c3f8471fe218ca34c32f2b35d42d1c5023a25f09fc3bf0c1a4f0c33197776b1cec";
   sha512.doc = "f54f52c5cee01b7ae8e01bff5a4d828b5c6708c31f2cf40d7e83c8a91c4c597945695dd7062b6088d3f91f7a9858e3227c850d658ae7a7bf94392e00e3eaf9c7";
   sha512.source = "2623a0ec244722c1e3194d9ff1237305c1b7bf8c3baf6f60edd69b165bbd5ea83fb73ad23bf9aac1937b4ecf1059754e798eb2c97f7bab5d550fabbe84b752c0";
@@ -34734,7 +35296,9 @@ tl: { # no indentation
 "tabu" = {
   revision = 61719;
   stripPrefix = 0;
-  deps."varwidth" = tl."varwidth";
+  deps = [
+    "varwidth"
+  ];
   sha512.run = "b40dc1e91084912df03175a6529223c6f24ae3c0ec77cfb8f1f8625816ea78c044c8f01f1b473e84696421d6772d9201fa4b59aa93e6f014b73598d16c09a6cd";
   sha512.doc = "5ef0a71d643bf5069a622aa8c807bf87db7445caab1f17b5202ee25ddab5368e94e796eb16de4fb183f294cedc232d48cbdba68f45d2451e01a2483d6869822d";
   sha512.source = "7c80ee8d25933e5d1c579357cffdf7177b0a419a847ca1e671cb1dda19fbde9b3680658df6b814d5d92953dd13eeee5100a5aa2fdb5fec3cbc1e213545cb3a78";
@@ -35083,11 +35647,13 @@ tl: { # no indentation
 };
 "tex" = {
   revision = 62387;
-  deps."cm" = tl."cm";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."kpathsea" = tl."kpathsea";
-  deps."plain" = tl."plain";
+  deps = [
+    "cm"
+    "hyphen-base"
+    "knuth-lib"
+    "kpathsea"
+    "plain"
+  ];
   hasFormats = true;
   sha512.run = "7d177346a2df7e7dbd2fce3635a8860c0deee30271beeba585091f8027c796678a3dc9cda2952a073c9ca02e26cd656a3bdcabe4661c23e81af350a987d7e4aa";
   sha512.doc = "e545796c64bbce0680d12b9d77ca64b008c369f90639ad9c3e7b7b219ceb85fcf24fa7eccaff65639bb9fe7159c2b2dd124866acd2ad78d860ff4e872a341d23";
@@ -35273,7 +35839,9 @@ tl: { # no indentation
 };
 "texdoc" = {
   revision = 62815;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "eda9f9c138191f73487c5da101898970cb7f268eade19a7eb44231d05d819b23b182a9ca15e61c23f172c9869659c3bb5f45f35d2590d7da79d10021195284be";
   sha512.doc = "0d4ad9b75b0c9f209bed3a5c816bbfb49a49667ca31b59fdf98caf42b60c9e618d6daae5fa9b3bd288dc6dc5fe2c6dc3a4cf7a1348f06006b9f60618d225a639";
   hasRunfiles = true;
@@ -35281,7 +35849,9 @@ tl: { # no indentation
 };
 "texdoctk" = {
   revision = 62186;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "f3300a088f5ecedfe66ca277f793d3565b5b0f111721a0d73a788d65b72f09d0103a11edda13679fb9e919f11ce9ed3662717c18e46be99a83b744a1f7ec88fe";
   sha512.doc = "fb403dc17ad839ea64bcf6da84e59288a8745b5eb731051d7df8593138aa5d3b6891d56f52bdbe5c9a41e590f1f36db390e7e7a825d9aaf00d4fbc01c8dc16ba";
   hasRunfiles = true;
@@ -35499,7 +36069,9 @@ tl: { # no indentation
 "texpower" = {
   revision = 29349;
   stripPrefix = 0;
-  deps."tpslifonts" = tl."tpslifonts";
+  deps = [
+    "tpslifonts"
+  ];
   sha512.run = "7e2efadabaf173fd30c592cbcd2338563b8690048ccaffd86efb079a04b7b95c8ab113b99205cbb2912eae3a709a110d7b152270422cf2cbfd2ab85d42f12d69";
   sha512.doc = "e61965b5e31b487daba383a4e6ebc0dba85475f8cade2faae6adb8576ec7ec544b518a6e0e105aa185ff82fd6aba7a9ea4abda2a9446d52f5b3acdb42580e315";
   sha512.source = "3add8eeda886ce6422d3b7ea53a55dc69bb2f5c2e64cdede105a7b4756b008807bef6245ddc2596b45809311874e566263c51e98ec6751b4db9d3c5c5f58efd3";
@@ -35524,11 +36096,13 @@ tl: { # no indentation
 };
 "texsis" = {
   revision = 45678;
-  deps."cm" = tl."cm";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."plain" = tl."plain";
-  deps."tex" = tl."tex";
+  deps = [
+    "cm"
+    "hyphen-base"
+    "knuth-lib"
+    "plain"
+    "tex"
+  ];
   hasFormats = true;
   sha512.run = "7309726b33eadf8290e596aab50bb1af95600a067338b352c1ac092643a8c6d4142180d0146abbbb828a38fb08fdd9ae03da6572e6c221afcd151a51430a423e";
   sha512.doc = "2a4979a10514ccd589b331ff34a677a4e22adbeea73d6112c9a14392b3ee75a8cdb292b008b160792b3d00b812834afa7e0211db860c41f1beb69bbc900fdb90";
@@ -35581,7 +36155,9 @@ tl: { # no indentation
 "textgreek" = {
   revision = 44192;
   stripPrefix = 0;
-  deps."greek-fontenc" = tl."greek-fontenc";
+  deps = [
+    "greek-fontenc"
+  ];
   sha512.run = "2370f666c2cef43a579e32a755675431717ccfb4bad6f30261a6c67e0617816ffc272c25e0d076d91c4047c41926c92ae375507f36f2fab01673bd7e708f5188";
   sha512.doc = "9107ca31b645977d56a3b1e37f7b12f0302b1b2531bd2a21883f7931831e70c4383beae77469aab4663253da3109cdd9c53589cbab95f7f0126389d12509127f";
   sha512.source = "367b63cd318c1e69944444f4cab82af7a7b1dde667d6469ade4c6433960b21a6f8922280d5a46e96fc88ddf4c2d5d3f3a440b55045a67512459208ae181bda96";
@@ -35906,7 +36482,9 @@ tl: { # no indentation
 };
 "tie" = {
   revision = 62387;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "96cab708d9faec3f451302c6141655b79524d3497d9bded141235a2fcfbb27bb2d65fd096e559cc01b01f4ab28b97f5851ba9e202c313240ef1af07c4676085f";
   sha512.doc = "519a15cde0a8b52250bdf61926ce44ea9267ff9f75f57f3ee9b390ce1aa6f7bc2a6bc2f30222d41a7606721ed28cbbd44348cb44229fba1c7126196291667917";
   version = "2.4";
@@ -35993,8 +36571,10 @@ tl: { # no indentation
 "tikz-feynman" = {
   revision = 56615;
   stripPrefix = 0;
-  deps."iftex" = tl."iftex";
-  deps."pgfopts" = tl."pgfopts";
+  deps = [
+    "iftex"
+    "pgfopts"
+  ];
   sha512.run = "34c147e6ee16643e99d2c8fa789b39aea6f3b9ae7de93fd5c65d1b0daca1e9514d484b5b38892a0cffa1aeedcd405df0bc6621bf68e587311bc9fe45205c29fc";
   sha512.doc = "ae0510a7971538fe458d83d4da4c78f7d607c7a1298344a139c02c49985f9005f6a81ab15f9dc621929d70d634c2cec4189ac4a2955e994611247af0c96986f3";
   hasRunfiles = true;
@@ -36156,7 +36736,9 @@ tl: { # no indentation
 "tikz-timing" = {
   revision = 64967;
   stripPrefix = 0;
-  deps."svn-prov" = tl."svn-prov";
+  deps = [
+    "svn-prov"
+  ];
   sha512.run = "2c3af958ff5509a470b4e1f93bdbb063f5b911a81de12d749fbd7dc6810715a473814d6d8694a81a49d2f45f1f468ef9d441fe07c2269c9c9a9094e350228b36";
   sha512.doc = "33ab52c8b2a60b9bad41a60375aa75432aea20a71c9fa7816d5dbc868e6a70b491dca9572d5c63ea486053294b6b709aa313de464e375e4f0a7a04f76764630a";
   sha512.source = "f1c7c0be255d533898bd65e85f2a36b2f86abb6580b716cb239821a243f67a2706cbcfffb99628b060aadc9b56dfee45f66e54851861df2e0cf12e6cd331aa4e";
@@ -36577,8 +37159,10 @@ tl: { # no indentation
 "to-be-determined" = {
   revision = 64882;
   stripPrefix = 0;
-  deps."soul" = tl."soul";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "soul"
+    "xcolor"
+  ];
   sha512.run = "a7c6b60844601f81bb659f57e212cfdc9e7cf72f24bfc662aed9dd26ebb9385187ebf44d82b59b637544b920c05dd5e3a698b69a0ef7ace4b57cd7531d240e3f";
   sha512.doc = "0df7f6b340c28d2ef9db73af4bbad364bbb238a42f37effbde69af30774de627d29b2f03e098482e6fe66d09bec49d7d4a4566ebb3125eb2f3423c1d5fdba066";
   sha512.source = "38d70708e3be579d46e086c2e1b227ac081da1d721fff64b51543269b9df11b7ebe67a8e95999bb3ca1b691b91a4c3e1a8d79bce2f367e6965e34a5577377608";
@@ -36633,10 +37217,12 @@ tl: { # no indentation
 "todonotes" = {
   revision = 59465;
   stripPrefix = 0;
-  deps."pgf" = tl."pgf";
-  deps."tools" = tl."tools";
-  deps."xcolor" = tl."xcolor";
-  deps."xkeyval" = tl."xkeyval";
+  deps = [
+    "pgf"
+    "tools"
+    "xcolor"
+    "xkeyval"
+  ];
   sha512.run = "78f84bcaf613003f694dfaddff2631cfe34c081ec5aac576a267f99940abcca1c8c71dc801e8df295c585a4db06517e5cce4671aef4188b81feba4be1ed6eccb";
   sha512.doc = "89b61bb5630846a7cf739f39cc43a4e08890a4b0af06c884a60d9ac30068044c89cb99578aefe3b08c5761a412e524dacd79b028e69430d87ec17493b42ab7eb";
   sha512.source = "e7bf0b61f1ce386b727f54288d1c6486fdb784fb7d7fe42e5a86f0815766df33881214579051c57325d6963fa7e073469ce488aeca816f7566275318e171fecc";
@@ -37012,21 +37598,23 @@ tl: { # no indentation
 "tudscr" = {
   revision = 64085;
   stripPrefix = 0;
-  deps."cbfonts" = tl."cbfonts";
-  deps."environ" = tl."environ";
-  deps."etoolbox" = tl."etoolbox";
-  deps."geometry" = tl."geometry";
-  deps."graphics" = tl."graphics";
-  deps."greek-inputenc" = tl."greek-inputenc";
-  deps."iwona" = tl."iwona";
-  deps."koma-script" = tl."koma-script";
-  deps."mathastext" = tl."mathastext";
-  deps."mweights" = tl."mweights";
-  deps."oberdiek" = tl."oberdiek";
-  deps."opensans" = tl."opensans";
-  deps."trimspaces" = tl."trimspaces";
-  deps."xcolor" = tl."xcolor";
-  deps."xpatch" = tl."xpatch";
+  deps = [
+    "cbfonts"
+    "environ"
+    "etoolbox"
+    "geometry"
+    "graphics"
+    "greek-inputenc"
+    "iwona"
+    "koma-script"
+    "mathastext"
+    "mweights"
+    "oberdiek"
+    "opensans"
+    "trimspaces"
+    "xcolor"
+    "xpatch"
+  ];
   sha512.run = "4e17b12a82a18bb1f4babf123f1e84681c6f9524f2113725f14ad85042dcd5b1fb2aeaa45f709c1797512b8e0f35cd0ff743b60901e75676ec321f8bc682e793";
   sha512.doc = "3335c87afe969963718137a9f854e0a4935c34bd850471673a3914fb9666e8f3195962d3474df35b876741b37c231851d47b440d49c35e42533b3717be1f442e";
   sha512.source = "d317e3fc0624ec762293c972c9feaaf56186faf0962137f43f36b974ef223b094919cd84b9f5183e89e0ea6b922e4ae22b489bc619af466dac41c98fe0b651e5";
@@ -37036,12 +37624,14 @@ tl: { # no indentation
 "tufte-latex" = {
   revision = 37649;
   stripPrefix = 0;
-  deps."changepage" = tl."changepage";
-  deps."ifmtarg" = tl."ifmtarg";
-  deps."paralist" = tl."paralist";
-  deps."placeins" = tl."placeins";
-  deps."sauerj" = tl."sauerj";
-  deps."xifthen" = tl."xifthen";
+  deps = [
+    "changepage"
+    "ifmtarg"
+    "paralist"
+    "placeins"
+    "sauerj"
+    "xifthen"
+  ];
   sha512.run = "6dd01a5a6faf37439ca9aab23534f99050b84bfac16df48545417ee03e72700344c25b2de3262e8e28406da705d50296473a815fa14b701c609b3715f01405d1";
   sha512.doc = "11ac57e79a05db644235b6db851473c75d1538a1261d7022a63d9ab0cc54486cc13b7cc95c44d16912952e46bc9264c1bfb831a728b51a03495d01f1963410d3";
   hasRunfiles = true;
@@ -37677,8 +38267,10 @@ tl: { # no indentation
 "unicode-math" = {
   revision = 61719;
   stripPrefix = 0;
-  deps."fontspec" = tl."fontspec";
-  deps."lm-math" = tl."lm-math";
+  deps = [
+    "fontspec"
+    "lm-math"
+  ];
   sha512.run = "05dd4b08e8e766c2c8e719a12aa5a28259bc429fb1f1d05850e865ef258ab5e1372a785a2787098ea50bb31c852727ba8269ca656ce55ee0a7355fe4fd7344cc";
   sha512.doc = "c8d05fe09c6ed76f29978eff8b7688d8989865f6517f06a58acb899603265e499db5d962895b5b3a0b6bf8d235f29da88f76a3b7b35778953878d02f2910b524";
   sha512.source = "b1f21cf06c5ece08e75575cb2e23f7e9815c0670cdb2af0026c1037556e646e81c2103740bcb14e95375cf88b3a665afa3b24a4fd6c33f416c36f588649de79f";
@@ -37869,25 +38461,27 @@ tl: { # no indentation
 };
 "uplatex" = {
   revision = 65305;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-base-dev" = tl."latex-base-dev";
-  deps."latex-firstaid-dev" = tl."latex-firstaid-dev";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."platex" = tl."platex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
-  deps."uptex" = tl."uptex";
-  deps."uptex-fonts" = tl."uptex-fonts";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "everyshi"
+    "firstaid"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-base-dev"
+    "latex-firstaid-dev"
+    "latex-fonts"
+    "platex"
+    "tex-ini-files"
+    "unicode-data"
+    "uptex"
+    "uptex-fonts"
+  ];
   hasFormats = true;
   sha512.run = "aa49098049ae86a286ccd14a3a25060104ade1ecfa1f31d44c36398dc1d9130e78ee2f3dfbda067c5cda54275a5ace7fdfa66ff8a4e30ab2cfef32c52d4c8781";
   sha512.doc = "373eaf7028b4528b1e7d1be399d0bc05b477fdb8a429f845d0bc7d767bbc7ff6a991174c8eff0e346a5b4c0a3dbee24b633df97656dcc1a1c5e5f80487f73a64";
@@ -37921,14 +38515,16 @@ tl: { # no indentation
 };
 "uptex" = {
   revision = 62464;
-  deps."cm" = tl."cm";
-  deps."etex" = tl."etex";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."knuth-lib" = tl."knuth-lib";
-  deps."plain" = tl."plain";
-  deps."ptex-base" = tl."ptex-base";
-  deps."uptex-base" = tl."uptex-base";
-  deps."uptex-fonts" = tl."uptex-fonts";
+  deps = [
+    "cm"
+    "etex"
+    "hyphen-base"
+    "knuth-lib"
+    "plain"
+    "ptex-base"
+    "uptex-base"
+    "uptex-fonts"
+  ];
   hasFormats = true;
   sha512.run = "9255b1ec06d2b1e214dda666b5f37df20ce98095a3726e2e114082cd0ebb13f9f4e0d46b8cfd28da528a6ab68896fd62a0593e02b5072e6c3196937b098bd626";
   sha512.doc = "2a9d880635afb3c848893c371d3aca7796e6aafb11949047a21e9f0df73d06b69d3cc84cfe28438f0424722b41b795be913e79cc01b16dacd5370ec5d1e9ac5b";
@@ -38216,7 +38812,9 @@ tl: { # no indentation
 };
 "velthuis" = {
   revision = 55475;
-  deps."xetex-devanagari" = tl."xetex-devanagari";
+  deps = [
+    "xetex-devanagari"
+  ];
   sha512.run = "451023c09755f3aa884128a6ddd5e70a6820724de66f8923deea812a8e28c337676de95aa98a06a96013502fa24e9855b24977603c675820b1d5a0a056fe4cab";
   sha512.doc = "e17270b0e427e3ff02b1d43e578815ec37c0046a20ceb898a357041f9184044162077d9fc64f66d955d774637a8d2ec59d31b624dd743113c972d0854075df10";
   hasRunfiles = true;
@@ -38537,7 +39135,9 @@ tl: { # no indentation
 "wasy-type1" = {
   revision = 53534;
   stripPrefix = 0;
-  deps."wasy" = tl."wasy";
+  deps = [
+    "wasy"
+  ];
   sha512.run = "d7131c025bd97bdaf62697feb698da97d175783e4b0502d3e85b60a663f46a0520268a6063956afaddc6308ddd21954992bf8d216049cb324133e3760ac20825";
   sha512.doc = "d9c88d39deabe19393df0b6d83bddd644e347592735cd7511dc70374ea015cd7fdf36ac9f320b44c612c8276eee3d7cd94f9e0b26de050c0771c85ec7dbae53c";
   hasRunfiles = true;
@@ -38554,7 +39154,9 @@ tl: { # no indentation
 };
 "web" = {
   revision = 62517;
-  deps."kpathsea" = tl."kpathsea";
+  deps = [
+    "kpathsea"
+  ];
   sha512.run = "edac6079f0de1904e008c2a5fd7ee697f32c5324e3b9a7a4d8997b97ef214bfa1a787c84ecd4bcccd38e88c58b9729b4c5684ab58bbfcc97ce159dc5c2b5b312";
   sha512.doc = "50ae800de53cecfa6f656ba41d35d7c486e4cfe4b2ed42dd26dc60ecaa9a0b80c178dead765a7076fcc6141e8a2158e9b0854ceecc2cbf7b2e85c23cf22a7da3";
   version = "4.5";
@@ -38906,7 +39508,9 @@ tl: { # no indentation
 "xecjk" = {
   revision = 64059;
   stripPrefix = 0;
-  deps."ctex" = tl."ctex";
+  deps = [
+    "ctex"
+  ];
   sha512.run = "3382b181053c76e58ba3f77b195765d83e5515a48b0c73580fc19305bd395de8d19b98be3494da8201b0a22a851a53c82dda14beb54a545b652cd0bd5719af67";
   sha512.doc = "b2dd0caf3317d708cc001b5aba57979f86eaa20d9d38d360650b45fbb683603e2075658a0c0a9c0631c81ea06ecac27694c45df47f053d9e7440901d66280295";
   sha512.source = "07fe51d62358a376d2f3cc2774cf606bd4e9f8b3bd3fb202427f34c3c15b004fed5985f7fe776b3529a83ea4aa3e3e176311e14bb0a02cf055eb501a3f474839";
@@ -38948,24 +39552,26 @@ tl: { # no indentation
 };
 "xelatex-dev" = {
   revision = 62145;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-base-dev" = tl."latex-base-dev";
-  deps."latex-firstaid-dev" = tl."latex-firstaid-dev";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."lm" = tl."lm";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
-  deps."xetex" = tl."xetex";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "everyshi"
+    "firstaid"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-base-dev"
+    "latex-firstaid-dev"
+    "latex-fonts"
+    "lm"
+    "tex-ini-files"
+    "unicode-data"
+    "xetex"
+  ];
   hasFormats = true;
   sha512.run = "088c917758f727ba08b8571d302c93f0b14fc15ca6dcb0ef7a89df4ba144c508d8d42265cc6b1915707329b64aa1d1030ed0b5513987fbd4437d0a58a232b5db";
 };
@@ -39015,25 +39621,27 @@ tl: { # no indentation
 };
 "xetex" = {
   revision = 62387;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."dvipdfmx" = tl."dvipdfmx";
-  deps."etex" = tl."etex";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."lm" = tl."lm";
-  deps."plain" = tl."plain";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
-  deps."xetexconfig" = tl."xetexconfig";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "dvipdfmx"
+    "etex"
+    "everyshi"
+    "firstaid"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "lm"
+    "plain"
+    "tex-ini-files"
+    "unicode-data"
+    "xetexconfig"
+  ];
   hasFormats = true;
   sha512.run = "e9f0aebda0a7fb36e2cbce4dd49e965335438c4ebf2d41eb8e19eabe29617239dd67e7e3433a8c75fd40f072a2c6753a7d0762afd34fca4130929e51888aaabf";
   sha512.doc = "31f03ee1ae00bc7883109ab7b7374feedc384d86b491873e90797658eae12299dd60b95edc1c86f1faa61a0b7a952cca23993e991863b37e49c27afd6c21c034";
@@ -39108,7 +39716,9 @@ tl: { # no indentation
 "xfakebold" = {
   revision = 55654;
   stripPrefix = 0;
-  deps."iftex" = tl."iftex";
+  deps = [
+    "iftex"
+  ];
   sha512.run = "99c735bd449c96b3444a8b50032c9962601a04beeeeb6b0fcb759ee0cc53e4510dc8d077a3cad7b99c968bb9d60bbd37f2f0c7d56ffb5fc667301423bfd32bdb";
   sha512.doc = "bb6f1bda41427f4c144402095a79aafe70d6b534b6d0462d951a2c58fabb0bc8dd9edfdabf526bba243b2c79aeacee728741dca778e25019ae909856b164a316";
   hasRunfiles = true;
@@ -39251,7 +39861,9 @@ tl: { # no indentation
 "xltxtra" = {
   revision = 56594;
   stripPrefix = 0;
-  deps."metalogo" = tl."metalogo";
+  deps = [
+    "metalogo"
+  ];
   sha512.run = "ff75c7b2f36f0e3cdc466dde35d83ccbb76c9c95f5d191a5498831247d1d418b69a8f0df8b263eae78e4a13694e628eba64c24e7480c7dbf56948cd5b1504a76";
   sha512.doc = "6fc84121dd3486f5f7744d757520e2b4d7baf83686e2630990be7e72ccb121e5b417779e4682e6e8a566b016a8995f80d7d4c6dfb3d6d2c9f70ed506bee99d64";
   sha512.source = "c177b99366479f6ed5ef935be07fbfc3425b48f2c3d274e175bbde9c63cbcc93ee4bca4c3c2886fdc2894b627332ff7edffa5b1083ad86dcced56bfb0d9fe03f";
@@ -39265,26 +39877,28 @@ tl: { # no indentation
 };
 "xmltex" = {
   revision = 62145;
-  deps."atbegshi" = tl."atbegshi";
-  deps."atveryend" = tl."atveryend";
-  deps."babel" = tl."babel";
-  deps."cm" = tl."cm";
-  deps."dehyph" = tl."dehyph";
-  deps."everyshi" = tl."everyshi";
-  deps."firstaid" = tl."firstaid";
-  deps."hyph-utf8" = tl."hyph-utf8";
-  deps."hyphen-base" = tl."hyphen-base";
-  deps."l3backend" = tl."l3backend";
-  deps."l3kernel" = tl."l3kernel";
-  deps."l3packages" = tl."l3packages";
-  deps."latex" = tl."latex";
-  deps."latex-fonts" = tl."latex-fonts";
-  deps."latexconfig" = tl."latexconfig";
-  deps."pdftex" = tl."pdftex";
-  deps."tex" = tl."tex";
-  deps."tex-ini-files" = tl."tex-ini-files";
-  deps."unicode-data" = tl."unicode-data";
-  deps."xmltexconfig" = tl."xmltexconfig";
+  deps = [
+    "atbegshi"
+    "atveryend"
+    "babel"
+    "cm"
+    "dehyph"
+    "everyshi"
+    "firstaid"
+    "hyph-utf8"
+    "hyphen-base"
+    "l3backend"
+    "l3kernel"
+    "l3packages"
+    "latex"
+    "latex-fonts"
+    "latexconfig"
+    "pdftex"
+    "tex"
+    "tex-ini-files"
+    "unicode-data"
+    "xmltexconfig"
+  ];
   hasFormats = true;
   sha512.run = "ee01abb25b18e99f18bc78357be04fb1405473e90fbdf74ed875e2910812550c44fcc7aee960b2bdc53fcd7d78e9aa706e46929da65d5cb78d9ca43ba475d675";
   sha512.doc = "d87c6d1f4c472b436104b0746d48a463977dc7eb520de3d7a53f48bc1c8e5682a23d604bbe2ebda1b5029d4a6dd33c2d2bf8b917ad4f54d2c7472874fdfe8509";
@@ -39468,7 +40082,9 @@ tl: { # no indentation
 "xunicode" = {
   revision = 30466;
   stripPrefix = 0;
-  deps."tipa" = tl."tipa";
+  deps = [
+    "tipa"
+  ];
   sha512.run = "f49628013bc54e82bc38a2c749ddde9426c65716f04c5c8d8264398b9595e571d380e07c045db9e7ed5d6df7d0b7b1f8e81eaa28d6b67a6756d2c5023b731176";
   sha512.doc = "fbd368180c97649944aa23fae4f50f8a8d1aaa776f643ba520f121b9aae196dca94c11906f9d5b2f961b6d494256329670af1f4563502b44a8fc9633e29373e0";
   hasRunfiles = true;
@@ -39598,36 +40214,38 @@ tl: { # no indentation
 "yb-book" = {
   revision = 64586;
   stripPrefix = 0;
-  deps."anyfontsize" = tl."anyfontsize";
-  deps."biblatex" = tl."biblatex";
-  deps."bigfoot" = tl."bigfoot";
-  deps."changepage" = tl."changepage";
-  deps."chngcntr" = tl."chngcntr";
-  deps."csquotes" = tl."csquotes";
-  deps."enumitem" = tl."enumitem";
-  deps."fancyhdr" = tl."fancyhdr";
-  deps."float" = tl."float";
-  deps."footmisc" = tl."footmisc";
-  deps."geometry" = tl."geometry";
-  deps."ifmtarg" = tl."ifmtarg";
-  deps."imakeidx" = tl."imakeidx";
-  deps."lastpage" = tl."lastpage";
-  deps."libertine" = tl."libertine";
-  deps."mdframed" = tl."mdframed";
-  deps."microtype" = tl."microtype";
-  deps."needspace" = tl."needspace";
-  deps."paralist" = tl."paralist";
-  deps."pgf" = tl."pgf";
-  deps."qrcode" = tl."qrcode";
-  deps."setspace" = tl."setspace";
-  deps."soul" = tl."soul";
-  deps."titlesec" = tl."titlesec";
-  deps."ulem" = tl."ulem";
-  deps."wrapfig" = tl."wrapfig";
-  deps."xcolor" = tl."xcolor";
-  deps."xifthen" = tl."xifthen";
-  deps."xkeyval" = tl."xkeyval";
-  deps."zref" = tl."zref";
+  deps = [
+    "anyfontsize"
+    "biblatex"
+    "bigfoot"
+    "changepage"
+    "chngcntr"
+    "csquotes"
+    "enumitem"
+    "fancyhdr"
+    "float"
+    "footmisc"
+    "geometry"
+    "ifmtarg"
+    "imakeidx"
+    "lastpage"
+    "libertine"
+    "mdframed"
+    "microtype"
+    "needspace"
+    "paralist"
+    "pgf"
+    "qrcode"
+    "setspace"
+    "soul"
+    "titlesec"
+    "ulem"
+    "wrapfig"
+    "xcolor"
+    "xifthen"
+    "xkeyval"
+    "zref"
+  ];
   sha512.run = "dea52e5aee243d84ad52bb5eb61957e05b500ea9caf36360fd587d0a38ebb602f2821e040e3acf41e8318c0ce491f3bdcb5a477ef65be7b41ec2fe12df680542";
   sha512.doc = "ecb2ed5bf434f96aacd7422bc815cdc8b69c307475f8f71b8b8b5bc2aad916d1db1394eeaf3b7ddd54e3bf7dc059574c821f2d44f9247103153fb5ef3f40f02d";
   sha512.source = "20080fd53bc9c749632236d710972bac2db0ab0a7c3cd4a1b39fdc1226a2279332dca41856647b6132f033f381de798b8dc522ba3199e747ea15e5ca571d71c8";
@@ -39644,16 +40262,18 @@ tl: { # no indentation
 "ydoc" = {
   revision = 64887;
   stripPrefix = 0;
-  deps."etoolbox" = tl."etoolbox";
-  deps."float" = tl."float";
-  deps."hyperref" = tl."hyperref";
-  deps."listings" = tl."listings";
-  deps."needspace" = tl."needspace";
-  deps."newverbs" = tl."newverbs";
-  deps."showexpl" = tl."showexpl";
-  deps."tools" = tl."tools";
-  deps."url" = tl."url";
-  deps."xcolor" = tl."xcolor";
+  deps = [
+    "etoolbox"
+    "float"
+    "hyperref"
+    "listings"
+    "needspace"
+    "newverbs"
+    "showexpl"
+    "tools"
+    "url"
+    "xcolor"
+  ];
   sha512.run = "116d4be9a7ca06f90967c85a696e893a85555402acf400c0251a71f4d43a5ad244ee041518d4408b6627610ff87792f07ab51309303e442159bce46025d5a27c";
   sha512.doc = "714ff9f1fc20d9f3e5effe9159935a45662f7f8dde9be0371055a3e178b9a74618046c1f4ba67cd1b89b6b0abfdf41de2716a097e67138d42f733ece3edb028d";
   sha512.source = "1a4d7c462316b3d2689b5121d81af8ff7847909e039564a0d66c859607e5c4fa573dbc607cffbd73223f48f471847057fbfeeb71a31947b5b1a8c02eb88eb35b";
@@ -39898,8 +40518,10 @@ tl: { # no indentation
 "zref-vario" = {
   revision = 63874;
   stripPrefix = 0;
-  deps."tools" = tl."tools";
-  deps."zref-clever" = tl."zref-clever";
+  deps = [
+    "tools"
+    "zref-clever"
+  ];
   sha512.run = "a6098a6d02e8ceef899a6dae98af5f4faa4878d450d02dbec9c3d855eacf359d30418ed81b8884b898f2b5b39e65abd7b4572e6797b73050d3f708a73d20f9f2";
   sha512.doc = "1fe5da87c16231ed058d42a0bb99d041823e8b81471039773338a09e83f650419d7f11a58322101e178f2682fc655aeac8be5d82d1df55da6929cd119c94b0be";
   sha512.source = "3389daa24248921968989cde9386d438c3bc81dcde8a800bc324437cf8e468f24bf8d0eb24296319cb9da45cf42295e45ae01f47a32ce175ce2dfb2508c4372c";

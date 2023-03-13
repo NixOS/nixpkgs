@@ -1,16 +1,11 @@
 { stdenv
-, bazel
 , cacert
 , lib
 }:
 
-let
-  bazelPkg = bazel;
-in
-
 args@{
   name ? "${args.pname}-${args.version}"
-, bazel ? bazelPkg
+, bazel
 , bazelFlags ? []
 , bazelBuildFlags ? []
 , bazelTestFlags ? []
@@ -123,10 +118,10 @@ stdenv.mkDerivation (fBuildAttrs // {
 
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
-      ${if removeRulesCC then "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}" else ""}
+      ${lib.optionalString removeRulesCC "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}"}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      ${if removeLocalConfigCc then "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}" else ""}
-      ${if removeLocal then "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}" else ""}
+      ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}"}
+      ${lib.optionalString removeLocal "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}"}
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;

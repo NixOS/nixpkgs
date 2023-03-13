@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.5.13";
+  version = "3.5.31";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "flexget";
     repo = "flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0yO4prnYJkD7eiyrEOPHlDTsgGgRhQujsp8k2FsLYKI=";
+    hash = "sha256-v6N1isaTVPwV/LC/a2lzrboLI6V/4W586RE5esfR500=";
   };
 
   postPatch = ''
@@ -68,6 +68,10 @@ python3Packages.buildPythonApplication rec {
 
     # Plugins requirements
     transmission-rpc
+  ];
+
+  pythonImportsCheck = [
+    "flexget"
   ];
 
   meta = with lib; {

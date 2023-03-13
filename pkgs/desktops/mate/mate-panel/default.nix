@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"

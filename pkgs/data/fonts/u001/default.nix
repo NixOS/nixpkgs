@@ -10,8 +10,6 @@ stdenvNoCC.mkDerivation rec {
     stripRoot = false;
   };
 
-  dontBuild = true;
-
   installPhase = ''
     runHook preInstall
 

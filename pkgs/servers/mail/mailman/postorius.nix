@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ django-mailman3 readme_renderer ];
-  checkInputs = [ beautifulsoup4 vcrpy mock ];
+  nativeCheckInputs = [ beautifulsoup4 vcrpy mock ];
 
   # Tries to connect to database.
   doCheck = false;

@@ -12,7 +12,7 @@ buildPythonPackage {
     sha256 = "1cj314rp6irlvr0a2c4xffsm2idsb0hzwr38vzz6z3kbhphcb63i";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests --with-coverage --cover-package=prettytable --cover-min-percentage=75

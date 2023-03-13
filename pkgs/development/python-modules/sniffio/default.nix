@@ -24,7 +24,7 @@ buildPythonPackage rec {
     glibcLocales
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     curio
     pytestCheckHook
   ];

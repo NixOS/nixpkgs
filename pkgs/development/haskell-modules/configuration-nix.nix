@@ -359,6 +359,17 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
   }) super.ghcide;
 
+  # At least on 1.3.4 version on 32-bit architectures tasty requires
+  # unbounded-delays via .cabal file conditions.
+  tasty = overrideCabal (drv: {
+    libraryHaskellDepends =
+      (drv.libraryHaskellDepends or [])
+      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64
+                          || pkgs.stdenv.hostPlatform.isx86_64)) [
+        self.unbounded-delays
+      ];
+  }) super.tasty;
+
   tasty-discover = overrideCabal (drv: {
     # Depends on itself for testing
     preBuild = ''
@@ -723,10 +734,8 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.haskell-language-server;
 
-  # NOTE: this patch updates the hevm code to work with the latest packages that broke the build
-  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
-  # tests depend on a specific version of solc
-  hevm = dontCheck (appendPatch ./patches/hevm-update-deps.patch super.hevm);
+  # there are three very heavy test suites that need external repos, one requires network access
+  hevm = dontCheck super.hevm;
 
   # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
   # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
@@ -802,6 +811,14 @@ self: super: builtins.intersectAttrs super {
   # time
   random = dontCheck super.random;
 
+  # https://github.com/Gabriella439/nix-diff/pull/74
+  nix-diff = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace src/Nix/Diff/Types.hs \
+        --replace "{-# OPTIONS_GHC -Wno-orphans #-}" "{-# OPTIONS_GHC -Wno-orphans -fconstraint-solver-iterations=0 #-}"
+      '';
+  }) (doJailbreak (dontCheck super.nix-diff));
+
   # mockery's tests depend on hspec-discover which dependso on mockery for its tests
   mockery = dontCheck super.mockery;
   # same for logging-facade
@@ -842,7 +859,11 @@ self: super: builtins.intersectAttrs super {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
-          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch ]
+          pkgs.lib.makeBinPath [
+            pkgs.nvchecker
+            pkgs.nix-prefetch
+            pkgs.nix-prefetch-docker
+          ]
         }"
       '';
     }) super.nvfetcher);
@@ -853,14 +874,44 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
-  cachix = super.cachix.override { nix = pkgs.nixVersions.nix_2_9; };
+  # Wants running postgresql database accessible over ip, so postgresqlTestHook
+  # won't work (or would need to patch test suite).
+  domaindriven-core = dontCheck super.domaindriven-core;
 
-  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
-  hercules-ci-cnix-expr =
-    addTestToolDepend pkgs.git (
-      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_9; }
-    );
-  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
+  cachix = overrideCabal (drv: {
+    version = "1.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.3.1";
+      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+    };
+    buildDepends = [ self.conduit-concurrent-map ];
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+    postPatch = ''
+      sed -i 's/1.3/1.3.1/' cachix.cabal
+    '';
+  }) (super.cachix.override {
+    nix = self.hercules-ci-cnix-store.passthru.nixPackage;
+    fsnotify = dontCheck super.fsnotify_0_4_1_0;
+    hnix-store-core = super.hnix-store-core_0_6_1_0;
+  });
+  cachix-api = overrideCabal (drv: {
+    version = "1.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.3.1";
+      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+  }) super.cachix-api;
+
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
+  hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
+  hercules-ci-cnix-store = (super.hercules-ci-cnix-store.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }).overrideAttrs (_: {
+    passthru.nixPackage = pkgs.nixVersions.nix_2_12;
+  });
 
   # the testsuite fails because of not finding tsc without some help
   aeson-typescript = overrideCabal (drv: {
@@ -916,6 +967,9 @@ self: super: builtins.intersectAttrs super {
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
+
+  # Test suite requires network access
+  minicurl = dontCheck super.minicurl;
 
   # procex relies on close_range which has been introduced in Linux 5.9,
   # the test suite seems to force the use of this feature (or the fallback
@@ -1022,10 +1076,15 @@ self: super: builtins.intersectAttrs super {
   hint = dontCheck super.hint;
 
   # Make sure that Cabal 3.8.* can be built as-is
-  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
+  Cabal_3_8_1_0 = doDistribute (overrideCabal (old: {
+    revision = assert old.revision == "1"; "2";
+    editedCabalFile = "179y365wh9zgzkcn4n6m4vfsfy6vk4apajv8jpys057z3a71s4kp";
+  }) (super.Cabal_3_8_1_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
+  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+    # Use process core package when possible
+    process = self.process_1_6_17_0;
+  })));
 
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
@@ -1091,7 +1150,7 @@ self: super: builtins.intersectAttrs super {
     hls-splice-plugin
     hls-refactor-plugin
     hls-cabal-plugin;
-  # Tests have file permissions expections that don‘t work with the nix store.
+  # Tests have file permissions expections that don’t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
 

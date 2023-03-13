@@ -1,17 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
-  name = "encode-sans-1.002";
+stdenvNoCC.mkDerivation rec {
+  pname = "encode-sans";
+  version = "1.002";
 
-  url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
+  src = fetchzip {
+    url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
+    hash = "sha256-TPAUc5msAUgJZHibjgYaS2TOuzKFy0rje9ZQTXE6s+w=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf                    -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*README.md \*FONTLOG.txt -d "$out/share/doc/${name}"
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf                 -t $out/share/fonts/truetype
+    install -Dm644 README.md FONTLOG.txt -t $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
-
-  sha256 = "16mx894zqlwrhnp4rflgayxhxppmsj6k7haxdngajhb30rlwf08p";
 
   meta = with lib; {
     description = "A versatile sans serif font family";

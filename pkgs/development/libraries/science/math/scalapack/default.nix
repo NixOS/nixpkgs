@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ openssh ];
+  nativeCheckInputs = [ openssh ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];

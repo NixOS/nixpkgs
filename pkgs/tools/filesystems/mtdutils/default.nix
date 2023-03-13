@@ -13,12 +13,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
   buildInputs = [ acl libuuid lzo zlib zstd ];
 
+  enableParallelBuilding = true;
+
   configureFlags = with lib; [
     (enableFeature doCheck "unit-tests")
     (enableFeature doCheck "tests")
   ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
+  outputs = [ "out" "dev" ];
+
+  postInstall = ''
+    mkdir -p $dev/lib
+    mv *.a $dev/lib/
+    mv include $dev/
+  '';
 
   meta = with lib; {
     description = "Tools for MTD filesystems";

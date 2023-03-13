@@ -36,7 +36,7 @@ buildPythonPackage rec {
       --replace "python_paths" "pythonpath"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

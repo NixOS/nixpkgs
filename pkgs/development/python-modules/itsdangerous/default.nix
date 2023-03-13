@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-XbvGizF+XkLzJ/kCF2NUXcP8O/4i5t65aq8fw4h0FWo=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];

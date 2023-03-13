@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ]
     ++ lib.optionals (pythonOlder "3.5") [ scandir typing ];
-  checkInputs = [ glibcLocales ]
+  nativeCheckInputs = [ glibcLocales ]
     ++ lib.optional (pythonOlder "3.3") mock;
 
   preCheck = ''

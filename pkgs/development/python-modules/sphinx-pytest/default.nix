@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_pytest" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

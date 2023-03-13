@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wildmidi";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "wildmidi";
     rev = "${pname}-${version}";
-    sha256 = "08fbbsvw6pkwwqarjwcvdp8mq4zn5sgahf025hynwc6rvf4sp167";
+    sha256 = "sha256-5El8aDpAgjrW0/4lphZEF+Hfv9Xr7J4DMk1b/Tb+0TU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       WildMIDI is a simple software midi player which has a core softsynth
       library that can be use with other applications.
     '';
-    homepage = "http://wildmidi.sourceforge.net/";
+    homepage = "https://wildmidi.sourceforge.net/";
     # The library is LGPLv3, the wildmidi executable is GPLv3
     license = licenses.lgpl3;
     platforms = platforms.linux;

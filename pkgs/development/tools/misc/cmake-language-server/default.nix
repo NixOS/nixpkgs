@@ -1,39 +1,35 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
 , cmake-format
 , pygls
 , cmake
+, pdm-pep517
 , pytest-datadir
 , pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "regen100";
-    repo = pname;
+    repo = "cmake-language-server";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-B7dhCQo3g2E8+fzyl1RhaYQE6TFoqoLtp9Z7sZcv5xk=";
+    hash = "sha256-ExEAi47hxxEJeoT3FCwpRwJrf3URnI47/5FDL7fS5sY=";
   };
+
+  PDM_PEP517_SCM_VERSION = version;
 
   patches = [
     # Test timeouts occasionally cause the build to fail
     ./disable-test-timeouts.patch
   ];
 
-  pythonRelaxDeps = [
-    "pygls"
-  ];
-
   nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
+    pdm-pep517
   ];
 
   propagatedBuildInputs = [
@@ -41,7 +37,7 @@ buildPythonApplication rec {
     pygls
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmake
     cmake-format
     pytest-datadir
@@ -49,7 +45,10 @@ buildPythonApplication rec {
   ];
 
   dontUseCmakeConfigure = true;
-  pythonImportsCheck = [ "cmake_language_server" ];
+
+  pythonImportsCheck = [
+    "cmake_language_server"
+  ];
 
   meta = with lib; {
     description = "CMake LSP Implementation";

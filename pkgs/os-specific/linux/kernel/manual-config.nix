@@ -1,5 +1,6 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, fetchpatch
 }:
 
 let
@@ -56,8 +57,12 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [ perl libelf ]
-    ++ optional (lib.versionAtLeast version "5.13") zstd;
+  moduleBuildDependencies = [
+    perl
+    libelf
+    # module makefiles often run uname commands to find out the kernel version
+    (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+  ] ++ optional (lib.versionAtLeast version "5.13") zstd;
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
@@ -81,9 +86,6 @@ let
 
       buildDTBs = kernelConf.DTB or false;
 
-      installsFirmware = (config.isEnabled "FW_LOADER") &&
-        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
-        (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
@@ -102,8 +104,16 @@ let
         # Required for deterministic builds along with some postPatch magic.
         ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
         ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
-        # Fixes determinism by normalizing metadata for the archive of kheaders
-        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
+        # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
+        # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
+        # https://github.com/openzfs/zfs/pull/13367
+        ++ optional (lib.versionAtLeast version "5.12" &&
+                     lib.versionOlder version "5.19" &&
+                     stdenv.hostPlatform.isPower)
+          (fetchpatch {
+            url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
+            hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
+          });
 
       postPatch = ''
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
@@ -186,7 +196,6 @@ let
       installFlags = [
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
       ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
 
       preInstall = let
@@ -253,9 +262,7 @@ let
           else "install"))
       ];
 
-      postInstall = (optionalString installsFirmware ''
-        mkdir -p $out/lib/firmware
-      '') + (if isModular then ''
+      postInstall = optionalString isModular ''
         mkdir -p $dev
         cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
@@ -328,10 +335,7 @@ let
 
         # Remove reference to kmod
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
-      '' else optionalString installsFirmware ''
-        make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
-      '');
+      '';
 
       requiredSystemFeatures = [ "big-parallel" ];
 

@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     pytz # https://github.com/Kozea/Radicale/issues/816
   ] ++ passlib.optional-dependencies.bcrypt;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     waitress
   ];

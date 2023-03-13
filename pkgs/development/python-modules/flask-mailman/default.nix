@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mkdocs-material-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

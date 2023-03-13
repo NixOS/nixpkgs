@@ -2,23 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "2023-01-01";
+  version = "2023-03-11";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = pname;
     rev = version;
-    hash = "sha256-xpNlmGG7Qy0SPzXZ9sQ0i9Yo2hMaK+YsTEOTk10rs+k=";
+    hash = "sha256-5WEdrN+ABrNOdfQc2k2mf+fj+ZvZR1Dp/PtypEdlFWA=";
   };
 
-  cargoHash = "sha256-mwfM3hIEaHKa2oPVWzXpua+W2Oa5brvNRbRCcV0KapY=";
+  cargoHash = "sha256-ISkw0lhUKJG8nWUHcR93sLUFt5dDEyK7EORcOXEmVbE=";
 
-  CFG_DATE = version;
-  CFG_REV = "release";
+  CFG_RELEASE = version;
 
   nativeBuildInputs = [
     (lib.getBin nix)
   ];
+
+  # might be related to https://github.com/NixOS/nix/issues/5884
+  preBuild = ''
+    export NIX_STATE_DIR=$(mktemp -d)
+  '';
 
   passthru.updateScript = nix-update-script { };
 

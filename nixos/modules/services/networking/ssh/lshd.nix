@@ -40,7 +40,7 @@ in
         type = types.listOf types.str;
         description = lib.mdDoc ''
           List of network interfaces where listening for connections.
-          When providing the empty list, `[]', lshd listens on all
+          When providing the empty list, `[]`, lshd listens on all
           network interfaces.
         '';
         example = [ "localhost" "1.2.3.4:443" ];

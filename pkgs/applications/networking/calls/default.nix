@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "43.0";
+  version = "43.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fvG9N6HuuO8BMH8MJRquMSe1oEPNmX/pzsJX5yzs1CY=";
+    hash = "sha256-gHlhbQGtdIjKLMAkTxfc2QOjvNUPGKKL+OK8/vm0Oac=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     sofia_sip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   mesonFlags = [
     "-Dgtk_doc=true"

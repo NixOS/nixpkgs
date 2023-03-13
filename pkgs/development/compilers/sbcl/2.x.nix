@@ -61,6 +61,10 @@ let
     "2.2.11" = {
       sha256 = "sha256-NgfWgBZzGICEXO1dXVXGBUzEnxkSGhUCfmxWB66Elt8=";
     };
+
+    "2.3.0" = {
+      sha256 = "sha256-v3Q5SXEq4Cy3ST87i1fOJBlIv2ETHjaGDdszTaFDnJc=";
+    };
   };
 
 in with versionMap.${version};
@@ -167,7 +171,7 @@ stdenv.mkDerivation rec {
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (lib.versionOlder version "2.1.10") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder version "2.1.10") [
     # Workaround build failure on -fno-common toolchains like upstream
     # clang-13. Without the change build fails as:
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
@@ -175,7 +179,7 @@ stdenv.mkDerivation rec {
     "-fcommon"
   ]
     # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ];
+    ++ [ "-D_GNU_SOURCE" ]);
 
   buildPhase = ''
     runHook preBuild
@@ -184,7 +188,7 @@ stdenv.mkDerivation rec {
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
-                } ${if stdenv.hostPlatform.system == "aarch64-darwin" then "--arch=arm64" else ""}
+                } ${lib.optionalString (stdenv.hostPlatform.system == "aarch64-darwin") "--arch=arm64"}
     (cd doc/manual ; make info)
 
     runHook postBuild

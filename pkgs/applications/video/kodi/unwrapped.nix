@@ -38,25 +38,27 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20221204";
-  kodiVersion = "19.5";
-  rel = "Matrix";
+  kodiReleaseDate = "20230115";
+  kodiVersion = "20.0";
+  rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-vprhEPxYpY3/AsUgvPNnhBlh0Dl73ekALAblHaUKzd0=";
+    sha256 = "sha256-0BkbA1iovouwjQVtiKFw3+64i7sMWZNiCUfOQ0EsslY=";
   };
+
+  # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
 
   ffmpeg = stdenv.mkDerivation rec {
     pname = "kodi-ffmpeg";
-    version = "4.3.2"; # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ffmpeg/FFMPEG-VERSION
+    version = "4.4.1";
     src = fetchFromGitHub {
       owner   = "xbmc";
       repo    = "FFmpeg";
-      rev     = "${version}-${rel}-19.2";
-      sha256  = "14s215sgc93ds1mrdbkgb7fvy94lpgv2ldricyxzis0gbzqfgs4f";
+      rev     = "${version}-${rel}-Alpha1";
+      sha256  = "sha256-EQHmmWnDw+/udKYq7Nrf00nL7I5XWUtmzdauDryfTII=";
     };
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
@@ -79,22 +81,22 @@ let
   libdvdcss = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdcss";
-    rev = "1.4.2-Leia-Beta-5";
-    sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
+    rev = "1.4.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
-    rev = "6.0.0-Leia-Alpha-3";
-    sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
+    rev = "6.1.1-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
-    rev = "6.0.0-Leia-Alpha-3";
-    sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
+    rev = "6.1.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
   };
 
   kodi_platforms = lib.optional gbmSupport "gbm"
@@ -106,15 +108,6 @@ in stdenv.mkDerivation {
     version = kodiVersion;
 
     src = kodi_src;
-
-    # This is a backport of
-    # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
-    # to Kodi 19.4 Matrix.
-    # This can be removed once a new release of Kodi comes out and we upgrade
-    # to it.
-    patches = [
-      ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
-    ];
 
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
@@ -189,6 +182,7 @@ in stdenv.mkDerivation {
       "-DGIT_VERSION=${kodiReleaseDate}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
+      "-DENABLE_INTERNAL_RapidJSON=OFF"
       "-DENABLE_OPTICAL=ON"
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
@@ -226,7 +220,8 @@ in stdenv.mkDerivation {
     '';
 
     postInstall = ''
-      for p in $(ls $out/bin/) ; do
+      # TODO: figure out which binaries should be wrapped this way and which shouldn't
+      for p in $(ls --ignore=kodi-send $out/bin/) ; do
         wrapProgram $out/bin/$p \
           --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
@@ -235,6 +230,9 @@ in stdenv.mkDerivation {
                  ++ lib.optional nfsSupport libnfs
                  ++ lib.optional rtmpSupport rtmpdump)}"
       done
+
+      wrapProgram $out/bin/kodi-send \
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
         --replace kodi-standalone $out/bin/kodi-standalone

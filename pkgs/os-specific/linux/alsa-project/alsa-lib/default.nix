@@ -3,15 +3,16 @@
 , fetchurl
 , alsa-topology-conf
 , alsa-ucm-conf
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.7.2";
+  version = "1.2.8";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    hash = "sha256-ijW3IY5Q8qLHk0LQ3pje2BQ5zhnhKAk4Xsm+lZbefC8=";
+    url = "mirror://alsa/lib/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-GrAbdOM0JcqZwuNsCET9aIgnMZO9iYJA/o+TrMvL80c=";
   };
 
   patches = [
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
@@ -41,7 +44,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl21Plus;
+    pkgConfigModules = [ "alsa" "alsa-topology" ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ l-as ];
   };
-}
+})

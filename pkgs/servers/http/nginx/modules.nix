@@ -204,8 +204,8 @@ let self = {
       name = "geoip2";
       owner = "leev";
       repo = "ngx_http_geoip2_module";
-      rev = "3.3";
-      sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
+      rev = "3.4";
+      sha256 = "CAs1JZsHY7RymSBYbumC2BENsXtZP3p4ljH5QKwz5yg=";
     };
     inputs = [ libmaxminddb ];
 
@@ -351,8 +351,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.7.8";
-      sha256 = "sha256-jsR8EOeW8tAo2utKznuUaCG4hK0oU0ZJSnnGmI5HUDk=";
+      rev = "0.7.10";
+      sha256 = "sha256-/yKzY+BUFxLk8bWo+mqKfRVRsC2moe+WvhaRYIGdr6Y=";
       name = "nginx-njs";
     };
 

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ wsproto toml h2 priority ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-trio
     pytestCheckHook

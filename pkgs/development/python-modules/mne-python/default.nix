@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.2.2";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KFifnu9MR3FoVs7gLv+CpB/p3/6Iej9RJuBf1uc1HJs=";
+    hash = "sha256-jvrk6m1Cd5ig2LXq6sAIbHDhmtG1gH/7WNAc7oet+tg=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     h5py
     nibabel
     pandas

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    homepage = "http://libhx.sourceforge.net/";
+    homepage = "https://libhx.sourceforge.net/";
     longDescription = ''
       libHX is a C library (with some C++ bindings available) that provides data structures
       and functions commonly needed, such as maps, deques, linked lists, string formatting

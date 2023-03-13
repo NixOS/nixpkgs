@@ -2,8 +2,6 @@
 , contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   name = "${pname}-${lib.optionalString contribPlugins "full-"}${version}";
   version = "20.03";
@@ -16,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config file zip wrapGAppsHook ];
   buildInputs = [ wxGTK31 gtk3 ]
-    ++ optionals contribPlugins [ hunspell gamin boost ];
+    ++ lib.optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [
     ./writable-projects.patch
@@ -56,16 +54,16 @@ stdenv.mkDerivation rec {
     })
   ];
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
-  postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
-  configureFlags = [ "--enable-pch=no" ] ++ optionals contribPlugins [
-    ("--with-contrib-plugins" + optionalString stdenv.isDarwin "=all,-FileManager,-NassiShneiderman")
+  postConfigure = lib.optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
+  configureFlags = [ "--enable-pch=no" ] ++ lib.optionals contribPlugins [
+    ("--with-contrib-plugins" + lib.optionalString stdenv.isDarwin "=all,-FileManager,-NassiShneiderman")
     "--with-boost-libdir=${boost}/lib"
   ];
-  postInstall = optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     ln -s $out/lib/codeblocks/plugins $out/share/codeblocks/plugins
   '';
 
-  meta = {
+  meta = with lib; {
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;
     description = "The open source, cross platform, free C, C++ and Fortran IDE";

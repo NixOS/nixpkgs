@@ -20,7 +20,7 @@ buildPythonPackage rec {
     enum34
   ];
 
-  checkInputs = [ six pyyaml mock pytestCheckHook ];
+  nativeCheckInputs = [ six pyyaml mock pytestCheckHook ];
 
   preCheck = ''
     # pytest can't import one file even with PYTHONPATH set

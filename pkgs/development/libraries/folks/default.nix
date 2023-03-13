@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     (python3.withPackages (pp: with pp; [
       python-dbusmock

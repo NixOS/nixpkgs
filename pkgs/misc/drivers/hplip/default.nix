@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication {
 
     # Remove all ImageProcessor functionality since that is closed source
     (fetchurl {
-      url = "https://sources.debian.org/data/main/h/hplip/3.22.4%2Bdfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
+      url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
       sha256 = "sha256:18njrq5wrf3fi4lnpd1jqmaqr7ph5d7jxm7f15b1wwrbxir1rmml";
     })
 

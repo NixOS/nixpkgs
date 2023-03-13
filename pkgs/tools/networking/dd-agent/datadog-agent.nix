@@ -8,7 +8,7 @@
 , pkg-config
 , systemd
 , hostname
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , extraTags ? [ ]
 }:
 

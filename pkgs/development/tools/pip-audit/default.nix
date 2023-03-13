@@ -52,7 +52,7 @@ buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pretend
     pytestCheckHook
   ];

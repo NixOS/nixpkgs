@@ -1,0 +1,17 @@
+diff --git a/web/config.py b/web/config.py
+index 4774043..5b73fd3 100644
+--- a/web/config.py
++++ b/web/config.py
+@@ -884,6 +884,12 @@ if os.path.exists(system_config_dir + '/config_system.py'):
+         user_config_settings.update(config_system_settings)
+     except ImportError:
+         pass
++    except PermissionError:
++        print(f"Permission denied to open {str(system_config_dir + '/config_system.py')}. \n \
++              If you are running pgadmin4-desktopmode please make sure you disable  \n \
++              the pgadmin NixOS module first. If you rely on settings in \n \
++              {str(system_config_dir + '/config_system.py')}, please check the correct permissions.")
++        pass
+
+ # Update settings for 'LOG_FILE', 'SQLITE_PATH', 'SESSION_DB_PATH',
+ # 'AZURE_CREDENTIAL_CACHE_DIR', 'KERBEROS_CCACHE_DIR', 'STORAGE_DIR'

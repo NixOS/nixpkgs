@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "mdevd";
-  version = "0.1.5.2";
-  sha256 = "sha256-RgNys9O6yfNXQVbtfkhhj59KNhy1LESUrZBjJIq0pP8=";
+  version = "0.1.6.1";
+  sha256 = "XAHk55QW22zZk++KkBRii48fC2xkMnWYhIhRL6pUBLE=";
 
   description = "mdev-compatible Linux hotplug manager daemon";
   platforms = lib.platforms.linux;
@@ -21,6 +21,7 @@ buildPackage {
   postInstall = ''
     # remove all mdevd executables from build directory
     rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+    rm libmdevd.*
 
     mv doc $doc/share/doc/mdevd/html
     mv examples $doc/share/doc/mdevd/examples

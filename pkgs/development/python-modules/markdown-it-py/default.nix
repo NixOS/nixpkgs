@@ -6,11 +6,15 @@
 , linkify-it-py
 , mdurl
 , psutil
+, py
 , pytest-benchmark
 , pytest-regressions
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
+# allow disabling tests for the nixos manual build.
+# the test suite closure is just too large.
+, disableTests ? false
 }:
 
 buildPythonPackage rec {
@@ -39,11 +43,17 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
+    py
+  ] ++ lib.optionals (! disableTests) [
     pytest-benchmark
     pytest-regressions
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--benchmark-skip"
   ];
 
   pythonImportsCheck = [

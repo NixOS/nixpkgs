@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];

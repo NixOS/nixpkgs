@@ -1,11 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, gitUpdater
 , meson
 , ninja
 , pkg-config
 , python3
 , wrapGAppsHook
+, libadwaita
 , libhandy
 , libxkbcommon
 , libgudev
@@ -13,7 +15,7 @@
 , pulseaudio
 , evince
 , glib
-, gtk3
+, gtk4
 , gnome
 , gnome-desktop
 , gcr
@@ -34,7 +36,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.22.0";
+  version = "0.25.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -43,10 +45,11 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-q2AYm+zbL4/pRG1wn+MT6IYM8CZt15o48U9+piMPf74=";
+    sha256 = "sha256-ysAZdmkFEuqJDTPe246F2I4Qp+fjtomia42PS8BuMM8=";
   };
 
   nativeBuildInputs = [
+    libadwaita
     meson
     ninja
     pkg-config
@@ -71,7 +74,7 @@ stdenv.mkDerivation rec {
     gnome.gnome-control-center
     gnome-desktop
     gnome.gnome-session
-    gtk3
+    gtk4
     pam
     systemd
     upower
@@ -79,7 +82,7 @@ stdenv.mkDerivation rec {
     feedbackd
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -93,11 +96,6 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/36468
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
 
   checkPhase = ''
     runHook preCheck
@@ -127,13 +125,18 @@ stdenv.mkDerivation rec {
     ];
 
     tests.phosh = nixosTests.phosh;
+
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
 }

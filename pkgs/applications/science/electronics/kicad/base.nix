@@ -22,6 +22,7 @@
 , libXdmcp
 , lndir
 , unixODBC
+, fetchpatch
 
 , util-linux
 , libselinux
@@ -34,6 +35,7 @@
 , at-spi2-core
 , libXtst
 , pcre2
+, libdeflate
 
 , swig4
 , python
@@ -50,7 +52,6 @@
 , withNgspice
 , withScripting
 , withI18n
-, withPCM
 , debug
 , sanitizeAddress
 , sanitizeThreads
@@ -71,16 +72,28 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+  ]
+  ++ optionals (stable) # the 2 wxGTK ones should in the next stable point release
+  [
+    (fetchpatch { # for wxGTK 3.2.2.1's .1 field
+      name = "support wxWidgets subrelease field";
+      url = "https://gitlab.com/kicad/code/kicad/-/commit/b536580119c59fde78e38d8d6388f2540ecb6cf9.diff";
+      hash = "sha256-F+J5oZO0BsT1VWKpx0KGA7ecn5/PBgCw8uiScihM+54=";
+    })
+    (fetchpatch { # for wxGTK 3.2.2.1's .1 field, but for wxPython
+      name = "relax wxPython check to just major.minor";
+      url = "https://gitlab.com/kicad/code/kicad/-/commit/1e8cc6855d6a8fc1f9dfc933224c3a10fb759f9c.diff";
+      hash = "sha256-CGNgxZ7QiVLkaauNl7Pmcl152lwyDZqA/HSyFdOswwU=";
+    })
   ];
 
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = if (!stable) then ''
+  postPatch = lib.optionalString (!stable) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
-  ''
-  else "";
+  '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
@@ -88,6 +101,7 @@ stdenv.mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DKICAD_USE_EGL=ON"
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"  # upstream issue 12491
   ]
   ++ optionals (withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
@@ -117,12 +131,6 @@ stdenv.mkDerivation rec {
   ]
   ++ optionals (withI18n) [
     "-DKICAD_BUILD_I18N=ON"
-  ]
-  ++ optionals (!withPCM && stable) [
-    "-DKICAD_PCM=OFF"
-  ]
-  ++ optionals (!stable) [ # upstream issue 12491
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
   ];
 
   nativeBuildInputs = [
@@ -167,8 +175,9 @@ stdenv.mkDerivation rec {
     boost
     swig4
     python
+    unixODBC
+    libdeflate
   ]
-  ++ optional (!stable) unixODBC
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
   ++ optional (withOCC) opencascade-occt

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     "structlog"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pretend
     pytest-asyncio

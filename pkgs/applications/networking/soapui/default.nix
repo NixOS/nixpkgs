@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "soapui";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/downloads.eviware/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
-    sha256 = "0vmj11fswja0ddnbc4vb7gj1al8km7ilma9bv1waaj8h5c8qpayi";
+    sha256 = "sha256-qzhy4yHmOk13dFUd2KEZhXtWY86QwyjJgYxx9GGoN80=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,16 +28,16 @@ stdenv.mkDerivation rec {
     (writeText "soapui-${version}.patch" ''
       --- a/bin/soapui.sh
       +++ b/bin/soapui.sh
-      @@ -34,7 +34,7 @@ SOAPUI_CLASSPATH=$SOAPUI_HOME/bin/soapui-${version}.jar:$SOAPUI_HOME/lib/*
-       export SOAPUI_CLASSPATH
+      @@ -50,7 +50,7 @@
+       #JAVA 16
+       JAVA_OPTS="$JAVA_OPTS --illegal-access=permit"
 
-       JAVA_OPTS="-Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=$SOAPUI_HOME/bin -splash:SoapUI-Spashscreen.png"
       -JFXRTPATH=`java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
       +JFXRTPATH=`${jdk}/bin/java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
        SOAPUI_CLASSPATH=$JFXRTPATH:$SOAPUI_CLASSPATH
 
        if $darwin
-      @@ -69,4 +69,4 @@ echo = SOAPUI_HOME = $SOAPUI_HOME
+      @@ -85,4 +85,4 @@
        echo =
        echo ================================
 

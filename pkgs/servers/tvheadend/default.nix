@@ -75,10 +75,13 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"
-  ];
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but unrecognized with GCC 9
+    "-Wno-error=use-after-free"
+  ]);
 
   configureFlags = [
     # disable dvbscan, as having it enabled causes a network download which
@@ -105,7 +108,7 @@ in stdenv.mkDerivation {
       --replace /usr/bin/tar ${gnutar}/bin/tar
 
     substituteInPlace src/input/mpegts/scanfile.c \
-      --replace /usr/share/dvb ${dtv-scan-tables}/dvbv5
+      --replace /usr/share/dvb ${dtv-scan-tables}/share/dvbv5
 
     # the version detection script `support/version` reads this file if it
     # exists, so let's just use that

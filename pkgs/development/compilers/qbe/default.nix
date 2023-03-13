@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchzip {
     url = "https://c9x.me/compile/release/qbe-${version}.tar.xz";
-    sha256 = "sha256-Or6m/y5hb9SlSToBevjhaSbk5Lo5BasbqeJmKd1QpGM=";
+    sha256 = "sha256-yFZ3cpp7eLjf7ythKFTY1YEJYyfeg2en4/D8+9oM1B4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

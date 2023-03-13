@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "3N+4rhmvVUvQ6svtyOMY0+eP2Kz7EpkmZ3Ua+W4gg0Y=";
+    sha256 = "HzA6+dOxXyeKrzYaR5Xwqj91rivc66ObjTLKHUay61A=";
   };
 
   nativeBuildInputs = [

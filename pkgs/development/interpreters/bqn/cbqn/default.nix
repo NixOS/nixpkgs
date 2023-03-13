@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+  ] ++ lib.optionals enableLibcbqn [
     "lib"
     "dev"
   ];

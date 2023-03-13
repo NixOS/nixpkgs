@@ -570,10 +570,14 @@ in {
           type = "normal";
           plugins = ["python3"];
           home = webEnv;
-          manage-script-name = true;
-          mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
           http = "127.0.0.1:18507";
-        };
+        }
+        // (if cfg.serve.virtualRoot == "/"
+          then { module = "mailman_web.wsgi:application"; }
+          else {
+            mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
+            manage-script-name = true;
+          });
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
         wantedBy = ["multi-user.target"];
@@ -638,7 +642,7 @@ in {
 
   meta = {
     maintainers = with lib.maintainers; [ lheckemann qyliss ma27 ];
-    doc = ./mailman.xml;
+    doc = ./mailman.md;
   };
 
 }

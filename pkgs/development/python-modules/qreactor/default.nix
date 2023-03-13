@@ -24,7 +24,7 @@ buildPythonPackage rec {
     twisted qtpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyqt5
   ];
 

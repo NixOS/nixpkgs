@@ -11,7 +11,6 @@ args@
 , fetchurl
 , fontconfig
 , freetype
-, gcc
 , gdk-pixbuf
 , glib
 , glibc
@@ -20,15 +19,15 @@ args@
 , makeWrapper
 , ncurses5
 , perl
-, python27
+, python3
 , requireFile
-, stdenv
+, backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
 , xorg
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+backendStdenv.mkDerivation rec {
   pname = "cudatoolkit";
   inherit version runPatches;
 
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
+    ncurses5 expat python3 zlib glibc
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
     gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
@@ -146,14 +145,23 @@ stdenv.mkDerivation rec {
 
     # Fix builds with newer glibc version
     sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
-
-    # Ensure that cmake can find CUDA.
+  '' +
+  # Point NVCC at a compatible compiler
+  # FIXME: redist cuda_nvcc copy-pastes this code
+  # Refer to comments in the overrides for cuda_nvcc for explanation
+  # CUDA_TOOLKIT_ROOT_DIR is legacy,
+  # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+  ''
     mkdir -p $out/nix-support
-    echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
-
-    # Set the host compiler to be used by nvcc for CMake-based projects:
-    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
-    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
+    cat <<EOF >> $out/nix-support/setup-hook
+    cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'
+    cmakeFlags+=' -DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    if [ -z "\''${CUDAHOSTCXX-}" ]; then
+      export CUDAHOSTCXX=${backendStdenv.cc}/bin;
+    fi
+    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin'
+    EOF
 
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.
@@ -166,10 +174,6 @@ stdenv.mkDerivation rec {
       mv $out/lib64 $out/lib
       mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
-
-    # Set compiler for NVCC.
-    wrapProgram $out/bin/nvcc \
-      --prefix PATH : ${gcc}/bin
 
     # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
     wrapProgram $out/bin/nvprof \
@@ -191,7 +195,14 @@ stdenv.mkDerivation rec {
   preFixup =
     let rpath = lib.concatStringsSep ":" [
       (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
-      "${stdenv.cc.cc.lib}/lib64"
+
+      # The path to libstdc++ and such
+      #
+      # `backendStdenv` is the cuda-compatible toolchain that we pick in
+      # extension.nix; we hand it to NVCC to use as a back-end, and we link
+      # cudatoolkit's binaries against its libstdc++
+      "${backendStdenv.cc.cc.lib}/lib64"
+
       "$out/jre/lib/amd64/jli"
       "$out/lib64"
       "$out/nvvm/lib64"
@@ -229,6 +240,13 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
     addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
     addOpenGLRunpath $out/target-linux-x64/*
+  '' +
+  # Prune broken symlinks which can cause problems with consumers of this package.
+  ''
+    while read -r -d "" file; do
+      echo "Found and removing broken symlink $file"
+      rm "$file"
+    done < <(find "$out" "$lib" "$doc" -xtype l -print0)
   '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so
@@ -253,7 +271,7 @@ stdenv.mkDerivation rec {
     popd
   '';
   passthru = {
-    cc = gcc;
+    inherit (backendStdenv) cc;
     majorMinorVersion = lib.versions.majorMinor version;
     majorVersion = lib.versions.majorMinor version;
   };

@@ -33,7 +33,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook matplotlib seaborn ];
+  nativeCheckInputs = [ pytestCheckHook matplotlib seaborn ];
   disabledTestPaths = [
     "docs"
     "benchmarks"

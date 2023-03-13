@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A command line tool for manipulating and querying XML data";
-    homepage = "http://xmlstar.sourceforge.net/";
+    homepage = "https://xmlstar.sourceforge.net/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

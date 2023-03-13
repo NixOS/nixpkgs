@@ -22,7 +22,7 @@
 let
   documentation_deps = [
     (texlive.combine {
-      inherit (texlive) scheme-small wrapfig was;
+      inherit (texlive) scheme-small wrapfig gensymb;
     })
     xvfb-run
     imagemagick
@@ -45,6 +45,9 @@ python3Packages.buildPythonApplication rec {
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace python-Levenshtein Levenshtein
+
     chmod a+w -R ..
     patchShebangs ../tools
 
@@ -83,7 +86,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ dbus ];
+  nativeCheckInputs = [ dbus ];
 
   nativeBuildInputs = [
     wrapGAppsHook

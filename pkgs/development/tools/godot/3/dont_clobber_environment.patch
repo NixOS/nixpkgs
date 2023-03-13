@@ -1,19 +1,23 @@
-diff --git a/SConstruct b/SConstruct
-index d138c7b250..c925bf908e 100644
+scons does not use os environment by default:
+  https://scons.org/doc/2.1.0/HTML/scons-user/x1750.html
+
+nixpkgs' cc-wrapper on the other hand relies on various NIX_* variables
+to be passed through like NIX_CFLAGS_COMPILE_BEFORE.
 --- a/SConstruct
 +++ b/SConstruct
-@@ -65,10 +65,10 @@ elif platform_arg == "javascript":
- # want to have to pull in manually.
- # Then we prepend PATH to make it take precedence, while preserving SCons' own entries.
- env_base = Environment(tools=custom_tools)
+@@ -67,14 +67,7 @@ elif platform_arg == "javascript":
+ elif os.name == "nt" and methods.get_cmdline_bool("use_mingw", False):
+     custom_tools = ["mingw"]
+ 
+-# We let SCons build its default ENV as it includes OS-specific things which we don't
+-# want to have to pull in manually.
+-# Then we prepend PATH to make it take precedence, while preserving SCons' own entries.
+-env_base = Environment(tools=custom_tools)
 -env_base.PrependENVPath("PATH", os.getenv("PATH"))
 -env_base.PrependENVPath("PKG_CONFIG_PATH", os.getenv("PKG_CONFIG_PATH"))
 -if "TERM" in os.environ:  # Used for colored output.
 -    env_base["ENV"]["TERM"] = os.environ["TERM"]
-+for k in ("TERM", "PATH", "PKG_CONFIG_PATH"):
-+    if (k in os.environ):
-+        env_base["ENV"][k] = os.environ[k]
-+
-
++env_base = Environment(ENV = os.environ, tools=custom_tools)
+ 
  env_base.disabled_modules = []
  env_base.use_ptrcall = False

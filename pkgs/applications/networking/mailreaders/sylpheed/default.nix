@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, gtk2, openssl ? null, gpgme ? null
-, gpgSupport ? true, sslSupport ? true, fetchpatch }:
+, gpgSupport ? true, sslSupport ? true, fetchpatch, Foundation }:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "sylpheed";
@@ -33,19 +31,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk2 ]
-    ++ optionals gpgSupport [ gpgme ]
-    ++ optionals sslSupport [ openssl ];
+    ++ lib.optionals gpgSupport [ gpgme ]
+    ++ lib.optionals sslSupport [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
-  configureFlags = optional gpgSupport "--enable-gpgme"
-    ++ optional sslSupport "--enable-ssl";
+  configureFlags = lib.optional gpgSupport "--enable-gpgme"
+    ++ lib.optional sslSupport "--enable-ssl";
 
-  meta = {
+  # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Foundation";
+
+  meta = with lib; {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

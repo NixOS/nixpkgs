@@ -26,7 +26,5 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     longDescription = "Play the german card game Skat against the AI or over IRC.";
     homepage = "http://www.xskat.de/";
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

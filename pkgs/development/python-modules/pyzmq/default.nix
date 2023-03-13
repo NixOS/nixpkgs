@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "23.2.1";
+  version = "24.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KzgaqGfs59CoLzCgx/PUOHt88uBpfjPvqlvtbFeEq80=";
+    hash = "sha256-IW9dfbtnFmdZ5ZsEebyoK4rPm+1gFbUmuOsQFD+wjnc=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tornado
   ];

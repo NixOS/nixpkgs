@@ -8,9 +8,10 @@
 , Foundation
 , python3
 , fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+, meson
+, ninja
 , gtk-doc
+, docbook-xsl-nons
 , gobject-introspection
   # Optional dependencies
 , libjpeg
@@ -38,15 +39,15 @@
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.13.3";
+  version = "8.14.1";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "sha256-JkG1f2SGLI6tSNlFJ//S37PXIo+L318Mej0bI7p/dVo=";
+    hash = "sha256-ajGVSVjnv78S/Xd3Aqn0N87I7m39DWKZHAQjwbog+5U=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -56,9 +57,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
-    gtk-doc
+    meson
+    ninja
+    docbook-xsl-nons
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gtk-doc
   ];
 
   buildInputs = [
@@ -95,11 +99,17 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
+  mesonFlags = [
+    "-Dcgif=disabled"
+    "-Dspng=disabled"
+    "-Dpdfium=disabled"
+    "-Dnifti=disabled"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "-Dgtk_doc=true"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";
     homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;

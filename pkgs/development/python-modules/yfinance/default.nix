@@ -1,8 +1,10 @@
 { lib
 , appdirs
+, beautifulsoup4
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, frozendict
 , multitasking
 , numpy
 , pandas
@@ -13,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.93";
+  version = "0.2.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,12 +24,14 @@ buildPythonPackage rec {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AyuIngXReI4PX554SuGIgoQoklFieZiEZzeVBcvPvEk=";
+    hash = "sha256-k0al/N9xWen/IlE8JfFV98DSRnelQk+MURXz3IjGgNI=";
   };
 
   propagatedBuildInputs = [
     appdirs
+    beautifulsoup4
     cryptography
+    frozendict
     multitasking
     numpy
     pandas

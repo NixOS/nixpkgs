@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -19,17 +20,20 @@
 , dbus
 , xvfb-run
 , shared-mime-info
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.6.1";
+  version = "5.6.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZZ2cydA0oRTwfn4TTugNd97ASXyxUWrlNpEZwvy52hY=";
+    sha256 = "HxRsFW8TWmBJnZeeNXfJm24VoRFEV2er5iGbs0xUXHc=";
   };
 
   patches = [
@@ -37,6 +41,13 @@ stdenv.mkDerivation rec {
     # but not from its own datadr (it assumes it will be in XDG_DATA_DIRS).
     # Since this is not generally true with Nix, let’s add $out/share unconditionally.
     ./4.x-nix_share_path.patch
+
+    # Add Nix syntax highlighting.
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/303
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtksourceview/-/commit/2cc7fd079f9fc8b593c727c68a2c783c82299562.patch";
+      sha256 = "bTYWjEDpdbnUxcYNKl2YtSLfYlMfcbQSSYQjhixOGS8=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -65,7 +76,7 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
@@ -109,11 +120,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Source code editing widget for GTK";
     homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    pkgConfigModules = [ "gtksourceview-5" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

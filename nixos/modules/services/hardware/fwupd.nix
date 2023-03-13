@@ -18,11 +18,11 @@ let
         fwupd = cfg.daemonSettings;
       };
     };
+
     "fwupd/uefi_capsule.conf" = {
-      source = pkgs.writeText "uefi_capsule.conf" ''
-        [uefi_capsule]
-        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-      '';
+      source = format.generate "uefi_capsule.conf" {
+        uefi_capsule = cfg.uefiCapsuleSettings;
+      };
     };
   };
 
@@ -127,11 +127,31 @@ in {
                 List of plugins to be disabled.
               '';
             };
+
+            EspLocation = mkOption {
+              type = types.path;
+              default = config.boot.loader.efi.efiSysMountPoint;
+              defaultText = lib.literalExpression "config.boot.loader.efi.efiSysMountPoint";
+              description = lib.mdDoc ''
+                The EFI system partition (ESP) path used if UDisks is not available
+                or if this partition is not mounted at /boot/efi, /boot, or /efi
+              '';
+            };
           };
         };
         default = {};
         description = lib.mdDoc ''
           Configurations for the fwupd daemon.
+        '';
+      };
+
+      uefiCapsuleSettings = mkOption {
+        type = types.submodule {
+          freeformType = format.type.nestedTypes.elemType;
+        };
+        default = {};
+        description = lib.mdDoc ''
+          UEFI capsule configurations for the fwupd daemon.
         '';
       };
     };
@@ -147,7 +167,10 @@ in {
   ###### implementation
   config = mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
-    services.fwupd.daemonSettings.DisabledPlugins = cfg.package.defaultDisabledPlugins;
+    services.fwupd.daemonSettings = {
+      DisabledPlugins = cfg.package.defaultDisabledPlugins;
+      EspLocation = config.boot.loader.efi.efiSysMountPoint;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -157,6 +180,9 @@ in {
     services.dbus.packages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];
+
+    # required to update the firmware of disks
+    services.udisks2.enable = true;
 
     systemd.packages = [ cfg.package ];
 

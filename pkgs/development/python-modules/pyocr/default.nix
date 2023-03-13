@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

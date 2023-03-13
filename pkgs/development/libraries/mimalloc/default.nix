@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0gX0rEOWT6Lp5AyRyrK5GPTBvAqc5SxSaNJOc5GIgKc=";
   };
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
   preCheck = let
     ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in ''
@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja ];
-  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ] ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ];
+  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ]
+    ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
+    ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ]
+  ;
 
   postInstall = let
     rel = lib.versions.majorMinor version;

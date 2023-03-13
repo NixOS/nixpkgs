@@ -64,6 +64,10 @@ stdenv.mkDerivation rec {
     libshumate
   ];
 
+  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+  # https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
+
   passthru = {
     updateScript = nix-update-script { };
   };

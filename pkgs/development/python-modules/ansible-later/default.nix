@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "3.0.2";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+UcrkITiRrAKo5MFcsSqEpvzuo4Czv+rHMWsnuvVx5o=";
+    hash = "sha256-5TV9cTMTx8R6jf9HypieinCyNgHC4LSHTRQd9RXApG4=";
   };
 
   postPatch = ''
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

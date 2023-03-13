@@ -17,7 +17,7 @@
 , typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.25.1";
+  version = "1.26.3";
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-PBzzaGUOduwAnAfNEXSpXNy0cbJHu3LRgkX31WwYCbI=";
+    sha256 = "sha256-rL0NqpZ1zohiPaNcgNgZza+pFzHe5rJpXGTXyp2oLbQ=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiodns
     aiohttp
     flask
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     "tests/testserver_tests/"
     # requires missing pytest plugin
     "tests/async_tests/test_rest_asyncio_transport.py"
-    # needs msrest, which cannot be included in checkInputs due to circular dependency new in msrest 0.7.1
+    # needs msrest, which cannot be included in nativeCheckInputs due to circular dependency new in msrest 0.7.1
     # azure-core needs msrest which needs azure-core
     "tests/test_polling.py"
     "tests/async_tests/test_base_polling_async.py"

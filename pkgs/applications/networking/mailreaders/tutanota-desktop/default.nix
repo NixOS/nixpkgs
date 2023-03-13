@@ -3,12 +3,12 @@ electron, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
-  version = "3.105.9";
+  version = "3.110.0";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
     name = "tutanota-desktop-${version}.tar.gz";
-    sha256 = "sha256-PkAxtpyL4rXJfz+YgbVteOP1V0hlF25htvOCkEGFq4k=";
+    sha256 = "sha256-ufrhJfYolx/O0/a5AU1nuUpQy0Md6TVgmdhTAi9Appo=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${electron}/bin/electron \
       $out/bin/tutanota-desktop \
       --add-flags $out/share/tutanota-desktop/resources/app.asar \
-      --run "mkdir /tmp/tutanota" \
+      --run "mkdir -p /tmp/tutanota" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}
 
     runHook postInstall

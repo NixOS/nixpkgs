@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     freezegun notmuch
   ];
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" ];
 
   postBuild =  ''
-    ${python3Packages.python.interpreter} setup.py build_sphinx -b html,man
+    ${python3Packages.python.pythonForBuild.interpreter} setup.py build_sphinx -b html,man
   '';
 
   postInstall = ''

@@ -3,35 +3,51 @@
 , fetchFromGitHub
 , buildPythonPackage
 , poetry-core
+, pytest-rerunfailures
 , pytestCheckHook
 , procps
 , tmux
+, ncurses
 }:
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.13.0";
+  version = "0.21.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-u08lxVMuyO5CwFbmxn69QqdSWcvGaSMZgizRJlsHa0k=";
+    hash = "sha256-nZPVS3jNz2e2LTlWiSz1fN7MzqJs/CqtAt6UVZaPPTY=";
   };
+
+  postPatch = ''
+    sed -i '/addopts/d' setup.cfg
+  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     procps
     tmux
-
+    ncurses
+    pytest-rerunfailures
     pytestCheckHook
   ];
 
-  pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_test.py" ];
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
+    "test_new_session_width_height"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "test_test.py"
+  ];
 
   pythonImportsCheck = [ "libtmux" ];
 

@@ -39,14 +39,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.250";
+  version = "0.252";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    sha256 = "sha256-jexs/1ovRk9Is5orD7hT9fN+dYm+WA+57aZ6JH7zjL4=";
+    hash = "sha256-snef00pTbukiLQp8eAMfuIqNV3l0wP1+KlpFnS3iKFg=";
   };
 
   outputs = [ "out" "tools" ];
@@ -116,6 +116,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/emu/emuopts.cpp \
       --subst-var-by mamePath "$out/opt/mame"
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=use-after-free"
+  ];
 
   desktopItems = [
     (makeDesktopItem {

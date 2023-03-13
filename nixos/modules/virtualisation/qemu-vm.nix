@@ -108,9 +108,9 @@ let
 
       set -e
 
-      NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}")
+      NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
-      if ! test -e "$NIX_DISK_IMAGE"; then
+      if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
           ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
             ${toString config.virtualisation.diskSize}M
       fi
@@ -152,9 +152,11 @@ let
 
       ${lib.optionalString cfg.useBootLoader
       ''
-        # Create a writable copy/snapshot of the boot disk.
-        # A writable boot disk can be booted from automatically.
-        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
+        if ${if !cfg.persistBootDevice then "true" else "! test -e $TMPDIR/disk.img"}; then
+          # Create a writable copy/snapshot of the boot disk.
+          # A writable boot disk can be booted from automatically.
+          ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
+        fi
 
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
 
@@ -211,7 +213,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "120M"
               ${if cfg.useEFIBoot then ''
                 efiVars=$out/efi-vars.fd
                 cp ${cfg.efi.variables} $efiVars
@@ -225,7 +227,7 @@ let
                       + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
         }
         ''
-          # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
+          # Create a /boot EFI partition with 120M and arbitrary but fixed GUIDs for reproducibility
           ${pkgs.gptfdisk}/bin/sgdisk \
             --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
             --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
@@ -346,7 +348,7 @@ in
 
     virtualisation.diskImage =
       mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = "./${config.system.name}.qcow2";
         defaultText = literalExpression ''"./''${config.system.name}.qcow2"'';
         description =
@@ -354,6 +356,9 @@ in
             Path to the disk image containing the root filesystem.
             The image will be created on startup if it does not
             exist.
+
+            If null, a tmpfs will be used as the root filesystem and
+            the VM's state will not be persistent.
           '';
       };
 
@@ -365,6 +370,17 @@ in
           lib.mdDoc ''
             The disk to be used for the root filesystem.
           '';
+      };
+
+    virtualisation.persistBootDevice =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            If useBootLoader is specified, whether to recreate the boot device
+            on each instantiaton or allow it to persist.
+            '';
       };
 
     virtualisation.emptyDiskImages =
@@ -527,6 +543,20 @@ in
           :::
         '';
     };
+
+    virtualisation.restrictNetwork =
+      mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description =
+          lib.mdDoc ''
+            If this option is enabled, the guest will be isolated, i.e. it will
+            not be able to contact the host and no guest IP packets will be
+            routed over the host to the outside. This option does not affect
+            any explicitly set forwarding rules.
+          '';
+      };
 
     virtualisation.vlans =
       mkOption {
@@ -836,6 +866,8 @@ in
     # * The disks are attached in `virtualisation.qemu.drives`.
     #   Their order makes them appear as devices `a`, `b`, etc.
     # * `fileSystems."/boot"` is adjusted to be on device `b`.
+    # * The disk.img is recreated each time the VM is booted unless
+    #   virtualisation.persistBootDevice is set.
 
     # If `useBootLoader`, GRUB goes to the second disk, see
     # note [Disk layout with `useBootLoader`].
@@ -878,7 +910,7 @@ in
 
         ${optionalString cfg.writableStore ''
           echo "mounting overlay filesystem on /nix/store..."
-          mkdir -p 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
+          mkdir -p -m 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
           mount -t overlay overlay $targetRoot/nix/store \
             -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
         ''}
@@ -936,10 +968,11 @@ in
               else "'guestfwd=${proto}:${guest.address}:${toString guest.port}-" +
                    "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
           );
+        restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
       [
         "-net nic,netdev=user.0,model=virtio"
-        "-netdev user,id=user.0,${forwardingOptions}\"$QEMU_NET_OPTS\""
+        "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
 
     # FIXME: Consolidate this one day.
@@ -975,12 +1008,12 @@ in
     ];
 
     virtualisation.qemu.drives = mkMerge [
-      [{
+      (mkIf (cfg.diskImage != null) [{
         name = "root";
         file = ''"$NIX_DISK_IMAGE"'';
         driveExtraOpts.cache = "writeback";
         driveExtraOpts.werror = "report";
-      }]
+      }])
       (mkIf cfg.useNixStoreImage [{
         name = "nix-store";
         file = ''"$TMPDIR"/store.img'';
@@ -1003,20 +1036,21 @@ in
       }) cfg.emptyDiskImages)
     ];
 
+    fileSystems = mkVMOverride cfg.fileSystems;
+
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to
     # allow this module to be applied to "normal" NixOS system
     # configuration, where the regular value for the `fileSystems'
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
-    fileSystems =
-    let
+    virtualisation.fileSystems = let
       mkSharedDir = tag: share:
         {
           name =
             if tag == "nix-store" && cfg.writableStore
-              then "/nix/.ro-store"
-              else share.target;
+            then "/nix/.ro-store"
+            else share.target;
           value.device = tag;
           value.fsType = "9p";
           value.neededForBoot = true;
@@ -1024,44 +1058,42 @@ in
             [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
             ++ lib.optional (tag == "nix-store") "cache=loose";
         };
-    in
-      mkVMOverride (cfg.fileSystems //
-      optionalAttrs cfg.useDefaultFilesystems {
-        "/".device = cfg.bootDevice;
-        "/".fsType = "ext4";
-        "/".autoFormat = true;
-      } //
-      optionalAttrs config.boot.tmpOnTmpfs {
-        "/tmp" = {
+    in lib.mkMerge [
+      (lib.mapAttrs' mkSharedDir cfg.sharedDirectories)
+      {
+        "/" = lib.mkIf cfg.useDefaultFilesystems (if cfg.diskImage == null then {
+          device = "tmpfs";
+          fsType = "tmpfs";
+        } else {
+          device = cfg.bootDevice;
+          fsType = "ext4";
+          autoFormat = true;
+        });
+        "/tmp" = lib.mkIf config.boot.tmpOnTmpfs {
           device = "tmpfs";
           fsType = "tmpfs";
           neededForBoot = true;
           # Sync with systemd's tmp.mount;
           options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
         };
-      } //
-      optionalAttrs cfg.useNixStoreImage {
-        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = {
+        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = lib.mkIf cfg.useNixStoreImage {
           device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
           neededForBoot = true;
           options = [ "ro" ];
         };
-      } //
-      optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs) {
-        "/nix/.rw-store" = {
+        "/nix/.rw-store" = lib.mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs) {
           fsType = "tmpfs";
           options = [ "mode=0755" ];
           neededForBoot = true;
         };
-      } //
-      optionalAttrs cfg.useBootLoader {
         # see note [Disk layout with `useBootLoader`]
-        "/boot" = {
+        "/boot" = lib.mkIf cfg.useBootLoader {
           device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
           fsType = "vfat";
           noCheck = true; # fsck fails on a r/o filesystem
         };
-      } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
+      }
+    ];
 
     boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
       mounts = [{
@@ -1080,7 +1112,7 @@ in
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "/bin/mkdir -p 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
+          ExecStart = "/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
         };
       };
     };

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   pname = "uhd";
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "4.1.0.5";
+  version = "4.4.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     owner = "EttusResearch";
     repo = "uhd";
     rev = "v${version}";
-    sha256 = "sha256-XBq4GkLRR2SFunFRvpPOMiIbTuUkMYf8tPAoHCoveRA=";
+    sha256 = "sha256-khVOHlvacZc4EMg4m55rxEqPvLY1xURpAfOW905/3jg=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
-    sha256 = "HctHB90ikOMkrYNyWmjGE/2HvA7xXKCUezdtiqzN+1A=";
+    sha256 = "V8ldW8bvYWbrDAvpWpHcMeLf9YvF8PIruDAyNK/bru4=";
   };
 
   cmakeFlags = [
@@ -116,7 +116,12 @@ stdenv.mkDerivation rec {
   preConfigure = "cd host";
   # TODO: Check if this still needed, perhaps relevant:
   # https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html#build_instructions_unix_arm
-  patches = if stdenv.isAarch32 then ./neon.patch else null;
+  patches = [
+    # Disable tests that fail in the sandbox
+    ./no-adapter-tests.patch
+  ] ++ lib.optionals stdenv.isAarch32 [
+    ./neon.patch
+  ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
     ++ optionals (enableUtils) [ "moveUdevRules" ]

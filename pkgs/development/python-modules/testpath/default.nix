@@ -20,7 +20,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

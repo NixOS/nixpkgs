@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   name = "polychromatic";
-  version = "0.7.3";
+  version = "0.8.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
     rev = "v${version}";
-    sha256 = "sha256-H++kQ3Fxw56avEsSE1ctu5p0s50s0eQ+jL5zXS3AA94=";
+    sha256 = "sha256-ym2pcGUWM5zCUx/lYs+WECj+wbyBtWnx04W/NRXNKlw=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace scripts/build-styles.sh \
       --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
       --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
-    substituteInPlace pylib/common.py \
+    substituteInPlace polychromatic/paths.py \
       --replace "/usr/share/polychromatic" "$out/share/polychromatic"
   '';
 

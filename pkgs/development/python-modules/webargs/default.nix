@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ marshmallow ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
     webtest

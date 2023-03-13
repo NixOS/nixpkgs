@@ -11,7 +11,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
   nativeBuildInputs = [ pkg-config poppler qmake ];
-  NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
+  env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   qmakeFlags = [
     "DESKTOPDIR=${placeholder "out"}/share/applications"

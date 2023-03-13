@@ -7,7 +7,7 @@ let
   cfg = config.services.flatpak;
 in {
   meta = {
-    doc = ./flatpak.xml;
+    doc = ./flatpak.md;
     maintainers = pkgs.flatpak.meta.maintainers;
   };
 

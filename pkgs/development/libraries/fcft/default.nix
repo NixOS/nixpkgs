@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype fontconfig pixman tllist ]
     ++ lib.optionals (withShapingTypes != []) [ harfbuzz ]
     ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   mesonBuildType = "release";
   mesonFlags = builtins.map (t:

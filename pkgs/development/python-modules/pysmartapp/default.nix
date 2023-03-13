@@ -25,7 +25,7 @@ buildPythonPackage rec {
     httpsig
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

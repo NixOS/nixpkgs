@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3wLfQvbwx+OFrCl5vMV7Zps4e4iEYFhqPiVCo5hDqgw=";
   })];
 
+  postPatch = ''
+    sed '1i#include <ctime>' -i src/Log.cxx # gcc12
+  '';
+
   nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [
     libmpdclient

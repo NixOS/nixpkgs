@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
     pytest-dependency

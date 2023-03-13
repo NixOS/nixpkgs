@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.1.1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1hoMIZ4mfXYF+ec/Eax2fSNBbx+UEY2c/jQCaRi+UqU=";
+    sha256 = "sha256-9qvIxKg/fj08wYY2fK5J1nWzojStUb9ArXwvA/cTOcQ=";
   };
 
-  cargoSha256 = "sha256-jGPS9x4DKQCXZkaJu9qIEqoxIu+1WraqfqxGFRV5z7A=";
+  cargoHash = "sha256-kVnA8w2YVg6+h1V1O4cvciuB7GM4/LULFsGrzy8xUMQ=";
 
   nativeBuildInputs = [ pandoc installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];

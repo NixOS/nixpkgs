@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fast-downward";
-  version = "22.06.1";
+  version = "22.12.0";
 
   src = fetchFromGitHub {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
-    sha256 = "sha256-SBksyZoLR1MtyJUbGigGIbT72qVpN+nznU/bmJGYRz8=";
+    sha256 = "sha256-GwZ5BGzLRMgWNBaA7M2D2p9OxvdyWqm+sTwxGpcI/qY=";
   };
 
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];

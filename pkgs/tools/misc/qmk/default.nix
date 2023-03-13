@@ -12,22 +12,18 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
   version = "1.1.1";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3QKOCevNYfi9+MuCkp36/A4AfZelo4A7RYGbRkF3Mmk=";
+    hash = "sha256-3QKOCevNYfi9+MuCkp36/A4AfZelo4A7RYGbRkF3Mmk=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    nose2
-    setuptools-scm
-    yapf
+    setuptools
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    argcomplete
-    colorama
     dotty-dict
     hid
     hjson
@@ -49,14 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     pkgsCross.avr.buildPackages.gcc8
     pkgsCross.avr.libcCross
   ];
-
-  # buildPythonApplication requires setup.py; the setup.py file crafted below
-  # acts as a wrapper to setup.cfg
-  postConfigure = ''
-    touch setup.py
-    echo "from setuptools import setup" >> setup.py
-    echo "setup()" >> setup.py
-  '';
 
   # no tests implemented
   doCheck = false;

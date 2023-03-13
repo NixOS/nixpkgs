@@ -24,7 +24,7 @@ buildPythonPackage rec {
     yara
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

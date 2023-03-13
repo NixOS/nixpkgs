@@ -22,7 +22,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
   ] ++ lib.optionals (pythonOlder "3.7") [

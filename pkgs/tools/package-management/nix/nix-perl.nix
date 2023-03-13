@@ -40,6 +40,4 @@ stdenv.mkDerivation {
   ];
 
   preConfigure = "export NIX_STATE_DIR=$TMPDIR";
-
-  preBuild = "unset NIX_INDENT_MAKE";
 }

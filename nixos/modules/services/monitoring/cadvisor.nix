@@ -123,7 +123,7 @@ in {
             ${escapeShellArgs cfg.extraOptions} \
             ${optionalString (cfg.storageDriver != null) ''
               -storage_driver "${cfg.storageDriver}" \
-              -storage_driver_user "${cfg.storageDriverHost}" \
+              -storage_driver_host "${cfg.storageDriverHost}" \
               -storage_driver_db "${cfg.storageDriverDb}" \
               -storage_driver_user "${cfg.storageDriverUser}" \
               -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \

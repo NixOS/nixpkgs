@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "1.1.0";
+  version = "1.1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "v${version}";
-    hash = "sha256-bjUDImMFwMhRjCa7XzGlqR8h+KfTsyxonrQlRGgApwo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J+zQrokrAX5tRU/2RPPSaFDyfsACPHHQYbK5sO99CMs=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";

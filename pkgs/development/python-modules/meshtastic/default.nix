@@ -8,17 +8,18 @@
 , pypubsub
 , pyqrcode
 , pyserial
+, pytap2
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , tabulate
-, pytap2
 , timeago
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.0.8";
+  version = "2.0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-4zhwMCEIVYHrf9gT6Eoiw9huR5D2njDo62L0MvXqrgE=";
+    hash = "sha256-Y3X5LW85e+OQ548H13fQ0s+R870Hzp0kVd+v+lbdqtg=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     pyqrcode
     pyserial
     pyyaml
+    setuptools
     tabulate
     timeago
   ];
@@ -49,7 +51,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytap2
     pytestCheckHook
   ];

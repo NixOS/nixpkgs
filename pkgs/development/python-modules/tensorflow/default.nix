@@ -6,7 +6,7 @@
 , numpy, tensorboard, absl-py
 , packaging, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator-bin
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
@@ -17,8 +17,10 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false, cudaPackages ? {}
-, mklSupport ? false, mkl ? null
+, cudaSupport ? false
+, cudaPackages ? { }
+, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
+, mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
@@ -30,7 +32,27 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
+  originalStdenv = stdenv;
+in
+let
+  # Tensorflow looks at many toolchain-related variables which may diverge.
+  #
+  # Toolchain for cuda-enabled builds.
+  # We want to achieve two things:
+  # 1. NVCC should use a compatible back-end (e.g. gcc11 for cuda11)
+  # 2. Normal C++ files should be compiled with the same toolchain,
+  #    to avoid potential weird dynamic linkage errors at runtime.
+  #    This may not be necessary though
+  #
+  # Toolchain for Darwin:
+  # clang 7 fails to emit a symbol for
+  # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
+  # translation units, so the build fails at link time
+  stdenv =
+    if cudaSupport then cudaPackages.backendStdenv
+    else if originalStdenv.isDarwin then llvmPackages_11.stdenv
+    else originalStdenv;
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
 in
 
 assert cudaSupport -> cudatoolkit != null
@@ -39,11 +61,10 @@ assert cudaSupport -> cudatoolkit != null
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
 
-assert mklSupport -> mkl != null;
-
 let
   withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
 
+  # FIXME: migrate to redist cudaPackages
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-merged";
     paths = [
@@ -56,10 +77,13 @@ let
     ];
   };
 
+  # Tensorflow expects bintools at hard-coded paths, e.g. /usr/bin/ar
+  # The only way to overcome that is to set GCC_HOST_COMPILER_PREFIX,
+  # but that path must contain cc as well, so we merge them
   cudatoolkit_cc_joined = symlinkJoin {
-    name = "${cudatoolkit.cc.name}-merged";
+    name = "${stdenv.cc.name}-merged";
     paths = [
-      cudatoolkit.cc
+      stdenv.cc
       binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
     ];
   };
@@ -74,8 +98,8 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.10.1";
-  variant = if cudaSupport then "-gpu" else "";
+  version = "2.11.0";
+  variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:
@@ -98,7 +122,7 @@ let
       six
       tblib
       tensorboard
-      tensorflow-estimator
+      tensorflow-estimator-bin
       termcolor
       typing-extensions
       wheel
@@ -175,20 +199,15 @@ let
     '';
   }) else _bazel-build;
 
-  _bazel-build = (buildBazelPackage.override (lib.optionalAttrs stdenv.isDarwin {
-    # clang 7 fails to emit a symbol for
-    # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
-    # translation units, so the build fails at link time
-    stdenv = llvmPackages_11.stdenv;
-  })) {
+  _bazel-build = buildBazelPackage.override { inherit stdenv; } {
     name = "${pname}-${version}";
     bazel = bazel_5;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
-      rev = "v${version}";
-      hash = "sha256-AYHUtJEXYZdVDigKZo7mQnV+PDeQg8mi45YH18qXHZA=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-OYh61/83yv+ycivylfdS8yFUIUAk8euAPvmfjPzldGs=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -211,12 +230,13 @@ let
       flatbuffers-core
       giflib
       grpc
-      icu
+      # Necessary to fix the "`GLIBCXX_3.4.30' not found" error
+      (icu.override { inherit stdenv; })
       jsoncpp
       libjpeg_turbo
       libpng
       lmdb-core
-      pybind11
+      (pybind11.overridePythonAttrs (_: { inherit stdenv; }))
       snappy
       sqlite
     ] ++ lib.optionals cudaSupport [
@@ -301,9 +321,11 @@ let
 
     TF_NEED_CUDA = tfFeature cudaSupport;
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
+    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+
+    # Needed even when we override stdenv: e.g. for ar
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
-    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
-    TF_CUDA_COMPUTE_CAPABILITIES = builtins.concatStringsSep "," cudaFlags.cudaRealArchs;
+    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/cc";
 
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
@@ -319,7 +341,7 @@ let
     '';
 
     # https://github.com/tensorflow/tensorflow/pull/39470
-    NIX_CFLAGS_COMPILE = [ "-Wno-stringop-truncation" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-stringop-truncation" ];
 
     preConfigure = let
       opt_flags = []
@@ -372,11 +394,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
-        else "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
-      aarch64-linux = "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg=";
-      x86_64-darwin = "sha256-ZfZQjLdqo8VVlfKfkdolvSHQvKe4IbQSLc/4cNzHr3E=";
-      aarch64-darwin = "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E=";
+        then "sha256-/wB9EpaDPg3TrD9qggdA4vPgzvmaKc6dDnLjoYTJC5o="
+        else "sha256-QgOaUaq0V5HG9BOv9nEw8OTSlzINNFvbnyP8Vx+r9Xw=";
+      aarch64-linux = "sha256-zjnRtTG1j9cZTbP0Xnk2o/zWTNsP8T0n4Ai8IiAT3PE=";
+      x86_64-darwin = "sha256-RBLox9rzBKcZMm4NwnT7vQ/EjapWQJkqxuQ0LIdaM1E=";
+      aarch64-darwin = "sha256-BRzh79lYvMHsUMk8BEYDLHTpnmeZ9+0lrDtj4XI1YY4=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -419,6 +441,7 @@ let
     };
 
     meta = with lib; {
+      changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
@@ -438,11 +461,13 @@ in buildPythonPackage {
   src = bazel-build.python;
 
   # Adjust dependency requirements:
+  # - Drop tensorflow-io dependency until we get it to build
   # - Relax flatbuffers and gast version requirements
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
   # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
+      -e '/tensorflow-io-gcs-filesystem/,+1d' \
       -e "s/'flatbuffers[^']*',/'flatbuffers',/" \
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
@@ -476,7 +501,7 @@ in buildPythonPackage {
     packaging
     protobuf-python
     six
-    tensorflow-estimator
+    tensorflow-estimator-bin
     termcolor
     typing-extensions
     wrapt
@@ -499,7 +524,7 @@ in buildPythonPackage {
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
   # TEST_PACKAGES in tensorflow/tools/pip_package/setup.py
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     keras
     portpicker

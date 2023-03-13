@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "faudio";
-  version = "22.08";
+  version = "23.03";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
     rev = version;
-    sha256 = "sha256-ZGyLP7dsVDKPCGA/6MNSEifd1rOcYqLdcEXYIQxrgtE=";
+    sha256 = "sha256-sQbltmHmScSn5E1tE32uU16JQasjOnLW5N2m6+LC9CI=";
   };
 
   nativeBuildInputs = [cmake];

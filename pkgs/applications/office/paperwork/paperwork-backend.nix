@@ -7,7 +7,7 @@
 , pycountry
 , whoosh
 , termcolor
-, python-Levenshtein
+, levenshtein
 , pygobject3
 , pyocr
 , natsort
@@ -39,6 +39,9 @@ buildPythonPackage rec {
   patchFlags = [ "-p2" ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace python-Levenshtein Levenshtein
+
     echo 'version = "${version}"' > src/paperwork_backend/_version.py
     chmod a+w -R ..
     patchShebangs ../tools
@@ -55,7 +58,7 @@ buildPythonPackage rec {
     pygobject3
     pyocr
     pypillowfight
-    python-Levenshtein
+    levenshtein
     poppler_gi
     scikit-learn
     termcolor
@@ -72,7 +75,7 @@ buildPythonPackage rec {
     make l10n_compile
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     libreoffice
     openpaperwork-gtk
     psutil

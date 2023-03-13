@@ -28,13 +28,13 @@ mkShell {
   packages = [
     (with dotnetCorePackages; combinePackages [
       sdk_3_1
-      sdk_5_0
+      sdk_6_0
     ])
   ];
 }
 ```
 
-This will produce a dotnet installation that has the dotnet 3.1, 3.0, and 2.1 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
+This will produce a dotnet installation that has the dotnet 3.1 6.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
 
 ```ShellSession
 $ dotnet --info
@@ -120,7 +120,7 @@ in buildDotnetModule rec {
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-runtime = dotnetCorePackages.net_5_0;
+  dotnet-runtime = dotnetCorePackages.net_6_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
   executables = []; # Don't install any executables.

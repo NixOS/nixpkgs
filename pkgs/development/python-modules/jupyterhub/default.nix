@@ -133,7 +133,7 @@ buildPythonPackage rec {
       "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
     beautifulsoup4
     cryptography

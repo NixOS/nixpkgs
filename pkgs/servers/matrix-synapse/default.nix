@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
-, enableSystemd ? stdenv.isLinux, nixosTests
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
+, nixosTests
 , enableRedis ? true
 , callPackage
 }:
@@ -11,26 +12,27 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.74.0";
+  version = "1.78.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-UsYodjykcLOgClHegqH598kPoGAI1Z8bLzV5LLE6yLg=";
+    hash = "sha256-UMP/JQ77qGfAQ+adLBLB8NFI2OiuwjILEbEecEDcK1A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-XOW9DRUhGIs8x5tQ9l2A85sNv736uMmfC72f8FX3g/I=";
+    hash = "sha256-UTuMvTWfOlFlL+4qsCEfVljnkeylBKq0wd5FlAOYAFQ=";
   };
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
     # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
+    sed -i 's/^frozendict = ">=1,!=2.1.2,<2.3.5"/frozendict = ">=1,!=2.1.2,<2.3.6"/g' pyproject.toml
   '';
 
   nativeBuildInputs = [
@@ -66,7 +68,6 @@ buildPythonApplication rec {
     pyasn1
     pydantic
     pyicu
-    pyjwt
     pymacaroons
     pynacl
     pyopenssl
@@ -83,7 +84,7 @@ buildPythonApplication rec {
   ] ++ lib.optional enableSystemd systemd
     ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
-  checkInputs = [ mock parameterized openssl ];
+  nativeCheckInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 

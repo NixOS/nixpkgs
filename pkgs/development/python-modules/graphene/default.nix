@@ -5,6 +5,7 @@
 , graphql-core
 , graphql-relay
 , promise
+, py
 , pytest-asyncio
 , pytest-benchmark
 , pytest-mock
@@ -35,8 +36,9 @@ buildPythonPackage rec {
     graphql-relay
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     promise
+    py
     pytestCheckHook
     pytest-asyncio
     pytest-benchmark

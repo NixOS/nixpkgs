@@ -16,7 +16,7 @@ let pyjsparser = buildPythonPackage rec {
     sha256 = "sha256-Hqay9/qsjUfe62U7Q79l0Yy01L2Bnj5xNs6427k3Br8=";
   };
 
-  checkInputs = [ pytestCheckHook js2py ];
+  nativeCheckInputs = [ pytestCheckHook js2py ];
 
   # escape infinite recursion with js2py
   doCheck = false;

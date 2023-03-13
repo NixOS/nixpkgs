@@ -173,7 +173,7 @@ in
     systemd.services.phosh = {
       wantedBy = [ "graphical.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/phosh";
+        ExecStart = "${cfg.package}/bin/phosh-session";
         User = cfg.user;
         Group = cfg.group;
         PAMName = "login";

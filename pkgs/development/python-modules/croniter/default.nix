@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "croniter";
-  version = "1.3.7";
+  version = "1.3.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cu940PgzfrNTk7iJPr+/vrNA8tKuR+DS14Ew40sN2Lk=";
+    hash = "sha256-MqXsBOl+wIN7zfATdnq9LnHM7u/TwuFMgECYzlGtbNk=";
   };
 
   propagatedBuildInputs = [
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
     tzlocal

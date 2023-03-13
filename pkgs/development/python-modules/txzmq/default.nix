@@ -21,7 +21,7 @@ buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

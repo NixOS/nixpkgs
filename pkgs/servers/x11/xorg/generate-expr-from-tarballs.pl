@@ -23,7 +23,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "meson", "ninja" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "meson", "ninja", "wrapWithXFileSearchPathHook" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -193,6 +193,10 @@ while (<>) {
         push @requires, "fontutil";
         push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
         push @{$extraAttrs{$pkg}}, "postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`\$PKG_CONFIG' '';";
+    }
+
+    if (@@ = glob("$tmpDir/*/app-defaults/")) {
+        push @nativeRequires, "wrapWithXFileSearchPathHook";
     }
 
     sub process {

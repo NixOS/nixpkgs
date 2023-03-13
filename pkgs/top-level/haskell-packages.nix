@@ -18,6 +18,8 @@ let
     "ghc90"
     "ghc924"
     "ghc925"
+    "ghc926"
+    "ghc927"
     "ghc92"
     "ghc942"
     "ghc943"
@@ -32,6 +34,8 @@ let
     "ghc92"
     "ghc924"
     "ghc925"
+    "ghc926"
+    "ghc927"
     "ghc94"
     "ghc942"
     "ghc943"
@@ -187,7 +191,41 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc92 = ghc924;
+    ghc926 = callPackage ../development/compilers/ghc/9.2.6.nix {
+      bootPkgs =
+        # aarch64 ghc8107Binary exceeds max output size on hydra
+        if stdenv.hostPlatform.isAarch then
+          packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc810
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc927 = callPackage ../development/compilers/ghc/9.2.7.nix {
+      bootPkgs =
+        # aarch64 ghc8107Binary exceeds max output size on hydra
+        if stdenv.hostPlatform.isAarch then
+          packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc810
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc92 = ghc926;
     ghc942 = callPackage ../development/compilers/ghc/9.4.2.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
@@ -277,9 +315,9 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      # 2022-08-04: Support range >= 10 && < 14
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-      llvmPackages = pkgs.llvmPackages_12;
+      # 2022-08-04: Support range >= 10 && < 15
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
+      llvmPackages = pkgs.llvmPackages_14;
     };
 
     ghcjs = compiler.ghcjs810;
@@ -386,7 +424,17 @@ in {
       ghc = bh.compiler.ghc925;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
-    ghc92 = ghc924;
+    ghc926 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc926;
+      ghc = bh.compiler.ghc926;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+    };
+    ghc927 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc927;
+      ghc = bh.compiler.ghc927;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+    };
+    ghc92 = ghc926;
     ghc942 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc942;
       ghc = bh.compiler.ghc942;
@@ -406,7 +454,7 @@ in {
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
     };
 
     ghcjs = packages.ghcjs810;

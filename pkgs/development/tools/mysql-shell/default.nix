@@ -39,16 +39,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mysql-shell";
-  version = "8.0.31";
+  version = "8.0.32";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
-      sha256 = "sha256-VA9dqvPmw2WXP3hAJS2xRTvxBM8D/IPsWYIaYwRZI/s=";
+      hash = "sha256-GUkeZ856/olOssiqkb3qc8ddnianVGXwrcW6hrIG3wE=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
-      sha256 = "sha256-Z7uMunWyjpXH95SFY/AfuEUo/LsaNduoOdTORP4Bm6o=";
+      hash = "sha256-Hw2SojeJgkRxbdWB95k1bgc8LaY8Oy5KAeEDLL7VDig=";
     })
   ];
 

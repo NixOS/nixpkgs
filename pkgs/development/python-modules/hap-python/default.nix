@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pyqrcode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook

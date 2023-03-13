@@ -100,6 +100,7 @@ rec {
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
         (pkgs.buildPackages.makeSetupHook {
+          name = "darwin-portable-libSystem-hook";
           substitutions = {
             libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
           };
@@ -141,7 +142,7 @@ rec {
      Example:
        stdenvNoOptimise =
          addAttrsToDerivation
-           { NIX_CFLAGS_COMPILE = "-O0"; }
+           { env.NIX_CFLAGS_COMPILE = "-O0"; }
            stdenv;
   */
   addAttrsToDerivation = extraAttrs: stdenv: stdenv.override (old: {
@@ -175,7 +176,7 @@ rec {
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         dontStrip = true;
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
       });
     });
 
@@ -196,7 +197,7 @@ rec {
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
         NIX_ENFORCE_NO_NATIVE = false;
 
         preferLocalBuild = true;
@@ -221,7 +222,7 @@ rec {
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
       });
     });
 }

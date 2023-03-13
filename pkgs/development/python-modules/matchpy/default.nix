@@ -37,7 +37,7 @@ buildPythonPackage rec {
     multiset
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];

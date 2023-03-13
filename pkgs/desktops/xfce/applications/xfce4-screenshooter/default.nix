@@ -12,10 +12,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.10.1";
+  version = "1.10.3";
   odd-unstable = false;
 
-  sha256 = "sha256-TKtEKjRmrdhi1nFRo1OovmPndT2RTYV9kt7auBDESmE=";
+  sha256 = "sha256-L+qlxzNgjsoMi+VsbOFG7L/IITbF1iqMWqujhk0rAcA=";
 
   buildInputs = [
     exo

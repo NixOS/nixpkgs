@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "deal";
-  version = "4.23.4";
+  version = "4.24.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "life4";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YwozwoTb1JsvrwcTntlpWpQJ9DszH2lmtuKkK8qZiG0=";
+    hash = "sha256-5gd46SMucH0rek9talMJ74TMRRvUm5Up6pCusUIHDjE=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
 
     docstring-parser
@@ -77,6 +77,8 @@ buildPythonPackage rec {
     "test_scheme_contract_is_satisfied_when_setting_arg"
     "test_scheme_contract_is_satisfied_within_chain"
     "test_scheme_errors_rewrite_message"
+    # broken since pytest > 7.1.3
+    "test_exception_hook"
   ];
 
   disabledTestPaths = [

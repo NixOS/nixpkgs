@@ -24,7 +24,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mox3
     pytestCheckHook
   ];

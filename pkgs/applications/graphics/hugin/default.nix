@@ -36,18 +36,12 @@
 
 stdenv.mkDerivation rec {
   pname = "hugin";
-  version = "2021.0.0";
+  version = "2022.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
-    sha256 = "sha256-BHrqin+keESzTvJ8GdO2l+hJOdyx/bvrLCBGIbZu6tk=";
+    sha256 = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
   };
-
-  patches = [
-    # committed upstream but unreleased:
-    #   https://sourceforge.net/p/hugin/hugin/ci/edfddc6070ca6d4223d359fb4b38273a5aed2f2d
-    ./dont-crash-if-XDG_DATA_DIRS-not-set-edfddc6070ca6d4223d359fb4b38273a5aed2f2d.patch
-  ];
 
   buildInputs = [
     boost
@@ -81,7 +75,7 @@ stdenv.mkDerivation rec {
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
     for p in $out/bin/*; do

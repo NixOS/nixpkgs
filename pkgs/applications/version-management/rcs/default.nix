@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
       [ buildPackages.diffutils buildPackages.ed ];
 
-  NIX_CFLAGS_COMPILE = "-std=c99";
+  env.NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 

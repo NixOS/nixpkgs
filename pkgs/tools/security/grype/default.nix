@@ -2,19 +2,18 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-
 , openssl
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.54.0";
+  version = "0.59.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/c7WP9m+8AULjmchpZmcTcnXG0K8gGxjseXS/QJXj+k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6NQRmgbV/if0S5jYus5R5oFjLz5wwHpJppi/Tyz2FjY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,12 +25,17 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
   proxyVendor = true;
 
-  vendorHash = "sha256-+WMaQaBf4uMCCQTyycHlkYeKbRtk6oAlqbHBYBqh64M=";
+  vendorHash = "sha256-eCvoTGETtB76ILnYKJ5ybtLbZUBMxX2w2CDczY05L0E=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    openssl
   ];
 
   subPackages = [ "." ];
@@ -55,7 +59,6 @@ buildGoModule rec {
     ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  checkInputs = [ openssl ];
   preCheck = ''
     # test all dirs (except excluded)
     unset subPackages
@@ -70,14 +73,6 @@ buildGoModule rec {
       --replace "TestCmd" "SkipCmd"
     substituteInPlace grype/pkg/provider_test.go \
       --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
-    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
-      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
-    substituteInPlace grype/presenter/cyclonedxvex/presenter_test.go \
-      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
-    substituteInPlace grype/presenter/sarif/presenter_test.go \
-      --replace "Test_imageToSarifReport" "Skip_imageToSarifReport" \
-      --replace "TestSarifPresenterImage" "SkipSarifPresenterImage"
-
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
       --replace "TestDBValidations" "SkipDBValidations"

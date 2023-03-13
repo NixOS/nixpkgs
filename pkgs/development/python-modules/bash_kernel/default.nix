@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    ${python.interpreter} -m bash_kernel.install --prefix $out
+    ${python.pythonForBuild.interpreter} -m bash_kernel.install --prefix $out
   '';
 
   meta = {

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "norouter";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "norouter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0h5jzxm4fw50781zj76r5ksnxkzsnrygrykpa913v9nd24c09c7m";
+    sha256 = "sha256-EY/Yfyaz2DeQKHJ4awpQDbrVkse9crIZlLzfviPy3Tk=";
   };
 
-  vendorSha256 = "sha256-DZ2kcNV8AzNogAUTaeus4rz9gCFo0wm306jcz/cAj0M=";
+  vendorSha256 = "sha256-RxrmYfEm1Maq8byoLXUr5RfXcwgqpCcAq5enMnl9V9E=";
 
   subPackages = [ "cmd/norouter" ];
   doInstallCheck = true;

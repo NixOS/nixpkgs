@@ -14,17 +14,60 @@
 , go-md2man
 , nixosTests
 , python3
+, makeWrapper
+, symlinkJoin
+, extraPackages ? [ ]
+, runc
+, crun
+, conmon
+, slirp4netns
+, fuse-overlayfs
+, util-linux
+, iptables
+, iproute2
+, catatonit
+, gvproxy
+, aardvark-dns
+, netavark
+, testers
+, podman
 }:
+let
+  # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
+  binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
+    runc
+    crun
+    conmon
+    slirp4netns
+    fuse-overlayfs
+    util-linux
+    iptables
+    iproute2
+  ] ++ extraPackages);
+
+  helpersBin = symlinkJoin {
+    name = "podman-helper-binary-wrapper";
+
+    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    paths = [
+      gvproxy
+    ] ++ lib.optionals stdenv.isLinux [
+      aardvark-dns
+      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      netavark
+    ];
+  };
+in
 buildGoModule rec {
   pname = "podman";
-  version = "4.3.1";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-UOAQtGDoZe+Av4+9RQCJiV3//B/pdF0pEsca4FonGxY=";
+    hash = "sha256-337PFsPGm7pUgnFeNJKwT+/7AdbWSfCx4kXyAvHyWJQ=";
   };
 
   patches = [
@@ -32,13 +75,13 @@ buildGoModule rec {
     ./rm-podman-mac-helper-msg.patch
   ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles python3 ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper python3 ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
@@ -50,13 +93,16 @@ buildGoModule rec {
     systemd
   ];
 
+  HELPER_BINARIES_DIR = "${PREFIX}/libexec/podman"; # used in buildPhase & installPhase
+  PREFIX = "${placeholder "out"}";
+
   buildPhase = ''
     runHook preBuild
     patchShebangs .
     ${if stdenv.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''
-      make bin/podman bin/rootlessport
+      make bin/podman bin/rootlessport bin/quadlet
     ''}
     make docs
     runHook postBuild
@@ -64,35 +110,34 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p {$out/{bin,etc,lib,share},$man} # ensure paths exist for the wrapper
     ${if stdenv.isDarwin then ''
-      mv bin/{darwin/podman,podman}
+      install bin/darwin/podman -Dt $out/bin
     '' else ''
-      install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
-      install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
-      for s in contrib/systemd/**/*.in; do
-        substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
-      done
-      PREFIX=$out make install.systemd
-      install -Dm555 bin/rootlessport -t $rootlessport/bin
+      make install.bin install.systemd
     ''}
-    install -Dm555 bin/podman -t $out/bin
-    PREFIX=$out make install.completions
-    MANDIR=$man/share/man make install.man
+    make install.completions install.man
+    mkdir -p ${HELPER_BINARIES_DIR}
+    ln -s ${helpersBin}/bin/* ${HELPER_BINARIES_DIR}
+    wrapProgram $out/bin/podman \
+      --prefix PATH : ${lib.escapeShellArg binPath}
     runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    RPATH=$(patchelf --print-rpath $out/bin/podman)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
+    RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
   '';
 
   passthru.tests = {
+    version = testers.testVersion {
+      package = podman;
+      command = "HOME=$TMPDIR podman --version";
+    };
+  } // lib.optionalAttrs stdenv.isLinux {
     inherit (nixosTests) podman;
     # related modules
     inherit (nixosTests)
       podman-tls-ghostunnel
-      podman-dnsname
       ;
     oci-containers-podman = nixosTests.oci-containers.podman;
   };

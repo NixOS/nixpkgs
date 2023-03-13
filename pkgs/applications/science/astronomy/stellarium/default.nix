@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://stellarium.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

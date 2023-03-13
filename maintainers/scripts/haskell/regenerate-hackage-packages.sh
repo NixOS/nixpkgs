@@ -11,6 +11,9 @@
 # Related scripts are update-hackage.sh, for updating the snapshot of the
 # Hackage database used by hackage2nix, and update-cabal2nix-unstable.sh,
 # for updating the version of hackage2nix used to perform this task.
+#
+# Note that this script doesn't gcroot anything, so it may be broken by an
+# unfortunately timed nix-store --gc.
 
 set -euo pipefail
 
@@ -20,15 +23,21 @@ HACKAGE2NIX="${HACKAGE2NIX:-hackage2nix}"
 # See: https://github.com/NixOS/nixpkgs/pull/122023
 export LC_ALL=C.UTF-8
 
+config_dir=pkgs/development/haskell-modules/configuration-hackage2nix
+
+echo "Obtaining Hackage data"
 extraction_derivation='with import ./. {}; runCommandLocal "unpacked-cabal-hashes" { } "tar xf ${all-cabal-hashes} --strip-components=1 --one-top-level=$out"'
 unpacked_hackage="$(nix-build -E "$extraction_derivation" --no-out-link)"
-config_dir=pkgs/development/haskell-modules/configuration-hackage2nix
+
+echo "Generating compiler configuration"
+compiler_config="$(nix-build -A haskellPackages.cabal2nix-unstable.compilerConfig --no-out-link)"
 
 echo "Starting hackage2nix to regenerate pkgs/development/haskell-modules/hackage-packages.nix ..."
 "$HACKAGE2NIX" \
    --hackage "$unpacked_hackage" \
    --preferred-versions <(for n in "$unpacked_hackage"/*/preferred-versions; do cat "$n"; echo; done) \
    --nixpkgs "$PWD" \
+   --config "$compiler_config" \
    --config "$config_dir/main.yaml" \
    --config "$config_dir/stackage.yaml" \
    --config "$config_dir/broken.yaml" \

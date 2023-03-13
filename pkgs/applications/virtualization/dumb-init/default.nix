@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
   };
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc.static ];
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    substituteInPlace Makefile --replace "-static" ""
+  '';
+
+  buildInputs = lib.optional (stdenv.hostPlatform.isGnu && stdenv.hostPlatform.isStatic) glibc.static;
 
   installPhase = ''
     runHook preInstall

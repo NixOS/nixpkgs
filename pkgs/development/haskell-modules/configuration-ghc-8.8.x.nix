@@ -54,18 +54,6 @@ self: super: {
   # This build needs a newer version of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
 
-  # cabal-install needs most recent versions of Cabal and Cabal-syntax
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-
   # Additionally depends on OneTuple for GHC < 9.0
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
@@ -125,12 +113,12 @@ self: super: {
   liquid-vector = markBroken super.liquid-vector;
   liquidhaskell = markBroken super.liquidhaskell;
 
-  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_7;
 
   ormolu = super.ormolu_0_2_0_0;
 
-  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
 
   ghc-api-compat = doDistribute (unmarkBroken super.ghc-api-compat_8_6);
@@ -141,11 +129,12 @@ self: super: {
 
   hlint = self.hlint_3_2_8;
 
-  ghc-lib-parser = self.ghc-lib-parser_8_10_7_20220219;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_8_10_7_20220219;
+  ghc-lib = doDistribute self.ghc-lib_8_10_7_20220219;
 
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24;
+  ghc-lib-parser-ex = doDistribute (addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24);
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;

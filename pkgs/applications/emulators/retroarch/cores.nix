@@ -734,6 +734,7 @@ in
 
   picodrive = mkLibretroCore {
     core = "picodrive";
+    version = "unstable-2023-02-15";
     dontConfigure = true;
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
     meta = {

@@ -3,7 +3,6 @@
 , cacert
 , curl
 , runCommandLocal
-, targetPlatform
 , unzip
 , appimage-run
 , addOpenGLRunpath
@@ -49,7 +48,7 @@ let
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
           USERAGENT = builtins.concatStringsSep " " [
-            "User-Agent: Mozilla/5.0 (X11; Linux ${targetPlatform.linuxArch})"
+            "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.targetPlatform.linuxArch})"
             "AppleWebKit/537.36 (KHTML, like Gecko)"
             "Chrome/77.0.3865.75"
             "Safari/537.36"
@@ -166,6 +165,7 @@ buildFHSUserEnv {
     writeText "davinci-wrapper"
     ''
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
+    export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${davinci}/libs
     ${davinci}/bin/resolve
     ''

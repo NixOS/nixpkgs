@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "pyscreeze" ];
-  checkInputs = [ scrot xlib xvfb-run ];
+  nativeCheckInputs = [ scrot xlib xvfb-run ];
   checkPhase = ''
     python -m unittest tests.test_pillow_unavailable
     xvfb-run python -m unittest tests.test_pyscreeze

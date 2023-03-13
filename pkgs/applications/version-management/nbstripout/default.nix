@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     nbformat
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     coreutils
     git
     mercurial

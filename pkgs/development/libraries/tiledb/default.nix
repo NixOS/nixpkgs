@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     doxygen
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

@@ -11,8 +11,8 @@ let
   tensorflow-haskell = pkgs.fetchFromGitHub {
     owner = "tensorflow";
     repo = "haskell";
-    rev = "568c9b6f03e5d66a25685a776386e2ff50b61aa9";
-    sha256 = "0v58zhqipa441hzdvp9pwgv6srir2fm7cp0bq2pb5jl1imwyd37h";
+    rev = "555d90c43202d5a3021893013bfc8e2ffff58c97";
+    sha256 = "uOuIeD4o+pcjvluTqyVU3GJUQ4e1+p3FhINJ9b6oK+k=";
     fetchSubmodules = true;
   };
 
@@ -23,7 +23,9 @@ in
 {
   tensorflow-proto = doJailbreak (setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto);
 
-  tensorflow = setTensorflowSourceRoot "tensorflow" super.tensorflow;
+  tensorflow = overrideCabal
+    (drv: { libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.vector-split]; })
+    (setTensorflowSourceRoot "tensorflow" super.tensorflow);
 
   tensorflow-core-ops = setTensorflowSourceRoot "tensorflow-core-ops" super.tensorflow-core-ops;
 

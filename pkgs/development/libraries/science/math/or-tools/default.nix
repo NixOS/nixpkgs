@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     python.pkgs.protobuf
     python.pkgs.numpy
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     python.pkgs.matplotlib
     python.pkgs.pandas
     python.pkgs.virtualenv

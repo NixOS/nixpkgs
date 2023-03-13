@@ -1,23 +1,26 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, lib
 , opuslib
 , protobuf
 , pytestCheckHook
 , pycrypto
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymumble";
-  version = "1.6.1";
-  disabled = isPy27;
+  version = "1.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "azlux";
     repo = "pymumble";
-    rev = version;
-    sha256 = "1qbsd2zvwd9ksclgiyrl1z79ms0zximm4527mnmhvq36lykgki7s";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NMp1yZ+R9vmne7old7z9UvcxSi6C044g68ZQsofT0gA=";
   };
 
   postPatch = ''
@@ -31,7 +34,7 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pycrypto
     pytestCheckHook
   ];
@@ -42,8 +45,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
+    description = "Library to create mumble bots";
     homepage = "https://github.com/azlux/pymumble";
+    changelog = "https://github.com/azlux/pymumble/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ thelegy infinisil ];
   };

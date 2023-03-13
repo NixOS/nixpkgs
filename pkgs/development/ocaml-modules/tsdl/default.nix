@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config, ocb-stubblr }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config
+, AudioToolbox, Cocoa, CoreAudio, CoreVideo, ForceFeedback }:
 
 if lib.versionOlder ocaml.version "4.03"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
@@ -18,9 +19,12 @@ stdenv.mkDerivation {
     sha256 = "sha256-GqFz+bYG2ESkAEJyP8DKud4JFfU5MGLulzJa5Z4sptQ=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg ];
-  propagatedBuildInputs = [ SDL2 ctypes ];
+  propagatedBuildInputs = [ SDL2 ctypes ]
+    ++ lib.optionals stdenv.isDarwin [ AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback ];
 
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)

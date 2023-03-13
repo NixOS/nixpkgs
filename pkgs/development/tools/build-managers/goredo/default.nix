@@ -20,7 +20,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ zstd ];
 
-  checkInputs = lib.optionals doCheck [ python3 perl ];
+  nativeCheckInputs = lib.optionals doCheck [ python3 perl ];
 
   SHARNESS_TEST_SRCDIR = sharness + "/share/sharness";
 

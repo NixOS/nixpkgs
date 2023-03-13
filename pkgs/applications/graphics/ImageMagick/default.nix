@@ -30,6 +30,7 @@
 , Foundation
 , testers
 , imagemagick
+, python3
 }:
 
 assert libXtSupport -> libX11Support;
@@ -44,15 +45,15 @@ let
     else null;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.0-56";
+  version = "7.1.1-0";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = version;
-    hash = "sha256-21gzq7VqjJndgkMIOk5ym6PEyIjMGpBfZiPDfkuqOYQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-FaoiB8qnzgREaslEXRituToIbU9tK3FnvC5ptFkctjA=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -122,15 +123,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests.version =
-    testers.testVersion { package = imagemagick; };
+  passthru.tests = {
+    version = testers.testVersion { package = imagemagick; };
+    inherit (python3.pkgs) img2pdf;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
+    pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ erictapen dotlambda ];
     license = licenses.asl20;
     mainProgram = "magick";
   };
-}
+})

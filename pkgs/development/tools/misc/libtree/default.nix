@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # note: "make check" returns exit code 0 even when the tests fail.
   # This has been reported upstream:
   #  https://github.com/haampie/libtree/issues/77
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   checkTarget = [ "check" ];
   doCheck = true;
 

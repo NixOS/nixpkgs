@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
+, stdenv
+, darwin
 , gitMinimal
 , mercurial
 , nix
@@ -10,21 +12,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nurl";
-  version = "0.2.2";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
     rev = "v${version}";
-    hash = "sha256-hK3bHaMzpqz3W/iJpSPf4Iv6nrLpVLBIkAy5QxI+yrg=";
+    hash = "sha256-TtH0sfWFWe3oYK/8jJslqjrEY5rR7HGAVDD5iQ2+spY=";
   };
 
-  cargoSha256 = "sha256-eHk9mBaHbKVp7lCmSmrHQoRMDFCmUJ+LN5TVa3LhNZ8=";
+  cargoSha256 = "sha256-vwLlqRjiJU3ecLURAZabmIBivYW1zAfMLUhaJzh57ig=";
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  # tests require internet access
+  doCheck = false;
 
   postInstall = ''
     wrapProgram $out/bin/nurl \

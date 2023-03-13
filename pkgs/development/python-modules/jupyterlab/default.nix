@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.5.2";
+  version = "3.5.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EKwJQhX/uHLd/74pgr8cA5p5/swybhkefMXv2E8zHa0=";
+    hash = "sha256-UeiJRIrhlO7vjlD2P1xPSH9yj0d77+Q26XSWcvdRHb4=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/jupyterlab/jupyterlab/releases/tag/v${version}";
     description = "Jupyter lab environment notebook server extension";
     license = with licenses; [ bsd3 ];
     homepage = "https://jupyter.org/";

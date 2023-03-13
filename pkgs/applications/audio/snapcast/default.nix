@@ -9,13 +9,13 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "sha256-CCifn9OEFM//Hk1PJj8T3MXIV8pXCTdBBXPsHuZwLyQ=";
+    sha256 = "sha256-dlK1xQQqst4VQjioC7MZzqXwMC+JfqtvnD5lrOqGhYI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

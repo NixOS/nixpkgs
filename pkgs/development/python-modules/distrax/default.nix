@@ -25,7 +25,7 @@ buildPythonPackage rec {
     tensorflow-probability
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dm-haiku
     pytestCheckHook
   ];

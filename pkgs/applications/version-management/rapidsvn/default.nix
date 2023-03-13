@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ wxGTK30 subversion apr aprutil python3 ];
 
-  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
   configureFlags = [
     "--with-svn-include=${subversion.dev}/include"

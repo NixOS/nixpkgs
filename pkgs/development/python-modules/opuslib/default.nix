@@ -34,7 +34,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   meta = with lib; {
     description = "Python bindings to the libopus, IETF low-delay audio codec";

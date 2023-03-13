@@ -3,10 +3,10 @@
 { stdenv
 , lib
 , nixosTests
+, pkgsCross
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
-, applyPatches
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -64,15 +64,23 @@
 , withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
 , kexec-tools
 , bashInteractive
+, bash
 , libmicrohttpd
 , libfido2
 , p11-kit
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
+  # Note: llvmPackages is explicitly taken from buildPackages instead of relying
+  # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
+  # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
+  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we explicitly
+  # take buildPackages.llvmPackages, this is no problem because
+  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to us. Working
+  # around this is important, because systemd is in the dependency closure of
+  # GHC via emscripten and jdk.
 , bpftools
 , libbpf
-, llvmPackages
 
 , withAnalyze ? true
 , withApparmor ? true
@@ -82,11 +90,13 @@
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
 , withFido2 ? true
-, withHomed ? false
+, withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
+, withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
+    && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -123,7 +133,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.1";
+  version = "252.5";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -131,7 +141,7 @@ let
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1667246393";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
@@ -140,7 +150,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-G43qbNF7znTITSM78sOL0qi8nqaA7qIhmiqP/rZKjXY=";
+    hash = "sha256-cNZRTuYFMR1z6KpELeQoJahMhRl4fKuRuc3xXH3KzlM=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -167,23 +177,14 @@ stdenv.mkDerivation {
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
     ./0018-core-don-t-taint-on-unmerged-usr.patch
+    ./0019-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-d43ec090ceb2bf0016a065103a4c34d0c43cb906.tar.gz";
-        sha256 = "sha256-e5rHmz0uyNgJwrAj96VGWWu9YHhZtJXoDpCtj17eC5w=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-cccd4bcaf381c2729adc000381bd89906003e72a.tar.gz";
+        sha256 = "2CFZEzWqUy6OOF3c+LN4Zmy3RqMzfdRHp+B5zlWJsoE=";
       };
-      oe-core-patched = applyPatches {
-        src = oe-core;
-        patches = [
-          (fetchpatch {
-            url = "https://lore.kernel.org/all/20221109002306.853567-1-raj.khem@gmail.com/raw";
-            includes = [ "meta/recipes-core/systemd/systemd/*" ];
-            sha256 = "sha256-aPJjN4vesZwFzgY4Nb6uaIuHz/quH1HccSVEof32IOU=";
-          })
-        ];
-      };
-      musl-patches = oe-core-patched + "/meta/recipes-core/systemd/systemd";
+      musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
       (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
@@ -205,8 +206,7 @@ stdenv.mkDerivation {
       (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0001-networkd-ipv4acd.c-Use-net-if.h-for-getting-IFF_LOOP.patch")
-      (musl-patches + "/0001-test-compile-test-utmp.c-only-if-UTMP-is-enabled.patch")
+      (musl-patches + "/0001-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
     ]
   );
 
@@ -341,7 +341,7 @@ stdenv.mkDerivation {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm)
+    patchShebangs tools test src/!(rpm|kernel-install) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -364,12 +364,13 @@ stdenv.mkDerivation {
       docbook_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_45
+      bash
       (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
     ]
     ++ lib.optionals withLibBPF [
       bpftools
-      llvmPackages.clang
-      llvmPackages.libllvm
+      buildPackages.llvmPackages.clang
+      buildPackages.llvmPackages.libllvm
     ]
   ;
 
@@ -384,9 +385,10 @@ stdenv.mkDerivation {
       libuuid
       linuxHeaders
       pam
+      bashInteractive # for patch shebangs
     ]
 
-    ++ lib.optional wantGcrypt libgcrypt
+    ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
@@ -398,7 +400,6 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit ]
@@ -632,7 +633,7 @@ stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
@@ -697,6 +698,10 @@ stdenv.mkDerivation {
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    # 'or p' is for manually specified buildPackages as they dont have __spliced
+    (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
+
   passthru = {
     # The interface version prevents NixOS from switching to an
     # incompatible systemd at runtime.  (Switching across reboots is
@@ -710,6 +715,7 @@ stdenv.mkDerivation {
 
     tests = {
       inherit (nixosTests) switchTest;
+      cross = pkgsCross.aarch64-multiplatform.systemd;
     };
   };
 
@@ -718,9 +724,10 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk mic92 ];
   };
-}
+})

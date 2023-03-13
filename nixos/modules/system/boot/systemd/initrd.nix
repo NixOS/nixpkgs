@@ -118,7 +118,7 @@ let
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
+    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
@@ -142,7 +142,7 @@ in {
       '';
     };
 
-    package = (mkPackageOption pkgs "systemd" {
+    package = (mkPackageOptionMD pkgs "systemd" {
       default = "systemdStage1";
     }) // {
       visible = false;
@@ -343,9 +343,11 @@ in {
     system.build = { inherit initialRamdisk; };
 
     boot.initrd.availableKernelModules = [
-      "autofs4"           # systemd needs this for some features
-      "tpm-tis" "tpm-crb" # systemd-cryptenroll
-    ];
+      # systemd needs this for some features
+      "autofs4"
+      # systemd-cryptenroll
+      "tpm-tis"
+    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -425,9 +427,6 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
-
-        # the unwrapped systemd-cryptsetup executable
-        "${cfg.package}/lib/systemd/.systemd-cryptsetup-wrapped"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
@@ -493,7 +492,7 @@ in {
 
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
-          if ! [ -x "/sysroot$closure/prepare-root" ]; then
+          if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
             echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
             echo "$closure does not look like a NixOS installation - not activating"
             exit 0

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "v${version}";
-    sha256 = "sha256-t6W5A877bSPcbKVzCLEhjPzOPwF8ZTGjlvnwt1CwWCE=";
+    sha256 = "sha256-OHuvUi5oa0fVcfo0FW9XwaUp52MEH4NTM6GqK4ic0oM=";
   };
 
   buildInputs = [

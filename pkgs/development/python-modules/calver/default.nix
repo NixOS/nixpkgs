@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "version=calver_version(True)" 'version="${version}"'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pretend
     pytestCheckHook
   ];

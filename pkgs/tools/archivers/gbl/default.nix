@@ -22,15 +22,20 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoPatches = [
-    # Upstream does not include Cargo.lock, even though this is recommended for applications.
-    # This patch adds it. https://github.com/dac-gmbh/gbl/pull/62
+    # update ring to fix building on Mac M1
+    # https://github.com/dac-gmbh/gbl/pull/64
     (fetchpatch {
-      url = "https://github.com/raboof/gbl/commit/99078da334c6e1ffd8189c691bbc711281fae5cc.patch";
-      sha256 = "sha256-sAKkn4//8P87ZJ6NTHm2NUJH1sAFFwfrybv2QtQ3nnM=";
+      url = "https://github.com/raboof/gbl/commit/17e154d66932af59abe8677309792606b7f64c7d.patch";
+      sha256 = "sha256-5Itoi86Q+9FzSTtnggODKPwwYPp5BpIVgR2vYMLHBts=";
+    })
+    # Upstream does not include Cargo.lock, even though this is recommended for applications.
+    (fetchpatch {
+      url = "https://github.com/raboof/gbl/commit/9423d36ee3168bca8db7a7cb65611dc7ddc2daf0.patch";
+      sha256 = "sha256-zwHXgUVkAYiQs/AT/pINnZoECoXzh+9astWMYENGTL8=";
     })
   ];
 
-  cargoSha256 = "sha256-RUZ6wswRtV8chq3+bY9LTRf6IYMbZ9/GPl2X5UcF7d8=";
+  cargoSha256 = "sha256-CeGLSseKUe2XudRqZm5Y7o7ZLDtDBg/MFunOGqxFZGM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
@@ -44,10 +49,8 @@ rustPlatform.buildRustPackage rec {
       Utility to read, create and manipulate `.gbl` firmware update
       files targeting the Silicon Labs Gecko Bootloader.
     '';
-    homepage = "https://github.com/dac-gmbh/gbl";
+    homepage = "https://github.com/jonas-schievink/gbl";
     license = licenses.mit;
     maintainers = [ maintainers.raboof ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

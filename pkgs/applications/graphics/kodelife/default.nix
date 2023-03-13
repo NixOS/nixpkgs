@@ -95,6 +95,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://hexler.net/kodelife";
     description = "Real-time GPU shader editor";

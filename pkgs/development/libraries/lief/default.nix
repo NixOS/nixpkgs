@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.lassulus ];
   };
 }

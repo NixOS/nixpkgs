@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "5.15.81";
-    hash = "sha256-EKC1Jvy1ju+HzavmIDYsnvZyicsbXAmsJuIpO1LDLZ0=";
+    version = "6.1.16";
+    hash = "sha256-w44mynSAcxx9jpTfj/3LiB2eZKzOBzH2rBKzvXqKQJU=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.1.0";
-    hash = "sha256-Idt7M6o2Zxqi3LBwuKu+pTHJA5OuP+KgEt2C+GcdO14=";
+    version = "6.2.3";
+    hash = "sha256-C3Vwgk3UyD638CYeO2z+GBjmCTMVC2fwU7HyX8bxgxg=";
     variant = "main";
   };
 
@@ -32,11 +32,6 @@ let
       # Google's BBRv2 TCP congestion Control
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
-
-      # Multigenerational LRU framework
-      # This can be removed when the LTS variant reaches version >= 6.1 (since it's on by default then)
-      LRU_GEN = yes;
-      LRU_GEN_ENABLED = yes;
 
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;

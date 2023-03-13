@@ -40,7 +40,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     decorator
     mock
     pytestCheckHook

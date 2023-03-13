@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, autoreconfHook, gettext, netbsd
+, fetchurl, autoreconfHook, gettext, freebsd, netbsd
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -42,11 +42,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs =
-    if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ] else [ gettext ]
+    (if stdenv.hostPlatform.isFreeBSD then [ freebsd.gencat ]
+     else if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ]
+     else [ gettext ])
        # Need to regenerate configure script with newer version in order to pass
-       # "mr_cv_target_elf=yes", but `autoreconfHook` brings in `makeWrapper`
-       # which doesn't work with the bootstrapTools bash, so can only do this
-       # for cross builds when `stdenv.shell` is a newer bash.
+       # "mr_cv_target_elf=yes" and determine integer sizes correctly when
+       # cross-compiling, but `autoreconfHook` brings in `makeWrapper` which
+       # doesn't work with the bootstrapTools bash, so can only do this for
+       # cross builds when `stdenv.shell` is a newer bash.
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) autoreconfHook;
 
   meta = {

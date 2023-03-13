@@ -4,9 +4,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , hip
 , gtest
 , gbenchmark
@@ -16,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "5.4.0";
+  version = "5.4.3";
 
   outputs = [
     "out"
@@ -30,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocPRIM";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-VGTrMllQguIJKexdQNXC07KX7TxU/e5oT6VZdlSRcQY=";
+    hash = "sha256-Sqr3lbDMK1Gwucqmr/CHoxw/L6bGj3wlXoHzKTnTqoc=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     hip
   ];
 
-  buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-  ] ++ lib.optionals buildTests [
+  buildInputs = lib.optionals buildTests [
     gtest
   ] ++ lib.optionals buildBenchmarks [
     gbenchmark
@@ -83,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

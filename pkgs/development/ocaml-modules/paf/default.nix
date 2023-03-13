@@ -25,12 +25,20 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    sha256 = "sha256-+RkrmWJJREHg8BBdNe92vYhd2/Frvs7l5qOr9jBwymU=";
+    hash = "sha256-ux8fk4XDdih4Ua9NGOJVSuPseJBPv6+6ND/esHrluQE=";
   };
+
+  patches = [
+    # Compatibility with mirage-crypto 0.11.0
+    (fetchpatch {
+      url = "https://github.com/dinosaure/paf-le-chien/commit/2f308c1c4d3ff49d42136f8ff86a4385661e4d1b.patch";
+      hash = "sha256-jmSeUpoRoUMPUNEH3Av2LxgRZs+eAectK+CpoH+SdpY=";
+    })
+  ];
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
@@ -60,6 +68,8 @@ buildDunePackage rec {
     uri
     alcotest-lwt
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "HTTP/AF and MirageOS";

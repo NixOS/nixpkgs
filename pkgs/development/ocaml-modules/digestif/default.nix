@@ -15,8 +15,7 @@ buildDunePackage rec {
     sha256 = "sha256-edNM5ROxFIV+OAqr328UcyGPGwXdflHQOJB3ntAbRmY=";
   };
 
-  nativeBuildInputs = [ findlib which ];
-  buildInputs = [ ocaml ];
+  nativeBuildInputs = [ findlib which ocaml pkg-config ];
 
   propagatedBuildInputs = [ eqaf ];
 

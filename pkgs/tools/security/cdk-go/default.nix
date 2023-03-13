@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cdk-go";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
-    rev = "v${version}";
-    sha256 = "sha256-17LeHYhOhRt6s9Hhb5yhCUUdauVgYHI4QCUPoPMr4DI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-d1EwKu3QUbIhpgSQLL3GqaPQJ1K/QxwhsHuX5y1jWH0=";
   };
 
-  vendorSha256 = "sha256-aJN/d/BxmleRXKw6++k6e0Vb0Gs5zg1QfakviABYTog=";
+  vendorHash = "sha256-aJN/d/BxmleRXKw6++k6e0Vb0Gs5zg1QfakviABYTog=";
 
   # At least one test is outdated
   doCheck = false;
@@ -23,6 +23,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Container penetration toolkit";
     homepage = "https://github.com/cdk-team/CDK";
+    changelog = "https://github.com/cdk-team/CDK/releases/tag/v${version}";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "cdk";

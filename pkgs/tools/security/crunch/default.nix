@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mgy6ghjvzr26yrhj1bn73qzw6v9qsniskc5wqq1kk0hfhy6r3va";
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [ which ];
 
   preBuild = ''
     substituteInPlace Makefile \
@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
       --replace 'sudo ' ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=$(out)"
+  ];
 
   meta = with lib; {
     description = "Wordlist generator";

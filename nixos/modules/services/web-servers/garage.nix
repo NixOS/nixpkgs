@@ -9,7 +9,7 @@ let
 in
 {
   meta = {
-    doc = ./garage-doc.xml;
+    doc = ./garage.md;
     maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
   };
 

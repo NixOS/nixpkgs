@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jovanlanik/gtklock";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];
+    platforms = platforms.linux;
   };
 }

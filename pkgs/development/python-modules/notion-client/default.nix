@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sed -i '/addopts/d' ./setup.cfg
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     anyio
     pytest-asyncio

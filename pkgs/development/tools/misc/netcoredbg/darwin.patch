@@ -1,0 +1,17 @@
+diff --git a/detectplatform.cmake b/detectplatform.cmake
+index 7b93bbf..6fa6e9e 100644
+--- a/detectplatform.cmake
++++ b/detectplatform.cmake
+@@ -56,7 +56,11 @@ endif(CMAKE_SYSTEM_NAME STREQUAL Linux)
+ 
+ if(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+   set(CLR_CMAKE_PLATFORM_UNIX 1)
+-  set(CLR_CMAKE_PLATFORM_UNIX_AMD64 1)
++  if(CMAKE_SYSTEM_PROCESSOR STREQUAL arm64)
++     set(CLR_CMAKE_PLATFORM_UNIX_ARM64 1)
++   else()
++     set(CLR_CMAKE_PLATFORM_UNIX_AMD64 1)
++   endif()
+   set(CLR_CMAKE_PLATFORM_DARWIN 1)
+   if(CMAKE_VERSION VERSION_LESS "3.4.0")
+     set(CMAKE_ASM_COMPILE_OBJECT "${CMAKE_C_COMPILER} <FLAGS> <DEFINES> -o <OBJECT> -c <SOURCE>")

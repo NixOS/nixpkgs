@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   patches = [
     # Fix a broken test

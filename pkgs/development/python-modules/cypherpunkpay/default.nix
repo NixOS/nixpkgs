@@ -64,7 +64,7 @@ buildPythonPackage rec {
     yoyo-migrations
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     webtest

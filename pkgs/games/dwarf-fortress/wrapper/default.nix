@@ -56,7 +56,11 @@ let
 
   settings_ = lib.recursiveUpdate {
     init = {
-      PRINT_MODE = if enableTextMode then "TEXT" else if enableTWBT then "TWBT" else null;
+      PRINT_MODE =
+        if enableTextMode then "TEXT"
+        else if enableTWBT then "TWBT"
+        else if stdenv.hostPlatform.isDarwin then "STANDARD" # https://www.bay12games.com/dwarves/mantisbt/view.php?id=11680
+        else null;
       INTRO = enableIntro;
       TRUETYPE = enableTruetype;
       FPS = enableFPS;

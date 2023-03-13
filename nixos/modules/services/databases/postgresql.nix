@@ -585,6 +585,6 @@ in
 
   };
 
-  meta.doc = ./postgresql.xml;
+  meta.doc = ./postgresql.md;
   meta.maintainers = with lib.maintainers; [ thoughtpolice danbst ];
 }

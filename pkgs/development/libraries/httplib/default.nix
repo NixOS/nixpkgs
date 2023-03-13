@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "httplib";
-  version = "0.11.3";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${version}";
-    hash = "sha256-gly0AQ2DCZJQCAPQL5Xsc/kTvFK2twIDbHwbjvrW+P4=";
+    hash = "sha256-F0MXuScZP2kmyCWv+DVXOB9rRk2T7hMgum7Zbs8X7QI=";
   };
 
   # Header-only library.

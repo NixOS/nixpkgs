@@ -18,7 +18,7 @@ buildPythonPackage rec {
   LDFLAGS = "-L${crc32c}/lib";
   CFLAGS = "-I${crc32c}/include";
 
-  checkInputs = [ pytestCheckHook crc32c ];
+  nativeCheckInputs = [ pytestCheckHook crc32c ];
 
   pythonImportsCheck = [ "google_crc32c" ];
 

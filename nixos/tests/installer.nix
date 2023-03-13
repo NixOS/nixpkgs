@@ -21,6 +21,8 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        documentation.enable = false;
+
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
@@ -49,6 +51,8 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
+        boot.initrd.secrets."/etc/secret" = ./secret;
+
         users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
@@ -73,9 +77,9 @@ let
     let iface = if grubVersion == 1 then "ide" else "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
         bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then
-      throw "Non-EFI boot methods are only supported on i686 / x86_64"
-    else ''
+    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
+      machine.succeed("true")
+    '' else ''
       def assemble_qemu_flags():
           flags = "-cpu max"
           ${if (system == "x86_64-linux" || system == "i686-linux")
@@ -124,6 +128,7 @@ let
               }",
               "/mnt/etc/nixos/configuration.nix",
           )
+          machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
       with subtest("Perform the installation"):
           machine.succeed("nixos-install < /dev/null >&2")
@@ -131,9 +136,21 @@ let
       with subtest("Do it again to make sure it's idempotent"):
           machine.succeed("nixos-install < /dev/null >&2")
 
+      with subtest("Check that we can build things in nixos-enter"):
+          machine.succeed(
+              """
+              nixos-enter -- nix-build --option substitute false -E 'derivation {
+                  name = "t";
+                  builder = "/bin/sh";
+                  args = ["-c" "echo nixos-enter build > $out"];
+                  system = builtins.currentSystem;
+                  preferLocalBuild = true;
+              }'
+              """
+          )
+
       with subtest("Shutdown system after installation"):
-          machine.succeed("umount /mnt/boot || true")
-          machine.succeed("umount /mnt")
+          machine.succeed("umount -R /mnt")
           machine.succeed("sync")
           machine.shutdown()
 
@@ -651,6 +668,55 @@ in {
         encrypted.label = "crypt";
         encrypted.keyFile = "/mnt-root/keyfile";
       };
+    '';
+  };
+
+  # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
+  # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+          + " mkpart ESP fat32 1M 100MiB"  # /boot/efi
+          + " set 1 boot on"
+          + " mkpart primary ext2 1024MiB -1MiB",  # LUKS
+          "udevadm settle",
+          "modprobe dm_mod dm_crypt",
+          "dd if=/dev/random of=luks.key bs=256 count=1",
+          "echo -n supersecret | cryptsetup luksFormat -q --pbkdf-force-iterations 1000 --type luks1 /dev/vda2 -",
+          "echo -n supersecret | cryptsetup luksAddKey -q --pbkdf-force-iterations 1000 --key-file - /dev/vda2 luks.key",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda2 crypt",
+          "pvcreate /dev/mapper/crypt",
+          "vgcreate crypt /dev/mapper/crypt",
+          "lvcreate -L 100M -n swap crypt",
+          "lvcreate -l '100%FREE' -n nixos crypt",
+          "mkfs.vfat -n efi /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/crypt/nixos",
+          "mkswap -L swap /dev/crypt/swap",
+          "mount LABEL=nixos /mnt",
+          "mkdir -p /mnt/{etc/nixos,boot/efi}",
+          "mount LABEL=efi /mnt/boot/efi",
+          "swapon -L swap",
+          "mv luks.key /mnt/etc/nixos/"
+      )
+    '';
+    bootLoader = "grub";
+    grubUseEfi = true;
+    extraConfig = ''
+      boot.loader.grub.enableCryptodisk = true;
+      boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+      boot.initrd.secrets."/luks.key" = ./luks.key;
+      boot.initrd.luks.devices.crypt =
+        { device  = "/dev/vda2";
+          keyFile = "/luks.key";
+        };
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Enter passphrase for")
+      machine.send_chars("supersecret\n")
     '';
   };
 

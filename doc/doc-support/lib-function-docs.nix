@@ -10,7 +10,11 @@ with pkgs; stdenv.mkDerivation {
   installPhase = ''
     function docgen {
       # TODO: wrap lib.$1 in <literal>, make nixdoc not escape it
-      nixdoc -c "$1" -d "lib.$1: $2" -f "$1.nix" > "$out/$1.xml"
+      if [[ -e "../lib/$1.nix" ]]; then
+        nixdoc -c "$1" -d "lib.$1: $2" -f "$1.nix" > "$out/$1.xml"
+      else
+        nixdoc -c "$1" -d "lib.$1: $2" -f "$1/default.nix" > "$out/$1.xml"
+      fi
       echo "<xi:include href='$1.xml' />" >> "$out/index.xml"
     }
 

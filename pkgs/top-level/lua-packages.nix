@@ -140,13 +140,13 @@ rec {
 
   vicious = callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.5.1";
+    version = "2.6.0";
 
     src = fetchFromGitHub {
       owner = "vicious-widgets";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "sha256-geu/g/dFAVxtY1BuJYpZoVtFS/oL66NFnqiLAnJELtI=";
+      sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
     };
 
     buildInputs = [ lua ];
@@ -160,6 +160,7 @@ rec {
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
       homepage = "https://vicious.rtfd.io";
+      changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms = platforms.linux;

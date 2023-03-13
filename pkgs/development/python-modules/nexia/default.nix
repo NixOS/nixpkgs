@@ -28,7 +28,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     requests-mock
     pytestCheckHook

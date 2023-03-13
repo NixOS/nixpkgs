@@ -1,6 +1,7 @@
 { lib, fetchurl, buildDunePackage, ocaml
 , cppo, logs, ptime, uri, bigstringaf
-, re, cmdliner, alcotest }:
+, re, cmdliner, alcotest
+}:
 
 buildDunePackage rec {
   pname = "caqti";

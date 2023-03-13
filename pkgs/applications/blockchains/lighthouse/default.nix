@@ -14,11 +14,13 @@
 , stdenv
 , testers
 , unzip
+, nix-update-script
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.3.0";
+  version = "3.5.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -28,10 +30,10 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-py64CWY3k5Z2mm9WduJ4Fh7lQ8b3sF6iIFsYYjndU5I=";
+    hash = "sha256-oF32s1nfzEZbaNUi5sQSrotcyOSinULj/qrRQWdMXHg=";
   };
 
-  cargoHash = "sha256-0gWTniLkhuPpgdUkE6gpF9uHYT6BeWWgH6Mu7KpFx9w=";
+  cargoHash = "sha256-T404OxWBDy8ghQDdhqt0jac+Tff8ph6D3gGnKrToXHY=";
 
   buildFeatures = [ "modern" "gnosis" ];
 
@@ -39,8 +41,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     CoreFoundation
+    SystemConfiguration
   ];
 
   depositContractSpec = fetchurl {
@@ -85,14 +87,17 @@ rustPlatform.buildRustPackage rec {
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nodePackages.ganache
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lighthouse;
-    command = "lighthouse --version";
-    version = "v${lighthouse.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = lighthouse;
+      command = "lighthouse --version";
+      version = "v${lighthouse.version}";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

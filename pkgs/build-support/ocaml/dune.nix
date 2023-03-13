@@ -34,7 +34,9 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-} // (builtins.removeAttrs args [ "minimalOCamlVersion" "duneVersion" ]) // {
+  strictDeps = true;
+
+} // (builtins.removeAttrs args [ "minimalOCamlVersion"  "duneVersion" ]) // {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 

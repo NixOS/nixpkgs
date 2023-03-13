@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath [ gitMinimal rpm dpkg fakeroot ])
   ];
 
-  checkInputs = with python3Packages; [ pytest ];
+  nativeCheckInputs = with python3Packages; [ pytest ];
   checkPhase = ''
     runHook preCheck
     py.test # inspiration: .gitlab-ci.yml

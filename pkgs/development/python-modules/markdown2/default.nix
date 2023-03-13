@@ -26,7 +26,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pygments ];
+  nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
     runHook preCheck

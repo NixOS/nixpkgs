@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     cp ./ImageLOL $out/bin
   '';
 
+  cmakeFlags = lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DPNG_ARM_NEON=off";
+
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";
     description = "Simple program to store a file into a PNG image";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

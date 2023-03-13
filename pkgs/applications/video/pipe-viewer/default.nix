@@ -62,7 +62,7 @@ buildPerlModule rec {
     substituteInPlace Build.PL --replace 'my $gtk ' 'my $gtk = 1;#'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     TestPod
   ];
 

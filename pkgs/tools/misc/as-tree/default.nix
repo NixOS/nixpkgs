@@ -1,27 +1,22 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "as-tree";
-  version = "0.12.0";
+  version = "unstable-2021-03-09";
 
   src = fetchFromGitHub {
     owner = "jez";
     repo = pname;
-    rev = version;
-    sha256 = "0c0g32pkyhyvqpgvzlw9244c80npq6s8mxy3may7q4qyd7hi3dz5";
+    rev = "0036c20f66795774eb9cda3ccbae6ca1e1c19444";
+    sha256 = "sha256-80yB89sKIuv7V68p0jEsi2hRdz+5CzE+4R0joRzO7Dk=";
   };
 
-  cargoSha256 = "1m334shcja7kg134b7lnq1ksy67j5b5vblkzamrw06f6r1hkn1rc";
-  # the upstream 0.12.0 release didn't update the Cargo.lock file properly
-  # they have updated their release script, so this patch can be removed
-  # when the next version is released.
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "sha256-BLEVPKO2YwcKuM/rUeMuyE38phOrbq0e8cjqh1qmJjM=";
 
   meta = with lib; {
     description = "Print a list of paths as a tree of paths";
     homepage = "https://github.com/jez/as-tree";
     license = with licenses; [ blueOak100 ];
     maintainers = with maintainers; [ jshholland ];
-    platforms = platforms.all;
   };
 }

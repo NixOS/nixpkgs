@@ -7,13 +7,13 @@ assert docSupport -> texLive != null && texinfo != null && texi2html != null;
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T8MKrvBvFF3WFwBMIN75vCOS0khliHQI+GGQvCk7T1o=";
+    sha256 = "sha256-pGjOefWnf11kG/zFGwYGet1OjAhKsULNGgh6vqvIQ7c=";
   };
 
   nativeBuildInputs = [ cmake bison flex ];

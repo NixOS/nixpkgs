@@ -1,30 +1,26 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-expand";
-  version = "1.0.36";
+  version = "1.0.39";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8h20Cnu72ychSdtKlAz6US0wXMIcn1ZUWMgF6a0K4uI=";
+    sha256 = "sha256-wJyCRg6qvkjjaFuFK6hTqt3u7ugFKAc9K4M/BojND6o=";
   };
 
-  cargoSha256 = "sha256-xIVoEIyp8NygfNu/aola1pM6KokjrPQ5v55eBc7zPZc=";
-
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  cargoHash = "sha256-n4fraxlMtkVNNmteVBoS6BlS0qE6bpFL/fKRp2pjxIs=";
 
   meta = with lib; {
-    description =
-      "A utility and Cargo subcommand designed to let people expand macros in their Rust source code";
+    description = "A utility and Cargo subcommand designed to let people expand macros in their Rust source code";
     homepage = "https://github.com/dtolnay/cargo-expand";
+    changelog = "https://github.com/dtolnay/cargo-expand/releases/tag/${version}";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ figsoda xrelkd ];
   };
 }

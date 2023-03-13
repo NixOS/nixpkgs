@@ -1,7 +1,7 @@
 {
   lib,
   dotnet-sdk,
-  targetPlatform,
+  stdenv,
   substituteAll,
 
   buildDotnetModule,
@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "BeatSaberModManager";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "affederaffe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XeyOWg4Wa4hiorLPnbnBrLSjnxheAGGMPTqBleulDGw=";
+    sha256 = "sha256-HHWC+MAwJ+AMCuBzSuR7FbW3k+wLri0B9J1DftyfNEU=";
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 
@@ -34,7 +34,7 @@ buildDotnetModule rec {
   patches = [
     (substituteAll {
       src = ./add-runtime-identifier.patch;
-      runtimeIdentifier = dotnetCorePackages.systemToDotnetRid targetPlatform.system;
+      runtimeIdentifier = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
     })
   ];
 

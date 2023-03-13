@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     sed -i 's|zlib-1.2.8/zlib.h|zlib.h|g' *.c *.h
-    ${if stdenv.cc.isClang then "sed -i 's|g++|clang++|g' Makefile.std" else ""}
+    ${lib.optionalString stdenv.cc.isClang "sed -i 's|g++|clang++|g' Makefile.std"}
 
     makeFlagsArray+=(
       ZLIB=-lz

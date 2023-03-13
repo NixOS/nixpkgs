@@ -6,6 +6,7 @@
 , libdaemon
 , dbus
 , perlPackages
+, libpcap
 , expat
 , gettext
 , glib
@@ -63,7 +64,9 @@ stdenv.mkDerivation rec {
   ] ++ (with perlPackages; [
     perl
     XMLParser
-  ]) ++ lib.optionals gtk3Support [
+  ]) ++ lib.optionals stdenv.isFreeBSD [
+    libpcap
+  ] ++ lib.optionals gtk3Support [
     gtk3
   ] ++ lib.optionals qt5Support [
     qt5
@@ -86,7 +89,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--runstatedir=/run"
     "--sysconfdir=/etc"
-    "--with-distro=none"
+    "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
     # A systemd unit is provided by the avahi-daemon NixOS module
     "--with-systemdsystemunitdir=no"
   ] ++ lib.optionals withLibdnssdCompat [

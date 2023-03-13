@@ -1,17 +1,20 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "courier-prime";
   version = "unstable-2019-12-05";
-  repo = "CourierPrime";
-  rev = "7f6d46a766acd9391d899090de467c53fd9c9cb0";
-in fetchzip rec {
-  name = "courier-prime-${version}";
-  url = "https://github.com/quoteunquoteapps/${repo}/archive/${rev}/${name}.zip";
-  sha256 = "1xh4pkksm6zrafhb69q4lq093q6pl245zi9qhqw3x6c1ab718704";
 
-  postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/truetype ${repo}-${rev}/fonts/ttf/*.ttf
+  src = fetchzip {
+    url = "https://github.com/quoteunquoteapps/CourierPrime/archive/7f6d46a766acd9391d899090de467c53fd9c9cb0/${pname}-${version}.zip";
+    hash = "sha256-pMFZpytNtgoZrBj2Gj8SgJ0Lab8uVY5aQtcO2lFbHj4=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

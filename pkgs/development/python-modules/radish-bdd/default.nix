@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "radish";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7C8XgGlpNVUONSfg9DsIS8Awpy6iDzFOLAFs1xpfHXI=";
+    hash = "sha256-SEW10ka0aQAXtW2UNCVJHMVhhZ9JTTj4IbskL87/Dn4=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     tag-expressions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-mock
     pytestCheckHook

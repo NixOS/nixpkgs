@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "haproxy_exporter";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "haproxy_exporter";
     rev = "v${version}";
-    sha256 = "sha256-u5o8XpKkuaNzAZAdA33GLd0QJSpqnkEbI8gW22G7FcY=";
+    sha256 = "sha256-hpZnMvHAAEbvzASK3OgfG34AhPkCdRM7eOm15PRemkA=";
   };
 
-  vendorSha256 = "sha256-lDoW1rkOn2YkEf3QZdWBpm5fdzjkbER35XnXFr57D8c=";
+  vendorHash = "sha256-s9UVtV8N2SJ1ik864P6p2hPXJ2jstFY/XnWt9fuCDo0=";
 
   ldflags = [ "-s" "-w" ];
 

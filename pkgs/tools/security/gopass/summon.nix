@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gopass-summon-provider";
-  version = "1.15.2";
+  version = "1.15.4";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass-summon-provider";
     rev = "v${version}";
-    hash = "sha256-tcRdb6zkFO/fhCm9YE7qDPYROuOrsN2BeeX+TtTnaHc=";
+    hash = "sha256-gwvrwLJTh58PiRsEC3juhnA/q6cX3nRh/hiunKnPvDQ=";
   };
 
-  vendorHash = "sha256-1pQ+f+m+cff6M0sfydaqGyvXqS6lyi9mfi9Pl4tynhU=";
+  vendorHash = "sha256-MLnfTdYR4/1qtnNCUs0TwGf5wMqE+V8jNCefeClQKfw=";
 
   subPackages = [ "." ];
 

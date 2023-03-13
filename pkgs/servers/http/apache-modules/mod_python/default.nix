@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin libintl;
 
   meta = with lib; {
-    homepage = "http://modpython.org/";
+    homepage = "https://modpython.org/";
     description = "An Apache module that embeds the Python interpreter within the server";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

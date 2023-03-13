@@ -51,7 +51,7 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     nose
     mock
     httmock

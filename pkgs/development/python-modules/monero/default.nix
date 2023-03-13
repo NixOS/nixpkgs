@@ -40,7 +40,7 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov responses ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov responses ];
 
   meta = with lib; {
     description = "Comprehensive Python module for handling Monero";

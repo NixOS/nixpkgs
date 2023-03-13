@@ -1,26 +1,14 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+{ callPackage, lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
 , fetchurl, libsecret  }:
 
 let
-  version = "3.23.69";
+  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+  version = srcjson.version;
   pname = "standardnotes";
   name = "${pname}-${version}";
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  plat = {
-    i686-linux = "i386";
-    x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system} or throwSystem;
-
-  sha256 = {
-    i686-linux = "sha256-/A2LjV8ky20bcKgs0ijwldryi5VkyROwz49vWYXYQus=";
-    x86_64-linux = "sha256-fA9WH9qUtvAHF9hTFRtxQdpz2dpK0joD0zX9VYBo10g=";
-  }.${stdenv.hostPlatform.system} or throwSystem;
-
-  src = fetchurl {
-    url = "https://github.com/standardnotes/app/releases/download/%40standardnotes%2Fdesktop%40${version}/standard-notes-${version}-linux-${plat}.AppImage";
-    inherit sha256;
-  };
+  src = fetchurl (srcjson.appimage.${stdenv.hostPlatform.system} or throwSystem);
 
   appimageContents = appimageTools.extract {
     inherit name src;
@@ -47,6 +35,8 @@ in appimageTools.wrapType2 rec {
     ln -s ${appimageContents}/usr/share/icons share
   '';
 
+  passthru.updateScript = callPackage ./update.nix {};
+
   meta = with lib; {
     description = "A simple and private notes app";
     longDescription = ''
@@ -55,8 +45,8 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire chuangzhu ];
+    maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = builtins.attrNames srcjson.appimage;
   };
 }

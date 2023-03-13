@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "105";
+  version = "110";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "deconz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8GQJ4PCl8te3sovC5FwWoaQnXIRR27b7gPwfmyPRVBE=";
+    hash = "sha256-2eHKFq+urzJS3K55O0hca0h4ElowJZD6nIkYkzyBFCM=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     orjson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytestCheckHook
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library wrapping the Deconz REST API";
     homepage = "https://github.com/Kane610/deconz";
+    changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

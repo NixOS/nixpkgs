@@ -84,8 +84,8 @@ in
       version = "0.8.0";
       sha256 = "sha256-c2RhHfg0+YV2E9Ckl1YSc+0nfzbHPIt0JgtT0DND9lA=";
       cargoSha256 = "sha256-vITXckNOiJbMuQW6/8p7dsZThkjxg/zUy3AZBbn33no=";
-      # On Darwin, tests are failing.
-      broken = stdenv.isDarwin;
+      # On x86_64-darwin, tests are failing.
+      broken = stdenv.isDarwin && stdenv.isx86_64;
     };
 
     garage_0_8 = garage_0_8_0;

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "2.3.1";
+  version = "2.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4KsMYQQN/4A2sbk2Fj8CYOBf7/UAciJ4wTSFYZaCfdk=";
+    hash = "sha256-SdYS/S3wBmIl/f+0H67PcMRX7GiJqAkysvlENshB1yY=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pycryptodomex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

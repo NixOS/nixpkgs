@@ -44,7 +44,7 @@ buildPythonPackage rec {
     sshtunnel
   ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  nativeCheckInputs = [ pytestCheckHook mock ];
 
   disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 

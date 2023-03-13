@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, CommonMark
+, commonmark
 , poetry-core
 , pygments
 , typing-extensions
@@ -17,27 +17,27 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.6.0";
+  version = "13.0.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-g3tXftEoBCJ1pMdLyDBXQvY9haGMQkuY1/UBOtUqrLE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Mc2ZTpn2cPGXIBblwwukJGiD8etdVi8ag9Xb77gG62A=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    CommonMark
+    commonmark
     pygments
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris jyooru ];
+    maintainers = with maintainers; [ ris joelkoen ];
   };
 }

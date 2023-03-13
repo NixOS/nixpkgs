@@ -14,7 +14,7 @@ qtModule {
   patches = [
     ../patches/qttools-paths.patch
   ];
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DNIX_OUTPUT_DEV=\"${placeholder "dev"}\""
   ];
 

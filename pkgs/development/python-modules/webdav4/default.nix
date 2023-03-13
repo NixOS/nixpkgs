@@ -40,7 +40,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cheroot
     colorama
     pytest-xdist

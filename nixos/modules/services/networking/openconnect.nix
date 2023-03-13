@@ -90,6 +90,7 @@ let
   generateConfig = name: icfg:
     pkgs.writeText "config" ''
       interface=${name}
+      ${optionalString (icfg.protocol != null) "protocol=${icfg.protocol}"}
       ${optionalString (icfg.user != null) "user=${icfg.user}"}
       ${optionalString (icfg.passwordFile != null) "passwd-on-stdin"}
       ${optionalString (icfg.certificate != null)
@@ -116,7 +117,7 @@ let
   };
 in {
   options.networking.openconnect = {
-    package = mkPackageOption pkgs "openconnect" { };
+    package = mkPackageOptionMD pkgs "openconnect" { };
 
     interfaces = mkOption {
       description = lib.mdDoc "OpenConnect interfaces.";

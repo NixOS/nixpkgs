@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson pkg-config scdoc ninja wayland-scanner ];
   buildInputs = [ libxkbcommon wayland ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=type-limits";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=type-limits";
 
   meta = with lib; {
     description = "Command line utility for miscellaneous wlroots Wayland extensions";
     homepage = "https://git.sr.ht/~brocellous/wlrctl";
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh artturin ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

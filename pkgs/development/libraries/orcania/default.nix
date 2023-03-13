@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, cmake, check, subunit }:
 stdenv.mkDerivation rec {
   pname = "orcania";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QAq/6MGVj+iBHLElHuqokF1v3LU1TZ9hVVJE1s3y6f0=";
+    sha256 = "sha256-xF6QIXfsI+6WqshcG74/J98MgjSkYjRkTW64zeH6DDY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ check subunit ];
+  nativeCheckInputs = [ check subunit ];
 
   cmakeFlags = [ "-DBUILD_ORCANIA_TESTING=on" ];
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyserial ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
     pytestCheckHook

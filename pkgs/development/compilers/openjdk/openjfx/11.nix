@@ -1,35 +1,30 @@
-{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby
-, openjdk11-bootstrap }:
+{ stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
+, openjdk11-bootstrap
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "11";
-  update = ".0.11";
+  update = ".0.18";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = (gradle_4.override {
+  gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
   });
-
-  NIX_CFLAGS_COMPILE = [
-    # avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
-    # glib-2.62 deprecations
-    # -fcommon: gstreamer workaround for -fno-common toolchains:
-    #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
-    #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-    "-fcommon"
-  ];
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
 
-    src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
-      sha256 = "sha256-mbEALUxuwbtlGeZ2Xsm3m3aNDdthLYWd6QHmdkAILxc=";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jfx${major}u";
+      rev = repover;
+      sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -43,8 +38,6 @@ let
       CONF = Release
       JDK_HOME = ${openjdk11-bootstrap.home}
     '' + args.gradleProperties or "");
-
-    inherit NIX_CFLAGS_COMPILE;
 
     buildPhase = ''
       runHook preBuild
@@ -74,18 +67,15 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    # Downloaded AWT jars differ by platform.
-    outputHash = {
-      x86_64-linux = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa8=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    outputHash = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa9=";
   };
 
 in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = true
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
   preBuild = ''
@@ -98,8 +88,6 @@ in makePackage {
   installPhase = ''
     cp -r build/modular-sdk $out
   '';
-
-  inherit NIX_CFLAGS_COMPILE;
 
   stripDebugList = [ "." ];
 

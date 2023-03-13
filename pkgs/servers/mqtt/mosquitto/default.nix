@@ -10,7 +10,7 @@
 , libuv
 , libwebsockets
 , openssl
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , fetchpatch
 }:

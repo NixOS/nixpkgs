@@ -15,14 +15,17 @@ stdenv.mkDerivation rec {
     "-DDYND_BUILD_BENCHMARKS=OFF"
   ];
 
-  # added to fix build with gcc7+
-  NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
+    # added to fix build with gcc7+
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=nonnull"
     "-Wno-error=tautological-compare"
     "-Wno-error=class-memaccess"
     "-Wno-error=parentheses"
     "-Wno-error=deprecated-copy"
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=maybe-uninitialized"
   ];
 
   nativeBuildInputs = [ cmake ];

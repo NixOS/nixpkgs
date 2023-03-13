@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "types-pyyaml";
-  version = "6.0.12.2";
+  version = "6.0.12.8";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types-PyYAML";
     inherit version;
-    sha256 = "sha256-aECBmHHJLe6+aiBn+4AMEbigY2MutOPnVZFOerNgToM=";
+    sha256 = "sha256-GTBIaaidSa8AvmgeeyZ0FN8hP064ljTESV+mLo+UK58=";
   };
 
   # Module doesn't have tests

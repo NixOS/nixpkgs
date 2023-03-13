@@ -7,17 +7,17 @@
 
 buildPythonPackage rec {
   pname = "prefixed";
-  version = "0.5.0";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sTTXNBNiULF7aO7eZaM3D6sBNEEstmvIvjVo/wW9+OQ=";
+    hash = "sha256-C1TRXmAuuK9Kwxsdsho36pXOWJDgdBuw3Z3tSTzvu+k=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

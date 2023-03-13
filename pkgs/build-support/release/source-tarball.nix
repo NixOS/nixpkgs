@@ -64,10 +64,9 @@ stdenv.mkDerivation (
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
-              header "Copying build directory to $KEEPBUILDDIR"
+              echo "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
               cp -R "$TMPDIR/"* $KEEPBUILDDIR
-              stopNest
           fi
       fi
     '';

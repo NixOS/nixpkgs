@@ -12,7 +12,7 @@
 , withManual ? true
 , pythonSupport ? true
 , withpcre2 ? true
-, sendEmailSupport ? false
+, sendEmailSupport ? perlSupport
 , Security, CoreServices
 , nixosTests
 , withLibsecret ? false
@@ -28,7 +28,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.38.1";
+  version = "2.39.2";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "sha256-l9346liiueD7wlCOJFAoynWRG9ONFVFhaxSMGqV0Ctk=";
+    sha256 = "R1918Tc7LNTkOHBhhRdZZtXBH2jE2x5IwmJXxD3c8tY=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";

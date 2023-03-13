@@ -12,6 +12,7 @@ let
     { name = "lists"; description = "list manipulation functions"; }
     { name = "debug"; description = "debugging functions"; }
     { name = "options"; description = "NixOS / nixpkgs option handling"; }
+    { name = "path"; description = "path functions"; }
     { name = "filesystem"; description = "filesystem functions"; }
     { name = "sources"; description = "source filtering functions"; }
     { name = "cli"; description = "command-line serialization functions"; }
@@ -74,7 +75,7 @@ in pkgs.runCommand "doc-support" {}
     ln -s ${epub-xsl} ./epub.xsl
     ln -s ${xhtml-xsl} ./xhtml.xsl
 
-    ln -s ${../../nixos/doc/xmlformat.conf} ./xmlformat.conf
+    ln -s ${./xmlformat.conf} ./xmlformat.conf
     ln -s ${pkgs.documentation-highlighter} ./highlightjs
 
     echo -n "${version}" > ./version

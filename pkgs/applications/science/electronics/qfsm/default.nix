@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Graphical editor for finite state machines";
-    homepage = "http://qfsm.sourceforge.net/";
+    homepage = "https://qfsm.sourceforge.net/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };

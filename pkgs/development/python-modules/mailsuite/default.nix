@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mailsuite";
-  version = "1.9.7";
+  version = "1.9.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d96r712suiL4dSzT5vG/rD+4PInlvpuoAo3cedqVe+w=";
+    hash = "sha256-8vybabJPQyR0XMXaNp8lQFyuPajrhucgdfazt2ci8Gs=";
   };
 
   nativeBuildInputs = [

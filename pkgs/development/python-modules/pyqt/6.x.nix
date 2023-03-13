@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "PyQt6";
-  version = "6.4.0";
+  version = "6.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kTkkab4fSRkF+p54+k5AWaiathbd8uz9UlvB1lwmu5M=";
+    hash = "sha256-dAJE9gj+Fe4diWlcQ/MaFMrspBxPAqw2yG37pKXVgT0=";
   };
 
   patches = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
   # does not use the enableParallelBuilding flag
   postUnpack = ''
-    export MAKEFLAGS+=" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES"
+    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '';
 
   outputs = [ "out" "dev" ];
@@ -135,7 +135,5 @@ buildPythonPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ LunNova ];
-    # python3Packages.pyqt-builder needs to be patched
-    broken = stdenv.isDarwin;
   };
 }

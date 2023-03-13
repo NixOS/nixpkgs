@@ -1,21 +1,20 @@
 { lib
+, rustPlatform
 , fetchFromGitHub
 , fetchpatch
-, rustPlatform
-, tree-sitter
-, difftastic
 , testers
+, difftastic
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.40.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zLps/R3KMx51eGdHINmvq9Cv4JTkVSont3Gktwgxsrg=";
+    sha256 = "sha256-AJwOft5hZoeraDDjwUBsdXn3V+4p8jOGSCYFCEOkWJA=";
   };
 
   depsExtraArgs = {
@@ -40,14 +39,14 @@ rustPlatform.buildRustPackage rec {
       popd
     '';
   };
-  cargoSha256 = "sha256-kVJwGEY0TvsKzTbcSgOSWIhx8MbH/KNB3Q8KvQfhCac=";
+  cargoSha256 = "sha256-iCkBXbwEUooybQ3IY8bxPZwD2tsWFEpVzJ5l2nkF/dg=";
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 
   meta = with lib; {
     description = "A syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
-    changelog = "https://github.com/Wilfred/difftastic/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 figsoda ];
     mainProgram = "difft";

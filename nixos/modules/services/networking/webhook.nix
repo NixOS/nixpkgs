@@ -36,7 +36,7 @@ in {
         which execute configured commands for any person or service that knows the URL
       '');
 
-      package = mkPackageOption pkgs "webhook" {};
+      package = mkPackageOptionMD pkgs "webhook" {};
       user = mkOption {
         type = types.str;
         default = defaultUser;

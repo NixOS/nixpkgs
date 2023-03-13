@@ -7,8 +7,6 @@ assert par2Support -> par2cmdline != null;
 
 let version = "0.32"; in
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "bup";
   inherit version;
@@ -31,7 +29,7 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs .
     substituteInPlace Makefile --replace "-Werror" ""
-  '' + optionalString par2Support ''
+  '' + lib.optionalString par2Support ''
     substituteInPlace cmd/fsck-cmd.py --replace "'par2'" "'${par2cmdline}/bin/par2'"
   '';
 
@@ -49,7 +47,7 @@ stdenv.mkDerivation {
       --prefix PATH : ${git}/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
     license = licenses.gpl2Plus;

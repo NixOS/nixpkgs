@@ -352,8 +352,8 @@
     "picodrive": {
         "owner": "libretro",
         "repo": "picodrive",
-        "rev": "62873cab5366999207c197e9f55987daee10be4a",
-        "sha256": "YErmanNczeh6BeanCGllwOoTjXO+9At8l/o4UhIek4o=",
+        "rev": "b2d43acfbc288038749d8a8fdfbcb0474568e043",
+        "sha256": "kDSQgF8G/IpZ9NkSwuOjFSkirkum7foRT01qIbNJmJI=",
         "fetchSubmodules": true
     },
     "play": {

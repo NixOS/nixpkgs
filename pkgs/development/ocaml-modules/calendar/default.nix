@@ -14,8 +14,6 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ re ];
 
-  strictDeps = true;
-
   meta = {
     inherit (src.meta) homepage;
     description = "A library for handling dates and times";

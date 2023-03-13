@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geoserver";
-  version = "2.22.0";
+  version = "2.22.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    sha256 = "sha256-68+IvbOCBjTdBg5dQb+ydp2ntt07fvWwm4ALc6m1aN4=";
+    sha256 = "sha256-usVqjXXjMCvbjEz6TKz7RM5A2oUVryjsjFBDUftQcRI=";
   };
 
   sourceRoot = ".";

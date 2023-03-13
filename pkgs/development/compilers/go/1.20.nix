@@ -17,7 +17,8 @@
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap117.nix { };
+  useGccGoBootstrap = stdenv.buildPlatform.isMusl || stdenv.buildPlatform.isRiscV;
+  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap117.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo120Module; };
 
@@ -45,11 +46,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.20rc1";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-FzEFTKmE8l/dCD0Ejt+gghDMkWf1oIanHeuhKMcTtBQ=";
+    hash = "sha256-TQ4oUNGXtN2tO9sBljABedCVuzrv1N+8OzZwLDco+Ks=";
   };
 
   strictDeps = true;
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
@@ -146,12 +147,12 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
-  '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
+  '' else lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
     rm -rf bin/*_*
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
-  '' else "");
+  '');
 
   installPhase = ''
     runHook preInstall
@@ -171,6 +172,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;

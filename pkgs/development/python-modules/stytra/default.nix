@@ -73,7 +73,7 @@ buildPythonPackage rec {
     av
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
     pyserial

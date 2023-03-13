@@ -34,7 +34,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

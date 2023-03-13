@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, scdoc, wayland-scanner
 , wayland, wayland-protocols, runtimeShell
-, systemdSupport ? stdenv.isLinux, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 stdenv.mkDerivation rec {

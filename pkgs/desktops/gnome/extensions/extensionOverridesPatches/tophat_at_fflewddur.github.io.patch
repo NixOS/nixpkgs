@@ -1,0 +1,13 @@
+diff --git a/extension.js b/extension.js
+index 60396f8..b044872 100644
+--- a/extension.js
++++ b/extension.js
+@@ -20,6 +20,8 @@
+ 
+ /* exported init, enable, disable */
+ 
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++
+ let depFailures = [];
+ let missingLibs = [];
+ 

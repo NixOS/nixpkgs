@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     uvloop
   ];
 
-  checkInputs = with  python3.pkgs; [
+  nativeCheckInputs = with  python3.pkgs; [
     pytest
     pytest-asyncio
   ];

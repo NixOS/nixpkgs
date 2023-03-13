@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.pygments;
 

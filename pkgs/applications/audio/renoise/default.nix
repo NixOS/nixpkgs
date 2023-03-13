@@ -1,15 +1,13 @@
 { lib, stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsa-lib
 , mpg123, releasePath ? null }:
 
-with lib;
-
 # To use the full release version:
 # 1) Sign into https://backstage.renoise.com and download the release version to some stable location.
 # 2) Override the releasePath attribute to point to the location of the newly downloaded bundle.
 # Note: Renoise creates an individual build for each license which screws somewhat with the
 # use of functions like requireFile as the hash will be different for every user.
 let
-  urlVersion = replaceStrings [ "." ] [ "_" ];
+  urlVersion = lib.replaceStrings [ "." ] [ "_" ];
 in
 
 stdenv.mkDerivation rec {
@@ -80,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "Modern tracker-based DAW";
     homepage = "https://www.renoise.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [];
     platforms = [ "x86_64-linux" ];
   };

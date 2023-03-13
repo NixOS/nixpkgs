@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

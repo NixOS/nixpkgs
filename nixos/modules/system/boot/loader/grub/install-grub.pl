@@ -442,7 +442,7 @@ sub copyToKernelsDir {
 }
 
 sub addEntry {
-    my ($name, $path, $options) = @_;
+    my ($name, $path, $options, $current) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
@@ -450,20 +450,28 @@ sub addEntry {
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
-        my $initrdName = basename($initrd);
-        my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
+        # Name the initrd secrets after the system from which they're derived.
+        my $systemName = basename(Cwd::abs_path("$path"));
+        my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
         mkpath(dirname($initrdSecretsPath), 0, 0755);
         my $oldUmask = umask;
         # Make sure initrd is not world readable (won't work if /boot is FAT)
         umask 0137;
         my $initrdSecretsPathTemp = File::Temp::mktemp("$initrdSecretsPath.XXXXXXXX");
-        system("$path/append-initrd-secrets", $initrdSecretsPathTemp) == 0 or die "failed to create initrd secrets: $!\n";
+        if (system("$path/append-initrd-secrets", $initrdSecretsPathTemp) != 0) {
+          if ($current) {
+              die "failed to create initrd secrets $!\n";
+          } else {
+              say STDERR "warning: failed to create initrd secrets for \"$name\", an older generation";
+              say STDERR "note: this is normal after having removed or renamed a file in `boot.initrd.secrets`";
+          }
+        }
         # Check whether any secrets were actually added
         if (-e $initrdSecretsPathTemp && ! -z _) {
             rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
             $copied{$initrdSecretsPath} = 1;
-            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
+            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$systemName-secrets";
         } else {
             unlink $initrdSecretsPathTemp;
             rmdir dirname($initrdSecretsPathTemp);
@@ -491,7 +499,7 @@ sub addEntry {
         }
         $conf .= "\n";
     } else {
-        $conf .= "menuentry \"$name\" " . ($options||"") . " {\n";
+        $conf .= "menuentry \"$name\" " . $options . " {\n";
         if ($saveDefault) {
             $conf .= "  savedefault\n";
         }
@@ -511,7 +519,7 @@ sub addEntry {
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("NixOS - Default", $defaultConfig, $entryOptions);
+addEntry("@distroName@ - Default", $defaultConfig, $entryOptions, 1);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
@@ -536,7 +544,7 @@ foreach my $link (@links) {
         my $linkname = basename($link);
         $entryName = "($linkname - $date - $version)";
     }
-    addEntry("NixOS - $entryName", $link);
+    addEntry("@distroName@ - $entryName", $link, "", 1);
 }
 
 my $grubBootPath = $grubBoot->path;
@@ -568,19 +576,19 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions);
+        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions, 0);
     }
 
     $conf .= "}\n" if $grubVersion == 2;
 }
 
-addProfile "/nix/var/nix/profiles/system", "NixOS - All configurations";
+addProfile "/nix/var/nix/profiles/system", "@distroName@ - All configurations";
 
 if ($grubVersion == 2) {
     for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
         my $name = basename($profile);
         next unless $name =~ /^\w+$/;
-        addProfile $profile, "NixOS - Profile '$name'";
+        addProfile $profile, "@distroName@ - Profile '$name'";
     }
 }
 

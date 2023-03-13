@@ -12,7 +12,7 @@
 , meta
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 

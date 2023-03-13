@@ -4,12 +4,12 @@
 , buildNpmPackage
 }:
 let
-  version = "0.3.5";
+  version = "0.3.6";
   src = fetchFromGitHub {
     owner = "zinclabs";
     repo = "zinc";
     rev = "v${version}";
-    sha256 = "sha256-qu3foI5Rnt2sf+B+roJOwUNvOfawKmcKq7UrmviQsHA=";
+    sha256 = "sha256-7pPVX/jdHN7EMss6/uRZqJO+zDfDLZv/iG5iboB+s64=";
   };
 
   webui = buildNpmPackage {
@@ -36,7 +36,7 @@ buildGoModule rec {
     cp -r ${webui}/share/zinc-ui web/dist
   '';
 
-  vendorSha256 = "sha256-akjb0cxHbITKS26c+7lVSHWO/KRoQVVKzAOra+tdAD8=";
+  vendorHash = "sha256-akjb0cxHbITKS26c+7lVSHWO/KRoQVVKzAOra+tdAD8=";
   subPackages = [ "cmd/zinc" ];
 
   CGO_ENABLED = 0;

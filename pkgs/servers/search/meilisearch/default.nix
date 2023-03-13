@@ -8,7 +8,7 @@
 , nixosTests
 }:
 
-let version = "0.30.2";
+let version = "1.0.2";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
-    rev = "v${version}";
-    hash = "sha256-kxANzEORvR+BJDfLUD1FLorBuYjnUQixgD2jDoX6jrg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2HfwNoluPPOOAdCaqUVaZcAd8M2naPYAsphZO1Inefg=";
   };
 
-  cargoHash = "sha256-IYNIr7PBNNloPizaauFYR9/NPnBMS8kQi+RNsKsNjLE=";
+  cargoHash = "sha256-HuVNI1Y+rhuAzAkDUuJJCZ500WuGPgABFfEbJNXaVpA=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "Powerful, fast, and an easy to use search engine ";
+    description = "Powerful, fast, and an easy to use search engine";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;

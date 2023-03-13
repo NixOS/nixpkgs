@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  checkInputs = with python3.pkgs;[
+  nativeCheckInputs = with python3.pkgs;[
     freezegun
     hypothesis
     packaging

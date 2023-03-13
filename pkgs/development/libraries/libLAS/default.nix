@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, fetchpatch, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libLAS";
@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     url = "https://download.osgeo.org/liblas/libLAS-${version}.tar.bz2";
     sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "aarch64-darwin.patch";
+      url = "https://github.com/libLAS/libLAS/commit/ded463732db1f9baf461be6f3fe5b8bb683c41cd.patch";
+      sha256 = "sha256-aWMpazeefDHE9OzuLR3FJ8+oXeGhEsk1igEm6j2DUnw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost gdal libgeotiff libtiff LASzip2 ];
@@ -31,7 +39,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.michelk ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

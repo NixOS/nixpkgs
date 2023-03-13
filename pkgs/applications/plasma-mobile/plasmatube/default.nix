@@ -8,6 +8,7 @@
 , kdeclarative
 , ki18n
 , kirigami2
+, mpv
 , qtmultimedia
 , qtquickcontrols2
 , yt-dlp
@@ -26,6 +27,7 @@ mkDerivation {
     kdeclarative
     ki18n
     kirigami2
+    mpv
     qtmultimedia
     qtquickcontrols2
   ] ++ (with gst_all_1; [

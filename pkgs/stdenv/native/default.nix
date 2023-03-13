@@ -12,9 +12,9 @@ let
     else "/bin/bash";
 
   path =
-    (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
-    (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
-    (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else []) ++
+    (lib.optionals (system == "i686-solaris") [ "/usr/gnu" ]) ++
+    (lib.optionals (system == "i686-netbsd") [ "/usr/pkg" ]) ++
+    (lib.optionals (system == "x86_64-solaris") [ "/opt/local/gnu" ]) ++
     ["/" "/usr" "/usr/local"];
 
   prehookBase = ''

@@ -13,18 +13,21 @@ let
 in
 buildBazelPackage rec {
   pname = "verible";
-  version = "0.0-2472-ga80124e1";
 
   # These environment variables are read in bazel/build-version.py to create
-  # a build string. Otherwise it would attempt to extract it from .git/.
-  GIT_DATE = "2022-10-21";
-  GIT_VERSION = version;
+  # a build string shown in the tools --version output.
+  # If env variables not set, it would attempt to extract it from .git/.
+  GIT_DATE = "2023-02-02";
+  GIT_VERSION = "v0.0-2821-gb2180bfa";
+
+  # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
+  version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "v${version}";
-    sha256 = "sha256:0jpdxqhnawrl80pbc8544pyggdp5s3cbc7byc423d5v0sri2f96v";
+    rev = "${GIT_VERSION}";
+    sha256 = "sha256-etcimvInhebH2zRPyZnWUq6m3VnCq44w32GJrIacULo=";
   };
 
   patches = [
@@ -46,8 +49,8 @@ buildBazelPackage rec {
     # of the output derivation ? Is there a more robust way to do this ?
     # (Hashes extracted from the ofborg build logs)
     sha256 = {
-      aarch64-linux = "sha256-6Udp7sZKGU8gcy6+5WPhkSWunf1sVkha8l5S1UQsC04=";
-      x86_64-linux = "sha256-WfhgbJFaM/ipdd1dRjPeVZ1mK2hotb0wLmKjO7e+BO4=";
+      aarch64-linux = "sha256-dYJoae3+u+gpULHS8nteFzzL974cVJ+cJzeG/Dz2HaQ=";
+      x86_64-linux = "sha256-Jd99+nhqgZ2Gwd78eyXfnSSfbl8C3hoWkiUnzJG1jqM=";
     }.${system} or (throw "No hash for system: ${system}");
   };
 
@@ -62,12 +65,9 @@ buildBazelPackage rec {
       bazel/build-version.py \
       bazel/sh_test_with_runfiles_lib.sh \
       common/lsp/dummy-ls_test.sh \
-      common/parser/move_yacc_stack_symbols.sh \
-      common/parser/record_syntax_error.sh \
       common/tools/patch_tool_test.sh \
       common/tools/verible-transform-interactive.sh \
       common/tools/verible-transform-interactive-test.sh \
-      common/util/create_version_header.sh \
       kythe-browse.sh \
       verilog/tools
   '';

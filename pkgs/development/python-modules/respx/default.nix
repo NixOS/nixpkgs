@@ -25,7 +25,7 @@ buildPythonPackage rec {
     httpx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpcore
     httpx
     flask

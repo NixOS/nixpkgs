@@ -1,6 +1,7 @@
 # Prepare a makefile specifying the appropriate output directories.
 #
 # Written by Ludovic Courtès <ludo@gnu.org>.
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 
 source "$stdenv/setup" || exit 1
 

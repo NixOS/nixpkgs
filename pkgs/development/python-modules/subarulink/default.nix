@@ -29,7 +29,7 @@ buildPythonPackage rec {
     stdiomask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     cryptography
     pytest-asyncio

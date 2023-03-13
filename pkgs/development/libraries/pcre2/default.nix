@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.40";
+  version = "10.42";
 
   src = fetchurl {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
-    hash = "sha256-FOS4PEeDkz3BfpZDGOYyT3yuG8ddjzx5vGlp8AwVnWg=";
+    hash = "sha256-jTbNjLbqKkwrs1j/ZBGwx4hjOipF2rvxrrS3AdG16EA=";
   };
 
   configureFlags = [

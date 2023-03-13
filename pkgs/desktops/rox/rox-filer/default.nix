@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
   buildInputs = [ libxml2 gtk shared-mime-info libSM ];
-  NIX_LDFLAGS = "-ldl -lm";
+  NIX_LDFLAGS = "-lm";
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch

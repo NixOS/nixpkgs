@@ -65,7 +65,7 @@ buildPythonApplication rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     unifdef
   ];

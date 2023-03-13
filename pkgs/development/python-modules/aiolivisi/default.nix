@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiolivisi";
-  version = "0.0.14";
+  version = "0.0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n7EQCOItr6MZRnTCfkJrq39bDbw09XyIRzSuZR2TsNg=";
+    hash = "sha256-8Cy2hhYrUBRfVb2hgil6Irk+iTJmJ8JL+5wvm4rm7kM=";
   };
 
   postPatch = ''
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to communicate with LIVISI Smart Home Controller";
     homepage = "https://github.com/StefanIacobLivisi/aiolivisi";
+    changelog = "https://github.com/StefanIacobLivisi/aiolivisi/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

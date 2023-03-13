@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "2.3.2";
+  version = "2.4.0";
 
   format = "setuptools";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZflCOTqNhalBhxDkee3UwusiVA+ShtfabP0slE28/UQ=";
+    hash = "sha256-TePUsyQ4DCuvfRQD4KAUs94o3MJRmZmu6jMPv4lJtHE=";
   };
 
   patches = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/nextcord/nextcord/blob/${src.rev}/docs/whats_new.rst";
     description = "Python wrapper for the Discord API forked from discord.py";
     homepage = "https://github.com/nextcord/nextcord";
     license = licenses.mit;

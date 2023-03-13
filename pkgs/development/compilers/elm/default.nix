@@ -7,7 +7,8 @@ let
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
-  hsPkgs = self: pkgs.haskell.packages.ghc810.override {
+  # Haskell packages that require ghc 8.10
+  hs810Pkgs = self: pkgs.haskell.packages.ghc810.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
       elm = overrideCabal (drv: {
@@ -30,20 +31,6 @@ let
         license = licenses.bsd3;
         maintainers = with maintainers; [ domenkozar turbomack ];
       }) (self.callPackage ./packages/elm.nix { });
-
-      /*
-      The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
-      `package/nix/build.sh`
-      */
-      elm-format = justStaticExecutables (overrideCabal (drv: {
-        jailbreak = true;
-        doCheck = assert (drv.version == "0.8.5"); false; # golden tests fail with optparse-applicative 0.17
-
-        description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
-        homepage = "https://github.com/avh4/elm-format";
-        license = licenses.bsd3;
-        maintainers = with maintainers; [ avh4 turbomack ];
-      }) (self.callPackage ./packages/elm-format.nix {}));
 
       elmi-to-json = justStaticExecutables (overrideCabal (drv: {
         prePatch = ''
@@ -84,23 +71,48 @@ let
       # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
       aeson = self.aeson_1_5_6_0;
 
-      # Needed for elm-format
+      # elm-instrument needs this
       indents = self.callPackage ./packages/indents.nix {};
-      bimap = self.callPackage ./packages/bimap.nix {};
+
+      # elm-instrument's tests depend on an old version of elm-format, but we set doCheck to false for other reasons above
+      elm-format = null;
+    };
+  };
+
+  # Haskell packages that require ghc 9.2
+  hs92Pkgs = self: pkgs.haskell.packages.ghc92.override {
+    overrides = self: super: with pkgs.haskell.lib.compose; with lib;
+    let elmPkgs = rec {
+      /*
+      The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
+      `package/nix/build.sh`
+      */
+      elm-format = justStaticExecutables (overrideCabal (drv: {
+        jailbreak = true;
+
+        description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
+        homepage = "https://github.com/avh4/elm-format";
+        license = licenses.bsd3;
+        maintainers = with maintainers; [ avh4 turbomack ];
+      }) (self.callPackage ./packages/elm-format.nix {}));
+    };
+    in elmPkgs // {
+      inherit elmPkgs;
+
+      # Needed for elm-format
       avh4-lib = doJailbreak (self.callPackage ./packages/avh4-lib.nix {});
       elm-format-lib = doJailbreak (self.callPackage ./packages/elm-format-lib.nix {});
-      # We need tasty-hspec < 1.1.7 and hspec-golden < 0.2 to build elm-format-lib
-      tasty-hspec = self.tasty-hspec_1_1_6;
-      hspec-golden = self.hspec-golden_0_1_0_3;
-
-      # We need hspec hspec_core, hspec_discover < 2.8 for tasty-hspec == 1.1.6
-      hspec = self.hspec_2_7_10;
-      hspec-core = self.hspec-core_2_7_10;
-      hspec-discover = self.hspec-discover_2_7_10;
-      hspec-meta = self.hspec-meta_2_7_8;
-
       elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
       elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
+
+      # elm-format requires text >= 2.0
+      text = self.text_2_0_1;
+      # elm-format-lib requires hspec-golden < 0.2
+      hspec-golden = self.hspec-golden_0_1_0_3;
+      # unorderd-container's tests indirectly depend on text < 2.0
+      unordered-containers = overrideCabal (drv: { doCheck = false; }) super.unordered-containers;
+      # relude-1.1.0.0's tests depend on hedgehog < 1.2, which indirectly depends on text < 2.0
+      relude = overrideCabal (drv: { doCheck = false; }) super.relude;
     };
   };
 
@@ -122,7 +134,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
         `patchNpmElm` function also defined in `packages/lib.nix`.
   */
   elmLib = let
-    hsElmPkgs = hsPkgs self;
+    hsElmPkgs = hs810Pkgs self;
   in import ./packages/lib.nix {
     inherit lib;
     inherit (pkgs) writeScriptBin stdenv;
@@ -141,7 +153,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
       maintainers = [ maintainers.turbomack ];
     };
   };
-} // (hsPkgs self).elmPkgs // (with elmLib; with (hsPkgs self).elmPkgs; {
+} // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
   elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
     meta = with lib; nodePkgs.elm-verify-examples.meta // {
       description = "Verify examples in your docs";

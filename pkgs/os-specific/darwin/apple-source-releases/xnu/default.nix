@@ -75,7 +75,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   ARCHS = arch;
   ARCH_CONFIGS = arch;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preBuild = let macosVersion =
     "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +

@@ -12,30 +12,39 @@ let
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = pkgsBuildBuild.buildGoPackage rec {
+  staticfiles = pkgsBuildBuild.buildGoModule rec {
     name = "staticfiles";
+
     src = fetchFromGitHub {
       owner = "bouk";
       repo = "staticfiles";
       rev = "827d7f6389cd410d0aa3f3d472a4838557bf53dd";
-      sha256 = "0xarhmsqypl8036w96ssdzjv3k098p2d4mkmw5f6hkp1m3j67j61";
+      hash = "sha256-wchj5KjhTmhc4XVW0sRFCcyx5W9am8TNAIhej3WFWXU=";
     };
 
-    goPackagePath = "bou.ke/staticfiles";
+    vendorHash = null;
+
+    excludedPackages = [ "./example" ];
+
+    preBuild = ''
+      cp ${./staticfiles.go.mod} go.mod
+    '';
+
+    ldflags = [ "-s" "-w" ];
   };
 in
 buildGoModule rec {
   pname = "argo";
-  version = "3.4.4";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZG10ruusSywXWn88UqrHVfAWrio2KoK2YoM9qdtMlhU=";
+    hash = "sha256-qNSnO+wtAKyUJwjIMZaiBUfgaoDFVttp04kTxr4H6po=";
   };
 
-  vendorHash = "sha256-Tqn5HGhRbN++yAo9JajUMTxFjVLw5QTvsis8wcfRIHw=";
+  vendorHash = "sha256-75l4YCYC38uX63Uv/MA7HciQ+wumWhTuimL+ctizBCs=";
 
   doCheck = false;
 
@@ -55,7 +64,8 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/argoproj/argo-workflows/v3.buildDate=unknown"
     "-X github.com/argoproj/argo-workflows/v3.gitCommit=${src.rev}"
     "-X github.com/argoproj/argo-workflows/v3.gitTag=${src.rev}"

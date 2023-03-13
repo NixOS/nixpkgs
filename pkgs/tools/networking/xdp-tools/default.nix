@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     emacs-nox # to generate man pages from .org
     nukeReferences
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     wireshark-cli # for tshark
   ];
 

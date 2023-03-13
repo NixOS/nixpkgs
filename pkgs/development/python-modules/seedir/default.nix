@@ -24,7 +24,7 @@ buildPythonPackage rec {
     natsort
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography
     mock
     pytest-forked

@@ -1,5 +1,5 @@
 diff --git a/WORKSPACE b/WORKSPACE
-index 696cc7ef..55a5bb8a 100644
+index ad16b3a1..52b66703 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -81,17 +81,6 @@ load("@com_github_google_rules_install//:setup.bzl", "install_rules_setup")
@@ -12,11 +12,11 @@ index 696cc7ef..55a5bb8a 100644
 -
 -win_flex_configure(
 -    name = "win_flex_bison",
--    sha256 = "095cf65cb3f12ee5888022f93109acbe6264e5f18f6ffce0bda77feb31b65bd8",
--    # bison 3.3.2, flex 2.6.4
--    url = "https://github.com/lexxmark/winflexbison/releases/download/v2.5.18/win_flex_bison-2.5.18.zip",
+-    sha256 = "8d324b62be33604b2c45ad1dd34ab93d722534448f55a16ca7292de32b6ac135",
+-    # bison 3.8.2, flex 2.6.4
+-    url = "https://github.com/lexxmark/winflexbison/releases/download/v2.5.25/win_flex_bison-2.5.25.zip",
 -)
 -
  http_archive(
      name = "rules_m4",
-     sha256 = "c67fa9891bb19e9e6c1050003ba648d35383b8cb3c9572f397ad24040fb7f0eb",
+     sha256 = "b0309baacfd1b736ed82dc2bb27b0ec38455a31a3d5d20f8d05e831ebeef1a8e",

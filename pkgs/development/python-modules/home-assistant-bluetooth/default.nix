@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.9.0";
+  version = "1.9.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/ne2pnSmeHuwlGCrMC0x/yNDCvB/P4SqmK/wwcmHlJQ=";
+    hash = "sha256-7wZocfTYTwTBwm61hKmIS4xlHq2nSvC6p8SlklnHq4M=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     "home_assistant_bluetooth"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -256,7 +256,7 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
+        default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
           "amdgpu-pro"

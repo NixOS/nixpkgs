@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 
 # propagates
-, antlr4-python3-runtime
-, dataclasses-json
+, importlib-resources
 , pyyaml
 
 # tests
@@ -13,7 +13,7 @@
 
 let
   pname = "hassil";
-  version = "0.1.3";
+  version = "1.0.6";
 in
 buildPythonPackage {
   inherit pname version;
@@ -21,20 +21,16 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KWkzHWMo50OIrZ2kwFhhqDSleFFkAD7/JugjvSyCkww=";
+    hash = "sha256-rCSVKFIkfPg2aYFwuYVLMxMO8S11dV8f4eckpFbNB3k=";
   };
 
-  postPatch = ''
-    sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements.txt
-  '';
-
   propagatedBuildInputs = [
-    antlr4-python3-runtime
-    dataclasses-json
     pyyaml
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

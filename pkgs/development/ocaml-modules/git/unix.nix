@@ -1,4 +1,4 @@
-{ buildDunePackage, git
+{ buildDunePackage, fetchpatch, git
 , rresult, result, bigstringaf
 , fmt, bos, fpath, uri, digestif, logs, lwt
 , mirage-clock, mirage-clock-unix, astring, awa, cmdliner
@@ -14,12 +14,22 @@ buildDunePackage {
   pname = "git-unix";
   inherit (git) version src;
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mirage/ocaml-git/commit/b708db8319cc456a5640618210d740a1e00468e9.patch";
+      hash = "sha256-Fe+eDhU/beZT/8br8XmOhHYJowaVEha16eGqyuu2Zr4=";
+    })
+  ];
+
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   buildInputs = [
-    awa awa-mirage cmdliner
-    mirage-clock tcpip
+    awa
+    awa-mirage
+    cmdliner
+    mirage-clock
+    tcpip
   ];
   propagatedBuildInputs = [
     rresult result bigstringaf
@@ -32,10 +42,11 @@ buildDunePackage {
   ];
   checkInputs = [
     alcotest alcotest-lwt base64 ke
-    mirage-crypto-rng git-binary
+    mirage-crypto-rng
     uri mtime
     cacert # sets up NIX_SSL_CERT_FILE
   ];
+  nativeCheckInputs = [ git-binary ];
   doCheck = true;
 
   meta = {

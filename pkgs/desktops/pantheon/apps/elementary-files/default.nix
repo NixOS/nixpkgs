@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.2.1";
+  version = "6.3.0";
 
   outputs = [ "out" "dev" ];
 
@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-pJFeMG2aGaMkS00fSoRlMR2YSg5YzwqwaQT8G7Gk5S4=";
+    sha256 = "sha256-DS39jCeN+FFiEqJqxa5F2XRKF7SJsm2qi5KKb79guKo=";
   };
 
   patches = [
-    # Ensure special user directory icon used for bookmark
-    # https://github.com/elementary/files/pull/2106
+    # Avoid crash due to ref counting issues in Directory cache
+    # https://github.com/elementary/files/pull/2149
     (fetchpatch {
-      url = "https://github.com/elementary/files/commit/00b1c2a975aeab378ed6eb1d90c8988f82596add.patch";
-      sha256 = "sha256-F/Vk7dg57uBBMO4WOJ/7kKbRNMZuWZ3QfrBfEIBozbw=";
+      url = "https://github.com/elementary/files/commit/6a0d16e819dea2d0cd2d622414257da9433afe2f.patch";
+      sha256 = "sha256-ijuSMZzVbSwWMWsK24A/24NfxjxgK/BU2qZlq6xLBEU=";
     })
   ];
 

@@ -4,7 +4,7 @@ self: super:
 
 let
   generatedGrammars = callPackage ./generated.nix {
-    buildGrammar = callPackage ../../../../../development/tools/parsing/tree-sitter/grammar.nix { };
+    inherit (tree-sitter) buildGrammar;
   };
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;

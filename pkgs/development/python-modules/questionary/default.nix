@@ -30,9 +30,13 @@ buildPythonPackage rec {
     prompt-toolkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 1024
+  '';
 
   disabledTests = [
     # TypeError: <lambda>() missing 1 required...

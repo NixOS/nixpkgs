@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pandas tensorboard ];
 
-  checkInputs = [ pytestCheckHook torch torchvision ];
+  nativeCheckInputs = [ pytestCheckHook torch torchvision ];
 
   disabledTests = [
     # Tests that attempt to access the filesystem in naughty ways.

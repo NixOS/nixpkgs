@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , backoff
 , beautifulsoup4
 , buildPythonPackage
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   version = "2022.12.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -46,19 +45,13 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
     types-pytz
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = "<0.18"' 'docutils = "*"'
-  '';
 
   disabledTests = [
     # simplipy/api.py:253: InvalidCredentialsError

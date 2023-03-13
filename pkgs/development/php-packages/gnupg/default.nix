@@ -15,7 +15,7 @@ in buildPecl {
   };
 
   buildInputs = [ gpgme ];
-  checkInputs = [ gnupg ];
+  nativeCheckInputs = [ gnupg ];
 
   postPhpize = ''
     substituteInPlace configure \

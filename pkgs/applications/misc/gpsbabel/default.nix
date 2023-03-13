@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGUI qtserialport
     ++ lib.optional (withGUI && withMapPreview) qtwebengine;
 
-  checkInputs = [ libxml2 which ];
+  nativeCheckInputs = [ libxml2 which ];
 
   preConfigure = lib.optionalString withGUI ''
     lrelease gui/*.ts gui/coretool/*.ts
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   # Floating point behavior on i686 causes nmea.test failures. Preventing
   # extended precision fixes this problem.
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isi686 "-ffloat-store";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-ffloat-store";
 
   doCheck = true;
 

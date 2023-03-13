@@ -1,32 +1,48 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , v4l-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtv-scan-tables";
-  version = "20221027";
+  version = "2022-04-30-57ed29822750";
 
-  src = fetchFromGitHub {
-    owner = "tvheadend";
-    repo = "dtv-scan-tables";
-    rev = "2a3dbfbab129c00d3f131c9c2f06b2be4c06fec6";
-    hash = "sha256-bJ+naUs3TDFul4PmpnWYld3j1Se+1X6U9jnECe3sno0=";
+  src = fetchurl {
+    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
+    hash = "sha256-amJoqjkkWTePo6E5IvwBWj+mP/gi9LDWTTPXE1Cm7J4=";
   };
 
   nativeBuildInputs = [
     v4l-utils
   ];
 
-  installFlags = [
-    "DATADIR=$(out)"
+  sourceRoot = "usr/share/dvb";
+
+  makeFlags = [
+    "PREFIX=$(out)"
   ];
 
+  allowedReferences = [ ];
+
   meta = with lib; {
-    description = "Digital TV scan tables";
-    homepage = "https://github.com/tvheadend/dtv-scan-tables";
+    # git repo with current revision is here:
+    #downloadPage = "https://git.linuxtv.org/dtv-scan-tables.git";
+    # Weekly releases are supposed to be here
+    downloadPage = "https://linuxtv.org/downloads/dtv-scan-tables/";
+    # but sometimes they lag behind several weeks or even months.
+    description = "Digital TV (DVB) channel/transponder scan tables";
+    homepage = "https://www.linuxtv.org/wiki/index.php/Dtv-scan-tables";
     license = with licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ ];
+    longDescription = ''
+      When scanning for dvb channels,
+      most applications require an initial set of
+      transponder coordinates (frequencies etc.).
+      These coordinates differ, depending of the
+      receiver's location or on the satellite.
+      The package delivers a collection of transponder
+      tables ready to be used by software like "dvbv5-scan".
+    '';
+    maintainers = with maintainers; [ yarny ];
   };
 }

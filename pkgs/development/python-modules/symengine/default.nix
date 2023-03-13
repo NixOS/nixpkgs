@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
 
-  checkInputs = [ pytest sympy ];
+  nativeCheckInputs = [ pytest sympy ];
 
   setupPyBuildFlags = [
     "--symengine-dir=${symengine}/"
