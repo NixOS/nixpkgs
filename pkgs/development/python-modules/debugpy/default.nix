@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , fetchFromGitHub
 , fetchpatch
 , substituteAll
@@ -22,7 +23,9 @@ buildPythonPackage rec {
   version = "1.6.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Currently doesn't support 3.11:
+  # https://github.com/microsoft/debugpy/issues/1107
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "microsoft";
