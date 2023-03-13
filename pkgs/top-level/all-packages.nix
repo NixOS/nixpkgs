@@ -10790,6 +10790,8 @@ with pkgs;
 
   payload_dumper = callPackage ../tools/archivers/payload_dumper { };
 
+  payload-dumper-go = callPackage ../tools/archivers/payload-dumper-go { };
+
   p2pvc = callPackage ../applications/video/p2pvc { };
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
