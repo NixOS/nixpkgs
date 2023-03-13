@@ -5621,6 +5621,8 @@ with pkgs;
 
   step-cli = callPackage ../tools/security/step-cli { };
 
+  step-kms-plugin = callPackage ../tools/security/step-kms-plugin { };
+
   string-machine = callPackage ../applications/audio/string-machine { };
 
   stripe-cli = callPackage ../tools/admin/stripe-cli {
