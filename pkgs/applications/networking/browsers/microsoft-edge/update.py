@@ -61,18 +61,6 @@ def write_expression():
     latest = latest_packages(packages())
     channel_strs = nix_expressions(latest)
     nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}'
-
-    print(textwrap.dedent(
-        '''
-        This script will update the default.nix file with the following contents:
-        {}\n
-        Are you sure you want to continue [y/N]?
-        '''
-    ).format(nix_expr))
-    response = input('> ')
-    if response.lower() != 'y':
-        print('Aborting')
-        exit(1)
     with open('default.nix', 'w') as f:
         f.write(nix_expr)
 
