@@ -99,6 +99,20 @@ let
   };
 
 in {
+  antlr4_12 = (mkAntlr {
+    version = "4.12.0";
+    sourceSha256 = "sha256-0JMG8UYFT+IAWvARY2KnuXSr5X6LlVZN4LJHy5d4x08=";
+    jarSha256 = "sha256-iPGKK/rA3eEAntpcfc41ilKHf673ho9WIjpbzBUynkM=";
+    extraCppCmakeFlags = [
+      # Generate CMake config files, which are not installed by default.
+      "-DANTLR4_INSTALL=ON"
+
+      # Disable tests, since they require downloading googletest, which is
+      # not available in a sandboxed build.
+      "-DANTLR_BUILD_CPP_TESTS=OFF"
+    ];
+  }).antlr;
+
   antlr4_11 = (mkAntlr {
     version = "4.11.1";
     sourceSha256 = "sha256-SUeDgfqLjYQorC8r/CKlwbYooTThMOILkizwQV8pocc=";
