@@ -63,6 +63,10 @@ let
       feature = "set `__contentAddressed` to true by default";
     };
 
+    alwaysAllowSubstitutes = mkMassRebuild {
+      feature = "set `allowSubstitutes` to true always";
+    };
+
     allowAliases = mkOption {
       type = types.bool;
       default = true;

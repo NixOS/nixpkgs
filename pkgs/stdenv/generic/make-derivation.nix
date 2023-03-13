@@ -288,7 +288,8 @@ else let
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
+       "sandboxProfile" "propagatedSandboxProfile"
+       "allowSubstitutes"]
        ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
@@ -486,6 +487,9 @@ else let
     lib.optionalAttrs (attrs ? allowedRequisites) {
       allowedRequisites =
         lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+    } //
+    lib.optionalAttrs (attrs ? allowSubstitutes) {
+      allowSubstitutes = if config.alwaysAllowSubstitutes then true else attrs.allowSubstitutes;
     };
 
   validity = checkMeta { inherit meta attrs; };
