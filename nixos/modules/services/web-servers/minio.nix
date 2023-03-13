@@ -60,7 +60,7 @@ in
       '';
     };
 
-    rootCredentialsFile = mkOption  {
+    rootCredentialsFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       description = lib.mdDoc ''
@@ -98,7 +98,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${cfg.configDir}' - minio minio - -"
-    ] ++ (map (x:  "d '" + x + "' - minio minio - - ") cfg.dataDir);
+    ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
 
     systemd.services.minio = {
       description = "Minio Object Storage";
@@ -110,9 +110,10 @@ in
         User = "minio";
         Group = "minio";
         LimitNOFILE = 65536;
-        EnvironmentFile = if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-                          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-                          else null;
+        EnvironmentFile =
+          if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
+          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
+          else null;
       };
       environment = {
         MINIO_REGION = "${cfg.region}";
