@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "darktile";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "darktile";
     rev = "v${version}";
-    sha256 = "0pdj4yv3qrq56gb67p85ara3g8qrzw5ha787bl2ls4vcx85q7303";
+    sha256 = "0pr38482an4kkml2lj2xd3z4xnynx5jiix6r8wfaphlq1i4g4yrk";
   };
 
   nativeBuildInputs = [ go pkg-config ];
@@ -37,11 +37,6 @@ stdenv.mkDerivation rec {
     libXxf86vm
     libGL
   ];
-
-  postPatch = ''
-    substituteInPlace scripts/build.sh \
-      --replace "bash" "sh"
-  '';
 
   postConfigure = ''
     export GOPATH=$TMP/go
