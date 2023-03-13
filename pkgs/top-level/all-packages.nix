@@ -40705,4 +40705,6 @@ with pkgs;
   isolate = callPackage ../tools/security/isolate { };
 
   reindeer = callPackage ../development/tools/reindeer { };
+
+  pbm = callPackage ../tools/admin/pbm { };
 }
