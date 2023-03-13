@@ -1565,12 +1565,6 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (appendPatch (fetchpatch {
-      name = "hercules-ci-agent-support-cachix-1.3.patch";
-      url = "https://github.com/hercules-ci/hercules-ci-agent/pull/500.diff";
-      sha256 = "sha256-ErrFvzB1NiIJLpsP2wfx5CX8DnH1x5i/ijQZEeuOzeI=";
-      relative = "hercules-ci-agent";
-    }))
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 
@@ -2494,4 +2488,8 @@ self: super: {
 
   # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
   diagrams-gtk = doJailbreak super.diagrams-gtk;
+
+  # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
+  # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
+  tomland = doJailbreak super.tomland;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
