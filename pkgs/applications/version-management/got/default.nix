@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     fgrep -Rl @HOST_FREEBSD_TRUE@ . | xargs sed -e 's,@HOST_FREEBSD_TRUE@,,' -i
   '';
 
-  patches = [ ./darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     buildFlagsArray+=(CFLAGS="-DHAVE_STRLCPY=1 -DHAVE_STRLCAT=1 -DHAVE_STRNSTR=1 -DHAVE_STRMODE=1")
