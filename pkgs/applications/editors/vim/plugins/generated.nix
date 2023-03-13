@@ -3022,6 +3022,18 @@ final: prev:
     meta.homepage = "https://github.com/ncm2/float-preview.nvim/";
   };
 
+  floating-input-nvim = buildVimPluginFrom2Nix {
+    pname = "floating-input.nvim";
+    version = "2023-03-09";
+    src = fetchFromGitHub {
+      owner = "liangxianzhe";
+      repo = "floating-input.nvim";
+      rev = "2ac3b4b75de72ea715a04d6d1b8d92c7718d2c64";
+      sha256 = "165jk5dhi8lv6fcbfwk395vw5yikmm1v2r74l0nvpa3j6xl1h7zm";
+    };
+    meta.homepage = "https://github.com/liangxianzhe/floating-input.nvim/";
+  };
+
   floating-nvim = buildVimPluginFrom2Nix {
     pname = "floating.nvim";
     version = "2021-07-19";
