@@ -21,6 +21,7 @@
 , enableMoby ? true
 , enableNomad ? true
 , enableOpenstack ? true
+, enableOVHCloud ? true
 , enablePuppetDB ? true
 , enableScaleway ? true
 , enableTriton ? true
@@ -77,6 +78,7 @@ buildGoModule rec {
     ${lib.optionalString enableMoby         "echo - github.com/prometheus/prometheus/discovery/moby"}
     ${lib.optionalString enableNomad        "echo - github.com/prometheus/prometheus/discovery/nomad"}
     ${lib.optionalString enableOpenstack    "echo - github.com/prometheus/prometheus/discovery/openstack"}
+    ${lib.optionalString enableOVHCloud     "echo - github.com/prometheus/prometheus/discovery/ovhcloud"}
     ${lib.optionalString enablePuppetDB     "echo - github.com/prometheus/prometheus/discovery/puppetdb"}
     ${lib.optionalString enableScaleway     "echo - github.com/prometheus/prometheus/discovery/scaleway"}
     ${lib.optionalString enableTriton       "echo - github.com/prometheus/prometheus/discovery/triton"}
