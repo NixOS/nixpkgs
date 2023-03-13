@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , nixosTests
 , pkg-config
 , systemd
@@ -51,6 +52,14 @@ stdenv.mkDerivation rec {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
     sha256 = "sha256-9kLctjXpCVZMqP2Z6kSrQ/YHI7TXbBWO2BKXjEWzmLk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-23009.patch";
+      url = "https://libreswan.org/security/CVE-2023-23009/CVE-2023-23009-libreswan-4.4-4.9.patch";
+      sha256 = "sha256-HJyp7y7ROfMVg5/e/JyOHlXTyVkw0dAVmNHwTAqlFmQ=";
+    })
+  ];
 
   strictDeps = true;
 
