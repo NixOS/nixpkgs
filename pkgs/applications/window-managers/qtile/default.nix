@@ -83,7 +83,7 @@ let
       license = licenses.mit;
       description = "A small, flexible, scriptable tiling window manager written in Python";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ kamilchm ];
+      maintainers = with maintainers; [ kamilchm arjan-s ];
     };
   };
 in
