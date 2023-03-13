@@ -21,11 +21,13 @@ stdenv.mkDerivation rec {
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
     substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
+  '' ++ lib.optional stdenv.isLinux ''
+    fgrep -Rl @HOST_FREEBSD_TRUE@ . | xargs sed -e 's,@HOST_FREEBSD_TRUE@,,' -i
   '';
 
   patches = [ ./darwin.patch ];
 
-  preBuild = ''
+  preBuild = lib.optionals stdenv.isDarwin ''
     buildFlagsArray+=(CFLAGS="-DHAVE_STRLCPY=1 -DHAVE_STRLCAT=1 -DHAVE_STRNSTR=1 -DHAVE_STRMODE=1")
   '';
 
