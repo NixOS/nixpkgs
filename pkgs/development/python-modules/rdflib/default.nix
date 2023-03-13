@@ -64,6 +64,9 @@ buildPythonPackage rec {
     # requires network access
     "--deselect=rdflib/__init__.py::rdflib"
     "--deselect=test/jsonld/test_onedotone.py::test_suite"
+    # assumes 64-bit hash length, fails on pkgsi686Linux.python3Packages.rdflib:
+    #   https://github.com/RDFLib/rdflib/issues/2275
+    "--deselect=test/test_extras/test_infixowl/test_restriction.py::test_restriction_str_and_hash"
   ];
 
   disabledTests = [
