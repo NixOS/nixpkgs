@@ -518,6 +518,8 @@ with pkgs;
 
   evans = callPackage ../development/tools/evans { };
 
+  evhz = callPackage ../tools/misc/evhz { };
+
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
   figma-linux = callPackage ../applications/graphics/figma-linux { };
