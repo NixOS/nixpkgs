@@ -9,7 +9,7 @@
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
-{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ] }:
+{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ] }:
 
 let
 
@@ -303,6 +303,7 @@ let
 
             # musl only supports linux, not darwin.
             "x86_64-darwin"
+            "aarch64-darwin"
           ]
           {
             inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
@@ -319,7 +320,10 @@ let
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
-            "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
+
+            # Static doesn't work on darwin
+            "x86_64-darwin"
+            "aarch64-darwin"
           ] {
             haskellPackages = {
               inherit (packagePlatforms pkgs.pkgsStatic.haskellPackages)
@@ -333,8 +337,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc926 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc926)
+            haskell.packages.native-bignum.ghc927 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc927)
                 hello
                 lens
                 random
@@ -346,22 +350,26 @@ let
             };
           };
 
-      # TODO(@sternenseemann): when GHC 9.6 comes out we need separate jobs for
-      # default GHC and ghcHEAD.
-      pkgsCross.ghcjs.haskellPackages =
+      pkgsCross.ghcjs =
         removePlatforms
           [
-            # Still unexplained build failure: https://github.com/NixOS/nixpkgs/issues/217127
-            "x86_64-darwin"
-
             # Hydra output size of 3GB is exceeded
             "aarch64-linux"
           ]
           {
-            inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-              ghc
-              hello
-            ;
+            haskellPackages = {
+              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+                ghc
+                hello
+              ;
+            };
+
+            haskell.packages.ghcHEAD = {
+              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
+                ghc
+                hello
+              ;
+            };
           };
     })
     (versionedCompilerJobs {
@@ -507,7 +515,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc926
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc927
         ];
       };
     }
