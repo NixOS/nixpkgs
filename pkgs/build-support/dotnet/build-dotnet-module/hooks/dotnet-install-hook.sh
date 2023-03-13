@@ -21,7 +21,7 @@ dotnetInstallHook() {
         env dotnet publish ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            --output "$out/lib/${pname}" \
+            -p:PublishDir="$out/lib/${pname}" \
             --configuration "@buildType@" \
             --no-build \
             ${dotnetInstallFlags[@]}  \
@@ -33,7 +33,7 @@ dotnetInstallHook() {
          env dotnet pack ${project-} \
              -p:ContinuousIntegrationBuild=true \
              -p:Deterministic=true \
-             --output "$out/share" \
+             -p:PackageOutputPath="$out/share" \
              --configuration "@buildType@" \
              --no-build \
              ${dotnetPackFlags[@]}  \
