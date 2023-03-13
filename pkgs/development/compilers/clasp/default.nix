@@ -1,12 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, llvmPackages_15
-# For packages
-, asdf_3_3
-, commonLispPackagesFor
-, lispWithPackages
-, build-asdf-system
-, spec ? { faslExt = "fasp"; program = "clasp"; flags = []; asdf = asdf_3_3; }
-, packageOverrides ? (self: super: {})
-, ...}:
+{ pkgs, lib, fetchFromGitHub, llvmPackages_15, ...}:
 
 
 let
@@ -55,62 +47,52 @@ let
     outputHash = "sha256-vgwThjn2h3nKnShtKoHgaPdH/FDHv28fLMQvKFEwG6o=";
   };
 
-  clasp = llvmPackages_15.stdenv.mkDerivation {
-    pname = "clasp";
-    version = "2.2.0";
-    inherit src;
-    nativeBuildInputs = (with pkgs; [
-      sbcl
-      git
-      pkg-config
-      fmt
-      gmpxx
-      libelf
-      boost
-      libunwind
-      ninja
-    ]) ++ (with llvmPackages_15; [
-      llvm
-      libclang
-    ]);
-    configurePhase = ''
-    export SOURCE_DATE_EPOCH=1
-    export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
-    tar xf ${reposTarball}
-    sbcl --script koga \
-      --skip-sync \
-      --cc=$NIX_CC/bin/cc \
-      --cxx=$NIX_CC/bin/c++ \
-      --reproducible-build \
-      --package-path=/ \
-      --bin-path=$out/bin \
-      --lib-path=$out/lib \
-      --share-path=$out/share
-  '';
-    buildPhase = ''
-    ninja -C build
-  '';
-    installPhase = ''
-    ninja -C build install
-  '';
+in llvmPackages_15.stdenv.mkDerivation {
+  pname = "clasp";
+  version = "2.2.0";
+  inherit src;
+  nativeBuildInputs = (with pkgs; [
+    sbcl
+    git
+    pkg-config
+    fmt
+    gmpxx
+    libelf
+    boost
+    libunwind
+    ninja
+  ]) ++ (with llvmPackages_15; [
+    llvm
+    libclang
+  ]);
+  configurePhase = ''
+  export SOURCE_DATE_EPOCH=1
+  export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
+  tar xf ${reposTarball}
+  sbcl --script koga \
+    --skip-sync \
+    --cc=$NIX_CC/bin/cc \
+    --cxx=$NIX_CC/bin/c++ \
+    --reproducible-build \
+    --package-path=/ \
+    --bin-path=$out/bin \
+    --lib-path=$out/lib \
+    --share-path=$out/share
+'';
+  buildPhase = ''
+  ninja -C build
+'';
+  installPhase = ''
+  ninja -C build install
+'';
 
-    meta = {
-      description = "A Common Lisp implementation based on LLVM with C++ integration";
-      license = lib.licenses.lgpl21Plus ;
-      maintainers = [lib.maintainers.raskin lib.maintainers.uthar];
-      platforms = lib.platforms.linux;
-      homepage = "https://github.com/clasp-developers/clasp";
-    };
-
-    # For packages
-    passthru = let
-      spec' = spec // { pkg = clasp; };
-      pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
-    in {
-      inherit pkgs;
-      withPackages = lispWithPackages pkgs;
-      buildASDFSystem = args: build-asdf-system (args // spec');
-    };
-
+  meta = {
+    description = "A Common Lisp implementation based on LLVM with C++ integration";
+    license = lib.licenses.lgpl21Plus ;
+    maintainers = [lib.maintainers.raskin lib.maintainers.uthar];
+    platforms = lib.platforms.linux;
+    homepage = "https://github.com/clasp-developers/clasp";
   };
-in clasp
+
+}
+
