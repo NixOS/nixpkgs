@@ -296,6 +296,7 @@ broken-packages:
   - azure-email
   - azurify
   - b9
+  - babl # wants pkg-config dependency `babl`, but pkgs.babl's pkg-config file is called babl-0.1.pc
   - backprop
   - backstop
   - backtracking-exceptions
@@ -471,6 +472,7 @@ broken-packages:
   - brians-brain
   - brick-dropdownmenu
   - brick-filetree
+  - brick-list-search #  failure  in job https://hydra.nixos.org/build/211236614 at 2023-03-13
   - bricks-internal
   - brick-tabular-list
   - brillig
@@ -487,6 +489,7 @@ broken-packages:
   - bson-generics
   - bson-mapping
   - bsparse
+  - btree-concurrent # dependency missing in job https://hydra.nixos.org/build/211250233 at 2023-03-13
   - btrfs
   - buffer
   - buffer-builder-aeson
@@ -731,6 +734,7 @@ broken-packages:
   - clone-all
   - closure
   - cloudfront-signer
+  - clplug #  failure  in job https://hydra.nixos.org/build/211239834 at 2023-03-13
   - clr-inline
   - clr-typed
   - cluss
@@ -1129,7 +1133,6 @@ broken-packages:
   - dia-base
   - diagrams-boolean
   - diagrams-builder
-  - diagrams-gtk
   - diagrams-pdf
   - diagrams-qrcode
   - diagrams-rubiks-cube
@@ -1237,7 +1240,6 @@ broken-packages:
   - drmaa
   - drone
   - dropbox
-  - drunken-bishop
   - dsc
   - ds-kanren
   - dsmc
@@ -1460,6 +1462,7 @@ broken-packages:
   - fastedit
   - fastly
   - fast-nats
+  - fastparser # failure building library in job https://hydra.nixos.org/build/211240748 at 2023-03-13
   - fastpbkdf2
   - FastPush
   - fast-tagsoup-utf8-only
@@ -2885,7 +2888,9 @@ broken-packages:
   - jvm-binary
   - jvm-parser
   - JYU-Utils
+  - k8s-wrapper # test failure in job https://hydra.nixos.org/build/211254982 at 2023-03-13
   - kademlia
+  - kafka-client # dependency missing in job https://hydra.nixos.org/build/211238496 at 2023-03-13
   - kafka-client-sync
   - kalman
   - Kalman
@@ -3287,6 +3292,7 @@ broken-packages:
   - medium-sdk-haskell
   - meep
   - megalisp
+  - megastore #  failure  in job https://hydra.nixos.org/build/211239200 at 2023-03-13
   - melf
   - mellon-core
   - melody
@@ -3598,6 +3604,7 @@ broken-packages:
   - neural-network-hmatrix
   - newbase60
   - newhope
+  - newline # dependency missing in job https://hydra.nixos.org/build/211250825 at 2023-03-13
   - newports
   - newsletter
   - newt
@@ -4283,6 +4290,7 @@ broken-packages:
   - quantification
   - quantum-arrow
   - quarantimer
+  - qudb # failure building executable 'qudb' in job https://hydra.nixos.org/build/211250260 at 2023-03-13
   - quenya-verb
   - querystring-pickle
   - questioner
@@ -4592,6 +4600,7 @@ broken-packages:
   - sandlib
   - sandman
   - sarasvati
+  - sasha # dependency missing in job https://hydra.nixos.org/build/211237944 at 2023-03-13
   - sat
   - satchmo-backends
   - satchmo-minisat
@@ -5210,7 +5219,6 @@ broken-packages:
   - tamarin-prover-utils
   - Tape
   - tapioca
-  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-autocollect
@@ -5799,6 +5807,7 @@ broken-packages:
   - whiskers
   - whois
   - why3
+  - wide-word-instances # failure building library in job https://hydra.nixos.org/build/211245524 at 2023-03-13
   - WikimediaParser
   - willow
   - windns

@@ -132,7 +132,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1g1m18l7cx2y5d43k0vy5bqn4znybq0p345399zf9nkwhwhb7s20";
+      sha256 = "0ngvdcvskrhdq4m19h4b1cq3jhbzx0bqay6hvsppk6cb2y4wkfd9";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -284,6 +284,11 @@ self: super: {
   # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
   opencv = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv);
   opencv-extra = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv-extra);
+
+  # Too strict lower bound on hspec
+  graphql =
+    assert lib.versionOlder self.hspec.version "2.10";
+    doJailbreak super.graphql;
 
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
@@ -1329,20 +1334,6 @@ self: super: {
     })
   ] super.svgcairo;
 
-  # Espial is waiting for a hackage release to be compatible with GHC 9.X.
-  # [This issue](https://github.com/jonschoning/espial/issues/49) can be followed
-  # to track the status of the new release.
-  espial =
-    let ghc9-compat = fetchpatch {
-          url = "https://github.com/jonschoning/espial/commit/70177f9efb9666c3616e8a474681d3eb763d0e84.patch";
-          sha256 = "sha256-aJtwZGp9DUpACBV0WYRL7k32m6qWf5vq6eKBFq/G23s=";
-          excludes = ["package.yaml" "stack.yaml" "stack.yaml.lock"];
-        };
-    in overrideCabal (drv: {
-      jailbreak = assert super.espial.version == "0.0.11"; true;
-      patches = [ ghc9-compat ];
-    }) super.espial;
-
   # Upstream PR: https://github.com/jkff/splot/pull/9
   splot = appendPatch (fetchpatch {
     url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
@@ -1352,7 +1343,7 @@ self: super: {
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
+  haskeline_0_8_2_1 = doDistribute (dontCheck super.haskeline_0_8_2_1);
 
   # Too strict upper bound on HTF
   # https://github.com/nikita-volkov/stm-containers/issues/29
@@ -1543,7 +1534,7 @@ self: super: {
   # 2022-03-19: strict upper bounds https://github.com/poscat0x04/hinit/issues/2
   hinit = doJailbreak
     (self.generateOptparseApplicativeCompletions [ "hi" ]
-      (super.hinit.override { haskeline = self.haskeline_0_8_2; }));
+      (super.hinit.override { haskeline = self.haskeline_0_8_2_1; }));
 
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;
@@ -1800,10 +1791,11 @@ self: super: {
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
 
-  # Too strict version bounds on a bunch of libraries:
-  # https://github.com/smallhadroncollider/taskell/issues/100
-  # May be possible to remove at the next release (1.11.0)
-  taskell = doJailbreak super.taskell;
+  taskell = super.taskell.override {
+    # Does not support brick >= 1.0
+    # https://github.com/smallhadroncollider/taskell/issues/125
+    brick = self.brick_0_70_1;
+  };
 
   # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
   ghc-bignum = super.ghc-bignum or self.mkDerivation {
@@ -2125,6 +2117,7 @@ self: super: {
       "-p" "!/Test Rendering/"
     ] ++ drv.testFlags or [];
   }) super.morpheus-graphql;
+  drunken-bishop = doJailbreak super.drunken-bishop;
   # https://github.com/SupercedeTech/dropbox-client/issues/1
   dropbox = overrideCabal (drv: {
     testFlags = [
@@ -2248,15 +2241,10 @@ self: super: {
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
-  # Temporarily upgrade haskell-gi until our hackage pin advances
+  # Temporarily upgrade haskell-gi until stackage advances
   # Fixes build of gi-harfbuzz with harfbuzz >= 7.0
   # https://github.com/haskell-gi/haskell-gi/issues/396#issuecomment-1445181362
-  haskell-gi =
-    assert super.haskell-gi.version == "0.26.2";
-    overrideCabal {
-      version = "0.26.3";
-      sha256 = "sha256-jsAb3JCSHCmi2dp9bpi/J3NRO/EQFB8ar4GpxAuBGOo=";
-    } super.haskell-gi;
+  haskell-gi = doDistribute self.haskell-gi_0_26_3;
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
@@ -2503,4 +2491,7 @@ self: super: {
   # bytestring <0.11.0, optparse-applicative <0.13.0
   # https://github.com/kseo/sfnt2woff/issues/1
   sfnt2woff = doJailbreak super.sfnt2woff;
+
+  # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
+  diagrams-gtk = doJailbreak super.diagrams-gtk;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
