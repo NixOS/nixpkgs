@@ -1,0 +1,20 @@
+diff --git a/cmake/SetCompilerFlags.cmake b/cmake/SetCompilerFlags.cmake
+index 8e83390..bd734f0 100644
+--- a/cmake/SetCompilerFlags.cmake
++++ b/cmake/SetCompilerFlags.cmake
+@@ -98,13 +98,13 @@ function(add_compile_flags target)
+       endif()
+     endif()
+     # Support address space layout randomization (ASLR)
+-    if(NOT (MINGW OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang"))
++    if(NOT (MINGW OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR ((CMAKE_SYSTEM_NAME MATCHES Darwin) AND (CMAKE_C_COMPILER_ID MATCHES Clang))))
+       target_compile_options(${target} PRIVATE -fPIE)
+       target_link_options(${target} PRIVATE -fPIE -pie)
+       target_link_options(${target} PRIVATE -Wl,-z,relro)
+       target_link_options(${target} PRIVATE -Wl,-z,now)
+       target_link_options(${target} PRIVATE -Wl,-z,noexecstack)
+-    endif(NOT (MINGW OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang"))
++    endif(NOT (MINGW OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR ((CMAKE_SYSTEM_NAME MATCHES Darwin) AND (CMAKE_C_COMPILER_ID MATCHES Clang))))
+     target_link_options(${target} PRIVATE -fstack-check)
+     add_compile_flag_to_targets(${target})
+   endif(MSVC)

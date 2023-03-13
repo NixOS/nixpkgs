@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
+, cmake
 , pkg-config
 , curl
 , openssl
@@ -9,16 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.3";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KJyGDrT3dr8DfjfRrWIENoBFuiWrgQx4qz1V+mT8/yI=";
+    sha256 = "sha256-33uT9PFD1YEIMzifZkpbl2EAoC98IsM72K4rRjDfh8g=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  patches = [ ./darwin-cmake.patch ];
+
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ curl openssl ];
 
