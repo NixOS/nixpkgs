@@ -2488,4 +2488,8 @@ self: super: {
 
   # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
   diagrams-gtk = doJailbreak super.diagrams-gtk;
+
+  # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
+  # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
+  tomland = doJailbreak super.tomland;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
