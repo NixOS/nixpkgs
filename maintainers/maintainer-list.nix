@@ -16353,6 +16353,12 @@
     githubId = 529003;
     name = "Christine Dodrill";
   };
+  xEgoist = {
+    email = "egoist@egoistic.dev";
+    github = "xEgoist";
+    githubId = 101279047;
+    name = "xEgoist";
+  };
   xeji = {
     email = "xeji@cat3.de";
     github = "xeji";
