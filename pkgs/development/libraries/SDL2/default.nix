@@ -33,8 +33,6 @@
 , udev
 , ibusSupport ? false
 , ibus
-, fcitxSupport ? false
-, fcitx
 , libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libdecor
 , pipewireSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
@@ -109,7 +107,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
-    ++ lib.optional fcitxSupport fcitx
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
