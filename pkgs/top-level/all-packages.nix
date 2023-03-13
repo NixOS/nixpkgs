@@ -460,6 +460,8 @@ with pkgs;
 
   crc = callPackage ../applications/networking/cluster/crc { };
 
+  confy = callPackage ../applications/misc/confy { };
+
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
 
   copilot-cli = callPackage ../tools/admin/copilot-cli { };
