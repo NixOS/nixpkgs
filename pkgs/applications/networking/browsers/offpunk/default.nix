@@ -30,13 +30,16 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "offpunk";
-  version = "1.9";
+  version = "1.9.2";
+  format = "flit";
+
+  disabled = python3Packages.pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    sha256 = "sha256-sxX4/7jbNbLwHVfE1lDtjr/luby5zAf6Hy1RcwXZLBA=";
+    sha256 = "sha256-CYsuoj5/BaaboDRtcOrGzJoZDCfOLs7ROVWLVjOAnRU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
