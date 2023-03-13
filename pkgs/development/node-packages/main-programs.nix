@@ -20,6 +20,7 @@
   "@commitlint/cli" = "commitlint";
   "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
+  "@githubnext/github-copilot-cli" = "github-copilot-cli";
   "@google/clasp" = "clasp";
   "@medable/mdctl-cli" = "mdctl";
   "@mermaid-js/mermaid-cli" = "mmdc";
