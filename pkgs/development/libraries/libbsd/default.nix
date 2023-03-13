@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libmd ];
 
-  patches = [ ./darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
