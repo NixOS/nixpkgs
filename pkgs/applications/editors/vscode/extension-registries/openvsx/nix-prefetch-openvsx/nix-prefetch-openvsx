@@ -123,14 +123,19 @@ function prepare_manifest_path {
 }
 
 function query_vsix_hash {
-    # TODO: Implement this when the hash-querying feature is merged by upstream
-    # See https://github.com/eclipse/openvsx/pull/678
-    prepare_force_query_hash
-    if ((FORCE_QUERY_HASH)); then
-        echo "query_vsix_hash: not implemented yet" >&2
-        echo "See https://github.com/eclipse/openvsx/pull/678" >&2
+    prepare_vsix_metadata_url
+    prepare_exttmp
+    prepare_hash_algo
+    prepare_hash_format
+    local VSIX_HASH_FILE_URL="${VSIX_METADATA_URL}/file/${HASH_ALGO}"
+    local VSIX_HASH_FILE_PATH_EXPECTED="${EXTTMP}/${HASH_ALGO}"
+    download_file "$VSIX_HASH_FILE_PATH_EXPECTED" "$VSIX_HASH_FILE_URL"
+    VSIX_HASH="$(nix --extra-experimental-features nix-command hash "to-${HASH_FORMAT}" --type "${HASH_ALGO}" "$(cat "$VSIX_HASH_FILE_PATH_EXPECTED")")"
+    if [[ -z "$VSIX_HASH" ]]; then
+        echo "query_vsix_hash: failed" >&2
+        return 1
     fi
-    return 1
+    rm "$VSIX_HASH_FILE_PATH_EXPECTED"
 }
 
 function prepare_vsix_hash {
@@ -145,8 +150,17 @@ function prepare_vsix_hash {
             # Note: The if keyword and logical operator will deprive those not-the-last commands
             # of the `set -e` property, so we must ensure that query_vsix_hash returns properly
             # without the fail-early warrenty.
+            # Use the LBYL strategy instead of the `query_vsix_hash || compute_vsix_hash` EAFP.
             # See https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html
-            query_vsix_hash || compute_vsix_hash
+            local _HASH_FILE_URL;
+            prepare_hash_algo
+            prepare_manifest_path
+            _HASH_FILE_URL="$(jq -c -r ".$HASH_ALGO" "$MANIFEST_PATH")"
+            if [[ "${_HASH_FILE_URL:-null}" != "null" ]]; then
+                query_vsix_hash
+            else
+                compute_vsix_hash
+            fi
         fi
     fi
 }
