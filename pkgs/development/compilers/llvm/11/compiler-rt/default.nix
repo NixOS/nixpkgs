@@ -67,6 +67,10 @@ stdenv.mkDerivation {
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     ./armv7l.patch
+    # Fix build on armv6l
+    ../../common/compiler-rt/armv6-mcr-dmb.patch
+    ../../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+    ../../common/compiler-rt/armv6-no-ldrexd-strexd.patch
   ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''

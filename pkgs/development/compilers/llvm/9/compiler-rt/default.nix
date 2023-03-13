@@ -61,6 +61,10 @@ stdenv.mkDerivation {
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
+    # Fix build on armv6l
+    ../../common/compiler-rt/armv6-mcr-dmb.patch
+    ../../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+    ../../common/compiler-rt/armv6-no-ldrexd-strexd.patch
   ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
