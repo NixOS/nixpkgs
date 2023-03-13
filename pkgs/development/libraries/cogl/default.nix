@@ -41,11 +41,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589";
       sha256 = "0f0d9iddg8zwy853phh7swikg4yzhxxv71fcag36f8gis0j5p998";
+      decode = "xz -d";
     })
 
     (fetchpatch {
       url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056";
       sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
+      decode = "xz -d";
     })
   ];
 
