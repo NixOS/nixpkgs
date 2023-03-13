@@ -665,6 +665,7 @@
   ./services/misc/prowlarr.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
+  ./services/misc/readarr.nix
   ./services/misc/redmine.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rippled.nix
@@ -803,6 +804,7 @@
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
+  ./services/networking/cgit.nix
   ./services/networking/charybdis.nix
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
