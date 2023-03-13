@@ -14016,6 +14016,12 @@
     githubId = 3371635;
     name = "Salar Rahmanian";
   };
+  sogreatandpowerfull = {
+    email = "sogreatandpowerful@tuta.io";
+    github = "sogreatandpowerfull";
+    githubId = 114095654;
+    name = "SoGreatAndPowerful";
+  };
   sohalt = {
     email = "nixos@sohalt.net";
     github = "Sohalt";
