@@ -19,7 +19,6 @@ in rec {
     if unit.enable then
       pkgs.runCommand "unit-${mkPathSafeName name}"
         { preferLocalBuild = true;
-          allowSubstitutes = false;
           inherit (unit) text;
         }
         ''
@@ -29,9 +28,7 @@ in rec {
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
-        { preferLocalBuild = true;
-          allowSubstitutes = false;
-        }
+        { preferLocalBuild = true; }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname "$name")"
@@ -131,9 +128,7 @@ in rec {
         nspawn = "nspawn";
       }).${type};
     in pkgs.runCommand "${type}-units"
-      { preferLocalBuild = true;
-        allowSubstitutes = false;
-      } ''
+      { preferLocalBuild = true; } ''
       mkdir -p $out
 
       # Copy the upstream systemd units we're interested in.

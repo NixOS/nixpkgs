@@ -54,7 +54,6 @@ let
   # Perform substitutions in all udev rules files.
   udevRulesFor = { name, udevPackages, udevPath, udev, systemd, binPackages, initrdBin ? null }: pkgs.runCommand name
     { preferLocalBuild = true;
-      allowSubstitutes = false;
       packages = unique (map toString udevPackages);
     }
     ''
@@ -156,7 +155,6 @@ let
 
   hwdbBin = pkgs.runCommand "hwdb.bin"
     { preferLocalBuild = true;
-      allowSubstitutes = false;
       packages = unique (map toString ([udev] ++ cfg.packages));
     }
     ''

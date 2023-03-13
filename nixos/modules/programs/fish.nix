@@ -256,7 +256,6 @@ in
               cp * $out/
             '';
             preferLocalBuild = true;
-            allowSubstitutes = false;
           };
           generateCompletions = package: pkgs.runCommand
             "${package.name}_fish-completions"
@@ -264,7 +263,6 @@ in
               {
                 inherit package;
                 preferLocalBuild = true;
-                allowSubstitutes = false;
               }
               // optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
             )
