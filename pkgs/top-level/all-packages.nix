@@ -6515,6 +6515,8 @@ with pkgs;
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
+  dc3dd = callPackage ../tools/system/dc3dd { };
+
   dclxvi = callPackage ../development/libraries/dclxvi { };
 
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
