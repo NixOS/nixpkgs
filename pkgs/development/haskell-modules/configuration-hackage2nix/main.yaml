@@ -120,6 +120,7 @@ extra-packages:
   - ShellCheck == 0.8.0                 # 2022-12-28: required by haskell-ci 0.14.3
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
+  - primitive == 0.7.4.0                # 2023-03-04: primitive 0.8 is not compatible with too many packages on ghc 9.4 as of now
 
 package-maintainers:
   abbradar:

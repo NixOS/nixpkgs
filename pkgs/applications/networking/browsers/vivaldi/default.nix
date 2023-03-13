@@ -23,9 +23,17 @@ in stdenv.mkDerivation rec {
   pname = "vivaldi";
   version = "5.7.2921.53";
 
+  suffix = {
+    aarch64-linux = "arm64";
+    x86_64-linux = "amd64";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
   src = fetchurl {
-    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_amd64.deb";
-    sha256 = "sha256-qkKCoHJCRji3XfXk71n4BfjFyQpXZ+BariHmbYPAuv8=";
+    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
+    hash = {
+      aarch64-linux = "sha256-U8mRXXLqBxc+humj4Cz9x5q75KC+H3pXlVe0rp1Hat0=";
+      x86_64-linux = "sha256-qkKCoHJCRji3XfXk71n4BfjFyQpXZ+BariHmbYPAuv8=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   unpackPhase = ''
@@ -106,6 +114,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ otwieracz badmutex ];
-    platforms   = [ "x86_64-linux" ];
+    platforms   = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

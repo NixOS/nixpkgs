@@ -46,7 +46,7 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -71,7 +71,8 @@ in {
 
   # Jailbreaks & Version Updates
 
-  aeson = self.aeson_2_1_1_0;
+  # Jailbreak to allow quickcheck-instances-0.3.28 (too strict lower bound)
+  aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
 
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
@@ -146,8 +147,7 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_2;
+  lens = doDistribute self.lens_5_2_1;
 
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {

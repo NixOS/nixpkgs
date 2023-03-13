@@ -4,6 +4,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pytestCheckHook
+, cookiecutter
 , datasets
 , dill
 , fsspec
@@ -13,6 +14,7 @@
 , numpy
 , packaging
 , pandas
+, pyarrow
 , requests
 , responses
 , tqdm
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "responses" ];
 
   propagatedBuildInputs = [
+    cookiecutter
     datasets
     numpy
     dill
@@ -48,6 +51,7 @@ buildPythonPackage rec {
     fsspec
     huggingface-hub
     packaging
+    pyarrow
     responses
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
@@ -66,5 +70,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/evaluate/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
+    mainProgram = "evaluate-cli";
   };
 }

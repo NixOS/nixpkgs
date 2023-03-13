@@ -38,7 +38,7 @@
   buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
 
   pname = "qutebrowser";
-  version = if isQt6 then "unstable-2022-09-16" else "2.5.2";
+  version = if isQt6 then "unstable-2022-09-16" else "2.5.3";
 
 in
 
@@ -60,7 +60,7 @@ buildPythonApplication {
   # the release tarballs are different from the git checkout!
    else fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-qb/OFN3EA94N6y7t+YPCMc4APgdZmV7H706jTkl06Qg=";
+    hash = "sha256-hF7yJDTQIztUcZJae20HVhfGlLprvz6GWrgpSwLJ14E=";
   };
 
   # Needs tox
