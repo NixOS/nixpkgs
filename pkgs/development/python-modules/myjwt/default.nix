@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
     homepage = "https://github.com/mBouamama/MyJWT";
+    changelog = "https://github.com/tyki6/MyJWT/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     # Build failures
