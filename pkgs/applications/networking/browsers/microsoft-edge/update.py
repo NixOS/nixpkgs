@@ -11,10 +11,9 @@ from debian.debian_support import Version
 
 
 def packages():
-    packages_url = 'https://packages.microsoft.com/repos/edge/dists/stable/main/binary-amd64/Packages.gz'
+    packages_url = 'https://packages.microsoft.com/repos/edge/dists/stable/main/binary-amd64/Packages'
     handle = request.urlopen(packages_url)
-    data = gzip.GzipFile(fileobj=handle).read()
-    return data
+    return handle
 
 
 def latest_packages(packages: bytes):
