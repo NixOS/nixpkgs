@@ -5,10 +5,6 @@
 , perl
 , llvmPackages
 , precision ? "double"
-, enableAvx ? stdenv.hostPlatform.avxSupport
-, enableAvx2 ? stdenv.hostPlatform.avx2Support
-, enableAvx512 ? stdenv.hostPlatform.avx512Support
-, enableFma ? stdenv.hostPlatform.fmaSupport
 , enableMpi ? false
 , mpi
 , withDoc ? stdenv.cc.isGNU
@@ -40,22 +36,25 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.openmp
   ] ++ lib.optional enableMpi mpi;
 
-  configureFlags =
-    [ "--enable-shared"
-      "--enable-threads"
-    ]
-    ++ lib.optional (precision != "double") "--enable-${precision}"
-    # all x86_64 have sse2
-    # however, not all float sizes fit
-    ++ lib.optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ lib.optional enableAvx "--enable-avx"
-    ++ lib.optional enableAvx2 "--enable-avx2"
-    ++ lib.optional enableAvx512 "--enable-avx512"
-    ++ lib.optional enableFma "--enable-fma"
-    ++ [ "--enable-openmp" ]
-    ++ lib.optional enableMpi "--enable-mpi"
-    # doc generation causes Fortran wrapper generation which hard-codes gcc
-    ++ lib.optional (!withDoc) "--disable-doc";
+  configureFlags = [
+    "--enable-shared"
+    "--enable-threads"
+    "--enable-openmp"
+  ]
+
+  ++ lib.optional (precision != "double") "--enable-${precision}"
+  # https://www.fftw.org/fftw3_doc/SIMD-alignment-and-fftw_005fmalloc.html
+  # FFTW will try to detect at runtime whether the CPU supports these extensions
+  ++ lib.optional (stdenv.isx86_64 && (precision == "single" || precision == "double"))
+    "--enable-sse2 --enable-avx --enable-avx2 --enable-avx512 --enable-avx128-fma"
+  ++ lib.optional enableMpi "--enable-mpi"
+  # doc generation causes Fortran wrapper generation which hard-codes gcc
+  ++ lib.optional (!withDoc) "--disable-doc";
+
+  # fftw builds with -mtune=native by default
+  postPatch = ''
+    substituteInPlace configure --replace "-mtune=native" "-mtune=generic"
+  '';
 
   enableParallelBuilding = true;
 
