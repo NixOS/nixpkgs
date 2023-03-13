@@ -108,6 +108,8 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update-vivaldi.sh;
+
   meta = with lib; {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
