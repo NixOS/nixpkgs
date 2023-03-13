@@ -49,7 +49,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2022-12-20"
+    , version ? "unstable-2023-03-13"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -734,7 +734,6 @@ in
 
   picodrive = mkLibretroCore {
     core = "picodrive";
-    version = "unstable-2023-02-15";
     dontConfigure = true;
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
     meta = {
