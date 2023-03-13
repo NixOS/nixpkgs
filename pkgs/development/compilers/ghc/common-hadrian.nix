@@ -397,16 +397,12 @@ stdenv.mkDerivation ({
     perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
     # autoconf and friends are necessary for hadrian to create the bindist
     autoconf automake m4
-  ] ++ lib.optionals (rev != null) [
-    # We need to execute the boot script
+    # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
     python3
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
-  ] ++ lib.optionals targetPlatform.isGhcjs [
-    # emscripten itself is added via depBuildTarget / targetCC
-    python3
   ];
 
   # For building runtime libs
