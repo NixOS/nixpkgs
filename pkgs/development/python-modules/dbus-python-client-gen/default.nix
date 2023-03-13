@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-RYgS4RNLLCtp+5gS/LlzdH7rlub48TSSSKhykkkBcuo=";
   };
 
@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python library for generating dbus-python client code";
     homepage = "https://github.com/stratis-storage/dbus-python-client-gen";
+    changelog = "https://github.com/stratis-storage/dbus-python-client-gen/blob/v${version}/CHANGES.txt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ nickcao ];
   };
