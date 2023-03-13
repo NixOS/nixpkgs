@@ -1459,7 +1459,9 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
-  gamescope = callPackage ../applications/window-managers/gamescope { };
+  gamescope = callPackage ../applications/window-managers/gamescope {
+    wlroots = wlroots_0_16;
+  };
 
   gay = callPackage ../tools/misc/gay {  };
 
@@ -22829,6 +22831,8 @@ with pkgs;
   manilaclient = with python3Packages; toPythonApplication python-manilaclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
+
+  openvr = callPackage ../development/libraries/openvr { };
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_4
