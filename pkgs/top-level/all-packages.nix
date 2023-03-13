@@ -11539,6 +11539,8 @@ with pkgs;
 
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
 
+  readarr = callPackage ../servers/readarr { };
+
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
   readstat = callPackage ../applications/science/math/readstat { };
@@ -25453,6 +25455,8 @@ with pkgs;
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
 
   proximity-sort = callPackage ../tools/misc/proximity-sort { };
+
+  psql2csv = callPackage ../tools/misc/psql2csv { };
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
