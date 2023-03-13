@@ -578,6 +578,12 @@
     githubId = 43479487;
     name = "Titouan Biteau";
   };
+  aleksana = {
+    email = "me@aleksana.moe";
+    github = "Aleksanaa";
+    githubId = 42209822;
+    name = "Aleksana QwQ";
+  };
   alekseysidorov = {
     email = "sauron1987@gmail.com";
     github = "alekseysidorov";
@@ -9191,6 +9197,12 @@
     githubId = 50230945;
     name = "Marcus Boyd";
   };
+  marcusramberg = {
+    email = "marcus@means.no";
+    github = "marcusramberg";
+    githubId = 5526;
+    name = "Marcus Ramberg";
+  };
   marenz = {
     email = "marenz@arkom.men";
     github = "marenz2569";
@@ -15046,6 +15058,12 @@
     keys = [{
       fingerprint = "7F3E EEAA EE66 93CC 8782  042A 7550 7BE2 56F4 0CED";
     }];
+  };
+  Tungsten842 = {
+    name = "Tungsten842";
+    email = "886724vf@anonaddy.me";
+    github = "Tungsten842";
+    githubId = 24614168;
   };
   tiagolobocastro = {
     email = "tiagolobocastro@gmail.com";
