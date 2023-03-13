@@ -14294,8 +14294,6 @@ with pkgs;
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
 
-  cmucl_binary = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
-
   comby = callPackage ../development/tools/comby { };
 
   inherit (coqPackages) compcert;
@@ -14850,10 +14848,6 @@ with pkgs;
     backend = "llvm";
   };
 
-  gcl = callPackage ../development/compilers/gcl {
-    gmp = gmp4;
-  };
-
   gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
 
   gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 {};
@@ -15385,8 +15379,6 @@ with pkgs;
   };
 
   miranda = callPackage ../development/compilers/miranda {};
-
-  mkcl = callPackage ../development/compilers/mkcl {};
 
   mlkit = callPackage ../development/compilers/mlkit {};
 
@@ -24220,6 +24212,15 @@ with pkgs;
     flags = ["-E" "UTF-8"];
   };
 
+  wrapLispi686Linux = pkgsi686Linux.callPackage ../development/lisp-modules/nix-cl.nix {};
+  
+  # CMU Common Lisp
+  cmucl_binary = wrapLispi686Linux {
+    pkg = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
+    faslExt = "sse2f";
+    program = "lisp";
+  };
+
   # Embeddable Common Lisp
   ecl = wrapLisp {
     pkg = callPackage ../development/compilers/ecl { };
@@ -24227,6 +24228,20 @@ with pkgs;
   };
   ecl_16_1_2 = wrapLisp {
     pkg = callPackage ../development/compilers/ecl/16.1.2.nix { };
+    faslExt = "fas";
+  };
+
+  # GNU Common Lisp
+  gcl = wrapLisp {
+    pkg = callPackage ../development/compilers/gcl {
+      gmp = gmp4;
+    };
+    faslExt = "o";
+  };
+
+  # ManKai Common Lisp
+  mkcl = wrapLisp {
+    pkg = callPackage ../development/compilers/mkcl {};
     faslExt = "fas";
   };
 
