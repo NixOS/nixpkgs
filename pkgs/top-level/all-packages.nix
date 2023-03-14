@@ -398,6 +398,8 @@ with pkgs;
 
   cereal = callPackage ../development/libraries/cereal { };
 
+  cerebro = callPackage ../applications/misc/cerebro { };
+
   certgraph = callPackage ../tools/security/certgraph { };
 
   cewl = callPackage ../tools/security/cewl { };
