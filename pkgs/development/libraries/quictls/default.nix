@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ../openssl/3.0/nix-ssl-cert-file.patch
+    ../openssl/3/nix-ssl-cert-file.patch
 
     # openssl will only compile in KTLS if the current kernel supports it.
     # This patch disables build-time detection.
-    ../openssl/3.0/openssl-disable-kernel-detection.patch
+    ../openssl/3/openssl-disable-kernel-detection.patch
 
     (if stdenv.hostPlatform.isDarwin
       then ../openssl/use-etc-ssl-certs-darwin.patch
