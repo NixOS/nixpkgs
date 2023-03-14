@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, fetchFromGitHub
+, makeWrapper
 , meson
 , ninja
 , pkg-config
@@ -12,10 +17,10 @@
 }:
 
 let
-  version = "1.25";
+  version = "2.0";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-zgMGx7vQaucvbQb37A7jN3SZWmXeceCoOBPstnrsm9s=";
+    sha256 = "sha256-niQWFfV4zWkLtDMRAA3r3s9qnFCnCCsAGVLxj28h3cI=";
   };
 in
 stdenv.mkDerivation rec {
@@ -26,8 +31,17 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4U/ChooesjhZSvxvk9dZrpZ/X0lf62+LEn72Ubrm2eM=";
+    sha256 = "sha256-PWH+XLKraFfjXovnZpREXBaQVyOyP8yIMYDMiF6ddXg=";
   };
+
+  # Remove in the next patch release
+  patches = [
+    (fetchpatch {
+      name = "fix-macos-build-error.patch";
+      url = "https://github.com/Genymobile/scrcpy/commit/6b769675fa68e60c9765022e43c4d7b1e329353a.patch";
+      hash = "sha256-lQx01HI0nTWdZFusLIswZT2iOgkP84btqF6F58tGNko=";
+    })
+  ];
 
   # postPatch:
   #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
@@ -63,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Genymobile/scrcpy";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # server
+      binaryBytecode # server
     ];
     license = licenses.asl20;
     platforms = platforms.unix;

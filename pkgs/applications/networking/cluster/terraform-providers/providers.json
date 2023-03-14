@@ -438,22 +438,22 @@
     "vendorHash": "sha256-yK2M07+FmMEE9YuCJk86qLncHr2ToeZQAzWRQz1lLNM="
   },
   "google": {
-    "hash": "sha256-FdchvDE8aTGKZADeN1peeWMz2jVN4VL1pUf1Tf3e/3E=",
+    "hash": "sha256-tdsMjgGR9Tmk5wonihYlFqy8wzx60jEfnIh4dujvabY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.56.0",
+    "rev": "v4.57.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-2dJAoDisGQOE21NBTjbFPM0hAYjHqo6QH/ONiHQU6hk="
   },
   "google-beta": {
-    "hash": "sha256-u7tGES1uiKpn47msir3rn118eWJsD9bnUAM+HHNZUyA=",
+    "hash": "sha256-e0Qnlu1O6h9s9+vo9yELifl5AmNNqhQc3Y6XorNCRQ8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.56.0",
+    "rev": "v4.57.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-2dJAoDisGQOE21NBTjbFPM0hAYjHqo6QH/ONiHQU6hk="
   },

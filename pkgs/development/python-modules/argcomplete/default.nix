@@ -1,30 +1,29 @@
-{ buildPythonPackage, fetchPypi, lib
-, dicttoxml
-, importlib-metadata
+{ buildPythonPackage
+, fetchPypi
+, lib
 , pexpect
-, prettytable
-, requests-toolbelt
 }:
+
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6372ad78c89d662035101418ae253668445b391755cfe94ea52f1b9d22425b20";
+    sha256 = "sha256-cuCDQIUtMlREWcDBmq0bSKosOpbejG5XQkVrT1OMpS8=";
   };
 
-  doCheck = false; # meant to be ran with interactive interpreter
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"coverage",' "" \
+      --replace " + lint_require" ""
+  '';
 
-  # re-enable if we are able to make testing work
-  # nativeCheckInputs = [ bashInteractive coverage flake8 ];
+  # tries to build and install test packages which fails
+  doCheck = false;
 
   propagatedBuildInputs = [
-    dicttoxml
-    importlib-metadata
     pexpect
-    prettytable
-    requests-toolbelt
   ];
 
   pythonImportsCheck = [ "argcomplete" ];

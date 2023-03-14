@@ -402,7 +402,9 @@ with pkgs;
 
   cewl = callPackage ../tools/security/cewl { };
 
-  checkov = callPackage ../development/tools/analysis/checkov { };
+  checkov = callPackage ../development/tools/analysis/checkov {
+    python3 = python311;
+  };
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
@@ -459,6 +461,8 @@ with pkgs;
   coost = callPackage ../development/libraries/coost { };
 
   crc = callPackage ../applications/networking/cluster/crc { };
+
+  confy = callPackage ../applications/misc/confy { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
 
@@ -623,6 +627,8 @@ with pkgs;
   enum4linux = callPackage ../tools/security/enum4linux { };
 
   enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
+
+  enumerepo = callPackage ../tools/security/enumerepo {};
 
   erosmb = callPackage ../tools/security/erosmb { };
 
@@ -1457,7 +1463,9 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
-  gamescope = callPackage ../applications/window-managers/gamescope { };
+  gamescope = callPackage ../applications/window-managers/gamescope {
+    wlroots = wlroots_0_16;
+  };
 
   gay = callPackage ../tools/misc/gay {  };
 
@@ -1590,6 +1598,8 @@ with pkgs;
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
+
+  speedtest-go = callPackage ../tools/networking/speedtest-go { };
 
   speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
 
@@ -5613,6 +5623,8 @@ with pkgs;
 
   step-cli = callPackage ../tools/security/step-cli { };
 
+  step-kms-plugin = callPackage ../tools/security/step-kms-plugin { };
+
   string-machine = callPackage ../applications/audio/string-machine { };
 
   stripe-cli = callPackage ../tools/admin/stripe-cli {
@@ -7647,7 +7659,7 @@ with pkgs;
   })
     garage
       garage_0_7 garage_0_8
-      garage_0_7_3 garage_0_8_0;
+      garage_0_7_3 garage_0_8_2;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
@@ -10776,6 +10788,8 @@ with pkgs;
   oxipng = callPackage ../tools/graphics/oxipng { };
 
   payload_dumper = callPackage ../tools/archivers/payload_dumper { };
+
+  payload-dumper-go = callPackage ../tools/archivers/payload-dumper-go { };
 
   p2pvc = callPackage ../applications/video/p2pvc { };
 
@@ -19158,6 +19172,8 @@ with pkgs;
 
   amdvlk = callPackage ../development/libraries/amdvlk { };
 
+  amf-headers = callPackage ../development/libraries/amf-headers { };
+
   aml = callPackage ../development/libraries/aml { };
 
   amrnb = callPackage ../development/libraries/amrnb { };
@@ -22821,6 +22837,8 @@ with pkgs;
   manilaclient = with python3Packages; toPythonApplication python-manilaclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
+
+  openvr = callPackage ../development/libraries/openvr { };
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_4
@@ -30379,6 +30397,8 @@ with pkgs;
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
+  halp = callPackage ../tools/misc/halp { };
+
   manga-cli = callPackage ../tools/misc/manga-cli { };
 
   hamster = callPackage ../applications/misc/hamster { };
@@ -31381,6 +31401,8 @@ with pkgs;
 
   lls = callPackage ../applications/networking/lls { };
 
+  localsend = callPackage ../applications/networking/localsend { };
+
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
@@ -31683,6 +31705,8 @@ with pkgs;
   mod-arpeggiator-lv2 = callPackage ../applications/audio/mod-arpeggiator-lv2 { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
+
+  monitorcontrol = callPackage ../applications/misc/monitorcontrol { };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
@@ -39406,7 +39430,9 @@ with pkgs;
 
   stayrtr = callPackage ../servers/stayrtr { };
 
-  sunshine = callPackage ../servers/sunshine { };
+  sunshine = callPackage ../servers/sunshine {
+    ffmpeg_5-full = ffmpeg_5-full.override { nv-codec-headers = nv-codec-headers-11; };
+  };
 
   sentencepiece = callPackage ../development/libraries/sentencepiece { };
 

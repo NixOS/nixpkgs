@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   inherit (srcs.${dxvkVersion}) version src patches;
 
   nativeBuildInputs = [ glslang meson ninja ];
-  buildInputs = lib.optional isWindows [ windows.pthreads ]
+  buildInputs = lib.optionals isWindows [ windows.pthreads ]
     ++ lib.optionals isDxvk2 (
       [ spirv-headers vulkan-headers ]
       ++ lib.optional (!isWindows && sdl2Support) SDL2

@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     # "Illegal instruction (core dumped)"
     gtk3
     gtk4
-  ] ++ lib.optional proprietaryCodecs [
+  ] ++ lib.optionals proprietaryCodecs [
     vivaldi-ffmpeg-codecs
   ];
 
