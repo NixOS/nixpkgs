@@ -2940,6 +2940,8 @@ self: super: with self; {
 
   dvc-data = callPackage ../development/python-modules/dvc-data {  };
 
+  dvc-http = callPackage ../development/python-modules/dvc-http {  };
+
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
