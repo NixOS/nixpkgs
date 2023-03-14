@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "smpplib";
   version = "2.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SMPP library for Python";
     homepage = "https://github.com/python-smpplib/python-smpplib";
+    changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ globin ];
   };
