@@ -18,6 +18,14 @@ let
       sio.seek(0)
       minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
     '';
+    rootCredentialsFile = "/etc/nixos/minio-root-credentials";
+    credsPartial =  pkgs.writeText "minio-credentials-partial" ''
+      MINIO_ROOT_USER=${accessKey}
+    '';
+    credsFull =  pkgs.writeText "minio-credentials-full" ''
+      MINIO_ROOT_USER=${accessKey}
+      MINIO_ROOT_PASSWORD=${secretKey}
+    '';
 in {
   name = "minio";
   meta = with pkgs.lib.maintainers; {
@@ -28,10 +36,7 @@ in {
     machine = { pkgs, ... }: {
       services.minio = {
         enable = true;
-        rootCredentialsFile = pkgs.writeText "minio-credentials" ''
-          MINIO_ROOT_USER=${accessKey}
-          MINIO_ROOT_PASSWORD=${secretKey}
-        '';
+        inherit rootCredentialsFile;
       };
       environment.systemPackages = [ pkgs.minio-client ];
 
@@ -41,7 +46,15 @@ in {
   };
 
   testScript = ''
+    import time
+
     start_all()
+    # simulate manually editing root credentials file
+    machine.wait_for_unit("multi-user.target")
+    machine.copy_from_host("${credsPartial}", "${rootCredentialsFile}")
+    time.sleep(3)
+    machine.copy_from_host("${credsFull}", "${rootCredentialsFile}")
+
     machine.wait_for_unit("minio.service")
     machine.wait_for_open_port(9000)
 
