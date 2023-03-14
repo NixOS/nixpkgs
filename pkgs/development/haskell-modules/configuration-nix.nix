@@ -907,27 +907,37 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
-  cachix = overrideCabal (drv: {
-    version = "1.1";
+  cachix = let 
+      hnix-store-core_0_6_1_0 = overrideCabal (drv: {
+        version = "0.6.1.0";
+        src = "${pkgs.fetchFromGitHub {
+          owner = "haskell-nix";
+          repo = "hnix-store";
+          rev = "core-0.6.1.0";
+          sha256 = "sha256-UOe+dY1dhCvdEKjPF1gNpfc4cNhZSKSbvu4yG+XVqbg=";
+        }}/hnix-store-core";
+      }) super.hnix-store-core;
+    in overrideCabal (drv: {
+    version = "1.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.1";
-      sha256 = "sha256-lML+E5RR5Pk2Do85+8Qs7mMVqp7ImlCIqEYjUAS08W4=";
+      rev = "v1.3.1";
+      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
     };
-    buildDepends = [ self.conduit-zstd ];
+    buildDepends = [ self.conduit-zstd self.conduit-concurrent-map self.fsnotify_0_4_1_0 hnix-store-core_0_6_1_0 ];
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.0.1/1.1/' cachix.cabal
+      sed -i 's/1.3/1.3.1/' cachix.cabal
     '';
   }) (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
   cachix-api = overrideCabal (drv: {
-    version = "1.1";
+    version = "1.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.1";
-      sha256 = "sha256-lML+E5RR5Pk2Do85+8Qs7mMVqp7ImlCIqEYjUAS08W4=";
+      rev = "v1.3.1";
+      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
     };
     buildDepends = [ self.stm-chans ];
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
