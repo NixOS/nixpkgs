@@ -3264,6 +3264,8 @@ with pkgs;
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
+  gammaray = libsForQt5.callPackage ../development/tools/gammaray { };
+
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
   gem = callPackage ../applications/audio/pd-plugins/gem { };
