@@ -626,6 +626,8 @@ with pkgs;
 
   enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
 
+  enumerepo = callPackage ../tools/security/enumerepo {};
+
   erosmb = callPackage ../tools/security/erosmb { };
 
   octosuite = callPackage ../tools/security/octosuite { };
