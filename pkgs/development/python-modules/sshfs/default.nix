@@ -2,8 +2,11 @@
 , asyncssh
 , bcrypt
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fsspec
+, mock-ssh-server
+, pytest-asyncio
+, pytestCheckHook
 , setuptools-scm
 }:
 
@@ -11,10 +14,14 @@ buildPythonPackage rec {
   pname = "sshfs";
   version = "2023.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-syIVtAi7aPeVPJSKHdDJIArsYj0mtIAP104vR3Vb1UQ=";
+  src = fetchFromGitHub {
+    owner = "fsspec";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-TETxjBI4T8dgmtCtx/lq2LIIwyFsAMWY6xdm7+Qsjb0=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -24,6 +31,12 @@ buildPythonPackage rec {
     asyncssh
     bcrypt
     fsspec
+  ];
+
+  nativeCheckInputs = [
+    mock-ssh-server
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
