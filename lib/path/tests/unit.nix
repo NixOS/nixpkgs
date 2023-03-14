@@ -3,7 +3,7 @@
 { libpath }:
 let
   lib = import libpath;
-  inherit (lib.path) append subpath;
+  inherit (lib.path) append difference subpath;
 
   cases = lib.runTests {
     # Test examples from the lib.path.append documentation
@@ -39,6 +39,38 @@ let
       expr = (builtins.tryEval (append /foo "../bar")).success;
       expected = false;
     };
+
+    # Test examples from the documentation
+    testDifferenceExample1 = {
+      expr = difference { foo = ./foo; bar = ./bar; };
+      expected = { commonPrefix = ./.; suffix = { foo = "./foo"; bar = "./bar"; }; };
+    };
+    testDifferenceExample2 = {
+      expr = difference { foo = ./foo; bar = ./.; };
+      expected = { commonPrefix = ./.; suffix = { foo = "./foo"; bar = "./."; }; };
+    };
+    testDifferenceExample3 = {
+      expr = difference { foo = ./foo; bar = ./foo; };
+      expected = { commonPrefix = ./foo; suffix = { foo = "./."; bar = "./."; }; };
+    };
+    testDifferenceExample4 = {
+      expr = difference { foo = ./foo; bar = ./foo/bar; };
+      expected = { commonPrefix = ./foo; suffix = { foo = "./."; bar = "./bar"; }; };
+    };
+    # Test that the invalid cases cause throws
+    testDifferenceNonAttrset = {
+      expr = (builtins.tryEval (difference 10).commonPrefix).success;
+      expected = false;
+    };
+    testDifferenceEmpty = {
+      expr = (builtins.tryEval (difference { }).commonPrefix).success;
+      expected = false;
+    };
+    testDifferenceNonPath = {
+      expr = (builtins.tryEval (difference { a = 10; }).commonPrefix).success;
+      expected = false;
+    };
+    # We can't test for multiple roots with the current Nix version though
 
     # Test examples from the lib.path.subpath.isValid documentation
     testSubpathIsValidExample1 = {
