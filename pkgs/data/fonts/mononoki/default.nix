@@ -2,19 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mononoki";
-  version = "1.3";
+  version = "1.5";
 
   src = fetchzip {
     url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
     stripRoot = false;
-    hash = "sha256-bZYBRdmbQVs4i6UzMIHwJnoLWggX4CW8ZogNFYiX/9w=";
+    hash = "sha256-H5Iu7nSrB5UGlCSjTM3SLu+IjaAffk9TCm5OoOleKvw=";
   };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/fonts/mononoki
-    cp webfont/* $out/share/fonts/mononoki
+    cp * $out/share/fonts/mononoki
 
     runHook postInstall
   '';
