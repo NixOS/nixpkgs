@@ -1,8 +1,8 @@
 { lib
 , aiohttp-retry
 , buildPythonPackage
-, dvc
 , fetchFromGitHub
+, dvc-objects
 , fsspec
 , pythonOlder
 , pythonRelaxDepsHook
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-http";
-  version = "0.0.1";
+  version = "2.30.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,19 +19,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-lZctTmMMF9OMvzMbTYH1d/twW284/IcO8ICb/ennFQA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IlgJEnS+rHSg5cw7SCc3vVtG1mJA5voGViya7nkpL2M=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    dvc
+    dvc-objects
     fsspec
     aiohttp-retry
   ];
@@ -47,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP plugin for dvc";
     homepage = "https://github.com/iterative/dvc-http";
+    changelog = "https://github.com/iterative/dvc-http/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
