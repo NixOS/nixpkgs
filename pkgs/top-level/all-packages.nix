@@ -29952,9 +29952,7 @@ with pkgs;
 
   fbida = callPackage ../applications/graphics/fbida { };
 
-  fclones = callPackage ../tools/misc/fclones {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
+  fclones = callPackage ../tools/misc/fclones { };
 
   fcp = callPackage ../tools/misc/fcp { };
 
