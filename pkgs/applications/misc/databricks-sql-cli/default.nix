@@ -22,8 +22,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-cli";
-    rev = "v${version}";
-    sha256 = "sha256-gr7LJfnvIu2Jf1XgILqfZoi8CbXeQyq0g1wLEBa5TPM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gr7LJfnvIu2Jf1XgILqfZoi8CbXeQyq0g1wLEBa5TPM=";
   };
 
   patches = [
@@ -40,7 +40,9 @@ buildPythonApplication rec {
       --replace 'pandas = "1.3.4"' 'pandas = "~1.4"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     prompt-toolkit
@@ -53,11 +55,14 @@ buildPythonApplication rec {
     click
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "CLI for querying Databricks SQL";
     homepage = "https://github.com/databricks/databricks-sql-cli";
+    changelog = "https://github.com/databricks/databricks-sql-cli/releases/tag/v${version}";
     license = licenses.databricks;
     maintainers = with maintainers; [ kfollesdal ];
   };
