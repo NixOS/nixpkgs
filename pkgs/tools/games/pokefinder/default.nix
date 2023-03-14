@@ -4,6 +4,7 @@
 , cmake
 , qtbase
 , qttools
+, qtwayland
 , wrapQtAppsHook
 , gitUpdater
 }:
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
-  buildInputs = [ qtbase qttools ];
+  buildInputs = [ qtbase qttools ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   passthru.updateScript = gitUpdater { };
 

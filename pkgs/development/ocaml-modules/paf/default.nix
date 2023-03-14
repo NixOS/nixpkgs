@@ -32,6 +32,14 @@ buildDunePackage rec {
     hash = "sha256-ux8fk4XDdih4Ua9NGOJVSuPseJBPv6+6ND/esHrluQE=";
   };
 
+  patches = [
+    # Compatibility with mirage-crypto 0.11.0
+    (fetchpatch {
+      url = "https://github.com/dinosaure/paf-le-chien/commit/2f308c1c4d3ff49d42136f8ff86a4385661e4d1b.patch";
+      hash = "sha256-jmSeUpoRoUMPUNEH3Av2LxgRZs+eAectK+CpoH+SdpY=";
+    })
+  ];
+
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 

@@ -18,17 +18,17 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0661qkcljxdpi5f6cyfqr8vyf87p94amzdspcg8hjrz18j1adb0h";
-    x86_64-darwin = "0781ad52vcqgam3iprm56kvcv5v12pba0i5spazr5zssnn3w3ym0";
-    aarch64-linux = "0fwl12yngq3z2f18hp43q7nmnjdikly05q9rar9vcjc63h2pzfc5";
-    aarch64-darwin = "1nldkg14zvk6nc72l50w4lv9k490vn34ms6z9x2b9zkx15d09v7x";
-    armv7l-linux = "0mhriqi6hzn7wwfzl98dvcghkpkfa4rbbxvmyvzzc5ycgbs6r1mx";
+    x86_64-linux = "0dqwjc606z8qizg9hcfjlpq92hmaxh3a09368ffz7irl5sgwp300";
+    x86_64-darwin = "00795gr9dmshz6sfgsp70fii6m76fqdmqskwkdwqwxddl0i07sw5";
+    aarch64-linux = "04ckk6l9ym1igaqk1zfyy4zx05yryi641lc0i1l38k3mbv1k3gvw";
+    aarch64-darwin = "16z96h8s9irgb17gy6ng3r6cbiwrxa7q7qazqamnmgvvahg08kvj";
+    armv7l-linux = "042ihy4bg39y4m2djkqcx099w9710ikprbw3z7gh1gqvj3qyxy6i";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.75.1";
+    version = "1.76.1";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -41,6 +41,9 @@ in
       url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
       inherit sha256;
     };
+
+    # We don't test vscode on CI, instead we test vscodium
+    tests = {};
 
     sourceRoot = "";
 

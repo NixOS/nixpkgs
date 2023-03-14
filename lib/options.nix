@@ -110,10 +110,6 @@ rec {
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
 
-     Type: mkPackageOption :: pkgs -> (string|[string]) ->
-      { default? :: [string], example? :: null|string|[string], extraDescription? :: string } ->
-      option
-
      The package is specified in the third argument under `default` as a list of strings
      representing its attribute path in nixpkgs (or another package set).
      Because of this, you need to pass nixpkgs itself (or a subset) as the first argument.
@@ -132,6 +128,8 @@ rec {
      valid attribute path in pkgs (if name is a list).
 
      If you wish to explicitly provide no default, pass `null` as `default`.
+
+     Type: mkPackageOption :: pkgs -> (string|[string]) -> { default? :: [string], example? :: null|string|[string], extraDescription? :: string } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -157,11 +155,11 @@ rec {
       # Name for the package, shown in option description
       name:
       {
-        # The attribute path where the default package is located
+        # The attribute path where the default package is located (may be omitted)
         default ? name,
-        # A string or an attribute path to use as an example
+        # A string or an attribute path to use as an example (may be omitted)
         example ? null,
-        # Additional text to include in the option description
+        # Additional text to include in the option description (may be omitted)
         extraDescription ? "",
       }:
       let

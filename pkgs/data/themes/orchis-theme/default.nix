@@ -6,29 +6,33 @@
 , gtk-engine-murrine
 , sassc
 , border-radius ? null # Suggested: 2 < value < 16
-, tweaks ? [ ] # can be "solid" "compact" "black" "primary"
+, tweaks ? [ ] # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
 , withWallpapers ? false
 }:
 
 let
-  validTweaks = [ "solid" "compact" "black" "primary" ];
-  unknownTweaks = lib.subtractLists validTweaks tweaks;
+  pname = "orchis-theme";
+
+  validTweaks = [ "solid" "compact" "black" "primary" "macos" "submenu" "nord" "dracula" ];
+
+  nordXorDracula = with builtins; lib.assertMsg (!(elem "nord" tweaks) || !(elem "dracula" tweaks)) ''
+    ${pname}: dracula and nord cannot be mixed. Tweaks ${toString tweaks}
+  '';
 in
-assert lib.assertMsg (unknownTweaks == [ ]) ''
-  You entered wrong tweaks: ${toString unknownTweaks}
-  Valid tweaks are: ${toString validTweaks}
-'';
+
+assert nordXorDracula;
+lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation
 rec {
-  pname = "orchis-theme";
-  version = "2022-10-19";
+  inherit pname;
+  version = "2023-02-26";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-1lJUrWkb8IoUyCMn8J4Lwvs/pWsibrY0pSXrepuQcug=";
+    sha256 = "sha256-Qk5MK8S8rIcwO7Kmze6eAl5qcwnrGsiWbn0WNIPjRnA=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];

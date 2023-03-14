@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "vsure";
-  version = "2.6.0";
+  version = "2.6.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KMLW1270Xs9s2a4ROWTvwRpfr4n4RO9rIYlskNjGzFQ=";
+    hash = "sha256-D6Q76L1BVx5hpFSShP1rUOmgTogEO+6Jj5x8GaepC+c=";
   };
 
   propagatedBuildInputs = [

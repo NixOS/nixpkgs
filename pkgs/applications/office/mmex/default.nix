@@ -10,26 +10,29 @@
 , wrapGAppsHook
 , curl
 , sqlite
-, wxGTK
+, wxGTK32
 , gtk3
-, libobjc
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "money-manager-ex";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-0zUZBkdFLvc32gkGqu0pYlVsHuwjhaVZzu9acSmNfu8=";
+    hash = "sha256-TQgJ2Q4Z7+OtwuwkfPBgm2BmMKML9nmyFLSkmKJ1RE4=";
   };
 
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     substituteInPlace src/platfdep_mac.mm \
       --replace "appearance.name == NSAppearanceNameDarkAqua" "NO"
+  '' + lib.optionalString (stdenv.isLinux && !stdenv.isx86_64) ''
+    substituteInPlace 3rd/CMakeLists.txt \
+      --replace "-msse4.2 -maes" ""
   '';
 
   nativeBuildInputs = [
@@ -46,14 +49,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     sqlite
-    wxGTK
+    wxGTK32
     gtk3
   ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
+    darwin.libobjc
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-deprecated-copy"
     "-Wno-old-style-cast"
+    "-Wno-unused-parameter"
   ]);
 
   postInstall = lib.optionalString stdenv.isDarwin ''

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyyaml
     requests
-  ] ++ lib.optional (!pythonAtLeast "3.9") [
+  ] ++ lib.optionals (!pythonAtLeast "3.9") [
     importlib-resources
   ];
 

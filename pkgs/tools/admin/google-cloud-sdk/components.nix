@@ -162,9 +162,10 @@ let
         cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
       nativeBuildInputs = [
-        autoPatchelfHook
         python3
         stdenv.cc.cc
+      ] ++ lib.optionals stdenv.isLinux [
+        autoPatchelfHook
       ];
       passthru = {
         dependencies = filterForSystem dependencies;

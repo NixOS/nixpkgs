@@ -1,25 +1,22 @@
 { lib
 , python3
 , fetchFromGitHub
-, poetry
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "shell-genie";
-  version = "unstable-2023-01-27";
+  version = "0.2.8";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "dylanjcastillo";
-    repo = pname;
-    rev = "d6da42a4426e6058a0b5ae07837d8c003cd1239e";
-    hash = "sha256-MGhQaTcl3KjAJXorOmMRec07LxH02T81rNbV2mYEpRA=";
+  src = fetchPypi {
+    pname = "shell_genie";
+    inherit version;
+    hash = "sha256-6miqTjiGLK7r6evfchwuAXTHj+JwoH/CqgRoa5+jDJI=";
   };
 
   nativeBuildInputs = [
-    poetry
     poetry-core
   ];
 
@@ -30,15 +27,19 @@ buildPythonPackage rec {
     rich
     shellingham
     typer
-  ];
+  ] ++ typer.optional-dependencies.all;
 
   # No tests available
   doCheck = false;
 
+  pythonImportsCheck = [
+    "shell_genie"
+  ];
+
   meta = with lib; {
     description = "Describe your shell commands in natural language";
     homepage = "https://github.com/dylanjcastillo/shell-genie";
-    license = licenses.unfree;
+    license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };
 }

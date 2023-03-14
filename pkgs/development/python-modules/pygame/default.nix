@@ -1,6 +1,7 @@
 { stdenv, lib, substituteAll, fetchFromGitHub, buildPythonPackage, python, pkg-config, libX11
 , SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype, fontconfig
 , AppKit
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -75,5 +76,7 @@ buildPythonPackage rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
+    # fatal error: longintrepr.h: No such file or directory.
+    broken = pythonAtLeast "3.11"; # At 2022-02-27
   };
 }

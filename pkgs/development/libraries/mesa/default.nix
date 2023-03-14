@@ -51,9 +51,9 @@
       "imagination-experimental" # PowerVR Rogue (currently N/A)
       "panfrost" # ARM Mali Midgard and up (T/G series)
     ]
-    ++ lib.optionals stdenv.isx86_64 [
-      "intel" # Intel (aka ANV), could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
-      "intel_hasvk" # Intel Haswell/Broadwell, experimental, x86_64 only
+    ++ lib.optionals stdenv.hostPlatform.isx86 [
+      "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
+      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     ]
   else [ "auto" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]

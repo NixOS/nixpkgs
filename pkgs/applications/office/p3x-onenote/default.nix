@@ -1,7 +1,7 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
-  version = "2022.10.117";
+  version = "2023.4.117";
   name = "p3x-onenote-${version}";
 
   plat = {
@@ -13,7 +13,7 @@ let
   sha256 = {
     aarch64-linux = "0plpwymm1bgzbzwk2689lw1fadxdwxzzn5dmayk1ayxz1k3pj9wi";
     armv7l-linux = "1pvr8f1ccl4nyfmshn3v3jfaa5x519rsy57g4pdapffj10vpbkb8";
-    x86_64-linux = "12j2py8yb81ngahbkbi7269izpc5aydd432cbv0sw45ighhyqhmr";
+    x86_64-linux = "sha256-hr/mPOrliP8Dej3DVE2+wYkb1J789WCkkY3xe9EcM44=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {

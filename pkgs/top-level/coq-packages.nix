@@ -112,7 +112,10 @@ let
       trakt = callPackage ../development/coq-modules/trakt {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
-      VST = callPackage ../development/coq-modules/VST {};
+      VST = callPackage ../development/coq-modules/VST (lib.optionalAttrs
+        (lib.versionAtLeast self.coq.version "8.14") {
+          compcert = self.compcert.override { version = "3.11"; };
+        });
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };

@@ -154,8 +154,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   strictDeps = true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
-
   meta = {
     # default to Rust's platforms
     platforms = rustc.meta.platforms;

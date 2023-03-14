@@ -1,44 +1,68 @@
 { config
 , lib
-, cudatoolkit
+, cudaVersion
 }:
 
 # Type aliases
-# Gpu = {
-#   archName: String, # e.g., "Hopper"
-#   computeCapability: String, # e.g., "9.0"
-#   minCudaVersion: String, # e.g., "11.8"
-#   maxCudaVersion: String, # e.g., "12.0"
-# }
+# Gpu :: AttrSet
+#   - See the documentation in ./gpus.nix.
 
 let
   inherit (lib) attrsets lists strings trivial versions;
-  cudaVersion = cudatoolkit.version;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
   # from improved performance, reduced file size, or greater hardware suppport by
   # passing a configuration based on your specific GPU environment.
   #
-  # config.cudaCapabilities: list of hardware generations to support (e.g., "8.0")
-  # config.cudaForwardCompat: bool for compatibility with future GPU generations
+  # config.cudaCapabilities :: List Capability
+  # List of hardware generations to build.
+  # E.g. [ "8.0" ]
+  # Currently, the last item is considered the optional forward-compatibility arch,
+  # but this may change in the future.
+  #
+  # config.cudaForwardCompat :: Bool
+  # Whether to include the forward compatibility gencode (+PTX)
+  # to support future GPU generations.
+  # E.g. true
   #
   # Please see the accompanying documentation or https://github.com/NixOS/nixpkgs/pull/205351
 
   # gpus :: List Gpu
   gpus = builtins.import ./gpus.nix;
 
-  # isVersionIn :: Gpu -> Bool
+  # isSupported :: Gpu -> Bool
   isSupported = gpu:
     let
       inherit (gpu) minCudaVersion maxCudaVersion;
       lowerBoundSatisfied = strings.versionAtLeast cudaVersion minCudaVersion;
-      upperBoundSatisfied = !(strings.versionOlder maxCudaVersion cudaVersion);
+      upperBoundSatisfied = (maxCudaVersion == null)
+        || !(strings.versionOlder maxCudaVersion cudaVersion);
     in
     lowerBoundSatisfied && upperBoundSatisfied;
+
+  # isDefault :: Gpu -> Bool
+  isDefault = gpu:
+    let
+      inherit (gpu) dontDefaultAfter;
+      newGpu = dontDefaultAfter == null;
+      recentGpu = newGpu || strings.versionAtLeast dontDefaultAfter cudaVersion;
+    in
+    recentGpu;
 
   # supportedGpus :: List Gpu
   # GPUs which are supported by the provided CUDA version.
   supportedGpus = builtins.filter isSupported gpus;
+
+  # defaultGpus :: List Gpu
+  # GPUs which are supported by the provided CUDA version and we want to build for by default.
+  defaultGpus = builtins.filter isDefault supportedGpus;
+
+  # supportedCapabilities :: List Capability
+  supportedCapabilities = lists.map (gpu: gpu.computeCapability) supportedGpus;
+
+  # defaultCapabilities :: List Capability
+  # The default capabilities to target, if not overridden by the user.
+  defaultCapabilities = lists.map (gpu: gpu.computeCapability) defaultGpus;
 
   # cudaArchNameToVersions :: AttrSet String (List String)
   # Maps the name of a GPU architecture to different versions of that architecture.
@@ -49,12 +73,6 @@ let
       [ ]
       (gpu: gpu.archName)
       supportedGpus;
-
-  # cudaArchNames :: List String
-  # NOTE: It's important that we don't rely on builtins.attrNames cudaArchNameToVersions here;
-  #   otherwise, we'll get the names sorted in alphabetical order. The JSON array we read them
-  #   from is already sorted, so we'll preserve that order here.
-  cudaArchNames = lists.unique (lists.map (gpu: gpu.archName) supportedGpus);
 
   # cudaComputeCapabilityToName :: AttrSet String String
   # Maps the version of a GPU architecture to the name of that architecture.
@@ -67,23 +85,6 @@ let
       })
       supportedGpus
   );
-
-  # cudaComputeCapabilities :: List String
-  # NOTE: It's important that we don't rely on builtins.attrNames cudaComputeCapabilityToName here;
-  #   otherwise, we'll get the versions sorted in alphabetical order. The JSON array we read them
-  #   from is already sorted, so we'll preserve that order here.
-  # Use the user-provided list of CUDA capabilities if it's provided.
-  cudaComputeCapabilities = config.cudaCapabilities
-    or (lists.map (gpu: gpu.computeCapability) supportedGpus);
-
-  # cudaForwardComputeCapability :: String
-  cudaForwardComputeCapability = (lists.last cudaComputeCapabilities) + "+PTX";
-
-  # cudaComputeCapabilitiesAndForward :: List String
-  # The list of supported CUDA architectures, including the forward compatibility architecture.
-  # If forward compatibility is disabled, this will be the same as cudaComputeCapabilities.
-  cudaComputeCapabilitiesAndForward = cudaComputeCapabilities
-    ++ lists.optional (config.cudaForwardCompat or true) cudaForwardComputeCapability;
 
   # dropDot :: String -> String
   dropDot = ver: builtins.replaceStrings [ "." ] [ "" ] ver;
@@ -102,38 +103,68 @@ let
     "-gencode=arch=compute_${dropDot computeCapability},code=${feat}_${dropDot computeCapability}"
   );
 
-  # cudaRealArches :: List String
-  # The real architectures are physical architectures supported by the CUDA version.
-  # For example, "sm_80".
-  cudaRealArches = archMapper "sm" cudaComputeCapabilities;
+  formatCapabilities = { cudaCapabilities, enableForwardCompat ? true }: rec {
+    inherit cudaCapabilities enableForwardCompat;
 
-  # cudaVirtualArches :: List String
-  # The virtual architectures are typically used for forward compatibility, when trying to support
-  # an architecture newer than the CUDA version allows.
-  # For example, "compute_80".
-  cudaVirtualArches = archMapper "compute" cudaComputeCapabilities;
+    # archNames :: List String
+    # E.g. [ "Turing" "Ampere" ]
+    archNames = lists.unique (builtins.map (cap: cudaComputeCapabilityToName.${cap}) cudaCapabilities);
 
-  # cudaArches :: List String
-  # By default, build for all supported architectures and forward compatibility via a virtual
-  # architecture for the newest supported architecture.
-  cudaArches = cudaRealArches ++
-    lists.optional (config.cudaForwardCompat or true) (lists.last cudaVirtualArches);
+    # realArches :: List String
+    # The real architectures are physical architectures supported by the CUDA version.
+    # E.g. [ "sm_75" "sm_86" ]
+    realArches = archMapper "sm" cudaCapabilities;
 
-  # cudaGencode :: List String
-  # A list of CUDA gencode arguments to pass to NVCC.
-  cudaGencode =
-    let
-      base = gencodeMapper "sm" cudaComputeCapabilities;
-      forwardCompat = gencodeMapper "compute" [ (lists.last cudaComputeCapabilities) ];
-    in
-    base ++ lists.optionals (config.cudaForwardCompat or true) forwardCompat;
+    # virtualArches :: List String
+    # The virtual architectures are typically used for forward compatibility, when trying to support
+    # an architecture newer than the CUDA version allows.
+    # E.g. [ "compute_75" "compute_86" ]
+    virtualArches = archMapper "compute" cudaCapabilities;
+
+    # arches :: List String
+    # By default, build for all supported architectures and forward compatibility via a virtual
+    # architecture for the newest supported architecture.
+    # E.g. [ "sm_75" "sm_86" "compute_86" ]
+    arches = realArches ++
+      lists.optional enableForwardCompat (lists.last virtualArches);
+
+    # gencode :: List String
+    # A list of CUDA gencode arguments to pass to NVCC.
+    # E.g. [ "-gencode=arch=compute_75,code=sm_75" ... "-gencode=arch=compute_86,code=compute_86" ]
+    gencode =
+      let
+        base = gencodeMapper "sm" cudaCapabilities;
+        forward = gencodeMapper "compute" [ (lists.last cudaCapabilities) ];
+      in
+      base ++ lib.optionals enableForwardCompat forward;
+  };
 
 in
+# When changing names or formats: pause, validate, and update the assert
+assert (formatCapabilities { cudaCapabilities = [ "7.5" "8.6" ]; }) == {
+  cudaCapabilities = [ "7.5" "8.6" ];
+  enableForwardCompat = true;
+
+  archNames = [ "Turing" "Ampere" ];
+  realArches = [ "sm_75" "sm_86" ];
+  virtualArches = [ "compute_75" "compute_86" ];
+  arches = [ "sm_75" "sm_86" "compute_86" ];
+
+  gencode = [ "-gencode=arch=compute_75,code=sm_75" "-gencode=arch=compute_86,code=sm_86" "-gencode=arch=compute_86,code=compute_86" ];
+};
 {
-  inherit
-    cudaArchNames
-    cudaArchNameToVersions cudaComputeCapabilityToName
-    cudaRealArches cudaVirtualArches cudaArches
-    cudaGencode;
-  cudaCapabilities = cudaComputeCapabilitiesAndForward;
+  # formatCapabilities :: { cudaCapabilities: List Capability, cudaForwardCompat: Boolean } ->  { ... }
+  inherit formatCapabilities;
+
+  # cudaArchNameToVersions :: String => String
+  inherit cudaArchNameToVersions;
+
+  # cudaComputeCapabilityToName :: String => String
+  inherit cudaComputeCapabilityToName;
+
+  # dropDot :: String -> String
+  inherit dropDot;
+} // formatCapabilities {
+  cudaCapabilities = config.cudaCapabilities or defaultCapabilities;
+  enableForwardCompat = config.cudaForwardCompat or true;
 }

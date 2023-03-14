@@ -15,7 +15,7 @@
 
 let
   pname = "torchmetrics";
-  version = "0.11.2";
+  version = "0.11.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "PyTorchLightning";
     repo = "metrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oeARQA7TtcplsvXvWVN4pcjj0BaMmHOJPZxGA55luI4=";
+    hash = "sha256-cyzAY5NKP+SgoZmwBBLsI0yQ1M4jdOB6/9+/k/+5mns=";
   };
 
   propagatedBuildInputs = [

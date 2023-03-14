@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
-, pkg-config, perl, cmake, gperf, gtk3, libXtst, libXxf86vm, glib, alsa-lib
+, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
 , ffmpeg_4-headless, python3, ruby, icu68
 , withMedia ? true
 , withWebKit ? false
@@ -24,7 +24,7 @@ let
       sha256 = "sha256-9VfXk2EfMebMyVKPohPRP2QXRFf8XemUtfY0JtBCHyw=";
     };
 
-    buildInputs = [ gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;

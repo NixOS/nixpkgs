@@ -560,7 +560,30 @@ buildLuarocksPackage {
   };
 }) {};
 
-http = callPackage({ fetchzip, lua, fifo, luaossl, lpeg_patterns, lpeg, basexx, buildLuarocksPackage, cqueues, bit32, binaryheap, luaOlder, compat53 }:
+haskell-tools-nvim = callPackage({ plenary-nvim, fetchzip, lua, luaOlder, buildLuarocksPackage }:
+buildLuarocksPackage {
+  pname = "haskell-tools.nvim";
+  version = "1.9.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/haskell-tools.nvim-1.9.1-1.rockspec";
+    sha256 = "1m7fasn5iz9hv9l1ycsjiaah14i1s5nssvqq9sypbwcpc9slj93b";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/haskell-tools.nvim/archive/1.9.1.zip";
+    sha256 = "0m425ipfvbb1f1m2wmz8qg57b901vspvvpckxr380crbwl3dflpr";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua plenary-nvim ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/haskell-tools.nvim";
+    description = "Supercharge your Haskell experience in neovim!";
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
+http = callPackage({ luaossl, lpeg_patterns, lpeg, binaryheap, compat53, cqueues, bit32, basexx, fetchzip, lua, fifo, luaOlder, buildLuarocksPackage }:
 buildLuarocksPackage {
   pname = "http";
   version = "0.3-0";
@@ -2853,7 +2876,61 @@ buildLuarocksPackage {
   };
 }) {};
 
-tl = callPackage({ compat53, buildLuarocksPackage, argparse, luafilesystem, fetchgit }:
+telescope-manix = callPackage({ telescope-nvim, buildLuarocksPackage, lua, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "telescope-manix";
+  version = "0.4.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/telescope-manix-0.4.0-1.rockspec";
+    sha256 = "1kh3dn4aixydxrq01sbl40v7if8bmpsvv30qf7vig7dvl21aqkrp";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/telescope-manix/archive/0.4.0.zip";
+    sha256 = "153fqnk8iymyq309kpfiz3xmlqryj02rji3z7air23bgyjkx0gr8";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua telescope-nvim ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/telescope-manix";
+    description = "A telescope.nvim extension for Manix - A fast documentation searcher for Nix";
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
+telescope-nvim = callPackage({ plenary-nvim, buildLuarocksPackage, lua, fetchgit }:
+buildLuarocksPackage {
+  pname = "telescope.nvim";
+  version = "scm-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/telescope.nvim-scm-1.rockspec";
+    sha256 = "07mjkv1nv9b3ifxk2bbpbhvp0awblyklyz6aaqw418x4gm4q1g35";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/nvim-telescope/telescope.nvim",
+  "rev": "a3f17d3baf70df58b9d3544ea30abe52a7a832c2",
+  "date": "2023-02-26T13:26:12+01:00",
+  "path": "/nix/store/qyzs7im9nqn04h9w9nii4nv12ysgk1fk-telescope.nvim",
+  "sha256": "136pik53kwl2avjdakwfls10d85jqybl7yd0mbzxc5nry8krav22",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (lua.luaversion != "5.1");
+  propagatedBuildInputs = [ lua plenary-nvim ];
+
+  meta = {
+    homepage = "https://github.com/nvim-telescope/telescope.nvim";
+    description = "Find, Filter, Preview, Pick. All lua, all the time.";
+    license.fullName = "MIT";
+  };
+}) {};
+
+tl = callPackage({ compat53, luafilesystem, argparse, buildLuarocksPackage, fetchgit }:
 buildLuarocksPackage {
   pname = "tl";
   version = "0.15.1-1";

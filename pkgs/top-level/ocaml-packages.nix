@@ -144,8 +144,6 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
-    camlimages_4_2_4 = callPackage ../development/ocaml-modules/camlimages/4.2.4.nix { };
-
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
@@ -314,6 +312,10 @@ let
 
     dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
 
+    dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
+
+    dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
+
     dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
 
     dns-resolver = callPackage ../development/ocaml-modules/dns/resolver.nix { };
@@ -481,7 +483,7 @@ let
     };
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
       inherit (pkgs) ffmpeg;
-      inherit (pkgs.darwin.apple_sdk.frameworks) AppKit AudioToolbox Cocoa CoreImage ForceFeedback OpenGL VideoToolbox;
+      inherit (pkgs.darwin.apple_sdk.frameworks) AppKit AudioToolbox AVFoundation Cocoa CoreImage ForceFeedback OpenGL VideoToolbox;
     };
 
     fiber = callPackage ../development/ocaml-modules/fiber { };
@@ -567,6 +569,8 @@ let
 
     hpack = callPackage ../development/ocaml-modules/hpack { };
 
+    http-mirage-client = callPackage ../development/ocaml-modules/http-mirage-client { };
+
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
@@ -610,8 +614,6 @@ let
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
     };
-
-    gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     graphics =
     if lib.versionOlder "4.09" ocaml.version
@@ -752,6 +754,8 @@ let
     letsencrypt-app = callPackage ../development/ocaml-modules/letsencrypt/app.nix { };
 
     letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
+
+    letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
 
     lilv = callPackage ../development/ocaml-modules/lilv {
       inherit (pkgs) lilv;
@@ -907,6 +911,8 @@ let
     mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
 
     mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
+
+    mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
 
     mirage-crypto-rng-mirage = callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix { };
 
@@ -1295,6 +1301,8 @@ let
     tls = callPackage ../development/ocaml-modules/tls { };
 
     tls-async = callPackage ../development/ocaml-modules/tls/async.nix { };
+
+    tls-lwt = callPackage ../development/ocaml-modules/tls/lwt.nix { };
 
     tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
@@ -1694,4 +1702,10 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_5_0;
 
   ocamlPackages = ocamlPackages_4_14;
+
+  # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
+  # Below are aliases for porting them to the latest versions of the OCaml 4 series.
+  ocamlPackages_4_14_unsafe_string = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix {
+    unsafeStringSupport = true;
+  });
 }

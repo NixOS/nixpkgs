@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , cmake
 , ninja
@@ -36,6 +37,14 @@ stdenv.mkDerivation rec {
     rev = "v.${version}";
     hash = "sha256-oEH4GlSV+642TGSJJhV4yzydh1hAQZfzwaiPAZFNQtI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "gmic-3.2.1-fix-system-gmic.patch";
+      url = "https://github.com/GreycLab/gmic/commit/9db3f6a39d9ed67b4279654da88993a8057575ff.patch";
+      hash = "sha256-JznKCs56t6cJ4HLqlhMZjSOupEB8cdkn3j6RgZpcpzo=";
+    })
+  ];
 
   # TODO: build this from source
   # https://github.com/dtschump/gmic/blob/b36b2428db5926af5eea5454f822f369c2d9907e/src/Makefile#L675-L729

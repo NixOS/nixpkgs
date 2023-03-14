@@ -31,7 +31,7 @@ let
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
-    , wmClass ? null
+    , wmClass ? applicationName
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , useGlvnd ? true
@@ -61,7 +61,7 @@ let
       smartcardSupport = cfg.smartcardSupport or false;
 
       nativeMessagingHosts =
-        ([ ]
+        [ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
@@ -70,7 +70,7 @@ let
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
-        );
+        ;
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg_5
@@ -168,10 +168,10 @@ let
       inherit pname version;
 
       desktopItem = makeDesktopItem ({
-        name = applicationName;
-        exec = "${launcherName} %U";
+        name = launcherName;
+        exec = "${launcherName} --name ${wmClass} %U";
         inherit icon;
-        desktopName = "${desktopName}${nameSuffix}";
+        inherit desktopName;
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -403,7 +403,7 @@ let
       disallowedRequisites = [ stdenv.cc ];
 
       meta = browser.meta // {
-        description = browser.meta.description;
+        inherit (browser.meta) description;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };

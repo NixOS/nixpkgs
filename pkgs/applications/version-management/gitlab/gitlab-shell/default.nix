@@ -1,20 +1,20 @@
-{ lib, fetchFromGitLab, buildGoModule, ruby }:
+{ lib, fetchFromGitLab, buildGoModule, ruby, libkrb5 }:
 
 buildGoModule rec {
   pname = "gitlab-shell";
-  version = "14.15.0";
+  version = "14.17.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "sha256-GDhYBL5LT3r6UIjDDY3LV5VgcBch190hYLPb6uMWETs=";
+    sha256 = "sha256-GTy+1O6Z7i+L8SSSQpYnN6SRfqDutkJYrj66tpX4f5M=";
   };
 
-  buildInputs = [ ruby ];
+  buildInputs = [ ruby libkrb5 ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
-  vendorSha256 = "sha256-2DpQNJw67ipIW3ctHDJthuDrKNZCYvjXGlDxzBEMGWs=";
+  vendorSha256 = "sha256-mFGkT5lyQfcaGz503vgqx/kP5S0V2Ks5HDmjx+BxZzg=";
 
   postInstall = ''
     cp -r "$NIX_BUILD_TOP/source"/bin/* $out/bin

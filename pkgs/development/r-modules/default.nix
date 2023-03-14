@@ -68,9 +68,9 @@ let
     hydraPlatforms = [];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
+    mkHomepage = {name, snapshot, ...}: "https://cran.r-project.org/${snapshot}/web/packages/${name}/";
     mkUrls = {name, version, snapshot}: [
-      "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz"
+      "https://packagemanager.rstudio.com/cran/${snapshot}/src/contrib/${name}_${version}.tar.gz"
     ];
   };
 
@@ -1272,6 +1272,17 @@ let
     arrow = old.arrow.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    sparklyr = old.sparklyr.overrideAttrs (attrs: {
+      # Pyspark's spark is full featured and better maintained than pkgs.spark
+      preConfigure = ''
+        substituteInPlace R/zzz.R \
+          --replace ".onLoad <- function(...) {" \
+            ".onLoad <- function(...) {
+          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/lib/${pkgs.python3Packages.python.libPrefix}/site-packages/pyspark\"))
+          Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
       '';
     });
 

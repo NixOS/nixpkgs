@@ -490,104 +490,14 @@ self: super:
 
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-suncg6/-/commit/14392504de04841fa2cbb5cdf8d9c9c7c4eb2ed8
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/cg6.h b/src/cg6.h
-      index 9f176e69dc1f6fc5e35ca20c30a4d3b4faf52623..d6bc19e8767c6aee9e7174a43cf1d71a9f35af32 100644
-      --- a/src/cg6.h
-      +++ b/src/cg6.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "cg6_regs.h"
-       EOF
-    '';
   });
 
   xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunffb/-/commit/656dd83b489e7bdc72d6c1990025d20dea26dc22
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/ffb.h b/src/ffb.h
-      index 67a2d87afa607b6bea07e53f4be738c1ebb757ab..d87024033fb48a83c50c588866c90cd6eac0975c 100644
-      --- a/src/ffb.h
-      +++ b/src/ffb.h
-      @@ -30,7 +30,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #ifdef HAVE_XAA_H
-       #include "xaa.h"
-       #endif
-       EOF
-    '';
   });
 
   xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunleo/-/commit/f58ba53e6b6fe1b6e21d6aa3901a11e6130b95b0
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/leo.h b/src/leo.h
-      index a5bf41d34955d81b7ea14d4da6bc7f65191a3f98..c45c59b71be679333216d289d689a3c06c8dcbf7 100644
-      --- a/src/leo.h
-      +++ b/src/leo.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "leo_regs.h"
-       EOF
-    '';
-  });
-
-  xf86videotrident = super.xf86videotrident.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-trident/-/commit/07a5c4732f1c28ffcb873ee04500e3cb813c50b4
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/trident.h b/src/trident.h
-      index 5cadf52d3be13f03e94a8f443f1c8a04358296e8..c82de4c7debf3ee42e3b7965b738a6bd6ae9147d 100644
-      --- a/src/trident.h
-      +++ b/src/trident.h
-      @@ -38,7 +38,6 @@
-       #include "xaa.h"
-       #endif
-       #include "xf86fbman.h"
-      -#include "xf86RamDac.h"
-       #include "compiler.h"
-       #include "vgaHW.h"
-       #include "xf86i2c.h"
-      @@ -103,7 +102,6 @@ typedef struct {
-           int			useEXA;
-           int			Chipset;
-           int			DACtype;
-      -    int			RamDac;
-           int                 ChipRev;
-           int			HwBpp;
-           int			BppShift;
-      @@ -169,7 +167,6 @@ typedef struct {
-           CARD32		BltScanDirection;
-           CARD32		DrawFlag;
-           CARD16		LinePattern;
-      -    RamDacRecPtr	RamDacRec;
-           int			CursorOffset;
-           xf86CursorInfoPtr	CursorInfoRec;
-           xf86Int10InfoPtr	Int10;
-       EOF
-    '';
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
@@ -599,16 +509,6 @@ self: super:
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/issues/12
-    postPatch = ''
-      patch -p1 <<EOF
-      --- a/src/qxl_option_helpers.c
-      +++ b/src/qxl_option_helpers.c
-      @@ -37 +37 @@
-      -        return options[option_index].value.bool;
-      +        return options[option_index].value.boolean;
-      EOF
-    '';
     buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
   });
 
@@ -755,7 +655,7 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+      commonBuildInputs = attrs.buildInputs ++ [ xtrans libxcvt ];
       commonPropagatedBuildInputs = [
         dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
         libxshmfence pixman xorgproto zlib
@@ -790,73 +690,6 @@ self: super:
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
-
-          # Fix e.g. xorg.xf86videovmware with libdrm 2.4.108
-          # TODO: remove with xorgserver >= 1.21
-          (fetchpatch {
-            name = "stdbool.patch";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
-            sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
-          })
-        ]
-        # TODO: remove with xorgserver >= 21.1.4; https://lists.x.org/archives/xorg/2022-July/061035.html
-        ++ [
-          (fetchpatch {
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/f1070c01d616c5f21f939d5ebc533738779451ac.diff";
-            sha256 = "5hcreV3ND8Lklvo7QMpB0VWQ2tifIamRlCr6J82qXt8=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-2319.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/6907b6ea2b4ce949cb07271f5b678d5966d9df42.diff";
-            sha256 = "gWXCalWj2SF4U7wSFGIgK396B0Fs3EtA/EL+34m3FWY=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-2320.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd8caf39e9e15d8f302e54045dd08d8ebf1025dc.diff";
-            sha256 = "rBiiXQRreMvexW9vOKblcfCYzul+9La01EAhir4FND8=";
-          })
-        ]
-        # TODO: remove with xorgserver >= 21.1.5; https://www.mail-archive.com/xorg-announce@lists.x.org/msg01511.html
-        ++ [
-          (fetchpatch {
-            name = "CVE-2022-46340.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/b320ca0ffe4c0c872eeb3a93d9bde21f765c7c63.diff";
-            sha256 = "sha256-XPjLwZcJPLVv1ufgqnUxl73HKcJWWTDy2J/oxFiFnAU=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-46341.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/51eb63b0ee1509c6c6b8922b0e4aa037faa6f78b.diff";
-            sha256 = "sha256-w+tzzoI1TfjjiFw5GNxVBgPc7M2lRY60zl+ySsyV59o=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-46342.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/b79f32b57cc0c1186b2899bce7cf89f7b325161b.diff";
-            sha256 = "sha256-NytCsqRlqhs8xpOL8PGgluU0nKd7VIY26BXgpzN6WqE=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-46343.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/842ca3ccef100ce010d1d8f5f6d6cc1915055900.diff";
-            sha256 = "sha256-oUwKwfN6lAvZ60dylm53+/yDeFnYTVdCINpBAfM6LoY=";
-          })
-          (fetchpatch {
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/b8a84cb0f2807b07ab70ca9915fcdee21301b8ca.diff";
-            sha256 = "sha256-Y2x9/P0SgwUAJRjIXivA32NnMso7gQAid+VjcwNUsa8=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-46344.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8f454b793e1f13c99872c15f0eed1d7f3b823fe8.diff";
-            sha256 = "sha256-Cr760UPwmm8Qr0o/R8/IlgggXQ6ENTHRz3bP/nsIwbU=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-4283.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/ccdd431cd8f1cabae9d744f0514b6533c438908c.diff";
-            sha256 = "sha256-IGPsjS7KgRPLrs1ImBXvIFCa8Iu5ZiAHRZvHlBYP8KQ=";
-          })
-          (fetchpatch {
-            name = "CVE-2023-0494.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/0ba6d8c37071131a49790243cdac55392ecf71ec.diff";
-            sha256 = "sha256-/+IuGk09OYVEIB/Y+DTKf7kfHyukEFX/6u1FDIGJieY=";
-          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
@@ -1039,6 +872,7 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    patches = [ ./use_crocus_and_iris.patch ];
 
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terracognita";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pI/TxC+RCQjtkYBA+BwW1jlDURKh1uf45GTIqz/rih8=";
+    sha256 = "sha256-OzqIUnvWVxaUAWRIKDWaxtmTeFGqvVYAgdbG4jrph7w=";
   };
 
-  vendorSha256 = "sha256-ihoWhiK3TO1lAvk1oU8HVVDBDvLFBw+MMaK2avWfCB4=";
+  vendorHash = "sha256-LzkxVxqBJ3pRk3EI+/Lc6XSNyxhPUg61GKwI1Kmadsc=";
 
   doCheck = false;
 

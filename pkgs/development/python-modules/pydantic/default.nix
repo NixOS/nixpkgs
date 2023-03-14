@@ -26,6 +26,7 @@
 , ujson
 , orjson
 , hypothesis
+, libxcrypt
 }:
 
 buildPythonPackage rec {
@@ -50,6 +51,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i '/flake8/ d' Makefile
   '';
+
+  buildInputs = lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   nativeBuildInputs = [
     cython

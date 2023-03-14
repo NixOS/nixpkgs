@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, CommonMark
+, commonmark
 , poetry-core
 , pygments
 , typing-extensions
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    CommonMark
+    commonmark
     pygments
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions

@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-pk1U3svy9r7O9ivFjBNXsaOmgc+nv2QTuwwHejB7B4Q=";
   };
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon libressl ];
 
   postPatch = ''

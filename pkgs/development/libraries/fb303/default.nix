@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fb303";
-  version = "2023.02.13.00";
+  version = "2023.02.20.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fb303";
     rev = "v${version}";
-    sha256 = "sha256-Dgef8Y8mvObbnXOsfWxTzMoqCph0i9lbusnjqn/WfTQ=";
+    sha256 = "sha256-cGJz7ArifkB6c5ukU9hoTqngZDTLZfSpdQ2Vx1gWntw=";
   };
 
   nativeBuildInputs = [ cmake ];

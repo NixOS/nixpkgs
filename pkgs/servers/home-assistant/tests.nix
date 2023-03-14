@@ -19,8 +19,10 @@ let
     homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ PyChromecast ];
+    mopeka = [ pyswitchbot ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
+    otbr = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     raspberry_pi = [ rpi-bad-power ];
     shelly = [ pyswitchbot ];
     tilt_ble = [ govee-ble ibeacon-ble ];
@@ -55,6 +57,9 @@ let
     logbook = [
       "--deselect tests/components/logbook/test_websocket_api.py::test_recorder_is_far_behind "
     ];
+    modbus = [
+      "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
+    ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
@@ -83,7 +88,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     dontUsePytestXdist = true;
 
     pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
-      ++ [ "--numprocesses=4" ]
+      ++ [ "--numprocesses=2" ]
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 
