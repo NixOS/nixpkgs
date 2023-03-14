@@ -113,7 +113,6 @@ let
     # An empty string is not a valid relative path, so we need to return a `.` when we have no components
     (if components == [] then "." else concatStringsSep "/" components);
 
-
   # Takes a Nix path value and deconstructs it into the filesystem root
   # (generally `/`) and a subpath
   deconstructPath =
@@ -173,7 +172,59 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
 
-  difference = paths:
+  /* Determine the difference between multiple paths, including the longest
+    common prefix and the individual suffixes between them
+
+    The input is an attribute set of paths, where the keys are only for naming
+    and can be picked arbitrarily. The returned attribute set contains two
+    attributes:
+
+    - `commonPrefix`: A path value containing the common prefix between all the
+      given paths.
+
+    - `suffix`: An attribute set of normalised subpaths (see
+      `lib.path.subpath.normalise`). The keys are the same
+      as were given as the input, they can be used to easily match up the
+      suffixes to the inputs.
+
+    Throws an error if all paths don't share the same filesystem root.
+
+    Laws:
+
+    - The input paths can be recovered by appending each suffix to the common ancestor
+
+          forall paths, result = difference paths.
+            mapAttrs (_: append result.commonPrefix) result.suffix == paths
+
+    - The _longest_ common prefix is returned
+
+          forall paths, result = difference paths.
+            ! exists longerPrefix. hasProperPrefix result.commonPrefix longerPrefix && all (hasPrefix longerPrefix) (attrValues paths)
+
+    - Suffixes are normalised
+
+          forall paths, result = difference paths.
+            mapAttrs (_: subpath.normalise) result.suffix == result.suffix
+
+    Type:
+      difference :: AttrsOf Path -> { commonPrefix :: Path, suffix :: AttrsOf String }
+
+    Example:
+      difference { foo = ./foo; bar = ./bar; }
+      => { commonPrefix = ./.; suffix = { foo = "./foo"; bar = "./bar"; }; }
+
+      difference { foo = ./foo; bar = ./.; }
+      => { commonPrefix = ./.; suffix = { foo = "./foo"; bar = "./."; }; }
+
+      difference { foo = ./foo; bar = ./foo; }
+      => { commonPrefix = ./foo; suffix = { foo = "./."; bar = "./."; }; }
+
+      difference { foo = ./foo; bar = ./foo/bar; }
+      => { commonPrefix = ./foo; suffix = { foo = "./."; bar = "./bar"; }; }
+  */
+  difference =
+    # The attribute set of paths to calculate the difference between
+    paths:
     let
       # Deconstruct every path into its root and subpath
       deconstructedPaths = mapAttrsToList (name: value:
