@@ -12747,6 +12747,8 @@ with pkgs;
 
   tinycbor = callPackage ../development/libraries/tinycbor { };
 
+  tinycompress = callPackage ../development/libraries/tinycompress { };
+
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn { };
 
   tinygltf = callPackage ../development/libraries/tinygltf { };
@@ -16880,8 +16882,6 @@ with pkgs;
     # affected by the *-headless changes.
     ffmpeg = ffmpeg-headless;
   };
-
-  pipewire-media-session = callPackage ../development/libraries/pipewire/media-session.nix { };
 
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix { };
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
