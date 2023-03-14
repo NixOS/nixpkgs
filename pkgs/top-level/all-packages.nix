@@ -4946,6 +4946,8 @@ with pkgs;
     stdenv = gcc9Stdenv;
   };
 
+  gpu-viewer = callPackage ../applications/misc/gpu-viewer { };
+
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
