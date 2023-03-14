@@ -20,6 +20,14 @@ with haskellLib;
 
 self: super: {
 
+  # Make sure that Cabal 3.10.* can be built as-is
+  Cabal_3_10_1_0 = doDistribute (super.Cabal_3_10_1_0.override ({
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
+  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+    # Use process core package when possible
+    process = self.process_1_6_17_0;
+  }));
+
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
   inherit (
