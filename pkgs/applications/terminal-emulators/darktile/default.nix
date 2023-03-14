@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/liamg/darktile/releases";
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sogreatandpowerfull ];
+    maintainers = with maintainers; [ sogreatandpowerful ];
   };
 }
