@@ -12164,6 +12164,8 @@ with pkgs;
 
   slowlorust = callPackage ../tools/networking/slowlorust { };
 
+  slsa-verifier = callPackage ../tools/security/slsa-verifier { };
+
   slsnif = callPackage ../tools/misc/slsnif { };
 
   slstatus = callPackage ../applications/misc/slstatus {
