@@ -36,7 +36,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.75.6";
+  version = "1.76.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    sha256 = "GhuXcXq8lJvXw8/mlpPaA7/bswxbSoXeT8oI4x8NJ/4=";
+    sha256 = "hVL/OlZ1i426IdQheVpSuan7+YRWWQe4Pxxk9N64OAw=";
   };
 
   patches = [
