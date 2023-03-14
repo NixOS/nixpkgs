@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
-    rev = "80a7c7cfed9157915067666fe95b298896f2aea8";
+    rev = version;
     sha256 = "sha256-iAIW6nVUk1FJD2dQvDMREPVqrq0JkExJ7lVio//ALts=";
     fetchSubmodules = true;
   };
@@ -215,7 +215,10 @@ stdenv.mkDerivation rec {
     npm run stylelint
   '';
 
-  passthru.tests = { inherit (nixosTests) cockpit; };
+  passthru = {
+    tests = { inherit (nixosTests) cockpit; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Web-based graphical interface for servers";
