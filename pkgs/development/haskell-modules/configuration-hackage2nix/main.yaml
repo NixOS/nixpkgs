@@ -48,9 +48,11 @@ default-package-overrides:
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
-  - Cabal == 3.2.*                      # required for cabal-install etc.
+  - Cabal == 3.2.*                      # required for cabal2spec
   - Cabal == 3.4.*                      # required for cabal-install etc.
-  - Cabal == 3.6.*                      # required for cabal-install-parsers etc.
+  - Cabal == 3.6.*
+  - Cabal-syntax == 3.8.*               # required for cabal-install{,-parsers}
+  - Cabal == 3.8.*                      # required for cabal-install{,-parsers}
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
   - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2

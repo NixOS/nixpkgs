@@ -1052,14 +1052,6 @@ self: super: builtins.intersectAttrs super {
   # Wants to execute cabal-install to (re-)build itself
   hint = dontCheck super.hint;
 
-  # Make sure that Cabal 3.8.* can be built as-is
-  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override ({
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
-    # Use process core package when possible
-    process = self.process_1_6_17_0;
-  }));
-
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
   # automatically. Instead we need to use the `cabal man`
