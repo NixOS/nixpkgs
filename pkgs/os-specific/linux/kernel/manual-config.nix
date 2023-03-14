@@ -368,7 +368,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+      ++ optional  (stdenv.hostPlatform.linux-kernel.target or null == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
