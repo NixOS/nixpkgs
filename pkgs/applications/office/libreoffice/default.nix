@@ -216,9 +216,6 @@ in
     tar -xf ${srcs.translations}
   '';
 
-  patches = optionals (variant == "still") [ ./skip-failed-test-with-icu70.patch ./gpgme-1.18.patch ]
-  ;
-
   ### QT/KDE
   #
   # configure.ac assumes that the first directory that contains headers and
@@ -449,6 +446,8 @@ in
     "--without-system-libstaroffice"
     "--without-system-libepubgen"
     "--without-system-libqxp"
+    "--without-system-dragonbox"
+    "--without-system-libfixmath"
     "--with-system-mdds"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
