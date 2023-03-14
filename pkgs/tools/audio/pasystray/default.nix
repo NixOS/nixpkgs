@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pasystray";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
-    rev = "${pname}-${version}";
-    sha256 = "0xx1bm9kimgq11a359ikabdndqg5q54pn1d1dyyjnrj0s41168fk";
+    rev = version;
+    sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
   };
 
   patches = [
