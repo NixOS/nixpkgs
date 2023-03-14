@@ -21,6 +21,7 @@ let
   seqAttrsIf = cond: a: lib.mapAttrs (_: v: seqIf cond a v);
 
   eval-config-minimal = import ./eval-config-minimal.nix { inherit lib; };
+  eval-config-system = import ./eval-config-system.nix { inherit lib; };
 
   testing-lib = import ./testing/default.nix { inherit lib; };
 in
@@ -29,8 +30,18 @@ in
   using a binding like `nixosLib = import (nixpkgs + "/nixos/lib") { }`.
 */
 {
+
+  # experimental
+
   inherit (seqAttrsIf (!featureFlags?minimalModules) minimalModulesWarning eval-config-minimal)
     evalModules
+    ;
+
+  # not experimental
+
+  inherit (eval-config-system)
+    evalSystemConfiguration
+    baseModules
     ;
 
   inherit (testing-lib)
