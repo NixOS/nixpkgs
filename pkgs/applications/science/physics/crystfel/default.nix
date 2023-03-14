@@ -149,7 +149,7 @@ let
     src = fetchFromGitHub {
       owner = "nexusformat";
       repo = pname;
-      rev = "master";
+      rev = "49e3b65eca772bca77af13ba047d8b577673afba";
       hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };
 
