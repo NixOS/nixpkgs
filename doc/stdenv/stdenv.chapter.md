@@ -368,7 +368,9 @@ Unless set to `false`, some build systems with good support for parallel buildin
 
 By default, `mkDerivation` will expose its arguments in the returned package attribute set. This is unnecessary and leads to some confusion and doubt.
 
-When `__cleanAttrs = true;` is passed to `mkDerivation`, it will return a minimal set of package attributes, which package authors can extend via [`passthru`](#var-stdenv-passthru).
+New packages may pass `__cleanAttrs = true;` to `mkDerivation`, so that it will return a minimal set of package attributes, which package authors can extend via [`passthru`](#var-stdenv-passthru).
+
+Existing packages may be modified to pass `__cleanAttrs = "warn";`, so that the legacy attributes remain available, but they will print a helpful warning when they are accessed. Doing this is best avoided until the packaging function used supports recursively defined arguments like [`mkDerivation` does](#mkderivation-recursive-attributes).
 
 Benefits of `__cleanAttrs`:
 
@@ -376,6 +378,16 @@ Benefits of `__cleanAttrs`:
  - Users can confidently use non-standard attributes that a package provides.
  - Package authors know which variables are intended for use by the builder. They can change the builder environment with confidence that they don't break consumers of their package.
  - It is a little bit more efficient in terms of CPU cycles and memory use.
+
+##### What to do when warned {#warning-package-attr-impl-detail}
+
+If you encounter the warning `The attribute ... of package ... is an implementation detail`, you are invited to help us explicitly support ways in which a package attribute set may used, so that Nixpkgs contributors and users will be aware of your use case.
+
+Ideally the package can add support for whatever is the high level goal you are trying to achieve. This usually involves adding an attribute explicitly to the package attribute set using [`passthru`](#var-stdenv-passthru). Perhaps some commonly applied logic can be added to its value. The public attributes defined in `passthru` can make use of a [recursive package definition](#mkderivation-recursive-attributes) in order to access other parts of the `mkDerivation`-based package in a way that works with `overrideAttrs`.
+
+If you do not know why you got the warning, you may set environment variable `NIX_ABORT_ON_WARN=true` and pass `--show-trace` to Nix. This will cause an evaluation trace to be printed for the location of the warning. From this trace, you can usually derive which expression is responsible for getting the attribute. If you use the `nix-command` experimental feature, you also need to pass `--impure`.
+
+If the attribute can not reasonably be supported by the community, you may use the `internals` attribute to find the same value without the warning. We hope that this will be rare, and if you need `internals` to make some temporary hack bearable, it's perfectly reasonable to use it.
 
 #### `__structuredAttrs` {#var-__structuredAttrs}
 

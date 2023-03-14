@@ -552,12 +552,33 @@ else let
   strict = builtins.derivationStrict drvAttrs;
   outputName = lib.head outputs;
 
+  name = attrs.name or attrs.pname;
+
+  # begin __cleanAttrs helpers
+
+  whatNow =
+    (
+      if meta.maintainers != []
+      then "You may work with the maintainer(s) of ${name}: ${lib.concatMapStringsSep ", " (m: m.github or m.name or m.email) meta.maintainers} (and/or the community), to add explicit support for your use case."
+      else "You may work with the community to add explicit support for your use case to ${name}."
+    ) +
+    " See https://nixos.org/manual/nixpkgs/unstable/#warning-package-attr-impl-detail"
+    ;
+
+  warnCleanAttrs = lib.mapAttrs (k: lib.warn "The attribute ${lib.strings.escapeNixIdentifier k} of package ${name} ${if k == "passthru" then "is" else "seems to be"} an implementation detail and may be removed from the package attribute set in the future. ${whatNow}");
+
+  warnCleanDrvAttrs = lib.warn "The attribute drvAttrs of package ${name} is an implementation detail and may be removed from the package attribute set in the future. ${whatNow}";
+
+  maybeWarnCleanAttrs = if __cleanAttrs == "warn" then warnCleanAttrs else x: x;
+
+  # end __cleanAttrs helpers
+
 in
 
 lib.extendDerivation
   validity.handled
   (
-    lib.optionalAttrs (! __cleanAttrs) {
+    lib.optionalAttrs (__cleanAttrs != true) (maybeWarnCleanAttrs {
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
@@ -589,7 +610,7 @@ lib.extendDerivation
        disallowedRequisites = [ ];
      });
      inherit passthru;
-   }
+   })
    // {
      inherit meta overrideAttrs;
    }
@@ -599,8 +620,10 @@ lib.extendDerivation
    // passthru)
   (
       (
-        if __cleanAttrs
+        if __cleanAttrs == true
         then builtins.intersectAttrs { version = null; } drvAttrs
+        else if __cleanAttrs == "warn"
+        then warnCleanAttrs drvAttrs
         else drvAttrs
       )
       // builtins.listToAttrs (map (outputName: {
@@ -612,7 +635,8 @@ lib.extendDerivation
         inherit outputName outputs;
         inherit (strict) drvPath;
         inherit (drvAttrs) name;
-        ${if __cleanAttrs then "internals" else "drvAttrs"} = drvAttrs;
+        ${if __cleanAttrs != false then "internals" else "drvAttrs"} = if __cleanAttrs == "warn" then warnCleanDrvAttrs drvAttrs else drvAttrs;
+        ${if __cleanAttrs == "warn" then "drvAttrs" else null} = warnCleanDrvAttrs drvAttrs;
         outPath = strict.${outputName};
       }
   );
