@@ -30,6 +30,7 @@ stdenv.mkDerivation {
       include \
       $out/
 
+    mkdir -p $out/share/doc
     install -D ../LICENSE $out/share/doc
 
     runHook postInstall
