@@ -1,6 +1,6 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, lib
 , pexpect
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cuCDQIUtMlREWcDBmq0bSKosOpbejG5XQkVrT1OMpS8=";
+    hash = "sha256-cuCDQIUtMlREWcDBmq0bSKosOpbejG5XQkVrT1OMpS8=";
   };
 
   postPatch = ''
@@ -19,19 +19,21 @@ buildPythonPackage rec {
       --replace " + lint_require" ""
   '';
 
-  # tries to build and install test packages which fails
-  doCheck = false;
-
   propagatedBuildInputs = [
     pexpect
   ];
 
-  pythonImportsCheck = [ "argcomplete" ];
+  # tries to build and install test packages which fails
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "argcomplete"
+  ];
 
   meta = with lib; {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    maintainers = [ maintainers.womfoo ];
-    license = [ licenses.asl20 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ womfoo ];
   };
 }
