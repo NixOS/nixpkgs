@@ -382,6 +382,9 @@ stdenv.mkDerivation (finalAttrs: {
     # For updating.
     inherit test-firmware;
 
+    # For downstream consumers that need the fwupd-efi this was built with.
+    inherit fwupd-efi;
+
     tests =
       let
         listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
