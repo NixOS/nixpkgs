@@ -944,7 +944,14 @@ self: super: builtins.intersectAttrs super {
   }) super.cachix-api;
 
 
-  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
+  hercules-ci-agent = 
+    appendPatch (pkgs.fetchpatch {
+      name = "hercules-ci-agent-support-cachix-1.3.patch";
+      url = "https://github.com/hercules-ci/hercules-ci-agent/pull/500.diff";
+      sha256 = "sha256-ErrFvzB1NiIJLpsP2wfx5CX8DnH1x5i/ijQZEeuOzeI=";
+      relative = "hercules-ci-agent";
+    })
+    (super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; });
   hercules-ci-cnix-expr =
     addTestToolDepend pkgs.git (
       super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_9; }
