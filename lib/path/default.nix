@@ -193,20 +193,16 @@ in /* No rec! Add dependencies on this file at the top. */ {
         # Fast happy path in case all roots are the same
         if all (path: path.root == firstPath.root) deconstructedPaths then firstPath.root
         # Slower sad path when that's not the case and we need to throw an error
-        else let
-          trigger = foldl'
-            (skip: path:
-              if path.root == firstPath.root then skip
-              else throw ''
-                lib.path.difference: Filesystem roots must be the same for all paths, but paths with different roots were given:
-                  ${firstPath.name} = ${toString firstPath.value} (root ${toString firstPath.root})
-                  ${toString path.name} = ${toString path.value} (root ${toString path.root})''
-            )
-            null
-            deconstructedPaths;
-          fallbackAbort =
-            abort "lib.path.difference: This should never happen and indicates a bug! Some paths don't have the same filesystem root but it couldn't be found!";
-        in seq trigger fallbackAbort;
+        else foldl'
+          (skip: path:
+            if path.root == firstPath.root then skip
+            else throw ''
+              lib.path.difference: Filesystem roots must be the same for all paths, but paths with different roots were given:
+                ${firstPath.name} = ${toString firstPath.value} (root ${toString firstPath.root})
+                ${toString path.name} = ${toString path.value} (root ${toString path.root})''
+          )
+          null
+          deconstructedPaths;
 
       commonAncestorLength =
         let
@@ -225,10 +221,10 @@ in /* No rec! Add dependencies on this file at the top. */ {
           # If we didn't do this one could evaluate `relativePaths` without an error even when there's no common root
           seq commonRoot (recurse 0);
 
-      commonAncestor = commonRoot
+      commonPrefix = commonRoot
         + ("/" + joinRelPath (take commonAncestorLength firstPath.components));
 
-      subpaths = listToAttrs (map (path:
+      suffix = listToAttrs (map (path:
         nameValuePair path.name (joinRelPath (drop commonAncestorLength path.components))
       ) deconstructedPaths);
     in
@@ -236,7 +232,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
       (isAttrs paths)
       "lib.path.difference: The given argument is of type ${typeOf paths}, but an attribute set was expected";
     {
-      inherit commonAncestor subpaths;
+      inherit commonPrefix suffix;
     };
 
   /* Whether a value is a valid subpath string.
