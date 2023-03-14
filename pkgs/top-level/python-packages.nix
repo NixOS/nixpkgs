@@ -7931,6 +7931,8 @@ self: super: with self; {
 
   pycategories = callPackage ../development/python-modules/pycategories { };
 
+  pycddl = callPackage ../development/python-modules/pycddl { };
+
   pycdio = callPackage ../development/python-modules/pycdio { };
 
   pycec = callPackage ../development/python-modules/pycec { };
