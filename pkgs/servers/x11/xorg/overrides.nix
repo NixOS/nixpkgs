@@ -2,11 +2,11 @@
   callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, libiconv, libtool, intltool,
-  freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
+  freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge, gettext,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, perl, python3,
   ApplicationServices, Carbon, Cocoa, Xplugin,
   xorg
 }:
@@ -539,9 +539,9 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    prePatch = "patchShebangs rules/merge.py";
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
-    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
+    prePatch = "patchShebangs rules/compat/map-variants.py rules/merge.py rules/xml2lst.pl";
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja gettext libxslt perl python3 ];
+    mesonFlags = [ "-Dxorg-rules-symlinks=true" ];
 
     # 1: compatibility for X11/xkb location
     # 2: I think pkg-config/ is supposed to be in /lib/

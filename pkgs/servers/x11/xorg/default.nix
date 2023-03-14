@@ -3115,18 +3115,18 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, python3 }: stdenv.mkDerivation {
+  xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "xkeyboard-config";
-    version = "2.33";
+    version = "2.38";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.33.tar.bz2";
-      sha256 = "1g6kn7l0mixw50kgn7d97gwv1990c5rczr2x776q3xywss8dfzv5";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.38.tar.xz";
+      sha256 = "0wn8asnbz111194ksi2mysa6ikn4kqgd9rpfydl8icc6mcdsk406";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config python3 ];
-    buildInputs = [ libX11 xorgproto ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
