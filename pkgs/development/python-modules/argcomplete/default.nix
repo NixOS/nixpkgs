@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
+    changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo ];
   };
