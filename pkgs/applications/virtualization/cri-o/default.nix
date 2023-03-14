@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.22.0";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "sha256-lY/kHvJBN7idFn3YUEHMR4w+M3F89RKMsvvyHmH/EPc=";
+    sha256 = "sha256-Wo6COdbqRWuGP4qXjiCehDm8FlVjz1nZRouMOxlKocw=";
   };
   vendorSha256 = null;
 
@@ -53,6 +53,9 @@ buildGoModule rec {
     for shell in bash fish zsh; do
       installShellCompletion --$shell completions/$shell/*
     done
+
+    install contrib/cni/*.conflist -Dt $out/etc/cni/net.d
+    install crictl.yaml -Dt $out/etc
 
     installManPage docs/*.[1-9]
     runHook postInstall

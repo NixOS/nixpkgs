@@ -5,25 +5,27 @@
 , ninja
 , vala
 , pkg-config
+, desktop-file-utils
 , wrapGAppsHook4
 , gobject-introspection
 , gettext
 , itstool
 , libxml2
-, python3
 , gnome
 , glib
 , gtk4
+, libadwaita
 , librsvg
+, pango
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "41.1";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "62GYhlljlrQDOj8oo8LjAEtU6+Gzi0DWQiwXufLMF9A=";
+    sha256 = "c08JLZX8YECe6so0J7WkjLm1mdoRmVEZ2FuqmWU+ApI=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    python3
+    desktop-file-utils
     wrapGAppsHook4
     gobject-introspection
   ];
@@ -42,14 +44,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk4
+    libadwaita
     librsvg
-    gnome.adwaita-icon-theme
+    pango
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -63,6 +61,6 @@ stdenv.mkDerivation rec {
     description = "Play the classic two-player boardgame of chess";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,28 +1,42 @@
 { lib, stdenv, fetchFromGitHub, bc, python3, bison, flex, fuse, libarchive
-, buildPackages }:
+, buildPackages
+
+, firewallSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "lkl";
-  version = "2019-10-04";
-  rev  = "06ca3ddb74dc5b84fa54fa1746737f2df502e047";
+
+  # NOTE: pinned to the last known version that doesn't have a hang in cptofs.
+  # Please verify `nix build -f nixos/release-combined.nix nixos.ova` works
+  # before attempting to update again.
+  # ref: https://github.com/NixOS/nixpkgs/pull/219434
+  version = "2022-08-08";
 
   outputs = [ "dev" "lib" "out" ];
+
+  src = fetchFromGitHub {
+    owner  = "lkl";
+    repo   = "linux";
+    rev  = "ffbb4aa67b3e0a64f6963f59385a200d08cb2d8b";
+    sha256 = "sha256-24sNREdnhkF+P+3P0qEh2tF1jHKF7KcbFSn/rPK2zWs=";
+  };
 
   nativeBuildInputs = [ bc bison flex python3 ];
 
   buildInputs = [ fuse libarchive ];
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner  = "lkl";
-    repo   = "linux";
-    sha256 = "0qjp0r338bwgrqdsvy5mkdh7ryas23m47yvxfwdknfyl0k3ylq62";
-  };
+  postPatch = ''
+    # Fix a /usr/bin/env reference in here that breaks sandboxed builds
+    patchShebangs arch/lkl/scripts
 
-  # Fix a /usr/bin/env reference in here that breaks sandboxed builds
-  prePatch = "patchShebangs arch/lkl/scripts";
-  # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
-  postPatch = "sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c";
+    patchShebangs scripts/ld-version.sh
+
+    # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
+    sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+  '' + lib.optionalString firewallSupport ''
+    cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $lib/lib $dev
@@ -61,8 +75,8 @@ stdenv.mkDerivation rec {
       overhead
     '';
     homepage    = "https://github.com/lkl/linux/";
-    platforms   = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ]; # Darwin probably works too but I haven't tested it
+    platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin raitobezarius ];
   };
 }

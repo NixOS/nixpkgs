@@ -10,18 +10,16 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.7";
-
-  outputs = [ "out" "man" ];
+  version = "1.6.19";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-BHVlGXyTkaiRkG8WG1LdtxrQs8nKS8djZFnO/AfKBUw=";
+    hash = "sha256-Us7NEv2BngV1Q/Bkuv4XOjVjpqThL0LnIH+yciPG3L8=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
@@ -32,14 +30,13 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm555 bin/* -t $out/bin
-    installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
     runHook postInstall
@@ -48,10 +45,11 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) docker; };
 
   meta = with lib; {
+    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
     platforms = platforms.linux;
   };
 }

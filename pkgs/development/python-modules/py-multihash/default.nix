@@ -33,7 +33,7 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

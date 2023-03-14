@@ -1,8 +1,8 @@
 { buildDunePackage, carton
 , lwt, decompress, optint, bigstringaf
 , alcotest, alcotest-lwt, cstruct, fmt, logs
-, mirage-flow, result, rresult, bigarray-compat
-, ke, base64, bos, checkseum, digestif, fpath, mmap
+, mirage-flow, result, rresult
+, ke, base64, bos, checkseum, digestif, fpath
 , stdlib-shims
 , git-binary # pkgs.git
 }:
@@ -10,7 +10,8 @@
 buildDunePackage {
   pname = "carton-lwt";
 
-  inherit (carton) version src useDune2 postPatch;
+  inherit (carton) version src postPatch;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     carton
@@ -21,8 +22,10 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     git-binary
+  ];
+  checkInputs = [
     alcotest
     alcotest-lwt
     cstruct
@@ -31,14 +34,12 @@ buildDunePackage {
     mirage-flow
     result
     rresult
-    bigarray-compat
     ke
     base64
     bos
     checkseum
     digestif
     fpath
-    mmap
     stdlib-shims
   ];
 

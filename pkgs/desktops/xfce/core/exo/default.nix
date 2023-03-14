@@ -1,12 +1,12 @@
-{ mkXfceDerivation, docbook_xsl, glib, libxslt, gtk3
+{ lib, mkXfceDerivation, docbook_xsl, glib, libxslt, gtk3
 , libxfce4ui, libxfce4util, perl }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "4.16.2";
+  version = "4.18.0";
 
-  sha256 = "sha256-O9Ak1sGxcSl9xB//+/vqJjXuEv9WIZlnliVPSKRIV2c=";
+  sha256 = "sha256-oWlKeUD1v2qqb8vY+2Cu9VJ1iThFPVboP12m/ob5KSQ=";
 
   nativeBuildInputs = [
     libxslt
@@ -23,9 +23,10 @@ mkXfceDerivation {
   ];
 
   # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  meta = {
+  meta = with lib; {
     description = "Application library for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

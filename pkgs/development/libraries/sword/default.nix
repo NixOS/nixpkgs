@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       texts in around 100 languages.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ piotr AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 

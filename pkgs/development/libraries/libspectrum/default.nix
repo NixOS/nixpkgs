@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = "http://fuse-emulator.sourceforge.net/libspectrum.php";
+    homepage = "https://fuse-emulator.sourceforge.net/libspectrum.php";
     description = "ZX Spectrum input and output support library";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

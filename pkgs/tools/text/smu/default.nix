@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "smu";
+  pname = "smu";
   version = "1.5";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O";
+  env.NIX_CFLAGS_COMPILE = "-O";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1sm99423hh90kr4wdjqi9sdrrpk65j2vz2hzj65zcxfxyr6khjci";
   };
 
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
+
   buildInputs = [
-      meson
-      pkg-config
-      cairo
-      ninja
+    cairo
   ];
 
   meta = with lib; {

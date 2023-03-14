@@ -1,19 +1,26 @@
-{ pkgs, lib }:
+{ config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs(p: p // {
+  iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs (p: p // {
     buildPhase = "make png-country-320x240-fancy";
     # installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png-320x420";
     installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png";
   });
 
-  iso-flags-svg = pkgs.iso-flags.overrideAttrs(p: p // {
+  iso-flags-svg = pkgs.iso-flags.overrideAttrs (p: p // {
     buildPhase = "mkdir -p $out/share";
     installPhase = "mv svg $out/share/iso-flags-svg";
   });
 
+  # Extensions added here will be shipped by default
+  nemoExtensions = [
+    folder-color-switcher
+    nemo-fileroller
+    nemo-python
+  ];
+
   # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
-  bulky = callPackage ./bulky {};
+  bulky = callPackage ./bulky { };
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
@@ -24,13 +31,23 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-session = callPackage ./cinnamon-session { };
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
+  folder-color-switcher = callPackage ./folder-color-switcher { };
   nemo = callPackage ./nemo { };
+  nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
+  nemo-python = callPackage ./nemo-extensions/nemo-python { };
+  nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   mint-artwork = callPackage ./mint-artwork { };
+  mint-cursor-themes = callPackage ./mint-cursor-themes { };
   mint-themes = callPackage ./mint-themes { };
   mint-x-icons = callPackage ./mint-x-icons { };
   mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
-  xapps = callPackage ./xapps { };
+  pix = callPackage ./pix { };
+  xapp = callPackage ./xapp { };
   warpinator = callPackage ./warpinator { };
+  xreader = callPackage ./xreader { };
   xviewer = callPackage ./xviewer { };
-})
+}) // lib.optionalAttrs config.allowAliases {
+  # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
+  xapps = pkgs.cinnamon.xapp; # added 2022-07-27
+}

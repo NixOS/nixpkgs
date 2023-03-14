@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "toxvpn";
+  pname = "toxvpn";
   version = "unstable-2019-09-09";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optional stdenv.isLinux [ "-DSYSTEMD=1" ];
+  cmakeFlags = lib.optionals stdenv.isLinux [ "-DSYSTEMD=1" ];
 
   postInstall = "$out/bin/toxvpn -h";
 

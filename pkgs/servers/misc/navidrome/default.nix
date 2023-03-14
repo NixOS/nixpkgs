@@ -1,49 +1,76 @@
-{ lib, stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests }:
+{ callPackage
+, buildGoModule
+, fetchFromGitHub
+, lib
+, pkg-config
+, stdenv
+, ffmpeg-headless
+, taglib
+, zlib
+, makeWrapper
+, nixosTests
+, ffmpegSupport ? true
+}:
 
-with lib;
+let
 
-stdenv.mkDerivation rec {
+  version = "0.49.3";
+
+  src = fetchFromGitHub {
+    owner = "navidrome";
+    repo = "navidrome";
+    rev = "v${version}";
+    hash = "sha256-JBvY+0QAouEc0im62aVSJ27GAB7jt0qVnYtc6VN2qTA=";
+  };
+
+  ui = callPackage ./ui {
+    inherit src version;
+  };
+
+in
+
+buildGoModule {
+
   pname = "navidrome";
-  version = "0.45.1";
 
+  inherit src version;
 
-  src = fetchurl (if stdenv.hostPlatform.system == "x86_64-linux"
-  then {
-    url = "https://github.com/deluan/navidrome/releases/download/v${version}/navidrome_${version}_Linux_x86_64.tar.gz";
-    sha256 = "sha256-TZcXq51sKoeLPmcRpv4VILDmS6dsS7lxlJzTDH0tEWM=";
-  }
-  else {
-    url = "https://github.com/deluan/navidrome/releases/download/v${version}/navidrome_${version}_Linux_arm64.tar.gz";
-    sha256 = "sha256-Va0DSmemj8hsaywoP6WKo/x+QQzSNwHCpU4VWs5lpbI=";
-  });
+  vendorSha256 = "sha256-C8w/qCts8VqNDTQVXtykjmSbo5uDrvS9NOu3SHpAlDE=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  unpackPhase = ''
-    tar xvf $src navidrome
+  buildInputs = [ taglib zlib ];
+
+  ldflags = [
+    "-X github.com/navidrome/navidrome/consts.gitSha=${src.rev}"
+    "-X github.com/navidrome/navidrome/consts.gitTag=v${version}"
+  ];
+
+  CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
+
+  prePatch = ''
+    cp -r ${ui}/* ui/build
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-     mkdir -p $out/bin
-     cp navidrome $out/bin
-
-    runHook postInstall
-  '';
-
-  postFixup = ''
+  postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${makeBinPath (optional ffmpegSupport ffmpeg)}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
-  passthru.tests.navidrome = nixosTests.navidrome;
+  passthru = {
+    inherit ui;
+    tests.navidrome = nixosTests.navidrome;
+    updateScript = callPackage ./update.nix {};
+  };
 
   meta = {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
     homepage = "https://www.navidrome.org/";
-    license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aciceri squalus ];
+    # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
+    broken = stdenv.isDarwin;
   };
 }

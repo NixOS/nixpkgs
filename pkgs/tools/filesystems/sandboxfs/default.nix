@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchCrate
 , pkg-config
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = "installManPage man/sandboxfs.1";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A virtual file system for sandboxing";
     homepage = "https://github.com/bazelbuild/sandboxfs";
     license = with licenses; [ asl20 ];

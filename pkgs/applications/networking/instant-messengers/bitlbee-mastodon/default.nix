@@ -1,14 +1,13 @@
 { lib, fetchgit, stdenv, bitlbee, autoreconfHook, pkg-config, glib }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchgit {
     url = "https://alexschroeder.ch/cgit/bitlbee-mastodon";
     rev = "v${version}";
-    sha256 = "0a8196pyr6bjnqg82zn7jdhiv7xsg4npbpzalla1i2h99j30q8pk";
+    sha256 = "sha256-8vmq/YstuBYUxe00P4NrxD/eMYI++R9uvn1sCcMTr7I=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
     export BITLBEE_DATADIR=$out/share/bitlbee
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bitlbee plugin for Mastodon";
     homepage = "https://alexschroeder.ch/cgit/bitlbee-mastodon/about";
     license = licenses.gpl2Plus;

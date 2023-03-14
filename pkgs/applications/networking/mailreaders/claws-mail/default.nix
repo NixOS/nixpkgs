@@ -1,9 +1,6 @@
-{ stdenv, lib, fetchgit, fetchpatch, wrapGAppsHook, autoreconfHook, bison, flex
-, curl, gtk2, gtk3, pkg-config, python2, python3, shared-mime-info
+{ stdenv, lib, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
+, curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
-
-# Selector between the GTK+ 3 and GTK+ 2 releases.
-, useGtk3
 
 # Package compatibility: old parameters whose name were not directly derived
 , enablePgp ? true
@@ -14,7 +11,7 @@
 , enableSpellcheck ? true
 
 # Arguments to include external libraries
-, enableLibSM ? true, libSM
+, enableLibSM ? true, xorg
 , enableGnuTLS ? true, gnutls
 , enableEnchant ? enableSpellcheck, enchant
 , enableDbus ? true, dbus, dbus-glib
@@ -34,14 +31,15 @@
 , enablePluginBsfilter ? true
 , enablePluginClamd ? true
 , enablePluginDillo ? true
-, enablePluginFancy ? useGtk3, libsoup, webkitgtk
+, enablePluginFancy ? true, libsoup, webkitgtk
 , enablePluginFetchInfo ? true
+, enablePluginKeywordWarner ? true
 , enablePluginLibravatar ? enablePluginRavatar
 , enablePluginLitehtmlViewer ? true, gumbo
 , enablePluginMailmbox ? true
 , enablePluginManageSieve ? true
 , enablePluginNewMail ? true
-, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds), libcanberra-gtk2, libcanberra-gtk3, libnotify
+, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds), libcanberra-gtk3, libnotify
 , enablePluginPdfViewer ? enablePluginPdf, poppler
 , enablePluginPerl ? true, perl
 , enablePluginPython ? true
@@ -54,26 +52,8 @@
 , enablePluginVcalendar ? true, libical
 }:
 
-with lib;
-
 let
-  # Last release and hash for both the GTK+ 3 and GTK+ 2 version.
-  version = if useGtk3 then "4.0.0" else "3.18.0";
-
-  gtk2src = {
-    sha256 = "1vsiy3xsppw4d8ylsz70wsyrvmgy88lp2hj7vrc353ckny80r9lh";
-  };
-
-  gtk3src = {
-    sha256 = "0mwnjiqg2sj61va0y9yi3v52iyr5kzmbnvsqxav3a48m2f8p27qn";
-  };
-
-  python = if useGtk3 then python3 else python2;
-  pythonPkgs = if useGtk3
-    then
-      with python.pkgs; [ python wrapPython pygobject3 ]
-    else
-      with python.pkgs; [ python wrapPython pygtk pygobject2 ];
+  pythonPkgs = with python3.pkgs; [ python3 wrapPython pygobject3 ];
 
   features = [
     { flags = [ "acpi_notifier-plugin" ]; enabled = enablePluginAcpiNotifier; }
@@ -89,17 +69,18 @@ let
     { flags = [ "enchant" ]; enabled = enableEnchant; deps = [ enchant ]; }
     { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ libsoup webkitgtk ]; }
     { flags = [ "fetchinfo-plugin" ]; enabled = enablePluginFetchInfo; }
+    { flags = [ "keyword_warner-plugin" ]; enabled = enablePluginKeywordWarner; }
     { flags = [ "gnutls" ]; enabled = enableGnuTLS; deps = [ gnutls ]; }
     { flags = [ "ldap" ]; enabled = enableLdap; deps = [ openldap ]; }
     { flags = [ "libetpan" ]; enabled = enableLibetpan; deps = [ libetpan ]; }
     { flags = [ "libravatar-plugin" ]; enabled = enablePluginLibravatar; }
-    { flags = [ "libsm" ]; enabled = enableLibSM; deps = [ libSM ]; }
+    { flags = [ "libsm" ]; enabled = enableLibSM; deps = [ xorg.libSM ]; }
     { flags = [ "litehtml_viewer-plugin" ]; enabled = enablePluginLitehtmlViewer; deps = [ gumbo ]; }
     { flags = [ "mailmbox-plugin" ]; enabled = enablePluginMailmbox; }
     { flags = [ "managesieve-plugin" ]; enabled = enablePluginManageSieve; }
     { flags = [ "networkmanager" ]; enabled = enableNetworkManager; deps = [ networkmanager ]; }
     { flags = [ "newmail-plugin" ]; enabled = enablePluginNewMail; }
-    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [(if useGtk3 then libcanberra-gtk3 else libcanberra-gtk2)]; }
+    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [libcanberra-gtk3]; }
     { flags = [ "pdf_viewer-plugin" ]; enabled = enablePluginPdfViewer; deps = [ poppler ]; }
     { flags = [ "perl-plugin" ]; enabled = enablePluginPerl; deps = [ perl ]; }
     { flags = [ "pgpcore-plugin" "pgpinline-plugin" "pgpmime-plugin" ]; enabled = enablePluginPgp; deps = [ gnupg gpgme ]; }
@@ -115,37 +96,29 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  inherit version;
+  version = "4.1.1";
 
-  src = fetchgit ({
-    rev = version;
-    url = "git://git.claws-mail.org/claws.git";
-  } // (if useGtk3 then gtk3src else gtk2src));
+  src = fetchurl {
+    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    hash = "sha256-sYnnAMGJb14N6wt21L+oIOt6wZNe4Qqpr7raPPU6A0Q=";
+  };
 
   outputs = [ "out" "dev" ];
 
   patches = [
     ./mime.patch
-
-    # Fixes a bug with the automatic authentication method, resulting in errors
-    # with certain mail providers.
-    # <https://www.thewildbeast.co.uk/claws-mail/bugzilla/show_bug.cgi?id=4497>
-    # This MUST be removed for the next release.
-    (fetchpatch {
-      name = "fix-automatic-auth.patch";
-      url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=9c2585c58b49815a0eab8d683f0a94f75cbbe64e";
-      sha256 = "0v8v5q2p4h93lp7yq3gnlvarsrcssv96aks1wqy3187vsr4kdw7a";
-    })
   ];
 
   preConfigure = ''
     # autotools check tries to dlopen libpython as a requirement for the python plugin
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python3}/lib
     # generate version without .git
     [ -e version ] || echo "echo ${version}" > version
   '';
 
   postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'm4_esyscmd([./get-git-version])' '${version}'
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
@@ -154,9 +127,8 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = pythonPkgs;
 
   buildInputs =
-    [ curl gsettings-desktop-schemas glib-networking ]
-    ++ [(if useGtk3 then gtk3 else gtk2)]
-    ++ concatMap (f: optionals f.enabled f.deps) (filter (f: f ? deps) features)
+    [ curl gsettings-desktop-schemas glib-networking gtk3 ]
+    ++ lib.concatMap (f: lib.optionals f.enabled f.deps) (lib.filter (f: f ? deps) features)
   ;
 
   configureFlags =
@@ -167,7 +139,7 @@ in stdenv.mkDerivation rec {
 
       "--disable-gdata-plugin" # Complains about missing libgdata, even when provided
     ] ++
-    (map (feature: map (flag: strings.enableFeature feature.enabled flag) feature.flags) features);
+    (map (feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags) features);
 
   enableParallelBuilding = true;
 
@@ -181,11 +153,11 @@ in stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The user-friendly, lightweight, and fast email client";
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 ];
+    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 srapenne ];
   };
 }

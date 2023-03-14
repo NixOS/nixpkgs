@@ -2,20 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "uchardet";
-  version = "0.0.7";
+  version = "0.0.8";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "1ca51sryhryqz82v4d0graaiqqq5w2f33a9gj83b910xmq499irz";
+    sha256 = "sha256-6Xpgz8AKHBR6Z0sJe7FCKr2fp4otnOPz/cwueKNKxfA=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
-  ];
 
   doCheck = !stdenv.isi686; # tests fail on i686
 

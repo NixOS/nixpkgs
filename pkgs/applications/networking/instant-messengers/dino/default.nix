@@ -1,35 +1,48 @@
 { lib, stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
-, xorg, libXdmcp, libxkbcommon
+, gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
+, libadwaita
 , libnotify, libsoup, libgee
-, librsvg, libsignal-protocol-c
+, libsignal-protocol-c
 , libgcrypt
-, epoxy
-, at-spi2-core
 , sqlite
-, dbus
 , gpgme
-, pcre
+, pcre2
 , qrencode
 , icu
- }:
+, gspell
+, srtp
+, libnice
+, gnutls
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-plugins-bad
+, gst-vaapi
+, webrtc-audio-processing
+}:
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.2.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "sha256-uYP3D2uyvfRP91fq/1jKOaKgp/+How0SUwmxSrLLH4c=";
+    sha256 = "sha256-1czey1/Zn96JneCUnhPMyffG9FVV4bA9aidNB7Ozkpo=";
   };
+
+  postPatch = ''
+    # don't overwrite manually set version information
+    substituteInPlace CMakeLists.txt \
+      --replace "include(ComputeVersion)" ""
+  '';
 
   nativeBuildInputs = [
     vala
     cmake
-    ninja
+    ninja # https://github.com/dino/dino/issues/230
     pkg-config
     wrapGAppsHook
     gettext
@@ -38,30 +51,53 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qrencode
     gobject-introspection
-    glib-networking
     glib
+    glib-networking # required for TLS support
+    libadwaita
     libgee
-    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
-    gtk3
+    gtk4
     libnotify
     gpgme
     libgcrypt
     libsoup
-    pcre
-    epoxy
-    at-spi2-core
-    dbus
+    pcre2
     icu
     libsignal-protocol-c
-    librsvg
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorg.libxcb
-    xorg.libpthreadstubs
-    libXdmcp
-    libxkbcommon
+    gspell
+    srtp
+    libnice
+    gnutls
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good # contains rtpbin, required for VP9
+    gst-plugins-bad # required for H264, MSDK
+    gst-vaapi # required for VAAPI
+    webrtc-audio-processing
   ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTS=true"
+    "-DRTP_ENABLE_H264=true"
+    "-DRTP_ENABLE_MSDK=true"
+    "-DRTP_ENABLE_VAAPI=true"
+    "-DRTP_ENABLE_VP9=true"
+    "-DVERSION_FOUND=true"
+    "-DVERSION_IS_RELEASE=true"
+    "-DVERSION_FULL=${version}"
+  ];
+
+  # Undefined symbols for architecture arm64: "_gpg_strerror"
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lgpg-error";
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./xmpp-vala-test
+    ./signal-protocol-vala-test
+    runHook postCheck
+  '';
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with
@@ -83,6 +119,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [ qyliss tomfitzhenry ];
   };
 }

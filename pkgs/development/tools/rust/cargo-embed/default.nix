@@ -1,36 +1,36 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , libusb1
 , libftdi1
 , pkg-config
-, rustfmt
+, DarwinTools
 , AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-embed";
-  version = "0.11.0";
+  version = "0.16.0";
 
-  src = fetchFromGitHub {
-    owner = "probe-rs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "151zdnv4i0dgkk4w3j2a1sdklcxw07bgqjs7sv6lvkylrx8dfrxa";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-YAeE3pDw5xqSn4rAv3lxJtKQHki1bf97CJHBEK8JoiA=";
   };
 
-  cargoSha256 = "00p2rwqrax99kwadc8bfq8pbcijals2nzpx43wb03kwxl4955wn9";
+  cargoSha256 = "sha256-p6d8vdiAVkufTQv3FliKCBgF5ZXM24UnG96EzlpyfZE=";
 
-  nativeBuildInputs = [ pkg-config rustfmt ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+
   buildInputs = [ libusb1 libftdi1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
-  cargoBuildFlags = [ "--features=ftdi" ];
+  buildFeatures = [ "ftdi" ];
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";
     homepage = "https://probe.rs/";
+    changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/cargo-embed/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ fooker ];
+    maintainers = with maintainers; [ fooker newam ];
   };
 }

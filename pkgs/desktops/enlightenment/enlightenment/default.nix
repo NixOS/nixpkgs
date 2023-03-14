@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -9,22 +10,23 @@
 , bc
 , ddcutil
 , efl
+, libexif
 , pam
 , xkeyboard_config
 , udisks2
-
 , waylandSupport ? false, wayland-protocols, xwayland
 , bluetoothSupport ? true, bluez5
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.24.2";
+  version = "0.25.4";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1wfz0rwwsx7c1mkswn4hc9xw1i6bsdirhxiycf7ha2vcipqy465y";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-VttdIGuCG5qIMdJucT5BCscLIlWm9D/N98Ae794jt6I=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +42,7 @@ stdenv.mkDerivation rec {
     bc # for the Everything module calculator mode
     ddcutil # specifically libddcutil.so.2 for backlight control
     efl
+    libexif
     pam
     xkeyboard_config
     udisks2 # for removable storage mounting/unmounting
@@ -68,11 +71,13 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "enlightenment" ];
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

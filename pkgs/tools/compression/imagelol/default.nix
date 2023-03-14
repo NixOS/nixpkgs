@@ -12,12 +12,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  # fix for case-sensitive filesystems
+  # https://github.com/MCredstoner2004/ImageLOL/issues/1
+  postPatch = ''
+    mv imagelol src
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp ./ImageLOL $out/bin
   '';
+
+  cmakeFlags = lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DPNG_ARM_NEON=off";
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";

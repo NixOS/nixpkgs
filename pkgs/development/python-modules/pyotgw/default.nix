@@ -9,32 +9,35 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "unstable-2021-03-25";
-  disabled = pythonOlder "3.7";
+  version = "2.1.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mvn23";
     repo = pname;
-    rev = "1854ef4ffb907524ff457ba558e4979ba7fabd02";
-    sha256 = "0zckd85dmzpz0drcgx16ly6kzh1f1slcxb9lrcf81wh1p4q9bcaa";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XIwBGjvIulKLmYZIorKIJwoHTNOIYYX8US2Na8MZ2LA=";
   };
 
   propagatedBuildInputs = [
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
-
-  pythonImportsCheck = [ "pyotgw" ];
+  pythonImportsCheck = [
+    "pyotgw"
+  ];
 
   meta = with lib; {
     description = "Python module to interact the OpenTherm Gateway";
     homepage = "https://github.com/mvn23/pyotgw";
+    changelog = "https://github.com/mvn23/pyotgw/blob/${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

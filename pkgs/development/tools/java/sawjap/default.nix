@@ -8,9 +8,12 @@ stdenv.mkDerivation {
 
   inherit (sawja) src version;
 
-  sourceRoot = "source/test";
+  prePatch = "cd test";
 
-  buildInputs = [ ocaml findlib sawja ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ sawja ];
 
   buildPhase = ''
     runHook preBuild

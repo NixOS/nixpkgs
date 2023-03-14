@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.63.1";
+  version = "0.70.0";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SwkqFSAl99fQoXT96BPRqKFqJg3HEziiT+jXcugPyxM=";
+    sha256 = "sha256-tuHrkL3tL+sCLPxNElVgnb4zQ6OTu65X9pb/cX6vD/w=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +41,15 @@ stdenv.mkDerivation rec {
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake cmake/modules/
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/107428
   postPatch = ''
+    # See https://github.com/NixOS/nixpkgs/issues/107428
     substituteInPlace CMakeLists.txt \
       --replace "enable_testing()" "" \
       --replace "add_subdirectory(tests)" ""
+
+    # https://github.com/rpm-software-management/libdnf/issues/1518
+    substituteInPlace libdnf/libdnf.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   cmakeFlags = [

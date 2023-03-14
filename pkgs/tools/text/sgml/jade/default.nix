@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, gnum4 }:
 
 stdenv.mkDerivation rec {
-  name = "jade-${version}-${debpatch}";
+  pname = "jade";
   version = "1.2.1";
   debpatch = "47.3";
 
@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnum4 ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated";
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
+
+  # Makefile is missing intra-library depends, fails build as:
+  # ld: cannot find -lsp
+  # ld: cannot find -lspgrove
+  enableParallelBuilding = false;
 
   preInstall = ''
     install -d -m755 "$out"/lib
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     license = "custom";
     homepage = "http://www.jclark.com/jade/";
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ e-user ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

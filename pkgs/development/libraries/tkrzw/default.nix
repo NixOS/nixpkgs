@@ -1,19 +1,25 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nimPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tkrzw";
-  version = "0.9.51";
+  version = "1.0.26";
   # TODO: defeat multi-output reference cycles
 
   src = fetchurl {
     url = "https://dbmx.net/tkrzw/pkg/tkrzw-${version}.tar.gz";
-    hash = "sha256-UqF2cJ/r8OksAKyHw6B9UiBFIXgKeDmD2ZyJ+iPkY2w=";
+    hash = "sha256-vbuzV4ZZnb0Vl+U9B8BorDD7mHQ7ILwkR35GaFs+aTI=";
   };
+
+  postPatch = ''
+    substituteInPlace configure \
+      --replace 'PATH=".:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"' ""
+  '';
 
   enableParallelBuilding = true;
 
   doCheck = false; # memory intensive
 
+  passthru.tests.nim = nimPackages.tkrzw;
   meta = with lib; {
     description = "A set of implementations of DBM";
     homepage = "https://dbmx.net/tkrzw/";

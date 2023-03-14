@@ -16,23 +16,23 @@ let
     };
     relx = builder {
       name = "relx";
-      version = "4.5.0";
+      version = "4.7.0";
       src = fetchHex {
         pkg = "relx";
-        version = "4.5.0";
-        sha256 = "sha256-3bWPIMzmymP1onJeklgW3XITR2aYo/PDy0+ownIgLFI=";
+        version = "4.7.0";
+        sha256 = "sha256-oqv6+nC846C5im5RQKyYQpuZgPg1/7RzV/BkVCL8L6M=";
       };
       beamDeps = [ bbmustache ];
     };
     providers = builder {
       name = "providers";
-      version = "1.8.1";
+      version = "1.9.0";
       src = fetchHex {
         pkg = "providers";
-        version = "1.8.1";
-        sha256 = "sha256-5FdFrenEdqmkaeoIQOQYqxk2DcRPAaIzME4RikRIa6A=";
+        version = "1.9.0";
+        sha256 = "sha256-0ofodEBqFQVghkKwo9tbaNato/KrABrsh+f018efwBc=";
       };
-      beamDeps = [ getopt ];
+      beamDeps = [ erlware_commons getopt ];
     };
     getopt = builder {
       name = "getopt";
@@ -86,21 +86,21 @@ let
     };
     certifi = builder {
       name = "certifi";
-      version = "2.6.1";
+      version = "2.9.0";
       src = fetchHex {
         pkg = "certifi";
-        version = "2.6.1";
-        sha256 = "sha256-UkyXtJkbOEndXBemMSI4licsawr0RneLpGdaHf9Tu34=";
+        version = "2.9.0";
+        sha256 = "sha256-Jm2ka9sG1sbTX955m8so022YXUJK18CLW7SPW1zdRkE";
       };
       beamDeps = [ ];
     };
     bbmustache = builder {
       name = "bbmustache";
-      version = "1.10.0";
+      version = "1.12.2";
       src = fetchHex {
         pkg = "bbmustache";
-        version = "1.10.0";
-        sha256 = "sha256-Q+/6P9S7lSMVevWp4idsSTSVuEWfyHNxRKoYbLE84u4=";
+        version = "1.12.2";
+        sha256 = "sha256-aIszpNXMLVH1da3ws2g/xAo4MUovFQkG7c/Hf1tXezs=";
       };
       beamDeps = [ ];
     };

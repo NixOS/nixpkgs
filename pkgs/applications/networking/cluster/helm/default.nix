@@ -1,38 +1,58 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kubernetes-helm }:
 
 buildGoModule rec {
-  pname = "helm";
-  version = "3.7.1";
-  gitCommit = "1d11fcb5d3f3bf00dbe6fe31b8412839a96b3dc4";
+  pname = "kubernetes-helm";
+  version = "3.11.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-NjBG3yLtvnAXziLH/ALRJVaFW327qo7cvnf1Jpq3QlI=";
+    sha256 = "sha256-aUzVICPCxAUoPvnE7pqz+bscfukbEwB+iGmXAYuQ/eE=";
   };
-  vendorSha256 = "sha256-gmyF/xuf5dTxorgqvW4PNA1l2SQ2oJuZCAFw7d8ufGc=";
-
-  doCheck = false;
+  vendorSha256 = "sha256-Hf4ElC3H5sJkzKFELeDygTmfuqBHLqRhaHG1bfnqigM=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    # skipping version tests because they require dot git directory
+    substituteInPlace cmd/helm/version_test.go \
+      --replace "TestVersion" "SkipVersion"
+    # skipping plugin tests
+    substituteInPlace cmd/helm/plugin_test.go \
+      --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
+      --replace "TestLoadPlugins" "SkipLoadPlugins"
+    substituteInPlace cmd/helm/helm_test.go \
+      --replace "TestPluginExitCode" "SkipPluginExitCode"
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
-    installShellCompletion helm.{bash,zsh}
+    $out/bin/helm completion fish > helm.fish
+    installShellCompletion helm.{bash,zsh,fish}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kubernetes-helm;
+    command = "helm version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/kubernetes/helm";
     description = "A package manager for kubernetes";
+    mainProgram = "helm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man ];
+    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man techknowlogick ];
   };
 }

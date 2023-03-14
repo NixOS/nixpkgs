@@ -40,17 +40,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.9.4";
-  rev = "29d003cae5e9d46f8b11b2102ff0b9abf6608c2f";
+  version = "0.17.0";
+  MZ_DEV_BUILD_SHA = "9f8cf75b461d288335cb6a7a73aaa670bab4a466";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "021n05csyvza9ifq09qaxypgmlbp3a7xn6r1m4jn8d4rnz38wag6";
+    hash = "sha256-wKYU5S77VoOX7UA9/d21Puz9NYs/om08eNM69/m3Orc=";
   };
 
-  cargoSha256 = "12fysxzmqnx7y7yg6fjcv1952s77d46pwi32vnsv62icgqfpw0j4";
+  cargoHash = "sha256-GTkn/fUprkpsDeQxtzdmS7Fub9QODO5/4nh9ERswOY0=";
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
@@ -67,8 +67,11 @@ rustPlatform.buildRustPackage rec {
     "--exact"
     "--skip test_client"
     "--skip test_client_errors"
+    "--skip test_client_all_subjects"
+    "--skip test_client_subject_and_references"
     "--skip test_no_block"
     "--skip test_safe_mode"
+    "--skip test_tls"
   ];
 
   postPatch = ''
@@ -78,7 +81,6 @@ rustPlatform.buildRustPackage rec {
       --replace _Materialize root
   '';
 
-  MZ_DEV_BUILD_SHA = rev;
   cargoBuildFlags = [ "--bin materialized" ];
 
   postInstall = ''

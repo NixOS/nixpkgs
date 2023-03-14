@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libgee
-    pantheon.elementary-icon-theme
     pantheon.granite
   ];
 
@@ -34,9 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

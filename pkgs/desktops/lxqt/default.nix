@@ -2,14 +2,6 @@
 let
   packages = self: with self; {
 
-    # Update script tailored to LXQt packages from git repository
-    lxqtUpdateScript = { pname, version, src }:
-      pkgs.genericUpdater {
-        inherit pname version;
-        attrPath = "lxqt.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-      };
-
     # For compiling information, see:
     # - https://github.com/lxqt/lxqt/wiki/Building-from-source
 
@@ -18,6 +10,7 @@ let
     lxqt-build-tools = callPackage ./lxqt-build-tools {};
     libsysstat = callPackage ./libsysstat {};
     liblxqt = callPackage ./liblxqt {};
+    qtxdg-tools = callPackage ./qtxdg-tools {};
 
     ### CORE 1
     libfm-qt = callPackage ./libfm-qt {};
@@ -50,6 +43,7 @@ let
     screengrab = callPackage ./screengrab {};
     qlipper = callPackage ./qlipper {};
     lxqt-archiver = callPackage ./lxqt-archiver {};
+    xdg-desktop-portal-lxqt = callPackage ./xdg-desktop-portal-lxqt {};
 
     preRequisitePackages = [
       libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
@@ -93,7 +87,6 @@ let
     optionalPackages = [
       ### LXQt project
       qterminal
-      compton-conf
       obconf-qt
       lximage-qt
       lxqt-archiver
@@ -102,11 +95,8 @@ let
       qps
       screengrab
 
-      ### Qlipper
-      qlipper
-
       ### Default icon theme
-      libsForQt5.oxygen-icons5
+      libsForQt5.breeze-icons
 
       ### Screen saver
       pkgs.xscreensaver

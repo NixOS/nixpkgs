@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.92.1";
+  version = "1.94.5";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -27,8 +27,17 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dpwzmwl9jjpaz44znvy3v8s9sln0c71b756rs1knk0zx8sa1qbc";
+    hash = "sha256-+eSvzbXxjemVKMeD8tp/0/tGBjw2EOlmyxb8KfyZKtA=";
   };
+
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py \
+      tests/umockdev-test.py \
+      tests/test-generated-hwdb.sh
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -49,10 +58,6 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  checkInputs = [
-    python3
-  ];
-
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
     # Include virtual drivers for fprintd tests
@@ -60,15 +65,22 @@ stdenv.mkDerivation rec {
     "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
-  doCheck = true;
+  nativeInstallCheckInputs = [
+    (python3.withPackages (p: with p; [ pygobject3 ]))
+  ];
 
-  postPatch = ''
-    patchShebangs \
-      tests/test-runner.sh \
-      tests/unittest_inspector.py \
-      tests/virtual-image.py \
-      tests/umockdev-test.py \
-      tests/test-generated-hwdb.sh
+  # We need to run tests _after_ install so all the paths that get loaded are in
+  # the right place.
+  doCheck = false;
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ninjaCheckPhase
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

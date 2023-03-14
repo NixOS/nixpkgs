@@ -1,17 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2021.3";
+  version = "2022.7.1";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326";
+    hash = "sha256-AaBoHEuWhKKDBGFeulXRqzGuAL9o7BV+w3CKgYLbvNA=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s pytz/tests
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "pytz/tests" ];
 
   pythonImportsCheck = [ "pytz" ];
 

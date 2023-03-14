@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pylode";
-  version = "2.12.0";
+  version = "2.13.3";
   format = "setuptools";
 
   disabled = python3.pythonOlder "3.6";
@@ -13,8 +13,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-X/YiJduAJNiceIrlCFwD2PFiMn3HVlzr9NzyDvYcql8=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-AtqkxnpEL+580S/iKCaRcsQO6LLYhkJxyNx6fi3atbE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

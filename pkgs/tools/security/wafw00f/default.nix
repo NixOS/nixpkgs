@@ -1,29 +1,31 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
-, pluginbase
-, requests
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "wafw00f";
-  version = "2.1.0";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0526kz6ypww9nxc2vddkhpn1gqvn25mzj3wmi91wwxwxjjb6w4qj";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-wJZ1/aRMFpE6Q5YAtGxXwxe2G9H/de+l3l0C5rwEWA8=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     requests
     pluginbase
   ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "wafw00f" ];
+
+  pythonImportsCheck = [
+    "wafw00f"
+  ];
 
   meta = with lib; {
     description = "Tool to identify and fingerprint Web Application Firewalls (WAF)";

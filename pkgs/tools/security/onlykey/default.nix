@@ -20,7 +20,7 @@ let
     elem;
 
   # this must be updated anytime this package is updated.
-  onlykeyPkg = "onlykey-git://github.com/trustcrypto/OnlyKey-App.git#v${version}";
+  onlykeyPkg = "onlykey-git+https://github.com/trustcrypto/OnlyKey-App.git#v${version}";
 
   # define a shortcut to get to onlykey.
   onlykey = self."${onlykeyPkg}";

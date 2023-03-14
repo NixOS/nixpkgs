@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.ergo;
+  opt = options.services.ergo;
 
-  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+  inherit (lib) literalExpression mkEnableOption mkIf mkOption optionalString types;
 
   configFile = pkgs.writeText "ergo.conf" (''
 ergo {
@@ -32,25 +33,25 @@ in {
   options = {
 
     services.ergo = {
-      enable = mkEnableOption "Ergo service";
+      enable = mkEnableOption (lib.mdDoc "Ergo service");
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/ergo";
-        description = "The data directory for the Ergo node.";
+        description = lib.mdDoc "The data directory for the Ergo node.";
       };
 
       listen = {
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = "IP address on which the Ergo node should listen.";
+          description = lib.mdDoc "IP address on which the Ergo node should listen.";
         };
 
         port = mkOption {
           type = types.port;
           default = 9006;
-          description = "Listen port for the Ergo node.";
+          description = lib.mdDoc "Listen port for the Ergo node.";
         };
       };
 
@@ -59,20 +60,20 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "324dcf027dd4a30a932c441f365a25e86b173defa4b8e58948253471b81b72cf";
-        description = "Hex-encoded Blake2b256 hash of an API key as a 64-chars long Base16 string.";
+        description = lib.mdDoc "Hex-encoded Blake2b256 hash of an API key as a 64-chars long Base16 string.";
        };
 
        listen = {
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = "IP address that the Ergo node API should listen on if <option>api.keyHash</option> is defined.";
+          description = lib.mdDoc "IP address that the Ergo node API should listen on if {option}`api.keyHash` is defined.";
           };
 
         port = mkOption {
           type = types.port;
           default = 9052;
-          description = "Listen port for the API endpoint if <option>api.keyHash</option> is defined.";
+          description = lib.mdDoc "Listen port for the API endpoint if {option}`api.keyHash` is defined.";
         };
        };
       };
@@ -80,25 +81,26 @@ in {
       testnet = mkOption {
          type = types.bool;
          default = false;
-         description = "Connect to testnet network instead of the default mainnet.";
+         description = lib.mdDoc "Connect to testnet network instead of the default mainnet.";
       };
 
       user = mkOption {
         type = types.str;
         default = "ergo";
-        description = "The user as which to run the Ergo node.";
+        description = lib.mdDoc "The user as which to run the Ergo node.";
       };
 
       group = mkOption {
         type = types.str;
         default = cfg.user;
-        description = "The group as which to run the Ergo node.";
+        defaultText = literalExpression "config.${opt.user}";
+        description = lib.mdDoc "The group as which to run the Ergo node.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Ergo node as well as the API.";
+        description = lib.mdDoc "Open ports in the firewall for the Ergo node as well as the API.";
       };
     };
   };

@@ -1,5 +1,5 @@
-{ lib, stdenv
-, substituteAll
+{ stdenv
+, lib
 , fetchurl
 , pkg-config
 , python3
@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fontconfig";
-  version = "2.13.94";
+  version = "2.14.0";
+
+  outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
-    sha256 = "0g004r0bkkqz00mpm3svnnxn7d83158q0yb9ggxryizxfg5m5w55";
+    sha256 = "3L64TJx0u/2xM9U1/hx77cnyIhqNrzkUuYTETFIOm6w=";
   };
-
-  outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   nativeBuildInputs = [
     autoreconfHook

@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Client for the KGS Go Server";
     homepage = "https://www.gokgs.com/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.free;
     maintainers = with maintainers; [ savannidgerinel ];
     platforms = adoptopenjdk-jre-bin.meta.platforms;

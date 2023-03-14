@@ -1,20 +1,29 @@
-{ lib, stdenv, fetchurl, cmake, python3
-, bison, openssl, readline, bzip2
-}:
+{ lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "monetdb";
-  version = "11.39.13";
+  version = "11.45.13";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "sha256-e30Vykwk6U83/0pS3OWPJ2Oq2SAtNc1S6c1ZO42k39c=";
+    sha256 = "sha256-TYTzC1oiU/YwrJNABwyA50qSB12cwrMurqYFVCtSAcc=";
   };
 
   postPatch = ''
     substituteInPlace cmake/monetdb-packages.cmake --replace \
       'get_os_release_info(LINUX_DISTRO LINUX_DISTRO_VERSION)' \
       'set(LINUX_DISTRO "nixos")'
+  '';
+
+  postInstall = ''
+    rm $out/bin/monetdb_mtest.sh \
+      $out/bin/mktest.py \
+      $out/bin/sqlsample.php \
+      $out/bin/sqllogictest.py \
+      $out/bin/Mz.py \
+      $out/bin/Mtest.py \
+      $out/bin/sqlsample.pl \
+      $out/bin/malsample.pl
   '';
 
   nativeBuildInputs = [ cmake python3 ];

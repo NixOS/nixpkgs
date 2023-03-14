@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ergo";
-  version = "4.0.15";
+  version = "5.0.7";
 
   src = fetchurl {
     url = "https://github.com/ergoplatform/ergo/releases/download/v${version}/ergo-${version}.jar";
-    sha256 = "sha256-4omuu/9EeywWDkk//4TTal/1siCe/4YMmEsIefBxsuY=";
+    sha256 = "sha256-yxb8cMAokAv0tl9FSjjtdvHkJP/UKlZxLLu/+gx8kyQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open protocol that implements modern scientific ideas in the blockchain area";
     homepage = "https://ergoplatform.org/en/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.cc0;
     platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];

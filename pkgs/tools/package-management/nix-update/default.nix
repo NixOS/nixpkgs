@@ -1,25 +1,25 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, nixUnstable
-, nix-prefetch
+, nix
 , nixpkgs-fmt
 , nixpkgs-review
 }:
 
 buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.5.0";
+  version = "0.15.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D1N7ISLZJ3A8G9X5dvtCbRse5h0MRJoeZM3CHkFpqlE=";
+    sha256 = "sha256-AYw2czg8HwA/ATQZO0snfb5GRsz77J6cPGDQ8b4W6AI=";
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nixUnstable nix-prefetch nixpkgs-fmt nixpkgs-review ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nixpkgs-fmt nixpkgs-review ])
   ];
 
   checkPhase = ''
@@ -29,8 +29,9 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Swiss-knife for updating nix packages";
     inherit (src.meta) homepage;
+    changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 zowoq ];
+    maintainers = with maintainers; [ figsoda mic92 zowoq ];
     platforms = platforms.all;
   };
 }

@@ -1,22 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config, libiconv, curl }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, openssl
+, stdenv
+, darwin
+, git
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.5.3";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
-    owner = "ashleygwilliams";
+    owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-RrDwq5VufMDsPlqRmBP3x2RUWU740L0L18noByO1IDY=";
+    sha256 = "sha256-0o7kemIxKCf+oNCl2ryKT02w49LQUuKaFIQUDt5mIw4=";
   };
 
-  cargoSha256 = "sha256-/0pxEQFhovPRI4Knv5xq6+PHRuGN6+tF8CdK5X30LKI=";
+  cargoSha256 = "sha256-DnPf75MEIbX4UQ6XeGLRE4giu+DxgWWmKJY34jrPwpc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl  ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [ git ];
+
+  # disable vendored libgit2 and openssl
+  buildNoDefaultFeatures = true;
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld
@@ -24,10 +39,20 @@ rustPlatform.buildRustPackage rec {
     git config --global user.email nixbld@localhost.localnet
   '';
 
+  # Exclude some tests that don't work in sandbox:
+  # - favorites_default_to_git_if_not_defined: requires network access to github.com
+  # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
+  checkFlags = [
+    "--skip=favorites::favorites_default_to_git_if_not_defined"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--skip=git::utils::should_canonicalize"
+  ];
+
   meta = with lib; {
-    description = "cargo, make me a project";
-    homepage = "https://github.com/ashleygwilliams/cargo-generate";
-    license = licenses.asl20;
-    maintainers = [ maintainers.turbomack ];
+    description = "A tool to generaet a new Rust project by leveraging a pre-existing git repository as a template";
+    homepage = "https://github.com/cargo-generate/cargo-generate";
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ figsoda turbomack ];
   };
 }

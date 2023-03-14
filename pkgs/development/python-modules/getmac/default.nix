@@ -1,23 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, py
 , pytest-benchmark
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.8.2";
+  version = "0.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = pname;
-    rev = version;
-    sha256 = "08d4iv5bjl1s4i9qhzf3pzjgj1rgbwi0x26qypf3ycgdj0a6gvh2";
+    rev = "refs/tags/${version}";
+    hash = "sha256-n4WpEbkaYUS0aGdZKO5T/cuDr5OxauiuOAAdK56/+AM=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
     pytest-benchmark
     pytest-mock
@@ -33,11 +39,14 @@ buildPythonPackage rec {
     "test_uuid_lanscan_iface"
   ];
 
-  pythonImportsCheck = [ "getmac" ];
+  pythonImportsCheck = [
+    "getmac"
+  ];
 
   meta = with lib; {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
+    changelog = "https://github.com/GhostofGoes/getmac/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
   };

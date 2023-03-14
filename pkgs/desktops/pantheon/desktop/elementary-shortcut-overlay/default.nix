@@ -2,58 +2,47 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
 , vala
-, libxml2
 , desktop-file-utils
-, gtk3
+, gtk4
 , glib
-, granite
+, granite7
 , libgee
-, libhandy
-, elementary-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.2.1";
-
-  repoName = "shortcut-overlay";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "shortcut-overlay";
     rev = version;
-    sha256 = "sha256-qmqzGCM3cVM6y80pzjm5CCyG6BO6XlKZiODAAEnwVrM=";
+    sha256 = "sha256-YVeCO7mZmf+FEY4d8tvC76lW/HkOwQ6kw7nvmzAFEtw=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    libxml2
     meson
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-icon-theme
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
     libgee
-    libhandy
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

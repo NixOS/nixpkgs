@@ -8,13 +8,13 @@ let
 
   pkg = self: stdenv.mkDerivation rec {
     pname = "hex";
-    version = "0.21.2";
+    version = "2.0.6";
 
     src = fetchFromGitHub {
       owner = "hexpm";
       repo = "hex";
       rev = "v${version}";
-      sha256 = "18vwrc5b7pyi3nifmx5hd5wbz8fy3h6sfvkmskjg5acmz66fys0g";
+      sha256 = "sha256-fSADQDrqh5U/TdhaHXsMiLMk1wtQ0gEiTqEclJ2w2nY=";
     };
 
     setupHook = writeText "setupHook.sh" ''

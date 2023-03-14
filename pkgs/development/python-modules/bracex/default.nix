@@ -1,15 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "bracex";
-  version = "2.2";
+  version = "2.3.post1";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8230f3a03f1f76c192a7844377124300fbaec83870a728b629dfabd9be9e83d0";
+    sha256 = "sha256-57I/yLLNBtPewGkrqr7LJJ3alOBqYXkB/wOmxW/XFpM=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bracex" ];
 

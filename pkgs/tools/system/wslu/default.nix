@@ -1,21 +1,37 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "wslu";
-  version = "3.2.3";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "wslutilities";
     repo = pname;
     rev = "v${version}";
-    sha512 = "2mkvdl65hnwflmi635ngmsm1aqsablz2gypn3a1adby1mwwdc57xym8kkg5359g3mvksac6n43ji2z48lfpvlay64z793q2v0z6by02";
+    hash = "sha256-yhugh836BoSISbTu19ubLOrz5X31Opu5QtCR0DXrbWc=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  patches = [
+    ./fallback-conf-nix-store.diff
+  ];
+
+  postPatch = ''
+    substituteInPlace src/wslu-header \
+      --subst-var out
+  '';
+
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   meta = with lib; {
-    description = "A collection of utilities for Windows 10 Linux Subsystems";
+    description = "A collection of utilities for Windows Subsystem for Linux";
     homepage = "https://github.com/wslutilities/wslu";
+    changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jamiemagee ];
     platforms = platforms.linux;

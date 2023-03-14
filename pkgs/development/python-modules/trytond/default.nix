@@ -1,8 +1,8 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
-, mock
+, defusedxml
 , lxml
 , relatorio
 , genshi
@@ -12,32 +12,31 @@
 , werkzeug
 , wrapt
 , passlib
-, bcrypt
 , pydot
-, python-Levenshtein
-, simplejson
+, levenshtein
 , html2text
-, psycopg2
+, weasyprint
+, gevent
+, pillow
 , withPostgresql ? true
+, psycopg2
+, unittestCheckHook
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "trytond";
-  version = "6.0.8";
-  disabled = pythonOlder "3.5";
+  version = "6.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "686d498f9648875f48edc9fc2e97cd465ed4ea9270c4984b6f2db20a2eac4942";
+    sha256 = "sha256-fE1JBlvKIvDFjMat/lgOM22rIpMlqnxoo9p8VJF6szs=";
   };
 
-  # Tells the tests which database to use
-  DB_NAME = ":memory:";
-
-  buildInputs = [
-    mock
-  ];
   propagatedBuildInputs = [
+    defusedxml
     lxml
     relatorio
     genshi
@@ -49,17 +48,26 @@ buildPythonApplication rec {
     passlib
 
     # extra dependencies
-    bcrypt
     pydot
-    python-Levenshtein
-    simplejson
+    levenshtein
     html2text
-  ] ++ lib.optional withPostgresql psycopg2;
+    weasyprint
+    gevent
+    pillow
+  ] ++ relatorio.optional-dependencies.fodt
+  ++ passlib.optional-dependencies.bcrypt
+  ++ passlib.optional-dependencies.argon2
+  ++ lib.optional withPostgresql psycopg2;
 
-  # If unset, trytond will try to mkdir /homeless-shelter
+  nativeCheckInputs = [ unittestCheckHook ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
+    export TRYTOND_DATABASE_URI="sqlite://"
+    export DB_NAME=":memory:";
   '';
+
+  unittestFlagsArray = [ "-s" "trytond.tests" ];
 
   meta = with lib; {
     description = "The server of the Tryton application platform";
@@ -72,6 +80,7 @@ buildPythonApplication rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
+    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ udono johbo ];
   };

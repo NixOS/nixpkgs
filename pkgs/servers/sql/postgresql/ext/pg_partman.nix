@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_partman";
-  version = "4.5.1";
+  version = "4.7.1";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "pgpartman";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "182yqvgcpgw99swn7w516f6d1bid2gnmf6dfsgmldx5viz0d6vi0";
+    sha256 = "sha256-XewRIzue38aXhjU6GKEiuUyY+6ngtyQLhCl3/T6Al+A=";
   };
 
   installPhase = ''

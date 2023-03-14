@@ -1,15 +1,15 @@
 { mkDerivation, lib, fetchbzr, python3, rtmpdump }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ pyqt5_with_qtmultimedia ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ m3u8 pyqt5_with_qtmultimedia ]);
 in mkDerivation {
   pname = "qarte";
-  version = "4.12.0";
+  version = "4.17.1";
 
   src = fetchbzr {
     url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-4";
-    rev = "56";
-    sha256 = "0cq9dg04grl45xw43gi9wsb0vm8c4bcvh813h5lm4ry8b94lfx2i";
+    rev = "74";
+    sha256 = "sha256:18ky9qwfvbifd0xrbmnfm3cm2vyy5jgf9rrca2hby46sjf2745h4";
   };
 
   buildInputs = [ pythonEnv ];

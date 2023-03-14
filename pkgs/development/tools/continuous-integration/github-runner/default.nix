@@ -1,280 +1,268 @@
 { autoPatchelfHook
-, coreutils
-, curl
+, autoSignDarwinBinariesHook
+, buildDotnetModule
 , dotnetCorePackages
-, dotnetPackages
 , fetchFromGitHub
-, fetchurl
+, fetchpatch
 , git
 , glibc
-, icu
-, libkrb5
+, glibcLocales
 , lib
-, linkFarm
-, lttng-ust
-, makeWrapper
-, nodejs-12_x
-, openssl
+, nixosTests
+, nodejs-16_x
 , stdenv
-, zlib
+, which
 }:
-let
-  deps = (import ./deps.nix { inherit fetchurl; });
-  nugetPackages = map
-    (x: {
-      name = "${x.name}.nupkg";
-      path = "${x}";
-    })
-    deps;
-  nugetSource = linkFarm "nuget-packages" nugetPackages;
-
-  dotnetSdk = dotnetCorePackages.sdk_3_1;
-  runtimeId =
-    if stdenv.isAarch64
-    then "linux-arm64"
-    else "linux-x64";
-  fakeSha1 = "0000000000000000000000000000000000000000";
-in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.284.0";
+  version = "2.303.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    sha256 = "sha256-JR0OzbT5gGhO/dxb/eSjP/d/VxW/aLmTs/oPwN8b8Rc=";
+    hash = "sha256-gGIYlYM4Rf7Ils2rThsQHWIkLDt5Htg4NDuJhxvl1rU=";
+    # Required to obtain HEAD's Git commit hash
+    leaveDotGit = true;
   };
 
-  nativeBuildInputs = [
-    dotnetSdk
-    dotnetPackages.Nuget
-    makeWrapper
-    autoPatchelfHook
-  ];
-
-  buildInputs = [
-    curl # libcurl.so.4
-    libkrb5 # libgssapi_krb5.so.2
-    lttng-ust # liblttng-ust.so.0
-    stdenv.cc.cc.lib # libstdc++.so.6
-    zlib # libz.so.1
-    icu
-  ];
 
   patches = [
-    # Don't run Git, no restore on build/test
-    ./patches/dir-proj.patch
     # Replace some paths that originally point to Nix's read-only store
     ./patches/host-context-dirs.patch
     # Use GetDirectory() to obtain "diag" dir
     ./patches/use-get-directory-for-diag.patch
-    # Don't try to install systemd service
-    ./patches/dont-install-systemd-service.patch
-    # Prevent the runner from starting a self-update for new versions
-    # (upstream issue: https://github.com/actions/runner/issues/485)
-    ./patches/prevent-self-update.patch
+    # Don't try to install service
+    ./patches/dont-install-service.patch
+    # Access `.env` and `.path` relative to `$RUNNER_ROOT`, if set
+    ./patches/env-sh-use-runner-root.patch
+    # Fix FHS path: https://github.com/actions/runner/pull/2464
+    (fetchpatch {
+      name = "ln-fhs.patch";
+      url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
+      hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
+    })
   ];
 
   postPatch = ''
-    # Relax the version requirement
-    substituteInPlace src/global.json \
-      --replace '3.1.302' '${dotnetSdk.version}'
-
-    # Disable specific tests
-    substituteInPlace src/dir.proj \
-      --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
-
-    # We don't use a Git checkout
+    # Ignore changes to src/Runner.Sdk/BuildConstants.cs
     substituteInPlace src/dir.proj \
       --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
-                'echo Patched out.'
-
-    # Fix FHS path
-    substituteInPlace src/Test/L0/Util/IOUtilL0.cs \
-      --replace '/bin/ln' '${coreutils}/bin/ln'
+                'true'
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-
-    # Set up Nuget dependencies
-    export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
-
-    # Never use nuget.org
-    nuget sources Disable -Name "nuget.org"
-
-    # Restore the dependencies
-    dotnet restore src/ActionsRunner.sln \
-      --runtime "${runtimeId}" \
-      --source "${nugetSource}"
-
-    runHook postConfigure
-  '';
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
+  LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
 
   postConfigure = ''
-    # `crossgen` dependency is called during build
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
-      $HOME/.nuget/packages/microsoft.netcore.app.runtime.${runtimeId}/*/tools/crossgen
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
+    # Generate src/Runner.Sdk/BuildConstants.cs
     dotnet msbuild \
-      -t:Build \
-      -p:PackageRuntime="${runtimeId}" \
-      -p:BUILDCONFIG="Release" \
+      -t:GenerateConstant \
+      -p:ContinuousIntegrationBuild=true \
+      -p:Deterministic=true \
+      -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
       -p:RunnerVersion="${version}" \
-      -p:GitInfoCommitHash="${fakeSha1}" \
       src/dir.proj
-
-    runHook postBuild
   '';
+
+  nativeBuildInputs = [
+    git
+    which
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = [ stdenv.cc.cc.lib ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+
+  dotnetFlags = [ "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ];
+
+  # As given here: https://github.com/actions/runner/blob/0befa62/src/dir.proj#L33-L41
+  projectFile = [
+    "src/Sdk/Sdk.csproj"
+    "src/Runner.Common/Runner.Common.csproj"
+    "src/Runner.Listener/Runner.Listener.csproj"
+    "src/Runner.Worker/Runner.Worker.csproj"
+    "src/Runner.PluginHost/Runner.PluginHost.csproj"
+    "src/Runner.Sdk/Runner.Sdk.csproj"
+    "src/Runner.Plugins/Runner.Plugins.csproj"
+  ];
+  nugetDeps = ./deps.nix;
 
   doCheck = true;
 
-  disabledTests = [
-    # Self-updating is patched out, hence this test will fail
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
-  ] ++ map
-    # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
+  __darwinAllowLocalNetworking = true;
+
+  # Fully qualified name of disabled tests
+  disabledTests =
+    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
+      "Cancel_CloneHashTask_WhenNotNeeded"
+      "CloneHash_RuntimeAndExternals"
+      "DownloadRetry"
+      "FallbackToFullPackage"
+      "NoUpdateOnOldVersion"
+      "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
+      "UseExternalsRuntimeTrimmedPackage"
+      "UseExternalsTrimmedPackage"
+      "ValidateHash"
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"
       "CompositeActionWithActionfile_CompositePrestepNested"
       "CompositeActionWithActionfile_MaxLimit"
       "CompositeActionWithActionfile_Node"
       "DownloadActionFromGraph"
-      "DownloadActionFromGraph_Legacy"
       "NotPullOrBuildImagesMultipleTimes"
-      "NotPullOrBuildImagesMultipleTimes_Legacy"
       "RepositoryActionWithActionYamlFile_DockerHubImage"
-      "RepositoryActionWithActionYamlFile_DockerHubImage_Legacy"
       "RepositoryActionWithActionfileAndDockerfile"
-      "RepositoryActionWithActionfileAndDockerfile_Legacy"
       "RepositoryActionWithActionfile_DockerHubImage"
-      "RepositoryActionWithActionfile_DockerHubImage_Legacy"
       "RepositoryActionWithActionfile_Dockerfile"
-      "RepositoryActionWithActionfile_Dockerfile_Legacy"
       "RepositoryActionWithActionfile_DockerfileRelativePath"
-      "RepositoryActionWithActionfile_DockerfileRelativePath_Legacy"
       "RepositoryActionWithActionfile_Node"
-      "RepositoryActionWithActionfile_Node_Legacy"
       "RepositoryActionWithDockerfile"
-      "RepositoryActionWithDockerfile_Legacy"
       "RepositoryActionWithDockerfileInRelativePath"
-      "RepositoryActionWithDockerfileInRelativePath_Legacy"
       "RepositoryActionWithDockerfilePrepareActions_Repository"
       "RepositoryActionWithInvalidWrapperActionfile_Node"
-      "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
       "RepositoryActionWithWrapperActionfile_PreSteps"
-      "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
       "EnsureDotnetsdkBashDownloadScriptUpToDate"
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+    ]
+    ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+      "RunnerLayoutParts_CheckExternalsHash"
+      "RunnerLayoutParts_CheckDotnetRuntimeHash"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+    ]
+    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
+      "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
+      "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
     ];
 
-  checkInputs = [ git ];
+  testProjectFile = [ "src/Test/Test.csproj" ];
 
-  checkPhase = ''
-    runHook preCheck
-
+  preCheck = ''
     mkdir -p _layout/externals
-    ln -s ${nodejs-12_x} _layout/externals/node12
-
-    # BUILDCONFIG needs to be "Debug"
-    dotnet msbuild \
-      -t:test \
-      -p:PackageRuntime="${runtimeId}" \
-      -p:BUILDCONFIG="Debug" \
-      -p:RunnerVersion="${version}" \
-      -p:GitInfoCommitHash="${fakeSha1}" \
-      src/dir.proj
-
-    runHook postCheck
+    ln -s ${nodejs-16_x} _layout/externals/node16
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    # Copy the built binaries to lib/ instead of bin/ as they
-    # have to be wrapped in the fixup phase to work
-    mkdir -p $out/lib
-    cp -r _layout/bin/. $out/lib/
-
-    # Delete debugging files
-    find "$out/lib" -type f -name '*.pdb' -delete
-
-    # Install the helper scripts to bin/ to resemble the upstream package
+  postInstall = ''
     mkdir -p $out/bin
-    install -m755 src/Misc/layoutbin/runsvc.sh        $out/bin/
-    install -m755 src/Misc/layoutbin/RunnerService.js $out/lib/
-    install -m755 src/Misc/layoutroot/run.sh          $out/lib/
-    install -m755 src/Misc/layoutroot/config.sh       $out/lib/
-    install -m755 src/Misc/layoutroot/env.sh          $out/lib/
 
-    # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' "$out/lib"
-    substituteInPlace $out/lib/config.sh --replace './bin' "$out/lib"
+    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/lib/github-runner
+    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/github-runner
+    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/github-runner
+    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/github-runner/run-helper.sh
+    install -m755 src/Misc/layoutroot/config.sh                $out/lib/github-runner
+    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/github-runner
+
+    # env.sh is patched to not require any wrapping
+    ln -sr "$out/lib/github-runner/env.sh" "$out/bin/"
+
+    substituteInPlace $out/lib/github-runner/config.sh \
+      --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace $out/lib/github-runner/config.sh \
+      --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
+      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+      --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
+  '' + ''
+    # Remove uneeded copy for run-helper template
+    substituteInPlace $out/lib/github-runner/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/github-runner/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
-    substituteInPlace $out/bin/runsvc.sh \
-      --replace './externals' "$out/externals" \
-      --replace './bin' "$out/lib"
+    substituteInPlace $out/lib/github-runner/runsvc.sh \
+      --replace './externals' "$out/lib/externals" \
+      --replace './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
 
-    # The upstream package includes Node 12 and expects it at the path
-    # externals/node12. As opposed to the official releases, we don't
-    # link the Alpine Node flavor.
-    mkdir -p $out/externals
-    ln -s ${nodejs-12_x} $out/externals/node12
+    # The upstream package includes Node 16 and expects it at the path
+    # externals/node16. As opposed to the official releases, we don't
+    # link the Alpine Node flavors.
+    mkdir -p $out/lib/externals
+    ln -s ${nodejs-16_x} $out/lib/externals/node16
 
-    runHook postInstall
+    # Install Nodejs scripts called from workflows
+    install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
+    mkdir -p $out/lib/github-runner/checkScripts
+    install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
+  '' + lib.optionalString stdenv.isLinux ''
+    # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
+    makeWrapperArgs=()
+
+    # We don't wrap with libicu
+    substituteInPlace $out/lib/github-runner/config.sh \
+      --replace '$LDCONFIG_COMMAND -NXv ''${libpath//:/ }' 'echo libicu'
+  '' + ''
+    # XXX: Using the corresponding Nix argument does not work as expected:
+    #      https://github.com/NixOS/nixpkgs/issues/218449
+    # Common wrapper args for `executables`
+    makeWrapperArgs+=(
+      --run 'export RUNNER_ROOT="''${RUNNER_ROOT:-"$HOME/.github-runner"}"'
+      --run 'mkdir -p "$RUNNER_ROOT"'
+      --chdir "$out"
+    )
   '';
 
-  # Stripping breaks the binaries
-  dontStrip = true;
+  # List of files to wrap
+  executables = [
+    "config.sh"
+    "Runner.Listener"
+    "Runner.PluginHost"
+    "Runner.Worker"
+    "run.sh"
+    "runsvc.sh"
+  ];
 
-  preFixup = ''
-    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export RUNNER_ROOT="$TMPDIR"
+
+    $out/bin/config.sh --help >/dev/null
+    $out/bin/Runner.Listener --help >/dev/null
+
+    version=$($out/bin/Runner.Listener --version)
+    if [[ "$version" != "${version}" ]]; then
+      printf 'Unexpected version %s' "$version"
+      exit 1
+    fi
+
+    commit=$($out/bin/Runner.Listener --commit)
+    if [[ "$commit" != "$(git rev-parse HEAD)" ]]; then
+      printf 'Unexpected commit %s' "$commit"
+      exit 1
+    fi
+
+    runHook postInstallCheck
   '';
 
-  postFixup = ''
-    fix_rpath() {
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/$1
-    }
-
-    wrap() {
-      makeWrapper $out/lib/$1 $out/bin/$1 \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
-        ''${@:2}
-    }
-
-    fix_rpath Runner.Listener
-    fix_rpath Runner.PluginHost
-    fix_rpath Runner.Worker
-
-    wrap Runner.Listener
-    wrap Runner.PluginHost
-    wrap Runner.Worker
-    wrap run.sh
-    wrap env.sh
-
-    wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
-  '';
+  passthru = {
+    tests.smoke-test = nixosTests.github-runner;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
+    changelog = "https://github.com/actions/runner/releases/tag/v${version}";
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse zimbatm ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

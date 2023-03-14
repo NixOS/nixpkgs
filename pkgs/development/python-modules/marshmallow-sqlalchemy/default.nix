@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchPypi
 , marshmallow
+, packaging
 , sqlalchemy
 , pytest-lazy-fixture
 , pytestCheckHook
@@ -10,16 +11,19 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "0.26.1";
-  disabled = pythonOlder "3.6";
+  version = "0.28.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d8525f74de51554b5c8491effe036f60629a426229befa33ff614c8569a16a73";
+    hash = "sha256-KrDxKAx5Plrsgd6rPmPsI2iN3+BeXzislgNooQeVIKE=";
   };
 
   propagatedBuildInputs = [
     marshmallow
+    packaging
     sqlalchemy
   ];
 
@@ -27,15 +31,16 @@ buildPythonPackage rec {
     "marshmallow_sqlalchemy"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-lazy-fixture
     pytestCheckHook
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
     description = "SQLAlchemy integration with marshmallow";
+    homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
+    changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

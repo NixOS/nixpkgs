@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     dos2unix $out/opt/sumorobot-manager/main.py
     makeQtWrapper $out/opt/sumorobot-manager/main.py $out/bin/sumorobot-manager \
-      --run "cd $out/opt/sumorobot-manager"
+      --chdir "$out/opt/sumorobot-manager"
   '';
 
   preFixup = ''

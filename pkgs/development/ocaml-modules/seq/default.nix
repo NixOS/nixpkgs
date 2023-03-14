@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation ({
   version = "0.1";
-  name = "ocaml${ocaml.version}-seq-0.1";
+  pname = "ocaml${ocaml.version}-seq";
 
   meta = {
     license = lib.licenses.lgpl21;

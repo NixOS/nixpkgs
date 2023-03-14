@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl
+{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl, ncurses
+
+  # for tests
+, aspell, glibc, runCommand
+
 , searchNixProfiles ? true
 }:
 
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ perl ];
+  buildInputs = [ ncurses perl ];
 
   doCheck = true;
 
@@ -54,6 +58,19 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp ${devaMapsSource}/u-deva.{cmap,cset} $out/lib/aspell/
   '';
+
+  passthru.tests = {
+    uses-curses = runCommand "${pname}-curses" {
+      buildInputs = [ glibc ];
+    } ''
+      if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
+      then
+        echo "Test failure: It does not look like aspell picked up the curses dependency."
+        exit 1
+      fi
+      touch $out
+    '';
+  };
 
   meta = {
     description = "Spell checker for many languages";

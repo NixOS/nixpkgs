@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , bson
-, pytest
-, pytest-cov
-, pytest-runner
 , pytestCheckHook
 , pyyaml
 , setuptools
@@ -23,20 +20,24 @@ buildPythonPackage rec {
     sha256 = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
+    substituteInPlace setup.cfg \
+      --replace "--cov=pymarshal --cov-report=html --cov-report=term" ""
+  '';
+
   nativeBuildInputs = [
     setuptools
-    pytest-runner
   ];
 
   propagatedBuildInputs = [
     bson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     bson
-    pytest
-    pytest-cov
     pyyaml
   ];
 

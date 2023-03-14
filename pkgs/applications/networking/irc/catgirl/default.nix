@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
-  version = "1.9a";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-MEm5mrrWfNp+mBHFjGSOGvvfvBJ+Ho/K+mPUxzJDkV0=";
+    sha256 = "sha256-pov7gvYlvN97xbem4VKP41Wbze1B8NPJcvi36Ri87o4=";
   };
 
   # catgirl's configure script uses pkg-config --variable exec_prefix openssl
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ctags pkg-config ];
   buildInputs = [ libressl ncurses ];
   strictDeps = true;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://git.causal.agency/catgirl/about/";

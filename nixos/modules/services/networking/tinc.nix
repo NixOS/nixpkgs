@@ -24,13 +24,13 @@ let
     options = {
       address = mkOption {
         type = types.str;
-        description = "The external IP address or hostname where the host can be reached.";
+        description = lib.mdDoc "The external IP address or hostname where the host can be reached.";
       };
 
       port = mkOption {
         type = types.nullOr types.port;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The port where the host can be reached.
 
           If no port is specified, the default Port is used.
@@ -43,7 +43,7 @@ let
     options = {
       address = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The subnet of this host.
 
           Subnets can either be single MAC, IPv4 or IPv6 addresses, in which case
@@ -60,7 +60,7 @@ let
       prefixLength = mkOption {
         type = with types; nullOr (addCheck int (n: n >= 0 && n <= 128));
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The prefix length of the subnet.
 
           If null, a subnet consisting of only that single address is assumed.
@@ -72,7 +72,7 @@ let
       weight = mkOption {
         type = types.ints.unsigned;
         default = 10;
-        description = ''
+        description = lib.mdDoc ''
           Indicates the priority over identical Subnets owned by different nodes.
 
           Lower values indicate higher priority. Packets will be sent to the
@@ -89,9 +89,9 @@ let
       addresses = mkOption {
         type = types.listOf (types.submodule addressSubmodule);
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           The external address where the host can be reached. This will set this
-          host's <option>settings.Address</option> option.
+          host's {option}`settings.Address` option.
 
           This variable is only required if you want to connect to this host.
         '';
@@ -100,9 +100,9 @@ let
       subnets = mkOption {
         type = types.listOf (types.submodule subnetSubmodule);
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           The subnets which this tinc daemon will serve. This will set this
-          host's <option>settings.Subnet</option> option.
+          host's {option}`settings.Subnet` option.
 
           Tinc tries to look up which other daemon it should send a packet to by
           searching the appropriate subnet. If the packet matches a subnet, it
@@ -114,24 +114,24 @@ let
       rsaPublicKey = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Legacy RSA public key of the host in PEM format, including start and
           end markers.
 
           This will be appended as-is in the host's configuration file.
 
           The ed25519 public key can be specified using the
-          <option>settings.Ed25519PublicKey</option> option instead.
+          {option}`settings.Ed25519PublicKey` option instead.
         '';
       };
 
       settings = mkOption {
         default = { };
         type = types.submodule { freeformType = tincConfType; };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for this host.
 
-          See <link xlink:href="https://tinc-vpn.org/documentation-1.1/Host-configuration-variables.html"/>
+          See <https://tinc-vpn.org/documentation-1.1/Host-configuration-variables.html>
           for supported values.
         '';
       };
@@ -167,10 +167,10 @@ in
             extraConfig = mkOption {
               default = "";
               type = types.lines;
-              description = ''
+              description = lib.mdDoc ''
                 Extra lines to add to the tinc service configuration file.
 
-                Note that using the declarative <option>service.tinc.networks.&lt;name&gt;.settings</option>
+                Note that using the declarative {option}`service.tinc.networks.<name>.settings`
                 option is preferred.
               '';
             };
@@ -178,7 +178,7 @@ in
             name = mkOption {
               default = null;
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the node which is used as an identifier when communicating
                 with the remote nodes in the mesh. If null then the hostname of the system
                 is used to derive a name (note that tinc may replace non-alphanumeric characters in
@@ -189,7 +189,7 @@ in
             ed25519PrivateKeyFile = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description = ''
+              description = lib.mdDoc ''
                 Path of the private ed25519 keyfile.
               '';
             };
@@ -197,7 +197,7 @@ in
             rsaPrivateKeyFile = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description = ''
+              description = lib.mdDoc ''
                 Path of the private RSA keyfile.
               '';
             };
@@ -205,9 +205,9 @@ in
             debugLevel = mkOption {
               default = 0;
               type = types.addCheck types.int (l: l >= 0 && l <= 5);
-              description = ''
+              description = lib.mdDoc ''
                 The amount of debugging information to add to the log. 0 means little
-                logging while 5 is the most logging. <command>man tincd</command> for
+                logging while 5 is the most logging. {command}`man tincd` for
                 more details.
               '';
             };
@@ -215,11 +215,11 @@ in
             hosts = mkOption {
               default = { };
               type = types.attrsOf types.lines;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the host in the network as well as the configuration for that host.
                 This name should only contain alphanumerics and underscores.
 
-                Note that using the declarative <option>service.tinc.networks.&lt;name&gt;.hostSettings</option>
+                Note that using the declarative {option}`service.tinc.networks.<name>.hostSettings`
                 option is preferred.
               '';
             };
@@ -249,7 +249,7 @@ in
                 }
               '';
               type = types.attrsOf (types.submodule hostSubmodule);
-              description = ''
+              description = lib.mdDoc ''
                 The name of the host in the network as well as the configuration for that host.
                 This name should only contain alphanumerics and underscores.
               '';
@@ -258,7 +258,7 @@ in
             interfaceType = mkOption {
               default = "tun";
               type = types.enum [ "tun" "tap" ];
-              description = ''
+              description = lib.mdDoc ''
                 The type of virtual interface used for the network connection.
               '';
             };
@@ -266,7 +266,7 @@ in
             listenAddress = mkOption {
               default = null;
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 The ip address to listen on for incoming connections.
               '';
             };
@@ -274,7 +274,7 @@ in
             bindToAddress = mkOption {
               default = null;
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 The ip address to bind to (both listen on and send packets from).
               '';
             };
@@ -283,7 +283,7 @@ in
               type = types.package;
               default = pkgs.tinc_pre;
               defaultText = literalExpression "pkgs.tinc_pre";
-              description = ''
+              description = lib.mdDoc ''
                 The package to use for the tinc daemon's binary.
               '';
             };
@@ -291,7 +291,7 @@ in
             chroot = mkOption {
               default = false;
               type = types.bool;
-              description = ''
+              description = lib.mdDoc ''
                 Change process root directory to the directory where the config file is located (/etc/tinc/netname/), for added security.
                 The chroot is performed after all the initialization is done, after writing pid files and opening network sockets.
 
@@ -309,10 +309,10 @@ in
                   Mode = "switch";
                 }
               '';
-              description = ''
+              description = lib.mdDoc ''
                 Configuration of the Tinc daemon for this network.
 
-                See <link xlink:href="https://tinc-vpn.org/documentation-1.1/Main-configuration-variables.html"/>
+                See <https://tinc-vpn.org/documentation-1.1/Main-configuration-variables.html>
                 for supported values.
               '';
             };
@@ -337,7 +337,7 @@ in
           };
         }));
 
-        description = ''
+        description = lib.mdDoc ''
           Defines the tinc networks which will be started.
           Each network invokes a different daemon.
         '';
@@ -349,91 +349,94 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.networks != { }) {
+  config = mkIf (cfg.networks != { }) (
+    let
+      etcConfig = foldr (a: b: a // b) { }
+        (flip mapAttrsToList cfg.networks (network: data:
+          flip mapAttrs' data.hosts (host: text: nameValuePair
+            ("tinc/${network}/hosts/${host}")
+            ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
+          ) // {
+            "tinc/${network}/tinc.conf" = {
+              mode = "0444";
+              text = ''
+                ${toTincConf ({ Interface = "tinc.${network}"; } // data.settings)}
+                ${data.extraConfig}
+              '';
+            };
+          }
+        ));
+    in {
+      environment.etc = etcConfig;
 
-    environment.etc = foldr (a: b: a // b) { }
-      (flip mapAttrsToList cfg.networks (network: data:
-        flip mapAttrs' data.hosts (host: text: nameValuePair
-          ("tinc/${network}/hosts/${host}")
-          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
-        ) // {
-          "tinc/${network}/tinc.conf" = {
-            mode = "0444";
-            text = ''
-              ${toTincConf ({ Interface = "tinc.${network}"; } // data.settings)}
-              ${data.extraConfig}
-            '';
+      systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
+        ("tinc.${network}")
+        (let version = getVersion data.package; in {
+          description = "Tinc Daemon - ${network}";
+          wantedBy = [ "multi-user.target" ];
+          path = [ data.package ];
+          reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
+          restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+            RestartSec = "3";
+            ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
+            ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
           };
-        }
-      ));
+          preStart = ''
+            mkdir -p /etc/tinc/${network}/hosts
+            chown tinc.${network} /etc/tinc/${network}/hosts
+            mkdir -p /etc/tinc/${network}/invitations
+            chown tinc.${network} /etc/tinc/${network}/invitations
 
-    systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
-      ("tinc.${network}")
-      ({
-        description = "Tinc Daemon - ${network}";
-        wantedBy = [ "multi-user.target" ];
-        path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          RestartSec = "3";
-          ExecReload = mkIf (versionAtLeast (getVersion data.package) "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
-          ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
+            # Determine how we should generate our keys
+            if type tinc >/dev/null 2>&1; then
+              # Tinc 1.1+ uses the tinc helper application for key generation
+            ${if data.ed25519PrivateKeyFile != null then "  # ed25519 Keyfile managed by nix" else ''
+              # Prefer ED25519 keys (only in 1.1+)
+              [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
+            ''}
+            ${if data.rsaPrivateKeyFile != null then "  # RSA Keyfile managed by nix" else ''
+              [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+            ''}
+              # In case there isn't anything to do
+              true
+            else
+              # Tinc 1.0 uses the tincd application
+              [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
+            fi
+          '';
+        })
+      );
+
+      environment.systemPackages = let
+        cli-wrappers = pkgs.stdenv.mkDerivation {
+          name = "tinc-cli-wrappers";
+          nativeBuildInputs = [ pkgs.makeWrapper ];
+          buildCommand = ''
+            mkdir -p $out/bin
+            ${concatStringsSep "\n" (mapAttrsToList (network: data:
+              optionalString (versionAtLeast data.package.version "1.1pre") ''
+                makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
+                  --add-flags "--pidfile=/run/tinc.${network}.pid" \
+                  --add-flags "--config=/etc/tinc/${network}"
+              '') cfg.networks)}
+          '';
         };
-        preStart = ''
-          mkdir -p /etc/tinc/${network}/hosts
-          chown tinc.${network} /etc/tinc/${network}/hosts
-          mkdir -p /etc/tinc/${network}/invitations
-          chown tinc.${network} /etc/tinc/${network}/invitations
+      in [ cli-wrappers ];
 
-          # Determine how we should generate our keys
-          if type tinc >/dev/null 2>&1; then
-            # Tinc 1.1+ uses the tinc helper application for key generation
-          ${if data.ed25519PrivateKeyFile != null then "  # ed25519 Keyfile managed by nix" else ''
-            # Prefer ED25519 keys (only in 1.1+)
-            [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
-          ''}
-          ${if data.rsaPrivateKeyFile != null then "  # RSA Keyfile managed by nix" else ''
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
-          ''}
-            # In case there isn't anything to do
-            true
-          else
-            # Tinc 1.0 uses the tincd application
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
-          fi
-        '';
-      })
-    );
+      users.users = flip mapAttrs' cfg.networks (network: _:
+        nameValuePair ("tinc.${network}") ({
+          description = "Tinc daemon user for ${network}";
+          isSystemUser = true;
+          group = "tinc.${network}";
+        })
+      );
+      users.groups = flip mapAttrs' cfg.networks (network: _:
+        nameValuePair "tinc.${network}" {}
+      );
+    });
 
-    environment.systemPackages = let
-      cli-wrappers = pkgs.stdenv.mkDerivation {
-        name = "tinc-cli-wrappers";
-        buildInputs = [ pkgs.makeWrapper ];
-        buildCommand = ''
-          mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data:
-            optionalString (versionAtLeast data.package.version "1.1pre") ''
-              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
-                --add-flags "--pidfile=/run/tinc.${network}.pid" \
-                --add-flags "--config=/etc/tinc/${network}"
-            '') cfg.networks)}
-        '';
-      };
-    in [ cli-wrappers ];
-
-    users.users = flip mapAttrs' cfg.networks (network: _:
-      nameValuePair ("tinc.${network}") ({
-        description = "Tinc daemon user for ${network}";
-        isSystemUser = true;
-        group = "tinc.${network}";
-      })
-    );
-    users.groups = flip mapAttrs' cfg.networks (network: _:
-      nameValuePair "tinc.${network}" {}
-    );
-  };
-
-  meta.maintainers = with maintainers; [ minijackson ];
+  meta.maintainers = with maintainers; [ minijackson mic92 ];
 }

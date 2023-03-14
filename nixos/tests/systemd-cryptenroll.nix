@@ -4,11 +4,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ ymatsiuk ];
   };
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     environment.systemPackages = [ pkgs.cryptsetup ];
     virtualisation = {
       emptyDiskImages = [ 512 ];
-      memorySize = 1024;
       qemu.options = [
         "-chardev socket,id=chrtpm,path=/tmp/swtpm-sock"
         "-tpmdev emulator,id=tpm0,chardev=chrtpm"

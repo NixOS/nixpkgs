@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hd-idle";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "adelolmo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LZcMwF/BhHiWWXMcrzbk8GyvwXdA3B2olmbOBxQwV5g=";
+    sha256 = "sha256-BHUjKvhUDeD/Xm0KKbkLH2XWn1W77E7Pm3OSPARF6Xw=";
   };
 
   vendorSha256 = null;

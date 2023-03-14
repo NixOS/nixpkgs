@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, ocaml, findlib, bzip2, autoreconfHook }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "bz2 is not available for OCaml ${ocaml.version}"
 else
 
@@ -15,13 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
   };
 
-  autoreconfFlags = "-I .";
+  autoreconfFlags = [ "-I" "." ];
 
   nativeBuildInputs = [
     autoreconfHook
-  ];
-
-  buildInputs = [
     ocaml
     findlib
   ];
@@ -29,6 +26,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     bzip2
   ];
+
+  strictDeps = true;
 
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
 

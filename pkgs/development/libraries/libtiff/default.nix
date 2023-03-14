@@ -1,48 +1,83 @@
 { lib, stdenv
-, fetchurl
+, fetchFromGitLab
+, fetchpatch
+, nix-update-script
 
 , autoreconfHook
 , pkg-config
+, sphinx
 
 , libdeflate
 , libjpeg
 , xz
 , zlib
-}:
 
-#FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
+# for passthru.tests
+, libgeotiff
+, python3Packages
+, imagemagick
+, graphicsmagick
+, gdal
+, openimageio
+, freeimage
+}:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.3.0";
+  version = "4.5.0";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
+  src = fetchFromGitLab {
+    owner = "libtiff";
+    repo = "libtiff";
+    rev = "v${version}";
+    hash = "sha256-KG6rB940JMjFUTAgtkzg+Zh75gylPY6Q7/4gEbL0Hcs=";
   };
 
-  # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  patches = [
+    # FreeImage needs this patch
+    ./headers.patch
+    # libc++abi 11 has an `#include <version>`, this picks up files name
+    # `version` in the project's include paths
+    ./rename-version.patch
+    (fetchpatch {
+      name = "CVE-2022-48281.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/d1b6b9c1b3cae2d9e37754506c1ad8f4f7b646b5.diff";
+      sha256 = "sha256-FWUlyJyHXac6fuM5f9PG33kcF5Bm4fyFmYnaDal46iM=";
+    })
+  ];
+
+  postPatch = ''
+    mv VERSION VERSION.txt
+  '';
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
   postFixup = ''
-    moveToOutput include/tif_dir.h $dev_private
     moveToOutput include/tif_config.h $dev_private
+    moveToOutput include/tif_dir.h $dev_private
+    moveToOutput include/tif_hash_set.h $dev_private
     moveToOutput include/tiffiop.h $dev_private
   '';
 
   # If you want to change to a different build system, please make
   # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
   propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  buildInputs = [ libdeflate ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru = {
+    tests = {
+      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit (python3Packages) pillow imread;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";

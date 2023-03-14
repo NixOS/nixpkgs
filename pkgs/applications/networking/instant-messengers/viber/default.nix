@@ -1,17 +1,17 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
  alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ nspr, nss, openssl_1_1, systemd, wayland, xorg, zlib, ...
 }:
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "13.3.1.22";
+  version = "16.1.0.37";
 
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "http://web.archive.org/web/20210602004133/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
+    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       libxslt
       nspr
       nss
-      openssl
+      openssl_1_1
       stdenv.cc.cc
       systemd
       wayland
@@ -99,8 +99,9 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = {
-    homepage = "http://www.viber.com";
+    homepage = "https://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ jagajaga ];

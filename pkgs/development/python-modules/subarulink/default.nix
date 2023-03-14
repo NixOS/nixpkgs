@@ -12,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.3.15";
+  version = "0.7.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "G-Two";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-akDccWkiFwTwq7dvUxm34BFNS5PnQowqnxVvkPFzxLM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-igfC/Hi/cbNnHmrzgWQnhJ9cdWHPI0fIqPIYeIZuxgU=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     stdiomask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     cryptography
     pytest-asyncio
@@ -35,7 +37,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "--cov=subarulink" ""
+    substituteInPlace setup.cfg \
+      --replace "--cov=subarulink" ""
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -44,11 +47,14 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [ "subarulink" ];
+  pythonImportsCheck = [
+    "subarulink"
+  ];
 
   meta = with lib; {
     description = "Python module for interacting with STARLINK-enabled vehicle";
     homepage = "https://github.com/G-Two/subarulink";
+    changelog = "https://github.com/G-Two/subarulink/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

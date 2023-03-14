@@ -2,26 +2,44 @@
 , buildPythonPackage
 , callPackage
 , fetchPypi
-, debugpy
+, hatchling
+, pythonOlder
+, comm
 , ipython
 , jupyter-client
+, packaging
+, psutil
 , tornado
 , traitlets
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.4.1";
+  version = "6.20.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df3355e5eec23126bc89767a676c5f0abfc7f4c3497d118c592b83b316e8c0cd";
+    sha256 = "sha256-ffr67GRTAHEMQUecCwvcE6nqZjm+5uOtBCdXZ06amik=";
   };
 
+  # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
+  postPatch = ''
+    sed -i "/debugpy/d" pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
-    debugpy
+    comm
     ipython
     jupyter-client
+    packaging
+    psutil
     tornado
     traitlets
   ];
@@ -35,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython Kernel for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Web-based kanban board";
     license = licenses.osl3;
     homepage = "https://restya.com";
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

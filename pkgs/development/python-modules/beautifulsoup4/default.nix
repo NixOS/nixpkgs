@@ -1,35 +1,46 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, chardet
 , html5lib
 , lxml
 , pytestCheckHook
 , pythonOlder
 , soupsieve
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.10.0";
+  version = "4.11.1";
+  format = "setuptools";
+  outputs = ["out" "doc"];
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wjrSPFIdgYlVpBUaZ9gVgDGdS/VI09SfQiOuBB/5iJE=";
+    hash = "sha256-rZqlW2XvKAjrQF9Gz3Tff8twRNXLwmSH+W6y7y5DZpM=";
   };
 
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+
   propagatedBuildInputs = [
+    chardet
     html5lib
     lxml
     soupsieve
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bs4" ];
+  pythonImportsCheck = [
+    "bs4"
+  ];
 
   meta = with lib; {
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";

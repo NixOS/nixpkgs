@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
 
     # Please, notify me (smironov) if you need the x86 version
     platforms = ["x86_64-linux"];
+    broken = true; # at 2022-09-30, failed download.
   };
 }

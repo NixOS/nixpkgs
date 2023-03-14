@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, qmake, mkDerivation,
-  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio_1, ffmpeg-full,
-  CoreFoundation }:
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, which, qmake, wrapQtAppsHook
+, qtmultimedia, frei0r, opencolorio_1, ffmpeg-full, CoreFoundation }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "olive-editor";
   version = "0.1.2";
 
@@ -12,6 +12,10 @@ mkDerivation rec {
     rev = version;
     sha256 = "151g6jwhipgbq4llwib92sq23p1s9hm6avr7j4qq3bvykzrm8z1a";
   };
+
+  patches = [
+    ./q-painter-path.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -34,5 +38,7 @@ mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.balsoft ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -2,18 +2,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.21.10.24";
+  version = "0.22.10.20";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "01is32lk6prwhajvlmgn3xs4fcpmiqivizcqkj9k80jx6mqjifzs";
+    hash = "sha256-NnFOe471GxcjpTwpsoxKaWiw4lW4tUPIM+WpzCsEdkI=";
   };
 
-  propagatedBuildInputs = [ python3Packages.psutil ];
+  propagatedBuildInputs = with python3Packages; [ psutil six ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytestCheckHook
   ];
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "trash";
   };
 }

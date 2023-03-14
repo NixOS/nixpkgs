@@ -1,27 +1,65 @@
-{   lib, buildPythonApplication, fetchPypi
-  , altair, astor, base58, blinker, boto3, botocore, click, enum-compat
-  , future, pillow, protobuf, requests, toml, tornado_5, tzlocal, validators, watchdog
-  , jinja2, setuptools
+{ lib
+, altair
+, blinker
+, buildPythonApplication
+, cachetools
+, click
+, fetchPypi
+, gitpython
+, importlib-metadata
+, jinja2
+, pillow
+, protobuf3
+, pyarrow
+, pydeck
+, pympler
+, requests
+, rich
+, semver
+, setuptools
+, toml
+, tornado
+, tzlocal
+, validators
+, watchdog
 }:
 
 buildPythonApplication rec {
   pname = "streamlit";
-  version = "0.50.2";
-  format = "wheel"; # the only distribution available
+  version = "1.18.1";
+  format = "wheel"; # source currently requires pipenv
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "1wymv7qckafs0p2jdjlxjaf1xrhm3iyd185jkldanbb0na5n3ndz";
+    hash = "sha256-lO2QfM/G+4M55f8JCZBwk10SkMp4gXb68KncHm90k7g=";
   };
 
   propagatedBuildInputs = [
-    altair astor base58 blinker boto3 botocore click enum-compat
-    future pillow protobuf requests toml tornado_5 tzlocal validators watchdog
-    jinja2 setuptools
+    altair
+    blinker
+    cachetools
+    click
+    gitpython
+    importlib-metadata
+    jinja2
+    pillow
+    protobuf3
+    pyarrow
+    pydeck
+    pympler
+    requests
+    rich
+    semver
+    setuptools
+    toml
+    tornado
+    tzlocal
+    validators
+    watchdog
   ];
 
   postInstall = ''
-      rm $out/bin/streamlit.cmd # remove windows helper
+    rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
   meta = with lib; {
@@ -30,5 +68,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ yrashk ];
     license = licenses.asl20;
   };
-
 }

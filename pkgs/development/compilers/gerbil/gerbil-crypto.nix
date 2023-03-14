@@ -7,7 +7,8 @@ gerbil-support.gerbilPackage {
   gerbil-package = "clan/crypto";
   gerbil = gerbil-unstable;
   gerbilInputs = [gerbil-support.gerbilPackages-unstable.gerbil-utils];
-  buildInputs = [pkgs.secp256k1 pkgs.pkg-config];
+  nativeBuildInputs = [ pkgs.pkg-config ];
+  buildInputs = [pkgs.secp256k1 ];
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-crypto";

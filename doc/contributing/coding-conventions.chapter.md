@@ -204,27 +204,27 @@ The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _s
 
 In Nixpkgs, there are generally three different names associated with a package:
 
-- The `name` attribute of the derivation (excluding the version part). This is what most users see, in particular when using `nix-env`.
+- The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
 - The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `name` attribute `"e2fsprogs-version"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
 There are a few naming guidelines:
 
-- The `name` attribute _should_ be identical to the upstream package name.
+- The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `name` attribute _must not_ contain uppercase letters — e.g., `"mplayer-1.0rc2"` instead of `"MPlayer-1.0rc2"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
 
-- The version part of the `name` attribute _must_ start with a digit (following a dash) — e.g., `"hello-0.3.1rc2"`.
+- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
 
-- If a package is not a release but a commit from a repository, then the version part of the name _must_ be the date of that (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format. Also append `"unstable"` to the name - e.g., `"pkgname-unstable-2014-09-23"`.
+- If a package is not a release but a commit from a repository, then the `version` attribute _must_ be the date of that (fetched) commit. The date _must_ be in `"unstable-YYYY-MM-DD"` format.
 
-- Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 
@@ -259,6 +259,10 @@ When in doubt, consider refactoring the `pkgs/` tree, e.g. creating new categori
   - **If it’s a _build manager_:**
 
     - `development/tools/build-managers` (e.g. `gnumake`)
+
+  - **If it’s a _language server_:**
+
+    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
 
   - **Else:**
 
@@ -337,6 +341,10 @@ A (typically large) program with a distinct user interface, primarily used inter
 - **If it’s a _terminal emulator_:**
 
   - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
+
+- **If it’s a _file manager_:**
+
+  - `applications/file-managers` (e.g. `mc` or `ranger` or `pcmanfm`)
 
 - **If it’s for _video playback / editing_:**
 
@@ -422,9 +430,10 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 
   ```nix
   src = fetchgit {
+    url = "git@github.com:NixOS/nix.git"
     url = "git://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -434,7 +443,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   src = fetchgit {
     url = "https://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -445,11 +454,14 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
     owner = "NixOS";
     repo = "nix";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1i2yxndxb6yc9l6c99pypbd92lfq5aac4klq7y2v93c9qvx2cgpc";
+    hash = "ha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=;
   }
   ```
 
-  Find the value to put as `sha256` by running `nix run -f '<nixpkgs>' nix-prefetch-github -c nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix` or `nix-prefetch-url --unpack https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz`.
+When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
+It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
+
+Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
 
 ## Obtaining source hash {#sec-source-hashes}
 
@@ -473,15 +485,23 @@ Preferred source hash type is sha256. There are several ways to get it.
 
 4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
 
-5. Fake hash: set fake hash in package expression, perform build and extract correct hash from error Nix prints.
+5. Fake hash: set the hash to one of
 
-    For package updates it is enough to change one symbol to make hash fake. For new packages, you can use `lib.fakeSha256`, `lib.fakeSha512` or any other fake hash.
+   - `""`
+   - `lib.fakeHash`
+   - `lib.fakeSha256`
+   - `lib.fakeSha512`
+
+   in the package expression, attempt build and extract correct hash from error messages.
+
+   ::: {.warning}
+   You must use one of these four fake hashes and not some arbitrarily-chosen hash.
+
+   See [](#sec-source-hashes-security).
+   :::
 
     This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
-::: {.warning}
-This method has security problems. Check below for details.
-:::
 
 ### Obtaining hashes securely {#sec-source-hashes-security}
 
@@ -493,7 +513,7 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 
 - `https://` URLs are secure in methods 1, 2, 3;
 
-- `https://` URLs are not secure in method 5. When obtaining hashes with fake hash method, TLS checks are disabled. So refetch source hash from several different networks to exclude MITM scenario. Alternatively, use fake hash method to make Nix error, but instead of extracting hash from error, extract `https://` URL and prefetch it with method 1.
+- `https://` URLs are secure in method 5 *only if* you use one of the listed fake hashes. If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
 
 ## Patches {#sec-patches}
 
@@ -504,12 +524,14 @@ patches = [
   (fetchpatch {
     name = "fix-check-for-using-shared-freetype-lib.patch";
     url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
+    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
   })
 ];
 ```
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
+
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [](#fetchpatch) for details.
 
 ```nix
 patches = [ ./0001-changes.patch ];
@@ -537,16 +559,6 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     ```ShellSession
     $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
-
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
-
-- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
-- `extraPrefix`: Prefix pathnames by this string.
-- `excludes`: Exclude files matching this pattern.
-- `includes`: Include only files matching this pattern.
-- `revert`: Revert the patch.
-
-Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
 
 ## Package tests {#sec-package-tests}
 
@@ -662,3 +674,18 @@ stdenv.mkDerivation {
   ...
 }
 ```
+
+### Import From Derivation {#ssec-import-from-derivation}
+
+Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
+
+[Hydra]: https://github.com/NixOS/hydra
+
+Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
+
+<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
+
+See also [NixOS Wiki: Import From Derivation].
+
+[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation

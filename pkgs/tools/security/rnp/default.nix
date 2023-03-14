@@ -15,16 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rnp";
-  version = "0.15.2";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
     rev = "v${version}";
-    sha256 = "1jph69nsz245fbv04nalh1qmhniyh88sacsf3nxv1vxm190314i9";
+    sha256 = "sha256-KHItrpuKXaLGF1mcpju/RJFnm2yPZyYq4eIoRGqf5Y8=";
   };
-
-  patches = [ ./cmake_nogit.patch ];
 
   buildInputs = [ zlib bzip2 json_c botan2 ];
 
@@ -38,9 +36,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ asciidoctor cmake gnupg gtest pkg-config python3 ];
 
-  # NOTE: check-only inputs should ideally be moved to checkInputs, but it
+  # NOTE: check-only inputs should ideally be moved to nativeCheckInputs, but it
   # would fail during buildPhase.
-  # checkInputs = [ gtest python3 ];
+  # nativeCheckInputs = [ gtest python3 ];
 
   outputs = [ "out" "lib" "dev" ];
 

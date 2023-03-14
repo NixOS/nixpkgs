@@ -1,16 +1,16 @@
 { lib, stdenv, fetchFromGitHub, caddy, asciidoctor
 , file, lessc, sass, multimarkdown, linkchecker
-, perlPackages, python27 }:
+, perlPackages, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "styx";
-  version = "0.7.2";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
-    rev    = "0f0a878156eac416620a177cc030fa9f2f69b1b8";
-    sha256 = "0ig456j1s17w4zhhcmkrskpy6n7061v5f2isa3qhipmn0gwb91af";
+    rev    = "v${version}";
+    hash = "sha256-f6iA/nHpKnm3BALoQq8SzdcSzJLCFSferEf69SpgD2Y=";
   };
 
   server = "${caddy}/bin/caddy";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     asciidoctor
     multimarkdown
     perlPackages.ImageExifTool
-    (python27.withPackages (ps: [ ps.parsimonious ]))
+    python3Packages.parsimonious
   ];
 
   installPhase = ''

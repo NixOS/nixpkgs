@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, freetype, asciidoc
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, freetype, asciidoc
 , xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, fetchpatch
 , nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "01f1bv9axjhw1l2gwhdwahljssj0h8q7a1bqwbpnwvln0ayv39qb";
+    sha256 = "sha256-stRgCQnlvs5a1jgY37MLsZ/SrJ9ShHsaenStQEBxgQU=";
   };
 
   outputs = [
@@ -37,11 +38,19 @@ stdenv.mkDerivation rec {
     libXrandr
     libXft
     libXrender
+    libXdmcp
+    libXfixes
     freetype
   ];
 
   patches = [
     ./test-path-environment.patch
+    # Adjust tests for compatibility with gcc 12 (https://github.com/herbstluftwm/herbstluftwm/issues/1512)
+    # Can be removed with the next release (>0.9.5).
+    (fetchpatch {
+      url = "https://github.com/herbstluftwm/herbstluftwm/commit/8678168c7a3307b1271e94974e062799e745ab40.patch";
+      hash = "sha256-uI6ErfDitT2Tw0txx4lMSBn/jjiiyL4Qw6AJa/CTh1E=";
+    })
   ];
 
   postPatch = ''
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
     xdotool
     xorgserver
@@ -68,14 +77,16 @@ stdenv.mkDerivation rec {
     python3.pkgs.pytestCheckHook
   ];
 
-  # make the package's module avalaible
+  # make the package's module available
   preCheck = ''
     export PYTHONPATH="$PYTHONPATH:../python"
   '';
 
   pytestFlagsArray = [ "../tests" ];
   disabledTests = [
-    "test_title_different_letters_are_drawn"
+    "test_autostart" # $PATH problems
+    "test_wmexec_to_other" # timeouts in sandbox
+    "test_rules" # timeouts
   ];
 
   passthru = {

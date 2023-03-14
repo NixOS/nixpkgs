@@ -15,11 +15,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiio ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Fix iio include path on darwin to match linux
+    for i in test/*.c; do
+      substituteInPlace $i \
+        --replace 'iio/iio.h' 'iio.h'
+    done
+  '';
+
   meta = with lib; {
     description = "IIO AD9361 library for filter design and handling, multi-chip sync, etc";
     homepage = "http://analogdevicesinc.github.io/libad9361-iio/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -89,12 +89,12 @@ in
 
     services.xtreemfs = {
 
-      enable = mkEnableOption "XtreemFS";
+      enable = mkEnableOption (lib.mdDoc "XtreemFS");
 
       homeDir = mkOption {
         type = types.path;
         default = "/var/lib/xtreemfs";
-        description = ''
+        description = lib.mdDoc ''
           XtreemFS home dir for the xtreemfs user.
         '';
       };
@@ -103,7 +103,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable XtreemFS DIR service.
           '';
         };
@@ -111,7 +111,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e40";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -120,7 +120,7 @@ in
         port = mkOption {
           default = 32638;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             The port to listen on for incoming connections (TCP).
           '';
         };
@@ -128,7 +128,7 @@ in
           type = types.str;
           example = "127.0.0.1";
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             If specified, it defines the interface to listen on. If not
             specified, the service will listen on all interfaces (any).
           '';
@@ -136,7 +136,7 @@ in
         httpPort = mkOption {
           default = 30638;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
@@ -145,7 +145,7 @@ in
           type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
           default = "FSYNC";
           example = "FDATASYNC";
-          description = ''
+          description = lib.mdDoc ''
             The sync mode influences how operations are committed to the disk
             log before the operation is acknowledged to the caller.
 
@@ -173,14 +173,14 @@ in
             ssl.trusted_certs.pw = jks_passphrase
             ssl.trusted_certs.container = jks
           '';
-          description = ''
+          description = lib.mdDoc ''
             Configuration of XtreemFS DIR service.
             WARNING: configuration is saved as plaintext inside nix store.
             For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
           '';
         };
         replication = {
-          enable = mkEnableOption "XtreemFS DIR replication plugin";
+          enable = mkEnableOption (lib.mdDoc "XtreemFS DIR replication plugin");
           extraConfig = mkOption {
             type = types.lines;
             example = ''
@@ -215,7 +215,7 @@ in
 
               babudb.ssl.authenticationWithoutEncryption = false
             '';
-            description = ''
+            description = lib.mdDoc ''
               Configuration of XtreemFS DIR replication plugin.
               WARNING: configuration is saved as plaintext inside nix store.
               For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
@@ -228,7 +228,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable XtreemFS MRC service.
           '';
         };
@@ -236,7 +236,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e41";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -245,7 +245,7 @@ in
         port = mkOption {
           default = 32636;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             The port to listen on for incoming connections (TCP).
           '';
         };
@@ -253,7 +253,7 @@ in
           example = "127.0.0.1";
           type = types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             If specified, it defines the interface to listen on. If not
             specified, the service will listen on all interfaces (any).
           '';
@@ -261,7 +261,7 @@ in
         httpPort = mkOption {
           default = 30636;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
@@ -270,7 +270,7 @@ in
           default = "FSYNC";
           type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
           example = "FDATASYNC";
-          description = ''
+          description = lib.mdDoc ''
             The sync mode influences how operations are committed to the disk
             log before the operation is acknowledged to the caller.
 
@@ -316,14 +316,14 @@ in
             ssl.trusted_certs.pw = jks_passphrase
             ssl.trusted_certs.container = jks
           '';
-          description = ''
+          description = lib.mdDoc ''
             Configuration of XtreemFS MRC service.
             WARNING: configuration is saved as plaintext inside nix store.
             For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
           '';
         };
         replication = {
-          enable = mkEnableOption "XtreemFS MRC replication plugin";
+          enable = mkEnableOption (lib.mdDoc "XtreemFS MRC replication plugin");
           extraConfig = mkOption {
             type = types.lines;
             example = ''
@@ -358,7 +358,7 @@ in
 
               babudb.ssl.authenticationWithoutEncryption = false
             '';
-            description = ''
+            description = lib.mdDoc ''
               Configuration of XtreemFS MRC replication plugin.
               WARNING: configuration is saved as plaintext inside nix store.
               For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
@@ -371,7 +371,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable XtreemFS OSD service.
           '';
         };
@@ -379,7 +379,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e42";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -388,7 +388,7 @@ in
         port = mkOption {
           default = 32640;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             The port to listen on for incoming connections (TCP and UDP).
           '';
         };
@@ -396,7 +396,7 @@ in
           example = "127.0.0.1";
           type = types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             If specified, it defines the interface to listen on. If not
             specified, the service will listen on all interfaces (any).
           '';
@@ -404,7 +404,7 @@ in
         httpPort = mkOption {
           default = 30640;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
@@ -435,7 +435,7 @@ in
             ssl.trusted_certs.pw = jks_passphrase
             ssl.trusted_certs.container = jks
           '';
-          description = ''
+          description = lib.mdDoc ''
             Configuration of XtreemFS OSD service.
             WARNING: configuration is saved as plaintext inside nix store.
             For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html

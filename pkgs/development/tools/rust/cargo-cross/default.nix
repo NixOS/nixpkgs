@@ -1,39 +1,34 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cross";
-  version = "0.2.1";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
-    owner = "rust-embedded";
+    owner = "cross-rs";
     repo = "cross";
-    rev = "v${version}";
-    sha256 = "1py5w4kf612x4qxi190ilsrx0zzwdzk9i47ppvqblska1s47qa2w";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
   };
 
-  cargoSha256 = "sha256-zk6cbN4iSHnyoeWupufVf2yQK6aq3S99uk9lqpjCw4c=";
+  cargoSha256 = "sha256-x+DrKo79R8TAeLVuvIIguQs3gdAHiAQ9dUU2/eZRZ0c=";
 
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/rust-embedded/cross/commit/e86ad2e5a55218395df7eaaf91900e22b809083c.patch";
-      sha256 = "1zrcj5fm3irmlrfkgb65kp2pjkry0rg5nn9pwsk9p0i6dpapjc7k";
-    })
+  checkFlags = [
+    "--skip=docker::shared::tests::directories::test_host"
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Zero setup cross compilation and cross testing";
-    homepage = "https://github.com/rust-embedded/cross";
+    homepage = "https://github.com/cross-rs/cross";
+    changelog = "https://github.com/cross-rs/cross/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ otavio ];
     mainProgram = "cross";

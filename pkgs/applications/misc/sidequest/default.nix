@@ -8,7 +8,7 @@
       exec = "SideQuest";
       desktopName = name;
       genericName = "VR App Store";
-      categories = "Settings;PackageManager;";
+      categories = [ "Settings" "PackageManager" ];
     };
 
     sidequest = stdenv.mkDerivation {
@@ -48,6 +48,7 @@
         description = "An open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
         homepage = "https://github.com/SideQuestVR/SideQuest";
         downloadPage = "https://github.com/SideQuestVR/SideQuest/releases";
+        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
         license = licenses.mit;
         maintainers = with maintainers; [ joepie91 rvolosatovs ];
         platforms = [ "x86_64-linux" ];

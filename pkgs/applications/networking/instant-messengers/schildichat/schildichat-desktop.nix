@@ -2,32 +2,33 @@
 , element-desktop # for seshat and keytar
 , schildichat-web
 , stdenv
-, fetchgit
+, fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , fetchYarnDeps
-, yarn, nodejs, fixup_yarn_lock
+, yarn
+, nodejs
+, fixup_yarn_lock
 , electron
 , Security
 , AppKit
 , CoreServices
-
-, useWayland ? false
+, sqlcipher
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "schildichat-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in
 stdenv.mkDerivation rec {
   pname = "schildichat-desktop";
   inherit (pinData) version;
 
-  src = fetchgit {
-    url = "https://github.com/SchildiChat/schildichat-desktop/";
-    rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "SchildiChat";
+    repo = "schildichat-desktop";
+    inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
   };
@@ -57,13 +58,18 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  # Only affects unused scripts in $out/share/element/electron/scripts. Also
+  # breaks because there are some `node`-scripts with a `npx`-shebang and
+  # this shouldn't be in the closure just for unused scripts.
+  dontPatchShebangs = true;
+
   buildPhase = ''
     runHook preBuild
 
     pushd element-desktop
-    npx tsc
-    yarn run i18n
-    node ./scripts/copy-res.js
+    yarn --offline run build:ts
+    yarn --offline run i18n
+    yarn --offline run build:res
     popd
 
     runHook postBuild
@@ -87,42 +93,39 @@ stdenv.mkDerivation rec {
     done
 
     # executable wrapper
-    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+    # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
+      --add-flags "$out/share/element/electron" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
-
-  # Do not attempt generating a tarball for element-web again.
-  # note: `doDist = false;` does not work.
-  distPhase = ";";
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/schildichat/element-desktop/blob/sc/package.json
   desktopItems = [
     (makeDesktopItem {
-     name = "schildichat-desktop";
-     exec = "${executableName} %u";
-     icon = "schildichat";
-     desktopName = "SchildiChat";
-     genericName = "Matrix Client";
-     comment = meta.description;
-     categories = "Network;InstantMessaging;Chat;";
-     extraEntries = ''
-       StartupWMClass=schildichat
-       MimeType=x-scheme-handler/element;
-     '';
+      name = "schildichat-desktop";
+      exec = "${executableName} %u";
+      icon = "schildichat";
+      desktopName = "SchildiChat";
+      genericName = "Matrix Client";
+      comment = meta.description;
+      categories = [ "Network" "InstantMessaging" "Chat" ];
+      startupWMClass = "schildichat";
+      mimeTypes = [ "x-scheme-handler/element" ];
     })
   ];
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Matrix client / Element Desktop fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members;
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    maintainers = teams.matrix.members ++ (with maintainers; [ kloenk yuka ]);
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

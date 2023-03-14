@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "21.10.0";
+  version = "23.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6cNoeuB9449HB2/41VjazpSAGvaHmBjG/hqmBKX5FEA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-6EmmiJjadC6zJM4+HhL8w2Xw1p7pG5LI0TS53bH61Tc=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     paramiko
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

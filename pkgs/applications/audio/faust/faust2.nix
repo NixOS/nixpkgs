@@ -20,13 +20,13 @@ with lib.strings;
 
 let
 
-  version = "2.37.3";
+  version = "2.54.9";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-Jzauw8+vBjtbK73Bh4huhX1ql1cWmh80EzEET3x03rc=";
+    sha256 = "sha256-7eSZUsZ0h0vWJIpZWXaS+SHV6N2i9nv6Gr6a9cuu4Fg=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +34,7 @@ let
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ magnetophon pmahoney ];
   };
 
@@ -58,9 +58,10 @@ let
       cd build
     '';
 
-    cmakeFlags = ''
-      -C ../backends/all.cmake -C  ../targets/all.cmake ..
-    '';
+    cmakeFlags = [
+      "-C../backends/all.cmake"
+      "-C../targets/all.cmake"
+    ];
 
     postInstall = ''
       # syntax error when eval'd directly

@@ -21,6 +21,7 @@
 , coreutils
 , cpio
 , curl
+, debugedit
 , elfutils
 , flatpak
 , gitMinimal
@@ -31,7 +32,6 @@
 , gnutar
 , json-glib
 , libcap
-, libdwarf
 , libsoup
 , libyaml
 , ostree
@@ -46,43 +46,14 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  version = "1.0.14";
+  version = "1.2.3";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-abZa9PY4BBJ1GMVFGE+d/JqTWM3tqr7yseUGI64rjYs=";
+    sha256 = "sha256-4leCWkf3o+ceMPsPgPLZrG5IAfdG9VLfrw5WTj7jUcg=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_xsl
-    gettext
-    libxml2
-    libxslt
-    pkg-config
-    xmlto
-  ];
-
-  buildInputs = [
-    acl
-    bzip2
-    curl
-    elfutils
-    flatpak
-    glib
-    json-glib
-    libcap
-    libdwarf
-    libsoup
-    libxml2
-    libyaml
-    ostree
-  ];
 
   patches = [
     # patch taken from gtk_doc
@@ -109,12 +80,42 @@ in stdenv.mkDerivation rec {
     # this on our patch for Flatpak 0.99.
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit glibcLocales python2;
+      inherit glibcLocales;
+      # FIXME use python3 for tests that rely on python2
+      # inherit python2;
     })
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xml_dtd_43
+    docbook_xsl
+    gettext
+    libxml2
+    libxslt
+    pkg-config
+    xmlto
+  ];
+
+  buildInputs = [
+    acl
+    bzip2
+    curl
+    debugedit
+    elfutils
+    flatpak
+    glib
+    json-glib
+    libcap
+    libsoup
+    libxml2
+    libyaml
+    ostree
   ];
 
   configureFlags = [
     "--enable-installed-tests"
+    "--with-system-debugedit"
   ];
 
   makeFlags = [
@@ -124,6 +125,8 @@ in stdenv.mkDerivation rec {
 
   # Some scripts used by tests  need to use shebangs that are available in Flatpak runtimes.
   dontPatchShebangs = true;
+
+  enableParallelBuilding = true;
 
   # Installed tests
   postFixup = ''
@@ -136,7 +139,7 @@ in stdenv.mkDerivation rec {
     installedTestsDependencies = [
       gnupg
       ostree
-      python2
+      # FIXME python2
       gnumake
     ];
 

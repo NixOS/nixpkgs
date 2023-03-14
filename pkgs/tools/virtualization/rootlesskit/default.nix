@@ -1,15 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "rootlesskit";
-  version = "0.11.1";
-  goPackagePath = "github.com/rootless-containers/rootlesskit";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "rootlesskit";
     rev = "v${version}";
-    sha256 = "15k0503077ang9ywvmhpr1l7ax0v3wla0x8n6lqpmd71w0j2zm5r";
+    hash = "sha256-pIxjesfkHWc7kz4knHxLnzopxO26dBAd/3+wVQ19oiI=";
+  };
+
+  vendorSha256 = "sha256-ILGUJsfG60qVu1RWoe8gwjVDfhPoAVZck0CVORgN2y0=";
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = nixosTests.docker-rootless;
   };
 
   meta = with lib; {

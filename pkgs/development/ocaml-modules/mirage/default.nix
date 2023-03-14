@@ -7,9 +7,8 @@ buildDunePackage rec {
   pname = "mirage";
   inherit (mirage-runtime) version src;
 
-  minimumOCamlVersion = "4.08";
-
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   outputs = [ "out" "dev" ];
 
@@ -23,7 +22,8 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  doCheck = true;
+  # Tests need opam-monorepo
+  doCheck = false;
   checkInputs = [
     alcotest
   ];

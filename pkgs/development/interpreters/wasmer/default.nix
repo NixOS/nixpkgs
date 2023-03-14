@@ -1,43 +1,60 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
-, cmake
 , llvmPackages
-, pkg-config
+, libffi
+, libxml2
+, CoreFoundation
+, SystemConfiguration
+, Security
+, withLLVM ? !stdenv.isDarwin
+, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "2.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = version;
-    sha256 = "191f60db2y1f3xw1x81mw88vclf1c4kgvnfv74g5vb3vn7n57c5j";
-    fetchSubmodules = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-797I3FBBfnAgNfOdMajm3WNkMo3MUXb1347LBggXrLk=";
   };
 
-  cargoSha256 = "0hhwixqhrl79hpzmvq7ga3kp2cfrwr4i8364cwnr7195xwnfxb0k";
+  cargoHash = "sha256-zUTwhfRLKUixgj3JXiz2QOuwbFhfget+GcFSRL1QJ3w=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  cargoBuildFlags = [
-    # cranelift+jit works everywhere, see:
-    # https://github.com/wasmerio/wasmer/blob/master/Makefile#L22
-    "--features" "cranelift,jit"
-    # must target manifest and desired output bin, otherwise output is empty
-    "--manifest-path" "lib/cli/Cargo.toml"
-    "--bin" "wasmer"
+  buildInputs = lib.optionals withLLVM [
+    llvmPackages.llvm
+    libffi
+    libxml2
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    SystemConfiguration
+    Security
   ];
 
-  cargoTestFlags = [
-    "--features" "test-cranelift"
-    # Can't use test-jit :
-    # error: Package `wasmer-workspace v2.0.0 (/build/source)` does not have the feature `test-jit`
+  LLVM_SYS_120_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+
+  # check references to `compiler_features` in Makefile on update
+  buildFeatures = checkFeatures ++ [
+    "webc_runner"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  checkFeatures = [
+    "cranelift"
+    "wasmer-artifact-create"
+    "static-artifact-create"
+    "wasmer-artifact-load"
+    "static-artifact-load"
+  ]
+  ++ lib.optional withLLVM "llvm"
+  ++ lib.optional withSinglepass "singlepass";
+
+  cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
 
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";

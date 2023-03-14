@@ -1,6 +1,5 @@
 { lib, fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkg-config, glib }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-discord";
   version = "0.4.3";
@@ -21,12 +20,12 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bitlbee plugin for Discord";
 
     homepage = "https://github.com/sm00th/bitlbee-discord";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lassulus jb55 ];
+    maintainers = with maintainers; [ lassulus ];
     platforms = lib.platforms.linux;
   };
 }

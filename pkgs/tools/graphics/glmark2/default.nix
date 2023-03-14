@@ -3,6 +3,9 @@
 , fetchFromGitHub
 , pkg-config
 , makeWrapper
+, meson
+, ninja
+, wayland-scanner
 , libjpeg
 , libpng
 , xorg
@@ -10,39 +13,36 @@
 , libGL
 , libdrm
 , udev
-, python3
 , wayland
 , wayland-protocols
 , mesa
-, wafHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "glmark2";
-  version = "2021.02";
+  version = "2023.01";
 
   src = fetchFromGitHub {
     owner = "glmark2";
     repo = "glmark2";
     rev = version;
-    sha256 = "1a75gg1dn03d3jq7n74wsw7kc14ildbb8azzbj4k28xik1m6khr9";
+    sha256 = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook makeWrapper ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper meson ninja wayland-scanner ];
   buildInputs = [
     libjpeg
     libpng
-    xorg.libxcb
     libX11
     libdrm
-    python3
     udev
     wayland
     wayland-protocols
     mesa
   ];
 
-  wafConfigureFlags = [ "--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2" ];
+  mesonFlags = [ "-Dflavors=drm-gl,drm-glesv2,gbm-gl,gbm-glesv2,wayland-gl,wayland-glesv2,x11-gl,x11-gl-egl,x11-glesv2" ];
 
   postInstall = ''
     for binary in $out/bin/glmark2*; do

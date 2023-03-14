@@ -1,6 +1,6 @@
 # This module defines global configuration for the zshell.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -9,9 +9,10 @@ let
   cfge = config.environment;
 
   cfg = config.programs.zsh;
+  opt = options.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+    mapAttrsFlatten (k: v: "alias -- ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
@@ -43,27 +44,27 @@ in
 
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure zsh as an interactive shell. To enable zsh for
-          a particular user, use the <option>users.users.&lt;name?&gt;.shell</option>
+          a particular user, use the {option}`users.users.<name?>.shell`
           option for that user. To enable zsh system-wide use the
-          <option>users.defaultUserShell</option> option.
+          {option}`users.defaultUserShell` option.
         '';
         type = types.bool;
       };
 
       shellAliases = mkOption {
         default = { };
-        description = ''
-          Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
-          See <option>environment.shellAliases</option> for an option format description.
+        description = lib.mdDoc ''
+          Set of aliases for zsh shell, which overrides {option}`environment.shellAliases`.
+          See {option}`environment.shellAliases` for an option format description.
         '';
         type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during zsh shell initialisation.
         '';
         type = types.lines;
@@ -71,7 +72,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during zsh login shell initialisation.
         '';
         type = types.lines;
@@ -79,7 +80,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during interactive zsh shell initialisation.
         '';
         type = types.lines;
@@ -93,7 +94,7 @@ in
           # a lot of different prompt variables.
           autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp
         '';
-        description = ''
+        description = lib.mdDoc ''
           Shell script code used to initialise the zsh prompt.
         '';
         type = types.lines;
@@ -101,7 +102,7 @@ in
 
       histSize = mkOption {
         default = 2000;
-        description = ''
+        description = lib.mdDoc ''
           Change history size.
         '';
         type = types.int;
@@ -109,7 +110,7 @@ in
 
       histFile = mkOption {
         default = "$HOME/.zsh_history";
-        description = ''
+        description = lib.mdDoc ''
           Change history file.
         '';
         type = types.str;
@@ -123,15 +124,15 @@ in
           "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
-        description = ''
+        description = lib.mdDoc ''
           Configure zsh options. See
-          <citerefentry><refentrytitle>zshoptions</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
+          {manpage}`zshoptions(1)`.
         '';
       };
 
       enableCompletion = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable zsh completion for all interactive zsh shells.
         '';
         type = types.bool;
@@ -139,7 +140,7 @@ in
 
       enableBashCompletion = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable compatibility with bash's programmable completion system.
         '';
         type = types.bool;
@@ -147,11 +148,12 @@ in
 
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
-        description = ''
+        defaultText = literalExpression "config.${opt.enableCompletion}";
+        description = lib.mdDoc ''
           Enable execution of compinit call for all interactive zsh shells.
 
           This option can be disabled if the user wants to extend its
-          <literal>fpath</literal> and a custom <literal>compinit</literal>
+          `fpath` and a custom `compinit`
           call in the local config is required.
         '';
         type = types.bool;
@@ -171,10 +173,10 @@ in
         # This file is read for all shells.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_ZSHENV_SOURCED-}" ]; then return; fi
         __ETC_ZSHENV_SOURCED=1
 
-        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+        if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE-}" ]; then
             . ${config.system.build.setEnvironment}
         fi
 
@@ -182,7 +184,7 @@ in
 
         # Tell zsh how to find installed completions.
         for p in ''${(z)NIX_PROFILES}; do
-            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+            fpath=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions $fpath)
         done
 
         # Setup custom shell init stuff.
@@ -204,7 +206,7 @@ in
         ${zshStartupNotes}
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_ZPROFILE_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_ZPROFILE_SOURCED-}" ]; then return; fi
         __ETC_ZPROFILE_SOURCED=1
 
         # Setup custom login shell init stuff.
@@ -283,21 +285,8 @@ in
     # see https://github.com/NixOS/nixpkgs/issues/132732
     environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
-    environment.systemPackages =
-      let
-        completions =
-          if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-          then
-            pkgs.nix-zsh-completions.overrideAttrs
-              (_: {
-                postInstall = ''
-                  rm $out/share/zsh/site-functions/_nix
-                '';
-              })
-          else pkgs.nix-zsh-completions;
-      in
-      [ pkgs.zsh ]
-      ++ optional cfg.enableCompletion completions;
+    environment.systemPackages = [ pkgs.zsh ]
+      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 

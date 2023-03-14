@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromSourcehut }:
+{ lib, stdenv, fetchFromSourcehut, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "scdoc";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = pname;
     rev = version;
-    sha256 = "1g37j847j3h4a4qbbfbr6vvsxpifj9v25jgv25nd71d1n0dxlhvk";
+    sha256 = "07c2vmdgqifbynm19zjnrk7h102pzrriv73izmx8pmd7b3xl5mfq";
   };
 
   postPatch = ''
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
       --replace "-static" "" \
       --replace "/usr/local" "$out"
   '';
+
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOST_SCDOC=${buildPackages.scdoc}/bin/scdoc"
+  ];
 
   doCheck = true;
 

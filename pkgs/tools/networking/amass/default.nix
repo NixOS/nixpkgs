@@ -1,22 +1,25 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.15.0";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     rev = "v${version}";
-    sha256 = "sha256-AOWVz+JQvri7H2k2vDSuDmTHPAVCb7MCi4uCJcj0Yjs=";
+    hash = "sha256-ph5SYN91/ibZdAAA/SZt7lecZCC93uotjfzkI4erzgU=";
   };
 
-  vendorSha256 = "sha256-lM/UWrljJHks+by4kUjlk0f39j/Qo+5+kxUVgrsO0zE=";
+  vendorHash = "sha256-fZd++VsLcs3MzcM23zE3AVaDPXf+cuLdJp8hsCeEZ1Y=";
 
-  outputs = [ "out" "wordlists" ];
+  outputs = [
+    "out"
+    "wordlists"
+  ];
 
   postInstall = ''
     mkdir -p $wordlists
@@ -41,6 +44,7 @@ buildGoModule rec {
       that are found under the wordlists output.
       '';
     homepage = "https://owasp.org/www-project-amass/";
+    changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit fab ];
   };

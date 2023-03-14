@@ -1,18 +1,20 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security, libiconv }:
+{ lib, rustPlatform, fetchCrate, stdenv, Security, libiconv, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "doh-proxy-rust";
-  version = "0.9.2";
+  version = "0.9.8";
 
   src = fetchCrate {
     inherit version;
     crateName = "doh-proxy";
-    sha256 = "sha256-/637lR6OycVOOUVe29uFR1LtYIoFJ6gslDV9uAGkU1A=";
+    sha256 = "sha256-+Z2eneEK6nhcJEKRa1VIolCTZ8to2mMQ8Ik7WEH+1w0=";
   };
 
-  cargoSha256 = "sha256-tadTyWSuknAjosv7AvZF0/8FlHL/zcFT5LDW1KcMeHI=";
+  cargoHash = "sha256-nlKzVQeLg3/nBIkD7QoBUWC93m9BiJrybf13Y/ns9gA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  passthru.tests = { inherit (nixosTests) doh-proxy-rust; };
 
   meta = with lib; {
     homepage = "https://github.com/jedisct1/doh-server";

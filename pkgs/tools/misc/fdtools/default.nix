@@ -78,9 +78,9 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://code.dogmap.org./fdtools/";
+    homepage = "https://code.dogmap.org/fdtools/";
     description = "A set of utilities for working with file descriptors";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.Profpatsch ];
   };

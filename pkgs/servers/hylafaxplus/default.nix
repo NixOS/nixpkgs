@@ -13,6 +13,8 @@
 , gnugrep
 , gnused
 , libtiff
+, libxcrypt
+, openssl
 , psmisc
 , sharutils
 , util-linux
@@ -30,8 +32,8 @@
 let
 
   pname = "hylafaxplus";
-  version = "7.0.4";
-  sha256 = "1y4b178rxa4ivxm8cnypnnyc8db7cjqyyzy60hiw215x4cyyj4i5";
+  version = "7.0.7";
+  hash = "sha512-nUvt+M0HBYN+MsGskuuDt1j0nI5Dk8MbfK/OVxP2FCDby3eiDg0eDtcpIxlOe4o0klko07zDRIb06zqh8ABuKA==";
 
   configSite = substituteAll {
     name = "${pname}-config.site";
@@ -65,7 +67,7 @@ stdenv.mkDerivation {
   inherit pname version;
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
   patches = [
     # adjust configure check to work with libtiff > 4.1
@@ -78,6 +80,8 @@ stdenv.mkDerivation {
     file  # for `file` command
     ghostscript
     libtiff
+    libxcrypt
+    openssl
     psmisc  # for `fuser` command
     sharutils  # for `uuencode` command
     util-linux  # for `agetty` command
@@ -87,11 +91,16 @@ stdenv.mkDerivation {
     openldap  # optional
     pam  # optional
   ];
+  # Disable parallel build, errors:
+  #  *** No rule to make target '../util/libfaxutil.so.7.0.4', needed by 'faxmsg'.  Stop.
+  enableParallelBuilding = false;
+
   postPatch = ". ${postPatch}";
   dontAddPrefix = true;
   postInstall = ". ${postInstall}";
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
+    changelog = "https://hylafax.sourceforge.io/news/${version}.php";
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";

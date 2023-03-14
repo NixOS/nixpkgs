@@ -26,7 +26,7 @@ buildPythonApplication rec {
       --replace "pyzmq>=13.1.0,<17.0" "pyzmq>13.1.0"
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   doCheck = false; # weird error
 
@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A process and socket manager";
-    homepage = "https://github.circus.com/circus-tent/circus";
+    homepage = "https://github.com/circus-tent/circus";
     license = licenses.asl20;
   };
 }

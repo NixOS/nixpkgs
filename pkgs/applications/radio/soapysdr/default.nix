@@ -2,9 +2,11 @@
 , fetchFromGitHub, cmake
 , libusb-compat-0_1, pkg-config
 , usePython ? false
-, python, ncurses, swig2
+, python ? null
+, ncurses, swig2
 , extraPackages ? []
-} :
+, testers
+}:
 
 let
 
@@ -13,7 +15,7 @@ let
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   inherit version;
 
@@ -23,6 +25,11 @@ in stdenv.mkDerivation {
     rev = "soapy-sdr-${version}";
     sha256 = "19f2x0pkxvf9figa0pl6xqlcz8fblvqb19mcnj632p0l8vk6qdv2";
   };
+
+  patches = [
+    # see https://github.com/pothosware/SoapySDR/issues/352 for upstream issue
+    ./fix-pkgconfig.patch
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
   buildInputs = [ libusb-compat-0_1 ncurses ]
@@ -34,6 +41,13 @@ in stdenv.mkDerivation {
     "-DCMAKE_BUILD_TYPE=Release"
   ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
 
+  # https://github.com/pothosware/SoapySDR/issues/352
+  postPatch = ''
+    substituteInPlace lib/SoapySDR.in.pc \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
     # Join all plugins via symlinking
     for i in ${toString extraPackages}; do
@@ -41,15 +55,19 @@ in stdenv.mkDerivation {
     done
     # Needed for at least the remote plugin server
     for file in $out/bin/*; do
-        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${extraPackagesSearchPath}
+        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg extraPackagesSearchPath}
     done
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
+    mainProgram = "SoapySDRUtil";
+    pkgConfigModules = [ "SoapySDR" ];
     platforms = platforms.unix;
   };
-}
+})

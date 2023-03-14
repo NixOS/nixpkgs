@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Python context manager for managing pid files";
     homepage = "https://github.com/mosquito/python-pidfile";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
   };
 }

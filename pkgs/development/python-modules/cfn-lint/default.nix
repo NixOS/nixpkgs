@@ -3,15 +3,13 @@
 , fetchFromGitHub
 , pythonOlder
 , aws-sam-translator
-, importlib-metadata
-, importlib-resources
+, jschema-to-python
 , jsonpatch
 , jsonschema
 , junit-xml
 , networkx
-, pathlib2
 , pyyaml
-, requests
+, sarif-om
 , setuptools
 , six
 , mock
@@ -21,34 +19,33 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.54.2";
+  version = "0.72.5";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
-    rev = "v${version}";
-    sha256 = "04d5zyjnrl3b6cb2fxmbpii27mnq77wqsglfxfv2a1zj2p9xby0p";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UDjCTl4AAOrwiXbKYIFsZCaSDjIFXYwNnp8/hIfXbM0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'importlib_resources~=1.4;python_version<"3.7" and python_version!="3.4"' 'importlib_resources;python_version<"3.7"'
+      --replace "jsonschema~=3.0" "jsonschema>=3.0"
   '';
 
   propagatedBuildInputs = [
     aws-sam-translator
+    jschema-to-python
     jsonpatch
     jsonschema
     junit-xml
     networkx
-    pathlib2
     pyyaml
-    requests
-    setuptools
+    sarif-om
     six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pydot
     pytestCheckHook
@@ -70,6 +67,7 @@ buildPythonPackage rec {
     # Tests depend on network access (fails in getaddrinfo)
     "test_update_resource_specs_python_2"
     "test_update_resource_specs_python_3"
+    "test_sarif_formatter"
   ];
 
   pythonImportsCheck = [

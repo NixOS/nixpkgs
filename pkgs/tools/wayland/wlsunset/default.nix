@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0hhsddh3rs066rbsjksr8kcwg8lvglbvs67dq0r5wx5c1xcwb51w";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [ meson pkg-config ninja wayland-scanner scdoc ];
   buildInputs = [ wayland wayland-protocols ];
 
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sr.ht/~kennylevinsen/wlsunset/";
     changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

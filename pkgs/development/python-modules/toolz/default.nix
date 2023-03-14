@@ -1,23 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1grz3zvw5ixwqqlbv0n7j11mlcxb66cirh5i9x9zw8kqy0hpk967";
+    sha256 = "sha256-iMVwhhxEDuPy9gN8RlRhMij/QMk6bCXg66cNFygsYZQ=";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests toolz/tests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/pytoolz/toolz";

@@ -62,7 +62,7 @@ in
 
     services.gnome.gnome-initial-setup = {
 
-      enable = mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
+      enable = mkEnableOption (lib.mdDoc "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system");
 
     };
 

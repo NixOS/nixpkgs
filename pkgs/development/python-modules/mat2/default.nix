@@ -1,13 +1,14 @@
 { lib
+, stdenv
 , buildPythonPackage
-, python
+, unittestCheckHook
 , pythonOlder
 , fetchFromGitLab
 , substituteAll
 , bubblewrap
 , exiftool
 , ffmpeg
-, mime-types
+, mailcap
 , wrapGAppsHook
 , gdk-pixbuf
 , gobject-introspection
@@ -16,32 +17,32 @@
 , mutagen
 , pygobject3
 , pycairo
-, dolphinIntegration ? false, plasma5Packages
+, dolphinIntegration ? false
+, plasma5Packages
 }:
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.2";
+  version = "0.13.3";
 
   disabled = pythonOlder "3.5";
+
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    sha256 = "sha256-KaHdBmTeBlCRaVkG3WsfDtFo45s/X69x7VGDYY7W5O8=";
+    hash = "sha256-x3vGltGuFjI435lEXZU3p4eQcgRm0Oodqd6pTWO7ZX8=";
   };
 
   patches = [
     # hardcode paths to some binaries
     (substituteAll ({
       src = ./paths.patch;
-      bwrap = "${bubblewrap}/bin/bwrap";
       exiftool = "${exiftool}/bin/exiftool";
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
-      # remove once faf0f8a8a4134edbeec0a73de7f938453444186d is in master
-      mimetypes = "${mime-types}/etc/mime.types";
     } // lib.optionalAttrs dolphinIntegration {
       kdialog = "${plasma5Packages.kdialog}/bin/kdialog";
     }))
@@ -49,21 +50,27 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    (substituteAll {
+      src = ./bubblewrap-path.patch;
+      bwrap = "${bubblewrap}/bin/bwrap";
+    })
   ];
 
   postPatch = ''
+    rm pyproject.toml
     substituteInPlace dolphin/mat2.desktop \
       --replace "@mat2@" "$out/bin/mat2" \
       --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
   '';
 
   nativeBuildInputs = [
+    gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
     gdk-pixbuf
-    gobject-introspection
     librsvg
     poppler_gi
   ];
@@ -77,16 +84,13 @@ buildPythonPackage rec {
   postInstall = ''
     install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
-    install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
-    buildPythonPath "$out $pythonPath"
-    patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
   '' + lib.optionalString dolphinIntegration ''
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -v
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";

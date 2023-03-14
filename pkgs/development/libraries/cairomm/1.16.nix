@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cairomm";
-  version = "1.16.1";
+  version = "1.16.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.cairographics.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-b2Bg2OmN1Lis/uIpX92904z0h8B8JqrY0ag7ub/0osY=";
+    url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
+    sha256 = "amO/mKl92isPVeNNG18/uQnvi3D5uNOCyx/zl459wT8=";
   };
 
   nativeBuildInputs = [

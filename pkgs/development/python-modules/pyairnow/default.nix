@@ -4,7 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-aiohttp
-, poetry
+, poetry-core
 , pytest-asyncio
 , pytest-cov
 , pytestCheckHook
@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.1.0";
+  version = "1.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "asymworks";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1hkpfl8rdwyzqrr1drqlmcw3xpv3pi1jf19h1divspbzwarqxs1c";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aab+3xrEiCjysa+DzXWelQwz8V2tr74y8v0NpDZiuTk=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-aiohttp

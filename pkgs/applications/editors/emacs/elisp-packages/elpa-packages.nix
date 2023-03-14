@@ -2,10 +2,11 @@
 
 # Updating
 
-To update the list of packages from MELPA,
+To update the list of packages from ELPA,
 
 1. Run `./update-elpa`.
 2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
 3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
 
@@ -36,22 +37,30 @@ self: let
     inherit (self) emacs;
   };
 
+  # Use custom elpa url fetcher with fallback/uncompress
+  fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+
   generateElpa = lib.makeOverridable ({
     generated ? ./elpa-generated.nix
   }: let
 
     imported = import generated {
       callPackage = pkgs: args: self.callPackage pkgs (args // {
-        # Use custom elpa url fetcher with fallback/uncompress
-        fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+        inherit fetchurl;
       });
     };
 
     super = removeAttrs imported [ "dash" ];
 
     overrides = {
+      # upstream issue: Wrong type argument: arrayp, nil
+      org-transclusion =
+        if super.org-transclusion.version == "1.2.0"
+        then markBroken super.org-transclusion
+        else super.org-transclusion;
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
       cl-lib = null; # builtin
+      cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
       seq = if lib.versionAtLeast self.emacs.version "27"
@@ -61,7 +70,7 @@ self: let
                 then null
                 else super.project;
       # Compilation instructions for the Ada executables:
-      # https://www.nongnu.org/ada-mode/ada-mode.html#Ada-executables
+      # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
         # actually unpack source of ada-mode and wisi
         # which are both needed to compile the tools
@@ -69,12 +78,7 @@ self: let
         dontUnpack = false;
         srcs = [
           super.ada-mode.src
-          # ada-mode needs a specific version of wisi, check NEWS or ada-mode's
-          # package-requires to find the version to use.
-          (pkgs.fetchurl {
-            url = "https://elpa.gnu.org/packages/wisi-3.1.3.tar.lz";
-            sha256 = "18dwcc0crds7aw466vslqicidlzamf8avn59gqi2g7y2x9k5q0as";
-          })
+          self.wisi.src
         ];
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
@@ -82,18 +86,21 @@ self: let
         nativeBuildInputs = [
           buildPackages.gnat
           buildPackages.gprbuild
-          buildPackages.lzip
+          buildPackages.dos2unix
+          buildPackages.re2c
         ];
 
         buildInputs = [
           pkgs.gnatcoll-xref
         ];
 
-        preInstall = ''
+        buildPhase = ''
+          runHook preBuild
           ./build.sh -j$NIX_BUILD_CORES
+          runHook postBuild
         '';
 
-        postInstall = ''
+        postInstall = (old.postInstall or "") + "\n" + ''
           ./install.sh --prefix=$out
         '';
 
@@ -101,6 +108,21 @@ self: let
           maintainers = [ lib.maintainers.sternenseemann ];
         };
       });
+
+      plz = super.plz.overrideAttrs (
+        old: {
+          dontUnpack = false;
+          postPatch = old.postPatch or "" + ''
+            substituteInPlace ./plz.el \
+              --replace 'plz-curl-program "curl"' 'plz-curl-program "${pkgs.curl}/bin/curl"'
+          '';
+          preInstall = ''
+            tar -cf "$pname-$version.tar" --transform "s,^,$pname-$version/," * .[!.]*
+            src="$pname-$version.tar"
+          '';
+        }
+      );
+
     };
 
     elpaPackages = super // overrides;

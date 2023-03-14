@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl
-, netcdf, xlibsWrapper, xorg, udunits, expat
+{ lib
+, stdenv
+, fetchurl
+, expat
+, libpng
+, udunits
+, netcdf
+, xorg
 }:
 
 let
@@ -14,7 +20,17 @@ in stdenv.mkDerivation {
     sha256 = "1gliziyxil2fcz85hj6z0jq33avrxdcjs74d500lhxwvgd8drfp8";
   };
 
-  buildInputs = [ netcdf xlibsWrapper xorg.libXaw udunits expat ];
+  buildInputs = [
+    expat
+    libpng
+    netcdf
+    udunits
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libXaw
+    xorg.libXt
+  ];
 
   meta = with lib; {
     description = "Visual browser for netCDF format files";

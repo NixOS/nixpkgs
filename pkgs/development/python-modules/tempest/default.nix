@@ -1,5 +1,6 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
+, defusedxml
 , fetchPypi
 , pbr
 , cliff
@@ -14,31 +15,35 @@
 , oslo-serialization
 , oslo-utils
 , fixtures
+, pythonOlder
 , pyyaml
 , subunit
 , stevedore
 , prettytable
 , urllib3
 , debtcollector
-, unittest2
 , hacking
 , oslotest
 , bash
-, python3
+, python
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "tempest";
-  version = "29.0.0";
+  version = "33.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2045963560f91241c56940af741f081e59212c65c9867dfcdabfe07f9dd4d255";
+    sha256 = "sha256-aEtBAE3p+HVw/macwZtKo20mSJctrsIN7idqWe6Dvtc=";
   };
 
   propagatedBuildInputs = [
     pbr
     cliff
+    defusedxml
     jsonschema
     testtools
     paramiko
@@ -56,10 +61,9 @@ buildPythonApplication rec {
     prettytable
     urllib3
     debtcollector
-    unittest2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     hacking
     oslotest
@@ -69,8 +73,8 @@ buildPythonApplication rec {
     # Tests expect these applications available as such.
     mkdir -p bin
     export PATH="$PWD/bin:$PATH"
-    printf '#!${bash}/bin/bash\nexec ${python3.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
-    printf '#!${bash}/bin/bash\nexec ${python3.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
+    printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
+    printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "

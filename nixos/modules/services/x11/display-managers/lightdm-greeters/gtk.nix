@@ -38,7 +38,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable lightdm-gtk-greeter as the lightdm greeter.
         '';
       };
@@ -49,7 +49,7 @@ in
           type = types.package;
           default = pkgs.gnome.gnome-themes-extra;
           defaultText = literalExpression "pkgs.gnome.gnome-themes-extra";
-          description = ''
+          description = lib.mdDoc ''
             The package path that contains the theme given in the name option.
           '';
         };
@@ -57,7 +57,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = ''
+          description = lib.mdDoc ''
             Name of the theme to use for the lightdm-gtk-greeter.
           '';
         };
@@ -70,7 +70,7 @@ in
           type = types.package;
           default = pkgs.gnome.adwaita-icon-theme;
           defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
-          description = ''
+          description = lib.mdDoc ''
             The package path that contains the icon theme given in the name option.
           '';
         };
@@ -78,7 +78,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = ''
+          description = lib.mdDoc ''
             Name of the icon theme to use for the lightdm-gtk-greeter.
           '';
         };
@@ -91,7 +91,7 @@ in
           type = types.package;
           default = pkgs.gnome.adwaita-icon-theme;
           defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
-          description = ''
+          description = lib.mdDoc ''
             The package path that contains the cursor theme given in the name option.
           '';
         };
@@ -99,7 +99,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = ''
+          description = lib.mdDoc ''
             Name of the cursor theme to use for the lightdm-gtk-greeter.
           '';
         };
@@ -107,7 +107,7 @@ in
         size = mkOption {
           type = types.int;
           default = 16;
-          description = ''
+          description = lib.mdDoc ''
             Size of the cursor theme to use for the lightdm-gtk-greeter.
           '';
         };
@@ -117,7 +117,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "%F";
-        description = ''
+        description = lib.mdDoc ''
           Clock format string (as expected by strftime, e.g. "%H:%M")
           to use with the lightdm gtk greeter panel.
 
@@ -129,7 +129,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power" ];
-        description = ''
+        description = lib.mdDoc ''
           List of allowed indicator modules to use for the lightdm gtk
           greeter panel.
 
@@ -145,7 +145,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration that should be put in the lightdm-gtk-greeter.conf
           configuration file.
         '';
@@ -158,7 +158,7 @@ in
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = pkgs.lightdm_gtk_greeter.xgreeters;
+      package = pkgs.lightdm-gtk-greeter.xgreeters;
       name = "lightdm-gtk-greeter";
     };
 

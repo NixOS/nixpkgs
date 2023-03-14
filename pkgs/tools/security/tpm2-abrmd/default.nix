@@ -6,18 +6,18 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-abrmd";
-  version = "2.3.3";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "17nv50w1yh6fg7393vfvys9y13lp0gvxx9vcw2pb87ky551d7xkf";
+    sha256 = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook autoconf-archive which ];
   buildInputs = [ tpm2-tss glib dbus ];
-  checkInputs = [ cmocka ];
+  nativeCheckInputs = [ cmocka ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , glib
 , gmime3
@@ -6,7 +7,7 @@
 , gobject-introspection
 , gpgme
 , gtk3
-, gtksourceview
+, gtksourceview4
 , gtkspell3
 , intltool
 , libcanberra-gtk3
@@ -16,17 +17,18 @@
 , libsecret
 , openssl
 , pkg-config
+, sqlite
 , webkitgtk
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "balsa";
-  version = "2.6.1";
+  version = "2.6.4";
 
   src = fetchurl {
-    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
-    sha256 = "1xkxx801p7sbfkn0bh3cz85wra4xf1z1zhjqqc80z1z1nln7fhb4";
+    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.xz";
+    sha256 = "1hcgmjka2x2igdrmvzlfs12mv892kv4vzv5iy90kvcqxa625kymy";
   };
 
   nativeBuildInputs = [
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     gnutls
     gpgme
     gtk3
-    gtksourceview
+    gtksourceview4
     gtkspell3
     libcanberra-gtk3
     libesmtp
@@ -50,6 +52,7 @@ stdenv.mkDerivation rec {
     libnotify
     libsecret
     openssl
+    sqlite
     webkitgtk
   ];
 
@@ -57,13 +60,12 @@ stdenv.mkDerivation rec {
     "--with-canberra"
     "--with-gtksourceview"
     "--with-libsecret"
+    "--with-spell-checker=gtkspell"
+    "--with-sqlite"
     "--with-ssl"
     "--with-unique"
     "--without-gnome"
-    "--with-spell-checker=gtkspell"
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 

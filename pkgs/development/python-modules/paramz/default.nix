@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy scipy six decorator ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # Ran 113 tests in 3.082s
   checkPhase = ''

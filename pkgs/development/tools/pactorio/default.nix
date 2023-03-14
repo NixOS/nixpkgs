@@ -10,27 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pactorio";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tRmchXDg8flvByjg6GLwwdwQgp/5NdZIgnjYgPLcLP8=";
+    sha256 = "sha256-3+irejeDltf7x+gyJxWBgvPgpQx5uU3DewU23Z4Nr/A=";
   };
 
-  cargoSha256 = "sha256-FIn+6wflDAjshP2Vz/rXRTrrjPQFW63XtXo8hBHMdkg=";
+  cargoSha256 = "sha256-sAFsG+EPSmvPDFR9R0fZ5f+y/PXVpTJlMzL61vwf4SY=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [ bzip2 ] ++ lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
-    completions=($releaseDir/build/pactorio-*/out/completions)
-    installShellCompletion $completions/pactorio.{bash,fish} --zsh $completions/_pactorio
+    installManPage artifacts/pactorio.1
+    installShellCompletion artifacts/pactorio.{bash,fish} --zsh artifacts/_pactorio
   '';
 
-  GEN_COMPLETIONS = 1;
+  GEN_ARTIFACTS = "artifacts";
 
   meta = with lib; {
     description = "Mod packager for factorio";

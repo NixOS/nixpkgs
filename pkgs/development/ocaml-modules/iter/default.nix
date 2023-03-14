@@ -1,25 +1,25 @@
 { lib, fetchFromGitHub, buildDunePackage, ocaml, dune-configurator
-, mdx, qtest, result
+, result, seq
+, mdx, ounit2, qcheck-core
 }:
 
 buildDunePackage rec {
   pname = "iter";
-  version = "1.2.1";
-
-  useDune2 = true;
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
-    rev = version;
-    sha256 = "0j2sg50byn0ppmf6l36ksip7zx1d3gv7sc4hbbxs2rmx39jr7vxh";
+    rev = "v${version}";
+    sha256 = "sha256-FbM/Vk/h4wkrBjyf9/QXTvTOA0nNqsdHP1mDnVkg1is=";
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ result ];
+  propagatedBuildInputs = [ result seq ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ mdx.bin qtest ];
+  nativeCheckInputs = [ mdx.bin ];
+  checkInputs = [ ounit2 qcheck-core ];
 
   meta = {
     homepage = "https://github.com/c-cube/sequence";

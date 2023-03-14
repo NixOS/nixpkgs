@@ -1,28 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, pythonOlder
 , google-api-core
 , libcst
 , mock
 , proto-plus
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
-  version = "2.5.0";
+  version = "2.11.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8c39d137d9ec0fe780f72b24999b8b47b1f948e38f242b51d609a0fd241b5bf";
+    hash = "sha256-viN/BiIYmE83B1JMh5THgj2/HLGOeIotDVLdTODZBAg=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.iam_credentials"
@@ -32,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "IAM Service Account Credentials API client library";
     homepage = "https://github.com/googleapis/python-iam";
+    changelog = "https://github.com/googleapis/python-iam/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
   };

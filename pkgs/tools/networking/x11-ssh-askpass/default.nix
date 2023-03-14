@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, xorg, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
   pname = "x11-ssh-askpass";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ xlibsWrapper ];
+  buildInputs = [ xorg.libX11 xorg.libXt xorg.libICE xorg.libSM ];
 
   configureFlags = [
     "--with-app-defaults-dir=$out/etc/X11/app-defaults"

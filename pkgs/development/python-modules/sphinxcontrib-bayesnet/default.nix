@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";
-  version = "0.1";
+  version = "0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x1kisvj7221cxfzmwplx3xlwbavl636fpncnjh7gghp1af71clw";
+    sha256 = "sha256-+M+K8WzQqxQUGgAgGPK+isf3gKK7HOrdI6nNW/V8Wv0=";
   };
 
   propagatedBuildInputs = [ sphinx sphinxcontrib-tikz ];
@@ -20,5 +20,6 @@ buildPythonPackage rec {
     description = "Bayesian networks and factor graphs in Sphinx using TikZ syntax";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jluttine ];
+    broken = true; # relies on 2to3 conversion, which was removed from setuptools>=58.0
   };
 }

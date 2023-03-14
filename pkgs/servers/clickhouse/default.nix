@@ -3,11 +3,12 @@
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
 , xxHash, zstd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "21.8.8.29";
+  version = "22.8.11.15";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     repo   = "ClickHouse";
     rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "1hvsnh3fzbh1vl7cki0sbpd5ar6cxdc7k3mfqby0xxv3zfywmmr2";
+    sha256 = "sha256-ZFS7RgeTV/eMSiI0o9WO1fHjRkPDNZs0Gm3w+blGsz0=";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
@@ -36,8 +37,6 @@ stdenv.mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-ungrouped-includes.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/generate-ya-make/generate-ya-make.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/list-licenses/list-licenses.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
@@ -46,6 +45,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DENABLE_CCACHE=0"
     "-DENABLE_EMBEDDED_COMPILER=ON"
     "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
@@ -64,8 +64,10 @@ stdenv.mkDerivation rec {
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.tests.clickhouse = nixosTests.clickhouse;
+
   meta = with lib; {
-    homepage = "https://clickhouse.tech/";
+    homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

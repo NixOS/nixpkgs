@@ -1,6 +1,6 @@
 { stdenv, runCommand, ruby, lib, rsync
 , defaultGemConfig, buildRubyGem, buildEnv
-, makeWrapper
+, makeBinaryWrapper
 , bundler
 }@defs:
 
@@ -20,7 +20,9 @@
 , meta ? {}
 , groups ? null
 , ignoreCollisions ? false
+, nativeBuildInputs ? []
 , buildInputs ? []
+, extraConfigPaths ? []
 , ...
 }@args:
 
@@ -64,9 +66,8 @@ let
     name;
 
   copyIfBundledByPath = { bundledByPath ? false, ...}:
-  (if bundledByPath then
-      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
-    else ""
+  (lib.optionalString bundledByPath (
+      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/") #*/
   );
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
@@ -83,6 +84,8 @@ let
     ${maybeCopyAll mainGemName}
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
+
+    ${lib.concatMapStringsSep "\n" (path: "cp -r ${path} $out/") extraConfigPaths}
   '';
 
   buildGem = name: attrs: (
@@ -99,7 +102,7 @@ let
 
 
   basicEnvArgs = {
-    inherit buildInputs ignoreCollisions;
+    inherit nativeBuildInputs buildInputs ignoreCollisions;
 
     name = name';
 
@@ -118,9 +121,12 @@ let
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
-        nativeBuildInputs = [ makeWrapper ];
-        inherit (ruby) gemPath meta;
-        buildCommand = ''
+
+        nativeBuildInputs = [ makeBinaryWrapper ];
+
+        dontUnpack = true;
+
+        buildPhase = ''
           mkdir -p $out/bin
           for i in ${ruby}/bin/*; do
             makeWrapper "$i" $out/bin/$(basename "$i") \
@@ -131,6 +137,15 @@ let
               --set GEM_PATH ${basicEnv}/${ruby.gemPath}
           done
         '';
+
+        dontInstall = true;
+
+        doCheck = true;
+        checkPhase = ''
+          $out/bin/ruby --help > /dev/null
+        '';
+
+        inherit (ruby) meta;
       };
 
       env = let

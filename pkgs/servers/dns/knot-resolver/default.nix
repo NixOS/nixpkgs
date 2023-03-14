@@ -3,7 +3,7 @@
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
-, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.4.2";
+  version = "5.6.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "ea6a219571a752056669bae3f2c0c3ed0bec58af5ab832d505a3ec9c4063a58b";
+    sha256 = "0c82ae937b685dc477fb3176098e3dc106c898b7cd83553e5bc54dccb83c80d7";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,6 +39,13 @@ unwrapped = stdenv.mkDerivation rec {
     # ExecStart can't be overwritten in overrides.
     # We need that to use wrapped executable and correct config file.
     sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+
+    # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
+    # Even though they should already be loaded and they're in RPATH, too.
+    for f in daemon/lua/{kres,zonefile}.lua; do
+      substituteInPlace "$f" \
+        --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+    done
   ''
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
@@ -55,8 +62,8 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
-    ++ [ nghttp2 ]
+    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
+    ++ [ jemalloc nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
 
@@ -64,10 +71,11 @@ unwrapped = stdenv.mkDerivation rec {
     "-Dkeyfile_default=${dns-root-data}/root.ds"
     "-Droot_hints=${dns-root-data}/root.hints"
     "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
+    "-Dmalloc=jemalloc"
     "--default-library=static" # not used by anyone
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
-  ++ optional (doInstallCheck && !stdenv.isDarwin) "-Dconfig_tests=enabled"
+  ++ optional doInstallCheck "-Dconfig_tests=enabled"
   ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
@@ -79,11 +87,10 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform
-    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
-  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
+  nativeInstallCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
-    meson test --print-errorlogs
+    meson test --print-errorlogs --no-suite snowflake
   '';
 
   meta = with lib; {
@@ -92,6 +99,7 @@ unwrapped = stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
+    mainProgram = "kresd";
   };
 };
 
@@ -106,6 +114,7 @@ wrapped-full = runCommand unwrapped.name
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
+    inherit (unwrapped) meta;
   }
   ''
     mkdir -p "$out"/bin

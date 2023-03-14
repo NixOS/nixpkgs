@@ -1,62 +1,86 @@
-{ lib
-, symlinkJoin
-, buildPythonPackage
+{ buildPythonPackage
+, cudaSupport ? torch.cudaSupport or false # by default uses the value from torch
 , fetchFromGitHub
-, ninja
-, which
+, lib
 , libjpeg_turbo
 , libpng
+, ninja
 , numpy
-, scipy
 , pillow
-, pytorch
 , pytest
-, cudatoolkit
-, cudnn
-, cudaSupport ? pytorch.cudaSupport or false # by default uses the value from pytorch
+, scipy
+, symlinkJoin
+, torch
+, which
 }:
 
 let
-  cudatoolkit_joined = symlinkJoin {
-    name = "${cudatoolkit.name}-unsplit";
-    paths = [ cudatoolkit.out cudatoolkit.lib ];
+  inherit (torch) cudaPackages gpuTargetString;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudaVersion;
+
+  # NOTE: torchvision doesn't use cudnn; torch does!
+  #   For this reason it is not included.
+  cuda-common-redist = with cudaPackages; [
+    cuda_cccl # <thrust/*>
+    libcublas # cublas_v2.h
+    libcusolver # cusolverDn.h
+    libcusparse # cusparse.h
+  ];
+
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_cudart # cuda_runtime.h
+      cuda_nvcc
+    ] ++ cuda-common-redist;
   };
-  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" pytorch.cudaArchList;
-in buildPythonPackage rec {
+
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaVersion}";
+    paths = cuda-common-redist;
+  };
+
   pname = "torchvision";
-  version = "0.10.1";
+  version = "0.14.1";
+in
+buildPythonPackage {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    rev = "v${version}";
-    sha256 = "0dw4q4yf86wwkm38bpsjf0yfzai46icvaly861ymh5v9f90q60jw";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lKkEJolJQaLr1TVm44CizbJQedGa1wyy0cFWg2LTJN0=";
   };
 
-  nativeBuildInputs = [ libpng ninja which ]
-    ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
+  nativeBuildInputs = [ libpng ninja which ] ++ lib.optionals cudaSupport [ cuda-native-redist ];
 
-  TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
-  TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
+  buildInputs = [ libjpeg_turbo libpng ] ++ lib.optionals cudaSupport [ cuda-redist ];
 
-  buildInputs = [ libjpeg_turbo libpng ]
-    ++ lib.optionals cudaSupport [ cudnn ];
+  propagatedBuildInputs = [ numpy pillow torch scipy ];
 
-  propagatedBuildInputs = [ numpy pillow pytorch scipy ];
-
-  preBuild = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${cudaArchStr}"
+  preConfigure = ''
+    export TORCHVISION_INCLUDE="${libjpeg_turbo.dev}/include/"
+    export TORCHVISION_LIBRARY="${libjpeg_turbo}/lib/"
+  ''
+  # NOTE: We essentially override the compilers provided by stdenv because we don't have a hook
+  #   for cudaPackages to swap in compilers supported by NVCC.
+  + lib.optionalString cudaSupport ''
+    export CC=${cudatoolkit.cc}/bin/cc
+    export CXX=${cudatoolkit.cc}/bin/c++
+    export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export FORCE_CUDA=1
   '';
 
   # tries to download many datasets for tests
   doCheck = false;
 
+  pythonImportsCheck = [ "torchvision" ];
   checkPhase = ''
     HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
   '';
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "PyTorch vision library";

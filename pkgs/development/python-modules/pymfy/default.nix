@@ -6,13 +6,14 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, requests_oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "pymfy";
   version = "0.11.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -22,19 +23,23 @@ buildPythonPackage rec {
     sha256 = "0wpjwjmywfyqgwvfa5kwcjpaljc32qa088kk88nl9nqdvc31mzhv";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpretty
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pymfy" ];
+  pythonImportsCheck = [
+    "pymfy"
+  ];
 
   meta = with lib; {
     description = "Python client for the Somfy Open API";

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ tnias ];
   };
 
-  machine =
+  nodes.machine =
     { ... }:
     {
       services.usbguard = {

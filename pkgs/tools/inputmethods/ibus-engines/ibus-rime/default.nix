@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rime.im/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pengmeiyu ];
+    maintainers = with maintainers; [ pmy ];
   };
 }

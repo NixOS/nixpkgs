@@ -68,12 +68,12 @@ tcl.mkTclDerivation rec {
     comment = meta.description;
     icon = "scid";
     exec = "scid";
-    categories = "Game;BoardGame;";
+    categories = [ "Game" "BoardGame" ];
   };
 
   meta = with lib; {
     description = "Chess database with play and training functionality";
-    homepage = "http://scidvspc.sourceforge.net/";
+    homepage = "https://scidvspc.sourceforge.net/";
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.paraseba ];
     platforms = lib.platforms.linux;

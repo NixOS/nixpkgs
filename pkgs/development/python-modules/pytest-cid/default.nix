@@ -20,11 +20,16 @@ buildPythonPackage rec {
     sha256 = "sha256-H2RtMGYWukowTTfqZSx+hikxzkqw1v5bA4AfZfiVl8U=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "pytest >= 5.0, < 7.0" "pytest >= 5.0"
+  '';
+
   propagatedBuildInputs = [
     py-cid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
   ];

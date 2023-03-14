@@ -1,26 +1,29 @@
-{ pkgs, newScope, buildFHSUserEnv }:
+{ makeScopeWithSplicing, generateSplicesForMkScope
+, stdenv, buildFHSUserEnv, pkgsi686Linux
+}:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
-    steamArch = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-                else if pkgs.stdenv.hostPlatform.system == "i686-linux" then "i386"
-                else throw "Unsupported platform: ${pkgs.stdenv.hostPlatform.system}";
+  steamPackagesFun = self: let
+    inherit (self) callPackage;
+  in rec {
+    steamArch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+                else if stdenv.hostPlatform.system == "i686-linux" then "i386"
+                else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
     steam-runtime = callPackage ./runtime.nix { };
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
-    steam-fonts = callPackage ./fonts.nix { };
     steam-fhsenv = callPackage ./fhsenv.nix {
-      glxinfo-i686 = pkgs.pkgsi686Linux.glxinfo;
+      glxinfo-i686 = pkgsi686Linux.glxinfo;
       steam-runtime-wrapped-i686 =
-        if steamArch == "amd64"
-        then pkgs.pkgsi686Linux.steamPackages.steam-runtime-wrapped
+        if self.steamArch == "amd64"
+        then pkgsi686Linux.steamPackages.steam-runtime-wrapped
         else null;
       inherit buildFHSUserEnv;
     };
+    steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
     steamcmd = callPackage ./steamcmd.nix { };
   };
-
-in self
+  keep = self: { };
+  extra = spliced0: { };
+in makeScopeWithSplicing (generateSplicesForMkScope "steamPackages") keep extra steamPackagesFun

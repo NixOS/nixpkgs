@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre }:
+{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
   pname = "JMusicBot";
-  version = "0.3.4";
+  version = "0.3.9";
 
   src = fetchurl {
     url = "https://github.com/jagrosh/MusicBot/releases/download/${version}/JMusicBot-${version}.jar";
-    sha256 = "sha256-++/ot9k74pkN9Wl7IEjiMIv/q5zklIEdU6uFjam0tmU=";
+    sha256 = "sha256-2A1yo2e1MawGLMTM6jWwpQJJuKOmljxFriORv90Jqg8=";
   };
 
   dontUnpack = true;
@@ -17,15 +17,16 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp $src $out/lib/JMusicBot
 
-    makeWrapper ${jre}/bin/java $out/bin/JMusicBot \
-      --add-flags "-Xmx1G -Dnogui=true -jar $out/lib/JMusicBot"
+    makeWrapper ${jre_headless}/bin/java $out/bin/JMusicBot \
+      --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
   '';
 
   meta = with lib; {
     description = "Discord music bot that's easy to set up and run yourself";
     homepage = "https://github.com/jagrosh/MusicBot";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.all;
+    inherit (jre_headless.meta) platforms;
   };
 }

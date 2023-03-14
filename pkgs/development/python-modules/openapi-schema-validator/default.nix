@@ -1,28 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, poetry-core
 , pytestCheckHook
 , isodate
 , jsonschema
-, pytest-flake8
-, pytest-cov
 , rfc3339-validator
-, six
-, strict-rfc3339
 }:
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.1.5";
+  version = "0.4.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a4b2712020284cee880b4c55faa513fbc2f8f07f365deda6098f8ab943c9f0df";
+  src = fetchFromGitHub {
+    owner = "p1c2u";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-rp0Oq5WWPpna5rHrq/lfRNxjK5/FLgPZ5uzVfDT/YiI=";
   };
 
-  propagatedBuildInputs = [ isodate jsonschema six strict-rfc3339 rfc3339-validator ];
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+  '';
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-flake8 ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    jsonschema
+    rfc3339-validator
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
   meta = with lib; {

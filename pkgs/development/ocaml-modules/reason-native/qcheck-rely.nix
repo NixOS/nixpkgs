@@ -3,7 +3,7 @@
 {
   pname = "qcheck-rely";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

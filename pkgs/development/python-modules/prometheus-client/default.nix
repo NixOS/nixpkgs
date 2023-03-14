@@ -2,28 +2,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.11.0";
+  version = "0.15.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
-    rev = "v${version}";
-    sha256 = "14swmy4dgpk6cyjsm2advgc2c8api7xaca1sl7swznblh5fyzgzg";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LabvQMNiRH4jclMnN0P4M3w25NQasNQEu1HWvRDQQ2o=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "prometheus_client" ];
+  pythonImportsCheck = [
+    "prometheus_client"
+  ];
 
   meta = with lib; {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

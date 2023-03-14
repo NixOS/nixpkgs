@@ -2,7 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , entrypoints
-, jupyter_core
+, jupyter-core
+, hatchling
 , nest-asyncio
 , python-dateutil
 , pyzmq
@@ -14,16 +15,21 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "7.0.6";
+  version = "7.4.8";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b6e06000eb9399775e0a55c52df6c1be4766666209c22f90c2691ded0e338dc";
+    sha256 = "sha256-EJo8M7YqnPZaqDJYUKCZmnlfrBVdneT3VVrvXzEO41o=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     entrypoints
-    jupyter_core
+    jupyter-core
     nest-asyncio
     python-dateutil
     pyzmq

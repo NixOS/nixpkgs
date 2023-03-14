@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "among-sus-unstable";
-  version = "2020-10-29";
+  version = "2021-05-19";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "among-sus";
-    rev = "1f4c8d800d025d36ac66826937161be3252fbc57";
-    sha256 = "19jq7ygh9l11dl1h6702bg57m04y35nqd6yqx1rgp1kxwhp45xyh";
+    rev = "554e60bf52e3fa931661b9414189a92bb8f69d78";
+    sha256 = "0j1158nczhvy5i1ykvzvhlv4ndhibgng0dq1lw2bmi8q6k1q1s0w";
   };
 
   patchPhase = ''

@@ -1,25 +1,53 @@
-{ lib, buildPythonPackage, fetchPypi, PyGithub, GitPython, toml, click, tqdm,
-  networkx, pydot, pyyaml, atomicwrites }:
+{ lib
+, atomicwrites
+, buildPythonPackage
+, click
+, fetchPypi
+, gitpython
+, networkx
+, pydot
+, PyGithub
+, pythonOlder
+, pyyaml
+, toml
+, tqdm
+}:
 
 buildPythonPackage rec {
   pname = "mathlibtools";
-  version = "1.1.0";
+  version = "1.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "789f070f35424e89e4f2e2c007382250133cc48877627e37c5c463bcf4a1b58a";
+    hash = "sha256-mkn0y3NV/acnkqVzi8xd+Sex4QLvxxmt++FtsZmgrGs=";
   };
 
   propagatedBuildInputs = [
-    PyGithub GitPython toml click tqdm networkx pydot pyyaml atomicwrites
+    atomicwrites
+    click
+    gitpython
+    networkx
+    pydot
+    PyGithub
+    pyyaml
+    toml
+    tqdm
   ];
 
-  # requires internet access
+  # Requires internet access
   doCheck = false;
 
+  pythonImportsCheck = [
+    "mathlibtools"
+  ];
+
   meta = with lib; {
+    description = "Supporting tool for Lean's mathlib";
     homepage = "https://github.com/leanprover-community/mathlib-tools";
-    description = "leanproject is a supporting tool for Lean's mathlib";
+    changelog = "https://github.com/leanprover-community/mathlib-tools/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ gebner ];
   };

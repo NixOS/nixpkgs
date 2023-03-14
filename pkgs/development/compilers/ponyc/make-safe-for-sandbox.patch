@@ -1,28 +1,41 @@
---- a/lib/CMakeLists.txt.orig	2021-07-07 13:40:20.209410160 -0400
-+++ a/lib/CMakeLists.txt	2021-07-07 13:43:11.886969662 -0400
-@@ -15,12 +15,12 @@
- endif()
+From e26ae067644ea780f050fb900bd850027bb86456 Mon Sep 17 00:00:00 2001
+From: superherointj <5861043+superherointj@users.noreply.github.com>
+Date: Tue, 7 Mar 2023 14:59:31 -0300
+Subject: [PATCH] make-safe-for-sandbox.patch
+
+---
+ lib/CMakeLists.txt | 80 ++--------------------------------------------
+ 1 file changed, 2 insertions(+), 78 deletions(-)
+
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 129e26e6..d25bdf9d 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -32,14 +32,14 @@ endif()
  
+ set(PONYC_GBENCHMARK_URL https://github.com/google/benchmark/archive/v1.7.1.tar.gz)
  ExternalProject_Add(gbenchmark
 -    URL ${PONYC_GBENCHMARK_URL}
-+	SOURCE_DIR gbenchmark-prefix/src/benchmark
-     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_CXX_FLAGS=-fpic --no-warn-unused-cli
++    SOURCE_DIR gbenchmark-prefix/src/benchmark
+     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DBENCHMARK_ENABLE_WERROR=OFF -DCMAKE_CXX_FLAGS=${PONY_PIC_FLAG} --no-warn-unused-cli
  )
+ 
+ set(PONYC_GOOGLETEST_URL https://github.com/google/googletest/archive/release-1.12.1.tar.gz)
  
  ExternalProject_Add(googletest
--    URL https://github.com/google/googletest/archive/release-1.8.1.tar.gz
-+	URL @googletest@
-     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_CXX_FLAGS=-fpic -Dgtest_force_shared_crt=ON --no-warn-unused-cli
+-    URL ${PONYC_GOOGLETEST_URL}
++    URL @googletest@
+     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_CXX_FLAGS=${PONY_PIC_FLAG} -Dgtest_force_shared_crt=ON --no-warn-unused-cli
  )
  
-@@ -33,75 +33,6 @@
+@@ -52,82 +52,6 @@ install(TARGETS blake2
      COMPONENT library
  )
  
 -find_package(Git)
 -
--set(LLVM_DESIRED_HASH "c1a0a213378a458fbea1a5c77b315c7dce08fd05")
--set(PATCHES_DESIRED_HASH "9063f83d727bf042a1232420e168c1ea192bf6a2960d35e57123245b630eb923")
+-set(LLVM_DESIRED_HASH "1f9140064dfbfb0bbda8e51306ea51080b2f7aac")
+-set(PATCHES_DESIRED_HASH "3e16c097794cb669a8f6a0bd7600b440205ac5c29a6135750c2e83263eb16a95")
 -
 -if(GIT_FOUND)
 -    if(EXISTS "${PROJECT_SOURCE_DIR}/../.git")
@@ -56,14 +69,21 @@
 -    file(GLOB PONY_LLVM_PATCHES "${PROJECT_SOURCE_DIR}/llvm/patches/*.diff")
 -
 -    # check to see if the patch hashes match
--    set(PATCHES_ACTUAL_HASH "")
+-    message("Checking patches ${PONY_LLVM_PATCHES}")
+-    set(PATCHES_ACTUAL_HASH "needed_if_no_patches")
 -    foreach (PATCH ${PONY_LLVM_PATCHES})
--        file(SHA256 ${PATCH} patch_file_hash)
--        string(CONCAT PATCHES_ACTUAL_HASH patch_file_hash)
+-        file(STRINGS ${PATCH} patch_file NEWLINE_CONSUME)
+-        string(REPLACE "\n" " " patch_file ${patch_file})
+-        string(SHA256 patch_file_hash ${patch_file})
+-        # message("${PATCH}: '${patch_file_hash}'")
+-        string(CONCAT PATCHES_ACTUAL_HASH ${PATCHES_ACTUAL_HASH} ${patch_file_hash})
+-        # message("concat is '${PATCHES_ACTUAL_HASH}'")
 -    endforeach()
 -    string(SHA256 PATCHES_ACTUAL_HASH ${PATCHES_ACTUAL_HASH})
--    if(NOT PATCHES_ACTUAL_HASH EQUAL "${PATCHES_DESIRED_HASH}")
--        message(FATAL_ERROR "Patch hash actual ${PATCHES_ACTUAL_HASH} does not match desired ${PATCHES_DESIRED_HASH}")
+-    # message("Desired hash ${PATCHES_DESIRED_HASH}")
+-    # message("Actual hash  ${PATCHES_ACTUAL_HASH}")
+-    if(NOT PATCHES_ACTUAL_HASH MATCHES "${PATCHES_DESIRED_HASH}")
+-        message(FATAL_ERROR "Patch hash actual '${PATCHES_ACTUAL_HASH}' does not match desired '${PATCHES_DESIRED_HASH}'")
 -    endif()
 -
 -    foreach (PATCH ${PONY_LLVM_PATCHES})
@@ -88,6 +108,9 @@
 -    message(FATAL_ERROR "Git not found!")
 -endif()
 -
- if (NOT DEFINED LLVM_TARGETS_TO_BUILD)
-   set(LLVM_TARGETS_TO_BUILD X86)
- endif()
+ message("Building targets: ${LLVM_TARGETS_TO_BUILD}")
+ 
+ set(LLVM_ENABLE_BINDINGS OFF CACHE BOOL "ponyc specific override of LLVM cache entry")
+-- 
+2.39.2
+

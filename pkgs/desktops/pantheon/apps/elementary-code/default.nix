@@ -1,51 +1,50 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
-, pkg-config
+, appstream
+, desktop-file-utils
 , meson
 , ninja
-, vala
+, pkg-config
+, polkit
 , python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, libpeas
+, vala
+, wrapGAppsHook
 , editorconfig-core-c
+, granite
+, gtk3
 , gtksourceview4
 , gtkspell3
+, libgee
+, libgit2-glib
+, libhandy
+, libpeas
 , libsoup
 , vte
-, webkitgtk
-, zeitgeist
 , ctags
-, libgit2-glib
-, wrapGAppsHook
-, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.0.1";
-
-  repoName = "code";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "code";
     rev = version;
-    sha256 = "120328pprzqj4587yj54yya9v2mv1rfwylpmxyr5l2qf80cjxi9d";
+    sha256 = "sha256-6ZOdlOCIDy5aWQre15+SrTH/vhY9OeTffY/uTSroELc=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix global search action disabled at startup
+    # https://github.com/elementary/code/pull/1254
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/1e75388b07c060cc10ecd612076f235b1833fab8.patch";
+      sha256 = "sha256-8Djh1orMcmICdYwQFENJCaYlXK0E52NhCmuhlHCz7oM=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -60,9 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ctags
     editorconfig-core-c
-    elementary-icon-theme
     granite
     gtk3
     gtksourceview4
@@ -73,12 +70,7 @@ stdenv.mkDerivation rec {
     libpeas
     libsoup
     vte
-    webkitgtk
-    zeitgeist
   ];
-
-  # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
-  LC_ALL = "C.UTF-8";
 
   # ctags needed in path by outline plugin
   preFixup = ''
@@ -91,6 +83,10 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Code editor designed for elementary OS";

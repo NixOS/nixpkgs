@@ -6,12 +6,12 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libsemanage";
-  version = "2.9";
-  inherit (libsepol) se_release se_url;
+  version = "3.5";
+  inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "075w6y3l9hiy5hicgwrmijyxmhfyd1r7cnc08qxyg4j46jfk8xi5";
+    url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
+    sha256 = "sha256-9TU05QJHU4KA7Q12xs6B2Ps5Ob1kytuJ2hDbpC5A3Zw=";
    };
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   #  1278 |  int i;
   #       |      ^
   # cc1: all warnings being treated as errors
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=clobbered" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=clobbered" ];
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
 

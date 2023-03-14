@@ -7,12 +7,12 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ticcutils-${release.version}";
+  pname = "ticcutils";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "ticcutils-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf libtool autoconf-archive libxml2
+  nativeBuildInputs = [ pkg-config automake autoconf ];
+  buildInputs = [ libtool autoconf-archive libxml2
                   # optional:
                   zlib bzip2 libtar
                   # broken but optional: boost

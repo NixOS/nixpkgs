@@ -8,19 +8,30 @@
 , libiconv
 , installShellFiles
 , makeWrapper
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.18.3";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3XwnlSPlyEE4oznXK59/rooZLtj1+VbozprXU2W0J5I=";
+    sha256 = "sha256-xkGGnWjuZ5ZR4Ll+JwgWyKZFboFZ6HKA8GviR3YBAnM=";
   };
-  cargoSha256 = "sha256-g5yfE/s1N6EgI2ikiJbypI4iQbXPu6zGNoSVC6ldoWo=";
+  cargoSha256 = "sha256-ye6GH4pcI9h1CNpobUzfJ+2WlqJ98saCdD77AtSGafg=";
+
+  cargoPatches = [
+    # merged upstream in https://github.com/sharkdp/bat/pull/2399
+    (fetchpatch {
+      name = "disable-completion-of-cache-subcommand.patch";
+      url = "https://github.com/sharkdp/bat/commit/b6b9d3a629bd9b08725df2a4e7b92c3023584a89.patch";
+      hash = "sha256-G4LajO09+qfhpr+HRvAHCuE9EETit2e16ZEyAtz26B4=";
+      excludes = [ "CHANGELOG.md" ];
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 

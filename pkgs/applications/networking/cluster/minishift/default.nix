@@ -59,7 +59,7 @@ in buildGoPackage rec {
       or develop with it, day-to-day, on your local host.
     '';
     homepage = "https://github.com/minishift/minishift";
-    maintainers = with maintainers; [ fpletz vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
     platforms = platforms.linux;
     license = licenses.asl20;
   };

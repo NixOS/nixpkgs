@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages, libiconv, skktools }:
+{ lib, stdenv, fetchurl, buildPackages, iconv, skktools }:
 
 let
   # kana to kanji
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   pname = "skk-dicts-unstable";
   version = "2020-03-24";
   srcs = [ small medium large edict assoc ];
-  nativeBuildInputs = [ skktools ] ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ iconv skktools ];
 
   strictDeps = true;
 
@@ -49,8 +49,7 @@ stdenv.mkDerivation {
     for src in $srcs; do
       dst=$out/share/$(dictname $src)
       echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
-      ${lib.getBin buildPackages.stdenv.cc.libc}/bin/iconv \
-        -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
+      iconv -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
     done
 
     # combine .L .edict and .assoc for convenience

@@ -7,13 +7,13 @@
 , ninja
 , gettext
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook4
 , packagekit
 , ostree
 , glib
 , appstream
-, libsoup
-, libhandy
+, libsoup_3
+, libadwaita
 , polkit
 , isocodes
 , gspell
@@ -21,10 +21,12 @@
 , gobject-introspection
 , flatpak
 , fwupd
-, gtk3
+, gtk4
 , gsettings-desktop-schemas
 , gnome-desktop
+, libgudev
 , libxmlb
+, malcontent
 , json-glib
 , libsecret
 , valgrind-light
@@ -34,19 +36,20 @@
 , gtk-doc
 , desktop-file-utils
 , libsysprof-capture
+, gst_all_1
 }:
 
 let
-  withFwupd = stdenv.isx86_64 || stdenv.isi686;
+  withFwupd = stdenv.hostPlatform.isx86;
 in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "41.1";
+  version = "43.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "eil3Ziga8tvsyssQJMcT7ISYxoJ++RJG6d6Grpof4Xs=";
+    sha256 = "6d8GDrq1n0lpfV7yYw7DbeYEVBadwZGvYNNINyCq2z4=";
   };
 
   patches = [
@@ -61,7 +64,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook4
     libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
@@ -73,12 +76,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     packagekit
     appstream
-    libsoup
-    libhandy
+    libsoup_3
+    libadwaita
     gsettings-desktop-schemas
     gnome-desktop
     gspell
@@ -87,16 +90,20 @@ stdenv.mkDerivation rec {
     ostree
     polkit
     flatpak
+    libgudev
     libxmlb
+    malcontent
     libsysprof-capture
+    # For video screenshots
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ] ++ lib.optionals withFwupd [
     fwupd
   ];
 
   mesonFlags = [
-    "-Dgudev=false"
-    # FIXME: package malcontent parental controls
-    "-Dmalcontent=false"
+    # Requires /etc/machine-id, D-Bus system bus, etc.
+    "-Dtests=false"
   ] ++ lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];

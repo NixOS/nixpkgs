@@ -1,26 +1,30 @@
-{ lib, fetchzip, version ? "3.200" }:
+{ lib, stdenvNoCC, fetchzip, version ? "3.300" }:
 
 let
   new = lib.versionAtLeast version "3.000";
-  sha256 = {
-    "2.100" = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
-    "3.200" = "0qvmpsn6ja3g2hlvq0vb9pjsyk6ibna7s3w3n6q7lnhk0rhjg8bv";
+  hash = {
+    "2.100" = "sha256-d2UyOOOnmE1afCwyIrM1bL3lQC7XRwh03hzetk/4V30=";
+    "3.300" = "sha256-LaaA6DWAE2dcwVVX4go9cJaiuwI6efYbPk82ym3W3IY=";
   }."${version}";
+  pname = "scheherazade${lib.optionalString new "-new"}";
+in
+stdenvNoCC.mkDerivation rec {
+  inherit pname version;
 
-in fetchzip rec {
-  name = "scheherazade${lib.optionalString new "-new"}-${version}";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+    inherit hash;
+  };
 
-  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*           -d $out/share/doc/${name}/documentation
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc
+    cp -r documentation $out/share/doc/
+
+    runHook postInstall
   '';
-
-  inherit sha256;
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";
@@ -30,7 +34,7 @@ in fetchzip rec {
       Scheherazade${lib.optionalString new " New"}, named after the heroine of
       the classic Arabian Nights tale, is designed in a similar style to
       traditional typefaces such as Monotype Naskh, extended to cover the
-      Unicode Arabic repertoire through Unicode ${if new then "13.0" else "8.0"}.
+      Unicode Arabic repertoire through Unicode ${if new then "14.0" else "8.0"}.
 
       Scheherazade provides a “simplified” rendering of Arabic script, using
       basic connecting glyphs but not including a wide variety of additional

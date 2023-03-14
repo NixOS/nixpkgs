@@ -1,57 +1,70 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptoolsBuildHook
 , attrs
+, buildPythonPackage
 , cattrs
-, toml
-, pytestCheckHook
 , click
+, click-option-group
+, fetchPypi
+, hatchling
+, pytestCheckHook
+, pythonOlder
+, tomli
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "0.11.1";
+  version = "2.0.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-gcyOeUyRAwU5s+XoQO/yM0tx7QHjDsBeyoe5HRZHtIs=";
+    pname = "typed_settings";
+    inherit version;
+    hash = "sha256-AYHA1xFS0g99cloGIjvi8loKS/Q/AteyLiLH8rf+2No=";
   };
 
   nativeBuildInputs = [
-    setuptoolsBuildHook
+    hatchling
   ];
 
   propagatedBuildInputs = [
     attrs
     cattrs
-    toml
+    click-option-group
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
-  preCheck = ''
-    pushd tests
-  '';
+  passthru.optional-dependencies = {
+    click = [
+      click
+    ];
+  };
 
   checkInputs = [
-    click
     pytestCheckHook
+    typing-extensions
+  ] ++ passthru.optional-dependencies.click;
+
+  pytestFlagsArray = [
+    "tests"
   ];
 
   disabledTests = [
-    # mismatches in click help output
-    "test_help"
+    # AssertionError: assert [OptionInfo(p...
+    "test_deep_options"
   ];
 
-  postCheck = ''
-    popd
-  '';
+  pythonImportsCheck = [
+    "typed_settings"
+  ];
 
   meta = {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
+    changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];
   };

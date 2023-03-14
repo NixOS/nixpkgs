@@ -1,19 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, substituteAll
 , pythonOlder
 , cudatoolkit
+, addOpenGLRunpath
 }:
 
 buildPythonPackage rec {
   pname = "pynvml";
-  version = "11.0.0";
+  version = "11.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1fxKItNVtAw0HWugqoiKLU0iUxd9JDkA+EAbfmyssbs=";
+    sha256 = "sha256-0CeyG5WxCIufwngRf59ht8Z/jjOnh+n4P3NfD3GsMtA=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
+  ];
 
   propagatedBuildInputs = [ cudatoolkit ];
 

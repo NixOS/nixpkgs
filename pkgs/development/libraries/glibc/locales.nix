@@ -6,7 +6,7 @@
    https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
-{ lib, stdenv, buildPackages, callPackage, writeText
+{ lib, stdenv, buildPackages, callPackage, writeText, glibc
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
 }:
 
@@ -17,19 +17,28 @@ callPackage ./common.nix { inherit stdenv; } {
 
   outputs = [ "out" ];
 
-  # Awful hack: `localedef' doesn't allow the path to `locale-archive'
-  # to be overriden, but you *can* specify a prefix, i.e. it will use
-  # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
-  # $TMPDIR as a prefix, meaning that the locale-archive is placed in
-  # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
-  buildPhase =
-    ''
-      mkdir -p $TMPDIR/"${buildPackages.stdenv.cc.libc.out}/lib/locale"
+  extraNativeBuildInputs = [ glibc ];
+
+  LOCALEDEF_FLAGS = [
+    (if stdenv.hostPlatform.isLittleEndian
+    then "--little-endian"
+    else "--big-endian")
+  ];
+
+  buildPhase = ''
+      # Awful hack: `localedef' doesn't allow the path to `locale-archive'
+      # to be overriden, but you *can* specify a prefix, i.e. it will use
+      # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
+      # $TMPDIR as a prefix, meaning that the locale-archive is placed in
+      # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
+      LOCALEDEF_FLAGS+=" --prefix=$TMPDIR"
+
+      mkdir -p $TMPDIR/"${buildPackages.glibc.out}/lib/locale"
 
       echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
 
       # Hack to allow building of the locales (needed since glibc-2.12)
-      sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
+      sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef $(LOCALEDEF_FLAGS),' ../glibc-2*/localedata/Makefile
     ''
       + lib.optionalString (!allLocales) ''
       # Check that all locales to be built are supported
@@ -55,8 +64,9 @@ callPackage ./common.nix { inherit stdenv; } {
 
   installPhase =
     ''
-      mkdir -p "$out/lib/locale"
+      mkdir -p "$out/lib/locale" "$out/share/i18n"
       cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
+      cp -v ../glibc-2*/localedata/SUPPORTED "$out/share/i18n/SUPPORTED"
     '';
 
   setupHook = writeText "locales-setup-hook.sh"

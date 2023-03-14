@@ -1,29 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pbr, sphinx, sphinx-testing, nose, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx }:
 
 buildPythonPackage rec {
   pname = "sphinx-jinja";
-  version = "1.1.1";
+  version = "2.0.2";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hz13vc65zi4zmay40nz8wzxickv1q9zzl6x03qc7rvvapz0c91p";
+    sha256 = "sha256-xiMrWaiUE5dwvh3G0LAKN55CiM54FXkE4fhHPeo+Bxg=";
   };
 
-  buildInputs = [ pbr ];
   propagatedBuildInputs = [ sphinx ];
 
-  checkInputs = [ sphinx-testing nose glibcLocales ];
+  # upstream source is not updated to 2.0.X and pypi does not contain tests
+  doCheck = false;
 
-  checkPhase = lib.optionalString (!isPy27) ''
-    # prevent python from loading locally and breaking namespace
-    mv sphinxcontrib .sphinxcontrib
-  '' + ''
-    # Zip (epub) does not support files with epoch timestamp
-    LC_ALL="en_US.UTF-8" nosetests -e test_build_epub
-  '';
+  pythonImportsCheck = [ "sphinx_jinja" ];
 
   meta = with lib; {
     description = "Sphinx extension to include jinja templates in documentation";
+    homepage = "https://github.com/tardyp/sphinx-jinja";
     maintainers = with maintainers; [ ];
     license = licenses.mit;
   };

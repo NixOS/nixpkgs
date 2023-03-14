@@ -9,19 +9,18 @@
 , importlib-resources
 , pytest-xdist
 , pytestCheckHook
-
 }:
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.7.4";
+  version = "1.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d33f3ff1488c4bfab1e1a6dfebbf085e8a8e1a3e047a43ad29ad1f67f012a1d";
+    sha256 = "sha256-+fduQQYfXr4n1P6SYA353WElIadoP5BNqzKLoCz/paI=";
   };
 
   propagatedBuildInputs = [
@@ -38,13 +37,9 @@ buildPythonPackage rec {
     "alembic"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
-  ];
-
-  pytestFlagsArray = [
-    "--numprocesses" "auto"
   ];
 
   meta = with lib; {

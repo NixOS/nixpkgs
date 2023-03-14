@@ -16,24 +16,24 @@
 , openssl
 , alsa-lib
 , libpulseaudio
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.2.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    sha256 = "16pri0in514xzy21bsijyvyyjwa0f6lg4zyizmdcmcdw4glrs11m";
+    hash = "sha256-0iuLZq9FSxaOchxx6LzGwpY8qnOq2APl/qkBYzEV2uw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1fvnidxh4rnkzqg3qjk3zlkp2d41qdamm0bfavk8jrazw8sgih84";
+    hash = "sha256-g46BkrTv6tdrGe/p245O4cBoPjbvyRP7U6hH1Hp4ja0=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -67,18 +67,19 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/cargo.sh
     patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    maintainers = with maintainers; [ tomfitzhenry ];
+    platforms = platforms.linux;
   };
 }

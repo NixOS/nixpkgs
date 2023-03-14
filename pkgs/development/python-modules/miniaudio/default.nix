@@ -1,29 +1,36 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , cffi
 , pytestCheckHook
+, AudioToolbox
+, CoreAudio
 }:
 
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.45";
+  version = "1.55";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "pyminiaudio";
-    rev = "v${version}";
-    sha256 = "1yx4n4zax103fmjzdiqzw37zibsh68b2p2l5qvgcnx2zrrjd31yl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-na8pnYIoawICbsVquzlmfYZtIagsVBudFOKJ62jSTGM=";
   };
 
-  propagatedBuildInputs = [
-    cffi
+  buildInputs = lib.optionals stdenv.isDarwin [
+    AudioToolbox
+    CoreAudio
   ];
 
-  checkInputs = [
+  propagatedNativeBuildInputs = [ cffi ];
+  propagatedBuildInputs = [ cffi ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

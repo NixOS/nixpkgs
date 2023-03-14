@@ -1,37 +1,71 @@
 { lib
+, stdenv
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, nose
-, pandas
+, flit-core
 , matplotlib
+, pytestCheckHook
+, numpy
+, pandas
+, pythonOlder
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.11.2";
+  version = "0.12.1";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
+    hash = "sha256-ux6x1R0wlzaMGHw+8InAKI7B/oqhxp+zJMaKodAt9ME=";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ pandas matplotlib ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  checkPhase = ''
-    nosetests -v
-  '';
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pandas
+    scipy
+  ];
 
-  # Computationally very demanding tests
-  doCheck = false;
-  pythonImportsCheck= [ "seaborn" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
-    description = "Statisitical data visualization";
+  disabledTests = [
+    # incompatible with matplotlib 3.5
+    "TestKDEPlotBivariate"
+    "TestBoxPlotter"
+    "TestCatPlot"
+    "TestKDEPlotUnivariate"
+    "test_with_rug"
+    "test_bivariate_kde_norm"
+
+    # requires internet connection
+    "test_load_dataset_string_error"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # overly strict float tolerances
+    "TestDendrogram"
+  ];
+
+  # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
+  # backends (leads to crashes on macOS).
+  MPLBACKEND="Agg";
+
+  pythonImportsCheck = [
+    "seaborn"
+  ];
+
+  meta = with lib; {
+    description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

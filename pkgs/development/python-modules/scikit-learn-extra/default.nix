@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ numpy cython ];
   propagatedBuildInputs = [ numpy scipy scikit-learn ];
-  checkInputs = [ matplotlib pytestCheckHook ];
+  nativeCheckInputs = [ matplotlib pytestCheckHook ];
 
   preCheck = ''
     # Remove the package in the build dir, because Python defaults to it and
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   ];
   disabledTests = [
     "build"   # needs network connection
+    "test_all_estimators" # sklearn.exceptions.NotFittedError: Estimator fails to pass `check_is_fitted` even though it has been fit.
   ];
 
   # Check packages with cythonized modules

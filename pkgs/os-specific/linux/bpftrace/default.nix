@@ -1,38 +1,31 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, flex, bison
-, llvmPackages, kernel, elfutils
-, libelf, libbfd, libbpf, libopcodes, bcc
+, llvmPackages, elfutils
+, libbfd, libbpf, libopcodes, bcc
+, cereal, asciidoctor
+, nixosTests
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.13.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "v${version}";
-    sha256 = "sha256-BKWBdFzj0j7rAfG30A0fwyYCpOG/5NFRPODW46EP1u0=";
+    sha256 = "sha256-PBqq3u8zym+RY6xudJ66ItzDZEJBNvJDtve1GtxcOdQ=";
   };
 
   buildInputs = with llvmPackages;
     [ llvm libclang
-      kernel elfutils libelf bcc
+      elfutils bcc
       libbpf libbfd libopcodes
+      cereal asciidoctor
     ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ]
-    # libelf is incompatible with elfutils-libelf
-    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
-
-  # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
-  # also in theory make this an environment variable around bpftrace, but this works
-  # nicely without wrappers.
-  patchPhase = ''
-    patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/utils.cpp \
-      --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
-  '';
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev util-linux ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
@@ -42,20 +35,25 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [ "-DBUILD_TESTING=FALSE"
       "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
+      "-DINSTALL_TOOL_DOCS=off"
     ];
 
-  # nuke the example/reference output .txt files, for the included tools,
-  # stuffed inside $out. we don't need them at all.
+  # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
+  # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
   postInstall = ''
-    rm -rf $out/share/bpftrace/tools/doc
+    ln -s $out/share/bpftrace/tools/*.bt $out/bin/
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
 
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice ];
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
   };
 }

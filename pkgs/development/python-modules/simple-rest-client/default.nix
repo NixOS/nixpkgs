@@ -12,7 +12,8 @@
 
 buildPythonPackage rec {
   pname = "simple-rest-client";
-  version = "1.1.1";
+  version = "1.1.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "allisson";
     repo = "python-simple-rest-client";
     rev = version;
-    sha256 = "sha256-oJXP2/lChlzzKyNiTgJMHkcNkFyy92kTPxgDkon54g8=";
+    sha256 = "sha256-HdGYLDrqQvd7hvjwhC5dY2amdHUZHTYJvD1QP89lcXU=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     python-status
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook

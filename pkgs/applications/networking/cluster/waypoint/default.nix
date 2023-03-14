@@ -2,17 +2,16 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.4.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JB/0nU/05Agh4fWFeSfrUHFtR8cQjxdXW0QHAoH0dDc=";
+    sha256 = "sha256-FI6QXQ0n/vvzUJTBbPDh9nMyAdcfTzpX79RxQEbFDUs=";
   };
 
-  deleteVendor = true;
-  vendorSha256 = "sha256-2YrCRdpRk+gPHN8flahgWb2sbK5dYL5ivVqeJSsiy8Y=";
+  vendorHash = "sha256-t8PzimNW7JWvWU3lZHo+b5K3R6he35HhBQPu1hxK51U=";
 
   nativeBuildInputs = [ go-bindata installShellFiles ];
 
@@ -77,7 +76,6 @@ buildGoModule rec {
       through a consistent and repeatable workflow.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ winpat jk ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ winpat jk techknowlogick ];
   };
 }

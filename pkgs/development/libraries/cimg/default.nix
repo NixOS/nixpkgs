@@ -1,17 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gmic
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "2.9.9";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    hash = "sha256-DWyqVN7v+j2XCArv4jmrD45XKWMNhd2DddJHH3gQWQY=";
+    hash = "sha256-MPkZGKewusCw5TsW5NOtnrjqEK2dxRSCal1fn7Yiaio=";
   };
 
   outputs = [ "out" "doc" ];
@@ -21,12 +23,17 @@ stdenv.mkDerivation rec {
 
     install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
     install -m 644 CImg.h $out/include/
-    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
     cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
+    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
     cp README.txt $doc/share/doc/cimg/
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    # Need to update in lockstep.
+    inherit gmic gmic-qt;
+  };
 
   meta = with lib; {
     homepage = "http://cimg.eu/";

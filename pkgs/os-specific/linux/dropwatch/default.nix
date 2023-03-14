@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dropwatch";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0axx0zzrs7apqnl0r70jyvmgk7cs5wk185id479mapgngibwkyxy";
+    sha256 = "sha256-TbhgcX5WzuigP5/Mj5JuK7O/UKcu70D7dcOcvo4fxeQ=";
   };
 
   nativeBuildInputs = [

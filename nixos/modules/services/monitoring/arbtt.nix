@@ -7,19 +7,13 @@ let
 in {
   options = {
     services.arbtt = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the arbtt statistics capture service.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "Arbtt statistics capture service");
 
       package = mkOption {
         type = types.package;
         default = pkgs.haskellPackages.arbtt;
         defaultText = literalExpression "pkgs.haskellPackages.arbtt";
-        description = ''
+        description = lib.mdDoc ''
           The package to use for the arbtt binaries.
         '';
       };
@@ -28,7 +22,7 @@ in {
         type = types.str;
         default = "%h/.arbtt/capture.log";
         example = "/home/username/.arbtt-capture.log";
-        description = ''
+        description = lib.mdDoc ''
           The log file for captured samples.
         '';
       };
@@ -37,7 +31,7 @@ in {
         type = types.int;
         default = 60;
         example = 120;
-        description = ''
+        description = lib.mdDoc ''
           The sampling interval in seconds.
         '';
       };

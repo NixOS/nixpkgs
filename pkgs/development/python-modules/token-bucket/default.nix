@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-runner
@@ -21,9 +22,11 @@ buildPythonPackage rec {
     pytest-runner
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Token Bucket Implementation for Python Web Apps";

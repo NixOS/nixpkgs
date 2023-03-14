@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "terranix";
-  version = "2.5.0";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "mrVanDalo";
     repo = "terranix";
     rev = version;
-    sha256 = "sha256-HDiyJGgyDUoLnpL8N+wDm3cM/vEfYYc/p4N1kKH/kLk=";
+    sha256 = "sha256-5s9YFvbYMp8x0uoXM/jOCPPdjau6+4zeK/rGRkXBdx0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/{bin,core,modules,lib}
-    mv bin core modules lib $out/
+    mv bin core modules lib share $out/
 
     wrapProgram $out/bin/terranix-doc-json \
       --prefix PATH : ${lib.makeBinPath [ jq nix ]}

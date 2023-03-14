@@ -16,7 +16,7 @@ let
     comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
-    cp -v $src $out/share/${pname}.love
+    cp -v $src $out/share/games/lovegames/${pname}.love
 
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 

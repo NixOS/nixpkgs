@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "environs";
-  version = "9.3.4";
+  version = "9.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sloria";
     repo = pname;
     rev = version;
-    sha256 = "0n0l9jici2d1pck5pf1c96jj3lhw91jki9nsgxzpikvpyvsw7wga";
+    sha256 = "sha256-hucApIn7ul7+MC2W811VTxZNO8Pqb6HDXz9VRcEdmIc=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     python-dotenv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dj-database-url
     dj-email-url
     django-cache-url

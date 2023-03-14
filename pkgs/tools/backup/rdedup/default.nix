@@ -28,6 +28,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dpc/rdedup";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dywedir ];
-    broken = stdenv.isDarwin;
   };
 }

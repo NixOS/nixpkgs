@@ -1,21 +1,21 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenvNoCC
 , gnome
 , gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.4.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # commit is named 1.4.3, tags=404
-    rev = "c997af402d425889f2e4277966eebe473f7451f7";
-    sha256 = "0yfas949xm85a28vgjqm9ym3bhhynrq256w9vfs8aiqq9nbm18mf";
+    rev = version;
+    hash = "sha256-XnQcVlN4xtZQDjijNV09m2m0ODYfFbrQaNd8ZQVToIw=";
   };
 
   propagatedBuildInputs = [

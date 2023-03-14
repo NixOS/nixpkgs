@@ -1,32 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, mkYarnPackage, writeText, python3 }:
+{ lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
-  version = "0.2.3";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
     repo = "PowerDNS-Admin";
     rev = "v${version}";
-    sha256 = "16faz57d77mxkflkvwyi8gb9wvnq2vhw79b84v1fmqvxri1yaphw";
+    hash = "sha256-e11u0jdJr+2TDXvBAPlDfnuuDwSfBq+JtvnDUTNKp/c=";
   };
 
-  python = python3.override {
-    packageOverrides = self: super: {
-      dnspython = super.dnspython.overridePythonAttrs (oldAttrs: rec {
-        version = "1.16.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
-        };
-      });
-    };
-  };
+  python = python3;
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-sslify
-    mysqlclient sqlalchemy
-    configobj bcrypt requests ldap pyotp qrcode dnspython
-    gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
-    lima pytimeparse pyyaml
+    flask flask_assets flask-login flask-sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
+    mysqlclient psycopg2 sqlalchemy
+    cffi configobj cryptography bcrypt requests python-ldap pyotp qrcode dnspython
+    gunicorn python3-saml pytz cssmin rjsmin authlib bravado-core
+    lima pytimeparse pyyaml jinja2 itsdangerous werkzeug
   ];
 
   assets = mkYarnPackage {
@@ -91,6 +81,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     rm -r powerdnsadmin/static powerdnsadmin/assets.py
+    sed -i "s/id:/'id':/" migrations/versions/787bdba9e147_init_db.py
   '';
 
   installPhase = ''
@@ -100,7 +91,7 @@ in stdenv.mkDerivation rec {
     wrapPythonPrograms
 
     mkdir -p $out/share $out/bin
-    cp -r powerdnsadmin $out/share/powerdnsadmin
+    cp -r migrations powerdnsadmin $out/share/
 
     ln -s ${assets} $out/share/powerdnsadmin/static
     ln -s ${assetsPy} $out/share/powerdnsadmin/assets.py
@@ -114,10 +105,16 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    # PYTHONPATH of all dependencies used by the package
+    pythonPath = python3.pkgs.makePythonPath pythonDeps;
+    tests = nixosTests.powerdns-admin;
+  };
+
   meta = with lib; {
     description = "A PowerDNS web interface with advanced features";
     homepage = "https://github.com/ngoduykhanh/PowerDNS-Admin";
     license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [ Flakebi zhaofengli ];
   };
 }

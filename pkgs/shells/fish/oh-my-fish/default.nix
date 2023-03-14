@@ -6,17 +6,18 @@
 , writeShellScript
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oh-my-fish";
-  version = "7+unstable=2021-03-03";
+  version = "unstable-2022-03-27";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "0b1396ad7962073fa25615bf03c43b53eddc2d56";
-    hash = "sha256-lwMo4+PcYR9kYJPWK+ALiMfBdxFSgB2vjtSn8QrmmEA=";
+    owner = finalAttrs.pname;
+    repo = finalAttrs.pname;
+    rev = "d428b723c8c18fef3b2a00b8b8b731177f483ad8";
+    hash = "sha256-msItKEPe7uSUpDAfCfdYZjt5NyfM3KtOrLUTO9NGqlg=";
   };
 
+  strictDeps = true;
   buildInputs = [
     fish
   ];
@@ -27,21 +28,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -pv $out/bin $out/share/${pname}
-    cp -vr * $out/share/${pname}
+    mkdir -pv $out/bin $out/share/${finalAttrs.pname}
+    cp -vr * $out/share/${finalAttrs.pname}
 
     cat << EOF > $out/bin/omf-install
     #!${runtimeShell}
 
     ${fish}/bin/fish \\
-      $out/share/${pname}/bin/install \\
+      $out/share/${finalAttrs.pname}/bin/install \\
       --noninteractive \\
-      --offline=$out/share/${pname}
+      --offline=$out/share/${finalAttrs.pname}
 
     EOF
     chmod +x $out/bin/omf-install
 
-    runHook PostInstall
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -54,7 +55,8 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "omf-install";
     platforms = fish.meta.platforms;
   };
-}
+})
 # TODO: customize the omf-install script

@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "django-prometheus";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "korfuri";
     repo = pname;
-    rev = version;
-    sha256 = "1y1cmycc545xrys41jk8kia36hwnkwhkw26mlpfdjgb63vq30x1d";
+    rev = "v${version}";
+    hash = "sha256-NE0zHnGGSrtkBLrSyBcQuyGrSfSQbdpevokg3YZhwDw=";
   };
 
   patches = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "django_prometheus"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

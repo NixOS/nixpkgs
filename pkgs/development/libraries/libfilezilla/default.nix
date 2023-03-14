@@ -6,21 +6,22 @@
 , nettle
 , pkg-config
 , libiconv
+, libxcrypt
 , ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.31.1";
+  version = "0.41.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-mX1Yh7YBXzhp03Wwy8S0lC/LJNvktDRohclGz+czFm8=";
+    hash = "sha256-rCodDYKOpgB4fOoefuUNIfDTvZFSzs5hh7ivyQBiKqA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ gettext gnutls nettle ]
+  buildInputs = [ gettext gnutls nettle libxcrypt ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;

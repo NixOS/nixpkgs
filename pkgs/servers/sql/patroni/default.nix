@@ -1,17 +1,18 @@
 { lib
 , pythonPackages
 , fetchFromGitHub
+, nixosTests
 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "2.0.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = "v${version}";
-    sha256 = "048g211njwmgl2v7nx6x5x82b4bbp35n234z7ah10aybm3yrxnc7";
+    sha256 = "sha256-cBkiBrty/6A3rIv9A1oh8GvPjwxhHwYEKuDIsNzHw1g=";
   };
 
   # cdiff renamed to ydiff; remove when patroni source reflects this.
@@ -40,7 +41,7 @@ pythonPackages.buildPythonApplication rec {
     ydiff
   ];
 
-  checkInputs = with pythonPackages; [
+  nativeCheckInputs = with pythonPackages; [
     flake8
     mock
     pytestCheckHook
@@ -53,11 +54,15 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "patroni" ];
 
+  passthru.tests = {
+    patroni = nixosTests.patroni;
+  };
+
   meta = with lib; {
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.deshaw.members;
   };
 }

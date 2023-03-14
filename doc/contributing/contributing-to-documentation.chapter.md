@@ -27,7 +27,7 @@ If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
-Additionally, the following syntax extensions are currently used:
+Additional syntax extensions are available, all of which can be used in NixOS option documentation. The following extensions are currently used:
 
 - []{#ssec-contributing-markup-anchors}
   Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
@@ -37,6 +37,10 @@ Additionally, the following syntax extensions are currently used:
   ```markdown
   ## Syntax {#sec-contributing-markup}
   ```
+
+  ::: {.note}
+  NixOS option documentation does not support headings in general.
+  :::
 
 - []{#ssec-contributing-markup-anchors-inline}
   **Inline anchors**, which allow linking arbitrary place in the text (e.g. individual list items, sentences…).
@@ -53,9 +57,17 @@ Additionally, the following syntax extensions are currently used:
   This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
 - []{#ssec-contributing-markup-inline-roles}
-  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`.
+  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`. The references will turn into links when a mapping exists in {file}`doc/manpage-urls.json`.
 
-  The references will turn into links when a mapping exists in {file}`doc/build-aux/pandoc-filters/unix-man-urls.lua`.
+  A few markups for other kinds of literals are also available:
+
+  - `` {command}`rm -rfi` `` turns into {command}`rm -rfi`
+  - `` {env}`XDG_DATA_DIRS` `` turns into {env}`XDG_DATA_DIRS`
+  - `` {file}`/etc/passwd` `` turns into {file}`/etc/passwd`
+  - `` {option}`networking.useDHCP` `` turns into {option}`networking.useDHCP`
+  - `` {var}`/etc/passwd` `` turns into {var}`/etc/passwd`
+
+  These literal kinds are used mostly in NixOS option documentation.
 
   This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
 

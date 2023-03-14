@@ -2,21 +2,23 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "1.6.14";
+  version = "2.0.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "02bl7q166j6rb8av9n1jz11xlwhrzmbkjq70mwr86qaj63pcxrak";
+  src = fetchFromGitHub {
+    owner = "sander76";
+    repo = "aio-powerview-api";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cghfNi5T343/7GxNLDrE0iAewMlRMycQTP7SvDVpU2M=";
   };
 
   propagatedBuildInputs = [
@@ -24,11 +26,13 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aiopvapi" ];
+  pythonImportsCheck = [
+    "aiopvapi"
+  ];
 
   meta = with lib; {
     description = "Python API for the PowerView API";

@@ -12,22 +12,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.24.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
-    repo = pname;
+    repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-fAbiPzyPaHy0KQb/twCovjgqIRzib7JZslb9FdVlQEg=";
+    sha256 = "sha256-1TP91mZ5f3x2Q0Qv/p+aE+rvWEW3zVArcgELLNWi4JY=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-UgCFlzihBvZywDNir/92lub9R6yYPJSK8S4mlMk2sMk=";
+  cargoSha256 = "sha256-aqOaU9K+dHwyqPqRnD+Gw2enmHF9eJAAHeP7sGBiWtg=";
 
-  checkInputs = [ ansi2html ];
+  nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
   checkFlags = [
     "--skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length"
@@ -42,15 +42,20 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    installShellCompletion --bash $releaseDir/build/mdcat-*/out/completions/mdcat.bash
-    installShellCompletion --fish $releaseDir/build/mdcat-*/out/completions/mdcat.fish
-    installShellCompletion --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
+    ln -sr $out/bin/{mdcat,mdless}
+
+    for bin in mdcat mdless; do
+      installShellCompletion \
+        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
+        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
+        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+    done
   '';
 
   meta = with lib; {
     description = "cat for markdown";
     homepage = "https://github.com/lunaryorn/mdcat";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ davidtwco SuperSandro2000 ];
+    license = with licenses; [ mpl20 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gojsontoyaml";
-  version = "unstable-2020-12-16";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "brancz";
     repo = "gojsontoyaml";
-    rev = "202f76bf8c1f8fb74941a845b349941064603185";
-    sha256 = "sha256-N49iHQh28nAZBGJnLKG/aZPdn5fwPKQpdrXXtX28yss=";
+    rev = "v${version}";
+    sha256 = "sha256-ebxz2uTH7XwD3j6JnsfET6aCGYjvsCjow/sU9pagg50=";
   };
 
   vendorSha256 = null;

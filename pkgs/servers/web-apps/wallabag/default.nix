@@ -1,41 +1,69 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+}:
 
-stdenv.mkDerivation rec {
+# Point the environment variable $WALLABAG_DATA to a data directory
+# that contains the folder `app` which must be a clone of
+# wallabag's configuration files with your customized `parameters.yml`.
+# In practice you need to copy `${pkgs.wallabag}/app` and the
+# customizzed `parameters.yml` to $WALLABAG_DATA.
+# These need to be updated every package upgrade.
+#
+# After a package upgrade, empty the `var/cache` folder or unexpected
+# error will occur.
+
+let
   pname = "wallabag";
-  version = "2.4.2";
+  version = "2.5.4";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
-  # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur
-
+  # Release tarball includes vendored files
   src = fetchurl {
-    url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    sha256 = "1n39flqqqjih0lc86vxdzbp44x4rqj5292if2fsa8y1xxlvyqmns";
+    urls = [
+      "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
+      "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
+    ];
+    hash = "sha256-yVMQXjGB8Yv1klQaHEbDGMZmOtANRocFJnawKn10xhg=";
   };
-
-  outputs = [ "out" ];
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
+
+    # Use sendmail from php.ini instead of FHS path.
+    (fetchpatch {
+      url = "https://github.com/symfony/swiftmailer-bundle/commit/31a4fed8f621f141ba70cb42ffb8f73184995f4c.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/symfony/swiftmailer-bundle/";
+      sha256 = "rxHiGhKFd/ZWnIfTt6omFLLoNFlyxOYNCHIv/UtxCho=";
+    })
   ];
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir $out/
+    runHook preInstall
+
+    mkdir $out
     cp -R * $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Web page archiver";
+    description = "wallabag is a self hostable application for saving web pages";
     longDescription = ''
-      wallabag is a self hostable application for saving web pages.
-
-      Point the environment variable $WALLABAG_DATA to a data directory that contains the folder `app/config` which must be a clone of wallabag's configuration files with your customized `parameters.yml`. These need to be updated every package upgrade.
-      After a package upgrade, empty the `var/cache` folder.
+      wallabag is a self-hostable PHP application allowing you to not
+      miss any content anymore. Click, save and read it when you can.
+      It extracts content so that you can read it when you have time.
     '';
     license = licenses.mit;
     homepage = "http://wallabag.org";
+    changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };
 }
-

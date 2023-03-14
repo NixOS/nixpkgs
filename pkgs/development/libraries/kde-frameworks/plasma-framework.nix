@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-framework";
+  pname = "plasma-framework";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kactivities karchive kconfig kconfigwidgets kcoreaddons kdbusaddons

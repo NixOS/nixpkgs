@@ -73,7 +73,7 @@ mkDerivation {
   };
 
   buildPhase = let
-    initialPath = import ../../stdenv/common-path.nix { inherit pkgs; };
+    initialPath = import ../../stdenv/generic/common-path.nix { inherit pkgs; };
   in ''
     set -x
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"

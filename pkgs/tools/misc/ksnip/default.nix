@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ksnip";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
     rev = "v${version}";
-    sha256 = "1izsk586n9fbm0di0hj6pxs7r0a6w554gpad1ghf247icr0pfc1l";
+    sha256 = "sha256-a5mS2mrbs0CyZ83hwwFdherq6kMS93ItQIDKu1AjnN4=";
   };
 
   nativeBuildInputs = [

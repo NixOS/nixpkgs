@@ -21,23 +21,19 @@ assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysq
 
 let
   inherit (lib) optional optionals optionalString;
-  features = optional sqliteSupport "sqlite"
-    ++ optional postgresqlSupport "postgres"
-    ++ optional mysqlSupport "mysql";
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    sha256 = "sha256-mRdDc4fHMkwkszY+2l8z1RSNMEQnrWI5/Y0Y2W+guQE=";
+    sha256 = "sha256-PBfVLqm9vEbf1tDTx4v8U1amYwC0hpYTAYcWyfHB84g=";
   };
 
-  cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
-  cargoSha256 = "sha256-sQ762Ss31sA5qALHzwkvwbfRXo00cCtqzQyoz3/zf6I=";
+  cargoSha256 = "sha256-8bvJwdZEdIChFUdTVL+EyjzqI+OAJaVMOOyspReSFzc=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -47,6 +43,11 @@ rustPlatform.buildRustPackage rec {
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
     ++ optionals mysqlSupport [ mariadb zlib ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = optional sqliteSupport "sqlite"
+    ++ optional postgresqlSupport "postgres"
+    ++ optional mysqlSupport "mysql";
 
   checkPhase = ''
     runHook preCheck

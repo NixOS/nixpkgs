@@ -22,9 +22,8 @@ in
         default = null;
         type = timezone;
         example = "America/New_York";
-        description = ''
-          The time zone used when displaying times and dates. See <link
-          xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>
+        description = lib.mdDoc ''
+          The time zone used when displaying times and dates. See <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
           for a comprehensive list of possible values for this setting.
 
           If null, the timezone will default to UTC and can be set imperatively
@@ -35,7 +34,7 @@ in
       hardwareClockInLocalTime = mkOption {
         default = false;
         type = types.bool;
-        description = "If set, keep the hardware clock in local time instead of UTC.";
+        description = lib.mdDoc "If set, keep the hardware clock in local time instead of UTC.";
       };
 
     };
@@ -44,18 +43,18 @@ in
 
       latitude = mkOption {
         type = types.float;
-        description = ''
+        description = lib.mdDoc ''
           Your current latitude, between
-          <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
+          `-90.0` and `90.0`. Must be provided
           along with longitude.
         '';
       };
 
       longitude = mkOption {
         type = types.float;
-        description = ''
+        description = lib.mdDoc ''
           Your current longitude, between
-          between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
+          between `-180.0` and `180.0`. Must be
           provided along with latitude.
         '';
       };
@@ -63,9 +62,9 @@ in
       provider = mkOption {
         type = types.enum [ "manual" "geoclue2" ];
         default = "manual";
-        description = ''
+        description = lib.mdDoc ''
           The location provider to use for determining your location. If set to
-          <literal>manual</literal> you must also provide latitude/longitude.
+          `manual` you must also provide latitude/longitude.
         '';
       };
 

@@ -1,28 +1,54 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, pcre
+, python3
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_45
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.5";
+  version = "2.10.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-s+KJpA11A4bFOXgy2eVkRMYBFwwBjU7QZgSPZ0oVKxo=";
+  src = fetchFromGitHub {
+    owner = "danmar";
+    repo = "cppcheck";
+    rev = version;
+    hash = "sha256-wr2O9EqDvHaMQwnjFLLtP1XxfUwFa/P6gGqYNNPVyaA=";
   };
 
-  buildInputs = [ pcre ] ++ lib.optionals withZ3 [ z3 ];
-  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
+  buildInputs = [ pcre (python3.withPackages (ps: [ps.pygments])) ];
+  nativeBuildInputs = [ installShellFiles libxslt docbook_xsl docbook_xml_dtd_45 which ];
 
-  makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
-   ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
+  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
 
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postBuild = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
-    mkdir -p $man/share/man/man1
-    cp cppcheck.1 $man/share/man/man1/cppcheck.1
+  '';
+
+  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+
+  postInstall = ''
+    installManPage cppcheck.1
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'int main() {}' > ./installcheck.cpp
+    $out/bin/cppcheck ./installcheck.cpp > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

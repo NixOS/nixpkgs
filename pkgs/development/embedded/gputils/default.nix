@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gputils";
-  version = "1.5.0-1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gputils/${pname}-${version}.tar.bz2";
-    sha256 = "055v83fdgqljprapf7rmh8x66mr13fj0qypj49xba5spx0ca123g";
+    sha256 = "sha256-j7iCCzHXwffHdhQcyzxPBvQK+RXaY3QSjXUtHu463fI=";
   };
 
   meta = with lib; {

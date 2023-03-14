@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , pkg-config
@@ -34,6 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
   configureFlags = [ "--disable-lynx" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "PulseAudio Volume Control";

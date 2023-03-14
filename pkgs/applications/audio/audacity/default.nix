@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, wxGTK
+, makeWrapper
+, wrapGAppsHook
 , pkg-config
 , python3
 , gettext
@@ -13,123 +14,102 @@
 , libjack2
 , lv2
 , lilv
+, mpg123
 , serd
 , sord
 , sqlite
 , sratom
 , suil
-, alsa-lib
 , libsndfile
 , soxr
 , flac
+, lame
 , twolame
 , expat
 , libid3tag
 , libopus
-, ffmpeg
+, libuuid
+, ffmpeg_4
 , soundtouch
-, pcre /*, portaudio - given up fighting their portaudio.patch */
+, pcre
+, portaudio # given up fighting their portaudio.patch?
+, portmidi
 , linuxHeaders
+, alsa-lib
 , at-spi2-core
 , dbus
-, epoxy
+, libepoxy
 , libXdmcp
 , libXtst
 , libpthreadstubs
+, libsbsms_2_3_0
 , libselinux
 , libsepol
 , libxkbcommon
 , util-linux
+, wavpack
+, wxGTK32
+, gtk3
+, libpng
+, libjpeg
+, AppKit
+, CoreAudioKit
 }:
 
 # TODO
-# 1. as of 3.0.2, GTK2 is still the recommended version ref https://www.audacityteam.org/download/source/ check if that changes in future versions
-# 2. detach sbsms
+# 1. detach sbsms
 
-let
-  inherit (lib) optionals;
-
-  wxGTK' = wxGTK.overrideAttrs (oldAttrs: rec {
-    src = fetchFromGitHub {
-      owner = "audacity";
-      repo = "wxWidgets";
-      rev = "07e7d832c7a337aedba3537b90b2c98c4d8e2985";
-      sha256 = "1mawnkcrmqj98jp0jxlnh9xkc950ca033ccb51c7035pzmi9if9a";
-      fetchSubmodules = true;
-    };
-  });
-
-in
 stdenv.mkDerivation rec {
   pname = "audacity";
-  # nixpkgs-update: no auto update
-  # Humans too! Let's wait to see how the situation with
-  # https://github.com/audacity/audacity/issues/1213 develops before
-  # pulling any updates that are subject to this privacy policy. We
-  # may wish to switch to a fork, but at the time of writing
-  # (2021-07-05) it's too early to tell how well any of the forks will
-  # be maintained.
-  version = "3.0.2";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
-    owner = "audacity";
-    repo = "audacity";
+    owner = pname;
+    repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "035qq2ff16cdl2cb9iply2bfjmhfl1dpscg79x6c9l0i9m8k41zj";
+    hash = "sha256-tMz55fZh+TfvLEyApDqC0QMd2hEQLJsNQ6y2Xy0xgaQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/audacity/audacity/commit/7f8135e112a0e1e8e906abab9339680d1e491441.patch";
-      sha256 = "0zp2iydd46analda9cfnbmzdkjphz5m7dynrdj5qdnmq6j3px9fw";
-      name = "audacity_xdg_paths.patch";
-    })
-  ];
-
   postPatch = ''
-    touch src/RevisionIdent.h
-
-    substituteInPlace src/FileNames.cpp \
+    mkdir src/private
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '';
-
-  # audacity only looks for ffmpeg at runtime, so we need to link it in manually
-  NIX_LDFLAGS = toString [
-    "-lavcodec"
-    "-lavdevice"
-    "-lavfilter"
-    "-lavformat"
-    "-lavresample"
-    "-lavutil"
-    "-lpostproc"
-    "-lswresample"
-    "-lswscale"
-  ];
 
   nativeBuildInputs = [
     cmake
     gettext
     pkg-config
     python3
-  ] ++ optionals stdenv.isLinux [
+    makeWrapper
+    wrapGAppsHook
+  ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
 
   buildInputs = [
-    alsa-lib
     expat
-    ffmpeg
+    ffmpeg_4
     file
     flac
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+  ] ++ [
+    gtk3
+    lame
     libid3tag
     libjack2
     libmad
     libopus
+    libsbsms_2_3_0
     libsndfile
     libvorbis
     lilv
     lv2
+    mpg123
     pcre
+    portmidi
     serd
     sord
     soundtouch
@@ -138,28 +118,78 @@ stdenv.mkDerivation rec {
     sratom
     suil
     twolame
-    wxGTK'
-    wxGTK'.gtk
-  ] ++ optionals stdenv.isLinux [
+    portaudio
+    wavpack
+    wxGTK32
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib # for portaudio
     at-spi2-core
     dbus
-    epoxy
+    libepoxy
     libXdmcp
     libXtst
     libpthreadstubs
     libxkbcommon
     libselinux
     libsepol
+    libuuid
     util-linux
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudioKit # for portaudio
+    libpng
+    libjpeg
   ];
+
+  cmakeFlags = [
+    "-DAUDACITY_BUILD_LEVEL=2"
+    "-DAUDACITY_REV_LONG=nixpkgs"
+    "-DAUDACITY_REV_TIME=nixpkgs"
+    "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
+    "-Daudacity_conan_enabled=Off"
+    "-Daudacity_use_ffmpeg=loaded"
+    "-Daudacity_has_vst3=Off"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
+  # [ 57%] Generating LightThemeAsCeeCode.h...
+  # ../../utils/image-compiler: error while loading shared libraries:
+  # lib-theme.so: cannot open shared object file: No such file or directory
+  preBuild = ''
+    export LD_LIBRARY_PATH=$PWD/utils
+  '';
 
   doCheck = false; # Test fails
 
+  # Replace audacity's wrapper, to:
+  # - put it in the right place, it shouldn't be in "$out/audacity"
+  # - Add the ffmpeg dynamic dependency
+  postInstall = lib.optionalString stdenv.isLinux ''
+    wrapProgram "$out/bin/audacity" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
+      --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
+      --suffix AUDACITY_PATH : "$out/share/audacity"
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/Audacity.app $out/Applications/
+    makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
+  '';
+
   meta = with lib; {
     description = "Sound editor with graphical UI";
-    homepage = "https://www.audacityteam.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lheckemann ];
-    platforms = platforms.linux;
+    homepage = "https://www.audacityteam.org";
+    changelog = "https://github.com/audacity/audacity/releases";
+    license = with licenses; [
+      gpl2Plus
+      # Must be GPL3 when building with "technologies that require it,
+      # such as the VST3 audio plugin interface".
+      # https://github.com/audacity/audacity/discussions/2142.
+      gpl3
+      # Documentation.
+      cc-by-30
+    ];
+    maintainers = with maintainers; [ lheckemann veprbl wegank ];
+    platforms = platforms.unix;
   };
 }

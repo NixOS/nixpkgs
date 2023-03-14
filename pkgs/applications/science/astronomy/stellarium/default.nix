@@ -1,38 +1,74 @@
-{ stdenv, lib, mkDerivation, fetchFromGitHub
-, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
-, qtscript, qtserialport, qttools
-, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, wrapGAppsHook
+, wrapQtAppsHook
+, qtbase
+, qtcharts
+, qtpositioning
+, qtmultimedia
+, qtserialport
+, qttranslations
+, qtwayland
+, qtwebengine
+, calcmysky
+, qxlsx
+, indilib
+, libnova
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "0.21.2";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-bh00o++l3sqELX5kgRhiCcQOLVqvjEyEMcJTnnVPNU8=";
+    sha256 = "sha256-0/ZSe6QfM2zVsqcbyqefl9hiuex72KPxJvVMRNCnpZg=";
   };
 
-  nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    wrapGAppsHook
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase
+    qtbase
+    qtcharts
+    qtpositioning
+    qtmultimedia
+    qtserialport
+    qttranslations
+    qtwayland
+    qtwebengine
+    calcmysky
+    qxlsx
+    indilib
+    libnova
   ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
-                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
     description = "Free open-source planetarium";
-    homepage = "http://stellarium.org/";
-    license = licenses.gpl2;
+    homepage = "https://stellarium.org/";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

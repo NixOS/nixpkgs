@@ -5,7 +5,7 @@ let
     [
       # Untrusted mirrors - do not update hashes
       "https://ludios.org/mirror/ue4demos/${file}"
-      "http://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
+      "https://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
     ];
 
   buildDemo = { name, src }:
@@ -24,7 +24,7 @@ let
         cd $out
         unzip $src
 
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+        interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \

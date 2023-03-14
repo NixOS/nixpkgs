@@ -1,35 +1,51 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , ifaddr
+, poetry-core
 , pytest-asyncio
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.36.12";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.47.3";
+  format = "pyproject";
 
-  # no tests in pypi sdist
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = version;
-    sha256 = "sha256-W66tL5uVcOhdahtYDYS8WYKXiz58UL6yEUp0uL9u5SI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hpbJ7kcyM8S2xAaVjuPzHXl/gcAYk3CX7NHxsbZXQ10=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    async-timeout
     ifaddr
   ];
 
-  checkInputs = [
+  # OSError: [Errno 48] Address already in use
+  doCheck = !stdenv.isDarwin;
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
+
+  preCheck = ''
+    sed -i '/addopts/d' pyproject.toml
+  '';
 
   disabledTests = [
     # tests that require network interaction
@@ -39,6 +55,8 @@ buildPythonPackage rec {
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
+    # Starting with 0.39.0: AssertionError: assert [('add', '_ht..._tcp.local.')]
+    "test_service_browser_expire_callbacks"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_lots_of_names"
   ];
@@ -51,6 +69,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
     license = licenses.lgpl21Only;

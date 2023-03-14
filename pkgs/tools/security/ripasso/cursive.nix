@@ -1,26 +1,29 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpg-error, gpgme, xorg, AppKit, Security, installShellFiles }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, python3, openssl, libgpg-error, gpgme, xorg, nettle, llvmPackages, clang, AppKit, Security, installShellFiles }:
 
 with rustPlatform;
 buildRustPackage rec {
-  version = "0.5.1";
+  version = "0.6.2";
   pname = "ripasso-cursive";
 
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
     rev  = "release-${version}";
-    sha256 = "1jx6qv7skikl1ap3g1r34rkz4ab756kra7dgwwv45vl2fb6x74k4";
+    sha256 = "sha256-OKFgBfm4d9IqSJFjg+J1XdsgQrfuIaoRIhVJQeZ+558=";
   };
 
-  patches = [ ./fix-tests.patch ];
+  patches = [ ./fix-tests.patch ./build-on-macos.patch ];
 
-  cargoSha256 = "1li1gmcs7lnjr4qhzs0rrgngdcxy1paiibjwk9zx2rrs71021cgk";
+  # Needed so bindgen can find libclang.so
+  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+
+  cargoSha256 = "sha256-cAhLI5IES6FM3/rjHjokLq5pCoA08K/8lpdAeSNrTFs=";
 
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 
-  nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles ];
+  nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles clang ];
   buildInputs = [
-    ncurses openssl libgpg-error gpgme xorg.libxcb
+    openssl libgpg-error gpgme xorg.libxcb nettle
   ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preCheck = ''

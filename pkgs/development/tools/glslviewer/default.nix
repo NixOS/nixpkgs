@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v7x93b61ama0gmzlx1zc56jgi7bvzsfvbkfl82xzwf2h5g1zni7";
   };
 
+  postPatch = ''
+    sed '1i#include <cstring>' -i src/tools/text.cpp # gcc12
+  '';
+
   nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];
   buildInputs = [
     glfw libGLU glfw libXrandr libXdamage
@@ -45,9 +49,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Live GLSL coding renderer";
-    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
+    homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.hodapp ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

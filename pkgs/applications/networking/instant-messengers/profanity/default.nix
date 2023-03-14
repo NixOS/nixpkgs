@@ -9,7 +9,7 @@
 , expect
 , glib
 , glibcLocales
-, libmesode
+, libstrophe
 , libmicrohttpd
 , libotr
 , libuuid
@@ -18,30 +18,23 @@
 , pkg-config
 , readline
 , sqlite
-, autoAwaySupport ? true,       libXScrnSaver ? null, libX11
+, autoAwaySupport ? true,       libXScrnSaver, libX11
 , notifySupport ? true,         libnotify, gdk-pixbuf
 , omemoSupport ? true,          libsignal-protocol-c, libgcrypt
 , pgpSupport ? true,            gpgme
-, pythonPluginSupport ? true,   python
-, traySupport ? true,           gtk
+, pythonPluginSupport ? true,   python3
+, traySupport ? true,           gtk3
 }:
-
-assert autoAwaySupport     -> libXScrnSaver != null && libX11 != null;
-assert notifySupport       -> libnotify != null && gdk-pixbuf != null;
-assert traySupport         -> gtk != null;
-assert pgpSupport          -> gpgme != null;
-assert pythonPluginSupport -> python != null;
-assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.11.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    hash = "sha256-8WGHOy0fSW8o7vMCYZqqpvDsn81JZefM6wGfjQ5iKbU=";
+    hash = "sha256-A9ZgHliLb4v/3W5tm5zD0WN8mRmxLE/MUSTBXGvBCCM=";
   };
 
   patches = [
@@ -63,7 +56,7 @@ stdenv.mkDerivation rec {
     expat
     expect
     glib
-    libmesode
+    libstrophe
     libmicrohttpd
     libotr
     libuuid
@@ -75,8 +68,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals notifySupport       [ libnotify gdk-pixbuf ]
     ++ lib.optionals omemoSupport        [ libsignal-protocol-c libgcrypt ]
     ++ lib.optionals pgpSupport          [ gpgme ]
-    ++ lib.optionals pythonPluginSupport [ python ]
-    ++ lib.optionals traySupport         [ gtk ];
+    ++ lib.optionals pythonPluginSupport [ python3 ]
+    ++ lib.optionals traySupport         [ gtk3 ];
 
   # Enable feature flags, so that build fail if libs are missing
   configureFlags = [

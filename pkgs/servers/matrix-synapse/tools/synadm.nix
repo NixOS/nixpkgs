@@ -4,12 +4,12 @@
 
 with python3Packages; buildPythonApplication rec {
   pname = "synadm";
-  version = "0.31";
+  version = "0.38";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1098a5248a1e2de53ced3c699b3b78ced3327c5f4e0ff092a95ef4940e4f9c6e";
+    sha256 = "sha256-l1KRUnjzj1/MEb1nxV6hMaxi15q7baG+iiK2yatZYRc=";
   };
 
   postPatch = ''
@@ -20,6 +20,7 @@ with python3Packages; buildPythonApplication rec {
   propagatedBuildInputs = [
     click
     click-option-group
+    dnspython
     tabulate
     pyyaml
     requests

@@ -15,6 +15,8 @@
 , javaSupport ? false
 , jdk
 , usev110Api ? false
+, threadsafe ? false
+, python3
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -24,11 +26,16 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.12.1";
-  pname = "hdf5";
+  version = "1.14.0";
+  pname = "hdf5"
+    + lib.optionalString cppSupport "-cpp"
+    + lib.optionalString fortranSupport "-fortran"
+    + lib.optionalString mpiSupport "-mpi"
+    + lib.optionalString threadsafe "-threadsafe";
+
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-qvn1MrPtqD09Otyfi0Cpt2MVIhj6RTScO8d1Asofjxw=";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
   };
 
   passthru = {
@@ -63,10 +70,17 @@ stdenv.mkDerivation rec {
     ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java"
-    ++ optional usev110Api "--with-default-api-version=v110";
+    ++ optional usev110Api "--with-default-api-version=v110"
+    # hdf5 hl (High Level) library is not considered stable with thread safety and should be disabled.
+    ++ optionals threadsafe [ "--enable-threadsafe" "--disable-hl" ];
 
   patches = [
-    ./bin-mv.patch
+    # Avoid non-determinism in autoconf build system:
+    # - build time
+    # - build user
+    # - uname -a (kernel version)
+    # Can be dropped once/if we switch to cmake.
+    ./hdf5-more-determinism.patch
   ];
 
   postInstall = ''
@@ -76,6 +90,10 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5fc' "''${!outputDev}"
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) h5py;
+  };
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";

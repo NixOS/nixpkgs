@@ -4,8 +4,9 @@
 , patchelf
 , fetchFromGitHub
 , rustPlatform
-, makeWrapper
+, makeBinaryWrapper
 , pkg-config
+, openssl
 , curl
 , zlib
 , Security
@@ -22,25 +23,27 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.24.3";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-JpOOFwlTgwwBCrXOGYskFTgS6RZ7mHQJGT0jnHavxvI=";
+    sha256 = "sha256-zFdw6P4yrLDshtF9A5MbkxFcUE8KvlZGx5qkW4LSPzw=";
   };
 
-  cargoSha256 = "sha256-hAfGpKaWD94IxFFpnW9XwQp4P9clUX6mmekwodCK0Ag=";
+  cargoSha256 = "sha256-QJKxKAW7MutpJsJwB/EImQLPaax7L/A25yRAAwEDXUQ=";
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
 
   buildInputs = [
-    curl
+    (curl.override { inherit openssl; })
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  buildFeatures = [ "no-self-update" ];
+
+  checkFeatures = [ ];
 
   patches = lib.optionals stdenv.isLinux [
     (runCommand "0001-dynamically-patchelf-binaries.patch" { CC = stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
@@ -59,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     mv rustup-init rustup
     binlinks=(
       cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
-      cargo-clippy clippy-driver cargo-miri
+      cargo-clippy clippy-driver cargo-miri rust-gdbgui
     )
     for link in ''${binlinks[@]}; do
       ln -s rustup $link

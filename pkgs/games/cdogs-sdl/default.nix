@@ -12,21 +12,29 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cdogs";
-  version = "0.13.0";
+  pname = "cdogs-sdl";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
-    repo = "cdogs-sdl";
+    repo = pname;
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-7wNiDA/gOpqzSFWw8Bn6suC/f5RXdDTxPV49nCvOxas=";
+    sha256 = "sha256-CH0P8OrRUXtuqAHxDKv4ziKYdwGTccLPwpzh4xo7lQc=";
   };
 
   postPatch = ''
     patchShebangs src/proto/nanopb/generator/*
   '';
 
-  cmakeFlags = [ "-DCDOGS_DATA_DIR=${placeholder "out"}/" ];
+  cmakeFlags = [
+    "-DCDOGS_DATA_DIR=${placeholder "out"}/"
+    "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -48,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nixinator ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
 }

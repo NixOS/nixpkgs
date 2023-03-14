@@ -49,13 +49,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2020-11-29";
+  version = "unstable-2021-10-20";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "6c10125a7f13908d2cbe56d2d9ab09872755f265";
-    sha256 = "00bqssh4zcs0jj6w07b91719xkrpdw75vpcplwrvlhwsvl55f901";
+    rev = "84f0268012cbe322ad858d76613f4182074510ac";
+    sha256 = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
     fetchSubmodules = true;
   };
 
@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
     SDL2 SDL2_image
     systemd
   ];
+
+  # Flag needed by GCC 12 but unrecognized by GCC 9 (aarch64-linux default now)
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (with stdenv; cc.isGNU && lib.versionAtLeast cc.version "12") [
+    "-Wno-error=mismatched-new-delete"
+  ]);
 
   patchPhase = ''
     patchShebangs scripts

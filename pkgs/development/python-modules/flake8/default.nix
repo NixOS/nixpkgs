@@ -1,53 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
-, configparser
-, enum34
+, fetchFromGitHub
 , mccabe
 , pycodestyle
 , pyflakes
-, functools32
-, typing
 , importlib-metadata
-, mock
+, pythonAtLeast
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "3.9.2";
+  version = "6.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b";
+  disabled = pythonOlder "3.8";
+
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "flake8";
+    rev = version;
+    hash = "sha256-dN9LlLpQ/ZoVIFrAQ1NxMvsHqWsgdJVLUIAFwkheEL4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pyflakes >= 2.3.0, < 2.4.0" "pyflakes >= 2.3.0, < 2.5.0"
-  '';
-
   propagatedBuildInputs = [
-    pyflakes
-    pycodestyle
     mccabe
-  ] ++ lib.optionals (pythonOlder "3.2") [
-    configparser
-    functools32
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    typing
+    pycodestyle
+    pyflakes
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
   # Tests fail on Python 3.7 due to importlib using a deprecated interface
-  doCheck = !(pythonOlder "3.8");
+  doCheck = pythonAtLeast "3.7";
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -55,6 +44,6 @@ buildPythonPackage rec {
     description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
     homepage = "https://github.com/pycqa/flake8";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

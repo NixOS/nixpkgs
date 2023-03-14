@@ -2,20 +2,27 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+# for passthru.tests
+, intel-compute-runtime
+, intel-media-driver
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "21.3.2";
+  version = "22.3.4";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     rev = "intel-gmmlib-${version}";
-    sha256 = "0whi7dmdv36d5l90yhjyv2raj2j165q82h7df9a6wf2abvsaqvdh";
+    sha256 = "sha256-V8mimy4yB7BO5YdbUh8byN9K6ylQ3lOLynQbXxiOUok=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests = {
+    inherit intel-compute-runtime intel-media-driver;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/intel/gmmlib";
@@ -27,6 +34,6 @@ stdenv.mkDerivation rec {
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ primeos SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,16 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "bsdiff4";
-  version = "1.2.1";
+  version = "1.2.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87cffc7522effdda03fd1564b212ad2279c0af50d16c3e65776f80acb6705d4b";
+    hash = "sha256-G5XOk7nzBoRvbJHJ0OPrZZCkyFrCu+crX2DZ24KtKhw=";
   };
+
+  pythonImportsCheck = [
+    "bsdiff4"
+  ];
 
   checkPhase = ''
     mv bsdiff4 _bsdiff4
@@ -18,8 +26,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "binary diff and patch using the BSDIFF4-format";
+    description = "Binary diff and patch using the BSDIFF4-format";
     homepage = "https://github.com/ilanschnell/bsdiff4";
+    changelog = "https://github.com/ilanschnell/bsdiff4/blob/${version}/CHANGELOG.txt";
     license = licenses.bsdProtection;
     maintainers = with maintainers; [ ris ];
   };

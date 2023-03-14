@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -10,8 +11,8 @@
 , cppheaderparser
 , dpkt
 , fetchFromGitHub
-, GitPython
-, itanium_demangler
+, gitpython
+, itanium-demangler
 , mulpyplexer
 , nampa
 , networkx
@@ -21,36 +22,25 @@
 , pycparser
 , pythonOlder
 , pyvex
-, sqlalchemy
 , rpyc
 , sortedcontainers
+, sqlalchemy
+, sympy
 , unicorn
 }:
 
-let
-  # Only the pinned release in setup.py works properly
-  unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
-    };
-  });
-in
-
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10534";
-  disabled = pythonOlder "3.6";
+  version = "9.2.41";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A2dqCABkqkn/rjWGc8hrGs60BK+V8j2+jVAYxnEpx8Y=";
+    hash = "sha256-HikfqU2k7w/IO51vOKNzCLWd+MphG1hXkJal5usQZOA=";
   };
 
   propagatedBuildInputs = [
@@ -63,28 +53,32 @@ buildPythonPackage rec {
     cle
     cppheaderparser
     dpkt
-    GitPython
-    itanium_demangler
+    gitpython
+    itanium-demangler
     mulpyplexer
     nampa
     networkx
     progressbar2
     protobuf
     psutil
-    sqlalchemy
     pycparser
     pyvex
-    sqlalchemy
     rpyc
     sortedcontainers
-    unicorn'
+    sqlalchemy
+    sympy
+    unicorn
+  ];
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
-  # See http://angr.io/api-doc/
   pythonImportsCheck = [
     "angr"
     "claripy"

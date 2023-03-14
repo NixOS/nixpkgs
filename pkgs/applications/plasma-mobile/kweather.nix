@@ -5,7 +5,9 @@
 , extra-cmake-modules
 
 , kconfig
+, kholidays
 , ki18n
+, kirigami-addons
 , kirigami2
 , knotifications
 , kquickcharts
@@ -25,7 +27,9 @@ mkDerivation rec {
 
   buildInputs = [
     kconfig
+    kholidays
     ki18n
+    kirigami-addons
     kirigami2
     knotifications
     kquickcharts

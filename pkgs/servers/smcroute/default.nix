@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smcroute";
-  version = "2.5.2";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "smcroute";
     rev = version;
-    sha256 = "sha256-yycTH6p0Ep8bDRlq/086j+sznxCpqwDrHaN99AKShz8=";
+    sha256 = "sha256-I9kc1F+GZf8Gl0Wx3J45Bf/RyFTyHVhwDz5l+sp/2pc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

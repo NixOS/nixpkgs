@@ -1,17 +1,20 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mustache-go";
-  version = "1.3.0";
-
-  goPackagePath = "github.com/cbroglie/mustache";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cbroglie";
     repo = "mustache";
     rev = "v${version}";
-    sha256 = "sha256-Z33hHOcx2K34v3j/qFD1VqeuUaqH0jqoMsVZQnLFx4U=";
+    fetchSubmodules = true;
+    sha256 = "sha256-A7LIkidhpFmhIjiDu9KdmSIdqFNsV3N8J2QEo7yT+DE=";
   };
+
+  vendorSha256 = "sha256-FYdsLcW6FYxSgixZ5US9cBPABOAVwidC3ejUNbs1lbA=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/cbroglie/mustache";

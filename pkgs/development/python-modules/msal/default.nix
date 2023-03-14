@@ -1,42 +1,41 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, lib
-
-# pythonPackages
 , pyjwt
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.16.0";
+  version = "1.21.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "240fb04dba46a27fd6a3178db8334412d0d02e0be85166f9e05bb45d03399084";
+    hash = "sha256-lrXIZ4MP0Rbl99DsjvGyOLTNpNGuqG2P7PUYJg4Tb78=";
   };
 
   propagatedBuildInputs = [
     pyjwt
     requests
-  ];
-
-  # we already have cryptography included, version bounds are causing issues
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "PyJWT[crypto]>=1.0.0,<3" "PyJWT" \
-      --replace "cryptography>=0.6,<38" "cryptography"
-  '';
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   # Tests assume Network Connectivity:
   # https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/e2958961e8ec16d0af4199f60c36c3f913497e48/tests/test_authority.py#L73
   doCheck = false;
 
-  pythonImportsCheck = [ "msal" ];
+  pythonImportsCheck = [
+    "msal"
+  ];
 
   meta = with lib; {
-    description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect";
+    description = "Library to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect";
     homepage = "https://github.com/AzureAD/microsoft-authentication-library-for-python";
+    changelog = "https://github.com/AzureAD/microsoft-authentication-library-for-python/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, psutil, setuptools
+{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
+, defusedxml, future, ujson, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
@@ -9,18 +9,15 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.3.1";
+  version = "3.3.1";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "v${version}";
-    sha256 = "0h7y36z4rizl1lyxacq32vpmvbwn9w2nrvrxn791060cksfw4xwd";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-93fghrNktcz+YyPkRl6ZiSZC+3a5TDql6eFZMy6veJc=";
   };
-
-  # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch;
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -39,7 +36,9 @@ buildPythonApplication rec {
     bottle
     defusedxml
     future
+    ujson
     netifaces
+    packaging
     psutil
     pysnmp
     setuptools

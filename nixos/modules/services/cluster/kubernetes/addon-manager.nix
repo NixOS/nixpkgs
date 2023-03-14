@@ -21,8 +21,8 @@ in
   options.services.kubernetes.addonManager = with lib.types; {
 
     bootstrapAddons = mkOption {
-      description = ''
-        Bootstrap addons are like regular addons, but they are applied with cluster-admin rigths.
+      description = lib.mdDoc ''
+        Bootstrap addons are like regular addons, but they are applied with cluster-admin rights.
         They are applied at addon-manager startup only.
       '';
       default = { };
@@ -43,7 +43,7 @@ in
     };
 
     addons = mkOption {
-      description = "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
+      description = lib.mdDoc "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
       default = { };
       type = attrsOf (either attrs (listOf attrs));
       example = literalExpression ''
@@ -58,11 +58,11 @@ in
             "spec" = { ... };
           };
         }
-        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dashboard.nix> { cfg = config.services.kubernetes; };
+        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dns.nix> { cfg = config.services.kubernetes; };
       '';
     };
 
-    enable = mkEnableOption "Kubernetes addon manager.";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes addon manager");
   };
 
   ###### implementation
@@ -167,4 +167,5 @@ in
     };
   };
 
+  meta.buildDocsInSandbox = false;
 }

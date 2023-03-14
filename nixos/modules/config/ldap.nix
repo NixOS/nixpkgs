@@ -59,39 +59,39 @@ in
 
     users.ldap = {
 
-      enable = mkEnableOption "authentication against an LDAP server";
+      enable = mkEnableOption (lib.mdDoc "authentication against an LDAP server");
 
       loginPam = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to include authentication against LDAP in login PAM.";
+        description = lib.mdDoc "Whether to include authentication against LDAP in login PAM.";
       };
 
       nsswitch = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to include lookup against LDAP in NSS.";
+        description = lib.mdDoc "Whether to include lookup against LDAP in NSS.";
       };
 
       server = mkOption {
         type = types.str;
         example = "ldap://ldap.example.org/";
-        description = "The URL of the LDAP server.";
+        description = lib.mdDoc "The URL of the LDAP server.";
       };
 
       base = mkOption {
         type = types.str;
         example = "dc=example,dc=org";
-        description = "The distinguished name of the search base.";
+        description = lib.mdDoc "The distinguished name of the search base.";
       };
 
       useTLS = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, use TLS (encryption) over an LDAP (port 389)
           connection.  The alternative is to specify an LDAPS server (port
-          636) in <option>users.ldap.server</option> or to forego
+          636) in {option}`users.ldap.server` or to forego
           security.
         '';
       };
@@ -99,7 +99,7 @@ in
       timeLimit = mkOption {
         default = 0;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the time limit (in seconds) to use when performing
           searches. A value of zero (0), which is the default, is to
           wait indefinitely for searches to be completed.
@@ -110,7 +110,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to let the nslcd daemon (nss-pam-ldapd) handle the
             LDAP lookups for NSS and PAM. This can improve performance,
             and if you need to bind to the LDAP server with a password,
@@ -125,9 +125,9 @@ in
         extraConfig = mkOption {
           default =  "";
           type = types.lines;
-          description = ''
+          description = lib.mdDoc ''
             Extra configuration options that will be added verbatim at
-            the end of the nslcd configuration file (<literal>nslcd.conf(5)</literal>).
+            the end of the nslcd configuration file (`nslcd.conf(5)`).
           '' ;
         } ;
 
@@ -135,7 +135,7 @@ in
           default = "";
           example = "cn=admin,dc=example,dc=com";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The distinguished name to use to bind to the LDAP server
             when the root user tries to modify a user's password.
           '';
@@ -145,7 +145,7 @@ in
           default = "";
           example = "/run/keys/nslcd.rootpwmodpw";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The path to a file containing the credentials with which to bind to
             the LDAP server if the root user tries to change a user's password.
           '';
@@ -157,7 +157,7 @@ in
           default = "";
           example = "cn=admin,dc=example,dc=com";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The distinguished name to bind to the LDAP server with. If this
             is not specified, an anonymous bind will be done.
           '';
@@ -166,7 +166,7 @@ in
         passwordFile = mkOption {
           default = "/etc/ldap/bind.password";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The path to a file containing the credentials to use when binding
             to the LDAP server (if not binding anonymously).
           '';
@@ -175,10 +175,10 @@ in
         timeLimit = mkOption {
           default = 30;
           type = types.int;
-          description = ''
+          description = lib.mdDoc ''
             Specifies the time limit (in seconds) to use when connecting
             to the directory server. This is distinct from the time limit
-            specified in <option>users.ldap.timeLimit</option> and affects
+            specified in {option}`users.ldap.timeLimit` and affects
             the initial server connection only.
           '';
         };
@@ -186,16 +186,16 @@ in
         policy = mkOption {
           default = "hard_open";
           type = types.enum [ "hard_open" "hard_init" "soft" ];
-          description = ''
+          description = lib.mdDoc ''
             Specifies the policy to use for reconnecting to an unavailable
-            LDAP server. The default is <literal>hard_open</literal>, which
+            LDAP server. The default is `hard_open`, which
             reconnects if opening the connection to the directory server
-            failed. By contrast, <literal>hard_init</literal> reconnects if
+            failed. By contrast, `hard_init` reconnects if
             initializing the connection failed. Initializing may not
             actually contact the directory server, and it is possible that
             a malformed configuration file will trigger reconnection. If
-            <literal>soft</literal> is specified, then
-            <package>nss_ldap</package> will return immediately on server
+            `soft` is specified, then
+            `nss_ldap` will return immediately on server
             failure. All hard reconnect policies block with exponential
             backoff before retrying.
           '';
@@ -205,12 +205,12 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration options that will be added verbatim at
-          the end of the ldap configuration file (<literal>ldap.conf(5)</literal>).
-          If <option>users.ldap.daemon</option> is enabled, this
+          the end of the ldap configuration file (`ldap.conf(5)`).
+          If {option}`users.ldap.daemon` is enabled, this
           configuration will not be used. In that case, use
-          <option>users.ldap.daemon.extraConfig</option> instead.
+          {option}`users.ldap.daemon.extraConfig` instead.
         '' ;
       };
 

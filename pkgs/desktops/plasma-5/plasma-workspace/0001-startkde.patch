@@ -14,33 +14,33 @@ diff --git a/startkde/plasma-session/startup.cpp b/startkde/plasma-session/start
 index 270744053..356160e96 100644
 --- a/startkde/plasma-session/startup.cpp
 +++ b/startkde/plasma-session/startup.cpp
-@@ -143,7 +143,7 @@ Startup::Startup(QObject *parent)
-     const AutoStart autostart;
+@@ -179,7 +179,7 @@ Startup::Startup(QObject *parent)
+     }
  
      // Keep for KF5; remove in KF6 (KInit will be gone then)
 -    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
 +    QProcess::execute(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER), QStringList());
  
-     KJob *windowManagerJob = nullptr;
-     if (qEnvironmentVariable("XDG_SESSION_TYPE") != QLatin1String("wayland")) {
-diff --git a/startkde/startplasma-waylandsession.cpp b/startkde/startplasma-waylandsession.cpp
+     KJob *phase1 = nullptr;
+     m_lock.reset(new QEventLoopLocker);
+diff --git a/startkde/startplasma-wayland.cpp b/startkde/startplasma-wayland.cpp
 index 3a054a04f..b2e7ab3fb 100644
---- a/startkde/startplasma-waylandsession.cpp
-+++ b/startkde/startplasma-waylandsession.cpp
-@@ -33,7 +33,7 @@ int main(int argc, char **argv)
-     out << "startplasma-waylandsession: Shutting down...\n";
+--- a/startkde/startplasma-wayland.cpp
++++ b/startkde/startplasma-wayland.cpp
+@@ -91,7 +91,7 @@ int main(int argc, char **argv)
+     out << "startplasma-wayland: Shutting down...\n";
  
      // Keep for KF5; remove in KF6 (KInit will be gone then)
 -    runSync(QStringLiteral("kdeinit5_shutdown"), {});
 +    runSync(QStringLiteral(NIXPKGS_KDEINIT5_SHUTDOWN), {});
  
-     out << "startplasma-waylandsession: Done.\n";
- 
+     out << "startplasmacompositor: Shutting down...\n";
+     cleanupPlasmaEnvironment(oldSystemdEnvironment);
 diff --git a/startkde/startplasma-x11.cpp b/startkde/startplasma-x11.cpp
 index d6b2c5439..534eeb0e5 100644
 --- a/startkde/startplasma-x11.cpp
 +++ b/startkde/startplasma-x11.cpp
-@@ -90,7 +90,7 @@ int main(int argc, char **argv)
+@@ -89,7 +89,7 @@ int main(int argc, char **argv)
      out << "startkde: Shutting down...\n";
  
      // Keep for KF5; remove in KF6 (KInit will be gone then)
@@ -53,7 +53,7 @@ diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
 index 008fdfcaf..72468f21c 100644
 --- a/startkde/startplasma.cpp
 +++ b/startkde/startplasma.cpp
-@@ -39,7 +39,7 @@ QTextStream out(stderr);
+@@ -50,7 +50,7 @@ QTextStream out(stderr);
  void messageBox(const QString &text)
  {
      out << text;
@@ -62,7 +62,7 @@ index 008fdfcaf..72468f21c 100644
  }
  
  QStringList allServices(const QLatin1String &prefix)
-@@ -340,7 +340,7 @@ void setupX11()
+@@ -412,7 +412,7 @@ void setupX11()
      //     If the user has overwritten fonts, the cursor font may be different now
      //     so don't move this up.
  
@@ -70,20 +70,11 @@ index 008fdfcaf..72468f21c 100644
 +    runSync(QStringLiteral(NIXPKGS_XSETROOT), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
  }
  
- void cleanupPlasmaEnvironment(const std::optional<QStringList> &oldSystemdEnvironment)
-@@ -403,7 +403,7 @@ void setupFontDpi()
-     // TODO port to c++?
-     const QByteArray input = "Xft.dpi: " + QByteArray::number(fontsCfg.readEntry("forceFontDPI", 0));
-     QProcess p;
--    p.start(QStringLiteral("xrdb"), {QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp")});
-+    p.start(QStringLiteral(NIXPKGS_XRDB), {QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp")});
-     p.setProcessChannelMode(QProcess::ForwardedChannels);
-     p.write(input);
-     p.closeWriteChannel();
-@@ -425,7 +425,7 @@ QProcess *setupKSplash()
-         KConfigGroup ksplashCfg = cfg.group("KSplash");
+ void cleanupPlasmaEnvironment(const std::optional<QProcessEnvironment> &oldSystemdEnvironment)
+@@ -501,7 +501,7 @@ QProcess *setupKSplash()
          if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
              p = new QProcess;
+             p->setProcessChannelMode(QProcess::ForwardedChannels);
 -            p->start(QStringLiteral("ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
 +            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
          }

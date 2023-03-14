@@ -1,26 +1,38 @@
 { lib, stdenv, fetchFromGitHub, pkg-config
-, libuuid
+, meson
+, ninja
+, libnvme
+, json_c
+, zlib
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "1.15";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    sha256 = "0qr1wa163cb7z6g083nl3zcc28mmlbxh1m97pd54bp3gyrhmdhhr";
+    hash = "sha256-okYtGiKUPNO31ntD9j5iAgdcnS5OQ/g1QAY+svhga4c=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libuuid ];
+  mesonFlags = [
+    "-Dversion-tag=${version}"
+  ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
-
-  # To omit the hostnqn and hostid files that are impure and should be unique
-  # for each target host:
-  installTargets = [ "install-spec" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3Packages.nose2
+  ];
+  buildInputs = [
+    libnvme
+    json_c
+    zlib
+  ];
 
   meta = with lib; {
     inherit (src.meta) homepage; # https://nvmexpress.org/

@@ -1,28 +1,32 @@
-{lib, stdenv, fetchurl, zlib, openssl, libre}:
+{ lib, stdenv, fetchFromGitHub, zlib, openssl, libre
+, cmake }:
+
 stdenv.mkDerivation rec {
-  version = "0.6.0";
+  version = "2.10.0";
   pname = "librem";
-  src=fetchurl {
-    url = "http://www.creytiv.com/pub/rem-${version}.tar.gz";
-    sha256 = "0b17wma5w9acizk02isk5k83vv47vf1cf9zkmsc1ail677d20xj1";
+  src = fetchFromGitHub {
+    owner = "baresip";
+    repo = "rem";
+    rev = "v${version}";
+    sha256 = "sha256-wyzpx0WjQLA8UKx4S6QOETMehf51Af5napZsxMXttmM=";
   };
-  buildInputs = [zlib openssl libre];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib openssl libre ];
+  cmakeFlags = [
+    "-DRE_INCLUDE_DIR=${libre}/include/re"
+  ];
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
-    "LIBRE_INC=${libre}/include/re"
     "PREFIX=$(out)"
   ]
   ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${lib.getDev stdenv.cc.cc}"
   ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}"
   ;
+  enableParallelBuilding = true;
   meta = {
-    description = " A library for real-time audio and video processing";
-    homepage = "http://www.creytiv.com/rem.html";
-    platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [raskin];
+    description = "A library for real-time audio and video processing";
+    homepage = "https://github.com/baresip/rem";
+    maintainers = with lib.maintainers; [ elohmeier raskin ];
     license = lib.licenses.bsd3;
-    downloadPage = "http://www.creytiv.com/pub/";
-    updateWalker = true;
-    downloadURLRegexp = "/rem-.*[.]tar[.].*";
   };
 }

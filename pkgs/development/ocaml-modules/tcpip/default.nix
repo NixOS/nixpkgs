@@ -1,43 +1,38 @@
 { lib, buildDunePackage, fetchurl
-, bisect_ppx, ppx_cstruct, pkg-config
-, rresult, cstruct, cstruct-lwt, mirage-net, mirage-clock
-, mirage-random, mirage-stack, mirage-protocols, mirage-time
+, ppx_cstruct, pkg-config
+, cstruct, cstruct-lwt, mirage-net, mirage-clock
+, mirage-random, mirage-time
 , ipaddr, macaddr, macaddr-cstruct, mirage-profile, fmt
 , lwt, lwt-dllist, logs, duration, randomconv, ethernet
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
 , mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
-, lru
+, lru, metrics
 , withFreestanding ? false
 , ocaml-freestanding
 }:
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "6.2.0";
+  version = "7.1.2";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "d0f6e643ce04da808d5f977c5ab2422cdb4f67e7abdc46dd6776ceada7151e1b";
+    url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-lraur6NfFD9yddG+y21jlHKt82gLgYBBbedltlgcRm0=";
   };
 
   nativeBuildInputs = [
-    bisect_ppx
-    ppx_cstruct
     pkg-config
   ];
 
   propagatedBuildInputs = [
-    rresult
+    ppx_cstruct
     cstruct
     cstruct-lwt
     mirage-net
     mirage-clock
     mirage-random
-    mirage-random-test
-    mirage-stack
-    mirage-protocols
     mirage-time
     ipaddr
     macaddr
@@ -51,6 +46,9 @@ buildDunePackage rec {
     randomconv
     ethernet
     lru
+    metrics
+    arp
+    mirage-flow
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
   ];
@@ -58,11 +56,11 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest
+    mirage-random-test
     mirage-flow
     mirage-vnetif
     pcap-format
     mirage-clock-unix
-    arp
     ipaddr-cstruct
   ];
 

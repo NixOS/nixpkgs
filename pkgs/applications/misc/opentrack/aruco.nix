@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ opencv4 ];
 
-  NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -march=native -O3";
+  env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
 
   preInstall = ''
     mkdir -p $out/include/aruco

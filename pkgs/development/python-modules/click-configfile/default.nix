@@ -4,15 +4,19 @@
 , click
 , six
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "click-configfile";
   version = "0.2.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "lb7sE77pUOmPQ8gdzavvT2RAkVWepmKY+drfWTUdkNE=";
+    hash = "sha256-lb7sE77pUOmPQ8gdzavvT2RAkVWepmKY+drfWTUdkNE=";
   };
 
   propagatedBuildInputs = [
@@ -20,8 +24,17 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "install_requires=install_requires," 'install_requires=["click >= 6.6", "six >= 1.10"],'
+  '';
+
+  pythonImportsCheck = [
+    "click_configfile"
   ];
 
   disabledTests = [

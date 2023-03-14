@@ -37,7 +37,7 @@ buildPythonPackage rec {
     tifffile
   ] ++ lib.optionals isPy27 [ pathlib enum34 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -3,21 +3,23 @@
 , fetchFromGitHub
 , protobuf
 , git
-, testVersion
+, testers
 , buf
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.0.0-rc8";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Oye+nYvKdT9t36hAMJSAJZCOQ2L3rHSjhjIu9gU2MWo=";
+    hash = "sha256-XiB8ZlbtzU66abM9zJotaMCrbYScqWmDv4ulEeQS6+g=";
   };
-  vendorSha256 = "sha256-aZv44ZPW/bJ8TEXU79ExREj2DH6j7J1+E/E1yh13Hvc=";
+
+  vendorHash = "sha256-bQKpy5xjUItgQ79r8TrMUOjo0Ze9E25glvOv312W1k0=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -26,11 +28,14 @@ buildGoModule rec {
     ./skip_test_requiring_dotgit.patch
   ];
 
-  nativeBuildInputs = [ protobuf ];
-  # Required for TestGitCloner
-  checkInputs = [ git ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
+
+  nativeCheckInputs = [
+    git # Required for TestGitCloner
+    protobuf # Required for buftesting.GetProtocFilePaths
+  ];
 
   preCheck = ''
     # The tests need access to some of the built utilities
@@ -42,25 +47,32 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin"
+    # Binaries
     # Only install required binaries, don't install testing binaries
-    for FILE in \
-      "buf" \
-      "protoc-gen-buf-breaking" \
-      "protoc-gen-buf-lint"; do
-      cp "$GOPATH/bin/$FILE" "$out/bin/"
+    for FILE in buf protoc-gen-buf-breaking protoc-gen-buf-lint; do
+      install -D -m 555 -t $out/bin $GOPATH/bin/$FILE
     done
+
+    # Completions
+    installShellCompletion --cmd buf \
+      --bash <($GOPATH/bin/buf completion bash) \
+      --fish <($GOPATH/bin/buf completion fish) \
+      --zsh <($GOPATH/bin/buf completion zsh)
+
+    # Man Pages
+    mkdir man && $GOPATH/bin/buf manpages man
+    installManPage man/*
 
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = buf; };
 
   meta = with lib; {
     homepage = "https://buf.build";
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof jk lrewega ];
+    maintainers = with maintainers; [ jk lrewega ];
   };
 }

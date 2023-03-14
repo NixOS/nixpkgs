@@ -1,18 +1,22 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "0.pre+unstable=2021-08-01";
+  version = "unstable-2023-02-05";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "311cc91946be63faab3b1578bc1d40668dd30f8c";
-    hash = "sha256-iqcdVzEp4ST/f93+9fGSwvJMj7BznNtoEx4F3oMPCYk=";
+    repo = "pipeworld";
+    rev = "58b2e9fe15ef0baa4b04c27079bfa386ec62b28e";
+    hash = "sha256-PbKejghMkLZdeQJD9fObw9xhGH24IX72X7pyjapTXJM=";
   };
+
+  dontConfigure = true;
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -43,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
-}
+})

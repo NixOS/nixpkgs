@@ -7,7 +7,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "5.133";
-  name = "byobu-" + version;
+  pname = "byobu";
 
   src = fetchurl {
     url = "https://launchpad.net/byobu/trunk/${version}/+download/byobu_${version}.orig.tar.gz";

@@ -1,40 +1,50 @@
 { lib
 , fetchFromGitHub
 , python3
-, wrapQtAppsHook
+, qt6
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.5.1";
-  disabled = python3.pkgs.pythonOlder "3.6";
+  version = "1.7.1";
+  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    rev = "v${version}";
-    sha256 = "sha256-LtKFdNX2/wSs9Hxplu7rz6rc1hoijCGgCKyLjlcRQoI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YYlH9s3iNEIacs8izEnIU32j+2lruQ5JJrjvDIzQjRE=";
   };
+
+  format = "pyproject";
 
   propagatedBuildInputs = with python3.pkgs; [
     click
     markdown2
     maestral
     packaging
-    pyqt5
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
+    pyqt6
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg  # Needed for the systray icon
+  ];
 
-  makeWrapperArgs = [
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+  ];
+
+  dontWrapQtApps = true;
+
+  makeWrapperArgs = with python3.pkgs; [
     # Firstly, add all necessary QT variables
     "\${qtWrapperArgs[@]}"
 
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python3.libPrefix}/site-packages") (python3.pkgs.requiredPythonModules python3.pkgs.maestral.propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "${python3.pkgs.maestral}/lib/${python3.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : ${makePythonPath (requiredPythonModules maestral.propagatedBuildInputs)}"
+    "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
 
   # no tests
@@ -42,11 +52,15 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "maestral_qt" ];
 
+  passthru.tests.maestral = nixosTests.maestral;
+
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
     homepage = "https://maestral.app";
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg sfrijters ];
+    platforms = platforms.linux;
+    mainProgram = "maestral_qt";
   };
 }

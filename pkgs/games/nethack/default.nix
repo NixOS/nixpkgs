@@ -19,14 +19,14 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
-  version = "3.6.6";
-  name = if x11Mode then "nethack-x11-${version}"
-         else if qtMode then "nethack-qt-${version}"
-         else "nethack-${version}";
+  version = "3.6.7";
+  pname = if x11Mode then "nethack-x11"
+         else if qtMode then "nethack-qt"
+         else "nethack";
 
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
-    sha256 = "1liyckjp34j354qnxc1zn9730lh1p2dabrg1hap24z6xnqx0rpng";
+    sha256 = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
   buildInputs = [ ncurses ]

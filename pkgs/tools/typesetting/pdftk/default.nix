@@ -2,13 +2,13 @@
 
 let
   pname = "pdftk";
-  version = "3.2.1";
+  version = "3.3.3";
 
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
     rev = "v${version}";
-    sha256 = "056db8rjczdfkq7fm3bv5g15y042rc9hb4zh5qccjrdw630vk9y4";
+    hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 
   deps = stdenv.mkDerivation {
@@ -32,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0p59myc5m3ds7fh0zdz3n7l7hx6dj8bpyqxzlhdrqybsyxwpw4w3";
+    outputHash = "sha256-Mx5CdiRxuql22kbLozzr9Rs2E2Svzg2zN1138Xa0pMc=";
   };
 
   # Point to our local deps repo
@@ -88,6 +88,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin averelld ];
     platforms = platforms.unix;

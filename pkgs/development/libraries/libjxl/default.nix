@@ -1,49 +1,60 @@
 { stdenv, lib, fetchFromGitHub
-, asciidoc
+, fetchpatch
 , brotli
 , cmake
-, graphviz
-, doxygen
 , giflib
 , gperftools
 , gtest
+, libhwy
 , libjpeg
 , libpng
 , libwebp
 , openexr
 , pkg-config
-, python3
 , zlib
+, buildDocs ? true
+, asciidoc
+, graphviz
+, doxygen
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.5";
+  version = "0.7.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "0grljgmy6cfhm8zni9d1mdn01qzc49k1pl75vhr7qcd3sp4r8lxm";
+    sha256 = "sha256-9DBLQ/gMyy2ZUm7PCWYJ7XOzkgQM0cAewJZzMNo8UPs=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
 
-  # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
-  # unless we disable highway's tests
-  postPatch = lib.optional stdenv.isDarwin ''
-    substituteInPlace third_party/highway/CMakeLists.txt \
-      --replace 'if(BUILD_TESTING)' 'if(false)'
-  '';
+  patches = [
+    # present in master
+    (fetchpatch {
+      name = "fix-test-failure-on-ia64-ppc64-riscv64";
+      url = "https://github.com/libjxl/libjxl/commit/bb8eac5d6acec223e44cf8cc72ae02f0816de311.patch";
+      hash = "sha256-DuUCStWEquhWo7bOss0RgZ7ouYE4FpWrIMFywYR424s=";
+    })
+  ];
 
   nativeBuildInputs = [
-    asciidoc # for docs
     cmake
-    graphviz # for docs via doxygen component `dot`
-    doxygen # for docs
     gtest
     pkg-config
-    python3 # for docs
+  ] ++ lib.optionals buildDocs [
+    asciidoc
+    doxygen
+    python3
+  ];
+
+  depsBuildBuild = lib.optionals buildDocs [
+    graphviz
   ];
 
   # Functionality not currently provided by this package
@@ -63,7 +74,6 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
-    brotli
     giflib
     gperftools # provides `libtcmalloc`
     libjpeg
@@ -71,6 +81,11 @@ stdenv.mkDerivation rec {
     libwebp
     openexr
     zlib
+  ];
+
+  propagatedBuildInputs = [
+    brotli
+    libhwy
   ];
 
   cmakeFlags = [
@@ -81,6 +96,9 @@ stdenv.mkDerivation rec {
     # using the vendorered ones is easier.
     "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
 
+    # Use our version of highway, though it is still statically linked in
+    "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
@@ -90,17 +108,18 @@ stdenv.mkDerivation rec {
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-DJPEGXL_STATIC=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-DJPEGXL_FORCE_NEON=ON"
   ];
 
-  doCheck = true;
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
 
-  # The test driver runs a test `LibraryCLinkageTest` which without
-  # LD_LIBRARY_PATH setting errors with:
-  #     /build/source/build/tools/tests/libjxl_test: error while loading shared libraries: libjxl.so.0
-  # The required file is in the build directory (`$PWD`).
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-  '';
+  # FIXME x86_64-darwin:
+  # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
+  doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";
@@ -108,6 +127,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ nh2 ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isAarch64; # `internal compiler error`, see https://github.com/NixOS/nixpkgs/pull/103160#issuecomment-866388610
   };
 }

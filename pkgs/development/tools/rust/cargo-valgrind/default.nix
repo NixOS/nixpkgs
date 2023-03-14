@@ -8,21 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
-    rev = version;
-    sha256 = "sha256-PltYUU2O/D1PrU+K8JN4+aUVLzHCeNyIsXMU6HLodXE=";
+    rev = "v${version}";
+    sha256 = "sha256-l/1paghG/ARD0JfzNh0xj2UD5kW6FddM8Xrd/FCygYc=";
   };
 
-  cargoSha256 = "sha256-XiQGkZ6pfyGkNPjpcPoY66qBl7ABTcRHCBjgmXSRrL0=";
+  cargoSha256 = "sha256-9/kIIZDIsOhUvRT3TyXN5PGFUB+a8m2yXmzBbsPUK28=";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,8 +29,10 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-valgrind --prefix PATH : ${lib.makeBinPath [ valgrind ]}
   '';
 
-  # Disable check phase as there are failures (2 tests fail)
-  doCheck = false;
+  checkFlags = [
+    "--skip examples_are_runnable"
+    "--skip tests_are_runnable"
+  ];
 
   meta = with lib; {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';

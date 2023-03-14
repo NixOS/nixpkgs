@@ -31,9 +31,11 @@ BOUNDARY_VER=$(curl -Ls -w "%{url_effective}" -o /dev/null https://github.com/ha
 BOUNDARY_LINUX_X64_SHA256=$(fetch_arch "$BOUNDARY_VER" "linux_amd64")
 BOUNDARY_DARWIN_X64_SHA256=$(fetch_arch "$BOUNDARY_VER" "darwin_amd64")
 BOUNDARY_LINUX_AARCH64_SHA256=$(fetch_arch "$BOUNDARY_VER" "linux_arm64")
+BOUNDARY_DARWIN_AARCH64_SHA256=$(fetch_arch "$BOUNDARY_VER" "darwin_arm64")
 
 sed -i "s/version = \".*\"/version = \"$BOUNDARY_VER\"/" "$NIX_DRV"
 
 replace_sha "x86_64-linux" "$BOUNDARY_LINUX_X64_SHA256"
 replace_sha "x86_64-darwin" "$BOUNDARY_DARWIN_X64_SHA256"
 replace_sha "aarch64-linux" "$BOUNDARY_LINUX_AARCH64_SHA256"
+replace_sha "aarch64-darwin" "$BOUNDARY_DARWIN_AARCH64_SHA256"

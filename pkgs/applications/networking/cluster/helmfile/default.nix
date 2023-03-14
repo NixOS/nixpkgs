@@ -1,27 +1,40 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.141.0";
+  version = "0.151.0";
 
   src = fetchFromGitHub {
-    owner = "roboll";
+    owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-UwjV3xgnZa0Emzw4FP/+gHh1ES6MTihrrlGKUBH6O9Q=";
+    sha256 = "sha256-hzsxuvHzdjNRqTk4yEBZhT/j1fVCAk+843kY4MsN0AM=";
   };
 
-  vendorSha256 = "sha256-HKHMeDnIDmQ7AjuS2lYCMphTHGD1JgQuBYDJe2+PEk4=";
+  vendorHash = "sha256-f0K3/xF+nJvlhtLAyLOah2RaZbaEqD8C28cPCLyaCXI=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X go.szostok.io/version.version=v${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd helmfile \
+      --bash <($out/bin/helmfile completion bash) \
+      --fish <($out/bin/helmfile completion fish) \
+      --zsh <($out/bin/helmfile completion zsh)
+  '';
 
   meta = {
-    description = "Deploy Kubernetes Helm charts";
-    homepage = "https://github.com/roboll/helmfile";
+    description = "Declarative spec for deploying Helm charts";
+    longDescription = ''
+      Declaratively deploy your Kubernetes manifests, Kustomize configs,
+      and charts as Helm releases in one shot.
+    '';
+    homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
     platforms = lib.platforms.unix;

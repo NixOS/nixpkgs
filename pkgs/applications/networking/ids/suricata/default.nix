@@ -34,11 +34,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.3";
+  version = "6.0.10";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-2vE0uy18mAA16a5g96rzEzI6gJNAAJ8m5IEQzN6B9gI=";
+    sha256 = "sha256-Wb/Rv12cFZYib6SBW/dmQ85ZaYhmwQeiYmnEgfElxNc=";
   };
 
   nativeBuildInputs = [
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free and open source, mature, fast and robust network threat detection engine";
-    homepage = "https://suricata-ids.org";
+    homepage = "https://suricata.io";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten ];

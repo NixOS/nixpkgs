@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "bluez-qt";
+  pname = "bluez-qt";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtdeclarative ];
   propagatedBuildInputs = [ qtbase ];

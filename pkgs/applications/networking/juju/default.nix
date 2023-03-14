@@ -2,19 +2,23 @@
 
 buildGoModule rec {
   pname = "juju";
-  version = "2.9.11";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
     rev = "juju-${version}";
-    sha256 = "sha256-KcvlnEfDzwhFzwaWLYuRGa8nh6MkjqZ+u+qJSJZl13U=";
+    sha256 = "sha256-n0OtugTjGXk4zCjGPhifY8VinXM6SYkbmX13jBfmV+o=";
   };
 
-  vendorSha256 = "sha256-0KGeMJDv1BdqM1/uMk+mKpK+Nejz9PiCAfRy96pu3OQ=";
+  vendorHash = "sha256-vDjBmBLrJNRwcre2OmlIuOcxxQuN6b2eYOXLQap3F/U=";
 
   # Disable tests because it attempts to use a mongodb instance
   doCheck = false;
+
+  subPackages = [
+    "cmd/juju"
+  ];
 
   meta = with lib; {
     description = "Open source modelling tool for operating software in the cloud";

@@ -1,23 +1,20 @@
 { lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  # When updating, beware of https://github.com/NixOS/nixpkgs/pull/131928#issuecomment-896614165
   pname = "automake";
-  version = "1.16.3";
+  version = "1.16.5";
 
   src = fetchurl {
     url = "mirror://gnu/automake/automake-${version}.tar.xz";
-    sha256 = "0fmz2fhmzcpacnprl5msphvaflwiy0hvpgmqlgfny72ddijzfazz";
+    sha256 = "0sdl32qxdy7m06iggmkkvf7j520rmmgbsjzbm7fgnxwxdp6mh7gh";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoconf perl ];
   buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;
 
-  # Disable indented log output from Make, otherwise "make.test" will
-  # fail.
-  preCheck = "unset NIX_INDENT_MAKE";
   doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
   doInstallCheck = false; # runs the same thing, fails the same tests
 

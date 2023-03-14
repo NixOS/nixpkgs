@@ -1,29 +1,31 @@
-{ lib, stdenv, fetchurl
-, perl, flex, bison, python3
+{ lib, stdenv, fetchFromGitHub
+, perl, flex, bison, python3, autoconf
+, which, cmake, help2man
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.210";
+  version = "5.006";
 
-  src = fetchurl {
-    url = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
-    sha256 = "sha256-KoIfJeV2aITnwiB2eQgQo4ZyXfMe6erFiGKXezR+IBg=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-PA8hbE6XECapuaO5YcgEodOoxSDqpMucdijJBBb7fZg=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 ];
+  nativeBuildInputs = [ flex bison python3 autoconf help2man ];
+  nativeCheckInputs = [ which ];
 
-  # these tests need some interpreter paths patched early on...
-  # see https://github.com/NixOS/nix/issues/1205
-  doCheck = false;
+  doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
+  preConfigure = "autoconf";
+
   postPatch = ''
-    patchShebangs \
-      src/flexfix \
-      src/vlcovgen
+    patchShebangs bin/* src/{flexfix,vlcovgen} test_regress/{driver.pl,t/*.pl}
   '';
 
   meta = with lib; {

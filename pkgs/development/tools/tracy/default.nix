@@ -1,31 +1,33 @@
-{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone }:
+{ stdenv, lib, darwin, fetchFromGitHub
+, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone, dbus
+}:
 
 let
   disableLTO = stdenv.cc.isClang && stdenv.isDarwin;  # workaround issue #19098
 in stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.7.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "sha256-hOeanY170vvn5W68cCDRUFApia/PW3ymPIgdWx3gwVw=";
+    sha256 = "sha256-cdVkY1dSag37JdbsoJp2/0QHO5G+zsftqwBVqRpMiew=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glfw capstone ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
-    ++ lib.optionals stdenv.isLinux [ gtk3 tbb ];
+    ++ lib.optionals stdenv.isLinux [ gtk3 tbb dbus ];
 
-  NIX_CFLAGS_COMPILE = [ ]
+  env.NIX_CFLAGS_COMPILE = toString ([ ]
     # Apple's compiler finds a format string security error on
     # ../../../server/TracyView.cpp:649:34, preventing building.
     ++ lib.optional stdenv.isDarwin "-Wno-format-security"
     ++ lib.optional stdenv.isLinux "-ltbb"
     ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    ++ lib.optional disableLTO "-fno-lto";
+    ++ lib.optional disableLTO "-fno-lto");
 
   NIX_CFLAGS_LINK = lib.optional disableLTO "-fno-lto";
 

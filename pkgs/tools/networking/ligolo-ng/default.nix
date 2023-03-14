@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
     rev = "v${version}";
-    sha256 = "sha256-VzK6WykC3UDlhhyu8LMRHgOMkdEssJuh1Aqp0rGx7F4=";
+    hash = "sha256-O/qiznQs+x7qBYXVItd0W7a0irEzRf0We7kW7HHLqcw=";
   };
 
   postConfigure = ''
@@ -17,14 +17,14 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-extldflags '-static'" ];
 
-  vendorSha256 = "sha256-ZRUy6gsl4Q2Sdm8Bfo4ANPdwcNQi5LNV6SbynpwfnOc=";
+  vendorHash = "sha256-If0K6DmkGk3AmO3eb/ocAl1RJeBN/xgY7dOh9lnVLh8=";
 
   doCheck = false; # tests require network access
 
   meta = with lib; {
     homepage = "https://github.com/tnpitsecurity/ligolo-ng";
     description = "A tunneling/pivoting tool that uses a TUN interface";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ elohmeier ];
   };

@@ -1,10 +1,8 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-let
-  version = "3.13";
+python3Packages.buildPythonApplication rec {
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication {
-  name = "${pname}-${version}";
+  version = "3.13";
 
   src = fetchFromGitHub {
     owner = "pixelb";

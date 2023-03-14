@@ -1,34 +1,71 @@
-{ buildGoPackage, fetchFromGitHub, lib
-, wayland, libX11, xbitmaps, libXcursor, libXmu, libXpm
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, libX11
+, libXcursor
+, libXmu
+, libXpm
+, libheif
+, pkg-config
+, wayland
+, xbitmaps
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wallutils";
-  version = "5.9.0";
+  version = "5.12.5";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    sha256 = "17xw1311xpmi5c8mwa9yvn4pxa7g4n09j84lvy61gmxc5m128fwy";
+    hash = "sha256-qC+AF+NFXSrUZAYaiFPwvfZtsAGhKE4XFDOUcfXUAbM=";
   };
 
-  goPackagePath = "github.com/xyproto/wallutils";
+  vendorSha256 = null;
 
-  patches = [ ./lscollection-Add-NixOS-paths-to-DefaultWallpaperDirectories.patch ];
+  patches = [
+    ./000-add-nixos-dirs-to-default-wallpapers.patch
+  ];
 
-  postPatch = ''
-    # VersionString is sometimes not up-to-date:
-    sed -iE 's/VersionString = "[0-9].[0-9].[0-9]"/VersionString = "${version}"/' wallutils.go
-  '';
+  excludedPackages = [
+    "./pkg/event/cmd" # Development tools
+  ];
 
-  buildInputs = [ wayland libX11 xbitmaps libXcursor libXmu libXpm ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  meta = with lib; {
+  buildInputs = [
+    libX11
+    libXcursor
+    libXmu
+    libXpm
+    libheif
+    wayland
+    xbitmaps
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
+  preCheck =
+    let skippedTests = [
+      "TestClosest" # Requiring Wayland or X
+      "TestEveryMinute" # Blocking
+      "TestNewSimpleEvent" # Blocking
+    ]; in
+    ''
+      export XDG_RUNTIME_DIR=`mktemp -d`
+
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
+
+  meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
     inherit (src.meta) homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    inherit (wayland.meta) platforms;
+    badPlatforms = lib.platforms.darwin;
   };
 }

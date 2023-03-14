@@ -188,7 +188,6 @@ in import ./make-test-python.nix {
       # Minio requires at least 1GiB of free disk space to run.
       virtualisation = {
         diskSize = 2 * 1024;
-        memorySize = 1024;
       };
       networking.firewall.allowedTCPPorts = [ minioPort ];
 

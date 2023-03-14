@@ -8,19 +8,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.23";
+  version = "2.28";
   pname = "links2";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "sha256-ZmDSAvUh/Ri/UYTD8XMtH6dCahAzdCd60c245XzmrEU=";
+    sha256 = "sha256-L9VJmxPe5ZRXwTLBZ7hJXEDe2nU4lInGzMtoMZP0VLQ=";
   };
 
   buildInputs = with lib;
     [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
     ++ optionals stdenv.isLinux [ gpm ]
     ++ optionals enableX11 [ libX11 libXau libXt ]
-    ++ optional enableDirectFB [ directfb ];
+    ++ optionals enableDirectFB [ directfb ];
 
   nativeBuildInputs = [ pkg-config bzip2 ];
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://links.twibright.com/";
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];
+    mainProgram = "links";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

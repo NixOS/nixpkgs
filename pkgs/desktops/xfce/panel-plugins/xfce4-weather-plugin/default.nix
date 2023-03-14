@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, libxml2, libsoup, upower,
-  libxfce4ui, xfce4-panel, xfconf, hicolor-icon-theme, xfce }:
+  libxfce4ui, xfce4-panel, xfconf, hicolor-icon-theme, gitUpdater }:
 
 let
   category = "panel-plugins";
@@ -31,10 +31,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
   meta = with lib; {
@@ -42,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Weather plugin for the Xfce desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

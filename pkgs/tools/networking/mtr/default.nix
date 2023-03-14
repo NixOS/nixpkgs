@@ -1,16 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
-, libcap, ncurses
-, withGtk ? false, gtk3 }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, libcap
+, ncurses
+, jansson
+, withGtk ? false
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtr${lib.optionalString withGtk "-gui"}";
-  version = "0.94";
+  version = "0.95";
 
   src = fetchFromGitHub {
     owner = "traviscross";
     repo = "mtr";
     rev = "v${version}";
-    sha256 = "0wnz87cr2lcl74bj8qxq9xgai40az3pk9k0z893scyc8svd61xz6";
+    sha256 = "sha256-f5bL3IdXibIc1xXCuZHwcEV5vhypRE2mLsS3A8HW2QM=";
   };
 
   # we need this before autoreconfHook does its thing
@@ -28,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ ncurses ]
+  buildInputs = [ ncurses jansson ]
     ++ lib.optional withGtk gtk3
     ++ lib.optional stdenv.isLinux libcap;
 

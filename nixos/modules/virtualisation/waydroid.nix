@@ -18,10 +18,11 @@ let
     /dev/hwbinder = hidl
   '';
 
-in {
+in
+{
 
   options.virtualisation.waydroid = {
-    enable = mkEnableOption "Waydroid";
+    enable = mkEnableOption (lib.mdDoc "Waydroid");
   };
 
   config = mkIf cfg.enable {
@@ -33,8 +34,14 @@ in {
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "ANDROID_BINDER_IPC")
       (isEnabled "ANDROID_BINDERFS")
-      (isEnabled "ASHMEM")
+      (isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
     ];
+
+    /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
+      as reading the kernel config is not always possible and on kernels where it's
+      already on it will be no-op
+    */
+    boot.kernelParams = [ "psi=1" ];
 
     environment.etc."gbinder.d/waydroid.conf".source = waydroidGbinderConf;
 
@@ -49,18 +56,16 @@ in {
 
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ getent iptables iproute kmod nftables util-linux which ];
-
-      unitConfig = {
-        ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
-      };
-
       serviceConfig = {
-        ExecStart = "${pkgs.waydroid}/bin/waydroid container start";
+        ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
         ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
         ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ];
   };
 
 }

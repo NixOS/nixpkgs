@@ -2,8 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , graphviz
+, appdirs
 , ifaddr
 , pythonOlder
+, lxml
 , mock
 , nix-update-script
 , pytestCheckHook
@@ -14,38 +16,43 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.24.1";
+  version = "0.29.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
-    rev = "v${version}";
-    sha256 = "sha256-78JYetA6msGiLMHNTdTN2b5lOiXaY+TQA9ID8qtPmM0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Kp9rG7fJzvmnLpjVulf9kODoABdjaaHvgyed9I+FHVA=";
   };
 
   propagatedBuildInputs = [
+    appdirs
     ifaddr
+    lxml
     requests
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     graphviz
     mock
     requests-mock
   ];
 
-  pythonImportsCheck = [ "soco" ];
+  pythonImportsCheck = [
+    "soco"
+  ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "python3Packages.${pname}";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
+    description = "CLI and library to control Sonos speakers";
     homepage = "http://python-soco.com/";
-    description = "A CLI and library to control Sonos speakers";
+    changelog = "https://github.com/SoCo/SoCo/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
   };

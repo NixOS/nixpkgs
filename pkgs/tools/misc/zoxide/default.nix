@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.7.9";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "sha256-afjEqHUoLYS+IOMnWocT5dVkjWdWGavJn7q9Fqjliss=";
+    sha256 = "sha256-easHqXEHMrRqLmD7GMudoMGRnFOLsnRrgivVaYfQn8k=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -24,14 +24,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = lib.optionalString withFzf ''
-    substituteInPlace src/fzf.rs \
+    substituteInPlace src/util.rs \
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoSha256 = "sha256-CgbjSP8QotCxQ8n8SLVuLpkg8hLuRYZwsl/9HsrkCt8=";
+  cargoSha256 = "sha256-6SGzMEYQIGDabIlCUmHky34wGMrAkOrweF7VTzzrUPE=";
 
   postInstall = ''
-    installManPage man/*
+    installManPage man/man*/*
     installShellCompletion --cmd zoxide \
       --bash contrib/completions/zoxide.bash \
       --fish contrib/completions/zoxide.fish \

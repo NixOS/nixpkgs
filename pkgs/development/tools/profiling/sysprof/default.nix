@@ -2,42 +2,35 @@
 , lib
 , desktop-file-utils
 , fetchurl
-, fetchpatch
 , gettext
 , glib
-, gtk3
+, gtk4
 , json-glib
 , itstool
-, libdazzle
+, libadwaita
+, libunwind
 , libxml2
-, meson, ninja
+, meson
+, ninja
 , pango
 , pkg-config
 , polkit
 , shared-mime-info
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.42.0";
+  version = "3.46.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "PBbgPv3+XT5xxNI5xndBrTf3LOiXHi9/rxaNvV6T6IY=";
+    sha256 = "PkMNV4FQqN0LB1sX0vzBunBNQogCYvDMZR8z5JO+QHE=";
   };
-
-  patches = [
-    # Fix missing unistd.h include.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/sysprof/commit/b113c89af1de2f87589175795a197f6384852a78.patch";
-      sha256 = "3Q8d6IZYNJl/vbyzRgoRR2sdl4aRkbcKPeVjSSqxb98=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -48,22 +41,24 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
-    gnome.adwaita-icon-theme
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     json-glib
     pango
     polkit
     systemd
-    libdazzle
+    libadwaita
+    libunwind
   ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
+    # In a separate libsysprof-capture package
+    "-Dinstall-static=false"
   ];
 
   passthru = {

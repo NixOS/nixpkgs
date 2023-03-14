@@ -8,42 +8,40 @@
 , pkg-config
 , gnome
 , libsysprof-capture
+, gobject-introspection
+, vala
+, libpsl
+, brotli
 , gnomeSupport ? true
 , sqlite
 , glib-networking
-, gobject-introspection
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
-, vala
-, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
-, libpsl
-, python3
-, brotli
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "2.74.0";
+  version = "2.74.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-M7HU4NY5RWxnXCJ4d+lKgHjXMSM+LVdonBGrzvfTxI4=";
+    sha256 = "sha256-5Ld8Qc/EyMWgNfzcMgx7xs+3XvfFoDQVPfFBP6HZLxM=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     glib
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals withVala [
     vala
   ];
 
   buildInputs = [
-    python3
     sqlite
     libpsl
     glib.out
@@ -60,19 +58,23 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
-    "-Dvapi=${if withVala then "enabled" else "disabled"}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dsysprof=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-lpthread";
+  env.NIX_CFLAGS_COMPILE = "-lpthread";
 
   doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
 
   postPatch = ''
+    # fixes finding vapigen when cross-compiling
+    # the commit is in 3.0.6
+    # https://gitlab.gnome.org/GNOME/libsoup/-/commit/5280e936d0a76f94dbc5d8489cfbdc0a06343f65
+    substituteInPlace meson.build \
+      --replace "required: vapi_opt)" "required: vapi_opt, native: false)"
+
     patchShebangs libsoup/
   '';
 

@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
      name = "teleprompter";
      exec = "teleprompter";
-     type = "Application";
      desktopName = "Teleprompter";
   };
 

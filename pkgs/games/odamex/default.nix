@@ -1,22 +1,54 @@
-{ lib, stdenv, cmake, fetchurl, pkg-config, SDL, SDL_mixer, SDL_net, wxGTK30 }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, makeWrapper
+, SDL
+, SDL_mixer
+, SDL_net
+, wxGTK32
+}:
 
 stdenv.mkDerivation rec {
   pname = "odamex";
-  version = "0.8.2";
+  version = "0.9.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.bz2";
-    sha256 = "0d4v1l7kghkz1xz92jxlx50x3iy94z7ix1i3209m5j5545qzxrqq";
+    sha256 = "sha256-WBqO5fWzemw1kYlY192v0nnZkbIEVuWmjWYMy+1ODPQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ SDL SDL_mixer SDL_net wxGTK30 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
+
+  buildInputs = [
+    SDL
+    SDL_mixer
+    SDL_net
+    wxGTK32
+  ];
+
+  installPhase = ''
+    runHook preInstall
+  '' + (if stdenv.isDarwin then ''
+    mkdir -p $out/{Applications,bin}
+    mv odalaunch/odalaunch.app $out/Applications
+    makeWrapper $out/{Applications/odalaunch.app/Contents/MacOS,bin}/odalaunch
+  '' else ''
+    make install
+  '') + ''
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "http://odamex.net/";
     description = "A client/server port for playing old-school Doom online";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ MP2E ];
   };
 }

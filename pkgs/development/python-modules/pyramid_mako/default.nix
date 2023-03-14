@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , webtest
 , pyramid
 , Mako
@@ -15,6 +16,15 @@ buildPythonPackage rec {
     sha256 = "0066c863441f1c3ddea60cee1ccc50d00a91a317a8052ca44131da1a12a840e2";
   };
 
+  patches = [
+    # Fix tests with pyramid >= 2.0
+    # https://github.com/Pylons/pyramid_mako/pull/54
+    (fetchpatch {
+      url = "https://github.com/Pylons/pyramid_mako/commit/c0f9e7e0146a7f94e35a9401b1519ac8b7765f5b.patch";
+      sha256 = "15swfm0a07bdl32s85426rmjh72jwfasjcrl849ppg035z75q9fx";
+    })
+  ];
+
   buildInputs = [ webtest ];
   propagatedBuildInputs = [ pyramid Mako ];
 
@@ -23,8 +33,5 @@ buildPythonPackage rec {
     description = "Mako template bindings for the Pyramid web framework";
     license = licenses.bsd0;
     maintainers = with maintainers; [];
-    # broken on pyramid>=2.0
-    # https://github.com/Pylons/pyramid_mako/issues/53
-    broken = true;
   };
 }

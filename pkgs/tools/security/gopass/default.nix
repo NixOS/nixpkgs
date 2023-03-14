@@ -13,22 +13,20 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.12.8";
+  version = "1.15.4";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass";
     rev = "v${version}";
-    sha256 = "0f3nnhipx2p8w04rxva0pcf7g1nhr4f5bz5dbvr2m76lkiaz5q3v";
+    hash = "sha256-Jm5H36DI6Mqdnm34+GUMEYxEefXLxgnwWo4fhKOayxY=";
   };
 
-  vendorSha256 = "14khs15k9d5m5dms3l4a5bi0s3zl1irm0i4s9pf86gpyz7b55l6a";
+  vendorHash = "sha256-IJSEU6a3AhA/cVTWXhVtNtvA/D0hyRlqL7pec1Tlyio=";
 
   subPackages = [ "." ];
-
-  doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
@@ -42,9 +40,10 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage gopass.1
-    installShellCompletion --zsh --name _gopass zsh.completion
-    installShellCompletion --bash --name gopass.bash bash.completion
-    installShellCompletion --fish --name gopass.fish fish.completion
+    installShellCompletion --cmd gopass \
+      --zsh zsh.completion \
+      --bash bash.completion \
+      --fish fish.completion
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
@@ -59,7 +58,7 @@ buildGoModule rec {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andir rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs sikmir ];
     changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
 
     longDescription = ''

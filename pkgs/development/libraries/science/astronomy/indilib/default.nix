@@ -6,6 +6,7 @@
 , libusb1
 , zlib
 , boost
+, libev
 , libnova
 , curl
 , libjpeg
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "indilib";
-  version = "1.9.2";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${version}";
-    sha256 = "sha256-5MaN1aNyHpZzKwQPUpp9NYRh7i+lx1N70+J1gczdtAE=";
+    sha256 = "sha256-+KFuZgM/Bl6Oezq3WXjWCHefc1wvR3wOKXejmT0pw1U=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     cfitsio
+    libev
     libusb1
     zlib
     boost

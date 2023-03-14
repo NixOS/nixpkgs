@@ -2,123 +2,45 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, python38
+, python3
 , substituteAll
 , nix-update-script
+, nixosTests
   # To include additional plugins, pass them here as an overlay.
-, packageOverrides ? self: super: {}
+, packageOverrides ? self: super: { }
 }:
 let
-  mkOverride = attrname: version: sha256:
-  self: super: {
-    ${attrname} = super.${attrname}.overridePythonAttrs (
-      oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      }
-    );
-  };
 
-  py = python38.override {
+  py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) (
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
-        # the following dependencies are non trivial to update since later versions introduce backwards incompatible
-        # changes that might affect plugins, or due to other observed problems
-        (mkOverride "click" "7.1.2" "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a")
-        (mkOverride "flask-babel" "1.0.0" "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn")
-        (mkOverride "itsdangerous" "1.1.0" "321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19")
-        (mkOverride "jinja2" "2.11.3" "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6")
-        (mkOverride "markdown" "3.1.1" "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a")
-        (mkOverride "markupsafe" "1.1.1" "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b")
-        (mkOverride "sarge" "0.1.5.post0" "1c1ll7pys9vra5cfi8jxlgrgaql6c27l6inpy15aprgqhc4ck36s")
-        (mkOverride "tornado" "5.1.1" "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409")
-
-        # Requires flask<2, cannot mkOverride because tests need to be disabled
         (
+          # with version 3 of flask-limiter octoprint 1.8.7 fails to start with
+          #  TypeError: Limiter.__init__() got multiple values for argument 'key_func'
           self: super: {
-            flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-              version = "1.1.2";
-              src = oldAttrs.src.override {
-                inherit version;
-                sha256 = "4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060";
-              };
-              doCheck = false;
-            });
-          }
-        )
-
-        # Requires werkezug<2, cannot mkOverride because tests need to be disabled
-        (
-          self: super: {
-            werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
-              version = "1.0.1";
-              src = oldAttrs.src.override {
-                inherit version;
-                sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
-              };
-              doCheck= false;
-            });
-          }
-        )
-
-        # Requires unidecode>=0.04.14,<0.05. Upstream changed the source naming between releases
-        (
-          self: super: {
-            unidecode = super.unidecode.overridePythonAttrs (oldAttrs: rec {
-              version = "0.04.21";
+            flask-limiter = super.flask-limiter.overridePythonAttrs (oldAttrs: rec {
+              version = "2.6.2";
               src = fetchFromGitHub {
-                owner = "avian2";
-                repo = "unidecode";
-                rev = "release-${version}";
-                sha256 = "0p5bkibv0xm1265dlfrz3zq3k9bbx07gl8zyq8mvvb8hi7p5lifg";
+                owner = "alisaifee";
+                repo = "flask-limiter";
+                rev = version;
+                sha256 = "sha256-eWOdJ7m3cY08ASN/X+7ILJK99iLJJwCY8294fwJiDew=";
               };
             });
-          }
-        )
-
-        # Requires websocket-client <1.0, >=0.57. Cannot do mkOverride b/c differing underscore/hyphen in pypi source name
-        (
-          self: super: {
-            websocket-client = super.websocket-client.overridePythonAttrs (
-              oldAttrs: rec {
-                version = "0.58.0";
-                src = oldAttrs.src.override {
-                  pname = "websocket_client";
-                  inherit version;
-                  sha256 = "63509b41d158ae5b7f67eb4ad20fecbb4eee99434e73e140354dc3ff8e09716f";
-                };
-                propagatedBuildInputs = [ self.six ];
-              }
-            );
-          }
-        )
-
-        # Octoprint needs zeroconf >=0.24 <0.25. This can't be done via mkOverride, because in zeroconf 0.32
-        # the super package was migrated to fetchFromGitHub.
-        (
-          self: super: {
-            zeroconf = super.zeroconf.overrideAttrs (oldAttrs: rec {
-              version = "0.24.5";
+            flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.0.0";
               src = super.fetchPypi {
-                inherit (oldAttrs) pname;
+                pname = "Flask-Babel";
                 inherit version;
-                sha256 = "0jpgd0rk91si93857mjrizan5gc42kj1q4fi4160qgk68la88fl9";
+                sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
               };
-              pythonImportsCheck = [
-                "zeroconf"
-              ];
-              buildInputs = with self; [
-                pytestCheckHook
-                nose
-              ];
-              pytestFlagsArray = [ "zeroconf/test.py" ];
+              nativeBuildInputs = [ ];
+              format = "setuptools";
+              outputs = [ "out" ];
             });
           }
         )
-
         # Built-in dependency
         (
           self: super: {
@@ -142,13 +64,13 @@ let
           self: super: {
             octoprint-firmwarecheck = self.buildPythonPackage rec {
               pname = "OctoPrint-FirmwareCheck";
-              version = "2021.8.11";
+              version = "2021.10.11";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-FirmwareCheck";
                 rev = version;
-                sha256 = "sha256-WzVjHgjF12iJ642AFaFd86GSU90XyPzKhi1CSreynW4=";
+                hash = "sha256-wqbD82bhJDrDawJ+X9kZkoA6eqGxqJc1Z5dA0EUwgEI=";
               };
               doCheck = false;
             };
@@ -159,18 +81,22 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
-              version = "2021.8.2";
+              version = "2022.6.13";
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
-                sha256 = "07akx61wadxhs0545pqa9gzjnaz9742bq710f8f4zs5x6sacjzbc";
+                hash = "sha256-3z5Btl287W3j+L+MQG8FOWt21smML0vpmu9BP48B9A0=";
               };
 
               # requires octoprint itself during tests
               doCheck = false;
+              postPatch = ''
+                substituteInPlace octoprint_pi_support/__init__.py \
+                  --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
+              '';
             };
           }
         )
@@ -179,26 +105,29 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.6.1";
+              version = "1.8.7";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-3b3k9h8H9Spf/P3/pXpCANnSGOgbUw/EWISJbrSoPBM=";
+                hash = "sha256-g4PYB9YbkX0almRPgMFlb8D633Y5fc3H+Boa541suqc=";
               };
 
-              propagatedBuildInputs = with super; [
+              propagatedBuildInputs = with self; [
+                argon2-cffi
                 blinker
                 cachelib
                 click
+                colorlog
                 emoji
                 feedparser
                 filetype
                 flask
                 flask-babel
                 flask_assets
-                flask_login
+                flask-login
+                flask-limiter
                 frozendict
                 future
                 itsdangerous
@@ -211,6 +140,8 @@ let
                 octoprint-filecheck
                 octoprint-firmwarecheck
                 octoprint-pisupport
+                passlib
+                pathvalidate
                 pkginfo
                 pip
                 psutil
@@ -231,16 +162,22 @@ let
                 werkzeug
                 wrapt
                 zeroconf
-                zipstream-new
-              ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
+                zipstream-ng
+              ] ++ lib.optionals stdenv.isDarwin [
+                py.pkgs.appdirs
+              ];
 
-              checkInputs = with super; [ pytestCheckHook mock ddt ];
+              nativeCheckInputs = with self; [
+                ddt
+                mock
+                pytestCheckHook
+              ];
 
               patches = [
                 # substitute pip and let it find out, that it can't write anywhere
                 (substituteAll {
                   src = ./pip-path.patch;
-                  pip = "${super.pip}/bin/pip";
+                  pip = "${self.pip}/bin/pip";
                 })
 
                 # hardcore path to ffmpeg and hide related settings
@@ -250,23 +187,34 @@ let
                 })
               ];
 
-              postPatch = let
-                ignoreVersionConstraints = [
-                  "emoji"
-                  "immutabledict"
-                  "sentry-sdk"
-                  "watchdog"
-                ];
-              in
+              postPatch =
+                let
+                  ignoreVersionConstraints = [
+                    "cachelib"
+                    "colorlog"
+                    "emoji"
+                    "immutabledict"
+                    "PyYAML"
+                    "sarge"
+                    "sentry-sdk"
+                    "watchdog"
+                    "wrapt"
+                    "zeroconf"
+                    "Flask-Login"
+                    "werkzeug"
+                    "flask"
+                    "Flask-Limiter"
+                  ];
+                in
                 ''
-                  sed -r -i \
-                    ${lib.concatStringsSep "\n" (
-                  map (
-                    e:
-                      ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-                  ) ignoreVersionConstraints
-                )}
-                    setup.py
+                    sed -r -i \
+                      ${lib.concatStringsSep "\n" (
+                    map (
+                      e:
+                        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+                    ) ignoreVersionConstraints
+                  )}
+                      setup.py
                 '';
 
               dontUseSetuptoolsCheck = true;
@@ -284,14 +232,17 @@ let
 
               passthru = {
                 python = self.python;
-                updateScript = nix-update-script { attrPath = "octoprint"; };
+                updateScript = nix-update-script { };
+                tests = {
+                  inherit (nixosTests) octoprint;
+                };
               };
 
               meta = with lib; {
                 homepage = "https://octoprint.org/";
                 description = "The snappy web interface for your 3D printer";
-                license = licenses.agpl3;
-                maintainers = with maintainers; [ abbradar gebner WhittlesJr ];
+                license = licenses.agpl3Only;
+                maintainers = with maintainers; [ abbradar gebner WhittlesJr gador ];
               };
             };
           }
@@ -302,4 +253,4 @@ let
     );
   };
 in
-  with py.pkgs; toPythonApplication octoprint
+with py.pkgs; toPythonApplication octoprint

@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "farrp";
+  pname = "farrp";
   version = "2018-02-13";
 
   idrisDeps = [ effects ];

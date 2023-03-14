@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "12.1";
+  version = "13.0";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "sha256-JYv1uZgwEIkLoQUYtQa8SrgPfAjM7FlJfpulWkqj5+M=";
+    hash = "sha256-M5344OCCcIfIOv54+O/GpzsKPYqVCgtTE3zm6KrXq2c=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
         - observe as spectators
     '';
     homepage = "https://www.openttd.org/";
+    changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jcumming fpletz ];

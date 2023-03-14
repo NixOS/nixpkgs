@@ -1,43 +1,39 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
-, libgee
+, evolution-data-server
+, glib
 , granite
 , gtk3
-, libaccounts-glib
-, libgdata
 , libhandy
-, libsignon-glib
-, json-glib
-, librest
-, webkitgtk
-, libsoup
-, sqlite
 , switchboard
-, evolution-data-server
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.2.1";
+  version = "6.5.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1q3f7zr04p2100mb255zy38il2i47l6vqdc9a9acjbk3n7q5sf92";
+    sha256 = "sha256-7eKbOf5lD2zwmZc0k9PWGwnqaqXmwgJPmij0WtMT7Qk=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # build: support evolution-data-server 3.45
+    # https://github.com/elementary/switchboard-plug-onlineaccounts/pull/248
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/08faf7b4241547b7900596af12a03d816712a808.patch";
+      sha256 = "sha256-QLe+NPHuo3hLM9n1f4hT5IK4nkWtYSe91L1wVSBzw6k=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -48,23 +44,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     evolution-data-server
+    glib
     granite
     gtk3
-    json-glib
-    libaccounts-glib
-    libgdata
-    libgee
     libhandy
-    libsignon-glib
-    libsoup
-    librest
-    sqlite # needed for camel-1.2
     switchboard
-    webkitgtk
   ];
 
-  PKG_CONFIG_LIBACCOUNTS_GLIB_PROVIDERFILESDIR = "${placeholder "out"}/share/accounts/providers";
-  PKG_CONFIG_LIBACCOUNTS_GLIB_SERVICEFILESDIR = "${placeholder "out"}/share/accounts/services";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Online Accounts Plug";
@@ -73,5 +62,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };
-
 }

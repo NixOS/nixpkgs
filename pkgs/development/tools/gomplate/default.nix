@@ -1,34 +1,47 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "gomplate";
-  version = "3.9.0";
-  owner = "hairyhenderson";
-  rev = "v${version}";
+  version = "3.11.4";
 
   src = fetchFromGitHub {
-    inherit owner rev;
+    owner = "hairyhenderson";
     repo = pname;
-    sha256 = "sha256-liy8cqn+hWoTOHchCY1LLu23tNvz7eGA+AN0d0APjC4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3WTscK2nmjd7+cUKGaAi9i+C3HFpuxb7eRCn0fOHFV4=";
   };
 
-  vendorSha256 = "sha256-Ph9z/Tom7O7V7yZ/On+etty+Bl653HiY/J3d3yfweeQ=";
+  vendorHash = "sha256-X3o00WATVlWoc1Axug5ErPtLDQ+BL3CtO/QyNtavIpg=";
 
-  # some tests require network access
   postPatch = ''
-    rm net/net_test.go
+    # some tests require network access
+    rm net/net_test.go \
+      internal/tests/integration/datasources_blob_test.go \
+      internal/tests/integration/datasources_git_test.go
+    # some tests rely on external tools we'd rather not depend on
+    rm internal/tests/integration/datasources_consul_test.go \
+      internal/tests/integration/datasources_vault*_test.go
+  '';
+
+  # TestInputDir_RespectsUlimit
+  preCheck = ''
+    ulimit -n 1024
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"
+    "-X github.com/${src.owner}/${pname}/v3/version.Version=${version}"
   ];
 
   meta = with lib; {
     description = "A flexible commandline tool for template rendering";
     homepage = "https://gomplate.ca/";
-    maintainers = with maintainers; [ ris jlesquembre ];
+    changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ris jlesquembre ];
   };
 }

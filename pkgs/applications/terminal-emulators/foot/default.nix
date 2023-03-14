@@ -18,7 +18,7 @@
 , wayland-scanner
 , pkg-config
 , utf8proc
-, allowPgo ? true
+, allowPgo ? !stdenv.hostPlatform.isMusl
 , python3  # for PGO
 # for clang stdenv check
 , foot
@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.9.2";
+  version = "1.13.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "15h01ijx87i60bdgjjap1ymwlxggsxc6iziykh3bahj8432s1836";
+    sha256 = "0k0zbh6adwr99y9aazlyvp6s1k8zaq2j6x8kqb8q9a5qjjg56lay";
   };
 
   depsBuildBuild = [
@@ -153,6 +153,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-terminfo=foot"
     # Tell foot to set TERMINFO and where to install the terminfo files
     "-Dcustom-terminfo-install-location=${terminfoDir}"
+    # Install systemd user units for foot-server
+    "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
   ];
 
   # build and run binary generating PGO profiles,
@@ -163,6 +165,7 @@ stdenv.mkDerivation rec {
     # make sure there is _some_ profiling data on all binaries
     ./footclient --version
     ./foot --version
+    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
@@ -170,7 +173,13 @@ stdenv.mkDerivation rec {
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
 
-  outputs = [ "out" "terminfo" ];
+  # Install example themes which can be added to foot.ini via the include
+  # directive to a separate output to save a bit of space
+  postInstall = ''
+    moveToOutput share/foot/themes "$themes"
+  '';
+
+  outputs = [ "out" "terminfo" "themes" ];
 
   passthru.tests = {
     clang-default-compilation = foot.override {

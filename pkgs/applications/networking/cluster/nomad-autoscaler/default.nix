@@ -1,9 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, go, removeReferencesTo, buildEnv }:
+{ lib, fetchFromGitHub, buildGoModule, buildEnv }:
 
 let
   package = buildGoModule rec {
     pname = "nomad-autoscaler";
-    version = "0.3.3";
+    version = "0.3.6";
 
     outputs = [
       "out"
@@ -25,36 +25,33 @@ let
       owner = "hashicorp";
       repo = "nomad-autoscaler";
       rev = "v${version}";
-      sha256 = "sha256-bN/U6aCf33B88ouQwTGG8CqARzWmIvXNr5JPr3l8cVI=";
+      sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 
-    vendorSha256 = "sha256-Ls8gkfLyxfQD8krvxjAPnZhf1r1s2MhtQfMMfp8hJII=";
+    vendorSha256 = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
 
-    subPackages = [ "." ];
-
-    nativeBuildInputs = [ removeReferencesTo ];
-
-    # buildGoModule overrides normal buildPhase, can't use makeTargets
-    postBuild = ''
+    buildPhase = ''
+      runHook preBuild
       make build plugins
+      runHook postBuild
     '';
 
     # tries to pull tests from network, and fails silently anyway
     doCheck = false;
 
-    postInstall = ''
-      mkdir -p $bin/bin
-      mv $out/bin/nomad-autoscaler $bin/bin/nomad-autoscaler
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $bin/bin $out/bin
+      mv bin/nomad-autoscaler $bin/bin
       ln -s $bin/bin/nomad-autoscaler $out/bin/nomad-autoscaler
 
-      for d in $outputs; do
+      for d in $(getAllOutputNames); do
         mkdir -p ''${!d}/share
       done
       rmdir $bin/share
 
       # have out contain all of the plugins
       for plugin in bin/plugins/*; do
-        remove-references-to -t ${go} "$plugin"
         cp "$plugin" $out/share/
       done
 
@@ -73,6 +70,7 @@ let
       mv bin/plugins/prometheus $prometheus/share/
       mv bin/plugins/target-value $target_value/share/
       mv bin/plugins/threshold $threshold/share/
+      runHook postInstall
     '';
 
     # make toggle-able, so that overrided versions can disable this check if

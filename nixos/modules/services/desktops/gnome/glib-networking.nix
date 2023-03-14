@@ -24,7 +24,7 @@ with lib;
 
     services.gnome.glib-networking = {
 
-      enable = mkEnableOption "network extensions for GLib";
+      enable = mkEnableOption (lib.mdDoc "network extensions for GLib");
 
     };
 
@@ -38,7 +38,7 @@ with lib;
 
     systemd.packages = [ pkgs.glib-networking ];
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.glib-networking.out}/lib/gio/modules" ];
+    environment.sessionVariables.GIO_EXTRA_MODULES = [ "${pkgs.glib-networking.out}/lib/gio/modules" ];
 
   };
 

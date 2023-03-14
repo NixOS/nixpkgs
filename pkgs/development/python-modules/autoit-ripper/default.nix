@@ -1,31 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, lief
+, pefile
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "autoit-ripper";
-  version = "1.0.1";
-  disabled = pythonOlder "3.6";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mbsrfa72n7y1vkm9jhwhn1z3k45jxrlgx58ia1l2bp6chnnn2zy";
+    sha256 = "sha256-fluG/2XlUh3kPtYtSotrP02c7kdmem92Hy1R93SaTzk=";
   };
 
   propagatedBuildInputs = [
-    lief
+    pefile
   ];
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "lief==0.10.1" "lief>=0.10.1"
+    substituteInPlace requirements.txt \
+      --replace "pefile==2019.4.18" "pefile>=2019.4.18"
   '';
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "autoit_ripper" ];
+
+  pythonImportsCheck = [
+    "autoit_ripper"
+  ];
 
   meta = with lib; {
     description = "Python module to extract AutoIt scripts embedded in PE binaries";

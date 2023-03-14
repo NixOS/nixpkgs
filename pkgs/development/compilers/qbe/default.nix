@@ -1,17 +1,15 @@
 { lib, stdenv
-, fetchgit
-, unstableGitUpdater
+, fetchzip
 , callPackage
 }:
 
 stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "unstable-2021-10-28";
+  version = "1.1";
 
-  src = fetchgit {
-    url = "git://c9x.me/qbe.git";
-    rev = "0d68986b6f6aa046ab13776f39cc37b67b3477ba";
-    sha256 = "sha256-K1XpVoJoY8QuUdP5rKnlAs4yTn5jhh9LKZjHalliNKs=";
+  src = fetchzip {
+    url = "https://c9x.me/compile/release/qbe-${version}.tar.xz";
+    sha256 = "sha256-yFZ3cpp7eLjf7ythKFTY1YEJYyfeg2en4/D8+9oM1B4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -20,7 +18,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {

@@ -1,28 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
+, pythonOlder
+, setuptools
 , attrs
-, pytest
+, pytestCheckHook
 , hypothesis
 , pretend
 , arpeggio
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "parver";
-  version = "0.3.1";
+  version = "0.4";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c902e0653bcce927cc156a7fd9b3a51924cbce3bf3d0bfd49fc282bfd0c5dfd3";
+    hash = "sha256-1KPbuTxTNz7poLoFXkhYxEFpsgS5EuSdAD6tlduam8o=";
   };
 
-  propagatedBuildInputs = [ six attrs arpeggio ];
-  checkInputs = [ pytest hypothesis pretend ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  meta = {
-    description = "parver allows parsing and manipulation of PEP 440 version numbers.";
-    license = lib.licenses.mit;
+  propagatedBuildInputs = [
+    attrs
+    arpeggio
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    pretend
+  ];
+
+  meta = with lib; {
+    description = "Allows parsing and manipulation of PEP 440 version numbers";
+    homepage = "https://github.com/RazerM/parver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,13 +1,13 @@
-{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome }:
+{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome, python }:
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.38.1";
+  version = "2.46.0";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0lc1p6p296c9q3lffi03v902jlsj34i7yyl3rcyaq94wwbljg7z4";
+    sha256 = "1FSJzz1HqhULGjXolJs7MQNfjCB15YjSa278Yllwxi4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -16,6 +16,16 @@ buildPythonPackage rec {
     at-spi2-core
     pygobject3
   ];
+
+  configureFlags = [
+    "PYTHON=${python.pythonForBuild.interpreter}"
+  ];
+
+  postPatch = ''
+    # useless python existence check for us
+    substituteInPlace configure \
+      --replace '&& ! which' '&& false'
+  '';
 
   disabled = !isPy3k;
 

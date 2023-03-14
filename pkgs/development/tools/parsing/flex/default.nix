@@ -1,6 +1,10 @@
 { lib, stdenv, buildPackages, fetchurl, bison, m4
-, fetchpatch, autoreconfHook, help2man
+, autoreconfHook, help2man
 }:
+
+# Avoid 'fetchpatch' to allow 'flex' to be used as a possible 'gcc'
+# dependency during bootstrap. Useful when gcc is built from snapshot
+# or from a git tree (flex lexers are not pre-generated there).
 
 stdenv.mkDerivation rec {
   pname = "flex";
@@ -13,11 +17,10 @@ stdenv.mkDerivation rec {
 
   # Also upstream, will be part of 2.6.5
   # https://github.com/westes/flex/commit/24fd0551333e
-  patches = [(fetchpatch {
+  patches = [(fetchurl {
     name = "glibc-2.26.patch";
-    url = "https://raw.githubusercontent.com/lede-project/source/0fb14a2b1ab2f82c"
-        + "/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
-    sha256 = "1aarhcmz7mfrgh15pkj6f7ikxa2m0mllw1i1vscsf1kw5d05lw6f";
+    url = "https://raw.githubusercontent.com/lede-project/source/0fb14a2b1ab2f82ce63f4437b062229d73d90516/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
+    sha256 = "0mpp41zdg17gx30kcpj83jl8hssks3adbks0qzbhcz882b9c083r";
   })];
 
   postPatch = ''
@@ -43,6 +46,10 @@ stdenv.mkDerivation rec {
   '';
 
   dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  postInstall = ''
+    ln -s $out/bin/flex $out/bin/lex
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/westes/flex";

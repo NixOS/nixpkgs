@@ -21,7 +21,7 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 1536;
-      description = ''
+      description = lib.mdDoc ''
         Size of disk image. Unit is MB.
       '';
     };
@@ -29,7 +29,7 @@ in
     virtualisation.googleComputeImage.configFile = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
         If set to `null`, a default configuration is used, where the only import is
@@ -40,7 +40,7 @@ in
     virtualisation.googleComputeImage.compressionLevel = mkOption {
       type = types.int;
       default = 6;
-      description = ''
+      description = lib.mdDoc ''
         GZIP compression level of the resulting disk image (1-9).
       '';
     };

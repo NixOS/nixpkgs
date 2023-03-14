@@ -4,21 +4,28 @@
 , pythonOlder
 , stdenv
 , packaging
+, setuptools
 , importlib-resources
 , dbus-next
 }:
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.3.2";
-  disabled = pythonOlder "3.6";
+  version = "3.4.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-h7an/Fm9pNnThCHXg9PAKG822dqXE/CUuW8lDJlwMfw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V5CggWp9G0/XoQhArrY3LCvfkF2SymORDWdJGjsr7yI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     packaging
@@ -30,11 +37,15 @@ buildPythonPackage rec {
 
   # no tests available, do the imports check instead
   doCheck = false;
-  pythonImportsCheck = [ "desktop_notifier" ];
+
+  pythonImportsCheck = [
+    "desktop_notifier"
+  ];
 
   meta = with lib; {
+    description = "Python library for cross-platform desktop notifications";
     homepage = "https://github.com/samschott/desktop-notifier";
-    description = "A Python library for cross-platform desktop notifications";
+    changelog = "https://github.com/samschott/desktop-notifier/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
     platforms = platforms.linux;

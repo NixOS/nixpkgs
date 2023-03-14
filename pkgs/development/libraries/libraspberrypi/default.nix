@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libraspberrypi";
-  version = "unstable-2021-06-23";
+  version = "unstable-2022-06-16";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "97bc8180ad682b004ea224d1db7b8e108eda4397";
-    sha256 = "0cnjc7w8ynayj90vlpl13xzm9izd8m5b4cvrq52si9vc6wlm4in5";
+    rev = "54fd97ae4066a10b6b02089bc769ceed328737e0";
+    hash = "sha512-f7tBgIykcIdkwcFjBKk5ooD/5Bsyrd/0OFr7LNCwWFYeE4DH3XA7UR7YjArkwqUVCVBByr82EOaacw0g1blOkw==";
   };
 
   patches = [

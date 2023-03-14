@@ -1,21 +1,26 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage, hatchling, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "colorama";
-  version = "0.4.4";
+  version = "0.4.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b";
+    sha256 = "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44";
   };
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [ hatchling ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "colorama" ];
 
   meta = with lib; {
-    homepage = "https://github.com/tartley/colorama";
-    license = licenses.bsd3;
     description = "Cross-platform colored terminal text";
+    homepage = "https://github.com/tartley/colorama";
+    changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
-

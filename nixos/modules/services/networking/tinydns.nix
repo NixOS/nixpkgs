@@ -10,19 +10,19 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to run the tinydns dns server";
+        description = lib.mdDoc "Whether to run the tinydns dns server";
       };
 
       data = mkOption {
         type = types.lines;
         default = "";
-        description = "The DNS data to serve, in the format described by tinydns-data(8)";
+        description = lib.mdDoc "The DNS data to serve, in the format described by tinydns-data(8)";
       };
 
       ip = mkOption {
         default = "0.0.0.0";
         type = types.str;
-        description = "IP address on which to listen for connections";
+        description = lib.mdDoc "IP address on which to listen for connections";
       };
     };
   };

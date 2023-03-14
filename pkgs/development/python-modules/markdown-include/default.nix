@@ -1,18 +1,28 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , markdown
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "markdown-include";
-  version = "0.6.0";
+  version = "0.8.0";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18p4qfhazvskcg6xsdv1np8m1gc1llyabp311xzhqy7p6q76hpbg";
+  # only wheel on pypi
+  src = fetchFromGitHub {
+    owner = "cmacmackin";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wTGgxvM3/h+6plUcheeMSkpk1we7pwuWHurkDkmbnPY=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     markdown

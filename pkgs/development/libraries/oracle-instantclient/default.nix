@@ -22,18 +22,32 @@ let
 
   # determine the version number, there might be different ones per architecture
   version = {
-    x86_64-linux = "19.3.0.0.0";
+    x86_64-linux = "19.16.0.0.0";
+    aarch64-linux = "19.10.0.0.0";
     x86_64-darwin = "19.3.0.0.0";
+  }.${stdenv.hostPlatform.system} or throwSystem;
+
+  directory = {
+    x86_64-linux = "1916000";
+    aarch64-linux = "191000";
+    x86_64-darwin = "193000";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # hashes per component and architecture
   hashes = {
     x86_64-linux = {
-      basic = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
-      sdk = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
-      sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
-      tools = "1q19blr0gz1c8bq0bnv1njzflrp03hf82ngid966xc6gwmqpkdsk";
-      odbc = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+      basic = "sha256-Sq1rWvbC1YME7EjSYPaP2g+1Xxxkk4ZkGaBmLo2cKcQ=";
+      sdk = "sha256-yJ8f/Hlq6vZoPxv+dfY4z1E7rWvcqlK+ou0SU0KKlEI=";
+      sqlplus = "sha256-C44srukpCB9et9UWm59daJmU83zr0HAktnWv7R42Irw=";
+      tools = "sha256-GP4E1REIoU3lctVYmLsAiwTJEvGRpCmOFlRuZk+A8HE=";
+      odbc = "sha256-JECxK7Ia1IJtve2goZJdTkvm5NJjqB2rc6k5BXUt3oA=";
+    };
+    aarch64-linux = {
+      basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
+      sdk = "sha256-8VpkNyLyFMUfQwbZpSDV/CB95RoXfaMr8w58cRt/syw=";
+      sqlplus = "sha256-iHcyijHhAvjsAqN9R+Rxo2R47k940VvPbScc2MWYn0Q=";
+      tools = "sha256-4QY0EwcnctwPm6ZGDZLudOFM4UycLFmRIluKGXVwR0M=";
+      odbc = "sha256-T+RIIKzZ9xEg/E72pfs5xqHz2WuIWKx/oRfDrQbw3ms=";
     };
     x86_64-darwin = {
       basic = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
@@ -50,11 +64,13 @@ let
   # convert platform to oracle architecture names
   arch = {
     x86_64-linux = "linux.x64";
+    aarch64-linux = "linux.arm64";
     x86_64-darwin = "macos.x64";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   shortArch = {
     x86_64-linux = "linux";
+    aarch64-linux = "linux";
     x86_64-darwin = "mac";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
@@ -62,12 +78,11 @@ let
   srcFilename = component: arch: version: rel:
     "instantclient-${component}-${arch}-${version}" +
     (optionalString (rel != "") "-${rel}") +
-    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
-    ".zip";
+    "dbru.zip"; # ¯\_(ツ)_/¯
 
   # fetcher for the non clickthrough artifacts
   fetcher = srcFilename: hash: fetchurl {
-    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
+    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/${directory}/${srcFilename}";
     sha256 = hash;
   };
 
@@ -125,8 +140,9 @@ stdenv.mkDerivation {
       OCCI, Pro*C, ODBC or JDBC). This package includes the sqlplus
       command line SQL client.
     '';
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ flokli ];
     hydraPlatforms = [ ];
   };

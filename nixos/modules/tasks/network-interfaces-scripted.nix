@@ -85,12 +85,14 @@ let
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
-        networkLocalCommands = {
+        needNetworkSetup = cfg.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null;
+
+        networkLocalCommands = lib.mkIf needNetworkSetup {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
         };
 
-        networkSetup =
+        networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
@@ -219,14 +221,15 @@ let
                     cidr = "${route.address}/${toString route.prefixLength}";
                     via = optionalString (route.via != null) ''via "${route.via}"'';
                     options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                    type = toString route.type;
                   in
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
+                     if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -532,6 +535,35 @@ let
             '';
           });
 
+        createGreDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = deviceDependency v.dev;
+            ttlarg = if lib.hasPrefix "ip6" v.type then "hoplimit" else "ttl";
+          in
+          { description = "GRE Tunnel Interface ${n}";
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            bindsTo = deps;
+            partOf = [ "network-setup.service" ];
+            after = [ "network-pre.target" ] ++ deps;
+            before = [ "network-setup.service" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute2 ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add name "${n}" type ${v.type} \
+                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
+                ${optionalString (v.local != null) "local \"${v.local}\""} \
+                ${optionalString (v.ttl != null) "${ttlarg} ${toString v.ttl}"} \
+                ${optionalString (v.dev != null) "dev \"${v.dev}\""}
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}" || true
+            '';
+          });
+
         createVlanDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.interface;
@@ -570,6 +602,7 @@ let
          // mapAttrs' createMacvlanDevice cfg.macvlans
          // mapAttrs' createFouEncapsulation cfg.fooOverUDP
          // mapAttrs' createSitDevice cfg.sits
+         // mapAttrs' createGreDevice cfg.greTunnels
          // mapAttrs' createVlanDevice cfg.vlans
          // {
            network-setup = networkSetup;

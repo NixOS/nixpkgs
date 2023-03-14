@@ -3,7 +3,7 @@
 {
   pname = "console";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

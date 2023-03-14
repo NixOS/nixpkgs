@@ -6,26 +6,24 @@
 , dbus
 , sqlite
 , file
-, gzip
 , makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "krankerl";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "ChristophWurst";
     repo = "krankerl";
     rev = "v${version}";
-    sha256 = "sha256-Kol39AtM5m6FC+s5SDbQhWuASkGbeXPlmSGb7axEuK8=";
+    sha256 = "sha256-fFtjQFkNB5vn9nlFJI6nRdqxB9PmOGl3ySZ5LG2tgPg=";
   };
 
-  cargoSha256 = "sha256-bPcKe3vE3VIjLJ4iYdF3Gt0sID09gRpxG5TpTGWhnPs=";
+  cargoSha256 = "sha256-0V2ftZmuKXRhOFWCroYOxQqW3NFh9Uuwcg0CM1sFlcQ=";
 
   nativeBuildInputs = [
     pkg-config
-    gzip
     makeWrapper
   ];
 
@@ -35,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     file
   ];
 

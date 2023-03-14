@@ -1,0 +1,23 @@
+diff --git a/desktop-ui/GNUmakefile b/desktop-ui/GNUmakefile
+index 916c8fcd8..b767c1335 100644
+--- a/desktop-ui/GNUmakefile
++++ b/desktop-ui/GNUmakefile
+@@ -92,7 +92,6 @@ endif
+ 	cp -R $(ares.path)/Shaders $(output.path)/$(name).app/Contents/Resources/
+ 	cp -R $(mia.path)/Database $(output.path)/$(name).app/Contents/Resources/	
+ 	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+-	codesign --force --deep --options runtime --entitlements resource/$(name).selfsigned.entitlements --sign - $(output.path)/$(name).app
+ else ifeq ($(platform),windows)
+ 	$(call mkdir,$(output.path)/Shaders/)
+ 	$(call mkdir,$(output.path)/Database/)
+@@ -115,8 +114,8 @@ ifeq ($(platform),windows)
+ else ifeq ($(shell id -un),root)
+ 	$(error "make install should not be run as root")
+ else ifeq ($(platform),macos)
+-	mkdir -p ~/Library/Application\ Support/$(name)/
+-	cp -R $(output.path)/$(name).app /Applications/$(name).app
++	mkdir -p $(prefix)/Applications/
++	cp -R $(output.path)/$(name).app $(prefix)/Applications/$(name).app
+ else ifneq ($(filter $(platform),linux bsd),)
+ 	mkdir -p $(prefix)/bin/
+ 	mkdir -p $(prefix)/share/applications/

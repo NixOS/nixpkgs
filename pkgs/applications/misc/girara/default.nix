@@ -3,19 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.3.6";
+  version = "0.3.7";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GPECj0CVxKh+gTfAkkvs13tdiy93il97iqbSTxLQSiM=";
+    sha256 = "sha256-QTQiE/jnRSWPHbKMu2zMJ6YwCaXgAb95G74BzkNtTbc=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config gettext check dbus ];
   buildInputs = [ libintl libiconv json_c ];
   propagatedBuildInputs = [ glib gtk ];
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 

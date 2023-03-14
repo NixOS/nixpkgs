@@ -7,16 +7,21 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "1.0.1";
+  version = "2.1.4";
+  format = "flit";
 
   src = fetchPypi {
-    pname = "pytest_check";
-    inherit version;
-    sha256 = "1i01i5ab06ic11na13gcacrlcs2ab6rmaii0yz0x06z5ynnljn6s";
+    inherit pname version;
+    hash = "sha256-AbN/1wPaD6ZntwF68fBGDHRKhfHuh2de4+D5Ssw98XI=";
   };
 
-  buildInputs = [ pytest ];
-  checkInputs = [ pytestCheckHook ];
+  buildInputs = [
+    pytest
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "pytest plugin allowing multiple failures per test";

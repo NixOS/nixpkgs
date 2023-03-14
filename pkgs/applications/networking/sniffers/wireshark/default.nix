@@ -1,26 +1,67 @@
-{ lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
-, gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3, libcap, glib
-, libssh, nghttp2, zlib, cmake, makeWrapper
-, withQt ? true, qt5 ? null
-, ApplicationServices, SystemConfiguration, gmp
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitLab
+, pkg-config
+, pcre2
+, perl
+, flex
+, bison
+, gettext
+, libpcap
+, libnl
+, c-ares
+, gnutls
+, libgcrypt
+, libgpg-error
+, libmaxminddb
+, libopus
+, bcg729
+, spandsp3
+, libkrb5
+, speexdsp
+, libsmi
+, lz4
+, snappy
+, zstd
+, minizip
+, sbc
+, openssl
+, lua5
+, python3
+, libcap
+, glib
+, libssh
+, nghttp2
+, zlib
+, cmake
+, ninja
+, makeWrapper
+, wrapGAppsHook
+, withQt ? true
+, qt5 ? null
+, ApplicationServices
+, SystemConfiguration
+, gmp
+, asciidoctor
 }:
 
-assert withQt  -> qt5  != null;
-
-with lib;
+assert withQt -> qt5 != null;
 
 let
-  version = "3.4.9";
+  version = "4.0.4";
   variant = if withQt then "qt" else "cli";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "wireshark-${variant}";
   inherit version;
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
-    url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "084nv4fbgpxsf6b6cfi6cinn8l3wsbn0g8lsd7p2aifjkf15wln6";
+  src = fetchFromGitLab {
+    repo = "wireshark";
+    owner = "wireshark";
+    rev = "v${version}";
+    hash = "sha256-x7McplQVdLczTov+u9eqmT1Ons22KqRsCN65pUuwYGw=";
   };
 
   cmakeFlags = [
@@ -28,29 +69,57 @@ in stdenv.mkDerivation {
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DLEMON_C_COMPILER=cc"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
+    "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
   ];
 
   # Avoid referencing -dev paths because of debug assertions.
-  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [ bison cmake flex makeWrapper pkg-config ] ++ optional withQt qt5.wrapQtAppsHook;
+  nativeBuildInputs = [ asciidoctor bison cmake ninja flex makeWrapper pkg-config python3 perl ]
+    ++ lib.optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
-    gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
-    libgpg-error gnutls geoip c-ares python3 glib zlib
-  ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
-    ++ optionals stdenv.isLinux  [ libcap libnl ]
-    ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
-    ++ optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
+    gettext
+    pcre2
+    libpcap
+    lua5
+    libssh
+    nghttp2
+    openssl
+    libgcrypt
+    libgpg-error
+    gnutls
+    libmaxminddb
+    libopus
+    bcg729
+    spandsp3
+    libkrb5
+    speexdsp
+    libsmi
+    lz4
+    snappy
+    zstd
+    minizip
+    c-ares
+    glib
+    zlib
+  ] ++ lib.optionals withQt (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+  ++ lib.optionals (withQt && stdenv.isLinux) [ qt5.qtwayland ]
+  ++ lib.optionals stdenv.isLinux [ libcap libnl sbc ]
+  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
+  ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
+
+  strictDeps = true;
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
   postPatch = ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
-  '';
-
-  preBuild = ''
-    export LD_LIBRARY_PATH="$PWD/run"
   '';
 
   postInstall = ''
@@ -66,23 +135,31 @@ in stdenv.mkDerivation {
             install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
         done
     done
-  '' else optionalString withQt ''
-    install -Dm644 -t $out/share/applications ../wireshark.desktop
+  '' else
+    lib.optionalString withQt ''
+      pwd
+      install -Dm644 -t $out/share/applications ../resources/freedesktop/org.wireshark.Wireshark.desktop
 
-    install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
-    mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
+      install -Dm644 ../resources/icons/wsicon.svg $out/share/icons/wireshark.svg
+      mkdir -pv $dev/include/{epan/{wmem,ftypes,dfilter},wsutil/wmem,wiretap}
 
-    cp config.h $dev/include/wireshark/
-    cp ../ws_*.h $dev/include
-    cp ../epan/*.h $dev/include/epan/
-    cp ../epan/wmem/*.h $dev/include/epan/wmem/
-    cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
-    cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
-    cp ../wsutil/*.h $dev/include/wsutil/
-    cp ../wiretap/*.h $dev/include/wiretap
-  '');
+      cp config.h $dev/include/wireshark/
+      cp ../epan/*.h $dev/include/epan/
+      cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
+      cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
+      cp ../include/ws_*.h $dev/include/
+      cp ../wiretap/*.h $dev/include/wiretap/
+      cp ../wsutil/*.h $dev/include/wsutil/
+      cp ../wsutil/wmem/*.h $dev/include/wsutil/wmem/
+    '');
 
   dontFixCmake = true;
+
+  # Prevent double-wrapping, inject wrapper args manually instead.
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   shellHook = ''
     # to be able to run the resulting binary

@@ -5,18 +5,20 @@
 , azure-mgmt-core
 , msrest
 , msrestazure
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "19.2.0";
+  version = "22.2.0";
   pname = "azure-mgmt-network";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c8da1cf9523b89d4b268546ea087153372633962e31a4e6befae20d0ae308bac";
+    hash = "sha256-491E1Q59dYFkH5QniR+S5eoiiL/ACwLe+fgYob8/jG4=";
   };
 
   propagatedBuildInputs = [
@@ -26,12 +28,16 @@ buildPythonPackage rec {
     msrestazure
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
-  pythonImportsCheck = [ "azure.mgmt.network" ];
+  pythonImportsCheck = [
+    "azure.mgmt.network"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";

@@ -14,15 +14,13 @@
 , btrfs-progs
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "veracrypt";
-  version = "1.24-Update7";
+  version = "1.25.9";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/trunk/${toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
-    sha256 = "0i7h44zn2mjzgh416l7kfs0dk6qc7b1bxsaxqqqcvgrpl453n7bc";
+    url = "https://launchpad.net/${pname}/trunk/${lib.toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
+    sha256 = "sha256-drbhgYS8IaQdKUn/Y9ch1JBUpxbO/zpL13tcNRC3lK8=";
   };
 
   patches = [
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace "Icon=veracrypt" "Icon=veracrypt.xpm"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = "https://www.veracrypt.fr/";
     license = with licenses; [ asl20 /* and */ unfree /* TrueCrypt License version 3.0 */ ];

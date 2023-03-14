@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -13,27 +13,18 @@
 , libgee
 , libhandy
 , libcanberra
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "6.0.1";
-
-  repoName = "screenshot";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "screenshot";
     rev = version;
-    sha256 = "sha256-MDmk+0IUCe6PSV5QOjjDRedv7X3lcBJ04jn9cE9DP3M=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-7BrowiMUDcf0raeOEFen2V3nenymgE6Rg5a3RilMQaI=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +38,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libcanberra
@@ -60,10 +50,14 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.screenshot";

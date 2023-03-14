@@ -8,19 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "scheme-bytestructures";
-  version = "1.0.10";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04oDvwvzTRzAVyywbcCm3Ug3p3xNbxjI7nOKYakEZZI=";
+    sha256 = "sha256-Wvs288K8BVjUuWvvzpDGBwOxL7mAXjVtgIwJAsQd0L4=";
   };
-
-  postConfigure = ''
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site%' Makefile;
-    sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
-  '';
 
   nativeBuildInputs = [
     autoreconfHook pkg-config
@@ -28,6 +23,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     guile
   ];
+
+  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

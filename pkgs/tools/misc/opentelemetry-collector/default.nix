@@ -1,30 +1,52 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, writeScript
 }:
 
+let
+  otelcontribcol = writeScript "otelcontribcol" ''
+    echo 'ERROR: otelcontribcol is now in `pkgs.opentelemetry-collector-contrib`, call the collector with `otelcorecol` or move to `pkgs.opentelemetry-collector-contrib`' >&2
+    exit 1
+  '';
+in
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.38.0";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
-    repo = "opentelemetry-collector-contrib";
+    repo = "opentelemetry-collector";
     rev = "v${version}";
-    sha256 = "1sgzz7p19vy7grvq1qrfgf5rw3yjnidcsdsky2l2g98i54md25ml";
+    sha256 = "sha256-Y6HSz81edWklXhTbaK9LvdwmgNPRMtI1BD0IfcjWl3I=";
   };
+  # there is a nested go.mod
+  sourceRoot = "source/cmd/otelcorecol";
+  vendorHash = "sha256-Zi9Rkfm+y0jZySwMJxAa5Sx/r5WAYvOVez3J0yQza2w=";
 
-  vendorSha256 = "1p9i01lwz7yidlmcri3pndmg8brgdrd0ai8sag9xn021hw2sn6qq";
-  proxyVendor = true;
+  preBuild = ''
+    # set the build version, can't be done via ldflags
+    sed -i -E 's/Version:(\s*)".*"/Version:\1"${version}"/' main.go
+  '';
 
-  CGO_ENABLED = 0;
+  ldflags = [ "-s" "-w" ];
 
-  subPackages = [ "cmd/otelcontribcol" ];
+  postInstall = ''
+    cp ${otelcontribcol} $out/bin/otelcontribcol
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
-    description = "OpenTelemetry Collector";
+    changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
+    description = "OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process and export telemetry data";
+    longDescription = ''
+      The OpenTelemetry Collector offers a vendor-agnostic implementation on how
+      to receive, process and export telemetry data. In addition, it removes the
+      need to run, operate and maintain multiple agents/collectors in order to
+      support open-source telemetry data formats (e.g. Jaeger, Prometheus, etc.)
+      sending to multiple open-source or commercial back-ends.
+    '';
     license = licenses.asl20;
-    maintainers = [ maintainers.uri-canva ];
+    maintainers = with maintainers; [ uri-canva jk ];
   };
 }

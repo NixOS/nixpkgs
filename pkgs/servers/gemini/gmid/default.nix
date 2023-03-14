@@ -2,24 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "1.7.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BBd0AL5jRRslxzDnxcTZRR+8J5D23NAQ7mp9K+leXAQ=";
+    hash = "sha256-ds5k5VHwc7/sq4PUe/WvxAx7gJkU4phKZk0KunPLNE0=";
   };
 
   nativeBuildInputs = [ bison ];
 
   buildInputs = [ libressl libevent ];
 
-  configurePhase = ''
-    runHook preConfigure
-    ./configure PREFIX=$out
-    runHook postConfigure
-  '';
+  configureFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = "Simple and secure Gemini server";

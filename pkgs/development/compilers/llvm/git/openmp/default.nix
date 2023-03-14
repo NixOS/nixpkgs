@@ -1,10 +1,14 @@
 { lib
 , stdenv
 , llvm_meta
-, src
+, monorepoSrc
+, runCommand
 , cmake
 , llvm
+, lit
+, clang-unwrapped
 , perl
+, pkg-config
 , version
 }:
 
@@ -12,14 +16,38 @@ stdenv.mkDerivation rec {
   pname = "openmp";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+  '';
 
-  nativeBuildInputs = [ cmake perl ];
+  sourceRoot = "${src.name}/${pname}";
+
+  patches = [
+    ./fix-find-tool.patch
+    ./gnu-install-dirs.patch
+    ./run-lit-directly.patch
+  ];
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake perl pkg-config lit ];
   buildInputs = [ llvm ];
 
+  # Unsup:Pass:XFail:Fail
+  # 26:267:16:8
+  doCheck = false;
+  checkTarget = "check-openmp";
+
+  preCheck = ''
+    patchShebangs ../tools/archer/tests/deflake.bash
+  '';
+
   cmakeFlags = [
-    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL currently fails
+    "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
+    "-DOPT_TOOL=${llvm}/bin/opt"
+    "-DLINK_TOOL=${llvm}/bin/llvm-link"
   ];
 
   meta = llvm_meta // {

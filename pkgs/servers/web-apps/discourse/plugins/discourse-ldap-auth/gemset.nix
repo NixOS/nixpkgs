@@ -4,20 +4,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "02bsx12ihl78x0vdm37byp78jjw2ff6035y7rrmbd90qxjwxr43q";
+      sha256 = "1nh3arcrbz1rc1cr59qm53sdhqm137b258y8rcb4cvd3y98lwv4x";
       type = "gem";
     };
-    version = "4.1.0";
+    version = "5.0.0";
   };
   net-ldap = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18fyxfbh32ai72cwgz8s9w0fg0xq7j534y217flw54mmzsj8i6qp";
+      sha256 = "1ycw0qsw3hap8svakl0i30jkj0ffd4lpyrn17a1j0w8mz5ainmsj";
       type = "gem";
     };
-    version = "0.14.0";
+    version = "0.17.1";
   };
   omniauth = {
     dependencies = ["hashie" "rack"];
@@ -25,10 +25,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "002vi9gwamkmhf0dsj2im1d47xw2n1jfhnzl18shxf3ampkqfmyz";
+      sha256 = "1jn9j54l5h7xcba2vjq74l1dk0xrwvsjxam4qhylpi52nw0h5502";
       type = "gem";
     };
-    version = "1.9.1";
+    version = "1.9.2";
   };
   omniauth-ldap = {
     dependencies = ["net-ldap" "omniauth" "pyu-ruby-sasl" "rubyntlm"];
@@ -56,10 +56,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i5vs0dph9i5jn8dfc6aqd6njcafmb20rwqngrf759c9cvmyff16";
+      sha256 = "0qvp6h2abmlsl4sqjsvac03cr2mxq6143gbx4kq52rpazp021qsb";
       type = "gem";
     };
-    version = "2.2.3";
+    version = "2.2.6.2";
   };
   rubyntlm = {
     groups = ["default"];

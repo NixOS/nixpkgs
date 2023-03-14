@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libjpeg";
-  version = "9d";
+  version = "9e";
 
   src = fetchurl {
     url = "http://www.ijg.org/files/jpegsrc.v${version}.tar.gz";
-    sha256 = "1vkip9rz4hz8f31a2kl7wl7f772wg1z0fg1fbd1653wzwlxllhvc";
+    sha256 = "sha256-QHfWpqda6wGIT3CJGdJZNMkzBeSffj8225EpMg5vTz0=";
   };
 
   configureFlags = lib.optional static "--enable-static --disable-shared";

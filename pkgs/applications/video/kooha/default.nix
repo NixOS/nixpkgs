@@ -1,59 +1,72 @@
-{ lib, fetchFromGitHub, appstream-glib, desktop-file-utils, glib
-, gobject-introspection, gst_all_1, gtk4, libadwaita, librsvg, meson, ninja
-, pkg-config, python3, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, glib
+, gst_all_1
+, pipewire
+, gtk4
+, libadwaita
+, libpulseaudio
+, librsvg
+, meson
+, ninja
+, pkg-config
+, rustPlatform
+, wayland
+, wrapGAppsHook4
+}:
 
-python3.pkgs.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "kooha";
-  version = "1.2.1";
-  format = "other";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
     rev = "v${version}";
-    sha256 = "1qwbzdn0n1nxcfci1bhhkfchdhw5yz74fdvsa84cznyyx2jils8w";
+    hash = "sha256-vLgBuP0DncBIb05R3484WozS+Nl+S7YBJUYek2CkJkQ=";
   };
 
-  buildInputs = [
-    glib
-    gobject-introspection
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gtk4
-    libadwaita
-    librsvg
-  ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-NPh603/5yZDUdTegAzFvjRn5tuzyrcNzbbKQr6NxXso=";
+  };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     meson
     ninja
-    python3
     pkg-config
-    wrapGAppsHook
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+    wrapGAppsHook4
   ];
 
-  propagatedBuildInputs = [ python3.pkgs.pygobject3 ];
-
-  strictDeps = false;
-
-  buildPhase = ''
-    export GST_PLUGIN_SYSTEM_PATH_1_0="$out/lib/gstreamer-1.0/:$GST_PLUGIN_SYSTEM_PATH_1_0"
-  '';
-
-  # Fixes https://github.com/NixOS/nixpkgs/issues/31168
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
+  buildInputs = [
+    glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-ugly
+    gtk4
+    libadwaita
+    libpulseaudio
+    librsvg
+    wayland
+    pipewire
+  ];
 
   installCheckPhase = ''
     $out/bin/kooha --help
   '';
 
   meta = with lib; {
-    description = "Simple screen recorder";
+    description = "Elegantly record your screen";
     homepage = "https://github.com/SeaDve/Kooha";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

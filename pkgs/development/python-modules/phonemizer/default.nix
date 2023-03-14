@@ -1,70 +1,57 @@
 { lib
+, stdenv
 , substituteAll
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , joblib
 , segments
 , attrs
+, dlinfo
+, typing-extensions
 , espeak-ng
 , pytestCheckHook
 , pytest-cov
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "phonemizer";
-  version = "2.2.2";
+  version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae252f0bc7633e172b08622f318e7e112cde847e9281d4675ea7210157325146";
+    hash = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
   };
 
   postPatch = ''
-    sed -i -e '/\'pytest-runner\'/d setup.py
+    sed -i '/pytest-runner/d' setup.py
   '';
 
   patches = [
     (substituteAll {
       src = ./backend-paths.patch;
-      espeak = "${lib.getBin espeak-ng}/bin/espeak";
-      # override festival path should you try to integrate it
-      festival = "";
+      libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
+      # FIXME package festival
     })
-    ./remove-intertwined-festival-test.patch
   ];
 
   propagatedBuildInputs = [
     joblib
     segments
     attrs
+    dlinfo
+    typing-extensions
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-  ];
-
-  # We tried to package festvial, but were unable to get the backend running,
+  # We tried to package festival, but were unable to get the backend running,
   # so let's disable related tests.
-  pytestFlagsArray = [
-    "--ignore=test/test_festival.py"
-  ];
-
-  disabledTests = [
-    "test_festival"
-    "test_relative"
-    "test_absolute"
-    "test_readme_festival_syll"
-  ];
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/bootphon/phonemizer";
+    changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };
 }

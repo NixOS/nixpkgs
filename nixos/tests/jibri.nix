@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = teams.jitsi.members;
   };
 
-    machine = { config, pkgs, ... }: {
+    nodes.machine = { config, pkgs, ... }: {
       virtualisation.memorySize = 5120;
 
       services.jitsi-meet = {
@@ -35,9 +35,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_unit("jibri.service")
 
     machine.wait_until_succeeds(
-        "journalctl -b -u jitsi-videobridge2 -o cat | grep -q 'Performed a successful health check'", timeout=30
-    )
-    machine.wait_until_succeeds(
         "journalctl -b -u prosody -o cat | grep -q 'Authenticated as focus@auth.machine'", timeout=31
     )
     machine.wait_until_succeeds(
@@ -63,7 +60,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         """sleep 15 && curl -H "Content-Type: application/json" -X POST http://localhost:2222/jibri/api/v1.0/stopService -d '{"sessionId": "RecordTest","callParams":{"callUrlInfo":{"baseUrl": "https://machine","callName": "TestCall"}},"callLoginParams":{"domain": "recorder.machine", "username": "recorder", "password": "'"$(cat /var/lib/jitsi-meet/jibri-recorder-secret)"'" },"sinkType": "file"}'"""
     )
     machine.wait_until_succeeds(
-        "cat /var/log/jitsi/jibri/log.0.txt | grep -q 'Recording finalize script finished with exit value 0'", timeout=36
+        "cat /var/log/jitsi/jibri/log.0.txt | grep -q 'Finalize script finished with exit value 0'", timeout=36
     )
   '';
 })

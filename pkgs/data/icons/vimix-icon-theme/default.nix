@@ -1,19 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, gtk3
+, hicolor-icon-theme
+, jdupes
+, colorVariants ? [] # default: all
+}:
 
-stdenv.mkDerivation rec {
+let
   pname = "vimix-icon-theme";
-  version = "2021-11-09";
+
+in
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "Amethyst" "Beryl" "Doder" "Ruby" "Jade" "Black" "White" ] colorVariants
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
+  version = "2023-01-18";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1ali128027yw5kllip7p32c92pby5gaqs0i393m3bp69547np1d4";
+    sha256 = "5EgTWF6qu12VYVi7w5BOp7IleN4IevLZR0hH9x/qbGo=";
   };
 
-  nativeBuildInputs = [ gtk3 jdupes ];
+  nativeBuildInputs = [
+    gtk3
+    jdupes
+  ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
@@ -21,14 +40,24 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontRewriteSymlinks = true;
 
+  postPatch = ''
+    patchShebangs install.sh
+  '';
+
   installPhase = ''
     runHook preInstall
-    patchShebangs install.sh
-    ./install.sh -a -d $out/share/icons
+
+    ./install.sh \
+      ${if colorVariants != [] then builtins.toString colorVariants else "-a"} \
+      -d $out/share/icons
+
     # replace duplicate files with symlinks
-    jdupes -l -r $out/share/icons
+    jdupes --quiet --link-soft --recurse $out/share
+
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A Material Design icon theme based on Paper icon theme";

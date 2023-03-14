@@ -16,17 +16,19 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.3.2";
-  disabled = pythonOlder "3.6";
+  version = "0.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0bximaalakw1dxan1lxar33l8hnmxqn0fg62hmdmprmra72z4bm8";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-XR79o65jZFR9jr9ubw7wdxCWNH8ANMrBDTVpLnetsuU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -36,7 +38,17 @@ buildPythonPackage rec {
       --replace "--cov aioconsole --count 2" ""
   '';
 
-  pythonImportsCheck = [ "aioconsole" ];
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    "test_interact_syntax_error"
+    # Output and the sandbox don't work well together
+    "test_interact_multiple_indented_lines"
+  ];
+
+  pythonImportsCheck = [
+    "aioconsole"
+  ];
 
   meta = with lib; {
     description = "Asynchronous console and interfaces for asyncio";

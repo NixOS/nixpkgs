@@ -3,12 +3,11 @@
 import ./make-test-python.nix ({ pkgs, ...} : rec {
   name = "privacyidea";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fpletz ];
+    maintainers = [ ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     virtualisation.cores = 2;
-    virtualisation.memorySize = 512;
 
     services.privacyidea = {
       enable = true;

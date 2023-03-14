@@ -1,28 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, httpx
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "netdata";
-  version = "0.2.1";
+  version = "1.0.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-oGOT4RvftI/2Ri2icM/AtglNZXt10jkFh/rlr6A46YE=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-netdata";
+    rev = version;
+    sha256 = "sha256-vrXXvCoZ1jErlxTcjGbtA8Uio7UDxnt3aNb9FQ0PkrU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  # no tests are present
-  doCheck = false;
+  propagatedBuildInputs = [
+    httpx
+    yarl
+  ];
 
-  pythonImportsCheck = [ "netdata" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "netdata"
+  ];
 
   meta = with lib; {
     description = "Python API for interacting with Netdata";

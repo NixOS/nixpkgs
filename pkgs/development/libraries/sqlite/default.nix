@@ -1,39 +1,42 @@
-{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
-, python3Packages
+{ lib, stdenv, fetchurl, zlib, readline, ncurses
+
+# for tests
+, python3Packages, sqldiff, sqlite-analyzer, tracker
+
+# uses readline & ncurses for a better interactive experience if set to true
+, interactive ? false
+# TODO: can be removed since 3.36 since it is the default now.
 , enableDeserialize ? false
 }:
-
-assert interactive -> readline != null && ncurses != null;
-
-with lib;
 
 let
   archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite";
-  version = "3.36.0";
+  pname = "sqlite${lib.optionalString interactive "-interactive"}";
+  version = "3.40.1";
 
+  # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "sha256-vZDD65a+6ZYga4O+cGXJzhmu84w/T7Uwc62g0LabvOM=";
+    url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "sha256-LF3qIH+lCNdlrx72ILY33LBlcq+m8B8IFb1bv4ZLM9k=";
   };
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -86,13 +89,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3Packages) sqlalchemy;
+    inherit sqldiff sqlite-analyzer tracker;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
+    mainProgram = "sqlite3";
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;
   };

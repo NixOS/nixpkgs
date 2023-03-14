@@ -1,28 +1,58 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true }:
-
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, pcsclite
+, pkg-config
+, installShellFiles
+, PCSC
+, pivKeySupport ? true
+, pkcs11Support ? true
+, testers
+, cosign
+}:
 buildGoModule rec {
   pname = "cosign";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VKlM+bsK2Oj0UB4LF10pHEIJqXv6cAO5rtxnTogpfOk=";
+    sha256 = "sha256-919oxYi4e56EhSBN0FdcEZBA430owaDnKHkgTneScXw=";
   };
 
-  buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
+  buildInputs =
+    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
     ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-idMvvYeP5rAT6r9RPZ9S8K9KTpVYVq06ZKSBPxWA2ms=";
+  vendorSha256 = "sha256-DtFywktiGHlsdOFVpKUtKLYXJYwQYy1VISfUYVXlOG8=";
 
-  excludedPackages = "\\(sample\\|webhook\\|help\\)";
+  subPackages = [
+    "cmd/cosign"
+  ];
 
-  tags = lib.optionals pivKeySupport [ "pivkey" ];
+  tags = [ ] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/cmd/cosign/cli/options.GitVersion=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    # test all paths
+    unset subPackages
+
+    rm pkg/cosign/ctlog_test.go # Require network access
+    rm pkg/cosign/tlog_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
+  '';
 
   postInstall = ''
     installShellCompletion --cmd cosign \
@@ -31,11 +61,17 @@ buildGoModule rec {
       --zsh <($out/bin/cosign completion zsh)
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = cosign;
+    command = "cosign version";
+    version = "v${version}";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk ];
+    maintainers = with maintainers; [ lesuisse jk developer-guy ];
   };
 }

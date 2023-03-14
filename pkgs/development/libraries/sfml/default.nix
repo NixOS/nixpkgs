@@ -1,16 +1,43 @@
-{ lib, stdenv, fetchzip, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
-, glew, libXrandr, libXrender, udev, xcbutilimage
-, IOKit, Foundation, AppKit, OpenAL
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libX11
+, freetype
+, libjpeg
+, openal
+, flac
+, libvorbis
+, glew
+, libXrandr
+, libXrender
+, udev
+, xcbutilimage
+, IOKit
+, Foundation
+, AppKit
+, OpenAL
 }:
 
 stdenv.mkDerivation rec {
   pname = "sfml";
   version = "2.5.1";
 
-  src = fetchzip {
-    url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";
-    sha256 = "0abr8ri2ssfy9ylpgjrr43m6rhrjy03wbj9bn509zqymifvq5pay";
+  src = fetchFromGitHub {
+    owner = "SFML";
+    repo = "SFML";
+    rev = version;
+    sha256 = "sha256-Xt2Ct4vV459AsSvJxQfwMsNs6iA5y3epT95pLWJGeSk=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/4df1fc235a708ff28200ffc0a39120974ed4b6e1/multimedia/sfml/files/patch-apple-silicon.diff";
+      extraPrefix = "";
+      sha256 = "sha256-9dNawJaYtkugR+2NvhQOhgsf6w9ZXHkBgsDRh8yAJc0=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ freetype libjpeg openal flac libvorbis glew ]
@@ -18,10 +45,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
     ++ lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
 
-  cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
-                 "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
-                 "-DSFML_BUILD_FRAMEWORKS=no"
-                 "-DSFML_USE_SYSTEM_DEPS=yes" ];
+  cmakeFlags = [
+    "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
+    "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
+    "-DSFML_BUILD_FRAMEWORKS=no"
+    "-DSFML_USE_SYSTEM_DEPS=yes"
+  ];
 
   meta = with lib; {
     homepage = "https://www.sfml-dev.org/";

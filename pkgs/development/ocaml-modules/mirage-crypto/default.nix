@@ -1,27 +1,27 @@
-{ lib, fetchurl, buildDunePackage, ounit, cstruct, dune-configurator, eqaf, bigarray-compat, pkg-config
+{ lib, fetchurl, buildDunePackage, ounit2, cstruct, dune-configurator, eqaf, pkg-config
 , withFreestanding ? false
 , ocaml-freestanding
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   pname = "mirage-crypto";
-  version = "0.10.3";
+  version = "0.11.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-v${version}.tbz";
-    sha256 = "a27910365d59b02c3f0e8a40d93a5b81835acf832e1ffa596ee772b41e8a900b";
+    url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-${version}.tbz";
+    sha256 = "sha256-A5SCuVmcIJo3dL0Tu//fQqEV0v3FuCxuANWnBo7hUeQ=";
   };
 
-  useDune2 = true;
-
   doCheck = true;
-  checkInputs = [ ounit ];
+  checkInputs = [ ounit2 ];
 
-  nativeBuildInputs = [ dune-configurator pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator  ];
   propagatedBuildInputs = [
-    cstruct eqaf bigarray-compat
+    cstruct eqaf
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
   ];

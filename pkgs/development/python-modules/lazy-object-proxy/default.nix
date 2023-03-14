@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "489000d368377571c6f982fba6497f2aa13c6d1facc40660963da62f5c379726";
+    sha256 = "sha256-whmgAkWvD2+k6VkB7SgERUT1AVKEDFtqPnslaNs00VY=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace ",<6.0" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

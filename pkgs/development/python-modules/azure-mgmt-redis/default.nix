@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-redis";
-  version = "13.0.0";
+  version = "14.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "283f776afe329472c20490b1f2c21c66895058cb06fb941eccda42cc247217f1";
+    sha256 = "sha256-LO92Wc2+VvsEKiOjVSHXw2o3D69NQlL58m+YqWl6+ig=";
   };
 
   propagatedBuildInputs = [

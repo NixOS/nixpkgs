@@ -1,23 +1,58 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, libpsl, redis, postgresql, which, brotli, procps, rsync
-, nodePackages, v8
+, ruby_3_1
+, replace
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, nettools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, fetchYarnDeps
+, yarn
+, fixup_yarn_lock
+, nodePackages
+, nodejs-16_x
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.7.9";
+  version = "3.1.0.beta2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-SOERjFbG4l/tUfOl51XEW0nVbza3L4adjiPhz4Hj0YU=";
+    sha256 = "sha256-wkNTm5/QyujPcMUrnc6eWmjhrRQAthhmejmjpy6zmbE=";
   };
+
+  ruby = ruby_3_1;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -33,10 +68,12 @@ let
     procps       # For ps and kill
     util-linux   # For renice
     gawk
+    nettools     # For hostname
 
     # Image optimization
     imagemagick
     optipng
+    oxipng
     pngquant
     libjpeg
     jpegoptim
@@ -98,7 +135,7 @@ let
         ${lib.concatStrings (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ") runtimeEnv)} \
         --prefix PATH : ${lib.makeBinPath runtimeDeps} \
         --set RAKEOPT '-f ${discourse}/share/discourse/Rakefile' \
-        --run 'cd ${discourse}/share/discourse'
+        --chdir '${discourse}/share/discourse'
   '';
 
   rubyEnv = bundlerEnv {
@@ -110,16 +147,21 @@ let
         gems = import ./rubyEnv/gemset.nix;
       in
         gems // {
+          mini_racer = gems.mini_racer // {
+            buildInputs = [ icu ];
+            dontBuild = false;
+            NIX_LDFLAGS = "-licui18n";
+          };
           libv8-node =
             let
               noopScript = writeShellScript "noop" "exit 0";
               linkFiles = writeShellScript "link-files" ''
                 cd ../..
 
-                mkdir -p vendor/v8/out.gn/libv8/obj/
-                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+                mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
+                ln -s "${nodejs-16_x.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${v8}/include vendor/v8/include
+                ln -s ${nodejs-16_x.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -155,16 +197,21 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    nativeBuildInputs = [
-      rubyEnv.wrappedRuby
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/app/assets/javascripts/yarn.lock";
+      sha256 = "0ryc4p5s35mzg1p71z98x5fvr5fpldmgghdi1viha4ckbpv153lw";
+    };
+
+    nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      which
-      brotli
-      procps
       nodePackages.uglify-js
       nodePackages.terser
+      yarn
+      nodejs-16_x
     ];
+
+    outputs = [ "out" "javascripts" ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -175,6 +222,10 @@ let
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
       ./auto_generated_path.patch
+
+      # Fix the rake command used to recursively execute itself in the
+      # assets precompilation task.
+      ./assets_rake_command.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -182,7 +233,20 @@ let
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
+      # Yarn wants a real home directory to write cache, config, etc to
+      export HOME=$NIX_BUILD_TOP/fake_home
+
+      # Make yarn install packages from our offline cache, not the registry
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+
+      # Fixup "resolved"-entries in yarn.lock to match our offline cache
+      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+
+      yarn install --offline --cwd app/assets/javascripts/discourse
+
+      patchShebangs app/assets/javascripts/node_modules/
 
       redis-server >/dev/null &
 
@@ -209,7 +273,7 @@ let
       export RAILS_ENV=production
 
       bundle exec rake db:migrate >/dev/null
-      rm -r tmp/*
+      chmod -R +w tmp
     '';
 
     buildPhase = ''
@@ -224,6 +288,10 @@ let
       runHook preInstall
 
       mv public/assets $out
+
+      rm -r app/assets/javascripts/plugins
+      mv app/assets/javascripts $javascripts
+      ln -sf /run/discourse/assets/javascripts/plugins $javascripts/plugins
 
       runHook postInstall
     '';
@@ -255,10 +323,6 @@ let
       # one constructed by bundlerEnv
       ./plugin_gem_api_version.patch
 
-      # Use mv instead of rename, since rename doesn't work across
-      # device boundaries
-      ./use_mv_instead_of_rename.patch
-
       # Change the path to the auto generated plugin assets, which
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
@@ -266,11 +330,6 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
-
-      # Change the path to the public directory reported by Discourse
-      # to its real path instead of the symlink in the store, since
-      # the store path won't be matched by any nginx rules
-      ./public_dir_path.patch
     ];
 
     postPatch = ''
@@ -278,7 +337,10 @@ let
       # path, not their relative state directory path. This gets rid of
       # warnings and means we don't have to link back to lib from the
       # state directory.
-      find config -type f -execdir sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -type f -name "*.rb" -execdir \
+        sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -maxdepth 1 -type f -name "*.rb" -execdir \
+        sed -Ei "s,require_relative (\"|')([[:alnum:]].*)(\"|'),require_relative '$out/share/discourse/config/\2'," {} \;
     '';
 
     buildPhase = ''
@@ -299,9 +361,10 @@ let
       ln -sf /var/log/discourse $out/share/discourse/log
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
-      ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf ${assets} $out/share/discourse/public.dist/assets
+      rm -r $out/share/discourse/app/assets/javascripts
+      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
       runHook postInstall
@@ -316,11 +379,15 @@ let
     };
 
     passthru = {
-      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
+      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse

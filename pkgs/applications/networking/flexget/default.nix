@@ -1,24 +1,24 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.1.150";
+  version = "3.5.31";
+  format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
-    rev = "v${version}";
-    sha256 = "sha256-tSA1pDGzIX2uIEWM0xV53jj1vBcJFMNCRakczs7Hue4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-v6N1isaTVPwV/LC/a2lzrboLI6V/4W586RE5esfR500=";
   };
 
   postPatch = ''
-    # Symlink requirements.in because upstream uses `pip-compile` which yields
-    # python-version dependent requirements
-    ln -sf requirements.in requirements.txt
-
-    # remove dependency constraints
-    sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+    # remove dependency constraints but keep environment constraints
+    sed 's/[~<>=][^;]*//' -i requirements.txt
 
     # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
     # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
@@ -29,9 +29,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   propagatedBuildInputs = with python3Packages; [
-    # See https://github.com/Flexget/Flexget/blob/master/requirements.in
+    # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
     APScheduler
     beautifulsoup4
+    click
+    colorama
     feedparser
     guessit
     html5lib
@@ -39,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     jsonschema
     loguru
     more-itertools
+    packaging
     psutil
     pynzb
     PyRSS2Gen
@@ -49,24 +52,31 @@ python3Packages.buildPythonApplication rec {
     rich
     rpyc
     sqlalchemy
+    typing-extensions
 
     # WebUI requirements
     cherrypy
     flask-compress
     flask-cors
-    flask_login
+    flask-login
     flask-restful
     flask-restx
     flask
     pyparsing
+    werkzeug
     zxcvbn
 
     # Plugins requirements
     transmission-rpc
   ];
 
+  pythonImportsCheck = [
+    "flexget"
+  ];
+
   meta = with lib; {
     homepage = "https://flexget.com/";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
     description = "Multipurpose automation tool for all of your media";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

@@ -13,6 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0v1dqg9hvycdkcvklg2njff97xwr8rah0nyldv4xm39r77f4yfvq";
   };
 
+  strictDeps = true;
   installPhase= ''
     install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel9k
     install -D functions/* --target-directory=$out/share/zsh-powerlevel9k/functions

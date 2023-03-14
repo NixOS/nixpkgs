@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , fetchzip
@@ -32,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cython numpy scikit-learn six ];
 
-  checkInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [ pytest pytest-cov ];
 
   # Checks require test data downloaded separately
   # See project source Makefile:test-data rule for reference
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Tool for computing continuous distributed representations of words";
     homepage = "https://github.com/danielfrg/word2vec";
     license = licenses.asl20;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ./gcc44.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   postInstall = ''
     install -D icons/ddd.xpm $out/share/pixmaps/ddd.xpm
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Graphical front-end for command-line debuggers";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ angustrau ];
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

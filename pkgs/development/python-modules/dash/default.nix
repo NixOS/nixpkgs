@@ -1,41 +1,64 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, plotly
-, flask
-, flask-compress
+, celery
 , dash-core-components
 , dash-html-components
 , dash-table
-, pytest-mock
+, diskcache
+, fetchFromGitHub
+, flask
+, flask-compress
 , mock
+, multiprocess
+, plotly
+, psutil
+, pytest-mock
 , pytestCheckHook
+, pythonOlder
+, pyyaml
+, redis
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.0.0";
+  version = "2.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-0RvA5qkwQJGyy81D5kW+IR6LbaD/KBwMy6kYxTETubg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6FsLvLsqnkSt/i27q/JJGfNh2zxKeA0t6VYNPCzhR0w=";
   };
 
   propagatedBuildInputs = [
-    plotly
-    flask
-    flask-compress
     dash-core-components
     dash-html-components
     dash-table
+    flask
+    flask-compress
+    plotly
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
+  passthru.optional-dependencies = {
+    celery = [
+      celery
+      redis
+    ];
+    diskcache = [
+      diskcache
+      multiprocess
+      psutil
+    ];
+  };
+
+  nativeCheckInputs = [
     mock
+    pytest-mock
+    pytestCheckHook
+    pyyaml
   ];
 
   disabledTestPaths = [
@@ -44,12 +67,20 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  pythonImportsCheck = [ "dash" ];
+  disabledTests = [
+    # Failed: DID NOT RAISE <class 'ImportError'>
+    "test_missing_flask_compress_raises"
+  ];
+
+  pythonImportsCheck = [
+    "dash"
+  ];
 
   meta = with lib; {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
+    changelog = "https://github.com/plotly/dash/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    maintainers = with maintainers; [ antoinerg ];
   };
 }

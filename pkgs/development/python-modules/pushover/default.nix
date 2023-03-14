@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ stdenv, lib, buildPythonPackage, fetchPypi
 , requests }:
 
 buildPythonPackage rec {
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = true; # Relies on 2to3 via setuptools
     description = "Bindings and command line utility for the Pushover notification service";
     homepage = "https://github.com/Thibauth/python-pushover";
     license = licenses.gpl3;

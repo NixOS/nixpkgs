@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Static photo gallery generator";
-    homepage = "http://www.thregr.org/~wavexx/software/fgallery/";
+    homepage = "https://www.thregr.org/~wavexx/software/fgallery/";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cpuid";
-  version = "20211031";
+  version = "20230228";
 
   src = fetchurl {
     url = "http://etallen.com/cpuid/${pname}-${version}.src.tar.gz";
-    sha256 = "13sxb2ar4gypiv0l87lr7hf3qjccwgsg1r92adv9jvrfxcv36pbn";
+    sha256 = "sha256-EYLFnFqpp7ljNzlABgQ+YN7hQIh6DBeERm1dLAhH7fM=";
   };
 
   # For pod2man during the build process.
@@ -47,10 +47,9 @@ stdenv.mkDerivation rec {
       Intel, AMD, VIA, Hygon, and Zhaoxin CPUs, as well as older Transmeta,
       Cyrix, UMC, NexGen, Rise, and SiS CPUs.
     '';
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    license = licenses.gpl2Plus;
     homepage = "http://etallen.com/cpuid.html";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ blitz ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
-
 }

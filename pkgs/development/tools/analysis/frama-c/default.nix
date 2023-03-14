@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, writeText
-, autoconf, ncurses, graphviz, doxygen
+, graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
 , gdk-pixbuf, wrapGAppsHook
 }:
@@ -8,6 +8,7 @@ let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
     apron.dev
+    bigarray-compat
     biniou
     camlzip
     easy-format
@@ -15,9 +16,13 @@ let
     mlgmpidl
     num
     ocamlgraph
+    ppx_deriving
+    ppx_deriving_yojson
+    ppx_import
     stdlib-shims
     why3
     re
+    result
     seq
     sexplib
     sexplib0
@@ -31,28 +36,38 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "23.1";
-  slang   = "Vanadium";
+  version = "26.1";
+  slang   = "Iron";
 
   src = fetchurl {
-    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "1rgkq9sg436smw005ag0j6y3xryhjn18a07m5wjfrfp0s1438nnj";
+    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    hash = "sha256-UT7ajIyu8e5vzrz2oBKDDrtZqUacgUP/TRi0/kz9Qkg=";
   };
 
-  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
+  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
-  nativeBuildInputs = [ autoconf wrapGAppsHook ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 ]);
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph ocamlgraph_gtk yojson menhirLib camlzip
-    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    dune-site dune-configurator
+    ltl2ba ocamlgraph yojson menhirLib camlzip
+    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    ppx_deriving ppx_import ppx_deriving_yojson
     gdk-pixbuf
   ];
 
-  enableParallelBuilding = true;
+  buildPhase = ''
+    runHook preBuild
+    dune build -j$NIX_BUILD_CORES --release @install
+    runHook postBuild
+  '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
-     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
   '';
 
   # Allow loading of external Frama-C plugins

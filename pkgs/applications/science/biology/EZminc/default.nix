@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libminc, bicpl, itk4, fftwFloat, gsl }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libminc, bicpl, itk, fftwFloat, gsl }:
 
 stdenv.mkDerivation rec {
   pname = "EZminc";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ itk4 libminc bicpl fftwFloat gsl ];
+  buildInputs = [ itk libminc bicpl fftwFloat gsl ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake"
                  "-DEZMINC_BUILD_TOOLS=TRUE"
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.free;
+    broken = true;  # ITK5 compatibility issue (https://github.com/BIC-MNI/EZminc/issues/15)
   };
 }

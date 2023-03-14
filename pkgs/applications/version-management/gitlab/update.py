@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log prefetch-yarn-deps
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps
 
 import click
 import click_log
@@ -10,7 +10,7 @@ import subprocess
 import json
 import pathlib
 import tempfile
-from distutils.version import LooseVersion
+from packaging.version import Version
 from typing import Iterable
 
 import requests
@@ -37,7 +37,7 @@ class GitLabRepo:
         versions = list(filter(self.version_regex.match, tags))
 
         # sort, but ignore v and -ee for sorting comparisons
-        versions.sort(key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)
+        versions.sort(key=lambda x: Version(x.replace("v", "").replace("-ee", "")), reverse=True)
         return versions
 
     def get_git_hash(self, rev: str):
@@ -138,16 +138,25 @@ def update_rubyenv():
     # load rev from data.json
     data = _get_data_json()
     rev = data['rev']
+    version = data['version']
 
-    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
-        f.write(repo.get_file('Gemfile.lock', rev))
-    with open(rubyenv_dir / 'Gemfile', 'w') as f:
-        original = repo.get_file('Gemfile', rev)
-        original += "\ngem 'sd_notify'\n"
-        f.write(re.sub(r".*mail-smtp_pool.*", "", original))
+    for fn in ['Gemfile.lock', 'Gemfile']:
+        with open(rubyenv_dir / fn, 'w') as f:
+            f.write(repo.get_file(fn, rev))
+
+    # Fetch vendored dependencies temporarily in order to build the gemset.nix
+    subprocess.check_output(['mkdir', '-p', 'vendor/gems'], cwd=rubyenv_dir)
+    subprocess.check_output(['sh', '-c', f'curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=vendor/gems | tar -xj --strip-components=3'], cwd=f'{rubyenv_dir}/vendor/gems')
+
+    # Undo our gemset.nix patches so that bundix runs through
+    subprocess.check_output(['sed', '-i', '-e', '1d', '-e', 's:\\${src}/::g' , 'gemset.nix'], cwd=rubyenv_dir)
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
+
+    subprocess.check_output(['sed', '-i', '-e', '1i\\src:', '-e', 's:path = \\(vendor/[^;]*\\);:path = "${src}/\\1";:g', 'gemset.nix'], cwd=rubyenv_dir)
+    subprocess.check_output(['rm', '-rf', 'vendor'], cwd=rubyenv_dir)
+
 
 
 @cli.command('update-gitaly')
@@ -166,6 +175,14 @@ def update_gitaly():
     subprocess.check_output(['bundix'], cwd=gitaly_dir)
 
     _call_nix_update('gitaly', gitaly_server_version)
+
+
+@cli.command('update-gitlab-pages')
+def update_gitlab_pages():
+    """Update gitlab-shell"""
+    data = _get_data_json()
+    gitlab_pages_version = data['passthru']['GITLAB_PAGES_VERSION']
+    _call_nix_update('gitlab-pages', gitlab_pages_version)
 
 
 @cli.command('update-gitlab-shell')
@@ -192,6 +209,7 @@ def update_all(ctx, rev: str):
     ctx.invoke(update_data, rev=rev)
     ctx.invoke(update_rubyenv)
     ctx.invoke(update_gitaly)
+    ctx.invoke(update_gitlab_pages)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
 

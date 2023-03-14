@@ -26,12 +26,16 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     expects
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
   ];
 
   postPatch = ''

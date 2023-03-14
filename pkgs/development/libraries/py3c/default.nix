@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "py3c";
@@ -24,10 +24,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
-    python2
+  nativeCheckInputs = [
     python3
   ];
+
+  checkTarget = "test-python";
 
   meta = with lib; {
     homepage = "https://github.com/encukou/py3c";

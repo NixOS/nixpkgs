@@ -1,0 +1,13 @@
+diff --git a/src/IndicatorFactory.vala b/src/IndicatorFactory.vala
+index 9411de0..632d83b 100644
+--- a/src/IndicatorFactory.vala
++++ b/src/IndicatorFactory.vala
+@@ -24,7 +24,7 @@ public class AyatanaCompatibility.IndicatorFactory : Object, IndicatorLoader {
+     public Gee.Collection<IndicatorIface> get_indicators () {
+         if (indicators == null) {
+             indicators = new Gee.LinkedList<IndicatorIface> ();
+-            load_indicator (File.new_for_path (Constants.AYATANA_INDICATOR_DIR), "libapplication.so");
++            load_indicator (File.new_for_path ("@indicator_application@/lib/indicators3/7/"), "libapplication.so");
+         }
+ 
+         return indicators.read_only_view;

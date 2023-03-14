@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xpgl82c2lc6zfswjsa7z10yhv5jb7a4znzh3nc7ffrzm1z8vylp";
   };
 
-  buildInputs = [ autoconf automake puredata ];
+  nativeBuildInputs = [ autoconf automake  ];
+  buildInputs = [ puredata ];
 
   preBuild = ''
     export LD=$CXX

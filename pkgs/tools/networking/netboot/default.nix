@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bison, lzo, db4 }:
 
 stdenv.mkDerivation rec {
-  name = "netboot";
+  pname = "netboot";
   version = "0.10.2";
 
   src = fetchurl {
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison lzo db4 ];
 
   hardeningDisable = [ "format" ];
+
+  # Disable parallel build, errors:
+  #  link: `parseopt.lo' is not a valid libtool object
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "Mini PXE server";

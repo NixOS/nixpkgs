@@ -8,12 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.3.0";
+  version = "0.3.8";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-D0odz4GkKvjuafhEGlHtRnO8lk4rV9y3imaHl7jXqJw=";
+    sha256 = "sha256-CBPBmzghuc+kvBt50qmU+jHyUdGgLgNX3jcVm9CC7/Q=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +25,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pymazda" ];
+
+  pythonImportsCheck = [
+    "pymazda"
+  ];
 
   meta = with lib; {
     description = "Python client for interacting with the MyMazda API";

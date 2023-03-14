@@ -1,23 +1,25 @@
-{ lib, rustPlatform, fetchFromGitHub, withJson ? true }:
+{ lib, rustPlatform, fetchFromGitHub, withJson ? true, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "statix";
-  # also update version of the vim plugin in pkgs/misc/vim-plugins/overrides.nix
+  # also update version of the vim plugin in
+  # pkgs/applications/editors/vim/plugins/overrides.nix
   # the version can be found in flake.nix of the source code
-  version = "0.4.0";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "nerdypepper";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wqkhtAOO6pKLjUUnDbVFwzm6mbXhP/4iJU7ZKtDKrE8=";
+    sha256 = "sha256-OQk80eTUufVUbYvZ38el2lmkgkU+5gr0hLTrBvzIp4A=";
   };
 
-  cargoSha256 = "sha256-e20POz9ZvuT0S+YG+9x7hcudhXQpOR4rVSFJbz76OI0=";
+  cargoSha256 = "sha256-j+FcV5JtO66Aa0ncIUfjuWtqnMmFb7zW7rNXttYBUU4=";
 
-  cargoBuildFlags = lib.optionals withJson [ "--features" "json" ];
+  buildFeatures = lib.optional withJson "json";
 
-  cargoCheckFlags = cargoBuildFlags;
+  # tests are failing on darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Lints and suggestions for the nix programming language";

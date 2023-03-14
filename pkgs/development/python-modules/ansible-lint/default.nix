@@ -1,61 +1,75 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , setuptools-scm
-, ansible-base
+, ansible-compat
+, ansible-core
+, black
 , enrich
+, filelock
 , flaky
+, jsonschema
+, pythonOlder
+, pytest
+, pytest-xdist
+, pytestCheckHook
 , pyyaml
 , rich
 , ruamel-yaml
-, tenacity
 , wcmatch
 , yamllint
-, pytest-xdist
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.2.1";
-  disabled = isPy27;
+  version = "6.14.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1krKWcjYllQdN5uSBbISa4UQiKqwosLKsZ/3SxhM3xw=";
+    hash = "sha256-3ofvEEMCwsb8tDeYp1xC1PClwH6IfCodB6C1qft3TeA=";
   };
+
+  postPatch = ''
+    # it is fine if lint tools are missing
+    substituteInPlace conftest.py \
+      --replace "sys.exit(1)" ""
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    ansible-base
+    ansible-compat
+    ansible-core
+    black
     enrich
-    flaky
+    filelock
+    jsonschema
+    pytest # yes, this is an actual runtime dependency
     pyyaml
     rich
     ruamel-yaml
-    tenacity
     wcmatch
     yamllint
   ];
 
-  checkInputs = [
+  # tests can't be easily run without installing things from ansible-galaxy
+  doCheck = false;
+
+  nativeCheckInputs = [
+    flaky
     pytest-xdist
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "--numprocesses" "auto"
   ];
 
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible-base ]}
+    export PATH=$PATH:${lib.makeBinPath [ ansible-core ]}
 
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
@@ -78,16 +92,16 @@ buildPythonPackage rec {
     "test_run_inside_role_dir"
     "test_run_multiple_role_path_no_trailing_slash"
     "test_runner_exclude_globs"
-
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-base ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ansible-community/ansible-lint";
     description = "Best practices checker for Ansible";
+    homepage = "https://github.com/ansible/ansible-lint";
+    changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sengaya SuperSandro2000 ];
+    maintainers = with maintainers; [ sengaya ];
   };
 }

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
-  version = "1.11.4";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "pugixml";
     rev = "v${version}";
-    sha256 = "sha256-pXadPs2Dlht3BMNYDVxWZqnVv0umDgYVcqH5YVxr+uA=";
+    sha256 = "sha256-MAXm/9ANj6TjO1Skpg20RYt88bf6w1uPwRwOHXiXsWw=";
   };
 
-  outputs = if shared then [ "out" "dev" ] else [ "out" ];
+  outputs = [ "out" ] ++ lib.optionals shared [ "dev" ];
 
   nativeBuildInputs = [ cmake validatePkgConfig ];
 
@@ -20,15 +20,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}"
   ];
 
-  checkInputs = [ check ];
-
-  # Hack to be able to run the test, broken because we use
-  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$(pwd)''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
+  nativeCheckInputs = [ check ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)

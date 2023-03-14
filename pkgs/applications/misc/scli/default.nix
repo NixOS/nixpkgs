@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scli";
-  version = "0.6.5";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "isamert";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1lykxkqscvpzb7bvl8kfaf23mjhr2kaaqdg0756xx4z1m0smpkgy";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7yyORM77oByH1gxx/TNkjJQBsig6ZxsfeI3ijg71oBs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     urwid
     urwid-readline
   ];
+  format = "other";
 
   dontBuild = true;
 
@@ -47,6 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple terminal user interface for Signal";
     homepage = "https://github.com/isamert/scli";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ alex-eyre ];
+    maintainers = with maintainers; [ alexeyre ];
   };
 }

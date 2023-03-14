@@ -1,15 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
 
 stdenv.mkDerivation rec {
-  version = "1.42.0";
+  version = "1.44.2";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f6mfbg750q26fa85nhmw2m0gyp8jcp1kyx9zn6lgi8bha5b7kny";
+    sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
   };
+
+  patches = [
+    # Fix tests for statically linked variant upstream PR is
+    # https://github.com/libuv/libuv/pull/3735
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/9d898acc564351dde74e9ed9865144e5c41f5beb.patch";
+      sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
+    })
+  ];
 
   postPatch = let
     toDisable = [
@@ -20,6 +29,11 @@ stdenv.mkDerivation rec {
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
       "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+      "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
+
+      # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
+      # Assertion failed in test/test-tcp-bind-error.c on line 99: r == UV_EADDRINUSE
+      "tcp_bind6_error_addrinuse" "tcp_bind_error_addrinuse_listen"
     ] ++ lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
@@ -65,12 +79,14 @@ stdenv.mkDerivation rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests.static = pkgsStatic.libuv;
+
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; linux ++ darwin;
+    platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 

@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "faraday-lwt-unix";
-  inherit (faraday) version src useDune2 minimumOCamlVersion;
+  inherit (faraday) version src;
 
   propagatedBuildInputs = [ lwt faraday-lwt ];
 

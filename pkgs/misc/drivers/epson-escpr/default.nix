@@ -1,8 +1,9 @@
 { lib, stdenv, fetchurl, cups }:
 
-stdenv.mkDerivation {
+let version = "1.7.20";
+in stdenv.mkDerivation {
   pname = "epson-escpr";
-  version = "1.7.16";
+  inherit version;
 
   src = fetchurl {
     # To find new versions, visit
@@ -11,10 +12,11 @@ stdenv.mkDerivation {
     # version.
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
-      "https://download3.ebz.epson.net/dsc/f/03/00/12/97/30/97f146010d33b9a55badbc23429296f6b9b46011/epson-inkjet-printer-escpr-1.7.16-1lsb3.2.tar.gz"
-      "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/12/97/30/97f146010d33b9a55badbc23429296f6b9b46011/epson-inkjet-printer-escpr-1.7.16-1lsb3.2.tar.gz"
+      "https://download3.ebz.epson.net/dsc/f/03/00/13/76/45/5ac2ea8f9cf94a48abd64afd0f967f98c4fc24aa/epson-inkjet-printer-escpr-${version}-1lsb3.2.tar.gz"
+
+      "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/13/76/45/5ac2ea8f9cf94a48abd64afd0f967f98c4fc24aa/epson-inkjet-printer-escpr-${version}-1lsb3.2.tar.gz"
     ];
-    sha256 = "18n6fgyrii8084vdjhys94lr6nhhbmn7zzjd8jckvv1grb0iz9nv";
+    sha256 = "sha256:09rscpm557dgaflylr93wcwmyn6fnvr8nc77abwnq97r6hxwrkhk";
   };
 
   patches = [ ./cups-filter-ppd-dirs.patch ];

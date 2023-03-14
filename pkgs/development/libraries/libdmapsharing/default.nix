@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libsoup
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     libgee
     check
     gtk3
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     "--enable-gtk-doc"
   ];
 
-  # Cannot disable tests here or `check` from checkInputs would not be included.
+  # Cannot disable tests here or `check` from nativeCheckInputs would not be included.
   # Cannot disable building the tests or docs will not build:
   # https://gitlab.gnome.org/GNOME/libdmapsharing/-/issues/49
   doCheck = true;

@@ -1,19 +1,17 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , flex
 , bison
 , proj
 , geos
-, xlibsWrapper
 , sqlite
 , gsl
 , qwt
 , fcgi
-, python3Packages
+, python3
 , libspatialindex
 , libspatialite
 , postgresql
@@ -28,17 +26,33 @@
 , qtsensors
 , qca-qt5
 , qtkeychain
+, qt3d
 , qscintilla
+, qtlocation
 , qtserialport
 , qtxmlpatterns
 , withGrass ? true
 , grass
-, withWebKit ? true
+, withWebKit ? false
 , qtwebkit
+, pdal
+, zstd
+, makeWrapper
+, wrapGAppsHook
+, substituteAll
 }:
 
 let
-  pythonBuildInputs = with python3Packages; [
+
+  py = python3.override {
+    packageOverrides = self: super: {
+      pyqt5 = super.pyqt5.override {
+        withLocation = true;
+      };
+    };
+  };
+
+  pythonBuildInputs = with py.pkgs; [
     qscintilla-qt5
     gdal
     jinja2
@@ -52,38 +66,32 @@ let
     urllib3
     pygments
     pyqt5
-    sip_4
+    pyqt-builder
+    sip
+    setuptools
     owslib
     six
   ];
 in mkDerivation rec {
-  version = "3.16.10";
+  version = "3.28.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-/lsfyTDlkZNIVHg5qgZW7qfOyTC2+1r3ZbsnQmEdy30=";
+    hash = "sha256-nXauZSC78BX1fcx0SXniwQpRmdSLfoqZ5jlbXeHgRGI=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/qgis/QGIS/commit/fc1ac8bef8dcc3194857ecd32519aca4867b4fa1.patch";
-      sha256 = "106smg3drx8c7yxzfhd1c7xrq757l5cfxx8lklihyvr4a7wc9gpy";
-    })
-  ];
 
   passthru = {
     inherit pythonBuildInputs;
-    inherit python3Packages;
+    inherit py;
   };
 
   buildInputs = [
     openssl
     proj
     geos
-    xlibsWrapper
     sqlite
     gsl
     qwt
@@ -102,35 +110,53 @@ in mkDerivation rec {
     qca-qt5
     qtkeychain
     qscintilla
+    qtlocation
     qtserialport
     qtxmlpatterns
+    qt3d
+    pdal
+    zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ cmake flex bison ninja ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook cmake flex bison ninja ];
 
-  # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
-  #
-  # TODO: Correct PyQt5 to provide the expected directory and fix
-  # build to use PYQT5_SIP_DIR consistently.
-  postPatch = ''
-    substituteInPlace cmake/FindPyQt5.py \
-      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./set-pyqt-package-dirs.patch;
+      pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+    })
+  ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
+    "-DWITH_3D=True"
+    "-DWITH_PDAL=TRUE"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+    ++ lib.optional withGrass (let
+        gmajor = lib.versions.major grass.version;
+        gminor = lib.versions.minor grass.version;
+      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+    );
+
+  dontWrapGApps = true; # wrapper params passed below
+
+  postFixup = lib.optionalString withGrass ''
+    # grass has to be availble on the command line even though we baked in
+    # the path at build time using GRASS_PREFIX.
+    # using wrapGAppsHook also prevents file dialogs from crashing the program
+    # on non-NixOS
+    wrapProgram $out/bin/qgis \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : ${lib.makeBinPath [ grass ]}
+  '';
 
   meta = {
     description = "A Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir ];
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen willcohen ];
   };
 }

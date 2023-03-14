@@ -103,6 +103,16 @@ class ReqHandler(BaseHTTPRequestHandler):
             self._send_json_ok(gen_mockuser(username=username, uid=uid, gid=uid, home_directory=f"/home/{username}", snakeoil_pubkey=SNAKEOIL_PUBLIC_KEY))
             return
 
+        # we need to provide something at the groups endpoint.
+        # the nss module does segfault if we don't.
+        elif pu.path == "/computeMetadata/v1/oslogin/groups":
+            self._send_json_ok({
+                "posixGroups": [
+                    {"name" : "demo", "gid" : 4294967295}
+                ],
+            })
+            return
+
         # authorize endpoint
         elif pu.path == "/computeMetadata/v1/oslogin/authorize":
             # is user allowed to login?

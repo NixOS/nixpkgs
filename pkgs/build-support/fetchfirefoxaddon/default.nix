@@ -1,4 +1,4 @@
-{stdenv, lib, coreutils, unzip, jq, zip, fetchurl,writeScript,  ...}:
+{stdenv, unzip, jq, zip, fetchurl,writeScript,  ...}:
 
 {
   name
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   builder = writeScript "xpibuilder" ''
     source $stdenv/setup
 
-    header "firefox addon $name into $out"
+    echo "firefox addon $name into $out"
 
     UUID="${extid}"
     mkdir -p "$out/$UUID"
@@ -40,5 +40,5 @@ stdenv.mkDerivation {
     zip -r -q -FS "$out/$UUID.xpi" *
     rm -r "$out/$UUID"
   '';
-  nativeBuildInputs = [ coreutils unzip zip jq  ];
+  nativeBuildInputs = [ unzip zip jq  ];
 }

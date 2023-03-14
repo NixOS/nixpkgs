@@ -1,13 +1,11 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchzip
 , openssl
 , pkg-config
-, makeWrapper
 , installShellFiles
 , Security
-, libiconv
 
   # rbw-fzf
 , withFzf ? false
@@ -26,61 +24,46 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.4.1";
+  version = "1.6.0";
 
-  src = fetchCrate {
-    inherit version;
-    crateName = pname;
-    sha256 = "sha256-RNdxAp3Q/xNrK1XcKZPMfuqxWzDtdhwT+nqG25SjJhI=";
+  src = fetchzip {
+    url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
+    sha256 = "sha256-f8ckTYfmwHt3g3n/D2U275G1nn7uG+2W+DIi6YmsvjQ=";
   };
 
-  cargoSha256 = "sha256-I0KwHCmfYxgSF5IMHiPooaf2bypd6eYCOPSB+qnEBJY=";
+  cargoHash = "sha256-EVEl1hhaeYBXIMQTgl0tDIbhE3cUm8jiyDTeWtsNaq0=";
 
   nativeBuildInputs = [
-    pkg-config
-    makeWrapper
     installShellFiles
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  postPatch = ''
-    patchShebangs bin/git-credential-rbw
-    substituteInPlace bin/git-credential-rbw \
-        --replace rbw $out/bin/rbw
-  '' + lib.optionalString withFzf ''
-    patchShebangs bin/rbw-fzf
-    substituteInPlace bin/rbw-fzf \
-        --replace fzf ${fzf}/bin/fzf \
-        --replace perl ${perl}/bin/perl
-  '' + lib.optionalString withRofi ''
-    patchShebangs bin/rbw-rofi
-    substituteInPlace bin/rbw-rofi \
-        --replace rofi ${rofi}/bin/rofi \
-        --replace xclip ${xclip}/bin/xclip
-  '' + lib.optionalString withRofi ''
-    patchShebangs bin/pass-import
-    substituteInPlace bin/pass-import \
-        --replace pass ${pass}/bin/pass
-  '';
-
-  preConfigure = ''
+  preConfigure = lib.optionalString stdenv.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
-    export OPENSSL_LIB_DIR="${openssl.out}/lib"
+    export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
   postInstall = ''
-    for shell in bash zsh fish; do
-      $out/bin/rbw gen-completions $shell > rbw.$shell
-      installShellCompletion rbw.$shell
-    done
-    cp bin/git-credential-rbw $out/bin
+    install -Dm755 -t $out/bin bin/git-credential-rbw
+    installShellCompletion --cmd rbw \
+      --bash <($out/bin/rbw gen-completions bash) \
+      --fish <($out/bin/rbw gen-completions fish) \
+      --zsh <($out/bin/rbw gen-completions zsh)
   '' + lib.optionalString withFzf ''
-    cp bin/rbw-fzf $out/bin
+    install -Dm755 -t $out/bin bin/rbw-fzf
+    substituteInPlace $out/bin/rbw-fzf \
+      --replace fzf ${fzf}/bin/fzf \
+      --replace perl ${perl}/bin/perl
   '' + lib.optionalString withRofi ''
-    cp bin/rbw-rofi $out/bin
+    install -Dm755 -t $out/bin bin/rbw-rofi
+    substituteInPlace $out/bin/rbw-rofi \
+      --replace rofi ${rofi}/bin/rofi \
+      --replace xclip ${xclip}/bin/xclip
   '' + lib.optionalString withPass ''
-    cp bin/pass-import $out/bin
+    install -Dm755 -t $out/bin bin/pass-import
+    substituteInPlace $out/bin/pass-import \
+      --replace pass ${pass}/bin/pass
   '';
 
   meta = with lib; {

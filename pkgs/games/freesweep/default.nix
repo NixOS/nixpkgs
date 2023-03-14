@@ -1,29 +1,29 @@
-{ fetchFromGitHub, ncurses, lib, stdenv,
-  updateAutotoolsGnuConfigScriptsHook }:
+{ fetchFromGitHub, fetchpatch, ncurses, lib, stdenv
+, updateAutotoolsGnuConfigScriptsHook, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "freesweep";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "rwestlund";
     repo = "freesweep";
     rev = "v${version}";
-    sha256 = "0grkwmz9whg1vlnk6gbr0vv9i2zgbd036182pk0xj4cavaj9rpjb";
+    hash = "sha256-iuu81yHbNrjdPsimBrPK58PJ0d8i3ySM7rFUG/d8NJM";
   };
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook installShellFiles ];
   buildInputs = [ ncurses ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --with-prefsdir=$out/share"
-  '';
+  configureFlags = [ "--with-prefsdir=$out/share" ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
     install -D -m 0555 freesweep $out/bin/freesweep
     install -D -m 0444 sweeprc $out/share/sweeprc
-    install -D -m 0444 freesweep.6 $out/share/man/man6/freesweep.6
+    installManPage freesweep.6
     runHook postInstall
   '';
 

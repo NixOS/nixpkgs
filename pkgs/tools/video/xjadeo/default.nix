@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
     rev = "v${version}";
-    sha256 = "0dma4cjgbrpy16x63zvfr0xss4lryl0zw7nvixvhq2f6z8day1ds";
+    sha256 = "sha256-VPmVoCoVyljzqtbkuT3e6jhXClP708V/6zy1bVoET7c=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       soundtrack composition, video monitoring or any task that requires to
       synchronizing movie frames with external events.
     '';
-    homepage = "http://xjadeo.sourceforge.net";
+    homepage = "https://xjadeo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mitchmindtree ];

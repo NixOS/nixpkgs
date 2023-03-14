@@ -5,7 +5,7 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "fusuma" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram "$out/bin/fusuma" \

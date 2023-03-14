@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 }:
 
@@ -15,7 +16,11 @@ buildPythonPackage rec {
     sha256 = "03kj15cf1pbd11mxsik96m5w1m6p0fbdc4ia5ihzmq8rz28razpq";
   };
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

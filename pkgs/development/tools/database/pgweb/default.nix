@@ -1,17 +1,24 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "pgweb";
-  version = "0.11.7";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1df3vixxca80i040apbim80nqni94q882ykn3cglyccyl0iz59ix";
+    sha256 = "sha256-+sU+kNTOv78g4mvynXoIyNtmeIDxzfAs4Kr/Lx9zfiU=";
   };
 
-  goPackagePath = "github.com/sosedoff/pgweb";
+  postPatch = ''
+    # Disable tests require network access.
+    rm -f pkg/client/{client,dump}_test.go
+  '';
+
+  vendorSha256 = "sha256-W+Vybea4oppD4BHRqcyouQL79cF+y+sONY9MRggti20=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "A web-based database browser for PostgreSQL";

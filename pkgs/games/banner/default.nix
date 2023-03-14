@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://software.cedar-solutions.com/utilities.html";
+    homepage = "https://github.com/pronovic/banner";
     description = "Print large banners to ASCII terminals";
     license = licenses.gpl2Only;
 

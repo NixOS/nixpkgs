@@ -1,33 +1,19 @@
 { stdenv, lib, fetchurl, unzip }:
 let
-  supportedPlatforms = {
-    "x86_64-linux" = {
-      name = "x86_64-unknown-linux-musl";
-      sha256 = "sha256-On+Sokm2+BV3JbIwK8oPO6882FOWBlgSaAp3VAyR+RM=";
-    };
-    "x86_64-darwin" = {
-      name = "x86_64-apple-darwin";
-      sha256 = "sha256-4YCm42mVcsEvY4I5MWrnbfgUIU7KUIrEirvjN8ISIr0=";
-    };
-    "aarch64-darwin" = {
-      name = "aarch64-apple-darwin";
-      sha256 = "sha256-HN4o5bGX389eAR7ea5EY1JlId8q4lSPGJ4cZo9c2aP4=";
-    };
-  };
+  sources = builtins.fromJSON (builtins.readFile ./sources.json);
   platform =
-    if (builtins.hasAttr stdenv.hostPlatform.system supportedPlatforms) then
-      builtins.getAttr (stdenv.hostPlatform.system) supportedPlatforms
+    if (builtins.hasAttr stdenv.hostPlatform.system sources.platforms) then
+      builtins.getAttr (stdenv.hostPlatform.system) sources.platforms
     else
       throw "Not supported on ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tabnine";
-  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  version = "3.7.25";
+  inherit (sources) version;
 
   src = fetchurl {
-    url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
-    inherit (platform) sha256;
+    url = "https://update.tabnine.com/bundles/${sources.version}/${platform.name}/TabNine.zip";
+    inherit (platform) hash;
   };
 
   dontBuild = true;
@@ -47,13 +33,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.platform = platform.name;
+  passthru = {
+    platform = platform.name;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "https://tabnine.com";
     description = "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
-    platforms = [ "x86_64-darwin" "aarch64-darwin" "x86_64-linux" ];
+    platforms = attrNames sources.platforms;
     maintainers = with maintainers; [ lovesegfault ];
   };
 }

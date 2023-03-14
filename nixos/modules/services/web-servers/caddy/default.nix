@@ -4,65 +4,213 @@ with lib;
 
 let
   cfg = config.services.caddy;
-  vhostToConfig = vhostName: vhostAttrs: ''
-    ${vhostName} ${builtins.concatStringsSep " " vhostAttrs.serverAliases} {
-      ${vhostAttrs.extraConfig}
-    }
-  '';
-  configFile = pkgs.writeText "Caddyfile" (builtins.concatStringsSep "\n"
-    ([ cfg.config ] ++ (mapAttrsToList vhostToConfig cfg.virtualHosts)));
 
-  formattedConfig = pkgs.runCommand "formattedCaddyFile" { } ''
-    ${cfg.package}/bin/caddy fmt ${configFile} > $out
-  '';
+  virtualHosts = attrValues cfg.virtualHosts;
+  acmeVHosts = filter (hostOpts: hostOpts.useACMEHost != null) virtualHosts;
 
-  tlsConfig = {
-    apps.tls.automation.policies = [{
-      issuers = [{
-        inherit (cfg) ca email;
-        module = "acme";
-      }];
-    }];
-  };
-
-  adaptedConfig = pkgs.runCommand "caddy-config-adapted.json" { } ''
-    ${cfg.package}/bin/caddy adapt \
-      --config ${formattedConfig} --adapter ${cfg.adapter} > $out
-  '';
-  tlsJSON = pkgs.writeText "tls.json" (builtins.toJSON tlsConfig);
-
-  # merge the TLS config options we expose with the ones originating in the Caddyfile
-  configJSON =
-    if cfg.ca != null then
-      let tlsConfigMerge = ''
-        {"apps":
-          {"tls":
-            {"automation":
-              {"policies":
-                (if .[0].apps.tls.automation.policies == .[1]?.apps.tls.automation.policies
-                 then .[0].apps.tls.automation.policies
-                 else (.[0].apps.tls.automation.policies + .[1]?.apps.tls.automation.policies)
-                 end)
-              }
-            }
-          }
-        }'';
-      in
-      pkgs.runCommand "caddy-config.json" { } ''
-        ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
+  mkVHostConf = hostOpts:
+    let
+      sslCertDir = config.security.acme.certs.${hostOpts.useACMEHost}.directory;
+    in
       ''
-    else
-      adaptedConfig;
+        ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
+          bind ${concatStringsSep " " hostOpts.listenAddresses}
+          ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
+          log {
+            ${hostOpts.logFormat}
+          }
+
+          ${hostOpts.extraConfig}
+        }
+      '';
+
+  configFile =
+    let
+      Caddyfile = pkgs.writeTextDir "Caddyfile" ''
+        {
+          ${cfg.globalConfig}
+        }
+        ${cfg.extraConfig}
+      '';
+
+      Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
+        mkdir -p $out
+        cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+        caddy fmt --overwrite $out/Caddyfile
+      '';
+    in
+      "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
+
+  acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
+    (mkRenamedOptionModule [ "services" "caddy" "ca" ] [ "services" "caddy" "acmeCA" ])
+    (mkRenamedOptionModule [ "services" "caddy" "config" ] [ "services" "caddy" "extraConfig" ])
   ];
 
+  # interface
   options.services.caddy = {
-    enable = mkEnableOption "Caddy web server";
+    enable = mkEnableOption (lib.mdDoc "Caddy web server");
 
-    config = mkOption {
+    user = mkOption {
+      default = "caddy";
+      type = types.str;
+      description = lib.mdDoc ''
+        User account under which caddy runs.
+
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the Caddy service starts.
+        :::
+      '';
+    };
+
+    group = mkOption {
+      default = "caddy";
+      type = types.str;
+      description = lib.mdDoc ''
+        Group account under which caddy runs.
+
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the Caddy service starts.
+        :::
+      '';
+    };
+
+    package = mkOption {
+      default = pkgs.caddy;
+      defaultText = literalExpression "pkgs.caddy";
+      type = types.package;
+      description = lib.mdDoc ''
+        Caddy package to use.
+      '';
+    };
+
+    dataDir = mkOption {
+      type = types.path;
+      default = "/var/lib/caddy";
+      description = lib.mdDoc ''
+        The data directory for caddy.
+
+        ::: {.note}
+        If left as the default value this directory will automatically be created
+        before the Caddy server starts, otherwise you are responsible for ensuring
+        the directory exists with appropriate ownership and permissions.
+
+        Caddy v2 replaced `CADDYPATH` with XDG directories.
+        See <https://caddyserver.com/docs/conventions#file-locations>.
+        :::
+      '';
+    };
+
+    logDir = mkOption {
+      type = types.path;
+      default = "/var/log/caddy";
+      description = lib.mdDoc ''
+        Directory for storing Caddy access logs.
+
+        ::: {.note}
+        If left as the default value this directory will automatically be created
+        before the Caddy server starts, otherwise the sysadmin is responsible for
+        ensuring the directory exists with appropriate ownership and permissions.
+        :::
+      '';
+    };
+
+    logFormat = mkOption {
+      type = types.lines;
+      default = ''
+        level ERROR
+      '';
+      example = literalExpression ''
+        mkForce "level INFO";
+      '';
+      description = lib.mdDoc ''
+        Configuration for the default logger. See
+        <https://caddyserver.com/docs/caddyfile/options#log>
+        for details.
+      '';
+    };
+
+    configFile = mkOption {
+      type = types.path;
+      default = configFile;
+      defaultText = "A Caddyfile automatically generated by values from services.caddy.*";
+      example = literalExpression ''
+        pkgs.writeTextDir "Caddyfile" '''
+          example.com
+
+          root * /var/www/wordpress
+          php_fastcgi unix//run/php/php-version-fpm.sock
+          file_server
+        ''';
+      '';
+      description = lib.mdDoc ''
+        Override the configuration file used by Caddy. By default,
+        NixOS generates one automatically.
+      '';
+    };
+
+    adapter = mkOption {
+      default = null;
+      example = literalExpression "nginx";
+      type = with types; nullOr str;
+      description = lib.mdDoc ''
+        Name of the config adapter to use.
+        See <https://caddyserver.com/docs/config-adapters>
+        for the full list.
+
+        If `null` is specified, the `--adapter` argument is omitted when
+        starting or restarting Caddy. Notably, this allows specification of a
+        configuration file in Caddy's native JSON format, as long as the
+        filename does not start with `Caddyfile` (in which case the `caddyfile`
+        adapter is implicitly enabled). See
+        <https://caddyserver.com/docs/command-line#caddy-run> for details.
+
+        ::: {.note}
+        Any value other than `null` or `caddyfile` is only valid when providing
+        your own `configFile`.
+        :::
+      '';
+    };
+
+    resume = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Use saved config, if any (and prefer over any specified configuration passed with `--config`).
+      '';
+    };
+
+    globalConfig = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        debug
+        servers {
+          protocol {
+            experimental_http3
+          }
+        }
+      '';
+      description = lib.mdDoc ''
+        Additional lines of configuration appended to the global config section
+        of the `Caddyfile`.
+
+        Refer to <https://caddyserver.com/docs/caddyfile/options#global-options>
+        for details on supported values.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
       default = "";
       example = ''
         example.com {
@@ -71,134 +219,108 @@ in
           root /srv/http
         }
       '';
-      type = types.lines;
-      description = ''
-        Verbatim Caddyfile to use.
-        Caddy v2 supports multiple config formats via adapters (see <option>services.caddy.adapter</option>).
+      description = lib.mdDoc ''
+        Additional lines of configuration appended to the automatically
+        generated `Caddyfile`.
       '';
     };
 
     virtualHosts = mkOption {
-      type = types.attrsOf (types.submodule (import ./vhost-options.nix {
-        inherit config lib;
-      }));
-      default = { };
+      type = with types; attrsOf (submodule (import ./vhost-options.nix { inherit cfg; }));
+      default = {};
       example = literalExpression ''
         {
           "hydra.example.com" = {
             serverAliases = [ "www.hydra.example.com" ];
-            extraConfig = ''''''
+            extraConfig = '''
               encode gzip
-              log
               root /srv/http
-            '''''';
+            ''';
           };
         };
       '';
-      description = "Declarative vhost config";
-    };
-
-
-    user = mkOption {
-      default = "caddy";
-      type = types.str;
-      description = "User account under which caddy runs.";
-    };
-
-    group = mkOption {
-      default = "caddy";
-      type = types.str;
-      description = "Group account under which caddy runs.";
-    };
-
-    adapter = mkOption {
-      default = "caddyfile";
-      example = "nginx";
-      type = types.str;
-      description = ''
-        Name of the config adapter to use.
-        See https://caddyserver.com/docs/config-adapters for the full list.
+      description = lib.mdDoc ''
+        Declarative specification of virtual hosts served by Caddy.
       '';
     };
 
-    resume = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Use saved config, if any (and prefer over configuration passed with <option>services.caddy.config</option>).
-      '';
-    };
-
-    ca = mkOption {
+    acmeCA = mkOption {
       default = "https://acme-v02.api.letsencrypt.org/directory";
       example = "https://acme-staging-v02.api.letsencrypt.org/directory";
-      type = types.nullOr types.str;
-      description = ''
-        Certificate authority ACME server. The default (Let's Encrypt
-        production server) should be fine for most people. Set it to null if
-        you don't want to include any authority (or if you want to write a more
-        fine-graned configuration manually)
+      type = with types; nullOr str;
+      description = lib.mdDoc ''
+        The URL to the ACME CA's directory. It is strongly recommended to set
+        this to Let's Encrypt's staging endpoint for testing or development.
+
+        Set it to `null` if you want to write a more
+        fine-grained configuration manually.
       '';
     };
 
     email = mkOption {
-      default = "";
-      type = types.str;
-      description = "Email address (for Let's Encrypt certificate)";
-    };
-
-    dataDir = mkOption {
-      default = "/var/lib/caddy";
-      type = types.path;
-      description = ''
-        The data directory, for storing certificates. Before 17.09, this
-        would create a .caddy directory. With 17.09 the contents of the
-        .caddy directory are in the specified data directory instead.
-
-        Caddy v2 replaced CADDYPATH with XDG directories.
-        See https://caddyserver.com/docs/conventions#file-locations.
+      default = null;
+      type = with types; nullOr str;
+      description = lib.mdDoc ''
+        Your email address. Mainly used when creating an ACME account with your
+        CA, and is highly recommended in case there are problems with your
+        certificates.
       '';
     };
 
-    package = mkOption {
-      default = pkgs.caddy;
-      defaultText = literalExpression "pkgs.caddy";
-      type = types.package;
-      description = ''
-        Caddy package to use.
-      '';
-    };
   };
 
+  # implementation
   config = mkIf cfg.enable {
+
+    assertions = [
+      { assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
+        message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
+      }
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) acmeHosts;
+
+    services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
+    services.caddy.globalConfig = ''
+      ${optionalString (cfg.email != null) "email ${cfg.email}"}
+      ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
+      log {
+        ${cfg.logFormat}
+      }
+    '';
+
+    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
+
+    systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
-      description = "Caddy web server";
-      # upstream unit: https://github.com/caddyserver/dist/blob/master/init/caddy.service
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
+      wants = map (hostOpts: "acme-finished-${hostOpts.useACMEHost}.target") acmeVHosts;
+      after = map (hostOpts: "acme-selfsigned-${hostOpts.useACMEHost}.service") acmeVHosts;
+      before = map (hostOpts: "acme-${hostOpts.useACMEHost}.service") acmeVHosts;
+
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
+
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/caddy run ${optionalString cfg.resume "--resume"} --config ${configJSON}";
-        ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
-        Type = "simple";
+        # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
+        # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
+        ExecStart = [ "" ''${cfg.package}/bin/caddy run --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} ${optionalString cfg.resume "--resume"}'' ];
+        ExecReload = [ "" ''${cfg.package}/bin/caddy reload --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} --force'' ];
+        ExecStartPre = ''${cfg.package}/bin/caddy validate --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
         User = cfg.user;
         Group = cfg.group;
+        ReadWriteDirectories = cfg.dataDir;
+        StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
+        LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
         Restart = "on-abnormal";
-        AmbientCapabilities = "cap_net_bind_service";
-        CapabilityBoundingSet = "cap_net_bind_service";
+
+        # TODO: attempt to upstream these options
         NoNewPrivileges = true;
-        LimitNPROC = 512;
-        LimitNOFILE = 1048576;
-        PrivateTmp = true;
         PrivateDevices = true;
         ProtectHome = true;
-        ProtectSystem = "full";
-        ReadWriteDirectories = cfg.dataDir;
-        KillMode = "mixed";
-        KillSignal = "SIGQUIT";
-        TimeoutStopSec = "5s";
       };
     };
 
@@ -207,13 +329,21 @@ in
         group = cfg.group;
         uid = config.ids.uids.caddy;
         home = cfg.dataDir;
-        createHome = true;
       };
     };
 
     users.groups = optionalAttrs (cfg.group == "caddy") {
       caddy.gid = config.ids.gids.caddy;
     };
+
+    security.acme.certs =
+      let
+        certCfg = map (useACMEHost: nameValuePair useACMEHost {
+          group = mkDefault cfg.group;
+          reloadServices = [ "caddy.service" ];
+        }) acmeHosts;
+      in
+        listToAttrs certCfg;
 
   };
 }

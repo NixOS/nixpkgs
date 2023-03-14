@@ -56,7 +56,7 @@ let
   levelOption = mkOption {
     default = "server";
     type = types.enum [ "workstation" "server" "paranoid" ];
-    description = ''
+    description = lib.mdDoc ''
       Set the logcheck level.
     '';
   };
@@ -68,7 +68,7 @@ let
       regex = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Regex specifying which log lines to ignore.
         '';
       };
@@ -80,7 +80,7 @@ let
       user = mkOption {
         default = "root";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User that runs the cronjob.
         '';
       };
@@ -88,7 +88,7 @@ let
       cmdline = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
         '';
       };
@@ -97,7 +97,7 @@ let
         default = null;
         type = types.nullOr (types.str);
         example = "02 06 * * *";
-        description = ''
+        description = lib.mdDoc ''
           "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
           Leave at null to not do this and just add a logcheck ignore rule.
         '';
@@ -109,18 +109,12 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable the logcheck cron job.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "logcheck cron job");
 
       user = mkOption {
         default = "logcheck";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Username for the logcheck user.
         '';
       };
@@ -129,7 +123,7 @@ in
         default = "*";
         example = "6";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Time of day to run logcheck. A logcheck will be scheduled at xx:02 each day.
           Leave default (*) to run every hour. Of course when nothing special was logged,
           logcheck will be silent.
@@ -140,7 +134,7 @@ in
         default = "root";
         example = "you@domain.com";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Email address to send reports to.
         '';
       };
@@ -148,7 +142,7 @@ in
       level = mkOption {
         default = "server";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Set the logcheck level. Either "workstation", "server", or "paranoid".
         '';
       };
@@ -156,7 +150,7 @@ in
       config = mkOption {
         default = "FQDN=1";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Config options that you would like in logcheck.conf.
         '';
       };
@@ -165,7 +159,7 @@ in
         default = [ "/var/log/messages" ];
         type = types.listOf types.path;
         example = [ "/var/log/messages" "/var/log/mail" ];
-        description = ''
+        description = lib.mdDoc ''
           Which log files to check.
         '';
       };
@@ -174,14 +168,14 @@ in
         default = [];
         example = [ "/etc/logcheck" ];
         type = types.listOf types.path;
-        description = ''
+        description = lib.mdDoc ''
           Directories with extra rules.
         '';
       };
 
       ignore = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines extra ignore rules.
         '';
         type = with types; attrsOf (submodule ignoreOptions);
@@ -189,7 +183,7 @@ in
 
       ignoreCron = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines extra ignore rules for cronjobs.
         '';
         type = with types; attrsOf (submodule ignoreCronOptions);
@@ -199,7 +193,7 @@ in
         default = [];
         type = types.listOf types.str;
         example = [ "postdrop" "mongodb" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra groups for the logcheck user, for example to be able to use sendmail,
           or to access certain log files.
         '';

@@ -1,22 +1,43 @@
-{ lib,
-  fetchPypi,
-  requests,
-  buildPythonPackage
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nose
+, pytestCheckHook
+, pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "braintree";
-  version = "4.12.0";
+  version = "4.14.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "946abd50fe2843eec586ac3cec285d27dfae0cc5a43a64b505e8a2800b8a74a6";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = "braintree_python";
+    rev = version;
+    hash = "sha256-qeqQX+qyy78sLe+46CA4D6VAxNHUVahS4LMYdGDzc2k=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  # pypi release does not include tests
-  doCheck = false;
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "braintree"
+  ];
+
+  disabledTestPaths = [
+    # Don't test integrations
+    "tests/integration"
+  ];
 
   meta = with lib; {
     description = "Python library for integration with Braintree";

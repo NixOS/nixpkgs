@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     ./add-macfuse-support.patch
   ];
 
+  postPatch = ''
+    sed -i -e '/TEST_SOURCES/d' CMakeLists.txt
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];
 
@@ -38,5 +42,7 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ bsd2 mit ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

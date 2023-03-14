@@ -1,53 +1,63 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , pkg-config
-, boost17x
-, openssl
-, olm
-, spdlog
+, coeurl
+, curl
+, libevent
 , nlohmann_json
+, olm
+, openssl
+, re2
+, spdlog
 }:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.5.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "sha256-UKroV1p7jYuNzCAFMsuUsYC/C9AZ1D4rhwpwuER39vc=";
+    hash = "sha256-r+bD2L5+3AwkdYa3FwsM+yf7V5w+6ZJC92CMdVeYLJQ=";
   };
 
-  # This patch should be obsolete and should stop applying the in next release.
-  patches = [ ./fix-compilation-with-olm-3.2.5.patch ];
+  postPatch = ''
+    # See https://github.com/gabime/spdlog/issues/1897
+    sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
+  '';
 
   cmakeFlags = [
     # Network requiring tests can't be disabled individually:
     # https://github.com/Nheko-Reborn/mtxclient/issues/22
     "-DBUILD_LIB_TESTS=OFF"
     "-DBUILD_LIB_EXAMPLES=OFF"
-    "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
-    # Can be removed once either https://github.com/NixOS/nixpkgs/pull/85254 or
-    # https://github.com/NixOS/nixpkgs/pull/73940 are merged
-    "-DBoost_NO_BOOST_CMAKE=TRUE"
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    spdlog
-    boost17x
-    openssl
+    coeurl
+    curl
+    libevent
+    nlohmann_json
     olm
+    openssl
+    re2
+    spdlog
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
   meta = with lib; {
-    description = "Client API library for Matrix, built on top of Boost.Asio";
+    description = "Client API library for the Matrix protocol.";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz pstn ];

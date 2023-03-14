@@ -1,21 +1,35 @@
-{ fetchFromGitHub, ocamlPackages, lib }:
+{ lib
+, fetchFromGitea
+, ocamlPackages
+, soupault
+, testers
+}:
 
-ocamlPackages.buildDunePackage rec {
+let
   pname = "soupault";
-  version = "3.2.0";
 
-  useDune2 = true;
+  version = "4.4.0";
+in
+ocamlPackages.buildDunePackage {
+  inherit pname version;
 
-  src = fetchFromGitHub {
-    owner = "dmbaturin";
+  minimalOCamlVersion = "4.13";
+
+  duneVersion = "3";
+
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-T1K/ntCK19LfPmMtaAa9c1JjSL+5dax2SNhM4yUFln4=";
+    sha256 = "sha256-M4gaPxBxQ1Bk2C3BwvobYHyaWKIZgQ6buZ6S5wBlvPg=";
   };
 
   buildInputs = with ocamlPackages; [
     base64
+    camomile
     containers
+    digestif
     ezjsonm
     fileutils
     fmt
@@ -32,11 +46,16 @@ ocamlPackages.buildDunePackage rec {
     yaml
   ];
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion {
+    package = soupault;
+    command = "soupault --version-number";
+  };
+
+  meta = {
     description = "A tool that helps you create and manage static websites";
     homepage = "https://soupault.app/";
-    license = licenses.mit;
-    maintainers = [ maintainers.toastal ];
+    changelog = "https://codeberg.org/PataphysicalSociety/soupault/src/branch/main/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ toastal ];
   };
 }
-

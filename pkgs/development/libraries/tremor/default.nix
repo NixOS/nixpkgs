@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, libogg }:
 
 stdenv.mkDerivation {
-  name = "tremor-unstable-2018-03-16";
+  pname = "tremor";
+  version = "unstable-2018-03-16";
 
   src = fetchFromGitLab {
     owner = "xiph";

@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, dbus-glib, libxklavier,
-  libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
-  pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, dbus-glib
+, libxklavier
+, libcanberra-gtk3
+, libnotify
+, nss
+, polkit
+, dconf
+, gtk3
+, mate
+, pulseaudioSupport ? stdenv.config.pulseaudio or true
+, libpulseaudio
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
@@ -34,11 +50,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE settings daemon";

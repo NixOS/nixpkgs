@@ -1,11 +1,11 @@
 { lib
-, backports-datetime-fromisoformat
 , backports-zoneinfo
 , buildPythonPackage
 , cached-property
 , defusedxml
 , dnspython
 , fetchFromGitHub
+, fetchpatch
 , flake8
 , isodate
 , lxml
@@ -18,7 +18,7 @@
 , pyyaml
 , requests
 , requests_ntlm
-, requests_oauthlib
+, requests-oauthlib
 , requests-kerberos
 , requests-mock
 , tzdata
@@ -27,15 +27,26 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.6.0";
-  disabled = pythonOlder "3.6";
+  version = "4.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1lx5q3m3vhbx9xnm3v25xrrxvli1nh0lsza51ln4y3fk79ln91hv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4oRIL5s2qN1tB8uijLiPkQTR4cXg4KsxqyZebw/cVkE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tests-timezones-2.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/419eafcd9261bfd0617823ee437204d5556a8271.diff";
+      excludes = [ "tests/test_ewsdatetime.py" ];
+      hash = "sha256-dSp6NkNT5dHOg8XgDi8sR3t3hq46sNtPjUXva2YfFSU=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cached-property
@@ -47,17 +58,15 @@ buildPythonPackage rec {
     pygments
     requests
     requests_ntlm
-    requests_oauthlib
+    requests-oauthlib
     requests-kerberos
     tzdata
     tzlocal
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports-datetime-fromisoformat
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flake8
     psutil
     python-dateutil
@@ -66,11 +75,14 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "exchangelib" ];
+  pythonImportsCheck = [
+    "exchangelib"
+  ];
 
   meta = with lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage = "https://github.com/ecederstrand/exchangelib";
+    changelog = "https://github.com/ecederstrand/exchangelib/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ catern ];
   };

@@ -2,36 +2,41 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, aiofiles
+, hatchling
+
+# runtime
+, ApplicationServices
 , anyio
-, contextlib2
-, graphene
 , itsdangerous
 , jinja2
 , python-multipart
 , pyyaml
-, requests
-, aiosqlite
-, databases
-, pytest-asyncio
+, httpx
+, typing-extensions
+
+# tests
 , pytestCheckHook
 , pythonOlder
 , trio
-, typing-extensions
-, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.16.0";
-  disabled = pythonOlder "3.6";
+  version = "0.23.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-/NYhRRZdi6I7CtLCohAqK4prsSUayOxa6sBKIJhPv+w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LcFrdaRgFBqcdylCzNlewj/papsg/sZ1FMVxBDLvQWI=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   postPatch = ''
     # remove coverage arguments to pytest
@@ -39,35 +44,27 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    aiofiles
     anyio
-    graphene
     itsdangerous
     jinja2
     python-multipart
     pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
+    httpx
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
-    pytest-asyncio
+  nativeCheckInputs = [
     pytestCheckHook
     trio
     typing-extensions
   ];
 
-  disabledTestPaths = [
-    # fails to import graphql, but integrated graphql support is about to
-    # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
-    "tests/test_graphql.py"
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+    "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -76,9 +73,12 @@ buildPythonPackage rec {
     "test_request_headers"
   ];
 
-  pythonImportsCheck = [ "starlette" ];
+  pythonImportsCheck = [
+    "starlette"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/encode/starlette/releases/tag/${version}";
     homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;

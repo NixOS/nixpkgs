@@ -41,27 +41,6 @@
 # around it.
 
 let
-  modules = [
-    {
-      path = "web/api/app/Plugin/Crud";
-      src = fetchFromGitHub {
-        owner = "ZoneMinder";
-        repo = "crud";
-        rev = "3.1.0-zm";
-        sha256 = "061avzyml7mla4hlx057fm8a9yjh6m6qslgyzn74cv5p2y7f463l";
-      };
-    }
-    {
-      path = "web/api/app/Plugin/CakePHP-Enum-Behavior";
-      src = fetchFromGitHub {
-        owner = "ZoneMinder";
-        repo = "CakePHP-Enum-Behavior";
-        rev = "1.0-zm";
-        sha256 = "0zsi6s8xymb183kx3szspbrwfjqcgga7786zqvydy6hc8c909cgx";
-      };
-    }
-  ];
-
   addons = [
     {
       path = "scripts/ZoneMinder/lib/ZoneMinder/Control/Xiaomi.pm";
@@ -78,13 +57,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.8";
+  version = "1.36.32";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "sha256-UUpq4CCZq+EwVNGsLCQuVWdY3yoGw977AaMk1iJ6a5U=";
+    sha256 = "sha256-8iRoGpkpZVOOr0wSY9iey2x4gPfKTfUNtt5TCHCCRIQ=";
     fetchSubmodules = true;
   };
 
@@ -94,11 +73,6 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    ${lib.concatStringsSep "\n" (map (e: ''
-      rm -rf ${e.path}/*
-      cp -r ${e.src}/* ${e.path}/
-    '') modules)}
-
     rm -rf web/api/lib/Cake/Test
 
     ${lib.concatStringsSep "\n" (map (e: ''
@@ -148,7 +122,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb pcre perl polkit x264 zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies

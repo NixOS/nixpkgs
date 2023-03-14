@@ -43,14 +43,14 @@ in
 
   clientbuffer = zncDerivation rec {
     pname = "znc-clientbuffer";
-    version = "unstable-2020-04-24";
+    version = "unstable-2021-05-30";
     module_name = "clientbuffer";
 
     src = fetchFromGitHub {
       owner = "CyberShadow";
       repo = "znc-clientbuffer";
-      rev = "2e32d508aa975c0a307d09575a0198f8c56c11fa";
-      sha256 = "1jaspnrbv3pzsnbysqygc8s8g3q07zx5nlrdpgwv9j8aryg0pcnh";
+      rev = "9a7465b413b53408f5d7af86e84b1d08efb6bec0";
+      sha256 = "0a3f4j6s5j7p53y42zrgpqyl2zm0jxb69lp24j6mni3licigh254";
     };
 
     meta = with lib; {

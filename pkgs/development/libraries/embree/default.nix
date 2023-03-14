@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "embree";
-  version = "3.13.1";
+  version = "3.13.5";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
     rev = "v${version}";
-    sha256 = "sha256-6BL/NnveIMg+xD8Zsc3sidL0iw0YbJITgd8Zf4Mh28I=";
+    sha256 = "sha256-tfM4SGOFVBG0pQK9B/iN2xDaW3yjefnTtsoUad75m80=";
   };
 
   postPatch = ''
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEMBREE_TUTORIALS=OFF"
     "-DEMBREE_RAY_MASK=ON"
+    "-DTBB_ROOT=${tbb}"
+    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
   ];
 
 
@@ -37,5 +39,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hodapp gebner ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

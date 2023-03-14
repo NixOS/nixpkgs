@@ -2,7 +2,7 @@
 
 , isPy3k, isPyPy
 
-, distro, setuptools
+, distro, setuptools, psutil
 
 , pkgs
 }:
@@ -25,6 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     distro
     setuptools
+    psutil
   ];
 
   nativeBuildInputs = [ pkgs.gettext pkgs.which ];
@@ -38,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aszlig symphorien ];
+    platforms = lib.platforms.linux;
   };
 }

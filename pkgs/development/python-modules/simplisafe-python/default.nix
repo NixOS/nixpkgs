@@ -1,9 +1,10 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , backoff
+, beautifulsoup4
 , buildPythonPackage
+, docutils
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -18,49 +19,61 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2021.10.0";
+  version = "2022.12.1";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-J0uMlczR7y5wDchaOjp5d3Vf36WfRmt7d51koGiNHBk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AOlO4K8ku+auEKw7OmgEo5E4ftAar0ukPQVIYzBJBW0=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     backoff
+    beautifulsoup4
+    docutils
     pytz
-    types-pytz
     voluptuous
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    types-pytz
   ];
 
   disabledTests = [
     # simplipy/api.py:253: InvalidCredentialsError
     "test_request_error_failed_retry"
     "test_update_error"
+    # ClientConnectorError: Cannot connect to host auth.simplisafe.com:443 ssl:default [Temporary failure in name resolution]
+    "test_client_async_from_refresh_token_unknown_error"
   ];
 
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples as they are prefixed with test_
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "simplipy" ];
+  pythonImportsCheck = [
+    "simplipy"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
     license = with licenses; [ mit ];

@@ -4,26 +4,34 @@
 , makeWrapper
 
 , alsa-lib
+, curl
 , gtk3
 , lame
+, libxml2
 , ffmpeg
 , vlc
 , xdg-utils
+, xdotool
 , which
 
-, jackSupport ? true, libjack2
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+, jackSupport ? true
+, jackLibrary
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
 }:
 
+let
+  url_for_platform = version: arch: "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
+in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.38";
+  version = "6.77";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
+    url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash = {
-      x86_64-linux = "sha256-K5EnrmzP8pyW9dR1fbMzkPzpS6aHm8JF1+m3afnH4rU=";
-      aarch64-linux = "sha256-6wNWDXjQNyfU2l9Xi9JtmAuoKtHuIY5cvNMjYkwh2Sk=";
+      x86_64-linux = "sha256-1HQtmhcLV/yhrANy1wLM1ju3t9o/lnU1OaYxqe20UFc=";
+      aarch64-linux = "sha256-17lBwadEDINoXd0yF/hCVFRGoWq6AuFUf4o+uPR6q60=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -43,7 +51,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     gtk3 # libSwell needs libgdk-3.so.0
   ]
-  ++ lib.optional jackSupport libjack2
+  ++ lib.optional jackSupport jackLibrary
   ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
@@ -63,8 +71,9 @@ stdenv.mkDerivation rec {
     # Setting the rpath of the plugin shared object files does not
     # seem to have an effect for some plugins.
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
+    # Note that libcurl and libxml2 are needed for ReaPack to run.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc.lib ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
@@ -73,11 +82,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ilian orivej ];
+    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer viraptor ];
   };
 }

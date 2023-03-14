@@ -8,21 +8,29 @@
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "2.29.0";
-  disabled = pythonOlder "3.6";
+  version = "3.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Hq58DJe8ZLZSJdhqSxfTaZPnWae2aQFCe7lH+6Y6ABg=";
+    hash = "sha256-vg1eNxIkdHM1MMTkCof/ED6nqFhwSgEiKjYmqAyHMp0=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    tokenize-rt
+  ];
 
-  propagatedBuildInputs = [ tokenize-rt ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pyupgrade" ];
+  pythonImportsCheck = [
+    "pyupgrade"
+  ];
 
   meta = with lib; {
     description = "Tool to automatically upgrade syntax for newer versions of the language";

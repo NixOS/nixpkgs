@@ -15,12 +15,16 @@
 
 stdenv.mkDerivation rec {
   pname = "zenity";
-  version = "3.41.0";
+  version = "3.44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "GbZ2w1EOIrrfzDIEBi1DK6U3QC9eCuJhKMDZDJVAN+E=";
+    sha256 = "wVWCMB7ZC51CzlIdvM+ZqYnyLxIEG91SecZjbamev2U=";
   };
+
+  patches = [
+    ./fix-icon-install.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://wiki.gnome.org/Projects/Zenity";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
 }

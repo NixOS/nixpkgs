@@ -20,7 +20,7 @@ buildPythonPackage rec {
     python-lsp-server
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

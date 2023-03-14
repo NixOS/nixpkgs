@@ -1,9 +1,5 @@
-{ stdenv
-, buildPythonPackage
-, ddt
-, sqlalchemy
+{  buildPythonPackage
 , stestr
-, subunit2sql
 }:
 
 buildPythonPackage rec {
@@ -20,8 +16,11 @@ buildPythonPackage rec {
 
   dontBuild = true;
   dontInstall = true;
+  preConfigure = ''
+    pythonOutputDistPhase() { touch $dist; }
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
   ];
 

@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package {
-  name = "wl-pprint";
+  pname = "wl-pprint";
   version = "2017-03-13";
 
   src = fetchFromGitHub {

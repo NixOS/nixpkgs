@@ -1,30 +1,26 @@
-{ buildGoPackage
-, lib
+{ lib
+, buildGoModule
 , fetchFromGitLab
 }:
 
-buildGoPackage rec {
-  pname = "check-unstable";
-  version = "2018-09-12";
-  rev = "88db195993f8e991ad402754accd0635490769f9";
-
-  goPackagePath = "gitlab.com/opennota/check";
+buildGoModule rec {
+  pname = "check";
+  version = "unstable-2018-12-24";
+  rev = "ccaba434e62accd51209476ad093810bd27ec150";
 
   src = fetchFromGitLab {
-    inherit rev;
-
     owner = "opennota";
     repo = "check";
-    sha256 = "1983xmdkgpqda4qz8ashc6xv1zg5jl4zly3w566grxc5sfxpgf0i";
+    inherit rev;
+    sha256 = "sha256-u8U/62LZEn1ffwdGsUCGam4HAk7b2LetomCLZzHuuas=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";
 
   meta = with lib; {
     description = "A set of utilities for checking Go sources";
     homepage = "https://gitlab.com/opennota/check";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,46 +1,98 @@
-{ fetchurl, stdenv, lib
-, cmake, libGLU, libGL
-, freetype, freeimage, zziplib, xorgproto, libXrandr
-, libXaw, freeglut, libXt, libpng, boost, ois
-, libX11, libXmu, libSM, pkg-config
-, libXxf86vm, libICE
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
 , unzip
-, libXrender
 , SDL2
-, withNvidiaCg ? false, nvidia_cg_toolkit
-, withSamples ? false }:
+, boost
+, freeimage
+, freetype
+, libpng
+, ois
+, pugixml
+, zziplib
+  # linux
+, freeglut
+, libGL
+, libGLU
+, libICE
+, libSM
+, libX11
+, libXaw
+, libXmu
+, libXrandr
+, libXrender
+, libXt
+, libXxf86vm
+, xorgproto
+  # darwin
+, Cocoa
+  # optional
+, withNvidiaCg ? false
+, nvidia_cg_toolkit
+, withSamples ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "ogre";
-  version = "1.12.1";
+  version = "13.6.3";
 
-  src = fetchurl {
-     url = "https://github.com/OGRECave/ogre/archive/v${version}.zip";
-     sha256 = "1iv6k0dwdzg5nnzw2mcgcl663q4f7p2kj7nhs8afnsikrzxxgsi4";
+  src = fetchFromGitHub {
+    owner = "OGRECave";
+    repo = "ogre";
+    rev = "v${version}";
+    hash = "sha256-+A+GpS6kZREczX0oOETAQJ+smiFVAEzPMIskU/Vh/9U=";
   };
 
-  cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
-    ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-           ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    unzip
+  ];
 
+  buildInputs = [
+    SDL2
+    boost
+    freeimage
+    freetype
+    libpng
+    ois
+    pugixml
+    zziplib
+  ] ++ lib.optionals stdenv.isLinux [
+    freeglut
+    libGL
+    libGLU
+    libICE
+    libSM
+    libX11
+    libXaw
+    libXmu
+    libXrandr
+    libXrender
+    libXt
+    libXxf86vm
+    xorgproto
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals withNvidiaCg [
+    nvidia_cg_toolkit
+  ];
 
-  nativeBuildInputs = [ cmake unzip pkg-config ];
-  buildInputs =
-   [ cmake libGLU libGL
-     freetype freeimage zziplib xorgproto libXrandr
-     libXaw freeglut libXt libpng boost ois
-     libX11 libXmu libSM
-     libXxf86vm libICE
-     libXrender
-     SDL2
-   ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+  cmakeFlags = [
+    "-DOGRE_BUILD_COMPONENT_OVERLAY_IMGUI=FALSE"
+    "-DOGRE_BUILD_DEPENDENCIES=OFF"
+    "-DOGRE_BUILD_SAMPLES=${toString withSamples}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DOGRE_BUILD_LIBS_AS_FRAMEWORKS=FALSE"
+  ];
 
   meta = {
-    description = "A 3D engine";
+    description = "3D Object-Oriented Graphics Rendering Engine";
     homepage = "https://www.ogre3d.org/";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin wegank ];
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
 }

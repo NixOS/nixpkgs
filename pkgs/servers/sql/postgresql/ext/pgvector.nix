@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgvector";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "ankane";
-    repo = pname;
+    owner = "pgvector";
+    repo = "pgvector";
     rev = "v${version}";
-    sha256 = "1jl6rpys24qxhkv3q798pp9v03z2z7gswivp19yria9xr3bg6wjv";
+    hash = "sha256-bOckX7zvHhgJDDhoAm+VZVIeVIf2hG/3oWZWuTtnZPo=";
   };
 
   buildInputs = [ postgresql ];
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source vector similarity search for PostgreSQL";
-    homepage = "https://github.com/ankane/pgvector";
-    changelog = "https://github.com/ankane/pgvector/raw/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/pgvector/pgvector";
+    changelog = "https://github.com/pgvector/pgvector/raw/v${version}/CHANGELOG.md";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = [ maintainers.marsam ];

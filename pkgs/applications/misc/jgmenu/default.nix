@@ -11,17 +11,18 @@
 , enableXfcePanelApplet ? false
 , xfce
 , gtk3
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "jgmenu";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+JO/A7+6/yeYz0tP7vxSi04cS1bEet+3sAs7CYXKxI8=";
+    sha256 = "sha256-UC92zyuMVjyMLNEOBMElO8wCWYgwWRZAGLEOdTPNMak=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
       wrapProgram $f --prefix PATH : $out/bin
     done
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/johanmalm/jgmenu";

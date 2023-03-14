@@ -2,8 +2,9 @@
 , pkgsHostHost
 , callPackage
 , fetchgit
+, fetchpatch
 , ghcjsSrcJson ? null
-, ghcjsSrc ? fetchgit lib.importJSON ghcjsSrcJson
+, ghcjsSrc ? fetchgit (lib.importJSON ghcjsSrcJson)
 , bootPkgs
 , stage0
 , haskellLib
@@ -36,7 +37,7 @@ let
       })
 
       (callPackage ./common-overrides.nix {
-        inherit haskellLib;
+        inherit haskellLib fetchpatch buildPackages;
       })
       ghcjsDepOverrides
     ]);
@@ -78,6 +79,11 @@ in stdenv.mkDerivation {
     ];
     dontConfigure = true;
     dontInstall = true;
+
+    # Newer versions of `config.sub` reject the `js-ghcjs` host string, but the
+    # older `config.sub` filed vendored within `ghc` still works
+    dontUpdateAutotoolsGnuConfigScripts = true;
+
     buildPhase = ''
       export HOME=$TMP
       mkdir $HOME/.cabal

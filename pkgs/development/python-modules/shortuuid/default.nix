@@ -1,28 +1,35 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchPypi
-, pep8
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "shortuuid";
-  version = "1.0.1";
+  version = "1.0.11";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3c11d2007b915c43bee3e10625f068d8a349e04f0d81f08f5fa08507427ebf1f";
+    hash = "sha256-/HXyYVkUgVqOTLFQGzpRN0XLZu8P1fxvufjD+jSB94k=";
   };
 
-  buildInputs = [pep8];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "shortuuid"
+  ];
 
   meta = with lib; {
-    description = "A generator library for concise, unambiguous and URL-safe UUIDs";
+    description = "Library to generate concise, unambiguous and URL-safe UUIDs";
     homepage = "https://github.com/stochastic-technologies/shortuuid/";
+    changelog = "https://github.com/skorokithakis/shortuuid/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zagy ];
   };
-
 }

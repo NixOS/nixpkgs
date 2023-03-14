@@ -1,15 +1,26 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+, capabilitiesSupport ? true
+, libcap_ng
+, libxcrypt
+, ncursesSupport ? true
+, ncurses
+, pamSupport ? true
+, pam
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
 , nlsSupport ? true
+, translateManpages ? true
+, po4a
+, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
-  pname = "util-linux";
-  version = "2.36.2";
+  pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
+  version = "2.38.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0psc0asjp1rmfx1j7468zfnk9nphlphybw2n8dcl74v8v2lnnlgp";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
+    hash = "sha256-YEkqGbRObPmj3f9oMlszO4tStsWc4+vWoOyqTFEX6E8=";
   };
 
   patches = [
@@ -17,6 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "bin" "dev" "out" "lib" "man" ];
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests/run.sh
@@ -34,17 +46,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--enable-write"
-    "--enable-last"
-    "--enable-mesg"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.enableFeature nlsSupport "nls")
-    (lib.withFeature (ncurses != null) "ncursesw")
-    (lib.withFeature (systemd != null) "systemd")
-    (lib.withFeatureAs (systemd != null)
+    (lib.withFeature ncursesSupport "ncursesw")
+    (lib.withFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    (lib.enableFeature translateManpages "poman")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
@@ -56,14 +67,22 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd ];
+  nativeBuildInputs = [ pkg-config installShellFiles ]
+    ++ lib.optionals translateManpages [ po4a ];
+
+  buildInputs = [ zlib libxcrypt ]
+    ++ lib.optionals pamSupport [ pam ]
+    ++ lib.optionals capabilitiesSupport [ libcap_ng ]
+    ++ lib.optionals ncursesSupport [ ncurses ]
+    ++ lib.optionals systemdSupport [ systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    installShellCompletion --bash bash-completion/*
+  '';
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";

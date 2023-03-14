@@ -15,23 +15,15 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.0.2";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "v${version}";
-    sha256 = "1cg63qhf823nf785kyl96r7vyxfl6dlbwsmhcpny8vb65pl9gng5";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4IPBulzRoAAplyM/1MPE40IW4IXBIGYLydzpY64Gl0c=";
   };
-
-  postPatch = ''
-    # https://github.com/alandtse/auth_capture_proxy/issues/14
-    # https://github.com/alandtse/auth_capture_proxy/issues/15
-    substituteInPlace pyproject.toml \
-       --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-       --replace 'importlib-metadata = "^3.4.0"' 'importlib-metadata = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -47,7 +39,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

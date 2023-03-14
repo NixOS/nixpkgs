@@ -12,6 +12,7 @@
 , itemloaders
 , jmespath
 , lxml
+, packaging
 , parsel
 , protego
 , pydispatcher
@@ -22,6 +23,7 @@
 , service-identity
 , sybil
 , testfixtures
+, tldextract
 , twisted
 , w3lib
 , zope_interface
@@ -29,13 +31,15 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.5.1";
-  disabled = pythonOlder "3.6";
+  version = "2.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    sha256 = "13af6032476ab4256158220e530411290b3b934dd602bb6dacacbf6d16141f49";
+    hash = "sha256-gHGsbGXxhewsdv6FCflNmf6ggFGf3CBvkIqSDV4F/kM=";
   };
 
   nativeBuildInputs = [
@@ -48,18 +52,20 @@ buildPythonPackage rec {
     itemadapter
     itemloaders
     lxml
+    packaging
     parsel
     protego
     pydispatcher
     pyopenssl
     queuelib
     service-identity
+    tldextract
     twisted
     w3lib
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
@@ -68,27 +74,12 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  patches = [
-    # Require setuptools, https://github.com/scrapy/scrapy/pull/5122
-    (fetchpatch {
-      name = "add-setuptools.patch";
-      url = "https://github.com/scrapy/scrapy/commit/4f500342c8ad4674b191e1fab0d1b2ac944d7d3e.patch";
-      sha256 = "14030sfv1cf7dy4yww02b49mg39cfcg4bv7ys1iwycfqag3xcjda";
-    })
-    # Make Twisted[http2] installation optional, https://github.com/scrapy/scrapy/pull/5113
-    (fetchpatch {
-      name = "remove-h2.patch";
-      url = "https://github.com/scrapy/scrapy/commit/c5b1ee810167266fcd259f263dbfc0fe0204761a.patch";
-      sha256 = "0sa39yx9my4nqww8a12bk9zagx7b56vwy7xpxm4xgjapjl6mcc0k";
-      excludes = [ "tox.ini" ];
-    })
-  ];
-
   LC_ALL = "en_US.UTF-8";
 
-  # Disable doctest plugin because it causes pytest to hang
   preCheck = ''
-    substituteInPlace pytest.ini --replace "--doctest-modules" ""
+    # Disable doctest plugin because it causes pytest to hang
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" ""
   '';
 
   disabledTestPaths = [
@@ -104,29 +95,46 @@ buildPythonPackage rec {
     "test_nested_css"
     "test_nested_xpath"
     "test_flavor_detection"
+    "test_follow_whitespace"
     # Requires network access
+    "AnonymousFTPTestCase"
     "FTPFeedStorageTest"
     "FeedExportTest"
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "test_timeout_download_from_spider_nodata_rcvd"
+    "test_timeout_download_from_spider_server_hangs"
+    # Depends on uvloop
+    "test_asyncio_enabled_reactor_different_loop"
+    "test_asyncio_enabled_reactor_same_loop"
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"
     "test_peek_lifo"
+    "test_callback_kwargs"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
+    "test_reactor_default_twisted_reactor_select"
+    "URIParamsSettingTest"
+    "URIParamsFeedOptionTest"
+    # flaky on darwin-aarch64
+    "test_fixed_delay"
+    "test_start_requests_laziness"
   ];
 
   postInstall = ''
     installManPage extras/scrapy.1
-    install -m 644 -D extras/scrapy_bash_completion $out/share/bash-completion/completions/scrapy
-    install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
+    installShellCompletion --cmd scrapy \
+      --zsh extras/scrapy_zsh_completion \
+      --bash extras/scrapy_bash_completion
   '';
 
-  pythonImportsCheck = [ "scrapy" ];
+  pythonImportsCheck = [
+    "scrapy"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -140,7 +148,6 @@ buildPythonPackage rec {
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett marsam ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ marsam ];
   };
 }

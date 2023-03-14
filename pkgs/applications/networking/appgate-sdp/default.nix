@@ -31,7 +31,6 @@
 , nss
 , openssl
 , pango
-, procps
 , python3
 , stdenv
 , systemd
@@ -39,7 +38,7 @@
 , xorg
 , zlib
 }:
-with lib;
+
 let
   deps = [
     alsa-lib
@@ -87,11 +86,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "5.4.2";
+  version = "6.1.2";
 
   src = fetchurl {
-    url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-wAhcTRO/Cd4MG1lfPNDq92yGcu3NOfymucddy92VaXo=";
+    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
+    sha256 = "sha256-nTQDQxXWMHkHgKlr7mIlazH7kW3HJqNLrUATo4s0N1g=";
   };
 
   # just patch interpreter
@@ -135,15 +134,16 @@ stdenv.mkDerivation rec {
         --replace "/etc/appgate.conf" "$out/etc/appgate.conf"
 
     wrapProgram $out/opt/appgate/service/createdump \
-        --set LD_LIBRARY_PATH "${makeLibraryPath [ stdenv.cc.cc ]}"
+        --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
 
     wrapProgram $out/opt/appgate/appgate-driver \
-        --prefix PATH : ${makeBinPath [ iproute2 networkmanager dnsmasq ]} \
+        --prefix PATH : ${lib.makeBinPath [ iproute2 networkmanager dnsmasq ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate/service
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
-        --prefix PATH : ${makeBinPath [ xdg-utils ]} \
-        --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --set LD_LIBRARY_PATH $out/opt/appgate:${lib.makeLibraryPath deps}
 
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
@@ -151,9 +151,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
     homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ymatsiuk ];
   };
 }
-

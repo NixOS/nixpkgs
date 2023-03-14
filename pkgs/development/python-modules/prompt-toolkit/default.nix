@@ -2,26 +2,41 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 , six
 , wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.19";
+  version = "3.0.36";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    sha256 = "08360ee3a3148bdb5163621709ee322ec34fc4375099afa4bbf751e9b7b7fa4f";
+    sha256 = "sha256-PhY/JUvvWgOxRjl9fBljvT4oEvCWS7miTm7HYf0o22M=";
   };
 
-  propagatedBuildInputs = [ six wcwidth ];
+  propagatedBuildInputs = [
+    six
+    wcwidth
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
+    # tests/test_completion.py:206: AssertionError
+    # https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1657
     "test_pathcompleter_can_expanduser"
+  ];
+
+  pythonImportsCheck = [
+    "prompt_toolkit"
   ];
 
   meta = with lib; {
@@ -33,7 +48,7 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

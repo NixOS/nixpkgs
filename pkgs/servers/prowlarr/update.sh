@@ -7,17 +7,19 @@ dirname="$(dirname "$0")"
 
 updateHash()
 {
+    # nixos
     version=$1
-    arch=$2
-    os=$3
+    system=$2
 
-    hashKey="${arch}-${os}_hash"
+    # prowlarr
+    arch=$3
+    os=$4
 
-    url="https://github.com/Prowlarr/Prowlarr/releases/download/v$version/Prowlarr.develop.$version.$os-core-$arch.tar.gz"
+    url="https://github.com/Prowlarr/Prowlarr/releases/download/v$version/Prowlarr.master.$version.$os-core-$arch.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
     sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-    sed -i "s|$hashKey = \"[a-zA-Z0-9\/+-=]*\";|$hashKey = \"$sriHash\";|g" "$dirname/default.nix"
+    sed -i "s|$system = \"sha256-[a-zA-Z0-9\/+-=]*\";|$system = \"$sriHash\";|g" "$dirname/default.nix"
 }
 
 updateVersion()
@@ -27,16 +29,8 @@ updateVersion()
 
 currentVersion=$(cd $dirname && nix eval --raw -f ../../.. prowlarr.version)
 
-# N.B. Prowlarr is still in development, so
-# https://api.github.com/repos/Prowlarr/Prowlarr/releases/latest
-# returns nothing. Once this endpoint returns something, we should use
-# it. Until then, we use jq to sort releases (N.B. the "sort_by(. |
-# split(".") | map(tonumber))" incantation is to sort the version
-# number properly and not as a string).
-
-# latestTag=$(curl https://api.github.com/repos/Prowlarr/Prowlarr/releases/latest | jq -r ".tag_name")
-# latestVersion="$(expr $latestTag : 'v\(.*\)')"
-latestVersion=$(curl https://api.github.com/repos/Prowlarr/Prowlarr/git/refs/tags | jq '. | map(.ref | sub("refs/tags/v";"")) | sort_by(. | split(".") | map(tonumber)) | .[-1]' -r)
+latestTag=$(curl https://api.github.com/repos/Prowlarr/Prowlarr/releases/latest | jq -r ".tag_name")
+latestVersion="$(expr $latestTag : 'v\(.*\)')"
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then
     echo "Prowlarr is up-to-date: ${currentVersion}"
@@ -45,6 +39,7 @@ fi
 
 updateVersion $latestVersion
 
-updateHash $latestVersion x64 linux
-updateHash $latestVersion arm64 linux
-updateHash $latestVersion x64 osx
+updateHash $latestVersion aarch64-darwin arm64 osx
+updateHash $latestVersion aarch64-linux arm64 linux
+updateHash $latestVersion x86_64-darwin x64 osx
+updateHash $latestVersion x86_64-linux x64 linux

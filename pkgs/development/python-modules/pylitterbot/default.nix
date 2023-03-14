@@ -1,42 +1,62 @@
 { lib
-, authlib
+, aiohttp
+, aioresponses
 , buildPythonPackage
 , fetchFromGitHub
-, httpx
-, pytest-asyncio
+, poetry-core
+, pyjwt
+, pytest-aiohttp
+, pytest-freezegun
 , pytestCheckHook
 , pythonOlder
-, pytz
+, deepdiff
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2021.10.1";
-  disabled = pythonOlder "3.6";
+  version = "2023.1.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-xE+H23AZR1OXfuLMvSuI7IeYKX7k2iEATHq5VheMLn4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PSg0u4Beg0OVUMxaBCPxJSVO/MxBvCpDu2rQhiYT9OM=";
   };
 
-  propagatedBuildInputs = [
-    authlib
-    httpx
-    pytz
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  checkInputs = [
-    pytest-asyncio
+  propagatedBuildInputs = [
+    aiohttp
+    deepdiff
+    pyjwt
+  ];
+
+  nativeCheckInputs = [
+    aioresponses
+    pytest-aiohttp
+    pytest-freezegun
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pylitterbot" ];
+  postPatch = ''
+    # https://github.com/natekspencer/pylitterbot/issues/73
+    substituteInPlace pyproject.toml \
+      --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
+  '';
+
+  pythonImportsCheck = [
+    "pylitterbot"
+  ];
 
   meta = with lib; {
-    description = "Python package for controlling a Litter-Robot";
+    description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

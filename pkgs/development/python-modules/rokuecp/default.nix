@@ -1,36 +1,69 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , aiohttp
+, aresponses
+, awesomeversion
+, backoff
+, buildPythonPackage
+, cachetools
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytest-freezegun
+, pytestCheckHook
+, pythonOlder
 , xmltodict
 , yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.8.4";
-  format = "setuptools";
+  version = "0.17.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
-    rev = version;
-    sha256 = "sha256-vwXBYwiDQZBxEZDwLX9if6dt7tKQQOLyKL5m0q/3eUw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3GHG4FBGMiF5kNk2gl05xiX9+5tcrUyi4SUCXTa6Qco=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
+    cachetools
     xmltodict
+    awesomeversion
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    pytestCheckHook
     pytest-asyncio
+    pytest-freezegun
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov" ""
+  '';
+
+  disabledTests = [
+    # Network related tests are having troube in the sandbox
+    "test_resolve_hostname"
+    "test_get_dns_state"
+    # Assertion issue
+    "test_guess_stream_format"
+    "test_update_tv"
+    "test_get_apps_single_app"
+    "test_get_tv_channels_single_channel"
   ];
 
   pythonImportsCheck = [
@@ -40,7 +73,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
+    changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

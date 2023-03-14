@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, zlib, boost
-, openal, glm, freetype, libGLU, SDL2, epoxy
+, openal, glm, freetype, libGLU, SDL2, libepoxy
 , dejavu_fonts, inkscape, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
 ,   qtbase ? null
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     zlib boost openal glm
-    freetype libGLU SDL2 epoxy
+    freetype libGLU SDL2 libepoxy
   ] ++ optionals withCrashReporter [ qtbase curl ]
     ++ optionals stdenv.isLinux    [ gdb ];
 

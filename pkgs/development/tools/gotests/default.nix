@@ -1,25 +1,25 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gotests";
-  version = "1.5.3";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/cweill/gotests";
-  excludedPackages = "testdata";
-  goDeps = ./deps.nix;
+  version = "1.6.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "cweill";
     repo = "gotests";
-    sha256 = "1c0hly31ax0wk01zdx0l0yl40xybaizjfb3gjxia2z0mgx330dq9";
+    rev = "v${version}";
+    sha256 = "sha256-6IzUpAsFUgF2FwiC17OfDn1M+8WYFQPpRyXbkpHIztw=";
   };
 
-  meta = {
+  vendorSha256 = "sha256-WMeHZN3s+8pIYEVaSLjI3Bz+rPTWHr1AkZ8lydjBwCw=";
+
+  # tests are broken in nix environment
+  doCheck = false;
+
+  meta = with lib; {
     description = "Generate Go tests from your source code";
     homepage = "https://github.com/cweill/gotests";
-    maintainers = with lib.maintainers; [ vdemeester ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ vdemeester ];
+    license = licenses.asl20;
   };
 }

@@ -1,27 +1,27 @@
 { lib, stdenv, fetchFromGitHub, python3, boost, cmake }:
 
 let
-  rev = "03e0070f263fbe31c247de61d259544722786210";
+  rev = "488f4e71073062de314c55a037ede7cf03a3324c";
   # git describe --tags
-  realVersion = "1.0-532-g${builtins.substring 0 7 rev}";
+  realVersion = "1.2.1-14-g${builtins.substring 0 7 rev}";
 in stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2021-09-01";
+  version = "unstable-2022-09-14";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "YosysHQ";
        repo   = "prjtrellis";
        inherit rev;
-       sha256 = "joQMsjVj8d3M3IaqOkfVQ1I5qPDM8HHJiye+Ak8f3dg=";
+       hash   = "sha256-Blbu+0rlM/3izbF0XCvkNpSAND0IclWEwK7anzyrpvw=";
        name   = "trellis";
      })
 
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "prjtrellis-db";
-      rev    = "fdf4bf275a7402654bc643db537173e2fbc86103";
-      sha256 = "eDq2wU2pnfK9bOkEVZ07NQPv02Dc6iB+p5GTtVBiyQA=";
+      rev    = "35d900a94ff0db152679a67bf6e4fbf40ebc34aa";
+      hash   = "sha256-r6viR8y9ZjURGNbsa0/YY8lzy9kGzjuu408ntxwpqm0=";
       name   = "trellis-database";
     })
   ];
@@ -39,6 +39,12 @@ in stdenv.mkDerivation rec {
     rmdir database && ln -sfv ${builtins.elemAt srcs 1} ./database
 
     cd libtrellis
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    for f in $out/bin/* ; do
+      install_name_tool -change "$out/lib/libtrellis.dylib" "$out/lib/trellis/libtrellis.dylib" "$f"
+    done
   '';
 
   doInstallCheck = true;

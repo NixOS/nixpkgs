@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = [ "-levent" "-ltirpc" ];
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   configureFlags = [ "--with-libevent" ];
 

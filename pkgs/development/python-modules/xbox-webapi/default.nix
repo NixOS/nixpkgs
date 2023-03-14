@@ -38,10 +38,14 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
   ];
 
   meta = with lib; {

@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   preInstall = ''
     mkdir -p $out/bin
@@ -25,10 +27,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with lib; {
-    homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     description = "“The Whitespace Thing” for OCaml";
+    homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [ ];
+    mainProgram = "ocaml+twt";
+    inherit (ocaml.meta) platforms;
   };
 }

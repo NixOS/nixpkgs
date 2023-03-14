@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-translations";
-  version = "5.0.0";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-qBLg0z0ZoS7clclKsIxMG6378Q1iv1NnhS9cz3f4cEc=";
+    hash = "sha256-567xkQGLLhZtjAWXzW/MRiD14rrWeg0yvx97jtukRvc=";
   };
 
   nativeBuildInputs = [

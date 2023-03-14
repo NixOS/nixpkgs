@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, robotframework }:
 
 buildPythonPackage rec {
-  version = "1.3";
+  version = "3.0.0";
   pname = "robotstatuschecker";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "statuschecker";
-    rev = version;
-    sha256 = "0rppwwpp4djn5c43x7icwslnxbzcfnnn3c6awpg1k97j69d2nmln";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7xHPqlR7IFZp3Z120mg25ZSg9eI878kE8RF1y3F5O70=";
   };
 
   propagatedBuildInputs = [ robotframework ];

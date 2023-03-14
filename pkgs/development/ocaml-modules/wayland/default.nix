@@ -12,15 +12,13 @@
 
 buildDunePackage rec {
   pname = "wayland";
-  version = "0.2";
+  version = "1.1";
 
-  minimumOCamlVersion = "4.08";
-
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/talex5/ocaml-wayland/releases/download/v${version}/wayland-v${version}.tbz";
-    sha256 = "4eb323e42a8c64e9e49b15a588342bfcc1e99640305cb261d128c75612d9458c";
+    url = "https://github.com/talex5/ocaml-wayland/releases/download/v${version}/wayland-${version}.tbz";
+    sha256 = "0b7czgh08i6xcx3fsz6vd19sfyngwi0i27jdzg8cnjgrgwnagv6d";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +40,9 @@ buildDunePackage rec {
 
   meta = {
     description = "Pure OCaml Wayland protocol library";
+    homepage = "https://github.com/talex5/ocaml-wayland";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sternenseemann ];
-    homepage = "https://github.com/talex5/ocaml-wayland";
+    mainProgram = "wayland-scanner-ocaml";
   };
 }

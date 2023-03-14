@@ -5,11 +5,11 @@ let
   cfg = config.services.opentracker;
 in {
   options.services.opentracker = {
-    enable = mkEnableOption "opentracker";
+    enable = mkEnableOption (lib.mdDoc "opentracker");
 
     package = mkOption {
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         opentracker package to use
       '';
       default = pkgs.opentracker;
@@ -18,7 +18,7 @@ in {
 
     extraOptions = mkOption {
       type = types.separatedString " ";
-      description = ''
+      description = lib.mdDoc ''
         Configuration Arguments for opentracker
         See https://erdgeist.org/arts/software/opentracker/ for all params
       '';

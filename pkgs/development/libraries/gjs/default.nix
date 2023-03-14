@@ -2,16 +2,18 @@
 , lib
 , stdenv
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gnome
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_78
+, spidermonkey_102
 , pango
 , cairo
 , readline
+, libsysprof-capture
 , glib
 , libxml2
 , dbus
@@ -25,18 +27,17 @@
 
 let
   testDeps = [
-    gobject-introspection # for Gio and cairo typelibs
     gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.70.0";
+  version = "1.74.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-SwYpNBoxigI3ThE6uX+anzMlQjJp/B4LBDpf+wGGHF8=";
+    sha256 = "sha256-pAb9ahZSz2bcqyKAYr0Wp19bM3gkjfu74BayEnRKMLY=";
   };
 
   patches = [
@@ -54,17 +55,20 @@ in stdenv.mkDerivation rec {
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     cairo
     readline
-    spidermonkey_78
-    dbus # for dbus-run-session
+    libsysprof-capture
+    spidermonkey_102
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ] ++ testDeps;
 
@@ -73,15 +77,19 @@ in stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dprofiler=disabled"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [
+    "-Dprofiler=disabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace installed-tests/js/meson.build \
+      --replace "'Encoding'," "#'Encoding',"
   '';
 
   preCheck = ''
@@ -135,6 +143,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

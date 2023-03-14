@@ -17,7 +17,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the dummy "startx" pseudo-display manager,
           which allows users to start X manually via the "startx" command
           from a vt shell. The X server runs under the user's id, not as root.
@@ -35,10 +35,7 @@ in
   config = mkIf cfg.enable {
     services.xserver = {
       exportConfiguration = true;
-      displayManager.job.execCmd = "";
-      displayManager.lightdm.enable = lib.mkForce false;
     };
-    systemd.services.display-manager.enable = false;
 
     # Other displayManagers log to /dev/null because they're services and put
     # Xorg's stdout in the journal

@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     gtkspell3
     hunspell
     libsecret
-    (webkitgtk.override {enableGLES = false;})
+    webkitgtk
     glib
   ];
 
@@ -65,9 +65,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   strictDeps = false;

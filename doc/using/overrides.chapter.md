@@ -39,14 +39,18 @@ The function `overrideAttrs` allows overriding the attribute set passed to a `st
 Example usage:
 
 ```nix
-helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
+helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
   separateDebugInfo = true;
 });
 ```
 
 In the above example, the `separateDebugInfo` attribute is overridden to be true, thus building debug info for `helloWithDebug`, while all other attributes will be retained from the original `hello` package.
 
-The argument `oldAttrs` is conventionally used to refer to the attr set originally passed to `stdenv.mkDerivation`.
+The argument `previousAttrs` is conventionally used to refer to the attr set originally passed to `stdenv.mkDerivation`.
+
+The argument `finalAttrs` refers to the final attributes passed to `mkDerivation`, plus the `finalPackage` attribute which is equal to the result of `mkDerivation` or subsequent `overrideAttrs` calls.
+
+If only a one-argument function is written, the argument has the meaning of `previousAttrs`.
 
 ::: {.note}
 Note that `separateDebugInfo` is processed only by the `stdenv.mkDerivation` function, not the generated, raw Nix derivation. Thus, using `overrideDerivation` will not work in this case, as it overrides only the attributes of the final derivation. It is for this reason that `overrideAttrs` should be preferred in (almost) all cases to `overrideDerivation`, i.e. to allow using `stdenv.mkDerivation` to process input arguments, as well as the fact that it is easier to use (you can use the same attribute names you see in your Nix code, instead of the ones generated (e.g. `buildInputs` vs `nativeBuildInputs`), and it involves less typing).
@@ -59,7 +63,7 @@ You should prefer `overrideAttrs` in almost all cases, see its documentation for
 :::
 
 ::: {.warning}
-Do not use this function in Nixpkgs as it evaluates a Derivation before modifying it, which breaks package abstraction and removes error-checking of function arguments. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in `~/.config/nixpkgs/config.nix`.
+Do not use this function in Nixpkgs as it evaluates a derivation before modifying it, which breaks package abstraction. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in `~/.config/nixpkgs/config.nix`.
 :::
 
 The function `overrideDerivation` creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the `makeOverridable` function. Most standard derivation-producing functions, such as `stdenv.mkDerivation`, are defined using this function, which means most packages in the nixpkgs expression, `pkgs`, have this function.
@@ -70,8 +74,8 @@ Example usage:
 mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
   name = "sed-4.2.2-pre";
   src = fetchurl {
-    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+    url = "ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2";
+    hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
   };
   patches = [];
 });

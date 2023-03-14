@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , colorlog
-, demjson
+, pyyaml
 , fetchPypi
 , pythonOlder
 , requests
@@ -9,30 +9,33 @@
 
 buildPythonPackage rec {
   pname = "lupupy";
-  version = "0.0.21";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cpamb1fp84psiqm7xr156zi4f2fv2wijbjjyk6w87z8fl2aw8xc";
+    hash = "sha256-g2EEyPhsQZ+VKP/kSjZdQ9ns0NlptH8l2h0vTTLpF54=";
   };
 
   propagatedBuildInputs = [
     colorlog
-    demjson
+    pyyaml
     requests
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "lupupy" ];
+  pythonImportsCheck = [
+    "lupupy"
+  ];
 
   meta = with lib; {
     description = "Python module to control Lupusec alarm control panels";
     homepage = "https://github.com/majuss/lupupy";
+    changelog = "https://github.com/majuss/lupupy/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "test.py" ];
   pythonImportsCheck = [ "pyuseragents" ];
 
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Giving you a random User-Agent Header";
     homepage = "https://github.com/Animenosekai/useragents";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

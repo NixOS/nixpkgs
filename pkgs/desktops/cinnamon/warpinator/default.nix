@@ -10,11 +10,12 @@
 , gettext
 , polkit
 , glib
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.0.8";
+  version = "1.4.5";
 
   format = "other";
 
@@ -22,7 +23,7 @@ python3.pkgs.buildPythonApplication rec  {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0n1b50j2w76qnhfj5yg5q2j7fgxr9gbmzpazmbml4q41h8ybcmxm";
+    hash = "sha256-5mMV4WinpFR9ihgoQsgIXre0VpBdg9S8GjSkx+7ocLg=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,10 @@ python3.pkgs.buildPythonApplication rec  {
     netifaces
   ];
 
+  mesonFlags = [
+    "-Dbundle-zeroconf=false"
+  ];
+
   postPatch = ''
     chmod +x install-scripts/*
     patchShebangs .
@@ -63,16 +68,24 @@ python3.pkgs.buildPythonApplication rec  {
       {} +
   '';
 
+  dontWrapGApps = true; # Prevent double wrapping
+
   preFixup = ''
     # these get loaded via import from bin, so don't need wrapping
     chmod -x+X $out/libexec/warpinator/*.py
+
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "^master.*";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

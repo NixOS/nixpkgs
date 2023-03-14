@@ -1,6 +1,6 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib
+{ haskellPackages, mkDerivation, fetchFromGitHub, lib, stdenv
 # the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz
+, makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
@@ -21,6 +21,7 @@ let
     homepage    = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
+    hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
   };
 
   # tamarin use symlinks to the LICENSE and Setup.hs files, so for these sublibraries
@@ -75,10 +76,17 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
+  '' + lib.optionalString stdenv.isLinux ''
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+  '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}
     # so that the package can be used as a vim plugin to install syntax coloration
     install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
     install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/tamarin-prover $out/share/nvim/site
+    # Emacs SPTHY major mode
+    install -Dt $out/share/emacs/site-lisp etc/spthy-mode.el
   '';
 
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";

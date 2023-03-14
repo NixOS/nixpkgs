@@ -1,28 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, liberasurecode, six }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, liberasurecode, six }:
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.6.0";
+  version = "unstable-2022-03-11";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-gBHjHuia5/uZymkWZgyH4BCEZqmWK9SXowAQIJdOO7E=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "pyeclib";
+    rev = "b50040969a03f7566ffcb468336e875d21486113";
+    sha256 = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
   };
 
   postPatch = ''
     # patch dlopen call
     substituteInPlace src/c/pyeclib_c/pyeclib_c.c \
       --replace "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
+    # python's platform.platform() doesn't return "Darwin" (anymore?)
+    substituteInPlace setup.py \
+      --replace '"Darwin"' '"macOS"'
   '';
 
-  preBuild = ''
-    # required for the custom find_library function in setup.py
-    export LD_LIBRARY_PATH="${lib.makeLibraryPath [ liberasurecode ]}"
+  preBuild = let
+    ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    # required for the custom _find_library function in setup.py
+    export ${ldLibraryPathEnvName}="${lib.makeLibraryPath [ liberasurecode ]}"
   '';
 
   buildInputs = [ liberasurecode ];
 
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six ];
 
   pythonImportsCheck = [ "pyeclib" ];
 

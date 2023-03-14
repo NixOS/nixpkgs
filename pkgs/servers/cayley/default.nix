@@ -1,29 +1,39 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cayley";
-  version = "0.7.5";
-
-  goPackagePath = "github.com/cayleygraph/cayley";
+  version = "0.7.7";
+  rev = "dcf764fef381f19ee49fad186b4e00024709f148";
 
   src = fetchFromGitHub {
     owner = "cayleygraph";
     repo = "cayley";
     rev = "v${version}";
-    sha256 = "1zfxa9z6spi6xw028mvbc7c3g517gn82g77ywr6picl47fr2blnd";
+    sha256 = "sha256-jIX0v6ujiQvEAb/mKkrpNgsY0YLkJYHy2sUfQnooE48=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-SSjHGJoW3I7r8emh3IwmiZQIVzdilAsA2ULdAqld2fA=";
 
-  ldflags = [
-    "-X=main.Version=${version}"
+  subPackages = [ "cmd/cayley" ];
+
+  ldflags = let basename = "github.com/cayleygraph/cayley/version"; in [
+    "-s"
+    "-w"
+    "-X ${basename}.Version=${src.rev}"
+    "-X ${basename}.GitHash=${rev}"
   ];
 
-  meta = {
+  meta = with lib; {
+    description = "Graph database designed for ease of use and storing complex data";
+    longDescription = ''
+      Cayley is an open-source database for Linked Data. It is inspired by the
+      graph database behind Google's Knowledge Graph (formerly Freebase).
+    '';
     homepage = "https://cayley.io/";
-    description = "A graph database inspired by Freebase and Knowledge Graph";
-    maintainers = with lib.maintainers; [ sigma ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sigma ];
   };
 }

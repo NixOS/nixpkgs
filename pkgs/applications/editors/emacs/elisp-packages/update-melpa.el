@@ -103,6 +103,10 @@ return Promise to resolve in that process."
                                                   (url-hexify-string repo)
                                                   "/repository/archive.tar.gz?ref="
                                                   commit)))
+            ("sourcehut" (list "nix-prefetch-url"
+                               "--unpack" (concat "https://git.sr.ht/~" repo "/archive/" commit ".tar.gz")))
+            ("codeberg" (list "nix-prefetch-url"
+                              "--unpack" (concat "https://codeberg.org/" repo "/archive/" commit ".tar.gz")))
             ("bitbucket" (list "nix-prefetch-hg"
                                (concat "https://bitbucket.com/" repo) commit))
             ("hg"        (list "nix-prefetch-hg"
@@ -210,7 +214,9 @@ return Promise to resolve in that process."
                             `((fetcher . ,fetcher))
                             (if (or (equal "github" fetcher)
                                     (equal "bitbucket" fetcher)
-                                    (equal "gitlab" fetcher))
+                                    (equal "gitlab" fetcher)
+                                    (equal "sourcehut" fetcher)
+                                    (equal "codeberg" fetcher))
                                 `((repo . ,repo))
                               `((url . ,url)))
                             (when unstable-aprops `((unstable . ,(source-info entry unstable-archive unstable-sha))))

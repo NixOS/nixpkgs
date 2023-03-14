@@ -1,38 +1,27 @@
-{lib, stdenv, fetchurl, java, makeWrapper}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="apache-jena";
-    version = "4.2.0";
-    name="${baseName}-${version}";
-    url="http://archive.apache.org/dist/jena/binaries/apache-jena-${version}.tar.gz";
-    sha256 = "1yiqlsp1g2fladal8mj164b9s0qsl5csllg54p7x7w63wf7gixnq";
+{ lib, stdenv, fetchurl, java, makeWrapper }:
+
+stdenv.mkDerivation rec {
+  pname = "apache-jena";
+  version = "4.7.0";
+  src = fetchurl {
+    url = "https://dlcdn.apache.org/jena/binaries/apache-jena-${version}.tar.gz";
+    sha256 = "sha256-3tJRJ9UHsOYfWvwPZHp+hkRZxb0RODchJjQMAZ3lkuY=";
   };
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
   installPhase = ''
     cp -r . "$out"
     for i in "$out"/bin/*; do
       wrapProgram "$i" --prefix "PATH" : "${java}/bin/"
     done
   '';
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "RDF database";
-    license = lib.licenses.asl20;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
-    homepage = "http://jena.apache.org";
-    downloadPage = "http://archive.apache.org/dist/jena/binaries/";
-    updateWalker = true;
-    downloadURLRegexp = "apache-jena-.*[.]tar[.]gz\$";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "https://jena.apache.org";
+    downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };
 }

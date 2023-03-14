@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pngquant";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "pngquant";
     rev = version;
-    sha256 = "0ny6h3fwf6gvzkqkc3zb5mrkqxm6s7xzb6bvzn6vlamklncqgl78";
+    sha256 = "sha256-D2KNn6AJ4eIHeb/2Oo1Wf0djMCXTtVGrua0D6z7+9V4=";
     fetchSubmodules = true;
   };
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = lib.optionals (!stdenv.isi686 && !stdenv.isx86_64) [ "--disable-sse" ];
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng zlib lcms2 ];
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
     platforms = platforms.unix;
     license = with licenses; [ gpl3Plus hpnd bsd2 ];
-    maintainers = [ maintainers.volth ];
+    maintainers = [ maintainers.srapenne ];
   };
 }

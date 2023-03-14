@@ -3,18 +3,16 @@
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "2.17.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    sha256 = "sha256-afprMKFyuo1Doi5K5EtzdiQY+fbx2LtEh3xxnPr+yjk=";
+    sha256 = "sha256-12yThmRsRW0RLNAgafZaciqJP5sRonyrkVSUf+LM7J0=";
     rev = "v${version}";
   };
 
-  vendorSha256 = "sha256-aV+A2duS13Zi9IPa7bd/tBe5NzmUhKYsXzvluuIFc+I=";
-
-  doCheck = false;
+  vendorHash = "sha256-6rEGuuw3UJyWeaIm9v5P8/V0Nxd9ySe0PCf0rWRDB9s=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,6 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Fast and secure on-the-fly image processing server written in Go";
     homepage = "https://imgproxy.net";
+    changelog = "https://github.com/imgproxy/imgproxy/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ paluh ];
   };

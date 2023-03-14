@@ -1,34 +1,32 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, async_generator
 , httpx
 }:
 
 buildPythonPackage rec {
   pname = "whodap";
-  version = "0.1.2";
+  version = "0.1.8";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1map5m9i1hi4wb9mpp7hq89n8x9bgsi7gclqfixgqhpi5v5gybqc";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hAU9143R/LDqDBgX3Y+gBG+dt4dpIIPDdO6HgH0ZTfg=";
   };
 
   propagatedBuildInputs = [
     httpx
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    async_generator
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -37,11 +35,14 @@ buildPythonPackage rec {
     "tests/test_client.py"
   ];
 
-  pythonImportsCheck = [ "whodap" ];
+  pythonImportsCheck = [
+    "whodap"
+  ];
 
   meta = with lib; {
     description = "Python RDAP utility for querying and parsing information about domain names";
     homepage = "https://github.com/pogzyb/whodap";
+    changelog = "https://github.com/pogzyb/whodap/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

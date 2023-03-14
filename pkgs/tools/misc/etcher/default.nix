@@ -5,7 +5,7 @@
 , util-linux
 , bash
 , makeWrapper
-, electron_12
+, electron
 }:
 
 let
@@ -14,8 +14,8 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   sha256 = {
-    "x86_64-linux" = "sha256-n8i4ZqjugeUfXpTzVgIwVomfPk6HvPEbTZLe/jFgwFg=";
-    "i686-linux" = "sha256-lLGfhW6el2ZOcaykH1kTjGldXo7/0q5O8QnslnDlWAQ=";
+    "x86_64-linux" = "1rcidar97nnpjb163x9snnnhw1z1ld4asgbd5dxpzdh8hikh66ll";
+    "i686-linux" = "1jll4i0j9kh78kl10s596xxs60gy7cnlafgpk89861yihj0i73a5";
   }."${system}" or throwSystem;
 
   arch = {
@@ -23,13 +23,11 @@ let
     "i686-linux" = "i386";
   }."${system}" or throwSystem;
 
-  electron = electron_12;
-
 in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.6.0";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
@@ -81,5 +79,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

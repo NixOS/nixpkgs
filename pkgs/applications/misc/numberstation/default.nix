@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "numberstation";
-  version = "1.0.0";
+  version = "1.3.0";
 
   format = "other";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "~martijnbraam";
     repo = "numberstation";
     rev = version;
-    sha256 = "1mr0rmm7hcyn8qr485h1ihbb5f581sab4fgvs7lhwy9lxsqk0r0l";
+    hash = "sha256-l4ev47ofBZeUqjJjdhQOHX+mNL9nIHH0mfYdqZW1LMs=";
   };
 
   postPatch = ''
@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils
     glib
     gtk3
+    gobject-introspection
     meson
     ninja
     pkg-config
@@ -41,7 +42,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libhandy
     librsvg

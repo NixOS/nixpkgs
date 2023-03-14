@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -52,15 +53,16 @@
 , writeText
 , xorg
 , zlib
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.25.1";
+  version = "1.26.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0svybbrvpf6q955y6fclxh3md64z0dgmh0x54x2j60503hhs071m";
+    sha256 = "sha256-2fg6oP2TNPRN7rTklS3A5RRGg6+seG/uvOYDCVFhfRU=";
   };
 
   nativeBuildInputs = [
@@ -145,7 +147,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
-    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not availabe in nixpkgs
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not available in nixpkgs
     "-D embedded-lz4=false"
     "-D fb=true"
     "-D network-backend=connman"
@@ -203,11 +205,13 @@ stdenv.mkDerivation rec {
     patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
     license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

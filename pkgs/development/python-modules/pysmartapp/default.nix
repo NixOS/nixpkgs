@@ -4,29 +4,35 @@
 , httpsig
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysmartapp";
-  version = "0.3.3";
+  version = "0.3.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = pname;
     rev = version;
-    sha256 = "03wk44siqxl15pa46x5vkg4q0mnga34ir7qn897576z2ivbx7awh";
+    sha256 = "sha256-zYjv7wRxQTS4PnNaY69bw9xE6I4DZMocwUzEICBfwqM=";
   };
 
   propagatedBuildInputs = [
     httpsig
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pysmartapp" ];
+  pythonImportsCheck = [
+    "pysmartapp"
+  ];
 
   meta = with lib; {
     description = "Python implementation to work with SmartApp lifecycle events";

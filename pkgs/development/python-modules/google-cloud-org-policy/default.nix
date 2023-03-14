@@ -1,26 +1,50 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core, mock, proto-plus, protobuf, pytest-asyncio }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-api-core
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.2.0";
+  version = "1.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6811f8bde6019b18f5f0d154078000405af6fd38836713c05cbb9c1512f181a";
+    hash = "sha256-ylUUxWLe5u1WVyz1rD64u9MJ7qKsLl3cLD4ELcZCI6Y=";
   };
 
-  propagatedBuildInputs = [ google-api-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  # prevent google directory from shadowing google imports
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  # Prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';
-  checkInputs = [ mock protobuf pytest-asyncio pytestCheckHook ];
-  pythonImportsCheck = [ "google.cloud.orgpolicy" ];
+
+  pythonImportsCheck = [
+    "google.cloud.orgpolicy"
+  ];
 
   meta = with lib; {
-    description = "Protobufs for Google Cloud Organization Policy.";
+    description = "Protobufs for Google Cloud Organization Policy";
     homepage = "https://github.com/googleapis/python-org-policy";
+    changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
   };

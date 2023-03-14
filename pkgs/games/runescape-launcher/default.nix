@@ -1,46 +1,69 @@
-{ stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
-, gnome2, xorg
-, libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl
+{ stdenv
+, lib
+, autoPatchelfHook
+, buildFHSUserEnv
+, cairo
+, dpkg
+, fetchurl
+, gcc-unwrapped
+, glib
+, glibc
+, gnome2
+, gtk2-x11
+, libGL
 , libpulseaudio
-, SDL2, xorg_sys_opengl, libGL
+, libSM
+, libXxf86vm
+, libX11
+, openssl_1_1
+, pango
+, SDL2
+, wrapGAppsHook
+, xdg-utils
+, xorg
+, xorg_sys_opengl
+, zlib
 }:
 let
 
   runescape = stdenv.mkDerivation rec {
     pname = "runescape-launcher";
-    version = "2.2.9";
+    version = "2.2.10";
 
+    # Packages: https://content.runescape.com/downloads/ubuntu/dists/trusty/non-free/binary-amd64/Packages
+    # upstream is https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb
     src = fetchurl {
-      url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
-      sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
+      url = "https://archive.org/download/${pname}_${version}_amd64/${pname}_${version}_amd64.deb";
+      sha256 = "1v96vjiblphhbqhpp3m7wbvdvcnp76ncdlf4pdcr2z1dz8nh6shg";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
-      wrapGAppsHook
       dpkg
+      wrapGAppsHook
     ];
 
     buildInputs = [
-      glibc
+      cairo
       gcc-unwrapped
+      glib
+      glibc
+      gtk2-x11
       libSM
       libXxf86vm
       libX11
-      glib
+      openssl_1_1
       pango
-      cairo
-      gtk2-x11
       zlib
-      openssl
     ];
 
     runtimeDependencies = [
-      libpulseaudio
       libGL
+      libpulseaudio
       SDL2
+      openssl_1_1
+      xdg-utils # The launcher uses `xdg-open` to open HTTP URLs in the user's browser
       xorg_sys_opengl
-      openssl
       zlib
     ];
 
@@ -75,8 +98,9 @@ let
     meta = with lib; {
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
-      maintainers = with lib.maintainers; [ grburst ];
+      maintainers = with maintainers; [ grburst ];
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -89,15 +113,43 @@ in
   * FHS simulates a classic linux shell
   */
   buildFHSUserEnv {
-   name = "RuneScape";
-   targetPkgs = pkgs: [
-     runescape
-     dpkg glibc gcc-unwrapped
-     libSM libXxf86vm libX11 glib pango cairo gtk2-x11 zlib openssl
-     libpulseaudio
-     xorg.libX11
-     SDL2 xorg_sys_opengl libGL
-   ];
-   multiPkgs = pkgs: [ libGL ];
-   runScript = "runescape-launcher";
-}
+    name = "RuneScape";
+    targetPkgs = pkgs: [
+      runescape
+      cairo
+      dpkg
+      gcc-unwrapped
+      glib
+      glibc
+      gtk2-x11
+      libGL
+      libpulseaudio
+      libSM
+      libXxf86vm
+      libX11
+      openssl_1_1
+      pango
+      SDL2
+      xdg-utils
+      xorg.libX11
+      xorg_sys_opengl
+      zlib
+    ];
+    multiPkgs = pkgs: [ libGL ];
+    runScript = "runescape-launcher";
+    extraInstallCommands = ''
+      mkdir -p "$out/share/applications"
+      cp ${runescape}/share/applications/runescape-launcher.desktop "$out/share/applications"
+      cp -r ${runescape}/share/icons "$out/share/icons"
+      substituteInPlace "$out/share/applications/runescape-launcher.desktop" \
+        --replace "/usr/bin/runescape-launcher" "RuneScape"
+    '';
+
+    meta = with lib; {
+      description = "RuneScape Game Client (NXT) - Launcher for RuneScape 3";
+      homepage = "https://www.runescape.com/";
+      license = licenses.unfree;
+      maintainers = with maintainers; [ grburst ];
+      platforms = [ "x86_64-linux" ];
+    };
+  }

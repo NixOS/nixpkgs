@@ -1,58 +1,73 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , numpy
 , scipy
 , pytestCheckHook
-, pytest-cov
 , pytest-timeout
 , h5py
 , matplotlib
 , nibabel
 , pandas
 , scikit-learn
+, decorator
+, jinja2
+, pooch
+, tqdm
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "0.23.4";
+  version = "1.3.1";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
-  # PyPI dist insufficient to run tests
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1kik52ssa6difkqz8xnvrcbpp4p7792hj1rcgyypb4q7sc048aqy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jvrk6m1Cd5ig2LXq6sAIbHDhmtG1gH/7WNAc7oet+tg=";
   };
 
-  propagatedBuildInputs = [ numpy scipy ];
-
-  # all tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
-  doCheck = false;
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-timeout
-    h5py
+  propagatedBuildInputs = [
+    decorator
+    jinja2
     matplotlib
+    numpy
+    pooch
+    scipy
+    setuptools
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    h5py
     nibabel
     pandas
+    pytestCheckHook
     scikit-learn
+    pytest-timeout
   ];
+
   preCheck = ''
     export HOME=$TMP
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
-  pythonImportsCheck = [ "mne" ];
+  # All tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "mne"
+  ];
 
   meta = with lib; {
-    homepage = "https://mne.tools";
     description = "Magnetoencephelography and electroencephalography in Python";
+    homepage = "https://mne.tools";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

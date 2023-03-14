@@ -1,13 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
-, elementary-settings-daemon
 , gnome-settings-daemon
 , granite
 , gtk3
@@ -20,19 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "006h8mrhmdrbd83vhdyahgrfk9wh6j9kjincpp7dz7sl8fsyhmcr";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-8Hu2RIgA0gSc+tLNjDqGS+b/HpbsOdR4otpY4UqNzKs=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +37,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
-    elementary-settings-daemon
     gnome-settings-daemon
     glib
     granite
@@ -54,6 +46,10 @@ stdenv.mkDerivation rec {
     switchboard
     wingpanel-indicator-power # settings schema
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Power Plug";

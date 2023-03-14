@@ -1,27 +1,38 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , google-api-core
 , grpcio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "chirpstack-api";
-  version = "3.9.4";
+  version = "3.12.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "08djidy3fyhghyzvndcjas3hb1s9d7719gvmgbl8bzxjm4h2c433";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "brocaar";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-69encHMk0eXE2Av87ysKvxoiXog5o68qCUlOx/lgHFU=";
   };
+
+  sourceRoot = "source/python/src";
 
   propagatedBuildInputs = [
     google-api-core
     grpcio
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
-  pythonImportsCheck = [ "chirpstack_api" ];
+
+  pythonImportsCheck = [
+    "chirpstack_api"
+  ];
 
   meta = with lib; {
     description = "ChirpStack gRPC API message and service wrappers for Python";

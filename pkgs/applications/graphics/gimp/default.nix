@@ -18,6 +18,7 @@
 , lcms
 , libpng
 , libjpeg
+, libjxl
 , poppler
 , poppler_data
 , libtiff
@@ -29,7 +30,6 @@
 , ghostscript
 , aalib
 , shared-mime-info
-, python2
 , libexif
 , gettext
 , makeWrapper
@@ -47,19 +47,21 @@
 , AppKit
 , Cocoa
 , gtk-mac-integration-gtk2
+, withPython ? false
+, python2
 }:
 
 let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.28";
+  version = "2.10.34";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "T03CLP8atfAm/qoqtV4Fd1s6EeGYGGtHvat5y/oHiCY=";
+    sha256 = "hABGQtNRs5ikKTzX/TWSBEqUTwW7UoUO5gaPJHxleqM=";
   };
 
   patches = [
@@ -100,6 +102,7 @@ in stdenv.mkDerivation rec {
     lcms
     libpng
     libjpeg
+    libjxl
     poppler
     poppler_data
     libtiff
@@ -114,7 +117,6 @@ in stdenv.mkDerivation rec {
     shared-mime-info
     libwebp
     libheif
-    python
     libexif
     xorg.libXpm
     glib-networking
@@ -126,6 +128,10 @@ in stdenv.mkDerivation rec {
     gtk-mac-integration-gtk2
   ] ++ lib.optionals stdenv.isLinux [
     libgudev
+  ] ++ lib.optionals withPython [
+    python
+    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
+    python2.pkgs.pygtk
   ];
 
   # needed by gimp-2.0.pc
@@ -140,13 +146,15 @@ in stdenv.mkDerivation rec {
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
     # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
     "--libdir=\${exec_prefix}/lib"
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
   ];
 
   enableParallelBuilding = true;
 
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
   # Check if librsvg was built with --disable-pixbuf-loader.
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
@@ -180,5 +188,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "gimp";
   };
 }

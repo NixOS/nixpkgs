@@ -3,7 +3,7 @@
 
 # IMPORTANT!
 # We only add static uids and gids for services where it is not feasible
-# to change uids/gids on service start, in example a service with a lot of
+# to change uids/gids on service start, for example a service with a lot of
 # files. Please also check if the service is applicable for systemd's
 # DynamicUser option and does not need a uid/gid allocation at all.
 # Systemd can also change ownership of service directories using the
@@ -19,7 +19,7 @@ in
 
     ids.uids = lib.mkOption {
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The user IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -27,7 +27,7 @@ in
 
     ids.gids = lib.mkOption {
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The group IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -82,14 +82,14 @@ in
       git = 41;
       #fourstore = 42; # dropped in 20.03
       #fourstorehttp = 43; # dropped in 20.03
-      virtuoso = 44;
+      #virtuoso = 44;  dropped module
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       # bind = 53; #dynamically allocated as of 2021-09-03
       wwwrun = 54;
       #adm = 55; # unused
@@ -182,7 +182,7 @@ in
       yandexdisk = 143;
       mxisd = 144; # was once collectd
       #consul = 145;# dynamically allocated as of 2021-09-03
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -236,7 +236,7 @@ in
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
-      riak = 205;
+      # riak = 205; # unused, remove 2022-07-22
       #shout = 206; # dynamically allocated as of 2021-09-18
       gateone = 207;
       namecoin = 208;
@@ -296,7 +296,7 @@ in
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
-      couchpotato = 267;
+      # couchpotato = 267; # unused, removed 2022-01-01
       gogs = 268;
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
@@ -351,6 +351,11 @@ in
       hqplayer = 319;
       moonraker = 320;
       distcc = 321;
+      webdav = 322;
+      pipewire = 323;
+      rstudio-server = 324;
+      localtimed = 325;
+      automatic-timezoned = 326;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -409,7 +414,7 @@ in
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       #bind = 53; # unused
       wwwrun = 54;
       adm = 55;
@@ -500,7 +505,7 @@ in
       #yandexdisk = 143; # unused
       mxisd = 144; # was once collectd
       #consul = 145; # unused
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -550,7 +555,7 @@ in
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
-      riak = 205;
+      # riak = 205;#unused, removed 2022-06-22
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;
@@ -602,7 +607,7 @@ in
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
-      couchpotato = 267;
+      # couchpotato = 267; # unused, removed 2022-01-01
       gogs = 268;
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
@@ -638,7 +643,7 @@ in
       qemu-libvirtd = 301;
       kvm = 302; # default udev rules from systemd requires these
       render = 303; # default udev rules from systemd requires these
-      # zeronet = 304; # removed 2019-01-03
+      sgx = 304; # default udev rules from systemd requires these
       lirc = 305;
       lidarr = 306;
       slurm = 307;
@@ -656,10 +661,36 @@ in
       hqplayer = 319;
       moonraker = 320;
       distcc = 321;
+      webdav = 322;
+      pipewire = 323;
+      rstudio-server = 324;
+      localtimed = 325;
+      automatic-timezoned = 326;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
       # uids and gids. Also, don't use gids above 399!
+
+      # For exceptional cases where you really need a gid above 399, leave a
+      # comment stating why.
+      #
+      # Also, avoid the following GID ranges:
+      #
+      #  1000 - 29999: user accounts (see ../config/update-users-groups.pl)
+      # 30000 - 31000: nixbld users (the upper limit is arbitrarily chosen)
+      # 61184 - 65519: systemd DynamicUser (see systemd.exec(5))
+      #         65535: the error return sentinel value when uid_t was 16 bits
+      #
+      # 100000 - 6653600: subgid allocated for user namespaces
+      #                   (see ../config/update-users-groups.pl)
+      #       4294967294: unauthenticated user in some NFS implementations
+      #       4294967295: error return sentinel value
+      #
+      # References:
+      # https://www.debian.org/doc/debian-policy/ch-opersys.html#uid-and-gid-classes
+
+      onepassword = 31001; # 1Password requires that its GID be larger than 1000
+      onepassword-cli = 31002; # 1Password requires that its GID be larger than 1000
 
       users = 100;
       nixbld = 30000;

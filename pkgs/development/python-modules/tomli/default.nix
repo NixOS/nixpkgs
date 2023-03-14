@@ -3,39 +3,36 @@
 , callPackage
 , fetchFromGitHub
 , flit-core
+, unittestCheckHook
+
+  # important downstream dependencies
+, flit
+, black
+, mypy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "tomli";
-  version = "1.2.1";
+  version = "2.0.1";
   format = "pyproject";
-
-  outputs = [
-    "out"
-    "testsout"
-  ];
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-30AQ9MQmclcjl1d83mIoxFXzaJn1OFKQlVxayqC5NxY=";
+    sha256 = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
-  postInstall = ''
-    mkdir $testsout
-    cp -R benchmark/ pyproject.toml tests/ $testsout/
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "tomli" ];
 
-  # check in passthru.tests.pytest to escape infinite recursion with setuptools-scm
-  doCheck = false;
-
   passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+    # test downstream dependencies
+    inherit flit black mypy setuptools-scm;
   };
 
   meta = with lib; {

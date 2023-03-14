@@ -37,9 +37,7 @@ options, but does not declare any. The structure of full NixOS modules
 is shown in [Example: Structure of NixOS Modules](#ex-module-syntax).
 
 ::: {#ex-module-syntax .example}
-::: {.title}
 **Example: Structure of NixOS Modules**
-:::
 ```nix
 { config, pkgs, ... }:
 
@@ -71,7 +69,7 @@ The meaning of each part is as follows.
 -   This `imports` list enumerates the paths to other NixOS modules that
     should be included in the evaluation of the system configuration. A
     default set of modules is defined in the file `modules/module-list.nix`.
-    These don\'t need to be added in the import list.
+    These don't need to be added in the import list.
 
 -   The attribute `options` is a nested set of *option declarations*
     (described below).
@@ -90,10 +88,19 @@ modules: `systemd.services` (the set of all systemd services) and
 `systemd.timers` (the list of commands to be executed periodically by
 `systemd`).
 
+Care must be taken when writing systemd services using `Exec*` directives. By
+default systemd performs substitution on `%<char>` specifiers in these
+directives, expands environment variables from `$FOO` and `${FOO}`, splits
+arguments on whitespace, and splits commands on `;`. All of these must be escaped
+to avoid unexpected substitution or splitting when interpolating into an `Exec*`
+directive, e.g. when using an `extraArgs` option to pass additional arguments to
+the service. The functions `utils.escapeSystemdExecArg` and
+`utils.escapeSystemdExecArgs` are provided for this, see [Example: Escaping in
+Exec directives](#exec-escaping-example) for an example. When using these
+functions system environment substitution should *not* be disabled explicitly.
+
 ::: {#locate-example .example}
-::: {.title}
 **Example: NixOS Module for the "locate" Service**
-:::
 ```nix
 { config, lib, pkgs, ... }:
 
@@ -153,14 +160,43 @@ in {
 ```
 :::
 
-```{=docbook}
-<xi:include href="option-declarations.section.xml" />
-<xi:include href="option-types.section.xml" />
-<xi:include href="option-def.section.xml" />
-<xi:include href="assertions.section.xml" />
-<xi:include href="meta-attributes.section.xml" />
-<xi:include href="importing-modules.section.xml" />
-<xi:include href="replace-modules.section.xml" />
-<xi:include href="freeform-modules.section.xml" />
-<xi:include href="settings-options.section.xml" />
+::: {#exec-escaping-example .example}
+**Example: Escaping in Exec directives**
+```nix
+{ config, lib, pkgs, utils, ... }:
+
+with lib;
+
+let
+  cfg = config.services.echo;
+  echoAll = pkgs.writeScript "echo-all" ''
+    #! ${pkgs.runtimeShell}
+    for s in "$@"; do
+      printf '%s\n' "$s"
+    done
+  '';
+  args = [ "a%Nything" "lang=\${LANG}" ";" "/bin/sh -c date" ];
+in {
+  systemd.services.echo =
+    { description = "Echo to the journal";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      serviceConfig.ExecStart = ''
+        ${echoAll} ${utils.escapeSystemdExecArgs args}
+      '';
+    };
+}
+```
+:::
+
+```{=include=} sections
+option-declarations.section.md
+option-types.section.md
+option-def.section.md
+assertions.section.md
+meta-attributes.section.md
+importing-modules.section.md
+replace-modules.section.md
+freeform-modules.section.md
+settings-options.section.md
 ```

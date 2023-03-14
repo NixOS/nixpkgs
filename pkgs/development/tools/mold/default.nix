@@ -1,38 +1,64 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, lib
-, autoPatchelfHook
 , cmake
-, llvmPackages_latest
-, xxHash
-, zlib
+, mimalloc
+, ninja
 , openssl
+, zlib
+, testers
+, mold
 }:
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "0.9.6";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0mj258fy8l4i23jd6ail0xrrq3das7lmrf1brrr1591ahx4vjj14";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5zE5a+BYzQjgVb0Ti7bSQrGzTyysOTTR0NMOO5IKG68=";
   };
 
-  buildInputs = [ zlib openssl ];
-  nativeBuildInputs = [ autoPatchelfHook cmake xxHash ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  dontUseCmakeConfigure = true;
-  EXTRA_LDFLAGS = "-fuse-ld=${llvmPackages_latest.lld}/bin/ld.lld";
-  LTO = 1;
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  buildInputs = [
+    openssl
+    zlib
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    mimalloc
+  ];
+
+  postPatch = ''
+    sed -i CMakeLists.txt -e '/.*set(DEST\ .*/d'
+  '';
+
+  cmakeFlags = [
+    "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-faligned-allocation"
+  ]);
+
+  passthru.tests.version = testers.testVersion { package = mold; };
 
   meta = with lib; {
-    description = "A high performance drop-in replacement for existing unix linkers";
+    description = "A faster drop-in replacement for existing Unix linkers";
+    longDescription = ''
+      mold is a faster drop-in replacement for existing Unix linkers. It is
+      several times faster than the LLVM lld linker. mold is designed to
+      increase developer productivity by reducing build time, especially in
+      rapid debug-edit-rebuild cycles.
+    '';
     homepage = "https://github.com/rui314/mold";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with maintainers; [ nitsky ];
-    broken = stdenv.isAarch64;
+    changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ azahi nitsky ];
+    platforms = platforms.unix;
   };
 }

@@ -1,41 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, adoptopenjdk-bin, jre, ant
-}:
+{ lib, stdenv, fetchurl, makeWrapper, adoptopenjdk-bin, jre }:
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
-  version = "1.7.0";
+  version = "1.7.2";
 
-  src = fetchFromGitHub {
-    owner  = "tlaplus";
-    repo   = "tlaplus";
-    rev    = "refs/tags/v${version}";
-    sha256 = "1mm6r9bq79zks50yk0agcpdkw9yy994m38ibmgpb3bi3wkpq9891";
+  src = fetchurl {
+    url = "https://github.com/tlaplus/tlaplus/releases/download/v${version}/tla2tools.jar";
+    sha256 = "sha256-+hhUPkTtWXSoW9LGDA3BZiCuEXaA6o5pPSaRmZ7ZCyI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ adoptopenjdk-bin ant ];
+  buildInputs = [ adoptopenjdk-bin ];
 
-  buildPhase = "ant -f tlatools/org.lamport.tlatools/customBuild.xml compile dist";
+  dontUnpack = true;
   installPhase = ''
     mkdir -p $out/share/java $out/bin
-    cp tlatools/org.lamport.tlatools/dist/*.jar $out/share/java
+    cp $src $out/share/java/tla2tools.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/tlc2 \
-      --add-flags "-cp $out/share/java/tla2tools.jar tlc2.TLC"
-    makeWrapper ${jre}/bin/java $out/bin/tla2sany \
-      --add-flags "-cp $out/share/java/tla2tools.jar tla2sany.SANY"
+    makeWrapper ${jre}/bin/java $out/bin/tlc \
+      --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar tlc2.TLC"
+    makeWrapper ${jre}/bin/java $out/bin/tlasany \
+      --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar tla2sany.SANY"
     makeWrapper ${jre}/bin/java $out/bin/pcal \
-      --add-flags "-cp $out/share/java/tla2tools.jar pcal.trans"
-    makeWrapper ${jre}/bin/java $out/bin/tla2tex \
-      --add-flags "-cp $out/share/java/tla2tools.jar tla2tex.TLA"
+      --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar pcal.trans"
+    makeWrapper ${jre}/bin/java $out/bin/tlatex \
+      --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar tla2tex.TLA"
   '';
 
   meta = {
     description = "An algorithm specification language with model checking tools";
     homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = with lib.maintainers; [ florentc thoughtpolice ];
   };
 }

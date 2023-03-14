@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , scipy
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     pyopengl
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
@@ -51,6 +52,13 @@ buildPythonPackage rec {
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
     export FONTCONFIG_FILE=${fontsConf}
   '';
+
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
+    # small precision-related differences on other architectures,
+    # upstream doesn't consider it serious.
+    # https://github.com/pyqtgraph/pyqtgraph/issues/2110
+    "test_PolyLineROI"
+  ];
 
   meta = with lib; {
     description = "Scientific Graphics and GUI Library for Python";

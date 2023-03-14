@@ -4,35 +4,49 @@
 , faker
 , fetchPypi
 , flask
-, flask_sqlalchemy
+, flask-sqlalchemy
 , mongoengine
 , pytestCheckHook
 , sqlalchemy
 }:
 
 buildPythonPackage rec {
-  pname = "factory_boy";
-  version = "3.2.0";
+  pname = "factory-boy";
+  version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0nsw2mdjk8sqds3qsix4cf19ws6i0fak79349pw2581ryc7w0720";
+    pname = "factory_boy";
+    inherit version;
+    sha256 = "sha256-qY0newwEfHXrbkq4UIp/gfsD0sshmG9ieRNUbveipV4=";
   };
 
-  propagatedBuildInputs = [ faker ];
+  propagatedBuildInputs = [
+    faker
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
-    flask_sqlalchemy
+    flask-sqlalchemy
     mongoengine
     pytestCheckHook
     sqlalchemy
   ];
 
   # Checks for MongoDB requires an a running DB
-  disabledTests = [ "MongoEngineTestCase" ];
-  pythonImportsCheck = [ "factory" ];
+  disabledTests = [
+    "MongoEngineTestCase"
+  ];
+
+  disabledTestPaths = [
+    # incompatible with latest flask-sqlalchemy
+    "examples/flask_alchemy/test_demoapp.py"
+  ];
+
+  pythonImportsCheck = [
+    "factory"
+  ];
 
   meta = with lib; {
     description = "Python package to create factories for complex objects";

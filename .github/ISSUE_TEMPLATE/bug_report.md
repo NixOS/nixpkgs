@@ -26,6 +26,7 @@ If applicable, add screenshots to help explain your problem.
 Add any other context about the problem here.
 
 ### Notify maintainers
+
 <!--
 Please @ people who are in the `meta.maintainers` list of the offending package or module.
 If in doubt, check `git blame` for whoever last touched something.
@@ -37,12 +38,4 @@ Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
 ```console
 [user@system:~]$ nix-shell -p nix-info --run "nix-info -m"
 output here
-```
-
-Maintainer information:
-```yaml
-# a list of nixpkgs attributes affected by the problem
-attribute:
-# a list of nixos modules affected by the problem
-module:
 ```

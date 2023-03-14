@@ -1,22 +1,34 @@
-{ fetchFromGitHub, lib, pkg-config, rustPlatform, stdenv, openssl, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, openssl
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
-  version = "0.4.7";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/gcNVTfLJKA5qzRgAqFSlSI618QBsJTxFE1doOKR7e8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lk4CePSvJb8W/3TAWyRhMcUUi7ZRdIs097Ny0ipXIuc=";
   };
 
-  cargoSha256 = "sha256-o5VKj69Wp7zLR3TS+wNA0D8nP6Cynlr4KtW4JSUm0VE=";
+  cargoSha256 = "sha256-cBtK/38b+W4GKiH+u9ouT52tapGUcPsHfC4DlNDHyjg=";
 
-  nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    pkg-config
+  ];
 
-  buildInputs = lib.optional stdenv.isLinux openssl
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isLinux [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # tests don't work inside the sandbox
   doCheck = false;
@@ -24,6 +36,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
+    changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

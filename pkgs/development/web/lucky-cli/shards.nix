@@ -1,20 +1,22 @@
 {
   ameba = {
-    owner = "crystal-ameba";
-    repo = "ameba";
-    rev = "v0.14.2";
-    sha256 = "1l1q1icpzg1zvhfj8948w36j7ikaj7w816677zi29vi6y2d1dmf2";
+    url = "https://github.com/crystal-ameba/ameba.git";
+    rev = "v1.1.0";
+    sha256 = "0famv413myrshgv6y24mr84ny53rcsr777x323jlaf2isnhdd0b8";
   };
-  future = {
-    owner = "crystal-community";
-    repo = "future.cr";
-    rev = "v0.1.0";
-    sha256 = "1p88mfn1ab5hz4r81vjfm1vn9rww0lbbii8lyzfx9pkxanh9rp98";
+  lucky_task = {
+    url = "https://github.com/luckyframework/lucky_task.git";
+    rev = "v0.1.1";
+    sha256 = "0w0rnf22pvj3lp5z8c4sshzwhqgwpbjpm7nry9mf0iz3fa0v48f7";
+  };
+  nox = {
+    url = "https://github.com/matthewmcgarvey/nox.git";
+    rev = "v0.2.2";
+    sha256 = "1dfq0aknrxwp9wc0glri4w5j8pfbc6b1xrsxkahci109p6dhcna5";
   };
   teeplate = {
-    owner = "luckyframework";
-    repo = "teeplate";
-    rev = "v0.8.2";
-    sha256 = "1v7njslcpir52nnyd30mfnxvqmb7ycqnlq80qnx6myw20iy9dcww";
+    url = "https://github.com/luckyframework/teeplate.git";
+    rev = "v0.8.5";
+    sha256 = "1kr05qrp674rph1324wry57gzvgvcvlz0w27brlvdgd3gi4s8sdj";
   };
 }

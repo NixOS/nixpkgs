@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "diffr";
-  version = "v0.1.4";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "mookid";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "18ks5g4bx6iz9hdjxmi6a41ncxpb1hnsscdlddp2gr40k3vgd0pa";
   };
 
-  cargoSha256 = "05rfjangmyvmqm0bvl4bcvc7m4zhg66gknh85sxr3bzrlwzacwgw";
+  cargoSha256 = "0pn3vqv13n29h8069a38306vjlzlxf1m08ldv7lpzgqxhl8an00r";
 
   buildInputs = (lib.optional stdenv.isDarwin Security);
 

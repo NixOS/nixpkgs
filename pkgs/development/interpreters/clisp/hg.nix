@@ -8,8 +8,8 @@
 , libffi, libffcall, automake
 , coreutils
 # build options
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
-, x11Support ? (stdenv.isi686 || stdenv.isx86_64)
+, threadSupport ? stdenv.hostPlatform.isx86
+, x11Support ? stdenv.hostPlatform.isx86
 , dllSupport ? true
 , withModules ? [
     "pcre"
@@ -23,8 +23,8 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
-  v = "2.50pre20171114";
-  name = "clisp-${v}";
+  version = "2.50pre20171114";
+  pname = "clisp";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/clisp/clisp";
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
       + lib.concatMapStrings (x: " " + x) withModules);
 
-  NIX_CFLAGS_COMPILE = "-O0 ${lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
+  env.NIX_CFLAGS_COMPILE = "-O0 ${lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
 
   # TODO : make mod-check fails
   doCheck = false;
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.cons.org";
-    maintainers = with lib.maintainers; [raskin tohl];
+    maintainers = with lib.maintainers; [ raskin ];
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = lib.platforms.linux;
   };

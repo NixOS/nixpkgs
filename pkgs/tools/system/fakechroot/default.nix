@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, perl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, nixosTests, perl }:
 
 stdenv.mkDerivation rec {
   pname = "fakechroot";
@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ perl ];
+
+  passthru = {
+    tests = {
+      # A lightweight *unit* test that exercises fakeroot and fakechroot together:
+      nixos-etc = nixosTests.etc.test-etc-fakeroot;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/dex4er/fakechroot";

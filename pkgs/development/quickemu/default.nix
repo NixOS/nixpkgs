@@ -4,6 +4,7 @@
 , makeWrapper
 , qemu
 , gnugrep
+, gnused
 , lsb-release
 , jq
 , procps
@@ -11,17 +12,24 @@
 , cdrtools
 , usbutils
 , util-linux
-, spicy
+, socat
+, spice-gtk
 , swtpm
+, unzip
 , wget
 , xdg-user-dirs
 , xrandr
 , zsync
+, OVMF
+, OVMFFull
+, quickemu
+, testers
 }:
 let
   runtimePaths = [
     qemu
     gnugrep
+    gnused
     jq
     lsb-release
     procps
@@ -29,7 +37,8 @@ let
     cdrtools
     usbutils
     util-linux
-    spicy
+    unzip
+    socat
     swtpm
     wget
     xdg-user-dirs
@@ -40,32 +49,47 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "2.2.7";
+  version = "4.6";
 
   src = fetchFromGitHub {
-    owner = "wimpysworld";
-    repo = pname;
+    owner = "quickemu-project";
+    repo = "quickemu";
     rev = version;
-    sha256 = "sha256-TNG1pCePsi12QQafhayhj+V5EXq+v7qmaW5v5X8ER6s=";
+    hash = "sha256-C/3zyHnxAxCu8rrR4Znka47pVPp0vvaVGyd4TVQG3qg=";
   };
+
+  postPatch = ''
+    sed -i \
+      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.fd}/FV/OVMF_CODE.fd","${OVMFFull.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.fd}/FV/OVMF_CODE.fd","${OVMF.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
+      -e 's/Icon=.*qemu.svg/Icon=qemu/' \
+      quickemu
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t "$out/bin" quickemu quickget macrecovery
+    install -Dm755 -t "$out/bin" macrecovery quickemu quickget windowskey
 
-   for f in quickget macrecovery quickemu; do
-    wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
-   done
+    # spice-gtk needs to be put in suffix so that when virtualisation.spiceUSBRedirection
+    # is enabled, the wrapped spice-client-glib-usb-acl-helper is used
+    for f in macrecovery quickget quickemu windowskey; do
+      wrapProgram $out/bin/$f \
+        --prefix PATH : "${lib.makeBinPath runtimePaths}" \
+        --suffix PATH : "${lib.makeBinPath [ spice-gtk ]}"
+    done
 
     runHook postInstall
   '';
 
+  passthru.tests = testers.testVersion { package = quickemu; };
+
   meta = with lib; {
     description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";
-    homepage = "https://github.com/wimpysworld/quickemu";
+    homepage = "https://github.com/quickemu-project/quickemu";
     license = licenses.mit;
     maintainers = with maintainers; [ fedx-sudo ];
   };

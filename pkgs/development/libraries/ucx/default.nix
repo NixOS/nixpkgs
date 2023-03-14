@@ -1,21 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, doxygen
+, numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
+, enableCuda ? false
+, cudatoolkit
 }:
 
-stdenv.mkDerivation rec {
+let
+  # Needed for configure to find all libraries
+  cudatoolkit' = symlinkJoin {
+    inherit (cudatoolkit) name meta;
+    paths = [ cudatoolkit cudatoolkit.lib ];
+  };
+
+in stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.11.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "0a4rbgr3hn3h42krb7lasfidhqcavacbpp1pv66l4lvfc0gkwi2i";
+    sha256 = "sha256-NhtN8xrHc6UnUrMbq9LHpb25JO+/LDGcLLGebCfGnv4=";
   };
+
+  patches = [
+    # Pull upstream fix for binutils-2.39:
+    #   https://github.com/openucx/ucx/pull/8450
+    (fetchpatch {
+      name = "binutils-2.39.patch";
+      url = "https://github.com/openucx/ucx/commit/6b6128efd416831cec3a1820f7d1c8e648b79448.patch";
+      sha256 = "sha256-ci00nZG8iOUEFXbmgr/5XkIfiw4eAAdG1wcEYjQSiT8=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
 
-  buildInputs = [ numactl rdma-core libbfd libiberty perl zlib ];
+  buildInputs = [
+    libbfd
+    libiberty
+    numactl
+    perl
+    rdma-core
+    zlib
+  ] ++ lib.optional enableCuda cudatoolkit;
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"
@@ -23,13 +49,13 @@ stdenv.mkDerivation rec {
     "--with-rc"
     "--with-dm"
     "--with-verbs=${rdma-core}"
-  ];
+  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}";
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Unified Communication X library";
-    homepage = "http://www.openucx.org";
+    homepage = "https://www.openucx.org";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

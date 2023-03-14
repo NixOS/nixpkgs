@@ -1,27 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, file, fluidsynth, jack2,
-  liblo, libpulseaudio, libsndfile, pkg-config, python3Packages,
-  which, withFrontend ? true,
-  withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
-  withGtk2 ? true, gtk2 ? null,
-  withGtk3 ? true, gtk3 ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, file
+, fluidsynth
+, jack2
+, liblo
+, libpulseaudio
+, libsndfile
+, pkg-config
+, python3Packages
+, which
+, gtk2 ? null
+, gtk3 ? null
+, qtbase ? null
+, withFrontend ? true
+, withGtk2 ? true
+, withGtk3 ? true
+, withQt ? true
+, wrapQtAppsHook ? null
+}:
 
-with lib;
-
-assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
-assert withGtk2 -> gtk2 != null;
-assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.4.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WxhG9X6jVcu10bl5p0f61+SYZmJw4W7DYvezbpAlNjg=";
+    hash = "sha256-J0C3GLdlLMkm3LHl6l3OI2rA73A6z5MMcNJ1I1T0pbI=";
   };
 
   nativeBuildInputs = [
@@ -30,13 +41,13 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3Packages; [
     rdflib pyliblo
-  ] ++ optional withFrontend pyqt5;
+  ] ++ lib.optional withFrontend pyqt5;
 
   buildInputs = [
     file liblo alsa-lib fluidsynth jack2 libpulseaudio libsndfile
-  ] ++ optional withQt qtbase
-    ++ optional withGtk2 gtk2
-    ++ optional withGtk3 gtk3;
+  ] ++ lib.optional withQt qtbase
+    ++ lib.optional withGtk2 gtk2
+    ++ lib.optional withGtk3 gtk3;
 
   propagatedBuildInputs = pythonPath;
 
@@ -62,7 +73,6 @@ stdenv.mkDerivation rec {
       patchPythonScript "$f"
     done
     patchPythonScript "$out/share/carla/carla_settings.py"
-    patchPythonScript "$out/share/carla/carla_database.py"
 
     for program in $out/bin/*; do
       wrapQtApp "$program" \
@@ -78,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kxstudio.sf.net/carla";
+    homepage = "https://kx.studio/Applications:Carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

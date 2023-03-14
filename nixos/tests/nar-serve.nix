@@ -31,7 +31,7 @@ import ./make-test-python.nix (
 
       # Create a fake cache with Nginx service the static files
       server.succeed(
-          "nix copy --to file:///var/www ${pkgs.hello}"
+          "nix --experimental-features nix-command copy --to file:///var/www ${pkgs.hello}"
       )
       server.wait_for_unit("nginx.service")
       server.wait_for_open_port(80)

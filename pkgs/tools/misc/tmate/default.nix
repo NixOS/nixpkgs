@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmate";
-  version = "2.4.0";
+  version = "unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner  = "tmate-io";
     repo   = "tmate";
-    rev    = version;
-    sha256 = "0x5c31yq7ansmiy20a0qf59wagba9v3pq97mlkxrqxn4n1gcc6vi";
+    rev    = "ac919516f4f1b10ec928e20b3a5034d18f609d68";
+    sha256 = "sha256-t96gfmAMcsjkGf8pvbEx2fNx4Sj3W6oYoQswB3Dklb8=";
   };
 
   dontUseCmakeConfigure = true;
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Instant Terminal Sharing";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ck3d ];
   };
 }

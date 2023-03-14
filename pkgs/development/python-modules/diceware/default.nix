@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "diceware";
-  version = "0.9.6";
+  version = "0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0klb0ysybzlh2wihvir82hgq62v0jjmlcqklwajyms7c0p529yby";
+    sha256 = "sha256-srTMm1n1aNLvUb/fn34a+UHSX7j1wl8XAZHburzpZWk=";
   };
 
   nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ coverage pytest ];
+  nativeCheckInputs = [ coverage pytest ];
 
   # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
   checkPhase = ''

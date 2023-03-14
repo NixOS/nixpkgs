@@ -1,6 +1,7 @@
 { lib
 , buildDunePackage
 , paf
+, dns-client-mirage
 , duration
 , emile
 , httpaf
@@ -8,6 +9,7 @@
 , mirage-stack
 , mirage-time
 , tls-mirage
+, x509
 }:
 
 buildDunePackage {
@@ -16,12 +18,14 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
-    minimumOCamlVersion
+    patches
   ;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf
+    dns-client-mirage
     duration
     emile
     httpaf
@@ -29,6 +33,7 @@ buildDunePackage {
     mirage-stack
     mirage-time
     tls-mirage
+    x509
   ];
 
   doCheck = true;

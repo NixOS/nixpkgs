@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.2.0";
+  version = "1.2.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16fc29bbd9e425e3eb0fef3018297910a0f4568f21116fc31771e2760a50e074";
+    sha256 = "sha256-OTSzDKG58pI3bZ2xWxlEYIjRLsWGKbw/DaKP1V+2M6E=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ python-dateutil ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytz

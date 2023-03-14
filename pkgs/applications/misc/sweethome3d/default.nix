@@ -10,6 +10,7 @@
 , gtk3
 , gsettings-desktop-schemas
 , p7zip
+, autoPatchelfHook
 , libXxf86vm
 , unzip
 }:
@@ -37,18 +38,21 @@ let
       icon = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Graphics;2DGraphics;3DGraphics;";
+      categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
 
     postPatch = ''
-      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_awt.so
-      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_x11.so
-      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_awt.so
-      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
+      addAutoPatchelfSearchPath ${jre8}/lib/openjdk/jre/lib/
+      autoPatchelf lib
+
+      # Nix cannot see the runtime references to the paths we just patched in
+      # once they've been compressed into the .jar. Scan for and remember them
+      # as plain text so they don't get overlooked.
+      find . -name '*.so' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
     '';
 
-    nativeBuildInputs = [ makeWrapper unzip ];
-    buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas ];
+    nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
+    buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
 
     buildPhase = ''
       runHook preBuild
@@ -80,6 +84,13 @@ let
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
 
+
+      # remember the store paths found inside the .jar libraries. note that
+      # which file they are in does not matter in particular, just that some
+      # file somewhere lists them in plain-text
+      mkdir -p $out/nix-support
+      cp .jar-paths $out/nix-support/depends
+
       runHook postInstall
     '';
 
@@ -94,19 +105,19 @@ let
     };
   };
 
-  d2u = lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceStrings ["."] ["_"];
 
 in {
 
   application = mkSweetHome3D rec {
     pname = lib.toLower module + "-application";
-    version = "6.6";
+    version = "7.0.2";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
     src = fetchurl {
       url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
-      sha256 = "sha256-CnVXpmodmyoZdqmt7OgRyzuLeDhkPhrAS/CldFM8SQs=";
+      sha256 = "sha256-9Jv/U7afG6+LwPB6IhqLePjQA67bPKelP+UcuvizBqo=";
     };
     desktopName = "Sweet Home 3D";
     icons = {

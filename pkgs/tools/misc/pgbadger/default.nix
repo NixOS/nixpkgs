@@ -1,4 +1,4 @@
-{ buildPerlPackage, lib, fetchFromGitHub, which, bzip2, PodMarkdown, JSONXS
+{ buildPerlPackage, stdenv, lib, fetchFromGitHub, which, bzip2, PodMarkdown, JSONXS
 , TextCSV }:
 buildPerlPackage rec {
   pname = "pgbadger";
@@ -20,12 +20,13 @@ buildPerlPackage rec {
 
   buildInputs = [ PodMarkdown JSONXS TextCSV ];
 
-  checkInputs = [ which bzip2 ];
+  nativeCheckInputs = [ which bzip2 ];
 
   meta = {
     homepage = "https://github.com/darold/pgbadger";
     description = "A fast PostgreSQL Log Analyzer";
     license = lib.licenses.postgresql;
     maintainers = lib.teams.determinatesystems.members;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/pgbadger.x86_64-darwin
   };
 }

@@ -3,9 +3,12 @@
 {
   pname = "cli";
 
+  nativeBuildInputs = [
+    reason
+  ];
+
   buildInputs = [
     re
-    reason
     pastel
   ];
 }

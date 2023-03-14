@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "A tool for adding dnscrypt support to any name resolver";
     homepage = "https://dnscrypt.info/";
     license = licenses.isc;
-    maintainers = with maintainers; [ tstrobel joachifm ];
+    maintainers = with maintainers; [ joachifm ];
     platforms = platforms.linux;
   };
 }

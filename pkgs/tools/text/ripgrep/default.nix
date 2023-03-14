@@ -22,12 +22,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1kfdgh8dra4jxgcdb0lln5wwrimz0dpp33bq3h7jgs8ngaq2a9wp";
 
-  cargoBuildFlags = lib.optional withPCRE2 "--features pcre2";
+  auditable = true; # TODO: remove when this is the default
 
   nativeBuildInputs = [ asciidoctor installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2
     ++ lib.optional stdenv.isDarwin Security;
+
+  buildFeatures = lib.optional withPCRE2 "pcre2";
 
   preFixup = ''
     installManPage $releaseDir/build/ripgrep-*/out/rg.1

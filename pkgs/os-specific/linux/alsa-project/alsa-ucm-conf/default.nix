@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-ucm-conf-${version}";
-  version = "1.2.5.1";
+  pname = "alsa-ucm-conf";
+  version = "1.2.8";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "sha256-WEGkRBZty/R523UTA9vDVW9oUIWsfgDwyed1VnYZXZc=";
+    url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
+    hash = "sha256-/uSnN4MP0l+WnYPaRqKyMb6whu/ZZvzAfSJeeCMmCug=";
   };
 
   dontBuild = true;

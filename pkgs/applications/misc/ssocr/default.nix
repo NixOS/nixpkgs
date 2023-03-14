@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, imlib2, libX11 }:
+{ lib, stdenv, fetchFromGitHub, imlib2, libX11, pkg-config }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ssocr";
-  version = "unstable-2018-08-11";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "auerswal";
     repo = "ssocr";
-    rev = "5e47e26b125a1a13bc79de93a5e87dd0b51354ca";
-    sha256 = "0yzprwflky9a7zxa3zic7gvdwqg0zy49zvrqkdxng2k1ng78k3s7";
+    rev = "v${version}";
+    sha256 = "sha256-j1l1o1wtVQo+G9HfXZ1sJQ8amsUQhuYxFguWFQoRe/s=";
   };
 
-  nativeBuildInputs = [ imlib2 libX11 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ imlib2 libX11 ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

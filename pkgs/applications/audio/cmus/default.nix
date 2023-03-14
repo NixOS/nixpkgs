@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
-, libiconv, CoreAudio, AudioUnit
+, libiconv, CoreAudio, AudioUnit, VideoToolbox
 
 , alsaSupport ? stdenv.isLinux, alsa-lib ? null
 # simple fallback for everyone else
@@ -38,8 +38,6 @@
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
 }:
-
-with lib;
 
 assert samplerateSupport -> jackSupport;
 
@@ -90,39 +88,32 @@ let
 
     #(mkFlag vtxSupport    "CONFIG_VTX=y"     libayemu)
   ];
-
-  clangGCC = runCommand "clang-gcc" {} ''
-    #! ${stdenv.shell}
-    mkdir -p $out/bin
-    ln -s ${stdenv.cc}/bin/clang $out/bin/gcc
-    ln -s ${stdenv.cc}/bin/clang++ $out/bin/g++
-  '';
-
 in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "sha256-HEiEnEWf/MzhPO19VKTLYzhylpEvyzy1Jxs6EW2NU34=";
+    sha256 = "sha256-Ha0bIh3SYMhA28YXQ//Loaz9J1lTJAzjTx8eK3AqUjM=";
   };
 
   patches = [ ./option-debugging.patch ];
 
-  configurePhase = "./configure " + concatStringsSep " " ([
-    "prefix=$out"
-    "CONFIG_WAV=y"
-  ] ++ concatMap (a: a.flags) opts);
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
-    ++ lib.optional stdenv.cc.isClang clangGCC
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit ]
-    ++ flatten (concatMap (a: a.deps) opts);
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit VideoToolbox ]
+    ++ lib.flatten (lib.concatMap (a: a.deps) opts);
+
+  prefixKey = "prefix=";
+
+  configureFlags = [
+    "CONFIG_WAV=y"
+    "HOSTCC=${stdenv.cc.targetPrefix}cc"
+  ] ++ lib.concatMap (a: a.flags) opts;
 
   makeFlags = [ "LD=$(CC)" ];
 

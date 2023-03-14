@@ -5,13 +5,14 @@
 , meson
 , ninja
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk3
-, libnotify
+, gvfs
 , cinnamon-desktop
-, xapps
+, xapp
 , libexif
 , exempi
 , intltool
@@ -22,28 +23,32 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.0.3";
-
-  # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
+  version = "5.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ah1Rp/o4LPdYm+wj2W5ljjMkCI3PgoAHrlM8yEQP77o=";
+    sha256 = "sha256-CuG0s2gtuYwuIvti5xGiGJa5C5IcruFtNhv6s1vcuUA=";
   };
+
+  patches = [
+    # Load extensions from NEMO_EXTENSION_DIR environment variable
+    # https://github.com/NixOS/nixpkgs/issues/78327
+    ./load-extensions-from-env.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [
     glib
     gtk3
-    libnotify
     cinnamon-desktop
     libxml2
-    xapps
+    xapp
     libexif
     exempi
+    gvfs
     gobject-introspection
     libgsf
   ];
@@ -58,11 +63,12 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  # Taken from libnemo-extension.pc.
+  passthru.extensiondir = "lib/nemo/extensions-3.0";
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
@@ -70,5 +76,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
+    mainProgram = "nemo";
   };
 }
+

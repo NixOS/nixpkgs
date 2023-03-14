@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pack";
-  version = "0.20.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G1tnk0SlQVX4bEifmuZahazNv3bbdgmcr1V0dN9dlKc=";
+    sha256 = "sha256-FKnOqK3qmzWEmf+92up8ApeotyQyZpbmLDY72U3+mY8=";
   };
 
-  vendorSha256 = "sha256-jeOK4k1W/5LvqB52LriKD5jNvZa/nc2ypRowrem2y30=";
+  vendorSha256 = "sha256-dYa6OuC2ingAh2VOzyGR4lK1GbTJ/l9iKXYWqRJmByc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -20,8 +20,10 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/buildpacks/pack.Version=${version}" ];
 
   postInstall = ''
-    installShellCompletion --bash --name pack.bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash)
-    installShellCompletion --zsh --name _pack $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh)
+    installShellCompletion --cmd pack \
+      --zsh $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh) \
+      --bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash) \
+      --fish $(PACK_HOME=$PWD $out/bin/pack completion --shell fish)
   '';
 
   meta = with lib; {

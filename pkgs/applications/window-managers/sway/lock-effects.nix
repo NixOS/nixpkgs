@@ -7,6 +7,7 @@
 , scdoc
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , cairo
 , gdk-pixbuf
@@ -15,20 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "1.6-3";
+  version = "1.6.11";
 
   src = fetchFromGitHub {
-    owner = "mortie";
+    owner = "jirutka";
     repo = "swaylock-effects";
     rev = "v${version}";
-    sha256 = "sha256-71IX0fC4xCPP6pK63KtvDMb3KoP1rw/Iz3S7BgiLSpg=";
+    sha256 = "sha256-MKmWVYssO9HAcP5uqwpy9kDa6/kfZyV2NI7ibozt7Ug=";
   };
 
   postPatch = ''
     sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner];
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
@@ -42,6 +44,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Swaylock, with fancy effects
     '';
+    mainProgram = "swaylock";
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.linux;

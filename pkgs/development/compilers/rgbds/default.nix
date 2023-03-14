@@ -2,15 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.5.1";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
     rev = "v${version}";
-    sha256 = "11b1hg2m2f60q5622rb0nxhrzzylsxjx0c8inbxifi6lvmj9ak4x";
+    sha256 = "sha256-3mx4yymrOQnP5aJCzPWl5G96WBxt1ixU6tdzhhOsF04=";
   };
-  nativeBuildInputs = [ bison flex pkg-config libpng ];
-  installFlags = [ "PREFIX=\${out}" ];
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ libpng ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://rgbds.gbdev.io/";

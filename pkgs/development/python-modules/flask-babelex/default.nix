@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , flask
-, Babel
+, babel
 , speaklater
 , jinja2
 , pytest
@@ -20,12 +20,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flask
-    Babel
+    babel
     speaklater
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

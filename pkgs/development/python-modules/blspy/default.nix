@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
-, fetchpatch
 , setuptools-scm
 , substituteAll
 , cmake
@@ -14,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "blspy";
-  version = "1.0.6";
+  version = "1.0.16";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sULXnecEs8VI687pR9EK9jjYWlrB4tV4dt7Kzekaxb4=";
+    hash = "sha256-XABdS6CCUJpZ9N1Vra078V0HoDU32u1l3yz96ZKHwFc=";
   };
 
   patches = [
@@ -28,10 +27,10 @@ buildPythonPackage rec {
       src = ./dont_fetch_dependencies.patch;
       pybind11_src = pybind11.src;
       relic_src = fetchFromGitHub {
-        owner = "relic-toolkit";
+        owner = "Chia-Network";
         repo = "relic";
-        rev = "1885ae3b681c423c72b65ce1fe70910142cf941c"; # pinned by blspy
-        hash = "sha256-tsSZTcssl8t7Nqdex4BesgQ+ACPgTdtHnJFvS9josN0=";
+        rev = "215c69966cb78b255995f0ee9c86bbbb41c3c42b"; # pinned by blspy
+        hash = "sha256-wivK18Cp7BMZJvrYxJgSHInRZgFgsgSzd0YIy5IWoYA=";
       };
       sodium_src = fetchFromGitHub {
         owner = "AmineKhaldi";
@@ -40,12 +39,12 @@ buildPythonPackage rec {
         sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
         fetchSubmodules = true;
       };
-    })
-
-    # avoid dynamic linking error at import time
-    (fetchpatch {
-      url = "https://github.com/Chia-Network/bls-signatures/pull/287/commits/797241e9dae1c164c862cbdb38c865d4b124a601.patch";
-      sha256 = "sha256-tlc4aA75gUxt5OaSNZqIlO//PXjmddVgVLYuVEFNmkE=";
+      catch2_src = fetchFromGitHub {
+        owner = "catchorg";
+        repo = "Catch2";
+        rev = "v3.0.0-preview5"; # pinned by blspy
+        sha256 = "sha256-IQ1yGZo3nKHTqScUoq3i3Njxqvk7uW8hQ3GT0/SxGaw=";
+      };
     })
   ];
 

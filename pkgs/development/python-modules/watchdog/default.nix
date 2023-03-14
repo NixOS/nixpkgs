@@ -1,34 +1,43 @@
 { lib
 , stdenv
 , buildPythonPackage
+, CoreServices
+, fetchpatch
 , fetchPypi
-, argh
-, pathtools
-, pyyaml
 , flaky
+, pathtools
 , pytest-timeout
 , pytestCheckHook
-, CoreServices
+, pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.6";
+  version = "2.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-o25132x2fL9G9hqRxws7pxgR36CspKMk2UB6Bqi3ouc=";
+    hash = "sha256-zcwjyVKGAaiik+tDacvRT2tPNPB66HaUISUunCJxi28=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ./force-kqueue.patch
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   propagatedBuildInputs = [
-    argh
     pathtools
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-timeout
     pytestCheckHook
@@ -40,14 +49,28 @@ buildPythonPackage rec {
       --replace "--cov-report=term-missing" ""
   '';
 
-  pythonImportsCheck = [ "watchdog" ];
+  disabledTests = [
+    # probably failing because of an encoding related issue
+    "test_create_wrong_encoding"
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    "test_delete"
+    "test_separate_consecutive_moves"
+  ];
+
+  disabledTestPaths = [
+    # Tests are flaky
+    "tests/test_inotify_buffer.py"
+  ];
+
+  pythonImportsCheck = [
+    "watchdog"
+  ];
 
   meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";
     homepage = "https://github.com/gorakhargosh/watchdog";
+    changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
-    # error: use of undeclared identifier 'kFSEventStreamEventFlagItemCloned'
-    broken = stdenv.isDarwin;
   };
 }

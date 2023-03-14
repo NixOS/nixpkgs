@@ -1,27 +1,43 @@
-{ pkgs, stdenv, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
-let
-  package = (import ./node.nix { inherit pkgs; inherit (stdenv.hostPlatform) system; }).package;
-in
-package.override rec {
-  # don't upgrade! Newer versions cause stack overflows and fail trunk-combined
-  # see https://github.com/NixOS/nixpkgs/pull/118400
-  version = "1.16.2";
-  reconstructLock = true;
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, python3
+, nixosTests
+, nix-update-script
+}:
 
-  src = pkgs.fetchFromGitHub {
+buildNpmPackage rec {
+  pname = "zigbee2mqtt";
+  version = "1.30.2";
+
+  src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    sha256 = "0rpmm4pwm8s4i9fl26ql0czg5kijv42k9wwik7jb3ppi5jzxrakd";
+    hash = "sha256-6xSFnaKUE2YtyeeaKenRbD479N1Pv/tBu4YO8mFwJxU=";
   };
 
-  passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
+  npmDepsHash = "sha256-h577FK84UhfZ2HVbwf1XOMyMBS7qfsRJFte05zUZ0bk=";
 
-  meta = with pkgs.lib; {
+  nativeBuildInputs = [
+    python3
+  ];
+
+  passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+    changelog = "https://github.com/Koenkk/zigbee2mqtt/releases/tag/${version}";
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
-    license = licenses.gpl3;
     homepage = "https://github.com/Koenkk/zigbee2mqtt";
-    maintainers = with maintainers; [ sweber ];
+    license = licenses.gpl3;
+    longDescription = ''
+      Allows you to use your Zigbee devices without the vendor's bridge or gateway.
+
+      It bridges events and allows you to control your Zigbee devices via MQTT.
+      In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
+    '';
+    maintainers = with maintainers; [ sweber hexa ];
     platforms = platforms.linux;
   };
 }

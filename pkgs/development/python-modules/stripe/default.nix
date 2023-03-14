@@ -1,24 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.61.0";
+  version = "5.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8131addd3512a22c4c539dda2d869a8f488e06f1b02d1f3a5f0f4848fc56184e";
+    hash = "sha256-pDcrna+DEtgjaaqmSZcpem8Ea8B8oJ91159ayAkztBQ=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
   # Tests require network connectivity and there's no easy way to disable them
   doCheck = false;
 
-  pythonImportsCheck = [ "stripe" ];
+  pythonImportsCheck = [
+    "stripe"
+  ];
 
   meta = with lib; {
     description = "Stripe Python bindings";
     homepage = "https://github.com/stripe/stripe-python";
+    changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

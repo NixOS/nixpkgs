@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake
 , libuuid, json_c
-, doxygen, perl, python2, python2Packages
+, doxygen, perl, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-truncation"
     "-Wno-error=address-of-packed-member"
+    "-Wno-array-bounds"
   ];
 
-  nativeBuildInputs = [ cmake doxygen perl python2Packages.sphinx ];
-  buildInputs = [ libuuid json_c python2 ];
+  nativeBuildInputs = [ cmake doxygen perl python3.pkgs.sphinx ];
+  buildInputs = [ libuuid json_c python3 ];
 
   # Set the Epoch to 1980; otherwise the Python wheel/zip code
   # gets very angry

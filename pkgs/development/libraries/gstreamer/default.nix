@@ -13,6 +13,8 @@
 
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
+  gst-plugins-viperfx = callPackage ./viperfx { };
+
   gst-rtsp-server = callPackage ./rtsp-server { };
 
   gst-libav = callPackage ./libav { };
@@ -22,6 +24,8 @@
   gst-editing-services = callPackage ./ges { };
 
   gst-vaapi = callPackage ./vaapi { };
+
+  icamerasrc = callPackage ./icamerasrc { };
 
   # note: gst-python is in ./python/default.nix - called under pythonPackages
 }

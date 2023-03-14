@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
-  version = "4.2.0";
+  version = "5.1.1";
 
   src = fetchPypi {
     pname = "oslo.serialization";
     inherit version;
-    sha256 = "3007e1b017ad3754cce54def894054cbcd05887e85928556657434b0fc7e4d83";
+    sha256 = "sha256-irvaixdjoGBx/CjF2Km+VHuihfSDDminD/iP4R8Wv0M=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ msgpack oslo-utils pytz ];
 
-  checkInputs = [ oslotest stestr ];
+  nativeCheckInputs = [ oslotest stestr ];
 
   checkPhase = ''
     stestr run

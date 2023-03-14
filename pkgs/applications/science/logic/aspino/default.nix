@@ -9,13 +9,13 @@ in
 
 stdenv.mkDerivation {
   pname = "aspino";
-  version = "unstable-2017-03-09";
+  version = "unstable-2018-03-24";
 
   src = fetchFromGitHub {
     owner = "alviano";
     repo = "aspino";
-    rev = "e31c3b4e5791a454e6602439cb26bd98d23c4e78";
-    sha256 = "0annsjs2prqmv1lbs0lxr7yclfzh47xg9zyiq6mdxcc02rxsi14f";
+    rev = "4d7483e328bdf9a00ef1eb7f2868e7b0f2a82d56";
+    hash = "sha256-R1TpBDGdq+NQQzmzqk0wYaz2Hns3qru0AkAyFPQasPA=";
   };
 
   buildInputs = [ zlib boost ];
@@ -23,8 +23,10 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "GCC = g++" "GCC = c++"
-
-    patchShebangs .
+    substituteInPlace src/main.cc \
+      --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
+    substituteInPlace src/MaxSatSolver.cc \
+      --replace "occ[i][sign(softLiterals[j])] > 0" "occ[i][sign(softLiterals[j])] != 0"
   '';
 
   preBuild = ''
@@ -45,7 +47,5 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     license = licenses.asl20;
     homepage = "https://alviano.net/software/maxino/";
-    # See pkgs/applications/science/logic/glucose/default.nix
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

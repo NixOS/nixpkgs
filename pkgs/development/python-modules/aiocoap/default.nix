@@ -8,21 +8,23 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.1";
+  version = "0.4.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = pname;
-    rev = version;
-    sha256 = "0k7ii2l3n139f8712ja6w3z73xiwlfsjgdc4k5c514ni2w6w2yjc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-t2yfWWfkJmOr14XdLsIV48HMgVRaEnUO4IG2jQHbKWA=";
   };
 
   propagatedBuildInputs = [
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -38,11 +40,14 @@ buildPythonPackage rec {
     "test_uri_parser"
   ];
 
-  pythonImportsCheck = [ "aiocoap" ];
+  pythonImportsCheck = [
+    "aiocoap"
+  ];
 
   meta = with lib; {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
+    changelog = "https://github.com/chrysn/aiocoap/blob/${version}/NEWS";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

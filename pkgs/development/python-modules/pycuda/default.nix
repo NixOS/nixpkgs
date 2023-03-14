@@ -10,7 +10,7 @@
 , decorator
 , appdirs
 , six
-, cudatoolkit
+, cudaPackages
 , python
 , mkDerivation
 , lib
@@ -19,18 +19,20 @@ let
   compyte = import ./compyte.nix {
     inherit mkDerivation fetchFromGitHub;
   };
+
+  inherit (cudaPackages) cudatoolkit;
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2021.1";
+  version = "2022.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab87312d0fc349d9c17294a087bb9615cffcf966ad7b115f5b051008a48dd6ed";
+    sha256 = "sha256-zZLnJGu0WsNFKVWhEHFBEmdM3ztKni9P8lpBWcaE5rs=";
   };
 
   preConfigure = with lib.versions; ''
-    ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+    ${python.pythonForBuild.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
                           --boost-python-libname=boost_python${major python.version}${minor python.version} \

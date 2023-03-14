@@ -1,22 +1,22 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy27, numpy, cython, zlib, six
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, numpy, cython, zlib, six
 , python-lzo, nose }:
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.8.11";
-  disabled = isPy27;
+  version = "0.9.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
-    rev = "v${version}";
-    sha256 = "0cz5vgw19hmkcg689vr540q2gl2lb3xcf1lphm7zbfp8wmypcadm";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Pi4hV3FatCXoXY3nNgqm5UfWYIrpP/v5PzzCi3gmIbE=";
   };
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ zlib ];
   propagatedBuildInputs = [ numpy six python-lzo ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   postInstall = ''
     cp -r scripts/* $out/bin

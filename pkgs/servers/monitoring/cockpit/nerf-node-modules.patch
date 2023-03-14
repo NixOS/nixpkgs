@@ -1,0 +1,12 @@
+diff --git a/tools/node-modules b/tools/node-modules
+index 518875d..72b51e0 100755
+--- a/tools/node-modules
++++ b/tools/node-modules
+@@ -7,6 +7,7 @@ V="${V-0}" # default to friendly messages
+ 
+ set -eu
+ cd "${0%/*}/.."
++exit 0
+ . tools/git-utils.sh
+ 
+ cmd_remove() {

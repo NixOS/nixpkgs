@@ -19,11 +19,6 @@ stdenv.mkDerivation rec {
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
   ];
 
-  # The test driver binary lacks an RPath to the library's libs
-  preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/libs/network/src
-  '';
-
   # Most tests make network GET requests to various websites
   doCheck = false;
 

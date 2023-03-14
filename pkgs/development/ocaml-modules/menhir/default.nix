@@ -5,7 +5,9 @@
 buildDunePackage rec {
   pname = "menhir";
 
-  inherit (menhirLib) version src useDune2;
+  minimalOCamlVersion = "4.03";
+
+  inherit (menhirLib) version src;
 
   buildInputs = [ menhirLib menhirSdk ];
 

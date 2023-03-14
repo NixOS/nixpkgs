@@ -29,7 +29,7 @@
 , bubblewrap
 , pcre
 , check
-, python
+, python3
 , json_c
 , zchunk
 , libmodulemd
@@ -40,16 +40,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2021.9";
+  version = "2023.2";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DvATvvAliJhEItbOlK1CA/ibhzImw651pkplqpRG+OQ=";
+    hash = "sha256-/C5la0b1plfqnsfSnfoSkSROIlAcvAfeg4m/PYV2UnY=";
   };
 
   nativeBuildInputs = [
+    python3
     pkg-config
     which
     autoconf
@@ -82,7 +83,6 @@ stdenv.mkDerivation rec {
     librepo
     pcre
     check
-    python
 
     # libdnf # vendored unstable branch
     # required by vendored libdnf
@@ -113,6 +113,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
   '';
+
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   meta = with lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";

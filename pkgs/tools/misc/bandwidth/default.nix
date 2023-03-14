@@ -6,17 +6,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bandwidth";
-  version = "1.10.4";
+  version = "1.11.2";
 
   src = fetchurl {
     url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
-    sha256 = "sha256-e/eP2rA7ElFrh2Z4qTzRGR/cxY1UI6s+LQ9Og1x46/I=";
+    sha256 = "sha256-mjtvQAOH9rv12XszGdD5hIX197er7Uc74WfVaP32TpM=";
   };
 
   postPatch = ''
     sed -i 's,ar ,$(AR) ,g' OOC/Makefile
     # Remove unnecessary -m32 for 32-bit targets
     sed -i 's,-m32,,g' OOC/Makefile
+    # Replace arm64 with aarch64
+    sed -i 's#,arm64#,aarch64#g' Makefile
     # Fix wrong comment character
     sed -i 's,# 32,; 32,g' routines-x86-32bit.asm
     # Fix missing symbol exports for macOS clang

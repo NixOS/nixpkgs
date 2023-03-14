@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "permutations";
+  pname = "permutations";
   version = "2018-01-19";
 
   src = fetchFromGitHub {

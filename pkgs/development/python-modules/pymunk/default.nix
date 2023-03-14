@@ -5,39 +5,53 @@
 , python
 , cffi
 , pytestCheckHook
+, pythonOlder
 , ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.2.0";
+  version = "6.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1r3jfjg4cpdilrmlyml514hqmjgabyrrs4cvmdr56rylg1sp4gf3";
+    hash = "sha256-YNzZ/wQz5s5J5ctXekNo0FksRoX03rZE1wXIghYcck4=";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [
+    cffi
+  ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
 
   preBuild = ''
-    ${python.interpreter} setup.py build_ext --inplace
+    ${python.pythonForBuild.interpreter} setup.py build_ext --inplace
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   pytestFlagsArray = [
     "pymunk/tests"
   ];
-  pythonImportsCheck = [ "pymunk" ];
+
+  pythonImportsCheck = [
+    "pymunk"
+  ];
 
   meta = with lib; {
     description = "2d physics library";
     homepage = "https://www.pymunk.org";
+    changelog = "https://github.com/viblo/pymunk/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
   };
 }

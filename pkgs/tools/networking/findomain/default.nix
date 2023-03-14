@@ -10,19 +10,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "5.0.0";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-xuabmlpejQVN8pYCNa97aL2IJUAgV7zLXpkEIp9SZRI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9mtXtBq08lL6qQg1Pq1WNwbkG0yi99mCpxNuBvr14ms=";
   };
 
-  cargoSha256 = "sha256-hrgTWB5D0eKmfuR+lrMN4mx6yGomHe/jUJxw2uyrjHg=";
+  cargoHash = "sha256-pKNqO43aFXZ/cbjNWt3tmBBbSTSKqVF7biNCPI1flvI=";
 
-  nativeBuildInputs = [ installShellFiles perl ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    perl
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   postInstall = ''
     installManPage ${pname}.1
@@ -31,6 +38,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "The fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Edu4rdSHL/findomain";
+    changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Br1ght0ne ];
   };

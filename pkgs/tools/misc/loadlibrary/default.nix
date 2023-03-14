@@ -4,7 +4,7 @@
 # support for 64-bit yet: it requires libc6-dev:i386, libreadline-dev:i386.
 
 stdenv_32bit.mkDerivation rec {
-  name = "loadlibrary-${version}";
+  pname = "loadlibrary";
   version = "20170525-${lib.strings.substring 0 7 rev}";
   rev = "721b084c088d779075405b7f20c77c2578e2a961";
   src = fetchFromGitHub {

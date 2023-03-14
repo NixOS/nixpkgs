@@ -1,37 +1,77 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel_yaml, CommonMark, lxml
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+  # deps
+, aiohttp
+, attrs
+, yarl
+  # optional deps
+, python-magic
+, python-olm
+, unpaddedbase64
+, pycryptodome
+  # check deps
+, pytestCheckHook
+, pytest-asyncio
+, aiosqlite
+, sqlalchemy
+, asyncpg
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.10.11";
+  version = "0.19.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b3905fbd1381031b4c54258fdef9e99dd342c3a211abe0b827b2c480db4b1771";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "mautrix";
+    repo = "python";
+    rev = "v${version}";
+    hash = "sha256-zPcqM+Ge7K4pJD4K0MkkGdSiYvXxe0K1qbfHzVYmGx0=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-
-    # defined in optional-requirements.txt
-    sqlalchemy
-    ruamel_yaml
-    CommonMark
-    lxml
+    attrs
+    yarl
   ];
 
-  disabled = pythonOlder "3.7";
+  passthru.optional-dependencies = {
+    detect_mimetype = [
+      python-magic
+    ];
+    encryption = [
+      python-olm
+      unpaddedbase64
+      pycryptodome
+    ];
+  };
 
-  # no tests available
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "mautrix" ];
+  checkInputs = [
+    pytest-asyncio
+    aiosqlite
+    sqlalchemy
+    asyncpg
+  ] ++ passthru.optional-dependencies.encryption;
+
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  pythonImportsCheck = [
+    "mautrix"
+  ];
 
   meta = with lib; {
+    description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
-    description = "A Python 3 asyncio Matrix framework.";
+    changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans ];
+    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans nickcao ];
   };
 }

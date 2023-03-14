@@ -1,21 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.11.2";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "0ry3zfwxs5j243jpbp5ymnz14ycyk6gpgb50lcazhn1yy52p8wac";
+    hash = "sha256-HU+9y4btWbYrkHazOudY2j9RceieBK3BS2jgLbwcEdk=";
   };
 
-  cargoSha256 = "1hvrp3zf5h33j6fgqyzn2jvjbyi8c8pyqwrj5wg3lw38h0z5rvaj";
+  cargoHash = "sha256-YORQHX4RPPHDErgo4c3SxvxklJ9mxHeP/1GiwhuL+J0=";
 
-  RUSTC_BOOTSTRAP = 1;
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
+
+  buildFeatures = [
+    "trust-dns"
+    "local-http-native-tls"
+    "local-tunnel"
+    "local-socks4"
+    "local-redir"
+    "local-dns"
+    "local-tun"
+    "aead-cipher-extra"
+    "aead-cipher-2022"
+    "aead-cipher-2022-extra"
+  ];
 
   # all of these rely on connecting to www.example.com:80
   checkFlags = [
@@ -29,8 +43,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    description = "A Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
-    description = "A Rust port of shadowsocks";
+    changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

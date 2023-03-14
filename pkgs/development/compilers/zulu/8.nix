@@ -21,11 +21,11 @@
 }:
 
 let
-  version = "8.48.0.53";
-  openjdk = "8.0.265";
+  version = "8.68.0.19";
+  openjdk = "8.0.362";
 
-  sha256_linux = "ed32513524b32a83b3b388831c69d1884df5675bd5069c6d1485fd1a060be209";
-  sha256_darwin = "36f189bfbd0255195848835819377474ba9c1c868e3c204633c451c96e21f30a";
+  sha256_linux = "sha256-jNty0iJoXG+sp7v2fGCrwZWCSZfQ4tkYe8ERixQMKL0=";
+  sha256_darwin = "sha256-3/P3puM6a7tCHP5eZM6IzbdPrqnhY1dTa7QWss9M08M=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
@@ -61,18 +61,22 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./* "$out/"
-
+  '' + lib.optionalString stdenv.isLinux ''
     # jni.h expects jni_md.h to be in the header search path.
     ln -s $out/include/linux/*_md.h $out/include/
-
+  '' + ''
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
@@ -87,6 +91,8 @@ in stdenv.mkDerivation {
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       fi
     done
+  '' + ''
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -106,7 +112,7 @@ in stdenv.mkDerivation {
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "java";
   };

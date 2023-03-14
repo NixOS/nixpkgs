@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
 , msrest
 , msrestazure
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "2.0.0";
+  version = "5.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e7f7943fe8f0efe98b3b1996cdec47c709765257a6e09e7940f7838a0f829e82";
+    hash = "sha256-U5OSFnOZV7/eXUEDU1TQBywrXjxwQ8qiEQJVFd3y57Q=";
   };
 
   propagatedBuildInputs = [
@@ -24,13 +26,13 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
   meta = with lib; {

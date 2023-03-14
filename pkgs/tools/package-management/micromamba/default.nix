@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, cli11, nlohmann_json, curl, libarchive, libyamlcpp, libsolv, reproc
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, bzip2
+, cli11
+, cmake
+, curl
+, ghc_filesystem
+, libarchive
+, libsolv
+, yaml-cpp
+, nlohmann_json
+, python3
+, reproc
+, spdlog
+, termcolor
+, tl-expected
+, fmt_9
 }:
 
 let
@@ -9,72 +26,71 @@ let
     ];
 
     patches = [
-      # Patch added by the mamba team
+      # Apply the same patch as in the "official" boa-forge build:
+      # https://github.com/mamba-org/boa-forge/tree/master/libsolv
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/add_strict_repo_prio_rule.patch";
-        sha256 = "19c47i5cpyy88nxskf7k6q6r43i55w61jvnz7fc2r84hpjkcrv7r";
-      })
-      # Patch added by the mamba team
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/conda_variant_priorization.patch";
+        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/20530f80e2e15012078d058803b6e2c75ed54224/libsolv/conda_variant_priorization.patch";
         sha256 = "1iic0yx7h8s662hi2jqx68w5kpyrab4fr017vxd4wyxb6wyk35dd";
-      })
-      # Patch added by the mamba team
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/memcpy_to_memmove.patch";
-        sha256 = "1c9ir40l6crcxllj5zwhzbrbgibwqaizyykd0vip61gywlfzss64";
       })
     ];
   });
 
-  # fails linking with yaml-cpp 0.7.x
-  libyamlcpp' = libyamlcpp.overrideAttrs (oldAttrs: rec {
-
-    version = "0.6.3";
-
-    src = fetchFromGitHub {
-      owner = "jbeder";
-      repo = "yaml-cpp";
-      rev = "yaml-cpp-${version}";
-      sha256 = "0ykkxzxcwwiv8l8r697gyqh1nl582krpvi7m7l6b40ijnk4pw30s";
-    };
+  spdlog' = spdlog.overrideAttrs (oldAttrs: {
+    # Use as header-only library.
+    #
+    # Spdlog 1.11 requires fmt version 8 while micromamba requires
+    # version 9. spdlog may use its bundled version of fmt,
+    # though. Micromamba is not calling spdlog functions with
+    # fmt-types in their signature. I.e. we get away with removing
+    # fmt_8 from spdlog's propagated dependencies and using fmt_9 for
+    # micromamba itself.
+    dontBuild = true;
+    cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DSPDLOG_FMT_EXTERNAL=OFF" ];
+    propagatedBuildInputs = [];
   });
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "0.15.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = version;
-    sha256 = "1zksp4zqj4wn9p9jb1qx1acajaz20k9xnm80yi7bab2d37y18hcw";
+    rev = "micromamba-" + version;
+    sha256 = "sha256-KGlH5i/lI6c1Jj1ttAOrip8BKECaea5D202TJMcFDmM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    bzip2
     cli11
     nlohmann_json
     curl
     libarchive
-    libyamlcpp'
+    yaml-cpp
     libsolv'
     reproc
-    # python3Packages.pybind11 # Would be necessary if someone wants to build with bindings I guess.
+    spdlog'
+    termcolor
+    ghc_filesystem
+    python3
+    tl-expected
+    fmt_9
   ];
 
   cmakeFlags = [
-    "-DBUILD_BINDINGS=OFF" # Fails to build, I don't think it's necessary for now.
-    "-DBUILD_EXE=ON"
+    "-DBUILD_LIBMAMBA=ON"
+    "-DBUILD_SHARED=ON"
+    "-DBUILD_MICROMAMBA=ON"
+    # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
   ];
-
-  CXXFLAGS = "-DMAMBA_USE_STD_FS";
 
   meta = with lib; {
     description = "Reimplementation of the conda package manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ mausch ];
   };
 }

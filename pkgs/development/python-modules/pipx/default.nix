@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, hatchling
 , userpath
 , argcomplete
 , packaging
 , importlib-metadata
+, pip
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.16.5";
+  version = "1.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -19,9 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pipxproject";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-gBeaHEig47XWKoPx3jzvgk/jJPJXtr5R5qUL0LgvbDg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-6cKKVOgHIoKNfGqvDWK5cwBGBDkgfyRuBRDV6fruBoA=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     userpath
@@ -31,7 +38,9 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -61,6 +70,7 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_list_short"
   ];
 
   meta = with lib; {
@@ -68,6 +78,6 @@ buildPythonPackage rec {
       "Install and Run Python Applications in Isolated Environments";
     homepage = "https://github.com/pipxproject/pipx";
     license = licenses.mit;
-    maintainers = with maintainers; [ yevhenshymotiuk ];
+    maintainers = with maintainers; [ yshym ];
   };
 }

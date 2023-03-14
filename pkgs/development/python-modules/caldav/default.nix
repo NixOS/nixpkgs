@@ -1,57 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , icalendar
 , lxml
-, mock
-, nose
+, pytestCheckHook
+, pythonOlder
 , pytz
+, recurring-ical-events
 , requests
-, six
 , tzlocal
 , vobject
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.8.0";
+  version = "1.2.1";
+
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "11q3svns3a2ywfci739krxbh67cx691qja772wq22606blyygyjy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nA7if28M4rDZwlF+ga/1FqD838zeu0OblrPUer3w3qM=";
   };
 
-  nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
-  propagatedBuildInputs = [ six requests vobject lxml ]
-    ++ lib.optionals (pythonOlder "3.6") [ pytz tzlocal ];
-
-  checkInputs = [
+  propagatedBuildInputs = [
+    vobject
+    lxml
+    requests
     icalendar
-    nose
-    tzlocal
+    recurring-ical-events
   ];
 
-  checkPhase = ''
-    nosetests tests
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tzlocal
+    pytz
+  ];
 
-  # xandikos and radicale is only a optional test dependency, not available for python3
+  # xandikos and radicale are only optional test dependencies, not available for python3
   postPatch = ''
     substituteInPlace setup.py \
-      --replace ", 'xandikos'" "" \
-      --replace ", 'radicale'" ""
+      --replace xandikos "" \
+      --replace radicale ""
   '';
 
   pythonImportsCheck = [ "caldav" ];
 
   meta = with lib; {
-    description = "This project is a CalDAV (RFC4791) client library for Python.";
+    description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
+    changelog = "https://github.com/python-caldav/caldav/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marenz ];
-    #broken = true; # requires radicale which is not packaged yet
+    maintainers = with maintainers; [ marenz dotlambda ];
   };
 }

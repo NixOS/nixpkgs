@@ -13,17 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl /* for pod2man */ ];
 
-  preBuild = let
-    CPPFLAGS = with stdenv; ""
-      + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ")
-      + "-Dunix";
-    CXXFLAGS = "-O3 -DNDEBUG";
-  in ''
-    buildFlagsArray=( "CPPFLAGS=${CPPFLAGS}" "CXXFLAGS=${CXXFLAGS}" )
-  '';
+  CPPFLAGS = [ "-Dunix" ] ++
+    lib.optional (!stdenv.isi686 && !stdenv.isx86_64) "-DNOJIT";
+  CXXFLAGS = [ "-O3" "-DNDEBUG" ];
 
   enableParallelBuilding = true;
 
+  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {

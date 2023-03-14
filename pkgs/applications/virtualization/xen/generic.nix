@@ -16,7 +16,8 @@ config:
 , util-linux, procps, systemd
 
 # Documentation
-, transfig, ghostscript, texinfo, pandoc
+# pythonPackages.markdown
+, fig2dev, ghostscript, texinfo, pandoc
 
 , binutils-unwrapped
 
@@ -64,9 +65,9 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    cmake which
+    which
 
     # Xen
     bison bzip2 checkpolicy dev86 figlet flex gettext glib acpica-tools libaio
@@ -79,7 +80,7 @@ stdenv.mkDerivation (rec {
     pythonPackages.wrapPython
 
     # Documentation
-    pythonPackages.markdown transfig ghostscript texinfo pandoc
+    pythonPackages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
   ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
@@ -243,7 +244,11 @@ stdenv.mkDerivation (rec {
                     + "\nIncludes:\n"
                     + withXenfiles (name: x: "* ${name}: ${x.meta.description or "(No description)"}.");
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ eelco tstrobel oxij ];
+    maintainers = with lib.maintainers; [ eelco oxij ];
     license = lib.licenses.gpl2;
+    # https://xenbits.xen.org/docs/unstable/support-matrix.html
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "4.13") [
+      "This version of Xen has reached its end of life. See https://xenbits.xen.org/docs/unstable/support-matrix.html"
+    ];
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

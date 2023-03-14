@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -7,20 +8,21 @@
 , gobject-introspection
 , gjs
 , nixosTests
+, curl
 , glib
 , systemd
 , xz
 , e2fsprogs
 , libsoup
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , gpgme
 , which
 , makeWrapper
 , autoconf
 , automake
 , libtool
-, fuse
+, fuse3
 , util-linuxMinimal
 , libselinux
 , libsodium
@@ -41,13 +43,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2021.4";
+  version = "2023.1";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-21zgGhYGrzRm7HcjZwD1OmPOIOSYSlSdDquj9mo9k2E=";
+    sha256 = "sha256-3XkrFnaToZccn24xaAE9kGrANRAP9scZo7Mi60S5b1U=";
   };
 
   patches = [
@@ -80,17 +82,18 @@ in stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    curl
     glib
     systemd
     e2fsprogs
     libsoup
     glib-networking
     gpgme
-    fuse
+    fuse3
     libselinux
     libsodium
     libcap
@@ -107,6 +110,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"

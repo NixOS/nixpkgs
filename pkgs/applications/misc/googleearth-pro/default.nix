@@ -115,6 +115,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "A world sphere viewer";
     homepage = "https://www.google.com/earth/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ friedelino shamilton ];
     platforms = platforms.linux;

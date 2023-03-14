@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, bison, flex, xkeyboard_config, libxcb, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "libxkbcommon-0.7.2";
+  pname = "libxkbcommon";
+  version = "0.7.2";
 
   src = fetchurl {
-    url = "http://xkbcommon.org/download/${name}.tar.xz";
+    url = "http://xkbcommon.org/download/libxkbcommon-${version}.tar.xz";
     sha256 = "1n5rv5n210kjnkyrvbh04gfwaa7zrmzy1393p8nyqfw66lkxr918";
   };
 
@@ -18,6 +19,11 @@ stdenv.mkDerivation rec {
     "--with-x-locale-root=${libX11.out}/share/X11/locale"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+  ];
+
   preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i 's/,--version-script=.*$//' Makefile
   '';
@@ -27,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://xkbcommon.org";
     license = licenses.mit;
     maintainers = with maintainers; [ ttuegel ];
+    mainProgram = "xkbcli";
     platforms = with platforms; unix;
   };
 }

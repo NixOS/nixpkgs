@@ -1,50 +1,36 @@
-{ dbus-glib
+{ stdenv
+, lib
 , fetchFromGitHub
 , gobject-introspection
 , pkg-config
-, lib
-, stdenv
-, wrapGAppsHook
-, python3
 , cairo
-, gnome
-, xapps
-, keybinder3
-, upower
-, callPackage
 , glib
-, libffi
-, gtk3
 , readline
 , spidermonkey_78
 , meson
-, sysprof
 , dbus
-, xvfb-run
 , ninja
-, makeWrapper
 , which
 , libxml2
 }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "4.8.2";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-6+zlWL0DmyP+RFp1ECA4XGbgYUlsMqqyTd6z46w99Ug=";
+    hash = "sha256-f9esbQi5WWSMAGlEs9HJFToOvmOrbP2lDW1gGh/48gw=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    meson # ADDING cmake breaks the build, ignore meson warning
+    meson
     ninja
     pkg-config
-    makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
   ];
@@ -57,18 +43,8 @@ stdenv.mkDerivation rec {
     dbus # for dbus-run-session
   ];
 
-  checkInputs = [
-    xvfb-run
-  ];
-
   propagatedBuildInputs = [
     glib
-
-    # bindings
-    gnome.caribou
-    keybinder3
-    upower
-    xapps
   ];
 
   mesonFlags = [

@@ -1,8 +1,40 @@
-{ fetchFromGitHub, lib, pkgs }:
+{ lib
+, config
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchhg
+, fetchpatch
+, runCommand
+
+, arpa2common
+, brotli
+, curl
+, expat
+, fdk_aac
+, ffmpeg
+, geoip
+, libbsd
+, libiconv
+, libmaxminddb
+, libmodsecurity
+, libuuid
+, libxml2
+, lmdb
+, luajit
+, msgpuck
+, openssl
+, opentracing-cpp
+, pam
+, psol
+, which
+, yajl
+, zlib
+}:
 
 let
 
   http_proxy_connect_module_generic = patchName: rec {
+    name = "http_proxy_connect";
     src = fetchFromGitHub {
       name = "http_proxy_connect_module_generic";
       owner = "chobits";
@@ -10,7 +42,6 @@ let
       rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
       sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
     };
-
     patches = [
       "${src}/patch/${patchName}.patch"
     ];
@@ -18,11 +49,12 @@ let
 
 in
 
-{
+let self = {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
   akamai-token-validate = {
+    name = "akamai-token-validate";
     src = fetchFromGitHub {
       name = "akamai-token-validate";
       owner = "kaltura";
@@ -30,10 +62,35 @@ in
       rev = "34fd0c94d2c43c642f323491c4f4a226cd83b962";
       sha256 = "0yf34s11vgkcl03wbl6gjngm3p9hs8vvm7hkjkwhjh39vkk2a7cy";
     };
-    inputs = [ pkgs.openssl ];
+    inputs = [ openssl ];
+  };
+
+  auth-a2aclr = {
+    name = "auth-a2aclr";
+    src = fetchFromGitLab {
+      name = "auth-a2aclr";
+      owner = "arpa2";
+      repo = "nginx-auth-a2aclr";
+      rev = "bbabf9480bb2b40ac581551883a18dfa6522dd63";
+      sha256 = "sha256-h2LgMhreCgod+H/bNQzY9BvqG9ezkwikwWB3T6gHH04=";
+    };
+    inputs = [
+      (arpa2common.overrideAttrs
+        (old: rec {
+          version = "0.7.1";
+
+          src = fetchFromGitLab {
+            owner = "arpa2";
+            repo = "arpa2common";
+            rev = "v${version}";
+            sha256 = "sha256-8zVsAlGtmya9EK4OkGUMu2FKJRn2Q3bg2QWGjqcii64=";
+          };
+        }))
+    ];
   };
 
   aws-auth = {
+    name = "aws-auth";
     src = fetchFromGitHub {
       name = "aws-auth";
       owner = "anomalizer";
@@ -44,41 +101,46 @@ in
   };
 
   brotli = {
-    src = let gitsrc = pkgs.fetchFromGitHub {
+    name = "brotli";
+    src = let src' = fetchFromGitHub {
       name = "brotli";
       owner = "google";
       repo = "ngx_brotli";
-      rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
-      sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in pkgs.runCommand "ngx_brotli-src" {} ''
-      cp -a ${gitsrc} $out
-      substituteInPlace $out/filter/config \
-        --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
-    '';
-    inputs = [ pkgs.brotli ];
+      rev = "6e975bcb015f62e1f303054897783355e2a877dc";
+      sha256 = "sha256-G0IDYlvaQzzJ6cNTSGbfuOuSXFp3RsEwIJLGapTbDgo=";
+    }; in
+      runCommand "brotli" { } ''
+        cp -a ${src'} $out
+        substituteInPlace $out/filter/config \
+          --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev brotli}
+      '';
+    inputs = [ brotli ];
   };
 
   cache-purge = {
+    name = "cache-purge";
     src = fetchFromGitHub {
       name = "cache-purge";
-      owner  = "nginx-modules";
-      repo   = "ngx_cache_purge";
-      rev    = "2.5.1";
+      owner = "nginx-modules";
+      repo = "ngx_cache_purge";
+      rev = "2.5.1";
       sha256 = "0va4jz36mxj76nmq05n3fgnpdad30cslg7c10vnlhdmmic9vqncd";
     };
   };
 
   coolkit = {
+    name = "coolkit";
     src = fetchFromGitHub {
       name = "coolkit";
-      owner  = "FRiCKLE";
-      repo   = "ngx_coolkit";
-      rev    = "0.2";
+      owner = "FRiCKLE";
+      repo = "ngx_coolkit";
+      rev = "0.2";
       sha256 = "1idj0cqmfsdqawjcqpr1fsq670fdki51ksqk2lslfpcs3yrfjpqh";
     };
   };
 
   dav = {
+    name = "dav";
     src = fetchFromGitHub {
       name = "dav";
       owner = "arut";
@@ -86,10 +148,11 @@ in
       rev = "v3.0.0";
       sha256 = "000dm5zk0m1hm1iq60aff5r6y8xmqd7djrwhgnz9ig01xyhnjv9w";
     };
-    inputs = [ pkgs.expat ];
+    inputs = [ expat ];
   };
 
   develkit = {
+    name = "develkit";
     src = fetchFromGitHub {
       name = "develkit";
       owner = "vision5";
@@ -100,6 +163,7 @@ in
   };
 
   echo = {
+    name = "echo";
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
@@ -110,22 +174,43 @@ in
   };
 
   fancyindex = {
+    name = "fancyindex";
     src = fetchFromGitHub {
       name = "fancyindex";
       owner = "aperezdc";
       repo = "ngx-fancyindex";
-      rev = "v0.4.4";
-      sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
+      rev = "v0.5.2";
+      sha256 = "0nar45lp3jays3p6b01a78a6gwh6v0snpzcncgiphcqmj5kw8ipg";
+    };
+    meta = {
+      maintainers = with lib.maintainers; [ aneeshusa ];
     };
   };
 
   fluentd = {
+    name = "fluentd";
     src = fetchFromGitHub {
       name = "fluentd";
       owner = "fluent";
       repo = "nginx-fluentd-module";
       rev = "8af234043059c857be27879bc547c141eafd5c13";
       sha256 = "1ycb5zd9sw60ra53jpak1m73zwrjikwhrrh9q6266h1mlyns7zxm";
+    };
+  };
+
+  geoip2 = {
+    name = "geoip2";
+    src = fetchFromGitHub {
+      name = "geoip2";
+      owner = "leev";
+      repo = "ngx_http_geoip2_module";
+      rev = "3.4";
+      sha256 = "CAs1JZsHY7RymSBYbumC2BENsXtZP3p4ljH5QKwz5yg=";
+    };
+    inputs = [ libmaxminddb ];
+
+    meta = {
+      maintainers = with lib.maintainers; [ pinpox ];
     };
   };
 
@@ -138,17 +223,20 @@ in
   };
 
   ipscrub = {
-    src = fetchFromGitHub {
-      name = "ipscrub";
-      owner = "masonicboom";
-      repo = "ipscrub";
-      rev = "v1.0.1";
-      sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
-    } + "/ipscrub";
-    inputs = [ pkgs.libbsd ];
+    name = "ipscrub";
+    src = fetchFromGitHub
+      {
+        name = "ipscrub";
+        owner = "masonicboom";
+        repo = "ipscrub";
+        rev = "v1.0.1";
+        sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
+      } + "/ipscrub";
+    inputs = [ libbsd ];
   };
 
   limit-speed = {
+    name = "limit-speed";
     src = fetchFromGitHub {
       name = "limit-speed";
       owner = "yaoweibin";
@@ -158,7 +246,8 @@ in
     };
   };
 
-  live ={
+  live = {
+    name = "live";
     src = fetchFromGitHub {
       name = "live";
       owner = "arut";
@@ -168,23 +257,39 @@ in
     };
   };
 
-  lua = {
+  lua = rec {
+    name = "lua";
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.15";
-      sha256 = "1j216isp0546hycklbr5wi8mlga5hq170hk7f2sm16sfavlkh5gz";
+      rev = "v0.10.22";
+      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
     };
-    inputs = [ pkgs.luajit ];
-    preConfigure = ''
-      export LUAJIT_LIB="${pkgs.luajit}/lib"
-      export LUAJIT_INC="${pkgs.luajit}/include/luajit-2.0"
+    inputs = [ luajit ];
+    preConfigure = let
+      # fix compilation against nginx 1.23.0
+      nginx-1-23-patch = fetchpatch {
+        url = "https://github.com/openresty/lua-nginx-module/commit/b6d167cf1a93c0c885c28db5a439f2404874cb26.patch";
+        sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
+      };
+    in ''
+      export LUAJIT_LIB="${luajit}/lib"
+      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+
+      # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
+      lua_src=$TMPDIR/lua-src
+      cp -r "${src}/" "$lua_src"
+      chmod -R +w "$lua_src"
+      patch -p1 -d $lua_src -i ${nginx-1-23-patch}
+      export configureFlags="''${configureFlags//"${src}"/"$lua_src"}"
+      unset lua_src
     '';
     allowMemoryWriteExecute = true;
   };
 
   lua-upstream = {
+    name = "lua-upstream";
     src = fetchFromGitHub {
       name = "lua-upstream";
       owner = "openresty";
@@ -192,40 +297,36 @@ in
       rev = "v0.07";
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
-    inputs = [ pkgs.luajit ];
+    inputs = [ luajit ];
     allowMemoryWriteExecute = true;
   };
 
   modsecurity = {
-    src = "${pkgs.modsecurity_standalone.nginx}/nginx/modsecurity";
-    inputs = [ pkgs.curl pkgs.apr pkgs.aprutil pkgs.apacheHttpd pkgs.yajl ];
-    preConfigure = ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.aprutil.dev}/include/apr-1 -I${pkgs.apacheHttpd.dev}/include -I${pkgs.apr.dev}/include/apr-1 -I${pkgs.yajl}/include"
-    '';
-  };
-
-  modsecurity-nginx = {
+    name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.1";
-      sha256 = "0cbb3g3g4v6q5zc6an212ia5kjjad62bidnkm8b70i4qv1615pzf";
+      rev = "v1.0.3";
+      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
     };
-    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+    inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
+    disableIPC = true;
   };
 
   moreheaders = {
+    name = "moreheaders";
     src = fetchFromGitHub {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.33";
-      sha256 = "1cgdjylrdd69vlkwwmn018hrglzjwd83nqva1hrapgcfw12f7j53";
+      rev = "v0.34";
+      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
     };
   };
 
-  mpeg-ts ={
+  mpeg-ts = {
+    name = "mpeg-ts";
     src = fetchFromGitHub {
       name = "mpeg-ts";
       owner = "arut";
@@ -235,7 +336,8 @@ in
     };
   };
 
-  naxsi ={
+  naxsi = {
+    name = "naxsi";
     src = fetchFromGitHub {
       name = "naxsi";
       owner = "nbs-system";
@@ -245,7 +347,31 @@ in
     } + "/naxsi_src";
   };
 
+  njs = rec {
+    name = "njs";
+    src = fetchhg {
+      url = "https://hg.nginx.org/njs";
+      rev = "0.7.10";
+      sha256 = "sha256-/yKzY+BUFxLk8bWo+mqKfRVRsC2moe+WvhaRYIGdr6Y=";
+      name = "nginx-njs";
+    };
+
+    # njs module sources have to be writable during nginx build, so we copy them
+    # to a temporary directory and change the module path in the configureFlags
+    preConfigure = ''
+      NJS_SOURCE_DIR=$(readlink -m "$TMPDIR/${src}")
+      mkdir -p "$(dirname "$NJS_SOURCE_DIR")"
+      cp --recursive "${src}" "$NJS_SOURCE_DIR"
+      chmod -R u+rwX,go+rX "$NJS_SOURCE_DIR"
+      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"}"
+      unset NJS_SOURCE_DIR
+    '';
+
+    inputs = [ which ];
+  };
+
   opentracing = {
+    name = "opentracing";
     src =
       let src' = fetchFromGitHub {
         name = "opentracing";
@@ -255,53 +381,48 @@ in
         sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
       };
       in "${src'}/opentracing";
-    inputs = [ pkgs.opentracing-cpp ];
+    inputs = [ opentracing-cpp ];
   };
 
-  pagespeed =
-    let
-      version = pkgs.psol.version;
-
+  pagespeed = {
+    name = "pagespeed";
+    src = let
       moduleSrc = fetchFromGitHub {
-        name   = "pagespeed";
-        owner  = "pagespeed";
-        repo   = "ngx_pagespeed";
-        rev    = "v${version}-stable";
+        name = "pagespeed";
+        owner = "pagespeed";
+        repo = "ngx_pagespeed";
+        rev = "v${psol.version}-stable";
         sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
-
-      ngx_pagespeed = pkgs.runCommand
-        "ngx_pagespeed"
-        {
-          meta = {
-            description = "PageSpeed module for Nginx";
-            homepage    = "https://developers.google.com/speed/pagespeed/module/";
-            license     = pkgs.lib.licenses.asl20;
-          };
-        }
-        ''
-          cp -r "${moduleSrc}" "$out"
-          chmod -R +w "$out"
-          ln -s "${pkgs.psol}" "$out/psol"
-        '';
-    in {
-      src = ngx_pagespeed;
-      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
-      allowMemoryWriteExecute = true;
-    };
+    in runCommand "ngx_pagespeed" {
+      meta = {
+        description = "PageSpeed module for Nginx";
+        homepage = "https://developers.google.com/speed/pagespeed/module/";
+        license = lib.licenses.asl20;
+      };
+    } ''
+      cp -r "${moduleSrc}" "$out"
+      chmod -R +w "$out"
+      ln -s "${psol}" "$out/psol"
+    '';
+    inputs = [ zlib libuuid ]; # psol deps
+    allowMemoryWriteExecute = true;
+  };
 
   pam = {
+    name = "pam";
     src = fetchFromGitHub {
       name = "pam";
-      owner = "stogh";
+      owner = "sto";
       repo = "ngx_http_auth_pam_module";
-      rev = "v1.5.2";
-      sha256 = "06nydxk82rc9yrw4408nakb197flxh4z1yv935crg65fn9706rl7";
+      rev = "v1.5.3";
+      sha256 = "sha256:09lnljdhjg65643bc4535z378lsn4llbq67zcxlln0pizk9y921a";
     };
-    inputs = [ pkgs.pam ];
+    inputs = [ pam ];
   };
 
   pinba = {
+    name = "pinba";
     src = fetchFromGitHub {
       name = "pinba";
       owner = "tony2001";
@@ -311,7 +432,8 @@ in
     };
   };
 
-  push-stream ={
+  push-stream = {
+    name = "push-stream";
     src = fetchFromGitHub {
       name = "push-stream";
       owner = "wandenberg";
@@ -322,6 +444,7 @@ in
   };
 
   rtmp = {
+    name = "rtmp";
     src = fetchFromGitHub {
       name = "rtmp";
       owner = "arut";
@@ -332,6 +455,7 @@ in
   };
 
   secure-token = {
+    name = "secure-token";
     src = fetchFromGitHub {
       name = "secure-token";
       owner = "kaltura";
@@ -339,10 +463,11 @@ in
       rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
       sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
     };
-    inputs = [ pkgs.openssl ];
+    inputs = [ openssl ];
   };
 
   set-misc = {
+    name = "set-misc";
     src = fetchFromGitHub {
       name = "set-misc";
       owner = "openresty";
@@ -353,6 +478,7 @@ in
   };
 
   shibboleth = {
+    name = "shibboleth";
     src = fetchFromGitHub {
       name = "shibboleth";
       owner = "nginx-shib";
@@ -363,6 +489,7 @@ in
   };
 
   sla = {
+    name = "sla";
     src = fetchFromGitHub {
       name = "sla";
       owner = "goldenclone";
@@ -373,16 +500,18 @@ in
   };
 
   slowfs-cache = {
+    name = "slowfs-cache";
     src = fetchFromGitHub {
       name = "slowfs-cache";
-      owner  = "FRiCKLE";
-      repo   = "ngx_slowfs_cache";
-      rev    = "1.10";
+      owner = "FRiCKLE";
+      repo = "ngx_slowfs_cache";
+      rev = "1.10";
       sha256 = "1gyza02pcws3zqm1phv3ag50db5gnapxyjwy8skjmvawz7p5bmxr";
     };
   };
 
   sorted-querystring = {
+    name = "sorted-querystring";
     src = fetchFromGitHub {
       name = "sorted-querystring";
       owner = "wandenberg";
@@ -393,6 +522,7 @@ in
   };
 
   spnego-http-auth = {
+    name = "spnego-http-auth";
     src = fetchFromGitHub {
       name = "spnego-http-auth";
       owner = "stnoonan";
@@ -403,6 +533,7 @@ in
   };
 
   statsd = {
+    name = "statsd";
     src = fetchFromGitHub {
       name = "statsd";
       owner = "harvesthq";
@@ -413,6 +544,7 @@ in
   };
 
   stream-sts = {
+    name = "stream-sts";
     src = fetchFromGitHub {
       name = "stream-sts";
       owner = "vozlt";
@@ -423,6 +555,7 @@ in
   };
 
   sts = {
+    name = "sts";
     src = fetchFromGitHub {
       name = "sts";
       owner = "vozlt";
@@ -433,6 +566,7 @@ in
   };
 
   subsFilter = {
+    name = "subsFilter";
     src = fetchFromGitHub {
       name = "subsFilter";
       owner = "yaoweibin";
@@ -443,6 +577,7 @@ in
   };
 
   sysguard = {
+    name = "sysguard";
     src = fetchFromGitHub {
       name = "sysguard";
       owner = "vozlt";
@@ -453,6 +588,7 @@ in
   };
 
   upload = {
+    name = "upload";
     src = fetchFromGitHub {
       name = "upload";
       owner = "fdintino";
@@ -463,6 +599,7 @@ in
   };
 
   upstream-check = {
+    name = "upstream-check";
     src = fetchFromGitHub {
       name = "upstream-check";
       owner = "yaoweibin";
@@ -473,6 +610,7 @@ in
   };
 
   upstream-tarantool = {
+    name = "upstream-tarantool";
     src = fetchFromGitHub {
       name = "upstream-tarantool";
       owner = "tarantool";
@@ -480,10 +618,11 @@ in
       rev = "v2.7.1";
       sha256 = "0ya4330in7zjzqw57djv4icpk0n1j98nvf0f8v296yi9rjy054br";
     };
-    inputs = [ pkgs.msgpuck.dev pkgs.yajl ];
+    inputs = [ msgpuck.dev yajl ];
   };
 
   url = {
+    name = "url";
     src = fetchFromGitHub {
       name = "url";
       owner = "vozlt";
@@ -494,17 +633,19 @@ in
   };
 
   video-thumbextractor = {
+    name = "video-thumbextractor";
     src = fetchFromGitHub {
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "0.9.0";
-      sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
+      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
+      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg_3 ];
+    inputs = [ ffmpeg ];
   };
 
   vod = {
+    name = "vod";
     src = fetchFromGitHub {
       name = "vod";
       owner = "kaltura";
@@ -512,16 +653,20 @@ in
       rev = "1.29";
       sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
   };
 
   vts = {
+    name = "vts";
     src = fetchFromGitHub {
       name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
-      rev = "v0.1.18";
-      sha256 = "1jq2s9k7hah3b317hfn9y3g1q4g4x58k209psrfsqs718a9sw8c7";
+      rev = "v0.2.1";
+      sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
     };
   };
+}; in self // lib.optionalAttrs config.allowAliases {
+  # deprecated or renamed packages
+  modsecurity-nginx = self.modsecurity;
 }

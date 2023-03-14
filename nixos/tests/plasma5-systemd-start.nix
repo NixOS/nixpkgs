@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ oxalica ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [ ./common/user-account.nix ];
@@ -21,7 +21,6 @@ import ./make-test-python.nix ({ pkgs, ...} :
         user = "alice";
       };
     };
-    virtualisation.memorySize = 1024;
   };
 
   testScript = { nodes, ... }: let

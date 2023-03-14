@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "leatherman";
-  version = "1.12.6";
+  version = "1.12.9";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-k5Lt/NCSlBaTGhpR4T3Q4Ih+RR1xKROxz+RNYor7zaQ=";
+    sha256 = "sha256-TuiOAinJsQWJVJiaS8kWk4Pl+hn521f4ooJ2p+eR6mk=";
     rev = version;
     repo = "leatherman";
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  cmakeFlags = [ "-DLEATHERMAN_ENABLE_TESTING=OFF" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];

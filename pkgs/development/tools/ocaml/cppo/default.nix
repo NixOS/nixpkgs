@@ -21,7 +21,7 @@ if lib.versionAtLeast ocaml.version "4.02" then
 
 buildDunePackage rec {
   inherit pname;
-  version = "1.6.8";
+  version = "1.6.9";
 
   useDune2 = true;
 
@@ -29,7 +29,7 @@ buildDunePackage rec {
     owner = "ocaml-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:0xjb1dnj8lvdcccskrhrakknd9q4vfy5330sjbqpf4h95dsz90k9";
+    sha256 = "sha256-NdN2QnVRfRq9hEcSAnO2Wha7icDlf2Zg4JQqoEWmErE=";
   };
 
   doCheck = true;
@@ -52,7 +52,9 @@ stdenv.mkDerivation {
     sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
 
   inherit meta;
 
@@ -61,7 +63,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
-    mkdir $out/bin
+    mkdir -p $out/bin
   '';
 
 }

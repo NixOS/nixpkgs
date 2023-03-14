@@ -44,8 +44,9 @@ mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
-    homepage = "http://djvu.sourceforge.net/djview4.html";
+    homepage = "https://djvu.sourceforge.net/djview4.html";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha ];

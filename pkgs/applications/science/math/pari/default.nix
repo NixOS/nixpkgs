@@ -1,18 +1,21 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
+, fetchpatch
 , gmp
-, readline
 , libX11
-, tex
+, libpthreadstubs
 , perl
-, withThread ? true, libpthreadstubs
+, readline
+, tex
+, withThread ? true
 }:
 
 assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.13.1";
+  version = "2.15.2";
 
   src = fetchurl {
     urls = [
@@ -20,43 +23,43 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-gez31wzNquIwFlz/Ynyc4uwpe48i+fQHQiedhfht/LE=";
+    hash = "sha256-sEYoER7iKHZRmksc2vsy/rqjTq+iT56B9Y+NBX++4N0=";
   };
 
   patches = [
-    # rebased version of 3edb98db78, see
-    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2284
-    ./rnfdisc.patch
+    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2441
+    (fetchpatch {
+      name = "fix-find_isogenous_from_Atkin.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/bug2441.patch?id=9.8.rc0";
+      hash = "sha256-DvOUFlFDnopN+MJY6GYRPNabuoHPFch/nNn+49ygznc=";
+    })
   ];
 
   buildInputs = [
     gmp
-    readline
     libX11
-    tex
     perl
+    readline
+    tex
   ] ++ lib.optionals withThread [
     libpthreadstubs
   ];
 
   configureScript = "./Configure";
   configureFlags = [
-    "--with-gmp=${gmp.dev}"
-    "--with-readline=${readline.dev}"
-  ] ++ lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+    "--with-gmp=${lib.getDev gmp}"
+    "--with-readline=${lib.getDev readline}"
+  ]
   ++ lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
   '';
 
-  postConfigure = lib.optionalString stdenv.isDarwin ''
-    echo 'echo x86_64-darwin' > config/arch-osname
-  '';
-
   makeFlags = [ "all" ];
 
   meta = with lib; {
+    homepage = "http://pari.math.u-bordeaux.fr";
     description = "Computer algebra system for high-performance number theory computations";
     longDescription = ''
        PARI/GP is a widely used computer algebra system designed for fast
@@ -81,11 +84,10 @@ stdenv.mkDerivation rec {
          3 or 4 times faster.) gp2c currently only understands a subset of the
          GP language.
     '';
-    homepage = "http://pari.math.u-bordeaux.fr";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
+    maintainers = with maintainers; [ ertes ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
-    updateWalker = true;
+    mainProgram = "gp";
   };
 }

@@ -1,16 +1,19 @@
-{ buildDunePackage, mirage-crypto, ounit, randomconv, dune-configurator
+{ buildDunePackage, mirage-crypto, ounit2, randomconv, dune-configurator
 , cstruct, duration, logs, mtime, ocaml_lwt }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-crypto-rng";
 
-  inherit (mirage-crypto) version src useDune2 minimumOCamlVersion;
+  inherit (mirage-crypto) version src;
+  duneVersion = "3";
 
   doCheck = true;
-  checkInputs = [ ounit randomconv ];
+  checkInputs = [ ounit2 randomconv ];
 
-  nativeBuildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ocaml_lwt ];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ];
+
+  strictDeps = true;
 
   meta = mirage-crypto.meta // {
     description = "A cryptographically secure PRNG";

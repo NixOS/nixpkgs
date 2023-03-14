@@ -5,7 +5,6 @@
 , itstool
 , python3
 , wrapGAppsHook
-, python3Packages
 , gst_all_1
 , gtk3
 , gobject-introspection
@@ -19,15 +18,15 @@
 , gsettings-desktop-schemas
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2021.05";
+  version = "2022.06";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "z1aTxGxCqw2hSi5Zv89LyIBgS0HpzTqo0uvcYIJ7dcc=";
+    sha256 = "Uz0448bSEcK9DpXiuWsPCDO98NXUd6zgffYRWDUGyDg=";
   };
 
   patches = [
@@ -52,9 +51,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libpeas
     librsvg
-    gnome.gnome-desktop
     gsound
-    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
   ] ++ (with gst_all_1; [
@@ -68,14 +65,13 @@ python3Packages.buildPythonApplication rec {
     gst-devtools
   ]);
 
-  pythonPath = with python3Packages; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     gst-python
-    pyxdg
     numpy
     pycairo
     matplotlib
-    dbus-python
+    librosa
   ];
 
   postPatch = ''

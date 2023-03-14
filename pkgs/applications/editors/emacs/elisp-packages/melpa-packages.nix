@@ -6,6 +6,7 @@ To update the list of packages from MELPA,
 
 1. Run `./update-melpa`
 2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
 3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
@@ -73,6 +74,15 @@ let
       overrides = lib.optionalAttrs (variant == "stable") {
 
         # upstream issue: missing file header
+        abridge-diff =
+          if super.abridge-diff.version == "0.1"
+          then markBroken super.abridge-diff
+          else super.abridge-diff;
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
 
         # upstream issue: missing file header
@@ -100,10 +110,37 @@ let
         dictionary = markBroken super.dictionary;
 
         # upstream issue: missing file header
+        fold-dwim =
+          if super.fold-dwim.version == "1.2"
+          then markBroken super.fold-dwim
+          else super.fold-dwim;
+
+        # upstream issue: missing file header
+        gl-conf-mode =
+          if super.gl-conf-mode.version == "0.3"
+          then markBroken super.gl-conf-mode
+          else super.gl-conf-mode;
+
+        # upstream issue: missing file header
+        ligo-mode =
+          if super.ligo-mode.version == "0.3"
+          then markBroken super.ligo-mode
+          else super.ligo-mode;
+
+        # upstream issue: missing file header
         link = markBroken super.link;
 
         # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
+        org-dp =
+          if super.org-dp.version == "1"
+          then markBroken super.org-dp
+          else super.org-dp;
+
+        # upstream issue: missing file header
+        revbufs =
+          if super.revbufs.version == "1.2"
+          then markBroken super.revbufs
+          else super.revbufs;
 
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
@@ -140,6 +177,23 @@ let
 
         dune = dontConfigure super.dune;
 
+        emacsql = super.emacsql.overrideAttrs (old: {
+          buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            cd source/sqlite
+            make
+            cd -
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            install -m=755 -D source/sqlite/emacsql-sqlite \
+              $out/share/emacs/site-lisp/elpa/emacsql-${old.version}/sqlite/emacsql-sqlite
+          '';
+
+          stripDebugList = [ "share" ];
+        });
+
         emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
@@ -149,12 +203,19 @@ let
             cd -
           '';
 
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             install -m=755 -D source/sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
           '';
 
           stripDebugList = [ "share" ];
+        });
+
+        epkg = super.epkg.overrideAttrs (old: {
+          postPatch = ''
+            substituteInPlace lisp/epkg.el \
+              --replace '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
+          '';
         });
 
         erlang = super.erlang.overrideAttrs (attrs: {
@@ -180,6 +241,12 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
+          # Temporary work around for:
+          #   - https://github.com/vedang/pdf-tools/issues/102
+          #   - https://github.com/vedang/pdf-tools/issues/103
+          #   - https://github.com/vedang/pdf-tools/issues/109
+          CXXFLAGS = "-std=c++17";
+
           nativeBuildInputs = [
             pkgs.autoconf
             pkgs.automake
@@ -216,7 +283,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';
@@ -234,9 +301,10 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = true;
+          doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
+          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -258,7 +326,7 @@ let
             make
             popd
           '';
-          postInstall = ''
+          postInstall = (attrs.postInstall or "") + "\n" + ''
             outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
             mkdir $outd/build
             install -m444 -t $outd/build ./source/src/libegit2.so
@@ -357,6 +425,18 @@ let
 
         rtags-xref = dontConfigure super.rtags;
 
+        rime = super.rime.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
+          preBuild = (old.preBuild or "") + ''
+            make lib
+            mkdir -p /build/rime-lib
+            cp *.so /build/rime-lib
+          '';
+          postInstall = (old.postInstall or "") + ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
+          '';
+        });
+
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.haskellPackages.structured-haskell-mode ];
         });
@@ -371,7 +451,8 @@ let
               --replace 'defcustom telega-server-command "telega-server"' \
                         "defcustom telega-server-command \"$out/bin/telega-server\""
 
-            substituteInPlace telega-sticker.el --replace '"dwebp"' '"${pkgs.libwebp}/bin/dwebp"'
+            substituteInPlace telega-sticker.el --replace '"dwebp' '"${pkgs.libwebp}/bin/dwebp'
+            substituteInPlace telega-sticker.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
 
             substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
           '';
@@ -382,7 +463,7 @@ let
             cd -
           '';
 
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             mkdir -p $out/bin
             install -m755 -Dt $out/bin ./source/server/telega-server
           '';
@@ -412,7 +493,7 @@ let
             pkgs.libtool
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             mv $EZMQ_LIBDIR/emacs-zmq.* $out/share/emacs/site-lisp/elpa/zmq-*
             rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
             rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
@@ -462,6 +543,16 @@ let
           packageRequires = with self; [ evil highlight ];
         });
 
+        hamlet-mode = super.hamlet-mode.overrideAttrs (attrs: {
+          patches = [
+            # Fix build; maintainer email fails to parse
+            (pkgs.fetchpatch {
+              url = "https://github.com/lightquake/hamlet-mode/commit/253495d1330d6ec88d97fac136c78f57c650aae0.patch";
+              sha256 = "dSxS5yuXzCW96CUyvJWwjkhf1FMGBfiKKoBxeDVdz9Y=";
+            })
+          ];
+        });
+
         helm-rtags = fix-rtags super.helm-rtags;
 
         # tries to write to $HOME
@@ -489,7 +580,7 @@ let
           ];
           # we need the proper out directory to exist, so we do this in the
           # postInstall instead of postBuild
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             pushd source/build >/dev/null
             make
             install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
@@ -508,6 +599,20 @@ let
                 'defcustom w3m-command "${w3m}"'
               '';
           });
+        });
+
+        wordnut = super.wordnut.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace wordnut.el \
+              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+          '';
+        });
+
+        mozc = super.mozc.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace src/unix/emacs/mozc.el \
+              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+          '';
         });
       };
 

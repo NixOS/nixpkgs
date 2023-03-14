@@ -1,16 +1,16 @@
 /*
 
-This file is for options that NixOS and nix-darwin have in common.
+  This file is for options that NixOS and nix-darwin have in common.
 
-Platform-specific code is in the respective default.nix files.
+  Platform-specific code is in the respective default.nix files.
 
- */
+*/
 
 { config, lib, options, pkgs, ... }:
 let
   inherit (lib)
     filterAttrs
-    literalDocBook
+    literalMD
     literalExpression
     mkIf
     mkOption
@@ -27,22 +27,32 @@ let
   settingsModule = { config, ... }: {
     freeformType = format.type;
     options = {
+      apiBaseUrl = mkOption {
+        description = lib.mdDoc ''
+          API base URL that the agent will connect to.
+
+          When using Hercules CI Enterprise, set this to the URL where your
+          Hercules CI server is reachable.
+        '';
+        type = types.str;
+        default = "https://hercules-ci.com";
+      };
       baseDirectory = mkOption {
         type = types.path;
         default = "/var/lib/hercules-ci-agent";
-        description = ''
+        description = lib.mdDoc ''
           State directory (secrets, work directory, etc) for agent
         '';
       };
       concurrentTasks = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Number of tasks to perform simultaneously.
 
           A task is a single derivation build, an evaluation or an effect run.
-          At minimum, you need 2 concurrent tasks for <literal>x86_64-linux</literal>
+          At minimum, you need 2 concurrent tasks for `x86_64-linux`
           in your cluster, to allow for import from derivation.
 
-          <literal>concurrentTasks</literal> can be around the CPU core count or lower if memory is
+          `concurrentTasks` can be around the CPU core count or lower if memory is
           the bottleneck.
 
           The optimal value depends on the resource consumption characteristics of your workload,
@@ -55,8 +65,27 @@ let
         type = types.either types.ints.positive (types.enum [ "auto" ]);
         default = "auto";
       };
+      labels = mkOption {
+        description = lib.mdDoc ''
+          A key-value map of user data.
+
+          This data will be available to organization members in the dashboard and API.
+
+          The values can be of any TOML type that corresponds to a JSON type, but arrays
+          can not contain tables/objects due to limitations of the TOML library. Values
+          involving arrays of non-primitive types may not be representable currently.
+        '';
+        type = format.type;
+        defaultText = literalExpression ''
+          {
+            agent.source = "..."; # One of "nixpkgs", "flake", "override"
+            lib.version = "...";
+            pkgs.version = "...";
+          }
+        '';
+      };
       workDirectory = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The directory in which temporary subdirectories are created for task state. This includes sources for Nix evaluation.
         '';
         type = types.path;
@@ -64,34 +93,59 @@ let
         defaultText = literalExpression ''baseDirectory + "/work"'';
       };
       staticSecretsDirectory = mkOption {
-        description = ''
-          This is the default directory to look for statically configured secrets like <literal>cluster-join-token.key</literal>.
+        description = lib.mdDoc ''
+          This is the default directory to look for statically configured secrets like `cluster-join-token.key`.
+
+          See also `clusterJoinTokenPath` and `binaryCachesPath` for fine-grained configuration.
         '';
         type = types.path;
         default = config.baseDirectory + "/secrets";
         defaultText = literalExpression ''baseDirectory + "/secrets"'';
       };
       clusterJoinTokenPath = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Location of the cluster-join-token.key file.
+
+          You can retrieve the contents of the file when creating a new agent via
+          <https://hercules-ci.com/dashboard>.
+
+          As this value is confidential, it should not be in the store, but
+          installed using other means, such as agenix, NixOps
+          `deployment.keys`, or manual installation.
+
+          The contents of the file are used for authentication between the agent and the API.
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/cluster-join-token.key";
         defaultText = literalExpression ''staticSecretsDirectory + "/cluster-join-token.key"'';
-        # internal: It's a bit too detailed to show by default in the docs,
-        # but useful to define explicitly to allow reuse by other modules.
-        internal = true;
       };
       binaryCachesPath = mkOption {
-        description = ''
-          Location of the binary-caches.json file.
+        description = lib.mdDoc ''
+          Path to a JSON file containing binary cache secret keys.
+
+          As these values are confidential, they should not be in the store, but
+          copied over using other means, such as agenix, NixOps
+          `deployment.keys`, or manual installation.
+
+          The format is described on <https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/>.
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/binary-caches.json";
         defaultText = literalExpression ''staticSecretsDirectory + "/binary-caches.json"'';
-        # internal: It's a bit too detailed to show by default in the docs,
-        # but useful to define explicitly to allow reuse by other modules.
-        internal = true;
+      };
+      secretsJsonPath = mkOption {
+        description = lib.mdDoc ''
+          Path to a JSON file containing secrets for effects.
+
+          As these values are confidential, they should not be in the store, but
+          copied over using other means, such as agenix, NixOps
+          `deployment.keys`, or manual installation.
+
+          The format is described on <https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/>.
+        '';
+        type = types.path;
+        default = config.staticSecretsDirectory + "/secrets.json";
+        defaultText = literalExpression ''staticSecretsDirectory + "/secrets.json"'';
       };
     };
   };
@@ -135,26 +189,26 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable to run Hercules CI Agent as a system service.
 
-        <link xlink:href="https://hercules-ci.com">Hercules CI</link> is a
+        [Hercules CI](https://hercules-ci.com) is a
         continuous integation service that is centered around Nix.
 
-        Support is available at <link xlink:href="mailto:help@hercules-ci.com">help@hercules-ci.com</link>.
+        Support is available at [help@hercules-ci.com](mailto:help@hercules-ci.com).
       '';
     };
     checkNix = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to make sure that the system's Nix (nix-daemon) is compatible.
 
         If you set this to false, please keep up with the change log.
       '';
     };
     package = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Package containing the bin/hercules-ci-agent executable.
       '';
       type = types.package;
@@ -162,12 +216,12 @@ in
       defaultText = literalExpression "pkgs.hercules-ci-agent";
     };
     settings = mkOption {
-      description = ''
-        These settings are written to the <literal>agent.toml</literal> file.
+      description = lib.mdDoc ''
+        These settings are written to the `agent.toml` file.
 
         Not all settings are listed as options, can be set nonetheless.
 
-        For the exhaustive list of settings, see <link xlink:href="https://docs.hercules-ci.com/hercules-ci/reference/agent-config/"/>.
+        For the exhaustive list of settings, see <https://docs.hercules-ci.com/hercules-ci/reference/agent-config/>.
       '';
       type = types.submoduleWith { modules = [ settingsModule ]; };
     };
@@ -177,12 +231,12 @@ in
 
       These are written as options instead of let binding to allow sharing with
       default.nix on both NixOS and nix-darwin.
-     */
+    */
     tomlFile = mkOption {
       type = types.path;
       internal = true;
-      defaultText = literalDocBook "generated <literal>hercules-ci-agent.toml</literal>";
-      description = ''
+      defaultText = literalMD "generated `hercules-ci-agent.toml`";
+      description = lib.mdDoc ''
         The fully assembled config file.
       '';
     };

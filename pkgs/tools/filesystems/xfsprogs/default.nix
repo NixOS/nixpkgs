@@ -1,14 +1,15 @@
-{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkg-config
-, icu, libuuid, readline, inih
+{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+, icu, libuuid, readline, inih, liburcu
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.11.0";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    sha256 = "0lxks616nmdk8zkdbwpq5sf9zz19smgy5rpmp3hpk2mvrl7kk70f";
+    hash = "sha256-BeihN4cNsdYYLfct2pirenEA3rN2lH6FS51ZyRTCx7s=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     autoconf automake libtool gettext pkg-config
     libuuid # codegen tool uses libuuid
   ];
-  buildInputs = [ readline icu inih ];
+  buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
@@ -44,6 +45,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     find . -type d -name .libs | xargs rm -rf
   '';
+
+  passthru.tests = {
+    inherit (nixosTests.installer) lvm;
+  };
 
   meta = with lib; {
     homepage = "https://xfs.org/";

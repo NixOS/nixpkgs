@@ -1,35 +1,35 @@
 { buildGoModule
-, buildGoPackage
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , go-bindata
 , lib
 , llvmPackages
+, perl
 , pkg-config
 , rustPlatform
 , stdenv
 , libiconv
 }:
 
-# Note for maintainers: use ./update-influxdb2.sh to update the Yarn
-# dependencies nix expression.
-
 let
-  version = "2.0.8";
-  shorthash = "e91d41810f"; # git rev-parse HEAD with 2.0.8 checked out
-  libflux_version = "0.124.0";
+  version = "2.5.1";
+  # Despite the name, this is not a rolling release. This is the
+  # version of the UI assets for 2.5.1, as specified in
+  # scripts/fetch-ui-assets.sh in the 2.5.1 tag of influxdb.
+  ui_version = "OSS-2022-09-16";
+  libflux_version = "0.188.1";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "0hbinnja13xr9ziyynjsnsbrxmyrvag7xdgfwq2ya28g07lw5wgq";
+    sha256 = "sha256-AKyuFBja06BuWYliqIGKOb4PIc5G8S9S+cf/dLrEATY=";
   };
 
   ui = fetchurl {
-    url = "https://github.com/influxdata/ui/releases/download/OSS-v${version}/build.tar.gz";
-    # https://github.com/influxdata/ui/releases/download/OSS-v${version}/sha256.txt
-    sha256 = "94965ae999a1098c26128141fbb849be3da9a723d509118eb6e0db4384ee01fc";
+    url = "https://github.com/influxdata/ui/releases/download/${ui_version}/build.tar.gz";
+    sha256 = "sha256-YKDp1jLyo4n+YTeMaWl8dhN4Lr3H8FXV7stJ3p3zFe8=";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -39,10 +39,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "1g1qilfzxqbbjbfvgkf7k7spcnhzvlmrqacpqdl05418ywkp3v29";
+      sha256 = "sha256-Xmh7V/o1Gje62kcnTeB9h/fySljhfu+tjbyvryvIGRc=";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "0farcjwnwwgfvcgbs5r6vsdrsiwq2mp82sjxkqb1pzqfls4ixcxj";
+    cargoSha256 = "sha256-9rPW0lgi3lXJARa1KXgSY8LVJsoFjppok5ODGlqYeYw=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -51,7 +51,7 @@ let
       Version: ${libflux_version}
       Description: Library for the InfluxData Flux engine
       Cflags: -I/out/include
-      Libs: -L/out/lib -lflux -ldl -lpthread
+      Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
     postInstall = ''
@@ -63,41 +63,57 @@ let
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
   };
+
 in buildGoModule {
   pname = "influxdb";
   version = version;
-  src = src;
+  inherit src;
 
-  nativeBuildInputs = [ go-bindata pkg-config ];
+  nativeBuildInputs = [ go-bindata pkg-config perl ];
 
-  vendorSha256 = "1kar88vlm6px7smlnajpyf8qx6d481xk979qafpfb1xy8931781m";
-  subPackages = [ "cmd/influxd" "cmd/influx" ];
+  vendorSha256 = "sha256-02x+HsWkng7OnKVSfkQR8LL1Qk42Bdrw0IMtBpS7xQc=";
+  subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
-  # We have to run a bunch of go:generate commands to embed the UI
-  # assets into the source code. Ideally we'd run `make generate`, but
-  # that ends up running a ton of non-hermetic stuff. Instead, we find
-  # the relevant go:generate directives, and run them by hand without
-  # breaking hermeticity.
-  preBuild = ''
-    tar -xzf ${ui} -C static/data
 
-    grep -RI -e 'go:generate.*go-bindata' | cut -f1 -d: | while read -r filename; do
-      sed -i -e 's/go:generate.*go-bindata/go:generate go-bindata/' $filename
-      pushd $(dirname $filename)
-      go generate
-      popd
-    done
+  postPatch = ''
+    # use go-bindata from environment
+    substituteInPlace static/static.go \
+      --replace 'go run github.com/kevinburke/go-bindata/' ""
+  '';
+
+  # Check that libflux and the UI are at the right version, and embed
+  # the UI assets into the Go source tree.
+  preBuild = ''
+    (
+      flux_ver=$(grep github.com/influxdata/flux go.mod | awk '{print $2}')
+      if [ "$flux_ver" != "v${libflux_version}" ]; then
+        echo "go.mod wants libflux $flux_ver, but nix derivation provides ${libflux_version}"
+        exit 1
+      fi
+
+      ui_ver=$(egrep 'UI_RELEASE=".*"' scripts/fetch-ui-assets.sh | cut -d'"' -f2)
+      if [ "$ui_ver" != "${ui_version}" ]; then
+        echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
+        exit 1
+      fi
+    )
+
+    mkdir -p static/data
+    tar -xzf ${ui} -C static/data
+    pushd static
+    go generate
+    popd
   '';
 
   tags = [ "assets" ];
 
-  ldflags = [ "-X main.commit=${shorthash}" "-X main.version=${version}" ];
+  ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "An open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ danderson ];
+    maintainers = with maintainers; [ abbradar danderson ];
   };
 }

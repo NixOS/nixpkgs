@@ -1,26 +1,25 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests }:
-
-let
-  common = opts: callPackage (import ../../browsers/firefox/common.nix opts) {
-    webrtcSupport = false;
-    geolocationSupport = false;
-  };
-in
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
 
 rec {
-  thunderbird = common rec {
+  thunderbird = thunderbird-102;
+
+  thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "91.3.0";
+    version = "102.8.0";
     application = "comm/mail";
+    applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "938de817ed2cad90f665559da1dfc266f34b6ca2e688ee364112edfdb1167183a8225132ed50b672ceb14402be933be82fd1ef8b46f103cdf1534a403fb472d9";
+      sha512 = "2431eb8799184b261609c96bed3c9368bec9035a831aa5f744fa89e48aedb130385b268dd90f03bbddfec449dc3e5fad1b5f8727fe9e11e1d1f123a81b97ddf8";
     };
-    patches = [
+    extraPatches = [
+      # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
+      ./no-buildconfig.patch
     ];
 
     meta = with lib; {
+      changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
@@ -32,6 +31,12 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
+      versionPrefix = "102";
     };
+  }).override {
+    geolocationSupport = false;
+    webrtcSupport = false;
+
+    pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
   };
 }

@@ -64,6 +64,8 @@ my $extraEntries = get("extraEntries");
 my $extraEntriesBeforeNixOS = get("extraEntriesBeforeNixOS") eq "true";
 my $splashImage = get("splashImage");
 my $splashMode = get("splashMode");
+my $entryOptions = get("entryOptions");
+my $subEntryOptions = get("subEntryOptions");
 my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
@@ -103,10 +105,10 @@ if (stat($bootPath)->dev != stat("/nix/store")->dev) {
 
 # Discover information about the location of the bootPath
 struct(Fs => {
-        device => '$',
-        type => '$',
-        mount => '$',
-    });
+    device => '$',
+    type => '$',
+    mount => '$',
+});
 sub PathInMount {
     my ($path, $mount) = @_;
     my @splitMount = split /\//, $mount;
@@ -155,9 +157,9 @@ sub GetFs {
     return $bestFs;
 }
 struct (Grub => {
-        path => '$',
-        search => '$',
-    });
+    path => '$',
+    search => '$',
+});
 my $driveid = 1;
 sub GrubFs {
     my ($dir) = @_;
@@ -254,8 +256,8 @@ if ($grubVersion == 1) {
     # $defaultEntry might be "saved", indicating that we want to use the last selected configuration as default.
     # Incidentally this is already the correct value for the grub 1 config to achieve this behaviour.
     $conf .= "
-    default $defaultEntry
-    timeout $timeout
+        default $defaultEntry
+        timeout $timeout
     ";
     if ($splashImage) {
         copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath: $!\n";
@@ -305,7 +307,7 @@ else {
 
     if ($copyKernels == 0) {
         $conf .= "
-        " . $grubStore->search;
+            " . $grubStore->search;
     }
     # FIXME: should use grub-mkconfig.
     my $defaultEntryText = $defaultEntry;
@@ -313,55 +315,55 @@ else {
         $defaultEntryText = "\"\${saved_entry}\"";
     }
     $conf .= "
-    " . $grubBoot->search . "
-    if [ -s \$prefix/grubenv ]; then
-    load_env
-    fi
-
-    # ‘grub-reboot’ sets a one-time saved entry, which we process here and
-    # then delete.
-    if [ \"\${next_entry}\" ]; then
-    set default=\"\${next_entry}\"
-    set next_entry=
-    save_env next_entry
-    set timeout=1
-    set boot_once=true
-    else
-    set default=$defaultEntryText
-    set timeout=$timeout
-    fi
-
-    function savedefault {
-        if [ -z \"\${boot_once}\"]; then
-        saved_entry=\"\${chosen}\"
-        save_env saved_entry
+        " . $grubBoot->search . "
+        if [ -s \$prefix/grubenv ]; then
+          load_env
         fi
-    }
 
-    # Setup the graphics stack for bios and efi systems
-    if [ \"\${grub_platform}\" = \"efi\" ]; then
-    insmod efi_gop
-    insmod efi_uga
-    else
-    insmod vbe
-    fi
+        # ‘grub-reboot’ sets a one-time saved entry, which we process here and
+        # then delete.
+        if [ \"\${next_entry}\" ]; then
+          set default=\"\${next_entry}\"
+          set next_entry=
+          save_env next_entry
+          set timeout=1
+          set boot_once=true
+        else
+          set default=$defaultEntryText
+          set timeout=$timeout
+        fi
+
+        function savedefault {
+            if [ -z \"\${boot_once}\"]; then
+            saved_entry=\"\${chosen}\"
+            save_env saved_entry
+            fi
+        }
+
+        # Setup the graphics stack for bios and efi systems
+        if [ \"\${grub_platform}\" = \"efi\" ]; then
+          insmod efi_gop
+          insmod efi_uga
+        else
+          insmod vbe
+        fi
     ";
 
     if ($font) {
         copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath: $!\n";
         $conf .= "
-        insmod font
-        if loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/converted-font.pf2; then
-        insmod gfxterm
-        if [ \"\${grub_platform}\" = \"efi\" ]; then
-        set gfxmode=$gfxmodeEfi
-        set gfxpayload=$gfxpayloadEfi
-        else
-        set gfxmode=$gfxmodeBios
-        set gfxpayload=$gfxpayloadBios
-        fi
-        terminal_output gfxterm
-        fi
+            insmod font
+            if loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/converted-font.pf2; then
+              insmod gfxterm
+              if [ \"\${grub_platform}\" = \"efi\" ]; then
+                set gfxmode=$gfxmodeEfi
+                set gfxpayload=$gfxpayloadEfi
+              else
+                set gfxmode=$gfxmodeBios
+                set gfxpayload=$gfxpayloadBios
+              fi
+              terminal_output gfxterm
+            fi
         ";
     }
     if ($splashImage) {
@@ -378,14 +380,14 @@ else {
         }
         copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath: $!\n";
         $conf .= "
-        insmod " . substr($suffix, 1) . "
-        if background_image --mode '$splashMode' " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background$suffix; then
-        set color_normal=white/black
-        set color_highlight=black/white
-        else
-        set menu_color_normal=cyan/blue
-        set menu_color_highlight=white/blue
-        fi
+            insmod " . substr($suffix, 1) . "
+            if background_image --mode '$splashMode' " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background$suffix; then
+              set color_normal=white/black
+              set color_highlight=black/white
+            else
+              set menu_color_normal=cyan/blue
+              set menu_color_highlight=white/blue
+            fi
         ";
     }
 
@@ -395,20 +397,20 @@ else {
         # Copy theme
         rcopy($theme, "$bootPath/theme") or die "cannot copy $theme to $bootPath\n";
         $conf .= "
-        # Sets theme.
-        set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
-        export theme
-        # Load theme fonts, if any
+            # Sets theme.
+            set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
+            export theme
+            # Load theme fonts, if any
         ";
 
         find( { wanted => sub {
-                    if ($_ =~ /\.pf2$/i) {
-                        $font = File::Spec->abs2rel($File::Find::name, $theme);
-                        $conf .= "
-                        loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/$font
-                        ";
-                    }
-                }, no_chdir => 1 }, $theme );
+            if ($_ =~ /\.pf2$/i) {
+                $font = File::Spec->abs2rel($File::Find::name, $theme);
+                $conf .= "
+                    loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/$font
+                ";
+            }
+        }, no_chdir => 1 }, $theme );
     }
 }
 
@@ -440,7 +442,7 @@ sub copyToKernelsDir {
 }
 
 sub addEntry {
-    my ($name, $path, $options) = @_;
+    my ($name, $path, $options, $current) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
@@ -448,20 +450,28 @@ sub addEntry {
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
-        my $initrdName = basename($initrd);
-        my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
+        # Name the initrd secrets after the system from which they're derived.
+        my $systemName = basename(Cwd::abs_path("$path"));
+        my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
         mkpath(dirname($initrdSecretsPath), 0, 0755);
         my $oldUmask = umask;
         # Make sure initrd is not world readable (won't work if /boot is FAT)
         umask 0137;
         my $initrdSecretsPathTemp = File::Temp::mktemp("$initrdSecretsPath.XXXXXXXX");
-        system("$path/append-initrd-secrets", $initrdSecretsPathTemp) == 0 or die "failed to create initrd secrets: $!\n";
+        if (system("$path/append-initrd-secrets", $initrdSecretsPathTemp) != 0) {
+          if ($current) {
+              die "failed to create initrd secrets $!\n";
+          } else {
+              say STDERR "warning: failed to create initrd secrets for \"$name\", an older generation";
+              say STDERR "note: this is normal after having removed or renamed a file in `boot.initrd.secrets`";
+          }
+        }
         # Check whether any secrets were actually added
         if (-e $initrdSecretsPathTemp && ! -z _) {
             rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
             $copied{$initrdSecretsPath} = 1;
-            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
+            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$systemName-secrets";
         } else {
             unlink $initrdSecretsPathTemp;
             rmdir dirname($initrdSecretsPathTemp);
@@ -474,8 +484,8 @@ sub addEntry {
     # FIXME: $confName
 
     my $kernelParams =
-    "init=" . Cwd::abs_path("$path/init") . " " .
-    readFile("$path/kernel-params");
+        "init=" . Cwd::abs_path("$path/init") . " " .
+        readFile("$path/kernel-params");
     my $xenParams = $xen && -e "$path/xen-params" ? readFile("$path/xen-params") : "";
 
     if ($grubVersion == 1) {
@@ -489,7 +499,7 @@ sub addEntry {
         }
         $conf .= "\n";
     } else {
-        $conf .= "menuentry \"$name\" " . ($options||"") . " {\n";
+        $conf .= "menuentry \"$name\" " . $options . " {\n";
         if ($saveDefault) {
             $conf .= "  savedefault\n";
         }
@@ -509,7 +519,7 @@ sub addEntry {
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("NixOS - Default", $defaultConfig, "--unrestricted");
+addEntry("@distroName@ - Default", $defaultConfig, $entryOptions, 1);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
@@ -524,9 +534,9 @@ foreach my $link (@links) {
 
     my $date = strftime("%F", localtime(lstat($link)->mtime));
     my $version =
-    -e "$link/nixos-version"
-    ? readFile("$link/nixos-version")
-    : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+        -e "$link/nixos-version"
+        ? readFile("$link/nixos-version")
+        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
 
     if ($cfgName) {
         $entryName = $cfgName;
@@ -534,7 +544,7 @@ foreach my $link (@links) {
         my $linkname = basename($link);
         $entryName = "($linkname - $date - $version)";
     }
-    addEntry("NixOS - $entryName", $link);
+    addEntry("@distroName@ - $entryName", $link, "", 1);
 }
 
 my $grubBootPath = $grubBoot->path;
@@ -546,13 +556,13 @@ sub addProfile {
     my ($profile, $description) = @_;
 
     # Add entries for all generations of this profile.
-    $conf .= "submenu \"$description\" {\n" if $grubVersion == 2;
+    $conf .= "submenu \"$description\" --class submenu {\n" if $grubVersion == 2;
 
     sub nrFromGen { my ($x) = @_; $x =~ /\/\w+-(\d+)-link/; return $1; }
 
     my @links = sort
-    { nrFromGen($b) <=> nrFromGen($a) }
-    (glob "$profile-*-link");
+        { nrFromGen($b) <=> nrFromGen($a) }
+        (glob "$profile-*-link");
 
     my $curEntry = 0;
     foreach my $link (@links) {
@@ -563,22 +573,22 @@ sub addProfile {
         }
         my $date = strftime("%F", localtime(lstat($link)->mtime));
         my $version =
-        -e "$link/nixos-version"
-        ? readFile("$link/nixos-version")
-        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
+            -e "$link/nixos-version"
+            ? readFile("$link/nixos-version")
+            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions, 0);
     }
 
     $conf .= "}\n" if $grubVersion == 2;
 }
 
-addProfile "/nix/var/nix/profiles/system", "NixOS - All configurations";
+addProfile "/nix/var/nix/profiles/system", "@distroName@ - All configurations";
 
 if ($grubVersion == 2) {
     for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
         my $name = basename($profile);
         next unless $name =~ /^\w+$/;
-        addProfile $profile, "NixOS - Profile '$name'";
+        addProfile $profile, "@distroName@ - Profile '$name'";
     }
 }
 
@@ -653,13 +663,13 @@ foreach my $fn (glob "$bootPath/kernels/*") {
 #
 
 struct(GrubState => {
-        name => '$',
-        version => '$',
-        efi => '$',
-        devices => '$',
-        efiMountPoint => '$',
-        extraGrubInstallArgs => '@',
-    });
+    name => '$',
+    version => '$',
+    efi => '$',
+    devices => '$',
+    efiMountPoint => '$',
+    extraGrubInstallArgs => '@',
+});
 # If you add something to the state file, only add it to the end
 # because it is read line-by-line.
 sub readGrubState {

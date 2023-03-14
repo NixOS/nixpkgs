@@ -16,11 +16,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i "s/==.*//g" requirements/test.txt
+
+    substituteInPlace requirements/base.txt --replace 'PyYAML>=3.13,<6' 'PyYAML>=3.13'
   '';
 
   propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "Configuration manager for python applications";

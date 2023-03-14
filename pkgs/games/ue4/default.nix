@@ -76,7 +76,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.unrealengine.com/what-is-unreal-engine-4";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.puffnfresh ];
+    maintainers = [ ];
+    # See issue https://github.com/NixOS/nixpkgs/issues/17162
     broken = true;
   };
 }

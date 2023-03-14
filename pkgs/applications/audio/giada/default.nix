@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-w"
     "-Wno-error"
   ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

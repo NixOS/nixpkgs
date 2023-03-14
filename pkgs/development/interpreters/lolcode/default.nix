@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, doxygen, cmake, readline }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, doxygen, cmake, readline }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "lolcode";
   version = "0.11.2";
 
-  src = fetchurl {
-    url = "https://github.com/justinmeza/lci/archive/v${version}.tar.gz";
-    sha256 = "1li7ikcrs7wqah7gqkirg0k61n6pm12w7pydin966x1sdn9na46b";
+  src = fetchFromGitHub {
+    owner = "justinmeza";
+    repo = "lci";
+    rev = "v${version}";
+    sha256 = "sha256-VMBW3/sw+1kI6iuOckSPU1TIeY6QORcSfFLFkRYw3Gs=";
   };
 
   nativeBuildInputs = [ pkg-config cmake doxygen ];
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   # Maybe it clashes with lci scientific logic software package...
   postInstall = "mv $out/bin/lci $out/bin/lolcode-lci";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://lolcode.org";
     description = "An esoteric programming language";
     longDescription = ''
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.AndersonTorres ];
+    mainProgram = "lolcode-lci";
     platforms = lib.platforms.unix;
   };
 

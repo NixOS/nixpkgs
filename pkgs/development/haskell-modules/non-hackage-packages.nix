@@ -24,14 +24,13 @@ self: super: {
 
   nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 
-  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
-
   # hasura graphql-engine is not released to hackage.
   # https://github.com/hasura/graphql-engine/issues/7391
   ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};
   pg-client = self.callPackage ../misc/haskell/hasura/pg-client.nix {};
   graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser.nix {};
   graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine.nix {};
+  kriti-lang = self.callPackage ../misc/haskell/hasura/kriti-lang.nix {};
   hasura-resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
   hasura-ekg-core = self.callPackage ../misc/haskell/hasura/ekg-core.nix {};
   hasura-ekg-json = self.callPackage ../misc/haskell/hasura/ekg-json.nix {};

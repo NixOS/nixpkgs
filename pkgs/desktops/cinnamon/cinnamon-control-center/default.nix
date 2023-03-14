@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , glib
@@ -8,15 +9,14 @@
 , libnotify
 , libxml2
 , gnome-online-accounts
-, cinnamon-settings-daemon
 , colord
 , polkit
 , libxkbfile
 , cinnamon-menus
-, dbus-glib
 , libgnomekbd
 , libxklavier
 , networkmanager
+, libgudev
 , libwacom
 , gnome
 , wrapGAppsHook
@@ -29,17 +29,19 @@
 , meson
 , ninja
 , cinnamon-translations
+, python3
+, upower
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "4.8.2";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-vALThDY0uN9bV7b1fga3MK7b2/l5uL33+B2x6oSLPRE=";
+    hash = "sha256-rp3K7SqGw8da2U61VjKiqUyT5vCUVk4XZdRYtLwRtfQ=";
   };
 
   buildInputs = [
@@ -49,12 +51,11 @@ stdenv.mkDerivation rec {
     libnotify
     cinnamon-menus
     libxml2
-    dbus-glib
     polkit
     libgnomekbd
     libxklavier
     colord
-    cinnamon-settings-daemon
+    libgudev
     libwacom
     gnome-online-accounts
     tzdata
@@ -64,38 +65,25 @@ stdenv.mkDerivation rec {
     xorg.libXxf86misc
     xorg.libxkbfile
     gdk-pixbuf
+    upower
   ];
 
   /* ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
-  ./panels/datetime/tz.h:32:#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
-  ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
+    ./panels/datetime/tz.h:32:#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
+    ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
 
   postPatch = ''
     sed 's|TZ_DIR "/usr/share/zoneinfo/"|TZ_DIR "${tzdata}/share/zoneinfo/"|g' -i ./panels/datetime/test-timezone.c
     sed 's|TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"|TZ_DATA_FILE "${tzdata}/share/zoneinfo/zone.tab"|g' -i ./panels/datetime/tz.h
     sed 's|"/usr/share/i18n/locales/"|"${glibc}/share/i18n/locales/"|g' -i panels/datetime/test-endianess.c
-  '';
 
-  # it needs to have access to that file, otherwise we can't run tests after build
-
-  preBuild = ''
-    mkdir -p $out/share/cinnamon-control-center/
-    ln -s $PWD/panels/datetime $out/share/cinnamon-control-center/
+    patchShebangs meson_install_schemas.py
   '';
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
-
-  preInstall = ''
-    rm -r $out
-  '';
-
-  # the only test is wacom-calibrator and it seems to need an xserver and prob more services aswell
-  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -103,6 +91,7 @@ stdenv.mkDerivation rec {
     ninja
     wrapGAppsHook
     gettext
+    python3
   ];
 
   meta = with lib; {

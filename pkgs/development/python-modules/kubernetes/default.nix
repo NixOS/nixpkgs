@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -10,7 +11,9 @@
 , python-dateutil
 , pyyaml
 , requests
-, requests_oauthlib
+, requests-oauthlib
+, setuptools
+, six
 , urllib3
 , websocket-client
 
@@ -21,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "18.20.0";
+  version = "26.1.0";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes-client";
     repo = "python";
-    rev = "v${version}";
-    sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
-    fetchSubmodules = true;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2QkQGZ4Dho2PykH90ijosWWBzhQoCHoWhRL3ruOiDBg=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +43,9 @@ buildPythonPackage rec {
     python-dateutil
     pyyaml
     requests
-    requests_oauthlib
+    requests-oauthlib
+    setuptools
+    six
     urllib3
     websocket-client
   ];
@@ -49,15 +54,20 @@ buildPythonPackage rec {
     "kubernetes"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>
+    "test_rest_proxycare"
+  ];
+
   meta = with lib; {
-    description = "Kubernetes python client";
+    description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lsix ];
+    maintainers = with maintainers; [ lsix SuperSandro2000 ];
   };
 }

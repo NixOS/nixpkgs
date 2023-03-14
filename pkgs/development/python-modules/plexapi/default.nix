@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.7.2";
+  version = "4.13.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
-    rev = version;
-    sha256 = "sha256-v12CL2VR9QAoj44F8V1qw/qflzQ1WRi1cvWn/U/wW/E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5YwINPgQ4efZBvu5McsLYicW/7keKSi011lthJUR9zw=";
   };
 
   propagatedBuildInputs = [
@@ -29,11 +30,14 @@ buildPythonPackage rec {
   # Tests require a running Plex instance
   doCheck = false;
 
-  pythonImportsCheck = [ "plexapi" ];
+  pythonImportsCheck = [
+    "plexapi"
+  ];
 
   meta = with lib; {
     description = "Python bindings for the Plex API";
     homepage = "https://github.com/pkkid/python-plexapi";
+    changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ colemickens ];
   };

@@ -1,49 +1,62 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , configparser
 , pyparsing
-, pytest
+, pytestCheckHook
 , future
 , openpyxl
 , wrapt
+, scipy
+, cexprtk
+, deepdiff
+, sympy
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
-  pname = "atsim.potentials";
+  version = "0.4.1";
+  pname = "atsim-potentials";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0c3e4e2323e969880f17a9924642e0991be5761f50b254bcbadd046db3be6390";
+  src = fetchFromGitHub {
+    owner = "mjdrushton";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
   };
 
-  checkInputs = [ pytest ];
+  postPatch = ''
+    # Remove conflicting openpyxl dependency version check
+    sed -i '/openpyxl==2.6.4/d' setup.py
+  '';
+
   propagatedBuildInputs = [
+    cexprtk
     configparser
     future
     openpyxl
     pyparsing
+    scipy
+    sympy
     wrapt
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "wrapt==1.11.2" "wrapt~=1.11"
-  '';
+  nativeCheckInputs = [
+    deepdiff
+    pytestCheckHook
+  ];
 
-  # tests are not included with release
-  doCheck = false;
+  disabledTests = [
+    # Missing lammps executable
+    "eam_tabulate_example2TestCase"
+    "test_pymath"
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "atsim.potentials" ];
 
   meta = with lib; {
     homepage = "https://github.com/mjdrushton/atsim-potentials";
     description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
-    broken = true; # missing cexprtk package
   };
 }

@@ -1,0 +1,25 @@
+From bf1f143455d1c8283d90964e0121b50c14a67bda Mon Sep 17 00:00:00 2001
+From: Lana Black <lana@illuminati.industries>
+Date: Sat, 11 Feb 2023 11:53:21 +0000
+Subject: [PATCH] Fix test.
+
+---
+ tests/tests.bats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/tests.bats b/tests/tests.bats
+index c542b7a..98520ee 100644
+--- a/tests/tests.bats
++++ b/tests/tests.bats
+@@ -196,7 +196,7 @@ xen_expect_abort() {
+   run test_hello/test_hello.hvt
+   case "${CONFIG_HOST}" in
+   Linux)
+-    [ "$status" -eq 127 ] && [[ "$output" == *"No such file or directory"* ]]
++    [ "$status" -eq 127 ] && ([[ "$output" == *"No such file or directory"* ]] || [[ "$output" == *"required file not found"* ]])
+     ;;
+   FreeBSD)
+     # XXX: imgact_elf.c:load_interp() outputs the "ELF interpreter ... not
+-- 
+2.39.0
+

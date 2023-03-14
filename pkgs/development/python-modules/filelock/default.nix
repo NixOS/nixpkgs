@@ -1,33 +1,37 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, setuptools-scm
+, hatch-vcs
+, hatchling
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.3.0";
+  version = "3.9.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c7eab13dc442dc249e95158bcc12dec724465919bdc9831fdbf0660f03d1785";
+    hash = "sha256-ezGfJDQLUfVaK/ehKsB1WpsD5xgxHaxWeg9Pf6vS9d4=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/benediktschmitt/py-filelock";
+    changelog = "https://github.com/tox-dev/py-filelock/releases/tag/${version}";
     description = "A platform independent file lock for Python";
+    homepage = "https://github.com/benediktschmitt/py-filelock";
     license = licenses.unlicense;
     maintainers = with maintainers; [ hyphon81 ];
   };

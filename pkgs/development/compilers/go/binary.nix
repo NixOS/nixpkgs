@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, version, hashes }:
+{ lib, stdenv, fetchurl, version, hashes, autoPatchelfHook }:
 let
   toGoKernel = platform:
     if platform.isDarwin then "darwin"
@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
   name = "go-${version}-${platform}-bootstrap";
 
   src = fetchurl {
-    url = "https://golang.org/dl/go${version}.${platform}.tar.gz";
+    url = "https://go.dev/dl/go${version}.${platform}.tar.gz";
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   # We must preserve the signature on Darwin
   dontStrip = stdenv.hostPlatform.isDarwin;
@@ -31,13 +33,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/go $out/bin
-    mv bin/* $out/bin
     cp -r . $out/share/go
-    ${lib.optionalString stdenv.isLinux (''
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/bin/go
-    '')}
+    ln -s $out/share/go/bin/go $out/bin/go
     runHook postInstall
   '';
 }

@@ -1,24 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, lxml
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tableaudocumentapi";
-  version = "0.7";
+  version = "0.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b1d04817a0fba43d58e1ce23c64ad8dfe54dc029ba5ccae3908944555bb13e0";
+    hash = "sha256-g6V1UBf+P21FcZkR3PHoUmdmrQwEvjdd1VKhvNmvOys=";
   };
 
-  # tests not inclued with release
+  propagatedBuildInputs = [
+    lxml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "tableaudocumentapi"
+  ];
+
+  # ModuleNotFoundError: No module named 'test.assets'
   doCheck = false;
 
   meta = with lib; {
-    description = "A Python module for working with Tableau files";
+    description = "Python module for working with Tableau files";
     homepage = "https://github.com/tableau/document-api-python";
+    changelog = "https://github.com/tableau/document-api-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

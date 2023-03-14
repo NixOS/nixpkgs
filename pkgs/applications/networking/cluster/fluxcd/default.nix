@@ -1,18 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles, stdenv }:
 
 let
-  version = "0.21.1";
-  sha256 = "1sb3912h28z097n7mn3hlh33hnxr9978h04py2m7gh27hmygscj3";
-  manifestsSha256 = "1rrnz50jfn3zgaz5hn7ghmgc31ahm4q49f0rxfagfygvks1h4910";
+  version = "0.41.1";
+  sha256 = "0nrwhq336n0aj1c51difgxk9an8d1j4yfkxn9sgzw9dq50rrrinf";
+  manifestsSha256 = "1rrmdbaian8wskcyaa2nifp4mp4bz0nqgwz6ah5r0ywg48cfq2gm";
 
   manifests = fetchzip {
-    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    url =
+      "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
     sha256 = manifestsSha256;
     stripRoot = false;
   };
-in
 
-buildGoModule rec {
+in buildGoModule rec {
   pname = "fluxcd";
   inherit version;
 
@@ -23,15 +23,13 @@ buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "sha256-m0uVatnV4GIyllZTOkLxXGEiAWXGloFfxSJn51y0AQo=";
+  vendorSha256 = "sha256-Oh1FBTHkICQZ79qf8XCL7ifi5Wd3jrIDupBKzYo+AEA=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
 
-  patches = [
-    ./patches/disable-tests-ssh_key.patch
-  ];
+  patches = [ ./patches/disable-tests-ssh_key.patch ];
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -39,7 +37,7 @@ buildGoModule rec {
 
   # Required to workaround test error:
   #   panic: mkdir /homeless-shelter: permission denied
-  HOME="$TMPDIR";
+  HOME = "$TMPDIR";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -48,7 +46,7 @@ buildGoModule rec {
     $out/bin/flux --version | grep ${version} > /dev/null
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     for shell in bash fish zsh; do
       $out/bin/flux completion $shell > flux.$shell
       installShellCompletion flux.$shell
@@ -58,7 +56,8 @@ buildGoModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Open and extensible continuous delivery solution for Kubernetes";
+    description =
+      "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
       Flux is a tool for keeping Kubernetes clusters in sync
       with sources of configuration (like Git repositories), and automating
@@ -66,6 +65,7 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 jlesquembre superherointj ];
+    mainProgram = "flux";
   };
 }

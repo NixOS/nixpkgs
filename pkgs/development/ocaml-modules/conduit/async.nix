@@ -7,9 +7,9 @@ buildDunePackage {
   inherit (conduit)
     version
     src
-    minimumOCamlVersion
-    useDune2
     ;
+
+  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ppx_here ];
 

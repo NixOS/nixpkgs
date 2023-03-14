@@ -14,21 +14,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2021.09.27";
+  version = "0.5";
 
   srcs = [
     (fetchFromGitHub {
-      owner  = "YosysHQ";
-      repo   = "nextpnr";
-      rev    = "9d8d3bdbc48133ff7758c9c5293e5904bc6e5ba7";
-      sha256 = "sha256-5Axo8qX2+ATqQ170QqfhRwYfCRQLCKBW1kc89x9XljE=";
-      name   = "nextpnr";
+      owner = "YosysHQ";
+      repo  = "nextpnr";
+      rev   = "${pname}-${version}";
+      hash  = "sha256-3/a6nVr2v9kK/FFmxZq9LQLAoE/yNRcTGojiFPGRkHU=";
+      name  = "nextpnr";
     })
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr-tests";
-      rev    = "ccc61e5ec7cc04410462ec3196ad467354787afb";
-      sha256 = "sha256-VT0JfpRLgfo2WG+eoMdE0scPM5nKZZ/v1XlkeDNcQCU=";
+      rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
+      sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
       name   = "nextpnr-tests";
     })
   ];

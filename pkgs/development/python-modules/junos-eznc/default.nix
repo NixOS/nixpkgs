@@ -1,50 +1,78 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, six
-, scp
-, pyserial
-, paramiko
-, netaddr
-, ncclient
-, ntc-templates
-, lxml
+, fetchFromGitHub
+, fetchpatch
 , jinja2
+, lxml
+, mock
+, ncclient
+, netaddr
+, nose
+, ntc-templates
+, paramiko
+, pyparsing
+, pyserial
+, pythonOlder
 , pyyaml
+, scp
+, six
 , transitions
 , yamlordereddictloader
-, nose
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.6.3";
+  version = "2.6.7";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4eee93d0af203af7cee54a8f0c7bd28af683e829edf1fd68feba85d0ad737395";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Juniper";
+    repo = "py-junos-eznc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+hGybznip5RpJm89MLg9JO4B/y50OIdgtmV2FIpZShU=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "ncclient==0.6.9" "ncclient"
+    # https://github.com/Juniper/py-junos-eznc/issues/1236
+    substituteInPlace lib/jnpr/junos/utils/scp.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
   '';
 
-  checkInputs = [ nose ];
-
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient ntc-templates lxml jinja2 pyyaml transitions yamlordereddictloader
+    jinja2
+    lxml
+    ncclient
+    netaddr
+    ntc-templates
+    paramiko
+    pyparsing
+    pyserial
+    pyyaml
+    scp
+    six
+    transitions
+    yamlordereddictloader
+  ];
+
+  nativeCheckInputs = [
+    mock
+    nose
   ];
 
   checkPhase = ''
-    nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
+    nosetests -v -a unit --exclude=test_sw_put_ftp
   '';
 
-  pythonImportsCheck = [ "jnpr.junos" ];
+  pythonImportsCheck = [
+    "jnpr.junos"
+  ];
 
   meta = with lib; {
-    homepage = "http://www.github.com/Juniper/py-junos-eznc";
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     description = "Junos 'EZ' automation for non-programmers";
+    homepage = "https://github.com/Juniper/py-junos-eznc";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };

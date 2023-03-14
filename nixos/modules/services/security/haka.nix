@@ -55,22 +55,22 @@ in
 
     services.haka = {
 
-      enable = mkEnableOption "Haka";
+      enable = mkEnableOption (lib.mdDoc "Haka");
 
       package = mkOption {
         default = pkgs.haka;
         defaultText = literalExpression "pkgs.haka";
         type = types.package;
-        description = "
+        description = lib.mdDoc ''
           Which Haka derivation to use.
-        ";
+        '';
       };
 
       configFile = mkOption {
         default = "empty.lua";
         example = "/srv/haka/myfilter.lua";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specify which configuration file Haka uses.
           It can be absolute path or a path relative to the sample directory of
           the haka git repo.
@@ -81,7 +81,7 @@ in
         default = [ "eth0" ];
         example = [ "any" ];
         type = with types; listOf str;
-        description = ''
+        description = lib.mdDoc ''
           Specify which interface(s) Haka listens to.
           Use 'any' to listen to all interfaces.
         '';
@@ -91,7 +91,7 @@ in
         default = 0;
         example = 4;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           The number of threads that will be used.
           All system threads are used by default.
         '';
@@ -100,24 +100,24 @@ in
       pcap = mkOption {
         default = true;
         type = types.bool;
-        description = "Whether to enable pcap";
+        description = lib.mdDoc "Whether to enable pcap";
       };
 
-      nfqueue = mkEnableOption "nfqueue";
+      nfqueue = mkEnableOption (lib.mdDoc "nfqueue");
 
-      dump.enable = mkEnableOption "dump";
+      dump.enable = mkEnableOption (lib.mdDoc "dump");
       dump.input  = mkOption {
         default = "/tmp/input.pcap";
         example = "/path/to/file.pcap";
         type = types.path;
-        description = "Path to file where incoming packets are dumped";
+        description = lib.mdDoc "Path to file where incoming packets are dumped";
       };
 
       dump.output  = mkOption {
         default = "/tmp/output.pcap";
         example = "/path/to/file.pcap";
         type = types.path;
-        description = "Path to file where outgoing packets are dumped";
+        description = lib.mdDoc "Path to file where outgoing packets are dumped";
       };
     };
   };

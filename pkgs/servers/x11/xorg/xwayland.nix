@@ -1,5 +1,5 @@
 { egl-wayland
-, epoxy
+, libepoxy
 , fetchurl
 , fontutil
 , lib
@@ -23,6 +23,7 @@
 , libxcb
 , libxkbfile
 , libxshmfence
+, libxcvt
 , mesa
 , meson
 , ninja
@@ -41,12 +42,12 @@
 , defaultFontPath ? "" }:
 
 stdenv.mkDerivation rec {
-
   pname = "xwayland";
-  version = "21.1.3";
+  version = "22.1.8";
+
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-68J1fzn9TH2xZU/YZZFYnCEaogFy1DpU93rlZ87b+KI=";
+    sha256 = "sha256-0R7u5zKQuI6o2kKn2TUN7fq6hWzkrkTljARa2eyqL3M=";
   };
 
   depsBuildBuild = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     egl-wayland
-    epoxy
+    libepoxy
     fontutil
     libGL
     libGLU
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbfile
     libxshmfence
+    libxcvt
     mesa
     openssl
     pixman
@@ -93,11 +95,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
   mesonFlags = [
-    "-Dxwayland_eglstream=true"
-    "-Ddefault_font_path=${defaultFontPath}"
-    "-Dxkb_bin_dir=${xkbcomp}/bin"
-    "-Dxkb_dir=${xkeyboard_config}/etc/X11/xkb"
-    "-Dxkb_output_dir=${placeholder "out"}/share/X11/xkb/compiled"
+    (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonOption "default_font_path" defaultFontPath)
+    (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
+    (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")
+    (lib.mesonOption "xkb_output_dir" "${placeholder "out"}/share/X11/xkb/compiled")
+    (lib.mesonBool "libunwind" (libunwind != null))
   ];
 
   meta = with lib; {

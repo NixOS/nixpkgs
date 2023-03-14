@@ -4,9 +4,12 @@
 , asynctest
 , buildPythonPackage
 , crccheck
+, cryptography
+, freezegun
 , fetchFromGitHub
 , pycryptodome
-, pytest-aiohttp
+, pyserial-asyncio
+, pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -15,36 +18,34 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.39.0";
+  version = "0.53.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = version;
-    sha256 = "sha256-cR63xzx62ZKCXJENoksJTwEU8vGL8HtdIN3+5OqIL1Y=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/IUJzMzbNKXQZkhwmoKoafMVw+6rD3Sw/coBLOi4FIk=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     aiosqlite
     crccheck
+    cryptography
+    pyserial-asyncio
     pycryptodome
     voluptuous
   ];
 
-  checkInputs = [
-    pytest-aiohttp
+  nativeCheckInputs = [
+    asynctest
+    freezegun
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-  ];
-
-  disabledTests = [
-    # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
-    #"test_remigrate_forcibly_downgraded_v4"
-    # RuntimeError: Event loop is closed
-    #"test_startup"
   ];
 
   pythonImportsCheck = [
@@ -58,8 +59,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
   };
 }

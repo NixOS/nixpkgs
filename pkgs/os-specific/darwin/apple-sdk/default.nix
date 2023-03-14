@@ -271,7 +271,7 @@ in rec {
 
   overrides = super: {
     AppKit = lib.overrideDerivation super.AppKit (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/PrivateFrameworks/"
       ];
     });
@@ -285,13 +285,13 @@ in rec {
     });
 
     CoreMedia = lib.overrideDerivation super.CoreMedia (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/Frameworks/CoreImage.framework"
       ];
     });
 
     CoreMIDI = lib.overrideDerivation super.CoreMIDI (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/PrivateFrameworks/"
       ];
       setupHook = ./private-frameworks-setup-hook.sh;
@@ -326,7 +326,17 @@ in rec {
         "Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy.tbd"
       ];
     });
-  } // lib.genAttrs [ "ContactsPersistence" "CoreSymbolication" "GameCenter" "SkyLight" "UIFoundation" ] (x: tbdOnlyFramework x {});
+  } // lib.genAttrs [
+    "ContactsPersistence"
+    "CoreSymbolication"
+    "DebugSymbols"
+    "DisplayServices"
+    "GameCenter"
+    "MultitouchSupport"
+    "SkyLight"
+    "UIFoundation"
+  ]
+    (x: tbdOnlyFramework x {});
 
   bareFrameworks = lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;

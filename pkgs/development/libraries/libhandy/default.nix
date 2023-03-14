@@ -6,17 +6,16 @@
 , pkg-config
 , gobject-introspection
 , vala
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
+, glib
+, gsettings-desktop-schemas
 , gtk3
 , enableGlade ? false
 , glade
-, dbus
 , xvfb-run
-, libxml2
 , gdk-pixbuf
 , librsvg
+, libxml2
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
@@ -27,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.4.0";
+  version = "1.8.1";
 
   outputs = [
     "out"
@@ -40,31 +39,32 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-JnbVH6H6QP3udJfT52P++hiwM4v/zS7jLn9+YzyIVEY=";
+    sha256 = "sha256-N2a5qIH+BljMYIBFOiIZCGw/bb2CBp3kCbirP1mUinA=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    docbook_xml_dtd_43
-    docbook-xsl-nons
     gobject-introspection
-    gtk-doc
-    libxml2
+    gi-docgen
     meson
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals enableGlade [
+    libxml2 # for xmllint
   ];
 
   buildInputs = [
     gdk-pixbuf
     gtk3
-    libxml2
   ] ++ lib.optionals enableGlade [
     glade
   ];
 
-  checkInputs = [
-    dbus
+  nativeCheckInputs = [
     xvfb-run
     at-spi2-atk
     at-spi2-core
@@ -84,17 +84,37 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS="$XDG_DATA_DIRS:${hicolor-icon-theme}/share" \
-    GDK_PIXBUF_MODULE_FILE="${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+    runHook preCheck
+
+    testEnvironment=(
+      # Disable portal since we cannot run it in tests.
+      HDY_DISABLE_PORTAL=1
+
+      "XDG_DATA_DIRS=${lib.concatStringsSep ":" [
+        # HdySettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
+        # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
+        # See hdy_settings_constructed function in https://gitlab.gnome.org/GNOME/libhandy/-/commit/bb68249b005c445947bfb2bee66c91d0fe9c41a4
+        (glib.getSchemaDataDirPath gsettings-desktop-schemas)
+
+        # Some tests require icons
+        "${hicolor-icon-theme}/share"
+      ]}"
+    )
+    env "''${testEnvironment[@]}" xvfb-run \
       meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   } // lib.optionalAttrs (!enableGlade) {
     glade =

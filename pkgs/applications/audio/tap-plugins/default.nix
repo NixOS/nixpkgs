@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ladspa-sdk, pkgs, ... }:
+{ lib, stdenv, ladspa-sdk, pkgs, ... }:
 
 stdenv.mkDerivation rec {
   pname = "tap-plugins";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       TAP Pitch Shifter, TAP Reflector, TAP Reverberator, TAP Rotary Speaker, TAP Scaling Limiter,
       TAP Sigmoid Booster, TAP Stereo Echo, TAP Tremolo, TAP TubeWarmth, TAP Vibrato.
     '';
-    homepage = "http://tap-plugins.sourceforge.net/ladspa.html";
+    homepage = "https://tap-plugins.sourceforge.net/ladspa.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.fps ];
   };

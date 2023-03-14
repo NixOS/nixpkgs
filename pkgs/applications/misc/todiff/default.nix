@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0vrn1vc3rwabv6l2r1qb7mkcxbp75q79bfl3rxhyi51ra3ij507r";
 
-  checkPhase = "cargo test --features=integration_tests";
+  checkFeatures = [ "integration_tests" ];
 
   meta = with lib; {
     description = "Human-readable diff for todo.txt files";

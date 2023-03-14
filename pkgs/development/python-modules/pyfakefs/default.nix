@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.5.1";
+  version = "5.0.0";
   pname = "pyfakefs";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "002a065dcbf59c2caa039e4fc4ba01d1d636aa63ee9c794d4c9fc01f0e2d6dc0";
+    sha256 = "sha256-GdHY8e5SCJHXi27QXCB44HktVF+D3uM0YfuqXMcuGH0=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # https://github.com/jmcgeheeiv/pyfakefs/issues/581 (OSError: [Errno 9] Bad file descriptor)
   disabledTests = [ "test_open_existing_pipe" ];
   pythonImportsCheck = [ "pyfakefs" ];

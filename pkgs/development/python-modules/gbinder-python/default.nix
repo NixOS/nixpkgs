@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "gbinder-python";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "erfanoabdi";
     repo = pname;
     rev = version;
-    sha256 = "0jgblzakjgsy0cj93bmh5gr7qnl2xgsrm0wzc6xjvzry9lrbs360";
+    sha256 = "1X9gAux9w/mCEVmE3Yqvvq3kU7hu4iAFaZWNZZZxt3E=";
   };
 
   buildInputs = [
@@ -25,6 +25,11 @@ buildPythonPackage rec {
     cython
     pkg-config
   ];
+
+  postPatch = ''
+    # Fix pkg-config name for cross-compilation
+    substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
+  '';
 
   setupPyGlobalFlags = [ "--cython" ];
 

@@ -20,13 +20,20 @@ buildGoModule {
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+  vendorSha256 = null;
 
   # hack to get both go and cmake configure phase
   # (if we use postConfigure then cmake will loop runHook postConfigure)
   preBuild = ''
     cmakeConfigurePhase
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export GOARCH=$(go env GOHOSTARCH)
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12 but breaks on darwin (with clang)
+    "-Wno-error=stringop-overflow"
+  ]);
 
   buildPhase = ''
     ninjaBuildPhase
@@ -36,7 +43,7 @@ buildGoModule {
   cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
-    mkdir -p $bin/bin $out/include $out/lib
+    mkdir -p $bin/bin $dev $out/lib
 
     mv tool/bssl $bin/bin
 
@@ -44,10 +51,10 @@ buildGoModule {
     mv crypto/libcrypto.a     $out/lib
     mv decrepit/libdecrepit.a $out/lib
 
-    mv ../include/openssl $out/include
+    mv ../include $dev
   '';
 
-  outputs = [ "out" "bin" ];
+  outputs = [ "out" "bin" "dev" ];
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";

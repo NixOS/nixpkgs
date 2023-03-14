@@ -1,19 +1,17 @@
-diff --git a/cmd/flux/create_secret_git_test.go b/cmd/flux/create_secret_git_test.go
-index afa34ba..0d22cce 100644
---- a/cmd/flux/create_secret_git_test.go
-+++ b/cmd/flux/create_secret_git_test.go
-@@ -20,16 +20,6 @@ func TestCreateGitSecret(t *testing.T) {
+--- flux/cmd/flux/create_secret_git_test.go.orig	2021-12-07 13:46:21.196278468 +0100
++++ flux/cmd/flux/create_secret_git_test.go	2021-12-07 13:49:51.668566955 +0100
+@@ -20,16 +20,6 @@
  			args:   "create secret git podinfo-auth --url=https://github.com/stefanprodan/podinfo --username=my-username --password=my-password --namespace=my-namespace --export",
  			assert: assertGoldenFile("./testdata/create_secret/git/secret-git-basic.yaml"),
  		},
 -		{
 -			name:   "ssh key",
--			args:   "create secret git podinfo-auth --url=ssh://git@github.com/stefanprodan/podinfo --private-key-file=./testdata/create_secret/git/rsa.private --namespace=my-namespace --export",
+-			args:   "create secret git podinfo-auth --url=ssh://git@github.com/stefanprodan/podinfo --private-key-file=./testdata/create_secret/git/ecdsa.private --namespace=my-namespace --export",
 -			assert: assertGoldenFile("testdata/create_secret/git/git-ssh-secret.yaml"),
 -		},
 -		{
 -			name:   "ssh key with password",
--			args:   "create secret git podinfo-auth --url=ssh://git@github.com/stefanprodan/podinfo --private-key-file=./testdata/create_secret/git/rsa-password.private --password=password --namespace=my-namespace --export",
+-			args:   "create secret git podinfo-auth --url=ssh://git@github.com/stefanprodan/podinfo --private-key-file=./testdata/create_secret/git/ecdsa-password.private --password=password --namespace=my-namespace --export",
 -			assert: assertGoldenFile("testdata/create_secret/git/git-ssh-secret-password.yaml"),
 -		},
  	}

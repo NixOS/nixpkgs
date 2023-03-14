@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "1.5.0";
+  version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f36128e8a93f3494ce3de8af883eeba4bd651ab228682810a46ec4b7897a84b3";
+    sha256 = "sha256-kIIR+cXLUtyLJ5YmhyCV88zhXahok/U7QXbezt3PyF0=";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiofiles
     pytest-asyncio
     pytest-localserver

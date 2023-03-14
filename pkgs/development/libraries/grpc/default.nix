@@ -13,17 +13,23 @@
 , grpc
 , abseil-cpp
 , libnsl
+
+# tests
+, python3
+, arrow-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.41.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.51.1"; # N.B: if you change this, please update:
+    # pythonPackages.grpcio-tools
+    # pythonPackages.grpcio-status
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1mcgnzwc2mcdpcfhc1b37vff0biwyd3v0a2ack58wgf4336pzlsb";
+    hash = "sha256-o1C35mtA2lTGgugCKAQyRDNlCnutoJ1ol/DInJNobnc=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf ]
+  buildInputs = [ openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags = [
@@ -56,14 +62,9 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DCMAKE_CXX_STANDARD=${passthru.cxxStandard}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
-    # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
-    # only an issue with the useLLVM stdenv, not the darwin stdenv…
-    # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    "-DCMAKE_CXX_STANDARD=11"
   ];
 
   # CMake creates a build directory by default, this conflicts with the
@@ -81,9 +82,26 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
+    + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
 
   enableParallelBuilds = true;
+
+  passthru.cxxStandard =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+    in
+    (if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17");
+
+  passthru.tests = {
+    inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
+  };
 
   meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";

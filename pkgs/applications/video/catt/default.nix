@@ -13,7 +13,7 @@ let
           owner = "jstasiak";
           repo = "python-zeroconf";
           rev = version;
-          sha256 = "158dqay74zvnz6kmpvip4ml0kw59nf2aaajwgaamx0zc8ci1p5pj";
+          hash = "sha256-8pYbIkPsg16VelwqpYSzqfAJaCU37lun+XZ/crzCDZU=";
         };
       });
 
@@ -29,7 +29,7 @@ let
         version = "9.2.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "02ig2wf2yyrnnl88r2n13s1naskwsifwgx3syifmcxygflsmjd3d";
+          hash = "sha256-bTRZNXXPd1Zd9Hr0x13UfGplgx7BiowQtTZ7LxwXLwo=";
         };
       });
     };
@@ -39,26 +39,27 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.2";
-
-  disabled = python3.pythonOlder "3.4";
+  version = "0.12.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
+    hash = "sha256-Q9ePWRLwuuTG+oPKFg7xn1gj4uAVlXUxegWdyH3Yd90=";
   };
 
   propagatedBuildInputs = [
     click
     ifaddr
     PyChromecast
+    protobuf
     requests
-    youtube-dl
+    yt-dlp
   ];
 
   doCheck = false; # attempts to access various URLs
 
-  pythonImportsCheck = [ "catt" ];
+  pythonImportsCheck = [
+    "catt"
+  ];
 
   meta = with lib; {
     description = "Tool to send media from online sources to Chromecast devices";

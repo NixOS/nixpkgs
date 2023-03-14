@@ -1,19 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
 let bins = [ "regbot" "regctl" "regsync" ]; in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.3.8";
+  version = "0.4.7";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "14w0g24sgphgib33sdvrvwk86p7km2pasb5fmr3p48i7sc71ja3h";
+    sha256 = "sha256-BPMdBTtH2uZ6x6sQe7SDe+WcLQrr8gqOka2OnLSA1kU=";
   };
-  vendorSha256 = "sha256-9sRjP7lxMRdt9D9ElIX+mbYIvCaknWMgDyYl+1/q0/g=";
+  vendorHash = "sha256-lDazAGhNzguDzMLHYz2dbk8Jp7VKhV2ULqdXMa+WFPg=";
 
   outputs = [ "out" ] ++ bins;
 

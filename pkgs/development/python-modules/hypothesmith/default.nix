@@ -1,17 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, lark-parser, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hypothesis
+, lark
+, libcst
+, parso
+, pytestCheckHook
+, pytest-xdist
+}:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.1.9";
+  version = "0.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "039fd6aa0102f89df9df7ad4cff70aa8068678c13c3be2713c92568917317a04";
+    sha256 = "sha256-vc6EXsmE5uP+0h5l0ugrjrxt5cpeuTZJ39dgNMWQakY=";
   };
 
-  propagatedBuildInputs = [ hypothesis lark-parser libcst ];
+  patches = [
+    ./remove-black.patch
+  ];
 
-  checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "lark-parser" "lark"
+
+    substituteInPlace tox.ini \
+      --replace "--cov=hypothesmith" "" \
+      --replace "--cov-branch" "" \
+      --replace "--cov-report=term-missing:skip-covered" "" \
+      --replace "--cov-fail-under=100" ""
+  '';
+
+  propagatedBuildInputs = [ hypothesis lark libcst ];
+
+  nativeCheckInputs = [ parso pytestCheckHook pytest-xdist ];
+
+  pytestFlagsArray = [
+    "-v"
+  ];
+
+  disabledTests = [
+    # https://github.com/Zac-HD/hypothesmith/issues/21
+    "test_source_code_from_libcst_node_type"
+  ];
+
+  disabledTestPaths = [
+    # missing blib2to3
+    "tests/test_syntactic.py"
+  ];
 
   pythonImportsCheck = [ "hypothesmith" ];
 

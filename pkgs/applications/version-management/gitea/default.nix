@@ -1,5 +1,6 @@
 { lib
-, buildGoPackage
+, stdenv
+, buildGoModule
 , fetchurl
 , makeWrapper
 , git
@@ -12,71 +13,61 @@
 , nixosTests
 }:
 
-with lib;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gitea";
-  version = "1.15.6";
+  version = "1.18.5";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
-    url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "sha256-FMM/iQAxJcymv4jYBzaBXG0Uy8UxHh9gFWB5gzV9cn0=";
+    url = "https://dl.gitea.io/gitea/${version}/gitea-src-${version}.tar.gz";
+    hash = "sha256-OGPn4fknYfzmuAi6CL8m/Ih4uRNraVDmpBm20qT3lKk=";
   };
 
-  unpackPhase = ''
-    mkdir source/
-    tar xvf $src -C source/
-  '';
-
-  sourceRoot = "source";
+  vendorHash = null;
 
   patches = [
     ./static-root-path.patch
   ];
 
   postPatch = ''
-    patchShebangs .
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
+  subPackages = [ "." ];
+
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = optional pamSupport pam;
+  buildInputs = lib.optional pamSupport pam;
 
-  preBuild =
-    let
-      tags = optional pamSupport "pam"
-        ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
-      tagsString = concatStringsSep " " tags;
-    in
-    ''
-      export buildFlagsArray=(
-        -tags="${tagsString}"
-        -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
-      )
-    '';
+  tags = lib.optional pamSupport "pam"
+    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+  ];
 
   outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
+    cp -R ./{public,templates,options} $data
     mkdir -p $out
-    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
+    cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  goPackagePath = "code.gitea.io/gitea";
+  passthru.tests = nixosTests.gitea;
 
-  passthru.tests.gitea = nixosTests.gitea;
-
-  meta = {
+  meta = with lib; {
     description = "Git with a cup of tea";
     homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ma27 ];
+    maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
+    broken = stdenv.isDarwin;
   };
 }

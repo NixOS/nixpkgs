@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch2
 , at-spi2-core
 , babl
 , dbus
@@ -7,22 +9,19 @@
 , dleyna-renderer
 , gdk-pixbuf
 , gegl
-, geocode-glib
+, geocode-glib_2
 , gettext
 , gexiv2
-, gfbgraph
 , glib
 , gnome-online-accounts
 , gnome
 , gobject-introspection
-, grilo
-, grilo-plugins
 , gsettings-desktop-schemas
 , gtk3
 , itstool
 , libdazzle
+, libportal-gtk3
 , libhandy
-, libgdata
 , libxml2
 , meson
 , ninja
@@ -36,17 +35,27 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "40.0";
+  version = "43.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1bzi79plw6ji6qlckhxnwfnswy6jpnhzmmyanml2i2xg73hp6bg0";
+    sha256 = "x6x0WNUz8p2VUBHHS3YiTXnqMbzBLp1tDOe2w3BNCOE=";
   };
 
   patches = [
     ./installed-tests-path.patch
+
+    # Support babel 0.1.100
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/64c6f733a44bac5b7f08445a686c000681f93f5f.patch";
+      hash = "sha256-iB5qCcDEH8pEX42ypEGJ9QMJWE8VXirv5JfdC1jP218=";
+    })
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/9db32c3508a8c5d357a053d5f8278c34b4df18f3.patch";
+      hash = "sha256-iz6gSu5rUBZ3Ki5GSRVuLcwX0LRQvJT17XmXQ7WJSmI=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -73,19 +82,15 @@ stdenv.mkDerivation rec {
     dleyna-renderer
     gdk-pixbuf
     gegl
-    geocode-glib
+    geocode-glib_2
     gexiv2
-    gfbgraph
     glib
     gnome-online-accounts
-    gnome.adwaita-icon-theme
-    grilo
-    grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
+    libportal-gtk3
     libhandy
-    libgdata
     tracker
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 

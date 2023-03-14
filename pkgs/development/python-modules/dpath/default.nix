@@ -4,26 +4,26 @@
 , hypothesis
 , isPy27
 , mock
-, nose
+, nose2
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dpath";
-  version = "2.0.5";
+  version = "2.1.4";
 
   disabled = isPy27; # uses python3 imports
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kk7wl15r305496q13ka4r6n2r13j99rrrpy2b4575j704dk4x7g";
+    sha256 = "sha256-M4CnfQ20q/EEElhg/260vQfJfGW4Gq1CpglxcImhvtA=";
   };
 
   # use pytest as nosetests hangs
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
-    nose
+    nose2
     pytestCheckHook
   ];
 

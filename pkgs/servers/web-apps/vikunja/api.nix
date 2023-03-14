@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "vikunja-api";
-  version = "0.18.1";
+  version = "0.20.4";
 
   src = fetchFromGitea {
     domain = "kolaente.dev";
     owner = "vikunja";
     repo = "api";
     rev = "v${version}";
-    sha256 = "sha256-ngdtK8e4mLpbuY9OP1aHk99qPX/cKwnyhb/3ImTwF6M=";
+    hash = "sha256-SkZf8LFU4/HFEWVEEj7Gl2jVwIL834GRwyua4cw9nh4=";
   };
 
   nativeBuildInputs =
@@ -24,7 +24,7 @@ buildGoModule rec {
         '';
       in [ fakeGit mage ];
 
-  vendorSha256 = "sha256-0MP04KpWX17Fa1WhLwF4yzIsDqGAeTUXxv81B+BTNe4=";
+  vendorSha256 = "sha256-TY6xJnz6phIrybZ2Ix7xwuMzGQ1f0xk0KwgPnaTaKYw=";
 
   # checks need to be disabled because of needed internet for some checks
   doCheck = false;
@@ -48,10 +48,12 @@ buildGoModule rec {
   passthru.tests.vikunja = nixosTests.vikunja;
 
   meta = {
+    changelog = "https://kolaente.dev/vikunja/api/src/tag/v${version}/CHANGELOG.md";
     description = "API of the Vikunja to-do list app";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ em0lar ];
+    maintainers = with lib.maintainers; [ leona ];
+    mainProgram = "vikunja";
     platforms = lib.platforms.all;
   };
 }

@@ -7,6 +7,9 @@
   # Cargo lock file contents as string
 , lockFileContents ? null
 
+  # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
+, allowBuiltinFetchGit ? false
+
   # Hashes for git dependencies.
 , outputHashes ? {}
 } @ args:
@@ -33,19 +36,21 @@ let
     then builtins.readFile lockFile
     else args.lockFileContents;
 
-  packages = (builtins.fromTOML lockFileContents).package;
+  parsedLockFile = builtins.fromTOML lockFileContents;
+
+  packages = parsedLockFile.package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
   # safely skip it.
-  depPackages = (builtins.filter (p: p ? "source") packages);
+  depPackages = builtins.filter (p: p ? "source") packages;
 
   # Create dependent crates from packages.
   #
   # Force evaluation of the git SHA -> hash mapping, so that an error is
   # thrown if there are stale hashes. We cannot rely on gitShaOutputHash
   # being evaluated otherwise, since there could be no git dependencies.
-  depCrates = builtins.deepSeq (gitShaOutputHash) (builtins.map mkCrate depPackages);
+  depCrates = builtins.deepSeq gitShaOutputHash (builtins.map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = builtins.listToAttrs (
@@ -76,17 +81,16 @@ let
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
   fetchCrate = pkg:
-    assert lib.assertMsg (pkg ? checksum) ''
+    let
+      checksum = pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
+    in
+    assert lib.assertMsg (checksum != null) ''
       Package ${pkg.name} does not have a checksum.
-      Please note that the Cargo.lock format where checksums used to be listed
-      under [metadata] is not supported.
-      If that is the case, running `cargo update` with a recent toolchain will
-      automatically update the format along with the crate's depenendencies.
     '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
       url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
-      sha256 = pkg.checksum;
+      sha256 = checksum;
     };
 
   # Fetch and unpack a crate.
@@ -102,7 +106,7 @@ let
         tar xf "${crateTarball}" -C $out --strip-components=1
 
         # Cargo is happy with largely empty metadata.
-        printf '{"files":{},"package":"${pkg.checksum}"}' > "$out/.cargo-checksum.json"
+        printf '{"files":{},"package":"${crateTarball.outputHash}"}' > "$out/.cargo-checksum.json"
       ''
       else if gitParts != null then
       let
@@ -117,27 +121,52 @@ let
           If you use `buildRustPackage`, you can add this attribute to the `cargoLock`
           attribute set.
         '';
-        sha256 = gitShaOutputHash.${gitParts.sha} or missingHash;
-        tree = fetchgit {
-          inherit sha256;
-          inherit (gitParts) url;
-          rev = gitParts.sha; # The commit SHA is always available.
-        };
+        tree =
+          if gitShaOutputHash ? ${gitParts.sha} then
+            fetchgit {
+              inherit (gitParts) url;
+              rev = gitParts.sha; # The commit SHA is always available.
+              sha256 = gitShaOutputHash.${gitParts.sha};
+            }
+          else if allowBuiltinFetchGit then
+            builtins.fetchGit {
+              inherit (gitParts) url;
+              rev = gitParts.sha;
+              allRefs = true;
+            }
+          else
+            missingHash;
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         tree=${tree}
-        if grep --quiet '\[workspace\]' "$tree/Cargo.toml"; then
-          # If the target package is in a workspace, find the crate path
-          # using `cargo metadata`.
-          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
-            ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
 
-            if [[ ! -z $crateCargoTOML ]]; then
-              tree=$(dirname $crateCargoTOML)
-            else
-              >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the Cargo workspace in: $tree"
-              exit 1
-            fi
+        # If the target package is in a workspace, or if it's the top-level
+        # crate, we should find the crate path using `cargo metadata`.
+        # Some packages do not have a Cargo.toml at the top-level,
+        # but only in nested directories.
+        # Only check the top-level Cargo.toml, if it actually exists
+        if [[ -f $tree/Cargo.toml ]]; then
+          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
+          ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
         fi
+
+        # If the repository is not a workspace the package might be in a subdirectory.
+        if [[ -z $crateCargoTOML ]]; then
+          for manifest in $(find $tree -name "Cargo.toml"); do
+            echo Looking at $manifest
+            crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
+            if [[ ! -z $crateCargoTOML ]]; then
+              break
+            fi
+          done
+
+          if [[ -z $crateCargoTOML ]]; then
+            >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the tree in: $tree"
+            exit 1
+          fi
+        fi
+
+        echo Found crate ${pkg.name} at $crateCargoTOML
+        tree=$(dirname $crateCargoTOML)
 
         cp -prvd "$tree/" $out
         chmod u+w $out
@@ -155,10 +184,15 @@ let
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
-    inherit lockFileContents;
-    passAsFile = [ "lockFileContents" ];
-  }) ''
+  vendorDir = runCommand "cargo-vendor-dir"
+    (if lockFile == null then {
+      inherit lockFileContents;
+      passAsFile = [ "lockFileContents" ];
+    } else {
+      passthru = {
+        inherit lockFile;
+      };
+    }) ''
     mkdir -p $out/.cargo
 
     ${

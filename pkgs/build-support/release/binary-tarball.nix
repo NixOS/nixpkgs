@@ -10,7 +10,7 @@
    directory, so the Makefile of the package should support DESTDIR.
 */
 
-{ src, stdenv
+{ src, lib, stdenv
 , name ? "binary-tarball"
 , ... } @ args:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (
   // args //
 
   {
-    name = name + (if src ? version then "-" + src.version else "");
+    name = name + (lib.optionalString (src ? version) "-${src.version}");
 
     postHook = ''
       mkdir -p $out/nix-support

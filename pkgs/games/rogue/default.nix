@@ -15,9 +15,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  # Fix build for recent ncurses versions
-  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
-
   meta = with lib; {
     homepage = "http://rogue.rogueforge.net/rogue-5-4/";
     description = "The final version of the original Rogue game developed for the UNIX operating system";

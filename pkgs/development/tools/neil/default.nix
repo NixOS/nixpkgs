@@ -3,17 +3,18 @@
 , fetchFromGitHub
 , makeWrapper
 , babashka
+, jdk
 }:
 
 stdenv.mkDerivation rec {
   pname = "neil";
-  version = "0.0.13";
+  version = "0.1.55";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "neil";
     rev = "v${version}";
-    sha256 = "0jiyl0d39d8kk5bpangwxiy90vqipj4lgp8x84rh4z5m53knjpkd";
+    sha256 = "sha256-+0+d0XZhZeRTAXRvA3QcWvbuOqlhNbFo2gTnROevJtU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D neil $out/bin/neil
     wrapProgram $out/bin/neil \
-      --prefix PATH : "${lib.makeBinPath [ babashka ]}"
+      --prefix PATH : "${lib.makeBinPath [ babashka jdk ]}"
   '';
 
   meta = with lib; {

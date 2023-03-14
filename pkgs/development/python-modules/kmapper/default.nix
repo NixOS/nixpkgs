@@ -8,7 +8,7 @@
 , pytestCheckHook
 , networkx
 , matplotlib
-, python-igraph
+, igraph
 , plotly
 , ipywidgets
 }:
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     networkx
     matplotlib
-    python-igraph
+    igraph
     plotly
     ipywidgets
   ];

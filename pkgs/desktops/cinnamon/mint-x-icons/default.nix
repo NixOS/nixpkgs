@@ -1,5 +1,6 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenvNoCC
 , gnome
 , gnome-icon-theme
 , hicolor-icon-theme
@@ -8,16 +9,15 @@
 , ubuntu-themes
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mint-x-icons";
-  version = "1.5.5";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # commit is named 1.5.5, tags=404
-    rev = "ecfbeb62bba41e85a61099df467c4700ac63c1e0";
-    sha256 = "1yxm7h7giag5hmymgxsg16vc0rhxb2vn3piaksc463mic4vwfa3i";
+    rev = version;
+    hash = "sha256-cPRae3EjzVtAL1Ei2LB4UNUU/m87mFT94xY/NnNR6JM=";
   };
 
   propagatedBuildInputs = [

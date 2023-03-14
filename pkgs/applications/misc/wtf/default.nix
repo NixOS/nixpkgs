@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.39.2";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nP56HzjtIg9EIOBda9TQl8soUqlGfRmixidWrmQ7+vs=";
-   };
+    sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
+  };
 
-  vendorSha256 = "sha256-yD4BUauYvyGk/D0Gr5Z15xWPtI/ZR9xTbmeS6RAxw1o=";
+  vendorHash = "sha256-f82ibPnauUOuZ5D6Rz3Yyt0jiAXvjN8Or3gud+ri6FA=";
 
   doCheck = false;
 
@@ -35,8 +35,10 @@ buildGoModule rec {
   meta = with lib; {
     description = "The personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
+    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "wtfutil";
     platforms = platforms.linux ++ platforms.darwin;
     broken = stdenv.isDarwin;
   };

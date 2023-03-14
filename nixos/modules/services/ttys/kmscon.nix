@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) mkOption types mkIf;
+  inherit (lib) mapAttrs mkIf mkOption optional optionals types;
 
   cfg = config.services.kmscon;
 
@@ -11,7 +11,7 @@ in {
   options = {
     services.kmscon = {
       enable = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Use kmscon as the virtual console instead of gettys.
           kmscon is a kms/dri-based userspace virtual terminal implementation.
           It supports a richer feature set than the standard linux console VT,
@@ -23,20 +23,33 @@ in {
       };
 
       hwRender = mkOption {
-        description = "Whether to use 3D hardware acceleration to render the console.";
+        description = lib.mdDoc "Whether to use 3D hardware acceleration to render the console.";
         type = types.bool;
         default = false;
       };
 
+      fonts = mkOption {
+        description = lib.mdDoc "Fonts used by kmscon, in order of priority.";
+        default = null;
+        example = lib.literalExpression ''[ { name = "Source Code Pro"; package = pkgs.source-code-pro; } ]'';
+        type = with types;
+          let fontType = submodule {
+                options = {
+                  name = mkOption { type = str; description = lib.mdDoc "Font name, as used by fontconfig."; };
+                  package = mkOption { type = package; description = lib.mdDoc "Package providing the font."; };
+                };
+          }; in nullOr (nonEmptyListOf fontType);
+      };
+
       extraConfig = mkOption {
-        description = "Extra contents of the kmscon.conf file.";
+        description = lib.mdDoc "Extra contents of the kmscon.conf file.";
         type = types.lines;
         default = "";
         example = "font-size=14";
       };
 
       extraOptions = mkOption {
-        description = "Extra flags to pass to kmscon.";
+        description = lib.mdDoc "Extra flags to pass to kmscon.";
         type = types.separatedString " ";
         default = "";
         example = "--term xterm-256color";
@@ -45,7 +58,7 @@ in {
       autologinUser = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
         '';
@@ -87,11 +100,17 @@ in {
 
     systemd.services.systemd-vconsole-setup.enable = false;
 
-    services.kmscon.extraConfig = mkIf cfg.hwRender ''
-      drm
-      hwaccel
-    '';
+    services.kmscon.extraConfig =
+      let
+        render = optionals cfg.hwRender [ "drm" "hwaccel" ];
+        fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
+      in lib.concatStringsSep "\n" (render ++ fonts);
 
     hardware.opengl.enable = mkIf cfg.hwRender true;
+
+    fonts = mkIf (cfg.fonts != null) {
+      fontconfig.enable = true;
+      fonts = map (f: f.package) cfg.fonts;
+    };
   };
 }

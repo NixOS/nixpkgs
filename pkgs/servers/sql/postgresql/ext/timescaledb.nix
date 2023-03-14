@@ -1,24 +1,28 @@
 { lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
 
 # # To enable on NixOS:
-# config.services.postgresql = {
-#   extraPlugins = [ pkgs.timescaledb ];
-#   extraConfig = "shared_preload_libraries = 'timescaledb'";
+# config.services.postgresql = let
+#   # The postgresql pkgs has to be taken from the
+#   # postgresql package used, so the extensions
+#   # are built for the correct postgresql version.
+#   postgresqlPackages = config.services.postgresql.package.pkgs;
+# in {
+#   extraPlugins = with postgresqlPackages; [ timescaledb ];
+#   settings.shared_preload_libraries = "timescaledb";
 # }
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.5.0";
+  version = "2.10.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
 
   src = fetchFromGitHub {
-    owner  = "timescale";
-    repo   = "timescaledb";
-    # some branches are named like tags which confuses git
-    rev    = "refs/tags/${version}";
-    sha256 = "0j8fbhf69q0074c02ilzdrhwc1ciyw6dq48217xxv274df2lcxzd";
+    owner = "timescale";
+    repo = "timescaledb";
+    rev = version;
+    sha256 = "sha256-D0jo1Z9hpaJBFJQhypo76cKaahNF498OLDco2YNktA8=";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
@@ -40,11 +44,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
-    homepage    = "https://www.timescale.com/";
-    changelog   = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ volth marsam ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.asl20;
-    broken      = versionOlder postgresql.version "12";
+    homepage = "https://www.timescale.com/";
+    changelog = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ marsam ];
+    platforms = postgresql.meta.platforms;
+    license = licenses.asl20;
+    broken = versionOlder postgresql.version "12";
   };
 }

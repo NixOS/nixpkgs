@@ -1,13 +1,12 @@
 { lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
 
-let buildFHSEnv = callPackage ./env.nix { }; in
-
 args @ {
   name
 , runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
+, extraBwrapArgs ? []
 , unshareUser ? true
 , unshareIpc ? true
 , unsharePid ? true
@@ -23,7 +22,7 @@ let
   buildFHSEnv = callPackage ./env.nix { };
 
   env = buildFHSEnv (removeAttrs args [
-    "runScript" "extraInstallCommands" "meta" "passthru" "dieWithParent"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
@@ -33,6 +32,7 @@ let
       "static"
       "nix" # mainly for nixUnstable users, but also for access to nix/netrc
       # Shells
+      "shells"
       "bashrc"
       "zshenv"
       "zshrc"
@@ -66,10 +66,11 @@ let
       "asound.conf"
       # SSL
       "ssl/certs"
+      "ca-certificates"
       "pki"
     ];
   in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try /etc/${file} /etc/${file}") files);
+  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -m /etc/${file}) /etc/${file}") files);
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
@@ -86,6 +87,8 @@ let
     /lib32
     /usr/lib/i386-linux-gnu
     /usr/lib32
+    /run/opengl-driver/lib
+    /run/opengl-driver-32/lib
     EOF
     ldconfig &> /dev/null
   '';
@@ -134,6 +137,18 @@ let
       fi
     done
 
+    declare -a x11_args
+    # Always mount a tmpfs on /tmp/.X11-unix
+    # Rationale: https://github.com/flatpak/flatpak/blob/be2de97e862e5ca223da40a895e54e7bf24dbfb9/common/flatpak-run.c#L277
+    x11_args+=(--tmpfs /tmp/.X11-unix)
+
+    # Try to guess X socket path. This doesn't cover _everything_, but it covers some things.
+    if [[ "$DISPLAY" == :* ]]; then
+      display_nr=''${DISPLAY#?}
+      local_socket=/tmp/.X11-unix/X$display_nr
+      x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
+    fi
+
     cmd=(
       ${bubblewrap}/bin/bwrap
       --dev-bind /dev /dev
@@ -168,6 +183,8 @@ let
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
+      "''${x11_args[@]}"
+      ${concatStringsSep "\n  " extraBwrapArgs}
       ${init runScript}/bin/${name}-init ${initArgs}
     )
     exec "''${cmd[@]}"

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , gettext
@@ -12,10 +13,14 @@
 , texlive
 , mate
 , wrapGAppsHook
-, enableEpub ? true, webkitgtk
-, enableDjvu ? true, djvulibre
-, enablePostScript ? true, libspectre
-, enableXps ? true, libgxps
+, enableEpub ? true
+, webkitgtk
+, enableDjvu ? true
+, djvulibre
+, enablePostScript ? true
+, libspectre
+, enableXps ? true
+, libgxps
 , enableImages ? false
 , mateUpdateScript
 }:
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
     mate.caja
     mate.mate-desktop
     hicolor-icon-theme
-    texlive.bin.core  # for synctex, used by the pdf back-end
+    texlive.bin.core # for synctex, used by the pdf back-end
   ]
   ++ optionals enableDjvu [ djvulibre ]
   ++ optionals enableEpub [ webkitgtk ]
@@ -62,13 +67,13 @@ stdenv.mkDerivation rec {
     ++ optionals (enableXps) [ "--enable-xps" ]
     ++ optionals (enableImages) [ "--enable-pixbuf" ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "A simple multi-page document viewer for the MATE desktop";

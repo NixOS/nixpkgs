@@ -21,9 +21,13 @@ buildPythonPackage rec {
     sha256 = "198vfv78hilpg0d0mjzchzp9zk6239wnra61vlsgwpcgz66d2bgv";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     commentjson
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "resolvelib"
   ];
 
   meta = with lib; {

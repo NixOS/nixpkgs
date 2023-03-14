@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
       sha256 = "1wnj0jmkmrwjww7qk9dvfxh8h06jdn7mi8v2fvwh95b6x87z5l47";
       excludes = [ "ChangeLog" ];
     })
+
+    # Upstream fix for clang-13 and gcc-12 test support
+    (fetchpatch {
+      name = "gcc-12.patch";
+      url = "http://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=ab9fe5cb9b85c5afab94f2a7f4b6d7d473c14ee9";
+      sha256 = "1v33zd2766k7cdgmajw2lffw9wd7v4f8z01f40z53f6bp608nr62";
+    })
   ];
 
   # source-highlight uses it's own binary to generate documentation.
@@ -32,10 +39,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-boost=${boost.out}"
-    "--with-bash-completion=${placeholder "out"}/share/bash_completion.d"
+    "--with-bash-completion=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  doCheck = !stdenv.cc.isClang;
+  doCheck = true;
 
   enableParallelBuilding = true;
   # Upstream uses the same intermediate files in multiple tests, running

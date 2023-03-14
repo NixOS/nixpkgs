@@ -5,22 +5,22 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-scheme";
-  version = "9.5.4";
+  version = "9.5.8";
 
   src = fetchFromGitHub {
     owner  = "cisco";
     repo   = "ChezScheme";
     rev    = "refs/tags/v${version}";
-    sha256 = "065dir19cqpn0d1bk9w49wnwzn6qfrgvcqw8da2fdhkafhfcb1bj";
+    sha256 = "sha256-esCWEzny/I+Ors6+upKlt4h13oN0bRLWN9OTKuSqdl8=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ coreutils ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   /*
   ** We patch out a very annoying 'feature' in ./configure, which

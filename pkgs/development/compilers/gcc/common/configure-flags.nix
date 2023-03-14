@@ -2,9 +2,10 @@
 , targetPackages
 
 , crossStageStatic, libcCross
+, threadsCross
 , version
 
-, gmp, mpfr, libmpc, libelf, isl
+, binutils, gmp, mpfr, libmpc, isl
 , cloog ? null
 
 , enableLTO
@@ -24,7 +25,6 @@
 , langJit
 }:
 
-assert cloog != null -> lib.versionOlder version "5";
 assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
@@ -50,7 +50,7 @@ let
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
-      "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
+      "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (if crossStageStatic then [
@@ -86,18 +86,14 @@ let
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "mcf"
+                          else if targetPlatform.isWindows then (threadsCross.model or "win32")
                           else "single"}"
       "--enable-nls"
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
-      # In uclibc cases, libgomp needs an additional '-ldl'
-      # and as I don't know how to pass it, I disable libgomp.
-      "--disable-libgomp"
-    ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
+    ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
@@ -110,9 +106,30 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optional (libelf != null) "--with-libelf=${libelf}"
-    ++ lib.optional (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+    ++ lib.optionals (!crossStageStatic) [
+      (if libcCross == null
+       then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+       else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+      # gcc builds for cross-compilers (build != host) or cross-built
+      # gcc (host != target) always apply the offset prefix to disentangle
+      # target headers from build or host headers:
+      #     ${with_build_sysroot}${native_system_header_dir}
+      #  or ${test_exec_prefix}/${target_noncanonical}/sys-include
+      #  or ${with_sysroot}${native_system_header_dir}
+      # While native build (build == host == target) uses passed headers
+      # path as is:
+      #    ${with_build_sysroot}${native_system_header_dir}
+      #
+      # Nixpkgs uses flat directory structure for both native and cross
+      # cases. As a result libc headers don't get found for cross case
+      # and many modern features get disabled (libssp is used instead of
+      # target-specific implementations and similar). More details at:
+      #   https://github.com/NixOS/nixpkgs/pull/181802#issuecomment-1186822355
+      #
+      # We pick "/" path to effectively avoid sysroot offset and make it work
+      # as a native case.
+      "--with-build-sysroot=/"
+    ]
 
     # Basic configuration
     ++ [
@@ -170,7 +187,7 @@ let
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
-    ++ lib.optionals (cloog != null) [
+    ++ lib.optionals (lib.versionOlder version "5" && cloog != null) [
       "--with-cloog=${cloog}"
       "--disable-cloog-version-check"
       "--enable-cloog-backend=isl"
@@ -195,7 +212,7 @@ let
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
     # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
-    ++ lib.optional (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
+    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
@@ -222,9 +239,6 @@ let
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
-    # Make -fcommon default on gcc10
-    # TODO: fix all packages (probably 100+) and remove that
-    ++ lib.optional (version >= "10.1.0") "--with-specs=%{!fno-common:%{!fcommon:-fcommon}}"
   ;
 
 in configureFlags

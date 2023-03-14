@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
+{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, gnumake42, glib, pcre
 , json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "fwts";
-  version = "21.07.00";
+  version = "22.09.00";
 
   src = fetchzip {
     url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "sha256-cTm8R7sUJk5aTjXvsxfBXX0J/ehVoqo43ILZ6VqaPTI=";
+    sha256 = "sha256-BaaUvRbon8V8RvAgw+AC9MCHC65Y/NFT1iFZ+B8P2Hk=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  # fails with make 4.4
+  nativeBuildInputs = [ autoreconfHook pkg-config gnumake42 ];
   buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd ];
 
   postPatch = ''

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libofx";
-  version = "0.10.3";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "LibOFX";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2ZSbXdlpX5MDV9y1d9ZqNSh/834MUeCZJHjJcg7ap0A=";
+    sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
 
   preConfigure = "./autogen.sh";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";
-    homepage = "http://libofx.sourceforge.net/";
+    homepage = "https://libofx.sourceforge.net/";
     license = "LGPL";
     platforms = lib.platforms.unix;
     maintainers = [ ];

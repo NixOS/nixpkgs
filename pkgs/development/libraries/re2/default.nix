@@ -1,37 +1,71 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, chromium
+, grpc
+, haskellPackages
+, mercurial
+, python3Packages
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2021-09-01";
+  version = "2023-02-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "1fyhypw345xz8zdh53gz6j1fwgrx0gszk1d349ja37dpxh4jp2jh";
+    hash = "sha256-YENgO5Ig6SLNdGEsdhKNb4THhocyAv1MMcg4FVYBB7U=";
   };
 
-  preConfigure = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
-    # we're using gnu sed, even on darwin
-    substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake ninja ];
+
+  postPatch = ''
+    substituteInPlace re2Config.cmake.in \
+      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
   '';
 
-  buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+  # Needed for case-insensitive filesystems (i.e. MacOS) because a file named
+  # BUILD already exists.
+  cmakeBuildDir = "build_dir";
 
-  preCheck = "patchShebangs runtests";
+  cmakeFlags = lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS:BOOL=ON";
+
+  # This installs a pkg-config definition.
+  postInstall = ''
+    pushd "$src"
+    make common-install prefix="$dev" SED_INPLACE="sed -i"
+    popd
+  '';
+
   doCheck = true;
-  checkTarget = "test";
 
-  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
+  passthru.tests = {
+    inherit
+      chromium
+      grpc
+      mercurial;
+    inherit (python3Packages)
+      fb-re2
+      google-re2;
+    haskell-re2 = haskellPackages.re2;
+  };
 
-  doInstallCheck = true;
-  installCheckTarget = "testinstall";
-
-  meta = {
+  meta = with lib; {
+    description = "A regular expression library";
+    longDescription = ''
+      RE2 is a fast, safe, thread-friendly alternative to backtracking regular
+      expression engines like those used in PCRE, Perl, and Python. It is a C++
+      library.
+    '';
+    license = licenses.bsd3;
     homepage = "https://github.com/google/re2";
-    description = "An efficient, principled regular expression library";
-    license = lib.licenses.bsd3;
-    platforms = with lib.platforms; all;
+    maintainers = with maintainers; [ azahi ];
+    platforms = platforms.all;
   };
 }

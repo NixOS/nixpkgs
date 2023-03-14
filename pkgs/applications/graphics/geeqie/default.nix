@@ -1,35 +1,39 @@
-{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext, intltool
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, xxd, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch
+, libarchive, djvulibre, libheif, openjpeg, libjxl, libraw, lua5_3, poppler
+, gspell, libtiff, libwebp
+, wrapGAppsHook, fetchpatch, doxygen
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.6.0";
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/BestImageViewer/geeqie/archive/refs/tags/v1.6.tar.gz";
-    sha256 = "0ky248j6n8hszkwwi949i1ypm2l5444byaspaa6564d9rpij01aj";
+  src = fetchFromGitHub {
+    owner = "BestImageViewer";
+    repo = "geeqie";
+    rev = "v${version}";
+    sha256 = "sha256-0GOX77vZ4KZkvwnR1vlv52tlbR+ciwl3ycxbOIcDOqU=";
   };
 
-  patches = [
-    # Do not build the changelog as this requires markdown.
-    (fetchpatch {
-      name = "geeqie-1.4-goodbye-changelog.patch";
-      url = "https://src.fedoraproject.org/rpms/geeqie/raw/132fb04a1a5e74ddb333d2474f7edb9a39dc8d27/f/geeqie-1.4-goodbye-changelog.patch";
-      sha256 = "00a35dds44kjjdqsbbfk0x9y82jspvsbpm2makcm1ivzlhjjgszn";
-    })
-  ];
-
-  preConfigure = "./autogen.sh";
+  postPatch = ''
+    patchShebangs .
+    # libtiff detection is broken and looks for liblibtiff...
+    # fixed upstream, to remove for 2.1
+    substituteInPlace meson.build --replace 'libtiff' 'tiff'
+  '';
 
   nativeBuildInputs =
-    [ pkg-config autoconf automake gettext intltool
-      wrapGAppsHook
+    [ pkg-config gettext intltool
+      wrapGAppsHook doxygen
+      meson ninja xxd
     ];
 
   buildInputs = [
     gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
+    libarchive djvulibre libheif openjpeg libjxl libraw lua5_3 poppler
+    gspell libtiff libwebp
   ];
 
   postInstall = ''
@@ -40,6 +44,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Lightweight GTK based image viewer";
@@ -57,7 +65,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    homepage = "http://geeqie.sourceforge.net";
+    homepage = "https://www.geeqie.org/";
 
     maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;

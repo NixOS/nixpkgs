@@ -1,19 +1,42 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "coredns";
-  version = "1.8.5";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-Tegpc6SspDoVPVD6fXNciVEp4/X1z3HMRWxfjc463PM=";
+    sha256 = "sha256-/+D/jATZhHSxLPB8RkPLUYAZ3O+/9l8XIhgokXz2SUQ=";
   };
 
-  vendorSha256 = "sha256-fWK8sGd3yycgFz4ipAmYJ3ye4OtbjpSzuK4fwIjfor8=";
+  vendorHash = "sha256-aWmwzIHScIMb3DPzr4eto2yETMgKd/hUy18X8KxQGos=";
 
-  doCheck = false;
+  nativeBuildInputs = [ installShellFiles ];
+
+  outputs = [ "out" "man" ];
+
+  postPatch = ''
+    substituteInPlace test/file_cname_proxy_test.go \
+      --replace "TestZoneExternalCNAMELookupWithProxy" \
+                "SkipZoneExternalCNAMELookupWithProxy"
+
+    substituteInPlace test/readme_test.go \
+      --replace "TestReadme" "SkipReadme"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # loopback interface is lo0 on macos
+    sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
+  '';
+
+  postInstall = ''
+    installManPage man/*
+  '';
 
   meta = with lib; {
     homepage = "https://coredns.io";

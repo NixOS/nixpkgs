@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "webdis";
-  version = "0.1.16";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "nicolasff";
     repo = pname;
     rev = version;
-    sha256 = "sha256-I+Nq3kjXoQlwfj8r7oNu6KFE6hnB076M9aJMdwCas3k=";
+    sha256 = "sha256-QvPawRYmk5HcE4XnI4B4G7AAaN/8cFov9lOa2e++g4A=";
   };
 
   buildInputs = [ hiredis http-parser jansson libevent ];

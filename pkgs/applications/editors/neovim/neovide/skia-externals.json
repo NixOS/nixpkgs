@@ -1,18 +1,18 @@
 {
   "expat": {
     "url": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git",
-    "rev": "e976867fb57a0cd87e3b0fe05d59e0ed63c6febb",
-    "sha256": "sha256-akSh/Vo7s7m/7qePamGA7oiHEHT3D6JhCFMc27CgDFI="
+    "rev": "a28238bdeebc087071777001245df1876a11f5ee",
+    "sha256": "sha256-TSaVtKEk7J0fckDvpI6/U5Aq7d37nsixp0Ft7sMHi8w="
   },
   "libjpeg-turbo": {
     "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
-    "rev": "64fc43d52351ed52143208ce6a656c03db56462b",
-    "sha256": "sha256-rk22wE83hxKbtZLhGwUIF4J816jHvWovgICdrKZi2Ig="
+    "rev": "22f1a22c99e9dde8cd3c72ead333f425c5a7aa77",
+    "sha256": "sha256-5MaYvyrhADFGKBxcS3kbKcn9tj0FNXAN/rAXXYW6ljs="
   },
   "icu": {
     "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
-    "rev": "dbd3825b31041d782c5b504c59dcfb5ac7dda08c",
-    "sha256": "sha256-voMH+TdNx3dBHeH5Oky5OYmmLGJ2u+WrMrmAkjXJRTE="
+    "rev": "a0718d4f121727e30b8d52c7a189ebf5ab52421f",
+    "sha256": "sha256-BI3f/gf9GNDvSfXWeRHKBvznSz4mjXY8rM24kK7QvOM="
   },
   "zlib": {
     "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
@@ -21,8 +21,8 @@
   },
   "harfbuzz": {
     "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
-    "rev": "3a74ee528255cc027d84b204a87b5c25e47bff79",
-    "sha256": "sha256-/4UdoUj0bxj6+EfNE8ofjtWOn2VkseEfvdFah5rwwBM="
+    "rev": "8d1b000a3edc90c12267b836b4ef3f81c0e53edc",
+    "sha256": "sha256-nFAT7HnYkIWZcV6kjDQiRltbPcmbtuRM4m5ecY4/s6E="
   },
   "libpng": {
     "url": "https://skia.googlesource.com/third_party/libpng.git",

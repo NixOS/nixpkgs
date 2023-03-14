@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     sha256 = "0sja0ddd9c8wjjpzk2ag8q1lxpj09adgmhd7wnsylincqnj2jyls";
   };
 
+  postPatch = ''
+    # Don't build tests, vendored catch doesn't build with latest glibc.
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory (tests)" ""
+  '';
+
   nativeBuildInputs = [
     cmake
     gettext

@@ -1,28 +1,33 @@
-{ lib, stdenv
-, pari
+{ lib
+, stdenv
 , fetchurl
-, perl }:
+, pari
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "gp2c";
-  version = "0.0.12";
+  version = "0.0.13";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${pname}-${version}.tar.gz";
-    sha256 = "039ip7qkwwv46wrcdrz7y12m30kazzkjr44kqbc0h137g4wzd7zf";
+    hash = "sha256-JhN07Kc+vXbBEqlZPcootkgSqnYlYf2lpLLCzXmmnTY=";
   };
 
-  buildInputs = [ pari perl ];
+  buildInputs = [
+    pari
+    perl
+  ];
 
   configureFlags = [
     "--with-paricfg=${pari}/lib/pari/pari.cfg"
-    "--with-perl=${perl}/bin/perl" ];
+    "--with-perl=${perl}/bin/perl"
+  ];
 
   meta = with lib; {
-    description =  "A compiler to translate GP scripts to PARI programs";
     homepage = "http://pari.math.u-bordeaux.fr/";
+    description =  "A compiler to translate GP scripts to PARI programs";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    inherit (pari.meta) license maintainers platforms broken;
   };
 }

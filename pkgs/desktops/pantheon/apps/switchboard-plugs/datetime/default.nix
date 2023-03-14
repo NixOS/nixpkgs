@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , substituteAll
@@ -25,12 +25,6 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = version;
     sha256 = "10rqhxsqbl1xnz5n84d7m39c3vb71k153989xvyc55djia1wjx96";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
   };
 
   patches = [
@@ -60,6 +54,10 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Date & Time Plug";

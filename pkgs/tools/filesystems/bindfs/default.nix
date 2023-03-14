@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, fuse, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "1.15.1";
+  version = "1.17.2";
   pname = "bindfs";
 
   src = fetchurl {
     url    = "https://bindfs.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-BN01hKbN+a9DRNQDxiGFyp+rMc465aJdAQG8EJNsaKs=";
+    sha256 = "sha256-XyxQpwuNWMAluB+/Nk+tQy0VSTZjDOACPMiLqo1codA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -8,18 +8,24 @@
 
 mkDerivation rec {
   pname = "vnote";
-  version = "3.8.1";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-GgSVBVcT0rfgglyjCmkEMbKCEltesC3eSsN38psrkS4=";
+    sha256 = "sha256-osJvoi7oyZupJ/bnqpm0TdZ5cMYEeOw9DHOIAzONKLg=";
   };
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtwebengine ];
+  nativeBuildInputs = [
+    qmake
+  ];
+
+  buildInputs = [
+    qtbase
+    qtwebengine
+  ];
 
   meta = with lib; {
     homepage = "https://vnotex.github.io/vnote";

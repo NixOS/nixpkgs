@@ -3,12 +3,12 @@
 }:
 
 let
-  python3Env = python3.withPackages(ps: with ps; [ numpy ]);
+  python3Env = python3.withPackages(ps: with ps; [ numpy setuptools ]);
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "sep20a";
-  version = "20200901_a";
+  srcVersion = "feb23a";
+  version = "20230201_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "9faa0b3e674b5ffe5b1aee88027d7401a46ae28cd0b306595300547605d6222a";
+    sha256 = "sha256-A6jtcC8QMtJ7YcNaPiOjwNPDGPAjmRA3jZLEt5iBONE=";
   };
 
   nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.bzizou lib.maintainers.smaret ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 
 }

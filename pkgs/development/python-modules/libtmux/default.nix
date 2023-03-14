@@ -1,26 +1,61 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, poetry-core
+, pytest-rerunfailures
+, pytestCheckHook
+, procps
+, tmux
+, ncurses
+}:
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.10.2";
+  version = "0.21.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a0e958b85ec14cdaabecfa738a0dd51846f05e5c5e9d6749a2bf5160b9f7e1d2";
+  src = fetchFromGitHub {
+    owner = "tmux-python";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nZPVS3jNz2e2LTlWiSz1fN7MzqJs/CqtAt6UVZaPPTY=";
   };
 
-  checkInputs = [ pytest ];
   postPatch = ''
-    sed -i 's/==.*$//' requirements/test.txt
+    sed -i '/addopts/d' setup.cfg
   '';
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    procps
+    tmux
+    ncurses
+    pytest-rerunfailures
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
+    "test_new_session_width_height"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "test_test.py"
+  ];
+
+  pythonImportsCheck = [ "libtmux" ];
 
   meta = with lib; {
-    description = "Scripting library for tmux";
-    homepage = "https://libtmux.readthedocs.io/";
-    license = licenses.bsd3;
+    description = "Typed scripting library / ORM / API wrapper for tmux";
+    homepage = "https://libtmux.git-pull.com/";
+    changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }

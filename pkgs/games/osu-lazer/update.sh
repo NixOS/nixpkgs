@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts nuget-to-nix dotnet-sdk_5
+#!nix-shell -I nixpkgs=../../../. -i bash -p curl jq common-updater-scripts
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -13,19 +13,9 @@ if [[ "$new_version" == "$old_version" ]]; then
 fi
 
 cd ../../..
-update-source-version osu-lazer "$new_version"
-store_src="$(nix-build . -A osu-lazer.src --no-out-link)"
-src="$(mktemp -d /tmp/osu-src.XXX)"
-echo "Temp src dir: $src"
-cp -rT "$store_src" "$src"
-chmod -R +w "$src"
 
-pushd "$src"
+if [[ "$1" != "--deps-only" ]]; then
+    update-source-version osu-lazer "$new_version"
+fi
 
-mkdir ./nuget_tmp.packages
-dotnet restore osu.Desktop --packages ./nuget_tmp.packages --runtime linux-x64
-
-nuget-to-nix ./nuget_tmp.packages > "$deps_file"
-
-popd
-rm -r "$src"
+$(nix-build . -A osu-lazer.fetch-deps --no-out-link) "$deps_file"

@@ -1,23 +1,25 @@
 { lib, fetchFromGitHub
+, pkg-config, meson ,ninja
 , python3Packages
 , gdk-pixbuf, glib, gobject-introspection, gtk3
 , libnotify
-, intltool
 , wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
-  version = "1.4.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zx129zl6bjb0j3f81yx2641nsj6ck04q5f0v0g8f08xgdwsyv3b";
+    sha256 = "sha256-w31e8cJvdep/ZzmDBCfdCZotrPunQBl1cTTWjs3sE1w=";
   };
 
+  format = "other";
+
   nativeBuildInputs = [
-    glib.dev gobject-introspection gtk3 intltool wrapGAppsHook
+    glib.dev gobject-introspection gtk3 pkg-config meson ninja wrapGAppsHook
   ];
 
   buildInputs = [
@@ -48,6 +50,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/SoongNoonien/mpdevil";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ ];
   };
 }

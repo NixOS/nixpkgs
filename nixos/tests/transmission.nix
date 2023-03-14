@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ coconnor ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     networking.firewall.allowedTCPPorts = [ 9091 ];

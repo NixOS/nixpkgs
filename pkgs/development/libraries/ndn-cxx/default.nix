@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , doxygen
 , pkg-config
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ndn-cxx";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
     rev = "${pname}-${version}";
-    sha256 = "1lcaqc79n3d9sip7knddblba17sz18b0w7nlxmj3fz3lb3z9qd51";
+    sha256 = "sha256-nnnxlkYVTSRB6ZcuIUDFol999+amGtqegHXK+06ITK8=";
   };
 
   nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
@@ -29,11 +30,19 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
+    "--with-tests"
   ];
+
+  doCheck = false; # some tests fail in upstream, some fail because of the sandbox environment
+  checkPhase = ''
+    runHook preCheck
+    LD_PRELOAD=build/libndn-cxx.so build/unit-tests
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "https://named-data.net/";
-    description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
+    description = "A Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)
       primitives that can be used to implement various NDN applications.
@@ -49,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sjmackenzie ];
+    maintainers = with maintainers; [ sjmackenzie bertof ];
   };
 }

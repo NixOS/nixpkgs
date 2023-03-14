@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pgo-client";
-  version = "4.7.3";
+  version = "4.7.7";
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = "postgres-operator";
     rev = "v${version}";
-    sha256 = "sha256-nIflJLHhzEMq4RZUHjZYvBW+cxsi/gc9ZnMoGCesbrc=";
+    sha256 = "sha256-rHWCj25NEKbwV1kmuH6k3oWSXKelknb2GRDgLaZSb3U=";
   };
 
-  vendorSha256 = "sha256-m8b6Lh6it67A6cppdBDX4X0u7Kde4GQz9wln/TrHVwI=";
+  vendorSha256 = "sha256-5/mLlgNdlX/ABrpofPqowCskxFwJAEKVpbsMOvMvTWc=";
 
   subPackages = [ "cmd/pgo" ];
 
@@ -21,5 +21,6 @@ buildGoModule rec {
     changelog = "https://github.com/CrunchyData/postgres-operator/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.bryanasdev000 ];
+    mainProgram = "pgo";
   };
 }

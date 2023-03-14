@@ -2,18 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.17.2";
-  format = "setuptools";
+  version = "3.41.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    sha256 = "sha256-IA846zNFmBqSUc0oXJ0eA5wj6PzQ28jxO22z5WNOT24=";
+    hash = "sha256-NWdY1ykuF8mYxXPCwaVq6mEkQXHrUmhEy/BXDFYn2V0=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -29,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform detection for use by Adafruit libraries";
     homepage = "https://github.com/adafruit/Adafruit_Python_PlatformDetect";
+    changelog = "https://github.com/adafruit/Adafruit_Python_PlatformDetect/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

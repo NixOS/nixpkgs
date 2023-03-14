@@ -1,25 +1,25 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, coreutils }:
+{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.4.0";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
+    sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
   };
 
   patches = [
-    ./backtrace-only-with-glibc.patch
-
+    # Fix for aarch64 and non-4K pages. Remove once upgraded past 1.6.2.
     (fetchpatch {
-      # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/libunwind/libunwind/commit/29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e.patch";
-      sha256 = "1angwfq6h0jskg6zx8g6w9min38g5mgmrcbppcy5hqn59cgsxbw0";
+      url = "https://github.com/libunwind/libunwind/commit/e85b65cec757ef589f28957d0c6c21c498a03bdf.patch";
+      sha256 = "1lnlygvhqrdrjgw303pg2k2k4ms4gaghpjsgmhk47q83vy1yjwfg";
     })
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''
+    substituteInPlace configure.ac --replace "-lgcc_s" ""
+  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
   '';
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # Without latex2man, no man pages are installed despite being
   # prebuilt in the source tarball.
-  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
+  configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
-    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
+    # https://github.com/libunwind/libunwind#libunwind
+    platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd13" "i686-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "x86_64-freebsd13" "x86_64-linux" "x86_64-solaris" ];
     license = licenses.mit;
   };
 }

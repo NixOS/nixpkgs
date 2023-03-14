@@ -34,6 +34,8 @@ python.pkgs.buildPythonPackage {
   dontConfigure = true;
   dontUseSetuptoolsCheck = true;
 
+  format = "poetry2nix";
+
   installPhase = ''
     mkdir -p $out/bin
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkScript scripts)}

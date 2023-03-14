@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "2.2.0";
   pname = "gpac";
 
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
     rev = "v${version}";
-    sha256 = "0gj46jpprfqv3wyagblv3a52chbplyzhvpra66v63czjibqsslm5";
+    sha256 = "sha256-m2qXTXLGgAyU9y6GEk4Hp/7Al57IPRSqImJatIcwswQ=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile --replace 'dh_link' 'ln -s'
-  '';
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-0358.patch";
+      url = "https://github.com/gpac/gpac/commit/9971fb125cf91cefd081a080c417b90bbe4a467b.patch";
+      sha256 = "sha256-0PDQXahbJCOo1JJAC0T0N1u2mqmwAkdm87wXMJnBicM=";
+    })
+  ];
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended

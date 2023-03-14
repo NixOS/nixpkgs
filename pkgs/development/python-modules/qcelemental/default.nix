@@ -1,26 +1,47 @@
-{ buildPythonPackage, lib, fetchPypi, numpy
-, pydantic, pint,  networkx, pytest-runner, pytest-cov, pytest
-} :
+{ stdenv
+, buildPythonPackage
+, lib
+, fetchPypi
+, networkx
+, numpy
+, pint
+, pydantic
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.23.0";
+  version = "0.25.1";
+  format = "setuptools";
 
-  checkInputs = [ pytest-runner pytest-cov pytest ];
-  propagatedBuildInputs = [ numpy pydantic pint networkx ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "642bc86ce937621ddfb1291cbff0851be16b26feb5eec562296999e36181cee3";
+    hash = "sha256-4+DlP+BH0UdWcYRBBApdc3E18L2zPvsdY6GTW5WCGnQ=";
   };
 
-  doCheck = true;
+  propagatedBuildInputs = [
+    networkx
+    numpy
+    pint
+    pydantic
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "qcelemental"
+  ];
 
   meta = with lib; {
-    description = "Periodic table, physical constants, and molecule parsing for quantum chemistry";
-    homepage = "http://docs.qcarchive.molssi.org/projects/qcelemental/en/latest/";
+    broken = stdenv.isDarwin;
+    description = "Periodic table, physical constants and molecule parsing for quantum chemistry";
+    homepage = "http://docs.qcarchive.molssi.org/projects/qcelemental/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = with maintainers; [ sheepforce ];
   };
 }

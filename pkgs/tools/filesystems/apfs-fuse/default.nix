@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "apfs-fuse-unstable";
-  version = "2020-09-28";
+  version = "2023-01-04";
 
   src = fetchFromGitHub {
     owner  = "sgan81";
     repo   = "apfs-fuse";
-    rev    = "ee71aa5c87c0831c1ae17048951fe9cd7579c3db";
-    sha256 = "0wvsx708km1lnhghny5y69k694x0zy8vlbndswkb7sq81j1r6kwx";
+    rev    = "1f041d7af5df5423832e54e9f358fd9234773fcc";
+    hash = "sha256-EmhCvIwyVJvib/ZHzCsULh8bOjhzKRu47LojX+L40qQ=";
     fetchSubmodules = true;
   };
 

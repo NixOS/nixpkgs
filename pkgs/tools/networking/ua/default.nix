@@ -1,31 +1,27 @@
-{ lib, buildGoPackage, fetchgit
-, pkg-config
-, glib, libxml2
-}:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, glib, libxml2 }:
 
-buildGoPackage rec {
-  pname = "ua-unstable";
-  version = "2017-02-24";
-  rev = "325dab92c60e0f028e55060f0c288aa70905fb17";
+buildGoModule rec {
+  pname = "ua";
+  version = "unstable-2021-12-18";
 
-  goPackagePath = "github.com/sloonz/ua";
-
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/sloonz/ua.git";
-    sha256 = "0452qknc8km9495324g6b5ja3shvk8jl7aa9nrjhdylf09dp2nif";
+  src = fetchFromGitHub {
+    owner = "sloonz";
+    repo = "ua";
+    rev = "b6d75970bb4f6f340887e1eadad5aa8ce78f30e3";
+    sha256 = "sha256-rCp8jyqQfq5eVdvKZz3vKuDfcR+gQOEAfBZx2It/rb0=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-0O80uhxSVsV9N7Z/FgaLwcjZqeb4MqSCE1YW5Zd32ns=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxml2 ];
 
-  meta = {
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
     homepage = "https://github.com/sloonz/ua";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     description = "Universal Aggregator";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

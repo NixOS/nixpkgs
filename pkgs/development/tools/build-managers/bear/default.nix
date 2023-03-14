@@ -9,7 +9,6 @@
 , gtest
 , spdlog
 , c-ares
-, abseil-cpp
 , zlib
 , sqlite
 , re2
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.14";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "0qy96dyd29bjvfhi46y30hli5cvshw8am0spvcv9v43660wbczd7";
+    sha256 = "sha256-EiAGM2tfzHp2rTAsf+mrfQ7VfX0NTFakcLVpT/plqh8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     gtest
     spdlog
     c-ares
-    abseil-cpp
     zlib
     sqlite
     re2
@@ -46,9 +44,6 @@ stdenv.mkDerivation rec {
     # Default libexec would be set to /nix/store/*-bear//nix/store/*-bear/libexec/...
     ./no-double-relative.patch
   ];
-
-  # 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
 
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";

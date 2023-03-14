@@ -2,17 +2,15 @@
 
 buildGoModule rec {
   pname = "istioctl";
-  version = "1.11.4";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
     rev = version;
-    sha256 = "sha256-DkZRRjnTWziAL6WSPy5V8fgjpRO2g3Ew25j3F47pDnk=";
+    sha256 = "sha256-6YoznN/wqgmNzBV0ukySwSQvnF4qQeH52uXlEgZTpig=";
   };
-  vendorSha256 = "sha256-kioicA4vdWuv0mvpjZRH0r1EuosS06Q3hIEkxdV4/1A=";
-
-  doCheck = false;
+  vendorHash = "sha256-9A4Du5expdbFKFIrcPTADyRINhiPpsboqsbszg638LY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,6 +26,11 @@ buildGoModule rec {
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/istioctl version --remote=false | grep ${version} > /dev/null
+  '';
+
   postInstall = ''
     $out/bin/istioctl collateral --man --bash --zsh
     installManPage *.1
@@ -39,7 +42,7 @@ buildGoModule rec {
     description = "Istio configuration command line utility for service operators to debug and diagnose their Istio mesh";
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch ];
+    maintainers = with maintainers; [ bryanasdev000 veehaitch ];
     platforms = platforms.unix;
   };
 }

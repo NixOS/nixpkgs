@@ -11,21 +11,22 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
-  vendorSha256 = "06ar9ivry9b01609izjbl6hqgg0cy7aqd8n2cqpyq0g7my0l0lbj";
+  vendorSha256 = null; #vendorSha256 = "";
 
   doCheck = false;
 
   ldflags = [
+    "-s"
+    "-w"
     "-X main.tag=v${version}"
   ];
 
   meta = with lib; {
-    description = ''
-      This project aims at creating a universal dark theme for Firefox while
-      adhering to the modern design principles set by Mozilla.
-    '';
+    description = "Universal dark theme for Firefox while adhering to the modern design principles set by Mozilla";
     homepage = "https://overdodactyl.github.io/ShadowFox/";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
+    mainProgram = "shadowfox-updater";
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

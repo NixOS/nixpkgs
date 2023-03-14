@@ -1,13 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, nix-update-script
 , python3
 , meson
 , ninja
 , vala
 , pkg-config
 , libgee
-, pantheon
 , gtk3
 , glib
 , gettext
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "6.1.2";
+  version = "6.2.0"; # nixpkgs-update: no auto update
 
   outputs = [ "out" "dev" ];
 
@@ -26,13 +25,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d48KQH8uwkSZWQEFSq1BD+TVUi9PWVVtMjKYmleRW58=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-WM0Wo9giVP5pkMFaPCHsMfnAP6xD71zg6QLCYV6lmkY=";
   };
 
   nativeBuildInputs = [

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iothubprovisioningservices";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e5871b03488b5ae6dfc441cdbda40cb39c000635ee57c513053792b3c15826a9";
+    sha256 = "sha256-04OoJuff93L62G6IozpmHpEaUbHHHD6nKlkMHVoJvJ4=";
   };
 
   propagatedBuildInputs = [

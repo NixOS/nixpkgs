@@ -1,0 +1,7 @@
+diff --git a/fastparquet/_version.py b/fastparquet/_version.py
+new file mode 100644
+index 0000000..eb2c9c9
+--- /dev/null
++++ b/fastparquet/_version.py
+@@ -0,0 +1 @@
++__version__ = "@version@"

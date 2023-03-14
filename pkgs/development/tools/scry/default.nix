@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, crystal, coreutils, makeWrapper }:
+{ lib, fetchFromGitHub, crystal, coreutils, makeWrapper, bash }:
 
 crystal.buildCrystalPackage rec {
   pname = "scry";
@@ -19,6 +19,7 @@ crystal.buildCrystalPackage rec {
   format = "shards";
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
   shardsFile = ./shards.nix;
 

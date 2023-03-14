@@ -10,7 +10,7 @@
 , llvmSharedForBuild
 , llvmSharedForHost
 , llvmSharedForTarget
-, llvmPackagesForBuild # Exposed through rustc for LTO in Firefox
+, llvmPackages # Exposed through rustc for LTO in Firefox
 }:
 { stdenv, lib
 , buildPackages
@@ -28,12 +28,11 @@ in
   lib = lib';
 
   # Backwards compat before `lib` was factored out.
-  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec;
+  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
 
   # This just contains tools for now. But it would conceivably contain
-  # libraries too, say if we picked some default/recommended versions from
-  # `cratesIO` to build by Hydra and/or try to prefer/bias in Cargo.lock for
-  # all vendored Carnix-generated nix.
+  # libraries too, say if we picked some default/recommended versions to build
+  # by Hydra.
   #
   # In the end game, rustc, the rust standard library (`core`, `std`, etc.),
   # and cargo would themselves be built with `buildRustCreate` like
@@ -64,7 +63,7 @@ in
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
-        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackagesForBuild;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages;
 
         patches = rustcPatches;
 
@@ -82,8 +81,9 @@ in
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
       };
+      cargo-auditable = self.callPackage ./cargo-auditable.nix { };
+      cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security SystemConfiguration; };
     });
   };
 }

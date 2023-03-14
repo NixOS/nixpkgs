@@ -1,9 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , python3
@@ -16,14 +14,10 @@
 , granite
 , libgee
 , bamf
-, libcanberra
 , libcanberra-gtk3
 , gnome-desktop
+, mesa
 , mutter
-, clutter
-, elementary-dock
-, elementary-icon-theme
-, elementary-settings-daemon
 , gnome-settings-daemon
 , wrapGAppsHook
 , gexiv2
@@ -31,24 +25,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "6.2.1";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1phnhj731kvk8ykmm33ypcxk8fkfny9k6kdapl582qh4d47wcy6f";
+    sha256 = "sha256-YHmmF9tYDgMieLCs9My7NU16Ysq4n2sxWT/7MpaerkI=";
   };
 
   patches = [
+    # We look for plugins in `/run/current-system/sw/lib/` because
+    # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
-    # Multitasking view: Don't use smooth scroll events to handle mouse wheel
-    # Avoid breaking the multitasking view scroll once xf86-input-libinput 1.2.0 lands
-    # https://github.com/elementary/gala/pull/1266
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/d2dcfdefdf97c1b49654179a7acd01ebfe017308.patch";
-      sha256 = "sha256-2lKrCz3fSjrfKfysuUHzeUjhmMm84K47n882CLpfAyg=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -65,19 +54,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
-    clutter
-    elementary-dock
-    elementary-icon-theme
-    elementary-settings-daemon
     gnome-settings-daemon
     gexiv2
     gnome-desktop
     granite
     gtk3
-    libcanberra
     libcanberra-gtk3
     libgee
+    mesa # for libEGL
     mutter
+  ];
+
+  mesonFlags = [
+    # TODO: enable this and remove --builtin flag from session-settings
+    # https://github.com/NixOS/nixpkgs/pull/140429
+    "-Dsystemd=false"
   ];
 
   postPatch = ''
@@ -86,12 +77,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;

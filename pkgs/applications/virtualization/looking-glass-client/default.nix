@@ -1,8 +1,39 @@
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeDesktopItem
+, pkg-config
+, cmake
+, freefont_ttf
+, spice-protocol
+, nettle
+, libbfd
+, fontconfig
+, libffi
+, expat
+, libGL
 
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeDesktopItem, cmake, pkg-config
-, SDL, SDL2_ttf, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig
-, libXi, libXScrnSaver, libXinerama
-, wayland, wayland-protocols
+, libX11
+, libxkbcommon
+, libXext
+, libXrandr
+, libXi
+, libXScrnSaver
+, libXinerama
+, libXcursor
+, libXpresent
+
+, wayland
+, wayland-protocols
+
+, pipewire
+, pulseaudio
+, libsamplerate
+
+, xorgSupport ? true
+, waylandSupport ? true
+, pipewireSupport ? true
+, pulseSupport ? true
 }:
 
 let
@@ -17,29 +48,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
-  version = "B4";
+  version = "B6";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0fwmz0l1dcfwklgvxmv0galgj2q3nss90kc3jwgf6n80x27rsnhf";
+    sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    SDL SDL2_ttf freefont_ttf spice-protocol
-    libbfd nettle fontconfig
-    libXi libXScrnSaver libXinerama
-    wayland wayland-protocols
-  ];
+  buildInputs = [ libGL libX11 freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
+    ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr ]
+    ++ lib.optionals waylandSupport [ libxkbcommon wayland wayland-protocols ]
+    ++ lib.optionals pipewireSupport [ pipewire libsamplerate ]
+    ++ lib.optionals pulseSupport [ pulseaudio libsamplerate ];
 
-  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
+  cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ]
+    ++ lib.optional (!xorgSupport) "-DENABLE_X11=no"
+    ++ lib.optional (!waylandSupport) "-DENABLE_WAYLAND=no"
+    ++ lib.optional (!pulseSupport) "-DENABLE_PULSEAUDIO=no"
+    ++ lib.optional (!pipewireSupport) "-DENABLE_PIPEWIRE=no";
+
 
   postUnpack = ''
-    echo $version > source/VERSION
+    echo ${src.rev} > source/VERSION
     export sourceRoot="source/client"
   '';
 
@@ -60,7 +95,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexbakker babbaj ];
+    maintainers = with maintainers; [ alexbakker babbaj j-brn ];
     platforms = [ "x86_64-linux" ];
   };
 }

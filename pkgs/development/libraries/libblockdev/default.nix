@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libblockdev";
-  version = "2.26";
+  version = "2.28";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
     rev = "${version}-1";
-    sha256 = "sha256-e7j5b1KbjgVN9JpJtK2o7RNEHZjKDoDyoY4f8GlIdyI=";
+    sha256 = "sha256-6MrM3psLqMcpf4haaEHg3FwrhUDz5h/DeY1w96T0UlE=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
+    changelog = "https://github.com/storaged-project/libblockdev/raw/${src.rev}/NEWS.rst";
     license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils
     maintainers = with maintainers; [ johnazoidberg ];
     platforms = platforms.linux;

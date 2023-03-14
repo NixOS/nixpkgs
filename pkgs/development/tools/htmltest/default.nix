@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "htmltest";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "wjdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lj+bR27huswHemF8M+G69PblqnQQUWsg4jtLfz89yVY=";
+    sha256 = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
   };
 
-  vendorSha256 = "0zx3ii9crick647kslzwg4d39li6jds938f9j9dp287rhrlzjfbm";
+  vendorSha256 = "sha256-dTn5aYb5IHFbksmhkXSTJtI0Gnn8Uz0PMZPFzFKMo38=";
 
   ldflags = [
     "-w"

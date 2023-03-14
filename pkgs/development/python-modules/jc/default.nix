@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, ruamel_yaml
+, ruamel-yaml
 , xmltodict
 , pygments
 , pytestCheckHook
@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.17.1";
+  version = "1.23.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ISggj6oOF0B7TKIQAlZtauRrDAWP88OOFezLJK6edjI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-0ZKdySzRHHtDWvSrQ0qJTggu48TyCBVrtEZZkM8HqNQ=";
   };
 
-  propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
+  propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jc" ];
 
@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
     maintainers = with maintainers; [ atemu ];
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/v${version}/CHANGELOG";
   };
 }

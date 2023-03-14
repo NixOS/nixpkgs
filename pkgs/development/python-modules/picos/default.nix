@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   # Needed only for the tests
-  checkInputs = [
+  nativeCheckInputs = [
     networkx
   ];
 

@@ -25,8 +25,6 @@
 , enableSystemd ? false
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "elogind";
   version = "246.10";
@@ -72,7 +70,7 @@ stdenv.mkDerivation rec {
     "-Dsysconfdir=${placeholder "out"}/etc"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/elogind/elogind";
     description = ''The systemd project's "logind", extracted to a standalone package'';
     platforms = platforms.linux; # probably more

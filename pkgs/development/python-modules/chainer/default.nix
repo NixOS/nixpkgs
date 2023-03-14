@@ -1,39 +1,68 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, filelock, protobuf, numpy, pytestCheckHook, mock, typing-extensions
-, cupy, cudaSupport ? false
+{ lib
+, buildPythonPackage
+, config
+, cudaSupport ? config.cudaSupport or false
+, cupy
+, fetchFromGitHub
+, filelock
+, mock
+, numpy
+, protobuf
+, pytestCheckHook
+, pythonOlder
+, six
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "7.8.0";
-  disabled = !isPy3k; # python2.7 abandoned upstream
+  version = "7.8.1.post1";
+  format = "setuptools";
 
-  # no tests in Pypi tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "chainer";
     repo = "chainer";
-    rev = "v${version}";
-    sha256 = "1zfj3pk54gzxd4nid0qjx4kw1wdngwscvn4hk4cijxvwqi4a5zxj";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-epwnExmyCWmwaOz+mJnAl1peEeHLBdQGC62BlLfSTQQ=";
   };
-
-  checkInputs = [
-    pytestCheckHook
-    mock
-  ];
 
   propagatedBuildInputs = [
     filelock
-    protobuf
     numpy
+    protobuf
+    six
     typing-extensions
-  ] ++ lib.optionals cudaSupport [ cupy ];
+  ] ++ lib.optionals cudaSupport [
+    cupy
+  ];
 
-  pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/chainer_tests/utils_tests"
+  ];
+
+  preCheck = ''
+    # cf. https://github.com/chainer/chainer/issues/8621
+    export CHAINER_WARN_VERSION_MISMATCH=0
+
+    # ignore pytest warnings not listed
+    rm setup.cfg
+  '';
 
   disabledTests = [
     "gpu"
     "cupy"
     "ideep"
+  ];
+
+  pythonImportsCheck = [
+    "chainer"
   ];
 
   meta = with lib; {

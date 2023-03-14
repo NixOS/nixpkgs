@@ -1,8 +1,21 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, unittest2, scripttest, pytz, mock
-, testtools, pbr, tempita, decorator, sqlalchemy
-, six, sqlparse, testrepository
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, python
+, pythonAtLeast
+, scripttest
+, pytz
+, pbr
+, tempita
+, decorator
+, sqlalchemy
+, six
+, sqlparse
+, testrepository
 }:
+
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
   version = "0.13.0";
@@ -13,21 +26,27 @@ buildPythonPackage rec {
   };
 
   # See: https://review.openstack.org/#/c/608382/
-  patches = [ (fetchpatch {
-    url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
-    sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
+      sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
+    })
+  ];
 
-  checkInputs = [ unittest2 scripttest pytz mock testtools testrepository ];
+  postPatch = ''
+    substituteInPlace test-requirements.txt \
+      --replace "ibm_db_sa>=0.3.0;python_version<'3.0'" "" \
+      --replace "ibm-db-sa-py3;python_version>='3.0'" "" \
+      --replace "tempest-lib>=0.1.0" "" \
+      --replace "testtools>=0.9.34,<0.9.36" "" \
+      --replace "pylint" ""
+  '';
+
+  nativeCheckInputs = [ scripttest pytz testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   doCheck = !stdenv.isDarwin;
 
-  prePatch = ''
-    sed -i -e /tempest-lib/d \
-           -e /testtools/d \
-      test-requirements.txt
-  '';
   checkPhase = ''
     export PATH=$PATH:$out/bin
     echo sqlite:///__tmp__ > test_db.cfg
@@ -41,9 +60,12 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/openstack/sqlalchemy-migrate";
+    homepage = "https://opendev.org/x/sqlalchemy-migrate";
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = teams.openstack.members ++ (with maintainers; [ makefu ]);
+    # using deprecated inspect.getargspec function
+    # https://bugs.launchpad.net/sqlalchemy-migrate/+bug/2003619
+    broken = pythonAtLeast "3.11";
   };
 }

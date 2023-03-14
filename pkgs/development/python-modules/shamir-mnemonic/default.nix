@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "shamir-mnemonic";
-  version = "0.2.1";
+  version = "0.2.2";
 
   disabled = !isPy3k;
 
@@ -18,13 +18,8 @@ buildPythonPackage rec {
     owner = "trezor";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "1mi1n01yw8yycbiv1l0xnfzlhhq2arappyvyi2jm5yq65jln77kg";
+    sha256 = "sha256-b9tBXN9dBdAeGg3xf5ZBdd6kPpFzseJl6wRTTfNZEwo=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click>=7,<8" "click"
-  '';
 
   propagatedBuildInputs = [
     attrs
@@ -32,7 +27,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "shamir_mnemonic" ];
 
@@ -40,6 +35,6 @@ buildPythonPackage rec {
     description = "Reference implementation of SLIP-0039";
     homepage = "https://github.com/trezor/python-shamir-mnemonic";
     license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 prusnak ];
+    maintainers = with maintainers; [ prusnak ];
   };
 }

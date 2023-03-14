@@ -20,6 +20,11 @@ in stdenv.mkDerivation {
     ln -s ${lss} $sourceRoot/src/third_party/lss
   '';
 
+  postPatch = ''
+    substituteInPlace src/client/linux/handler/exception_handler.cc \
+      --replace "max(16384" "max(static_cast<long>(16384)"
+  '';
+
   meta = with lib; {
     description = "An open-source multi-platform crash reporting system";
     homepage = "https://chromium.googlesource.com/breakpad";

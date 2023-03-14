@@ -1,7 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl }:
+{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl
+, gnumake42
+}:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-apron-${version}";
+  pname = "ocaml${ocaml.version}-apron";
   version = "0.9.13";
   src = fetchFromGitHub {
     owner = "antoinemine";
@@ -10,8 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "14ymjahqdxj26da8wik9d5dzlxn81b3z1iggdl7rn2nn06jy7lvy";
   };
 
-  buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
+  # fails with make 4.4
+  nativeBuildInputs = [ ocaml findlib perl gnumake42 ];
+  buildInputs = [ gmp mpfr ppl camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
+
+  # TODO: Doesn't produce the library correctly if true
+  strictDeps = false;
 
   outputs = [ "out" "bin" "dev" ];
 

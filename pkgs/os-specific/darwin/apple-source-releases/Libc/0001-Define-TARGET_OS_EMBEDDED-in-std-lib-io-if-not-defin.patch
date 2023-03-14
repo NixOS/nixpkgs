@@ -1,0 +1,47 @@
+From 187d0e8847d080790b22724352e51de50d214dd8 Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Tue, 27 Jul 2021 15:12:14 +0200
+Subject: [PATCH] Define TARGET_OS_EMBEDDED in std{lib,io} if not defined
+
+Originally attempted including `TargetConditionals.h` but this had
+knock-on effects, for example, breaking the zlib build because of
+`TARGET_OS_MAC` getting defined.
+
+This should be the lowest impact solution and corresponds to the default
+behavior IIUC.
+---
+ include/stdio.h  | 3 +++
+ include/stdlib.h | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/include/stdio.h b/include/stdio.h
+index d0cf7a5..487496e 100644
+--- a/include/stdio.h
++++ b/include/stdio.h
+@@ -351,6 +351,9 @@ __END_DECLS
+ /* Additional functionality provided by:
+  * POSIX.2-1992 C Language Binding Option
+  */
++#ifndef TARGET_OS_EMBEDDED
++#  define TARGET_OS_EMBEDDED 0
++#endif
+ #if TARGET_OS_EMBEDDED
+ #define __swift_unavailable_on(osx_msg, ios_msg) __swift_unavailable(ios_msg)
+ #else
+diff --git a/include/stdlib.h b/include/stdlib.h
+index c04d3a7..0b454ba 100644
+--- a/include/stdlib.h
++++ b/include/stdlib.h
+@@ -183,6 +183,9 @@ unsigned long long
+ #ifndef LIBC_ALIAS_SYSTEM
+ //End-Libc
+ 
++#ifndef TARGET_OS_EMBEDDED
++#  define TARGET_OS_EMBEDDED 0
++#endif
+ #if TARGET_OS_EMBEDDED
+ #define __swift_unavailable_on(osx_msg, ios_msg) __swift_unavailable(ios_msg)
+ #else
+-- 
+2.17.2 (Apple Git-113)
+

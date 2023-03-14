@@ -1,15 +1,24 @@
-{ lib, stdenv, fetchgit
+{ lib
+, stdenv
+, fetchgit
+, coreutils
+, gawk
+, gnugrep
+, iproute2
 , makeWrapper
-, nettools, gawk, systemd, openresolv, coreutils, gnugrep, iproute2
+, nettools
+, openresolv
+, systemd
 }:
 
 stdenv.mkDerivation {
   pname = "vpnc-scripts";
-  version = "unstable-2021-03-21";
+  version = "unstable-2023-01-03";
+
   src = fetchgit {
-    url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
-    rev = "8fff06090ed193c4a7285e9a10b42e6679e8ecf3";
-    sha256 = "14bzzpwz7kdmlbx825h6s4jjdml9q6ziyrq8311lp8caql68qdq1";
+    url = "https://gitlab.com/openconnect/vpnc-scripts.git";
+    rev = "22756827315bc875303190abb3756b5b1dd147ce";
+    hash = "sha256-EWrDyXg47Ur9mFutaG8+oYOCAW9AZowzwwJp3YbogIY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,8 +41,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "script for vpnc to configure the network routing and name service";
     homepage = "https://www.infradead.org/openconnect/";
+    description = "Script for vpnc to configure the network routing and name service";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ jerith666 ];
     platforms = platforms.linux ++ platforms.darwin;

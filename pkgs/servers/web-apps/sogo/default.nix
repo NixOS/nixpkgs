@@ -1,27 +1,24 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests }:
+{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir, libxcrypt
+, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
+, oath-toolkit
+, enableActiveSync ? false
+, libwbxml }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.2.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    sha256 = "0y9im5y6ffdc7sy2qphq0xai4ig1ks7vj10vy4mn1psdlc5kd516";
+    hash = "sha256-lHUEV5yYLs3oc8Arl3KX8G/OEAoLmS7pRLCGsRAJAr4=";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config ]
-    ++ lib.optional (openldap != null) openldap;
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
+    ++ lib.optional enableActiveSync libwbxml;
 
-  patches = [
-    # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/sogo/-/raw/120ac6390602c811908c7fcb212a79acbc7f7f28/debian/patches/0005-Remove-build-date.patch";
-      sha256 = "151i8504kwdlcirgd0pbif7cxnb1q6jsp5j7dbh9p6zw2xgwkp25";
-    })
-  ];
+  patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
   postPatch = ''
     # Exclude NIX_ variables
@@ -41,7 +38,11 @@ gnustep.stdenv.mkDerivation rec {
     find . -type f -name GNUmakefile -exec sed -i "s:\\$.GNUSTEP_MAKEFILES.:$PWD/makefiles:g" {} +
   '';
 
-  configureFlags = [ "--disable-debug" "--with-ssl=ssl" ];
+  configureFlags = [
+    "--disable-debug"
+    "--with-ssl=ssl"
+    "--enable-mfa"
+  ];
 
   preFixup = ''
     # Create gnustep.conf
@@ -50,7 +51,7 @@ gnustep.stdenv.mkDerivation rec {
     sed -i "s:${gnustep.make}:$out:g" $out/share/GNUstep/GNUstep.conf
 
     # Link in GNUstep base
-    ${lndir}/bin/lndir ${gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
+    ${lndir}/bin/lndir ${lib.getLib gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
 
     # Link in sope
     ${lndir}/bin/lndir ${sope}/ $out/
@@ -64,6 +65,8 @@ gnustep.stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --prefix LD_LIBRARY_PATH : $out/lib/sogo --prefix GNUSTEP_CONFIG_FILE : $out/share/GNUstep/GNUstep.conf
     done
+
+    rmdir $out/nix
   '';
 
   passthru.tests.sogo = nixosTests.sogo;

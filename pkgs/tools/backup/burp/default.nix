@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config
 , acl, librsync, ncurses, openssl, zlib, uthash }:
 
 stdenv.mkDerivation rec {
   pname = "burp";
-  version = "2.2.18";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
     rev = version;
-    sha256 = "1zhq240kz881vs2s620qp0kifmgr582caalm85ls789w9rmdkhjl";
+    sha256 = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
+
+  patches = [
+    # Pull upstream fix for ncurses-6.3 support
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/grke/burp/commit/1d6c931af7c11f164cf7ad3479781e8f03413496.patch";
+      sha256 = "14sfbfahlankz3xg6v10i8fnmpnmqpp73q9xm0l0hnjh25igv6bl";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ librsync ncurses openssl zlib uthash ]
@@ -24,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "BURP - BackUp and Restore Program";
     homepage    = "https://burp.grke.org";
     license     = licenses.agpl3;
-    maintainers = with maintainers; [ tokudan ];
+    maintainers = with maintainers; [ arjan-s ];
     platforms   = platforms.all;
   };
 }

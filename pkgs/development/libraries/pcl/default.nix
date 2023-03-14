@@ -6,7 +6,7 @@
 , qhull
 , flann
 , boost
-, vtk
+, vtk_8
 , eigen
 , pkg-config
 , qtbase
@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jhvciaw43y6iqqk7hyxnfhn1b4bsw5fpy04s01r5pkcsjjbdbqc";
   };
 
+  # remove attempt to prevent (x86/x87-specific) extended precision use
+  # when SSE not detected
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
+  '';
+
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
     eigen
@@ -49,7 +55,7 @@ stdenv.mkDerivation rec {
     libpng
     libtiff
     qhull
-    vtk
+    vtk_8
   ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [

@@ -1,17 +1,23 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "21.09";
+  version = "22.12";
   pname = "libmediainfo";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    sha256 = "09pinxqw3z3hxrafn67clw1cb1z9aqfy6gkiavginfm0yr299gk9";
+    sha256 = "sha256-D8bTLwbWzl4UQHTS5X4NuN+k4451LTEjraJ8yviWNLw=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libzen zlib ];
+  buildInputs = [ zlib ];
+  propagatedBuildInputs = [ libzen ];
 
-  sourceRoot = "./MediaInfoLib/Project/GNU/Library/";
+  sourceRoot = "MediaInfoLib/Project/GNU/Library";
+
+  postPatch = lib.optionalString (stdenv.cc.targetPrefix != "") ''
+    substituteInPlace configure.ac \
+      --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
+  '';
 
   configureFlags = [ "--enable-shared" ];
 

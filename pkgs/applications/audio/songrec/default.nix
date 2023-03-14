@@ -6,24 +6,25 @@
 , alsa-lib
 , pkg-config
 , ffmpeg
+, dbus
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "songrec";
-  version = "0.2.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pKHKM4XOuuZCr4neMe1AVqWMuZghwYNe+ifJCQhXG/c=";
+    sha256 = "sha256-cUiy8ApeUv1K8SEH4APMTvbieGTt4kZYhyB9iGJd/IY=";
   };
 
-  cargoSha256 = "sha256-J3ezXBOGJwzIPTHXujHpswsgh9PFy110AOQ2pPJNm10=";
+  cargoSha256 = "sha256-Tlq4qDp56PXP4N1UyHjtQoRgDrc/19vIv8uml/lAqqc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsa-lib gtk3 openssl ffmpeg ];
+  buildInputs = [ alsa-lib dbus gtk3 openssl ffmpeg ];
 
   postInstall = ''
     mv packaging/rootfs/usr/share $out/share

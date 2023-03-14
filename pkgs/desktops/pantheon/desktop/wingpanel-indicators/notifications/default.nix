@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "6.0.2";
+  version = "6.0.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZuOZlfxtRq8ZcrXGe9wlFGwn2isdvMoXQveKKnEPFdo=";
+    sha256 = "sha256-MIuyVGI4jSLGQMQUmj/2PIvcRHSJyPO5Pnd1f8JIuXc=";
   };
 
   nativeBuildInputs = [
@@ -42,9 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,11 +1,11 @@
 { fetchurl, lib, stdenv, libcdio, zlib, bzip2, readline, acl, attr, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "xorriso-${version}";
+  pname = "xorriso";
   version = "1.5.4.pl02";
 
   src = fetchurl {
-    url = "mirror://gnu/xorriso/${name}.tar.gz";
+    url = "mirror://gnu/xorriso/xorriso-${version}.tar.gz";
     sha256 = "sha256-Psc5PUqdy/X3QwnCikFfVSJ+xidwuVrpk6yNejsVKXI=";
   };
 

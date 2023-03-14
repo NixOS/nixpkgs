@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mjolnir";
-  version = "1.1.20";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     rev = "v${version}";
-    sha256 = "yfMBnNriSpwitR4u664iz+8uWp/3iSTymyFajMBP5xg=";
+    sha256 = "YmP+r9W5e63Aw66lSQeTTbYwSF/vjPyHkoehJxtcRNw=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
       runHook preBuild
 
       ln -s ${nodeDependencies}/lib/node_modules .
+      export HOME=$(mktemp -d)
       export PATH="${nodeDependencies}/bin:$PATH"
       npm run build
 

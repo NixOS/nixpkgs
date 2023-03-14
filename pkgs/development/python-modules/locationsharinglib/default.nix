@@ -6,7 +6,6 @@
 , emoji
 , fetchPypi
 , nose
-, python
 , pythonOlder
 , pytz
 , requests
@@ -15,11 +14,13 @@
 buildPythonPackage rec {
   pname = "locationsharinglib";
   version = "4.1.8";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
+    hash = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     emoji
     nose
@@ -46,15 +47,18 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     # Only coverage no real unit tests
-    ${python.interpreter} setup.py nosetests
+    nosetests
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "locationsharinglib" ];
+  pythonImportsCheck = [
+    "locationsharinglib"
+  ];
 
   meta = with lib; {
     description = "Python package to retrieve coordinates from a Google account";
     homepage = "https://locationsharinglib.readthedocs.io/";
+    changelog = "https://github.com/costastf/locationsharinglib/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

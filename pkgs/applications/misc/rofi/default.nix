@@ -1,7 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, autoreconfHook
+, meson
+, ninja
 , pkg-config
 , libxkbcommon
 , pango
@@ -18,18 +19,20 @@
 , flex
 , librsvg
 , check
+, glib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.0";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "03wdy56b3g8p2czb0qydrddyyhj3x037pirnhyqr5qbfczb9a63v";
+    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''
@@ -38,14 +41,13 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  depsBuildBuild = [ buildPackages.stdenv.cc pkg-config glib ];
+  nativeBuildInputs = [ meson ninja pkg-config flex bison ];
   buildInputs = [
     libxkbcommon
     pango
     cairo
     git
-    bison
-    flex
     librsvg
     check
     libstartup_notification

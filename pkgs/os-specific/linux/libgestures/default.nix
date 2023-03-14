@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, glib, jsoncpp }:
 
 stdenv.mkDerivation rec {
-  name = "libgestures-${version}";
+  pname = "libgestures";
   version = "2.0.1";
   src = fetchFromGitHub {
     owner = "hugegreenbug";

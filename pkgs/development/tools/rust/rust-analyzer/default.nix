@@ -1,63 +1,36 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , CoreServices
 , cmake
 , libiconv
 , useMimalloc ? false
 , doCheck ? true
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-10-25";
-  cargoSha256 = "sha256-PCQxXNpv4krdLBhyINoZT5QxV2hCqXpp1mqs0dUu4Ag=";
+  version = "2023-03-06";
+  cargoSha256 = "sha256-K4zaspweDhzkl0iFvW/6s2Qonj0Waepy0viX6U7x844=";
 
   src = fetchFromGitHub {
-    owner = "rust-analyzer";
+    owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-3AMRwtEmITIvUdR/NINQTPatkjhmS1dQsbbsefIDYAE=";
+    sha256 = "sha256-Njlus+vY3N++qWE0JXrGjwcXY2QDFuOV/7NruBBMETY=";
   };
 
-  patches = [
-    # Code format and git history check require more dependencies but don't really matter for packaging.
-    # So just ignore them.
-    ./ignore-git-and-rustfmt-tests.patch
-  ];
+  auditable = true; # TODO: remove when this is the default
 
-  # Revert edition 2021 related code since we have rust 1.55.0 in nixpkgs currently.
-  # Remove them when we have rust >= 1.56.0
-  # They change Cargo.toml so go `cargoPatches`.
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/f0ad6fa68bf98d317518bb75da01b7bb7abe98d3.patch";
-      revert = true;
-      sha256 = "sha256-ksX2j1Pgtd+M+FmXTEljm1nUxJwcY8GDQ9784Lb1uM4=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/8457ae34bdbca117b2ef73787b214161440e21f9.patch";
-      revert = true;
-      sha256 = "sha256-w1Py1bvZ2/tDQDZVMNmPRo6i6uA4H3YYZY4rXlo0iqg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/ca44b6892e3e66765355d4e645f74df3d184c03b.patch";
-      revert = true;
-      sha256 = "sha256-N1TWlLxEg6oxFkns1ieVVvLAkrHq2WOr1tbkNvZvDFg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/1294bfce865c556184c9327af4a8953ca940aec8.patch";
-      revert = true;
-      sha256 = "sha256-65eZxAjsuUln6lzSihIP26x15PELLDL4yk9wiVzJ0hE=";
-    })
-  ];
+  cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
+  cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];
 
-  buildAndTestSubdir = "crates/rust-analyzer";
-
-  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
-  cargoTestFlags = lib.optional useMimalloc "--features=mimalloc";
+  # Code format check requires more dependencies but don't really matter for packaging.
+  # So just ignore it.
+  checkFlags = [ "--skip=tidy::check_code_formatting" ];
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
@@ -66,7 +39,9 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  RUST_ANALYZER_REV = version;
+  buildFeatures = lib.optional useMimalloc "mimalloc";
+
+  CFG_RELEASE = version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
@@ -82,12 +57,17 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = nix-update-script { };
+    # FIXME: Pass overrided `rust-analyzer` once `buildRustPackage` also implements #119942
+    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+  };
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    description = "A modular compiler frontend for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
+    mainProgram = "rust-analyzer";
   };
 }

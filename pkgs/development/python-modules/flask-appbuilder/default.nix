@@ -4,19 +4,20 @@
 , apispec
 , colorama
 , click
-, email_validator
+, email-validator
 , flask
 , flask-babel
-, flask_login
+, flask-login
 , flask-openid
-, flask_sqlalchemy
-, flask_wtf
+, flask-sqlalchemy
+, flask-wtf
 , flask-jwt-extended
 , jsonschema
 , marshmallow
 , marshmallow-enum
 , marshmallow-sqlalchemy
 , python-dateutil
+, pythonOlder
 , prison
 , pyjwt
 , pyyaml
@@ -25,30 +26,28 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "3.3.3";
+  version = "4.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "sha256-yjb4dpcQt2se5GT+wodh4UC9LAF4JmYrdX89VIdkk0U=";
+    hash = "sha256-rZbu0Bif5pOa/zu6MCrbGJpkqUdYzWyVgp6tqRzGyIc=";
   };
-
-  # See here: https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch
-  #           https://github.com/dpgaspar/Flask-AppBuilder/pull/1610
-  # The patch from the PR doesn't apply cleanly so I edited it manually.
-  patches = [ ./upgrade-to-flask_jwt_extended-4.patch ];
 
   propagatedBuildInputs = [
     apispec
     colorama
     click
-    email_validator
+    email-validator
     flask
     flask-babel
-    flask_login
+    flask-login
     flask-openid
-    flask_sqlalchemy
-    flask_wtf
+    flask-sqlalchemy
+    flask-wtf
     flask-jwt-extended
     jsonschema
     marshmallow
@@ -59,31 +58,31 @@ buildPythonPackage rec {
     pyjwt
     pyyaml
     sqlalchemy-utils
-  ];
+  ] ++ apispec.optional-dependencies.yaml;
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=3.3, <4" "apispec[yaml] >=3.3" \
-      --replace "Flask>=0.12, <2" "Flask" \
-      --replace "Flask-Login>=0.3, <0.5" "Flask-Login >=0.3, <0.6" \
-      --replace "Flask-Babel>=1, <2" "Flask-Babel >=1, <3" \
-      --replace "Flask-WTF>=0.14.2, <0.15.0" "Flask-WTF" \
-      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
-      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended>=4.1.0" \
-      --replace "PyJWT>=1.7.1, <2.0.0" "PyJWT>=2.0.1" \
-      --replace "prison>=0.2.1, <1.0.0" "prison" \
-      --replace "SQLAlchemy<1.4.0" "SQLAlchemy"
+      --replace "apispec[yaml]>=3.3, <6" "apispec[yaml]" \
+      --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
+      --replace "Flask-Babel>=1, <3" "Flask-Babel" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
+      --replace "prison>=0.2.1, <1.0.0" "prison"
   '';
 
   # Majority of tests require network access or mongo
   doCheck = false;
 
-  pythonImportsCheck = [ "flask_appbuilder" ];
+  pythonImportsCheck = [
+    "flask_appbuilder"
+  ];
 
   meta = with lib; {
-    description = "Simple and rapid application development framework, built on top of Flask";
+    description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
+    changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
+    # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
+    broken = true;
   };
 }

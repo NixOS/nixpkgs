@@ -2,18 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libqb";
-  version = "2.0.3";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-a9CnqfrQUL0DdPPOJjfh9tQ0O8iRHPP3iBmy3MKvt/0=";
+    sha256 = "sha256-vt9FmIRojX3INOn3CXAjkswVFD8Th4sRIz3RR4GJHFQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ libxml2 ];
+
+  postPatch = ''
+    sed -i '/# --enable-new-dtags:/,/--enable-new-dtags is required/ d' configure.ac
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/clusterlabs/libqb";

@@ -1,22 +1,20 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
-let
-  py = python3Packages;
-in py.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "0.48";
+  version = "0.49";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oOH58jD49xAeSuP+l6tYUpwkYsnfeSGTt8x4DFzTY6g=";
+    sha256 = "sha256-xKgyBV/Qc+9PgXyxcT0xG1GXLC6KnjavJ/0SUE+9VSY=";
   };
 
-  nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
+  nativeBuildInputs = (with python3Packages; [ numpy cython scipy ]) ++
     [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py; [
+  propagatedBuildInputs = with python3Packages; [
     sounddevice
     pyopengl
     pyopengl-accelerate
@@ -26,15 +24,6 @@ in py.buildPythonApplication rec {
     appdirs
     pyrr
     rtmixer
-  ];
-
-  patches = [
-    # Backported fix that resolves an issue with setuptools packaging
-    (fetchpatch {
-      name = "fix-setuptools-packaging.patch";
-      url = "https://github.com/tlecomte/friture/commit/ea7210dae883edf17de8fec82f9428b18ee138b6.diff";
-      sha256 = "sha256-Kv/vmC8kcqfOgfIPQyZN46sbV6bezhq6pyj8bvke6s8=";
-    })
   ];
 
   postPatch = ''

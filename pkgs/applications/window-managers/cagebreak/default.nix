@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-tWfHJajAOYZJ73GckZWWTdVz75YmHA7t/qDhM7+tJgk=";
+    hash = "sha256-pU1QHYOqnkb3L4iSKbZY9Vo60Z6EaX9mp2Nw48NSPic=";
   };
 
   nativeBuildInputs = [
@@ -63,14 +63,12 @@ stdenv.mkDerivation rec {
     "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
-  # TODO: investigate why is this happening
   postPatch = ''
+    # TODO: investigate why is this happening
     sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
-  '';
 
-  postInstall = ''
-    install -d $out/share/cagebreak/
-    install -m644 $src/examples/config $out/share/cagebreak/
+    # Patch cagebreak to read its default configuration from $out/share/cagebreak
+    sed -i "s|/etc/xdg/cagebreak|$out/share/cagebreak|" meson.build cagebreak.c
   '';
 
   postFixup = lib.optionalString withXwayland ''
@@ -84,6 +82,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
+    changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;

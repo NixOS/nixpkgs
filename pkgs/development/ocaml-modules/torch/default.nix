@@ -12,22 +12,21 @@
 , ppx_sexp_conv
 , sexplib
 , stdio
-, pytorch
+, torch
 }:
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.13";
+  version = "0.17";
 
-  useDune2 = true;
-
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
     repo   = "ocaml-${pname}";
     rev    = version;
-    sha256 = "0528h1mkrqbmbf7hy91dsnxcg0k55m3jgharr71c652xyd847yz7";
+    hash = "sha256-z/9NUBjeFWE63Z/e8OyzDiy8hrn6qzjaiBH8G9MPeos=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -37,16 +36,16 @@ buildDunePackage rec {
     ctypes
     npy
     ocaml-compiler-libs
-    pytorch
-    pytorch.dev
     ppx_custom_printf
     ppx_expect
     ppx_sexp_conv
     sexplib
     stdio
+    torch
+    torch.dev
   ];
 
-  preBuild = "export LIBTORCH=${pytorch.dev}/";
+  preBuild = "export LIBTORCH=${torch.dev}/";
 
   doCheck = !stdenv.isAarch64;
   checkPhase = "dune runtest";

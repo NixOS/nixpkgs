@@ -2,8 +2,8 @@
 , mkDerivation
 , fetchFromGitHub
 , fluxbox
+, hicolor-icon-theme
 , libarchive
-, linux-pam
 , numlockx
 , qmake
 , qtbase
@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "lumina";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wc8frhw1yv07n05r33c4zilq5lgn5gw07a9n37g6nyn5sgrbp4f";
+    sha256 = "1llr65gilcf0k88f9mbwzlalqwdnjy4nv2jq7w154z0xmd6iarfq";
   };
 
   nativeBuildInputs = [
@@ -35,8 +35,8 @@ mkDerivation rec {
 
   buildInputs = [
     fluxbox # window manager for Lumina DE
+    hicolor-icon-theme
     libarchive # make `bsdtar` available for lumina-archiver
-    linux-pam
     numlockx # required for changing state of numlock at login
     qtbase
     qtmultimedia
@@ -49,6 +49,8 @@ mkDerivation rec {
     xorg.xcbutilwm
     xscreensaver
   ];
+
+  dontDropIconThemeCache = true;
 
   patches = [
     ./LuminaOS-NixOS.cpp.patch
@@ -65,10 +67,6 @@ mkDerivation rec {
     substituteInPlace src-qt5/OS-detect.pri \
       --replace L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'
 
-    # Do not set special permission
-    substituteInPlace src-qt5/core/lumina-checkpass/lumina-checkpass.pro \
-      --replace "chmod 4555" "chmod 555"
-
     # Fix plugin dir
     substituteInPlace src-qt5/core/lumina-theme-engine/lthemeengine.pri \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
@@ -81,9 +79,14 @@ mkDerivation rec {
     substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
       --replace '"bsdtar"' '"${lib.getBin libarchive}/bin/bsdtar"'
 
-    # Fix desktop files
-    for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
-      substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
+    # Fix installation path of lumina-sudo
+    substituteInPlace src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro \
+      --replace "/usr/bin" "$out/bin"
+  '';
+
+  postInstall = ''
+    for theme in lumina-icons material-design-{dark,light}; do
+      gtk-update-icon-cache $out/share/icons/$theme
     done
   '';
 
@@ -105,6 +108,6 @@ mkDerivation rec {
     homepage = "https://lumina-desktop.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.lumina.members;
   };
 }

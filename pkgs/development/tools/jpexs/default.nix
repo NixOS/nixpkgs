@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
-  version = "11.3.0";
+  version = "15.0.0";
 
   src = fetchzip {
     url = "${meta.homepage}/releases/download/version${version}/ffdec_${version}.zip";
-    sha256 = "0d1xmq21vdpn0glwfzr00s62ic8jynmgmgxl0m1834xqf3ma0ihv";
+    sha256 = "1w8sh0dzln6mxcbibyw6r9f9c8g0cbwxq4qbm5kawq00yydvwfza";
     stripRoot = false;
   };
 
@@ -36,10 +36,8 @@ stdenv.mkDerivation rec {
     desktopName = "JPEXS Free Flash Decompiler";
     genericName = "Flash Decompiler";
     comment = meta.description;
-    categories = "Development;Java;";
-    extraEntries = ''
-      StartupWMClass=com-jpexs-decompiler-flash-gui-Main
-    '';
+    categories = [ "Development" "Java" ];
+    startupWMClass = "com-jpexs-decompiler-flash-gui-Main";
   };
 
   meta = with lib; {
@@ -50,6 +48,7 @@ stdenv.mkDerivation rec {
       texts or fonts.
     '';
     homepage = "https://github.com/jindrapetrik/jpexs-decompiler";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     platforms = jdk8.meta.platforms;
     maintainers = [ ];

@@ -21,8 +21,8 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-P4CSu/ff6i48uWV5gXsJgayZ1S1s0RAqa5O5y3Y0g9Y=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    makeWrapper
     perlPackages.perl
     perlPackages.AnyEvent
     perlPackages.ArchiveZip

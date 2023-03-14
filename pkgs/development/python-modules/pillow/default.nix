@@ -1,17 +1,30 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
-, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, isPyPy
+, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+# for passthru.tests
+, imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:
 
 import ./generic.nix (rec {
-  pname = "Pillow";
-  version = "8.3.2";
+  pname = "pillow";
+  version = "9.4.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1361y215ydmdh4il1vay5831aqivmpwgzjqrphqjdiq0ipnz7qyx";
+    pname = "Pillow";
+    inherit version;
+    hash = "sha256-ocLXeARI65P7zDeJvzkWqlcg2ULjeUX0BWaAMX8c0j4=";
+  };
+
+  passthru.tests = {
+    inherit imageio matplotlib pilkit pydicom reportlab;
   };
 
   meta = with lib; {

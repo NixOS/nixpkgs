@@ -21,8 +21,7 @@ let
     inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
   };
 
-  isArm = with stdenv.hostPlatform; isAarch64 || isAarch32;
-  platformConfigurations = lib.optionals isArm [
+  platformConfigurations = lib.optionals stdenv.hostPlatform.isAarch [
     (configurationArm { inherit pkgs haskellLib; })
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (configurationDarwin { inherit pkgs haskellLib; })

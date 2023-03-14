@@ -1,27 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGL, libGLU, cmake
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
-    sha256 = "0s6sk49q8ijgbsrrryb7dzqx2fa744jhx1wck5cz5jia2010w06l";
+    url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-xZRKCC3wu6lrV1bd2x910M1yzie1OVxsHd6Fwv8pelA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c.patch";
-      sha256 = "0j43vrnm22mz3r3c43szgcnil19cx9vcydzky9gwzqlyacr51swd";
-      stripLen = 2;
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
+  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGL libGLU ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"
@@ -30,6 +23,8 @@ stdenv.mkDerivation rec {
                  "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Create and manage windows containing OpenGL contexts";
@@ -41,9 +36,10 @@ stdenv.mkDerivation rec {
       intended to be a full replacement for GLUT, and has only a few
       differences.
     '';
-    homepage = "http://freeglut.sourceforge.net/";
+    homepage = "https://freeglut.sourceforge.net/";
     license = licenses.mit;
+    pkgConfigModules = [ "glut" ];
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
-}
+})

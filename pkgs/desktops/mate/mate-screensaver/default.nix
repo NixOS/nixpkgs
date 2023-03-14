@@ -1,12 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, dbus-glib, libXScrnSaver, libnotify, libxml2, pam, systemd, mate, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, dbus-glib
+, libXScrnSaver
+, libnotify
+, libxml2
+, pam
+, systemd
+, mate
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-screensaver";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xmgzrb5nk7x6ganf7jd4gmdafanx7f0znga0lhsd8kd40r40la1";
+    sha256 = "T72yHqSlnqjeM+qb93bYaXU+SSlWBGZMMOIg4JZZuLw=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Screen saver and locker for the MATE desktop";

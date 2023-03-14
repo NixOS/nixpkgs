@@ -22,5 +22,6 @@ buildGoModule rec {
     description = "A TUI for viewing and editing database files";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "sqlite3-viewer";
   };
 }

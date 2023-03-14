@@ -15,13 +15,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.1.14";
+  version = "6.3.7";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-ySQOc/k+kvdSj5g88ujm4e2apvPVbiaspzSbCdEQ4ZA=";
+    sha256 = "sha256-UT6KPiNz3f+peLt1mGEgk2OHBZJMBrxIz6Te8qfdiik=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Metasploit Framework - a collection of exploits";
-    homepage = "https://github.com/rapid7/metasploit-framework/wiki";
+    homepage = "https://docs.metasploit.com/";
     platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab makefu ];

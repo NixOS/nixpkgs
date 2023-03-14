@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "zedeus";
   repo = "redis";
-  rev = "94bcbf1";
-  sha256 = "1p9zv4f4lqrjqa8fk98cb89b9fzlf866jc584ll9sws14904i80j";
+  rev = "d0a0e6f";
+  sha256 = "166kzflb3wgwvqnv9flyynp8b35xby617lxmk0yas8i4m6vjl00f";
 }

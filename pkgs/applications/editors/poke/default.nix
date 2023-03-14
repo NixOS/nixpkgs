@@ -1,30 +1,38 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , gettext
 , help2man
 , pkg-config
 , texinfo
-, makeWrapper
 , boehmgc
 , readline
-, guiSupport ? false, tcl, tcllib, tk
+, guiSupport ? false, makeWrapper, tcl, tcllib, tk
 , miSupport ? true, json_c
 , nbdSupport ? !stdenv.isDarwin, libnbd
 , textStylingSupport ? true
 , dejagnu
+
+# update script only
+, writeScript
 }:
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "1.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-unhjA0obCABLDuj4i9qUFgcH6aeB1VVvVVtQdYPPDxs=";
+    sha256 = "sha256-hB4oWRfGc4zpgqaTDjDr6t7PsGVaedkYTxb4dqn+bkc=";
   };
+
+  outputs = [ "out" "dev" "info" "lib" ]
+  # help2man can't cross compile because it runs `poke --help` to
+  # generate the man page
+  ++ lib.optional (!isCross) "man";
 
   postPatch = ''
     patchShebangs .
@@ -33,20 +41,30 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoreconfHook
     gettext
-    help2man
     pkg-config
     texinfo
-  ] ++ lib.optional guiSupport makeWrapper;
+  ] ++ lib.optionals (!isCross) [
+    help2man
+  ] ++ lib.optionals guiSupport [
+    makeWrapper
+    tcl.tclPackageHook
+  ];
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
+  ++ lib.optionals guiSupport [ tcl tcllib tk ]
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
   ++ lib.optional textStylingSupport gettext
   ++ lib.optional (!isCross) dejagnu;
 
-  configureFlags = lib.optionals guiSupport [
+  configureFlags = [
+    # libpoke depends on $datadir/poke, so we specify the datadir in
+    # $lib, and later move anything else it doesn't depend on to $out
+    "--datadir=${placeholder "lib"}/share"
+  ] ++ lib.optionals guiSupport [
+    "--enable-gui"
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-tkinclude=${tk.dev}/include"
@@ -55,15 +73,43 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = !isCross;
-  checkInputs = lib.optionals (!isCross) [ dejagnu ];
+  nativeCheckInputs = lib.optionals (!isCross) [ dejagnu ];
+
+  postInstall = ''
+    moveToOutput share/emacs "$out"
+    moveToOutput share/vim "$out"
+  '';
+
+  # Prevent tclPackageHook from auto-wrapping all binaries, we only
+  # need to wrap poke-gui
+  dontWrapTclBinaries = true;
+
+  postFixup = lib.optionalString guiSupport ''
+    wrapProgram "$out/bin/poke-gui" \
+      --prefix TCLLIBPATH ' ' "$TCLLIBPATH"
+  '';
+
+  passthru = {
+    updateScript = writeScript "update-poke" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<a href="...">poke 2.0</a>'
+      new_version="$(curl -s https://www.jemarch.net/poke |
+          pcregrep -o1 '>poke ([0-9.]+)</a>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "Interactive, extensible editor for binary data";
     homepage = "http://www.jemarch.net/poke";
+    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres kira-bruneau ];
     platforms = platforms.unix;
-    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${version}";
   };
 }
 

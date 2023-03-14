@@ -5,24 +5,35 @@
 , IOKit
 , nvidiaSupport ? false
 , makeWrapper
+, llvmPackages
 }:
+
+assert nvidiaSupport -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "1bn364rmp0q86rd7vgv4n7x09cdf9m4njcaq92jnk85ni6h147ax";
+    sha256 = "sha256-GrrdE9Ih8x8N2HN+1NfxfthfHbufLAT/Ac+ZZWW5Zg8=";
   };
 
-  cargoBuildFlags = lib.optionals nvidiaSupport [ "--features" "nvidia" ];
-  cargoSha256 = "0c2mk2bcz4qjyqmf11yqhnhy4pqxr77b3c1gvr5jfmjshx4ff7v2";
+  # remove cargo config so it can find the linker on aarch64-linux
+  postPatch = ''
+    rm .cargo/config
+  '';
 
-  nativeBuildInputs = lib.optional nvidiaSupport makeWrapper;
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  cargoHash = "sha256-2VgyUVBcmSlmPSqAWrzWjH5J6Co/rAC9EQCckYzfW2o=";
+
+  nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
+  buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+
+  buildFeatures = lib.optional nvidiaSupport "nvidia";
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = lib.optionalString nvidiaSupport ''
     wrapProgram $out/bin/zenith \
@@ -35,8 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
-    # doesn't build on aarch64 https://github.com/bvaisvil/zenith/issues/19
-    # see https://github.com/NixOS/nixpkgs/pull/88616
-    platforms = platforms.x86;
+    platforms = platforms.unix;
   };
 }

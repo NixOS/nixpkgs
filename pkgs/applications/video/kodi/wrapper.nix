@@ -22,7 +22,7 @@ buildEnv {
   paths = [ kodi ] ++ addons;
   pathsToLink = [ "/share" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     mkdir $out/bin

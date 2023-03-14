@@ -1,12 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
-, gettext
 , vala
 , python3
 , desktop-file-utils
@@ -21,10 +20,7 @@
 , elementary-dock
 , bamf
 , sqlite
-, libdbusmenu-gtk3
 , zeitgeist
-, glib-networking
-, elementary-icon-theme
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
@@ -33,29 +29,28 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.0.4";
-
-  repoName = "files";
+  version = "6.3.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "files";
     rev = version;
-    sha256 = "sha256-FH6EYtgKADp8jjBoCwsdRdknlKS9v3iOtPiT3CyEc/8=";
+    sha256 = "sha256-DS39jCeN+FFiEqJqxa5F2XRKF7SJsm2qi5KKb79guKo=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Avoid crash due to ref counting issues in Directory cache
+    # https://github.com/elementary/files/pull/2149
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/6a0d16e819dea2d0cd2d622414257da9433afe2f.patch";
+      sha256 = "sha256-ijuSMZzVbSwWMWsK24A/24NfxjxgK/BU2qZlq6xLBEU=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    gettext
-    glib-networking
     meson
     ninja
     pkg-config
@@ -67,12 +62,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    elementary-icon-theme
+    glib
     granite
     gtk3
     libcanberra
     libcloudproviders
-    libdbusmenu-gtk3
     libgee
     libgit2-glib
     libhandy
@@ -83,17 +77,14 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [
-    ./filechooser-portal-hardcode-gsettings-for-nixos.patch
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace filechooser-portal/LegacyFileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "File browser designed for elementary OS";

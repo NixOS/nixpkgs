@@ -14,11 +14,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   pname = "ntl";
-  version = "11.4.4";
+  version = "11.5.1";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "sha256-nX9uguEaQJ8VHA3i3rCMDXY7r5g0/d/UMr89IY+AIds=";
+    sha256 = "sha256-IQ0GwxMGy8bq9oFEU8Vsd22djo3zbXTrMG9qUj0caoo=";
   };
 
   buildInputs = [
@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   dontAddPrefix = true; # DEF_PREFIX instead
+
+  # Written in perl, does not support autoconf-style
+  # --build=/--host= options:
+  #   Error: unrecognized option: --build=x86_64-unknown-linux-gnu
+  configurePlatforms = [ ];
 
   # reference: http://shoup.net/ntl/doc/tour-unix.html
   configureFlags = [

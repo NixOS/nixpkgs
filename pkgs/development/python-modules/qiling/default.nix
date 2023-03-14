@@ -1,31 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , capstone
-, unicorn
-, pefile
-, python-registry
-, keystone-engine
-, pyelftools
+, fetchFromGitHub
+, fetchPypi
 , gevent
+, keystone-engine
+, multiprocess
+, pefile
+, pyelftools
+, pythonOlder
+, python-fx
+, python-registry
+, pyyaml
+, questionary
+, termcolor
+, unicorn
 }:
+
 buildPythonPackage rec {
   pname = "qiling";
-  version = "1.3.0";
+  version = "1.4.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "084ad706f6803d7de2391eab928ecf4cb3e8d892fd2988666d4791a422d6ab9a";
+    hash = "sha256-MEafxry/ewqlzOMu9TJMQodXLChGMYjS2jX3yv7FZJk=";
   };
 
   propagatedBuildInputs = [
     capstone
-    unicorn
-    pefile
-    python-registry
-    keystone-engine
-    pyelftools
     gevent
+    keystone-engine
+    multiprocess
+    pefile
+    pyelftools
+    python-fx
+    python-registry
+    pyyaml
+    termcolor
+    questionary
+    unicorn
   ];
 
   # Tests are broken (attempt to import a file that tells you not to import it,
@@ -39,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Qiling Advanced Binary Emulation Framework";
     homepage = "https://qiling.io/";
+    changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
     license = licenses.gpl2Only;
     maintainers = teams.determinatesystems.members;
   };

@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "ktextwidgets";
+  pname = "ktextwidgets";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcompletion kconfig kconfigwidgets kiconthemes kservice kwindowsystem

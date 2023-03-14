@@ -1,32 +1,41 @@
 { lib
 , buildPythonPackage
-, coverage
 , fetchPypi
-, isPy27
-, pytest-cov
+, pint
+, pythonOlder
 , pytestCheckHook
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.3";
-  disabled = isPy27;
+  version = "2.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ryrmsm72z3fzaanyblz49q40h9d3bbl4pspn2lvkkp9rcmsdm83";
+    hash = "sha256-JRX6hIGBAB3Ipzq6agGhoXQG9dNy8k7H9xkYZvn0mX4=";
   };
 
-  propagatedBuildInputs = [ toml ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov vulture --cov-report=html --cov-report=term --cov-report=xml --cov-append" ""
+  '';
 
-  checkInputs = [
-    coverage
-    pytest-cov
+  propagatedBuildInputs = [
+    toml
+  ];
+
+  nativeCheckInputs = [
+    pint
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "vulture" ];
+  pythonImportsCheck = [
+    "vulture"
+  ];
 
   meta = with lib; {
     description = "Finds unused code in Python programs";

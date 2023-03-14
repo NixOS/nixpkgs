@@ -3,16 +3,16 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz
-, makeWrapper, python3, ruby, perl
+, callPackage, ghostscript_headless, harfbuzz
+, makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
+, libfaketime
 , useFixedHashes ? true
 , recurseIntoAttrs
-, fetchpatch
 }:
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    ghostscript = ghostscriptX;
+    ghostscript = ghostscript_headless;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
@@ -24,15 +24,15 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl;
-    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
+      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime;
+    ghostscript = ghostscript_headless;
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix tl;
+    orig = import ./tlpdb.nix;
     removeSelfDep = lib.mapAttrs
-      (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
+      (n: p: if p ? deps then p // { deps = lib.filter (dn: n != dn) p.deps; }
                          else p);
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
@@ -42,37 +42,30 @@ let
       };
 
       xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
+        deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
       };
 
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
+        deps = lib.filter (n: n != "metafont" && n != "xdvi") orig.collection-basic.deps;
       };
       # add them elsewhere so that collections cover all packages
       collection-metapost = orig.collection-metapost // {
-        deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
+        deps = orig.collection-metapost.deps ++ [ "metafont" ];
       };
       collection-plaingeneric = orig.collection-plaingeneric // {
-        deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
+        deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
+      };
+
+      # override cyclic dependency until #167226 is fixed
+      xecjk = orig.xecjk // {
+        deps = lib.remove "ctex" orig.xecjk.deps;
       };
 
       texdoc = orig.texdoc // {
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
-        postUnpack = let
-          # commit that ensures reproducibility of Data.tlpdb.lua
-          # remove on the next texdoc update
-          reproPatch = fetchpatch {
-            name = "make-data-tlpdb-lua-reproducible.patch";
-            url = "https://github.com/TeX-Live/texdoc/commit/82aff83d5453a887c1117b9e771a98bddd8a605a.patch";
-            sha256 = "0y04y468i7db4p5bsyyhgzip8q4fi1756x9a15ndha9xfnasbf44";
-            stripLen = 2;
-            extraPrefix = "scripts/texdoc/";
-          };
-        in ''
+        postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            patch -p1 -d "$out" < "${reproPatch}"
-
             unxz --stdout "${tlpdb}" > texlive.tlpdb
 
             # create dummy doc file to ensure that texdoc does not return an error
@@ -89,8 +82,11 @@ let
       };
     }); # overrides
 
-    # tl =
-    in lib.mapAttrs flatDeps clean;
+    linkDeps = lib.mapAttrs (_: attrs: attrs // lib.optionalAttrs (attrs ? deps) {
+      deps = builtins.map (n: tl.${n}) attrs.deps;
+    }); # transform [ "dep1" "dep2" ... ] into [ tl."dep1" ... ]
+
+    in lib.mapAttrs flatDeps (linkDeps clean);
     # TODO: texlive.infra for web2c config?
 
 
@@ -120,24 +116,43 @@ let
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgs (attrs.deps or {});
+        ++ combinePkgs (attrs.deps or []);
     };
 
+  # for daily snapshots
   snapshot = {
-    year = "2021";
-    month = "04";
-    day = "08";
+    year = "2022";
+    month = "12";
+    day = "27";
   };
+
+  # The tarballs on CTAN mirrors for the current release are constantly
+  # receiving updates, so we can't use those directly. Stable snapshots
+  # need to be used instead. Ideally, for the release branches of NixOS we
+  # should be switching to the tlnet-final versions
+  # (https://tug.org/historic/).
+  urlPrefixes = [
+    # tlnet-final snapshot
+    #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+    #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
+
+    # Daily snapshots hosted by one of the texlive release managers
+    "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+  ];
 
   tlpdb = fetchurl {
     # use the same mirror(s) as urlPrefixes below
-    urls = [
-      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
-    ];
-    sha512 = "1dsj4bza84g2f2z0w31yil3iwcnggcyg9f1xxwmp6ljk5xlzyr39cb556prx9691zbwpbrwbb5hnbqxqlnwsivgk0pmbl9mbjbk9cz0";
+    urls = map (up: "${up}/../tlpkg/texlive.tlpdb.xz") urlPrefixes;
+    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
   };
+
+  tlpdb-nix = runCommand "tlpdb.nix" {
+    inherit tlpdb;
+    tl2nix = ./tl2nix.sed;
+  }
+  ''
+    xzcat "$tlpdb" | sed -rn -f "$tl2nix" | uniq > "$out"
+  '';
 
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
@@ -148,21 +163,7 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
-
-      # The tarballs on CTAN mirrors for the current release are constantly
-      # receiving updates, so we can't use those directly. Stable snapshots
-      # need to be used instead. Ideally, for the release branches of NixOS we
-      # should be switching to the tlnet-final versions
-      # (https://tug.org/historic/).
-      urlPrefixes = args.urlPrefixes or [
-        # tlnet-final snapshot
-        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
-        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
-
-        # Daily snapshots hosted by one of the texlive release managers
-        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
-      ];
+        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") (args.urlPrefixes or urlPrefixes));
 
     in runCommand "texlive-${tlName}"
       ( {
@@ -189,12 +190,12 @@ let
       );
 
   # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
-    (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
+  combinePkgs = pkgList: lib.concatLists # uniqueness is handled in `combine`
+    (builtins.map (a: a.pkgs) pkgList);
 
 in
   tl // {
-    inherit bin combine;
+    inherit bin combine tlpdb-nix;
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
@@ -209,6 +210,7 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
+            #extraVersion = "-final";
             extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )

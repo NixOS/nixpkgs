@@ -16,7 +16,6 @@
 , requests
 , setuptools
 , six
-, typing
 , watchdog
 , websocket-client
 , wheel
@@ -24,14 +23,22 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.24.2";
+  version = "1.27.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
-    rev = version;
-    sha256 = "0xpzc3rizdkjxclgxngswz0a22kdv1pw235gsw517ma7i06d0lw6";
+    rev = "refs/tags/${version}";
+    hash = "sha256-izzoYxzkaQqcEM5e8BhZeZIxtAGRDNH/qvqwvrx250s=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "attrs>=19.3.0,<21.5.0" "attrs" \
+      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
+      --replace "pip>=9,<22.3" "pip" \
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -46,23 +53,15 @@ buildPythonPackage rec {
     six
     wheel
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook
     requests
     websocket-client
   ];
-
-  postPatch = ''
-    sed -i setup.py -e "/pip>=/c\'pip',"
-    substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing'
-  '';
 
   disabledTestPaths = [
     # Don't check the templates and the sample app
@@ -85,6 +84,9 @@ buildPythonPackage rec {
     # Don't build
     "test_can_generate_pipeline_for_all"
     "test_build_wheel"
+    # https://github.com/aws/chalice/issues/1850
+    "test_resolve_endpoint"
+    "test_endpoint_from_arn"
   ];
 
   pythonImportsCheck = [ "chalice" ];

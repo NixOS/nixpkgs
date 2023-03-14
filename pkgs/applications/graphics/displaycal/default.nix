@@ -1,72 +1,68 @@
-{ python2
-, lib
-, fetchurl
-, pkg-config
-, libXext
-, libXxf86vm
-, libX11
-, libXrandr
-, libXinerama
-, libXScrnSaver
+{ lib
+, python3
+, xorg
 , argyllcms
- }:
+, wrapGAppsHook
+, gtk3
+, librsvg
+}:
 
-let
-  inherit (python2.pkgs) buildPythonApplication wxPython numpy dbus-python;
-in buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.8.9.3";
+  version = "3.9.10";
+  format = "setuptools";
 
-  enableParallelBuilding = true;
-
-  src = fetchurl {
-    url = "mirror://sourceforge/project/dispcalgui/release/${version}/DisplayCAL-${version}.tar.gz";
-    sha256 = "1sivi4q7sqsrc95qg5gh37bsm2761md4mpl89hflzwk6kyyxyd3w";
+  src = python3.pkgs.fetchPypi {
+    pname = "DisplayCAL";
+    inherit version;
+    hash = "sha256-oDHDVb0zuAC49yPfmNe7xuFKaA1BRZGr75XwsLqugHs=";
   };
 
-  propagatedBuildInputs = [
-    libXext
-    libXxf86vm
-    libX11
-    libXrandr
-    libXinerama
-    libXScrnSaver
-    argyllcms
-    wxPython
-    numpy
-    dbus-python
-  ];
-
   nativeBuildInputs = [
-    pkg-config
+    wrapGAppsHook
+    gtk3
   ];
 
-  preConfigure = ''
-    mkdir dist
-    cp {misc,dist}/net.displaycal.DisplayCAL.appdata.xml
-    touch dist/copyright
-    mkdir -p $out
-    ln -s $out/share/DisplayCAL $out/Resources
+  propagatedBuildInputs = with python3.pkgs; [
+    build
+    certifi
+    wxPython_4_2
+    dbus-python
+    distro
+    PyChromecast
+    send2trash
+  ];
+
+  buildInputs = [
+    gtk3
+    librsvg
+  ] ++ (with xorg; [
+    libX11
+    libXxf86vm
+    libXext
+    libXinerama
+    libXrandr
+  ]);
+
+  doCheck = false; # Tests try to access an X11 session and dbus in weird locations.
+
+  pythonImportsCheck = [ "DisplayCAL" ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      ''${gappsWrapperArgs[@]}
+      --prefix PATH : ${lib.makeBinPath [ argyllcms ]}
+      --prefix PYTHONPATH : $PYTHONPATH
+    )
   '';
 
-  # no idea why it looks there - symlink .json lang (everything)
-  postInstall = ''
-    for x in $out/share/DisplayCAL/*; do
-      ln -s $x $out/lib/python2.7/site-packages/DisplayCAL
-    done
-
-    for prog in "$out/bin/"*; do
-      wrapProgram "$prog" \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        --prefix PATH : ${argyllcms}/bin
-    done
-  '';
-
-  meta = {
-    description = "Display Calibration and Characterization powered by Argyll CMS";
-    homepage = "https://displaycal.net/";
-    license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.marcweber];
-    platforms = lib.platforms.linux;
+  meta = with lib; {
+    description = "Display calibration and characterization powered by Argyll CMS (Migrated to Python 3)";
+    homepage = "https://github.com/eoyilmaz/displaycal-py3";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ toastal ];
   };
 }

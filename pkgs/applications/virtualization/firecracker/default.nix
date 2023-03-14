@@ -1,7 +1,8 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "0.24.5";
+  version = "1.1.3";
+  # nixpkgs-update: no auto update
 
   suffix = {
     x86_64-linux = "x86_64";
@@ -22,15 +23,15 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-drcm2kz2csuJqr8Oqs0r1BrxgPHOyuwC2S+99MhbMjA=";
-    aarch64-linux = "sha256-x8RoBmgY3HRUOLw8YzEwQfQuT83zGfBHHWu88b4i05o=";
+    x86_64-linux = "sha256-3+CqVBOb2haknQIMzE9kl99pDWm9wZPUX92FlVov3No=";
+    aarch64-linux = "sha256-ii+x4YEZIZJuM+1Njvxe1dz6WOvAK1SWqfuodC7a4yo=";
   };
 
   dontConfigure = true;
 
   buildPhase = ''
-    mv release-v${version}/firecracker-v${version}-${suffix} firecracker
-    mv release-v${version}/jailer-v${version}-${suffix} jailer
+    mv release-v${version}-${suffix}/firecracker-v${version}-${suffix} firecracker
+    mv release-v${version}-${suffix}/jailer-v${version}-${suffix} jailer
     chmod +x firecracker jailer
   '';
 

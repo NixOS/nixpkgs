@@ -19,19 +19,23 @@ in {
           "/run/kea/kea-dhcp6.socket"
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Paths to kea control sockets
       '';
     };
   };
   serviceOpts = {
+    after = [
+      "kea-dhcp4-server.service"
+      "kea-dhcp6-server.service"
+    ];
     serviceConfig = {
       User = "kea";
       ExecStart = ''
         ${pkgs.prometheus-kea-exporter}/bin/kea-exporter \
           --address ${cfg.listenAddress} \
           --port ${toString cfg.port} \
-          ${concatStringsSep " \\n" cfg.controlSocketPaths}
+          ${concatStringsSep " " cfg.controlSocketPaths}
       '';
       SupplementaryGroups = [ "kea" ];
       RestrictAddressFamilies = [

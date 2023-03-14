@@ -1,5 +1,6 @@
 { system ? builtins.currentSystem,
   config ? {},
+  giteaPackage ? pkgs.gitea,
   pkgs ? import ../.. { inherit system config; }
 }:
 
@@ -7,10 +8,25 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
+  ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
+  signingPrivateKey = ''
+    -----BEGIN PGP PRIVATE KEY BLOCK-----
+
+    lFgEY/6jkBYJKwYBBAHaRw8BAQdADXiZRV8RJUyC9g0LH04wLMaJL9WTc+szbMi7
+    5fw4yP8AAQCl8EwGfzSLm/P6fCBfA3I9znFb3MEHGCCJhJ6VtKYyRw7ktAhzbmFr
+    ZW9pbIiUBBMWCgA8FiEE+wUM6VW/NLtAdSixTWQt6LZ4x50FAmP+o5ACGwMFCQPC
+    ZwAECwkIBwQVCgkIBRYCAwEAAh4FAheAAAoJEE1kLei2eMedFTgBAKQs1oGFZrCI
+    TZP42hmBTKxGAI1wg7VSdDEWTZxut/2JAQDGgo2sa4VHMfj0aqYGxrIwfP2B7JHO
+    GCqGCRf9O/hzBA==
+    =9Uy3
+    -----END PGP PRIVATE KEY BLOCK-----
+  '';
+  signingPrivateKeyId = "4D642DE8B678C79D";
+
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
   makeGiteaTest = type: nameValuePair type (makeTest {
-    name = "gitea-${type}";
-    meta.maintainers = with maintainers; [ aanderse kolaente ma27 ];
+    name = "${giteaPackage.pname}-${type}";
+    meta.maintainers = with maintainers; [ aanderse indeednotjames kolaente ma27 ];
 
     nodes = {
       server = { config, pkgs, ... }: {
@@ -18,9 +34,11 @@ let
         services.gitea = {
           enable = true;
           database = { inherit type; };
-          disableRegistration = true;
+          package = giteaPackage;
+          settings.service.DISABLE_REGISTRATION = true;
+          settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
         };
-        environment.systemPackages = [ pkgs.gitea pkgs.jq ];
+        environment.systemPackages = [ giteaPackage pkgs.gnupg pkgs.jq ];
         services.openssh.enable = true;
       };
       client1 = { config, pkgs, ... }: {
@@ -55,6 +73,13 @@ let
       server.wait_for_unit("gitea.service")
       server.wait_for_open_port(3000)
       server.succeed("curl --fail http://localhost:3000/")
+
+      server.succeed(
+          "su -l gitea -c 'gpg --homedir /var/lib/gitea/data/home/.gnupg "
+          + "--import ${toString (pkgs.writeText "gitea.key" signingPrivateKey)}'"
+      )
+
+      assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
 
       server.succeed(
           "curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. "

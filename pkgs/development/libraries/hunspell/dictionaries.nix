@@ -1,42 +1,42 @@
 /* hunspell dictionaries */
 
-{ lib, stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
 
 
 let
   mkDict =
-  { pname, readmeFile, dictFileName, ... }@args:
-  stdenv.mkDerivation ({
-    inherit pname;
-    installPhase = ''
-      runHook preInstall
-      # hunspell dicts
-      install -dm755 "$out/share/hunspell"
-      install -m644 ${dictFileName}.dic "$out/share/hunspell/"
-      install -m644 ${dictFileName}.aff "$out/share/hunspell/"
-      # myspell dicts symlinks
-      install -dm755 "$out/share/myspell/dicts"
-      ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-      ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-      # docs
-      install -dm755 "$out/share/doc"
-      install -m644 ${readmeFile} $out/share/doc/${pname}.txt
-      runHook postInstall
-    '';
-  } // args);
+    { pname, readmeFile, dictFileName, ... }@args:
+    stdenv.mkDerivation ({
+      inherit pname;
+      installPhase = ''
+        runHook preInstall
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        # docs
+        install -dm755 "$out/share/doc"
+        install -m644 ${readmeFile} $out/share/doc/${pname}.txt
+        runHook postInstall
+      '';
+    } // args);
 
   mkDictFromRla =
     { shortName, shortDescription, dictFileName }:
     mkDict rec {
       inherit dictFileName;
-      version = "2.2";
+      version = "2.5";
       pname = "hunspell-dict-${shortName}-rla";
       readmeFile = "README.txt";
       src = fetchFromGitHub {
         owner = "sbosio";
         repo = "rla-es";
         rev = "v${version}";
-        sha256 = "0n9ms092k7vg7xpd3ksadxydbrizkb7js7dfxr08nbnnb9fgy0i8";
+        sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
       meta = with lib; {
         description = "Hunspell dictionary for ${shortDescription} from rla";
@@ -45,15 +45,14 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      nativeBuildInputs = [ unzip ];
-      buildInputs = [ bash coreutils which zip ];
-      patchPhase = ''
+      nativeBuildInputs = [ bash coreutils which zip unzip ];
+      postPatch = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
-           --replace /bin/bash bash \
+           --replace /bin/bash ${bash}/bin/bash \
            --replace /dev/stderr stderr.log
 
         substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash bash \
+           --replace /bin/bash ${bash}/bin/bash \
       '';
       buildPhase = ''
         cd ortograf/herramientas
@@ -79,9 +78,9 @@ let
       };
       meta = with lib; {
         longDescription = ''
-        Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
-        Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
-        LibreOffice då dsso.se inte längre verkar vara med oss.
+          Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
+          Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
+          LibreOffice då dsso.se inte längre verkar vara med oss.
         '';
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
         license = licenses.lgpl3;
@@ -90,7 +89,7 @@ let
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
       unpackCmd = ''
-      unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
+        unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
       '';
       installPhase = ''
         # hunspell dicts
@@ -115,8 +114,8 @@ let
       pname = "hunspell-dict-${shortName}-dicollecte";
       readmeFile = "README_dict_fr.txt";
       src = fetchurl {
-         url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
-         sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
+        url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
+        sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
       };
       meta = with lib; {
         inherit longDescription;
@@ -234,7 +233,7 @@ let
         sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
       };
 
-      buildInputs = [ ispell perl hunspell ];
+      nativeBuildInputs = [ ispell perl hunspell ];
 
       dontBuild = true;
 
@@ -266,7 +265,8 @@ let
     , dictFileName
     , license
     , readmeFile ? "README_${dictFileName}.txt"
-    , sourceRoot ? dictFileName }:
+    , sourceRoot ? dictFileName
+    }:
     mkDict rec {
       pname = "hunspell-dict-${shortName}-libreoffice";
       version = "6.3.0.4";
@@ -289,7 +289,8 @@ let
       };
     };
 
-in rec {
+in
+rec {
 
   /* ENGLISH */
 
@@ -441,7 +442,7 @@ in rec {
   es_CR = es-cr;
   es-cr = mkDictFromRla {
     shortName = "es-cr";
-    shortDescription = "Spanish (Costra Rica)";
+    shortDescription = "Spanish (Costa Rica)";
     dictFileName = "es_CR";
   };
 
@@ -598,7 +599,7 @@ in rec {
   /* ITALIAN */
 
   it_IT = it-it;
-  it-it =  mkDictFromLinguistico {
+  it-it = mkDictFromLinguistico {
     shortName = "it-it";
     dictFileName = "it_IT";
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
@@ -820,5 +821,85 @@ in rec {
     shortDescription = "Hebrew (Israel)";
     readmeFile = "README_he_IL.txt";
     license = with lib.licenses; [ agpl3Plus ];
+  };
+
+  /* THAI */
+
+  th_TH = th-th;
+  th-th = mkDict {
+    pname = "hunspell-dict-th-th";
+    version = "experimental-2021-12-20";
+    dictFileName = "th_TH";
+    readmeFile = "README.md";
+    src = fetchFromGitHub {
+      owner = "SyafiqHadzir";
+      repo = "Hunspell-TH";
+      rev = "f119e58e5f6954965d6abd683e7d4c4b9be2684f";
+      sha256 = "sha256-hwqKvuLxbtzxfyQ5YhC/sdb3QQwxCfzgDOHeatxDjxM=";
+    };
+    meta = with lib; {
+      description = "Hunspell dictionary for Central Thai (Thailand)";
+      homepage = "https://github.com/SyafiqHadzir/Hunspell-TH";
+      license = with licenses; [ gpl3 ];
+      maintainers = with maintainers; [ toastal ]; # looking for a native speaker
+      platforms = platforms.all;
+    };
+  };
+
+  /* CROATIAN */
+
+  hr_HR = hr-hr;
+  hr-hr = mkDictFromLibreOffice {
+    shortName = "hr-hr";
+    dictFileName = "hr_HR";
+    shortDescription = "Croatian (Croatia)";
+    readmeFile = "README_hr_HR.txt";
+    license = with lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
+  };
+
+  /* NORWEGIAN */
+
+  nb_NO = nb-no;
+  nb-no = mkDictFromLibreOffice {
+    shortName = "nb-no";
+    dictFileName = "nb_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Bokmål (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
+  };
+
+  nn_NO = nn-no;
+  nn-no = mkDictFromLibreOffice {
+    shortName = "nn-no";
+    dictFileName = "nn_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Nynorsk (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
+  };
+
+  /* TOKI PONA */
+
+  tok = mkDict rec {
+    pname = "hunspell-dict-tok";
+    version = "20220829";
+    dictFileName = "tok";
+    readmeFile = "README.en.adoc";
+
+    src = fetchzip {
+      url = "https://github.com/somasis/hunspell-tok/releases/download/${version}/hunspell-tok-${version}.tar.gz";
+      sha256 = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
+    };
+
+    dontBuild = true;
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Toki Pona";
+      homepage = "https://github.com/somasis/hunspell-tok";
+      license = with lib.licenses; [ cc0 publicDomain cc-by-sa-30 cc-by-sa-40 ];
+      maintainers = with maintainers; [ somasis ];
+      platforms = platforms.all;
+    };
   };
 }

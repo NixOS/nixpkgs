@@ -1,8 +1,8 @@
 diff --git a/tests/debug/session.py b/tests/debug/session.py
-index 101492fc..4ee7cfbe 100644
+index af242877..30b21a1e 100644
 --- a/tests/debug/session.py
 +++ b/tests/debug/session.py
-@@ -630,6 +630,7 @@ class Session(object):
+@@ -622,6 +622,7 @@ class Session(object):
          if "PYTHONPATH" in self.config.env:
              # If specified, launcher will use it in lieu of PYTHONPATH it inherited
              # from the adapter when spawning debuggee, so we need to adjust again.

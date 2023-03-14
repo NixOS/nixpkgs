@@ -1,17 +1,17 @@
-{ antlr3_4
-, bctoolbox
+{ bctoolbox
+, belr
 , cmake
 , fetchFromGitLab
 , lib
 , libantlr3c
-, mbedtls
+, mbedtls_2
 , stdenv
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "4.5.14";
+  version = "5.2.23";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -19,27 +19,31 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-L6dhgBJrzYgBuMNd2eMZJCqB/GIZjKipfn1SffxBFWw=";
+    sha256 = "sha256-c73PCM+bRz6CjGRY2AapEcvKC1UqyEfzb7qsicmrkQU=";
   };
 
-  nativeBuildInputs = [ antlr3_4 cmake ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ];
 
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
-    "-Wno-error=cast-function-type"
-  ];
+    "-Wno-error=stringop-overflow"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs and probably clang
+    "-Wno-error=use-after-free"
+  ]);
 
-  propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];
+  propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];
 
   meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
-    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
+    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers. Part of the Linphone project.";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];

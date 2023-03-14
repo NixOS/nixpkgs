@@ -4,7 +4,9 @@ let
   generic = {
     version, sha256,
     eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
+  }: let
+    major = lib.versions.major version;
+  in stdenv.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
@@ -12,6 +14,8 @@ let
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
+
+    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
 
     passthru.tests = nixosTests.nextcloud;
 
@@ -23,9 +27,10 @@ let
     '';
 
     meta = with lib; {
+      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
+      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
       platforms = with platforms; unix;
       knownVulnerabilities = extraVulnerabilities
@@ -33,27 +38,28 @@ let
     };
   };
 in {
-  nextcloud20 = throw ''
-    Nextcloud v20 has been removed from `nixpkgs` as the support for it was dropped
-    by upstream in 2021-10. Please upgrade to at least Nextcloud v21 by declaring
+  nextcloud23 = throw ''
+    Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud21;
+        services.nextcloud.package = pkgs.nextcloud24;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 19 on NixOS 21.05 you have to upgrade to Nextcloud 20
-    first on 21.05 because Nextcloud doesn't support upgrades accross multiple major versions!
+    WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
+    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
-  nextcloud21 = generic {
-    version = "21.0.5";
-    sha256 = "1q46h480kn97k7h3xm7r5gsa8l3f0kfiicapi46sh0p39pbjbyhv";
+  nextcloud24 = generic {
+    version = "24.0.10";
+    sha256 = "sha256-B6+0gO9wn39BpcR0IsIuMa81DH8TWuDOlTZR9O1qRbk=";
   };
 
-  nextcloud22 = generic {
-    version = "22.2.2";
-    sha256 = "sha256-lDvn29N19Lhm3P2YIVM/85vr/U07qR+M8TkF/D/GTfA=";
+  nextcloud25 = generic {
+    version = "25.0.4";
+    sha256 = "sha256-wyUeAIOpQwPi1piLNS87Mwgqeacmsw/3RnCbD+hpoaY=";
   };
-  # tip: get she sha with:
+
+  # tip: get the sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , expiringdict
 , google-auth-httplib2
@@ -7,7 +7,7 @@
 , google-api-python-client
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "drivelib";
   version = "0.3.0";
 

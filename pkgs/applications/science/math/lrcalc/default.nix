@@ -1,33 +1,23 @@
 { lib, stdenv
 , fetchFromBitbucket
-, fetchpatch
 , autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2";
+  version = "2.1";
   pname = "lrcalc";
 
   src = fetchFromBitbucket {
     owner = "asbuch";
     repo = "lrcalc";
     rev = "lrcalc-${version}";
-    sha256 = "1c12d04jdyxkkav4ak8d1aqrv594gzihwhpxvc6p9js0ry1fahss";
+    sha256 = "0s3amf3z75hnrjyszdndrvk4wp5p630dcgyj341i6l57h43d1p4k";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
     autoreconfHook
-  ];
-
-  patches = [
-    # Fix include syntax:
-    # For private includes, use `#include "..."` instead of `#include <...>`
-    (fetchpatch {
-      url = "https://bitbucket.org/asbuch/lrcalc/commits/226981a0/raw/";
-      sha256 = "02kaqx5s3l642rhh28kn2wg9wr098vzpknxyl4pv627lqa3lv9vm";
-    })
   ];
 
   meta = with lib; {

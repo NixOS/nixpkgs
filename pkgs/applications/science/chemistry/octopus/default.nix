@@ -8,16 +8,17 @@
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
+assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "11.2";
+  version = "12.1";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "sha256-leEcUSjpiP13l65K9WKN2GXTtTa8vvK/MFxR2zH6Xno=";
+    sha256 = "sha256-dQdb4wGKOQefrgtQVorq6EH9IiAh1tMmj3GiZOXgTBY=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +41,12 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = with lib; [
-    "--with-yaml-prefix=${libyaml}"
+    "--with-yaml-prefix=${lib.getDev libyaml}"
     "--with-blas=-lblas"
     "--with-lapack=-llapack"
-    "--with-fftw-prefix=${fftw.dev}"
-    "--with-gsl-prefix=${gsl}"
-    "--with-libxc-prefix=${libxc}"
+    "--with-fftw-prefix=${lib.getDev fftw}"
+    "--with-gsl-prefix=${lib.getDev gsl}"
+    "--with-libxc-prefix=${lib.getDev libxc}"
     "--enable-openmp"
   ] ++ optional enableFma "--enable-fma3"
     ++ optional enableFma4 "--enable-fma4"

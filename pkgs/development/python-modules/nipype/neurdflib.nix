@@ -3,7 +3,7 @@
 , fetchPypi
 , isodate
 , html5lib
-, SPARQLWrapper
+, sparqlwrapper
 , networkx
 , nose
 , python
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "d34493cee15029ff5db16157429585ff863ba5542675a4d8a94a0da1bc6e3a50";
   };
 
-  propagatedBuildInputs = [ isodate html5lib SPARQLWrapper ];
+  propagatedBuildInputs = [ isodate html5lib sparqlwrapper ];
 
-  checkInputs = [ networkx nose ];
+  nativeCheckInputs = [ networkx nose ];
 
   # Python 2 syntax
   # Failing doctest

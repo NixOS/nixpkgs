@@ -6,41 +6,73 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "1.0.131";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
-    owner = "armosec";
+    owner = "kubescape";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DcReo4pTdI8ssWH1IqD8gDUm4jQ0jBBJ+ltxSpdkxQE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J3E41xQxI53iRfo5E+DMXD70sSCBO3TpSm3qZmpxvW8=";
+    fetchSubmodules = true;
   };
+
+  vendorHash = "sha256-KoAuM1H9FRcPLD0AipnXOCUiNHcCWnek4sV0ztu5SyI=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  vendorSha256 = "sha256-SxJnYJyKFed1c+zgeeXQQhsKHlaDevJGMwqA5gPef3s=";
-
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/clihandler/cmd.BuildNumber=v${version}"
+    "-X github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
+  subPackages = [ "." ];
+
+  preCheck = ''
+    # Feed in all but the integration tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    # Skip httphandler tests - the checkPhase doesn't care about excludedPackages
+    getGoDirs() {
+      go list ./... | grep -v httphandler
+    }
+
+    # remove tests that use networking
+    rm core/pkg/resourcehandler/urlloader_test.go
+    rm core/pkg/opaprocessor/*_test.go
+
+    # remove tests that use networking
+    substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
+      --replace "TestScanRepository" "SkipScanRepository" \
+      --replace "TestGit" "SkipGit"
+
+    # remove test that requires networking
+    substituteInPlace core/cautils/scaninfo_test.go \
+      --replace "TestSetContextMetadata" "SkipSetContextMetadata"
+  '';
+
   postInstall = ''
-    # Running kubescape to generate completions outputs error warnings
-    # but does not crash and completes successfully
-    # https://github.com/armosec/kubescape/issues/200
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
       --zsh <($out/bin/kubescape completion zsh)
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/kubescape --help
+    $out/bin/kubescape version | grep "v${version}"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";
-    homepage = "https://github.com/armosec/kubescape";
-    changelog = "https://github.com/armosec/kubescape/releases/tag/v${version}";
+    homepage = "https://github.com/kubescape/kubescape";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized

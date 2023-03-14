@@ -9,17 +9,17 @@
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.4.3";
+  version = "0.4.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1r3x9qwl08yscmzvhafc6gsmq84lr17s6p7a1qxr49cmdvjzsc13";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WOtscg02Dq5YNSAfq4pIyH3oUP/5G+cjBwKB6c+SUVA=";
   };
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];
 
   meta = with lib; {
     description = "Generator-based operators for asynchronous iteration";

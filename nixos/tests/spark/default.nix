@@ -3,11 +3,11 @@ import ../make-test-python.nix ({...}: {
 
   nodes = {
     worker = { nodes, pkgs, ... }: {
-      virtualisation.memorySize = 1024;
       services.spark.worker = {
         enable = true;
         master = "master:7077";
       };
+      virtualisation.memorySize = 2048;
     };
     master = { config, pkgs, ... }: {
       services.spark.master = {

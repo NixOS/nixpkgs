@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "rakkess";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "corneliusweig";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qDcSIpIS09OU2tYoBGq7BCXFkf9QWj07RvNKMjghrFU=";
+    sha256 = "sha256-igovWWk8GfNmOS/NbZWfv9kox6QLNIbM09jdvA/lL3A=";
   };
-  vendorSha256 = "sha256-1/8it/djhDjbWqe36VefnRu9XuwAa/qKpZT6d2LGpJ0=";
+  vendorSha256 = "sha256-lVxJ4wFBhHc8JVpkmqphLYPE9Z8Cr6o+aAHvC1naqyE=";
 
   ldflags = [ "-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}" ];
 

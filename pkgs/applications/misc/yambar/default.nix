@@ -1,51 +1,56 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, scdoc
 , alsa-lib
+, bison
 , fcft
+, flex
 , json_c
 , libmpdclient
+, libxcb
 , libyaml
+, meson
+, ninja
+, pipewire
 , pixman
+, pkg-config
+, pulseaudio
+, scdoc
 , tllist
 , udev
 , wayland
-, wayland-scanner
 , wayland-protocols
-, waylandSupport ? false
-# Xorg backend
-, libxcb
+, wayland-scanner
 , xcbutil
 , xcbutilcursor
 , xcbutilerrors
 , xcbutilwm
+, waylandSupport ? true
+, x11Support ? true
 }:
 
 let
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+  inherit (lib) mesonEnable;
 in
-
-stdenv.mkDerivation rec {
+assert (x11Support || waylandSupport);
+stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
-    rev = version;
-    sha256 = "sha256-NzJrlPOkzstMbw37yBTah/uFYezlPB/1hrxCiXduSmc=";
+    rev = finalAttrs.version;
+    hash = "sha256-0bgRnZYLGWJ9PE62i04hPBcgzWyd30DK7AUuejSgta4=";
   };
 
   nativeBuildInputs = [
-    pkg-config
+    bison
+    flex
     meson
     ninja
+    pkg-config
     scdoc
     wayland-scanner
   ];
@@ -56,12 +61,15 @@ stdenv.mkDerivation rec {
     json_c
     libmpdclient
     libyaml
+    pipewire
     pixman
+    pulseaudio
     tllist
     udev
+  ] ++ lib.optionals (waylandSupport) [
     wayland
     wayland-protocols
-  ] ++ lib.optionals (!waylandSupport) [
+  ] ++ lib.optionals (x11Support) [
     xcbutil
     xcbutilcursor
     xcbutilerrors
@@ -71,22 +79,22 @@ stdenv.mkDerivation rec {
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "backend-x11" (!waylandSupport))
-    (mesonFeatureFlag "backend-wayland" waylandSupport)
+    (mesonEnable "backend-x11" x11Support)
+    (mesonEnable "backend-wayland" waylandSupport)
   ];
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/yambar";
-    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${version}";
+    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${finalAttrs.version}";
     description = "Modular status panel for X11 and Wayland";
     longDescription = ''
       yambar is a lightweight and configurable status panel (bar, for short) for
       X11 and Wayland, that goes to great lengths to be both CPU and battery
       efficient - polling is only done when absolutely necessary.
 
-      It has a number of modules that provide information in the form of
-      tags. For example, the clock module has a date tag that contains the
-      current date.
+      It has a number of modules that provide information in the form of tags.
+      For example, the clock module has a date tag that contains the current
+      date.
 
       The modules do not know how to present the information though. This is
       instead done by particles. And the user, you, decides which particles (and
@@ -106,6 +114,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
   };
-}
+})

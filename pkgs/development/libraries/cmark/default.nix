@@ -1,31 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "cmark";
-  version = "0.30.1";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
-    owner = "jgm";
+    owner = "commonmark";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UjDM2N6gCwO94F1nW3qCP9JX42MYAicAuGTKAXMy1Gg=";
+    sha256 = "sha256-/7TzaZYP8lndkfRPgCpBbazUBytVLXxqWHYktIsGox0=";
   };
-
-  patches = [
-    # Fix libcmark.pc paths (should be incorporated next release)
-    (fetchpatch {
-      url = "https://github.com/commonmark/cmark/commit/15762d7d391483859c241cdf82b1615c6b6a5a19.patch";
-      sha256 = "sha256-wdyK1tQolgfiwYMAaWMQZdCSbMDCijug5ykpoDl/HwI=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    # https://github.com/commonmark/cmark/releases/tag/0.30.1
-    # recommends distributions dynamically link
-    "-DCMARK_STATIC=OFF"
-  ];
+  cmakeFlags =
+    # Link the executable with the shared library on system with shared libraries.
+    lib.optional (!stdenv.hostPlatform.isStatic) "-DCMARK_STATIC=OFF"
+    # Do not attempt to build .so library on static platform.
+    ++ lib.optional stdenv.hostPlatform.isStatic "-DCMARK_SHARED=OFF";
 
   doCheck = true;
 
@@ -37,9 +29,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CommonMark parsing and rendering library and program in C";
-    homepage = "https://github.com/jgm/cmark";
+    homepage = "https://github.com/commonmark/cmark";
+    changelog = "https://github.com/commonmark/cmark/raw/${version}/changelog.txt";
     maintainers = [ maintainers.michelk ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
     license = licenses.bsd2;
   };
 }

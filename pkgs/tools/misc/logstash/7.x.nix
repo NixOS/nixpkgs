@@ -1,4 +1,5 @@
-{ elk7Version
+{ config
+, elk7Version
 , enableUnfree ? true
 , lib
 , stdenv
@@ -8,27 +9,25 @@
 , jre
 }:
 
-with lib;
-
 let
-  info = splitString "-" stdenv.hostPlatform.system;
-  arch = elemAt info 0;
-  plat = elemAt info 1;
+  info = lib.splitString "-" stdenv.hostPlatform.system;
+  arch = lib.elemAt info 0;
+  plat = lib.elemAt info 1;
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
-      x86_64-darwin = "0dqm66c89w1nvmbwqzphlqmf7avrycgv1nwd5b0k1z168fj0c3zm";
-      aarch64-linux = "11hjhyb48mjagmvqyxb780n57kr619h6p4adl2vs1zm97g9gslx8";
+      x86_64-linux  = "35e50e05fba0240aa5b138bc1c81f67addaf557701f8df41c682b5bc708f7455";
+      x86_64-darwin = "698b6000788e123b647c988993f710c6d9bc44eb8c8e6f97d6b18a695a61f0a6";
+      aarch64-linux = "69694856fde11836eb1613bf3a2ba31fbdc933f58c8527b6180f6122c8bb528b";
     }
     else {
-      x86_64-linux  = "14b1649avjcalcsi0ffkgznq6d93qdk6m3j0i73mwfqka5d3dvy3";
-      x86_64-darwin = "0ypgdfklr5rxvsnc3czh231pa1z2h70366j1c6q5g64b3xnxpphs";
-      aarch64-linux = "01ainayr8fwwfix7dmxfhhmb23ji65dn4lbjwnj2w0pl0ym9h9w2";
+      x86_64-linux  = "3a2da2e63bc08ee1886db29c80103c669d3ed6960290b8b97d771232769f282e";
+      x86_64-darwin = "655ab873e16257827f884f67b66d62c4da40a895d06206faa435615ad0a56796";
+      aarch64-linux = "235cf57afb619801808d5fe1bff7e01a4a9b29f77723566e5371b5f3b2bf8fad";
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
-    pname = "logstash${optionalString (!enableUnfree) "-oss"}";
+    pname = "logstash${lib.optionalString (!enableUnfree) "-oss"}";
 
 
     src = fetchurl {
@@ -41,8 +40,11 @@ let
     dontStrip = true;
     dontPatchShebangs = true;
 
-    buildInputs = [
+    nativeBuildInputs = [
       makeWrapper
+    ];
+
+    buildInputs = [
       jre
     ];
 
@@ -65,15 +67,20 @@ let
     meta = with lib; {
       description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
       homepage = "https://www.elastic.co/products/logstash";
+      sourceProvenance = with sourceTypes; [
+        fromSource
+        binaryBytecode  # source bundles dependencies as jars
+        binaryNativeCode  # bundled jruby includes native code
+      ];
       license = if enableUnfree then licenses.elastic else licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ wjlroe offline basvandijk ];
     };
     passthru.tests =
-      optionalAttrs (!enableUnfree) (
-        assert this.drvPath == nixosTests.elk.ELK-7.elkPackages.logstash.drvPath;
+      lib.optionalAttrs (config.allowUnfree && enableUnfree) (
+        assert this.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.logstash.drvPath;
         {
-          elk = nixosTests.elk.ELK-7;
+          elk = nixosTests.elk.unfree.ELK-7;
         }
       );
   };

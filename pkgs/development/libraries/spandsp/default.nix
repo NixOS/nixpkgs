@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
   ];
 
   configureFlags = [
@@ -29,6 +30,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
-    updateWalker = true;
   };
 }

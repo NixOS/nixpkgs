@@ -1,18 +1,22 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (self: {
   pname = "durden";
-  version = "0.6.1+unstable=2021-10-15";
+  version = "unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "ab6cdaf19e87b74895a9ab5e1d005a07ea9396a6";
-    hash = "sha256-FxqY1TUgbD/PjQjTZZerb7ngn5nkcqmVwqPvbRAYaqo=";
+    repo = "durden";
+    rev = "bba1bcc8992ea5826fd3b1c798cb271141b7c8e2";
+    hash = "sha256-PK9ObMJ3SbHZLnLjxk4smh5N0WaM/2H/Y+T5vKBdHWA=";
   };
+
+  dontConfigure = true;
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -36,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
-}
+})

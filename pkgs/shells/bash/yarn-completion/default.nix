@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xflbrbwskjqv3knvc8jqygpvfxh5ak66q7w22d1ng8gwrfqzcng";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''

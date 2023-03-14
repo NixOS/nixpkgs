@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , cffi
+, py
 , pytestCheckHook
 , pyserial
 , fetchpatch
@@ -24,6 +25,8 @@ buildPythonPackage rec {
     })
   ];
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   propagatedBuildInputs = [ cffi ];
 
   installCheckPhase = ''
@@ -35,7 +38,7 @@ buildPythonPackage rec {
   # requires hardware access
   pytestFlagsArray = [ "--ignore=test/test_smbus_integration.py" ];
 
-  checkInputs = [ pytestCheckHook pyserial ];
+  nativeCheckInputs = [ py pytestCheckHook pyserial ];
 
   meta = with lib; {
     description = "Python module for SMBus access through Linux I2C /dev interface";

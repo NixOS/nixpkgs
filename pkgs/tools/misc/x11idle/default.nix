@@ -1,9 +1,8 @@
 { lib, stdenv, fetchurl, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation rec {
-
   version = "9.2.4";
-  name = "x11idle-org-${version}";
+  pname = "x11idle-org";
 
   src = fetchurl {
     url = "https://code.orgmode.org/bzg/org-mode/raw/release_${version}/contrib/scripts/x11idle.c";

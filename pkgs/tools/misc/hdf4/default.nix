@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , fixDarwinDylibNames
@@ -12,9 +13,6 @@
 , javaSupport ? false
 , jdk
 }:
-let
-  javabase = "${jdk}/jre/lib/${jdk.architecture}";
-in
 stdenv.mkDerivation rec {
   pname = "hdf";
   version = "4.2.15";
@@ -84,20 +82,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals javaSupport [
     "-DHDF4_BUILD_JAVA=ON"
     "-DJAVA_HOME=${jdk}"
-    "-DJAVA_AWT_LIBRARY=${javabase}/libawt.so"
-    "-DJAVA_JVM_LIBRARY=${javabase}/server/libjvm.so"
   ] ++ lib.optionals szipSupport [
     "-DHDF4_ENABLE_SZIP_ENCODING=ON"
     "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
   ];
 
   doCheck = true;
-
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  '' + lib.optionalString (stdenv.isDarwin) ''
-    export DYLD_LIBRARY_PATH=$(pwd)/bin
-  '';
 
   excludedTests = lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
@@ -106,13 +96,15 @@ stdenv.mkDerivation rec {
     "NC_TEST-nctest"
   ];
 
-  checkPhase = let excludedTestsRegex = if (excludedTests != [])
-    then "(" + (lib.concatStringsSep "|" excludedTests) + ")"
-    else ""; in ''
-    runHook preCheck
-    ctest -E "${excludedTestsRegex}" --output-on-failure
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+    in
+    ''
+      runHook preCheck
+      ctest -E "${excludedTestsRegex}" --output-on-failure
+      runHook postCheck
+    '';
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -128,7 +120,7 @@ stdenv.mkDerivation rec {
       szip
       javaSupport
       jdk
-    ;
+      ;
   };
 
   meta = with lib; {

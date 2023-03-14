@@ -1,13 +1,13 @@
-{ lib, buildDunePackage, alcotest, logs, ocaml_lwt, fmt
+{ lib, buildDunePackage, alcotest, logs, lwt, fmt
 , re, cmdliner
 }:
 
 buildDunePackage {
   pname = "alcotest-lwt";
 
-  inherit (alcotest) version src useDune2;
+  inherit (alcotest) version src;
 
-  propagatedBuildInputs = [ alcotest logs ocaml_lwt fmt ];
+  propagatedBuildInputs = [ alcotest logs lwt fmt ];
 
   doCheck = true;
   checkInputs = [ re cmdliner ];

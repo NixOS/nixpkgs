@@ -6,12 +6,12 @@
 
 buildDunePackage rec {
   pname = "lwt-watcher";
-  version = "0.1";
+  version = "0.2";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kaf7py02i0dn9rvrbzxh4ljfg059wc8xvm093m9wy7lsa68rax9";
+    sha256 = "sha256-35Z73bSzEEgTabNH2cD9lRdDczsyIMZR2ktyKx4aN9k=";
   };
 
   useDune2 = true;

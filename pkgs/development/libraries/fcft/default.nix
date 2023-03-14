@@ -1,38 +1,52 @@
 { stdenv, lib, fetchFromGitea, pkg-config, meson, ninja, scdoc
 , freetype, fontconfig, pixman, tllist, check
-, withHarfBuzz ? true
-, harfbuzz
+# Text shaping methods to enable, empty list disables all text shaping.
+# See `availableShapingTypes` or upstream meson_options.txt for available types.
+, withShapingTypes ? [ "grapheme" "run" ]
+, harfbuzz, utf8proc
+, fcft # for passthru.tests
 }:
 
 let
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+  # Needs to be reflect upstream meson_options.txt
+  availableShapingTypes = [
+    "grapheme"
+    "run"
+  ];
 in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.4.5";
+  version = "3.1.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "0z4bqap88pydkgcxrsvm3fmcyhi9x7z8knliarvdcvqlk7qnyzfh";
+    sha256 = "sha256-3gsaXnflGiGOpIkqDQe5u6x8d18x67/dc4Hh1iU89+o=";
   };
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [ freetype fontconfig pixman tllist ]
-    ++ lib.optional withHarfBuzz harfbuzz;
-  checkInputs = [ check ];
+    ++ lib.optionals (withShapingTypes != []) [ harfbuzz ]
+    ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
+  nativeCheckInputs = [ check ];
 
   mesonBuildType = "release";
-  mesonFlags = [
-    (mesonFeatureFlag "text-shaping" withHarfBuzz)
-  ];
+  mesonFlags = builtins.map (t:
+    lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
+  ) availableShapingTypes;
 
   doCheck = true;
+
+  outputs = [ "out" "doc" "man" ];
+
+  passthru.tests = {
+    noShaping = fcft.override { withShapingTypes = []; };
+    onlyGraphemeShaping = fcft.override { withShapingTypes = [ "grapheme" ]; };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";

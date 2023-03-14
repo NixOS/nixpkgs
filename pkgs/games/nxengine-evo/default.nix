@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchpatch
 , fetchurl
+, fetchFromGitHub
 , cmake
 , libpng
 , SDL2
@@ -10,9 +11,11 @@
 stdenv.mkDerivation rec {
   pname = "nxengine-evo";
   version = "2.6.4";
-  src = fetchurl {
-    url = "https://github.com/nxengine/nxengine-evo/archive/v${version}.tar.gz";
-    sha256 = "1xir74l0vrzrpyl7sfqfxp083dakbix26hd0arwf2y57w1mbjas8";
+  src = fetchFromGitHub {
+    owner = "nxengine";
+    repo = "nxengine-evo";
+    rev = "v${version}";
+    sha256 = "sha256-krK2b1E5JUMxRoEWmb3HZMNSIHfUUGXSpyb4/Zdp+5A=";
   };
   assets = fetchurl {
     url = "https://github.com/nxengine/nxengine-evo/releases/download/v${version}/NXEngine-v${version}-Linux.tar.xz";

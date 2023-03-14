@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2021-11-05";
+  version = "2023-02-03";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
+    sha256 = "sha256-W3gGn4ioTg/iOWTa5hfwx6FWzpFilpG8IXwaO5/YAvk=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -36,7 +36,8 @@ stdenvNoCC.mkDerivation rec {
     description = "A flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
     license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    # darwin systems use case-insensitive filesystems that cause hash mismatches
+    platforms = subtractLists platforms.darwin platforms.unix;
     maintainers = with maintainers; [ figsoda ];
   };
 }

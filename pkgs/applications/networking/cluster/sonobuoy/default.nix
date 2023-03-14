@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
-let rev = "08bb70f407d0334fa80b9dbc6850987f16eb27d3";
+let rev = "bd5465d6b2b2b92b517f4c6074008d22338ff509";
 in
 buildGoModule rec {
   pname = "sonobuoy";
-  version = "0.54.0"; # Do not forget to update `rev` above
+  version = "0.56.14"; # Do not forget to update `rev` above
 
   ldflags =
     let t = "github.com/vmware-tanzu/sonobuoy";
@@ -20,10 +20,10 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
     rev = "v${version}";
-    sha256 = "sha256-Gtpky+zkFKukIIHF91F4uBZjaguk8KlOEVhSwTj+ccs=";
+    sha256 = "sha256-YiVCdAdwdK9PcQ6VQQNAjLQq2X54vJmZfbHRjV2d8VQ=";
   };
 
-  vendorSha256 = "sha256-Lkwv95BZa7nFEXk1KcwXIRVpj9DZmqnWjkdrZkO/k24=";
+  vendorSha256 = "sha256-Fqxkyl9AKZ7H4QSp2V/yztpeXHt57+LjpzzGtOPndX0=";
 
   subPackages = [ "." ];
 

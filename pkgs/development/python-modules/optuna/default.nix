@@ -9,7 +9,7 @@
 , xgboost
 , mpi4py
 , lightgbm
-, Keras
+, keras
 , mxnet
 , scikit-optimize
 , tensorflow
@@ -30,17 +30,17 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "2.10.0";
+  version = "3.0.5";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0fha0pwxq6n3mbpvpz3vk8hh61zqncj5cnq063kzfl5d8rd48vcd";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-TfAWL81a7GIePkPm+2uXinBP5jwnhWCZPp5GJjXOC6g=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     mock
     bokeh
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     xgboost
     mpi4py
     lightgbm
-    Keras
+    keras
     mxnet
     scikit-optimize
     tensorflow
@@ -70,10 +70,10 @@ buildPythonPackage rec {
     typing
   ];
 
-  configurePhase = if !(pythonOlder "3.5") then ''
+  configurePhase = lib.optionalString (! pythonOlder "3.5") ''
     substituteInPlace setup.py \
       --replace "'typing'," ""
-  '' else "";
+  '';
 
   checkPhase = ''
     pytest --ignore tests/test_cli.py \

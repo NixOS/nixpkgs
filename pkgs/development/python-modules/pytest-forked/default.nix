@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
+, setuptools
 , setuptools-scm
+, wheel
 , py
 , pytest
 , pytestCheckHook
@@ -9,14 +12,26 @@
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "1.3.0";
+  version = "1.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6aa9ac7e00ad1a539c41bec6d21011332de671e938c7637378ec9710204e37ca";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-forked";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-owkGwF5WQ17/CXwTsIYJ2AgktekRB4qhtsDxR0LCI/k=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     pytest
@@ -26,9 +41,15 @@ buildPythonPackage rec {
     py
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    py
+    pytestCheckHook
+  ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
+    changelog = "https://github.com/pytest-dev/pytest-forked/blob/${src.rev}/CHANGELOG.rst";
     description = "Run tests in isolated forked subprocesses";
     homepage = "https://github.com/pytest-dev/pytest-forked";
     license = lib.licenses.mit;

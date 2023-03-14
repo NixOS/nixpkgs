@@ -19,8 +19,8 @@
 , urllib3
 , wget
 , deepdiff
-, pytestCheckHook
 , pytest-cov
+, pytestCheckHook
 , pythonOlder
 , websocket-client
 }:
@@ -28,13 +28,15 @@
 buildPythonPackage rec {
   pname = "runway-python";
   version = "0.6.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "runwayml";
     repo = "model-sdk";
     rev = version;
-    sha256 = "1ww2wai1qnly8i7g42vhkkbs4yp7wi9x4fjdxsg9fl3izjra0zs2";
+    hash = "sha256-Qn+gsvxxUJee7k060lPk53qi15xwC/JORJ5aHKLigvM=";
   };
 
   propagatedBuildInputs = [
@@ -54,32 +56,39 @@ buildPythonPackage rec {
     unidecode
     urllib3
     wget
-  ];
+  ] ++ urllib3.optional-dependencies.secure;
 
-  pythonImportsCheck = [
-    "runway"
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
-    pytestCheckHook
     pytest-cov
+    pytestCheckHook
     websocket-client
   ];
 
+  postPatch = ''
+    # Build fails with:
+    # ERROR: No matching distribution found for urllib3-secure-extra; extra == "secure"
+    substituteInPlace requirements.txt \
+      --replace "urllib3[secure]>=1.25.7" "urllib3"
+  '';
+
   disabledTests = [
-    # these tests require network
+    # These tests require network
     "test_file_deserialization_remote"
     "test_file_deserialization_absolute_directory"
     "test_file_deserialization_remote_directory"
     # Fails with a decoding error at the moment
     "test_inference_async"
   ] ++ lib.optionals (pythonAtLeast "3.9") [
-     # AttributeError: module 'base64' has no attribute 'decodestring
-     # https://github.com/runwayml/model-sdk/issues/99
-     "test_image_serialize_and_deserialize"
-     "test_segmentation_serialize_and_deserialize_colormap"
-     "test_segmentation_serialize_and_deserialize_labelmap"
+    # AttributeError: module 'base64' has no attribute 'decodestring
+    # https://github.com/runwayml/model-sdk/issues/99
+    "test_image_serialize_and_deserialize"
+    "test_segmentation_serialize_and_deserialize_colormap"
+    "test_segmentation_serialize_and_deserialize_labelmap"
+  ];
+
+  pythonImportsCheck = [
+    "runway"
   ];
 
   meta = {

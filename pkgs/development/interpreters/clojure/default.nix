@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.3.1029";
+  version = "1.11.1.1252";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "14c08xva1r6sl3h78vhckwx5dd8kqwi7457prygh9330b7r8caa2";
+    sha256 = "sha256-ZQFhN/vO1L1kKmEC6wKT74qimR6ctkdoXrCFujobX6A=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
     # `jq -r '.[0].name'` results in `v0.0`
     readonly latest_version="$(curl \
-      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
       -s "https://api.github.com/repos/clojure/brew-install/tags" \
       | jq -r '.[1].name')"
 
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hdl-dump";
-  version = "unstable-2021-08-20";
+  version = "unstable-2022-09-19";
 
   src = fetchFromGitHub {
     owner = "ps2homebrew";
     repo = pname;
-    rev = "1e760d7672dc12a36c09690b8c9b20d6642a2926";
-    sha256 = "sha256-NMExi2pUyj8vRn9beT2YvnEogRw/xzgqE+roaZ/vNZs=";
+    rev = "87d3099d2ba39a15e86ebc7dc725e8eaa49f2d5f";
+    hash = "sha256-eBqF4OGEaLQXQ4JMtD/Yn+f97RzKVsnC+4oyiEhLTUM=";
   };
 
   makeFlags = [ "RELEASE=yes" ];

@@ -1,11 +1,13 @@
-{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre
+{ stdenv, nixosTests, lib, pkg-config, jansson, pcre, libxcrypt
+, expat, zlib
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
-, systemd, withSystemd ? stdenv.isLinux
+, systemd, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , libcap, withCap ? stdenv.isLinux
 , python2, python3, ncurses
 , ruby, php
+, makeWrapper, fetchFromGitHub
 }:
 
 let php-embed = php.override {
@@ -59,11 +61,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "uwsgi";
-  version = "2.0.19.1";
+  version = "2.0.21";
 
-  src = fetchurl {
-    url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0256v72b7zr6ds4srpaawk1px3bp0djdwm239w3wrxpw7dzk1gjn";
+  src = fetchFromGitHub {
+    owner = "unbit";
+    repo = "uwsgi";
+    rev = version;
+    sha256 = "sha256-TUASYDyG+p1tlhmqi+ivaC7aW6UZBrPTFQUTYys5ICE=";
   };
 
   patches = [
@@ -71,9 +75,10 @@ stdenv.mkDerivation rec {
         ./additional-php-ldflags.patch
   ];
 
-  nativeBuildInputs = [ python3 pkg-config ];
+  nativeBuildInputs = [ python3 pkg-config makeWrapper ];
 
-  buildInputs =  [ jansson pcre ]
+  buildInputs =  [ jansson pcre libxcrypt ]
+              ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ expat zlib ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
               ++ lib.optional withCap libcap
@@ -96,6 +101,7 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" \
         --replace pkg-config "$PKG_CONFIG"
     done
+    sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py
   '';
 
   configurePhase = ''
@@ -122,6 +128,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 uwsgi $out/bin/uwsgi
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
+  '';
+
+  postFixup = lib.optionalString (builtins.any (x: x.name == "php") needed)
+  ''
+    wrapProgram $out/bin/uwsgi --set PHP_INI_SCAN_DIR ${php-embed}/lib
   '';
 
   meta = with lib; {

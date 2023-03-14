@@ -3,10 +3,11 @@
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-1.5.6";
+  pname = "libgcrypt";
+  version = "1.5.6";
 
   src = fetchurl {
-    url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
+    url = "mirror://gnupg/libgcrypt/libgcrypt-${version}.tar.bz2";
     sha256 = "0ydy7bgra5jbq9mxl5x031nif3m6y3balc6ndw2ngj11wnsjc61h";
   };
 
@@ -37,7 +38,6 @@ stdenv.mkDerivation rec {
     description = "General-pupose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    repositories.git = "git://git.gnupg.org/libgcrypt.git";
     knownVulnerabilities = [
       "CVE-2014-3591"
       "CVE-2015-0837"

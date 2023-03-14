@@ -1,7 +1,22 @@
-{ fetchNimble }:
+{ lib, buildNimPackage, fetchFromGitHub }:
 
-fetchNimble {
+buildNimPackage rec {
   pname = "flatty";
-  version = "0.2.1";
-  hash = "sha256-TqNnRh2+i6n98ktLRVQxt9CVw17FGLNYq29rJoMus/0=";
+  version = "0.3.4";
+
+  src = fetchFromGitHub {
+    owner = "treeform";
+    repo = pname;
+    rev = version;
+    hash = "sha256-ZmhjehmEJHm5qNlsGQvyYLajUdwhWt1+AtRppRrNtgA=";
+  };
+
+  doCheck = true;
+
+  meta = with lib;
+    src.meta // {
+      description = "Tools and serializer for plain flat binary files";
+      license = [ licenses.mit ];
+      maintainers = [ maintainers.ehmry ];
+    };
 }

@@ -6,9 +6,11 @@
 buildDunePackage {
   pname = "mirage-crypto-rng-async";
 
-  inherit (mirage-crypto) useDune2 version minimumOCamlVersion src;
+  inherit (mirage-crypto) version src;
 
-  nativeBuildInputs = [
+  duneVersion = "3";
+
+  buildInputs = [
     dune-configurator
   ];
 
@@ -18,6 +20,8 @@ buildDunePackage {
     mirage-crypto
     mirage-crypto-rng
   ];
+
+  strictDeps = true;
 
   meta = mirage-crypto.meta // {
     description = "Feed the entropy source in an Async-friendly way";

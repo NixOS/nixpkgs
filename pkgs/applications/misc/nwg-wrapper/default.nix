@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
-  version = "0.0.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-LkAB0MrwQxP3X7glfSnI0GZMv8tjaeSOz7WSOW33wuo=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GKDAdjO67aedCEFHKDukQ+oPMomTPwFE/CvJu112fus=";
   };
 
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
@@ -16,9 +16,6 @@ python3Packages.buildPythonPackage rec {
   buildInputs = [ gtk3 gtk-layer-shell ];
 
   propagatedBuildInputs = with python3Packages; [ i3ipc pygobject3 ];
-
-  # ValueError: Namespace GtkLayerShell not available
-  strictDeps = false;
 
   # No tests
   doCheck = false;

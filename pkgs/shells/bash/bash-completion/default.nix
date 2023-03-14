@@ -20,12 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
   # tests are super flaky unfortunately, and regularily break.
   # let's disable them for now.
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     # perl is assumed by perldoc completion
     perl
     # ps assumed to exist by gdb, killall, pgrep, pidof,
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   # - ignore test_screen because it assumes vt terminals exist
   checkPhase = ''
     pytest . \
-      ${lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) "--ignore=test/t/test_gcc.py"} \
+      ${lib.optionalString stdenv.hostPlatform.isAarch "--ignore=test/t/test_gcc.py"} \
       --ignore=test/t/test_chsh.py \
       --ignore=test/t/test_ether_wake.py \
       --ignore=test/t/test_ifdown.py \

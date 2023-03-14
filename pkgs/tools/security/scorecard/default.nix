@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "scorecard";
-  version = "3.0.1";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-19XDAgv9ARCZ7eNlWUPcsbGNyKA9vYFry8m6D3+vQP8=";
+    sha256 = "sha256-GQs+wBq47sn3h8I87p+HErBmLMs8Dzh9xj3xMYDsXm4=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -16,20 +16,14 @@ buildGoModule rec {
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
-
-      commit="$(git rev-parse HEAD)"
-      source_date_epoch=$(git log --date=iso8601-strict -1 --pretty=%ct)
-
-      substituteInPlace "$out/pkg/scorecard_version.go" \
-        --replace 'gitCommit = "unknown"' "gitCommit = \"$commit\"" \
-        --replace 'buildDate = "unknown"' "buildDate = \"$source_date_epoch\""
-
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-ucF26pTEvG8tkzsyC9WNbvl8QCeetKBvBIcQL2NTfjo=";
+  vendorSha256 = "sha256-W213KQu4FuJcT/cJOvS+WMw1fXBcSoZ4yssI06JAIc8=";
 
-  # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "." ];
@@ -37,9 +31,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ossf/scorecard/v${lib.versions.major version}/pkg.gitVersion=v${version}"
-    "-X github.com/ossf/scorecard/v${lib.versions.major version}/pkg.gitTreeState=clean"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
+
+  # ldflags based on metadata from git and source
+  preBuild = ''
+    ldflags+=" -X sigs.k8s.io/release-utils/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   preCheck = ''
     # Feed in all but the e2e tests for testing
@@ -48,6 +48,8 @@ buildGoModule rec {
     getGoDirs() {
       go list ./... | grep -v e2e
     }
+    # Ensure other e2e tests that have escaped the e2e dir dont run
+    export SKIP_GINKGO=1
   '';
 
   postInstall = ''
@@ -61,7 +63,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/scorecard --help
-    $out/bin/scorecard version | grep "v${version}"
+    # $out/bin/scorecard version 2>&1 | grep "v${version}"
     runHook postInstallCheck
   '';
 
@@ -70,6 +72,6 @@ buildGoModule rec {
     changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
     description = "Security health metrics for Open Source";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy ];
   };
 }

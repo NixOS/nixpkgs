@@ -1,22 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , mox3
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aprslib";
-  version = "0.6.47";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
     repo = "aprs-python";
     rev = "v${version}";
-    sha256 = "1569v74ym2r8vxx3dnjcs5fr7rdrfb0i9sycny5frw2zgms4ag6b";
+    hash = "sha256-2bYTnbJ8wF/smTpZ2tV+3ZRae7FpbNBtXoaR2Sc9Pek=";
   };
 
-  checkInputs = [
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/rossengeorgiev/aprs-python/commit/c2a0f18ce028a4cced582567a73d57f0d03cd00f.patch";
+      hash = "sha256-uxiLIagz1PIUUa6/qdBW15yhm/0QXqznVzZnzUVCWuQ=";
+    })
+  ];
+
+  nativeCheckInputs = [
     mox3
     pytestCheckHook
   ];

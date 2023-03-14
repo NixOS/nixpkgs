@@ -1,19 +1,19 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, CoreServices, Foundation, rust, libiconv }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, Cocoa, CoreServices, Foundation, rust, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
-  version = "8.1.1";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
-    owner = "passcod";
+    owner = "watchexec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wv1aD20VHar0V7oKOEKIX3klGVXauMXU4vL+NgNeZPk=";
+    hash = "sha256-YwiTzIO60ct076vMoK9BHKa65Qet2PAvPRwnZcjDgcM=";
   };
 
-  cargoSha256 = "sha256-qhCDrZAG1FcPYKMj2C/m+5Dplko4Tpp1hGpRdGOK/Ds=";
+  cargoHash = "sha256-BzcKWQSB94H3XOsbwNvJoAHlZwkJvLABIrfFh9Ugfig=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa CoreServices Foundation libiconv ];
 
   # `test with_cargo` tries to call cargo-watch as a cargo subcommand
   # (calling cargo-watch with command `cargo watch`)

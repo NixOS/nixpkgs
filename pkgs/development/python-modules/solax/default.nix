@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "0.2.8";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bOpDrbRbdsb4XgEksAQG4GE26XSTwGAECq9Fh//zoYc=";
+    sha256 = "sha256-lqzFY2Rfmc/9KUuFfq07DZkIIS2cJ1JqZ/8gP3+pu5U=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ aiohttp voluptuous ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-cov
     pytest-httpserver

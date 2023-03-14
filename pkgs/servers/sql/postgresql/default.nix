@@ -3,27 +3,26 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata
+      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
+      , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
-      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
+      , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
+      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
-
-      # for postgreql.pkgs
+      # for postgresql.pkgs
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, sha256, psqlSchema,
+      , version, hash, psqlSchema,
 
       # for tests
       nixosTests, thisAttr
     }:
   let
     atLeast = lib.versionAtLeast version;
-    icuEnabled = atLeast "10";
     lz4Enabled = atLeast "14";
+    zstdEnabled = atLeast "15";
 
   in stdenv.mkDerivation rec {
     pname = "postgresql";
@@ -31,7 +30,7 @@ let
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
     hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
@@ -39,15 +38,23 @@ let
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
-    buildInputs =
-      [ zlib readline openssl libxml2 ]
-      ++ lib.optionals icuEnabled [ icu ]
+    buildInputs = [
+      zlib
+      readline
+      openssl
+      libxml2
+      icu
+    ]
       ++ lib.optionals lz4Enabled [ lz4 ]
+      ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+    ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
@@ -55,7 +62,7 @@ let
 
     buildFlags = [ "world" ];
 
-    NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+    env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
     # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
     preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
@@ -63,35 +70,36 @@ let
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
+      "--with-icu"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
-    ] ++ lib.optionals icuEnabled [ "--with-icu" ]
-      ++ lib.optionals lz4Enabled [ "--with-lz4" ]
-      ++ lib.optionals gssSupport [ "--with-gssapi" ];
+    ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
+      ++ lib.optionals zstdEnabled [ "--with-zstd" ]
+      ++ lib.optionals gssSupport [ "--with-gssapi" ]
+      ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
-    patches =
-      [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
-        (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
-        (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
-        ./patches/specify_pkglibdir_at_runtime.patch
-        ./patches/findstring.patch
-      ]
-      ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
+    patches = [
+      ./patches/disable-resolve_symlinks.patch
+      ./patches/less-is-more.patch
+      ./patches/hardcode-pgxs-path.patch
+      ./patches/specify_pkglibdir_at_runtime.patch
+      ./patches/findstring.patch
+    ] ++ lib.optionals stdenv.isLinux [
+      (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
+    ];
 
     installTargets = [ "install-world" ];
 
     LC_ALL = "C";
 
-    postConfigure =
-      let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
-        ''
-          # Hardcode the path to pgxs so pg_config returns the path in $out
-          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $out/lib
-        '';
+    postPatch = ''
+      # Hardcode the path to pgxs so pg_config returns the path in $out
+      substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
+    '';
 
     postInstall =
       ''
@@ -164,8 +172,6 @@ let
       license     = licenses.postgresql;
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ];
       platforms   = platforms.unix;
-      knownVulnerabilities = optional (!atLeast "9.4")
-        "PostgreSQL versions older than 9.4 are not maintained anymore!";
     };
   };
 
@@ -176,7 +182,7 @@ let
         postgresql.lib
         postgresql.man   # in case user installs this into environment
     ];
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
 
     # We include /bin to ensure the $out/bin directory is created, which is
@@ -186,7 +192,7 @@ let
 
     # Note: the duplication of executables is about 4MB size.
     # So a nicer solution was patching postgresql to allow setting the
-    # libdir explicitely.
+    # libdir explicitly.
     postBuild = ''
       mkdir -p $out/bin
       rm $out/bin/{pg_config,postgres,pg_ctl}
@@ -200,58 +206,48 @@ let
 
 in self: {
 
-  postgresql_9_6 = self.callPackage generic {
-    version = "9.6.23";
-    psqlSchema = "9.6";
-    sha256 = "1fa735lrmv2vrfiixg73nh024gxlagcbrssklvgwdf0s82cgfjd8";
-    this = self.postgresql_9_6;
-    thisAttr = "postgresql_9_6";
-    inherit self;
-  };
-
-  postgresql_10 = self.callPackage generic {
-    version = "10.18";
-    psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "009qpb02bq0rx0aaw5ck70gk07xwparhfxvlfimgihw2vhp7qisp";
-    this = self.postgresql_10;
-    thisAttr = "postgresql_10";
-    inherit self;
-    icu = self.icu67;
-  };
-
   postgresql_11 = self.callPackage generic {
-    version = "11.13";
+    version = "11.19";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "0j5wnscnxa3sx8d39s55654df8aikmvkihfb0a02hrgmyygnihx0";
+    hash = "sha256-ExCeK3HxE5QFwnIB2jczphrOcu4cIo2cnwMg4GruFMI=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.8";
+    version = "12.14";
     psqlSchema = "12";
-    sha256 = "0an6v5bsp26d276wbdx76lsq6cq86hgi2fmkzwawnk63j3h02r72";
+    hash = "sha256-eFYQI304LIQtNW40cTjljAb/6uJA5swLUqxevMMNBD4=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.4";
+    version = "13.10";
     psqlSchema = "13";
-    sha256 = "1kf0gcsrl5n25rjlvkh87aywmn28kbwvakm5c7j1qpr4j01y34za";
+    hash = "sha256-W7z1pW2FxE86iwWPtGhi/0nLyRg00H4pXQLm3jwhbfI=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
   };
 
   postgresql_14 = self.callPackage generic {
-    version = "14.0";
+    version = "14.7";
     psqlSchema = "14";
-    sha256 = "08m14zcrcvc2i0xl10p0wgzycsmfmk27gny40a8mwdx74s8xfapf";
+    hash = "sha256-zvYPAJj6gQHBVG9CVORbcir1QxM3lFs3ryBwB2MNszE=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
+    inherit self;
+  };
+
+  postgresql_15 = self.callPackage generic {
+    version = "15.2";
+    psqlSchema = "15";
+    hash = "sha256-maIXH8PWtbX1a3V6ejy4XVCaOOQnOAXe8jlB7SuEaMc=";
+    this = self.postgresql_15;
+    thisAttr = "postgresql_15";
     inherit self;
   };
 }

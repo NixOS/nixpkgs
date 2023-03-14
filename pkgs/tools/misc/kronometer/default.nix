@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "kronometer";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "05hs8729a3aqjpwmn2xdf2sriacrll4sj4ax3lm4s1ravj09n9bm";
+    sha256 = "sha256-dbnhom8PRo0Bay3DzS2P0xQSrJaMXD51UadQL3z6xHY=";
   };
 
   meta = with lib; {

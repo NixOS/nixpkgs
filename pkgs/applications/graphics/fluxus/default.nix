@@ -17,31 +17,12 @@
 , ode
 , openal
 , openssl
-, racket
+, racket_7_9
 , sconsPackages
 , zlib
 }:
 let
-  libs = [
-    alsa-lib
-    bzip2
-    fftw
-    freeglut
-    freetype
-    glew
-    libjack2
-    libGL
-    libGLU
-    libjpeg
-    liblo
-    libpng
-    libsndfile
-    libtiff
-    ode
-    openal
-    openssl
-    zlib
-  ];
+  racket = racket_7_9;
 in
 stdenv.mkDerivation rec {
   pname = "fluxus";
@@ -67,16 +48,15 @@ stdenv.mkDerivation rec {
     ode
     openal
     openssl.dev
-    racket
+    racket_7_9
   ];
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ sconsPackages.scons_latest ];
 
   patches = [ ./fix-build.patch ];
   sconsFlags = [
     "RacketPrefix=${racket}"
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
-    "LIBPATH=${lib.makeLibraryPath libs}"
     "DESTDIR=build"
   ];
   configurePhase = ''

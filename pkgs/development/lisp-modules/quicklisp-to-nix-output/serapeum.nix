@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "serapeum";
-  version = "20211020-git";
+  version = "20211209-git";
 
   description = "Utilities beyond Alexandria.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."closer-mop" args."fare-quasiquote" args."fare-quasiquote-extras" args."fare-quasiquote-optima" args."fare-quasiquote-readtable" args."fare-utils" args."global-vars" args."introspect-environment" args."iterate" args."lisp-namespace" args."named-readtables" args."parse-declarations-1_dot_0" args."parse-number" args."split-sequence" args."string-case" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_quasiquote" args."trivia_dot_trivial" args."trivial-cltl2" args."trivial-features" args."trivial-file-size" args."trivial-garbage" args."trivial-macroexpand-all" args."type-i" args."uiop" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/serapeum/2021-10-20/serapeum-20211020-git.tgz";
-    sha256 = "1lax10p8apgsm09wcnmxn1p52hgngwp8j6dsk5y8r2dj7h73529v";
+    url = "http://beta.quicklisp.org/archive/serapeum/2021-12-09/serapeum-20211209-git.tgz";
+    sha256 = "19ndbi69b60rxh1jvs7jrwg6bgzpkrfd22cnhyd2mir4ybmrdllh";
   };
 
   packageName = "serapeum";
@@ -19,9 +19,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM serapeum DESCRIPTION Utilities beyond Alexandria. SHA256
-    1lax10p8apgsm09wcnmxn1p52hgngwp8j6dsk5y8r2dj7h73529v URL
-    http://beta.quicklisp.org/archive/serapeum/2021-10-20/serapeum-20211020-git.tgz
-    MD5 2f15c5635215fd23ddd43dba01647f82 NAME serapeum FILENAME serapeum DEPS
+    19ndbi69b60rxh1jvs7jrwg6bgzpkrfd22cnhyd2mir4ybmrdllh URL
+    http://beta.quicklisp.org/archive/serapeum/2021-12-09/serapeum-20211209-git.tgz
+    MD5 be358e1693fd0883042d849199ab72d1 NAME serapeum FILENAME serapeum DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME closer-mop FILENAME closer-mop)
@@ -60,4 +60,4 @@ rec {
      trivia.level2 trivia.quasiquote trivia.trivial trivial-cltl2
      trivial-features trivial-file-size trivial-garbage trivial-macroexpand-all
      type-i uiop)
-    VERSION 20211020-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20211209-git SIBLINGS NIL PARASITES NIL) */

@@ -1,15 +1,16 @@
 { lib
 , fetchPypi
+, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
 , hypothesis
 , pytest
+, typing-extensions
 , blas
 , lapack
 , writeTextFile
 , cython
-, setuptoolsBuildHook
 , pythonOlder
 }:
 
@@ -39,14 +40,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.21.2";
-  format = "pyproject.toml";
+  version = "1.23.5";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "423216d8afc5923b15df86037c6053bf030d15cc9e3224206ef868c2d63dd6dc";
+    extension = "tar.gz";
+    hash = "sha256-Gxdm1vOXwYFT1AAV3fx53bcVyrrcBNLSKNTlqLxN7Ro=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -56,7 +57,7 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
 
   # we default openblas to build with 64 threads
@@ -72,20 +73,18 @@ in buildPythonPackage rec {
     ln -s ${cfg} site.cfg
   '';
 
-  # Workaround flakey compiler feature detection
-  # https://github.com/numpy/numpy/issues/19624
-  hardeningDisable = [ "strictoverflow" ];
-
   enableParallelBuilding = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    hypothesis
+    # "hypothesis" indirectly depends on numpy to build its documentation.
+    (hypothesis.override { enableDocumentation = false; })
+    typing-extensions
   ];
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck

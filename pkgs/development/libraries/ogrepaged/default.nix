@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, ois, ogre, libX11, boost }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, ois, ogre, libX11, boost }:
 
 stdenv.mkDerivation rec {
   pname = "ogre-paged";
   version = "1.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/RigsOfRods/ogre-pagedgeometry/archive/v${version}.tar.gz";
-    sha256 = "17j7rw9wbkynxbhm2lay3qgjnnagb2vd5jn9iijnn2lf8qzbgy82";
+  src = fetchFromGitHub {
+    owner = "RigsOfRods";
+    repo = "ogre-pagedgeometry";
+    rev = "v${version}";
+    sha256 = "sha256-EwtTV8cbhDv0Bgj7i3qgq4hLETwd5B2GFEegwozlY9U=";
   };
 
   patches = [

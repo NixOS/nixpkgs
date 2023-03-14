@@ -28,7 +28,7 @@ buildPythonPackage rec {
     python-multipart
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpx
     pytest-asyncio
     pytestCheckHook

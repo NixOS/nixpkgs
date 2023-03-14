@@ -7,13 +7,16 @@
 , libva
 , libpciaccess
 , intel-gmmlib
+, libdrm
 , enableX11 ? stdenv.isLinux
 , libX11
+  # for passhtru.tests
+, pkgsi686Linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "21.4.1";
+  version = "22.6.4";
 
   outputs = [ "out" "dev" ];
 
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "1gf3gkxr68n8ca5bk269w469jykq90z8d3a9v0gag02cl1d6ca3i";
+    sha256 = "sha256-0Il51cWqgJwtsnsltHey5Sp+7RYUpqo4GtTRzrzw09A=";
   };
 
   patches = [
@@ -37,19 +40,24 @@ stdenv.mkDerivation rec {
     "-DLIBVA_DRIVERS_PATH=${placeholder "out"}/lib/dri"
     # Works only on hosts with suitable CPUs.
     "-DMEDIA_RUN_TEST_SUITE=OFF"
+    "-DMEDIA_BUILD_FATAL_WARNINGS=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libva libpciaccess intel-gmmlib ]
+  buildInputs = [ libva libpciaccess intel-gmmlib libdrm ]
     ++ lib.optional enableX11 libX11;
 
   postFixup = lib.optionalString enableX11 ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libX11 ]}" \
       $out/lib/dri/iHD_drv_video.so
   '';
+
+  passthru.tests = {
+    inherit (pkgsi686Linux) intel-media-driver;
+  };
 
   meta = with lib; {
     description = "Intel Media Driver for VAAPI — Broadwell+ iGPUs";
@@ -62,6 +70,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
     license = with licenses; [ bsd3 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos jfrankenau SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

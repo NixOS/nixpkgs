@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, pcre, libxkbcommon, epoxy
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, pcre, libxkbcommon, libepoxy
 , gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n4xiic8lqnv3mqi7wpdv866gyyakax71gffv3n9427rmcld465i";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
+  env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   nativeBuildInputs = [
     cmake
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    poppler pcre libxkbcommon epoxy
+    poppler pcre libxkbcommon libepoxy
     freetype gtk3
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
   ];

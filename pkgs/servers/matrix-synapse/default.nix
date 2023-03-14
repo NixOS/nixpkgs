@@ -1,43 +1,48 @@
-{ lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux, nixosTests
+{ lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
+, nixosTests
 , enableRedis ? true
 , callPackage
 }:
 
 let
-py = python3.override {
-  packageOverrides = self: super: {
-    frozendict = super.frozendict.overridePythonAttrs (oldAttrs: rec {
-      version = "1.2";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
-      };
-      doCheck = false;
-    });
-  };
-};
-in
-
-with py.pkgs;
-
-let
-  plugins = py.pkgs.callPackage ./plugins { };
+  plugins = python3.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.46.0";
+  version = "1.78.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-RcB+RSb/LZE8Q+UunyrYh28S7c7VsTmqg4mJIDVCX5U=";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "synapse";
+    rev = "v${version}";
+    hash = "sha256-UMP/JQ77qGfAQ+adLBLB8NFI2OiuwjILEbEecEDcK1A=";
   };
 
-  patches = [
-    ./0001-setup-add-homeserver-as-console-script.patch
-    ./0002-Expose-generic-worker-as-binary-under-NixOS.patch
-  ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-UTuMvTWfOlFlL+4qsCEfVljnkeylBKq0wd5FlAOYAFQ=";
+  };
+
+  postPatch = ''
+    # Remove setuptools_rust from runtime dependencies
+    # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
+    sed -i '/^setuptools_rust =/d' pyproject.toml
+    sed -i 's/^frozendict = ">=1,!=2.1.2,<2.3.5"/frozendict = ">=1,!=2.1.2,<2.3.6"/g' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+    rustPlatform.cargoSetupHook
+    setuptools-rust
+  ] ++ (with rustPlatform.rust; [
+    cargo
+    rustc
+  ]);
 
   buildInputs = [ openssl ];
 
@@ -52,6 +57,7 @@ buildPythonApplication rec {
     jinja2
     jsonschema
     lxml
+    matrix-common
     msgpack
     netaddr
     phonenumbers
@@ -60,7 +66,8 @@ buildPythonApplication rec {
     psutil
     psycopg2
     pyasn1
-    pyjwt
+    pydantic
+    pyicu
     pymacaroons
     pynacl
     pyopenssl
@@ -77,18 +84,25 @@ buildPythonApplication rec {
   ] ++ lib.optional enableSystemd systemd
     ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
-  checkInputs = [ mock parameterized openssl ];
+  nativeCheckInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${py.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+    runHook preCheck
+
+    # remove src module, so tests use the installed module instead
+    rm -rf ./synapse
+
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+
+    runHook postCheck
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
   passthru.plugins = plugins;
   passthru.tools = tools;
-  passthru.python = py;
+  passthru.python = python3;
 
   meta = with lib; {
     homepage = "https://matrix.org";

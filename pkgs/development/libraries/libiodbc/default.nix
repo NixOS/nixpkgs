@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libiodbc";
-  version = "3.52.12";
+  version = "3.52.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/iodbc/${pname}-${version}.tar.gz";
-    sha256 = "0qpvklgr1lcn5g8xbz7fbc9rldqf9r8s6xybhqj20m4sglxgziai";
+    sha256 = "sha256-x0VB4zJ/yaHHzPEDZFRxxnvAFFQtcPVyR26wfAst1Dw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "iODBC driver manager";
-    homepage = "http://www.iodbc.org";
+    homepage = "https://www.iodbc.org";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

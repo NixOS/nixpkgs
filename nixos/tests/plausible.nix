@@ -4,10 +4,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = [ ma27 ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
     services.plausible = {
       enable = true;
+      releaseCookiePath = "${pkgs.runCommand "cookie" { } ''
+        ${pkgs.openssl}/bin/openssl rand -base64 64 >"$out"
+      ''}";
       adminUser = {
         email = "admin@example.org";
         passwordFile = "${pkgs.writeText "pwd" "foobar"}";

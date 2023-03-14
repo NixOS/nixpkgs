@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xcb-imdkit";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "xcb-imdkit";
     rev = version;
-    sha256 = "sha256-IPuTRSgmrnCJRgGWcE4JRaxd0sGCcHrKRnn2B1OdDMU=";
+    sha256 = "sha256-jbIhcxZzGlklpoMjLAYkKlh/CBE8R4jARO6nfnzSXOQ=";
   };
 
   nativeBuildInputs = [

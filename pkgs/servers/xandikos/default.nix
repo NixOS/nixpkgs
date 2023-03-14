@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     rev = "v${version}";
-    sha256 = "sha256-Epy6NWtRY2Oj4MHTStdv8ZJ5SvSmUo6IlwL5PJV9pD0=";
+    sha256 = "sha256-KDDk0QSOjwivJFz3vLk+g4vZMlSuX2FiOgHJfDJkpwg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
   disabledTests = [
     # these tests are failing due to the following error:
     # TypeError: expected str, bytes or os.PathLike object, not int

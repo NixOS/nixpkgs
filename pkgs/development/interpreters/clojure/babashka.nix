@@ -1,56 +1,21 @@
-{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales, writeScript }:
+{ lib, buildGraalvmNativeImage, fetchurl, writeScript }:
 
-stdenv.mkDerivation rec {
+buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "0.6.4";
+  version = "1.1.173";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-/ULBnC10lAYHYD0P0HGWEcCAqkX8IRcQ7W5ulho+JUM=";
+    sha256 = "sha256-p/KGDCocTksvUwj6x5l1xUEM1OZ4pNHtXL4mTgg7JUI=";
   };
 
-  dontUnpack = true;
+  executable = "bb";
 
-  nativeBuildInputs = [ graalvm11-ce glibcLocales ];
-
-  LC_ALL = "en_US.UTF-8";
-  BABASHKA_JAR = src;
-  BABASHKA_BINARY = "bb";
-  BABASHKA_XMX = "-J-Xmx4500m";
-
-  buildPhase = ''
-    runHook preBuild
-
-    # https://github.com/babashka/babashka/blob/v0.6.2/script/compile#L41-L52
-    args=("-jar" "$BABASHKA_JAR"
-          "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
-          # Required to build babashka on darwin. Do not remove.
-          "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
-          "-H:Name=$BABASHKA_BINARY"
-          "-H:+ReportExceptionStackTraces"
-          # "-H:+PrintAnalysisCallTree"
-          # "-H:+DashboardAll"
-          # "-H:DashboardDump=reports/dump"
-          # "-H:+DashboardPretty"
-          # "-H:+DashboardJson"
-          "--verbose"
-          "--no-fallback"
-          "--native-image-info"
-          "$BABASHKA_XMX")
-
-     native-image ''${args[@]}
-
-     runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    cp bb $out/bin/bb
-
-    runHook postInstall
-  '';
+  extraNativeImageBuildArgs = [
+    "-H:+ReportExceptionStackTraces"
+    "--no-fallback"
+    "--native-image-info"
+  ];
 
   installCheckPhase = ''
     $out/bin/bb --version | grep '${version}'
@@ -65,7 +30,7 @@ stdenv.mkDerivation rec {
     set -euo pipefail
 
     readonly latest_version="$(curl \
-      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
       -s "https://api.github.com/repos/babashka/babashka/releases/latest" \
       | jq -r '.tag_name')"
 
@@ -101,8 +66,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/babashka/babashka";
     changelog = "https://github.com/babashka/babashka/blob/v${version}/CHANGELOG.md";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
-    platforms = graalvm11-ce.meta.platforms;
     maintainers = with maintainers; [
       bandresen
       bhougland

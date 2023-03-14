@@ -1,21 +1,30 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, openssl, perl, pkg-config, libiconv, Security }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, libiconv
+, openssl
+, pkg-config
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eWe7oTWl7QfIqq3GfMILi5S8zUi03ER1Mzfr8hqUvgw=";
+    sha256 = "sha256-Fv1yaBnfn/wik1Ix24shwfritwxno3NoeJgHPsHgZOI=";
   };
 
-  cargoSha256 = "sha256-RuClZ+ChP7d40e9nr1Lg8R0F7rbFbBse79V9Y1AQn3o=";
+  cargoHash = "sha256-q0VrN+5Ypq4ga/gI5MlyRaMdD8NxzuaZ804KaRQzpRs=";
 
-  nativeBuildInputs = [ openssl perl pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "A Conventional commit cli";

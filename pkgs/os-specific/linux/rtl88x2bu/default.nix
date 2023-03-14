@@ -2,24 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2021-11-04";
+  version = "${kernel.version}-unstable-2023-02-24";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "88x2bu";
-    rev = "745d134080b74b92389ffe59c03dcfd6658f8655";
-    sha256 = "0f1hsfdw3ar78kqzr4hi04kpp5wnx0hd29f9rm698k0drxaw1g44";
+    repo = "88x2bu-20210702";
+    rev = "51a2fb94893c562ec5f2fabce0b80e4da4eda812";
+    sha256 = "sha256-nTas2EkghZeQhc8bTtoQfHEl8QJtClXi9V1IxlIThbI=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
- prePatch = ''
+  prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Realtek rtl88x2bu driver";
-    homepage = "https://github.com/morrownr/88x2bu";
+    homepage = "https://github.com/morrownr/88x2bu-20210702";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.ralith ];

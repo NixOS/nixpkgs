@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_8 }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_22 }:
 
 stdenv.mkDerivation rec {
   pname = "blockbench-electron";
-  version = "3.7.5";
+  version = "4.5.2";
 
   src = fetchurl {
     url = "https://github.com/JannisX11/blockbench/releases/download/v${version}/Blockbench_${version}.AppImage";
-    sha256 = "0qqklhncd4khqmgp7jg7wap2rzkrg8b6dflmz0wmm5zxxp5vcy1c";
+    sha256 = "sha256-uUgVBdYMCF31+L/FV4ADIpUdEAmnW59KfscQxUStPWM=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_8}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "A boxy 3D model editor powered by Electron";
     homepage = "https://blockbench.net/";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ckie ];
+    maintainers = with maintainers; [ ckie ];
     platforms = [ "x86_64-linux" ];
   };
 }

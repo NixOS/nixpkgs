@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , cmake
+, doxygen
 , fetchFromGitHub
 , glib
 , glib-networking
@@ -12,7 +13,9 @@
 , libpcap
 , libssh
 , libuuid
+, libxcrypt
 , libxml2
+, paho-mqtt-c
 , pkg-config
 , zlib
 , freeradius
@@ -20,17 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "21.4.2";
+  version = "22.4.4";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "14v7z8ynd20s4pkhp2nc19n6gbmbh8yrn39yi2fbfm7gj28b52sx";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qsEIjoaq+iBl6iTdSXrxf7LYin/qiGtJ/LaD4bONbI0=";
   };
 
   nativeBuildInputs = [
     cmake
+    doxygen
     pkg-config
   ];
 
@@ -46,13 +50,20 @@ stdenv.mkDerivation rec {
     libpcap
     libssh
     libuuid
+    libxcrypt
     libxml2
+    paho-mqtt-c
     zlib
+  ];
+
+  cmakeFlags = [
+    "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
   ];
 
   meta = with lib; {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
+    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

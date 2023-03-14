@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, qmake4Hook, unzip, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "${project}-${version}";
-  project = "qmetro";
+  pname = "qmetro";
   version = "0.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${project}/${name}.zip";
+    url = "mirror://sourceforge/qmetro/qmetro-${version}.zip";
     sha256 = "1zdj87lzcr43gr2h05g17z31pd22n5kxdwbvx7rx656rmhv0sjq5";
   };
 

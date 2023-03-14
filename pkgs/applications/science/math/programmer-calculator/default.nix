@@ -2,13 +2,13 @@
 
 gccStdenv.mkDerivation rec {
   pname = "programmer-calculator";
-  version = "2.1";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "alt-romes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vvpbj24ijl9ma0h669n9x0z1im3vqdf8zf2li0xf5h97b14gmv0";
+    sha256 = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
   };
 
   buildInputs = [ ncurses ];

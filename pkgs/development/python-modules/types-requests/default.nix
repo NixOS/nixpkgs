@@ -1,17 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, types-urllib3
 }:
 
 buildPythonPackage rec {
   pname = "types-requests";
-  version = "2.26.0";
+  version = "2.28.11.15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-317Iw0tBOkLrs45Plr3raAkLh1vfzFE43IKYnJVEWIM=";
+    sha256 = "sha256-/I6qCcwBRpnGtjxgwuOt0MiwmkEMgYtaxuZfkqJt3gk=";
   };
+
+  propagatedBuildInputs = [
+    types-urllib3
+  ];
 
   # Module doesn't have tests
   doCheck = false;

@@ -1,17 +1,17 @@
-{ lib, python2, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
-python2.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "loxodo";
-  version = "unstable-2015-01-24";
+  version = "unstable-2021-02-08";
 
   src = fetchFromGitHub {
     owner = "sommer";
     repo = "loxodo";
-    rev = "6c56efb4511fd6f645ad0f8eb3deafc8071c5795";
-    sha256 = "1cg0dfcv57ps54f1a0ksib7hgkrbdi9q699w302xyyfyvjcb5dd2";
+    rev = "7add982135545817e9b3e2bbd0d27a2763866133";
+    sha256 = "1cips4pvrqga8q1ibs23vjrf8dwan860x8jvjmc52h6qvvvv60yl";
   };
 
-  propagatedBuildInputs = with python2.pkgs; [ wxPython ];
+  propagatedBuildInputs = with python3.pkgs; [ six wxPython_4_0 ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo
@@ -20,12 +20,14 @@ python2.pkgs.buildPythonApplication {
     [Desktop Entry]
     Type=Application
     Exec=$out/bin/loxodo
-    Icon=$out/lib/${python2.libPrefix}/site-packages/resources/loxodo-icon.png
+    Icon=$out/lib/${python3.libPrefix}/site-packages/resources/loxodo-icon.png
     Name=Loxodo
     GenericName=Password Vault
     Categories=Application;Other;
     EOF
   '';
+
+  doCheck = false;  # Tests are interactive.
 
   meta = with lib; {
     description = "A Password Safe V3 compatible password vault";

@@ -1,11 +1,18 @@
 # Adding Custom Packages {#sec-custom-packages}
 
 It's possible that a package you need is not available in NixOS. In that
-case, you can do two things. First, you can clone the Nixpkgs
-repository, add the package to your clone, and (optionally) submit a
-patch or pull request to have it accepted into the main Nixpkgs repository.
-This is described in detail in the [Nixpkgs manual](https://nixos.org/nixpkgs/manual).
-In short, you clone Nixpkgs:
+case, you can do two things. Either you can package it with Nix, or you can try
+to use prebuilt packages from upstream. Due to the peculiarities of NixOS, it
+is important to note that building software from source is often easier than
+using pre-built executables.
+
+## Building with Nix {#sec-custom-packages-nix}
+
+This can be done either in-tree or out-of-tree. For an in-tree build, you can
+clone the Nixpkgs repository, add the package to your clone, and (optionally)
+submit a patch or pull request to have it accepted into the main Nixpkgs
+repository. This is described in detail in the [Nixpkgs
+manual](https://nixos.org/nixpkgs/manual). In short, you clone Nixpkgs:
 
 ```ShellSession
 $ git clone https://github.com/NixOS/nixpkgs
@@ -72,3 +79,21 @@ $ nix-build my-hello.nix
 $ ./result/bin/hello
 Hello, world!
 ```
+
+## Using pre-built executables {#sec-custom-packages-prebuilt}
+
+Most pre-built executables will not work on NixOS. There are two notable
+exceptions: flatpaks and AppImages. For flatpaks see the [dedicated
+section](#module-services-flatpak). AppImages will not run "as-is" on NixOS.
+First you need to install `appimage-run`: add to `/etc/nixos/configuration.nix`
+
+```nix
+environment.systemPackages = [ pkgs.appimage-run ];
+```
+
+Then instead of running the AppImage "as-is", run `appimage-run foo.appimage`.
+
+To make other pre-built executables work on NixOS, you need to package them
+with Nix and special helpers like `autoPatchelfHook` or `buildFHSUserEnv`. See
+the [Nixpkgs manual](https://nixos.org/nixpkgs/manual) for details. This
+is complex and often doing a source build is easier.

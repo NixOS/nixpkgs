@@ -1,12 +1,18 @@
 { airspy
+, airspyhf
+, aptdec
 , boost
 , cm256cc
 , cmake
 , codec2
+, dab_lib
+, dsdcc
+, faad2
 , fetchFromGitHub
 , fftwFloat
 , glew
 , hackrf
+, hidapi
 , lib
 , ffmpeg
 , libiio
@@ -15,6 +21,7 @@
 , libusb1
 , limesuite
 , libbladeRF
+, mbelib
 , mkDerivation
 , ocl-icd
 , opencv3
@@ -25,41 +32,49 @@
 , qtserialport
 , qtspeech
 , qtwebsockets
+, qtwebengine
 , rtl-sdr
 , serialdv
+, sgp4
 , soapysdr-with-plugins
 , uhd
 }:
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "6.17.2";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "sha256-sMD2JTJJlssMdXCUHdFYjEqGknhGGuG4szfnvFFN7t4=";
-    fetchSubmodules = false;
+    sha256 = "sha256-hsYt7zGG6CSWeQ9A3GPt65efjZGPu33O5pIhnZjFgmY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     airspy
+    airspyhf
+    aptdec
     boost
     cm256cc
     codec2
+    dab_lib
+    dsdcc
+    faad2
     ffmpeg
     fftwFloat
     glew
     hackrf
+    hidapi
     libbladeRF
     libiio
     libopus
     libpulseaudio
     libusb1
     limesuite
+    mbelib
     opencv3
     qtcharts
     qtlocation
@@ -67,16 +82,21 @@ mkDerivation rec {
     qtserialport
     qtspeech
     qtwebsockets
+    qtwebengine
     rtl-sdr
     serialdv
+    sgp4
     soapysdr-with-plugins
     uhd
   ];
 
   cmakeFlags = [
+    "-DAPT_DIR=${aptdec}"
+    "-DDAB_LIB=${dab_lib}"
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
     "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
 

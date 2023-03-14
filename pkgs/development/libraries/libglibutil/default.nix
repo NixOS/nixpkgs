@@ -1,15 +1,14 @@
-{ stdenv, lib, fetchFromGitLab, pkg-config, glib }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libglibutil";
-  version = "1.0.55";
+  version = "1.0.68";
 
-  src = fetchFromGitLab {
-    domain = "git.sailfishos.org";
-    owner = "mer-core";
+  src = fetchFromGitHub {
+    owner = "sailfishos";
     repo = pname;
     rev = version;
-    sha256 = "0zrxccpyfz4jf14zr6fj9b88p340s66lw5cnqkapfa72kl1rnp4q";
+    sha256 = "sha256-FlBXSX6ZA6vDV1Kf1QU1XGxkyS3aWGSrwr2RtdVss10=";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,6 +20,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
   ];
+
+  postPatch = ''
+    # Fix pkg-config name for cross-compilation
+    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+  '';
 
   makeFlags = [
     "LIBDIR=$(out)/lib"

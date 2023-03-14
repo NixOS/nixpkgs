@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , wrapGAppsHook
 , pkg-config
 , meson
@@ -22,20 +22,18 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "078yi36r452sc33mv2ck8z0icya1lhzhickllrlhc60rdri36sb8";
+    sha256 = "sha256-dShC6SXjOJmiLI6TUEZsthv5scnm9Jzum+sG/NkWAyM=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    ./indicators.patch
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -48,7 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
     gala
     granite
@@ -59,10 +56,6 @@ stdenv.mkDerivation rec {
     mesa # for libEGL
   ];
 
-  patches = [
-    ./indicators.patch
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
@@ -70,10 +63,17 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # this theme is required
+      # this GTK theme is required
       --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+
+      # the icon theme is required
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "The extensible top panel for Pantheon";

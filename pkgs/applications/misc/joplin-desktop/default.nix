@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, undmg }:
 
 let
   pname = "joplin-desktop";
-  version = "2.5.12";
+  version = "2.10.4";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-/S/paqMKVerSQFjA4wQ9fLV0WaqKm4CzQfy+0OdH7c8=";
-      x86_64-darwin = "sha256-5eKTfZRpW7IYwFt8TeJiytrwEpiHBgN4k9kth+Lh0Bo=";
+      x86_64-linux = "sha256-KEEPPtWxaY6+Nu/CE+AVAnaVZ30zmASWiIYaJt4a+3E=";
+      x86_64-darwin = "sha256-8Rkj1pV6tJygznbfELnAhzhh7ImnTm9dxCxCjYlWdnU=";
     }.${system} or throwSystem;
   };
 
@@ -35,7 +35,7 @@ let
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.mit;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
@@ -45,7 +45,6 @@ let
 
     profile = ''
       export LC_ALL=C.UTF-8
-      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
     '';
 
     multiPkgs = null; # no 32bit needed
@@ -56,7 +55,7 @@ let
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}' \
-        --replace 'Icon=joplin' "Icon=$out/share/pixmaps/@joplinapp-desktop.png"
+        --replace 'Icon=joplin' "Icon=@joplinapp-desktop"
     '';
   };
 

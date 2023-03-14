@@ -1,15 +1,15 @@
-{ lib, stdenv, runCommand, fetchurl
+{ lib, stdenv, runCommand, fetchurl, fetchpatch
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost
+, boost175, xz
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
 , gtest
 , cunit, snappy
 , makeWrapper
-, leveldb, oathToolkit
+, leveldb, oath-toolkit
 , libnl, libcap_ng
 , rdkafka
 , nixosTests
@@ -21,7 +21,7 @@
 , doxygen
 , graphviz
 , fmt
-, python3
+, python39
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -85,7 +85,7 @@ let
   };
 
   getMeta = description: with lib; {
-     homepage = "https://ceph.com/";
+     homepage = "https://ceph.io/en/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
@@ -98,31 +98,25 @@ let
 
     sourceRoot = "ceph-${version}/src/python-common";
 
-    checkInputs = [ python.pkgs.pytest ];
+    nativeCheckInputs = [ python.pkgs.pytest ];
     propagatedBuildInputs = with python.pkgs; [ pyyaml six ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  python = python3.override {
-    packageOverrides = self: super: {
-      # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
-      # Bump once these issues are resolved:
-      # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
-      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
-        };
-        doCheck = false;
-      });
-    };
+  # Boost 1.75 is not compatible with Python 3.10
+  python = python39;
+
+  boost = boost175.override {
+    enablePython = true;
+    inherit python;
   };
 
   ceph-python-env = python.withPackages (ps: [
+    # Check .requires files below https://github.com/ceph/ceph/tree/main/debian for dependencies
     ps.sphinx
     ps.flask
+    ps.routes
     ps.cython
     ps.setuptools
     ps.virtualenv
@@ -146,10 +140,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "16.2.6";
+  version = "16.2.10";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "sha256-TXGyZnyVTYAf7G7BcTv3dAfK/54JfOKObcyTRhCrnYA=";
+    sha256 = "sha256-342+nUV3mCX7QJfZSnKEfnQFCJwJmVQeYnefJwW/AtU=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -158,6 +152,21 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      # pacific: include/buffer: include <memory>
+      # fixes build with gcc 12
+      # https://github.com/ceph/ceph/pull/47295
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/df88789a38c053513d3b2a9b7d12a952fc0c9042.patch";
+        hash = "sha256-je65kBfa5hR0ZKo6ZI10XmD5ZUbKj5rxlGxxI9ZJVfo=";
+      })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/2abcbe4e47705e6e0fcc7d9d9b75625f563199af.patch";
+        hash = "sha256-8sWQKoZNHuGuhzX/F+3fY4+kjsrwsfoMdVpfVSj2x5w=";
+      })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/13dc077cf6c65a3b8c4f13d896847b9964b3fcbb.patch";
+        hash = "sha256-byfiZh9OJrux/y5m3QCPg0LET6q33ZDXmp/CN+yOSQQ=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -173,9 +182,9 @@ in rec {
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+      boost xz ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
@@ -192,8 +201,6 @@ in rec {
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
       substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
 
-      # for pybind/rgw to find internal dep
-      export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
       export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
@@ -241,13 +248,14 @@ in rec {
   ceph-client = runCommand "ceph-client-${version}" {
       meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
     } ''
-      mkdir -p $out/{bin,sbin,etc,${sitePackages},share/bash-completion/completions}
+      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/sbin/mount.ceph $out/sbin
-      cp -r ${ceph}/sbin/mount.fuse.ceph $out/sbin
-      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
+      cp -r ${ceph}/sbin/mount.ceph $out/bin
+      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+      ln -s bin $out/sbin
+      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out

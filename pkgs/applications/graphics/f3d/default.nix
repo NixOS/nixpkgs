@@ -1,26 +1,31 @@
-{ lib, stdenv, fetchFromGitLab, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "1.1.0";
+  version = "1.3.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.kitware.com";
-    owner = "f3d";
+  src = fetchFromGitHub {
+    owner = "f3d-app";
     repo = "f3d";
     rev = "v${version}";
-    sha256 = "0lj20k5qyw9z85k3wsp05f7dcv7v7asrnppi8i1jm32dzxjm4siw";
+    hash = "sha256-dOpiX7xJWDKHqPLGvlgv7NHgfzyeZhJd898+KzAmD4Q=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ vtk_9 ]
-    ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+
+  # conflict between VTK and Nixpkgs;
+  # see https://github.com/NixOS/nixpkgs/issues/89167
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+  ];
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
-    homepage = "https://kitware.github.io/F3D";
+    homepage = "https://f3d-app.github.io/f3d";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = with platforms; unix;

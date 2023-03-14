@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvimpager";
-  version = "0.10";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-okYnPwuxU/syxcKIMUBc25r791D6Bug2w2axH4vvmAY=";
+    sha256 = "sha256-tjnmY7dJUE5k8hlAfNKcHqmpw0ciS6T5WJOpDvvt2V0=";
   };
 
   buildInputs = [
@@ -26,20 +26,19 @@ stdenv.mkDerivation rec {
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
-    # remove git command from makefile as we run from a tarball
-    # replace with actual timestamp of the commit
-    substituteInPlace makefile --replace '$(shell git log -1 --no-show-signature --pretty="%ct")' 1623019602
     '';
 
   doCheck = true;
-  checkInputs = [ lua51Packages.busted util-linux neovim ];
+  nativeCheckInputs = [ lua51Packages.busted util-linux neovim ];
+  # filter out one test that fails in the sandbox of nix
   checkPhase = ''
     runHook preCheck
-    script -c "busted --lpath './?.lua' test"
+    script -ec "busted --lpath './?.lua' --filter-out 'handles man' test"
     runHook postCheck
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax

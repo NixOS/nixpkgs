@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2, gnused }:
+{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python3, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "libpqxx";
-  version = "6.4.5";
+  version = "6.4.8";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = pname;
     rev = version;
-    sha256 = "0djmjr2b5x5nd2a4idv5j8s6w0kdmvil910iv1kyc7x94dirbrni";
+    hash = "sha256-ybnW9ip1QVadmbYLP+gvo49k9ExHfnsOhSnI6NjsAQk=";
   };
 
-  nativeBuildInputs = [ gnused python2 ];
+  nativeBuildInputs = [ gnused python3 ];
   buildInputs = [ postgresql doxygen xmlto ];
 
   preConfigure = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A C++ library to access PostgreSQL databases";
-    homepage = "http://pqxx.org/development/libpqxx/";
+    homepage = "https://pqxx.org/development/libpqxx/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eelco ];

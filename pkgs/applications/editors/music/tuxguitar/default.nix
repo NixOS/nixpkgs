@@ -2,11 +2,11 @@
 
 let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
   if stdenv.hostPlatform.system == "i686-linux" then
-    { arch = "x86"; sha256 = "afa4b1116aee18e3ddd93132467809d0bcf03715cf9ad55b895f021a13e1cb8a"; }
+    { arch = "x86"; sha256 = "sha256-k4FQrt72VNb5FdYMzxskcVhKlvx8MZelUlLCItxDB7c="; }
   else
-    { arch = "x86_64"; sha256 = "55ab653c601727a2077080e7ea4d76fe7a897379934ed9a5b544e20d490f53f9"; };
+    { arch = "x86_64"; sha256 = "sha256-mj5wVQlY2xFzdulvMdb5Qb5HGwr7RElzIkpOLjaAfGA="; };
 in stdenv.mkDerivation rec {
-  version = "1.5.4";
+  version = "1.5.5";
   pname = "tuxguitar";
 
   src = fetchurl {
@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
       in Java-SWT. It can open GuitarPro, PowerTab and TablEdit files.
     '';
     homepage = "http://www.tuxguitar.com.ar/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl2;
     maintainers = [ maintainers.ardumont ];
     platforms = platforms.linux;

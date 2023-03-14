@@ -59,7 +59,7 @@ in
   options = {
 
     users.defaultUserShell = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         This option defines the default shell assigned to user
         accounts. This can be either a full system path or a shell package.
 

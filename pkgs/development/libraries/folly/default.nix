@@ -1,31 +1,35 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, cmake
 , boost
-, libevent
+, cmake
 , double-conversion
-, glog
+, fetchpatch
+, fmt_8
 , gflags
+, glog
+, libevent
 , libiberty
+, libunwind
 , lz4
-, xz
-, zlib
-, jemalloc
 , openssl
 , pkg-config
-, libunwind
-, fmt
+, xz
+, zlib
+, zstd
+, jemalloc
+, follyMobile ? false
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2021.10.25.00";
+  version = "2023.02.27.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-+di8Dzt5NRbqIydBR4sB6bUbQrZZ8URUosdP2JGQMec=";
+    sha256 = "sha256-DfZiVxncpKSPn9BN25d8o0/tC27+HhSG/t53WgzAT/s=";
   };
 
   nativeBuildInputs = [
@@ -45,21 +49,42 @@ stdenv.mkDerivation (rec {
     lz4
     xz
     zlib
-    jemalloc
     libunwind
-    fmt
+    fmt_8
+    zstd
+  ] ++ lib.optional stdenv.isLinux jemalloc;
+
+  # jemalloc headers are required in include/folly/portability/Malloc.h
+  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+
+    # temporary hack until folly builds work on aarch64,
+    # see https://github.com/facebook/folly/issues/1880
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/libfolly.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
+  # folly-config.cmake, will `find_package` these, thus there should be
+  # a way to ensure abi compatibility.
+  passthru = {
+    inherit boost;
+    fmt = fmt_8;
+  };
 
   meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
-} // lib.optionalAttrs stdenv.isDarwin {
-  LDFLAGS = "-ljemalloc";
-})
+}

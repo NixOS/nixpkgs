@@ -1,27 +1,42 @@
-{ buildGoModule, go, lib, fetchFromGitHub, makeWrapper }:
+{ lib
+, buildGoModule
+, go
+, fetchFromGitHub
+, makeWrapper
+}:
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "1.12.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+AWkzv6SI/d3p1ljopSyLg2qi1hv6PsynmVG7+lUSTw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rvLWM6G2kOOuFU0JuwdIjSCFNyjBNL+fOoEj+tIR190=";
   };
 
-  vendorSha256 = "sha256-jYBkC0IA2xbRa+56CW/5EWG8sYg3eRuFdLpOFSinuuw=";
+  vendorHash = "sha256-L+Z1k+z/XNO9OeTQVzNJd1caRip6Ti8mPfNmXJx5D5c=";
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    go
+  ];
 
   doCheck = false;
 
-  subPackages = [ "cmd/operator-sdk" ];
-
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ go ];
+  subPackages = [
+    "cmd/ansible-operator"
+    "cmd/helm-operator"
+    "cmd/operator-sdk"
+  ];
 
   # operator-sdk uses the go compiler at runtime
   allowGoReference = true;
+
   postFixup = ''
     wrapProgram $out/bin/operator-sdk --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
@@ -29,6 +44,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "SDK for building Kubernetes applications. Provides high level APIs, useful abstractions, and project scaffolding";
     homepage = "https://github.com/operator-framework/operator-sdk";
+    changelog = "https://github.com/operator-framework/operator-sdk/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ arnarg ];
     platforms = platforms.linux ++ platforms.darwin;

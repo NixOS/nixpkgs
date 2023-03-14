@@ -2,33 +2,10 @@
 , fetchFromGitHub
 , python3
 }:
+
 let
   py = python3.override {
     packageOverrides = self: super: {
-
-      boto3 = super.boto3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.17.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1byqrffbgpp1mq62gnn3w3hnm54dfar0cwgvmkl7mrgbwz5xmdh8";
-        };
-      });
-
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.20.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1ksdjh3mwbzgqgfj58vyrhann23b9gqam8id2svmpdmmdq5vgffh";
-        };
-      });
-
-      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1cp169vz9rvng7dwbn33fgdbl3b014zpsdqsnfxxw7jm2r5jy0nb";
-        };
-      });
 
       dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
@@ -38,17 +15,6 @@ let
         };
         doCheck = false;
       });
-
-      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.2";
-        src = fetchFromGitHub {
-          owner = "CycloneDX";
-          repo = "cyclonedx-python-lib";
-          rev = "v${version}";
-          sha256 = "10cmp2aqbnbiyrsq5r9p7ppghqj3zyg612d2dldk6m85li3jr500";
-        };
-      });
-
     };
   };
 in
@@ -56,38 +22,61 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.568";
+  version = "2.3.85";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-V1YHD0+gXx5wLfhrfze6kAgF1egxXbjf4c2zEc/oT1A=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-j//r9ykMCzmpPBAPmfZCMlvcv7jrFaT+fFsLZoOeQF4=";
   };
 
+  patches = [
+    ./flake8-compat-5.x.patch
+  ];
+
+  pythonRelaxDeps = [
+    "bc-python-hcl2"
+    "pycep-parser"
+    "networkx"
+  ];
+
   nativeBuildInputs = with py.pkgs; [
+    pythonRelaxDepsHook
     setuptools-scm
   ];
 
   propagatedBuildInputs = with py.pkgs; [
+    aiodns
+    aiohttp
+    aiomultiprocess
+    argcomplete
+    bc-detect-secrets
+    bc-jsonpath-ng
     bc-python-hcl2
     boto3
     cachetools
+    charset-normalizer
     cloudsplaining
     colorama
     configargparse
     cyclonedx-python-lib
     deep_merge
-    detect-secrets
     docker
     dockerfile-parse
     dpath
-    GitPython
+    flake8
+    gitpython
+    igraph
     jmespath
+    jsonschema
     junit-xml
     networkx
     packaging
     policyuniverse
+    prettytable
+    pycep-parser
     pyyaml
     semantic-version
     tabulate
@@ -97,38 +86,75 @@ buildPythonApplication rec {
     update_checker
   ];
 
-  checkInputs = with py.pkgs; [
-    jsonschema
+  nativeCheckInputs = with py.pkgs; [
+    aioresponses
+    mock
+    pytest-asyncio
+    pytest-mock
     pytest-xdist
     pytestCheckHook
+    responses
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   disabledTests = [
     # No API key available
     "api_key"
     # Requires network access
     "TestSarifReport"
+    "test_skip_mapping_default"
+    # Flake8 test
+    "test_file_with_class"
+    "test_dataclass_skip"
+    "test_typing_class_skip"
+    # Tests are comparing console output
+    "cli"
+    "console"
   ];
 
   disabledTestPaths = [
     # Tests are pulling from external sources
     # https://github.com/bridgecrewio/checkov/blob/f03a4204d291cf47e3753a02a9b8c8d805bbd1be/.github/workflows/build.yml
     "integration_tests/"
+    "tests/ansible/"
+    "tests/arm/"
+    "tests/bicep/"
+    "tests/cloudformation/"
+    "tests/common/"
+    "tests/dockerfile/"
+    "tests/generic_json/"
+    "tests/generic_yaml/"
+    "tests/github_actions/"
+    "tests/github/"
+    "tests/kubernetes/"
+    "tests/sca_package_2"
     "tests/terraform/"
+    # Performance tests have no value for us
+    "performance_tests/test_checkov_performance.py"
+    # No Helm
+    "dogfood_tests/test_checkov_dogfood.py"
   ];
 
   pythonImportsCheck = [
     "checkov"
   ];
 
+  postInstall = ''
+    chmod +x $out/bin/checkov
+  '';
+
   meta = with lib; {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
+    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
     longDescription = ''
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 ];
+    maintainers = with maintainers; [ anhdle14 fab ];
   };
 }

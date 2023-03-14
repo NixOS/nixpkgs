@@ -1,53 +1,77 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, makePythonPath
 , pythonOlder
 , python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
+, click
+, dbus-python
+, desktop-notifier
+, dropbox
+, fasteners
 , importlib-metadata
+, keyring
+, keyrings-alt
+, packaging
+, pathspec
+, Pyro5
+, requests
+, rich
+, setuptools
+, survey
+, typing-extensions
+, watchdog
 , pytestCheckHook
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.5.1";
-  disabled = pythonOlder "3.6";
+  version = "1.7.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    rev = "v${version}";
-    sha256 = "sha256-R6zacpJkSWppodrb0SD4lglFmGVtPaloeDMBPL+ztuU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WYLYDDXxO5ot30oSBkxgJszn8nyAQh5XtCyywBz56J4=";
   };
 
   propagatedBuildInputs = [
     click
     desktop-notifier
+    dbus-python
     dropbox
     fasteners
+    importlib-metadata
     keyring
     keyrings-alt
     packaging
     pathspec
     Pyro5
     requests
+    rich
     setuptools
-    sdnotify
     survey
+    typing-extensions
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
+    "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # We don't want to benchmark
@@ -60,15 +84,22 @@ buildPythonPackage rec {
     "test_filestatus"
     "test_path_exists_case_insensitive"
     "test_cased_path_candidates"
+    # AssertionError
+    "test_locking_multiprocess"
   ];
 
-  pythonImportsCheck = [ "maestral" ];
+  pythonImportsCheck = [
+    "maestral"
+  ];
+
+  passthru.tests.maestral = nixosTests.maestral;
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
     homepage = "https://maestral.app";
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg sfrijters ];
+    platforms = platforms.unix;
   };
 }

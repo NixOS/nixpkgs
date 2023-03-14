@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/alemuller/tree-sitter-make",
-  "rev": "716c294283bc3dda263ccbdf55e38ec30aa0edba",
-  "date": "2021-04-30T16:37:32-03:00",
-  "path": "/nix/store/v2dvgqs3fxwh83dhc53xivrx8i0g519y-tree-sitter-make",
-  "sha256": "1fb6rf6pc6mdawphifhlbzbgppxvq6hj48cz6073schvavgjgchc",
+  "rev": "a4b9187417d6be349ee5fd4b6e77b4172c6827dd",
+  "date": "2021-12-16T17:14:17+00:00",
+  "path": "/nix/store/v01s3lfi1w3bm433gf6zi0wb0r603906-tree-sitter-make",
+  "sha256": "07gz4x12xhigar2plr3jgazb2z4f9xp68nscmvy9a7wafak9l2m9",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

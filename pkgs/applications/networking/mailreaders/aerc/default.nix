@@ -1,21 +1,28 @@
-{ lib, buildGoModule, fetchFromSourcehut
-, ncurses, notmuch, scdoc
-, python3, w3m, dante
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, ncurses
+, notmuch
+, scdoc
+, python3
+, w3m
+, dante
+, gawk
 }:
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.5.2";
+  version = "0.14.0";
 
   src = fetchFromSourcehut {
-    owner = "~sircmpwn";
-    repo = pname;
+    owner = "~rjarry";
+    repo = "aerc";
     rev = version;
-    sha256 = "1ja639qry8h2d6y7qshf62ypkzs2rzady59p81scqh8nx0g9bils";
+    hash = "sha256-qC7lNqjgljUqRUp+S7vBVLPyRB3+Ie5UOxuio+Q88hg=";
   };
 
-  runVend = true;
-  vendorSha256 = "9PXdUH0gu8PGaKlRJCUF15W1/LxA+sv3Pwl2UnjYxWY=";
+  proxyVendor = true;
+  vendorHash = "sha256-MVek3TQpE3AChGyQ4z01fLfkcGKJcckmFV21ww9zT7M=";
 
   doCheck = false;
 
@@ -28,30 +35,36 @@ buildGoModule rec {
     ./runtime-sharedir.patch
   ];
 
+  postPatch = ''
+    substituteAllInPlace config/aerc.conf
+    substituteAllInPlace config/config.go
+    substituteAllInPlace doc/aerc-config.5.scd
+  '';
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   pythonPath = [
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 notmuch ];
-
-  buildPhase = "
-    runHook preBuild
-    # we use make instead of go build
-    runHook postBuild
-  ";
+  buildInputs = [ python3 notmuch gawk ];
 
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
-    wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
+
+    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
+
     runHook postInstall
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/aerc --prefix PATH ":" \
-      "$out/share/aerc/filters:${lib.makeBinPath [ ncurses ]}"
-    wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
-      ${lib.makeBinPath [ w3m dante ]}
+    wrapProgram $out/bin/aerc \
+      --prefix PATH ":" "${lib.makeBinPath [ ncurses ]}"
+    wrapProgram $out/share/aerc/filters/html \
+      --prefix PATH ":"  ${lib.makeBinPath [ w3m dante ]}
+    wrapProgram $out/share/aerc/filters/html-unsafe \
+      --prefix PATH ":" ${lib.makeBinPath [ w3m dante ]}
+    patchShebangs $out/share/aerc/filters
   '';
 
   meta = with lib; {

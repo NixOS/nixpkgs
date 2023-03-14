@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snixembed";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromSourcehut {
     owner = "~steef";
     repo = pname;
     rev = version;
-    sha256 = "0yy1i4463q43aq98qk4nvvzpw4i6bid2bywwgf6iq545pr3glfj5";
+    sha256 = "sha256-co32Xlklg6KVyi+xEoDJ6TeN28V+wCSx73phwnl/05E=";
   };
 
   nativeBuildInputs = [ pkg-config vala ];

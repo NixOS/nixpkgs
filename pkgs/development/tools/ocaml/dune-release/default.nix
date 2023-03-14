@@ -1,8 +1,8 @@
-{ lib, buildDunePackage, fetchurl, makeWrapper
-, curly, fmt, bos, cmdliner, re, rresult, logs
+{ lib, buildDunePackage, fetchurl, makeWrapper, fetchpatch
+, curly, fmt, bos, cmdliner, re, rresult, logs, fpath
 , odoc, opam-format, opam-core, opam-state, yojson, astring
 , opam, git, findlib, mercurial, bzip2, gnutar, coreutils
-, alcotest, mdx
+, alcotest
 }:
 
 # don't include dune as runtime dep, so user can
@@ -10,33 +10,27 @@
 let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
 in buildDunePackage rec {
   pname = "dune-release";
-  version = "1.5.0";
+  version = "1.6.2";
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1lyfaczskdbqnhmpiy6wga9437frds3m8prfk2rhwyb96h69y3pv";
+    sha256 = "sha256-oJ5SL7qNM5izoEpr+nTjbT+YmmNIoy7QgSNse3wNIA4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson astring ];
-  checkInputs = [ alcotest mdx ] ++ runtimeInputs;
+                  rresult logs odoc bos yojson astring fpath ];
+  nativeCheckInputs = [ odoc ];
+  checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
-
-  useDune2 = true;
 
   postPatch = ''
     # remove check for curl in PATH, since curly is patched
     # to have a fixed path to the binary in nix store
     sed -i '/must_exist (Cmd\.v "curl"/d' lib/github.ml
-
-    # ignore weird yes error message
-    sed -i 's/yes |/yes 2>\/dev\/null |/' \
-      tests/bin/no_doc/run.t \
-      tests/bin/draft/run.t \
-      tests/bin/url-file/run.t
   '';
 
   preCheck = ''

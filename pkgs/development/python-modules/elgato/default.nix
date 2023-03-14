@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "2.2.0";
+  version = "4.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-elgato";
-    rev = "v${version}";
-    sha256 = "sha256-xsIglJSnvtd3NKqwoRAonPRN+C9KWyar0mrYcC3hPpw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-kyFnc/lMxgYy8s/gAP5vpEPV8a+dphOummr6G7deGQ4=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

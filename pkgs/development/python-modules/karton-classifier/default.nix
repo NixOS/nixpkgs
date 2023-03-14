@@ -4,27 +4,32 @@
 , fetchFromGitHub
 , karton-core
 , pytestCheckHook
-, python_magic
+, python-magic
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "karton-classifier";
-  version = "1.2.0";
+  version = "1.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-AG2CtNMgXYfbdlOqB1ZdjMT8H67fsSMXTgiFg6K41IQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TRmAin0TAOIwR5EBMwTOJ9QaHO+mOx/eAjgqvyQZDj4=";
   };
 
   propagatedBuildInputs = [
     chardet
     karton-core
-    python_magic
+    python-magic
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   postPatch = ''
@@ -33,15 +38,20 @@ buildPythonPackage rec {
       --replace "python-magic==0.4.18" "python-magic"
   '';
 
-  checkInputs = [
-    pytestCheckHook
+  pythonImportsCheck = [
+    "karton.classifier"
   ];
 
-  pythonImportsCheck = [ "karton.classifier" ];
+  disabledTests = [
+    # Tests expecting results from a different version of libmagic
+    "test_process_archive_ace"
+    "test_process_runnable_win32_lnk"
+  ];
 
   meta = with lib; {
     description = "File type classifier for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
+    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

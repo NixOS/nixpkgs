@@ -46,7 +46,7 @@ with pkgs.lib;
         # Note: we use net=169.0.0.0/8 rather than
         # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
         # confused. (It would get a DHCP lease in the 169.254.*
-        # range, which it would then configure and prompty delete
+        # range, which it would then configure and promptly delete
         # again when it deletes link-local addresses.) Ideally we'd
         # turn off the DHCP server, but qemu does not have an option
         # to do that.

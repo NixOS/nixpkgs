@@ -1,58 +1,72 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , anyio
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
 , h11
 , h2
 , pproxy
 , pytest-asyncio
+, pytest-httpbin
+, pytest-trio
 , pytestCheckHook
-, pytest-cov
+, pythonOlder
 , sniffio
-, trio
-, trustme
-, uvicorn
+, socksio
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.13.7";
-  disabled = pythonOlder "3.6";
+  version = "0.16.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-9hG9MqqEYMT2j7tXafToGYwHbJfp9/klNqZozHSbweE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3bC97CTZi6An+owjoJF7Irtr7ONbP8RtNdTIGJRy0Ng=";
   };
 
   propagatedBuildInputs = [
     anyio
+    certifi
     h11
-    h2
     sniffio
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    http2 = [
+      h2
+    ];
+    socks = [
+      socksio
+    ];
+  };
+
+  nativeCheckInputs = [
     pproxy
     pytest-asyncio
+    pytest-httpbin
+    pytest-trio
     pytestCheckHook
-    pytest-cov
-    trio
-    trustme
-    uvicorn
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.socks;
+
+  pythonImportsCheck = [
+    "httpcore"
   ];
 
-  disabledTestPaths = [
-    # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
-    "tests/test_threadsafety.py"
-    "tests/async_tests/"
-    "tests/sync_tests/test_interfaces.py"
-    "tests/sync_tests/test_retries.py"
-  ];
+  preCheck = ''
+    # remove upstreams pytest flags which cause:
+    # httpcore.ConnectError: TLS/SSL connection has been closed (EOF) (_ssl.c:997)
+    rm setup.cfg
+  '';
 
-  pythonImportsCheck = [ "httpcore" ];
+  pytestFlagsArray = [
+    "--asyncio-mode=strict"
+  ];
 
   meta = with lib; {
     description = "A minimal low-level HTTP client";

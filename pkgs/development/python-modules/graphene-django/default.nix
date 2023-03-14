@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 
@@ -12,6 +13,7 @@
 
 , django-filter
 , mock
+, py
 , pytest-django
 , pytest-random-order
 , pytestCheckHook
@@ -19,15 +21,16 @@
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "unstable-2021-06-11";
+  version = "3.0.0";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "e7f7d8da07ba1020f9916153f17e97b0ec037712";
-    sha256 = "0b33q1im90ahp3gzy9wx5amfzy6q57ydjpy5rn988gh81hbyqaxv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wSZm0hRukBmvrmU3bsqFuZSQRXBwwye9J4ojuSz1uzE=";
   };
 
   postPatch = ''
@@ -48,17 +51,27 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=examples.django_test_settings
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     django-filter
     mock
+    py
     pytest-django
     pytest-random-order
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # Pèython 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
+    "test_django_objecttype_convert_choices_enum_naming_collisions"
+    "test_django_objecttype_choices_custom_enum_name"
+    "test_django_objecttype_convert_choices_enum_list"
+    "test_schema_representation"
+  ];
+
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";
     homepage = "https://github.com/graphql-python/graphene-django";
+    changelog = "https://github.com/graphql-python/graphene-django/releases/tag/v{version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "4.1.2";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0s6lakbd8h1pa4lfdj18sm13gpywszgpcns4hz026a4kam787kby";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-c7pPcDgqyqWQtiMbLQbQd0nAgx4TIFUFHrlBVDNdr8M=";
   };
 
-  checkInputs = [ jsonschema ];
+  nativeCheckInputs = [ jsonschema ];
 
   checkPhase = ''
     python3 utest/run.py

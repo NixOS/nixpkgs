@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchpatch
 , makeWrapper
 , nixosTests
@@ -13,6 +13,7 @@
 , python3
 , xz
 , zlib
+, catch2
 # recommended dependencies
 , withHwloc ? true
 , hwloc
@@ -49,11 +50,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.0.2";
+  version = "9.1.4";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "0r05iqmnnjq259nsibncgfrfsr0l4h3hsafizvgfl9zgmrkm6izz";
+    sha256 = "sha256-+iq+z+1JE6JE6OLcUwRRAe2/EISqb6Ax6pNm8GcB7bc=";
   };
 
   patches = [
@@ -120,9 +121,6 @@ stdenv.mkDerivation rec {
     "--enable-experimental-plugins"
     (lib.enableFeature enableWCCP "wccp")
 
-    # the configure script can't auto-locate the following from buildInputs
-    "--with-lzma=${xz.dev}"
-    "--with-zlib=${zlib.dev}"
     (lib.withFeatureAs withHiredis "hiredis" hiredis)
   ];
 

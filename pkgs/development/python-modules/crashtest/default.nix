@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "crashtest";
-  version = "0.3.1";
+  version = "0.4.1";
   disabled = !(pythonAtLeast "3.6");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42ca7b6ce88b6c7433e2ce47ea884e91ec93104a4b754998be498a8e6c3d37dd";
+    sha256 = "sha256-gNex8xbr+9Qp9kgHbWJ1yHe6MLpIl53kGRcUp1Jm8M4=";
   };
 
   # has tests, but only on GitHub, however the pyproject build fails for me

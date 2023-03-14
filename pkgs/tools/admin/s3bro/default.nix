@@ -1,21 +1,38 @@
-{ lib, python3Packages }:
+{ lib
+, python3
+}:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "s3bro";
   version = "2.8";
+  format = "setuptools";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0k25g3vch0q772f29jlghda5mjvps55h5lgwhwwbd5g2nlnrrspq";
+    hash = "sha256-+OqcLbXilbY4h/zRAkvRd8taVIOPyiScOAcDyPZ4RUw=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ boto3 botocore click termcolor ];
+  propagatedBuildInputs = with python3.pkgs; [
+    boto3
+    botocore
+    click
+    termcolor
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "use_2to3=True," ""
+  '';
 
   # No tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "s3bro"
+  ];
+
   meta = with lib; {
-    description = "A handy s3 cli tool";
+    description = "s3 CLI tool";
     homepage = "https://github.com/rsavordelli/s3bro";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];

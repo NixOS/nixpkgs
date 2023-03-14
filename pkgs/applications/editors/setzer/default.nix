@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.1";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    sha256 = "1rcx2c07jg1ij81pnvg3px49hfbjmkagn68d3gp79z3gcajbp2av";
+    hash = "sha256-7NPyvAof0xObYZws3KFAbdue/GpIRthzdX00jc9GhYs=";
   };
 
   format = "other";
@@ -37,10 +37,10 @@ python3.pkgs.buildPythonApplication rec {
     appstream-glib
     wrapGAppsHook
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtksourceview4
     gspell
     poppler_gi
@@ -51,8 +51,9 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pyxdg
-    pdfminer
+    pdfminer-six
     pycairo
+    pexpect
   ];
 
   checkPhase = ''

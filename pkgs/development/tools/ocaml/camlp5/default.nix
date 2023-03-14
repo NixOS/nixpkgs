@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, ocaml, perl }:
 
 if lib.versionOlder ocaml.version "4.02"
+|| lib.versionOlder "4.13" ocaml.version
 then throw "camlp5 is not available for OCaml ${ocaml.version}"
 else
 
@@ -16,7 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
   };
 
-  buildInputs = [ ocaml perl ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml perl ];
 
   prefixKey = "-prefix ";
 

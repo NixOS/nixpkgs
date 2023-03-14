@@ -1,17 +1,22 @@
 { stdenv, lib, substituteAll, fetchFromGitHub, buildPythonPackage, python, pkg-config, libX11
 , SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype, fontconfig
 , AppKit
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "GrfNaowlD2L5umiFwj7DgtHGBg9a4WVfe3RlMjK3ElU=";
+    # Unicode file names lead to different checksums on HFS+ vs. other
+    # filesystems because of unicode normalisation. The documentation
+    # has such files and will be removed.
+    sha256 = "sha256-v1z6caEMJNXqbcbTmFXoy3KQewHiz6qK4vhNU6Qbukk=";
+    postFetch = "rm -rf $out/docs/reST";
   };
 
   patches = [
@@ -21,6 +26,7 @@ buildPythonPackage rec {
       buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getDev dep}/"
         "${lib.getDev dep}/include"
+        "${lib.getDev dep}/include/SDL2"
       ]) buildInputs);
       buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getLib dep}/"
@@ -47,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    ${python.interpreter} buildconfig/config.py
+    ${python.pythonForBuild.interpreter} buildconfig/config.py
   '';
 
   checkPhase = ''
@@ -68,7 +74,9 @@ buildPythonPackage rec {
     description = "Python library for games";
     homepage = "https://www.pygame.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
+    # fatal error: longintrepr.h: No such file or directory.
+    broken = pythonAtLeast "3.11"; # At 2022-02-27
   };
 }

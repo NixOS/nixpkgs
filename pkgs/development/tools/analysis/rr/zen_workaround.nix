@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     makeFlags="$makeFlags M=$(pwd)"
   '';
-  buildFlags = "modules";
+  buildFlags = [ "modules" ];
 
   installPhase = let
     modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel"; #TODO: longer path?

@@ -8,22 +8,28 @@
 , cjson
 , libuuid
 , libuv
-, libwebsockets_3_1
+, libwebsockets
 , openssl
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , fetchpatch
 }:
 
+let
+  # Mosquitto needs external poll enabled in libwebsockets.
+  libwebsockets' = libwebsockets.override {
+    withExternalPoll = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.12";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bn6vpk6gdxrnm3aw3j2g0ny6cx2arv8pmv4x8302pr6qcrz57s6";
+    sha256 = "sha256-H2oaTphx5wvwXWDDaf9lLSVfHWmb2rMlxQmyRB4k5eg=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
     cjson
     libuuid
     libuv
-    libwebsockets_3_1
+    libwebsockets'
     openssl
   ] ++ lib.optional withSystemd systemd;
 

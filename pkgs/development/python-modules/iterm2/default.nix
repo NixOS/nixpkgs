@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "iterm2";
-  version = "1.29";
+  version = "2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8245562ed713fd473520f81361cdc1b15835920e1ceb7d588678cd153e77c2b6";
+    sha256 = "sha256-9vC+xGwyzsr3vn/YIpbsRpfUvyEB8MSqskzBI5kfojA=";
   };
 
   propagatedBuildInputs = [ protobuf websockets ];

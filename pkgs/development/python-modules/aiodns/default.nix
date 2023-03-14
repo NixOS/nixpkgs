@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycares
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     typing
   ];
 

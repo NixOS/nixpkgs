@@ -1,21 +1,23 @@
 { fetchurl
-, substituteAll
 , runCommand
 , lib
+, fetchpatch
 , stdenv
 , pkg-config
 , gnome
 , gettext
 , gobject-introspection
 , cairo
+, colord
+, lcms2
 , pango
 , json-glib
 , libstartup_notification
-, zenity
 , libcanberra
 , ninja
 , xvfb-run
 , xkeyboard_config
+, libxcvt
 , libxkbfile
 , libXdamage
 , libxkbcommon
@@ -36,7 +38,9 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, gi-docgen
 , sysprof
+, libsysprof-capture
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
@@ -44,25 +48,30 @@
 , wayland-protocols
 }:
 
-let self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "41.1";
+  version = "43.3";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "WOY/0LxD81E08hMTr/Suv5LIKdbfTcmaBEoeN2aR4/M=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+    sha256 = "Z75IINmycMnDxl44lHvwUtLC/xiunnBCHUklnvrACn0=";
   };
 
   patches = [
-    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
-    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    # ./drop-inheritable.patch
+    # Fix build with separate sysprof.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
+      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
+    })
 
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit zenity;
+    # Fix focus regression.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2848
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/12ce58dba4f96f6a948c1d166646d263253e3ee0.patch";
+      sha256 = "CGu11aLFs8VEt8NiIkih+cXZzU82oxY6Ko9QRKOkM98=";
     })
   ];
 
@@ -75,6 +84,7 @@ let self = stdenv.mkDerivation rec {
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
+    "-Ddocs=true"
   ];
 
   propagatedBuildInputs = [
@@ -88,6 +98,7 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    libxcvt
     mesa # needed for gbm
     meson
     ninja
@@ -95,7 +106,8 @@ let self = stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
-    xorgserver # for cvt command
+    gi-docgen
+    xorgserver
   ];
 
   buildInputs = [
@@ -116,9 +128,12 @@ let self = stdenv.mkDerivation rec {
     libxkbcommon
     libxkbfile
     libXdamage
+    colord
+    lcms2
     pango
     pipewire
-    sysprof
+    sysprof # for D-Bus interfaces
+    libsysprof-capture
     xkeyboard_config
     xwayland
     wayland-protocols
@@ -132,16 +147,24 @@ let self = stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    # TODO: Move this into a directory devhelp can find.
+    moveToOutput "share/mutter-11/doc" "$devdoc"
+  '';
+
   # Install udev files into our own tree.
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
+  separateDebugInfo = true;
+
   passthru = {
-    libdir = "${self}/lib/mutter-8";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
-        if [[ ! -d ${self.libdir} ]]; then
-          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+        if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1
         fi
         touch $out
@@ -149,8 +172,8 @@ let self = stdenv.mkDerivation rec {
     };
 
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "mutter";
+      attrPath = "gnome.mutter";
     };
   };
 
@@ -161,5 +184,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-};
-in self
+})

@@ -40,7 +40,7 @@ let
       name = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Graphics;2DGraphics;3DGraphics;";
+      categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
 
     nativeBuildInputs = [ makeWrapper unzip ];
@@ -81,7 +81,7 @@ let
 
   };
 
-  d2u = lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceStrings ["."] ["_"];
 
 in {
 

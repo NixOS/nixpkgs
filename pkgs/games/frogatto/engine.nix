@@ -1,23 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, which
+{ lib, stdenv, fetchFromGitHub, fetchurl, which
 , boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
-, glew, zlib, icu, pkg-config, cairo, libvpx }:
+, glew, zlib, icu, pkg-config, cairo, libvpx, glm
+}:
 
 stdenv.mkDerivation {
   pname = "anura-engine";
-  version = "unstable-2021-05-24";
+  version = "unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "anura-engine";
     repo = "anura";
-    rev = "ed50bbfa68a4aa09438d95d39103ec39156d438f";
-    sha256 = "0bk0qklk9wwx3jr2kbrmansccn1nj962v5n2vlb5hxsrcv96s3dg";
+    rev = "65d85b6646099db1d5cd25d31321bb434a3f94f1";
+    sha256 = "sha256-hb4Sn7uI+eXLaGb4zkEy4w+ByQJ6FqkoMUYFsyiFCeE=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace src/sys.cpp \
-      --replace mallinfo2 mallinfo
-  '';
 
   nativeBuildInputs = [
     which pkg-config
@@ -34,6 +30,7 @@ stdenv.mkDerivation {
     icu
     cairo
     libvpx
+    glm
   ];
 
   enableParallelBuilding = true;

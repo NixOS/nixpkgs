@@ -72,7 +72,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dwarf_fortress_unfuck-${release.unfuckRelease}";
+  pname = "dwarf_fortress_unfuck";
+  version = release.unfuckRelease;
 
   src = fetchFromGitHub {
     owner = "svenstaro";
@@ -80,6 +81,11 @@ stdenv.mkDerivation {
     rev = release.unfuckRelease;
     sha256 = release.sha256;
   };
+
+  postPatch = ''
+    # https://github.com/svenstaro/dwarf_fortress_unfuck/pull/27
+    substituteInPlace CMakeLists.txt --replace \''${GLEW_LIBRARIES} GLEW::glew
+  '';
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"

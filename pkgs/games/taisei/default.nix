@@ -3,16 +3,16 @@
 , docutils, meson, ninja, pkg-config, python3
 # Runtime depends
 , glfw, SDL2, SDL2_mixer
-, freetype, libpng, libwebp, libzip, zlib
+, cglm, freetype, libpng, libwebp, libzip, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "taisei";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://github.com/taisei-project/${pname}/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    sha256 = "11f9mlqmzy1lszwcc1nsbar9q1hs4ml6pbm52hqfd4q0f4x3ln46";
+    sha256 = "1g53fcyrlzmvlsb40pw90gaglysv6n1w42hk263iv61ibhdmzh6v";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glfw SDL2 SDL2_mixer
-    freetype libpng libwebp libzip zlib
+    cglm freetype libpng libwebp libzip zlib
   ];
 
   patches = [ ./0001-lto-fix.patch ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A free and open-source Touhou Project clone and fangame";
     longDescription = ''
       Taisei is an open clone of the Tōhō Project series. Tōhō is a one-man
@@ -43,4 +44,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

@@ -4,30 +4,40 @@
 , pkg-config
 , rustPlatform
 , stdenv
-, libX11
-, libXrandr
+, withSixel ? false
+, libsixel
+, xorg
+, AppKit
 , withSki ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "menyoki";
-  version = "1.5.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "050c6c60il6cy0a8d3nw4z2cyp043912a7n4n44yjpmx047w7kc7";
+    sha256 = "sha256-owP3G1Rygraifdc4iPURQ1Es0msNhYZIlfrtj0CSU6Y=";
   };
 
-  cargoSha256 = "0wwcda2w8jg3q132cvhdgfmjc0rz93fx6fai93g5w8br98aq9qzx";
+  cargoSha256 = "sha256-NtXjlGkX8AzSw98xHPymzdnTipMIunyDbpSr4eVowa0=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optionals stdenv.isLinux [ libX11 libXrandr ];
+  buildInputs = lib.optional withSixel libsixel
+    ++ lib.optionals stdenv.isLinux (with xorg; [ libX11 libXrandr ])
+    ++ lib.optional stdenv.isDarwin AppKit;
 
-  cargoBuildFlags = lib.optional (!withSki) "--no-default-features";
+  buildNoDefaultFeatures = !withSki;
+  buildFeatures = lib.optional withSixel "sixel";
+
+  checkFlags = [
+    # sometimes fails on lower end machines
+    "--skip=record::fps::tests::test_fps"
+  ];
 
   postInstall = ''
     installManPage man/*
@@ -37,8 +47,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Screen{shot,cast} and perform ImageOps on the command line";
     homepage = "https://menyoki.cli.rs/";
+    changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    broken = stdenv.isDarwin;
   };
 }

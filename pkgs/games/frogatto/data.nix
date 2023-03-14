@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation {
   pname = "frogatto-data";
-  version = "unstable-2021-05-24";
+  version = "unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "frogatto";
     repo = "frogatto";
-    # master branch as of 2020-12-17
-    rev = "8b0f2bc8f9f172f6225b8e0d806552cb94f35e2a";
-    sha256 = "09nrna9l1zj2ma2bazdhdvphwy570kfz4br4xgpwq21rsjrvrqiy";
+    rev = "5ca339f4b97e5004dc07394407bf1da43fbd6204";
+    sha256 = "sha256-6wqCFc7DlDt0u0JnPg4amVemc9HOjsB/U4s9n7N84QA=";
   };
 
   installPhase = ''
     mkdir -p $out/share/frogatto/modules
-    cp -ar . $out/share/frogatto/modules/frogatto
+    cp -ar . $out/share/frogatto/modules/frogatto4
   '';
 
   meta = with lib; {

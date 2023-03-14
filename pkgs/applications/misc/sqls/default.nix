@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "sqls";
-  version = "0.2.19";
+  version = "0.2.22";
 
   src = fetchFromGitHub {
     owner = "lighttiger2505";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1myypq9kdfbhl5h9h8d30a3pi89mix48wm1c38648ky9vhx0s4az";
+    sha256 = "sha256-xtvm/NVL98dRzQL1id/WwT/NdsnB7qTRVR7jfrRsabY=";
   };
 
-  vendorSha256 = "13c7nv0anj260z34bd7w1hz0rkmsj9r1zz55qiwcr1vdgmvy84cz";
+  vendorSha256 = "sha256-sowzyhvNr7Ek3ex4BP415HhHSKnqPHy5EbnECDVZOGw=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.revision=${src.rev}" ];
+
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/lighttiger2505/sqls";

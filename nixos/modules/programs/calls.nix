@@ -7,13 +7,15 @@ let
 in {
   options = {
     programs.calls = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         Whether to enable GNOME calls: a phone dialer and call handler.
-      '';
+      '');
     };
   };
 
   config = mkIf cfg.enable {
+    programs.dconf.enable = true;
+
     environment.systemPackages = [
       pkgs.calls
     ];

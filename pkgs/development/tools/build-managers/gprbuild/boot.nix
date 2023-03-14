@@ -7,14 +7,14 @@
 }:
 
 let
-  version = "21.0.0";
+  version = "23.0.0";
 
   gprConfigKbSrc = fetchFromGitHub {
     name = "gprconfig-kb-${version}-src";
     owner = "AdaCore";
     repo = "gprconfig_kb";
     rev = "v${version}";
-    sha256 = "11qmzfdd0ipmhxl4k2hjidqc9i40bywrfkbiivd3lhscxca5pxpg";
+    sha256 = "1rhskq4r2plf3ia67k08misygnpr9knzw3kp3kyv5778lra8y6s2";
   };
 in
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     owner = "AdaCore";
     repo = "gprbuild";
     rev = "v${version}";
-    sha256 = "1knpwasbrz6sxh3dhkc4izchcz4km04j77r4vxxhi23fbd8v1ynj";
+    sha256 = "1ciaq4nh98vd7r5i11v353c1ms9s5yph0yxk4fkryc6bvkm4666x";
   };
 
   nativeBuildInputs = [

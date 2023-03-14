@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "l2md";
-  version = "unstable-2020-07-31";
+  version = "unstable-2021-10-27";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git";
-    rev = "2b9fae141fc2129940e0337732a35a3fc1c33455";
-    sha256 = "PNNoD3a+rJwKH6wbOkvVU1IW4+xF7+zQaLFAlyLlYOI=";
+    rev = "9db252bc1716ebaf0abd3a47a59ea78e4e6253d6";
+    sha256 = "sha256-H/leDUwQM55akyXsmTnI2YsnG4i1KQtf4bBt1fizy8E=";
   };
 
   buildInputs = [ libgit2 ];

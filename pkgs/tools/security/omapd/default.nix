@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.google.com/archive/p/omapd/";
     description = "IF-MAP Server that implements the IF-MAP v1.1 and v2.0 specifications published by the Trusted Computing Group (TCG)";
     license = licenses.gpl3;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

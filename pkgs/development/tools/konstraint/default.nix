@@ -1,21 +1,38 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "konstraint";
-  version = "0.15.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lnbci3SUVp/vyArrfRF1dgv0KnqcmGIalhsZjDOhpSg=";
+    sha256 = "sha256-KOl1K6XSublOxaCE89QXIRESyBrfgrJnVkaaC76ld1E=";
   };
-  vendorSha256 = "sha256-hfnpZgGIEpfHjM5J93D/aljN6j5XHGknpYXWeRV4Y4Q=";
+  vendorHash = "sha256-t306WYXPVXHqp6Ixd02QTVSLJ8VI57FA1KwMDW/JSeg=";
 
   # Exclude go within .github folder
   excludedPackages = ".github";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [ "-s" "-w" "-X github.com/plexsystems/konstraint/internal/commands.version=${version}" ];
+
+  postInstall = ''
+    installShellCompletion --cmd konstraint \
+      --bash <($out/bin/konstraint completion bash) \
+      --fish <($out/bin/konstraint completion fish) \
+      --zsh <($out/bin/konstraint completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/konstraint --help
+    $out/bin/konstraint --version | grep "${version}"
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/plexsystems/konstraint";

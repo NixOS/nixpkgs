@@ -5,13 +5,13 @@ import ../make-test-python.nix (
     # copy_from_host works only for store paths
     rec {
         name = "fcitx";
-        machine =
+        meta.broken = true; # takes hours to time out since October 2021
+        nodes.machine =
         {
           pkgs,
           ...
         }:
           {
-            virtualisation.memorySize = 1024;
 
             imports = [
               ../common/user-account.nix

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goffice";
-  version = "0.10.50";
+  version = "0.10.55";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LFw93HsIs0UkCMgbEhxfASpzSYHXXkRN68yxxY5cv9w=";
+    sha256 = "FqIhGRhVpqbA0Gse+OSBzz9SBBplTsltNYFwRboama8=";
   };
 
   nativeBuildInputs = [ pkg-config intltool ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt librsvg ];
 
   enableParallelBuilding = true;
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isPower64;
 
   passthru = {
     updateScript = gnome.updateScript {

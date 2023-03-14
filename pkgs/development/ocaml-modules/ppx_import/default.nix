@@ -1,27 +1,51 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_tools_versioned
-, ocaml-migrate-parsetree
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, ounit
+, ppx_deriving
+, ppx_sexp_conv
+, ppxlib
+, version ? if lib.versionAtLeast ocaml.version "4.11" then "1.10.0" else "1.9.1"
 }:
+
+let param = {
+  "1.9.1" = {
+    sha256 = "sha256-0bSY4u44Ds84XPIbcT5Vt4AG/4PkzFKMl9CDGFZyIdI=";
+  };
+  "1.10.0" = {
+    sha256 = "sha256-MA8sf0F7Ch1wJDL8E8470ukKx7KieWyjWJnJQsqBVW8=";
+  };
+}."${version}"; in
+
+lib.throwIfNot (lib.versionAtLeast ppxlib.version "0.24.0")
+  "ppx_import is not available with ppxlib-${ppxlib.version}"
 
 buildDunePackage rec {
   pname = "ppx_import";
-  version = "1.8.0";
+  inherit version;
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.05";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ppx_import/releases/download/v${version}/ppx_import-${version}.tbz";
-    sha256 = "0zqcj70yyp4ik4jc6jz3qs2xhb94vxc6yq9ij0d5cyak28klc3gv";
+    url = "https://github.com/ocaml-ppx/ppx_import/releases/download/${version}/ppx_import-${version}.tbz";
+    inherit (param) sha256;
   };
 
   propagatedBuildInputs = [
-    ppx_tools_versioned ocaml-migrate-parsetree
+    ppxlib
   ];
 
+  checkInputs = [
+    ounit
+    ppx_deriving
+    ppx_sexp_conv
+  ];
+
+  doCheck = true;
+
   meta = {
-    description = "A syntax extension that allows to pull in types or signatures from other compiled interface files";
+    description = "A syntax extension for importing declarations from interface files";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocaml-ppx/ppx_import";
   };

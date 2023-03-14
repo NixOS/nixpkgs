@@ -6,6 +6,7 @@
 , libgpg-error
 , libxcb
 , libxkbcommon
+, pkg-config
 , python3
 , AppKit
 , Foundation
@@ -16,20 +17,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.8.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    sha256 = "sha256-2fTJHcJJzQIAyxLnWdoyR77tA9p/3s3UescypGwKfc0=";
+    hash = "sha256-2OMjqY1oTVKyEuCJrGGSQfgjQPSOQRx6LPhoFUuf/pw=";
   };
 
-  cargoSha256 = "sha256-8dWMJZiWy0cO0CGAFEmtGYZ8bVK1ZR7qBkjKn6rLC+k=";
+  cargoHash = "sha256-EhnQvVXv08l4ONnuIudU0WBw5AptD7OcvPUNOdpRZj4=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
     libgpg-error # for gpg-error-config
+    pkg-config
     python3
   ];
 
@@ -49,6 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal user interface for GnuPG";
     homepage = "https://github.com/orhun/gpg-tui";
+    changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

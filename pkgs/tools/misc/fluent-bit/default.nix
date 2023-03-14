@@ -1,26 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, postgresql, openssl, libyaml }:
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.8.9";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-b+MZuZQB/sl0HcioU1KCxH3TNiXYSPBfC9dBKqCVeXk=";
+    sha256 = "sha256-jHbxROO21cgbhEiWv9wQJyHWGGK14nGQuk9Fc9ufHqg=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ systemd ];
+  buildInputs = [ openssl libyaml postgresql ]
+    ++ lib.optionals stdenv.isLinux [ systemd ];
 
-  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];
-
-  patches = lib.optionals stdenv.isDarwin [ ./fix-luajit-darwin.patch ];
+  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" "-DFLB_OUT_PGSQL=ON"  ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-O" ]
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: /monkey/mk_tls.h:81: multiple definition of `mk_tls_server_timeout';
+    #     flb_config.c.o:include/monkey/mk_tls.h:81: first defined here
+    # TODO: drop when upstream gets a fix for it:
+    #   https://github.com/fluent/fluent-bit/issues/5537
+    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
 
   outputs = [ "out" "dev" ];
 
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fluentbit.io";
     maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,5 @@
 { lib
+, gitUpdater
 , fetchFromGitHub
 , buildPythonApplication
 , pythonOlder
@@ -7,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "legendary-gl"; # Name in pypi
-  version = "0.20.10";
+  version = "0.20.32";
 
   src = fetchFromGitHub {
     owner = "derrod";
     repo = "legendary";
-    rev = version;
-    sha256 = "sha256-/OttNHwS08gHx/ZpOuB6yxfK2cX3BbMeQLZC7iXKKrk=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-MsvhVS3lqhgBJ+S/cjXFP70I3rM5WBYT7TyVlRWhNWw=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -31,4 +32,6 @@ buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ equirosa ];
   };
+
+  passthru.updateScript = gitUpdater { };
 }

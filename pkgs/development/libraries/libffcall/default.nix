@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libffcall";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchurl {
     url = "mirror://gnu/libffcall/libffcall-${version}.tar.gz";
-    sha256 = "sha256-6/o3+XtslPrCTs8xk/n8gpUXz4Gu6awtGRr5k9c8t0c=";
+    sha256 = "sha256-jvaZIdvcBrxbuQUTYiY3p7g6cfMfW6N3vp2P2PV5EsI=";
   };
 
   enableParallelBuilding = false;
@@ -24,5 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/libffcall/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

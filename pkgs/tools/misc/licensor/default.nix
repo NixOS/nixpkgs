@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "licensor";
@@ -12,6 +16,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1h66d1brx441bg7vzbqdish4avgmc6h7rrkw2qf1siwmplwqqhw0";
+
+  # https://github.com/raftario/licensor/issues/67
+  postPatch = ''
+    sed "/Copyright (c) 2021/s/2021/$(date +%Y)/" -i tests/integration.rs
+  '';
 
   meta = with lib; {
     description = "Write licenses to stdout";

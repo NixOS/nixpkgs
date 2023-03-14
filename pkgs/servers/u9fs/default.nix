@@ -1,24 +1,24 @@
-{ lib, stdenv, fetchhg }:
+{ lib, stdenv, fetchFromBitbucket }:
 
 stdenv.mkDerivation {
   pname = "u9fs";
-  version = "unstable-2020-11-21";
+  version = "unstable-2021-01-25";
 
-  src = fetchhg {
-    url = "https://code.9front.org/hg/plan9front";
-    rev = "6eef4d6a9bce";
-    sha256 = "0irwyk8vnvx0fmz8lmbdb2jrlvas8imr61jr76a1pkwi9wpf2wv6";
+  src = fetchFromBitbucket {
+    owner = "plan9-from-bell-labs";
+    repo = "u9fs";
+    rev = "d65923fd17e8b158350d3ccd6a4e32b89b15014a";
+    sha256 = "0h06l7ciikp3gzrr550z0fyrfp3y2067dfd3rxxw0q95z4l6vhy1";
   };
 
   installPhase = ''
-      mkdir -p $out/bin $out/share/man4
-      cp u9fs.man $out/share/man4
-      cp u9fs $out/bin
+      install -Dm644 u9fs.man "$out/share/man/man4/u9fs.4"
+      install -Dm755 u9fs -t "$out/bin"
     '';
 
   meta = with lib; {
     description = "Serve 9P from Unix";
-    homepage = "http://plan9.bell-labs.com/magic/man2html/4/u9fs";
+    homepage = "http://p9f.org/magic/man2html?man=u9fs&sect=4";
     license = licenses.free;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.unix;

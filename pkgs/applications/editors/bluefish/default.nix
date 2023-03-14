@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";
-    homepage = "http://bluefish.openoffice.nl/";
+    homepage = "https://bluefish.openoffice.nl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vbgl ];
     platforms = platforms.all;

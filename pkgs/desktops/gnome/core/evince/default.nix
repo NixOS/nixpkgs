@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -30,55 +31,35 @@
 , gsettings-desktop-schemas
 , gnome-desktop
 , dbus
-, pantheon
-, python3
 , texlive
-, t1lib
 , gst_all_1
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
 , supportMultimedia ? true # PDF multimedia
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
-, withPantheon ? false
+, withLibsecret ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "41.2";
+  version = "43.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lautDW/urJVg2zq4C6fF6rsf3xyg47PJMzmvBUU6JNg=";
+    sha256 = "bXXKYrc7+7YA9xigmBA9xrgT+QULlZS+kp4ptFidIzU=";
   };
-
-  patches = lib.optionals withPantheon [
-    # Make this respect dark mode settings from Pantheon
-    # https://github.com/elementary/evince
-    # The patch currently differs from upstream (updated for evince 41).
-    ./pantheon-dark-style.patch
-  ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   nativeBuildInputs = [
     appstream
-    docbook-xsl-nons
-    docbook_xml_dtd_43
     gettext
     gobject-introspection
-    gtk-doc
+    gi-docgen
     itstool
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook
     yelp-tools
   ];
@@ -98,13 +79,13 @@ stdenv.mkDerivation rec {
     libarchive
     libhandy
     librsvg
-    libsecret
     libspectre
     libxml2
     pango
     poppler
-    t1lib
     texlive.bin.core # kpathsea for DVI support
+  ] ++ lib.optionals withLibsecret [
+    libsecret
   ] ++ lib.optionals supportXPS [
     libgxps
   ] ++ lib.optionals supportMultimedia (with gst_all_1; [
@@ -114,19 +95,26 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-  ]) ++ lib.optionals withPantheon [
-    pantheon.granite
-  ];
+  ]);
 
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
+  ] ++ lib.optionals (!withLibsecret) [
+    "-Dkeyring=disabled"
+  ] ++ lib.optionals (!supportMultimedia) [
+    "-Dmultimedia=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

@@ -1,22 +1,70 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
-buildPythonPackage rec {
-  pname = "OWSLib";
-  version = "0.25.0";
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyproj
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, pyyaml
+, requests
+, python
+}:
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "20d79bce0be10277caa36f3134826bd0065325df0301a55b2c8b1c338d8d8f0a";
+buildPythonPackage rec {
+  pname = "owslib";
+  version = "0.28.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "geopython";
+    repo = "OWSLib";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o/sNhnEZ9e0BsftN9AhJKuUjKHAHNRPe0grxdAWRVao=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --doctest-modules --doctest-glob 'tests/**/*.txt' --cov-report term-missing --cov owslib" ""
+  '';
 
-  # 'tests' dir not included in pypy distribution archive.
-  doCheck = false;
+  propagatedBuildInputs = [
+    pyproj
+    python-dateutil
+    pytz
+    pyyaml
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "owslib"
+  ];
+
+  preCheck = ''
+    # _pytest.pathlib.ImportPathMismatchError: ('owslib.swe.sensor.sml', '/build/source/build/...
+    export PY_IGNORE_IMPORTMISMATCH=1
+  '';
+
+  disabledTests = [
+    # Tests require network access
+    "test_ows_interfaces_wcs"
+    "test_wfs_110_remotemd"
+    "test_wfs_200_remotemd"
+    "test_wms_130_remotemd"
+    "test_wmts_example_informatievlaanderen"
+  ];
 
   meta = with lib; {
-    description = "client for Open Geospatial Consortium web service interface standards";
-    license = licenses.bsd3;
+    description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
+    changelog = "https://github.com/geopython/OWSLib/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

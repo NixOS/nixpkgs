@@ -7,20 +7,21 @@
 , PCSC
 , pkg-config
 , hsmSupport ? true
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.17.4";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "v${version}";
-    sha256 = "sha256-X4dOrd/wxtYLw3C4Lj88RV/J6CEkmsOeqtiVX/6VFHg=";
+    sha256 = "sha256-BDJEvA6kDBxE43+l2GGaGJxv1BETZGJ9poAqXg/NfOY=";
   };
 
-  vendorSha256 = "sha256-/8Glo+U8MS8Y8mKECgTAB7JWmp/rjMQhG4nZkNs+Zgs=";
+  vendorHash = "sha256-2uBrd1AJyKPJBgMp2ANng9dSjye3iTNaUg+tuLsKEts=";
 
   ldflags = [ "-buildid=" ];
 
@@ -45,12 +46,16 @@ buildGoModule rec {
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+  # Tests need to run in a reproducible order, otherwise they run unreliably on
+  # (at least) x86_64-linux.
+  checkFlags = [ "-p 1" ];
+
+  passthru.tests.step-ca = nixosTests.step-ca;
 
   meta = with lib; {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai mohe2015 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ cmcdragonkai mohe2015 techknowlogick ];
   };
 }

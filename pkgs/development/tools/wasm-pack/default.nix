@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-pack";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
     rev = "v${version}";
-    sha256 = "sha256-I5TxpJTSus3fXMV0We9SCVMEERS0wIdYvC8SHo8zEHY=";
+    sha256 = "sha256-5AhHh/ycoNhhCH30RXvW6MyJkscrjFW+pvudw0MXieU=";
   };
 
-  cargoSha256 = "sha256-MmbQb2JYaDpLijKRAxzD9pR4gh+Eoem0MtfdiuRC7Tg=";
+  cargoSha256 = "sha256-4TKu9O5jLac5kLZF53DGjxEPize8jZm2B+CurelzSuo=";
 
   nativeBuildInputs = [ pkg-config ];
 

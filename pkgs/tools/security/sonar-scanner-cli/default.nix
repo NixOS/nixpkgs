@@ -2,16 +2,16 @@
 
 let
 
-  version = "4.5.0.2216";
+  version = "4.7.0.2747";
 
   sonarScannerArchPackage = {
     "x86_64-linux" = {
       url = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${version}-linux.zip";
-      sha256 = "sha256-rmvDb5l2BGV8j94Uhu2kJXwoDAHA3VncAahqGvLY3I0=";
+      sha256 = "0qy97lcn9nfwg0x32v9x5kh5jswnjyw3wpvxj45z7cddlj2is4iy";
     };
     "x86_64-darwin" = {
       url = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${version}-macosx.zip";
-      sha256 = "1g3lldpkrjlvwld9h82hlwclyplxpbk4q3nq59ylw4dhp26kb993";
+      sha256 = "0f8km7wqkw09g01l03kcrjgvq7b6xclzpvb5r64ymsmrc39p0ylp";
     };
   };
 

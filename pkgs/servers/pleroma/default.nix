@@ -1,38 +1,49 @@
 { lib, beamPackages
-, fetchFromGitHub, fetchFromGitLab
+, fetchFromGitHub, fetchFromGitLab, fetchHex
 , file, cmake
+, libxcrypt
 , nixosTests, writeText
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-XYZIf8/Vznl4FvVAOy5GVfTBTCwhfUol/3vWWIDwIxQ=";
+    sha256 = "sha256-3iG2s7jVEnhq1kLLgtaHnFmLYBO2Xr5M5jjZfSNA9z4=";
   };
+  stripDebug = false;
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
+      gettext = beamPackages.buildMix rec {
+        name = "gettext";
+        version = "0.19.1";
+
+        src = fetchFromGitHub {
+          owner = "tusooa";
+          repo = "gettext";
+          rev = "72fb2496b6c5280ed911bdc3756890e7f38a4808";
+          sha256 = "sha256-V0qmE+LcAbVoWsJmWE4fwrduYFIZ5BzK/sGzgLY3eH0=";
+        };
+      };
       prometheus_ex = beamPackages.buildMix rec {
         name = "prometheus_ex";
         version = "3.0.5";
 
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
+        src = fetchFromGitHub {
+          owner = "lanodan";
           repo = "prometheus.ex";
-          rev = "a4e9beb3c1c479d14b352fd9d6dd7b1f6d7deee5";
-          sha256 = "1v0q4bi7sb253i8q016l7gwlv5562wk5zy3l2sa446csvsacnpjk";
+          rev = "31f7fbe4b71b79ba27efc2a5085746c4011ceb8f";
+          sha256 = "sha256-2PZP+YnwnHt69HtIAQvjMBqBbfdbkRSoMzb1AL2Zsyc=";
         };
         beamDeps = with final; [ prometheus ];
       };
@@ -49,6 +60,8 @@ beamPackages.mixRelease rec {
           sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
         };
         beamDeps = with final; [ ];
+
+        postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
       };
       remote_ip = beamPackages.buildMix rec {
         name = "remote_ip";
@@ -63,20 +76,6 @@ beamPackages.mixRelease rec {
           sha256 = "0c7vmakcxlcs3j040018i7bfd6z0yq6fjfig02g5fgakx398s0x6";
         };
         beamDeps = with final; [ combine plug inet_cidr ];
-      };
-      concurrent_limiter = beamPackages.buildMix rec {
-        name = "concurrent_limiter";
-        version = "0.1.0";
-
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
-          repo = "concurrent_limiter";
-          rev = "d81be41024569330f296fc472e24198d7499ba78";
-          sha256 = "1nci8zz1gy7dnvxf5ydjqbagf4g9f7z5x1v9kdyy7jz9f37z6qw9";
-        };
-        beamDeps = with final; [ telemetry ];
       };
       prometheus_phx = beamPackages.buildMix rec {
         name = "prometheus_phx";
@@ -95,54 +94,9 @@ beamPackages.mixRelease rec {
         };
         beamDeps = with final; [ prometheus_ex ];
       };
-      majic = beamPackages.buildMix rec {
-        name = "majic";
-        version = "1.0.0";
-
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
-          repo = "majic";
-          rev = "289cda1b6d0d70ccb2ba508a2b0bd24638db2880";
-          sha256 = "15605lsdd74bmsp5z96f76ihn7m2g3p1hjbhs2x7v7309n1k108n";
-        };
-        patchPhase = ''
-          substituteInPlace lib/majic/server.ex --replace "erlang.now" "erlang.time"
-        '';
+      majic = prev.majic.override {
         buildInputs = [ file ];
-
-        beamDeps = with final; [ nimble_pool mime plug elixir_make ];
       };
-      crypt = beamPackages.buildRebar3 rec {
-        name = "crypt";
-        version = "0.4.3";
-
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
-          repo = "crypt";
-          rev = "cf2aa3f11632e8b0634810a15b3e612c7526f6a3";
-          sha256 = "0fnzljxy9pwabh1nzx0vawn131d5pdfb0p98kvpkqs441jr0ii73";
-        };
-
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
-
-        beamDeps = with final; [ elixir_make ];
-      };
-      web_push_encryption = beamPackages.buildMix rec {
-        name = "web_push_encryption";
-        version = "0.3.0";
-        src = fetchFromGitHub {
-          owner = "lanodan";
-          repo = "elixir-web-push-encryption";
-          rev = "026a043037a89db4da8f07560bc8f9c68bcf0cc0";
-          sha256 = "0a4x6njqp8v579bc965c9ipsr1z3klrc0pvgj8x1xf69r77gs6sj";
-        };
-        beamDeps = with final; [ httpoison jose ];
-      };
-
       # Some additional build inputs and build fixes
       http_signatures = prev.http_signatures.override {
         patchPhase = ''
@@ -176,6 +130,19 @@ beamPackages.mixRelease rec {
 
         beamDeps = with final; [ p1_utils ];
       };
+      # Required by eimp
+      p1_utils = beamPackages.buildRebar3 rec {
+        name = "p1_utils";
+        version = "1.0.18";
+
+        src = fetchHex {
+          pkg = "${name}";
+          version = "${version}";
+          sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
+        };
+
+        beamDeps = [];
+      };
 
       mime = prev.mime.override {
         patchPhase = let
@@ -194,6 +161,13 @@ beamPackages.mixRelease rec {
           cp ${cfgFile} config/config.exs
         '';
       };
+
+      crypt = let
+        version = prev.crypt.version;
+      in prev.crypt.override {
+        buildInputs = [ libxcrypt ];
+        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
+      };
     });
   };
 
@@ -206,7 +180,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ petabyteboy ninjatrappeur yuka ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ ninjatrappeur yuka kloenk ];
+    platforms = platforms.unix;
   };
 }

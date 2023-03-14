@@ -16,14 +16,16 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.1.1";
-  disabled = pythonOlder "3.6";
+  version = "7.1.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
-    rev = version;
-    sha256 = "sha256-dUNx6r7KppfeHefa1IeJPXSEMyElPk+RAGdn447ax1g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Kn/I5q079b4vqi+jL/pcVKMqGgs+PYgMoByX8ZzgZ5M=";
   };
 
   propagatedBuildInputs = [
@@ -35,23 +37,26 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     faker
     mock
     nose
     pytestCheckHook
   ];
 
-  # example credentials aren't present
   disabledTestPaths = [
+    # example credentials aren't present
     "tests/unit/credentials_test.py"
   ];
 
-  pythonImportsCheck = [ "minio" ];
+  pythonImportsCheck = [
+    "minio"
+  ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
     homepage = "https://github.com/minio/minio-py";
+    changelog = "https://github.com/minio/minio-py/releases/tag/${version}";
     maintainers = with maintainers; [ peterromfeldhk ];
     license = licenses.asl20;
   };

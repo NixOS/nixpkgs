@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bison, mpi, flex, zlib}:
 
 stdenv.mkDerivation rec {
-  version = "6.0.4";
+  version = "6.1.1";
   pname = "scotch";
   src_name = "scotch_${version}";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gforge.inria.fr/frs/download.php/file/34618/${src_name}.tar.gz";
-    sha256 = "f53f4d71a8345ba15e2dd4e102a35fd83915abf50ea73e1bf6efe1bc2b4220c7";
+    sha256 = "sha256-OQUvWf9HSkppzvwlzzyvhClACIneugEO5kA8oYj4sxE=";
   };
 
   sourceRoot = "${src_name}/src";

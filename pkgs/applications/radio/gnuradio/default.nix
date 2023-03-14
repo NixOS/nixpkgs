@@ -9,7 +9,7 @@
 , cppunit
 , orc
 , boost
-, log4cpp
+, spdlog
 , mpir
 , doxygen
 , python
@@ -18,6 +18,8 @@
 , fftwFloat
 , alsa-lib
 , libjack2
+, libiio
+, libad9361
 , CoreAudio
 , uhd
 , SDL
@@ -45,14 +47,14 @@
 , overrideSrc ? {}
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.9";
-  minor = "3";
-  patch = "0";
+  major = "3.10";
+  minor = "5";
+  patch = "1";
 }
 }:
 
 let
-  sourceSha256 = "sha256-jVfExv1CcnlOaaj/XtnfhWAHnQsshZJ1l/zXo0uovdo=";
+  sourceSha256 = "sha256-D5Bsj70IHFOLPZQbaxkGdx7Lz94bXhCfnNfhZb3dDp4=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -64,7 +66,7 @@ let
       runtime = [
         volk
         boost
-        log4cpp
+        spdlog
         mpir
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
@@ -78,6 +80,9 @@ let
     doxygen = {
       native = [ doxygen ];
       cmakeEnableFlag = "DOXYGEN";
+    };
+    man-pages = {
+      cmakeEnableFlag = "MANPAGES";
     };
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
@@ -131,6 +136,12 @@ let
       ];
       cmakeEnableFlag = "GRC";
     };
+    jsonyaml_blocks = {
+      pythonRuntime = [
+        python.pkgs.jsonschema
+      ];
+      cmakeEnableFlag = "JSONYAML_BLOCKS";
+    };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
     };
@@ -168,6 +179,22 @@ let
     gr-channels = {
       cmakeEnableFlag = "GR_CHANNELS";
     };
+    gr-pdu = {
+      cmakeEnableFlag = "GR_PDU";
+      runtime = [
+        libiio
+        libad9361
+      ];
+    };
+    gr-iio = {
+      cmakeEnableFlag = "GR_IIO";
+      runtime = [
+        libiio
+      ];
+    };
+    common-precompiled-headers = {
+      cmakeEnableFlag = "COMMON_PCH";
+    };
     gr-qtgui = {
       runtime = [ qt5.qtbase libsForQt5.qwt ];
       pythonRuntime = [ python.pkgs.pyqt5 ];
@@ -200,6 +227,7 @@ let
         setuptools
         click
         click-plugins
+        pygccxml
       ];
       cmakeEnableFlag = "GR_MODTOOL";
     };
@@ -269,17 +297,18 @@ stdenv.mkDerivation rec {
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
-    (fetchpatch {
-      # https://github.com/gnuradio/gnuradio/pull/5225
-      url = "https://github.com/gnuradio/gnuradio/commit/4cef46e3ea0faf04e05ca1a5846cd1568fa51bb2.patch";
-      sha256 = "sha256-6AlGbtD1S0c3I9JSoLTMP4YqwDU17i2j+XRkuR+QTuc=";
-    })
   ];
   passthru = shared.passthru // {
-    # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
+    inherit
+      boost
+      volk
+      spdlog
+    ;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
+  } // lib.optionalAttrs (hasFeature "gr-pdu") {
+    inherit libiio libad9361;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };
@@ -288,7 +317,7 @@ stdenv.mkDerivation rec {
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;

@@ -1,24 +1,38 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, withGui ? true
-, webkitgtk, Cocoa, WebKit, zenity, makeWrapper }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, makeWrapper
+, webkitgtk
+, zenity
+, Cocoa
+, Security
+, WebKit
+, withGui ? true
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.6.5";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     rev = "v${version}";
-    sha256 = "1g95yvkvlj78bqrk3p2xbhrmg1hrlgbyr1a4s7vg45y60zys2c2j";
+    sha256 = "sha256-QOKFnre5MW9EvrKrKBHWpOxi2fBKTDMhzCDX3ISd2cQ=";
   };
 
-  cargoSha256 = "1n7kb1lyghpkgdgd58pw8ldvfps30rnv5niwx35pkdg74h59hqgj";
+  cargoPatches = [
+    (fetchpatch {
+      name = "bump-rust-web-view.patch";
+      url = "https://github.com/Revertron/Alfis/commit/03b461a740ab6ccbacd576eafc7a3faf4a66648f.patch";
+      sha256 = "sha256-CSqSMdVD31w7QxxXWtjKmqlaEirmbs1EVuiefSf1NKY=";
+    })
+  ];
 
-  cargoBuildFlags = [ "--no-default-features" ]
-    ++ lib.optional withGui "--features webgui";
-
-  cargoTestFlags = [ "--no-default-features" ]
-    ++ lib.optional withGui "--features webgui";
+  cargoSha256 = "sha256-B4xI++U6RCljXCyaOmNj/SwA6I16zoiZsgk2VTiKfkg=";
 
   checkFlags = [
     # these want internet access, disable them
@@ -27,8 +41,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = lib.optional (withGui && stdenv.isLinux) webkitgtk
+  buildInputs = lib.optional stdenv.isDarwin Security
+    ++ lib.optional (withGui && stdenv.isLinux) webkitgtk
     ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "doh"
+  ] ++ lib.optional withGui "webgui";
 
   postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
     wrapProgram $out/bin/alfis \

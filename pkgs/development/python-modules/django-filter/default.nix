@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "21.1";
+  version = "22.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YyolH6jxqttLjM7/kyu1L+L4Jt19/n8+rEDlxGPWg24=";
+    sha256 = "sha256-7Uc7duhPfoOyURuyBQw++zbRNSB9ASjf465LNuNZS6U=";
   };
 
   propagatedBuildInputs = [ django ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # Tests fail (needs the 'crispy_forms' module not packaged on nixos)
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
     django
     mock

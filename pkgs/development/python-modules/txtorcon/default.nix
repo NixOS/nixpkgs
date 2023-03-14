@@ -1,35 +1,57 @@
-{ lib, python, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, incremental, ipaddress, twisted
-, automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
-, GeoIP}:
+{ lib
+, stdenv
+, automat
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, GeoIP
+, idna
+, incremental
+, lsof
+, mock
+, pyopenssl
+, pytestCheckHook
+, python
+, pythonOlder
+, service-identity
+, twisted
+, zope_interface
+}:
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "21.1.0";
+  version = "23.0.0";
+  format = "setuptools";
 
-  checkInputs = [ pytest mock lsof GeoIP ];
-  propagatedBuildInputs = [
-    incremental twisted automat zope_interface
-    # extra dependencies required by twisted[tls]
-    idna pyopenssl service-identity
-  ] ++ lib.optionals (!isPy3k) [ ipaddress ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aebf0b9ec6c69a029f6b61fd534e785692e28fdcd2fd003ce3cc132b9393b7d6";
+    hash = "sha256-AiX/rWdokTeEmtmtNK21abDYj5rwRQMABnpfkB6ZQyU=";
   };
 
-  # Based on what txtorcon tox.ini will automatically test, allow back as far
-  # as Python 3.5.
-  disabled = pythonOlder "3.5";
+  propagatedBuildInputs = [
+    cryptography
+    incremental
+    twisted
+    automat
+    zope_interface
+  ] ++ twisted.optional-dependencies.tls;
 
-  checkPhase = ''
-    ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES ./test
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    lsof
+    GeoIP
+  ];
 
-  meta = {
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  meta = with lib; {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
     homepage = "https://github.com/meejah/txtorcon";
-    maintainers = with lib.maintainers; [ jluttine exarkun ];
-    license = lib.licenses.mit;
+    changelog = "https://github.com/meejah/txtorcon/releases/tag/v${version}";
+    maintainers = with maintainers; [ jluttine exarkun ];
+    license = licenses.mit;
   };
 }

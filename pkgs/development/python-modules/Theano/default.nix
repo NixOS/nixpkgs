@@ -11,9 +11,13 @@
 , setuptools
 , six
 , libgpuarray
-, cudaSupport ? false, cudatoolkit
-, cudnnSupport ? false, cudnn
+, cudaSupport ? false, cudaPackages ? {}
+, cudnnSupport ? false
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
 assert cudnnSupport -> cudaSupport;
 
@@ -39,7 +43,9 @@ let
     (    lib.optional cudaSupport libgpuarray_
       ++ lib.optional cudnnSupport cudnn );
 
-  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
+  # We need to be careful with overriding Python packages within the package set
+  # as this can lead to collisions!
+  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudaPackages; };
 
 in buildPythonPackage rec {
   pname = "Theano";
@@ -76,7 +82,7 @@ in buildPythonPackage rec {
   # the fix for which hasn't been merged yet.
 
   # keep Nose around since running the tests by hand is possible from Python or bash
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   # setuptools needed for cuda support
   propagatedBuildInputs = [
     libgpuarray_
@@ -93,6 +99,6 @@ in buildPythonPackage rec {
     homepage = "https://github.com/Theano/Theano";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ maintainers.bcdarwin ];
+    maintainers = [ ];
   };
 }

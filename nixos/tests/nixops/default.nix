@@ -9,7 +9,7 @@ let
     #  - Alternatively, blocked on a NixOps 2 release
     #    https://github.com/NixOS/nixops/issues/1242
     # stable = testsLegacyNetwork { nixopsPkg = pkgs.nixops; };
-    unstable = testsForPackage { nixopsPkg = pkgs.nixopsUnstable; };
+    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable; };
 
     # inherit testsForPackage;
   };
@@ -19,14 +19,14 @@ let
   });
 
   testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
+    name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
         imports = [ ../../modules/installer/cd-dvd/channel.nix ];
         environment.systemPackages = [ nixopsPkg ];
-        nix.binaryCaches = lib.mkForce [ ];
+        nix.settings.substituters = lib.mkForce [ ];
         users.users.person.isNormalUser = true;
         virtualisation.writableStore = true;
-        virtualisation.memorySize = 1024 /*MiB*/;
         virtualisation.additionalPaths = [
           pkgs.hello
           pkgs.figlet
@@ -98,7 +98,7 @@ let
     derivations and all build dependency outputs, all the way down.
   */
   allDrvOutputs = pkg:
-    let name = lib.strings.sanitizeDerivationName "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
+    let name = "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
     in
     pkgs.runCommand name { refs = pkgs.writeReferencesToFile pkg.drvPath; } ''
       touch $out

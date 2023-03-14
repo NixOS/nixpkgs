@@ -21,13 +21,13 @@ in
 {
   options = {
     services.salt.minion = {
-      enable = mkEnableOption "Salt minion service";
+      enable = mkEnableOption (lib.mdDoc "Salt minion service");
       configuration = mkOption {
         type = types.attrs;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Salt minion configuration as Nix attribute set.
-          See <link xlink:href="https://docs.saltstack.com/en/latest/ref/configuration/minion.html"/>
+          See <https://docs.saltstack.com/en/latest/ref/configuration/minion.html>
           for details.
         '';
       };

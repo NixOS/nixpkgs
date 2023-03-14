@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "dftlibs";
     repo = pname;
     rev = "v${version}";
-    sha256= "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
+    sha256 = "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A library of exchange-correlation functionals with arbitrary-order derivatives";
     homepage = "https://github.com/dftlibs/xcfun";
     license = licenses.mpl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };
 }

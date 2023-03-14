@@ -3,29 +3,46 @@
 , makeSetupHook
 , wheel
 , pip
+, pkgs
 }:
 let
   callPackage = python.pythonForBuild.pkgs.callPackage;
   pythonInterpreter = python.pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
+
+  nonOverlayedPython = pkgs.python3.pythonForBuild.withPackages (ps: [ ps.tomlkit ]);
+  makeRemoveSpecialDependenciesHook = { fields, kind }:
+    nonOverlayedPython.pkgs.callPackage
+      (
+        {}:
+        makeSetupHook
+          {
+            name = "remove-path-dependencies.sh";
+            propagatedBuildInputs = [ ];
+            substitutions = {
+              # NOTE: We have to use a non-overlayed Python here because otherwise we run into an infinite recursion
+              # because building of tomlkit and its dependencies also use these hooks.
+              pythonPath = nonOverlayedPython.pkgs.makePythonPath [ nonOverlayedPython ];
+              pythonInterpreter = nonOverlayedPython.interpreter;
+              pyprojectPatchScript = "${./pyproject-without-special-deps.py}";
+              fields = fields;
+              kind = kind;
+            };
+          } ./remove-special-dependencies.sh
+      )
+      { };
 in
 {
+  removePathDependenciesHook = makeRemoveSpecialDependenciesHook {
+    fields = [ "path" ];
+    kind = "path";
+  };
 
-  removePathDependenciesHook = callPackage
-    (
-      {}:
-      makeSetupHook
-        {
-          name = "remove-path-dependencies.sh";
-          deps = [ ];
-          substitutions = {
-            inherit pythonInterpreter;
-            yj = "${buildPackages.yj}/bin/yj";
-            pyprojectPatchScript = "${./pyproject-without-path.py}";
-          };
-        } ./remove-path-dependencies.sh
-    )
-    { };
+  removeGitDependenciesHook = makeRemoveSpecialDependenciesHook {
+    fields = [ "git" "branch" "rev" "tag" ];
+    kind = "git";
+  };
+
 
   pipBuildHook = callPackage
     (
@@ -33,7 +50,7 @@ in
       makeSetupHook
         {
           name = "pip-build-hook.sh";
-          deps = [ pip wheel ];
+          propagatedBuildInputs = [ pip wheel ];
           substitutions = {
             inherit pythonInterpreter pythonSitePackages;
           };
@@ -47,7 +64,15 @@ in
       makeSetupHook
         {
           name = "fixup-hook.sh";
-          deps = [ ];
+          propagatedBuildInputs = [ ];
+          substitutions = {
+            inherit pythonSitePackages;
+            filenames = builtins.concatStringsSep " " [
+              "pyproject.toml"
+              "README.md"
+              "LICENSE"
+            ];
+          };
         } ./fixup-hook.sh
     )
     { };
@@ -59,10 +84,8 @@ in
       makeSetupHook
         {
           name = "wheel-unpack-hook.sh";
-          deps = [ ];
+          propagatedBuildInputs = [ ];
         } ./wheel-unpack-hook.sh
     )
     { };
-
-
 }

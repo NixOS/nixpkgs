@@ -2,24 +2,27 @@
 , buildPythonPackage
 , fetchFromGitHub
 , requests
-, requests_oauthlib
+, requests-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "twitterapi";
-  version = "2.7.7";
+  version = "2.8.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geduldig";
     repo = "TwitterAPI";
     rev = "v${version}";
-    sha256 = "sha256-KEJ0lAg6Zi2vps+ZPTkT6ts87qnIBL9pFe1tPEzviCI=";
+    hash = "sha256-aBL7k10kZNQG/wNIxO37TbDSlbhrVjTfv2aXcrS2Ibo=";
   };
 
   propagatedBuildInputs = [
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   # Tests are interacting with the Twitter API

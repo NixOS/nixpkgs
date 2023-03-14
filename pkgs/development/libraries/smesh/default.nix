@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ opencascade ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
+
   meta = with lib; {
     description = "Extension to OCE providing advanced meshing features";
     homepage = "https://github.com/tpaviot/smesh";

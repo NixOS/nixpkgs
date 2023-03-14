@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "viddy";
-  version = "0.3.1";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18ms4kfv332863vd8b7mmrz39y4b8gvhi6lx9x5385jfzd19w5wx";
+    sha256 = "sha256-AcRfKu6P7b/HsuC6DTezbYLI9rQZwjklH/bs7mKITUk=";
   };
 
-  vendorSha256 = "0789wq4d9cynyadvlwahs4586gc3p78gdpv5wf733lpv1h5rjbv3";
+  vendorSha256 = "sha256-QxYM4N3E/BqmeNaofLR1crwFLVaF3IigDXKlKA2Bkuw=";
 
   ldflags = [
     "-s"

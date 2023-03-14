@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , libdrm
 , libpciaccess
@@ -45,6 +46,14 @@ stdenv.mkDerivation rec {
     sha256 = "1dwvxh1yplsh1a7h3gpp40g91v12cfxy6yy99s1v9yr2kwxikm1n";
   };
 
+  patches = [
+    # fix build with meson 0.60
+    (fetchpatch {
+      url = "https://github.com/freedesktop/xorg-intel-gpu-tools/commit/963917a3565466832a3b2fc22e9285d34a0bf944.patch";
+      sha256 = "sha256-goO2N7aK2dJYMhFGS1DlvjEYMSijN6stV6Q5z/RP8Ko=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config utilmacros meson ninja flex bison gtk-doc docutils docbook_xsl ];
   buildInputs = [
     libdrm
@@ -73,7 +82,7 @@ stdenv.mkDerivation rec {
     liboping
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ];
 
   preConfigure = ''
     patchShebangs tests man

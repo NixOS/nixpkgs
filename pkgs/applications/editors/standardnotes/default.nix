@@ -1,25 +1,14 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
+{ callPackage, lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+, fetchurl, libsecret  }:
 
 let
-  version = "3.8.18";
+  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+  version = srcjson.version;
   pname = "standardnotes";
   name = "${pname}-${version}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  plat = {
-    i386-linux = "i386";
-    x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system};
-
-  sha256 = {
-    i386-linux = "1xiypsmvpk8i6kab862pipbdfb0y5d5355hdwjmva7v7g26aa7h7";
-    x86_64-linux = "03qlxlgyypnvcr40jh6i4wriyax2jbfhrb798cq0n7qlc1y4pg8r";
-  }.${stdenv.hostPlatform.system};
-
-  src = fetchurl {
-    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
-    inherit sha256;
-  };
+  src = fetchurl (srcjson.appimage.${stdenv.hostPlatform.system} or throwSystem);
 
   appimageContents = appimageTools.extract {
     inherit name src;
@@ -30,27 +19,23 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
-
   extraPkgs = pkgs: with pkgs; [
     libsecret
   ];
 
   extraInstallCommands = ''
     # directory in /nix/store so readonly
-    cp -r  ${appimageContents}/* $out
     cd $out
     chmod -R +w $out
     mv $out/bin/${name} $out/bin/${pname}
 
     # fixup and install desktop file
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} standard-notes.desktop
-
-    rm usr/lib/* AppRun standard-notes.desktop .so*
+      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
+    ln -s ${appimageContents}/usr/share/icons share
   '';
+
+  passthru.updateScript = callPackage ./update.nix {};
 
   meta = with lib; {
     description = "A simple and private notes app";
@@ -60,7 +45,8 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire ];
-    platforms = [ "i386-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    platforms = builtins.attrNames srcjson.appimage;
   };
 }

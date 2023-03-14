@@ -4,19 +4,24 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "27r1";
+  version = "2.7r4";
+
   src = fetchurl {
-    url = "https://pallini.di.uniroma1.it/nauty${version}.tar.gz";
-    sha256 = "0xsfqfcknbd6g6wzpa5l7crmmk3bf3zjh37rhylq6b20dqcmvjkn";
+    url = "https://pallini.di.uniroma1.it/nauty${builtins.replaceStrings ["."] [""] version}.tar.gz";
+    sha256 = "sha256-uBDIWm/imfO0yfJKr5KcrH+VRsLzXCDh3Qrbx0CISKY=";
   };
+
   outputs = [ "out" "dev" ];
+
   configureFlags = [
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
+    "--enable-generic" # don't use -march=native
     "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-popcnt"
     "--${if stdenv.hostPlatform.sse4_aSupport then "enable" else "disable"}-clz"
   ];
+
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
 
@@ -28,7 +33,9 @@ stdenv.mkDerivation rec {
       cp "$i" "$dev/lib/lib$i";
     done
   '';
+
   checkTarget = "checks";
+
   meta = with lib; {
     description = "Programs for computing automorphism groups of graphs and digraphs";
     license = licenses.asl20;

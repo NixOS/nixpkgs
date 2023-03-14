@@ -1,51 +1,90 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
+, isPyPy
+, fetchFromGitHub
+
+# build
+, cython
+, setuptools
+
+# tests
 , aiofiles
 , cbor2
 , httpx
 , msgpack
-, pecan
+, mujson
+, orjson
 , pytest-asyncio
 , pytestCheckHook
 , pyyaml
+, rapidjson
 , requests
 , testtools
+, ujson
+, uvicorn
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "3.0.1";
+  version = "3.1.1";
   format = "pyproject";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-xB2E2zJYgahw6LcSnV7P2XL6QyPPd7cRmh0qIZZu5oE=";
+  src = fetchFromGitHub {
+    owner = "falconry";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-5Lhz4qI/x7yK9tqQg4CvYNug+fp9l6ErNGH1pVybZ6c=";
   };
 
-  checkInputs = [
-    aiofiles
-    cbor2
-    httpx
-    msgpack
-    pecan
-    pytest-asyncio
+  nativeBuildInputs = [
+    setuptools
+  ] ++ lib.optionals (!isPyPy) [
+    cython
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+    cp -R tests examples $TMPDIR
+    pushd $TMPDIR
+  '';
+
+  postCheck = ''
+    popd
+  '';
+
+  nativeCheckInputs = [
+    # https://github.com/falconry/falcon/blob/master/requirements/tests
     pytestCheckHook
     pyyaml
     requests
-    testtools
+    rapidjson
+    orjson
+
+    # ASGI specific
+    pytest-asyncio
+    aiofiles
+    httpx
+    uvicorn
     websockets
+
+    # handler specific
+    cbor2
+    msgpack
+    mujson
+    ujson
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    testtools
+  ];
+
+  pytestFlagsArray = [
+    "tests"
   ];
 
   disabledTestPaths = [
-    # missing optional nuts package
-    "falcon/bench/nuts/nuts/tests/test_functional.py"
-    # missing optional mujson package
-    "tests/test_media_handlers.py"
-    # tries to run uvicorn binary and doesn't find it
+    # needs a running server
     "tests/asgi/test_asgi_servers.py"
   ];
 

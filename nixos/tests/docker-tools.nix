@@ -1,6 +1,52 @@
 # this test creates a simple GNU image with docker tools and sees if it executes
 
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }:
+let
+  # nixpkgs#214434: dockerTools.buildImage fails to unpack base images
+  # containing duplicate layers when those duplicate tarballs
+  # appear under the manifest's 'Layers'. Docker can generate images
+  # like this even though dockerTools does not.
+  repeatedLayerTestImage =
+    let
+      # Rootfs diffs for layers 1 and 2 are identical (and empty)
+      layer1 = pkgs.dockerTools.buildImage {  name = "empty";  };
+      layer2 = layer1.overrideAttrs (_: { fromImage = layer1; });
+      repeatedRootfsDiffs = pkgs.runCommandNoCC "image-with-links.tar" {
+        nativeBuildInputs = [pkgs.jq];
+      } ''
+        mkdir contents
+        tar -xf "${layer2}" -C contents
+        cd contents
+        first_rootfs=$(jq -r '.[0].Layers[0]' manifest.json)
+        second_rootfs=$(jq -r '.[0].Layers[1]' manifest.json)
+        target_rootfs=$(sha256sum "$first_rootfs" | cut -d' ' -f 1).tar
+
+        # Replace duplicated rootfs diffs with symlinks to one tarball
+        chmod -R ug+w .
+        mv "$first_rootfs" "$target_rootfs"
+        rm "$second_rootfs"
+        ln -s "../$target_rootfs" "$first_rootfs"
+        ln -s "../$target_rootfs" "$second_rootfs"
+
+        # Update manifest's layers to use the symlinks' target
+        cat manifest.json | \
+        jq ".[0].Layers[0] = \"$target_rootfs\"" |
+        jq ".[0].Layers[1] = \"$target_rootfs\"" > manifest.json.new
+        mv manifest.json.new manifest.json
+
+        tar --sort=name --hard-dereference -cf $out .
+        '';
+    in pkgs.dockerTools.buildImage {
+      fromImage = repeatedRootfsDiffs;
+      name = "repeated-layer-test";
+      tag = "latest";
+      copyToRoot = pkgs.bash;
+      # A runAsRoot script is required to force previous layers to be unpacked
+      runAsRoot = ''
+        echo 'runAsRoot has run.'
+      '';
+    };
+in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 roberth ];
@@ -215,6 +261,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 f"docker run --rm  ${examples.layersOrder.imageName} cat /tmp/layer{index}"
             )
 
+    with subtest("Ensure layers unpacked in correct order before runAsRoot runs"):
+        assert "abc" in docker.succeed(
+            "docker load --input='${examples.layersUnpackOrder}'",
+            "docker run --rm ${examples.layersUnpackOrder.imageName} cat /layer-order"
+        )
+
+    with subtest("Ensure repeated base layers handled by buildImage"):
+        docker.succeed(
+            "docker load --input='${repeatedLayerTestImage}'",
+            "docker run --rm ${repeatedLayerTestImage.imageName} /bin/bash -c 'exit 0'"
+        )
+
     with subtest("Ensure environment variables are correctly inherited"):
         docker.succeed(
             "docker load --input='${examples.environmentVariables}'"
@@ -276,15 +334,22 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         # Ensure the image has the correct number of layers
         assert len(set_of_layers("layered-bulk-layer")) == 4
 
-    with subtest("Ensure correct behavior when no store is needed"):
+    with subtest("Ensure only minimal paths are added to the store"):
+        # TODO: make an example that has no store paths, for example by making
+        #       busybox non-self-referential.
+
         # This check tests that buildLayeredImage can build images that don't need a store.
         docker.succeed(
             "docker load --input='${pkgs.dockerTools.examples.no-store-paths}'"
         )
 
-        # This check may be loosened to allow an *empty* store rather than *no* store.
-        docker.succeed("docker run --rm no-store-paths ls /")
-        docker.fail("docker run --rm no-store-paths ls /nix/store")
+        docker.succeed("docker run --rm no-store-paths ls / >/dev/console")
+
+        # If busybox isn't self-referential, we need this line
+        #   docker.fail("docker run --rm no-store-paths ls /nix/store >/dev/console")
+        # However, it currently is self-referential, so we check that it is the
+        # only store path.
+        docker.succeed("diff <(docker run --rm no-store-paths ls /nix/store) <(basename ${pkgs.pkgsStatic.busybox}) >/dev/console")
 
     with subtest("Ensure buildLayeredImage does not change store path contents."):
         docker.succeed(
@@ -302,7 +367,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
-            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+            == "${if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then "amd64" else "arm64"}"
         )
 
     with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):
@@ -333,7 +398,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.layeredImageWithFakeRootCommands}'"
         )
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/alice | grep -E ^1000$'"
         )
 
     with subtest("Ensure docker load on merged images loads all of the constituent images"):
@@ -376,13 +441,23 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.mergedBashFakeRoot}'"
         )
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/alice | grep -E ^1000$'"
+        )
+
+    with subtest("The image contains store paths referenced by the fakeRootCommands output"):
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/layeredImageWithFakeRootCommands-hello"
         )
 
     with subtest("exportImage produces a valid tarball"):
         docker.succeed(
             "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
         )
+
+    with subtest("layered image fakeRootCommands with fakechroot works"):
+        docker.succeed("${examples.imageViaFakeChroot} | docker load")
+        docker.succeed("docker run --rm image-via-fake-chroot | grep -i hello")
+        docker.succeed("docker image rm image-via-fake-chroot:latest")
 
     with subtest("Ensure bare paths in contents are loaded correctly"):
         docker.succeed(
@@ -396,5 +471,84 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker rmi layered-image-with-path",
         )
 
+    with subtest("Ensure correct architecture is present in manifests."):
+        docker.succeed("""
+            docker load --input='${examples.build-image-with-architecture}'
+            docker inspect build-image-with-architecture \
+              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+            docker rmi build-image-with-architecture
+        """)
+        docker.succeed("""
+            ${examples.layered-image-with-architecture} | docker load
+            docker inspect layered-image-with-architecture \
+              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+            docker rmi layered-image-with-architecture
+        """)
+
+    with subtest("etc"):
+        docker.succeed("${examples.etc} | docker load")
+        docker.succeed("docker run --rm etc | grep localhost")
+        docker.succeed("docker image rm etc:latest")
+
+    with subtest("image-with-certs"):
+        docker.succeed("<${examples.image-with-certs} docker load")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/ssl/certs/ca-bundle.crt")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/ssl/certs/ca-certificates.crt")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
+        docker.succeed("docker image rm image-with-certs:latest")
+
+    with subtest("buildNixShellImage: Can build a basic derivation"):
+        docker.succeed(
+            "${examples.nix-shell-basic} | docker load",
+            "docker run --rm nix-shell-basic bash -c 'buildDerivation && $out/bin/hello' | grep '^Hello, world!$'"
+        )
+
+    with subtest("buildNixShellImage: Runs the shell hook"):
+        docker.succeed(
+            "${examples.nix-shell-hook} | docker load",
+            "docker run --rm -it nix-shell-hook | grep 'This is the shell hook!'"
+        )
+
+    with subtest("buildNixShellImage: Sources stdenv, making build inputs available"):
+        docker.succeed(
+            "${examples.nix-shell-inputs} | docker load",
+            "docker run --rm -it nix-shell-inputs | grep 'Hello, world!'"
+        )
+
+    with subtest("buildNixShellImage: passAsFile works"):
+        docker.succeed(
+            "${examples.nix-shell-pass-as-file} | docker load",
+            "docker run --rm -it nix-shell-pass-as-file | grep 'this is a string'"
+        )
+
+    with subtest("buildNixShellImage: run argument works"):
+        docker.succeed(
+            "${examples.nix-shell-run} | docker load",
+            "docker run --rm -it nix-shell-run | grep 'This shell is not interactive'"
+        )
+
+    with subtest("buildNixShellImage: command argument works"):
+        docker.succeed(
+            "${examples.nix-shell-command} | docker load",
+            "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
+        )
+
+    with subtest("buildNixShellImage: home directory is writable by default"):
+        docker.succeed(
+            "${examples.nix-shell-writable-home} | docker load",
+            "docker run --rm -it nix-shell-writable-home"
+        )
+
+    with subtest("buildNixShellImage: home directory can be made non-existent"):
+        docker.succeed(
+            "${examples.nix-shell-nonexistent-home} | docker load",
+            "docker run --rm -it nix-shell-nonexistent-home"
+        )
+
+    with subtest("buildNixShellImage: can build derivations"):
+        docker.succeed(
+            "${examples.nix-shell-build-derivation} | docker load",
+            "docker run --rm -it nix-shell-build-derivation"
+        )
   '';
 })

@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/cth103/plugin-torture";
     description = "A tool to test LADSPA and LV2 plugins";
     license = licenses.gpl2;

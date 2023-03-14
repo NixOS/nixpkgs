@@ -1,20 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
-, django-mailman3, mailmanclient, readme_renderer
-}:
+{ lib, python3 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "postorius";
   # Note: Mailman core must be on the latest version before upgrading Postorious.
   # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f23c6542bf0f6e6364d678c094ee5804acfe59ecbcc0e944bc4c13834e24e80";
+    sha256 = "sha256-KwzEU9IfcQ6YPZu3jPuFrd6ux/3e2pzoLfTrak/aGmg=";
   };
 
   propagatedBuildInputs = [ django-mailman3 readme_renderer ];
-  checkInputs = [ beautifulsoup4 vcrpy mock ];
+  nativeCheckInputs = [ beautifulsoup4 vcrpy mock ];
 
   # Tries to connect to database.
   doCheck = false;

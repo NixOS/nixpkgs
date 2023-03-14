@@ -1,9 +1,16 @@
 { lib, buildPythonPackage, isPy3k, olm
-, cffi, future, typing }:
+, cffi
+, future
+, aspectlib
+, pytest-benchmark
+, pytestCheckHook
+}:
 
 buildPythonPackage {
   pname = "python-olm";
   inherit (olm) src version;
+
+  disabled = !isPy3k;
 
   sourceRoot = "source/python";
   buildInputs = [ olm ];
@@ -15,11 +22,19 @@ buildPythonPackage {
   propagatedBuildInputs = [
     cffi
     future
-  ] ++ lib.optionals (!isPy3k) [ typing ];
+  ];
 
-  # Some required libraries for testing are not packaged yet.
-  doCheck = false;
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
+
   pythonImportsCheck = [ "olm" ];
+
+  nativeCheckInputs = [
+    aspectlib
+    pytest-benchmark
+    pytestCheckHook
+  ];
 
   meta = {
     inherit (olm.meta) license maintainers;

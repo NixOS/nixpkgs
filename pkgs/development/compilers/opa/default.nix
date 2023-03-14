@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
 
-  patches = [ ./ocaml-4.03.patch ./ocaml-4.04.patch ];
+  patches = [
+    ./ocaml-4.03.patch
+    ./ocaml-4.04.patch
+    ./ocaml-4.14.patch
+    ./ocaml-4.14-tags.patch
+  ];
 
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.
@@ -37,17 +42,16 @@ stdenv.mkDerivation rec {
     export CAMLP4O=${ocamlPackages.camlp4}/bin/camlp4o
     export CAMLP4ORF=${ocamlPackages.camlp4}/bin/camlp4orf
     export OCAMLBUILD=${ocamlPackages.ocamlbuild}/bin/ocamlbuild
-    substituteInPlace _tags --replace ', warn_error_A' ""
   '';
 
   prefixKey = "-prefix ";
 
   configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
-    makeWrapper gcc binutils gnumake nodejs
+  nativeBuildInputs = [ gcc binutils nodejs which makeWrapper ];
+  buildInputs = [ perl jdk openssl coreutils zlib ncurses
   ] ++ (with ocamlPackages; [
-    ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
+    ocaml findlib ssl camlzip ulex ocamlgraph camlp4 num
   ]);
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://opalang.org/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.kkallio ];
-    platforms = with lib.platforms; unix;
+    maintainers = [ ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

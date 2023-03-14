@@ -3,81 +3,85 @@
 , fetchFromGitHub
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # until https://github.com/ags-slc/localzone/issues/1 gets resolved
-      dnspython = super.dnspython.overridePythonAttrs(oldAttrs: rec {
-        pname = "dnspython";
-        version = "1.16.0";
-        # since name is defined from the previous derivation, need to override
-        # name explicity for correct version to show in drvName
-        name = "${pname}-${version}";
-
-        src = super.fetchPypi {
-          inherit pname version;
-          extension = "zip";
-          sha256 = "00cfamn97w2vhq3id87f10mjna8ag5yz5dw0cy5s0sa3ipiyii9n";
-        };
-      });
-
-      localzone = super.localzone.overridePythonAttrs(oldAttrs: rec {
-        meta = oldAttrs.meta // { broken = false; };
-      });
-    };
-  };
-in
-  with py.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.5.2";
+  version = "3.11.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1jsc2ybbf3mbvgzkgliria494dpj23mgqnw2lh43cnd9rgsjvzn3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TySgIxBEl2RolndAkEN4vCIDKaI48vrh2ocd+CTn7Ow=";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
     beautifulsoup4
-    boto3
     cryptography
-    dnspython
-    future
-    localzone
-    pynamecheap
+    importlib-metadata
     pyyaml
     requests
-    softlayer
     tldextract
-    transip
-    xmltodict
-    zeep
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    route53 = [
+      boto3
+    ];
+    localzone = [
+      localzone
+    ];
+    softlayer = [
+      softlayer
+    ];
+    gransy = [
+      zeep
+    ];
+    ddns = [
+      dnspython
+    ];
+    oci = [
+      oci
+    ];
+    full = [
+      boto3
+      dnspython
+      localzone
+      oci
+      softlayer
+      zeep
+    ];
+  };
+
+  nativeCheckInputs = [
     mock
-    pytest
-    pytest-cov
+    pytestCheckHook
     pytest-xdist
     vcrpy
+  ] ++ passthru.optional-dependencies.full;
+
+  disabledTestPaths = [
+    # Tests require network access
+    "lexicon/tests/providers/test_auto.py"
+    # Tests require an additional setup
+    "lexicon/tests/providers/test_localzone.py"
   ];
 
-  checkPhase = ''
-    pytest --ignore=lexicon/tests/providers/test_auto.py
-  '';
+  pythonImportsCheck = [
+    "lexicon"
+  ];
 
   meta = with lib; {
-    description = "Manipulate DNS records on various DNS providers in a standardized way";
+    description = "Manipulate DNS records of various DNS providers in a standardized way";
     homepage = "https://github.com/AnalogJ/lexicon";
-    maintainers = with maintainers; [ flyfloh ];
+    changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    maintainers = with maintainers; [ flyfloh ];
   };
 }

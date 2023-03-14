@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, libpng, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, libpng, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "apngasm";
-  version = "3.1.9";
+  version = "3.1.10";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d50bfb0cf14c376f4cfb94eb91c61d795a76b715"; # not tagged, but in debian/changelog
-    sha256 = "0pk0r8x1950pm6j3d5wgryvy3ldm7a9gl59jmnwnjmg1sf9mzf97";
+    rev = "f105b2d6024ef3113bb407d68e27e476a17fa998";
+    sha256 = "sha256-lTk2sTllKHRUaWPPEkC4qU5K10oRaLrdWBgN4MUGKeo=";
   };
+
+  patches = [
+    # Fix parallel build and avoid static linking of binary.
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/apngasm/files/apngasm-3.1.10-static.patch?id=45fd0cde71ca2ae0e7e38ab67400d84b86b593d7";
+      sha256 = "sha256-eKthgInWxXEqN5PupvVf9wVQDElxsPYRFXT7pMc6vIU=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

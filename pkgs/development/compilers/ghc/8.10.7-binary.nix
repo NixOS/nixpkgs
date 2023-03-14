@@ -3,6 +3,8 @@
 , ncurses5
 , ncurses6, gmp, libiconv, numactl
 , llvmPackages
+, coreutils
+, targetPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -135,6 +137,7 @@ let
           # instead of `libtinfo.so.*.`
           { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
         ];
+        isHadrian = true;
       };
     };
   };
@@ -154,6 +157,19 @@ let
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
+
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
@@ -175,9 +191,6 @@ stdenv.mkDerivation rec {
   #       and update this comment accordingly.
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs =
-    lib.optionals useLLVM [ llvmPackages.llvm ]
-    ;
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -258,6 +271,20 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
+    '' +
+    # The hadrian install Makefile uses 'xxx' as a temporary placeholder in path
+    # substitution. Which can break the build if the store path / prefix happens
+    # to contain this string. This will be fixed with 9.4 bindists.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/21402
+    ''
+      # Detect hadrian Makefile by checking for the target that has the problem
+      if grep '^update_package_db' ghc-${version}*/Makefile > /dev/null; then
+        echo Hadrian bindist, applying workaround for xxx path substitution.
+        # based on https://gitlab.haskell.org/ghc/ghc/-/commit/dd5fecb0e2990b192d92f4dfd7519ecb33164fad.patch
+        substituteInPlace ghc-${version}*/Makefile --replace 'xxx' '\0xxx\0'
+      else
+        echo Not a hadrian bindist, not applying xxx path workaround.
+      fi
     '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
@@ -277,6 +304,15 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the
@@ -360,7 +396,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -369,7 +404,7 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    env -i $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
@@ -378,8 +413,17 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
     enableShared = true;
 
+    inherit llvmPackages;
+
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
+  } // lib.optionalAttrs (binDistUsed.isHadrian or false) {
+    # Normal GHC derivations expose the hadrian derivation used to build them
+    # here. In the case of bindists we just make sure that the attribute exists,
+    # as it is used for checking if a GHC derivation has been built with hadrian.
+    # The isHadrian mechanism will become obsolete with GHCs that use hadrian
+    # exclusively, i.e. 9.6 (and 9.4?).
+    hadrian = null;
   };
 
   meta = rec {
@@ -396,7 +440,6 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [
       prusnak
       domenkozar

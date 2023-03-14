@@ -1,39 +1,58 @@
 { lib
 , stdenv
-, python
-, fetchFromGitHub
 , buildPythonPackage
+, fetchFromGitHub
 , future
-, numpy
-, scipy
 , matplotlib
-, nose
+, numpy
+, pytestCheckHook
+, pythonOlder
+, scipy
+, ezyrb
 }:
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.3.3";
+  version = "0.4.0.post2302";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "PyDMD";
-    rev = "v${version}";
-    sha256 = "1516dhmpwi12v9ly9jj18wpz9k696q5k6aamlrbby8wp8smajgrv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EYVmaxwOxje3KVrNbvsjwRqQBD7Rje/JK+qB1F7EqA0=";
   };
 
-  propagatedBuildInputs = [ future numpy scipy matplotlib ];
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [
+    future
+    matplotlib
+    numpy
+    scipy
+    ezyrb
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
-  pythonImportsCheck = [ "pydmd" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  pytestFlagsArray = [
+    # test suite takes over 100 vCPU hours, just run small subset of it.
+    # TODO: Add a passthru.tests with all tests
+    "tests/test_dmdbase.py"
+  ];
+
+  pythonImportsCheck = [
+    "pydmd"
+  ];
+
+  meta = with lib; {
     description = "Python Dynamic Mode Decomposition";
     homepage = "https://mathlab.github.io/PyDMD/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    changelog = "https://github.com/mathLab/PyDMD/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yl3dy ];
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

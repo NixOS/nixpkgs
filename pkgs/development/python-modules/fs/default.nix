@@ -2,6 +2,7 @@
 , glibcLocales
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , six
 , appdirs
 , scandir ? null
@@ -20,16 +21,19 @@
 
 buildPythonPackage rec {
   pname = "fs";
-  version = "2.4.13";
+  version = "2.4.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "caab4dc1561d63c92f36ee78976f6a4a01381830d8420ce34a78d4f1bb1dc95f";
+    sha256 = "sha256-rpfH1RIT9LcLapWCklMCiQkN46fhWEHhCPvhRPBp0xM=";
   };
 
   buildInputs = [ glibcLocales ];
-  checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
-  propagatedBuildInputs = [ six appdirs pytz ]
+
+  # strong cycle with paramaterized
+  doCheck = false;
+  nativeCheckInputs = [ pyftpdlib mock psutil pytestCheckHook ];
+  propagatedBuildInputs = [ six appdirs pytz setuptools ]
     ++ lib.optionals (!isPy3k) [ backports_os ]
     ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
     ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]

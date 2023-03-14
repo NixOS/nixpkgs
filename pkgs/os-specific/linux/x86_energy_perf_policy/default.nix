@@ -1,7 +1,8 @@
 { lib, stdenv, kernel }:
 
 stdenv.mkDerivation {
-  name = "x86_energy_perf_policy-${kernel.version}";
+  pname = "x86_energy_perf_policy";
+  version = kernel.version;
 
   src = kernel.src;
 

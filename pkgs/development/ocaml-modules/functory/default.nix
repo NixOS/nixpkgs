@@ -13,15 +13,17 @@ let param =
 in
 
 stdenv.mkDerivation {
-
-  name = "ocaml${ocaml.version}-functory-${param.version}";
+  pname = "ocaml${ocaml.version}-functory";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://www.lri.fr/~filliatr/functory/download/functory-${param.version}.tar.gz";
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   installTargets = [ "ocamlfind-install" ];
 
@@ -32,6 +34,6 @@ stdenv.mkDerivation {
     description = "A distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

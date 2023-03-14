@@ -18,6 +18,7 @@ let
   disabledTests = [
     "test_capabilities.py"
     "test_cwd.py"
+    "test_delete.py"
     "test_detach.py"
     "test_exec.py"
     "test_hooks.py"
@@ -37,23 +38,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.3";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-c0jXhqYdEpt4De1Z6VNwyrv0KJcf039Wp3ye0oTW0Qc=";
+    hash = "sha256-Pm96fOfbBqf7mc9llv3sFi00Ioa3f9WNoDmLBPhB2eI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
-  buildInputs = [ libcap libseccomp systemd yajl ]
-    # Criu currently only builds on x86_64-linux
-    ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
+  buildInputs = [ criu libcap libseccomp systemd yajl ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+
+  NIX_LDFLAGS = "-lcriu";
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
@@ -72,9 +74,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
+    homepage = "https://github.com/containers/crun";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

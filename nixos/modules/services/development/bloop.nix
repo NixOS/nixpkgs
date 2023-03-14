@@ -17,7 +17,7 @@ in {
         "-J-XX:MaxInlineLevel=20"
         "-J-XX:+UseParallelGC"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Specifies additional command line argument to pass to bloop
         java process.
       '';
@@ -26,7 +26,7 @@ in {
     install = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to install a user service for the Bloop server.
 
         The service must be manually started for each user with

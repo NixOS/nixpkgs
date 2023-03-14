@@ -20,11 +20,11 @@ in stdenv.mkDerivation {
     # We add Mesa to the end of $LD_LIBRARY_PATH to provide fallback
     # software rendering. GCC is needed so that libgcc_s.so can be found
     # when Mesa is used.
-    makeWrapper ${env}/ioquake3.* $out/bin/quake3 \
+    makeWrapper ${env}/bin/ioquake3.* $out/bin/quake3 \
       --suffix-each LD_LIBRARY_PATH ':' "${libPath}" \
       --add-flags "+set fs_basepath ${env} +set r_allowSoftwareGL 1"
 
-    makeWrapper ${env}/ioq3ded.* $out/bin/quake3-server \
+    makeWrapper ${env}/bin/ioq3ded.* $out/bin/quake3-server \
       --add-flags "+set fs_basepath ${env}"
   '';
 

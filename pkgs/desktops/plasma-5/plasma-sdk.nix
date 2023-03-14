@@ -11,6 +11,7 @@
 , ki18n
 , kiconthemes
 , kio
+, kitemmodels
 , plasma-framework
 , kservice
 , ktexteditor
@@ -20,7 +21,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-sdk";
+  pname = "plasma-sdk";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive
@@ -33,6 +34,7 @@ mkDerivation {
     ki18n
     kiconthemes
     kio
+    kitemmodels
     plasma-framework
     kservice
     ktexteditor

@@ -2,10 +2,13 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
-  # This compiler version needs llvm 10.x.
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 9.0.x core libraries.
   array = null;
@@ -36,26 +39,35 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
-
-  # cabal-install needs more recent versions of Cabal and base16-bytestring.
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_2_0;
-  });
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
   # Jailbreaks & Version Updates
+
+  # This `doJailbreak` can be removed once the following PR is released to Hackage:
+  # https://github.com/thsutton/aeson-diff/pull/58
+  aeson-diff = doJailbreak super.aeson-diff;
+
   async = doJailbreak super.async;
-  ChasingBottoms = markBrokenVersion "1.3.1.9" super.ChasingBottoms;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; }) (doJailbreak (dontCheck super.hashable));
+  hashable =
+    pkgs.lib.pipe
+      super.hashable
+      [ (overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; }))
+        doJailbreak
+        dontCheck
+        (addBuildDepend self.base-orphans)
+      ];
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
   integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
@@ -68,35 +80,49 @@ self: super: {
   split = doJailbreak super.split;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
+  tuple = addBuildDepend self.base-orphans super.tuple;
   vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
-  weeder = self.weeder_2_3_0;
-  generic-lens-core = self.generic-lens-core_2_2_0_0;
-  generic-lens = self.generic-lens_2_2_0_0;
-  th-desugar = self.th-desugar_1_13;
   # 2021-11-08: Fixed in autoapply-0.4.2
-  autoapply = doJailbreak self.autoapply_0_4_1_1;
+  autoapply = doJailbreak super.autoapply;
 
-  # Doesn't allow Dhall 1.39.*
-  weeder_2_3_0 = super.weeder_2_3_0.override {
-    dhall = self.dhall_1_40_1;
-  };
-
-  # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
-  generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
-
+  doctest = dontCheck super.doctest;
   # Apply patches from head.hackage.
-  alex = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
-    sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
-  }) (dontCheck super.alex);
-  doctest = dontCheck (doJailbreak super.doctest_0_18_1);
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   }) (doJailbreak super.language-haskell-extract);
+
+  haskell-language-server = let
+    # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
+    # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
+    additionalDeps = with self.haskell-language-server.scope; [
+      hls-haddock-comments-plugin
+      (unmarkBroken hls-splice-plugin)
+      hls-tactics-plugin
+    ];
+  in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
+    # Needed for modern ormolu and fourmolu.
+    # Apply this here and not in common, because other ghc versions offer different Cabal versions.
+    Cabal = lself.Cabal_3_6_3_0;
+  }));
+
+  # Needs to use ghc-lib due to incompatible GHC
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+
+  # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
+  # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
+  hls-haddock-comments-plugin = unmarkBroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
+    ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
+  ]) super.hls-haddock-comments-plugin);
+
+  hls-tactics-plugin = unmarkBroken (addBuildDepends (with self.hls-tactics-plugin.scope; [
+    aeson extra fingertree generic-lens ghc-exactprint ghc-source-gen ghcide
+    hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
+    parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
+  ]) super.hls-tactics-plugin);
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
@@ -104,94 +130,56 @@ self: super: {
   # The test suite seems pretty broken.
   base64-bytestring = dontCheck super.base64-bytestring;
 
-  # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
-  lens = super.lens_5_0_1;
-
-  # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
-  memory = super.memory_0_16_0;
-
   # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
   # https://github.com/snoyberg/mono-traversable/issues/192
   mono-traversable = dontCheck super.mono-traversable;
+
+  # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
+  # https://github.com/ekmett/reflection/issues/51
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141
+  reflection = dontCheck super.reflection;
 
   # Disable tests pending resolution of
   # https://github.com/Soostone/retry/issues/71
   retry = dontCheck super.retry;
 
-  # Hlint needs >= 3.3.4 for ghc 9 support.
-  hlint = super.hlint_3_3_4;
-
-  # 2021-09-18: ghc-api-compat and ghc-lib-* need >= 9.0.x versions for hls and hlint
-  ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
-  ghc-lib-parser = self.ghc-lib-parser_9_0_1_20210324;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
-  ghc-lib = self.ghc-lib_9_0_1_20210324;
-
-  # 2021-09-18: Need semialign >= 1.2 for correct bounds
-  semialign = super.semialign_1_2_0_1;
-
-  # Will probably be needed for brittany support
-  # https://github.com/lspitzner/czipwith/pull/2
-  #czipwith = appendPatch
-  #    (pkgs.fetchpatch {
-  #      url = "https://github.com/lspitzner/czipwith/commit/b6245884ae83e00dd2b5261762549b37390179f8.patch";
-  #      sha256 = "08rpppdldsdwzb09fmn0j55l23pwyls2dyzziw3yjc1cm0j5vic5";
-  #    }) super.czipwith;
-
-  # 2021-09-18: https://github.com/mokus0/th-extras/pull/8
-  # Release is missing, but asked for in the above PR.
-  th-extras = overrideCabal (old: {
-      version = assert old.version == "0.0.0.4"; "unstable-2021-09-18";
-      src = pkgs.fetchFromGitHub  {
-        owner = "mokus0";
-        repo = "th-extras";
-        rev = "0d050b24ec5ef37c825b6f28ebd46787191e2a2d";
-        sha256 = "045f36yagrigrggvyb96zqmw8y42qjsllhhx2h20q25sk5h44xsd";
-      };
-      libraryHaskellDepends = old.libraryHaskellDepends ++ [self.th-abstraction];
-    }) super.th-extras;
-
-  # 2021-09-18: GHC 9 compat release is missing
-  # Issue: https://github.com/obsidiansystems/dependent-sum/issues/65
-  dependent-sum-template = dontCheck (appendPatch
-      (pkgs.fetchpatch {
-        url = "https://github.com/obsidiansystems/dependent-sum/commit/8cf4c7fbc3bfa2be475a17bb7c94a1e1e9a830b5.patch";
-        sha256 = "02wyy0ciicq2x8lw4xxz3x5i4a550mxfidhm2ihh60ni6am498ff";
-        stripLen = 2;
-        extraPrefix = "";
-      }) super.dependent-sum-template);
+  ghc-api-compat = unmarkBroken super.ghc-api-compat;
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
   hiedb = overrideCabal (old: {
     libraryHaskellDepends = old.libraryHaskellDepends ++ [self.ghc-api-compat];
   }) super.hiedb;
 
-  # 2021-09-18: Need path >= 0.9.0 for ghc 9 compat
-  path = self.path_0_9_0;
-  # 2021-09-18: Need ormolu >= 0.3.0.0 for ghc 9 compat
-  ormolu = doDistribute self.ormolu_0_3_1_0;
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2206
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;
 
-  # 2021-09-18: The following plugins don‘t work yet on ghc9.
-  haskell-language-server = appendConfigureFlags [
-    "-f-tactic"
-    "-f-splice"
-    "-f-refineimports"
-    "-f-class"
+  # https://github.com/lspitzner/butcher/issues/7
+  butcher = doJailbreak super.butcher;
 
-    "-f-fourmolu"
-    "-f-brittany"
-    "-f-stylishhaskell"
-  ] (super.haskell-language-server.override {
-    hls-tactics-plugin = null; # No upstream support, generic-lens-core fail
-    hls-splice-plugin = null; # No upstream support in hls 1.4.0, should be fixed in 1.5
-    hls-refine-imports-plugin = null; # same issue es splice-plugin
-    hls-class-plugin = null; # No upstream support
+  # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
+  # which means that the upstream cabal file isn't allowed to add the flag.
+  inline-c-cpp =
+    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
+    super.inline-c-cpp;
 
-    hls-fourmolu-plugin = null; # No upstream support, needs new fourmolu release
-    hls-stylish-haskell-plugin = null; # No upstream support
-    hls-brittany-plugin = null; # No upstream support, needs new brittany release
-  });
+  # 2022-05-31: weeder 2.3.0 requires GHC 9.2
+  weeder = doDistribute self.weeder_2_3_1;
+
+  # Restrictive upper bound on base and containers
+  sv2v = doJailbreak super.sv2v;
+
+  # Later versions only support GHC >= 9.2
+  ghc-exactprint = self.ghc-exactprint_0_6_4;
+
+  retrie = dontCheck self.retrie_1_1_0_0;
+
+  apply-refact = self.apply-refact_0_9_3_0;
+
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) apply-refact;
+  };
+
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 }

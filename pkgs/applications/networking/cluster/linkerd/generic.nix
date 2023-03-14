@@ -14,13 +14,17 @@ buildGoModule rec {
   };
 
   subPackages = [ "cli" ];
-  runVend = true;
 
   preBuild = ''
     env GOFLAGS="" go generate ./pkg/charts/static
     env GOFLAGS="" go generate ./jaeger/static
     env GOFLAGS="" go generate ./multicluster/static
     env GOFLAGS="" go generate ./viz/static
+
+    # Necessary for building Musl
+    if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+    fi
   '';
 
   tags = [
@@ -54,6 +58,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 Gonzih ];
   };
 }

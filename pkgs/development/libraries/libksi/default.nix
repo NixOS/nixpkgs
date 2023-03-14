@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libksi";
-  version = "3.20.3025";
+  version = "3.21.3075";
 
   src = fetchFromGitHub {
     owner = "Guardtime";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cagysr8j92r6g7f0mwrlkpn9xz9ncz2v3jymh47j3ljxmfbagpz";
+    sha256 = "sha256-JEdjy91+8xJPNzjkumadT05SxcvtM551+SjLN1SQcAU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

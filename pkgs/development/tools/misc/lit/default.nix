@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lit";
-  version = "0.10.0";
+  version = "15.0.6";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "13s8v9s2f284fnh47xdyc75gq2i9pndl39q8v4wl7v7lwri2hv8r";
+    hash = "sha256-S06OQfDmDyutls21HxyQ016ku3FTTsDOP8Di67d9f+k=";
   };
 
   passthru = {
@@ -14,6 +14,9 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   # Non-standard test suite. Needs custom checkPhase.
+  # Needs LLVM's `FileCheck` and `not`: `$out/bin/lit tests`
+  # There should be `llvmPackages.lit` since older LLVM versions may
+  # have the possibility of not correctly interfacing with newer lit versions
   doCheck = false;
 
   meta = {

@@ -33,7 +33,7 @@ let
 
         buildInputs = [ libressl boost ];
         nativeBuildInputs = [ cmake ninja python3 openjdk mono ]
-          ++ lib.optional useClang [ llvmPackages.lld ];
+          ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
         dontFixCmake = true;
@@ -59,6 +59,11 @@ let
             (lib.optionalString useClang    "-DUSE_LD=LLD")
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
           ];
+
+        env.NIX_CFLAGS_COMPILE = toString [
+          # Needed with GCC 12
+          "-Wno-error=missing-template-keyword"
+        ];
 
         inherit patches;
 
@@ -123,7 +128,7 @@ let
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
-          maintainers = with maintainers; [ thoughtpolice ];
+          maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };
 in makeFdb

@@ -10,17 +10,18 @@
 , bashInteractive
 , xcodebuild
 , makeWrapper
+, nix-update-script
 }:
 
-let ccache = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.4.2";
+  version = "4.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VtwykRX5so6LqyC0En/Jx7anXD7qW47zqq3awCY0lJE=";
+    owner = "ccache";
+    repo = "ccache";
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-X7Pv+yEQaKPdWTiKq67kSAyimyKvLSCYr4EjLlw+J0U=";
   };
 
   outputs = [ "out" "man" ];
@@ -46,31 +47,33 @@ let ccache = stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
 
-  checkPhase = let
-    badTests = [
-      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-    ] ++ lib.optionals stdenv.isDarwin [
-      "test.basedir"
-      "test.multi_arch"
-      "test.nocpp2"
-    ];
-  in ''
-    runHook preCheck
-    export HOME=$(mktemp -d)
-    ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      badTests = [
+        "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+      ] ++ lib.optionals stdenv.isDarwin [
+        "test.basedir"
+        "test.multi_arch"
+        "test.nocpp2"
+      ];
+    in
+    ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
+      runHook postCheck
+    '';
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation {
+    links = { unwrappedCC, extraConfig }: stdenv.mkDerivation {
       name = "ccache-links";
       passthru = {
         isClang = unwrappedCC.isClang or false;
@@ -84,7 +87,7 @@ let ccache = stdenv.mkDerivation rec {
         wrap() {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
-            makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
+            makeWrapper ${finalAttrs.finalPackage}/bin/ccache $out/bin/$cname \
               --run ${lib.escapeShellArg extraConfig} \
               --add-flags ${unwrappedCC}/bin/$cname
           fi
@@ -107,15 +110,19 @@ let ccache = stdenv.mkDerivation rec {
         done
       '';
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
+    changelog = "https://ccache.dev/releasenotes.html#_ccache_${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau r-burns ];
     platforms = platforms.unix;
   };
-};
-in ccache
+})

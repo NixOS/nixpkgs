@@ -1,22 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "kube-score";
-  version = "1.13.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "zegl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QAtsXNmR+Sg9xmvP7x6b2jAJkUcL/sMYk8i5CSzjVos=";
+    hash = "sha256-/aCuPL0bzzoNczvSdLYS8obTu8bZzO5HhBmRZ3/ArAM=";
   };
 
-  vendorSha256 = "sha256-kPYvkovzQDmoB67TZHCKZ5jtW6pN3gHxBPKAU8prbgo=";
+  vendorHash = "sha256-pcNdszOfsYKiASOUNKflbr89j/wb9ILQvjMJYsiGPWo=";
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
-    homepage    = "https://github.com/zegl/kube-score";
-    license     = licenses.mit;
-    maintainers = [ maintainers.j4m3s ];
+    homepage = "https://github.com/zegl/kube-score";
+    changelog = "https://github.com/zegl/kube-score/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ j4m3s ];
   };
 }

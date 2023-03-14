@@ -1,17 +1,17 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
 { stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
 , fetchpatch
-, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
-, enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
+, enableQt ? false, qtbase, qtx11extras, qttools, qtdeclarative, qtEnv
+, enablePython ? false, python ? throw "vtk: Python support requested, but no python interpreter was given."
 # Darwin support
-, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
+, AGL, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
 , ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
 }:
 
 let
   inherit (lib) optionalString optionals optional;
 
-  pythonMajor = lib.substring 0 1 pythonInterpreter.pythonVersion;
+  pythonMajor = lib.substring 0 1 python.pythonVersion;
 
 in stdenv.mkDerivation rec {
   pname = "vtk${optionalString enableQt "-qvtk"}";
@@ -25,15 +25,16 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libpng libtiff ]
-    ++ optionals enableQt [ qtbase qtx11extras qttools ]
+    ++ optionals enableQt (if lib.versionOlder majorVersion "9"
+                           then [ qtbase qtx11extras qttools ]
+                           else  [ (qtEnv "qvtk-qt-env" [ qtx11extras qttools qtdeclarative ]) ])
     ++ optionals stdenv.isLinux [
       libGLU
-      libGL
-      libX11
       xorgproto
       libXt
     ] ++ optionals stdenv.isDarwin [
       xpc
+      AGL
       Cocoa
       CoreServices
       DiskArbitration
@@ -46,16 +47,14 @@ in stdenv.mkDerivation rec {
       ImageIO
       OpenGL
       GLUT
-    ] ++ optional enablePython [
-      pythonInterpreter
+    ] ++ optionals enablePython [
+      python
     ];
-  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];
+  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ]
+    ++ optionals stdenv.isLinux [ libX11 libGL ];
+    # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
   patches = map fetchpatch patchesToFetch;
-
-  preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib";
-  '';
 
   dontWrapQtApps = true;
 
@@ -73,6 +72,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DVTK_VERSIONED_INSTALL=OFF"
   ] ++ optionals enableQt [
     "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
   ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
@@ -90,6 +90,13 @@ in stdenv.mkDerivation rec {
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
   '';
 
+  postInstall = optionalString enablePython ''
+    substitute \
+      ${./vtk.egg-info} \
+      $out/${python.sitePackages}/vtk-${version}.egg-info \
+      --subst-var-by VTK_VER "${version}"
+  '';
+
   meta = with lib; {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
@@ -97,6 +104,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
     # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
-    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "8");
   };
 }

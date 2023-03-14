@@ -7,30 +7,27 @@
 , poetry-core
 , prometheus-client
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
-  version = "0.3.2";
+  version = "0.5.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Paperspace";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "083hnkv19mhvdc8nx28f1nph50c903gxh9g9q8531abv0w8m0744";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-swnl0phdOsBSP8AX/OySI/aYI9z60Ss3SsJox/mb9KY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'numpy = "1.18.5"' 'numpy = "^1.18.5"' \
-      --replace 'hyperopt = "0.1.2"' 'hyperopt = ">=0.1.2"' \
-      --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
-      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"'
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     hyperopt
@@ -38,27 +35,39 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     requests
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # https://github.com/Paperspace/gradient-utils/issues/68
+    # https://github.com/Paperspace/gradient-utils/issues/72
+    substituteInPlace pyproject.toml \
+      --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
+      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"' \
+      --replace 'pymongo = "^3.11.0"' 'pymongo = ">=3.11.0"'
+  '';
+
   preCheck = ''
     export HOSTNAME=myhost-experimentId
   '';
 
-  disabledTests = [
-    "test_add_metrics_pushes_metrics" # requires a working prometheus push gateway
+  disabledTestPaths = [
+    # Requires a working Prometheus push gateway
+    "tests/integration/test_metrics.py"
   ];
 
-  pythonImportsCheck = [ "gradient_utils" ];
+  pythonImportsCheck = [
+    "gradient_utils"
+  ];
 
   meta = with lib; {
     description = "Python utils and helpers library for Gradient";
     homepage = "https://github.com/Paperspace/gradient-utils";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ freezeboy ];
+    platforms = platforms.unix;
   };
 }

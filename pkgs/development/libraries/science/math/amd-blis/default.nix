@@ -16,7 +16,7 @@
 }:
 
 let
-  threadingSuffix = if withOpenMP then "-mt" else "";
+  threadingSuffix = lib.optionalString withOpenMP "-mt";
   blasIntSize = if blas64 then "64" else "32";
 in stdenv.mkDerivation rec {
   pname = "amd-blis";
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     description = "BLAS-compatible library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [ maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
 }

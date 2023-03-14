@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";
-  version = "16";
+  version = "20";
 
   src = fetchFromGitHub {
     owner = "cinatic";
     repo = "taskwhisperer";
     rev = "v${version}";
-    sha256 = "05w2dfpr5vrydb7ij4nd2gb7c31nxix3j48rb798r4jzl1rakyah";
+    sha256 = "sha256-UVBLFXsbOPRXC4P5laZ82Rs08yXnNnzJ+pp5fbx6Zqc=";
   };
 
   nativeBuildInputs = [

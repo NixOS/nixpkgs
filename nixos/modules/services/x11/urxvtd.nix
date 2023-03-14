@@ -11,7 +11,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable urxvtd, the urxvt terminal daemon. To use urxvtd, run
         "urxvtc".
       '';
@@ -20,7 +20,7 @@ in {
     package = mkOption {
       default = pkgs.rxvt-unicode;
       defaultText = literalExpression "pkgs.rxvt-unicode";
-      description = ''
+      description = lib.mdDoc ''
         Package to install. Usually pkgs.rxvt-unicode.
       '';
       type = types.package;

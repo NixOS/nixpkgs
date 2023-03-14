@@ -1,17 +1,17 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python_magic, python-dateutil }:
+{ lib, buildPythonApplication, fetchFromGitHub, python-magic, python-dateutil }:
 
 buildPythonApplication rec {
   pname = "s3cmd";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "s3tools";
     repo = "s3cmd";
-    rev = "v${version}";
-    sha256 = "0w4abif05mp52qybh4hjg6jbbj2caljq5xdhfiha3g0s5zsq46ri";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-nb4WEH8ELaG/bIe4NtjD4p99VJoG90UQ662iWyvnr2U=";
   };
 
-  propagatedBuildInputs = [ python_magic python-dateutil ];
+  propagatedBuildInputs = [ python-magic python-dateutil ];
 
   dontUseSetuptoolsCheck = true;
 

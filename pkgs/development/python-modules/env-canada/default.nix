@@ -5,21 +5,26 @@
 , geopy
 , imageio
 , lxml
+, pandas
 , pillow
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.5.16";
+  version = "0.5.29";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    rev = "v${version}";
-    sha256 = "sha256-5Cxpl5iwbBtpwQ9//yhEZNCIzBZgTm/fqAo9PNNxoG4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iGL2LrjVDj4rmzRe6JEBlZxqk6Zt1JlCsQdo+wYXb+0=";
   };
 
   propagatedBuildInputs = [
@@ -27,12 +32,13 @@ buildPythonPackage rec {
     geopy
     imageio
     lxml
+    pandas
     pillow
     python-dateutil
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -49,11 +55,14 @@ buildPythonPackage rec {
     "test_ecradar"
   ];
 
-  pythonImportsCheck = [ "env_canada" ];
+  pythonImportsCheck = [
+    "env_canada"
+  ];
 
   meta = with lib; {
     description = "Python library to get Environment Canada weather data";
     homepage = "https://github.com/michaeldavie/env_canada";
+    changelog = "https://github.com/michaeldavie/env_canada/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

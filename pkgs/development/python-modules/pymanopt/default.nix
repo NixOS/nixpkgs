@@ -3,29 +3,42 @@
 , buildPythonPackage
 , numpy
 , scipy
+, torch
 , autograd
 , nose2
+, matplotlib
+, tensorflow
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "0.2.5";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "0zk775v281375sangc5qkwrkb8yc9wx1g8b1917s4s8wszzkp8k6";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-VwCUqKI1PkR8nUVaa73bkTw67URKPaza3VU9g+rB+Mg=";
   };
 
-  propagatedBuildInputs = [ numpy scipy ];
-  checkInputs = [ nose2 autograd ];
+  propagatedBuildInputs = [ numpy scipy torch ];
+  nativeCheckInputs = [ nose2 autograd matplotlib tensorflow ];
 
   checkPhase = ''
-    # nose2 doesn't properly support excludes
-    rm tests/test_{problem,tensorflow,theano}.py
+    runHook preCheck
+
+    # upstream themselves seem unsure about the robustness of these
+    # tests - see https://github.com/pymanopt/pymanopt/issues/219
+    grep -lr 'test_second_order_function_approximation' tests/ | while read -r fn ; do
+      substituteInPlace "$fn" \
+        --replace \
+          'test_second_order_function_approximation' \
+          'dont_test_second_order_function_approximation'
+    done
 
     nose2 tests -v
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "pymanopt" ];

@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, nixosTests
 , configFile ? "all"
@@ -16,11 +16,13 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14
+, linuxPackages_6_1 ? pkgs.linuxKernel.packages.linux_6_1
+, linuxPackages_6_2 ? pkgs.linuxKernel.packages.linux_6_2
 }:
 
-with lib;
 let
+  inherit (lib) any optionalString optionals optional makeBinPath;
+
   smartmon = smartmontools.override { inherit enableMail; };
 
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
@@ -46,12 +48,18 @@ let
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
-        owner = "zfsonlinux";
+        owner = "openzfs";
         repo = "zfs";
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [
+        (fetchpatch {
+          name = "musl.patch";
+          url = "https://github.com/openzfs/zfs/commit/1f19826c9ac85835cbde61a7439d9d1fefe43a4a.patch";
+          sha256 = "XEaK227ubfOwlB2s851UvZ6xp/QOtYUWYsKTkEHzmo0=";
+        })
+      ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
@@ -113,7 +121,7 @@ let
       configureFlags = [
         "--with-config=${configFile}"
         "--with-tirpc=1"
-        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+        (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -200,9 +208,9 @@ let
         '';
         homepage = "https://github.com/openzfs/zfs";
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
-        license = licenses.cddl;
-        platforms = platforms.linux;
-        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
+        license = lib.licenses.cddl;
+        platforms = lib.platforms.linux;
+        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -215,28 +223,37 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.1";
+    version = "2.1.9";
 
-    sha256 = "sha256-UUuJa5w/GsEvsgH/BnXFsP/dsOt9wwmPqKzDxLPrhiY=";
+    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    # NOTE:
+    #   zfs-2.1.9<=x<=2.1.10 is broken with aarch64-linux-6.2
+    #   for future releases, please delete this condition.
+    kernelCompatible =
+      if kernel.stdenv.isx86_64
+      then kernel.kernelOlder "6.3"
+      else kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages =
+      if kernel.stdenv.isx86_64
+      then linuxPackages_6_2
+      else linuxPackages_6_1;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.1";
-    # rev = "0000000000000000000000000000000000000000";
+    version = "2.1.10-staging-2023-03-02";
+    rev = "9d2e5c14b2f94c91aa389799bd9e80e1098263e7";
 
-    sha256 = "sha256-UUuJa5w/GsEvsgH/BnXFsP/dsOt9wwmPqKzDxLPrhiY=";
+    sha256 = "sha256-E+nLmmSSPtGDjqBQp2GXJsYR2zCEpcxU0/9BD5QHdnA=";
 
     isUnstable = true;
   };

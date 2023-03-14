@@ -21,7 +21,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     tornado
   ];

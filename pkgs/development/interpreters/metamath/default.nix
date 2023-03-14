@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metamath";
-  version = "0.196";
+  version = "0.198";
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "metamath";
     repo = "metamath-exe";
     rev = "v${version}";
-    sha256 = "sha256-/ofH5fq7lUxbbRBAczsLNG3UPsOMbCdcxkB3el5OPcU=";
+    sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 
   meta = with lib; {
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
       in the Metamath Proof Explorer, and it generated its web pages. The *.mm
       ASCII databases (set.mm and others) are also included in this derivation.
     '';
-    homepage = "http://us.metamath.org";
-    downloadPage = "http://us.metamath.org/#downloads";
+    homepage = "https://us.metamath.org";
+    downloadPage = "https://us.metamath.org/#downloads";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.taneb ];
     platforms = platforms.all;

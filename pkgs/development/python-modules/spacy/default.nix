@@ -1,42 +1,49 @@
 { lib
+, blis
 , buildPythonPackage
 , callPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, blis
 , catalogue
 , cymem
+, fetchPypi
 , jinja2
 , jsonschema
+, langcodes
 , murmurhash
 , numpy
-, pathlib
-, preshed
-, requests
-, setuptools
-, srsly
-, spacy-legacy
-, thinc
-, typer
-, wasabi
 , packaging
 , pathy
+, preshed
 , pydantic
+, pytest
 , python
+, pythonOlder
+, requests
+, setuptools
+, spacy-legacy
+, spacy-loggers
+, srsly
+, thinc
 , tqdm
+, typer
 , typing-extensions
+, wasabi
+, writeScript
+, stdenv
+, nix
+, git
+, nix-update
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.1.3";
+  version = "3.5.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WAhOZKJ5lxkupI8Yq7MOwUjFu+edBNF7pNL8JiEAwqI=";
+    hash = "sha256-/iAScBKZJ3iATZP3XOk3DViFcwcmOcODLOw49Uv35KU=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +52,7 @@ buildPythonPackage rec {
     cymem
     jinja2
     jsonschema
+    langcodes
     murmurhash
     numpy
     packaging
@@ -53,15 +61,23 @@ buildPythonPackage rec {
     pydantic
     requests
     setuptools
-    srsly
     spacy-legacy
+    spacy-loggers
+    srsly
     thinc
     tqdm
     typer
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
-  checkInputs = [
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
+  '';
+
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -70,12 +86,26 @@ buildPythonPackage rec {
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
 
-  pythonImportsCheck = [ "spacy" ];
+  pythonImportsCheck = [
+    "spacy"
+  ];
 
-  passthru.tests.annotation = callPackage ./annotation-test { };
+  passthru = {
+    updateScript = writeScript "update-spacy" ''
+    #!${stdenv.shell}
+    set -eou pipefail
+    PATH=${lib.makeBinPath [ nix git nix-update ]}
+
+    nix-update python3Packages.spacy
+
+    # update spacy models as well
+    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+    '';
+    tests.annotation = callPackage ./annotation-test { };
+  };
 
   meta = with lib; {
-    description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
+    description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

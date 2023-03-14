@@ -1,22 +1,30 @@
-{ stdenv, lib, fetchurl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "fnotifystat";
-  version = "0.02.07";
-  src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/fnotifystat/fnotifystat-${version}.tar.gz";
-    sha256 = "0ipfg2gymbgx7bqlx1sq5p2y89k5j18iqnb0wa27n5s3kh9sh8w0";
+  version = "0.02.10";
+
+  src = fetchFromGitHub {
+    owner = "ColinIanKing";
+    repo = pname;
+    rev = "V${version}";
+    hash = "sha256-bcb1kSpNZV7eTcEIcaoiqxB68kTc0TGFMIr1Aehy/Rc=";
   };
-  installFlags = [ "DESTDIR=$(out)" ];
-  postInstall = ''
-    mv $out/usr/* $out
-    rm -r $out/usr
-  '';
+
+  installFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man/man8"
+    "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
+  ];
+
   meta = with lib; {
     description = "File activity monitoring tool";
-    homepage = "https://kernel.ubuntu.com/~cking/fnotifystat/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/ColinIanKing/fnotifystat";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    maintainers = with maintainers; [ womfoo dtzWill ];
   };
 }

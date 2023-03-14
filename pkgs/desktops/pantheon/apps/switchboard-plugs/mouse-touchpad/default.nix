@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , substituteAll
-, pantheon
 , meson
 , ninja
 , pkg-config
@@ -20,20 +20,21 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0nqgbpk1knvbj5xa078i0ka6lzqmaaa873gwj3mhjr5q2gzkw7y5";
+    sha256 = "sha256-iXkNdUMHa0IF2FLn34/6G4w3m53GRZun8yzc8dxAg20=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      touchegg = touchegg;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -54,12 +55,9 @@ stdenv.mkDerivation rec {
     touchegg
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      touchegg = touchegg;
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Mouse & Touchpad Plug";
