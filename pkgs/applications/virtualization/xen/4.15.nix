@@ -144,6 +144,9 @@ callPackage (import ./generic.nix (rec {
     # Fix build with GCC 10
     "-Wno-error=enum-conversion"
     "-Wno-error=zero-length-bounds"
+    # Fix build with GCC 12
+    # xentoollog_stubs.c:57: error: "Some_val" redefined [-Werror]
+    "-Wno-error"
   ];
 
   patches = with xsa; flatten [
