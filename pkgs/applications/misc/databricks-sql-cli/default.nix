@@ -1,20 +1,10 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
 , fetchpatch
-, poetry-core
-, pandas
-, prompt-toolkit
-, databricks-sql-connector
-, pygments
-, configobj
-, sqlparse
-, cli-helpers
-, click
-, pytestCheckHook
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "databricks-sql-cli";
   version = "0.1.4";
   format = "pyproject";
@@ -37,25 +27,25 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'python = ">=3.7.1,<4.0"' 'python = ">=3.8,<4.0"' \
-      --replace 'pandas = "1.3.4"' 'pandas = "~1.4"'
+      --replace 'pandas = "1.3.4"' 'pandas = "~1.5"'
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-    pandas
-    databricks-sql-connector
-    pygments
-    configobj
-    sqlparse
+  propagatedBuildInputs = with python3.pkgs; [
     cli-helpers
     click
+    configobj
+    databricks-sql-connector
+    pandas
+    prompt-toolkit
+    pygments
+    sqlparse
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
