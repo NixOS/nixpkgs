@@ -11,6 +11,8 @@ lib.makeScope newScope (self:
       };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
+    asciigraph = callPackage ../development/nim-packages/asciigraph { };
+
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
@@ -39,6 +41,8 @@ lib.makeScope newScope (self:
 
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
+    illwill = callPackage ../development/nim-packages/illwill { };
+
     jester = callPackage ../development/nim-packages/jester { };
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
@@ -65,6 +69,8 @@ lib.makeScope newScope (self:
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
+    parsetoml = callPackage ../development/nim-packages/parsetoml { };
+
     pixie = callPackage ../development/nim-packages/pixie { };
 
     redis = callPackage ../development/nim-packages/redis { };
@@ -76,6 +82,8 @@ lib.makeScope newScope (self:
     rocksdb = callPackage ../development/nim-packages/rocksdb {
       inherit (pkgs) rocksdb;
     };
+
+    safeset = callPackage ../development/nim-packages/safeset { };
 
     sass = callPackage ../development/nim-packages/sass { };
 
@@ -107,6 +115,8 @@ lib.makeScope newScope (self:
     unicodeplus = callPackage ../development/nim-packages/unicodeplus { };
 
     vmath = callPackage ../development/nim-packages/vmath { };
+
+    x11 = callPackage ../development/nim-packages/x11 { };
 
     zippy = callPackage ../development/nim-packages/zippy { };
 

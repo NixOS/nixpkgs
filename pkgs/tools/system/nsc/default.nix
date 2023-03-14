@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "nsc";
-  version = "2.7.6";
+  version = "2.7.8";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-aieUCQ5JVJQs4RoTGaXwfTv3xC1ozSsQyfCLsD245go=";
+    hash = "sha256-cgp/kkHgH5JIWMgrUHHHyuKedbJ3n6L9xBglXCcMYms=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.builtBy=nixpkgs"
   ];
 
-  vendorHash = "sha256-gDwppx0ORG+pXzTdGtUVbiFyTD/P7avt+/V89Gl0QYY=";
+  vendorHash = "sha256-l9Fl0j8Fa/hiV/2ebmIlnFtekYLwDg3eMpY7lLBreGg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

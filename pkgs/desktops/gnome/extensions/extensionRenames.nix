@@ -22,6 +22,9 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+  "vbox-applet@gs.eros2.info" = "virtualbox-applet";
+  "vbox-applet@buba98" = "virtualbox-applet-2";
+
   "batime@martin.zurowietz.de" = "battery-time";
   "batterytime@typeof.pw" = "battery-time-2";
 

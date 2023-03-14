@@ -12,6 +12,7 @@ let
   atLeast27 = lib.versionAtLeast version "2.7pre";
   atLeast210 = lib.versionAtLeast version "2.10pre";
   atLeast213 = lib.versionAtLeast version "2.13pre";
+  atLeast214 = lib.versionAtLeast version "2.14pre";
 in
 { stdenv
 , autoconf-archive
@@ -43,6 +44,7 @@ in
 , openssl
 , perl
 , pkg-config
+, rapidcheck
 , Security
 , sqlite
 , util-linuxMinimal
@@ -109,6 +111,8 @@ self = stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
+  ] ++ lib.optionals atLeast214 [
+    rapidcheck
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
@@ -167,6 +171,8 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!atLeast24) [
     # option was removed in 2.4
     "--disable-init-state"
+  ] ++ lib.optionals atLeast214 [
+    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [

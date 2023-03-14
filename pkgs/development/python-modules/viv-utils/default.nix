@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
   };

@@ -10,15 +10,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "urbit";
-  version = "1.20";
+  version = "1.22";
 
   src = fetchzip {
     url = "https://github.com/urbit/vere/releases/download/vere-v${version}/${platform}.tgz";
     sha256 = {
-      x86_64-linux = "sha256-nBIpf9akK4cXnR5y5Fcl1g7/FxL8BU/CH/WHGhYuP74=";
-      aarch64-linux = "sha256-ERSYXNh/vmAKr4PNonOxTm5/FRLNDWwHSHM6fIeY4Nc=";
-      x86_64-darwin = "sha256-Kk9hNzyWngnyqlyQ9hILFM81WVw1ZYimMj4K3ENtifE=";
-      aarch64-darwin = "sha256-i3ixj04J/fcb396ncINLF8eYw1mpFCYeIM3f74K6tqY=";
+      x86_64-linux = "sha256-wYXFromLV1BCiSWlzphtCSBOWacQ3yC7i2kxxH4y88Y=";
+      aarch64-linux = "sha256-t3waCv2hwkchWPlfx1bsKKB6imp7F6scRnZUQSwS6fI=";
+      x86_64-darwin = "sha256-x5Gr6z5ma+0AF7DEXJpqG+yg3ym+w2ULTqfpdLjfHGo=";
+      aarch64-darwin = "sha256-vvGZoN+Yi6FZDblhxwDzRneVtWaFFaOjyRG7017BzZI=";
     }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 

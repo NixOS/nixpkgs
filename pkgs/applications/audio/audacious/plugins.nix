@@ -35,6 +35,8 @@
 , neon
 , ninja
 , pkg-config
+, opusfile
+, pipewire
 , qtbase
 , qtmultimedia
 , qtx11extras
@@ -44,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious-plugins";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "sha256-b6D2nDoQQeuHfDcQlROrSioKVqd9nowToVgc8UOaQX8=";
+    sha256 = "sha256-Zi72yMS9cNDzX9HF8IuRVJuUNmOLZfihozlWsJ34n8Y=";
   };
 
   patches = [ ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch ];
@@ -91,6 +93,8 @@ stdenv.mkDerivation rec {
     lirc
     mpg123
     neon
+    opusfile
+    pipewire
     qtbase
     qtmultimedia
     qtx11extras

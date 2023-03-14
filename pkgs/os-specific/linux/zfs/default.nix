@@ -17,6 +17,7 @@
 
 # for determining the latest compatible linuxPackages
 , linuxPackages_6_1 ? pkgs.linuxKernel.packages.linux_6_1
+, linuxPackages_6_2 ? pkgs.linuxKernel.packages.linux_6_2
 }:
 
 let
@@ -233,17 +234,26 @@ in {
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "6.2";
-    latestCompatibleLinuxPackages = linuxPackages_6_1;
+    # NOTE:
+    #   zfs-2.1.9<=x<=2.1.10 is broken with aarch64-linux-6.2
+    #   for future releases, please delete this condition.
+    kernelCompatible =
+      if kernel.stdenv.isx86_64
+      then kernel.kernelOlder "6.3"
+      else kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages =
+      if kernel.stdenv.isx86_64
+      then linuxPackages_6_2
+      else linuxPackages_6_1;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.10-staging-2023-01-24";
-    rev = "92e0d9d183ce6752cd52f7277c8321d81df9ffee";
+    version = "2.1.10-staging-2023-03-02";
+    rev = "9d2e5c14b2f94c91aa389799bd9e80e1098263e7";
 
-    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
+    sha256 = "sha256-E+nLmmSSPtGDjqBQp2GXJsYR2zCEpcxU0/9BD5QHdnA=";
 
     isUnstable = true;
   };

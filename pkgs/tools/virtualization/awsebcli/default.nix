@@ -93,7 +93,7 @@ with localPython.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
-    maintainers = with maintainers; [ eqyiel ];
+    maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;
   };
 }

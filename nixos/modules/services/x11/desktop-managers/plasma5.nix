@@ -448,6 +448,7 @@ in
             kio-extras
           ];
           optionalPackages = [
+            ark
             elisa
             gwenview
             okular

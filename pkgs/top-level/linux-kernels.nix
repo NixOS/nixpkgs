@@ -342,6 +342,10 @@ in {
 
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
+    ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers {};
+
+    ivsc-driver = callPackage ../os-specific/linux/ivsc-driver {};
+
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
     it87 = callPackage ../os-specific/linux/it87 {};
@@ -611,7 +615,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_5_15;
+    linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_2;
     linux_mptcp = packages.linux_mptcp_95;

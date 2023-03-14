@@ -6,7 +6,7 @@
 , cython
 , leptonica
 , pkg-config
-, tesseract
+, tesseract4
 
 # propagates
 , pillow
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     leptonica
-    tesseract
+    tesseract4
   ];
 
   propagatedBuildInputs = [

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ND+0jukCU3jB34Sf4qAZg/+pyXVCoIoMqOoBW7srCSQ=";
+    hash = "sha256-6bbhjmtgGEifYmtgXrnsCF36oU+jJDmHMPPEO5a7AKQ=";
   };
 
   prePatch = ''

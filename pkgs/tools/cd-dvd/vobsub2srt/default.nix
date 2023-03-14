@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtiff, pkg-config, tesseract }:
+{ lib, stdenv, fetchFromGitHub, cmake, libtiff, pkg-config, tesseract3 }:
 
 stdenv.mkDerivation rec {
   pname = "vobsub2srt";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libtiff ];
-  propagatedBuildInputs = [ tesseract ];
+  propagatedBuildInputs = [ tesseract3 ];
 
   meta = {
     homepage = "https://github.com/ruediger/VobSub2SRT";

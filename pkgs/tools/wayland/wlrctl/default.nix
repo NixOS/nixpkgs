@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~brocellous/wlrctl";
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh artturin ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

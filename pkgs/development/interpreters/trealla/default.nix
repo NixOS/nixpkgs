@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trealla";
-  version = "2.8.4";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${version}";
-    sha256 = "sha256-/jB4jlYotvdU068+zj9Z+G0g75sI9dTmtgN874i0qAE=";
+    sha256 = "sha256-0sAPexGKriaJVhBDRsopRYD8xrJAaXZiscCcwfWdEgQ=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xxd ];
   buildInputs = [ readline openssl libffi ];
-  checkInputs = [ valgrind ];
+  checkInputs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [ valgrind ];
   enableParallelBuilding = true;
 
   installPhase = ''

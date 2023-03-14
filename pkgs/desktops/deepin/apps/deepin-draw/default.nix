@@ -2,25 +2,26 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
 , cmake
 , qttools
 , pkg-config
 , wrapQtAppsHook
 , qtbase
+, qtsvg
+, dtkwidget
+, qt5integration
+, qt5platform-plugins
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-draw";
-  version = "5.11.4";
+  version = "5.11.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-49RQQ52HR5aqzeVEjGm9vQpTOxhY7I0X724x/Bboo90=";
+    sha256 = "sha256-oryh1b7/78Hp3JclN9vKvfcKRg58nsfGZQvBx6VyJBs";
   };
 
   patches = [
@@ -44,11 +45,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qtbase
+    qtsvg
     dtkwidget
     qt5platform-plugins
   ];
 
   cmakeFlags = [ "-DVERSION=${version}" ];
+
+  strictDeps = true;
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [

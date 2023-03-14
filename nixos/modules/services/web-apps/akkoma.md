@@ -318,8 +318,8 @@ to make packages available in the chroot.
 {option}`services.systemd.akkoma.serviceConfig.BindPaths` and
 {option}`services.systemd.akkoma.serviceConfig.BindReadOnlyPaths` permit access to outside paths
 through bind mounts. Refer to
-[{manpage}`systemd.exec(5)`](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#BindPaths=)
-for details.
+[`BindPaths=`](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#BindPaths=)
+of {manpage}`systemd.exec(5)` for details.
 
 ### Distributed deployment {#modules-services-akkoma-distributed-deployment}
 

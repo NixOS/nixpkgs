@@ -39,7 +39,6 @@ let
     util-linux
     unzip
     socat
-    spice-gtk
     swtpm
     wget
     xdg-user-dirs
@@ -75,8 +74,12 @@ stdenv.mkDerivation rec {
 
     install -Dm755 -t "$out/bin" macrecovery quickemu quickget windowskey
 
+    # spice-gtk needs to be put in suffix so that when virtualisation.spiceUSBRedirection
+    # is enabled, the wrapped spice-client-glib-usb-acl-helper is used
     for f in macrecovery quickget quickemu windowskey; do
-      wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
+      wrapProgram $out/bin/$f \
+        --prefix PATH : "${lib.makeBinPath runtimePaths}" \
+        --suffix PATH : "${lib.makeBinPath [ spice-gtk ]}"
     done
 
     runHook postInstall

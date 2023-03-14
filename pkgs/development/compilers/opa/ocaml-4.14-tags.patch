@@ -1,0 +1,191 @@
+diff --git a/Makefile b/Makefile
+index 37589e1..10d3418 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,6 +14,7 @@ OPALANG_DIR ?= .
+ 
+ MAKE ?= $_
+ OCAMLBUILD_OPT ?= -j 6
++OCAMLBUILD_OPT += -use-ocamlfind -package num
+ 
+ ifndef NO_REBUILD_OPA_PACKAGES
+ OPAOPT += --rebuild
+diff --git a/_tags b/_tags
+index 5d8d922..b6bdd5e 100644
+--- a/_tags
++++ b/_tags
+@@ -15,4 +15,4 @@
+ <{ocamllib,compiler,lib,tools}>: include
+ 
+ # Warnings
+-<**/*.ml>: warn_L, warn_Z, warn_error_A
++<**/*.ml>: warn_L, warn_Z
+diff --git a/compiler/_tags b/compiler/_tags
+index b33eeeb..7afa493 100644
+--- a/compiler/_tags
++++ b/compiler/_tags
+@@ -7,6 +7,6 @@
+ 
+ <main.ml>: use_opalib, use_opalang, use_opapasses, use_libqmlcompil, use_passlib, use_libbsl, use_qmloptions, use_qml2js, use_js_passes, use_opa
+ 
+-<main.{byte,native}>: thread, use_dynlink, use_graph, use_str, use_unix, use_nums, use_zip, use_buildinfos, use_libbase, use_ulex, use_libtrx, use_libqmlcompil, use_libbsl, use_opalib, use_opalang, use_opapasses, use_qmlfakecompiler, use_qmloptions, use_qmljsimp, use_qml2js, use_opabsl_for_compiler, use_qmlslicer, use_jslang, use_qmlcpsrewriter, use_ocamllang, use_passlib, use_compilerlib, use_pplib, use_qmlpasses, use_opacapi, use_js_passes, use_opa
++<main.{byte,native}>: thread, use_dynlink, use_graph, use_str, use_zip, use_buildinfos, use_libbase, use_ulex, use_libtrx, use_libqmlcompil, use_libbsl, use_opalib, use_opalang, use_opapasses, use_qmlfakecompiler, use_qmloptions, use_qmljsimp, use_qml2js, use_opabsl_for_compiler, use_qmlslicer, use_jslang, use_qmlcpsrewriter, use_ocamllang, use_passlib, use_compilerlib, use_pplib, use_qmlpasses, use_opacapi, use_js_passes, use_opa
+ 
+ <main.ml>: with_mlstate_debug
+diff --git a/compiler/jslang/_tags b/compiler/jslang/_tags
+index f33b592..8925703 100644
+--- a/compiler/jslang/_tags
++++ b/compiler/jslang/_tags
+@@ -4,7 +4,7 @@
+ <jsParse.ml>:           use_camlp4, camlp4orf_fixed
+ 
+ # todo: find a way to link fewer libs
+-<{jspp,jsstat,globalizer}.{byte,native}>: use_passlib, use_opacapi, use_libtrx, use_ulex, use_str, use_unix, use_buildinfos, use_libbase, use_libqmlcompil, use_compilerlib, use_graph, use_nums, use_dynlink, use_jslang, use_ocamllang, use_libbsl, use_opalang, use_pplib, use_qmloptions, use_qml2js, use_qmlcpsrewriter, use_qmlpasses
++<{jspp,jsstat,globalizer}.{byte,native}>: use_passlib, use_opacapi, use_libtrx, use_ulex, use_str, use_unix, use_buildinfos, use_libbase, use_libqmlcompil, use_compilerlib, use_graph, use_dynlink, use_jslang, use_ocamllang, use_libbsl, use_opalang, use_pplib, use_qmloptions, use_qml2js, use_qmlcpsrewriter, use_qmlpasses
+ <{jspp,jsstat,globalizer}.{ml,byte,native}>: use_qmljsimp
+ 
+ <jsstat.{ml,byte,native}>: use_libjsminify
+diff --git a/compiler/libbsl/_tags b/compiler/libbsl/_tags
+index cad1fe4..8ef238b 100644
+--- a/compiler/libbsl/_tags
++++ b/compiler/libbsl/_tags
+@@ -20,7 +20,7 @@
+ <bslRegisterParser.{ml,mli,byte,native}>: use_libtrx
+ <bslTinyShell.{ml,mli,byte,native}>: use_libtrx
+ <bslregister.*>: use_jslang
+-<bslregister.{byte,native}>: use_ulex, use_libbsl, use_dynlink, use_zip, use_nums
++<bslregister.{byte,native}>: use_ulex, use_libbsl, use_dynlink, use_zip
+ <portingBsl.{ml,byte,native}>: use_ulex, use_libbsl, use_dynlink, use_zip, use_nums
+ <bslGeneration.{ml,mli}>: use_ulex, use_dynlink, use_zip, use_nums, use_jslang
+ <bslMarshalPlugin.*>: use_jslang
+@@ -30,7 +30,7 @@
+ <tests>: ignore
+ 
+ # applications, linking
+-<*.{byte,native}>:use_buildinfos, use_ulex, use_libtrx, use_dynlink, use_unix, thread, use_graph, use_libbsl, use_passlib, use_zip, use_nums, use_opalang, use_ocamllang, use_langlang, use_jslang, use_opacapi
++<*.{byte,native}>:use_buildinfos, use_ulex, use_libtrx, use_dynlink, thread, use_graph, use_libbsl, use_passlib, use_zip, use_opalang, use_ocamllang, use_langlang, use_jslang, use_opacapi
+ 
+ # ppdebug (pl. be very specific with the use of ppdebug)
+ <bslLib.ml*>        : with_mlstate_debug
+diff --git a/compiler/opa/_tags b/compiler/opa/_tags
+index cfe97a1..702af34 100644
+--- a/compiler/opa/_tags
++++ b/compiler/opa/_tags
+@@ -62,7 +62,7 @@
+ <syntaxHelper.ml>: use_opalib, use_opalang, use_opapasses, use_libqmlcompil, use_passlib
+ 
+ # linking
+-<{opa_parse,checkopacapi,gen_opa_manpage,syntaxHelper}.{byte,native}>: thread, use_dynlink, use_graph, use_str, use_unix, use_nums, use_zip, use_buildinfos, use_libbase, use_ulex, use_libtrx, use_libqmlcompil, use_libbsl, use_opalib, use_opalang, use_opapasses, use_qmlfakecompiler, use_qmljsimp, use_qml2js, use_opabsl_for_compiler, use_qmlslicer, use_jslang, use_qmlcpsrewriter, use_ocamllang, use_passlib, use_compilerlib, use_pplib, use_qmlpasses, use_opacapi, use_qmloptions
++<{opa_parse,checkopacapi,gen_opa_manpage,syntaxHelper}.{byte,native}>: thread, use_dynlink, use_graph, use_str, use_zip, use_buildinfos, use_libbase, use_ulex, use_libtrx, use_libqmlcompil, use_libbsl, use_opalib, use_opalang, use_opapasses, use_qmlfakecompiler, use_qmljsimp, use_qml2js, use_opabsl_for_compiler, use_qmlslicer, use_jslang, use_qmlcpsrewriter, use_ocamllang, use_passlib, use_compilerlib, use_pplib, use_qmlpasses, use_opacapi, use_qmloptions
+ 
+ <opa_InsertRemote.ml>: with_mlstate_debug
+ <main_utils.ml>: with_mlstate_debug
+diff --git a/compiler/opalang/_tags b/compiler/opalang/_tags
+index 6844281..8f0eaec 100644
+--- a/compiler/opalang/_tags
++++ b/compiler/opalang/_tags
+@@ -14,7 +14,7 @@ true: warn_Z
+ <standaloneparser.ml>: use_buildinfos, use_compilerlib, use_pplib
+ <**/*.{ml,mli}>: use_libbase, use_compilerlib, use_libqmlcompil, use_passlib
+ 
+-<{opa2opa,standaloneparser}.{native,byte}>: use_unix, use_libbase, use_mutex, use_graph, use_str, use_zlib, thread, use_nums, use_libtrx, use_passlib, use_libqmlcompil, use_buildinfos, use_ulex, use_compilerlib, use_pplib, use_opacapi
++<{opa2opa,standaloneparser}.{native,byte}>: use_libbase, use_mutex, use_graph, use_str, use_zlib, thread, use_libtrx, use_passlib, use_libqmlcompil, use_buildinfos, use_ulex, use_compilerlib, use_pplib, use_opacapi
+ 
+ <opaMapToIdent.ml>: use_opacapi
+ <surfaceAstCons.ml>: use_opacapi
+diff --git a/compiler/opx2js/_tags b/compiler/opx2js/_tags
+index 7e9b9cc..3e257ea 100644
+--- a/compiler/opx2js/_tags
++++ b/compiler/opx2js/_tags
+@@ -2,7 +2,7 @@
+ 
+ <**/*.{ml,mli}>: use_buildinfos, use_libbase, use_compilerlib, use_passlib
+ 
+-<**/*.native>: thread, use_dynlink, use_graph, use_str, use_unix, use_nums, use_zip, use_buildinfos, use_libbase, use_ulex, use_libtrx, use_libqmlcompil, use_libbsl, use_opalib, use_opalang, use_opapasses, use_qmlfakecompiler, use_qmlflatcompiler, use_qmloptions, use_qmljsimp, use_qml2js, use_opabsl_for_compiler, use_qmlslicer, use_jslang, use_qmlcpsrewriter, use_ocamllang, use_passlib, use_compilerlib, use_pplib, use_qmlpasses, use_opacapi, use_libopa
++<**/*.native>: thread, use_dynlink, use_graph, use_str, use_zip, use_buildinfos, use_libbase, use_ulex, use_libtrx, use_libqmlcompil, use_libbsl, use_opalib, use_opalang, use_opapasses, use_qmlfakecompiler, use_qmlflatcompiler, use_qmloptions, use_qmljsimp, use_qml2js, use_opabsl_for_compiler, use_qmlslicer, use_jslang, use_qmlcpsrewriter, use_ocamllang, use_passlib, use_compilerlib, use_pplib, use_qmlpasses, use_opacapi, use_libopa
+ 
+ <**/opx2jsPasses.{ml,mli}>: use_jslang, use_opalib, use_opalang, use_opapasses, use_libopa, use_libqmlcompil, use_qmlpasses, use_qmlcpsrewriter, use_qmlslicer
+ 
+diff --git a/compiler/passes/_tags b/compiler/passes/_tags
+index a0daff4..9644d3a 100644
+--- a/compiler/passes/_tags
++++ b/compiler/passes/_tags
+@@ -1,7 +1,7 @@
+ # -*- conf -*- (for emacs)
+ 
+ # preprocessing
+-true: with_mlstate_debug, warn_A, warn_e, warn_error_A, warnno_48
++true: with_mlstate_debug, warn_A, warn_e, warnno_48
+ 
+ <**/*.{ml,mli}>: use_libbase, use_libqmlcompil, use_passlib, use_opalang, use_compilerlib, use_opacapi
+ <surfaceAst*.{ml,mli}>: use_opalib, use_libbsl
+diff --git a/compiler/passlib/_tags b/compiler/passlib/_tags
+index 2b9cfcf..5cb3145 100644
+--- a/compiler/passlib/_tags
++++ b/compiler/passlib/_tags
+@@ -1,6 +1,6 @@
+ # -*- conf -*- (for emacs)
+ 
+-<*.{ml,mli,byte,native}>: use_libbase, use_compilerlib, thread, use_ulex, use_unix, use_str
++<*.{ml,mli,byte,native}>: use_libbase, use_compilerlib, thread, use_ulex, use_str
+ 
+ <passHandler.ml>: use_buildinfos
+ <passdesign.{byte,native}>: use_buildinfos, use_graph
+diff --git a/compiler/qmlcompilers/_tags b/compiler/qmlcompilers/_tags
+index 087165c..87ae918 100644
+--- a/compiler/qmlcompilers/_tags
++++ b/compiler/qmlcompilers/_tags
+@@ -5,7 +5,7 @@
+ 
+ # application, linkink
+ # common
+-<{qmljs_exe}.{ml,mli,byte,native}>: thread, use_unix, use_dynlink, use_str, use_graph, use_ulex, use_libtrx, use_pplib, use_opabsl_for_compiler, use_passlib, use_nums, use_buildinfos, use_opalang, use_compilerlib, use_opacapi
++<{qmljs_exe}.{ml,mli,byte,native}>: thread, use_dynlink, use_str, use_graph, use_ulex, use_libtrx, use_pplib, use_opabsl_for_compiler, use_passlib, use_buildinfos, use_opalang, use_compilerlib, use_opacapi
+ 
+ # specific
+ <qmljs_exe.{ml,byte,native}>: use_qmljsimp, use_qml2js, use_zip
+diff --git a/ocamllib/libbase/_tags b/ocamllib/libbase/_tags
+index 42d067d..6b7e690 100644
+--- a/ocamllib/libbase/_tags
++++ b/ocamllib/libbase/_tags
+@@ -27,4 +27,4 @@
+ <mongo.ml>: with_mlstate_debug
+ 
+ 
+-<{testconsole,testfilepos}.{ml,mli,byte,native}>: thread, use_str, use_unix, use_libbase, use_ulex
++<{testconsole,testfilepos}.{ml,mli,byte,native}>: thread, use_str, use_libbase, use_ulex
+diff --git a/tools/_tags b/tools/_tags
+index 549752b..44c97b3 100644
+--- a/tools/_tags
++++ b/tools/_tags
+@@ -8,7 +8,7 @@
+ <build>: include
+ 
+ # Odep
+-<odep*.{ml,byte,native}>: thread, use_str, use_unix, use_graph, use_zip, use_libbase, use_ulex
++<odep*.{ml,byte,native}>: thread, use_str, use_graph, use_zip, use_libbase, use_ulex
+ 
+ ###
+ # Ofile
+@@ -16,7 +16,7 @@
+ <ofile.ml>: use_libbase
+ 
+ # linking
+-<ofile.{byte,native}>: use_unix, use_str, thread, use_ulex, use_libbase, use_zip
++<ofile.{byte,native}>: use_str, thread, use_ulex, use_libbase, use_zip
+ 
+ ###
+ # jschecker
+diff --git a/tools/teerex/_tags b/tools/teerex/_tags
+index d662b49..366ea01 100644
+--- a/tools/teerex/_tags
++++ b/tools/teerex/_tags
+@@ -6,6 +6,6 @@
+ 
+ <*.{ml,mli,byte,native}>: use_str, use_libbase, use_compilerlib, use_graph, use_libtrx, use_ocamllang, use_zip, use_buildinfos, use_passlib
+ 
+-<trx_ocaml.{byte,native}>: thread, use_unix
++<trx_ocaml.{byte,native}>: thread
+ <trx_ocaml_main.{byte,native}>: thread, use_unix
+-<trx_interpreter.{byte,native}>: thread, use_unix
++<trx_interpreter.{byte,native}>: thread

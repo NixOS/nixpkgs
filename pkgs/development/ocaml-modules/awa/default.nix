@@ -8,14 +8,14 @@
 
 buildDunePackage rec {
   pname = "awa";
-  version = "0.1.1";
+  version = "0.1.2";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    hash = "sha256-ae1gTx3Emmkof/2Gnhq0d5RyfkFx21hHkVEVgyPdXuo=";
+    hash = "sha256-HfIqvmvmdizPSfSHthj2syszVZXVhju7tI8yNEetc38=";
   };
 
   propagatedBuildInputs = [

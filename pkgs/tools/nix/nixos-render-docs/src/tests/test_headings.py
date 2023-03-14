@@ -1,10 +1,12 @@
-import nixos_render_docs
+import nixos_render_docs as nrd
 
 from markdown_it.token import Token
 
-class Converter(nixos_render_docs.md.Converter):
+class Converter(nrd.md.Converter[nrd.docbook.DocBookRenderer]):
     # actual renderer doesn't matter, we're just parsing.
-    __renderer__ = nixos_render_docs.docbook.DocBookRenderer
+    def __init__(self, manpage_urls: dict[str, str]) -> None:
+        super().__init__()
+        self._renderer = nrd.docbook.DocBookRenderer(manpage_urls)
 
 def test_heading_id_absent() -> None:
     c = Converter({})

@@ -12,26 +12,27 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.77.0";
+  version = "1.78.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-//1BTiNH3n2eNjwOADb1OB7xp5QsH6arV5Pg3B7y3r0=";
+    hash = "sha256-UMP/JQ77qGfAQ+adLBLB8NFI2OiuwjILEbEecEDcK1A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-B9Z+7VtbbX/S01aaMFHgXH60sg8Lmwku2XPRnpMpwjo=";
+    hash = "sha256-UTuMvTWfOlFlL+4qsCEfVljnkeylBKq0wd5FlAOYAFQ=";
   };
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
     # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
+    sed -i 's/^frozendict = ">=1,!=2.1.2,<2.3.5"/frozendict = ">=1,!=2.1.2,<2.3.6"/g' pyproject.toml
   '';
 
   nativeBuildInputs = [

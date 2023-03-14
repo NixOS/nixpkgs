@@ -244,6 +244,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
+    msgpack = callPackage ../development/php-packages/msgpack { };
+
     oci8 = callPackage ../development/php-packages/oci8 { };
 
     openswoole = callPackage ../development/php-packages/openswoole { };
@@ -285,6 +287,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
+
+    ssh2 = callPackage ../development/php-packages/ssh2 { };
 
     swoole = callPackage ../development/php-packages/swoole { };
 

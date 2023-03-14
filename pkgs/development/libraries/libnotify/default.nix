@@ -8,7 +8,8 @@
 , glib
 , gdk-pixbuf
 , gnome
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 }:
 

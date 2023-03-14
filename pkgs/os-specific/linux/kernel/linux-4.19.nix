@@ -3,7 +3,7 @@
 with lib;
 
 buildLinux (args // rec {
-  version = "4.19.274";
+  version = "4.19.277";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = versions.pad 3 version;
@@ -13,6 +13,6 @@ buildLinux (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "1a2w6knszfqg7ilnvxrs0kbgcviq90iqw9wp2d6y3qy9jfhnb8k4";
+    sha256 = "137mjk6hzpr120bb6ky3b8q4jnkbgqla0cpgnhzpcng00aidk0pn";
   };
 } // (args.argsOverride or {}))

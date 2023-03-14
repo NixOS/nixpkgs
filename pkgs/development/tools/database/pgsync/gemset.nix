@@ -14,10 +14,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wd6nl81nbdwck04hccsm7wf23ghpi8yddd9j4rbwyvyj0sbsff1";
+      sha256 = "07m6lxljabw9kyww5k5lgsxsznsm1v5l14r1la09gqka9b5kv3yr";
       type = "gem";
     };
-    version = "1.4.5";
+    version = "1.4.6";
   };
   pgsync = {
     dependencies = ["parallel" "pg" "slop" "tty-spinner"];
@@ -25,20 +25,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18misp6iwjr3cd4jzhbnf2q058gnkxx27jx1b87z6p64bwkgr3x2";
+      sha256 = "1f2lzsa7l88skp18f8w1ch9w8a42pymc48rdaqjrrdgg0126kvj3";
       type = "gem";
     };
-    version = "0.7.3";
+    version = "0.7.4";
   };
   slop = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "052mhd76f4dshc36f2bd5pp807lgnaj5i6ai8jg075384wcfhcpb";
+      sha256 = "1iyrjskgxyn8i1679qwkzns85p909aq77cgx2m4fs5ygzysj4hw4";
       type = "gem";
     };
-    version = "4.10.0";
+    version = "4.10.1";
   };
   tty-cursor = {
     groups = ["default"];

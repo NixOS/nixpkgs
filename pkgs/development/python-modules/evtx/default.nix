@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,10 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -46,6 +51,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
   };
 }

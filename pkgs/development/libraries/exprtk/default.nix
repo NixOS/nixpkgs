@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "exprtk";
-  version = "unstable-2021-12-31";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "ArashPartow";
-    repo = "exprtk";
-    rev = "806c519c91fd08ba4fa19380dbf3f6e42de9e2d1";
-    hash = "sha256-5/k+y3gNJeggfwXmtAVqmaiV+BXX+WKtWwZWcQSrQDM=";
+    repo = pname;
+    rev = version;
+    hash = "sha256-ZV5nS6wEbKfzXhfXEtVlkwaEtxpTOYQaGlaxKx3FIvE=";
   };
 
   dontBuild = true;

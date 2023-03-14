@@ -1,7 +1,8 @@
 { lib
 , mkDerivation
 , variant ? "standalone"
-, fetchFromGitHub
+, fetchzip
+, fetchpatch
 , cmake
 , pkg-config
 , ninja
@@ -16,7 +17,6 @@
 , curl
 , gimp ? null
 , gmic
-, cimg
 , qtbase
 , qttools
 , writeShellScript
@@ -54,12 +54,20 @@ mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
   version = "3.2.1";
 
-  src = fetchFromGitHub {
-    owner = "c-koi";
-    repo = "gmic-qt";
-    rev = "v.${version}";
-    sha256 = "sha256-z+GtYLBcHVufXwdeSd8WKmPmU1+/EKMv26kNaEgyt5w=";
+  src = fetchzip {
+    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
+    hash = "sha256-2lMnn19FcFKnfIjSxOObqxIjqLMUoWgi0ADZBCBePY4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "gmic-qt-3.2.1-fix-system-gmic.patch";
+      url = "https://github.com/c-koi/gmic-qt/commit/e8d7a3523753ff592da63b1d54edf0921c54fe53.patch";
+      hash = "sha256-kBFZo2qvod4pH3oK8gvnmw39x6eMH9zjr4mMcY74mFo=";
+    })
+  ];
+
+  sourceRoot = "source/gmic-qt";
 
   nativeBuildInputs = [
     cmake
@@ -69,7 +77,6 @@ mkDerivation rec {
 
   buildInputs = [
     gmic
-    cimg
     qtbase
     qttools
     fftw
@@ -85,7 +92,8 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
-    "-DENABLE_SYSTEM_GMIC:BOOL=ON"
+    "-DENABLE_SYSTEM_GMIC=ON"
+    "-DENABLE_DYNAMIC_LINKING=ON"
   ];
 
   postPatch = ''
@@ -108,8 +116,6 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    # Broken since 3.2.0 update, cannot handle system gmic and cimg.
-    broken = true;
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
