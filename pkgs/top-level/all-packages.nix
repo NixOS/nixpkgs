@@ -1900,6 +1900,10 @@ with pkgs;
 
   git-privacy = callPackage ../applications/version-management/git-privacy { };
 
+  git-ps-rs = callPackage ../development/tools/git-ps-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-publish = python3Packages.callPackage ../applications/version-management/git-publish { };
 
   git-quick-stats = callPackage ../applications/version-management/git-quick-stats { };
