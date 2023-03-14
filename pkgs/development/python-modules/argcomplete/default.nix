@@ -2,11 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , pexpect
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
   version = "2.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
