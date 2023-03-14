@@ -253,6 +253,15 @@ in {
     linux_xanmod_stable = xanmodKernels.main;
     linux_xanmod_latest = xanmodKernels.main;
 
+    sunlightKernels = callPackage ../os-specific/linux/kernel/sunlight-kernels.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
+    linux_sunlight = sunlightKernels.lts;
+
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
     linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
@@ -616,6 +625,7 @@ in {
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
     linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
+    linux_sunlight = recurseIntoAttrs (packagesFor kernels.linux_sunlight);
 
     hardkernel_4_14 = recurseIntoAttrs (packagesFor kernels.linux_hardkernel_4_14);
 

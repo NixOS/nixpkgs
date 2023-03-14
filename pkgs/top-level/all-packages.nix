@@ -26684,6 +26684,10 @@ with pkgs;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
+  # Sunlight kernel
+  linuxPackages_sunlight = linuxKernel.packages.linux_sunlight;
+  linux_sunlight = linuxKernel.kernels.linux_sunlight;
+
   linux-doc = callPackage ../os-specific/linux/kernel/htmldocs.nix { };
 
   cryptodev = linuxPackages.cryptodev;
