@@ -3,7 +3,7 @@
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
-, withSeabios ? !withInternalSeabios, seabios ? null
+, withSeabios ? !withInternalSeabios, seabios
 , withInternalOVMF ? false # FIXME: tricky to build
 , withOVMF ? false, OVMF
 , withLibHVM ? false
@@ -179,6 +179,5 @@ callPackage (import ./generic.nix (rec {
   };
 
 })) ({
-  ocamlPackages = ocaml-ng.ocamlPackages_4_05;
-  pythonPackages = python3Packages;
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
 } // args)

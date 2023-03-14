@@ -5,7 +5,7 @@ config:
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
 , acpica-tools, libaio, libiconv, libuuid, ncurses, openssl, perl
 , xz, yajl, zlib
-, pythonPackages
+, python3Packages
 
 # Xen Optional
 , ocamlPackages
@@ -16,7 +16,7 @@ config:
 , util-linux, procps, systemd
 
 # Documentation
-# pythonPackages.markdown
+# python3Packages.markdown
 , fig2dev, ghostscript, texinfo, pandoc
 
 , binutils-unwrapped
@@ -71,16 +71,16 @@ stdenv.mkDerivation (rec {
 
     # Xen
     bison bzip2 checkpolicy dev86 figlet flex gettext glib acpica-tools libaio
-    libiconv libuuid ncurses openssl perl pythonPackages.python xz yajl zlib
+    libiconv libuuid ncurses openssl perl python3Packages.python xz yajl zlib
 
     # oxenstored
     ocamlPackages.findlib ocamlPackages.ocaml systemd
 
     # Python fixes
-    pythonPackages.wrapPython
+    python3Packages.wrapPython
 
     # Documentation
-    pythonPackages.markdown fig2dev ghostscript texinfo pandoc
+    python3Packages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
   ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
