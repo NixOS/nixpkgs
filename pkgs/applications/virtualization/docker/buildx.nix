@@ -32,6 +32,6 @@ buildGoModule rec {
     description = "Docker CLI plugin for extended build capabilities with BuildKit";
     homepage = "https://github.com/docker/buildx";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivan-babrou ];
+    maintainers = with maintainers; [ ivan-babrou developer-guy ];
   };
 }
