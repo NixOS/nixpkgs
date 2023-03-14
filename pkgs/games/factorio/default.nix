@@ -12,10 +12,12 @@
 , libXinerama
 , libXrandr
 , libpulseaudio
+, libxkbcommon
 , makeDesktopItem
 , makeWrapper
 , releaseType
 , stdenv
+, wayland
 
 , mods ? [ ]
 , mods-dat ? null
@@ -217,6 +219,8 @@ let
         libXinerama
         libXrandr
         libpulseaudio
+        libxkbcommon
+        wayland
       ];
 
       installPhase = base.installPhase + ''
