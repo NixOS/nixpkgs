@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SSH/SFTP implementation for fsspec";
-    homepage = "https://pypi.org/project/sshfs/${version}";
+    homepage = "https://github.com/fsspec/sshfs/";
     changelog = "https://github.com/fsspec/sshfs/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];
