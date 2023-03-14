@@ -16949,7 +16949,8 @@ with pkgs;
     mkRuby
     ruby_2_7
     ruby_3_0
-    ruby_3_1;
+    ruby_3_1
+    ruby_3_2;
 
   ruby = ruby_2_7;
   rubyPackages = rubyPackages_2_7;
@@ -16957,6 +16958,7 @@ with pkgs;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
   rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
+  rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
 
