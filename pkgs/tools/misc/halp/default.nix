@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halp";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "halp";
     rev = "v${version}";
-    hash = "sha256-GV+/+/BJTQW3VUtaX1FhY+m7J3vG0oL5fHO/cVVeY/E=";
+    hash = "sha256-A48r7bDXyYVYrsyhqaQMk7c9fuCzilj2Ch9dYHFh8xY=";
   };
 
-  cargoHash = "sha256-JqFRPOFKz/KHTym7XgIZ3nZwV1ZLsQ/F2p8i5UCG5aA=";
+  cargoHash = "sha256-CTLCpGkUobMgKsGLCZ1Z+zfLbvn37TXPmIWynGs1ybA=";
 
   patches = [
     # patch tests to point to the correct target directory
