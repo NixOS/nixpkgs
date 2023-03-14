@@ -18,6 +18,7 @@
 , libXi
 , libXext
 , gnome
+, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     libXi
     # libXext is a transitive dependency of libXi
     libXext
+    # libsystemd is a needed for dbus-broker support
+    systemd
   ];
 
   # In atspi-2.pc dbus-1 glib-2.0
@@ -67,6 +70,8 @@ stdenv.mkDerivation rec {
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+    # Same as the above, but for dbus-broker
+    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
   ];
 
   passthru = {
