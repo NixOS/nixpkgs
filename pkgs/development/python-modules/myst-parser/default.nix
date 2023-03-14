@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
-  ];
+  ] ++ markdown-it-py.optional-dependencies.linkify;
 
   pythonImportsCheck = [
     "myst_parser"

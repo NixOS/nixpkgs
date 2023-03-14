@@ -32,7 +32,7 @@ stdenv.mkDerivation ({
     runHook preInstall
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname} \
      ${if lib.versionAtLeast Dune.version "2.9"
-       then "--docdir $out/share/doc"
+       then "--docdir $out/share/doc --man $out/share/man"
        else ""}
     runHook postInstall
   '';
