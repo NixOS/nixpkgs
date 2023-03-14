@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     sourceHighlight
     xz
     zlib
-  ] ++ lib.optional stdenv.buildPlatform.isLinux [
+  ] ++ lib.optionals stdenv.buildPlatform.isLinux [
     autoPatchelfHook
     elfutils
     glibc

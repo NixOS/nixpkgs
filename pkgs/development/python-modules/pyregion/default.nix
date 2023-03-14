@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook pytest-astropy ];
 
-  disabledTests = lib.optional (!stdenv.hostPlatform.isDarwin) [
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # Skipping 2 tests because it's failing. Domain knowledge was unavailable on decision.
     # Error logs: https://gist.github.com/superherointj/3f616f784014eeb2e3039b0f4037e4e9
     "test_calculate_rotation_angle"

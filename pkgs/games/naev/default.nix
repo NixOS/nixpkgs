@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
     enet
     freetype
     glpk
-    intltool
     libpng
     libunibreak
     libvorbis
@@ -61,6 +60,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    intltool
   ];
 
   mesonFlags = [

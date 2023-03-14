@@ -32,7 +32,7 @@ let
     buildFeatures = [
       "kubernetes-discovery"
     ] ++
-    (lib.optional (lib.versionAtLeast version "0.8") [
+    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "metrics"
@@ -50,7 +50,7 @@ let
       "k2v"
       "kubernetes-discovery"
     ] ++
-    (lib.optional (lib.versionAtLeast version "0.8") [
+    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "lmdb"
