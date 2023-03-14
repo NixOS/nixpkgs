@@ -175,9 +175,9 @@ in /* No rec! Add dependencies on this file at the top. */ {
   /* Determine the difference between multiple paths, including the longest
     common prefix and the individual suffixes between them
 
-    The input is an attribute set of paths, where the keys are only for naming
-    and can be picked arbitrarily. The returned attribute set contains two
-    attributes:
+    The input is an attribute set of paths, where the keys are only for user
+    convenience and can be chosen arbitrarily. The returned attribute set
+    contains two attributes:
 
     - `commonPrefix`: A path value containing the common prefix between all the
       given paths.
