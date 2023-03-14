@@ -26,6 +26,10 @@ buildPythonPackage rec {
     fsspec
   ];
 
+  pythonImportsCheck = [
+    "sshfs"
+  ];
+
   meta = with lib; {
     description = "SSH/SFTP implementation for fsspec";
     homepage = "https://pypi.org/project/sshfs/${version}";
