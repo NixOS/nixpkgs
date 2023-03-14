@@ -5,6 +5,7 @@
 # binary dependencies between projects.
 
 { lib
+, buildRustCrateHelpers
 , stdenv
 , defaultCrateOverrides
 , fetchCrate
@@ -75,10 +76,10 @@ let
   };
 
   buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust;
+    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust buildRustCrateHelpers;
   };
 
-  installCrate = import ./install-crate.nix { inherit stdenv; };
+  installCrate = import ./install-crate.nix { inherit lib stdenv buildRustCrateHelpers; };
 
   # Allow access to the rust attribute set from inside buildRustCrate, which
   # has a parameter that shadows the name.
@@ -188,8 +189,12 @@ crate_: lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
     , extraRustcOptsForBuildRs
-      # Whether to enable building tests.
-      # Use true to enable.
+      # What should be build in the crate.
+      # Options: "lib" "bin" "test" "example" "bench"
+      # Default: ["lib" "bin"]
+    , buildKinds
+      # Whether to build tests
+      # Deprecated, use buildKinds = ["test"] instead
       # Default: false
     , buildTests
       # Passed to stdenv.mkDerivation.
@@ -238,6 +243,7 @@ crate_: lib.makeOverridable
         "authors"
         "colors"
         "edition"
+        "buildKinds"
         "buildTests"
         "codegenUnits"
       ];
@@ -270,6 +276,7 @@ crate_: lib.makeOverridable
         preInstall
         postInstall
         buildTests
+        buildKinds
         ;
 
       src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
@@ -302,6 +309,7 @@ crate_: lib.makeOverridable
 
       libName = if crate ? libName then crate.libName else crate.crateName;
       libPath = lib.optionalString (crate ? libPath) crate.libPath;
+      libHarness = if crate ? libHarness then crate.libHarness else true;
 
       # Seed the symbol hashes with something unique every time.
       # https://doc.rust-lang.org/1.0.0/rustc/metadata/loader/index.html#frobbing-symbols
@@ -336,8 +344,8 @@ crate_: lib.makeOverridable
           ++ (lib.optional (edition != null) "--edition ${edition}");
       extraRustcOptsForBuildRs =
         lib.optionals (crate ? extraRustcOptsForBuildRs) crate.extraRustcOptsForBuildRs
-        ++ extraRustcOptsForBuildRs_
-        ++ (lib.optional (edition != null) "--edition ${edition}");
+          ++ extraRustcOptsForBuildRs_
+          ++ (lib.optional (edition != null) "--edition ${edition}");
 
 
       configurePhase = configureCrate {
@@ -348,16 +356,16 @@ crate_: lib.makeOverridable
       };
       buildPhase = buildCrate {
         inherit crateName dependencies
-          crateFeatures crateRenames libName release libPath crateType
+          crateFeatures crateRenames libName libHarness libPath release crateType
           metadata hasCrateBin crateBin verbose colors
-          extraRustcOpts buildTests codegenUnits;
+          extraRustcOpts buildTests codegenUnits buildKinds;
       };
-      installPhase = installCrate crateName metadata buildTests;
+      installPhase = installCrate {
+        inherit crateName metadata buildTests buildKinds;
+      };
 
-      # depending on the test setting we are either producing something with bins
-      # and libs or just test binaries
-      outputs = if buildTests then [ "out" ] else [ "out" "lib" ];
-      outputDev = if buildTests then [ "out" ] else [ "lib" ];
+      outputs = [ "out" ] ++ lib.optional (builtins.any (t: buildRustCrateHelpers.kinds.isLib t) buildKinds) "lib";
+      outputDev = if buildTests then [ "out" ] else lib.optional (builtins.any (t: buildRustCrateHelpers.kinds.isLib t) buildKinds) "lib";
 
       meta = {
         mainProgram = crateName;
@@ -389,5 +397,6 @@ crate_: lib.makeOverridable
   dependencies = crate_.dependencies or [ ];
   buildDependencies = crate_.buildDependencies or [ ];
   crateRenames = crate_.crateRenames or { };
+  buildKinds = crate_.buildKinds or [ "bin" "lib" ];
   buildTests = crate_.buildTests or false;
 }
