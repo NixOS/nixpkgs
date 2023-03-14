@@ -6,6 +6,7 @@
 , gtk2
 , gtk3
 , pkg-config
+, python3
 }:
 
 stdenv.mkDerivation (self: {
@@ -19,6 +20,7 @@ stdenv.mkDerivation (self: {
 
   nativeBuildInputs = [
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -38,7 +40,7 @@ stdenv.mkDerivation (self: {
     "hdspconf"
     "hdsploader"
     "hdspmixer"
-    # "hwmixvolume" # needs Python
+    "hwmixvolume"
     "ld10k1"
     # "qlo10k1" # needs Qt
     "mixartloader"
