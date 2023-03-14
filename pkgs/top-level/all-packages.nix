@@ -24209,6 +24209,8 @@ with pkgs;
 
   zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
 
+  zix = callPackage ../development/libraries/audio/zix { };
+
   zz = callPackage ../development/compilers/zz { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
