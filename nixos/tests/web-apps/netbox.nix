@@ -8,7 +8,7 @@ let
   testUser = "alice";
   testPassword = "verySecure";
   testGroup = "netbox-users";
-in import ../make-test-python.nix ({ lib, pkgs, ... }: {
+in import ../make-test-python.nix ({ lib, pkgs, netbox, ... }: {
   name = "netbox";
 
   meta = with lib.maintainers; {
@@ -18,6 +18,7 @@ in import ../make-test-python.nix ({ lib, pkgs, ... }: {
   nodes.machine = { config, ... }: {
     services.netbox = {
       enable = true;
+      package = netbox;
       secretKeyFile = pkgs.writeText "secret" ''
         abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
       '';

@@ -14,7 +14,7 @@ let
   };
   configFile = pkgs.concatText "configuration.py" [ settingsFile extraConfigFile ];
 
-  pkg = (pkgs.netbox.overrideAttrs (old: {
+  pkg = (cfg.package.overrideAttrs (old: {
     installPhase = old.installPhase + ''
       ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
     '' + optionalString cfg.enableLdap ''
@@ -71,6 +71,17 @@ in {
       default = "[::1]";
       description = lib.mdDoc ''
         Address the server will listen on.
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      defaultText = literalExpression ''
+        if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      '';
+      description = lib.mdDoc ''
+        NetBox package to use.
       '';
     };
 
