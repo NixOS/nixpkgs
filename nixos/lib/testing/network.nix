@@ -82,7 +82,12 @@ let
       virtualisation.test.nodeNumber = mkOption {
         internal = true;
         type = types.int;
-        readOnly = true;
+        # Allow overriding the nodeNumber. Useful when having e.g.
+        # two nodes in a test, but only one is booted. After that,
+        # the first node does a switch-to-configuration to the config of the second
+        # node (e.g. `<nixpkgs/nixos/tests/switch-test.nix>`), but you want to have
+        # stable IPs between the switch.
+        # readOnly = true;
         default = nodeNumbers.${config.virtualisation.test.nodeName};
         description = mdDoc ''
           A unique number assigned for each node in `nodes`.
