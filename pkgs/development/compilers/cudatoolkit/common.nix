@@ -151,6 +151,10 @@ backendStdenv.mkDerivation rec {
   # Refer to comments in the overrides for cuda_nvcc for explanation
   # CUDA_TOOLKIT_ROOT_DIR is legacy,
   # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+  # NOTE: We unconditionally set -Xfatbin=-compress-all, which reduces the size of the compiled
+  #   binaries. If binaries grow over 2GB, they will fail to link. This is a problem for us, as
+  #   the default set of CUDA capabilities we build can regularly cause this to occur (for
+  #   example, with Magma).
   ''
     mkdir -p $out/nix-support
     cat <<EOF >> $out/nix-support/setup-hook
@@ -160,7 +164,7 @@ backendStdenv.mkDerivation rec {
     if [ -z "\''${CUDAHOSTCXX-}" ]; then
       export CUDAHOSTCXX=${backendStdenv.cc}/bin;
     fi
-    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin'
+    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin -Xfatbin=-compress-all'
     EOF
 
     # Move some libraries to the lib output so that programs that

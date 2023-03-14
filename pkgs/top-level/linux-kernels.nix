@@ -34,8 +34,6 @@ let
       major = lib.versions.major version;
       sha256 = kernelPatches.hardened.${kernel.meta.branch}.sha256;
       modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
-      # FIXME remove as soon as the revert happened upstream!
-      basePatches = lib.filter ({ name, ... }: name != "fix-brcmfmac") kernel.kernelPatches;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
         inherit stdenv lib version;
@@ -51,7 +49,7 @@ let
           broken = kernel.meta.broken || (stdenv.isx86_64 && lib.versions.majorMinor version == "5.4");
         };
       };
-      kernelPatches = basePatches ++ [
+      kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
       isHardened = true;
@@ -106,7 +104,6 @@ in {
           # when adding a new linux version
           kernelPatches.cpu-cgroup-v2."4.11"
           kernelPatches.modinst_arg_list_too_long
-          kernelPatches.fix-brcmfmac
         ];
     };
 
@@ -115,7 +112,6 @@ in {
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.modinst_arg_list_too_long
-          kernelPatches.fix-brcmfmac
         ];
     };
 
@@ -124,7 +120,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -139,7 +134,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -156,7 +150,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -173,7 +166,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -182,7 +174,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.fix-brcmfmac
       ];
     };
 

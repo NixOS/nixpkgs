@@ -151,6 +151,8 @@ in
                   if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
                   then
                     ${pkgs.coreutils}/bin/mv -v -f "$logfile".new "$logfile"
+                  else
+                    ${pkgs.coreutils}/bin/rm -f "$logfile".new
                   fi
                 done
               '';
