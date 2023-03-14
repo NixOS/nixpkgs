@@ -2,6 +2,15 @@
 
 {
 
+  tlpdb-nix = runCommand "texlive-test-tlpdb-nix" {
+    nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlpdb.nix;
+    tlpdbNix = texlive.tlpdb-nix;
+  }
+  ''
+    mkdir -p "$out"
+    diff -u "''${nixpkgsTlpdbNix}" "''${tlpdbNix}" | tee "$out/tlpdb.nix.patch"
+  '';
+
   luaotfload-fonts = runCommand "texlive-test-lualatex" {
     nativeBuildInputs = [
       (with texlive; combine { inherit scheme-medium libertinus-fonts; })
