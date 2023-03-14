@@ -1209,6 +1209,10 @@ self: super: with self; {
 
   bbox = callPackage ../development/python-modules/bbox { };
 
+  bc-detect-secrets = callPackage ../development/python-modules/bc-detect-secrets { };
+
+  bc-jsonpath-ng = callPackage ../development/python-modules/bc-jsonpath-ng { };
+
   bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
@@ -5030,6 +5034,8 @@ self: super: with self; {
   json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
 
   json-stream = callPackage ../development/python-modules/json-stream { };
+
+  json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
 
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 

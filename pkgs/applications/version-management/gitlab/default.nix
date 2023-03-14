@@ -166,6 +166,7 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
+    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
   '';

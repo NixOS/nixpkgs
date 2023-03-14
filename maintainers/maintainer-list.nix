@@ -2503,6 +2503,12 @@
     matrix = "@cawilliamson:nixos.dev";
     name = "Christopher A. Williamson";
   };
+  cbleslie = {
+    email = "cameronleslie@gmail.com";
+    github = "cbleslie";
+    githubId = 500963;
+    name = "C.B.Leslie";
+  };
   cbley = {
     email = "claudio.bley@gmail.com";
     github = "avdv";
@@ -11296,6 +11302,15 @@
     github = "osener";
     githubId = 111265;
     name = "Ozan Sener";
+  };
+  ostrolucky = {
+    email = "gabriel.ostrolucky@gmail.com";
+    github = "ostrolucky";
+    githubId = 496233;
+    name = "Gabriel Ostrolucký";
+    keys = [{
+      fingerprint = "6611 22A7 B778 6E4A E99A  9D6E C79A D015 19EF B134";
+    }];
   };
   otavio = {
     email = "otavio.salvador@ossystems.com.br";

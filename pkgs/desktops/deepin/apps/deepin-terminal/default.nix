@@ -8,6 +8,7 @@
 , dde-qt-dbus-factory
 , cmake
 , qtbase
+, qtsvg
 , qttools
 , qtx11extras
 , pkg-config
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
-  version = "5.4.34";
+  version = "5.9.40";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CpI7dyQwrYOYzqVZ6aa+/OAUC3xRyY4ZwzH1mqURTfY=";
+    sha256 = "sha256-GtrbR59IUYNAOmioW5NYhDsPKBmK4uybyDjHsbelkE4=";
   };
 
   patches = [
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qtbase
+    qtsvg
     dtkwidget
     qt5platform-plugins
     dde-qt-dbus-factory

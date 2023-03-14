@@ -15,11 +15,11 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "11w2gzhp0vlpygk93cksxhkimc9y8w862gn9450xkzi1jsps5lj4";
-    x86_64-darwin = "0ya17adx2vbi800ws5sfqq03lrjjk6kbclrfrc2zfij2ha05xl8z";
-    aarch64-linux = "15kzjs1ha5x2hcq28nkbb0rim1v694jj6p9sz226rai3bmq9airg";
-    aarch64-darwin = "1cggppblr42jzpcz3g8052w5y1b9392iizpvg6y7001kw66ndp3n";
-    armv7l-linux = "01qqhhl5ffvba1pk4jj3q7sbahq7cvy81wvmgng1cmaj5b8m8dgp";
+    x86_64-linux = "0q3wp1n67f8w0j35saf4mlnsfd2481f9yl28428vycq32m10q96k";
+    x86_64-darwin = "1820a01a97vvv1d2553czv1g2z7mg3f6l8i8168g63zvvnad0f1c";
+    aarch64-linux = "03gzfp5n6z6dzinsnwpvmmlj0lqa53152a4mylaj1rg540jv2xh7";
+    aarch64-darwin = "0mbwavi3palh353i19an94hr6xs0i5bxqcvkmr5qv3xvpwlaandl";
+    armv7l-linux = "0wpnjd9fqlnv360q6061kmi1z699kd4q9igdczp8gwqyz2x4d3yz";
   }.${system} or throwSystem;
 
   sourceRoot = if stdenv.isDarwin then "" else ".";
@@ -29,7 +29,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.76.0.23062";
+    version = "1.76.1.23069";
     pname = "vscodium";
 
     executableName = "codium";

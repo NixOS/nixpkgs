@@ -1,9 +1,12 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, iconv
 , pytestCheckHook
 , pythonOlder
 , requests
+, json-stream-rs-tokenizer
 , setuptools
 }:
 
@@ -23,8 +26,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [
+    iconv
+  ];
+
   propagatedBuildInputs = [
     requests
+    json-stream-rs-tokenizer
   ];
 
   nativeCheckInputs = [

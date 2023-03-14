@@ -1,7 +1,10 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+, fetchurl
 , autoPatchelfHook
+, makeWrapper
 , buildNpmPackage
 , cmake
 , avahi
@@ -11,7 +14,7 @@
 , libxcb
 , openssl
 , libopus
-, ffmpeg-full
+, ffmpeg_5-full
 , boost
 , pkg-config
 , libdrm
@@ -23,19 +26,29 @@
 , libva
 , libvdpau
 , numactl
+, amf-headers
+, svt-av1
+, vulkan-loader
 , cudaSupport ? false
 , cudaPackages ? {}
 }:
-
+let
+  libcbs = callPackage ./libcbs.nix { };
+  # get cmake file used to find external ffmpeg from previous sunshine version
+  findFfmpeg = fetchurl {
+    url = "https://raw.githubusercontent.com/LizardByte/Sunshine/6702802829869547708dfec98db5b8cbef39be89/cmake/FindFFMPEG.cmake";
+    sha256 = "sha256:1hl3sffv1z8ghdql5y9flk41v74asvh23y6jmaypll84f1s6k1xa";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.16.0";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-o489IPza1iLoe74Onn2grP5oeNy0ZYdrvBoMEWlbwCE=";
+    sha256 = "sha256-nPUWBka/fl1oTB0vTv6qyL7EHh7ptFnxwfV/jYtloTc=";
     fetchSubmodules = true;
   };
 
@@ -46,8 +59,7 @@ stdenv.mkDerivation rec {
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    sourceRoot = "source/src_assets/common/assets/web";
-    npmDepsHash = "sha256-fg/turcpPMHUs6GBwSoJl4Pxua/lGfCA1RzT1R5q53M=";
+    npmDepsHash = "sha256-k8Vfi/57AbGxYFPYSNh8bv4KqHnZjk3BDp8SJQHzuR8=";
 
     dontNpmBuild = true;
 
@@ -66,13 +78,15 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     autoPatchelfHook
+    makeWrapper
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   buildInputs = [
+    libcbs
     avahi
-    ffmpeg-full
+    ffmpeg_5-full
     libevdev
     libpulseaudio
     xorg.libX11
@@ -94,6 +108,8 @@ stdenv.mkDerivation rec {
     libvdpau
     numactl
     mesa
+    amf-headers
+    svt-av1
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
   ];
@@ -117,16 +133,24 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Don't force the need for a static boost, fix hardcoded libevdev path
+    # fix hardcoded libevdev path
     substituteInPlace CMakeLists.txt \
-      --replace 'set(Boost_USE_STATIC_LIBS ON)' '# set(Boost_USE_STATIC_LIBS ON)' \
       --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+
+    # add FindFFMPEG to source tree
+    cp ${findFfmpeg} cmake/FindFFMPEG.cmake
   '';
 
   preBuild = ''
     # copy node_modules where they can be picked up by build
-    mkdir -p ../src_assets/common/assets/web/node_modules
-    cp -r ${ui}/node_modules/* ../src_assets/common/assets/web/node_modules
+    mkdir -p ../node_modules
+    cp -r ${ui}/node_modules/* ../node_modules
+  '';
+
+  # allow Sunshine to find libvulkan
+  postFixup = lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/sunshine \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = with lib; {
