@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "eks-node-viewer";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k3UezzrLwv4eL8n2qefP8ae4ekNLhcHc8PMH3+Zq92c";
+    sha256 = "sha256-utn0OJX3NLCyAV4F01GIkvh/KFPv7vfLQMwso7x7yCw";
   };
 
-  vendorSha256 = "sha256-A7XGbGTbx1qr/zpfXyJqIDb3EU8IVGO6sTNg5bg/jMk";
+  vendorSha256 = "sha256-28TKZYZM2kddXAusxmjhrKFy+ATU7kZM4Ad7zvP/F3A";
 
   meta = with lib; {
     description = "Tool to visualize dynamic node usage within a cluster";
