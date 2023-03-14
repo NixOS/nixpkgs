@@ -259,6 +259,7 @@
 , "prettier"
 , "prettier_d_slim"
 , "prettier-plugin-toml"
+, "@prettier/plugin-xml"
 , "prisma"
 , "@prisma/language-server"
 , "pscid"
