@@ -16,12 +16,18 @@ buildPythonPackage rec {
     hash = "sha256-syIVtAi7aPeVPJSKHdDJIArsYj0mtIAP104vR3Vb1UQ=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ fsspec asyncssh bcrypt ];
+  propagatedBuildInputs = [
+    asyncssh
+    bcrypt
+    fsspec
+  ];
 
   meta = with lib; {
-    description = "SSH/SFTP implementation for fsspec ";
+    description = "SSH/SFTP implementation for fsspec";
     homepage = "https://pypi.org/project/sshfs/${version}";
     changelog = "https://github.com/fsspec/sshfs/releases/tag/${version}";
     license = licenses.asl20;
