@@ -6674,6 +6674,8 @@ with pkgs;
 
   dsp = callPackage ../tools/audio/dsp { };
 
+  dspdfviewer = callPackage ../applications/office/dspdfviewer { };
+
   dirdiff = callPackage ../tools/text/dirdiff {
     tcl = tcl-8_5;
     tk = tk-8_5;
