@@ -1,14 +1,15 @@
 { lib
+, argcomplete
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , hatchling
-, userpath
-, argcomplete
-, packaging
 , importlib-metadata
+, packaging
 , pip
+, platformdirs
 , pytestCheckHook
+, pythonOlder
+, userpath
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    userpath
     argcomplete
     packaging
+    platformdirs
+    userpath
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
