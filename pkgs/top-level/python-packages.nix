@@ -6097,6 +6097,8 @@ self: super: with self; {
 
   mock-services = callPackage ../development/python-modules/mock-services { };
 
+  mock-ssh-server = callPackage ../development/python-modules/mock-ssh-server { };
+
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
   modeled = callPackage ../development/python-modules/modeled { };
@@ -11206,6 +11208,8 @@ self: super: with self; {
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
 
   ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
+
+  sshfs = callPackage ../development/python-modules/sshfs { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
