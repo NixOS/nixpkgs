@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond, gettext }:
 
 buildPythonApplication rec {
   pname = "frescobaldi";
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     pyqtwebengine
   ];
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook gettext ];
 
   # Needed because source is fetched from git
   preBuild = ''
