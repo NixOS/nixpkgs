@@ -20827,6 +20827,8 @@ with pkgs;
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
+  json-fortran = callPackage ../development/libraries/json-fortran { };
+
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
