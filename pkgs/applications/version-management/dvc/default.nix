@@ -10,26 +10,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.43.1";
+  version = "2.49.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-FwJErwAVWFZ95wzBalGi9o+8BTtcGvnC9uQE1qTUaBs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rDwFOqltj/iR41kQdOOPmcG5jrf4IeHJoBvzZrMFSAE=";
   };
 
+  pythonRelaxDeps = [
+    "dvc-data"
+    "platformdirs"
+  ];
+
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "scmrepo==0.1.6" "scmrepo" \
-      --replace "iterative-telemetry==0.0.6" "iterative-telemetry" \
-      --replace "dvc-data==0.35.1" "dvc-data"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -39,11 +41,12 @@ python3.pkgs.buildPythonApplication rec {
     configobj
     distro
     dpath
-    dvclive
     dvc-data
+    dvc-http
     dvc-render
     dvc-studio-client
     dvc-task
+    dvclive
     flatten-dict
     flufl_lock
     funcy
@@ -53,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     networkx
     packaging
     pathspec
+    platformdirs
     psutil
     pydot
     pygtrie
@@ -89,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
+    changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
     broken = true; # requires new python package: dvc-studio-client
