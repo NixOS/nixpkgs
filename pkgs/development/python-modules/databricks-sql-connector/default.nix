@@ -1,21 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, alembic
 , lz4
 , numpy
 , oauthlib
+, openpyxl
 , pandas
 , poetry-core
 , pyarrow
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, sqlalchemy
 , thrift
 }:
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = "databricks-sql-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XyDkL/bGnivx7MRG86vGS69mKdrWw7kKiuvQfBYFKVQ=";
+    hash = "sha256-V8Nl6xr96Xnd1gkw9R0aqXkitLESsAyW7ufTYn6ttLg=";
   };
 
   pythonRelaxDeps = [
@@ -38,11 +41,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    alembic
     lz4
     numpy
     oauthlib
+    openpyxl
     pandas
     pyarrow
+    sqlalchemy
     thrift
   ];
 

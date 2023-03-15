@@ -6,8 +6,8 @@ let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "sha256-3LgqMBCnUG2UmsekaIvV43lBpSPEocEXmFV9WpE7wE0=";
-  version = "4.5";
+  sha256 = "sha256-UiUMoqdfkk6mzaPGctpQW3dvOWKhNBNuScJ5BpCykVg=";
+  version = "4.8";
 
   inherit (kernel) stdenv;
 

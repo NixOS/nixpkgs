@@ -1,31 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "exrex";
-  version = "unstable-2021-04-22";
+  version = "0.11.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "exrex";
-    rev = "9a66706e7582a9cf31c4121629c9035e329bbe21";
-    sha256 = "sha256-g31tHY+LzGxwBmUpSa0DV7ruLfYwmuDg+XyBxMZRa9U=";
+    # https://github.com/asciimoo/exrex/issues/68
+    rev = "239e4da37ff3a66d8b4b398d189299ae295594c3";
+    hash = "sha256-Tn/XIIy2wnob+1FmP9bdD9+gHLQZDofF2c1FqOijKWA=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/asciimoo/exrex/pull/65
-      url = "https://github.com/asciimoo/exrex/commit/44712bfb1350a509581a5834d9fa8aebcd9434db.patch";
-      hash = "sha256-thKotSvdVdVjXaG/AhsXmW51FHLOYUeYTYw8SA/k2t4=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=about['__version__']," "version='${version}',"
+  '';
 
   # Projec thas no released tests
   doCheck = false;
-  pythonImportsCheck = [ "exrex" ];
+
+  pythonImportsCheck = [
+    "exrex"
+  ];
 
   meta = with lib; {
     description = "Irregular methods on regular expressions";

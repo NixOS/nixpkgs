@@ -26,7 +26,7 @@ buildGoModule rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/site/yarn.lock";
-    hash = "sha256-4GbM7GNZ3wHIZJIJuHw1v/SwjUNc1vi8IHRGaGwPGZQ=";
+    hash = "sha256-nRmEXR9fjDxvpbnT+qpGeM0Cc/qW/kN53sKOXwZiBXY=";
   };
 
   subPackages = [ "cmd/..." ];

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "easyenergy";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EhpZKwoayT53lhyuM/DlyLQ/1OSGuiAaiBdjM0UTZ8E=";
+    hash = "sha256-FjqkePMD55LWLwL6ZWzKwCI0tcYACPdRuci5fy6n02s=";
   };
 
   postPatch = ''

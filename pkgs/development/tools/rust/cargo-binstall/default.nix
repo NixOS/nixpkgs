@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "0.20.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-wM8DawrniyJxj8Omgj+hiePa521p4hIAngfzEHFNO58=";
+    hash = "sha256-8iJOjaOnbvRZWkygkXK0e/BiImpyQ92E0XQDklb4JJQ=";
   };
 
-  cargoHash = "sha256-ZanPmdFMDGZhRHVVGt03OJWz8HnSYFdm42W6rpytu5Y=";
+  cargoHash = "sha256-+u1v3XJ+DCXMbMpLcjxUZMKcF0E9LrNv6+9XVo/DduQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,6 +41,13 @@ rustPlatform.buildRustPackage rec {
     "rustls"
     "trust-dns"
     "zstd-thin"
+  ];
+
+  checkFlags = [
+    # requires internet access
+    "--skip=download::test::test_and_extract"
+    "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_no_such_release"
+    "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
 
   # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu

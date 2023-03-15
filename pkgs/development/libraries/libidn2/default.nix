@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/libidn/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
     sha256 = "sha256-dpQM1Od46Ak1eanRlbJf/16Tbp3GJCBoUotDenZ2T5E=";
   };
 

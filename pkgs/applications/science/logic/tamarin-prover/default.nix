@@ -1,6 +1,6 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib
+{ haskellPackages, mkDerivation, fetchFromGitHub, lib, stdenv
 # the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz
+, makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
@@ -76,6 +76,9 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
+  '' + lib.optionalString stdenv.isLinux ''
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+  '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}
     # so that the package can be used as a vim plugin to install syntax coloration
     install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim

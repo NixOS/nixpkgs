@@ -72,6 +72,6 @@ buildGoModule rec {
     changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
     description = "Security health metrics for Open Source";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy ];
   };
 }

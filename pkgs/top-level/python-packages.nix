@@ -1209,6 +1209,10 @@ self: super: with self; {
 
   bbox = callPackage ../development/python-modules/bbox { };
 
+  bc-detect-secrets = callPackage ../development/python-modules/bc-detect-secrets { };
+
+  bc-jsonpath-ng = callPackage ../development/python-modules/bc-jsonpath-ng { };
+
   bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
@@ -1975,7 +1979,7 @@ self: super: with self; {
 
   commoncode = callPackage ../development/python-modules/commoncode { };
 
-  CommonMark = callPackage ../development/python-modules/commonmark { };
+  commonmark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
 
@@ -2935,6 +2939,8 @@ self: super: with self; {
   durus = callPackage ../development/python-modules/durus {  };
 
   dvc-data = callPackage ../development/python-modules/dvc-data {  };
+
+  dvc-http = callPackage ../development/python-modules/dvc-http {  };
 
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
@@ -5022,6 +5028,8 @@ self: super: with self; {
 
   json-stream = callPackage ../development/python-modules/json-stream { };
 
+  json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
@@ -6072,6 +6080,8 @@ self: super: with self; {
   mock-open = callPackage ../development/python-modules/mock-open { };
 
   mock-services = callPackage ../development/python-modules/mock-services { };
+
+  mock-ssh-server = callPackage ../development/python-modules/mock-ssh-server { };
 
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
@@ -7155,6 +7165,8 @@ self: super: with self; {
   onetimepad = callPackage ../development/python-modules/onetimepad { };
 
   openai = callPackage ../development/python-modules/openai { };
+
+  openaiauth = callPackage ../development/python-modules/openaiauth { };
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
@@ -10465,6 +10477,8 @@ self: super: with self; {
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
+  scikit-rf = callPackage ../development/python-modules/scikit-rf { };
+
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
@@ -11168,6 +11182,8 @@ self: super: with self; {
 
   ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
 
+  sshfs = callPackage ../development/python-modules/sshfs { };
+
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
@@ -11703,7 +11719,7 @@ self: super: with self; {
 
   torch = callPackage ../development/python-modules/torch {
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
     inherit (pkgs.llvmPackages_rocm) openmp;
   };
@@ -11908,6 +11924,8 @@ self: super: with self; {
 
   txgithub = callPackage ../development/python-modules/txgithub { };
 
+  txi2p-tahoe = callPackage ../development/python-modules/txi2p-tahoe { };
+
   txredisapi = callPackage ../development/python-modules/txredisapi { };
 
   txrequests = callPackage ../development/python-modules/txrequests { };
@@ -11973,6 +11991,8 @@ self: super: with self; {
   types-toml = callPackage ../development/python-modules/types-toml { };
 
   types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
+
+  types-ujson = callPackage ../development/python-modules/types-ujson { };
 
   types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
 
