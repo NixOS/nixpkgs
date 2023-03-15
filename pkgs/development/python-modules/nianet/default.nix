@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "NiaNet";
+  pname = "nianet";
   version = "1.1.4";
   format = "pyproject";
 
