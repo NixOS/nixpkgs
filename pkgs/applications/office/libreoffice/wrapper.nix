@@ -89,12 +89,16 @@ in runCommand "${unwrapped.name}-wrapped" {
 } (''
   mkdir -p "$out/bin"
   mkdir -p "$out/share"
+  for dir in ${unwrapped}/share/*; do
+    dirname="''${dir##*/}"
+    if [[ $dirname == "applications" ]]; then
+      cp -r $dir/ $out/share/
+    else
+      ln -s $dir $out/share/
+    fi
+  done
 
-  ln -s ${unwrapped}/share/icons $out/share/icons
-  ln -s ${unwrapped}/share/templates $out/share/templates
   ln -s ${unwrapped}/lib $out/lib
-
-  cp -r ${unwrapped}/share/applications/ $out/share/
   for f in $out/share/applications/*.desktop; do
     substituteInPlace "$f" \
       --replace "Exec=libreoffice${major}.${minor}" "Exec=soffice"

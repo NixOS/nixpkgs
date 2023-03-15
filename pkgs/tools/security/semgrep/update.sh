@@ -25,7 +25,7 @@ instantiateClean() {
 
 # get latest version
 NEW_VERSION=$(
-  curl -s -H
+  curl -s -H \
     "Accept: application/vnd.github.v3+json" \
     ${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} \
     https://api.github.com/repos/returntocorp/semgrep/releases/latest \
@@ -75,8 +75,8 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.com
 | jq '.[]' -r \
 | while read -r PLATFORM; do
     echo "Updating core for $PLATFORM"
-    SUFFIX=$(instantiateClean semgrep.common.core.data."$1".suffix "$PLATFORM")
-    OLD_HASH=$(instantiateClean semgrep.common.core.data."$1".sha256 "$PLATFORM")
+    SUFFIX=$(instantiateClean semgrep.common.core.data."$PLATFORM".suffix)
+    OLD_HASH=$(instantiateClean semgrep.common.core.data."$PLATFORM".sha256)
     echo "Old hash $OLD_HASH"
 
     NEW_URL="https://github.com/returntocorp/semgrep/releases/download/v$NEW_VERSION/semgrep-v$NEW_VERSION$SUFFIX"
@@ -123,7 +123,7 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
     NEW_URL=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".url | sed "s@$OLD_REV@$NEW_REV@g")
     NEW_HASH=$(nix --experimental-features nix-command hash to-sri "sha256:$(nix-prefetch-url "$NEW_URL")")
 
-    TMP_HASH="sha256-ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     replace "$OLD_REV" "$NEW_REV" "$COMMON_FILE"
     replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
     NEW_HASH="$(fetchgithub semgrep.passthru.common.submodules."$SUBMODULE")"
