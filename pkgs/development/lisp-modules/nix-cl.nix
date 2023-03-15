@@ -113,7 +113,7 @@ let
       pkg,
 
       # Name of the Lisp executable
-      program ? pkg.pname,
+      program ? pkg.meta.mainProgram or pkg.pname,
 
       # General flags to the Lisp executable
       flags ? [],
@@ -289,7 +289,7 @@ let
   wrapLisp = {
     pkg
     , faslExt
-    , program ? pkg.pname
+    , program ? pkg.meta.mainProgram or pkg.pname
     , flags ? []
     , asdf ? pkgs.asdf_3_3
     , packageOverrides ? (self: super: {})
