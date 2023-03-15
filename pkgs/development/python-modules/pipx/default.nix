@@ -18,12 +18,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  # no tests in the pypi tarball, so we directly fetch from github
   src = fetchFromGitHub {
     owner = "pipxproject";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-lm/Q+8nNubhaUR1pUbSIoD4DEUEkK+pQvvUdWNquW4Q=";
+    hash = "sha256-lm/Q+8nNubhaUR1pUbSIoD4DEUEkK+pQvvUdWNquW4Q=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     # start local pypi server and use in tests
     "--net-pypiserver"
   ];
+
   disabledTests = [
     # disable tests which are difficult to emulate due to shell manipulations
     "path_warning"
@@ -74,9 +74,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description =
-      "Install and Run Python Applications in Isolated Environments";
+    description = "Install and run Python applications in isolated environments";
     homepage = "https://github.com/pipxproject/pipx";
+    changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ yshym ];
   };
