@@ -56,12 +56,8 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      unitConfig = {
-        ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
-      };
-
       serviceConfig = {
-        ExecStart = "${pkgs.waydroid}/bin/waydroid container start";
+        ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
         ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
         ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
       };

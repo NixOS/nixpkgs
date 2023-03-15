@@ -292,5 +292,5 @@ in {
   };
 
   meta.maintainers = with maintainers; [ ma27 ];
-  meta.doc = ./plausible.xml;
+  meta.doc = ./plausible.md;
 }

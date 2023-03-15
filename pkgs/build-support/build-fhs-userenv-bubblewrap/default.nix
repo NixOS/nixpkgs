@@ -1,7 +1,5 @@
 { lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
 
-let buildFHSEnv = callPackage ./env.nix { }; in
-
 args @ {
   name
 , runScript ? "bash"
@@ -139,6 +137,18 @@ let
       fi
     done
 
+    declare -a x11_args
+    # Always mount a tmpfs on /tmp/.X11-unix
+    # Rationale: https://github.com/flatpak/flatpak/blob/be2de97e862e5ca223da40a895e54e7bf24dbfb9/common/flatpak-run.c#L277
+    x11_args+=(--tmpfs /tmp/.X11-unix)
+
+    # Try to guess X socket path. This doesn't cover _everything_, but it covers some things.
+    if [[ "$DISPLAY" == :* ]]; then
+      display_nr=''${DISPLAY#?}
+      local_socket=/tmp/.X11-unix/X$display_nr
+      x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
+    fi
+
     cmd=(
       ${bubblewrap}/bin/bwrap
       --dev-bind /dev /dev
@@ -173,6 +183,7 @@ let
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
+      "''${x11_args[@]}"
       ${concatStringsSep "\n  " extraBwrapArgs}
       ${init runScript}/bin/${name}-init ${initArgs}
     )

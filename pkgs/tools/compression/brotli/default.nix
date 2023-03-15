@@ -4,18 +4,19 @@
 , cmake
 , fetchpatch
 , staticOnly ? stdenv.hostPlatform.isStatic
+, testers
 }:
 
 # ?TODO: there's also python lib in there
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brotli";
   version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "z6Dhrabav1MDQ4rAcXaDv0aN+qOoh9cvoXZqEWBB13c=";
   };
 
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://github.com/google/brotli";
     description = "A generic-purpose lossless compression algorithm and tool";
@@ -72,6 +75,10 @@ stdenv.mkDerivation rec {
       '';
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
+    pkgConfigModules = [
+      "libbrotlidec"
+      "libbrotlienc"
+    ];
     platforms = platforms.all;
   };
-}
+})

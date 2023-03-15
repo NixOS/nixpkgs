@@ -18,9 +18,9 @@ For available translations and language codes see [upstream translation reposito
 
 To regenerate the nixpkgs wordpressPackages set, run:
 
-``` 
+```
 ./generate.sh
-``` 
+```
 
 After that you can commit and submit the changes.
 
@@ -29,7 +29,7 @@ After that you can commit and submit the changes.
 The plugins will be available in the namespace `wordpressPackages.plugins`.
 Using it together with the Wordpress module could look like this:
 
-``` 
+```
 services.wordpress = {
   sites."blog.${config.networking.domain}" = {
     plugins = with pkgs.wordpressPackages.plugins; [

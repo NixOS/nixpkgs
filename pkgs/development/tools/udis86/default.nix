@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "lib" ];
 
   meta = with lib; {
-    homepage = "http://udis86.sourceforge.net";
+    homepage = "https://udis86.sourceforge.net";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timor ];
     mainProgram = "udcli";

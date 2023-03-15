@@ -1,5 +1,5 @@
 # run tests by building `neovim.tests`
-{ vimUtils, vim_configurable, writeText, neovim, vimPlugins
+{ vimUtils, writeText, neovim, vimPlugins
 , lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab
@@ -8,8 +8,6 @@
 }:
 let
   inherit (neovimUtils) makeNeovimConfig;
-
-  packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
   plugins = with vimPlugins; [
     {
@@ -46,13 +44,6 @@ let
   };
 
   nvimAutoDisableWrap = makeNeovimConfig { };
-
-  nvimConfDontWrap = makeNeovimConfig {
-    inherit plugins;
-    customRC = ''
-      " just a comment
-    '';
-  };
 
   wrapNeovim2 = suffix: config:
     wrapNeovimUnstable neovim-unwrapped (config // {

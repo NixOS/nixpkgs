@@ -9,7 +9,6 @@
 , libnotify
 , libxml2
 , gnome-online-accounts
-, cinnamon-settings-daemon
 , colord
 , polkit
 , libxkbfile
@@ -36,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.4.7";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-38n1QCygkBq+wOLwui1oF6MtDWxAFWxp5U1omSVtbro=";
+    hash = "sha256-rp3K7SqGw8da2U61VjKiqUyT5vCUVk4XZdRYtLwRtfQ=";
   };
 
   buildInputs = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
     libgnomekbd
     libxklavier
     colord
-    cinnamon-settings-daemon
     libgudev
     libwacom
     gnome-online-accounts
@@ -75,10 +73,6 @@ stdenv.mkDerivation rec {
     ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
 
   postPatch = ''
-    find . -type f -exec sed -i \
-      -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
-      {} +
-
     sed 's|TZ_DIR "/usr/share/zoneinfo/"|TZ_DIR "${tzdata}/share/zoneinfo/"|g' -i ./panels/datetime/test-timezone.c
     sed 's|TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"|TZ_DATA_FILE "${tzdata}/share/zoneinfo/zone.tab"|g' -i ./panels/datetime/tz.h
     sed 's|"/usr/share/i18n/locales/"|"${glibc}/share/i18n/locales/"|g' -i panels/datetime/test-endianess.c
@@ -86,26 +80,10 @@ stdenv.mkDerivation rec {
     patchShebangs meson_install_schemas.py
   '';
 
-  # it needs to have access to that file, otherwise we can't run tests after build
-
-  preBuild = ''
-    mkdir -p $out/share/cinnamon-control-center/
-    ln -s $PWD/panels/datetime $out/share/cinnamon-control-center/
-  '';
-
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
-
-  preInstall = ''
-    rm -r $out
-  '';
-
-  # the only test is wacom-calibrator and it seems to need an xserver and prob more services aswell
-  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config

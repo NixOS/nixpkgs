@@ -1,18 +1,21 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
+, dask
+, distributed
 , fetchFromGitHub
+, grpcio
 , pytestCheckHook
 , pythonOlder
-, distributed
-, dask
-, grpcio
 , skein
 }:
 
 buildPythonPackage rec {
   pname = "dask-yarn";
   version = "0.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
@@ -28,14 +31,30 @@ buildPythonPackage rec {
     skein
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
-  pythonImportsCheck = [ "dask_yarn" ];
+
+  pythonImportsCheck = [
+    "dask_yarn"
+  ];
+
+  disabledTests = [
+    # skein.exceptions.DriverError: Failed to start java process
+    "test_basic"
+    "test_adapt"
+    "test_from_specification"
+    "test_from_application_id"
+    "test_from_current"
+    "test_basic_async"
+    "test_widget_and_html_reprs"
+  ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Deploy dask on YARN clusters";
     longDescription = ''Dask-Yarn deploys Dask on YARN clusters,
       such as are found in traditional Hadoop installations.
@@ -45,5 +64,6 @@ buildPythonPackage rec {
     homepage = "https://yarn.dask.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ illustris ];
+    broken = stdenv.isDarwin;
   };
 }

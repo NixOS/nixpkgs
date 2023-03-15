@@ -1,23 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "tomlcpp";
-  version = "0.pre+date=2022-05-01";
+  version = "0.pre+date=2022-06-25";
 
   src = fetchFromGitHub {
     owner = "cktan";
     repo = pname;
-    rev = "59fcc6dc89fb3f4130a2865e41e1fa5b8c502e45";
-    hash = "sha256-Uc6R5KnGIZXY0EJgFM4Xi7Jtxcu6l8yGh5xgFZPoJDM=";
+    rev = "4212f1fccf530e276a2e1b63d3f99fbfb84e86a4";
+    hash = "sha256-PM3gURXhyTZr59BWuLHvltjKOlKUSBT9/rqTeX5V//k=";
   };
-
-  patches = [
-    # Self-explaining
-    ./0001-missing-headers.diff
-  ];
 
   dontConfigure = true;
 

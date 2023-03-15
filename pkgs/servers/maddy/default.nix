@@ -1,21 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils, installShellFiles, scdoc, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, pam, coreutils, installShellFiles, scdoc, nixosTests }:
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-DBSqC4EteESYb6RbC2xyS+6YczGviWYnyMz7QvCO3Uc=";
+    sha256 = "sha256-vf+jkXerdwvQhtyiOObBRxh8sYMEcgXC5vNzm5wquBs=";
   };
 
   vendorSha256 = "sha256-10cLNl9jWYX8XIKQkCxJ+/ymZC1YJRHUJWZQhq7zeV4=";
 
+  tags = [ "libpam" ];
+
   ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
 
   subPackages = [ "cmd/maddy" ];
+
+  buildInputs = [ pam ];
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 

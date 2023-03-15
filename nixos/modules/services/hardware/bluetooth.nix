@@ -50,14 +50,8 @@ in
         type = types.package;
         default = pkgs.bluez;
         defaultText = literalExpression "pkgs.bluez";
-        example = literalExpression "pkgs.bluezFull";
         description = lib.mdDoc ''
           Which BlueZ package to use.
-
-          ::: {.note}
-          Use the `pkgs.bluezFull` package to enable all
-          bluez plugins.
-          :::
         '';
       };
 
@@ -77,6 +71,29 @@ in
         };
         description = lib.mdDoc "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
       };
+
+      input = mkOption {
+        type = cfgFmt.type;
+        default = { };
+        example = {
+          General = {
+            IdleTimeout = 30;
+            ClassicBondedOnly = true;
+          };
+        };
+        description = lib.mdDoc "Set configuration for the input service (/etc/bluetooth/input.conf).";
+      };
+
+      network = mkOption {
+        type = cfgFmt.type;
+        default = { };
+        example = {
+          General = {
+            DisableSecurity = true;
+          };
+        };
+        description = lib.mdDoc "Set configuration for the network service (/etc/bluetooth/network.conf).";
+      };
     };
   };
 
@@ -86,6 +103,10 @@ in
     environment.systemPackages = [ package ]
       ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
 
+    environment.etc."bluetooth/input.conf".source =
+      cfgFmt.generate "input.conf" cfg.input;
+    environment.etc."bluetooth/network.conf".source =
+      cfgFmt.generate "network.conf" cfg.network;
     environment.etc."bluetooth/main.conf".source =
       cfgFmt.generate "main.conf" (recursiveUpdate defaults cfg.settings);
     services.udev.packages = [ package ];

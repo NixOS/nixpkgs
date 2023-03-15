@@ -1,16 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "yanone-kaffeesatz-2004";
+stdenvNoCC.mkDerivation rec {
+  pname = "yanone-kaffeesatz";
+  version = "2004";
 
-  url = "https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip";
+  src = fetchzip {
+    url = "https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip";
+    stripRoot = false;
+    hash = "sha256-8yAB73UJ77/c8/VLqiFeT1KtoBQzOh+vWrI+JA2dCoY=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "190c4wx7avy3kp98lsyml7kc0jw7csf5n79af2ypbkhsadfsy8di";
 
   meta = {
     description = "The free font classic";

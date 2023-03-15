@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "0.57.0";
+  version = "1.0.0";
 
   disabled = isPy27;
 
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-plJ+X4RtZT77fWEAXAsyi5YnonjaWfZfKbSNFKE1DKc=";
+    hash = "sha256-JAMEJv0Vc5iunuKusyD+rxLiubEIDgHsr7FrMZgLy9Q=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

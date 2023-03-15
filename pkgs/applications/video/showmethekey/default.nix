@@ -1,56 +1,40 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, glib
 , meson
 , ninja
 , libevdev
 , json-glib
-, cairo
-, pango
 , libinput
 , gtk4
 , wrapGAppsHook4
 , libxkbcommon
 , pkg-config
 }:
-
 stdenv.mkDerivation rec {
   pname = "showmethekey";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
-    repo = "showmethekey";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hq4X4dG25YauMjsNXC6Flco9pEpVj3EM2JiFWbRrPaA=";
+    hash = "sha256-iWZjOhugGD7GikcIKaJimfLrTDaGQeYgmp17N03Meb8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "use-gtk4-update-icon-cache.patch";
-      url = "https://github.com/alynxzhou/showmethekey/commit/c73102dc2825d00cbaf323fcfc96736381dc67ae.patch";
-      sha256 = "sha256-6QDY5eQ9A8q3LZeD7v6WI/4vYXc/XXVY/WENA1nvIKo=";
-    })
-  ];
-
   nativeBuildInputs = [
-    glib
     meson
     ninja
-    cairo
-    pango
     json-glib
     pkg-config
-    libevdev
-    libinput
-    libxkbcommon
     wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
+    libevdev
+    libinput
+    libxkbcommon
   ];
 
   meta = with lib; {

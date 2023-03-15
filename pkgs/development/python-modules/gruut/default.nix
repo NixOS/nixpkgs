@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , callPackage
-, pythonOlder
 , fetchFromGitHub
 , babel
 , gruut-ipa
@@ -9,7 +8,6 @@
 , jsonlines
 , num2words
 , python-crfsuite
-, dataclasses
 , python
 , networkx
 , glibcLocales
@@ -61,13 +59,11 @@ buildPythonPackage rec {
     python-crfsuite
     dateparser
     networkx
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ (map (lang: callPackage ./language-pack.nix {
     inherit lang version format src;
   }) langPkgs);
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [ glibcLocales pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25

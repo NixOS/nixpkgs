@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libodb
     libodb-sqlite
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     git
     openssl
   ];

@@ -21,6 +21,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jbruchon/jdupes/commit/8f5b06109b44a9e4316f9445da3044590a6c63e2.patch";
       sha256 = "0saq92v0mm5g979chr062psvwp3i3z23mgqrcliq4m07lvwc7i3s";
     })
+    (fetchpatch {
+      name = "linux-header-ioctl.patch";
+      url = "https://github.com/jbruchon/jdupes/commit/0d4d98f51c99999d2c6dbbb89d554af551b5b69b.patch";
+      sha256 = "sha256-lyuZeRp0Laa8I9nDl1HGdlKa59OvGRQJnRg2fTWv7mQ=";
+    })
+    (fetchpatch {
+      name = "darwin-apfs-comp.patch";
+      url = "https://github.com/jbruchon/jdupes/commit/517b7035945eacd82323392b13bc17b044bcc89d.patch";
+      sha256 = "sha256-lvOab6tyEyKUtik3JBdIs5SHpVjcQEDfN7n2bfUszBw=";
+    })
   ];
 
   dontConfigure = true;

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     python-rtmidi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

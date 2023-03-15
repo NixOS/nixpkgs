@@ -52,8 +52,6 @@
 , enablePluginVcalendar ? true, libical
 }:
 
-with lib;
-
 let
   pythonPkgs = with python3.pkgs; [ python3 wrapPython pygobject3 ];
 
@@ -130,7 +128,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ curl gsettings-desktop-schemas glib-networking gtk3 ]
-    ++ concatMap (f: optionals f.enabled f.deps) (filter (f: f ? deps) features)
+    ++ lib.concatMap (f: lib.optionals f.enabled f.deps) (lib.filter (f: f ? deps) features)
   ;
 
   configureFlags =
@@ -141,7 +139,7 @@ in stdenv.mkDerivation rec {
 
       "--disable-gdata-plugin" # Complains about missing libgdata, even when provided
     ] ++
-    (map (feature: map (flag: strings.enableFeature feature.enabled flag) feature.flags) features);
+    (map (feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags) features);
 
   enableParallelBuilding = true;
 
@@ -155,7 +153,7 @@ in stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The user-friendly, lightweight, and fast email client";
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;

@@ -135,10 +135,6 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "12"; };
   });
 
-  deltachat-desktop = prev."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
-  });
-
   eask = prev."@emacs-eask/cli".override {
     name = "eask";
   };
@@ -192,10 +188,12 @@ final: prev: {
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
     nativeBuildInputs = [ pkgs.installShellFiles ];
+    # 'gt completion' auto-detects zshell from environment variables:
+    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
     postInstall = ''
       installShellCompletion --cmd gt \
         --bash <($out/bin/gt completion) \
-        --zsh <($out/bin/gt completion)
+        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
     '';
   };
 
@@ -272,11 +270,7 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${
-        if stdenv.isLinux
-          then "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
-          else ""
-      }
+      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
   };
 
@@ -346,14 +340,22 @@ final: prev: {
     };
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = let
-      # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
-      npmPatch = fetchpatch {
-        name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
-        url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
-        hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
-      };
+      patches = [
+        # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
+        (fetchpatch {
+          name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
+          hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
+        })
+        # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
+        (fetchpatch {
+          name = "convert-crlf-for-script-bin-files.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
+          hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
+        })
+      ];
     in ''
-      patch -d $out/lib/node_modules/node2nix -p1 < ${npmPatch}
+      ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
     '';
   };
@@ -363,10 +365,6 @@ final: prev: {
     preRebuild = ''
       sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
     '';
-  };
-
-  photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
-    meta.broken = true; # use the top-level package instead
   };
 
   pnpm = prev.pnpm.override {
@@ -414,7 +412,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-TAnObUMGCM9NLt9nsRs1WWYQGPKsJOK8bN/7gSAnBcYIxMCFFDe+XtFYJbyTzsJZ/i+0rH4zg8au3m7HX354LA==";
+      sha512 = "sha512-4zZmBXssPUEiX+GeL0MUq/Yyie4ltiKmGu7jCJFnYMamNrrulTBc+D+QwAQSJ01tyzeGHlD13kOnqPwRipnlNw==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -444,6 +442,26 @@ final: prev: {
     '';
   };
 
+  readability-cli = prev.readability-cli.override (oldAttrs: {
+    # Wrap src to fix this build error:
+    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
+    #
+    # Need to wrap the source, instead of patching in patchPhase, because
+    # buildNodePackage only unpacks sources in the installPhase.
+    src = pkgs.srcOnly {
+      src = oldAttrs.src;
+      name = oldAttrs.name;
+      patchPhase = "chmod a-x readable.ts";
+    };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
+  });
+
   reveal-md = prev.reveal-md.override (
     lib.optionalAttrs (!stdenv.isDarwin) {
       nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -456,6 +474,10 @@ final: prev: {
       '';
     }
   );
+
+  rush = prev."@microsoft/rush".override {
+    name = "rush";
+  };
 
   ssb-server = prev.ssb-server.override (oldAttrs: {
     buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
@@ -561,8 +583,7 @@ final: prev: {
   typescript-language-server = prev.typescript-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
-      wrapProgram "$out/bin/typescript-language-server" \
-        --suffix PATH : ${lib.makeBinPath [ final.typescript ]}
+      ${pkgs.xorg.lndir}/bin/lndir ${final.typescript} $out
     '';
   };
 

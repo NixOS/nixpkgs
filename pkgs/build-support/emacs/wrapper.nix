@@ -42,6 +42,8 @@ let
 
   nativeComp = emacs.nativeComp or false;
 
+  treeSitter = emacs.treeSitter or false;
+
 in
 
 packagesFun: # packages explicitly requested by the user
@@ -109,6 +111,9 @@ runCommand
         ${optionalString nativeComp ''
           mkdir -p $out/share/emacs/native-lisp
         ''}
+        ${optionalString treeSitter ''
+          mkdir -p $out/lib
+        ''}
 
         local requires
         for pkg in $explicitRequires; do
@@ -132,6 +137,9 @@ runCommand
           linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
           ${optionalString nativeComp ''
             linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
+          ''}
+          ${optionalString treeSitter ''
+            linkPath "$1" "lib" "lib"
           ''}
         }
 
@@ -163,6 +171,9 @@ runCommand
         (add-to-list 'exec-path "$out/bin")
         ${optionalString nativeComp ''
           (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
+        ''}
+        ${optionalString treeSitter ''
+          (add-to-list 'treesit-extra-load-path "$out/lib/")
         ''}
         EOF
 

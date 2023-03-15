@@ -2,31 +2,30 @@
 , fetchFromGitHub
 , fzy
 , lib
-, makeWrapper
-, nix
-, nix-index
+, makeBinaryWrapper
+, nix-index-unwrapped
 , rustPlatform
 , testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "comma";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
     rev = "v${version}";
-    sha256 = "sha256-rXAX14yB8v9BOG4ZsdGEedpZAnNqhQ4DtjQwzFX/TLY=";
+    hash = "sha256-OonKO7D6xuNf9S6SvxWYzZXNOfoUw5ZEymfC5UmZT7Y=";
   };
 
-  cargoSha256 = "sha256-9PVbiWmaTDx4iob5g9tXC+FV5Jmy6Id9tQxm05fJLkM=";
+  cargoHash = "sha256-q6MbaKrGkwvKWSfL7bQjf9+RdcgKpKj3iXJtSz3FnMc=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/comma \
-      --prefix PATH : ${lib.makeBinPath [ nix fzy nix-index ]}
+      --prefix PATH : ${lib.makeBinPath [ fzy nix-index-unwrapped ]}
     ln -s $out/bin/comma $out/bin/,
   '';
 
@@ -38,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/comma";
     description = "Runs programs without installing them";
     license = licenses.mit;
-    maintainers = with maintainers; [ Enzime artturin ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Enzime artturin marsam ];
   };
 }

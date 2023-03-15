@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage, ocaml
 , version ?
   if lib.versionAtLeast ocaml.version "4.07"
   then if lib.versionAtLeast ocaml.version "4.08"
@@ -10,45 +10,49 @@
 
 let param = {
   "0.8.1" = {
-    sha256 = "0vm0jajmg8135scbg0x60ivyy5gzv4abwnl7zls2mrw23ac6kml6";
+    sha256 = "sha256-pct57oO7qAMEtlvEfymFOCvviWaLG0b5/7NzTC8vdSE=";
     max_version = "4.10";
     useDune2 = false;
     useOMP2 = false;
   };
   "0.13.0" = {
-    sha256 = "0c54g22pm6lhfh3f7s5wbah8y48lr5lj3cqsbvgi99bly1b5vqvl";
+    sha256 = "sha256-geHz0whQDg5/YQjVsN2iuHlkClwh7z3Eqb2QOBzuOdk=";
+    max_version = "4.11";
     useDune2 = false;
     useOMP2 = false;
   };
   "0.15.0" = {
-    sha256 = "1p037kqj5858xrhh0dps6vbf4fnijla6z9fjz5zigvnqp4i2xkrn";
+    sha256 = "sha256-C2MNf410qJmlXMJxiLXOA+c1qT8H6gwt5WUy2P2TszA=";
     min_version = "4.07";
     max_version = "4.12";
     useOMP2 = false;
   };
   "0.18.0" = {
-    sha256 = "1ciy6va2gjrpjs02kha83pzh0x1gkmfsfsdgabbs1v14a8qgfibm";
+    sha256 = "sha256-nUg8NkZ64GHHDfcWbtFGXq3MNEKu+nYPtcVDm/gEfcM=";
     min_version = "4.07";
     max_version = "4.12";
   };
   "0.22.0" = {
-    sha256 = "0kf7lgcwygf6zlx7rwddqpqvasa6v7xiq0bqal8vxlib6lpg074q";
+    sha256 = "sha256-PuuR4DlmZiKEoyIuYS3uf0+it2N8U9lXLSp0E0u5bXo=";
     min_version = "4.07";
+    max_version = "4.13";
   };
   "0.22.2" = {
-    sha256 = "0fysjqcpv281n52wl3h0dy2lzf9d61wdzk90ldv3p63a4i3mr1j2";
+    sha256 = "sha256-0Oih69xiILFXTXqSbwCEYMURjM73m/mgzgJC80z/Ilo=";
     min_version = "4.07";
+    max_version = "4.14";
   };
   "0.23.0" = {
-    sha256 = "0jg5v4pssbl66hn5davpin1i57a0r3r54l96vpz5y99xk5w70xi1";
+    sha256 = "sha256-G1g2wYa51aFqz0falPOWj08ItRm3cpzYao/TmXH+EuU=";
     min_version = "4.07";
+    max_version = "4.14";
   };
   "0.24.0" = {
-    sha256 = "sha256-wuG7cUZiVP2PdM+nZloip7lGGiWn6Wpkh2YoF/Fuc9o=";
+    sha256 = "sha256-d2YCfC7ND1s7Rg6SEqcHCcZ0QngRPrkfMXxWxB56kMg=";
     min_version = "4.07";
   };
   "0.28.0" = {
-    sha256 = "sha256-i/U++sosKQUjyxu9GscPb1Gfv2a3Hbmj+UgIZlewnCo=";
+    sha256 = "sha256-2Hrl+aCBIGMIypZICbUKZq646D0lSAHouWdUSLYM83c=";
     min_version = "4.07";
   };
 }."${version}"; in
@@ -62,12 +66,10 @@ buildDunePackage rec {
   pname = "ppxlib";
   inherit version;
 
-  useDune2 = param.useDune2 or true;
+  duneVersion = if param.useDune2 or true then "2" else "1";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = pname;
-    rev = version;
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${version}/ppxlib-${version}.tbz";
     inherit (param) sha256;
   };
 
@@ -85,6 +87,6 @@ buildDunePackage rec {
     description = "Comprehensive ppx tool set";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-ppx/ppxlib";
   };
 }

@@ -105,7 +105,7 @@ in {
           `MAUTRIX_TELEGRAM_TELEGRAM_BOT_TOKEN`.
 
           These environment variables can also be used to set other options by
-          replacing hierachy levels by `.`, converting the name to uppercase
+          replacing hierarchy levels by `.`, converting the name to uppercase
           and prepending `MAUTRIX_TELEGRAM_`.
           For example, the first value above maps to
           {option}`settings.appservice.as_token`.
@@ -137,10 +137,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      path = [ pkgs.lottieconverter ];
+      path = [ pkgs.lottieconverter pkgs.ffmpeg-full ];
 
       # mautrix-telegram tries to generate a dotfile in the home directory of
-      # the running user if using a postgresql databse:
+      # the running user if using a postgresql database:
       #
       #  File "python3.10/site-packages/asyncpg/connect_utils.py", line 257, in _dot_postgre>
       #    return (pathlib.Path.home() / '.postgresql' / filename).resolve()

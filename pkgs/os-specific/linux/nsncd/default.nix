@@ -26,5 +26,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/twosigma/nsncd";
     license = licenses.asl20;
     maintainers = with maintainers; [ flokli ninjatrappeur ];
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

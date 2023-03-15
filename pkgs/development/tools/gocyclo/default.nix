@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-1IwtGUqshpLDyxH5NNkGUads1TKLs48eslNnFylGUPA=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "Calculate cyclomatic complexities of functions in Go source code";

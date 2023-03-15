@@ -1,44 +1,36 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, fetchurl, autoPatchelfHook, matrix-sdk-crypto-nodejs }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, python3
+, matrix-sdk-crypto-nodejs
+, nixosTests
+, nix-update-script
+}:
 
-let
-  ourNodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-  version = (lib.importJSON ./package.json).version;
-  srcInfo = lib.importJSON ./src.json;
-in
-ourNodePackages.package.override {
+buildNpmPackage rec {
   pname = "matrix-appservice-irc";
-  inherit version;
+  version = "0.37.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
-    rev = version;
-    inherit (srcInfo) sha256;
+    rev = "refs/tags/${version}";
+    hash = "sha256-d/CA27A0txnVnSCJeS/qeK90gOu1QjQaFBk+gblEdH8=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.node-gyp-build ];
+  npmDepsHash = "sha256-s/b/G49HlDbYsSmwRYrm4Bcv/81tHLC8Ac1IMEwGFW8=";
 
-  dontAutoPatchelf = true;
-
-  postRebuild = ''
-    npm run build
-  '';
+  nativeBuildInputs = [
+    python3
+  ];
 
   postInstall = ''
-    # Compile typescript
-    npm run build
-
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
-      --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
-
-      cp -rv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/
+    rm -rv $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    ln -sv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";

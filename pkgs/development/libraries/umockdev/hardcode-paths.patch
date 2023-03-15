@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index 2ed9027..1f6bbf2 100644
+index 15d9e5d..a1906dd 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -38,6 +38,7 @@ g_ir_compiler = find_program('g-ir-compiler', required: false)
+@@ -44,6 +44,7 @@ g_ir_compiler = find_program('g-ir-compiler', required: false)
  
  conf.set('PACKAGE_NAME', meson.project_name())
  conf.set_quoted('VERSION', meson.project_version())
@@ -10,7 +10,7 @@ index 2ed9027..1f6bbf2 100644
  
  # glibc versions somewhere between 2.28 and 2.34
  if cc.has_function('__fxstatat', prefix: '#include <sys/stat.h>')
-@@ -148,7 +149,7 @@ hacked_gir = custom_target('UMockdev-1.0 hacked gir',
+@@ -156,7 +157,7 @@ hacked_gir = custom_target('UMockdev-1.0 hacked gir',
  
  if g_ir_compiler.found()
  umockdev_typelib = custom_target('UMockdev-1.0 typelib',
@@ -31,28 +31,28 @@ index 5269dd0..a2ec46d 100644
  }
  
 diff --git a/src/umockdev-record.vala b/src/umockdev-record.vala
-index 8434d32..68c7f8e 100644
+index bf0e644..ff5ea59 100644
 --- a/src/umockdev-record.vala
 +++ b/src/umockdev-record.vala
-@@ -435,7 +435,7 @@ main (string[] args)
+@@ -444,7 +444,7 @@ main (string[] args)
          preload = "";
      else
          preload = preload + ":";
--    Environment.set_variable("LD_PRELOAD", preload + "libumockdev-preload.so.0", true);
-+    Environment.set_variable("LD_PRELOAD", preload + Config.LIBDIR + "/libumockdev-preload.so.0", true);
+-    checked_setenv("LD_PRELOAD", preload + "libumockdev-preload.so.0");
++    checked_setenv("LD_PRELOAD", preload + Config.LIBDIR + "/libumockdev-preload.so.0");
  
      try {
          root_dir = DirUtils.make_tmp("umockdev.XXXXXX");
 diff --git a/src/umockdev-run.vala b/src/umockdev-run.vala
-index 9a1ba10..6df2522 100644
+index 7b0753e..66b778b 100644
 --- a/src/umockdev-run.vala
 +++ b/src/umockdev-run.vala
 @@ -95,7 +95,7 @@ main (string[] args)
          preload = "";
      else
          preload = preload + ":";
--    Environment.set_variable ("LD_PRELOAD", preload + "libumockdev-preload.so.0", true);
-+    Environment.set_variable ("LD_PRELOAD", preload + Config.LIBDIR + "/libumockdev-preload.so.0", true);
+-    checked_setenv ("LD_PRELOAD", preload + "libumockdev-preload.so.0");
++    checked_setenv ("LD_PRELOAD", preload + Config.LIBDIR + "/libumockdev-preload.so.0");
  
      var testbed = new UMockdev.Testbed ();
  

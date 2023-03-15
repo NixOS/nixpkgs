@@ -4,15 +4,15 @@
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk17-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   version = {
     feature = "17";
-    interim = ".0.4";
-    build = "8";
+    interim = ".0.6";
+    build = "10";
   };
 
   openjdk = stdenv.mkDerivation {
@@ -23,7 +23,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "drbljLz82ZyK29lIDLPqCkwqpBdgU/7zCTZ0ceeb1SI=";
+      sha256 = "sha256-zPpINi++3Ct0PCwlwlfhceh/ploMkclw+MgeI9dULdc=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
@@ -55,8 +55,8 @@ let
       # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
       # This is applied anywhere to prevent patchrot.
       (fetchurl {
-        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=6f97cb0ae4dff6588dae5868c2522aea96c99d2c";
-        sha256 = "sha256-giOmMInwLH0Ei9H7ETsrrzQU09I6+dn8KpPrKb7zn8I=";
+        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
+        sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
@@ -88,7 +88,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -149,12 +149,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)

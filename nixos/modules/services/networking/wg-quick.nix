@@ -273,7 +273,11 @@ let
         after = [ "network.target" "network-online.target" ];
         wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
-        path = [ pkgs.kmod pkgs.wireguard-tools config.networking.resolvconf.package ];
+        path = [
+          pkgs.wireguard-tools
+          config.networking.firewall.package   # iptables or nftables
+          config.networking.resolvconf.package # openresolv or systemd
+        ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -281,7 +285,7 @@ let
         };
 
         script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
+          ${optionalString (!config.boot.isContainer) "${pkgs.kmod}/bin/modprobe wireguard"}
           ${optionalString (values.configFile != null) ''
             cp ${values.configFile} ${configPath}
           ''}

@@ -5,14 +5,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libidn2";
   version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/libidn/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
     sha256 = "sha256-dpQM1Od46Ak1eanRlbJf/16Tbp3GJCBoUotDenZ2T5E=";
   };
 
@@ -20,14 +18,14 @@ stdenv.mkDerivation rec {
   # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
-  patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
+  patches = lib.optional stdenv.isDarwin ./fix-error-darwin.patch;
 
   enableParallelBuilding = true;
 
   # The above patch causes the documentation to be regenerated, so the
   # documentation tools are required.
-  nativeBuildInputs = optionals stdenv.isDarwin [ help2man texinfo ];
-  buildInputs = [ libunistring ] ++ optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ help2man texinfo ];
+  buildInputs = [ libunistring ] ++ lib.optional stdenv.isDarwin libiconv;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   meta = {

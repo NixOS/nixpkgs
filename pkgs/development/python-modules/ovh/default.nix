@@ -25,7 +25,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
     yanc

@@ -22,11 +22,10 @@ For new packages please briefly describe the package or provide a link to its ho
   - made sure NixOS tests are [linked](https://nixos.org/manual/nixpkgs/unstable/#ssec-nixos-tests-linking) to the relevant packages
 - [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
 - [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
-- [22.11 Release Notes (or backporting 22.05 Release notes)](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#generating-2211-release-notes)
+- [23.05 Release Notes (or backporting 22.11 Release notes)](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#generating-2305-release-notes)
   - [ ] (Package updates) Added a release notes entry if the change is major or breaking
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
-  - [ ] (Release notes changes) Ran `nixos/doc/manual/md-to-db.sh` to update generated release notes
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
 
 <!--

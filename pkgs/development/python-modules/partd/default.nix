@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-zpGrzcYXjWaLyqQxeRpakX2QI0HLGT9UP+RF1JRmBIU=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   propagatedBuildInputs = [ locket numpy pandas pyzmq toolz ];
 

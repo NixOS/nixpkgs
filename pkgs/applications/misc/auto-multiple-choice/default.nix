@@ -42,7 +42,14 @@ stdenv.mkDerivation rec {
     # Relative paths.
     "BINDIR=/bin"
     "PERLDIR=/share/perl5"
-    "MODSDIR=/lib/"
+    "MODSDIR=/lib" # At runtime, AMC will test for that dir before
+    # defaulting to the "portable" strategy we use, so this test
+    # *must* fail.  *But* this variable cannot be set to anything but
+    # "/lib" , because that name is hardcoded in the main executable
+    # and this variable controls both both the path AMC will check at
+    # runtime, AND the path where the actual modules will be stored at
+    # build-time.  This has been reported upstream as
+    # https://project.auto-multiple-choice.net/issues/872
     "TEXDIR=/tex/latex/" # what texlive.combine expects
     "TEXDOCDIR=/share/doc/texmf/" # TODO where to put this?
     "MAN1DIR=/share/man/man1"

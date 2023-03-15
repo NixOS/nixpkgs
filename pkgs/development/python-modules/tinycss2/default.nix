@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";

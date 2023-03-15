@@ -256,7 +256,7 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
+        default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
           "amdgpu-pro"
@@ -592,7 +592,8 @@ in
                     || dmConf.sddm.enable
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
-                    || dmConf.startx.enable);
+                    || dmConf.startx.enable
+                    || config.services.greetd.enable);
       in mkIf (default) (mkDefault true);
 
     # so that the service won't be enabled when only startx is used

@@ -15,8 +15,6 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
 
-  strictDeps = true;
-
   configurePhase = ''
     runHook preConfigure
     ocaml configure.ml --share $out/share/camomile

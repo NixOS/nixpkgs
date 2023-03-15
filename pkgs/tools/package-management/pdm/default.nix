@@ -8,12 +8,12 @@ let
     # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
     packageOverrides = self: super: {
       resolvelib = super.resolvelib.overridePythonAttrs (attrs: rec {
-        version = "0.8.1";
+        version = "0.9.0";
         src = fetchFromGitHub {
           owner = "sarugaku";
           repo = "resolvelib";
-          rev = version;
-          sha256 = "sha256-QDHEdVET7HN2ZCKxNUMofabR+rxJy0erWhNQn94D7eI=";
+          rev = "/refs/tags/${version}";
+          hash = "sha256-xzu8sMNMihJ80vezMdGkOT5Etx08qy3T/TkEn5EAY48=";
         };
       });
     };
@@ -24,14 +24,18 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.1.5";
+  version = "2.4.6";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W+5B1JfOyTpJaT+le1zxyDNwGATrErxNNHw+x5VdfOc=";
+    hash = "sha256-g+fQxq2kwhNXXEJG2n5n4f9GMkmmLsjpHoay152fcVQ=";
   };
+
+  nativeBuildInputs = [
+    pdm-pep517
+  ];
 
   propagatedBuildInputs = [
     blinker
@@ -40,29 +44,29 @@ buildPythonApplication rec {
     findpython
     installer
     packaging
-    pdm-pep517
-    pep517
-    pip
     platformdirs
+    pyproject-hooks
     python-dotenv
     requests-toolbelt
     resolvelib
     rich
     shellingham
-    tomli
     tomlkit
     unearth
     virtualenv
   ]
   ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.8") [
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    pytest-rerunfailures
     pytest-xdist
   ];
 
@@ -82,8 +86,11 @@ buildPythonApplication rec {
     "test_use_invalid_wrapper_python"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://pdm.fming.dev";
+    changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

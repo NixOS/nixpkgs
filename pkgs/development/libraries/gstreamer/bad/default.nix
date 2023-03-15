@@ -323,6 +323,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+
+    # upstream bumps this version check one minor version at a time
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/main/subprojects/gst-plugins-bad/ext/opencv/meson.build#L74
+    substituteInPlace ext/opencv/meson.build \
+      --replace '< 4.7.0' '< 5.0.0'
   '';
 
   # This package has some `_("string literal")` string formats

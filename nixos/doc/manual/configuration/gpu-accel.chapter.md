@@ -159,6 +159,40 @@ environment.variables.VK_ICD_FILENAMES =
   "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 ```
 
+## VA-API {#sec-gpu-accel-va-api}
+
+[VA-API (Video Acceleration API)](https://www.intel.com/content/www/us/en/developer/articles/technical/linuxmedia-vaapi.html)
+is an open-source library and API specification, which provides access to
+graphics hardware acceleration capabilities for video processing.
+
+VA-API drivers are loaded by `libva`. The version in nixpkgs is built to search
+the opengl driver path, so drivers can be installed in
+[](#opt-hardware.opengl.extraPackages).
+
+VA-API can be tested using:
+
+```ShellSession
+$ nix-shell -p libva-utils --run vainfo
+```
+
+### Intel {#sec-gpu-accel-va-api-intel}
+
+Modern Intel GPUs use the iHD driver, which can be installed with:
+
+```nix
+hardware.opengl.extraPackages = [
+  intel-media-driver
+];
+```
+
+Older Intel GPUs use the i965 driver, which can be installed with:
+
+```nix
+hardware.opengl.extraPackages = [
+  vaapiIntel
+];
+```
+
 ## Common issues {#sec-gpu-accel-common-issues}
 
 ### User permissions {#sec-gpu-accel-common-issues-permissions}

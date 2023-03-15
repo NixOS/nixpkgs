@@ -49,17 +49,18 @@ let
   # targetInfo.triple is what Google thinks the toolchain should be, this is a little
   # different from what we use. We make it four parts to conform with the existing
   # standard more properly.
-  targetConfig = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
+  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
 in
 
 rec {
   # Misc tools
   binaries = stdenv.mkDerivation {
-    pname = "${targetConfig}-ndk-toolchain";
+    pname = "${targetPrefix}ndk-toolchain";
     inherit (androidndk) version;
     nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
     propagatedBuildInputs = [ androidndk ];
     passthru = {
+      inherit targetPrefix;
       isClang = true; # clang based cc, but bintools ld
     };
     dontUnpack = true;
@@ -91,23 +92,23 @@ rec {
       ln -s $out/toolchain/bin $out/bin
       ln -s $out/toolchain/${targetInfo.triple}/bin/* $out/bin/
       for f in $out/bin/${targetInfo.triple}-*; do
-        ln -s $f ''${f/${targetInfo.triple}-/${targetConfig}-}
+        ln -s $f ''${f/${targetInfo.triple}-/${targetPrefix}}
       done
       for f in $(find $out/toolchain -type d -name ${targetInfo.triple}); do
-        ln -s $f ''${f/${targetInfo.triple}/${targetConfig}}
+        ln -s $f ''${f/${targetInfo.triple}/${targetPrefix}}
       done
 
-      rm -f $out/bin/${targetConfig}-ld
-      ln -s $out/bin/lld $out/bin/${targetConfig}-ld
+      rm -f $out/bin/${targetPrefix}ld
+      ln -s $out/bin/lld $out/bin/${targetPrefix}ld
 
       (cd $out/bin;
         for tool in llvm-*; do
-          ln -sf $tool ${targetConfig}-$(echo $tool | sed 's/llvm-//')
+          ln -sf $tool ${targetPrefix}$(echo $tool | sed 's/llvm-//')
           ln -sf $tool $(echo $tool | sed 's/llvm-//')
         done)
 
       # handle last, as llvm-as is for llvm bytecode
-      ln -sf $out/bin/${targetInfo.triple}-as $out/bin/${targetConfig}-as
+      ln -sf $out/bin/${targetInfo.triple}-as $out/bin/${targetPrefix}as
       ln -sf $out/bin/${targetInfo.triple}-as $out/bin/as
 
       patchShebangs $out/bin
@@ -131,8 +132,9 @@ rec {
       # Android needs executables linked with -pie since version 5.0
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
       echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
-      echo "-z,noexecstack -z,relro -z,now" >> $out/nix-support/cc-ldflags
-      echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
+      echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
+      echo 'expandResponseParams "$@"' >> $out/nix-support/add-flags.sh
+      echo 'if [[ ! (" ''${params[@]} " =~ " -shared ") && ! (" ''${params[@]} " =~ " -no-pie ") ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
       echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
         # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake

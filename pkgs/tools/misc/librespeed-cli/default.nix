@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-psZyyySpY06J+ji+9uHUtX7Ks1hzZC3zINszYP75NfQ=";
 
-  # Tests have additonal requirements
+  # Tests have additional requirements
   doCheck = false;
 
   meta = with lib; {

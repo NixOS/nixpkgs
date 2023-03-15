@@ -23,7 +23,8 @@
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp
+                         && lib.meta.availableOn stdenv.targetPlatform gmp)
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -194,6 +195,22 @@ stdenv.mkDerivation (rec {
       extraPrefix = "utils/haddock/";
       stripLen = 1;
     })
+    # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
+    # Can be removed if the Cabal library included with ghc backports the linked fix
+    (fetchpatch {
+      url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
+      stripLen = 1;
+      extraPrefix = "libraries/Cabal/";
+      sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
+    })
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./Cabal-3.6-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";

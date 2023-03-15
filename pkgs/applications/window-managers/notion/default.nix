@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "14swd0yqci8lxn259fkd9w92bgyf4rmjwgvgyqp78wlfix6ai4mv";
   };
 
+  # error: 'PATH_MAX' undeclared
+  postPatch = ''
+    sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
+  '';
+
   nativeBuildInputs = [ pkg-config makeWrapper groff ];
   buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
                   libXinerama libXrandr libXft ];

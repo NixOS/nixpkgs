@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "fd50d9089b412147ea3c6027e2ad905f977002db2918cf315d64eed23d6d6eb8";
   };
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
   pythonImportsCheck = [ "file_read_backwards" ];
 
   meta = with lib; {

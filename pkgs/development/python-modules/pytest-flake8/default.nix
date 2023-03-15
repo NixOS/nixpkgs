@@ -33,7 +33,7 @@ buildPythonPackage rec {
     flake8
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tholo/pytest-flake8";
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.bsd2;
+    broken = lib.versionAtLeast flake8.version "6.0.0";
   };
 }

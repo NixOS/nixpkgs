@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , aiohttp
 , blinker
 , buildPythonPackage
@@ -15,6 +14,7 @@
 , pytest-bdd
 , pytest-localserver
 , pytest-mock
+, pytest-random-order
 , pytestCheckHook
 , pythonOlder
 , sanic
@@ -24,11 +24,12 @@
 , tornado
 , urllib3
 , webob
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.12.0";
+  version = "6.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tAX96aOPuwtchLk5A1ANuZI5w5H9/yX3Zj9bRSyHv90=";
+    hash = "sha256-Uoybe6Mx7ZLs2GaOnl278Xj6KlTEgrOuNxMRmPpSq8k=";
   };
 
   propagatedBuildInputs = [
@@ -48,22 +49,23 @@ buildPythonPackage rec {
     starlette
     tornado
     urllib3
+    wrapt
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     ecs-logging
+    httpx
     jinja2
     jsonschema
     Logbook
     mock
-    httpx
     pytest-asyncio
     pytest-bdd
-    pytest-mock
     pytest-localserver
-    sanic-testing
+    pytest-mock
+    pytest-random-order
     pytestCheckHook
+    sanic-testing
     structlog
     webob
   ];
@@ -84,6 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

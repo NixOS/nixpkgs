@@ -13,26 +13,17 @@ import ./make-test-python.nix ({ pkgs, ... }:
         serverSettings = {
           origin = "https://${serverDomain}";
           domain = serverDomain;
-          bindaddress = "[::1]:8443";
+          bindaddress = "[::]:443";
           ldapbindaddress = "[::1]:636";
-        };
-      };
-
-      services.nginx = {
-        enable = true;
-        recommendedProxySettings = true;
-        virtualHosts."${serverDomain}" = {
-          forceSSL = true;
-          sslCertificate = certs."${serverDomain}".cert;
-          sslCertificateKey = certs."${serverDomain}".key;
-          locations."/".proxyPass = "http://[::1]:8443";
+          tls_chain = certs."${serverDomain}".cert;
+          tls_key = certs."${serverDomain}".key;
         };
       };
 
       security.pki.certificateFiles = [ certs.ca.cert ];
 
       networking.hosts."::1" = [ serverDomain ];
-      networking.firewall.allowedTCPPorts = [ 80 443 ];
+      networking.firewall.allowedTCPPorts = [ 443 ];
 
       users.users.kanidm.shell = pkgs.bashInteractive;
 
@@ -73,7 +64,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         start_all()
         server.wait_for_unit("kanidm.service")
         server.wait_until_succeeds("curl -sf https://${serverDomain} | grep Kanidm")
-        server.succeed("ldapsearch -H ldap://[::1]:636 -b '${ldapBaseDN}' -x '(name=test)'")
+        server.succeed("ldapsearch -H ldaps://${serverDomain}:636 -b '${ldapBaseDN}' -x '(name=test)'")
         client.succeed("kanidm login -D anonymous && kanidm self whoami | grep anonymous@${serverDomain}")
         rv, result = server.execute("kanidmd recover_account -c ${serverConfigFile} idm_admin 2>&1 | rg -o '[A-Za-z0-9]{48}'")
         assert rv == 0

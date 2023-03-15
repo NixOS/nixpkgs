@@ -1,7 +1,7 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1832,7 +1832,7 @@ if(WITH_COMPILER_SHORT_FILE_MACRO)
+@@ -1894,7 +1894,7 @@ if(WITH_COMPILER_SHORT_FILE_MACRO)
    ADD_CHECK_CXX_COMPILER_FLAG(CXX_PREFIX_MAP_FLAGS CXX_MACRO_PREFIX_MAP -fmacro-prefix-map=foo=bar)
    if(C_MACRO_PREFIX_MAP AND CXX_MACRO_PREFIX_MAP)
      if(APPLE)
@@ -58,10 +58,10 @@ diff --git a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake
 -    theora theoradec theoraenc vorbis vorbisenc
 -    vorbisfile vpx x264 xvidcore)
 +    swresample swscale)
-   find_package(FFmpeg)
- endif()
- 
-@@ -270,7 +263,6 @@ if(WITH_BOOST)
+   if(EXISTS ${LIBDIR}/ffmpeg/lib/libaom.a)
+     list(APPEND FFMPEG_FIND_COMPONENTS aom)
+   endif()
+@@ -273,7 +266,6 @@ if(WITH_BOOST)
  endif()
  
  if(WITH_INTERNATIONAL OR WITH_CODEC_FFMPEG)
@@ -69,7 +69,7 @@ diff --git a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake
  endif()
  
  if(WITH_PUGIXML)
-@@ -399,7 +391,7 @@ endif()
+@@ -402,7 +394,7 @@ endif()
  
  # CMake FindOpenMP doesn't know about AppleClang before 3.12, so provide custom flags.
  if(WITH_OPENMP)

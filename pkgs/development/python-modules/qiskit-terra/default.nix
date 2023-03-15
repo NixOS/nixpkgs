@@ -94,7 +94,7 @@ buildPythonPackage rec {
   ++ lib.optionals withCrosstalkPass crosstalkPackages;
 
   # *** Tests ***
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     hypothesis

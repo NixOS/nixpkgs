@@ -55,7 +55,7 @@ let
 
     # Run the library tests as they don't have external dependencies
     doCheck = true;
-    checkInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+    nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
     checkPhase = ''
       runHook preCheck
       # test list repeats suites. Unique them
@@ -112,7 +112,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
-      checkInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+      nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}

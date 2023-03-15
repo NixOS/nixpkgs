@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://eweb.sourceforge.net/";
+    homepage = "https://eweb.sourceforge.net/";
     description = "An Asciidoc-based literate programming tool, written in Python";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

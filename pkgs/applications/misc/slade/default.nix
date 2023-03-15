@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   meta = with lib; {
     description = "Doom editor";

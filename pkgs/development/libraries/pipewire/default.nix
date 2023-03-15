@@ -3,7 +3,6 @@
 , buildPackages
 , fetchFromGitLab
 , fetchpatch
-, removeReferencesTo
 , python3
 , meson
 , ninja
@@ -20,20 +19,18 @@
 , libjack2
 , libusb1
 , udev
-, libva
 , libsndfile
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
 , ncurses
-, readline81 # meson can't find <7 as those versions don't have a .pc file
+, readline # meson can't find <7 as those versions don't have a .pc file
 , lilv
 , makeFontsConf
 , callPackage
 , nixosTests
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
 , valgrind
-, withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm
@@ -64,6 +61,8 @@
 , x11Support ? true
 , libcanberra
 , xorg
+, mysofaSupport ? true
+, libmysofa
 }:
 
 let
@@ -71,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.60";
+    version = "0.3.66";
 
     outputs = [
       "out"
@@ -89,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-HDE2QAV2jnEJCqgiGx4TVP4ceeKAqwd4P3OYw6auNAM=";
+      sha256 = "sha256-qx4mgNRhMdha+8ap+FhVfxpsHE9TcTx29uwQIHLyMHA=";
     };
 
     patches = [
@@ -105,28 +104,9 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # Following are backported patches as recommended by upstream.
-      # FIXME: remove in 0.3.61
-      # fix tdesktop with pw-pulse
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b720da771efa950cf380101bed42d5d5ee177908.diff";
-        hash = "sha256-p/BvatnbEJAMLQUUOECKAK7FppaNp9ei3FHjAw2spM8=";
-      })
-
-      # fix a crash when quickly switching Bluetooth profiles
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/bf3516ba0496b644b3944b114253f23964178897.diff";
-        hash = "sha256-LqasplS/azCPekslJQPTd9MZkUcRqA0ks94FtwyY3GA=";
-      })
-
-      # fix no sound in VMs (Pipewire on the guest)
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b46d8a8c921a8da6883610ad4b68da95bf59b59e.diff";
-        hash = "sha256-2VHBwXbzUAGP/fG4xxoFLHSb9oXQK1BPuNv3zAV8cEg=";
-      })
     ];
 
+    strictDeps = true;
     nativeBuildInputs = [
       docutils
       doxygen
@@ -135,6 +115,7 @@ let
       ninja
       pkg-config
       python3
+      glib
     ];
 
     buildInputs = [
@@ -146,7 +127,7 @@ let
       libsndfile
       lilv
       ncurses
-      readline81
+      readline
       udev
       vulkan-headers
       vulkan-loader
@@ -160,10 +141,11 @@ let
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
+    ++ lib.optional mysofaSupport libmysofa;
 
     # Valgrind binary is required for running one optional test.
-    checkInputs = lib.optional withValgrind valgrind;
+    nativeCheckInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -195,7 +177,9 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
+      "-Drlimits-install=false" # installs to /etc, we won't use this anyway
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -246,6 +230,7 @@ let
             "nix-support/jack.conf.json"
             "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
+            "nix-support/pipewire-aes67.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];
           paths-lib = [
@@ -261,7 +246,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes ];
+      maintainers = with maintainers; [ jtojnar kranzes k900 ];
     };
   };
 

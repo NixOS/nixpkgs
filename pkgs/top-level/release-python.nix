@@ -24,7 +24,7 @@ let
         packagePython value
       else
         []);
-    in if res.success then res.value else []
+    in lib.optionals res.success res.value
     );
 
   jobs = {

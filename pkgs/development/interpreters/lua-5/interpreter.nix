@@ -9,19 +9,19 @@
 , pkgsBuildTarget
 , pkgsHostHost
 , pkgsTargetTarget
-, sourceVersion
+, version
 , hash
 , passthruFun
 , patches ? []
 , postConfigure ? null
 , postBuild ? null
 , staticOnly ? stdenv.hostPlatform.isStatic
-, luaAttr ? "lua${sourceVersion.major}_${sourceVersion.minor}"
+, luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}"
 } @ inputs:
 let
   luaPackages = self.pkgs;
 
-  luaversion = with sourceVersion; "${major}.${minor}";
+  luaversion = lib.versions.majorMinor version;
 
 plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
        else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
@@ -32,11 +32,15 @@ plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux
        else if stdenv.hostPlatform.isBSD then "bsd"
        else if stdenv.hostPlatform.isUnix then "posix"
        else "generic";
+
+compatFlags = if (lib.versionOlder self.luaversion "5.3") then " -DLUA_COMPAT_ALL"
+              else if (lib.versionOlder self.luaversion "5.4") then " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
+              else " -DLUA_COMPAT_5_3";
 in
 
 stdenv.mkDerivation rec {
   pname = "lua";
-  version = "${luaversion}.${sourceVersion.patch}";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
@@ -89,7 +93,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(${
+    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat compatFlags} $(${
       if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
@@ -136,7 +140,7 @@ stdenv.mkDerivation rec {
     inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
     override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
   in passthruFun rec {
-    inherit self luaversion packageOverrides luaAttr sourceVersion;
+    inherit self luaversion packageOverrides luaAttr;
     executable = "lua";
     luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};

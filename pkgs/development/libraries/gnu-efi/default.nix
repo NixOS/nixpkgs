@@ -1,8 +1,6 @@
 { lib, stdenv, buildPackages, fetchurl, pciutils
 , gitUpdater }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
   version = "3.0.15";
@@ -32,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/gnu-efi/";
     license = licenses.bsd3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

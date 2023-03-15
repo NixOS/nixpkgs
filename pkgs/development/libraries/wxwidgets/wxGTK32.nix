@@ -2,6 +2,7 @@
 , stdenv
 , expat
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , gnome2
 , gst_all_1
@@ -52,13 +53,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.1";
+  version = "3.2.2.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-k6td/8pF7ad7+gVm7L0jX79fHKwR7/qrOBpSFggyaI0=";
+    hash = "sha256-u+INjo9EkW433OYoCDZpw5pcW1DyF/t/J5ntLZX+6aA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

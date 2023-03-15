@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.2.1";
+  version = "0.2.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "AEMET-OpenData";
-    rev = version;
-    sha256 = "0jl1897m3qmr48n469mq7d66k1j0rn7hlbcahm0ylf5i3ma03aiw";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-3f3hvui00oItu6t9rKecoCquqsD1Eeqz+SEsLBqGt48=";
   };
 
   propagatedBuildInputs = [

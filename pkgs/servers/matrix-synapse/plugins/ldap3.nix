@@ -1,17 +1,27 @@
-{ isPy3k, buildPythonPackage, fetchPypi, service-identity, ldap3, twisted, ldaptor, mock }:
+{ lib, buildPythonPackage, fetchPypi, ldap3, ldaptor, matrix-synapse, pytestCheckHook, service-identity, setuptools, twisted }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";
-  version = "0.1.5";
+  version = "0.2.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fdf8df7c8ec756642aa0fea53b31c0b2f1924f70d7f049a2090b523125456fe";
+    sha256 = "sha256-s4jZVpNIbu9pra79D9noRGPVL+F7AhSgDvyqZptzy3Q=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ service-identity ldap3 twisted ];
 
-  # ldaptor is not ready for py3 yet
-  doCheck = !isPy3k;
-  checkInputs = [ ldaptor mock ];
+  nativeCheckInputs = [ ldaptor matrix-synapse pytestCheckHook ];
+
+  pythonImportsCheck = [ "ldap_auth_provider" ];
+
+  meta = with lib; {
+    description = "LDAP3 auth provider for Synapse";
+    homepage = "https://github.com/matrix-org/matrix-synapse-ldap3";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
+  };
 }

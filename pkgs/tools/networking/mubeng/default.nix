@@ -5,22 +5,27 @@
 
 buildGoModule rec {
   pname = "mubeng";
-  version = "0.11.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BY3X9N7XnBZ6mVX/o+EXruJmi3HYWMeY9enSuJY4jWI=";
+    hash = "sha256-Z1MwI76jOJft68+/yX4QEO7zYkUyQY7+DdZlejtNA8k=";
   };
 
-  vendorSha256 = "sha256-1JxyP6CrJ4/g7o3eGeN1kRXJU/jNLEB8fW1bjJytQqQ=";
+  vendorHash = "sha256-1RJAmz3Tw6c2Y7lXlXvq/aEkVLO+smkwuNJbi7aBUNo=";
 
-  ldflags = [ "-s" "-w" "-X ktbs.dev/mubeng/common.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X ktbs.dev/mubeng/common.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Proxy checker and IP rotator";
     homepage = "https://github.com/kitabisa/mubeng";
+    changelog = "https://github.com/kitabisa/mubeng/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

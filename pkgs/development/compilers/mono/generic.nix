@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
+{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib
+, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
 , gnumake42
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
@@ -6,7 +7,7 @@
 }:
 
 let
-  llvm     = callPackage ./llvm.nix { };
+  llvm = callPackage ./llvm.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "mono";
@@ -18,23 +19,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ automake bison cmake pkg-config which gnumake42 ];
-  buildInputs =
-    [ glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
-    ]
-    ++ (lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
+  buildInputs = [
+    glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
+  ] ++ lib.optionals stdenv.isDarwin [ Foundation libobjc ];
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
-  ]
-  ++ lib.optionals withLLVM [
+  ] ++ lib.optionals withLLVM [
     "--enable-llvm"
     "--with-llvm=${llvm}"
   ];
 
   configurePhase = ''
-    patchShebangs ./
+    patchShebangs autogen.sh mcs/build/start-compiler-server.sh
     ./autogen.sh --prefix $out $configureFlags
   '';
 

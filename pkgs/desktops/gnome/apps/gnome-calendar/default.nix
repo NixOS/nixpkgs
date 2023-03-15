@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     description = "Simple and beautiful calendar application for GNOME";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests iso8601 ];
 
-  checkInputs = [ bottle pytestCheckHook ];
+  nativeCheckInputs = [ bottle pytestCheckHook ];
 
   pytestFlagsArray = [
     "tests/test_parser.py"

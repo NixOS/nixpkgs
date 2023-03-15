@@ -9,7 +9,7 @@
 , fetchpatch
 , fetchPypi
 , flask
-, GitPython
+, gitpython
 , gorilla
 , gunicorn
 , importlib-metadata
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     docker
     entrypoints
     flask
-    GitPython
+    gitpython
     gorilla
     gunicorn
     importlib-metadata
@@ -81,6 +81,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Open source platform for the machine learning lifecycle";
     homepage = "https://github.com/mlflow/mlflow";
+    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
   };

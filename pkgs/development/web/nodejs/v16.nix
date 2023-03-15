@@ -5,13 +5,15 @@ let
     inherit openssl;
     python = python3;
   };
+
+  npmPatches = callPackage ./npm-patches.nix { };
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.18.1";
-    sha256 = "sha256-H4BRqI+G9CBk9EFf56mA5ZsKUC7Mje9YP2MDvE1EUjg=";
+    version = "16.19.1";
+    sha256 = "sha256-F/txZAYZgSWzDJTdPRdWIHspdwViav4W2NxHmmWh2LU=";
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
       ./bypass-darwin-xcrun-node16.patch
-    ];
+    ] ++ npmPatches;
   }

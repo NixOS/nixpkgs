@@ -1,6 +1,6 @@
-const _curry2 = require('ramda/src/internal/_curry2')
-const _map = require('ramda/src/internal/_map')
-const keys = require('ramda/src/keys')
+const _curry2 = require("ramda/src/internal/_curry2");
+const _map = require("ramda/src/internal/_map");
+const keys = require("ramda/src/keys");
 
 // mapObjIndexed: ((v, k, {k: v}) → v') → {k: v} → {k: v'}
 // mapObjIndexedReturnArray: ((v, k, {k: v}) → v') → {k: v} → [v']
@@ -15,7 +15,7 @@ const keys = require('ramda/src/keys')
  */
 
 const mapObjIndexedReturnArray = _curry2((fn, obj) =>
-  _map(key => fn(obj[key], key, obj), keys(obj)),
-)
+  _map(key => fn(obj[key], key, obj), keys(obj))
+);
 
-module.exports = mapObjIndexedReturnArray
+module.exports = mapObjIndexedReturnArray;

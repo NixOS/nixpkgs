@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.2.8";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    sha256 = "7QYlC0YBQsXH2VxjgBbmTgEvp83lXloTLCHY2fTrZuQ=";
+    sha256 = "Q1vaogcAeNjLIPaB0ovOo96hzRv69tMO5xwHh5W4Ws0=";
   };
 
   outputs = [ "out" "lib" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     emacs-nox # to generate man pages from .org
     nukeReferences
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     wireshark-cli # for tshark
   ];
 

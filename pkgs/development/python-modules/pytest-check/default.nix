@@ -7,19 +7,19 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "1.0.10";
+  version = "2.1.4";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ng7c10Dyxb5qbO22TDkNl5wAzXg2eYrLO21sjtEBoio=";
+    hash = "sha256-AbN/1wPaD6ZntwF68fBGDHRKhfHuh2de4+D5Ssw98XI=";
   };
 
   buildInputs = [
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

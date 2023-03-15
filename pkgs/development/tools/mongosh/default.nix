@@ -1,14 +1,37 @@
-{ pkgs, stdenv, lib, testers, mongosh }:
+{ lib
+, buildNpmPackage
+, fetchurl
+, testers
+, mongosh
+}:
 
 let
-  nodePackages = import ./gen/composition.nix {
-    inherit pkgs;
-    inherit (stdenv.hostPlatform) system;
-  };
+  source = builtins.fromJSON (builtins.readFile ./source.json);
 in
-nodePackages.mongosh.override {
-  passthru.tests.version = testers.testVersion {
-    package = mongosh;
+buildNpmPackage {
+  pname = "mongosh";
+  inherit (source) version;
+
+  src = fetchurl {
+    url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
+    hash = source.integrity;
+  };
+
+  postPatch = ''
+    ln -s ${./package-lock.json} package-lock.json
+  '';
+
+  npmDepsHash = source.deps;
+
+  makeCacheWritable = true;
+  dontNpmBuild = true;
+  npmFlags = [ "--omit=optional" ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = mongosh;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {

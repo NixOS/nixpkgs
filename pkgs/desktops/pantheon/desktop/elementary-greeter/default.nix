@@ -15,6 +15,7 @@
 , libgee
 , libhandy
 , gnome-settings-daemon
+, mesa
 , mutter
 , elementary-icon-theme
 , wingpanel-with-indicators
@@ -22,7 +23,6 @@
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
-, clutter-gtk
 , dbus
 , accountsservice
 , wrapGAppsHook
@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     accountsservice
-    clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-icon-theme
     gnome-settings-daemon
     gdk-pixbuf
@@ -68,6 +67,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     lightdm
+    mesa # for libEGL
     mutter
   ];
 
@@ -109,9 +109,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
 
     xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
       path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";

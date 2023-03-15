@@ -10,10 +10,11 @@ buildDunePackage rec {
   pname = "checkseum";
 
   minimalOCamlVersion = "4.07";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
-    sha256 = "sha256-K6QPMts5+hxH2a+WQ1N0lwMBoshG2T0bSozNgzRvAlo=";
+    hash = "sha256-K6QPMts5+hxH2a+WQ1N0lwMBoshG2T0bSozNgzRvAlo=";
   };
 
   buildInputs = [ dune-configurator ];

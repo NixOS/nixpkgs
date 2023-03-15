@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy matplotlib ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   checkPhase = ''
     nosetests --verbosity=3
   '';

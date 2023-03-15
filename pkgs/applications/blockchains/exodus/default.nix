@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "22.8.12";
 
   src = fetchzip {
-    url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
+    url = "https://downloads.exodus.com/releases/${pname}-linux-x64-${version}.zip";
     sha256 = "sha256-jNzHh4zYhFzpFZAC9rHmwjTdFkbpROSEN3qpL7geiOU=";
   };
 

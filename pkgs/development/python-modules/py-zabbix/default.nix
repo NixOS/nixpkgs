@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "aPQc188pszfDQvNtsGYlRLHS5CG5VyqptSoe4/GJVvE=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

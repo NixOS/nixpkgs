@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AhgWeV/ojB8jM16A5ggrOD1YjWfRVcoQbkd3S2bgdyE=";
   };
 
-  checkInputs = [ python3 ];
+  # gcc12; see https://github.com/ivan-tkatchev/tab/commit/673bdac998
+  postPatch = ''
+    sed '1i#include <cstring>' -i deps.h
+  '';
+
+  nativeCheckInputs = [ python3 ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programming language/shell calculator";
-    homepage    = "http://tab-lang.xyz";
+    homepage    = "https://tab-lang.xyz";
     license     = licenses.boost;
     maintainers = with maintainers; [ mstarzyk ];
     platforms   = with platforms; unix;

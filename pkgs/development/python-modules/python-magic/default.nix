@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , file
 , pytestCheckHook
@@ -23,13 +24,18 @@ buildPythonPackage rec {
       src = ./libmagic-path.patch;
       libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+    (fetchpatch {
+      name = "update-test-for-upstream-added-gzip-extensions.patch";
+      url = "https://github.com/ahupp/python-magic/commit/4ffcd59113fa26d7c2e9d5897b1eef919fd4b457.patch";
+      hash = "sha256-67GpjlGiR4/os/iZ69V+ZziVLpjmid+7t+gQ2aQy9I0=";
+    })
   ];
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -71,7 +71,7 @@ in
           type = types.nullOr types.str;
 
           description = lib.mdDoc ''
-            The script to use when nothing has happend for as long as {option}`killtime`
+            The script to use when nothing has happened for as long as {option}`killtime`
           '';
         };
 

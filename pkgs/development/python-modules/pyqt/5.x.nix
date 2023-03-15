@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.15.7";
+  version = "5.15.9";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dVEhpSs6CMsHJ1wQ67lldtNuMg5XJZHbFs/bxVgQFZQ=";
+    hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
   };
 
   patches = [

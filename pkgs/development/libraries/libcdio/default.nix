@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
       url = "https://savannah.gnu.org/patch/download.php?file_id=52179";
       sha256 = "1v15gxhpi4bgcr12pb3d9c3hiwj0drvc832vic7sham34lhjmcbb";
     })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      name = "musl-realpath-test.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/libcdio/disable-broken-test.patch?id=058a8695c12ae13b40c981ee98809352490b6155";
+      includes = [ "test/driver/realpath.c" ];
+      sha256 = "sha256-6j2bjMed2l+TFZ5emjCcozzF/kkGA8FVifJB8U7QceU=";
+    })
   ];
 
   postPatch = ''
@@ -24,8 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config help2man ];
-  buildInputs = [ libcddb ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
+  buildInputs = [ libcddb libiconv ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon IOKit ];
+
+  enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 
@@ -39,6 +48,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

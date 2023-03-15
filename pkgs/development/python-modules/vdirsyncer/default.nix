@@ -7,32 +7,35 @@
 , click-threading
 , requests-toolbelt
 , requests
-, requests-oauthlib
 , atomicwrites
 , hypothesis
 , pytestCheckHook
-, pytest-localserver
 , pytest-subtesthack
 , setuptools-scm
+, aiostream
+, aiohttp-oauthlib
+, aiohttp
+, pytest-asyncio
+, trustme
+, aioresponses
+, vdirsyncer
+, testers
 }:
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.18.0";
-  format = "setuptools";
+  version = "0.19.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
+    hash = "sha256-qnbHclqlpxH2N0vFzYO+eKrmjHSCljWp7Qc81MCfA64=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click-log>=0.3.0, <0.4.0" "click-log>=0.3.0, <0.5.0"
-
-    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
+    sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
   '';
 
   propagatedBuildInputs = [
@@ -41,19 +44,19 @@ buildPythonPackage rec {
     click-log
     click-threading
     requests
-    requests-oauthlib
     requests-toolbelt
+    aiostream
+    aiohttp
+    aiohttp-oauthlib
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-    pytest-localserver
     pytest-subtesthack
+    pytest-asyncio
+    trustme
+    aioresponses
   ];
 
   preCheck = ''
@@ -65,6 +68,8 @@ buildPythonPackage rec {
     "test_request_ssl"
     "test_verbosity"
   ];
+
+  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";

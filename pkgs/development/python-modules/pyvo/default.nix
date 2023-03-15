@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , astropy
 , pillow
 , pythonOlder
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     sha256 = "sha256-R2ttLoFd6Ic0KZl49dzN5NtWAqPpXRaeki6X8CRGsCw=";
   };
 
+  patches = [
+    # Backport Python 3.11 support.
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/astropy/pyvo/pull/385.patch";
+      sha256 = "IHf3W9fIT8XFvyM41PUiJkt1j+B3RkX3TS4FOnRUMDk=";
+    })
+  ];
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
@@ -33,7 +42,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     pytestCheckHook
     pytest-astropy

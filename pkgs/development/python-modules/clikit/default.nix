@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
   ++ lib.optionals isPy27 [ typing enum34 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

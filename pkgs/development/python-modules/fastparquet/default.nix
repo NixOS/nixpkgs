@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
+, cython
+, setuptools
+, substituteAll
 , numba
 , numpy
 , pandas
@@ -15,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "2023.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -24,8 +27,28 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-rWrbHHcJMahaUV8+YuKkZUhdboNFUK9btjvdg74lCxc=";
+    hash = "sha256-p8JydnrDEl9W4clrOkd+np0NYGP3hVnq+lyyF/zaVk8=";
   };
+
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "oldest-supported-numpy" "numpy"
+
+    sed -i '/"git", "status"/d' setup.py
+  '';
 
   propagatedBuildInputs = [
     cramjam
@@ -42,16 +65,9 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "oldest-supported-numpy" "numpy"
-  '';
-
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''

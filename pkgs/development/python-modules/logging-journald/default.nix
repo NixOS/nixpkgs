@@ -1,20 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, poetry-core
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "logging-journald";
-  version = "0.6.2";
-  format = "setuptools";
+  version = "0.6.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U6kqAvMSyLDbThc6wAN/ri0vmt/vAxgFFZT65Csbpss=";
+  src = fetchFromGitHub {
+    owner = "mosquito";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-g8oDFuqTBVutS7Uq7JCN+SXYL7UEQ+7G2nxzndjKAh8=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   # Circular dependency with aiomisc
   doCheck = false;

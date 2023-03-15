@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asn1tools";
-  version = "0.164.0";
+  version = "0.166.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "eerimoq";
     repo = "asn1tools";
     rev = version;
-    hash= "sha256-sbwwbwkhlZvCb2emuw1FTBj5pnv9SOtHpAcYPSQqIvM=";
+    hash = "sha256-TWAOML6nsLX3TYqoQ9fcSjrUmC4byXOfczfkmSaSa0k=";
   };
 
   propagatedBuildInputs = [

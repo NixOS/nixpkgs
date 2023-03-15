@@ -45,7 +45,7 @@ buildPythonPackage rec {
     w3lib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

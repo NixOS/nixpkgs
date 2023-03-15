@@ -2,7 +2,7 @@
 , zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, perl, ... }:
 
-{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
+{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
 
 stdenv.mkDerivation rec {
   inherit name src;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
+    interpreter="$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)"
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
     [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
@@ -38,13 +38,14 @@ stdenv.mkDerivation rec {
     # settings in ~/.eclipse/org.eclipse.platform_<version> rather
     # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
     productId=$(sed 's/id=//; t; d' $out/eclipse/.eclipseproduct)
+    productVersion=$(sed 's/version=//; t; d' $out/eclipse/.eclipseproduct)
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
@@ -57,10 +58,10 @@ stdenv.mkDerivation rec {
   ''; # */
 
   meta = {
-    homepage = "http://www.eclipse.org/";
+    homepage = "https://www.eclipse.org/";
     inherit description;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
 }

@@ -57,13 +57,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.28";
+  version = "1.36.32";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "sha256-x00u7AWMNS+wAO/tdWi7GYbMZZM7XnszCO57ZDlm0J0=";
+    sha256 = "sha256-8iRoGpkpZVOOr0wSY9iey2x4gPfKTfUNtt5TCHCCRIQ=";
     fetchSubmodules = true;
   };
 
@@ -122,7 +122,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb pcre perl polkit x264 zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies

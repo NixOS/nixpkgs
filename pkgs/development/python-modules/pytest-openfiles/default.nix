@@ -26,7 +26,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pytest plugin for detecting inadvertent open file handles";

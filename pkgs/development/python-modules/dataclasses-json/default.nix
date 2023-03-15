@@ -24,7 +24,7 @@ buildPythonPackage rec {
     marshmallow-enum
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mypy
     pytestCheckHook

@@ -64,7 +64,7 @@ def update_product(name, product):
             build = latest_build(channel)
             new_version = build["@version"]
             new_build_number = build["@fullNumber"]
-            if "EAP" not in channel["@name"]:
+            if all(x not in channel["@name"] for x in ["EAP", "Gateway"]):
                 version_or_build_number = new_version
             else:
                 version_or_build_number = new_build_number

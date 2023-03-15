@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mkdocs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

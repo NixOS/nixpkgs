@@ -128,7 +128,7 @@ let
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       prison = callPackage ./prison.nix {};
       qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
-      solid = callPackage ./solid.nix {};
+      solid = callPackage ./solid {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};

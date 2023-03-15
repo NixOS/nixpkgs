@@ -92,10 +92,12 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
+  preConfigure = ''
+    export GETTEXT_DIR="${gettext}"
+  '';
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -103,5 +105,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
     maintainers = teams.gnome.members ++ (with maintainers; [ dtzWill ]);
+    platforms = platforms.unix;
   };
 }

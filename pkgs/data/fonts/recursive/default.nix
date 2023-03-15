@@ -1,20 +1,19 @@
-{ lib, fetchzip }:
+{ lib, fetchzip, stdenvNoCC }:
 
-let
-  version = "1.084";
-in
-fetchzip {
-  name = "recursive-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "recursive";
+  version = "1.085";
 
-  url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
+    sha256 = "sha256-hnGnKnRoQN8vFStW8TjLrrTL1dWsthUEWxfaGF0b0vM=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  installPhase = ''
+    install -D -t $out/share/fonts/opentype/ $(find $src -type f -name '*.otf')
+    install -D -t $out/share/fonts/truetype/ $(find $src -type f -name '*.ttf')
   '';
 
-  sha256 = "sha256-YL09RVU9pgP0/aGRKECHzd5t1VmNDPtOFcRygWqIisg=";
 
   meta = with lib; {
     homepage = "https://recursive.design/";

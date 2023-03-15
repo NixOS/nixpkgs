@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       (compatibility and core profiles), DirectX 9, DirectX 10 or DirectX 11
       to interactively tweak parameters on-screen
     '';
-    homepage = "http://anttweakbar.sourceforge.net/";
+    homepage = "https://anttweakbar.sourceforge.net/";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.razvan ];
     platforms = lib.platforms.linux;

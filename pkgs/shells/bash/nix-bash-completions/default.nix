@@ -11,8 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
   };
 
+  postPatch = ''
+    # Nix 2.4+ provides its own completion for the nix command, see https://github.com/hedning/nix-bash-completions/issues/20
+    substituteInPlace _nix --replace 'nix nixos-option' 'nixos-option'
+  '';
+
   strictDeps = true;
-  # To enable lazy loading via. bash-completion we need a symlink to the script
+  # To enable lazy loading via bash-completion we need a symlink to the script
   # from every command name.
   installPhase = ''
     runHook preInstall
@@ -36,8 +41,8 @@ stdenv.mkDerivation rec {
     description = "Bash completions for Nix, NixOS, and NixOps";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ hedning ];
-    # Set a lower priority such that the newly provided completion from Nix 2.4 are preferred.
+    maintainers = with maintainers; [ hedning ncfavier ];
+    # Set a lower priority such that Nix wins in case of conflicts.
     priority = 10;
   };
 }

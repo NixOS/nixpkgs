@@ -56,7 +56,7 @@ in
       };
 
       listenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8091;
         description = lib.mdDoc "Port to listen on.";
       };
@@ -78,7 +78,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 443;
           example = 80;
           description = lib.mdDoc "Port used at the proxy";

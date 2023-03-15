@@ -20,7 +20,7 @@ npmBuildHook() {
         echo
         echo "Here are a few things you can try, depending on the error:"
         echo "1. Make sure your build script ($npmBuildScript) exists"
-        echo "  If there is none, set `dontNpmBuild = true`."
+        echo '  If there is none, set `dontNpmBuild = true`.'
         echo '2. If the error being thrown is something similar to "error:0308010C:digital envelope routines::unsupported", add `NODE_OPTIONS = "--openssl-legacy-provider"` to your derivation'
         echo "  See https://github.com/webpack/webpack/issues/14532 for more information."
         echo

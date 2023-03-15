@@ -71,7 +71,7 @@ $ ./maintainers/scripts/haskell/hydra-report.hs get-report
 $ ./maintainers/scripts/haskell/hydra-report.hs ping-maintainers
 ```
 
-The `hyda-report.hs ping-maintainers` command generates a Markdown document
+The `hydra-report.hs ping-maintainers` command generates a Markdown document
 that you can paste in a GitHub comment on the PR opened above.  This
 comment describes which Haskell packages are now failing to build.  It also
 pings the maintainers so that they know to fix up their packages.

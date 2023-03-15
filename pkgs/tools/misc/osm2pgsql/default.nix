@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-KJkqzvsm0IMaqeKnIbLGeOSJrsLvW+z7lCg6NbuU13g=";
+    hash = "sha256-8Jefd8dfoh/an7wd+8iTM0uOKA4UiUo8t2WzZs4r/Ck=";
   };
 
   postPatch = ''
@@ -35,14 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ expat fmt proj bzip2 zlib boost postgresql libosmium protozero rapidjson ]
+  buildInputs = [ expat fmt proj bzip2 zlib boost postgresql libosmium protozero ]
     ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     "-DEXTERNAL_LIBOSMIUM=ON"
     "-DEXTERNAL_PROTOZERO=ON"
-    "-DEXTERNAL_RAPIDJSON=ON"
     "-DEXTERNAL_FMT=ON"
   ] ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 

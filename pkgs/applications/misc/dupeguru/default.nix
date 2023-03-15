@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     "NO_VENV=1"
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
   preCheck = ''

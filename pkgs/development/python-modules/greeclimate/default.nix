@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "1.3.0";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = "greeclimate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4kR3Hc5M4FDG/WFtIW20a9d0vwLzmqtrlhd+teMiejA=";
+    hash = "sha256-M4oxFi/PpqhJgZX/wM+9rSrraIZcqzubbxnihfK0W2E=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

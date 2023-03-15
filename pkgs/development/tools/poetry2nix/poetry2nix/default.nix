@@ -1,11 +1,10 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
-, poetry ? null
 , poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
   # Poetry2nix version
-  version = "1.36.0";
+  version = "1.39.1";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -72,7 +71,7 @@ let
         )
       );
       nativeBuildInputs = mkInput "nativeBuildInputs" [ ];
-      checkInputs = mkInput "checkInputs" (
+      nativeCheckInputs = mkInput "nativeCheckInputs" (
         getDeps (pyProject.tool.poetry."dev-dependencies" or { })  # <poetry-1.2.0
         # >=poetry-1.2.0 dependency groups
         ++ lib.flatten (map (g: getDeps (pyProject.tool.poetry.group.${g}.dependencies or { })) checkGroups)
@@ -143,7 +142,7 @@ lib.makeScope pkgs.newScope (self: {
       };
       getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-      poetryPkg = poetry.override { inherit python; };
+      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; };
 
       scripts = pyProject.tool.poetry.scripts or { };
       hasScripts = scripts != { };
@@ -221,6 +220,16 @@ lib.makeScope pkgs.newScope (self: {
         getFunctorFn
         (
           [
+            # Remove Python packages aliases with non-normalized names to avoid issues with infinite recursion (issue #750).
+            (self: super: lib.attrsets.mapAttrs
+              (
+                name: value:
+                  if lib.isDerivation value && self.hasPythonModule value && (normalizePackageName name) != name
+                  then null
+                  else value
+              )
+              super)
+
             (
               self: super:
                 {
@@ -239,7 +248,7 @@ lib.makeScope pkgs.newScope (self: {
                 }
             )
 
-            # Fix infinite recursion in a lot of packages because of checkInputs
+            # Fix infinite recursion in a lot of packages because of nativeCheckInputs
             (self: super: lib.mapAttrs
               (name: value: (
                 if lib.isDerivation value && lib.hasAttr "overridePythonAttrs" value
@@ -472,7 +481,7 @@ lib.makeScope pkgs.newScope (self: {
   /*
     The default list of poetry2nix override overlays
 
-    Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
+    Can be overridden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
   defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib poetryLib; });
 

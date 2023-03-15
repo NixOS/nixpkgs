@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rt-tests";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yuSfeYTaCZ0F1GXQkDnH8PBvyzR2w/XDitN8csHB9xE=";
+    sha256 = "sha256-LzN3YB3Lb7tjyEplrFaNYtiGwHUUTztZBsMrUndd2cU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

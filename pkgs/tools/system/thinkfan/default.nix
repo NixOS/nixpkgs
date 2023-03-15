@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, libyamlcpp
+, yaml-cpp
 , pkg-config
 , procps
 , coreutils
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libyamlcpp ] ++ lib.optional smartSupport libatasmart;
+  buildInputs = [ yaml-cpp ] ++ lib.optional smartSupport libatasmart;
 
   meta = {
     description = "A simple, lightweight fan control program";

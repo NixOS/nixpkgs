@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     (python3.withPackages (p: with p; [ pygobject3 ]))
   ];
 

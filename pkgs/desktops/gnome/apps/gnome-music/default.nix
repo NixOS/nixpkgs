@@ -107,6 +107,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Music player and management application for the GNOME desktop environment";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

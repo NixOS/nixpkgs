@@ -20,7 +20,7 @@ in {
       user = mkOption {
         type = types.str;
         description = lib.mdDoc ''
-          AppVM user login. Currenly only AppVMs are supported for a single user only.
+          AppVM user login. Currently only AppVMs are supported for a single user only.
         '';
       };
     };

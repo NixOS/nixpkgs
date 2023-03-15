@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , swig
 , boost
@@ -33,6 +34,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-QeapH937yGnK6oD+rgIERePxz6ooxGpOx6x9LyFDt2A=";
   };
+
+  patches = [
+    # Fix build with primesieve 11, https://github.com/openturns/openturns/pull/2187
+    # Remove with next version update.
+    (fetchpatch {
+      url = "https://github.com/openturns/openturns/commit/a85061f89a5763061467beac516c1355fe81b9be.patch";
+      hash = "sha256-z28ipBuX3b5UFEnKuDfp+kMI5cUcwXVz/8WZHlICnvE=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional enablePython python3Packages.sphinx;
   buildInputs = [

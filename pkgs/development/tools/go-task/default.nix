@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.18.0";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
-    rev = "v${version}";
-    sha256 = "sha256-b5YNiMnk1tBk7kO4YWAU8cyg5oHhKu95ogTtZ3N/6IY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SmO59VXuQZISDNJy2d6qhQv1QCxm0WodqPx2qHhCs80=";
   };
 
-  vendorSha256 = "sha256-+DmnYd415FWgbY+gkDVWjnvbjTppfFV5NMpIE3Mm124=";
+  vendorHash = "sha256-TsFPpN/X5pO4KALbqsHCa6YxYtaXMVqB5ENaIEfTWRo=";
 
   doCheck = false;
 
@@ -32,6 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://taskfile.dev/";
     description = "A task runner / simpler Make alternative written in Go";
+    changelog = "https://github.com/go-task/task/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ parasrah ];
   };

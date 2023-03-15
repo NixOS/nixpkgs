@@ -32,6 +32,10 @@ in
         assertion = !config.services.pipewire.media-session.enable;
         message = "WirePlumber and pipewire-media-session can't be enabled at the same time.";
       }
+      {
+        assertion = !config.hardware.bluetooth.hsphfpd.enable;
+        message = "Using Wireplumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
+      }
     ];
 
     environment.systemPackages = [ cfg.package ];

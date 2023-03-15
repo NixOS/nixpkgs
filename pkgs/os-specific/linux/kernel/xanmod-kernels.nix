@@ -3,20 +3,20 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "5.15.75";
-    hash = "sha256-tgm5nmguEfRFq3OhmZgRgFLIW7E798Rv1basxnfdqLI=";
+    version = "6.1.16";
+    hash = "sha256-w44mynSAcxx9jpTfj/3LiB2eZKzOBzH2rBKzvXqKQJU=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.0.7";
-    hash = "sha256-qeM2oswuop42rvyBGlrH6VvODScLCpAOjTc4KR5a2Ec=";
+    version = "6.2.3";
+    hash = "sha256-C3Vwgk3UyD638CYeO2z+GBjmCTMVC2fwU7HyX8bxgxg=";
     variant = "main";
   };
 
   xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
     inherit version;
-    modDirVersion = "${version}-${suffix}";
+    modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
 
     src = fetchFromGitHub {
       owner = "xanmod";
@@ -32,10 +32,6 @@ let
       # Google's BBRv2 TCP congestion Control
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
-
-      # Google's Multigenerational LRU framework
-      LRU_GEN = yes;
-      LRU_GEN_ENABLED = yes;
 
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;

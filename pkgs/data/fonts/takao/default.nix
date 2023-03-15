@@ -1,20 +1,21 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "takao";
   version = "00303.01";
-in
-fetchzip {
-  name = "takao-${version}";
-  url = "mirror://ubuntu/pool/universe/f/fonts-takao/fonts-takao_${version}.orig.tar.gz";
-  sha256 = "sha256-TlPq3iIv8vHlxYu5dkX/Lf6ediYKQaQ5uMbFvypQM/w=";
 
-  postFetch = ''
-    unpackDir="$TMPDIR/unpack"
-    mkdir "$unpackDir"
-    cd "$unpackDir"
-    tar xf "$downloadedFile" --strip-components=1
+  src = fetchurl {
+    url = "mirror://ubuntu/pool/universe/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.gz";
+    hash = "sha256-0wjHNv1yStp0q9D0WfwjgUYoUKcCrXA5jFO8PEVgq5k=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
     cp *.ttf $out/share/fonts
+
+    runHook postInstall
   '';
 
   meta = with lib; {

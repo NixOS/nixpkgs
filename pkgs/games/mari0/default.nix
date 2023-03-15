@@ -1,22 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zip, love_11, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, zip, love, makeWrapper, makeDesktopItem
+, copyDesktopItems }:
 
-let
+stdenv.mkDerivation rec {
   pname = "mari0";
   version = "1.6.2";
-
-  desktopItem = makeDesktopItem {
-    name = "mari0";
-    exec = pname;
-    comment = "Crossover between Super Mario Bros. and Portal";
-    desktopName = "mari0";
-    genericName = "mari0";
-    categories = [ "Game" ];
-  };
-
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "Stabyourself";
@@ -25,17 +12,26 @@ stdenv.mkDerivation {
     sha256 = "1zqaq4w599scsjvy1rsb21fd2r8j3srx9vym4ir9bh666dp36gxa";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love_11 zip ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems zip ];
 
-  installPhase =
-  ''
-    mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
-    zip -9 -r ${pname}.love ./*
-    mv ${pname}.love $out/share/games/lovegames/${pname}.love
-    makeWrapper ${love_11}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-    chmod +x $out/bin/${pname}
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mari0";
+      exec = pname;
+      comment = "Crossover between Super Mario Bros. and Portal";
+      desktopName = "mari0";
+      genericName = "mari0";
+      categories = [ "Game" ];
+    })
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    zip -9 -r mari0.love ./*
+    install -Dm444 -t $out/share/games/lovegames/ mari0.love
+    makeWrapper ${love}/bin/love $out/bin/mari0 \
+      --add-flags $out/share/games/lovegames/mari0.love
+    runHook postInstall
   '';
 
   meta = with lib; {

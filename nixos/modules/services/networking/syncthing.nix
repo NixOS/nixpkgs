@@ -384,6 +384,29 @@ in {
         description = mdDoc ''
           Extra configuration options for Syncthing.
           See <https://docs.syncthing.net/users/config.html>.
+          Note that this attribute set does not exactly match the documented
+          xml format. Instead, this is the format of the json rest api. There
+          are slight differences. For example, this xml:
+          ```xml
+          <options>
+            <listenAddress>default</listenAddress>
+            <minHomeDiskFree unit="%">1</minHomeDiskFree>
+          </options>
+          ```
+          corresponds to the json:
+          ```json
+          {
+            options: {
+              listenAddresses = [
+                "default"
+              ];
+              minHomeDiskFree = {
+                unit = "%";
+                value = 1;
+              };
+            };
+          }
+          ```
         '';
         example = {
           options.localAnnounceEnabled = false;

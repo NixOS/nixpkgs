@@ -17,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.6.1";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LVcgpeY/c+rzHtqhX2q4fzXwaQ+MojMBfX0j10OpHXM=";
+    hash = "sha256-/3l4RleKnyogG1NEKu3rVDMZRmhw++HHAeq2bddoEWU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "rich >=10.11.0,<13.0.0" "rich"
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -43,7 +48,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     coverage # execs coverage in tests
     pytest-sugar
     pytest-xdist

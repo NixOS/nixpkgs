@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   meta = with lib; {
     description = "Lightweight Tox client";

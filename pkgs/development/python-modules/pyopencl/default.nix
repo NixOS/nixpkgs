@@ -22,9 +22,9 @@ let
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
 in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2022.2.4";
+  version = "2022.3.1";
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tXye+L2ObbB+iRBvMJG6I2sk+Vo4/UDfsX0u1/9r5K0=";
+    sha256 = "sha256-Sj2w/mG1zclSZ1Jt7r1xp+HXlWlNSw/idh8GMLzKNiE=";
   };
 
   # py.test is not needed during runtime, so remove it from `install_requires`

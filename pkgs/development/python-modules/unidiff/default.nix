@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "unidiff";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2bbcbc986e1fb97f04b1d7b864aa6002ab02f4d8a996bf03aa6e5a81447d1fc5";
+    sha256 = "2e5f0162052248946b9f0970a40e9e124236bf86c82b70821143a6fc1dea2574";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "-s" "tests" ];
 

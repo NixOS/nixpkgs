@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
   ];
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   mesonFlags = [
     "-Dgstreamer=1.0"

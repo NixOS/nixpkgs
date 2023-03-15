@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "2.3.1";
+  version = "2.6.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jkLbCx9F7bDg2wIiEVGkaFPOYg5CROp5lfR8ZGvkKhY=";
+    hash = "sha256-FqZYJoNaRISuZ5m5ZeeregPdBT4fh8NdcgzEho0ZWd0=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

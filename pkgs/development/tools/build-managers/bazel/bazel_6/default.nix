@@ -2,12 +2,10 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_4
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python27, python3, writeScript
+, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -26,22 +24,22 @@
 }:
 
 let
-  version = "6.0.0-pre.20220720.3";
+  version = "6.0.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-i8d4yLSq8fL+YT11wYmBvLDLSprq1gVfyjsKBYci1bk=";
+    hash = "sha256-e8DFFFwZpW2CoI/OaQjF4aDnXk+/s7bxK03q5/SzjLw=";
   };
 
-  # Update with `eval $(nix-build -A bazel_5.updater)`,
+  # Update with `eval $(nix-build -A bazel_6.updater)`,
   # then add new dependencies from the dict in ./src-deps.json as required.
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
       srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        urls = d.urls;
+        urls = d.urls or [d.url];
         sha256 = d.sha256;
       });
     in builtins.listToAttrs (map toFetchurl [
@@ -54,8 +52,8 @@ let
       srcs.remote_java_tools_for_testing
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.26.0.tar.gz"
-      srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
+      srcs.android_tools_for_testing
+      srcs.openjdk_linux_vanilla
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -69,6 +67,9 @@ let
       srcs.com_google_absl
       srcs.com_googlesource_code_re2
       srcs.com_github_cares_cares
+      srcs.com_envoyproxy_protoc_gen_validate
+      srcs.com_google_googleapis
+      srcs.bazel_gazelle
     ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -103,10 +104,6 @@ let
     #            "@bison//:bin/bison",
     #        ],
     #     )
-    #
-    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
-    # default to using python3. Therefore, both python27 and python3 are
-    # runtime dependencies.
     [
       bash
       coreutils
@@ -117,7 +114,6 @@ let
       gnused
       gnutar
       gzip
-      python27
       python3
       unzip
       which
@@ -338,7 +334,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_4}"/bin/bazel \
+        "${bazel_self}"/bin/bazel \
             query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
             --loading_phase_threads=1 \
             --output build) \
@@ -391,7 +387,7 @@ stdenv.mkDerivation rec {
       sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
 
       sed -i -e 's;"/usr/bin/libtool";_find_generic(repository_ctx, "libtool", "LIBTOOL", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
-      wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
+      wrappers=( tools/cpp/osx_cc_wrapper.sh.tpl )
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
@@ -414,8 +410,6 @@ stdenv.mkDerivation rec {
       grep -rlZ /bin/ src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
-        # We default to python3 where possible. See also `postFixup` where
-        # python3 is added to $out/nix-support
         substituteInPlace "$path" \
           --replace /bin/bash ${bash}/bin/bash \
           --replace "/usr/bin/env bash" ${bash}/bin/bash \
@@ -426,7 +420,7 @@ stdenv.mkDerivation rec {
 
       grep -rlZ /bin/ tools/python | while IFS="" read -r -d "" path; do
         substituteInPlace "$path" \
-          --replace "/usr/bin/env python2" ${python27}/bin/python \
+          --replace "/usr/bin/env python2" ${python3.interpreter} \
           --replace "/usr/bin/env python3" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env
       done

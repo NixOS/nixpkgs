@@ -1,19 +1,19 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
+{ pkgsBuildBuild, go, buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.22.1";
+      version = "1.23.2";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         rev = "v${version}";
-        hash = "sha256-XndTMPO1lN6bsjeHbvrZ+i4VwaKoUOcWOfbVQ2E7/eo=";
+        hash = "sha256-EowUQYfSznTuAHV7OIesFPM99zRmeKkzYNp7VANtR2U=";
       };
 
-      vendorSha256 = "sha256-ZxA05K5zKmQIm2R525DNXpGXqwM33j3PCuPN5d2qcj8=";
+      vendorHash = "sha256-5NgflkRXkbWiIkASmxIgWliE8sF89HtlMtlIF+5u6Ic=";
 
       doCheck = false;
 
@@ -22,7 +22,12 @@ let
 
       buildPhase = ''
         runHook preBuild
-        go run build.go -no-upgrade -version v${version} build ${target}
+        (
+          export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
+          go build build.go
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+        )
+        ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
       '';
 

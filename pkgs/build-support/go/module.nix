@@ -83,9 +83,12 @@ let
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
+    prePatch = args.prePatch or "";
     patches = args.patches or [];
     patchFlags = args.patchFlags or [];
+    postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
+    postBuild = args.postBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
@@ -142,6 +145,11 @@ let
       cp -r --reflink=auto vendor $out
     ''}
 
+      if ! [ "$(ls -A $out)" ]; then
+        echo "vendor folder is empty, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        exit 10
+      fi
+
       runHook postInstall
     '';
 
@@ -185,6 +193,12 @@ let
       ''}
     '' + ''
 
+      # currently pie is only enabled by default in pkgsMusl
+      # this will respect the `hardening{Disable,Enable}` flags if set
+      if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+      fi
+
       runHook postConfigure
     '';
 
@@ -209,7 +223,7 @@ let
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
-        flags+=("-v" "-p" "$NIX_BUILD_CORES")
+        flags+=("-p" "$NIX_BUILD_CORES")
 
         if [ "$cmd" = "test" ]; then
           flags+=(-vet=off)

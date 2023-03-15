@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2_ttf";
-  version = "2.20.1";
+  version = "2.20.2";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_ttf/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eM2tUfPMOtppMrG7bpFLM3mKuXCh6Bd2PyLdv9l9DFc=";
+    sha256 = "sha256-ncce2TSHUhsQeixKnKa/Q/ti9r3dXCawVea5FBiiIFM=";
   };
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";

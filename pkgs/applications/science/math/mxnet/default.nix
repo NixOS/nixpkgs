@@ -2,11 +2,10 @@
 , opencv3, gtest, blas, gomp, llvmPackages, perl
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, nvidia_x11
 , cudnnSupport ? cudaSupport
-, cudaCapabilities ? [ "3.7" "5.0" "6.0" "7.0" "7.5" "8.0" "8.6" ]
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudnn;
 in
 
 assert cudnnSupport -> cudaSupport;
@@ -51,9 +50,15 @@ stdenv.mkDerivation rec {
       "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
-      "-DMXNET_CUDA_ARCH=${lib.concatStringsSep ";" cudaCapabilities}"
+      "-DMXNET_CUDA_ARCH=${builtins.concatStringsSep ";" cudaFlags.realArches}"
     ] else [ "-DUSE_CUDA=OFF" ])
     ++ lib.optional (!cudnnSupport) "-DUSE_CUDNN=OFF";
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=uninitialized"
+  ];
 
   postPatch = ''
     substituteInPlace 3rdparty/mkldnn/tests/CMakeLists.txt \

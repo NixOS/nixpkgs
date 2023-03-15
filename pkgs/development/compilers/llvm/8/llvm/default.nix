@@ -5,6 +5,7 @@
 , cmake
 , python3
 , libffi
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2
@@ -16,10 +17,9 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+# broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+# broken for the armv7l builder
+, enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? false
 }:
 
@@ -174,7 +174,7 @@ in stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (!isDarwin) [
+  ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"

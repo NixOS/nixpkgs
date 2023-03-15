@@ -9,6 +9,8 @@ import ../pillow/generic.nix (rec {
   # check for release version on https://pypi.org/project/Pillow-SIMD/#history
   # does not match the latest pillow release version!
   version = "9.0.0.post1";
+  format = "setuptools";
+
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

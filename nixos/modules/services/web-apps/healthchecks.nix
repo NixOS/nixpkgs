@@ -98,7 +98,7 @@ in
       description = lib.mdDoc ''
         Environment variables which are read by healthchecks `(local)_settings.py`.
 
-        Settings which are explictly covered in options bewlow, are type-checked and/or transformed
+        Settings which are explicitly covered in options bewlow, are type-checked and/or transformed
         before added to the environment, everything else is passed as a string.
 
         See <https://healthchecks.io/docs/self_hosted_configuration/>

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-KtMGQftoYVNNMtfYeYiaQyMLAySpf9YXLMxj+e/CV5I=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

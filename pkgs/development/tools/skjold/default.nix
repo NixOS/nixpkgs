@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     toml
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-mock
     pytest-watch
     pytestCheckHook

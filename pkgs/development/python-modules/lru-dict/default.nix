@@ -17,7 +17,7 @@ buildPythonPackage {
     hash = "sha256-h4vI70Bz5c+5U9/Bz0WF20HouBTAEGq9400A7g0LMRU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

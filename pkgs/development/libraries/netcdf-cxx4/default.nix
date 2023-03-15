@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = false;
+  preCheck = ''
+    export HDF5_PLUGIN_PATH=${netcdf}/lib/hdf5-plugins
+  '';
 
   meta = {
     description = "C++ API to manipulate netcdf files";

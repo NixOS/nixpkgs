@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Silences many warnings
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
     # NSFilenamesPboardType is deprecated in 10.14+

@@ -46,7 +46,11 @@ let
     version = versions.linux;
 
     src = fetchurl {
-      url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb";
+      urls = [
+        "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb"
+        # NOTE: the archive.org timestamp must also be updated if the version changes.
+        "https://web.archive.org/web/20221130115842if_/https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb"
+      ];
       hash = hashes.linux;
     };
 

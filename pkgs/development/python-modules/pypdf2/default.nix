@@ -23,7 +23,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "PyPDF2"

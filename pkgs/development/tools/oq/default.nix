@@ -19,7 +19,7 @@ crystal.buildCrystalPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libxml2 ];
-  checkInputs = [ jq ];
+  nativeCheckInputs = [ jq ];
 
   format = "shards";
 

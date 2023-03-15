@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dsmr-parser";
-  version = "0.34";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ndokter";
     repo = "dsmr_parser";
-    rev = "v${version}";
-    sha256 = "sha256-GO+lSgTmFgi/ljt99mteoot+p5BJnGb6ZFky5I3I6Io=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-giWchaiNuEN2m2XOpDigZKd0p0gOxp6RrIxPLHEvYOg=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     tailer
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to parse Dutch Smart Meter Requirements (DSMR)";
     homepage = "https://github.com/ndokter/dsmr_parser";
+    changelog = "https://github.com/ndokter/dsmr_parser/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

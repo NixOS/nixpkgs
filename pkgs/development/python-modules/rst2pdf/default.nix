@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "rst2pdf"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pymupdf
     sphinx

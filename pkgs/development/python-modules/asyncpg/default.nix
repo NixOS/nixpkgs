@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
   doCheck = postgresql.doCheck;
 
-  checkInputs = [
+  nativeCheckInputs = [
     uvloop
     postgresql
   ];

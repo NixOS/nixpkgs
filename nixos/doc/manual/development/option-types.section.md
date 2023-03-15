@@ -36,9 +36,8 @@ merging is handled.
     together. This type is recommended when the option type is unknown.
 
     ::: {#ex-types-anything .example}
-    ::: {.title}
     **Example: `types.anything` Example**
-    :::
+
     Two definitions of this type like
 
     ```nix
@@ -92,11 +91,11 @@ merging is handled.
 :   A free-form attribute set.
 
     ::: {.warning}
-    This type will be deprecated in the future because it doesn\'t
+    This type will be deprecated in the future because it doesn't
     recurse into attribute sets, silently drops earlier attribute
-    definitions, and doesn\'t discharge `lib.mkDefault`, `lib.mkIf`
+    definitions, and doesn't discharge `lib.mkDefault`, `lib.mkIf`
     and co. For allowing arbitrary attribute sets, prefer
-    `types.attrsOf types.anything` instead which doesn\'t have these
+    `types.attrsOf types.anything` instead which doesn't have these
     problems.
     :::
 
@@ -222,7 +221,7 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     -   *`specialArgs`* An attribute set of extra arguments to be passed
         to the module functions. The option `_module.args` should be
         used instead for most arguments since it allows overriding.
-        *`specialArgs`* should only be used for arguments that can\'t go
+        *`specialArgs`* should only be used for arguments that can't go
         through the module fixed-point, because of infinite recursion or
         other problems. An example is overriding the `lib` argument,
         because `lib` itself is used to define `_module.args`, which
@@ -236,7 +235,7 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         In such a case it would allow the option to be set with
         `the-submodule.config = "value"` instead of requiring
         `the-submodule.config.config = "value"`. This is because
-        only when modules *don\'t* set the `config` or `options`
+        only when modules *don't* set the `config` or `options`
         keys, all keys are interpreted as option definitions in the
         `config` section. Enabling this option implicitly puts all
         attributes in the `config` section.
@@ -324,7 +323,7 @@ Composed types are types that take a type as parameter. `listOf
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
     Multiple definitions cannot be merged.
 
-`types.oneOf` \[ *`t1 t2`* \... \]
+`types.oneOf` \[ *`t1 t2`* ... \]
 
 :   Type *`t1`* or type *`t2`* and so forth, e.g.
     `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
@@ -345,7 +344,7 @@ that are handled like a separate module.
 It takes a parameter *`o`*, that should be a set, or a function returning
 a set with an `options` key defining the sub-options. Submodule option
 definitions are type-checked accordingly to the `options` declarations.
-Of course, you can nest submodule option definitons for even higher
+Of course, you can nest submodule option definitions for even higher
 modularity.
 
 The option set can be defined directly
@@ -357,9 +356,7 @@ you will still need to provide a default value (e.g. an empty attribute set)
 if you want to allow users to leave it undefined.
 
 ::: {#ex-submodule-direct .example}
-::: {.title}
 **Example: Directly defined submodule**
-:::
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -378,9 +375,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-reference .example}
-::: {.title}
 **Example: Submodule defined as a reference**
-:::
 ```nix
 let
   modOptions = {
@@ -408,9 +403,7 @@ multiple definitions of the submodule option set
 ([Example: Definition of a list of submodules](#ex-submodule-listof-definition)).
 
 ::: {#ex-submodule-listof-declaration .example}
-::: {.title}
 **Example: Declaration of a list of submodules**
-:::
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -429,9 +422,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-listof-definition .example}
-::: {.title}
 **Example: Definition of a list of submodules**
-:::
 ```nix
 config.mod = [
   { foo = 1; bar = "one"; }
@@ -446,9 +437,7 @@ multiple named definitions of the submodule option set
 ([Example: Definition of attribute sets of submodules](#ex-submodule-attrsof-definition)).
 
 ::: {#ex-submodule-attrsof-declaration .example}
-::: {.title}
 **Example: Declaration of attribute sets of submodules**
-:::
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -467,9 +456,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-attrsof-definition .example}
-::: {.title}
 **Example: Definition of attribute sets of submodules**
-:::
 ```nix
 config.mod.one = { foo = 1; bar = "one"; };
 config.mod.two = { foo = 2; bar = "two"; };
@@ -489,9 +476,8 @@ Types are mainly characterized by their `check` and `merge` functions.
     ([Example: Overriding a type check](#ex-extending-type-check-2)).
 
     ::: {#ex-extending-type-check-1 .example}
-    ::: {.title}
     **Example: Adding a type check**
-    :::
+
     ```nix
     byte = mkOption {
       description = "An integer between 0 and 255.";
@@ -501,9 +487,8 @@ Types are mainly characterized by their `check` and `merge` functions.
     :::
 
     ::: {#ex-extending-type-check-2 .example}
-    ::: {.title}
     **Example: Overriding a type check**
-    :::
+
     ```nix
     nixThings = mkOption {
       description = "words that start with 'nix'";

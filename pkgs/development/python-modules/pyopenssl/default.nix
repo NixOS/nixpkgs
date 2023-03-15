@@ -6,34 +6,50 @@
 , cryptography
 , pytestCheckHook
 , pretend
+, sphinxHook
+, sphinx-rtd-theme
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "22.1.0";
-
-  outputs = [ "out" "dev" ];
+  version = "23.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    sha256 = "sha256-eoO3snLdWVIi1nL1zimqAw8fuDdjDvIp9i5y45XOiWg=";
+    hash = "sha256-wcxfhrys78hNrafTEXXK4bFRjV9g09C7WVpngiqGim8=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    openssl
+    sphinxHook
+    sphinx-rtd-theme
+  ];
 
   postPatch = ''
     # remove cryptography pin
     sed "/cryptography/ s/,<[0-9]*//g" setup.py
   '';
 
-  # Seems to fail unpredictably on Darwin. See https://hydra.nixos.org/build/49877419/nixlog/1
-  # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
-  doCheck = !stdenv.isDarwin;
+  propagatedBuildInputs = [
+    cryptography
+  ];
 
-  nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography ];
+  nativeCheckInputs = [
+    flaky
+    pretend
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytestCheckHook pretend flaky ];
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export LANG="en_US.UTF-8"
@@ -77,9 +93,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper around the OpenSSL library";
     homepage = "https://github.com/pyca/pyopenssl";
+    changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    # https://github.com/pyca/pyopenssl/issues/873
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

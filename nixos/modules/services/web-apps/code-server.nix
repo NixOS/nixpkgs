@@ -15,7 +15,7 @@ in {
 
       package = mkOption {
         default = pkgs.code-server;
-        defaultText = "pkgs.code-server";
+        defaultText = lib.literalExpression "pkgs.code-server";
         description = lib.mdDoc "Which code-server derivation to use.";
         type = types.package;
       };

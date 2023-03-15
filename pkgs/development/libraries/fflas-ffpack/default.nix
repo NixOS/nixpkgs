@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     gmpxx
   ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optionals doCheck checkInputs;
+  ] ++ lib.optionals doCheck nativeCheckInputs;
 
   buildInputs = [ givaro blas lapack ];
 

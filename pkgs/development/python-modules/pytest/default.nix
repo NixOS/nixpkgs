@@ -11,6 +11,7 @@
 
 # propagates
 , attrs
+, exceptiongroup
 , iniconfig
 , packaging
 , pluggy
@@ -20,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.1.3";
+  version = "7.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TzZf7C3/nBFi+DTZ8YrxuhMGLbDHCL97lG+KXHYYDDk=";
+    hash = "sha256-xAFOtA4Q8R81WtTjwvssbG0ZGcc/O1pDPeRwggLK3lk=";
   };
 
   outputs = [
@@ -44,6 +45,8 @@ buildPythonPackage rec {
     pluggy
     py
     tomli
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ];
 
   postInstall = ''
@@ -69,7 +72,7 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/7.1.3/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.2.0/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"

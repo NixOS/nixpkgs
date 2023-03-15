@@ -119,9 +119,8 @@ in
         ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
+          "@system-service @pkey"
+          "~@privileged @resources"
         ];
         UMask = "0077";
       };

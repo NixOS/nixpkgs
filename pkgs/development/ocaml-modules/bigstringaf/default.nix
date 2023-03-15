@@ -13,9 +13,6 @@ buildDunePackage rec {
     sha256 = "sha256-HXPjnE56auy2MI6HV2XuBX/VeqsO50HFzTul17lKEqE=";
   };
 
-  # This currently fails with dune
-  strictDeps = false;
-
   nativeBuildInputs = [ pkg-config ];
   checkInputs = [ alcotest ];
   doCheck = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext SDL2 glibc ];
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
-    badPlatforms = [ platforms.aarch64 ];
+    badPlatforms = platforms.aarch64;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

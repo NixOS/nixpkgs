@@ -24,7 +24,7 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Enable PAM mount system to mount fileystems on user login.
+          Enable PAM mount system to mount filesystems on user login.
         '';
       };
 

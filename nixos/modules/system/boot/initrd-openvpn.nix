@@ -68,11 +68,8 @@ in
       $out/bin/openvpn --show-gateway
     '';
 
-    # Add `iproute /bin/ip` to the config, to ensure that openvpn
-    # is able to set the routes
     boot.initrd.network.postCommands = ''
-      (cat /etc/initrd.ovpn; echo -e '\niproute /bin/ip') | \
-        openvpn /dev/stdin &
+      openvpn /etc/initrd.ovpn &
     '';
   };
 

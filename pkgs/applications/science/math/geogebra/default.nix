@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
-  version = "5-0-723-0";
+  version = "5-0-745-0";
 
   srcIcon = fetchurl {
     url = "http://static.geogebra.org/images/geogebra-logo.svg";
-    sha256 = "01sy7ggfvck350hwv0cla9ynrvghvssqm3c59x4q5lwsxjsxdpjm";
+    hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
   };
 
   desktopItem = makeDesktopItem {
@@ -45,9 +45,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-        "https://web.archive.org/web/20220807021654/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "https://web.archive.org/web/20221126102702/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       ];
-      sha256 = "fc05e2ae35b91f2d30650df08da0c20e060f559ef1fac1375cb70093c1d20507";
+      hash = "sha256-DhZ9inK/6Cc/vunYNHhyP4tI/9/toUOgV4lZWmFIj3c=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -76,9 +76,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
-        "https://web.archive.org/web/20220807021931/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+        "https://web.archive.org/web/20221126102602/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
       ];
-      sha256 = "83aa702625c88be00ee005b40bdac0822af37dc1bba7dbf0ba6c4f547d7387d7";
+      hash = "sha256-La7NzEoao4ExUw3mBGstvSHm94/JM5LHlhOE9ewJePY=";
     };
 
     dontUnpack = true;

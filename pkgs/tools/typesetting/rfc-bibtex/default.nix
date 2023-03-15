@@ -15,7 +15,7 @@ with python3.pkgs; buildPythonApplication rec {
     hash = "sha256-bPCNQqiG50vWVFA6J2kyxftwsXunHTNBdSkoIRYkb0s=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     vcrpy
   ];

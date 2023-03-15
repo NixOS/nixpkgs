@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "43.1";
+  version = "43.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-vYR8PKdzYJlTNEYs1GnkWhJHnxHAxI6WUCjtXLgHpbI=";
+    hash = "sha256-EdRR0f3kTxgJ6/Ya/0vqX570/cAjWaiWR/bp59RUKaw=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pipewire
     systemd
-  ] ++ checkInputs;
+  ] ++ nativeCheckInputs;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mesa # for gbm
     libgudev
     xvfb-run

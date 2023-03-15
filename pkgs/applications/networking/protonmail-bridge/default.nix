@@ -2,44 +2,51 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "2.1.3";
+  version = "3.0.18";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
-    rev = "br-${version}";
-    sha256 = "sha256-+XeNhjwtH1T5p8iydMQk22nXztyamSn6yY56/qqvkmk=";
+    rev = "v${version}";
+    hash = "sha256-0gQnMhjwW2NEJwafqndStQ33dIu82lW6ntXFRCpbmm4=";
   };
 
-  vendorSha256 = "sha256-YTGjiteYfuRkDC4M9c/JKqURq4WiC5n9pFRqRVYhyxU=";
+  vendorHash = "sha256-lHMcVcaoBwjE2ikEZPeZexC5XvhkAtvHnDci7UAa4vg=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret ];
 
-  buildPhase = ''
-    runHook preBuild
+  proxyVendor = true; # Bridge uses some C headers so we have to enable proxyVendor
 
+  preBuild = ''
     patchShebangs ./utils/
-    make BUILD_TIME= -j$NIX_BUILD_CORES build-nogui
-
-    runHook postBuild
+    (cd ./utils/ && ./credits.sh bridge)
   '';
 
-  installPhase = ''
-    runHook preInstall
+  ldflags =
+    let constants = "github.com/ProtonMail/proton-bridge/v3/internal/constants"; in
+    [
+      "-X ${constants}.Version=${version}"
+      "-X ${constants}.Revision=${src.rev}"
+      "-X ${constants}.buildTime=unknown"
+      "-X ${constants}.FullAppName=ProtonMailBridge" # Should be "Proton Mail Bridge", but quoting doesn't seems to work in nix's ldflags
+    ];
 
-    install -Dm555 proton-bridge $out/bin/protonmail-bridge
+  subPackages = [
+    "cmd/Desktop-Bridge"
+  ];
 
-    runHook postInstall
+  postInstall = ''
+    mv $out/bin/Desktop-Bridge $out/bin/bridge # The cli is named like that in the upstream repo
   '';
 
   meta = with lib; {
     homepage = "https://github.com/ProtonMail/proton-bridge";
-    changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
+    changelog = "https://github.com/ProtonMail/proton-bridge/blob/${src.rev}/Changelog.md";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lightdiscord ];
+    maintainers = with maintainers; [ mrfreezeex ];
     description = "Use your ProtonMail account with your local e-mail client";
     longDescription = ''
       An application that runs on your computer in the background and seamlessly encrypts

@@ -10,5 +10,5 @@ qtModule {
   pname = "qtserialport";
   qtInputs = [ qtbase ];
   nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ udev ];
+  propagatedBuildInputs = lib.optionals stdenv.isLinux [ udev ];
 }

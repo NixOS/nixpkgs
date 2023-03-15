@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calculator";
     rev = version;
-    sha256 = "sha256-NE7x5vSfwakwJJe2VGRFiYc7GCB1M6xU5945EC6Em34=";
+    sha256 = "sha256-7aKJDlpODIysrHtqtD5wfd+dULFpD+LfWsjzg3OAxkY=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -6,6 +6,7 @@
 , SDL2
 , libiconv
 , Cocoa
+, autoSignDarwinBinariesHook
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported
 , libGL
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-8b9rFI4iRpBJqeJ2KRJ9vRyv9gYwa9jRWCuXRfA3x50=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
   propagatedBuildInputs = [ SDL2 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]

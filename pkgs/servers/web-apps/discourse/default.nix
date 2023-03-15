@@ -1,24 +1,58 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, oxipng, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, fetchYarnDeps, yarn, fixup_yarn_lock, nodePackages, nodejs-14_x
+, ruby_3_1
+, replace
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, nettools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, fetchYarnDeps
+, yarn
+, fixup_yarn_lock
+, nodePackages
 , nodejs-16_x
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.9.0.beta12";
+  version = "3.1.0.beta2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-gL3/+m8SyyOSdcQ0jXo/qEWm0rAvHrmKM3pm5Lm4354=";
+    sha256 = "sha256-wkNTm5/QyujPcMUrnc6eWmjhrRQAthhmejmjpy6zmbE=";
   };
+
+  ruby = ruby_3_1;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -165,7 +199,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "17va1k5r3v0hxpznm7qgmy8c0vicvyk28bn6cr5hqhjn3krzwf8b";
+      sha256 = "0ryc4p5s35mzg1p71z98x5fvr5fpldmgghdi1viha4ckbpv153lw";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -174,7 +208,7 @@ let
       nodePackages.uglify-js
       nodePackages.terser
       yarn
-      nodejs-14_x
+      nodejs-16_x
     ];
 
     outputs = [ "out" "javascripts" ];

@@ -10,16 +10,12 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.12.8";
+  version = "2.13.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-dmN2fMBDZqgvdHQryQgjmBHeH/h2dihRH8LkflFYzTk=";
+    hash = "sha256-NGz6DUa7TdChpgwmD9pcGdvYr3R+Ft3jPPSJpybCW4Q=";
   };
-
-  patches = [
-    ./ffmpeg5-compat.patch
-  ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
@@ -89,7 +85,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" "man" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     imagemagick
     libtiff
     djvulibre
@@ -128,7 +124,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = {
     description = "A GUI to produce PDFs or DjVus from scanned documents";
-    homepage = "http://gscan2pdf.sourceforge.net/";
+    homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];
   };

@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];
+    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac jwoudenberg ];
   };
 }

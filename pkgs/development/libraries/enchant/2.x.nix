@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     nuspell
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittest-cpp
   ];
 

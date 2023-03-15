@@ -43,7 +43,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     opencv3
     pytestCheckHook
   ];

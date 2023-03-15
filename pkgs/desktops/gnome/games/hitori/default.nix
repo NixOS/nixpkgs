@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "GTK application to generate and let you play games of Hitori";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

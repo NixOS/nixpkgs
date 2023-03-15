@@ -6,7 +6,7 @@ buildPythonPackage rec {
   version = "1.9.0";
 
   propagatedBuildInputs = [ mistune cjkwrap wcwidth ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "md2gemini" ];
 
   src = fetchPypi {

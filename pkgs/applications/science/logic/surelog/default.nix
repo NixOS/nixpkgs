@@ -5,7 +5,7 @@
 , python3
 , pkg-config
 , libuuid
-, openjdk11
+, openjdk
 , gperftools
 , flatbuffers
 , fetchpatch
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    openjdk11
+    openjdk
     (python3.withPackages (p: with p; [
       psutil
       orderedmultidict

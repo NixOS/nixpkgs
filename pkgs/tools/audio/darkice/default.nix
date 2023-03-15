@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     libopus libvorbis libogg libpulseaudio alsa-lib libsamplerate libjack2 lame
   ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   configureFlags = [
     "--with-faac-prefix=${faac}"

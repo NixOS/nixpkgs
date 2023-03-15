@@ -14,6 +14,7 @@
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 , requests
 , srptools
@@ -25,23 +26,38 @@ buildPythonPackage rec {
   version = "0.10.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
+    hash = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pytest-runner" ""
-    # Remove all version pinning
-
-    substituteInPlace base_versions.txt \
-      --replace "protobuf==3.19.1,<4" "protobuf>=3.19.0,<4"
   '';
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "async_timeout"
+    "bitarray"
+    "chacha20poly1305-reuseable"
+    "cryptography"
+    "ifaddr"
+    "mediafile"
+    "miniaudio"
+    "protobuf"
+    "requests"
+    "srptools"
+    "zeroconf"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -57,7 +73,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
     pytest-aiohttp
     pytest-asyncio
@@ -72,6 +88,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Test doesn't work in the sandbox
     "tests/protocols/companion/test_companion_auth.py"
+    "tests/protocols/mrp/test_mrp_auth.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -83,7 +100,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
+    changelog = "https://github.com/postlund/pyatv/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

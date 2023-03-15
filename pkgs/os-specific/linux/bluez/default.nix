@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , alsa-lib
 , dbus
 , ell
@@ -22,12 +23,20 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.65";
+  version = "5.66";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-JWWk1INUtXbmrZLiW1TtZoCCllgciruAWHBR+Zk9ltQ=";
+    sha256 = "sha256-Of6mS1kMlJKYSgwnqJ/CA+HNx0hmCG77j0aYZ3qytXQ=";
   };
+
+  patches = [
+    # replace use of a non-standard symbol to fix build with musl libc (pkgsMusl.bluez)
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
+      sha256 = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
+    })
+  ];
 
   buildInputs = [
     alsa-lib
@@ -120,6 +129,10 @@ in stdenv.mkDerivation rec {
     # Add extra configuration
     mkdir $out/etc/bluetooth
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
+
+    # https://github.com/NixOS/nixpkgs/issues/204418
+    ln -s /etc/bluetooth/input.conf $out/etc/bluetooth/input.conf
+    ln -s /etc/bluetooth/network.conf $out/etc/bluetooth/network.conf
 
     # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
     for files in `find tools/ -type f -perm -755`; do

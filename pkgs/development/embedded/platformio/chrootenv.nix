@@ -38,7 +38,7 @@ buildFHSUserEnv {
     mkdir -p $out/lib/udev/rules.d
 
     ln -s $out/bin/platformio $out/bin/pio
-    ln -s ${src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
+    ln -s ${src}/platformio/assets/system/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
   runScript = "platformio";

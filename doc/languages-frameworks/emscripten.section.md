@@ -56,11 +56,11 @@ See the `zlib` example:
 
     zlib = (pkgs.zlib.override {
       stdenv = pkgs.emscriptenStdenv;
-    }).overrideDerivation
+    }).overrideAttrs
     (old: rec {
       buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
         HOME=$TMPDIR
@@ -121,7 +121,7 @@ This `xmlmirror` example features a emscriptenPackage which is defined completel
       src = pkgs.fetchgit {
         url = "https://gitlab.com/odfplugfest/xmlmirror.git";
         rev = "4fd7e86f7c9526b8f4c1733e5c8b45175860a8fd";
-        sha256 = "1jasdqnbdnb83wbcnyrp32f36w3xwhwp0wq8lwwmhqagxrij1r4b";
+        hash = "sha256-i+QgY+5PYVg5pwhzcDnkfXAznBg3e8sWH2jZtixuWsk=";
       };
 
       configurePhase = ''

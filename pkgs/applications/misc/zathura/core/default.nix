@@ -6,15 +6,13 @@
 , gtk-mac-integration
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "zathura";
-  version = "0.4.9";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "0msy7s57mlx0wya99qpia4fpcy40pbj253kmx2y97nb0sqnc8c7w";
+    sha256 = "15314m9chmh5jkrd9vk2h2gwcwkcffv2kjcxkd4v3wmckz5sfjy6";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -23,13 +21,12 @@ stdenv.mkDerivation rec {
   # https://github.com/pwmt/zathura/blob/master/meson_options.txt
   mesonFlags = [
     "-Dsqlite=enabled"
-    "-Dmagic=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     # Make sure tests are enabled for doCheck
     "-Dtests=enabled"
-  ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
+  ] ++ lib.optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
     meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
@@ -39,12 +36,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
     texlive.bin.core
-  ] ++ optional stdenv.isLinux libseccomp
-    ++ optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ lib.optional stdenv.isLinux libseccomp
+    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;

@@ -26,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [ ps ];
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [ ps ];
 
   postInstall = ''
     wrapProgram "$out/bin/assh" \

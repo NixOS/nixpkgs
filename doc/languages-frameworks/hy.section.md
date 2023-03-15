@@ -4,10 +4,10 @@
 
 ### Installation without packages {#installation-without-packages}
 
-You can install `hy` via nix-env or by adding it to `configuration.nix` by reffering to it as a `hy` attribute. This kind of installation adds `hy` to your environment and it succesfully works with `python3`.
+You can install `hy` via nix-env or by adding it to `configuration.nix` by referring to it as a `hy` attribute. This kind of installation adds `hy` to your environment and it successfully works with `python3`.
 
 ::: {.caution}
-Packages that are installed with your python derivation, are not accesible by `hy` this way.
+Packages that are installed with your python derivation, are not accessible by `hy` this way.
 :::
 
 ### Installation with packages {#installation-with-packages}

@@ -81,7 +81,6 @@ in mkLicense lset) ({
   apsl10 = {
     spdxId = "APSL-1.0";
     fullName = "Apple Public Source License 1.0";
-    url = "https://web.archive.org/web/20040701000000*/http://www.opensource.apple.com/apsl/1.0.txt";
   };
 
   apsl20 = {
@@ -109,9 +108,24 @@ in mkLicense lset) ({
     fullName = "Apache License 2.0";
   };
 
+  asl20-llvm = {
+    spdxId = "Apache-2.0 WITH LLVM-exception";
+    fullName = "Apache License 2.0 with LLVM Exceptions";
+  };
+
   bitstreamVera = {
     spdxId = "Bitstream-Vera";
     fullName = "Bitstream Vera Font License";
+  };
+
+  bitTorrent10 = {
+     spdxId = "BitTorrent-1.0";
+     fullName = " BitTorrent Open Source License v1.0";
+  };
+
+  bitTorrent11 = {
+    spdxId = "BitTorrent-1.1";
+    fullName = " BitTorrent Open Source License v1.1";
   };
 
   bola11 = {
@@ -208,6 +222,12 @@ in mkLicense lset) ({
   cc0 = {
     spdxId = "CC0-1.0";
     fullName = "Creative Commons Zero v1.0 Universal";
+  };
+
+  cc-by-nc-nd-30 = {
+    spdxId = "CC-BY-NC-ND-3.0";
+    fullName = "Creative Commons Attribution Non Commercial No Derivative Works 3.0 Unported";
+    free = false;
   };
 
   cc-by-nc-sa-20 = {
@@ -331,6 +351,13 @@ in mkLicense lset) ({
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
     free = false;
+  };
+
+  ecl20 = {
+    fullName = "Educational Community License, Version 2.0";
+    url = "https://opensource.org/licenses/ECL-2.0";
+    shortName = "ECL 2.0";
+    spdxId = "ECL-2.0";
   };
 
   efl10 = {
@@ -558,6 +585,12 @@ in mkLicense lset) ({
     redistributable = false;
   };
 
+  fair = {
+    fullName = "Fair License";
+    spdxId = "Fair";
+    free = true;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
@@ -634,11 +667,6 @@ in mkLicense lset) ({
     url = "https://opensource.franz.com/preamble.html";
   };
 
-  llvm-exception = {
-    spdxId = "LLVM-exception";
-    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
-  };
-
   lppl12 = {
     spdxId = "LPPL-1.2";
     fullName = "LaTeX Project Public License v1.2";
@@ -709,7 +737,12 @@ in mkLicense lset) ({
 
   ncsa = {
     spdxId = "NCSA";
-    fullName  = "University of Illinois/NCSA Open Source License";
+    fullName = "University of Illinois/NCSA Open Source License";
+  };
+
+  nlpl = {
+    spdxId = "NLPL";
+    fullName = "No Limit Public License";
   };
 
   nposl3 = {
@@ -842,6 +875,12 @@ in mkLicense lset) ({
     fullName = "SGI Free Software License B v2.0";
   };
 
+  # Gentoo seems to treat it as a license:
+  # https://gitweb.gentoo.org/repo/gentoo.git/tree/licenses/SGMLUG?id=7d999af4a47bf55e53e54713d98d145f935935c1
+  sgmlug = {
+    fullName = "SGML UG SGML Parser Materials license";
+  };
+
   sleepycat = {
     spdxId = "Sleepycat";
     fullName = "Sleepycat License";
@@ -967,6 +1006,11 @@ in mkLicense lset) ({
   wxWindows = {
     spdxId = "wxWindows";
     fullName = "wxWindows Library Licence, Version 3.1";
+  };
+
+  x11 = {
+    spdxId = "X11";
+    fullName = "X11 License";
   };
 
   xfig = {

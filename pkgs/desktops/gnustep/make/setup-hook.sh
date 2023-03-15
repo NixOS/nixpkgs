@@ -1,20 +1,24 @@
 # this path is used by some packages to install additional makefiles
 export DESTDIR_GNUSTEP_MAKEFILES=$out/share/GNUstep/Makefiles
 
-installFlagsArray=( \
-  "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM" \
-  "GNUSTEP_SYSTEM_APPS=$out/lib/GNUstep/Applications" \
-  "GNUSTEP_SYSTEM_ADMIN_APPS=$out/lib/GNUstep/Applications" \
-  "GNUSTEP_SYSTEM_WEB_APPS=$out/lib/GNUstep/WebApplications" \
-  "GNUSTEP_SYSTEM_TOOLS=$out/bin" \
-  "GNUSTEP_SYSTEM_ADMIN_TOOLS=$out/sbin" \
-  "GNUSTEP_SYSTEM_LIBRARY=$out/lib/GNUstep" \
-  "GNUSTEP_SYSTEM_HEADERS=$out/include" \
-  "GNUSTEP_SYSTEM_LIBRARIES=$out/lib" \
-  "GNUSTEP_SYSTEM_DOC=$out/share/GNUstep/Documentation" \
-  "GNUSTEP_SYSTEM_DOC_MAN=$out/share/man" \
-  "GNUSTEP_SYSTEM_DOC_INFO=$out/share/info" \
-)
+addGnustepInstallFlags() {
+    installFlagsArray=( \
+      "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM" \
+      "GNUSTEP_SYSTEM_APPS=${!outputLib}/lib/GNUstep/Applications" \
+      "GNUSTEP_SYSTEM_ADMIN_APPS=${!outputLib}/lib/GNUstep/Applications" \
+      "GNUSTEP_SYSTEM_WEB_APPS=${!outputLib}/lib/GNUstep/WebApplications" \
+      "GNUSTEP_SYSTEM_TOOLS=${!outputBin}/bin" \
+      "GNUSTEP_SYSTEM_ADMIN_TOOLS=${!outputBin}/sbin" \
+      "GNUSTEP_SYSTEM_LIBRARY=${!outputLib}/lib/GNUstep" \
+      "GNUSTEP_SYSTEM_HEADERS=${!outputInclude}/include" \
+      "GNUSTEP_SYSTEM_LIBRARIES=${!outputLib}/lib" \
+      "GNUSTEP_SYSTEM_DOC=${!outputDoc}/share/GNUstep/Documentation" \
+      "GNUSTEP_SYSTEM_DOC_MAN=${!outputMan}/share/man" \
+      "GNUSTEP_SYSTEM_DOC_INFO=${!outputInfo}/share/info" \
+    )
+}
+
+preInstallPhases+=" addGnustepInstallFlags"
 
 addEnvVars() {
     local filename

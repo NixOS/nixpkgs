@@ -17,15 +17,16 @@
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.15";
+  version = "0.17";
 
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
     repo   = "ocaml-${pname}";
     rev    = version;
-    sha256 = "sha256-EXJqlAGa0LwQKY8IlmcoJs0l2eRTiUhuzMHfakrslXU=";
+    hash = "sha256-z/9NUBjeFWE63Z/e8OyzDiy8hrn6qzjaiBH8G9MPeos=";
   };
 
   buildInputs = [ dune-configurator ];

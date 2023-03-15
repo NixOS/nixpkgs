@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ep69Rrm8Ek0lkgctz6vDAZ1MZ8kWKZSyIvMMAmzTngA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ep69Rrm8Ek0lkgctz6vDAZ1MZ8kWKZSyIvMMAmzTngA=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static configuration extractor for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
+    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

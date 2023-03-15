@@ -5,7 +5,6 @@
 , docopt
 , pillow
 , requests
-, dataclasses
 , pythonOlder
 }:
 
@@ -13,7 +12,7 @@ buildPythonPackage rec {
   pname = "pixcat";
   version = "0.1.4";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

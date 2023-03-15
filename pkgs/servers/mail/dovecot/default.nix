@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.19.1";
+  version = "2.3.20";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-21q82H1zCWWeprRbLLbunF+XSGsrcZpd0Fp1nh9qXFE=";
+    hash = "sha256-yqgy65aBSKvfNe6dD1NLd5+nMsDOSpE9mrjDRpshhVI=";
   };
 
   enableParallelBuilding = true;
@@ -58,11 +58,6 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
-    # fix CVE-2022-30550
-    (fetchpatch {
-      url = "https://github.com/dovecot/core/compare/7bad6a24%5E..a1022072.patch";
-      hash = "sha256-aSyRcQreyA9j8QwkODHqPpRuS3vzouVatEWCqhh+r+8=";
-    })
     # fix openssl 3.0 compatibility
     (fetchpatch {
       url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";

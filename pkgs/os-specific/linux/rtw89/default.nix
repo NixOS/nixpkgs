@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw89";
-  version = "unstable-2021-10-21";
+  version = "unstable-2022-12-18";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw89";
-    rev = "0684157cba90e36bff5bc61a59e7e87c359b5e5c";
-    sha256 = "0cvawyi1ksw9xkr8pzwipsl7b8hnmrb17w5cblyicwih8fqaw632";
+    rev = "e834edfe8bee6e27e31c2f783817a9c13ff45665";
+    sha256 = "19ApYiEvA0E6qgf5XQc03paZ+ghjZL8JoC3vSYYw3xU=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -30,12 +30,12 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = " Driver for Realtek 8852AE, an 802.11ax device";
+    description = " Driver for Realtek 8852AE, 8852BE, and 8853CE, 802.11ax devices";
     homepage = "https://github.com/lwfinger/rtw89";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ tvorog ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.4";
+    broken = kernel.kernelOlder "5.7";
     priority = -1;
   };
 }

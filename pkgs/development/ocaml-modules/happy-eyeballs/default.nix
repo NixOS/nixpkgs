@@ -4,16 +4,15 @@
 
 buildDunePackage rec {
   pname = "happy-eyeballs";
-  version = "0.3.0";
+  version = "0.5.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/roburio/happy-eyeballs/releases/download/v${version}/happy-eyeballs-${version}.tbz";
-    sha256 = "17mnid1gvq1ml1zmqzn0m6jmrqw4kqdrjqrdsrphl5kxxyhs03m6";
+    hash = "sha256-T4BOFlSj3xfUFhP9v8UaCHgmhvGrMyeqNUQf79bdBh4=";
   };
-
-  strictDeps = true;
 
   propagatedBuildInputs = [
     domain-name

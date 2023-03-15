@@ -26,7 +26,7 @@ buildPythonPackage rec {
     png = [ cairosvg ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyquery
     pytestCheckHook
   ] ++ passthru.optional-dependencies.png;

@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     description = "An application firewall";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.raboof ];
+    maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
   };
 }

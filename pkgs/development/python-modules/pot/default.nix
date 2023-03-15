@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pymanopt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cvxopt
     matplotlib
     numpy

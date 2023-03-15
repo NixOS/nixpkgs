@@ -25,7 +25,7 @@
 # optional server deps
 , libmicrohttpd
 , libsodium
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd ? null
 
 # options

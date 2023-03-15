@@ -65,6 +65,7 @@ let
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
+      export distroId=${config.system.nixos.distroId};
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
       ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
@@ -77,7 +78,12 @@ let
 
       ${config.system.systemBuilderCommands}
 
-      echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
+      echo -n "$extraDependencies" > $out/extra-dependencies
+
+      ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
+        ${config.boot.bootspec.writer}
+        ${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"
+      ''}
 
       ${config.system.extraSystemBuilderCmds}
     '';
@@ -105,6 +111,8 @@ let
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
+    inherit (config.system) extraDependencies;
+
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
   } // config.system.systemBuilderArgs);
@@ -121,6 +129,13 @@ let
   system = foldr ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
+
+  systemWithBuildDeps = system.overrideAttrs (o: {
+    systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
+    buildCommand = o.buildCommand + ''
+      ln -sn $systemBuildClosure $out/build-closure
+    '';
+  });
 
 in
 
@@ -223,6 +238,16 @@ in
       '';
     };
 
+    system.forbiddenDependenciesRegex = mkOption {
+      default = "";
+      example = "-dev$";
+      type = types.str;
+      description = lib.mdDoc ''
+        A POSIX Extended Regular Expression that matches store paths that
+        should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
+      '';
+    };
+
     system.extraSystemBuilderCmds = mkOption {
       type = types.lines;
       internal = true;
@@ -288,6 +313,27 @@ in
       '';
     };
 
+    system.includeBuildDependencies = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to include the build closure of the whole system in
+        its runtime closure.  This can be useful for making changes
+        fully offline, as it includes all sources, patches, and
+        intermediate outputs required to build all the derivations
+        that the system depends on.
+
+        Note that this includes _all_ the derivations, down from the
+        included applications to their sources, the compilers used to
+        build them, and even the bootstrap compiler used to compile
+        the compilers. This increases the size of the system and the
+        time needed to download its dependencies drastically: a
+        minimal configuration with no extra services enabled grows
+        from ~670MiB in size to 13.5GiB, and takes proportionally
+        longer to download.
+      '';
+    };
+
   };
 
 
@@ -298,9 +344,27 @@ in
         config.system.copySystemConfiguration
         ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
+        '' +
+      optionalString
+        (config.system.forbiddenDependenciesRegex != "")
+        ''
+          if [[ $forbiddenDependenciesRegex != "" && -n $closureInfo ]]; then
+            if forbiddenPaths="$(grep -E -- "$forbiddenDependenciesRegex" $closureInfo/store-paths)"; then
+              echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
+              exit 1
+            fi
+          fi
         '';
 
-    system.build.toplevel = system;
+    system.systemBuilderArgs = lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
+      inherit (config.system) forbiddenDependenciesRegex;
+      closureInfo = pkgs.closureInfo { rootPaths = [
+        # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
+        (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
+      ]; };
+    };
+
+    system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
 
   };
 

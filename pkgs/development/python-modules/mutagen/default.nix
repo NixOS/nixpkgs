@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

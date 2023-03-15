@@ -7,12 +7,13 @@
 , pytestCheckHook
 , pythonOlder
 , scipy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.7.4";
-  format = "setuptools";
+  version = "0.8.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -20,8 +21,12 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oqbo/aQ5L1nQO8BvXH6/8PBPiWcv2m/LUjwow8+J90w=";
+    hash = "sha256-VE0M5/s8/XmmAe8EE/FcHBFGc9ppVWuYOYMuajQeZww=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     matplotlib
@@ -30,7 +35,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -46,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Scales for Python";
     homepage = "https://github.com/has2k1/mizani";
+    changelog = "https://github.com/has2k1/mizani/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ samuela ];
   };

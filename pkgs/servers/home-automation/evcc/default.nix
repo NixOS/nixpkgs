@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo120Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
@@ -14,22 +14,22 @@
 , stdenv
 }:
 
-buildGoModule rec {
+buildGo120Module rec {
   pname = "evcc";
-  version = "0.107.1";
+  version = "0.114.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-Yu7ebZ6WkLpdvmg7H9A1Sveyu9SRuQ+78gFrCZrYhCU=";
+    hash = "sha256-c+XHSO6waDyju8oXFWGYeaCCqyaYdU2JLXr+NDXijdU=";
   };
 
-  vendorHash = "sha256-10W1BNHcdP77m7lJ/mc+jQeUigoUid3K0wI4bUm5y+s=";
+  vendorHash = "sha256-O58Y9mfHmNUWtHmdO3hvZQbFlcqfZs0GmQDcx2RKRUs=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-+l5LuxJAjrTvOL5XEQ4OIktdupSpn6IqrNX5x4MRmNw=";
+    hash = "sha256-LGlM+itulqtlwyVKfVGiZtTpcCmx+lVvE3JOFkYRHXk=";
   };
 
   nativeBuildInputs = [
@@ -81,9 +81,7 @@ buildGoModule rec {
     tests = {
       inherit (nixosTests) evcc;
     };
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

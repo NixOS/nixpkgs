@@ -34,6 +34,7 @@ let
 
       src = fetchurl {
         url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}${platform}.tar.gz";
+        curlOptsList = [ "--user-agent" "Mozilla/5.0" ]; # HTTP 104 otherwise
         inherit sha256;
       };
       nativeBuildInputs = [ makeWrapper ];

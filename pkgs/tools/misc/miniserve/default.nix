@@ -3,33 +3,37 @@
 , fetchFromGitHub
 , installShellFiles
 , stdenv
-, Security
+, darwin
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-pi+dBJE+EqQpyZAkIV7duK1g378J6BgjIiFcjV5H1fQ=";
+    hash = "sha256-iI9J1BGD7/SDLoJ2WfizAEHUXBJH4DiUbfGingef9lM=";
   };
 
-  cargoSha256 = "sha256-nRTGKW33NO2vRkvpNVk4pT1DrHPEsSfhwf8y5pJ+n9U=";
+  cargoSha256 = "sha256-qvV7rJx0Yrv5CLRqSshGf1JUL6nW5KDb7Sv7B6M6WDs=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [
+    curl
   ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
-    "--skip=cant_navigate_up_the_root"
     "--skip=qrcode_hidden_in_tty_when_disabled"
     "--skip=qrcode_shown_in_tty_when_enabled"
   ];
@@ -44,13 +48,13 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/miniserve --print-completions zsh)
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
     changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ figsoda ];
-    # https://hydra.nixos.org/build/162650896/nixlog/1
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

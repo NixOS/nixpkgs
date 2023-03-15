@@ -12,9 +12,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
-  version = "0.6.4";
+  version = "0.6.5";
 
-  sha256 = "sha256-H/qAfgwM0qaIxpVlSAUJJ4/Z3WtvYxJb2TtjKHK6AjE=";
+  sha256 = "sha256-NUEqQk9EcDl23twbo+DUt7QYZrPmWpsRzmi5wIdolqw=";
 
   buildInputs = [
     gtk3
@@ -26,7 +26,7 @@ mkXfceDerivation {
     xfconf
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   configureFlags = [
     "--enable-dbus-start-daemon"

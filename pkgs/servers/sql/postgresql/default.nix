@@ -3,11 +3,11 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic
+      , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -22,6 +22,7 @@ let
   let
     atLeast = lib.versionAtLeast version;
     lz4Enabled = atLeast "14";
+    zstdEnabled = atLeast "15";
 
   in stdenv.mkDerivation rec {
     pname = "postgresql";
@@ -45,6 +46,7 @@ let
       icu
     ]
       ++ lib.optionals lz4Enabled [ lz4 ]
+      ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
@@ -60,7 +62,7 @@ let
 
     buildFlags = [ "world" ];
 
-    NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+    env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
     # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
     preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
@@ -76,6 +78,7 @@ let
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
+      ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
@@ -189,7 +192,7 @@ let
 
     # Note: the duplication of executables is about 4MB size.
     # So a nicer solution was patching postgresql to allow setting the
-    # libdir explicitely.
+    # libdir explicitly.
     postBuild = ''
       mkdir -p $out/bin
       rm $out/bin/{pg_config,postgres,pg_ctl}
@@ -204,45 +207,45 @@ let
 in self: {
 
   postgresql_11 = self.callPackage generic {
-    version = "11.18";
+    version = "11.19";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    hash = "sha256-0k8g78UukYrPvMoh6c6ijg4mO4RqDECPz6w7PEoPdQQ=";
+    hash = "sha256-ExCeK3HxE5QFwnIB2jczphrOcu4cIo2cnwMg4GruFMI=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.13";
+    version = "12.14";
     psqlSchema = "12";
-    hash = "sha256-tsYjBGr0VI8RqEtAeTTWddEe0HDHk9FbBGg79fMi4C0=";
+    hash = "sha256-eFYQI304LIQtNW40cTjljAb/6uJA5swLUqxevMMNBD4=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.9";
+    version = "13.10";
     psqlSchema = "13";
-    hash = "sha256-7xlmwKXkn77TNwrSgkkoy2sRZGF67q4WBtooP38zpBU=";
+    hash = "sha256-W7z1pW2FxE86iwWPtGhi/0nLyRg00H4pXQLm3jwhbfI=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
   };
 
   postgresql_14 = self.callPackage generic {
-    version = "14.6";
+    version = "14.7";
     psqlSchema = "14";
-    hash = "sha256-UIhA/BgJ05q3InTV8Tfau5/X+0+TPaQWiu67IAae3yI=";
+    hash = "sha256-zvYPAJj6gQHBVG9CVORbcir1QxM3lFs3ryBwB2MNszE=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
     inherit self;
   };
 
   postgresql_15 = self.callPackage generic {
-    version = "15.1";
+    version = "15.2";
     psqlSchema = "15";
-    hash = "sha256-ZP3yPXNK+tDf5Ad9rKlqxR3NaX5ori09TKbEXLFOIa4=";
+    hash = "sha256-maIXH8PWtbX1a3V6ejy4XVCaOOQnOAXe8jlB7SuEaMc=";
     this = self.postgresql_15;
     thisAttr = "postgresql_15";
     inherit self;

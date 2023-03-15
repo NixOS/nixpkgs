@@ -1,26 +1,31 @@
-{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4, python2, ruby
-, openjdk11-bootstrap }:
+{ stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
+, openjdk11-bootstrap
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "11";
-  update = ".0.3";
+  update = ".0.18";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = (gradle_4.override {
+  gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
   });
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
 
-    src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
-      sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jfx${major}u";
+      rev = repover;
+      sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python2 ruby ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
 
@@ -33,9 +38,6 @@ let
       CONF = Release
       JDK_HOME = ${openjdk11-bootstrap.home}
     '' + args.gradleProperties or "");
-
-    #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
     buildPhase = ''
       runHook preBuild
@@ -65,19 +67,15 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    # Downloaded AWT jars differ by platform.
-    outputHash = {
-      i686-linux = "0mjlyf6jvbis7nrm5d394sjv4hjw6k3753hr1nwdxk8skwc3ry08";
-      x86_64-linux = "0d4msxswdav1xsfkpr0qd3xgqkcbxzf47v1zdy5jmg5w4bs6a78a";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    outputHash = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa9=";
   };
 
 in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = true
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
   preBuild = ''
@@ -91,12 +89,6 @@ in makePackage {
     cp -r build/modular-sdk $out
   '';
 
-  # glib-2.62 deprecations
-  # -fcommon: gstreamer workaround for -fno-common toolchains:
-  #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
-  #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
-
   stripDebugList = [ "." ];
 
   postFixup = ''
@@ -105,6 +97,9 @@ in makePackage {
       new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${openjdk11-bootstrap}[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
+
+    # Remove licenses, otherwise they may conflict with the ones included in the openjdk
+    rm -rf $out/modules_legal/*
   '';
 
   disallowedReferences = [ openjdk11-bootstrap ];
@@ -119,6 +114,6 @@ in makePackage {
     license = licenses.gpl2;
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

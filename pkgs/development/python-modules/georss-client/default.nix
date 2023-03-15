@@ -30,7 +30,7 @@ buildPythonPackage rec {
     dateparser
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

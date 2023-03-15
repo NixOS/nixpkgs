@@ -34,7 +34,7 @@ in {
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerURL" ] ''
       Due to incompatibility, the alertmanagerURL option has been removed,
-      please use 'services.prometheus2.alertmanagers' instead.
+      please use 'services.prometheus.alertmanagers' instead.
     '')
   ];
 
@@ -107,7 +107,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9093;
         description = lib.mdDoc ''
           Port to listen on for the web interface and API.

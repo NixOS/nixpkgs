@@ -41,6 +41,9 @@ import ../make-test-python.nix ({pkgs, ...}:
     server = { pkgs, ... }: {
       environment = {
         etc = {
+          "peertube/secrets-peertube".text = ''
+            063d9c60d519597acef26003d5ecc32729083965d09181ef3949200cbe5f09ee
+          '';
           "peertube/password-posgressql-db".text = ''
             0gUN0C1mgST6czvjZ8T9
           '';
@@ -66,6 +69,10 @@ import ../make-test-python.nix ({pkgs, ...}:
         enable = true;
         localDomain = "peertube.local";
         enableWebHttps = false;
+
+        secrets = {
+          secretsFile = "/etc/peertube/secrets-peertube";
+        };
 
         database = {
           host = "192.168.2.10";

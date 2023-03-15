@@ -28,7 +28,7 @@ buildPythonPackage {
     rm pytest.ini
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -6,9 +6,12 @@
 , SDL2
 , gtk3, gtksourceview3
 , alsa-lib, libao, openal, libpulseaudio
-, libicns, Cocoa, OpenAL
+, libicns, makeWrapper, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Cocoa OpenAL;
+in
 stdenv.mkDerivation {
   pname = "bsnes-hd";
   version = "10.6-beta";
@@ -35,8 +38,9 @@ stdenv.mkDerivation {
     ./macos-copy-app-to-prefix.patch
   ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ]
-    ++ lib.optionals stdenv.isDarwin [ libicns ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals stdenv.isLinux [ wrapGAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ libicns makeWrapper ];
 
   buildInputs = [ SDL2 libao ]
     ++ lib.optionals stdenv.isLinux [ libX11 libXv udev gtk3 gtksourceview3 alsa-lib openal libpulseaudio ]
@@ -44,10 +48,17 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "-C" "bsnes" "hiro=gtk3" "prefix=$(out)" ];
+  makeFlags = [ "-C" "bsnes" "prefix=$(out)" ]
+    ++ lib.optionals stdenv.isLinux [ "hiro=gtk3" ]
+    ++ lib.optionals stdenv.isDarwin [ "hiro=cocoa" ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/bin
+    makeWrapper $out/{Applications/bsnes.app/Contents/MacOS,bin}/bsnes
+  '';
 
   # https://github.com/bsnes-emu/bsnes/issues/107
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     gappsWrapperArgs+=(
       --prefix GDK_BACKEND : x11
     )
@@ -59,9 +70,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ stevebob ];
     platforms = platforms.unix;
-    # ../nall/traits.hpp:19:14: error: no member named 'is_floating_point_v' in namespace 'std'; did you mean 'is_floating_point'?
-    #   using std::is_floating_point_v;
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
     mainProgram = "bsnes";
   };
 }

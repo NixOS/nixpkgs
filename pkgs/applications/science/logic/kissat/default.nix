@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
-  checkInputs = [ drat-trim p7zip ];
+  nativeCheckInputs = [ drat-trim p7zip ];
   doCheck = true;
 
   # 'make test' assumes that /etc/passwd is not writable.

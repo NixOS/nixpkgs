@@ -66,7 +66,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 9092;
       description = lib.mdDoc "Port of Kapacitor";
     };

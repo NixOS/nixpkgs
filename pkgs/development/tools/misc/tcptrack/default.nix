@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libpcap ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   meta = with lib; {
     inherit (src.meta) homepage;

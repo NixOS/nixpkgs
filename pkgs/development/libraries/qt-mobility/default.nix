@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "14713pbscysd6d0b9rgm7gg145jzwvgdn22778pf2v13qzvfmy1i";
   };
 
-  NIX_CFLAGS_COMPILE="-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   configurePhase = ''
     ./configure -prefix $out

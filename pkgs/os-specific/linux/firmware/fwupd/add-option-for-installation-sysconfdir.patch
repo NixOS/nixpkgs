@@ -10,7 +10,7 @@ index b0ff5b106..13ac380d0 100644
  )
  endif
 diff --git a/data/meson.build b/data/meson.build
-index 3a77a7bfc..747bd1988 100644
+index 865b20e26..ff1c2657b 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -26,7 +26,7 @@ endif
@@ -20,8 +20,8 @@ index 3a77a7bfc..747bd1988 100644
 -    install_dir: join_paths(sysconfdir, 'fwupd')
 +    install_dir: join_paths(sysconfdir_install, 'fwupd')
    )
-   plugin_quirks += join_paths(meson.current_source_dir(), 'power.quirk')
-   plugin_quirks += join_paths(meson.current_source_dir(), 'cfi.quirk')
+   plugin_quirks += files([
+     'power.quirk',
 diff --git a/data/pki/meson.build b/data/pki/meson.build
 index 3649fecea..c3462744b 100644
 --- a/data/pki/meson.build
@@ -57,20 +57,19 @@ index 3649fecea..c3462744b 100644
  )
  endif
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index 1d1698a7e..5469d00a6 100644
+index c20a1a05e..87b1fa930 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
-@@ -2,7 +2,7 @@ if build_standalone and get_option('lvfs') != 'false'
-   install_data([
-       'lvfs-testing.conf',
-     ],
--    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d')
-+    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d')
-   )
-   con3 = configuration_data()
-   if get_option('lvfs') == 'disabled'
-@@ -15,7 +15,7 @@ if build_standalone and get_option('lvfs') != 'false'
+@@ -15,14 +15,14 @@ if build_standalone and get_option('lvfs') != 'false'
      output: 'lvfs.conf',
+     configuration: con3,
+     install: true,
+-    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+   )
+   configure_file(
+     input: 'lvfs-testing.conf',
+     output: 'lvfs-testing.conf',
      configuration: con3,
      install: true,
 -    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
@@ -78,7 +77,7 @@ index 1d1698a7e..5469d00a6 100644
    )
    i18n.merge_file(
      input: 'lvfs.metainfo.xml',
-@@ -49,12 +49,12 @@ configure_file(
+@@ -54,12 +54,12 @@ configure_file(
    output: 'vendor.conf',
    configuration: con2,
    install: true,
@@ -94,10 +93,10 @@ index 1d1698a7e..5469d00a6 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index e7980e965..2c66e2dc4 100644
+index d3e08af43..30011f548 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -195,6 +195,12 @@ endif
+@@ -193,6 +193,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -111,7 +110,7 @@ index e7980e965..2c66e2dc4 100644
  gio = dependency('gio-2.0', version: '>= 2.45.8')
  giounix = dependency('gio-unix-2.0', version: '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index 6cf92e72e..2e8568292 100644
+index 204690640..6fc7e8437 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,3 +1,4 @@
@@ -120,10 +119,10 @@ index 6cf92e72e..2e8568292 100644
  option('consolekit', type : 'feature', description : 'ConsoleKit support', deprecated: {'true': 'enabled', 'false': 'disabled'})
  option('static_analysis', type : 'boolean', value : false, description : 'enable GCC static analysis support')
 diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
-index 67bd3b9d9..ad04a91b6 100644
+index 88c039f85..62a7691f3 100644
 --- a/plugins/dell-esrt/meson.build
 +++ b/plugins/dell-esrt/meson.build
-@@ -38,6 +38,6 @@ configure_file(
+@@ -27,6 +27,6 @@ configure_file(
    output: 'dell-esrt.conf',
    configuration: con2,
    install: true,
@@ -132,7 +131,7 @@ index 67bd3b9d9..ad04a91b6 100644
  )
  endif
 diff --git a/plugins/msr/meson.build b/plugins/msr/meson.build
-index d626c3ad3..5a2f847d5 100644
+index 23ec5ec82..b03826fc0 100644
 --- a/plugins/msr/meson.build
 +++ b/plugins/msr/meson.build
 @@ -10,7 +10,7 @@ install_data(['fwupd-msr.conf'],
@@ -142,27 +141,27 @@ index d626c3ad3..5a2f847d5 100644
 -  install_dir: join_paths(sysconfdir, 'fwupd')
 +  install_dir: join_paths(sysconfdir_install, 'fwupd')
  )
- shared_module('fu_plugin_msr',
-   fu_hash,
+ plugin_builtins += static_library('fu_plugin_msr',
+   sources: [
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 95606e478..e5355e520 100644
+index 1e35b6ce9..33ca1447f 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -43,7 +43,7 @@ shared_module('fu_plugin_redfish',
- )
+@@ -35,7 +35,7 @@ plugin_builtin_redfish = static_library('fu_plugin_redfish',
+ plugin_builtins += plugin_builtin_redfish
  
  install_data(['redfish.conf'],
 -  install_dir: join_paths(sysconfdir, 'fwupd'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd'),
+   install_mode: 'rw-r-----',
  )
  
- if get_option('tests')
 diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
-index 5f8ffbf90..9ba323e75 100644
+index 71d930e62..399fb5781 100644
 --- a/plugins/thunderbolt/meson.build
 +++ b/plugins/thunderbolt/meson.build
-@@ -32,7 +32,7 @@ fu_plugin_thunderbolt = shared_module('fu_plugin_thunderbolt',
- )
+@@ -19,7 +19,7 @@ plugin_builtin_thunderbolt = static_library('fu_plugin_thunderbolt',
+ plugin_builtins += plugin_builtin_thunderbolt
  
  install_data(['thunderbolt.conf'],
 -  install_dir: join_paths(sysconfdir, 'fwupd')
@@ -171,7 +170,7 @@ index 5f8ffbf90..9ba323e75 100644
  # we use functions from 2.52 in the tests
  if get_option('tests') and run_sanitize_unsafe_tests and umockdev.found() and gio.version().version_compare('>= 2.52')
 diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
-index ef38dc03e..78ff65e1d 100644
+index b4b038313..9c5407c3f 100644
 --- a/plugins/uefi-capsule/meson.build
 +++ b/plugins/uefi-capsule/meson.build
 @@ -20,7 +20,7 @@ if host_machine.system() == 'linux'
@@ -183,7 +182,7 @@ index ef38dc03e..78ff65e1d 100644
    )
  elif host_machine.system() == 'freebsd'
    backend_srcs += 'fu-uefi-backend-freebsd.c'
-@@ -110,7 +110,7 @@ if get_option('compat_cli') and get_option('man')
+@@ -87,7 +87,7 @@ if get_option('compat_cli') and get_option('man')
  endif
  
  install_data(['uefi_capsule.conf'],

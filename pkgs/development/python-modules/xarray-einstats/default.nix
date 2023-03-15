@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xarray-einstats";
-  version = "0.3.0";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-N8ievasPaqusx51FCxcl1FGIjXooyBsRqsuRU73puRM=";
+    hash = "sha256-oDrNR7iVDg7Piti6JNaXGekfrUfK5GWJYbH/g6m4570=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     xarray
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     einops
     numba
     pytestCheckHook
@@ -44,10 +44,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "xarray_einstats"
-  ];
-
-  pytestFlagsArray = [
-    "src/xarray_einstats/tests/"
   ];
 
   meta = with lib; {

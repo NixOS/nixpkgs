@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   PLAT_FLAGS = lib.optionalString stdenv.isx86_64 "-mfpmath=sse -mssse3";
 
   patches = [
-    # Remove unecessary tests (valgrind, coverage)
+    # Remove unnecessary tests (valgrind, coverage)
     ./Makefile.patch
 
     # Fix for building on darwin

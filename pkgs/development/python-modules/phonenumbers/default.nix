@@ -7,17 +7,17 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.12.57";
+  version = "8.13.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BX0ZZpYvuGs9xEe/rCyOJc7td0UJ5JsYCSahOpmRAxg=";
+    hash = "sha256-+L2Sl1unRjt4KK4vleEDe34KuPAj6ej/t8Vg/X9dZtc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for handling international phone numbers";
     homepage = "https://github.com/daviddrysdale/python-phonenumbers";
+    changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fadenb ];
   };

@@ -41,20 +41,20 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/starsector
     rm -r jre_linux # remove bundled jre7
     rm starfarer.api.zip
-    cp -r ./* $out
+    cp -r ./* $out/share/starsector
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
     ln -s $out/graphics/ui/s_icon64.png $out/share/icons/hicolor/64x64/apps/starsector.png
 
-    wrapProgram $out/starsector.sh \
+    wrapProgram $out/share/starsector/starsector.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
-      --chdir "$out"
-    ln -s $out/starsector.sh $out/bin/starsector
+      --chdir "$out/share/starsector"
+    ln -s $out/share/starsector/starsector.sh $out/bin/starsector
 
     runHook postInstall
   '';
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace starsector.sh \
       --replace "./jre_linux/bin/java" "${openjdk}/bin/java" \
-      --replace "./native/linux" "$out/native/linux" \
+      --replace "./native/linux" "$out/share/starsector/native/linux" \
       --replace "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
       --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"
   '';

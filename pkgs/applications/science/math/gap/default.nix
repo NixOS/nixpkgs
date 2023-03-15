@@ -66,11 +66,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.12.1";
+  version = "4.12.2";
 
   src = fetchurl {
     url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
-    sha256 = "sha256-+evvEe4xshDONuPHCWB0K04lMoK71ScK3JMkJzySsBY=";
+    sha256 = "sha256-ZyMIdF63iiIklO6N1nhu3VvDMUVvzGRWrAZL2yjVh6g=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -134,8 +134,6 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/192548#discussion_r992824942
     rm -r "$out/share/gap/pkg"
     cp -ar pkg tst "$out/share/gap"
-
-    makeWrapper "$out/lib/gap/gap" "$out/bin/gap" --add-flags "-l $out/share/gap"
   '';
 
   preFixup = ''

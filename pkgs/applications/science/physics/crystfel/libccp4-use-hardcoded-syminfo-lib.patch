@@ -1,11 +1,12 @@
 diff --git a/ccp4/csymlib.c b/ccp4/csymlib.c
-index 76bc70b..7a0c5dc 100644
+index 76bc70b..3616121 100644
 --- a/ccp4/csymlib.c
 +++ b/ccp4/csymlib.c
-@@ -137,24 +137,7 @@ CCP4SPG *ccp4spg_load_spacegroup(const int numspg, const int ccp4numspg,
+@@ -136,25 +136,7 @@ CCP4SPG *ccp4spg_load_spacegroup(const int numspg, const int ccp4numspg,
+     }
    }
  
-   /* Open the symop file: */
+-  /* Open the symop file: */
 -  if (!(symopfile = getenv("SYMINFO"))) {
 -    if (debug)
 -      printf("Environment variable SYMINFO not set ... guessing location of symmetry file. \n");
@@ -28,3 +29,12 @@ index 76bc70b..7a0c5dc 100644
  
    filein = fopen(symopfile,"r");
    if (!filein) {
+@@ -162,8 +144,6 @@ CCP4SPG *ccp4spg_load_spacegroup(const int numspg, const int ccp4numspg,
+     return NULL;
+   }
+ 
+-  if (!(getenv("SYMINFO"))) free(symopfile);
+-
+   parser = ccp4_parse_start(20);
+   if (parser == NULL) 
+     ccp4_signal(CSYM_ERRNO(CSYMERR_ParserFail),"ccp4spg_load_spacegroup",NULL);

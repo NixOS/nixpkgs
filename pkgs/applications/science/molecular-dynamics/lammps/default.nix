@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     for pack in ${lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
   '';
 
-  # Must do manual build due to LAMMPS requiring a seperate build for
+  # Must do manual build due to LAMMPS requiring a separate build for
   # the libraries and executable. Also non-typical make script
   buildPhase = ''
     make mode=exe ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng

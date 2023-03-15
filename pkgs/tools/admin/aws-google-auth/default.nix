@@ -46,7 +46,7 @@ buildPythonApplication rec {
     tzlocal
   ] ++ lib.optional withU2F python-u2flib-host;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
   ];

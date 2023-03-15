@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
   # make the testsuite run with pytest, so we can disable individual tests
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
-    homepage = "http://www.mypy-lang.org";
+    homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
   };

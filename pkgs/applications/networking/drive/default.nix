@@ -1,25 +1,35 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "drive";
-  version = "0.3.8.1";
-
-  goPackagePath = "github.com/odeke-em/drive";
-  subPackages = [ "cmd/drive" ];
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "odeke-em";
     repo = "drive";
     rev = "v${version}";
-    sha256 = "1b9cgc148rg5irg4jas10zv9i2km75x1zin25hld340dmpjcpi82";
+    hash = "sha256-mNOeOB0Tn5eqULFJZuE18PvLoHtnspv4AElmgEQKXcU=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-F/ikdr7UCVlNv2yiEemyB7eIkYi3mX+rJvSfX488RFc=";
+
+  patches = [
+    # Add Go Modules support
+    (fetchpatch {
+      url = "https://github.com/odeke-em/drive/commit/0fb4bb2cf83a7293d9a33b00f8fc07e1c8dd8b7c.patch";
+      hash = "sha256-4PxsgfufhTfmy/7N5QahIhmRa0rb2eUDXJ66pYb6jFg=";
+    })
+  ];
+
+  subPackages = [ "cmd/drive" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/odeke-em/drive";
     description = "Google Drive client for the commandline";
     license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     platforms = platforms.unix;
   };
 }

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-mg0JlpW/Yh1GgN1sc/atVH9qNEL72+gMSx2qHtvEkvw=";
   };
 
-  checkInputs = [ pytest mock glibcLocales ];
+  nativeCheckInputs = [ pytest mock glibcLocales ];
 
   # Default tox.ini parameters not needed
   checkPhase = ''

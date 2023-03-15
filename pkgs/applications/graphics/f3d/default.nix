@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ vtk_9 ]
-    ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   # conflict between VTK and Nixpkgs;
   # see https://github.com/NixOS/nixpkgs/issues/89167

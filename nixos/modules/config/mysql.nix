@@ -181,7 +181,7 @@ in
                 example = "pid";
                 description = lib.mdDoc ''
                   The name of the column in the log table to which the pid of the
-                  process utilising the `pam_mysql's` authentication
+                  process utilising the `pam_mysql` authentication
                   service is stored.
                 '';
               };

@@ -54,7 +54,6 @@ let
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = option no;
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
@@ -71,12 +70,22 @@ let
       PM_ADVANCED_DEBUG                = yes;
       PM_WAKELOCKS                     = yes;
       POWERCAP                         = yes;
+      # ACPI Firmware Performance Data Table Support
+      ACPI_FPDT                        = whenAtLeast "5.12" (option yes);
+      # ACPI Heterogeneous Memory Attribute Table Support
+      ACPI_HMAT                        = whenAtLeast "5.2" (option yes);
+      # ACPI Platform Error Interface
+      ACPI_APEI                        = (option yes);
+      # APEI Generic Hardware Error Source
+      ACPI_APEI_GHES                   = (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
-      X86_AMD_PSTATE                   = whenAtLeast "5.17" module;
+      X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
+      # Intel DPTF (Dynamic Platform and Thermal Framework) Support
+      ACPI_DPTF                        = whenAtLeast "5.10" yes;
     };
 
     external-firmware = {
@@ -276,7 +285,7 @@ let
 
     video = {
       DRM_LEGACY = no;
-      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
@@ -284,7 +293,7 @@ let
       DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
-      DRM_VMWGFX_FBCON       = yes;
+      DRM_VMWGFX_FBCON       = whenOlder "6.2" yes;
       # (experimental) amdgpu support for verde and newer chipsets
       DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
@@ -304,6 +313,8 @@ let
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
+      # Enable Hyper-V Synthetic DRM Driver
+      DRM_HYPERV = whenAtLeast "5.14" module;
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
@@ -389,7 +400,7 @@ let
 
       TMPFS           = yes;
       TMPFS_POSIX_ACL = yes;
-      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else whenAtLeast "4.9" (option module);
+      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else option module;
 
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -400,7 +411,7 @@ let
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY  = yes;
-      EXT4_ENCRYPTION   = option yes;
+      EXT4_ENCRYPTION   = whenOlder "5.1" yes;
 
       NTFS_FS            = whenAtLeast "5.15" no;
       NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
@@ -426,11 +437,11 @@ let
 
       F2FS_FS             = module;
       F2FS_FS_SECURITY    = option yes;
-      F2FS_FS_ENCRYPTION  = option yes;
+      F2FS_FS_ENCRYPTION  = whenOlder "5.1" yes;
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = yes;
+      NFSD_V2_ACL            = whenOlder "6.2" yes;
       NFSD_V3                = whenOlder "5.18" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
@@ -456,7 +467,7 @@ let
       CEPH_FS_POSIX_ACL = yes;
 
       SQUASHFS_FILE_DIRECT         = yes;
-      SQUASHFS_DECOMP_MULTI_PERCPU = yes;
+      SQUASHFS_DECOMP_MULTI_PERCPU = whenOlder "6.2" yes;
       SQUASHFS_XATTR               = yes;
       SQUASHFS_ZLIB                = yes;
       SQUASHFS_LZO                 = yes;
@@ -501,13 +512,13 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
-      RANDOM_TRUST_CPU                 = whenAtLeast "4.19" yes; # allow RDRAND to seed the RNG
-      RANDOM_TRUST_BOOTLOADER          = whenAtLeast "5.4" yes; # allow the bootloader to seed the RNG
+      RANDOM_TRUST_CPU                 = whenOlder "6.2" (whenAtLeast "4.19" yes); # allow RDRAND to seed the RNG
+      RANDOM_TRUST_BOOTLOADER          = whenOlder "6.2" (whenAtLeast "5.4" yes); # allow the bootloader to seed the RNG
 
       MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
-      SECURITY_LOCKDOWN_LSM = option no;
+      SECURITY_LOCKDOWN_LSM = whenAtLeast "5.4" no;
 
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS              = yes;
@@ -522,6 +533,15 @@ let
       X86_SGX     = whenAtLeast "5.11" yes;
       # Allow KVM guests to load SGX enclaves
       X86_SGX_KVM = whenAtLeast "5.13" yes;
+
+      # AMD Cryptographic Coprocessor (CCP)
+      CRYPTO_DEV_CCP  = yes;
+      # AMD SME
+      AMD_MEM_ENCRYPT = yes;
+      # AMD SEV and AMD SEV-SE
+      KVM_AMD_SEV     = whenAtLeast "4.16" yes;
+      # AMD SEV-SNP
+      SEV_GUEST       = whenAtLeast "5.19" module;
     };
 
     microcode = {
@@ -620,16 +640,16 @@ let
       XEN_PVH                     = option yes;
       XEN_PVHVM                   = option yes;
       XEN_SAVE_RESTORE            = option yes;
-      XEN_SCRUB_PAGES             = option yes;
-      XEN_SELFBALLOONING          = option yes;
-      XEN_STUB                    = option yes;
-      XEN_TMEM                    = option yes;
+      XEN_SCRUB_PAGES             = whenOlder "4.19" yes;
+      XEN_SELFBALLOONING          = whenOlder "5.3" yes;
+
+      # Enable device detection on virtio-mmio hypervisors
+      VIRTIO_MMIO_CMDLINE_DEVICES = yes;
     };
 
     media = {
       MEDIA_DIGITAL_TV_SUPPORT = yes;
       MEDIA_CAMERA_SUPPORT     = yes;
-      MEDIA_RC_SUPPORT         = whenOlder "4.14" yes;
       MEDIA_CONTROLLER         = yes;
       MEDIA_PCI_SUPPORT        = yes;
       MEDIA_USB_SUPPORT        = yes;
@@ -709,7 +729,8 @@ let
       LOCK_TORTURE_TEST        = option no;
       MTD_TESTS                = option no;
       NOTIFIER_ERROR_INJECTION = option no;
-      RCU_PERF_TEST            = option no;
+      RCU_PERF_TEST            = whenOlder "5.9" no;
+      RCU_SCALE_TEST           = whenAtLeast "5.10" no;
       RCU_TORTURE_TEST         = option no;
       TEST_ASYNC_DRIVER_PROBE  = option no;
       WW_MUTEX_SELFTEST        = option no;
@@ -822,7 +843,7 @@ let
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
       EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
-          whenAtLeast "5.8" yes; # initrd kernel parameter for EFI
+          whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231
@@ -930,6 +951,9 @@ let
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
 
       SCHED_CORE = whenAtLeast "5.14" yes;
+
+      LRU_GEN = whenAtLeast "6.1"  yes;
+      LRU_GEN_ENABLED =  whenAtLeast "6.1" yes;
 
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 

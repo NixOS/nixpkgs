@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fR3CeF+ScvDoPJaevAAShUdZDDjD/ocZQl7dIk2jHso=";
+    sha256 = "sha256-kUKqZEphEohBR8f6Y5j5QEFeLI14iaivKWVPimSiLkg=";
   };
 
-  cargoSha256 = "sha256-VH/eu0qLh59J6uyj0RSqqEhlwghYg/JPp6u54BQzLPo=";
+  cargoHash = "sha256-rqMrsll82Ij0ZwYKJuC4st9sNrGFYB3x44vAOcUTtHQ=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config
@@ -21,6 +21,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     Security
+  ];
+
+  # FIXME: checkPhase on darwin will leave some zombie spawn processes
+  # see https://github.com/NixOS/nixpkgs/issues/205620
+  doCheck = !stdenv.isDarwin;
+  checkFlags = [
+    # tests depend on network interface, may fail with virtual IPs.
+    "--skip=validate_printed_urls"
   ];
 
   meta = with lib; {

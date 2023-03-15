@@ -2,6 +2,7 @@
 , curl, db, libgeotiff
 , xorg, motif, pcre
 , perl, proj, rastermagick, shapelib
+, libax25
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     curl db libgeotiff
     xorg.libXpm xorg.libXt motif pcre
     perl proj rastermagick shapelib
+    libax25
   ];
 
   configureFlags = [ "--with-motif-includes=${motif}/include" ];

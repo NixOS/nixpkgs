@@ -3,7 +3,7 @@
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
-, makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
+, makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl, openssl_1_1
 } @ args:
 
@@ -47,7 +47,7 @@ let
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
-      , makeWrapper, buildRubyGem, defaultGemConfig
+      , makeBinaryWrapper, buildRubyGem, defaultGemConfig
       , baseRuby ? buildPackages.ruby_3_1.override {
           useRailsExpress = false;
           docSupport = false;
@@ -97,6 +97,13 @@ let
           }).${ver.majMinTiny}
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
+          ++ ops (ver.majMin == "3.0") [
+            # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
+            (fetchpatch {
+              url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
+              sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
+            })
+          ]
           ++ ops (!atLeast30 && rubygemsSupport) [
             # We upgrade rubygems to a version that isn't compatible with the
             # ruby 2.7 installer. Backport the upstream fix.
@@ -187,11 +194,17 @@ let
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
+
+          # Allow to override compiler. This is important for cross compiling as
+          # we need to set a compiler that is different from the build one.
+          sed -i 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/'  "$rbConfig"
+
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
+          find "$out/${passthru.gemPath}" -name gem_make.out -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -222,6 +235,21 @@ let
             $rbConfig $out/lib/libruby*
         '';
 
+        installCheckPhase = ''
+          overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
+          if [[ "$overriden_cc" != "foo" ]]; then
+             echo "CC cannot be overwritten: $overriden_cc != foo" >&2
+             false
+          fi
+
+          fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
+          if [[ "$fallback_cc" != "$CC" ]]; then
+             echo "CC='$fallback_cc' should be '$CC' by default" >&2
+             false
+          fi
+        '';
+        doInstallCheck = true;
+
         disallowedRequisites = op (!jitSupport) stdenv.cc.cc
           ++ op useBaseRuby baseRuby;
 
@@ -244,10 +272,10 @@ let
           };
 
           inherit (import ../../ruby-modules/with-packages {
-            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
             ruby = self;
-          }) withPackages gems;
+          }) withPackages buildGems gems;
 
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
@@ -260,13 +288,13 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "6" "";
-    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
+    version = rubyVersion "2" "7" "7" "";
+    sha256 = "sha256-4QEn22kdf/NkAs/oj0GMjQJaPx7qkgRLFi3XLwuMe5A=";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "4" "";
-    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+    version = rubyVersion "3" "0" "5" "";
+    sha256 = "sha256-mvxjgKAnpP4a4aPi7MtrSXucWsBjHBLKVvm3vrSEh3Y=";
   };
 
   ruby_3_1 = generic {

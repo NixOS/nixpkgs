@@ -3,18 +3,24 @@
 , minimal ? false, libva-minimal
 , libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
+# for passthru.tests
+, intel-compute-runtime
 , intel-media-driver
+, ffmpeg
+, mpv
+, vaapiIntel
+, vlc
 }:
 
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "sha256-HTwJQpDND4PjiNpUjHtTgkQdkahm2BUe71UDRQpvo6M=";
+    sha256 = "sha256-Vw62xgWzaaWKQWIZDYpVpOgEUQGUNToImEAo6lwiFFU=";
   };
 
   outputs = [ "dev" "out" ];
@@ -31,7 +37,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    inherit intel-media-driver;
+    # other drivers depending on libva and selected application users.
+    # Please get a confirmation from the maintainer before adding more applications.
+    inherit intel-compute-runtime intel-media-driver vaapiIntel mpv vlc;
   };
 
   meta = with lib; {

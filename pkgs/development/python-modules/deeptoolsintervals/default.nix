@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ zlib xz ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     homepage = "https://deeptools.readthedocs.io/en/develop";

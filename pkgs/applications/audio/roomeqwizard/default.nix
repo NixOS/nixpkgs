@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "5.20.5";
 
   src = fetchurl {
-    url = "https://www.roomeqwizard.com/installers/REW_linux_${lib.replaceChars [ "." ] [ "_" ] version}.sh";
+    url = "https://www.roomeqwizard.com/installers/REW_linux_${lib.replaceStrings [ "." ] [ "_" ] version}.sh";
     sha256 = "NYTRiOZmwkni4k+jI2SV84z5umO7+l+eKpwPCdlDD3U=";
   };
 

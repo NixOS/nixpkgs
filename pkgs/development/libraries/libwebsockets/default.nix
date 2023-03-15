@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-why8LAcc4XN0JdTJ1JoNWijKENL5mOHBsi9K4wpYr2c=";
   };
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ openssl zlib libuv ];
 
   nativeBuildInputs = [ cmake ];
@@ -31,10 +33,23 @@ stdenv.mkDerivation rec {
     "-DDISABLE_WERROR=ON"
     "-DLWS_BUILD_HASH=no_hash"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
-  ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
+  ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
+  ++ (
+    if stdenv.hostPlatform.isStatic then
+      [ "-DLWS_WITH_SHARED=OFF" ]
+    else
+      [ "-DLWS_WITH_STATIC=OFF" "-DLWS_LINK_TESTAPPS_DYNAMIC=ON" ]
+  );
 
   postInstall = ''
-    rm -r ${placeholder "out"}/share/libwebsockets-test-server
+    # Fix path that will be incorrect on move to "dev" output.
+    substituteInPlace "$out/lib/cmake/libwebsockets/LibwebsocketsTargets-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}" "$out"
+
+    # The package builds a few test programs that are not usually necessary.
+    # Move those to the dev output.
+    moveToOutput "bin/libwebsockets-test-*" "$dev"
+    moveToOutput "share/libwebsockets-test-*" "$dev"
   '';
 
   # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o

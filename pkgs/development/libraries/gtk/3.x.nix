@@ -46,6 +46,7 @@
 , QuartzCore
 , broadwaySupport ? true
 , wayland-scanner
+, testers
 }:
 
 let
@@ -58,9 +59,9 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.34";
+  version = "3.24.36";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -70,9 +71,11 @@ stdenv.mkDerivation rec {
     gtkCleanImmodulesCache
   ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-28afkN3IIbjRRB8AN03B2kMjour6kHjmHtvl7u+oUuw=";
+    sha256 = "sha256-J6bvFXdDNQyAf/6lm6odcCJtvt6CpelT/9WOpgWf5pE=";
   };
 
   patches = [
@@ -99,7 +102,7 @@ stdenv.mkDerivation rec {
     python3
     sassc
     gdk-pixbuf
-  ] ++ setupHooks ++ lib.optionals withGtkDoc [
+  ] ++ finalAttrs.setupHooks ++ lib.optionals withGtkDoc [
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
@@ -110,7 +113,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
@@ -134,6 +136,8 @@ stdenv.mkDerivation rec {
     libSM
     libXcomposite
     libXcursor
+    libXdamage
+    libXfixes
     libXi
     libXrandr
     libXrender
@@ -167,7 +171,7 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
     # See https://github.com/NixOS/nixpkgs/issues/132259
@@ -211,7 +215,7 @@ stdenv.mkDerivation rec {
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
   '' + lib.optionalString stdenv.isDarwin ''
     # a comment created a cycle between outputs
@@ -224,6 +228,7 @@ stdenv.mkDerivation rec {
       attrPath = "gtk3";
       freeze = true;
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -241,7 +246,14 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    pkgConfigModules = [
+      "gdk-3.0"
+      "gtk+-3.0"
+    ] ++ lib.optionals x11Support [
+      "gdk-x11-3.0"
+      "gtk+-x11-3.0"
+    ];
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
-}
+})

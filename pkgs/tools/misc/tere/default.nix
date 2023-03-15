@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tere";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mgunyho";
     repo = "tere";
     rev = "v${version}";
-    sha256 = "sha256-jousyoro1Mn1+yBzUkGxW7/zbNvF7+Y4/WLRj99Iuy0=";
+    sha256 = "sha256-gEoy7pwZxlCIPTQZVPSo5TIdmSliSSePunXO3hD3Ryo=";
   };
 
-  cargoSha256 = "sha256-hMAxKijmlckkCtQZiC5ubaZQKU2m99gL/MkYoU7zQxU=";
+  cargoSha256 = "sha256-4XvVisRLSHw4jz+nUndWzS1IK2tnzmxdcgqNHHOvkQg=";
 
   postPatch = ''
     rm .cargo/config.toml;

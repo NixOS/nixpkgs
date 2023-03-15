@@ -1,12 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "lerc";
-  version = "3.0";
+  version = "4.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -14,8 +15,17 @@ stdenv.mkDerivation rec {
     owner = "esri";
     repo = "lerc";
     rev = "v${version}";
-    hash = "sha256-QO5+ouQy5nOcAgvxMeBDoSBP+G3ClDjXipnkuSIDcP0=";
+    hash = "sha256-IHY9QtNYsxPz/ksxRMZGHleT+/bawfTYNVRSTAuYQ7Y=";
   };
+
+  patches = [
+    # https://github.com/Esri/lerc/pull/227
+    (fetchpatch {
+      name = "use-cmake-install-full-dir.patch";
+      url = "https://github.com/Esri/lerc/commit/5462ca7f7dfb38c65e16f5abfd96873af177a0f8.patch";
+      hash = "sha256-qaNR3QwLe0AB6vu1nXOh9KhlPdWM3DmgCJj4d0VdOUk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

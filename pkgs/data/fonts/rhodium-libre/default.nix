@@ -1,22 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "RhodiumLibre";
   version = "1.2.0";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "DunwichType";
-  repo = pname;
-  rev = version;
+  src = fetchFromGitHub {
+    owner = "DunwichType";
+    repo = pname;
+    rev = version;
+    hash = "sha256-YCQvUdjEAj4G71WCRCM0+NwiqRqwt1Ggeg9jb/oWEsY=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     install -Dm444 -t $out/share/fonts/opentype/ RhodiumLibre-Regular.otf
     install -Dm444 -t $out/share/fonts/truetype/ RhodiumLibre-Regular.ttf
-  '';
 
-  sha256 = "04ax6bri5vsji465806p8d7zbdf12r5bpvcm9nb8isfqm81ggj0r";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "F/OSS/Libre font for Latin and Devanagari";

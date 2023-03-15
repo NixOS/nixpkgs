@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-dk12IXX5n8xGML1IU7CWMqy2CmIkrLJ84IzXDwsbgb0=";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   meta = with lib; {
     homepage = "https://github.com/madzak/python-json-logger";

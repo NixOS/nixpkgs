@@ -1,6 +1,47 @@
 { lib, requireFile }:
 
+/*
+ * To calculate the hash of an installer, use a command like this:
+ *
+ *   nix --extra-experimental-features nix-command hash file <installer-file>
+ */
+
 let versions = [
+  {
+    version = "13.2.1";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-GA2k+jvE4mTJsIbMHce5c516h/glHLnXdthEfnNmk0w=";
+    installer = "Mathematica_13.2.1_LINUX.sh";
+  }
+  {
+    version = "13.2.1";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-ZvgG2W/gjQIo4hyXHsGta5FyTslrz/ltOe/ZK/U2Sx8=";
+    installer = "Mathematica_13.2.1_BNDL_LINUX.sh";
+  }
+  {
+    version = "13.2.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-T9XOXA6jpgN6bcO/do9sw1L73ABtyxuZCLzftv4Cl6o=";
+    installer = "Mathematica_13.2.0_LINUX.sh";
+  }
+  {
+    version = "13.2.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-YRUvl2H9SwpwDZx04ugd7ZnK5G+t88bzAObXsGGVhk0=";
+    installer = "Mathematica_13.2.0_BNDL_LINUX.sh";
+  }
+  {
+    version = "13.1.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-GZyUYslx/M4aFI3Pj9Osw3/w79/Jp/4T3mRE277pNuM=";
+    installer = "Mathematica_13.1.0_LINUX.sh";
+  }
   {
     version = "13.1.0";
     lang = "en";

@@ -2,8 +2,8 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.15.74";
-  tag = "1.20221028";
+  modDirVersion = "5.15.84";
+  tag = "1.20230106";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -13,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = tag;
-    hash = "sha256-2UdSW9X9prAya9mvEp3i0l3Uim0wtDYEY0WrD2wntaI=";
+    hash = "sha512-6Dcpo81JBvc8NOv1nvO8JwjUgOOviRgHmXLLcGpE/pI2lEOcSeDRlB/FZtflzXTGilapvmwOSx5NxQfAmysHqQ==";
   };
 
   defconfig = {
@@ -41,10 +41,10 @@ lib.overrideDerivation (buildLinux (args // {
   '';
 
   extraMeta = if (rpiVersion < 3) then {
-    platforms = with lib.platforms; [ arm ];
+    platforms = with lib.platforms; arm;
     hydraPlatforms = [];
   } else {
-    platforms = with lib.platforms; [ arm aarch64 ];
+    platforms = with lib.platforms; arm ++ aarch64;
     hydraPlatforms = [ "aarch64-linux" ];
   };
 } // (args.argsOverride or {}))) (oldAttrs: {

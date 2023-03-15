@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  patches = [ ./no-ocamlpath-override.patch ];
+  patches = [ ./no-stream.patch ./no-ocamlpath-override.patch ];
 
   createFindlibDestdir = true;
 

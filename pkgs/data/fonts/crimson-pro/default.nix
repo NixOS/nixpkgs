@@ -13,8 +13,6 @@ stdenv.mkDerivation {
     hash = "sha256-3zFB1AMcC7eNEVA2Mx1OE8rLN9zPzexZ3FtER9wH5ss=";
   };
 
-  dontBuild = true;
-
   installPhase = ''
     runHook preInstall
 

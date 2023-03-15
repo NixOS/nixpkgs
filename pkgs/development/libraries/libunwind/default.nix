@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
-    badPlatforms = [ "riscv32-linux" ];
+    # https://github.com/libunwind/libunwind#libunwind
+    platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd13" "i686-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "x86_64-freebsd13" "x86_64-linux" "x86_64-solaris" ];
     license = licenses.mit;
   };
 }

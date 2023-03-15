@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     cp -a ${parts}/* parts/
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
 
   qmakeFlags = [
     "phoenix.pro"

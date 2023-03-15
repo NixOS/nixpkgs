@@ -27,10 +27,9 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
-  checkInputs = with python3Packages; [ cram ];
+  nativeCheckInputs = with python3Packages; [ cram ];
 
   doCheck = true;
-  checkTarget = "test";
 
   postPatch = ''
     patchShebangs ci/isdir.py src/protocol/gen-pb.py

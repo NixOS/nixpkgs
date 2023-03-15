@@ -16,18 +16,20 @@ let
     ) + "\n";
 
   osReleaseContents = {
-    NAME = "NixOS";
-    ID = "nixos";
+    NAME = "${cfg.distroName}";
+    ID = "${cfg.distroId}";
     VERSION = "${cfg.release} (${cfg.codeName})";
     VERSION_CODENAME = toLower cfg.codeName;
     VERSION_ID = cfg.release;
     BUILD_ID = cfg.version;
-    PRETTY_NAME = "NixOS ${cfg.release} (${cfg.codeName})";
+    PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
     LOGO = "nix-snowflake";
-    HOME_URL = "https://nixos.org/";
-    DOCUMENTATION_URL = "https://nixos.org/learn.html";
-    SUPPORT_URL = "https://nixos.org/community.html";
-    BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+    HOME_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/";
+    DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
+    SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
+    BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
+  } // lib.optionalAttrs (cfg.variant_id != null) {
+    VARIANT_ID = cfg.variant_id;
   };
 
   initrdReleaseContents = osReleaseContents // {
@@ -87,8 +89,35 @@ in
       description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
     };
 
+    nixos.distroId = mkOption {
+      internal = true;
+      type = types.str;
+      default = "nixos";
+      description = lib.mdDoc "The id of the operating system";
+    };
+
+    nixos.distroName = mkOption {
+      internal = true;
+      type = types.str;
+      default = "NixOS";
+      description = lib.mdDoc "The name of the operating system";
+    };
+
+    nixos.variant_id = mkOption {
+      type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+      default = null;
+      description = lib.mdDoc "A lower-case string identifying a specific variant or edition of the operating system";
+      example = "installer";
+    };
+
     stateVersion = mkOption {
       type = types.str;
+      # TODO Remove this and drop the default of the option so people are forced to set it.
+      # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
+      apply = v:
+        lib.warnIf (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
+          "system.stateVersion is not set, defaulting to ${v}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion."
+          v;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
       description = lib.mdDoc ''
@@ -101,7 +130,7 @@ in
         to be compatible. The effect is that NixOS will use
         defaults corresponding to the specified release (such as using
         an older version of PostgreSQL).
-        It‘s perfectly fine and recommended to leave this value at the
+        It’s perfectly fine and recommended to leave this value at the
         release version of the first install of this system.
         Changing this option will not upgrade your system. In fact it
         is meant to stay constant exactly when you upgrade your system.
@@ -140,23 +169,15 @@ in
     environment.etc = {
       "lsb-release".text = attrsToText {
         LSB_VERSION = "${cfg.release} (${cfg.codeName})";
-        DISTRIB_ID = "nixos";
+        DISTRIB_ID = "${cfg.distroId}";
         DISTRIB_RELEASE = cfg.release;
         DISTRIB_CODENAME = toLower cfg.codeName;
-        DISTRIB_DESCRIPTION = "NixOS ${cfg.release} (${cfg.codeName})";
+        DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
       };
 
       "os-release".text = attrsToText osReleaseContents;
     };
 
-    # We have to use `warnings` because when warning in the default of the option
-    # the warning would also be shown when building the manual since the manual
-    # has to evaluate the default.
-    #
-    # TODO Remove this and drop the default of the option so people are forced to set it.
-    # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
-    warnings = lib.optional (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
-      "system.stateVersion is not set, defaulting to ${config.system.stateVersion}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion.";
   };
 
   # uses version info nixpkgs, which requires a full nixpkgs path

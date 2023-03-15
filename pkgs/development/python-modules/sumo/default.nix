@@ -47,7 +47,7 @@ buildPythonPackage rec {
     spglib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

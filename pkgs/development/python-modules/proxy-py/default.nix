@@ -1,7 +1,10 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, bash
 , buildPythonPackage
 , fetchFromGitHub
+, gnumake
+, httpx
 , openssl
 , paramiko
 , pytest-asyncio
@@ -15,7 +18,7 @@
 buildPythonPackage rec {
   pname = "proxy-py";
   version = "2.4.3";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -23,8 +26,17 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
+    hash = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+    --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
+    substituteInPlace pytest.ini \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -35,8 +47,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    httpx
     openssl
+    gnumake
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -46,20 +60,23 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "typing-extensions==3.7.4.3" "typing-extensions"
-  '';
+  disabledTests = [
+    # Test requires network access
+    "test_http2_via_proxy"
+    # Tests run into a timeout
+    "integration"
+  ];
 
   pythonImportsCheck = [
     "proxy"
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
+    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

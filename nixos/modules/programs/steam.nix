@@ -12,14 +12,14 @@ in {
       type        = types.package;
       default     = pkgs.steam.override {
         extraLibraries = pkgs: with config.hardware.opengl;
-          if pkgs.hostPlatform.is64bit
+          if pkgs.stdenv.hostPlatform.is64bit
           then [ package ] ++ extraPackages
           else [ package32 ] ++ extraPackages32;
       };
       defaultText = literalExpression ''
         pkgs.steam.override {
           extraLibraries = pkgs: with config.hardware.opengl;
-            if pkgs.hostPlatform.is64bit
+            if pkgs.stdenv.hostPlatform.is64bit
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
         }

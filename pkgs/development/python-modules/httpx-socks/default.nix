@@ -47,7 +47,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     flask
     hypercorn
     pytest-asyncio

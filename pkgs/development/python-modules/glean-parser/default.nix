@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "6.2.0";
+  version = "7.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-PKUc1PYfM4MxDFErV4zYyHl/mkPQNvIcjNaDekenHc8=";
+    hash = "sha256-IgBaLVTVF4pGkC5EKZvLaa7U6Lwy2r/xit3E26kWEas=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -68,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
     homepage = "https://github.com/mozilla/glean_parser";
+    changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [];
   };

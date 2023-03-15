@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbmc";
-  version = "5.70.0";
+  version = "5.76.1";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-fzc/WrHo+B9oscnTqN8nETcKc34aq4fUX8VLpYJUvRY=";
+    sha256 = "sha256-OVOoAfoqev33c7pIzBGK9HD+zgji/+BWKD33RYJaSDc=";
   };
 
   nativeBuildInputs = [
@@ -60,9 +60,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$out/share/cbmc" \
   '';
 
-  # fix "argument unused during compilation"
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12 but breaks on darwin (with clang)
+    "-Wno-error=maybe-uninitialized"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # fix "argument unused during compilation"
+    "-Wno-unused-command-line-argument"
+  ]);
 
   # TODO: add jbmc support
   cmakeFlags = [ "-DWITH_JBMC=OFF" "-Dsat_impl=cadical" "-Dcadical_INCLUDE_DIR=${cadical.dev}/include" ];
@@ -78,5 +82,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.unix;
+    # https://github.com/diffblue/cbmc/issues/7423
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

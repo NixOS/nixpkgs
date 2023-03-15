@@ -1,18 +1,18 @@
-{ buildPecl, lib, php }:
+{ buildPecl, lib, fetchFromGitHub }:
 
 let
-  versionData = if (lib.versionOlder php.version "8.1") then {
-    version = "3.1.6";
-    sha256 = "1lnmrb5kgq8lbhjs48j3wwhqgk44pnqb1yjq4b5r6ysv9l5wlkjm";
-  } else {
-    version = "3.2.0RC2";
-    sha256 = "dQgXDP3Ifg+D0niWxaJ4ec71Vfr8KH40jv6QbxSyY+4=";
-  };
-in
-buildPecl {
+  version = "3.2.0";
+in buildPecl {
+  inherit version;
+
   pname = "xdebug";
 
-  inherit (versionData) version sha256;
+  src = fetchFromGitHub {
+    owner = "xdebug";
+    repo = "xdebug";
+    rev = version;
+    sha256 = "sha256-GQB69aETp8STyT4GHQQSPJBVEynWifbmGQXUeISvLRI=";
+  };
 
   doCheck = true;
   checkTarget = "test";
@@ -20,6 +20,7 @@ buildPecl {
   zendExtension = true;
 
   meta = with lib; {
+    changelog = "https://github.com/xdebug/xdebug/releases/tag/${version}";
     description = "Provides functions for function traces and profiling";
     license = licenses.php301;
     homepage = "https://xdebug.org/";

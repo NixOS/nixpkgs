@@ -1,30 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, mbedtls, sqlite }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, pkg-config
+, cyclonedds, libmysqlclient, mariadb, mbedtls, sqlite, zeromq
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.13.1";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
-    rev = version;
-    hash = "sha256-FJhM1IdS6Ee54JJqJXpvp0OcTJJo2NaB/uP8w3mf/Yw=";
+    rev = finalAttrs.version;
+    hash = "sha256-eIwUsYPpRZMl1oCuuZeOj0SCBHDaJdmdWdoI4yuqxrg=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix the conflict on function naming in ddsproxy
+    (fetchpatch {
+      url = "https://github.com/emqx/nanomq/commit/20f436a3b9d45f9809d7c7f0714905c657354631.patch";
+      hash = "sha256-ISMlf9QW73oogMTlifi/r08uSxBpzRYvBSJBB1hn2xY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "DESTINATION /etc" "DESTINATION $out/etc"
   '';
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
-  buildInputs = [ mbedtls sqlite ];
+  buildInputs = [ cyclonedds libmysqlclient mariadb mbedtls sqlite zeromq ];
 
   cmakeFlags = [
-    "-DNNG_ENABLE_TLS=ON"
+    "-DBUILD_BENCH=ON"
+    "-DBUILD_DDS_PROXY=ON"
+    "-DBUILD_NANOMQ_CLI=ON"
+    "-DBUILD_ZMQ_GATEWAY=ON"
+    "-DENABLE_RULE_ENGINE=ON"
     "-DNNG_ENABLE_SQLITE=ON"
+    "-DNNG_ENABLE_TLS=ON"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
 
   meta = with lib; {
     description = "An ultra-lightweight and blazing-fast MQTT broker for IoT edge";
@@ -33,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})

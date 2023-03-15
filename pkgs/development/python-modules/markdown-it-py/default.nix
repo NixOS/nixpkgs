@@ -1,16 +1,24 @@
 { lib
 , attrs
 , buildPythonPackage
+, commonmark
 , fetchFromGitHub
 , flit-core
 , linkify-it-py
+, markdown
 , mdurl
-, psutil
-, pytest-benchmark
+, mistletoe
+, mistune
+, myst-parser
+, panflute
+, pyyaml
+, sphinx
+, sphinx-book-theme
+, sphinx-copybutton
+, sphinx-design
 , pytest-regressions
 , pytestCheckHook
 , pythonOlder
-, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -32,23 +40,28 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
-    linkify-it-py
     mdurl
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
-  checkInputs = [
-    psutil
-    pytest-benchmark
+  nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.linkify;
+
+  # disable and remove benchmark tests
+  preCheck = ''
+    rm -r benchmarking
+  '';
 
   pythonImportsCheck = [
     "markdown_it"
   ];
+
+  passthru.optional-dependencies = {
+    compare = [ commonmark markdown mistletoe mistune panflute ];
+    linkify = [ linkify-it-py ];
+    rtd = [ attrs myst-parser pyyaml sphinx sphinx-copybutton sphinx-design sphinx-book-theme ];
+  };
 
   meta = with lib; {
     description = "Markdown parser in Python";

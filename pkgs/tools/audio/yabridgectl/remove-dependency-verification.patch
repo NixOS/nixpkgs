@@ -1,16 +1,17 @@
 diff --git a/tools/yabridgectl/src/actions.rs b/tools/yabridgectl/src/actions.rs
-index 9ecdb140..061a8ff3 100644
+index 25857753..59590e38 100644
 --- a/tools/yabridgectl/src/actions.rs
 +++ b/tools/yabridgectl/src/actions.rs
-@@ -712,13 +712,6 @@ pub fn do_sync(config: &mut Config, options: &SyncOptions) -> Result<()> {
+@@ -835,14 +835,6 @@ pub fn do_sync(config: &mut Config, options: &SyncOptions) -> Result<()> {
      // be the case if we get to this point though.
      verify_path_setup(config)?;
  
 -    // This check is only performed once per combination of Wine and yabridge versions
 -    verify_wine_setup(config)?;
 -
--    // Yabridge uses notify-send to relay important information when something's very wrong, so
--    // we'll check whether this is installed
+-    // Yabridge uses D-Bus notifications to relay important information when something's very wrong,
+-    // so we'll check whether `libdbus-1.so` is available (even though it would be very odd if it
+-    // isn't)
 -    verify_external_dependencies()?;
 -
      Ok(())

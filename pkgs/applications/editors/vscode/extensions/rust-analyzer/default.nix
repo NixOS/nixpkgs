@@ -20,13 +20,13 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2022-05-17";
+  releaseTag = "2023-03-06";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    sha256 = "sha256-vrVpgQYUuJPgK1NMb1nxlCdxjoYo40YkUbZpH2Z2mwM=";
+    sha256 = "sha256-Njlus+vY3N++qWE0JXrGjwcXY2QDFuOV/7NruBBMETY=";
   };
 
   build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-analyzer/build-deps";
@@ -69,6 +69,8 @@ vscode-utils.buildVscodeExtension {
   name = "${pname}-${version}";
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
+  vscodeExtPublisher = publisher;
+  vscodeExtName = pname;
 
   nativeBuildInputs = lib.optionals setDefaultServerPath [ jq moreutils ];
 

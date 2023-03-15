@@ -133,6 +133,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     maintainers = [ maintainers.symphorien ];
   };
 }

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [ pypandoc ];
   propagatedBuildInputs = with python3.pkgs; [ requests ];
-  checkInputs = with python3.pkgs; [ pytestCheckHook requests-mock ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook requests-mock ];
 
   postPatch = ''
     substituteInPlace setup.py \

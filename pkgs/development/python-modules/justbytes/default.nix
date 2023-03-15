@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ justbases ];
-  checkInputs = [ hypothesis ];
+  nativeCheckInputs = [ hypothesis ];
 
   meta = with lib; {
     description = "computing with and displaying bytes";

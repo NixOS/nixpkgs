@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0bcgls7m2zndpd8whgznnd5908jbsa50si2bh88wsn0agcznhv7d";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Backport and updates for the unicodedata module";

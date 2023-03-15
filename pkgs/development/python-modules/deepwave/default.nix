@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ torch pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
     scipy
     pytest-xdist

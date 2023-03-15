@@ -3,20 +3,22 @@
 , lib
 , llvmPackages
 , protobuf
+, rocksdb
 , rustPlatform
 , stdenv
 , writeShellScriptBin
 , Security
+, SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.32";
+  version = "0.9.39-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-bE7PzvkHKAP/nqNkoBMTGvZZwmf8YY+cGnJ2EM/2xAs=";
+    hash = "sha256-Hr3VFqfoBW7VGc7FXLxeCtZDLRMM+jITgR8LGA5uEP8=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -32,19 +34,19 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-NI50KFXvQgUV+G1l5D2gnAo1EohnCpQWlFCZ0iP2CVQ=";
+  cargoHash = "sha256-gLU/3wHiSpOA7oQwmy7v5s3PiAtElJv4EwLqdOyKhds=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  nativeBuildInputs = [ clang ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   preBuild = ''
     export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
     rm .git_commit
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
   # complicated rust environment setup and this is only needed for developer

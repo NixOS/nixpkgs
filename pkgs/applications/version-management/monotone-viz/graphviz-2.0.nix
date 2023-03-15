@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , pkg-config
-, xlibsWrapper
+, libX11
 , libpng
 , libjpeg
 , expat
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xlibsWrapper
+    libX11
     libpng
     libjpeg
     expat
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       "--with-ltdl-include=${libtool}/include"
       "--with-ltdl-lib=${libtool.lib}/lib"
     ]
-    ++ lib.optional (xlibsWrapper == null) "--without-x";
+    ++ lib.optional (libX11 == null) "--without-x";
 
   meta = {
     description = "A program for visualising graphs";

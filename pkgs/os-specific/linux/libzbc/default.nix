@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, autoconf-archive
 , autoreconfHook
 , fetchFromGitHub
 , gtk3
@@ -11,17 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libzbc";
-  version = "5.12.0";
+  version = "5.13.0";
 
   src = fetchFromGitHub {
     owner = "westerndigitalcorporation";
     repo = "libzbc";
     rev = "v${version}";
-    sha256 = "qI09dkMCwMym3j1ELrFDNbNB5hW/CzwmFmZhUNDXsfI=";
+    sha256 = "6xkA96bgQ2Ik1vEwkw7hwjMbjMSlopzv5ziTh60Mjx0=";
   };
 
   nativeBuildInputs = [
-    autoconf-archive # this can be removed with the next release
     autoreconfHook
     libtool
   ] ++ lib.optionals guiSupport [ pkg-config ];

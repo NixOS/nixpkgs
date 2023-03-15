@@ -20,7 +20,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

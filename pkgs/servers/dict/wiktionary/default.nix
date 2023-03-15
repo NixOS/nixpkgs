@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2, dict, glibcLocales }:
+{ lib, stdenv, fetchurl, python3, dict, glibcLocales }:
 
 stdenv.mkDerivation rec {
   pname = "dict-db-wiktionary";
@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "qsha26LL2513SDtriE/0zdPX1zlnpzk1KKk+R9dSdew=";
   };
 
-  # script in nixpkgs does not support python2
-  nativeBuildInputs = [ python2 dict glibcLocales ];
+  nativeBuildInputs = [ python3 dict glibcLocales ];
 
   dontUnpack = true;
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/dictd/
     cd $out/share/dictd
 
-    ${python2.interpreter} -O ${./wiktionary2dict.py} "${src}"
+    ${python3.interpreter} -O ${./wiktionary2dict.py} "${src}"
     dictzip wiktionary-en.dict
     echo en_US.UTF-8 > locale
   '';

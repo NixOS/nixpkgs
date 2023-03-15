@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-order";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Xda5KfvX6qbQ7gdYb2XGI7q7Cv5ytIQ8XxUFXWs7Gx8=";
+    sha256 = "sha256-E50lswgmt47rtCci90fqsUxEuIBZ16cdT3nRSgVyaaU=";
   };
 
   buildInputs = [ pytest ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
     pytest-dependency

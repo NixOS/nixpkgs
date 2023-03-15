@@ -31,8 +31,18 @@ let
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+    maintainers = lib.teams.llvm.members;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
@@ -65,7 +75,7 @@ let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libllvm-polly = callPackage ./llvm {
       inherit llvm_meta;
@@ -78,7 +88,7 @@ let
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     clang-polly-unwrapped = callPackage ./clang {
       inherit llvm_meta;
@@ -117,7 +127,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -154,7 +164,7 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -164,7 +174,7 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false) ''
+      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
         echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags

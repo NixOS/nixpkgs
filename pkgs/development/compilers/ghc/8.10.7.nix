@@ -21,7 +21,9 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
+  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp
+                          && lib.meta.availableOn stdenv.targetPlatform gmp)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -224,14 +226,13 @@ stdenv.mkDerivation (rec {
       sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
     })
   ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
-
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
     #
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./cabal-paths.patch
+    ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";

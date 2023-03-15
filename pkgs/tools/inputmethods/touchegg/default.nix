@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
-  version = "2.0.15";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     owner = "JoseExposito";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oz3+hNNjQ/5vXWPMuhA2N2KK8W8S42WeSeDbhV4oJ9M=";
+    sha256 = "sha256-/0XeFW0cdS1/UaE/z2FROwk2dTyZMqXjiBzt62x8f8o=";
   };
 
   patches = lib.optionals withPantheon [
@@ -68,9 +68,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -38,7 +38,7 @@ buildPythonPackage rec {
     openssh
   ] ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh

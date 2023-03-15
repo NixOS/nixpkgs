@@ -43,7 +43,7 @@ in {
     port = mkOption {
       description = lib.mdDoc "Kibana listening port";
       default = 5601;
-      type = types.int;
+      type = types.port;
     };
 
     cert = mkOption {
