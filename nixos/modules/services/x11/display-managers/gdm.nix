@@ -323,7 +323,7 @@ in
 
         account   sufficient    pam_unix.so
 
-        password  requisite     pam_unix.so nullok sha512
+        password  requisite     pam_unix.so nullok yescrypt
 
         session   optional      pam_keyinit.so revoke
         session   include       login
