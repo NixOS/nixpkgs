@@ -18,6 +18,7 @@ showSyntax() {
 # Parse the command line.
 origArgs=("$@")
 copyClosureFlags=()
+copyFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=(--extra-experimental-features 'nix-command flakes')
@@ -76,6 +77,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --use-substitutes|-s)
         copyClosureFlags+=("$i")
+        copyFlags+=("-s")
         ;;
       -I|--max-jobs|-j|--cores|--builders)
         j="$1"; shift 1
@@ -292,7 +294,7 @@ nixFlakeBuild() {
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix eval failed"
