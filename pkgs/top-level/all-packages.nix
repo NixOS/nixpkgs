@@ -15614,9 +15614,17 @@ with pkgs;
   };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
-  ocaml = ocamlPackages.ocaml;
 
-  ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  # Ocaml package sets
+  ocamlPackages_4_14 = recurseIntoAttrs ocaml-ng.ocamlPackages_4_14;
+  ocamlPackages_5_0 = recurseIntoAttrs ocaml-ng.ocamlPackages_5_0;
+  ocamlPackages_4 = ocamlPackages_4_14;
+  ocamlPackages_5 = ocamlPackages_5_0;
+  ocamlPackages = ocamlPackages_4_14;
+
+  ocaml = ocamlPackages.ocaml;
+  ocaml_4 = ocamlPackages_4.ocaml;
+  ocaml_5 = ocamlPackages_5.ocaml;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
