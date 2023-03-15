@@ -32992,7 +32992,7 @@ with pkgs;
   radioboat = callPackage ../applications/audio/radioboat { };
 
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
   };
 
   raiseorlaunch = callPackage ../applications/misc/raiseorlaunch { };
