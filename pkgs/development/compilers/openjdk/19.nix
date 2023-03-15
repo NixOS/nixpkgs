@@ -9,9 +9,6 @@
 , headless ? stdenv.targetPlatform.isGhcjs
 , enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
-# Hold back make-4.4 as 4.4.1 breaks the build:
-#   https://github.com/NixOS/nixpkgs/issues/219513
-, gnumake44
 }:
 
 let
@@ -32,7 +29,7 @@ let
       hash = "sha256-pBEHmBtIgG4Czou4C/zpBBYZEDImvXiLoA5CjOzpeyI=";
     };
 
-    nativeBuildInputs = [ gnumake44 pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
@@ -62,6 +59,14 @@ let
       (fetchpatch {
         url = "https://git.alpinelinux.org/aports/plain/testing/openjdk19/FixNullPtrCast.patch?id=93dc07f97ff716b647c5f57c6224901ea06da560";
         hash = "sha256-H4X3Yip5bCpXMH7MSu9BgXIOYRVUBMZPZW8EvZSWI5k=";
+      })
+
+      # Fix build for gnumake-4.4.1:
+      #   https://github.com/openjdk/jdk/pull/12992
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
