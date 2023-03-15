@@ -22423,6 +22423,8 @@ with pkgs;
 
   mstore = callPackage ../development/libraries/science/chemistry/mstore { };
 
+  multicharge = callPackage ../development/libraries/science/chemistry/multicharge { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
