@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "offpunk";
-  version = "1.9";
+  version = "1.9.1";
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sxX4/7jbNbLwHVfE1lDtjr/luby5zAf6Hy1RcwXZLBA=";
+    sha256 = "sha256-qBuDamIkz7aUpcVVZOadGATsk8Nx9TqTwwxHSu1HEYE=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
