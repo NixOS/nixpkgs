@@ -5695,6 +5695,8 @@ with pkgs;
 
   rsbkb = callPackage ../tools/text/rsbkb { };
 
+  rsign2 = callPackage ../tools/security/rsign2 { };
+
   rsyslog = callPackage ../tools/system/rsyslog {
     withHadoop = false; # Currently Broken
     withKsi = false; # Currently Broken
