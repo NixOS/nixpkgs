@@ -18,6 +18,8 @@ let
     all
     concatMap
     foldl'
+    take
+    drop
     ;
 
   inherit (lib.strings)
@@ -100,7 +102,28 @@ let
     # An empty string is not a valid relative path, so we need to return a `.` when we have no components
     (if components == [] then "." else concatStringsSep "/" components);
 
+  # Deconstruct a path value type into:
+  # - root: The filesystem root of the path, generally `/`
+  # - components: All the path's components
+  #
+  # This is similar to `splitString "/" (toString path)` but safer
+  # because it can distinguish different filesystem roots
+  deconstructPath =
+    let
+      recurse = components: path:
+        # If the parent of a path is the path itself, then it's a filesystem root
+        if path == dirOf path then { root = path; inherit components; }
+        else recurse ([ (baseNameOf path) ] ++ components) (dirOf path);
+    in recurse [];
+
 in /* No rec! Add dependencies on this file at the top. */ {
+
+  deconstructPath = path:
+    let deconstructed = deconstructPath path;
+    in {
+      root = deconstructed.root;
+      subpath = joinRelPath deconstructed.components;
+    };
 
   /* Append a subpath string to a path.
 
@@ -347,5 +370,41 @@ in /* No rec! Add dependencies on this file at the top. */ {
       lib.path.subpath.normalise: Argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
     joinRelPath (splitRelPath subpath);
+
+  subpath.hasPrefix =
+    prefix:
+    assert assertMsg (isValid prefix) ''
+      lib.path.subpath.hasPrefix: The first argument is not a valid subpath string:
+          ${subpathInvalidReason prefix}'';
+    let
+      splitPrefix = splitRelPath prefix;
+      prefixLength = length splitPrefix;
+    in
+      subpath:
+      assert assertMsg (isValid subpath) ''
+        lib.path.subpath.hasPrefix: The second argument is not a valid subpath string:
+            ${subpathInvalidReason subpath}'';
+      take prefixLength (splitRelPath subpath) == splitPrefix;
+
+  subpath.removePrefix =
+    prefix:
+    assert assertMsg (isValid prefix) ''
+      lib.path.subpath.removePrefix: The first argument is not a valid subpath string:
+          ${subpathInvalidReason prefix}'';
+    let
+      splitPrefix = splitRelPath prefix;
+      prefixLength = length splitPrefix;
+    in
+      subpath:
+      assert assertMsg (isValid subpath) ''
+        lib.path.subpath.removePrefix: The second argument is not a valid subpath string:
+            ${subpathInvalidReason subpath}'';
+      let
+        splitSubpath = splitRelPath subpath;
+      in
+        if take prefixLength splitSubpath == splitPrefix
+        then joinRelPath (drop prefixLength splitSubpath)
+        else throw ''
+          lib.path.subpath.removePrefix: The first argument (${prefix}) is not a subpath prefix of the second argument (${subpath})'';
 
 }

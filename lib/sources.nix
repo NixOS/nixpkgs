@@ -270,6 +270,19 @@ let
       outPath = builtins.path { inherit filter name; path = origSrc; };
     };
 
+  predicateFilter = { name ? "source", src, predicate }:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+      origSrc = if isFiltered then src.origSrc else src;
+      removeBase = lib.path.subpath.removePrefix (lib.path.deconstructPath origSrc).subpath;
+    in lib.cleanSourceWith {
+      inherit name src;
+      filter = absolutePath: type:
+        assert lib.isString absolutePath;
+        let subpath = removeBase (lib.substring 1 (-1) absolutePath);
+        in predicate { inherit type subpath; };
+    };
+
 in {
   inherit
     pathType
@@ -289,5 +302,6 @@ in {
     sourceFilesBySuffices
 
     trace
+    predicateFilter
     ;
 }
