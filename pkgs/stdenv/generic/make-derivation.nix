@@ -441,6 +441,7 @@ else let
     } // lib.optionalAttrs (enableParallelBuilding) {
       inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
+      enableParallelInstalling = attrs.enableParallelInstalling or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {

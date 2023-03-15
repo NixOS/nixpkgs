@@ -95,6 +95,11 @@ stdenv.mkDerivation (args // {
   #  make[2]: *** [Makefile:199: backup] Error 1
   enableParallelBuilding = lib.versionAtLeast version "4.08";
 
+  # Workaround missing dependencies for install parallelism:
+  #  install: target '...-ocaml-4.14.0/lib/ocaml/threads': No such file or directory
+  #  make[1]: *** [Makefile:140: installopt] Error 1
+  enableParallelInstalling = false;
+
   # Workaround lack of parallelism support among top-level targets:
   # we place nixpkgs-specific targets to a separate file and set
   # sequential order among them as a single rule.
