@@ -4,7 +4,6 @@
 , meson
 , pkg-config
 , ninja
-, wrapGAppsHook
 , wayland
 , wlroots
 , gtkmm3
@@ -31,7 +30,6 @@
 , udevSupport     ? true,  udev
 , upowerSupport   ? true,  upower
 , wireplumberSupport ? true, wireplumber
-, withMediaPlayer ? mprisSupport && false, glib, gobject-introspection, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -46,13 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config scdoc wrapGAppsHook
-  ] ++ lib.optional withMediaPlayer gobject-introspection;
-
-  propagatedBuildInputs = lib.optionals withMediaPlayer [
-    glib
-    playerctl
-    python3.pkgs.pygobject3
+    meson ninja pkg-config scdoc
   ];
 
   strictDeps = false;
@@ -99,13 +91,6 @@ stdenv.mkDerivation rec {
     "-Dgtk-layer-shell=enabled"
     "-Dman-pages=enabled"
   ];
-
-  preFixup = lib.optionalString withMediaPlayer ''
-      cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
-
-      wrapProgram $out/bin/waybar-mediaplayer.py \
-        --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
-    '';
 
   meta = with lib; {
     changelog = "https://github.com/alexays/waybar/releases/tag/${version}";

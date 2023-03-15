@@ -30680,6 +30680,7 @@ with pkgs;
   rootbar = callPackage ../applications/misc/rootbar { };
 
   waybar = callPackage ../applications/misc/waybar { };
+  waybar-custom-modules = recurseIntoAttrs (callPackages ../applications/misc/waybar/custom-modules.nix { });
 
   waylock = callPackage ../applications/misc/waylock {
     zig = zig_0_10;
