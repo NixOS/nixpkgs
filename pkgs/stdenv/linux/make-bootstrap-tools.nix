@@ -183,6 +183,10 @@ in with pkgs; rec {
             fi
         done
 
+        rm $out/lib/libgcc_s.so.1
+        cp $(readlink -f $out/lib/libgcc_s.so) $out/lib/libgcc_s.so.1
+        rm $out/lib/libgcc_s.so
+        ln -s libgcc_s.so.1 $out/lib/libgcc_s.so
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
         nuke-refs $out/lib/*/*
