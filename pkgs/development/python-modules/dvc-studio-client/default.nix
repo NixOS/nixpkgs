@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dulwich
 , fetchFromGitHub
 , gitpython
 , pythonOlder
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-studio-client";
-  version = "0.3.0";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LSehY7dIi7UEZim60X0660WzaZp1VuALcxxNCP7Quuk=";
+    hash = "sha256-uCB7Xz9dPJl0kmQsJt7aIWez8bKLCWO7wIU+bsZcoAg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -29,9 +30,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    voluptuous
-    requests
+    dulwich
     gitpython
+    requests
+    voluptuous
   ];
 
   pythonImportsCheck = [
