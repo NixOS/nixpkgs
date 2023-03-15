@@ -6436,6 +6436,8 @@ self: super: with self; {
 
   niaaml = callPackage ../development/python-modules/niaaml { };
 
+  nianet = callPackage ../development/python-modules/nianet { };
+
   niaarm = callPackage ../development/python-modules/niaarm { };
 
   niapy = callPackage ../development/python-modules/niapy { };
