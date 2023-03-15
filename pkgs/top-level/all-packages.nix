@@ -6764,6 +6764,8 @@ with pkgs;
 
   driftctl = callPackage ../applications/networking/cluster/driftctl { };
 
+  eks-node-viewer = callPackage ../applications/networking/cluster/eks-node-viewer { };
+
   drill = callPackage ../tools/networking/drill {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -12152,6 +12154,8 @@ with pkgs;
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
   slowlorust = callPackage ../tools/networking/slowlorust { };
+
+  slsa-verifier = callPackage ../tools/security/slsa-verifier { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
@@ -26829,6 +26833,8 @@ with pkgs;
   qemu_xen-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-light; });
   qemu_xen_4_10 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_10-slim; });
   qemu_xen_4_10-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_10-light; });
+  qemu_xen_4_15 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_15-slim; });
+  qemu_xen_4_15-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_15-light; });
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
@@ -34544,6 +34550,10 @@ with pkgs;
   xen_4_10-slim = xenPackages.xen_4_10-slim;
   xen_4_10-light = xenPackages.xen_4_10-light;
 
+  xen_4_15 = xenPackages.xen_4_15-vanilla;
+  xen_4_15-slim = xenPackages.xen_4_15-slim;
+  xen_4_15-light = xenPackages.xen_4_15-light;
+
   xkbset = callPackage ../tools/X11/xkbset { };
 
   xkbmon = callPackage ../applications/misc/xkbmon { };
@@ -38320,7 +38330,9 @@ with pkgs;
 
   dnadd = callPackage ../tools/nix/dnadd { };
 
-  nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs { };
+  nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
+    nix = nixVersions.nix_2_14;
+  };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
 
