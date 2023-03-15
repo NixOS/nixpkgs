@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lefthook";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "evilmartians";
     repo = "lefthook";
-    sha256 = "sha256-9XmLQPkc8we5wRZe5+bhL1b9lxWX6JAQeF4DmRXBgew=";
+    sha256 = "sha256-D+QI29i7xBhOFeA05iGWoFh5zv9Se8Q3Vxiu8iHfzbE=";
   };
 
   vendorHash = "sha256-VeR/lyrQrjXWvHdxpG4H+XPlAud9rrlzX8GqhVzn1sg=";
