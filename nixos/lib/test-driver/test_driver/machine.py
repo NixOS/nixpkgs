@@ -946,6 +946,15 @@ class Machine:
         self.send_monitor_command("quit")
         self.wait_for_shutdown()
 
+    def reboot(self) -> None:
+        """Press Ctrl+Alt+Delete in the guest.
+
+        Prepares the machine to be reconnected which is useful if the
+        machine was started after setting `machine.allow_reboot = True`
+        """
+        self.send_key(f"ctrl-alt-delete")
+        self.connected = False
+
     def wait_for_x(self) -> None:
         """Wait until it is possible to connect to the X server.  Note that
         testing the existence of /tmp/.X11-unix/X0 is insufficient.
