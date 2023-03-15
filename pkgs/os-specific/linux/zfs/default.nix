@@ -238,11 +238,11 @@ in {
     #   zfs-2.1.9<=x<=2.1.10 is broken with aarch64-linux-6.2
     #   for future releases, please delete this condition.
     kernelCompatible =
-      if kernel.stdenv.isx86_64
+      if stdenv'.isx86_64
       then kernel.kernelOlder "6.3"
       else kernel.kernelOlder "6.2";
     latestCompatibleLinuxPackages =
-      if kernel.stdenv.isx86_64
+      if stdenv'.isx86_64
       then linuxPackages_6_2
       else linuxPackages_6_1;
 
