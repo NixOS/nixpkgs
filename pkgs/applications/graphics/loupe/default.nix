@@ -16,25 +16,25 @@
 , libgweather
 , librsvg
 , shared-mime-info
+, libheif
+, libxml2
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  # latest maeson.build requires gtk4 >=4.9.4
-  # and gtk4-sys with feature v4_10 requires gtk4 >= 4.9
-  version = "unstable-2023-03-01";
+  version = "unstable-2023-03-14";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "Incubator";
     repo = "loupe";
-    rev = "01bebfef384610169d020ea31b083af7cc4eb1db";
-    hash = "sha256-FFsE5sXkmPti8hYwKjMo1xwgjep8CzxXZFm32JDYKZc=";
+    rev = "889c818c14179e3f4755fb56f38d1af603e009cf";
+    hash = "sha256-9FNUAypm2GAd8/deEbNhCV+eIEGxOBCzFyytKaK9dnw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
-    hash = "sha256-a9w6WmTEuuKY956RAhmiCo+ty/9dWjfI6JnXKCSa8JM=";
+    hash = "sha256-tUi+y6raAhfG1bvUuSR/MRIax3OhExOBxn8gElLBRfI=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     libgweather
     librsvg
     shared-mime-info
+    libheif
+    libxml2
   ];
 
   # based on eog
