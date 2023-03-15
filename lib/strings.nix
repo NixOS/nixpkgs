@@ -601,14 +601,23 @@ rec {
     prefix:
     # Input string
     str:
-    let
+    # Before 23.05, paths would be copied to the store before converting them
+    # to strings and comparing. This was surprising and confusing.
+    warnIf
+      (isPath prefix)
+      ''
+        lib.strings.removePrefix: The first argument (${toString prefix}) is a path value, but only strings are supported.
+            There is almost certainly a bug in the calling code, since this function never removes any prefix in such a case.
+            This function also copies the path to the Nix store, which may not be what you want.
+            This behavior is deprecated and will throw an error in the future.''
+    (let
       preLen = stringLength prefix;
       sLen = stringLength str;
     in
-      if hasPrefix prefix str then
+      if substring 0 preLen str == prefix then
         substring preLen (sLen - preLen) str
       else
-        str;
+        str);
 
   /* Return a string without the specified suffix, if the suffix matches.
 
@@ -625,14 +634,23 @@ rec {
     suffix:
     # Input string
     str:
-    let
+    # Before 23.05, paths would be copied to the store before converting them
+    # to strings and comparing. This was surprising and confusing.
+    warnIf
+      (isPath suffix)
+      ''
+        lib.strings.removeSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
+            There is almost certainly a bug in the calling code, since this function never removes any suffix in such a case.
+            This function also copies the path to the Nix store, which may not be what you want.
+            This behavior is deprecated and will throw an error in the future.''
+    (let
       sufLen = stringLength suffix;
       sLen = stringLength str;
     in
       if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
         substring 0 (sLen - sufLen) str
       else
-        str;
+        str);
 
   /* Return true if string v1 denotes a version older than v2.
 
