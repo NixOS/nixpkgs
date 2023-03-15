@@ -9232,6 +9232,8 @@ self: super: with self; {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
+
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
   pytest-quickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
@@ -11541,6 +11543,8 @@ self: super: with self; {
   testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
 
   testpath = callPackage ../development/python-modules/testpath { };
+
+  testrail-api = callPackage ../development/python-modules/testrail-api { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
 
