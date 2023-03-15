@@ -3,6 +3,7 @@
 buildGoModule rec {
   pname = "shadowsocks-v2ray-plugin";
   version = "1.3.1";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "shadowsocks";
