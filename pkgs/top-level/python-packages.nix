@@ -6454,6 +6454,8 @@ self: super: with self; {
 
   niaaml = callPackage ../development/python-modules/niaaml { };
 
+  nianet = callPackage ../development/python-modules/nianet { };
+
   niaarm = callPackage ../development/python-modules/niaarm { };
 
   niapy = callPackage ../development/python-modules/niapy { };
@@ -9252,6 +9254,8 @@ self: super: with self; {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
+
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
   pytest-quickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
@@ -11568,6 +11572,8 @@ self: super: with self; {
   testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
 
   testpath = callPackage ../development/python-modules/testpath { };
+
+  testrail-api = callPackage ../development/python-modules/testrail-api { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
 
