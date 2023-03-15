@@ -24622,7 +24622,11 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.0"; };
     faslExt = "fasl";
   };
-  sbcl = sbcl_2_3_0;
+  sbcl_2_3_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.2"; };
+    faslExt = "fasl";
+  };
+  sbcl = sbcl_2_3_2;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
