@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
+    changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ globin ];
   };
