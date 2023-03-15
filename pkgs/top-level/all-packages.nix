@@ -22419,6 +22419,8 @@ with pkgs;
 
   mergerfs-tools = callPackage ../tools/filesystems/mergerfs/tools.nix { };
 
+  mctc-lib = callPackage ../development/libraries/science/chemistry/mctc-lib { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
