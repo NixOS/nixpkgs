@@ -30,6 +30,13 @@ rustPlatform.buildRustPackage rec {
     nix
   ];
 
+  # not compatible with current nix version:
+  # $ harmonia
+  # The program must call nix::initNix() before calling any libstore library functions.
+  # [1]    148943 IOT instruction (core dumped)  ./result/bin/harmonia
+  # See https://github.com/nix-community/harmonia/ for a maintained fork
+  broken = true;
+
   meta = with lib; {
     description = "Nix binary cache";
     homepage = "https://github.com/helsinki-systems/harmonia";
