@@ -345,6 +345,7 @@ in {
   keter = handleTest ./keter.nix {};
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
+  keyd = handleTest ./keyd.nix {};
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
   komga = handleTest ./komga.nix {};
