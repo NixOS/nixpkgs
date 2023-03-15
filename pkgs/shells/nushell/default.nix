@@ -26,7 +26,7 @@
 
 rustPlatform.buildRustPackage (
   let
-    version =  "0.76.0";
+    version =  "0.77.0";
     pname = "nushell";
   in {
   inherit version pname;
@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage (
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-dGsnbKsg0nQFFXZDRDei2uGhGWEQSeSHGpXJp+8QUC8=";
+    sha256 = "sha256-cffAxuM12wdd7IeLbKSpL6dpvpZVscA8nMOh3jFqY3E=";
   };
 
-  cargoSha256 = "sha256-9oXMojQA4tSoIxY1lwMPGhQz3WHcxEKtwl+4LsAYbDo=";
+  cargoSha256 = "sha256-OcYE9d3hO3JtxF3REWev0Rz97Kr9l7P7nUxhIb5fhi0=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
