@@ -41,11 +41,8 @@ buildPythonPackage rec {
       --replace '=get_requires()' '=[]'
   '';
 
-  disabledTests = [
-    # Output formatting error
-    "pycm.pycm_compare.Compare"
-    "plot_test"
-  ];
+  # https://github.com/sepandhaghighi/pycm/issues/488
+  pytestFlagsArray = [ "Test" ];
 
   pythonImportsCheck = [
     "pycm"
@@ -53,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multiclass confusion matrix library";
-    homepage = "https://pycm.ir";
+    homepage = "https://pycm.io";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
