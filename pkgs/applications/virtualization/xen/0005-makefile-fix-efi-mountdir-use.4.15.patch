@@ -11,9 +11,11 @@ because I can't see why we have it
 2) Ensures the said directory exists
 
 
---- a/xen/Makefile	2016-01-08 01:50:58.028045657 +0000
-+++ b/xen/Makefile	2016-01-08 01:51:33.560268718 +0000
-@@ -49,7 +49,9 @@
+diff --git a/xen/Makefile b/xen/Makefile
+index acb2d28891..d0763fbbe7 100644
+--- a/xen/Makefile
++++ b/xen/Makefile
+@@ -289,7 +289,9 @@ _install: $(TARGET)$(CONFIG_XEN_INSTALL_SUFFIX)
  		ln -sf $(T)-$(XEN_FULLVERSION).efi $(D)$(EFI_DIR)/$(T)-$(XEN_VERSION).efi; \
  		ln -sf $(T)-$(XEN_FULLVERSION).efi $(D)$(EFI_DIR)/$(T).efi; \
  		if [ -n '$(EFI_MOUNTPOINT)' -a -n '$(EFI_VENDOR)' ]; then \
@@ -24,8 +26,8 @@ because I can't see why we have it
  		elif [ "$(D)" = "$(patsubst $(shell cd $(XEN_ROOT) && pwd)/%,%,$(D))" ]; then \
  			echo 'EFI installation only partially done (EFI_VENDOR not set)' >&2; \
  		fi; \
-@@ -69,7 +69,7 @@
- 	rm -f $(D)$(EFI_DIR)/$(T)-$(XEN_VERSION).$(XEN_SUBVERSION).efi
+@@ -319,7 +321,7 @@ _uninstall:
+ 	rm -f $(D)$(DEBUG_DIR)/$(T)-$(XEN_FULLVERSION).efi.map
  	rm -f $(D)$(EFI_DIR)/$(T)-$(XEN_VERSION).efi
  	rm -f $(D)$(EFI_DIR)/$(T).efi
 -	rm -f $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi

@@ -27,12 +27,12 @@ let
 
     OPENSSL_NO_VENDOR = true;
 
-    # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.7.2/default.nix#L84-L98
+    # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.8.2/nix/compile.nix#L192-L198
     # on version changes for checking if changes are required here
     buildFeatures = [
       "kubernetes-discovery"
     ] ++
-    (lib.optional (lib.versionAtLeast version "0.8") [
+    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "metrics"
@@ -50,16 +50,12 @@ let
       "k2v"
       "kubernetes-discovery"
     ] ++
-    (lib.optional (lib.versionAtLeast version "0.8") [
+    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "lmdb"
       "sqlite"
     ]);
-
-    # Workaround until upstream fixes integration test race condition
-    # https://git.deuxfleurs.fr/Deuxfleurs/garage/issues/528
-    dontUseCargoParallelTests = true;
 
     passthru = nixosTests.garage;
 
@@ -87,13 +83,13 @@ in
 
     garage_0_7 = garage_0_7_3;
 
-    garage_0_8_1 = generic {
-      version = "0.8.1";
-      sha256 = "sha256-lpNp/jw4YaczG3NM3pVWR0cZ8u/KBQCWvvfAswO4+Do=";
-      cargoSha256 = "sha256-TXHSAnttXfxoFLOP+vsd86O8sVoyrSkadij26cF4aXI=";
+    garage_0_8_2 = generic {
+      version = "0.8.2";
+      sha256 = "sha256-IlDWbNWI1yXvPPF3HIqQvo79M2FQCtoX1wRLJrDbd9k=";
+      cargoSha256 = "sha256-6l4tDBMcOvckTkEO05rman4hHlmVbBt1nCeX5/dETKk=";
     };
 
-    garage_0_8 = garage_0_8_1;
+    garage_0_8 = garage_0_8_2;
 
     garage = garage_0_8;
   }

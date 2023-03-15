@@ -2503,6 +2503,12 @@
     matrix = "@cawilliamson:nixos.dev";
     name = "Christopher A. Williamson";
   };
+  cbleslie = {
+    email = "cameronleslie@gmail.com";
+    github = "cbleslie";
+    githubId = 500963;
+    name = "C.B.Leslie";
+  };
   cbley = {
     email = "claudio.bley@gmail.com";
     github = "avdv";
@@ -16675,7 +16681,8 @@
     }];
   };
   yuu = {
-    email = "yuuyin@protonmail.com";
+    email = "yuunix@grrlz.net";
+    matrix = "@yuu:matrix.org";
     github = "yuuyins";
     githubId = 86538850;
     name = "Yuu Yin";

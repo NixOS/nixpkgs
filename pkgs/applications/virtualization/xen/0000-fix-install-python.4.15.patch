@@ -1,10 +1,10 @@
 tools/python/install-wrap script brakes shebangs patching, disable
 
 diff --git a/tools/Rules.mk b/tools/Rules.mk
-index 87a56dc..a7da869 100644
+index 444e5bacdd..c99ea959ff 100644
 --- a/tools/Rules.mk
 +++ b/tools/Rules.mk
-@@ -90,8 +90,7 @@ CFLAGS += $(CFLAGS-y)
+@@ -135,8 +135,7 @@ CFLAGS += $(CFLAGS-y)
  
  CFLAGS += $(EXTRA_CFLAGS_XEN_TOOLS)
  

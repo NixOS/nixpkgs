@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
     quazip
-  ] ++ lib.optional (qtVersion == "6") [
+  ] ++ lib.optionals (qtVersion == "6") [
     qt5compat
   ];
 

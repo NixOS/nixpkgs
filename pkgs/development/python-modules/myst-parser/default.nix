@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
-  ];
+  ] ++ markdown-it-py.optional-dependencies.linkify;
 
   disabledTests = [
     # AssertionError due to different files

@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     Cocoa SystemConfiguration
   ] ++ lib.optionals coreaudioSupport [
     CoreAudio
-  ] ++ lib.optional sndioSupport [
+  ] ++ lib.optionals sndioSupport [
     sndio
-  ] ++ lib.optional pipewireSupport [
+  ] ++ lib.optionals pipewireSupport [
     pipewire
   ];
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     "-DDISABLE_STRIP=true"
   ];
 
-  postFixup = lib.optionals stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
   '';

@@ -13,6 +13,7 @@
 , settings32Bit ? false
 
 , prePatch ? ""
+, postPatch ? null
 , patches ? []
 , broken ? false
 , brokenOpen ? broken
@@ -68,7 +69,7 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
-    inherit prePatch;
+    inherit prePatch postPatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
