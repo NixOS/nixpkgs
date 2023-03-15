@@ -9,11 +9,6 @@ let
   # remove null values from the final configuration
   finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
-  logConfigFile = format.generate "log_config.yaml" cfg.logConfig;
-
-  pluginsEnv = cfg.package.python.buildEnv.override {
-    extraLibs = cfg.plugins;
-  };
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
@@ -50,6 +45,30 @@ let
             "${bindAddress}"
         }:${builtins.toString listener.port}/"
     '';
+
+  defaultExtras = [
+    "systemd"
+    "postgres"
+    "url-preview"
+    "user-search"
+  ];
+
+  wantedExtras = cfg.extras
+    ++ lib.optional (cfg.settings ? oidc_providers) "oidc"
+    ++ lib.optional (cfg.settings ? jwt_config) "jwt"
+    ++ lib.optional (cfg.settings ? saml2_config) "saml2"
+    ++ lib.optional (cfg.settings ? opentracing) "opentracing"
+    ++ lib.optional (cfg.settings ? redis) "redis"
+    ++ lib.optional (cfg.settings ? sentry) "sentry"
+    ++ lib.optional (cfg.settings ? user_directory) "user-search"
+    ++ lib.optional (cfg.settings.url_preview_enabled) "url-preview"
+    ++ lib.optional (cfg.settings.database.name == "psycopg2") "postgres";
+
+  wrapped = pkgs.matrix-synapse.override {
+    matrix-synapse-unwrapped = cfg.package.unwrapped;
+    extras = wantedExtras;
+    inherit (cfg) plugins;
+  };
 in {
 
   imports = [
@@ -153,8 +172,38 @@ in {
         type = types.package;
         default = pkgs.matrix-synapse;
         defaultText = literalExpression "pkgs.matrix-synapse";
+        readOnly = true;
         description = lib.mdDoc ''
-          Overridable attribute of the matrix synapse server package to use.
+          Wrapper package that gets configured through the module.
+
+          If you want to override the unwrapped package use an overlay.
+        '';
+      };
+
+      extras = mkOption {
+        type = types.listOf (types.enum (lib.attrNames cfg.package.unwrapped.optional-dependencies));
+        default = defaultExtras;
+        example = literalExpression ''
+          [
+            "cache-memory" # Provide statistics about caching memory consumption
+            "jwt"          # JSON Web Token authentication
+            "opentracing"  # End-to-end tracing support using Jaeger
+            "oidc"         # OpenID Connect authentication
+            "postgres"     # PostgreSQL database backend
+            "redis"        # Redis support for the replication stream between worker processes
+            "saml2"        # SAML2 authentication
+            "sentry"       # Error tracking and performance metrics
+            "systemd"      # Provide the JournalHandler used in the default log_config
+            "url-preview"  # Support for oEmbed URL previews
+            "user-search"  # Support internationalized domain names in user-search
+          ]
+        '';
+        description = lib.mdDoc ''
+          Explicitly install extras provided by matrix-synapse. Most
+          will reconfigure some additional configuration.
+
+          Extras will automatically be enabled, when the relevant
+          configuration sections are present.
         '';
       };
 
@@ -193,7 +242,7 @@ in {
         default = {};
         description = mdDoc ''
           The primary synapse configuration. See the
-          [sample configuration](https://github.com/matrix-org/synapse/blob/v${cfg.package.version}/docs/sample_config.yaml)
+          [sample configuration](https://github.com/matrix-org/synapse/blob/v${cfg.package.unwrapped.version}/docs/sample_config.yaml)
           for possible values.
 
           Secrets should be passed in by using the `extraConfigFiles` option.
@@ -707,6 +756,9 @@ in {
 
     services.matrix-synapse.configFile = configFile;
 
+    # default them, so they are additive
+    services.matrix-synapse.settings.extras = defaultExtras;
+
     users.users.matrix-synapse = {
       group = "matrix-synapse";
       home = cfg.dataDir;
@@ -724,14 +776,12 @@ in {
       after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${cfg.package}/bin/synapse_homeserver \
+        ${wrapped}/bin/synapse_homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
-      environment = {
-        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
-      } // optionalAttrs (cfg.withJemalloc) {
+      environment = optionalAttrs (cfg.withJemalloc) {
         LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
       };
       serviceConfig = {
@@ -744,7 +794,7 @@ in {
           chmod 0600 ${cfg.settings.signing_key_path}
         '')) ];
         ExecStart = ''
-          ${cfg.package}/bin/synapse_homeserver \
+          ${wrapped}/bin/synapse_homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
