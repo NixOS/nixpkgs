@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "AGProjects";
     repo = "python3-gnutls";
     rev = "324b78f7cd3d9fe58c89c7f0b2bf94199bd6a6e5"; # version not tagged
-    sha256 = "sha256-18T8bAHlNERHobsspUFvSC6ulN55nrFFb5aqNwU8T00=";
+    hash = "sha256-18T8bAHlNERHobsspUFvSC6ulN55nrFFb5aqNwU8T00=";
   };
 
   propagatedBuildInputs = [ twisted pyopenssl service-identity ];

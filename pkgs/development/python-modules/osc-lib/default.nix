@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "osc-lib";
     rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
-    sha256 = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
+    hash = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...

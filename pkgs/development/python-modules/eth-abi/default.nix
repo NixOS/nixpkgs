@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-abi";
     rev = "v${version}";
-    sha256 = "sha256-xrZpT/9zwDtjSwSPDDse+Aq8plPm26OR/cIrliZUpLY=";
+    hash = "sha256-xrZpT/9zwDtjSwSPDDse+Aq8plPm26OR/cIrliZUpLY=";
   };
 
   postPatch = ''

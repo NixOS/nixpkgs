@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "danielgtaylor";
     repo = "python-betterproto";
     rev = "v${version}";
-    sha256 = "sha256-XyXdpo3Yo4aO1favMWC7i9utz4fNDbKbsnYXJW0b7Gc=";
+    hash = "sha256-XyXdpo3Yo4aO1favMWC7i9utz4fNDbKbsnYXJW0b7Gc=";
   };
 
   nativeBuildInputs = [ poetry-core ];

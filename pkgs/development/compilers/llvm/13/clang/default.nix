@@ -42,7 +42,7 @@ let
       # mis-compilation in firefox.
       # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
       ./revert-malloc-alignment-assumption.patch
-      ./add-nostdlibinc-flag.patch
+      ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
@@ -51,9 +51,6 @@ let
 
     postPatch = ''
       (cd tools && ln -s ../../clang-tools-extra extra)
-
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
@@ -84,8 +81,9 @@ let
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {

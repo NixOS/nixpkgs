@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "statuschecker";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7xHPqlR7IFZp3Z120mg25ZSg9eI878kE8RF1y3F5O70=";
+    hash = "sha256-7xHPqlR7IFZp3Z120mg25ZSg9eI878kE8RF1y3F5O70=";
   };
 
   propagatedBuildInputs = [ robotframework ];

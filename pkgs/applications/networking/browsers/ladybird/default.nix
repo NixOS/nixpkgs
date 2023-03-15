@@ -57,9 +57,6 @@ stdenv.mkDerivation {
     "-Daligned_alloc=_mm_malloc"
   ]);
 
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
-
   # https://github.com/SerenityOS/serenity/issues/10055
   postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath $out/lib $out/bin/ladybird

@@ -1,22 +1,40 @@
-{ lib, python, buildPythonPackage, fetchPypi, pytestCheckHook, flask }:
+{ lib
+, python
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, setuptools
+, flask
+ }:
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
   version = "4.7.0";
+  format = "pyproject";
 
   disabled = python.pythonOlder "3";
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
     version = version;
-    sha256 = "sha256-9xmee60g1baLPwtivd/KdjfFUIfp0C9gWuJuDeR5/ZQ=";
+    hash = "sha256-9xmee60g1baLPwtivd/KdjfFUIfp0C9gWuJuDeR5/ZQ=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ flask ];
+  propagatedBuildInputs = [
+    flask
+  ];
 
-  pythonImportsCheck = [ "flask_httpauth" ];
+  pythonImportsCheck = [
+    "flask_httpauth"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ flask.optional-dependencies.async;
 
   meta = with lib; {
     description = "Extension that provides HTTP authentication for Flask routes";

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.15.0";
+  version = "0.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "prometheus";
     repo = "client_python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LabvQMNiRH4jclMnN0P4M3w25NQasNQEu1HWvRDQQ2o=";
+    hash = "sha256-FYQE0toy5VFKNVadSsxG/5NCRANYJOcVR4bGPrCAxvc=";
   };
 
   nativeCheckInputs = [
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
+    changelog = "https://github.com/prometheus/client_python/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

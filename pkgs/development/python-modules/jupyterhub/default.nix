@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
+    hash = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are

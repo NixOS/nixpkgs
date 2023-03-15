@@ -11,6 +11,18 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      ipython = super.ipython.overridePythonAttrs (oldAttrs: rec {
+        pname = "ipython";
+        version = "8.5.0";
+
+        src = self.fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-CXvfXNh1dv0GYXnJ9/IIAE96aGTuGyDzfTRsC8sJn4Q=";
+        };
+
+        disabledTests = [ "testIPythonLexer" ] ++ oldAttrs.disabledTests;
+      });
+
       prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.28";
         src = self.fetchPypi {
@@ -36,6 +48,8 @@ with py.pkgs; buildPythonApplication rec {
   };
 
   postPatch = ''
+    substituteInPlace requirements/bootstrap.txt \
+      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
     substituteInPlace pyproject.toml \
       --replace "distro>=1.5.0,<1.6.0" "distro>=1.5.0" \
       --replace "cryptography>=3.3.2,<38.0.5" "cryptography>=3.3.2"

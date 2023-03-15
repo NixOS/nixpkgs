@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "autorefs";
     rev = version;
-    sha256 = "sha256-kiHb/XSFw6yaUbLJHBvHaQAOVUM6UfyFeomgniDZqgU=";
+    hash = "sha256-kiHb/XSFw6yaUbLJHBvHaQAOVUM6UfyFeomgniDZqgU=";
   };
 
   nativeBuildInputs = [

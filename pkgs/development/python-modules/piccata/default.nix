@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "NordicSemiconductor";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Vuhwt+esTkvyEIRVYaRGvNMTAXVWBBv/6lpaxN5RrBA=";
+    hash = "sha256-Vuhwt+esTkvyEIRVYaRGvNMTAXVWBBv/6lpaxN5RrBA=";
   };
 
   nativeCheckInputs = [

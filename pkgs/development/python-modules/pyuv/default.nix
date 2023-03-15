@@ -22,7 +22,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "fix-build-with-python3.10.patch";
       url = "https://github.com/saghul/pyuv/commit/8bddcc27052017b5b9cb89c24dbfdf06737b0dd3.patch";
-      sha256 = "sha256-J/3ky64Ff+gYpN3ksFLNuZ5xgPbBkyOl4LTY6fiHAgk=";
+      hash = "sha256-J/3ky64Ff+gYpN3ksFLNuZ5xgPbBkyOl4LTY6fiHAgk=";
     })
   ];
 

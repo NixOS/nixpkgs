@@ -39,8 +39,8 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # TypeError: <lambda>() missing 1 required...
-    "test_print_with_style"
+    # RuntimeError: no running event loop
+    "test_blank_line_fix"
   ];
 
   pythonImportsCheck = [

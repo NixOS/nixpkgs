@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "python-restx";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Rp+TQjAZqgIS6jmj0PAqshD+5a3JPOr2Qw5l4INxK/Y=";
+    hash = "sha256-Rp+TQjAZqgIS6jmj0PAqshD+5a3JPOr2Qw5l4INxK/Y=";
   };
 
   propagatedBuildInputs = [

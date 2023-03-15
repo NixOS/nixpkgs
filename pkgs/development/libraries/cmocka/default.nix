@@ -1,26 +1,17 @@
 { fetchurl, fetchpatch, lib, stdenv, cmake }:
-let
-  # Temporary split to save rebuilds; see PR #217469
-  isUpdated = with stdenv; isDarwin && isAarch64;
-in
+
 stdenv.mkDerivation rec {
   pname = "cmocka";
   majorVersion = "1.1";
-  version = "${majorVersion}." + (if isUpdated then "6" else "5");
+  version = "${majorVersion}.6";
 
   src = fetchurl {
     url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
-    sha256 = if isUpdated
-      then "0xksffx1w3pzm18ynf28cx8scrhylcbz43s1rgkkdqnyil1q6cjv"
-      else "1dm8pdvkyfa8dsbz9bpq7wwgixjij4sii9bbn5sgvqjm5ljdik7h";
+    sha256 = "0xksffx1w3pzm18ynf28cx8scrhylcbz43s1rgkkdqnyil1q6cjv";
   };
 
-  patches = lib.optionals (!isUpdated) [
-    (fetchpatch {
-      name = "musl-uintptr.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/cmocka/musl_uintptr.patch?id=6a15dd0d0ba9cc354a621fb359ca5e315ff2eabd";
-      sha256 = "sha256-fhb2Tax30kRTGuaKvzSzglSd/ntxiNeGFJt5I8poa24=";
-    })
+  patches = [
+    ./uintptr_t.patch
   ];
 
   nativeBuildInputs = [ cmake ];

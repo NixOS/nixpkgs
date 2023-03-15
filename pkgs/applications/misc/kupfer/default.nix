@@ -11,6 +11,8 @@
 , shared-mime-info
 , wrapGAppsHook
 , wafHook
+, bash
+, dbus
 }:
 
 with python3Packages;
@@ -33,13 +35,11 @@ buildPythonApplication rec {
     itstool            # for help pages
     desktop-file-utils # for update-desktop-database
     shared-mime-info   # for update-mime-info
+    docutils # for rst2man
+    dbus # for detection of dbus-send during build
   ];
-  buildInputs = [ docutils libwnck keybinder3 ];
+  buildInputs = [ libwnck keybinder3 bash ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
-
-  # without strictDeps kupfer fails to build: Could not find the python module 'gi.repository.Gtk'
-  # see https://github.com/NixOS/nixpkgs/issues/56943 for details
-  strictDeps = false;
 
   postInstall = ''
     gappsWrapperArgs+=(

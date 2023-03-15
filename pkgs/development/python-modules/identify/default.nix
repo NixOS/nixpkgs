@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QBFA4vq58rlW9XR1jrn2VrrsZuW+hZJHrZzSoRVZUMQ=";
+    hash = "sha256-QBFA4vq58rlW9XR1jrn2VrrsZuW+hZJHrZzSoRVZUMQ=";
   };
 
   nativeCheckInputs = [

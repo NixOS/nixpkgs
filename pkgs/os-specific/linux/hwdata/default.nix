@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hwdata";
-  version = "0.367";
+  version = "0.368";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
-    sha256 = "sha256-cFusLjRH7E3TCEREQH4Y9fZLjB6b5IJV/NThdS7c19A=";
+    sha256 = "sha256-+9UyF4tcy5cJPjbyQ2RuWVJkBsZut+YX2ncUJIqIQZo=";
   };
 
   postPatch = ''

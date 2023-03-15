@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     rev = "v${version}";
-    sha256 = "sha256-mdV5zGvVI1MltmOD1BtXxsKB/yigk8d56WwLlX6Uizg=";
+    hash = "sha256-mdV5zGvVI1MltmOD1BtXxsKB/yigk8d56WwLlX6Uizg=";
     fetchSubmodules = true;
   };
 

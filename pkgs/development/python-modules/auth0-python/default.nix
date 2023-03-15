@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.24.0";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iNe86UcjQud/LyX9iwYIGbNVcADjpD4mGM16D+UhLHE=";
+    hash = "sha256-gza5HYtxgmTfC+u+WlBiuOinBNXYIfVBa5IX8lr0Hj8=";
   };
 
   propagatedBuildInputs = [

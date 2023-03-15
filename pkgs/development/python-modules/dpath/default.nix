@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-M4CnfQ20q/EEElhg/260vQfJfGW4Gq1CpglxcImhvtA=";
+    hash = "sha256-M4CnfQ20q/EEElhg/260vQfJfGW4Gq1CpglxcImhvtA=";
   };
 
   # use pytest as nosetests hangs

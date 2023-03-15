@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "libnano";
     repo = "primer3-py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-o9B8TN3mOchOO7dz34mI3NDtIhHSlA9+lMNsYcxhTE0=";
+    hash = "sha256-o9B8TN3mOchOO7dz34mI3NDtIhHSlA9+lMNsYcxhTE0=";
   };
 
   nativeBuildInputs = [ cython ]

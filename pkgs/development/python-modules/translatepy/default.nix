@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Animenosekai";
     repo = "translate";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
+    hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
   propagatedBuildInputs = [

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "ProtonVPN";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-xpK3l8BI6/DUt46VR8DS89hzdHUljAbrYhEyf00giGg=";
+    hash = "sha256-xpK3l8BI6/DUt46VR8DS89hzdHUljAbrYhEyf00giGg=";
   };
 
   propagatedBuildInputs = [

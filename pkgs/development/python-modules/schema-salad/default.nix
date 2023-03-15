@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.4.20230127112827";
+  version = "8.4.20230213094415";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nptZTNveutV9bGSkDPWLfiBusZblVqd/5m7DN4HwGJY=";
+    hash = "sha256-x2co8WjL+e4nBZd0pGUwv39nzNkO5G3dYrYJZeqP31o=";
   };
 
   nativeBuildInputs = [

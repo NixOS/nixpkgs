@@ -18,7 +18,7 @@
 , zlib
 }:
 let
-  py3 = python3.withPackages (p: [ p.Mako ]);
+  py3 = python3.withPackages (p: [ p.mako ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";

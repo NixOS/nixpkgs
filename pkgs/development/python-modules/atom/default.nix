@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.8.2";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-45c17lewJPo39ZWMaE8kyOo6n0A9f0m58TbMAiNAqeg=";
+    hash = "sha256-zxFYsINlDyGQGGh+u7vwyzAitRXe3OM1//HvCtuZ/p8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

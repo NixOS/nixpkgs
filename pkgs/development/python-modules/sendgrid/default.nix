@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    sha256 = "sha256-Lx84jmgJz/J5MJtJyqDTVIbN6H63gD2rkJrdNeojd08=";
+    hash = "sha256-Lx84jmgJz/J5MJtJyqDTVIbN6H63gD2rkJrdNeojd08=";
   };
 
   propagatedBuildInputs = [

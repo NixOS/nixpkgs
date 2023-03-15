@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.3.0";
+  version = "5.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iuhXfFp6cfDNDtk3JS+U8YbQAOII0khY2bmvP75QAP4=";
+    hash = "sha256-oMX+XMglmgu2sfREVxSq/E9foEf49UzHEzkUupeFb14=";
   };
 
   propagatedBuildInputs = [

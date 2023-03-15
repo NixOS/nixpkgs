@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "trezor";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "sha256-YYgWlYfVd1iALOziaUI8uVYjJDCIVk/dXcUmJd2jcvQ=";
+    hash = "sha256-YYgWlYfVd1iALOziaUI8uVYjJDCIVk/dXcUmJd2jcvQ=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

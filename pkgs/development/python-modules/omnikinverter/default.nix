@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "omnikinverter";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-omnikinverter";
-    rev = "v${version}";
-    hash = "sha256-OQWk+ae+hSLLdH0uLVPauoNeQpXgxkvflXFyaiFe108=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V7rppl1u5QTzxkeLYgCFwgU6XuVENtb7EW/n+glwtSk=";
   };
 
   nativeBuildInputs = [

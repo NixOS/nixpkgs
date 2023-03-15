@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    sha256 = "sha256-jQgE/eR8Gd9nMGijH9unhHCrLUn7DbWFkTauoz3O/sM=";
+    hash = "sha256-jQgE/eR8Gd9nMGijH9unhHCrLUn7DbWFkTauoz3O/sM=";
   };
 
   propagatedBuildInputs = [

@@ -8,7 +8,7 @@
 , sphinx-prompt
 , sphinx-rtd-theme
 , sphinx-tabs
-, sphinxcontrib-autoapi
+, sphinx-autoapi
 , sphinxemoji
 # runtime dependencies
 , sphinx
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     sphinx-prompt
     sphinx-rtd-theme
     sphinx-tabs
-    sphinxcontrib-autoapi
+    sphinx-autoapi
     sphinxemoji
   ];
 

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     (python3.withPackages (ps: with ps; [
-      Mako
+      mako
       numpy
     ]))
     waffle

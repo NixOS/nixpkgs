@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JWkUtMAROk4cePMuogx9dtyO/ihv6JAnDnXPrVD+UQ8=";
+    hash = "sha256-JWkUtMAROk4cePMuogx9dtyO/ihv6JAnDnXPrVD+UQ8=";
   };
 
   propagatedBuildInputs = [

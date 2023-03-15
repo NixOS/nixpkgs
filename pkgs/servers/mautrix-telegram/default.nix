@@ -44,7 +44,7 @@ python.pkgs.buildPythonPackage rec {
     mautrix
     tulir-telethon
     asyncpg
-    Mako
+    mako
     # speedups
     cryptg
     aiodns

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pypemicro";
-  version = "0.1.9";
+  version = "0.1.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HouDBlqfokKhbdWWDCfaUJrqIEC5f+sSnVmsrRseFmU=";
+    hash = "sha256-KE085u9yIPsuEr41GNWwHFm6KAHggvqGqP9ChGRoLE0=";
   };
 
   pythonImportsCheck = [ "pypemicro" ];

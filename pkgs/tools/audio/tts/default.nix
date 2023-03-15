@@ -17,6 +17,21 @@ let
           inherit version;
           hash = "sha256-xT0F52iuSj5VOuIcLlAVKT5e+/1cEtSX8RBMtRnMprM=";
         };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ (with super; [
+          resampy
+        ]);
+        doCheck = false;
+      });
+
+      numpy = super.numpy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.23.5";
+        src = super.fetchPypi {
+          pname = "numpy";
+          inherit version;
+          extension = "tar.gz";
+          hash = "sha256-Gxdm1vOXwYFT1AAV3fx53bcVyrrcBNLSKNTlqLxN7Ro=";
+        };
+        doCheck = false;
       });
     };
   };
@@ -43,6 +58,7 @@ python.pkgs.buildPythonApplication rec {
       "numba"
       "numpy"
       "unidic-lite"
+      "trainer"
     ];
   in ''
     sed -r -i \
@@ -169,6 +185,10 @@ python.pkgs.buildPythonApplication rec {
     "tests/vocoder_tests/test_melgan_train.py"
     "tests/vocoder_tests/test_wavernn_train.py"
   ];
+
+  passthru = {
+    inherit python;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/coqui-ai/TTS";

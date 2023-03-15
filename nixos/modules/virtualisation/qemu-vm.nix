@@ -1101,15 +1101,17 @@ in
         what = "overlay";
         type = "overlay";
         options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
-        wantedBy = ["local-fs.target"];
-        before = ["local-fs.target"];
-        requires = ["sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service"];
-        after = ["sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service"];
-        unitConfig.IgnoreOnIsolate = true;
+        wantedBy = ["initrd-fs.target"];
+        before = ["initrd-fs.target"];
+        requires = ["rw-store.service"];
+        after = ["rw-store.service"];
+        unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
       }];
       services.rw-store = {
-        after = ["sysroot-nix-.rw\\x2dstore.mount"];
-        unitConfig.DefaultDependencies = false;
+        unitConfig = {
+          DefaultDependencies = false;
+          RequiresMountsFor = "/sysroot/nix/.rw-store";
+        };
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";

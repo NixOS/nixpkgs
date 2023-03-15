@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "epson_projector";
     inherit version;
-    sha256 = "sha256-a9pRncC22DCKX+7ObC8PORpR+RGbOBor2lbwzfrU8tk=";
+    hash = "sha256-a9pRncC22DCKX+7ObC8PORpR+RGbOBor2lbwzfrU8tk=";
   };
 
   propagatedBuildInputs = [

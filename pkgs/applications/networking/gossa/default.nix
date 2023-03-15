@@ -5,7 +5,7 @@
 }:
 
 buildGoModule rec {
-  name = "gossa";
+  pname = "gossa";
   version = "0.2.2";
 
   src = fetchFromGitHub {

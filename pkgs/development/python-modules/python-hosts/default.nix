@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4SAXjx5pRDhv4YVUgrUttyUa5izpYqpDKiiGJc2y8V0=";
+    hash = "sha256-4SAXjx5pRDhv4YVUgrUttyUa5izpYqpDKiiGJc2y8V0=";
   };
 
   # win_inet_pton is required for windows support

@@ -16,6 +16,7 @@
 , requests
 , markdown
 , matplotlib
+, mock
 , pytest
 , glibcLocales
 , nose
@@ -104,7 +105,7 @@ buildPythonApplication rec {
   ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
   ;
 
-  nativeCheckInputs = [ pytest glibcLocales nose ];
+  nativeCheckInputs = [ pytest glibcLocales mock nose ];
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
   buildInputs = [ lame mpv-unwrapped libpulseaudio ];

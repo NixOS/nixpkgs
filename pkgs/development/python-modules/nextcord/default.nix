@@ -9,7 +9,7 @@
 , aiohttp
 , aiodns
 , brotli
-, cchardet
+, faust-cchardet
 , orjson
 , pynacl
 }:
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     aiodns
     aiohttp
     brotli
-    cchardet
+    faust-cchardet
     orjson
     pynacl
   ];

@@ -1,14 +1,18 @@
 cargoSetupPostUnpackHook() {
     echo "Executing cargoSetupPostUnpackHook"
 
-    export NIX_LDFLAGS+=" @aarch64LinuxGccWorkaround@"
-
     # Some cargo builds include build hooks that modify their own vendor
     # dependencies. This copies the vendor directory into the build tree and makes
     # it writable. If we're using a tarball, the unpackFile hook already handles
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
-        unpackFile "$cargoDeps"
+        if [ -d "$cargoDeps" ]; then
+            local dest=$(stripHash "$cargoDeps")
+            cp -Lr --reflink=auto -- "$cargoDeps" "$dest"
+            chmod -R +644 -- "$dest"
+        else
+            unpackFile "$cargoDeps"
+        fi
         export cargoDepsCopy="$(realpath "$(stripHash $cargoDeps)")"
     else
         cargoDepsCopy="$(realpath "$(pwd)/$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}")"
