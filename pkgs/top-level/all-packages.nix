@@ -5897,6 +5897,8 @@ with pkgs;
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
+  bom = callPackage ../tools/admin/bom { };
+
   bomber-go = callPackage ../development/tools/bomber-go { };
 
   bomutils = callPackage ../tools/archivers/bomutils { };
