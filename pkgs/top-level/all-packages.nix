@@ -22421,6 +22421,8 @@ with pkgs;
 
   mctc-lib = callPackage ../development/libraries/science/chemistry/mctc-lib { };
 
+  mstore = callPackage ../development/libraries/science/chemistry/mstore { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
