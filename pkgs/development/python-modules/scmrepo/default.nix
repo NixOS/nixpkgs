@@ -11,6 +11,7 @@
 , pygtrie
 , pythonOlder
 , setuptools
+, setuptools-scm
 , shortuuid
 }:
 
@@ -28,14 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-MREY8i6FIeRyjcCKvS8gthsVql81x4Ab7gA7yFgwNoQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1" \
-      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
