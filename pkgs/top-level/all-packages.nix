@@ -22427,6 +22427,8 @@ with pkgs;
 
   test-drive = callPackage ../development/libraries/test-drive { };
 
+  dftd4 = callPackage ../development/libraries/science/chemistry/dftd4 { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
