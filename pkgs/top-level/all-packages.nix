@@ -22425,6 +22425,8 @@ with pkgs;
 
   multicharge = callPackage ../development/libraries/science/chemistry/multicharge { };
 
+  test-drive = callPackage ../development/libraries/test-drive { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
