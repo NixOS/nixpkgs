@@ -3,10 +3,8 @@
   installShellFiles,
   less,
   lib,
-  makeWrapper,
   offpunk,
-  python3,
-  stdenv,
+  python3Packages,
   testers,
   timg,
   xdg-utils,
@@ -14,7 +12,7 @@
 }:
 
 let
-  pythonDependencies = with python3.pkgs; [
+  pythonDependencies = with python3Packages; [
     beautifulsoup4
     cryptography
     feedparser
@@ -30,40 +28,34 @@ let
     xsel
   ];
 in
-stdenv.mkDerivation (finalAttrs: {
+python3Packages.buildPythonPackage rec {
   pname = "offpunk";
-  version = "1.9";
+  version = "1.9.2";
+  format = "flit";
+
+  disabled = python3Packages.pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sxX4/7jbNbLwHVfE1lDtjr/luby5zAf6Hy1RcwXZLBA=";
+    rev = "v${version}";
+    sha256 = "sha256-CYsuoj5/BaaboDRtcOrGzJoZDCfOLs7ROVWLVjOAnRU=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
-  buildInputs = otherDependencies ++ pythonDependencies;
+  nativeBuildInputs = [ installShellFiles ];
+  propagatedBuildInputs = otherDependencies ++ pythonDependencies;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D ./offpunk.py $out/bin/offpunk
-
-    wrapProgram $out/bin/offpunk \
-        --set PYTHONPATH "$PYTHONPATH" \
-        --set PATH ${lib.makeBinPath otherDependencies}
-
-   installManPage man/*.1
-   runHook postInstall
+  postInstall = ''
+    installManPage man/*.1
   '';
 
   passthru.tests.version = testers.testVersion { package = offpunk; };
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";
-    homepage = finalAttrs.src.meta.homepage;
+    homepage = src.meta.homepage;
     maintainers = with maintainers; [ DamienCassou ];
     platforms = platforms.linux;
     license = licenses.bsd2;
   };
-})
+}
