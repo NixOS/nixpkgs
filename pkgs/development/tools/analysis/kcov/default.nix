@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , zlib
@@ -47,13 +46,13 @@ let
           set +x
         '';
 
-        works-on-rust = runCommandCC "works-on-rust" { } ''
+        works-on-rust = runCommandCC "works-on-rust" { nativeBuildInputs = [ rustc ]; } ''
           set -ex
           cat - > a.rs <<EOF
           fn main() {}
           EOF
           # Put gcc in the path so that `cc` is found
-          ${rustc}/bin/rustc a.rs -o a.out
+          rustc a.rs -o a.out
           ${self}/bin/kcov /tmp/kcov ./a.out
           test -e /tmp/kcov/index.html
           touch $out
