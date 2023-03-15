@@ -65,9 +65,6 @@ self: let
       seq = if lib.versionAtLeast self.emacs.version "27"
             then null
             else super.seq;
-      project = if lib.versionAtLeast self.emacs.version "28"
-                then null
-                else super.project;
       # Compilation instructions for the Ada executables:
       # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
