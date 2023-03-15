@@ -144,7 +144,7 @@ class StartCommand:
         self,
         monitor_socket_path: Path,
         shell_socket_path: Path,
-        allow_reboot: bool = False,  # TODO: unused, legacy?
+        allow_reboot: bool = False,
     ) -> str:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
@@ -152,16 +152,14 @@ class StartCommand:
             display_opts += " -nographic"
 
         # qemu options
-        qemu_opts = ""
-        qemu_opts += (
-            ""
-            if allow_reboot
-            else " -no-reboot"
+        qemu_opts = (
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
             " -device virtio-rng-pci"
             " -serial stdio"
         )
+        if not allow_reboot:
+            qemu_opts += " -no-reboot"
         # TODO: qemu script already catpures this env variable, legacy?
         qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
@@ -195,9 +193,10 @@ class StartCommand:
         shared_dir: Path,
         monitor_socket_path: Path,
         shell_socket_path: Path,
+        allow_reboot: bool,
     ) -> subprocess.Popen:
         return subprocess.Popen(
-            self.cmd(monitor_socket_path, shell_socket_path),
+            self.cmd(monitor_socket_path, shell_socket_path, allow_reboot),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -898,6 +897,7 @@ class Machine:
             self.shared_dir,
             self.monitor_path,
             self.shell_path,
+            self.allow_reboot,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
