@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , alsa-lib
 , appstream-glib
 , cmake
@@ -18,6 +19,7 @@
 , rustPlatform
 , shared-mime-info
 , wrapGAppsHook4
+, AudioUnit
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,14 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     hash = "sha256-sfsk67zTmVPPtohJcgQ/OoMPeoNTo/zGs3hdA1D9SwM=";
   };
+
+  patches = [
+    # https://github.com/flxzt/rnote/pull/569
+    (fetchpatch {
+      url = "https://github.com/flxzt/rnote/commit/8585b446c08b246f3d55359026415cb3d242d44e.patch";
+      hash = "sha256-ePpTQ/3mzZTNjU9P4vTu9CM0vX8+r8b6njuj7hDgFCg=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib # For appstream-util
@@ -56,13 +66,16 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    alsa-lib
     glib
     gstreamer
     gtk4
     libadwaita
     libxml2
     poppler
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    AudioUnit
   ];
 
   postPatch = ''
@@ -79,6 +92,6 @@ stdenv.mkDerivation rec {
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda yrd ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
