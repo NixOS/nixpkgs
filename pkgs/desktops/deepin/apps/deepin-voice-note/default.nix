@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deepin-voice-note";
-  version = "5.10.22";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZDw/kGmhcoTPDUsZa9CYhrVbK4Uo75G0L4q4cCBPr7E=";
+    sha256 = "sha256-JX4OuVu+5/a3IhkfnvaWVDaKl+xg/8qxlvp9hM0nHNU=";
   };
 
   postPatch = ''
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     gst-plugins-good
   ]);
+
+  strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
