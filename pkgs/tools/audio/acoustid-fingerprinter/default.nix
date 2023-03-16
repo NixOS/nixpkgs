@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, qt4, taglib, chromaprint, ffmpeg }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, qt4, taglib, chromaprint, ffmpeg_4 }:
 
 stdenv.mkDerivation rec {
   pname = "acoustid-fingerprinter";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ qt4 taglib chromaprint ffmpeg ];
+  buildInputs = [ qt4 taglib chromaprint ffmpeg_4 ];
 
   cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${lib.getVersion taglib}" ];
 

@@ -27,7 +27,6 @@ let
     buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [

@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
   '';
 
+  strictDeps = true;
+
   depsBuildBuild = [
     pkg-config
   ];
@@ -77,6 +79,10 @@ stdenv.mkDerivation rec {
     dbus
   ] ++ lib.optionals stdenv.isLinux [
     systemd
+  ];
+
+  nativeCheckInputs = [
+    dbus
   ];
 
   mesonFlags = [

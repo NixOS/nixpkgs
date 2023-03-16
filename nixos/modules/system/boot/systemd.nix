@@ -79,6 +79,8 @@ let
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
+      "systemd-growfs@.service"
+      "systemd-growfs-root.service"
       "systemd-remount-fs.service"
       "systemd-pstore.service"
       "local-fs.target"

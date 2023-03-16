@@ -17,10 +17,10 @@ See also: https://github.com/systemd/systemd/issues/24191
  1 file changed, 4 deletions(-)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index ba3ce14bf0..03bf66ff74 100644
+index 898f9ed2f1..5040d5b105 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
-@@ -4493,10 +4493,6 @@ char* manager_taint_string(const Manager *m) {
+@@ -4543,10 +4543,6 @@ char* manager_taint_string(const Manager *m) {
          if (m->taint_usr)
                  stage[n++] = "split-usr";
  

@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "http://www.pawfal.org/fluxus/";
     maintainers = [ maintainers.brainrape ];
+    broken = true;
   };
 }
