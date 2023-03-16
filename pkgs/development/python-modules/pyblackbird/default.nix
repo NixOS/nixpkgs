@@ -3,11 +3,15 @@
 , fetchFromGitHub
 , pyserial
 , pyserial-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyblackbird";
   version = "0.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koolsb";
