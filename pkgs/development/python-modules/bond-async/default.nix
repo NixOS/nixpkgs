@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bond-async";
-  version = "0.1.22";
+  version = "0.1.23";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bondhome";
     repo = "bond-async";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wU1niuzHwNmrmyjcTlBIKrBf1wMbHHFlIBxFNHUwDw4=";
+    hash = "sha256-Kht2O/+F7Nw78p1Q6NGugm2bfAwZAUWAs30htoWkafI=";
   };
 
   propagatedBuildInputs = [
