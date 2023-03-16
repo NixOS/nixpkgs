@@ -38,10 +38,8 @@ buildPythonApplication rec {
   SEMGREP_SKIP_BIN = true;
 
   pythonRelaxDeps = [
-    "attrs"
     "boltons"
-    "jsonschema"
-    "typing-extensions"
+    "glom"
   ];
 
   propagatedBuildInputs = with pythonPackages; [
