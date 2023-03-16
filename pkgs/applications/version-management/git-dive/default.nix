@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-dive";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-dive";
     rev = "v${version}";
-    hash = "sha256-zq594j/X74qzRSjbkd2lup/WqZXpTOecUYRVQGqpXug=";
+    hash = "sha256-nl6JEVOU5eDntPOItYCooBi3zx2ceyRLtelr97uYiOY=";
   };
 
-  cargoHash = "sha256-f3hiAVno5BuPgqP1y9XtVQ/TJcnqwUnEOqaU/tTljTQ=";
+  cargoHash = "sha256-johUvl2hPlgn+2wgFJUR6/pR7lx1NzE4ralcjhVqkik=";
 
   nativeBuildInputs = [
     pkg-config
