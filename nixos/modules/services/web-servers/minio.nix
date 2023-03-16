@@ -124,8 +124,11 @@ in
     }
 
       (lib.mkIf (cfg.rootCredentialsFile != null) {
+        # The service will fail if the credentials file is missing
         services.minio.unitConfig.ConditionPathExists = cfg.rootCredentialsFile;
 
+        # The service will not restart if the credentials file has
+        # been changed. This can cause stale root credentials.
         paths.minio-root-credentials = {
           wantedBy = [ "multi-user.target" ];
 
