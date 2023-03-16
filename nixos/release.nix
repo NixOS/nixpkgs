@@ -1,4 +1,5 @@
 with import ../lib;
+with import ./lib {};
 
 { nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
@@ -49,16 +50,18 @@ let
       system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
-  makeModules = module: rest: [ configuration versionModule module rest ];
+  makeModules = system: module: rest: [
+    { nixpkgs = { inherit system; }; }
+    configuration versionModule module rest
+  ];
 
   makeIso =
     { module, type, system, ... }:
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules = makeModules module {
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system module {
         isoImage.isoBaseName = "nixos-${type}";
       };
     }).config.system.build.isoImage);
@@ -69,9 +72,8 @@ let
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules = makeModules module {};
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system module {};
     }).config.system.build.sdImage);
 
 
@@ -82,9 +84,8 @@ let
 
     let
 
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules = makeModules module {};
+      config = (evalSystemConfiguration {
+        modules = makeModules system module {};
       }).config;
 
       tarball = config.system.build.tarball;
@@ -102,9 +103,8 @@ let
   makeClosure = module: buildFromConfig module (config: config.system.build.toplevel);
 
 
-  buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
-    inherit system;
-    modules = makeModules module
+  buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (evalSystemConfiguration {
+    modules = makeModules system module
       ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
@@ -113,9 +113,8 @@ let
 
   makeNetboot = { module, system, ... }:
     let
-      configEvaled = import lib/eval-config.nix {
-        inherit system;
-        modules = makeModules module {};
+      configEvaled = evalSystemConfiguration {
+        modules = makeModules system module {};
       };
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
@@ -150,9 +149,9 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  kexec = forMatchingSystems supportedSystems (system: (import lib/eval-config.nix {
-    inherit system;
+  kexec = forMatchingSystems supportedSystems (system: (evalSystemConfiguration {
     modules = [
+      { nixpkgs = { inherit system; }; }
       ./modules/installer/netboot/netboot-minimal.nix
     ];
   }).config.system.build.kexecTree);
@@ -226,12 +225,12 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ versionModule
-          ./modules/installer/virtualbox-demo.nix
-        ];
+    hydraJob ((evalSystemConfiguration {
+      modules = [
+        { nixpkgs = { inherit system; }; }
+        versionModule
+        ./modules/installer/virtualbox-demo.nix
+      ];
     }).config.system.build.virtualBoxOVA)
 
   );
@@ -240,9 +239,9 @@ in rec {
   proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
+    hydraJob ((evalSystemConfiguration {
       modules = [
+        { nixpkgs = { inherit system; }; }
         ./modules/virtualisation/proxmox-image.nix
       ];
     }).config.system.build.VMA)
@@ -252,9 +251,9 @@ in rec {
   proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
+    hydraJob ((evalSystemConfiguration {
       modules = [
+        { nixpkgs = { inherit system; }; }
         ./modules/virtualisation/proxmox-lxc.nix
       ];
     }).config.system.build.tarball)
@@ -265,13 +264,8 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
-        ];
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system ./maintainers/scripts/ec2/amazon-image.nix {};
     }).config.system.build.amazonImage)
 
   );
@@ -279,13 +273,8 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image-zfs.nix
-        ];
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system ./maintainers/scripts/ec2/amazon-image-zfs.nix {};
     }).config.system.build.amazonImage)
 
   );
@@ -297,14 +286,10 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system ./maintainers/scripts/ec2/amazon-image.nix {
           ({ ... }: { amazonImage.sizeMB = "auto"; })
-        ];
+      };
     }).config.system.build.amazonImage)
 
   );
@@ -314,13 +299,8 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
-        ];
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system ./maintainers/scripts/lxd/lxd-image.nix {};
     }).config.system.build.tarball)
 
   );
@@ -330,20 +310,15 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
-        ];
+    hydraJob ((evalSystemConfiguration {
+      modules = makeModules system ./maintainers/scripts/lxd/lxd-image.nix {};
     }).config.system.build.metadata)
 
   );
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
-    { toplevel = (import lib/eval-config.nix {
+    { toplevel = (evalSystemConfiguration {
         inherit system;
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
