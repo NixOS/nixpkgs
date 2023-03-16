@@ -19907,6 +19907,16 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  freeipa = callPackage ../os-specific/linux/freeipa {
+    kerberos = krb5.override {
+      withVerto = true;
+    };
+    sasl = cyrus_sasl;
+    samba = samba4.override {
+      enableLDAP = true;
+    };
+  };
+
   freetts = callPackage ../development/libraries/freetts {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
