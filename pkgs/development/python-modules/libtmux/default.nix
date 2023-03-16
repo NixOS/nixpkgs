@@ -46,7 +46,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [
-    "test_test.py"
+    "tests/test_test.py"
+    "tests/legacy_api/test_test.py"
   ];
 
   pythonImportsCheck = [ "libtmux" ];
