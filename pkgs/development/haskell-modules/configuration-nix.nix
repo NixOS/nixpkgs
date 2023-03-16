@@ -925,7 +925,7 @@ self: super: builtins.intersectAttrs super {
       rev = "v1.3.1";
       sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
     };
-    buildDepends = [ self.conduit-zstd self.conduit-concurrent-map self.fsnotify_0_4_1_0 hnix-store-core_0_6_1_0 ];
+    buildDepends = [ self.conduit-zstd self.conduit-concurrent-map (dontCheck self.fsnotify_0_4_1_0) hnix-store-core_0_6_1_0 ];
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
       sed -i 's/1.3/1.3.1/' cachix.cabal
