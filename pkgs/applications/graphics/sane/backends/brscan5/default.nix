@@ -10,15 +10,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "brscan5";
-  version = "1.2.9-0";
+  version = "1.2.11-0";
   src = {
     "i686-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-      sha256 = "ac23c9a435818955e7882ab06380adf346203ff4e45f384b40e84b8b29642f07";
+      hash = "sha256-j+vKC0fwnVVa/gPYcwdowMlCy2nv0DWG9zyNGT+bESM=";
     };
     "x86_64-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-      sha256 = "4ec23ff4b457323ae778e871a0f1abcc1848ea105af17850b57f7dcaddcfd96d";
+      hash = "sha256-wNPaTdowVbZysATiDl0CfihuFuuwvJNInJaiZsvBo78=";
     };
   }."${system}" or (throw "Unsupported system: ${system}");
 
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper patchelf ];
   buildInputs = [ libusb1 avahi-compat stdenv.cc.cc glib ];
   dontBuild = true;
+
+  patches = [ ./remove-old-udev-key.patch ];
 
   postPatch =
     let

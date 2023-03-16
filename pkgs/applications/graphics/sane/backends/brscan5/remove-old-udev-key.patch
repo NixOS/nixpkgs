@@ -1,0 +1,10 @@
+--- a/opt/brother/scanner/brscan5/udev-rules/NN-brother-mfp-brscan5-1.0.2-2.rules
++++ b/opt/brother/scanner/brscan5/udev-rules/NN-brother-mfp-brscan5-1.0.2-2.rules
+@@ -14,7 +14,6 @@
+ LABEL="brother_mfp_udev_1"
+
+
+-SYSFS{idVendor}=="04f9", GOTO="brother_mfp_udev_2"
+ ATTRS{idVendor}=="04f9", GOTO="brother_mfp_udev_2"
+ GOTO="brother_mfp_end"
+ LABEL="brother_mfp_udev_2"
