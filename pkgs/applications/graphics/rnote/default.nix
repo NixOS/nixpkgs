@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , alsa-lib
 , appstream-glib
-, clang
 , cmake
 , desktop-file-utils
 , glib
@@ -23,30 +22,30 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.16";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-blpANUfFam46Vyyc3vaB7vX07CRMtdMZR2n7FOLGgaU=";
+    hash = "sha256-/crqcp0oCq1f/5hnYfIcuSUzF5GmiAh2lLhQh+IzP4o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-vVU/OVwtIPRw1Ohe5EIqovhyd4oYOR7CPISz8Zo74r0=";
+    hash = "sha256-sfsk67zTmVPPtohJcgQ/OoMPeoNTo/zGs3hdA1D9SwM=";
   };
 
   nativeBuildInputs = [
     appstream-glib # For appstream-util
-    clang
     cmake
     desktop-file-utils # For update-desktop-database
     meson
     ninja
     pkg-config
     python3 # For the postinstall script
+    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
@@ -66,8 +65,6 @@ stdenv.mkDerivation rec {
     poppler
   ];
 
-  LIBCLANG_PATH = "${clang.cc.lib}/lib";
-
   postPatch = ''
     pushd build-aux
     chmod +x cargo_build.py meson_post_install.py
@@ -80,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flxzt/rnote";
     changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda yrd ];
     platforms = platforms.linux;
   };
