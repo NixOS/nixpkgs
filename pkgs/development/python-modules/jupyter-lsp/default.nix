@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multi-Language Server WebSocket proxy for your Jupyter notebook or lab server";
-    homepage = "https://pypi.org/project/jupyter-lsp";
+    homepage = "https://jupyterlab-lsp.readthedocs.io/en/latest/";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ doronbehar ];
