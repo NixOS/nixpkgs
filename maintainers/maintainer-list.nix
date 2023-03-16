@@ -4658,6 +4658,12 @@
     github = "ethindp";
     githubId = 8030501;
   };
+  ethinx = {
+    email = "eth2net@gmail.com";
+    github = "ethinx";
+    githubId = 965612;
+    name = "York Wong";
+  };
   Etjean = {
     email = "et.jean@outlook.fr";
     github = "Etjean";
