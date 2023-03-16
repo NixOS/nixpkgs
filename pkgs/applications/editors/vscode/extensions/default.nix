@@ -927,8 +927,12 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "2023.3.1505";
-          sha256 = "sha256-USAbI2x6UftNfIEJy2Pbqa/BTYJnUBCNjsdm0Pfrz0o=";
+          # Stable versions are listed on the GitHub releases page and use a
+          # semver scheme, contrary to preview versions which are listed on
+          # the VSCode Marketplace and use a calver scheme. We should avoid
+          # using preview versions, because they expire after two weeks.
+          version = "13.3.2";
+          sha256 = "sha256-4o4dmjio/I531szcoeGPVtfrNAyRAPJRrmsNny/PY2w=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
