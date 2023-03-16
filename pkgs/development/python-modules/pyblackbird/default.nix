@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyblackbird";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "koolsb";
     repo = pname;
     rev = version;
-    sha256 = "0m1yd1cb3z8011x7nicxpf091bdcwghcphn0l21c65f71rabzg6s";
+    sha256 = "sha256-+ehzrr+RrwFKOOuxBq3+mwnuMPxZFV4QTZG1IRgsbLc=";
   };
 
   propagatedBuildInputs = [
