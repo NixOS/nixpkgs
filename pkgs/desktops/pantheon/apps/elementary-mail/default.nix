@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/mail/commit/7d4878543b27251664852c708d54abc1e4580eab.patch";
       sha256 = "sha256-yl6Bzjinp+ti/aX+t22GibGeQFtharZNk3MmbuJm0Tk=";
     })
+    # Fix crash on setting message flag
+    # https://github.com/elementary/mail/pull/825
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/c630f926196e44e086ddda6086cb8b9bdd3efc83.patch";
+      sha256 = "sha256-4vEETSHA1Gd8GpBZuko4X+9AjG7SFwUlK2MxrWq+iOE=";
+    })
   ];
 
   nativeBuildInputs = [
