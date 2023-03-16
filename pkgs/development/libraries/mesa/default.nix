@@ -10,7 +10,6 @@
   if stdenv.isLinux then
     [
       "d3d12" # WSL emulated GPU (aka Dozen)
-      "kmsro" # helper driver for display-only devices
       "nouveau" # Nvidia
       "radeonsi" # new AMD (GCN+)
       "r300" # very old AMD
@@ -19,15 +18,15 @@
       "svga" # VMWare virtualized GPU
       "virgl" # QEMU virtualized GPU (aka VirGL)
       "zink" # generic OpenGL over Vulkan, experimental
-    ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
       "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
       "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
       "lima" # ARM Mali 4xx
       "panfrost" # ARM Mali Midgard and up (T/G series)
+      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    ] ++ lib.optionals stdenv.isAarch64 [
       "tegra" # Nvidia Tegra SoCs
       "v3d" # Broadcom VC5 (Raspberry Pi 4)
-      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     ] ++ lib.optionals stdenv.hostPlatform.isx86 [
       "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
       "crocus" # Intel legacy, x86 only
