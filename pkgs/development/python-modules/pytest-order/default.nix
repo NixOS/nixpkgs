@@ -11,10 +11,11 @@
 buildPythonPackage rec {
   pname = "pytest-order";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-E50lswgmt47rtCci90fqsUxEuIBZ16cdT3nRSgVyaaU=";
+    hash = "sha256-E50lswgmt47rtCci90fqsUxEuIBZ16cdT3nRSgVyaaU=";
   };
 
   buildInputs = [ pytest ];

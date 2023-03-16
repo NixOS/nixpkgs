@@ -2,26 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G5dEN1yO/WnMLVZtxL6vD+YjvHDWiWehZSqeL43IDXE=";
+    sha256 = "sha256-vvGeC+5dsO26ALfHoZ9+zVlpl+63Nj/VqtSBQo1Gl/c=";
   };
 
-  cargoSha256 = "sha256-carsp6IRFCw5bLRYoyy6QP8jnImTSf/6GxYDH9lR7GA=";
+  cargoSha256 = "sha256-A45txIc5AcJtWx6Jl4w7Ys2H3UgTjRsEiMySuUv9+Ds=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installShellCompletion completions/argc.{bash,zsh}
+    installShellCompletion completions/argc.{bash,fish,zsh}
   '';
 
   meta = with lib; {
     description = "A tool to handle sh/bash cli parameters";
     homepage = "https://github.com/sigoden/argc";
+    changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };

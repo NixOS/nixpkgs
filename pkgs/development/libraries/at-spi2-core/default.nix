@@ -5,6 +5,8 @@
 , ninja
 , pkg-config
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gsettings-desktop-schemas
 , makeWrapper
 , dbus
@@ -30,11 +32,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
-    gobject-introspection
     makeWrapper
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -58,7 +62,6 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [
-    "-Dintrospection=yes"
     # Provide dbus-daemon fallback when it is not already running when
     # at-spi2-bus-launcher is executed. This allows us to avoid
     # including the entire dbus closure in libraries linked with

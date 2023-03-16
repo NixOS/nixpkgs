@@ -7,7 +7,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "blesh";
+  pname = "blesh";
   version = "unstable-2022-07-29";
 
   src = fetchzip {

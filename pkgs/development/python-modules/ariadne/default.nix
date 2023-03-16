@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.17.0";
+  version = "0.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LRsijp2N0L4QCvPt0vWBX0qE4yqDDKtMcTBQ/eAkljA=";
+    hash = "sha256-E7uC+l0Yjol8UPLF4CV+PN49tOUJXNUS5yYdF1oyfwU=";
   };
 
   propagatedBuildInputs = [

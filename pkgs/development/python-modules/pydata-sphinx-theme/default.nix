@@ -22,7 +22,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
-    sha256 = "sha256-zinB3nlh1hbfol9MOpYZgY1LstSpmF7QeDZ68pT7zMI=";
+    hash = "sha256-zinB3nlh1hbfol9MOpYZgY1LstSpmF7QeDZ68pT7zMI=";
   };
 
   propagatedBuildInputs = [

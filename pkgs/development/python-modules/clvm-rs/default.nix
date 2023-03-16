@@ -18,13 +18,13 @@ buildPythonPackage rec {
     owner = "Chia-Network";
     repo = "clvm_rs";
     rev = version;
-    sha256 = "sha256-mCKY/PqNOUTaRsFDxQBvbTD6wC4qzP0uv5FldYkwl6c=";
+    hash = "sha256-mCKY/PqNOUTaRsFDxQBvbTD6wC4qzP0uv5FldYkwl6c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-TmrR8EeySsGWXohMdo3dCX4oT3l9uLVv5TUeRxCBQeE=";
+    hash = "sha256-TmrR8EeySsGWXohMdo3dCX4oT3l9uLVv5TUeRxCBQeE=";
   };
 
   format = "pyproject";

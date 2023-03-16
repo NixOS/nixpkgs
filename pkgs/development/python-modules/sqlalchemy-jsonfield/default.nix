@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "penguinolog";
     repo = "sqlalchemy_jsonfield";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-dSvqUXZzr+s/v8QEtqrv6slI7p1akXwAxi68D9ctyuU=";
+    hash = "sha256-dSvqUXZzr+s/v8QEtqrv6slI7p1akXwAxi68D9ctyuU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";

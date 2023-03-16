@@ -4,6 +4,7 @@
 , six
 , mock
 , pyfakefs
+, pytest-forked
 , pytestCheckHook
 }:
 
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pyfakefs
+    pytest-forked
     pytestCheckHook
   ];
 

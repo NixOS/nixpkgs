@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-iot-device-sdk-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GHMnDRxXkaKDTaawwPtMqa7EZJ8Y35+ScgtfEP9PJGs=";
+    hash = "sha256-GHMnDRxXkaKDTaawwPtMqa7EZJ8Y35+ScgtfEP9PJGs=";
   };
 
   # Module has no tests

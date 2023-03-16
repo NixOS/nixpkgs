@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jpvanhal";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-han0OjMI1XmuWKHGVpk+xZB+/+cpV1I+659zOG3hcPY=";
+    hash = "sha256-han0OjMI1XmuWKHGVpk+xZB+/+cpV1I+659zOG3hcPY=";
   };
 
   patches = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       #   https://github.com/jpvanhal/flask-basicauth/pull/29
       name = "fix-test-flask-ext-imports.patch";
       url = "https://github.com/jpvanhal/flask-basicauth/commit/23f57dc1c3d85ea6fc7f468e8d8c6f19348a0a81.patch";
-      sha256 = "sha256-njUYjO0TRe3vr5D0XjIfCNcsFlShbGxtFV/DJerAKDE=";
+      hash = "sha256-njUYjO0TRe3vr5D0XjIfCNcsFlShbGxtFV/DJerAKDE=";
     })
   ];
 

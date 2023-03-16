@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ful1e5";
     repo = "clickgen";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-qDaSfIeKCbyl3C2iKz9DYQc1oNwTe5xDlGg/yYhakSw=";
+    hash = "sha256-qDaSfIeKCbyl3C2iKz9DYQc1oNwTe5xDlGg/yYhakSw=";
   };
 
   propagatedBuildInputs = [ pillow toml numpy ];

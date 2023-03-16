@@ -25,14 +25,14 @@ buildPythonPackage rec {
     owner = "anyoptimization";
     repo = "pymoo";
     rev = version;
-    sha256 = "sha256-dzKr+u84XmPShWXFjH7V9KzwJPGZz3msGOe1S7FlGTQ=";
+    hash = "sha256-dzKr+u84XmPShWXFjH7V9KzwJPGZz3msGOe1S7FlGTQ=";
   };
 
   pymoo_data = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo-data";
     rev = "33f61a78182ceb211b95381dd6d3edee0d2fc0f3";
-    sha256 = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
+    hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
   };
 
   postPatch = ''

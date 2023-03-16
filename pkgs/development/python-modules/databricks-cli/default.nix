@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.17.4";
+  version = "0.17.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-srrNxiOGrU1u5shssRssr8Hwdy20U4coOAjYsT7eTSA=";
+    hash = "sha256-HaSSaRd8WFq1g8WT5forBGBz9hSKsyBiTD4FnLprSgE=";
   };
 
   propagatedBuildInputs = [

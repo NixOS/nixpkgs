@@ -2,7 +2,7 @@
 , addOpenGLRunpath
 , fetchPypi
 , fetchFromGitHub
-, Mako
+, mako
 , boost
 , numpy
 , pytools
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zZLnJGu0WsNFKVWhEHFBEmdM3ztKni9P8lpBWcaE5rs=";
+    hash = "sha256-zZLnJGu0WsNFKVWhEHFBEmdM3ztKni9P8lpBWcaE5rs=";
   };
 
   preConfigure = with lib.versions; ''
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-    Mako
+    mako
   ];
 
   meta = with lib; {

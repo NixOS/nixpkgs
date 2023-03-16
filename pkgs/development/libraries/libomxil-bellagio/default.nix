@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "libomxil-bellagio";
@@ -15,6 +18,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./fedora-fixes.patch
     ./fno-common.patch
+    # Fix stack overread: https://sourceforge.net/p/omxil/patches/8/
+    (fetchurl {
+      name = "no-overread.patch";
+      url = "https://sourceforge.net/p/omxil/patches/8/attachment/0001-src-base-omx_base_component.c-fix-stack-overread.patch";
+      hash = "sha256-ElpiDxU0Ii4Ou8ebVx4Ne9UnB6mesC8cRj77N7LdovA=";
+    })
   ];
 
   # Disable parallel build as it fails as:

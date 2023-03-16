@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "ahupp";
     repo = "python-magic";
     rev = version;
-    sha256 = "sha256-fZ+5xJ3P0EYK+6rQ8VzXv2zckKfEH5VUdISIR6ybIfQ=";
+    hash = "sha256-fZ+5xJ3P0EYK+6rQ8VzXv2zckKfEH5VUdISIR6ybIfQ=";
   };
 
   patches = [

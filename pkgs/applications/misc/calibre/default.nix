@@ -99,11 +99,11 @@ stdenv.mkDerivation rec {
         setupPyBuildFlags = [ "--enable=load_extension" ];
       }))
       beautifulsoup4
-      cchardet
       css-parser
       cssselect
       python-dateutil
       dnspython
+      faust-cchardet
       feedparser
       html2text
       html5-parser

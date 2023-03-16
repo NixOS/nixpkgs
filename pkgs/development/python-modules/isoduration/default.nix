@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bolsote";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6LqsH+3V/K0s2YD1gvmelo+cCH+yCAmmyTYGhUegVdk=";
+    hash = "sha256-6LqsH+3V/K0s2YD1gvmelo+cCH+yCAmmyTYGhUegVdk=";
   };
 
   propagatedBuildInputs = [

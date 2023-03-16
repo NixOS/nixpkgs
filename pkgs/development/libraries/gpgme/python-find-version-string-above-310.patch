@@ -6,7 +6,7 @@ diff --git a/configure.ac b/configure.ac
  	  # Reset everything, so that we can look for another Python.
            m4_foreach([mym4pythonver],
 -                     [[2.7],[3.4],[3.5],[3.6],[3.7],[3.8],[3.9],[all]],
-+                     [[2.7],[3.4],[3.5],[3.6],[3.7],[3.8],[3.9],[3.10],[all]],
++                     [[2.7],[3.4],[3.5],[3.6],[3.7],[3.8],[3.9],[3.10],[3.11],[all]],
             [unset PYTHON
  	    unset PYTHON_VERSION
  	    unset PYTHON_CPPFLAGS
@@ -45,7 +45,7 @@ diff --git a/m4/python.m4 b/m4/python.m4
  [python2 python2.7 dnl
   python dnl
 - python3 python3.9 python3.8 python3.7 python3.6 python3.5 python3.4
-+ python3 python3.10 python3.9 python3.8 python3.7 python3.6 python3.5 python3.4
++ python3 python3.10 python3.11, python3.9 python3.8 python3.7 python3.6 python3.5 python3.4
   ])
  
    AC_ARG_VAR([PYTHON], [the Python interpreter])

@@ -135,9 +135,6 @@ stdenv.mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
-
   # Use nix-provided libraries instead of submodules
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \

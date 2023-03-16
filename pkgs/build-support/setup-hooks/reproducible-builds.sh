@@ -3,7 +3,8 @@
 # derivation and not easily collide with other builds.
 # We also truncate the hash so that it cannot cause reference cycles.
 NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE:-} -frandom-seed=$(
-    outbase="${out##*/}"
+    randSeed=${NIX_OUTPATH_USED_AS_RANDOM_SEED:-$out}
+    outbase="${randSeed##*/}"
     randomseed="${outbase:0:10}"
     echo $randomseed
 )"

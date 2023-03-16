@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
 
+  # causes failures in coreutils test suite
+  hardeningDisable = [ "fortify3" ];
+
   # Upstream use C++-style comments in C code. Remove them.
   # This comment breaks compilation if too strict gcc flags are used.
   patchPhase = ''

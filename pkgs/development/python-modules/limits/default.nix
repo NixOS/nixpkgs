@@ -2,6 +2,7 @@
 , buildPythonPackage
 , deprecated
 , fetchFromGitHub
+, etcd3
 , hiro
 , packaging
 , pymemcache
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "2.8.0";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-XGYwSe9KWw6PdxDjyqZ5kw5jlBxQR0VYacquwZ2z8rA=";
+    hash = "sha256-zMU2MU7MFTWSig2j1PaBLPtKM5/7gNkFajKXw3A+fIQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    etcd3
     hiro
     pymemcache
     pymongo

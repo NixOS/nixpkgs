@@ -29,7 +29,7 @@ buildPythonPackage rec {
   patches = [ (fetchpatch {
     name = "libxc-6";  # https://github.com/pyscf/pyscf/pull/1467
     url = "https://github.com/pyscf/pyscf/commit/ebcfacc90e119cd7f9dcdbf0076a84660349fc79.patch";
-    sha256 = "sha256-O+eDlUKJeThxQcHrMGqxjDfRCmCNP+OCgv/L72jAF/o=";
+    hash = "sha256-O+eDlUKJeThxQcHrMGqxjDfRCmCNP+OCgv/L72jAF/o=";
   })];
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.

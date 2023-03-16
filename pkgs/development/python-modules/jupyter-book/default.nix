@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "0.15.0";
+  version = "0.15.1";
 
   format = "flit";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eUw3zC+6kx/OQvMhzkG6R3b2ricX0kvC+fCBD4mkEuo=";
+    hash = "sha256-ihY07Bb37t7g0Rbx5ft8SCAyia2S2kLglRnccdlWwBA=";
   };
 
   nativeBuildInputs = [

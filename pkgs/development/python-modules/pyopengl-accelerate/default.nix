@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyOpenGL-accelerate";
     inherit version;
-    sha256 = "sha256-rYowAlbsolIoJh3hb3QeUaMPNPHhsc9oNZ9cYtvNzcM=";
+    hash = "sha256-rYowAlbsolIoJh3hb3QeUaMPNPHhsc9oNZ9cYtvNzcM=";
   };
 
   meta = {

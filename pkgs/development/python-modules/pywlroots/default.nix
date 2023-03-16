@@ -9,7 +9,7 @@
 , pixman
 , pythonOlder
 , udev
-, wlroots
+, wlroots_0_16
 , wayland
 , pywayland
 , xkbcommon
@@ -19,19 +19,19 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.24";
+  version = "0.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TvYhxiAbK+mpcEE9y79WH96dzeDnvI0xPaUxSYQqyHE=";
+    hash = "sha256-GFJw88N0313PudM0o/jOvtoE3u8kSoV+lYgKlNya4wM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
-  buildInputs = [ libinput libxkbcommon pixman xorg.libxcb udev wayland wlroots ];
+  buildInputs = [ libinput libxkbcommon pixman xorg.libxcb udev wayland wlroots_0_16 ];
   propagatedBuildInputs = [ cffi pywayland xkbcommon ];
   nativeCheckInputs = [ pytestCheckHook ];
 

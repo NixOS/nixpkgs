@@ -33,7 +33,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "libusb-package-optional.patch";
       url = "https://github.com/pyocd/pyOCD/commit/0b980cf253e3714dd2eaf0bddeb7172d14089649.patch";
-      sha256 = "sha256-B2+50VntcQELeakJbCeJdgI1iBU+h2NkXqba+LRYa/0=";
+      hash = "sha256-B2+50VntcQELeakJbCeJdgI1iBU+h2NkXqba+LRYa/0=";
     })
   ];
 

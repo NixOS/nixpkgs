@@ -12,7 +12,7 @@
 , sqlite
 , tinyxml
 , wrapGAppsHook
-, wxGTK30
+, wxGTK32
 , gtk3
 , xdg-utils
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pugixml
     sqlite
     tinyxml
-    wxGTK30
+    wxGTK32
     gtk3
     xdg-utils
   ];

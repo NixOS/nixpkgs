@@ -130,6 +130,13 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
+  systemWithBuildDeps = system.overrideAttrs (o: {
+    systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
+    buildCommand = o.buildCommand + ''
+      ln -sn $systemBuildClosure $out/build-closure
+    '';
+  });
+
 in
 
 {
@@ -306,6 +313,27 @@ in
       '';
     };
 
+    system.includeBuildDependencies = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to include the build closure of the whole system in
+        its runtime closure.  This can be useful for making changes
+        fully offline, as it includes all sources, patches, and
+        intermediate outputs required to build all the derivations
+        that the system depends on.
+
+        Note that this includes _all_ the derivations, down from the
+        included applications to their sources, the compilers used to
+        build them, and even the bootstrap compiler used to compile
+        the compilers. This increases the size of the system and the
+        time needed to download its dependencies drastically: a
+        minimal configuration with no extra services enabled grows
+        from ~670MiB in size to 13.5GiB, and takes proportionally
+        longer to download.
+      '';
+    };
+
   };
 
 
@@ -336,7 +364,7 @@ in
       ]; };
     };
 
-    system.build.toplevel = system;
+    system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
 
   };
 

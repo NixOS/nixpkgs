@@ -2,24 +2,45 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "csvkit";
   version = "1.1.1";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = python.pkgs.fetchPypi {
     inherit pname version;
     hash = "sha256-vt23t49rIq2+1urVrV3kv7Md0sVfMhGyorO2VSkEkiM=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     agate
     agate-excel
     agate-dbf
     agate-sql
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
   ];
 

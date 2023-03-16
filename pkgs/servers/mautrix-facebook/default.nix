@@ -21,6 +21,7 @@ python3.pkgs.buildPythonPackage rec {
     commonmark
     aiohttp
     asyncpg
+    commonmark
     mautrix
     paho-mqtt
     pillow

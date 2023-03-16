@@ -30,7 +30,7 @@
 
 let
   pythonModules = pp: [
-    pp.Mako
+    pp.mako
     pp.markdown
   ];
 in

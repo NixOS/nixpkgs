@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "sloria";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UuAz/k/Tnumupv3ybFR7PkYHwG3kH7M5oobZykEP+ao=";
+    hash = "sha256-UuAz/k/Tnumupv3ybFR7PkYHwG3kH7M5oobZykEP+ao=";
   };
 
   patches = [

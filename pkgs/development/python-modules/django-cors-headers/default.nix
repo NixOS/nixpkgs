@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "adamchainz";
     repo = "django-cors-headers";
     rev = version;
-    sha256 = "sha256-pIyf4poW8/slxj4PVvmXpuYp//v5w00yU0Vz6Jiy2yM=";
+    hash = "sha256-pIyf4poW8/slxj4PVvmXpuYp//v5w00yU0Vz6Jiy2yM=";
   };
 
   propagatedBuildInputs = [

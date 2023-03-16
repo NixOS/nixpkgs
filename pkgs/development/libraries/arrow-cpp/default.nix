@@ -268,7 +268,6 @@ stdenv.mkDerivation rec {
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = licenses.asl20;
-    broken = stdenv.isLinux && stdenv.isAarch64; # waiting on gtest changes in staging
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };
