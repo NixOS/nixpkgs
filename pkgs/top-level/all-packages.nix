@@ -22433,6 +22433,8 @@ with pkgs;
 
   tblite = callPackage ../development/libraries/science/chemistry/tblite { };
 
+  toml-f = callPackage ../development/libraries/toml-f { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
