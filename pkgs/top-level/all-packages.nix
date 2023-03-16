@@ -5000,12 +5000,15 @@ with pkgs;
   hunt = callPackage ../tools/misc/hunt { };
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
-    cairo = cairo.override { xcbSupport = true; };
-  };
+    cairo = cairo.override { xcbSupport = true; };  };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
-  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
+  hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
+
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
+    stdenv = gcc12Stdenv;
+  };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
