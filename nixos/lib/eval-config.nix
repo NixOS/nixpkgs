@@ -38,11 +38,7 @@ let pkgs_ = pkgs;
 in
 
 let
-  evalModulesMinimal = (import ./default.nix {
-    inherit lib;
-    # Implicit use of feature is noted in implementation.
-    featureFlags.minimalModules = { };
-  }).evalModules;
+  inherit (import ./default.nix { inherit lib;}) evalSystemConfiguration;
 
   pkgsModule = rec {
     _file = ./eval-config.nix;
@@ -87,16 +83,23 @@ let
     in
       locatedModules ++ legacyModules;
 
-  noUserModules = evalModulesMinimal ({
+  noUserModules = evalSystemConfiguration ({
     inherit prefix specialArgs;
     modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
   });
 
   # Extra arguments that are useful for constructing a similar configuration.
-  modulesModule = {
+  modulesModule = let
+    # keep `mkForce` and similar available to users,
+    # but override what is set in `evalSystemConfiguration`
+    higherThanDefaultPriority = lib.modules.defaultOverridePriority - 1;
+  in {
     config = {
       _module.args = {
-        inherit noUserModules baseModules extraModules modules;
+        inherit extraModules;
+        noUserModules = lib.mkOverride higherThanDefaultPriority noUserModules;
+        baseModules = lib.mkOverride higherThanDefaultPriority baseModules;
+        modules = lib.mkOverride higherThanDefaultPriority modules;
       };
     };
   };
