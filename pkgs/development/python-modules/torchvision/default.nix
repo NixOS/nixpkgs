@@ -1,5 +1,4 @@
 { buildPythonPackage
-, cudaSupport ? torch.cudaSupport or false # by default uses the value from torch
 , fetchFromGitHub
 , lib
 , libjpeg_turbo
@@ -15,7 +14,7 @@
 }:
 
 let
-  inherit (torch) cudaPackages gpuTargetString;
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
   inherit (cudaPackages) cudatoolkit cudaFlags cudaVersion;
 
   # NOTE: torchvision doesn't use cudnn; torch does!
@@ -68,7 +67,7 @@ buildPythonPackage {
   + lib.optionalString cudaSupport ''
     export CC=${cudatoolkit.cc}/bin/cc
     export CXX=${cudatoolkit.cc}/bin/c++
-    export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
+    export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
     export FORCE_CUDA=1
   '';
 
