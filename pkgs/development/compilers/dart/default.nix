@@ -2,16 +2,18 @@
 , lib
 , fetchurl
 , unzip
-, version ? "2.18.0"
+, runCommand
+, darwin
+# we need a way to build other dart versions
+# than the latest, because flutter might want
+# another version
+, version ? "2.19.3"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
     i686 = "ia32";
     aarch64 = "arm64";
-    # Make sure that if the user overrides version parameter they're
-    # also need to override sources, to avoid mistakes
-    version = "2.18.0";
-  in
+in
   {
     "${version}-aarch64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${aarch64}-release.zip";
@@ -39,7 +41,7 @@
 assert version != null && version != "";
 assert sources != null && (builtins.isAttrs sources);
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
   inherit version;
 
@@ -56,9 +58,30 @@ stdenv.mkDerivation {
   '';
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-
   dontStrip = true;
+  passthru.tests = {
+    testCreate = runCommand "dart-test-create" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+      PROJECTNAME="dart_test_project"
+      dart create --no-pub $PROJECTNAME
 
+      [[ -d $PROJECTNAME ]]
+      [[ -f $PROJECTNAME/bin/$PROJECTNAME.dart ]]
+      touch $out
+    '';
+
+    testCompile = runCommand "dart-test-compile" {
+      nativeBuildInputs = [ finalAttrs.finalPackage ]
+        ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.sigtool ];
+    } ''
+      HELLO_MESSAGE="Hello, world!"
+      echo "void main() => print('$HELLO_MESSAGE');" > hello.dart
+      dart compile exe hello.dart
+      PROGRAM_OUT=$(./hello.exe)
+
+      [[ "$PROGRAM_OUT" == "$HELLO_MESSAGE" ]]
+      touch $out
+    '';
+  };
   meta = with lib; {
     homepage = "https://www.dartlang.org/";
     maintainers = with maintainers; [ grburst ];
@@ -72,4 +95,4 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };
-}
+})
