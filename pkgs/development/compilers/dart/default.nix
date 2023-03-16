@@ -3,6 +3,7 @@
 , fetchurl
 , unzip
 , runCommand
+, darwin
 # we need a way to build other dart versions
 # than the latest, because flutter might want
 # another version
@@ -68,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       touch $out
     '';
 
-    testCompile = runCommand "dart-test-compile" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+    testCompile = runCommand "dart-test-compile" { nativeBuildInputs = [ finalAttrs.finalPackage ] ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.sigtool ]; } ''
       HELLO_MESSAGE="Hello, world!"
       echo "void main() => print('$HELLO_MESSAGE');" > hello.dart
       dart compile exe hello.dart
