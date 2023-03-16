@@ -30,4 +30,5 @@ public interface of the library.
 
 ```{=include=} sections
 lib-modules-eval.section.md
+lib-tests-eval.section.md
 ```
