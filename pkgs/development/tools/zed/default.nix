@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/brimdata/zed/cli.Version=${version}"
+    "-X=github.com/brimdata/zed/cli.version=${version}"
   ];
 
   passthru.tests = {
