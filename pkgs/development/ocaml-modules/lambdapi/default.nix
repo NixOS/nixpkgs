@@ -24,7 +24,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
-    hash = "sha256-xWnKJtfTaLBNxpq4+LNLvVyqLg5wP7yD4FTvm0853XU=";
+    hash = "sha256-7ww2TjVcbEQyfmLnnEhLGAjW4US9a4mdOfDJw6NR1fI=";
   };
 
   nativeBuildInputs = [ menhir ];
