@@ -2,6 +2,7 @@
 , stdenv
 , runCommand
 , fetchurl
+, fetchpatch2
 , perl
 , python3
 , ruby
@@ -97,6 +98,17 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
+    })
+
+    # Various build fixes for 2.39.91, should be part of final release
+    # https://src.fedoraproject.org/rpms/webkitgtk/blob/1c16daccce69d47df5381968e9c7be8ed72e4f90/f/fix-installed-headers.patch
+    (fetchpatch2 {
+      url = "https://github.com/WebKit/WebKit/commit/53a8890833684fe813efd7b7a2b7417dbfa7b826.patch";
+      hash = "sha256-utenJzQMr8AUMRT6CL06hi5sXPiXEJJmM7Vht+qxiw8=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/WebKit/WebKit/commit/10c9256883bf38b9fbcfbc91577783d4df90d1bd.patch";
+      hash = "sha256-eXMRh9oEcBeOiJvj+kRJHEIUwnviBvlI2JdBS6MVxtk=";
     })
   ];
 
