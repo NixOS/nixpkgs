@@ -130,8 +130,7 @@ let
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
               */
             ]
-            # FIXME: reintroduce aarch64-darwin after this builds again
-            ++ lib.collect lib.isDerivation (removeAttrs jobs.stdenvBootstrapTools [ "aarch64-darwin" ])
+            ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin

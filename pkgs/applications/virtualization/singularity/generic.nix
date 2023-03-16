@@ -76,7 +76,7 @@ in
 
 let
   defaultPathOriginal = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
-  privileged-un-utils = if ((isNull newuidmapPath) && (isNull newgidmapPath)) then null else
+  privileged-un-utils = if ((newuidmapPath == null) && (newgidmapPath == null)) then null else
   (runCommandLocal "privileged-un-utils" { } ''
     mkdir -p "$out/bin"
     ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
@@ -212,10 +212,10 @@ buildGoModule {
         rm "$file"
       done
     ''}
-    ${lib.optionalString enableSuid (lib.warnIf (isNull starterSuidPath) "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial." ''
+    ${lib.optionalString enableSuid (lib.warnIf (starterSuidPath == null) "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial." ''
       chmod +x $out/libexec/${projectName}/bin/starter-suid
     '')}
-    ${lib.optionalString (enableSuid && !isNull starterSuidPath) ''
+    ${lib.optionalString (enableSuid && (starterSuidPath != null)) ''
       mv "$out"/libexec/${projectName}/bin/starter-suid{,.orig}
       ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
     ''}
