@@ -22429,6 +22429,8 @@ with pkgs;
 
   dftd4 = callPackage ../development/libraries/science/chemistry/dftd4 { };
 
+  simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
