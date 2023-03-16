@@ -2665,10 +2665,7 @@ with pkgs;
 
   android-backup-extractor = callPackage ../tools/backup/android-backup-extractor { };
 
-  android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools
-    (lib.optionalAttrs (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isLinux) {
-      stdenv = gcc10Stdenv;
-    }));
+  android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
   anewer = callPackage ../tools/text/anewer { };
 
@@ -10744,6 +10741,8 @@ with pkgs;
   orangefs = callPackage ../tools/filesystems/orangefs {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  orz = callPackage ../tools/compression/orz { };
 
   os-prober = callPackage ../tools/misc/os-prober { };
 
@@ -31104,10 +31103,9 @@ with pkgs;
       Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
       CoreMediaIO QuartzCore AppKit CoreWLAN WebKit IOKit GSS MediaPlayer IOSurface Metal MetalKit;
 
-    # C++20 is required, aarch64 has gcc 9 by default
     stdenv = if stdenv.isDarwin
       then darwin.apple_sdk_11_0.stdenv
-      else if stdenv.isAarch64 then gcc10Stdenv else stdenv;
+      else stdenv;
 
     # tdesktop has random crashes when jemalloc is built with gcc.
     # Apparently, it triggers some bug due to usage of gcc's builtin
@@ -38532,7 +38530,7 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
-  qMasterPassword = qt6Packages.callPackage ../applications/misc/qMasterPassword { };
+  qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
   qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
 
@@ -39160,7 +39158,7 @@ with pkgs;
 
   spdlog = spdlog_1;
 
-  dart = callPackage ../development/interpreters/dart { };
+  dart = callPackage ../development/compilers/dart { };
 
   httrack = callPackage ../tools/backup/httrack { };
 

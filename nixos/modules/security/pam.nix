@@ -793,7 +793,7 @@ let
     };
   }));
 
-  motd = if isNull config.users.motdFile
+  motd = if config.users.motdFile == null
          then pkgs.writeText "motd" config.users.motd
          else config.users.motdFile;
 
@@ -1233,7 +1233,7 @@ in
   config = {
     assertions = [
       {
-        assertion = isNull config.users.motd || isNull config.users.motdFile;
+        assertion = config.users.motd == null || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
         '';
