@@ -12788,6 +12788,8 @@ self: super: with self; {
 
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 
+  yubico = callPackage ../development/python-modules/yubico { };
+
   yubico-client = callPackage ../development/python-modules/yubico-client { };
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
