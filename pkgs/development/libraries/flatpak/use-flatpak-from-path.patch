@@ -1,0 +1,34 @@
+From 5515c31ce221159841c279c90c994ef071fe773b Mon Sep 17 00:00:00 2001
+From: Lorenz Brun <lorenz@brun.one>
+Date: Thu, 16 Mar 2023 01:19:17 +0100
+Subject: [PATCH] Use flatpak from PATH
+
+---
+ common/flatpak-dir.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/common/flatpak-dir.c b/common/flatpak-dir.c
+index 84816389..06c17f94 100644
+--- a/common/flatpak-dir.c
++++ b/common/flatpak-dir.c
+@@ -7593,7 +7593,7 @@ export_desktop_file (const char         *app,
+ 
+       new_exec = g_string_new ("");
+       if ((flatpak = g_getenv ("FLATPAK_BINARY")) == NULL)
+-        flatpak = FLATPAK_BINDIR "/flatpak";
++        flatpak = "flatpak";
+ 
+       g_string_append_printf (new_exec,
+                               "%s run --branch=%s --arch=%s",
+@@ -8939,7 +8939,7 @@ flatpak_dir_deploy (FlatpakDir          *self,
+                                        error))
+         return FALSE;
+       if ((flatpak = g_getenv ("FLATPAK_BINARY")) == NULL)
+-        flatpak = FLATPAK_BINDIR "/flatpak";
++        flatpak = "flatpak";
+ 
+       bin_data = g_strdup_printf ("#!/bin/sh\nexec %s run --branch=%s --arch=%s %s \"$@\"\n",
+                                   flatpak, escaped_branch, escaped_arch, escaped_app);
+-- 
+2.39.2
+

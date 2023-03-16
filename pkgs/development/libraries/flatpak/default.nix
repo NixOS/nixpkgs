@@ -89,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
+    # Always use flatpak from PATH to avoid references to the Nix store in launchers.
+    # Using FLATPAK_BINARY instead has the disadvantage of needing to wrap every user.
+    ./use-flatpak-from-path.patch
+
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
@@ -174,13 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs buildutil
     patchShebangs tests
     PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # Use flatpak from PATH in exported assets (e.g. desktop files).
-      --set FLATPAK_BINARY flatpak
-    )
   '';
 
   passthru = {
