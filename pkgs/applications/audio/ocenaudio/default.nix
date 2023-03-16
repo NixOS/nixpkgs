@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ocenaudio.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ onny ];
   };
 }
