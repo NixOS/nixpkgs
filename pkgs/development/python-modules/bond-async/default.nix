@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/bondhome/bond-async";
+    changelog = "https://github.com/bondhome/bond-async/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
