@@ -430,8 +430,12 @@ in
                 # Set up the replication master
 
                 ( echo "use mysql;"
-                  echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
-                  echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
+                  ${if isMariaDB then ''
+                    echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
+                    echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
+                  '' else ''
+                    echo "CREATE USER IF NOT EXISTS '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password BY '${cfg.replication.masterPassword}';"
+                  ''}
                   echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
                 ) | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
