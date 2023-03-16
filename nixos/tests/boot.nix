@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  evalSystemConfiguration ? (import ../lib {}).evalSystemConfiguration
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -10,18 +11,18 @@ let
   qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
 
   iso =
-    (import ../lib/eval-config.nix {
-      inherit system;
+    (evalSystemConfiguration  {
       modules = [
+        { nixpkgs = { inherit system; }; }
         ../modules/installer/cd-dvd/installation-cd-minimal.nix
         ../modules/testing/test-instrumentation.nix
       ];
     }).config.system.build.isoImage;
 
   sd =
-    (import ../lib/eval-config.nix {
-      inherit system;
+    (evalSystemConfiguration {
       modules = [
+        { nixpkgs = { inherit system; }; }
         ../modules/installer/sd-card/sd-image-x86_64.nix
         ../modules/testing/test-instrumentation.nix
         { sdImage.compressImage = false; }
@@ -57,12 +58,12 @@ let
 
   makeNetbootTest = name: extraConfig:
     let
-      config = (import ../lib/eval-config.nix {
-          inherit system;
+      config = (evalSystemConfiguration {
           modules =
             [ ../modules/installer/netboot/netboot.nix
               ../modules/testing/test-instrumentation.nix
               { key = "serial"; }
+              { nixpkgs = { inherit system; }; }
             ];
         }).config;
       ipxeBootDir = pkgs.symlinkJoin {

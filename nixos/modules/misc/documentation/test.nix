@@ -1,7 +1,7 @@
-{ nixosLib, pkgsModule, runCommand }:
+{ evalModules, pkgsModule, runCommand }:
 
 let
-  sys = nixosLib.evalModules rec {
+  sys = evalModules rec {
     modules = [
       pkgsModule
       ../documentation.nix

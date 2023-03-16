@@ -36,12 +36,21 @@ let
     if elem system systems then handleTest path args
     else {};
 
-  nixosLib = import ../lib {
+  nixosLibExperimental = import ../lib {
     # Experimental features need testing too, but there's no point in warning
     # about it, so we enable the feature flag.
     featureFlags.minimalModules = {};
   };
-  evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
+  nixosLib = import ../lib {};
+
+  inherit
+    (nixosLibExperimental)
+    evalModules;
+  inherit
+    (nixosLib)
+    evalSystemConfiguration;
+
+  evalMinimalConfig = module: evalModules { modules = [ module ]; };
 
   inherit
     (rec {
@@ -99,7 +108,7 @@ in {
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
   blocky = handleTest ./blocky.nix {};
-  boot = handleTestOn ["x86_64-linux" "aarch64-linux"] ./boot.nix {};
+  boot = handleTestOn ["x86_64-linux" "aarch64-linux"] ./boot.nix { inherit evalSystemConfiguration; };
   bootspec = handleTestOn ["x86_64-linux"] ./bootspec.nix {};
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
@@ -147,7 +156,7 @@ in {
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
-  containers-imperative = handleTest ./containers-imperative.nix {};
+  containers-imperative = handleTest ./containers-imperative.nix { inherit evalSystemConfiguration; };
   containers-ip = handleTest ./containers-ip.nix {};
   containers-macvlans = handleTest ./containers-macvlans.nix {};
   containers-names = handleTest ./containers-names.nix {};
@@ -183,7 +192,7 @@ in {
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
-  documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
+  documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit evalModules; };
   doh-proxy-rust = handleTest ./doh-proxy-rust.nix {};
   dokuwiki = handleTest ./dokuwiki.nix {};
   dolibarr = handleTest ./dolibarr.nix {};
@@ -191,8 +200,8 @@ in {
   dovecot = handleTest ./dovecot.nix {};
   drbd = handleTest ./drbd.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
-  ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
-  ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
+  ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix { inherit evalSystemConfiguration; }).boot-ec2-config or {};
+  ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix { inherit evalSystemConfiguration; }).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
   fscrypt = handleTest ./fscrypt.nix {};
   ejabberd = handleTest ./xmpp/ejabberd.nix {};
@@ -290,8 +299,8 @@ in {
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
-  hibernate = handleTestOn ["x86_64-linux"] ./hibernate.nix {};
-  hibernate-systemd-stage-1 = handleTestOn ["x86_64-linux"] ./hibernate.nix { systemdStage1 = true; };
+  hibernate = handleTestOn ["x86_64-linux"] ./hibernate.nix { inherit evalSystemConfiguration; };
+  hibernate-systemd-stage-1 = handleTestOn ["x86_64-linux"] ./hibernate.nix { systemdStage1 = true; inherit evalSystemConfiguration; };
   hitch = handleTest ./hitch {};
   hledger-web = handleTest ./hledger-web.nix {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
@@ -500,11 +509,11 @@ in {
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};
   openssh = handleTest ./openssh.nix {};
   octoprint = handleTest ./octoprint.nix {};
-  openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
-  openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
+  openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {inherit evalSystemConfiguration;}).metadata or {};
+  openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {inherit evalSystemConfiguration;}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
   owncast = handleTest ./owncast.nix {};
-  image-contents = handleTest ./image-contents.nix {};
+  image-contents = handleTest ./image-contents.nix { inherit evalSystemConfiguration; };
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
@@ -621,7 +630,7 @@ in {
   solanum = handleTest ./solanum.nix {};
   solr = handleTest ./solr.nix {};
   sonarr = handleTest ./sonarr.nix {};
-  sourcehut = handleTest ./sourcehut.nix {};
+  sourcehut = handleTest ./sourcehut.nix { inherit evalSystemConfiguration; };
   spacecookie = handleTest ./spacecookie.nix {};
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
@@ -663,7 +672,7 @@ in {
   systemd-initrd-swraid = handleTest ./systemd-initrd-swraid.nix {};
   systemd-initrd-vconsole = handleTest ./systemd-initrd-vconsole.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
-  systemd-machinectl = handleTest ./systemd-machinectl.nix {};
+  systemd-machinectl = handleTest ./systemd-machinectl.nix { inherit evalSystemConfiguration; };
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
   systemd-networkd-dhcpserver-static-leases = handleTest ./systemd-networkd-dhcpserver-static-leases.nix {};
@@ -735,7 +744,7 @@ in {
   vengi-tools = handleTest ./vengi-tools.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   vikunja = handleTest ./vikunja.nix {};
-  virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix { inherit evalSystemConfiguration; };
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
   warzone2100 = handleTest ./warzone2100.nix {};

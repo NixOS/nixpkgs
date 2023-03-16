@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, evalSystemConfiguration, ... }:
   let
 
     container = {
@@ -17,9 +17,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
       imports = [ ../modules/profiles/minimal.nix ];
     };
 
-    containerSystem = (import ../lib/eval-config.nix {
-      inherit (pkgs) system;
-      modules = [ container ];
+    containerSystem = (evalSystemConfiguration {
+      modules = [
+        { nixpkgs = { inherit (pkgs) system; }; }
+        container
+      ];
     }).config.system.build.toplevel;
 
     containerName = "container";

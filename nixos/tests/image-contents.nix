@@ -2,6 +2,7 @@
 # including its user, group, and mode attributes.
 { system ? builtins.currentSystem,
   config ? {},
+  evalSystemConfiguration ? (import ../lib {}).evalSystemConfiguration,
   pkgs ? import ../.. { inherit system config; }
 }:
 
@@ -11,9 +12,9 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  config = (import ../lib/eval-config.nix {
-    inherit system;
+  config = (evalSystemConfiguration {
     modules = [
+      { nixpkgs = { inherit system; }; }
       ../modules/testing/test-instrumentation.nix
       ../modules/profiles/qemu-guest.nix
       {

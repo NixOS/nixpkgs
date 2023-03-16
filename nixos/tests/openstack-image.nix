@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  evalSystemConfiguration ? (import ../lib {}).evalSystemConfiguration
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,12 +10,12 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  image = (import ../lib/eval-config.nix {
-    inherit system;
+  image = (evalSystemConfiguration {
     modules = [
       ../maintainers/scripts/openstack/openstack-image.nix
       ../modules/testing/test-instrumentation.nix
       ../modules/profiles/qemu-guest.nix
+      { nixpkgs = { inherit system; }; }
       {
         # Needed by nixos-rebuild due to lack of network access.
         system.extraDependencies = with pkgs; [

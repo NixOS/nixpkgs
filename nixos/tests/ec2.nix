@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  evalSystemConfiguration ? (import ../lib {}).evalSystemConfiguration
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,9 +10,9 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  imageCfg = (import ../lib/eval-config.nix {
-    inherit system;
+  imageCfg = (evalSystemConfiguration {
     modules = [
+      { nixpkgs = { inherit system; }; }
       ../maintainers/scripts/ec2/amazon-image.nix
       ../modules/testing/test-instrumentation.nix
       ../modules/profiles/qemu-guest.nix
