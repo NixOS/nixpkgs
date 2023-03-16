@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-wKbCIA6Xp+VYhcQ5ZpHo5usB+ksnMAJyv5naBvl4Cxo=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "python_requires='>=3.7.*'" "python_requires='>=3.7'"
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
