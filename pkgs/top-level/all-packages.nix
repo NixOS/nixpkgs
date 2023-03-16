@@ -10742,6 +10742,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  orz = callPackage ../tools/compression/orz { };
+
   os-prober = callPackage ../tools/misc/os-prober { };
 
   oshka = callPackage ../development/tools/oshka { };
