@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
     };
 
   testScript = ''
-      machine.allow_reboot = True
+      machine.start(allow_reboot = True)
 
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")

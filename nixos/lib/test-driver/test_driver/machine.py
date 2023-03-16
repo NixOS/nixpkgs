@@ -311,7 +311,6 @@ class Machine:
 
     start_command: StartCommand
     keep_vm_state: bool
-    allow_reboot: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -336,13 +335,11 @@ class Machine:
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
-        allow_reboot: bool = False,
         callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
-        self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
@@ -873,7 +870,7 @@ class Machine:
         self.process.stdin.write(chars.encode())
         self.process.stdin.flush()
 
-    def start(self) -> None:
+    def start(self, allow_reboot: bool = False) -> None:
         if self.booted:
             return
 
@@ -897,7 +894,7 @@ class Machine:
             self.shared_dir,
             self.monitor_path,
             self.shell_path,
-            self.allow_reboot,
+            allow_reboot,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
@@ -950,7 +947,7 @@ class Machine:
         """Press Ctrl+Alt+Delete in the guest.
 
         Prepares the machine to be reconnected which is useful if the
-        machine was started after setting `machine.allow_reboot = True`
+        machine was started with `allow_reboot = True`
         """
         self.send_key(f"ctrl-alt-delete")
         self.connected = False
