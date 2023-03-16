@@ -24228,6 +24228,8 @@ with pkgs;
     mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
   };
 
+  plumed = callPackage ../development/libraries/science/chemistry/plumed { };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = callPackage ./agda-packages.nix {
