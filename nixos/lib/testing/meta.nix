@@ -22,7 +22,7 @@ in
           };
           timeout = lib.mkOption {
             type = types.nullOr types.int;
-            default = 3600;  # 1 hour
+            default = null; # NOTE: null values are filtered out by `meta`.
             description = mdDoc ''
               The [{option}`test`](#test-opt-test)'s [`meta.timeout`](https://nixos.org/manual/nixpkgs/stable/#var-meta-timeout) in seconds.
             '';
