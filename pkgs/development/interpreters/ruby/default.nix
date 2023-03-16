@@ -95,6 +95,10 @@ let
         propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
+        # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
+        #   No such file or directory @ apply2files - ...-ruby-2.7.7-devdoc/share/ri/2.7.0/system/ARGF/inspect-i.ri (Errno::ENOENT)
+        # make: *** [uncommon.mk:373: do-install-all] Error 1
+        enableParallelInstalling = false;
 
         patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) (
