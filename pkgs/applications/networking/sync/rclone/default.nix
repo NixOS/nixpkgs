@@ -46,7 +46,7 @@ buildGoModule rec {
       ''
       wrapProgram $out/bin/rclone \
                   --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
-                  --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+                  --prefix LD_LIBRARY_PATH : "${lib.getLib fuse}/lib"
     '';
 
   meta = with lib; {
