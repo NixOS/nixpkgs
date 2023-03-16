@@ -12732,6 +12732,8 @@ with pkgs;
 
   tiv = callPackage ../applications/misc/tiv { };
 
+  tkman = callPackage ../tools/misc/tkman { };
+
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
