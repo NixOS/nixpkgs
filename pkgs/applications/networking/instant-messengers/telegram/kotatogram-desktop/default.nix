@@ -16,7 +16,7 @@
 , kwayland
 , lz4
 , xxHash
-, ffmpeg
+, ffmpeg_4
 , openalSoft
 , minizip
 , libopus
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     qtsvg
     lz4
     xxHash
-    ffmpeg
+    ffmpeg_4
     openalSoft
     minizip
     libopus
