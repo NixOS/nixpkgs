@@ -970,6 +970,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    purrr = old.purrr.overrideAttrs (attrs: {
+      patchPhase = "patchShebangs configure";
+    });
+
     RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
