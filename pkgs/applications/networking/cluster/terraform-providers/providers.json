@@ -811,11 +811,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-ZERJIZ1nsvvMhZe9hjcZt5F1lFNFV4TP0ifNin+MC5M=",
+    "hash": "sha256-OceXVqPbjJnPNKbf5vKzbTBEES1+CNCa/dTfPFgdACM=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v4.111.0",
+    "rev": "v4.112.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
