@@ -10133,6 +10133,10 @@ with pkgs;
 
   neofetch = callPackage ../tools/misc/neofetch { };
 
+  neorg-haskell-parser = with haskell.lib.compose; lib.pipe
+    (haskellPackages.callPackage ../tools/misc/neorg-haskell-parser { })
+    [ justStaticExecutables doJailbreak ];
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
