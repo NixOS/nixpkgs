@@ -41,7 +41,7 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  throwSystem = throw "slack does not support system: ${system}";
 
   pname = "slack";
 
