@@ -1856,6 +1856,8 @@ with pkgs;
 
   git-delete-merged-branches = callPackage ../applications/version-management/git-delete-merged-branches { };
 
+  git-dive = callPackage ../applications/version-management/git-dive { };
+
   git-extras = callPackage ../applications/version-management/git-extras { };
 
   git-fame = callPackage ../applications/version-management/git-fame { };
