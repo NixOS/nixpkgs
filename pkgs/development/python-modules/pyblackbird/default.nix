@@ -12,8 +12,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koolsb";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-+ehzrr+RrwFKOOuxBq3+mwnuMPxZFV4QTZG1IRgsbLc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+ehzrr+RrwFKOOuxBq3+mwnuMPxZFV4QTZG1IRgsbLc=";
   };
 
   propagatedBuildInputs = [
@@ -23,11 +23,15 @@ buildPythonPackage rec {
 
   # Test setup try to create a serial port
   doCheck = false;
-  pythonImportsCheck = [ "pyblackbird" ];
+
+  pythonImportsCheck = [
+    "pyblackbird"
+  ];
 
   meta = with lib; {
     description = "Python implementation for Monoprice Blackbird units";
     homepage = "https://github.com/koolsb/pyblackbird";
+    changelog = "https://github.com/koolsb/pyblackbird/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
