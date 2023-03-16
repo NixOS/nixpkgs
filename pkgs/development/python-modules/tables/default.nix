@@ -55,6 +55,7 @@ buildPythonPackage rec {
       --replace "return 0" "assert result.wasSuccessful(); return 0" \
       --replace "return 1" "assert result.wasSuccessful(); return 1"
     substituteInPlace requirements.txt \
+      --replace "cython>=0.29.21" "" \
       --replace "blosc2~=2.0.0" "blosc2"
   '';
 
