@@ -287,9 +287,7 @@ in rec {
     with import ./.. { inherit system; };
 
     hydraJob ((evalSystemConfiguration {
-      modules = makeModules system ./maintainers/scripts/ec2/amazon-image.nix {
-          ({ ... }: { amazonImage.sizeMB = "auto"; })
-      };
+      modules = makeModules system ./maintainers/scripts/ec2/amazon-image.nix ({ ... }: { amazonImage.sizeMB = "auto"; });
     }).config.system.build.amazonImage)
 
   );
@@ -319,11 +317,11 @@ in rec {
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (evalSystemConfiguration {
-        inherit system;
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
             system.stateVersion = mkDefault "18.03";
+            nixpkgs = { inherit system; };
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
