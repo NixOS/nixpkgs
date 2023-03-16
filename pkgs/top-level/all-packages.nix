@@ -2231,7 +2231,7 @@ with pkgs;
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsx2 = callPackage ../applications/emulators/pcsx2 {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
   };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
@@ -24198,8 +24198,7 @@ with pkgs;
   zig_0_10 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.10.nix {
     llvmPackages = llvmPackages_15;
   };
-  # Zig 0.10.1 is broken on Darwin, so use 0.9.1 on Darwin instead.
-  zig = if stdenv.isDarwin then zig_0_9 else zig_0_10;
+  zig = zig_0_10;
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -35851,7 +35850,9 @@ with pkgs;
 
   openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
-  openmw = libsForQt5.callPackage ../games/openmw { };
+  openmw = libsForQt5.callPackage ../games/openmw {
+    inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
+  };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
