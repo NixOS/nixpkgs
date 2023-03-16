@@ -31094,10 +31094,9 @@ with pkgs;
       Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
       CoreMediaIO QuartzCore AppKit CoreWLAN WebKit IOKit GSS MediaPlayer IOSurface Metal MetalKit;
 
-    # C++20 is required, aarch64 has gcc 9 by default
     stdenv = if stdenv.isDarwin
       then darwin.apple_sdk_11_0.stdenv
-      else if stdenv.isAarch64 then gcc10Stdenv else stdenv;
+      else stdenv;
 
     # tdesktop has random crashes when jemalloc is built with gcc.
     # Apparently, it triggers some bug due to usage of gcc's builtin
