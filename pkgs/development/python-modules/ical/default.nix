@@ -13,11 +13,12 @@
 , pytest-golden
 , pytestCheckHook
 , pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.2.9";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-p1cvs+xLin2WK2zyqQFd1vWKzt+LU2mpDSieOgA7Qf8=";
+    hash = "sha256-ZLT9AwBl8Bp1ktz6UvyFemacDb5mCExJSSoN5aGxDJk=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-golden
     pytestCheckHook
+    pyyaml
   ];
 
   # https://github.com/allenporter/ical/issues/136
