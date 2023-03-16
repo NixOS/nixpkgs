@@ -2665,10 +2665,7 @@ with pkgs;
 
   android-backup-extractor = callPackage ../tools/backup/android-backup-extractor { };
 
-  android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools
-    (lib.optionalAttrs (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isLinux) {
-      stdenv = gcc10Stdenv;
-    }));
+  android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
   anewer = callPackage ../tools/text/anewer { };
 
