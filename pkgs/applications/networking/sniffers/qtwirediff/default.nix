@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , qtbase
 , qmake
+, qtwayland
 , wrapQtAppsHook
 , wireshark-cli
 }:
@@ -26,6 +27,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
+    qtwayland
   ];
 
   installPhase = ''
