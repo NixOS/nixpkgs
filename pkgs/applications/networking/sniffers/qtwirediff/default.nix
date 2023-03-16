@@ -27,14 +27,21 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
+  ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ];
 
   installPhase = ''
     runHook preInstall
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r qtwirediff.app $out/Applications
+    makeWrapper $out/{Applications/qtwirediff.app/Contents/MacOS,bin}/qtwirediff
+  '' + lib.optionalString stdenv.isLinux ''
     install -Dm755 -T qtwirediff $out/bin/qtwirediff
     wrapProgram $out/bin/qtwirediff \
       --prefix PATH : "${lib.makeBinPath [ wireshark-cli ]}"
+  '' + ''
     runHook postInstall
   '';
 

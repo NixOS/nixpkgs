@@ -29943,7 +29943,7 @@ with pkgs;
   };
   wireshark-qt = wireshark;
 
-  qtwirediff = qt6.callPackage ../applications/networking/sniffers/qtwirediff {};
+  qtwirediff = qt6Packages.callPackage ../applications/networking/sniffers/qtwirediff {};
 
   tshark = wireshark-cli;
   wireshark-cli = wireshark.override {
