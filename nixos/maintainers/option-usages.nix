@@ -43,12 +43,13 @@
 # tested option result.
 
 with import ../../lib;
+with import ../lib {};
 
 let
 
   evalFun = {
     specialArgs ? {}
-  }: import ../lib/eval-config.nix {
+  }: evalSystemConfiguration {
        modules = [ configuration ];
        inherit specialArgs;
      };

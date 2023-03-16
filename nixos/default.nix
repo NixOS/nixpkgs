@@ -4,9 +4,11 @@
 
 let
 
-  eval = import ./lib/eval-config.nix {
-    inherit system;
-    modules = [ configuration ];
+  eval = (import ./lib {}).evalSystemConfiguration {
+    modules = [
+      { nixpkgs = {inherit system;}; }
+      configuration
+    ];
   };
 
 in

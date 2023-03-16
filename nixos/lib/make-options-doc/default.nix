@@ -2,14 +2,14 @@
 
    Minimal example:
 
-    { pkgs,  }:
+    { pkgs, lib }:
 
     let
-      eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-        baseModules = [
-          ../module.nix
+      # TODO (during review): shouldn't this be the minimal eval?!?
+      eval = (import (pkgs.path + "/nixos/lib") {}).evalSystemConfiguration {
+        modules = [
+          { _modules.args.baseModules = lib.mkForce [ ../module.nix ];
         ];
-        modules = [];
       };
     in pkgs.nixosOptionsDoc {
       options = eval.options;
