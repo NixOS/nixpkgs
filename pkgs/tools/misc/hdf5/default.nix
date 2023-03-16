@@ -103,6 +103,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit (python3.pkgs) h5py;
   };
