@@ -91,6 +91,18 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
+  # Remove reference to /build, which get introduced
+  # into AM_CPPFLAGS since hdf5-1.14.0. Cmake of various
+  # packages using HDF5 gets confused trying access the non-existent path.
+  postFixup = ''
+    for i in h5cc h5pcc h5c++; do
+      if [ -f $dev/bin/$i ]; then
+        substituteInPlace $dev/bin/$i --replace \
+          '-I/build/hdf5-${version}/src/H5FDsubfiling' ""
+      fi
+    done
+  '';
+
   passthru.tests = {
     inherit (python3.pkgs) h5py;
   };
