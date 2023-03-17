@@ -266,15 +266,15 @@ in
             # completely replace the contents of this file, use
             # `environment.etc."doas.conf"`.
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-
             # extraRules
             ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
             # extraConfig
             ${cfg.extraConfig}
-          '';
+
+            # "root" is allowed to do anything.
+            permit nopass keepenv root
+         '';
           preferLocalBuild = true;
         }
         # Make sure that the doas.conf file is syntactically valid.
