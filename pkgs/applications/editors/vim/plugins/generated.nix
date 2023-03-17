@@ -171,6 +171,18 @@ final: prev:
     meta.homepage = "https://github.com/vigoux/LanguageTool.nvim/";
   };
 
+  LazyVim = buildVimPluginFrom2Nix {
+    pname = "LazyVim";
+    version = "2023-03-17";
+    src = fetchFromGitHub {
+      owner = "LazyVim";
+      repo = "LazyVim";
+      rev = "c10e550639caef68146d122d9bc4a66f2f38650a";
+      sha256 = "04d062kxa0pz57liymim3i17hz51w0690c2y4q22h3kfarcmj0ws";
+    };
+    meta.homepage = "https://github.com/LazyVim/LazyVim/";
+  };
+
   LeaderF = buildVimPluginFrom2Nix {
     pname = "LeaderF";
     version = "2023-03-02";
