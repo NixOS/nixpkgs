@@ -3153,7 +3153,7 @@ with pkgs;
 
   cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
 
-  cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
+  cyclonedx-python = with python3Packages; toPythonApplication cyclonedx-python;
 
   dcap = callPackage ../tools/networking/dcap { };
 

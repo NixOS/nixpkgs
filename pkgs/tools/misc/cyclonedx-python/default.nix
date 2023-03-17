@@ -1,34 +1,38 @@
 { lib
-, python3
+, buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, poetry-core
+, setuptools
+, cyclonedx-python-lib
+, packageurl-python
+, importlib-metadata
+, pip-requirements-parser
+, toml
 }:
-python3.pkgs.buildPythonApplication rec {
+ buildPythonPackage rec {
   pname = "cyclonedx-python";
-  version = "0.4.3";
+  version = "3.11.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
     rev = "v${version}";
-    sha256 = "BvG4aWBMsllW2L4lLsiRFUCPjgoDpHxN49fsUFdg7tQ=";
+    sha256 = "sha256-uYXkS4aGCJDjUrUrF/koBc4rA8H4tJQzC8COt9AD+b0=";
   };
 
-  # They pin versions for exact version numbers because "A bill-of-material such
-  # as CycloneDX expects exact version numbers" -- but that's unnecessary with
-  # Nix.
-  preBuild = ''
-    sed "s@==.*'@'@" -i setup.py
-  '';
+  nativeBuildInputs = [poetry-core];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
+    cyclonedx-python-lib
     packageurl-python
-    requests
-    xmlschema
+    importlib-metadata
+    pip-requirements-parser
     setuptools
-    requirements-parser
-    packaging
-    chardet
-    jsonschema
+    toml
   ];
 
   # the tests want access to the cyclonedx binary
@@ -42,6 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = teams.determinatesystems.members ++ [ maintainers.georgesalkhouri ];
   };
 }
