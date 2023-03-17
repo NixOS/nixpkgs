@@ -11,11 +11,6 @@ mkDerivation rec {
     sha256 = "sha256-zOH/w4QroMaVjWnFuWAJQ11RYlpXwIXRG9QYGDkfLVY=";
   };
 
-  patches = [
-    # Remove autostart
-    ./0001-fix-installPhase.patch
-  ];
-
   nativeBuildInputs = [
     cmake
     ninja
