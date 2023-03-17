@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "44.rc";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nYEwjr9B8dLLDbQV40Mmj5uU8IE7/YBTRS3fTJXn+wI=";
+    sha256 = "WTz8bcj4KphnG5TANbl9vojvVucIeAsq0dIyTk0Eu/8=";
   };
 
   patches = [
