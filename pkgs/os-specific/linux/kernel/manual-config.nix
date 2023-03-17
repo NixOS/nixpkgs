@@ -277,7 +277,6 @@ let
       ];
 
       postInstall = optionalString isModular ''
-        cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
@@ -297,12 +296,16 @@ let
         # from a `try-run` call from the Makefile
         rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
-        # Keep some extra files on some arches (powerpc, aarch64)
-        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
-          if [ -f "$buildRoot/$f" ]; then
-            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+        # Keep some extra files
+        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o \
+                 scripts/gdb/linux vmlinux vmlinux-gdb.py
+        do
+          if [ -e "$buildRoot/$f" ]; then
+            mkdir -p "$(dirname "$dev/lib/modules/${modDirVersion}/build/$f")"
+            cp -HR $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
           fi
         done
+        ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $dev
 
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can add
@@ -343,6 +346,11 @@ let
 
         # Remove reference to kmod
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
+      '';
+
+      preFixup = ''
+        # Don't strip $dev/lib/modules/*/vmlinux
+        stripDebugList="$(cd $dev && echo lib/modules/*/build/*/)"
       '';
 
       requiredSystemFeatures = [ "big-parallel" ];
