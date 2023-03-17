@@ -6897,6 +6897,18 @@ final: prev:
     meta.homepage = "https://github.com/steelsojka/pears.nvim/";
   };
 
+  persistence-nvim = buildVimPluginFrom2Nix {
+    pname = "persistence.nvim";
+    version = "2023-02-28";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "persistence.nvim";
+      rev = "adcf6913693a0434665d162ee45a186230496f8a";
+      sha256 = "1fx713swa6138mpmqgpc6lf7nvm4j7nm6fr8zwpgqn6dv71jdhxd";
+    };
+    meta.homepage = "https://github.com/folke/persistence.nvim/";
+  };
+
   peskcolor-vim = buildVimPluginFrom2Nix {
     pname = "peskcolor.vim";
     version = "2016-06-11";
