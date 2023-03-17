@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pyutil
-, setuptoolsTrial
 , twisted
 }:
 
@@ -17,12 +16,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyutil ];
 
-  nativeCheckInputs = [ setuptoolsTrial twisted ];
+  nativeCheckInputs = [ twisted ];
 
-  # argparse is in the stdlib but zfec doesn't know that.
-  postPatch = ''
-    sed -i -e '/argparse/d' setup.py
-  '';
+  checkPhase = "trial zfec";
 
   pythonImportsCheck = [ "zfec" ];
 
