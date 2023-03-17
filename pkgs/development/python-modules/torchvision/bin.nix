@@ -6,17 +6,19 @@
 , isPy38
 , isPy39
 , isPy310
+, isPy311
 , patchelf
 , pillow
 , python
 , torch-bin
+, addOpenGLRunpath
 }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.14.1";
+  version = "0.15.1";
 in buildPythonPackage {
   inherit version;
 
@@ -26,10 +28,11 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
+  disabled = !(isPy38 || isPy39 || isPy310 || isPy311);
 
   nativeBuildInputs = [
     patchelf
+    addOpenGLRunpath
   ];
 
   propagatedBuildInputs = [
@@ -45,11 +48,12 @@ in buildPythonPackage {
   postFixup = let
     rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
-    # Note: after patchelf'ing, libcudart can still not be found. However, this should
-    #       not be an issue, because PyTorch is loaded before torchvision and brings
-    #       in the necessary symbols.
-    patchelf --set-rpath "${rpath}:${torch-bin}/${python.sitePackages}/torch/lib:" \
-      "$out/${python.sitePackages}/torchvision/_C.so"
+    cp $out/${python.sitePackages}/torchvision.libs/* $out/${python.sitePackages}/torchvision/
+    find $out/${python.sitePackages}/torchvision/ -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      echo "setting rpath for $lib..."
+      patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torchvision/" "$lib"
+      addOpenGLRunpath "$lib"
+    done
   '';
 
   meta = with lib; {
