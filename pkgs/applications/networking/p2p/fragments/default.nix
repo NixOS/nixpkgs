@@ -15,12 +15,12 @@
 , pkg-config
 , rustPlatform
 , sqlite
-, transmission
+, transmission_3
 , wrapGAppsHook4
 }:
 
 let
-  patchedTransmission = transmission.overrideAttrs (oldAttrs: {
+  patchedTransmission = transmission_3.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or []) ++ [
       (fetchpatch {
         url = "https://raw.githubusercontent.com/flathub/de.haeckerfelix.Fragments/2aee477c8e26a24570f8dbbdbd1c49e017ae32eb/transmission_pdeathsig.patch";
