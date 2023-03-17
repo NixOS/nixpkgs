@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open and full-featured framework for image processing";
     homepage = "https://gmic.eu/";
-    license = licenses.cecill20;
+    license = licenses.cecill21;
     platforms = platforms.unix;
   };
 }
