@@ -1571,6 +1571,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
+  phpDocumentor = callPackage ../tools/misc/phpDocumentor { };
+
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
 
   q = callPackage ../tools/networking/q { };
