@@ -30573,9 +30573,7 @@ with pkgs;
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
-  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
