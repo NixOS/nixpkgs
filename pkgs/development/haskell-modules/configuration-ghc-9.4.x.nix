@@ -194,6 +194,28 @@ in {
     hls-stylish-haskell-plugin = null;
   };
 
+  # needed to build servant
+  http-api-data = super.http-api-data_0_5;
+  attoparsec-iso8601 = super.attoparsec-iso8601_1_1_0_0;
+
+  # requires newer versions to work with GHC 9.4
+  swagger2 = dontCheck super.swagger2;
+  servant = doJailbreak super.servant;
+  servant-server = doJailbreak super.servant-server;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
+  servant-swagger = doJailbreak super.servant-swagger;
+  servant-client-core = doJailbreak super.servant-client-core;
+  servant-client = doJailbreak super.servant-client;
+  relude = doJailbreak super.relude;
+
+  cborg = appendPatch (pkgs.fetchpatch {
+    name = "cborg-support-ghc-9.4.patch";
+    url = "https://github.com/well-typed/cborg/pull/304.diff";
+    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
+    relative = "cborg";
+  }) super.cborg;
+
   # https://github.com/tweag/ormolu/issues/941
   ormolu = doDistribute self.ormolu_0_5_3_0;
   fourmolu = overrideCabal (drv: {
