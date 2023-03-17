@@ -38,6 +38,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  ldflags = [
+    "-X=github.com/sagernet/sing-box/constant.Version=${version}"
+  ];
+
   postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
     installShellCompletion --cmd sing-box \
       --bash <(${emulator} $out/bin/sing-box completion bash) \
