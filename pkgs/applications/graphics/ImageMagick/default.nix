@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
     done
   '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do

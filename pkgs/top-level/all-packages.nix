@@ -1856,6 +1856,8 @@ with pkgs;
 
   git-delete-merged-branches = callPackage ../applications/version-management/git-delete-merged-branches { };
 
+  git-dive = callPackage ../applications/version-management/git-dive { };
+
   git-extras = callPackage ../applications/version-management/git-extras { };
 
   git-fame = callPackage ../applications/version-management/git-fame { };
@@ -24225,6 +24227,8 @@ with pkgs;
     mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
   };
 
+  plumed = callPackage ../development/libraries/science/chemistry/plumed { };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = callPackage ./agda-packages.nix {
@@ -29945,6 +29949,8 @@ with pkgs;
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
   };
   wireshark-qt = wireshark;
+
+  qtwirediff = qt6Packages.callPackage ../applications/networking/sniffers/qtwirediff {};
 
   tshark = wireshark-cli;
   wireshark-cli = wireshark.override {

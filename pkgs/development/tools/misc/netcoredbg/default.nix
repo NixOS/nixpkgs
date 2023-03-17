@@ -4,12 +4,12 @@ let
   version = "2.2.0-961";
   hash = "0gbjm8x40hzf787kccfxqb2wdgfks81f6hzr6rrmid42s4bfs5w7";
 
-  coreclr-version = "release/7.0";
+  coreclr-version = "v7.0.4";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    sha256 = "sha256-kBYb0Uw1IzDTpsEyd02/5sliVHoLmZdGnpybneV0u7U=";
+    sha256 = "sha256-gPl9sfn3eL3AUli1gdPizDK4lciTJ1ImBcics5BA63M=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
