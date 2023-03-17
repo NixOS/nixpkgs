@@ -75,7 +75,7 @@ let
       plasma-settings = callPackage ./plasma-settings.nix {};
       plasmatube = callPackage ./plasmatube {};
       qmlkonsole = callPackage ./qmlkonsole.nix {};
-      spacebar = callPackage ./spacebar.nix { inherit srcs; };
+      spacebar = callPackage ./spacebar.nix {};
       tokodon = callPackage ./tokodon.nix {};
     };
 
