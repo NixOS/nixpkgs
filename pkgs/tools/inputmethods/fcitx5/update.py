@@ -21,6 +21,7 @@ REPOS = [
         "fcitx5-m17n",
         "fcitx5-qt",
         "fcitx5-rime",
+        "fcitx5-skk",
         "fcitx5-table-extra",
         "fcitx5-table-other",
         "fcitx5-unikey"
