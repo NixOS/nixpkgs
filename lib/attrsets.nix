@@ -444,6 +444,58 @@ rec {
     else
       [];
 
+  /* Recursively collect values produced by function `f` that verify a given
+     predicate named `pred` from the set `attrs`. The recursion is stopped
+     when the predicate is verified.
+
+     If `pred` verifies the given `attrs` set, the result is a list with a
+     single element `f [ ] attrs`.
+
+     Attention:
+       Using this function on attribute sets that refer to themselves will cause
+       infinite recursion if the predicate allows that.
+
+     Example:
+       collect'
+         (_: v: isDerivation v)
+         (path: value: { inherit path value; })
+         {
+           a = «derivation 1»;
+           b = {
+             c = «derivation 2»;
+           };
+           not-a-derivation = 42;
+         }
+       => [
+            { path = [ "a" ]; value = «derivation 1»; }
+            { path = [ "b" "c" ]; value = «derivation 2»; }
+          ]
+
+     Type:
+       collect' :: ([String] -> a -> Bool) -> ([String] -> a -> b) -> AttrSet -> [b]
+  */
+  collect' =
+  # Given an attribute's path and value, determine if recursion should stop.
+  pred:
+  # Given an attribute's path and value, produce the value to collect.
+  f:
+  # The attribute set to recursively collect.
+  attrs:
+    let
+      recurse = prefix: attrs:
+        concatMap
+          (name: visit (prefix ++ [ name ]) attrs.${name})
+          (attrNames attrs);
+      visit = path: value:
+        if pred path value then
+          [ (f path value) ]
+        else if isAttrs value then
+          recurse path value
+        else
+          [ ];
+    in
+    visit [ ] attrs;
+
   /* Return the cartesian product of attribute set value combinations.
 
     Example:
