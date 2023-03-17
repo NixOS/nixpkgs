@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch2
 , docbook-xsl-nons
 , docutils
 , gi-docgen
@@ -42,6 +43,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-7H5Ah4zo+wLKd0WoKoOgtIm7HcUSw8PTf/KzBlY75oc=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://source.puri.sm/Librem5/feedbackd/-/merge_requests/109.patch";
+      hash = "sha256-z3Ud6P2GHYOaGA2vJDD3Sz47+M8p0VcYZ5gbYcGydMk=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
