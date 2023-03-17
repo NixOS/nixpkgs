@@ -1,0 +1,13 @@
+Accept and ignore "--disable-shared" option passed by pkgsStatic.stdenv.
+Without this patch, configure phase fails with "unknown option".
+
+--- a/configure	1970-01-01 00:00:00.000000000 -0500
++++ b/configure	1970-01-01 00:00:00.000000000 -0500
+@@ -46,6 +46,7 @@
+ 	opt=${x%%=*}
+ 	var=${x#*=}
+ 	case "$opt" in
++	--disable-shared) : ;;
+ 	--prefix) PREFIX=$var ;;
+ 	--exec-prefix) EPREFIX=$var ;;
+ 	--bindir) BINDIR=$var ;;

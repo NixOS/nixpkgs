@@ -1,0 +1,12 @@
+diff -Naur meson-0.60.2-old/mesonbuild/environment.py meson-0.60.2-new/mesonbuild/environment.py
+--- meson-0.60.2-old/mesonbuild/environment.py	2021-11-02 16:58:13.000000000 -0300
++++ meson-0.60.2-new/mesonbuild/environment.py	2021-12-12 17:44:00.350499307 -0300
+@@ -68,7 +68,7 @@
+         # compiling we fall back on the unprefixed host version. This
+         # allows native builds to never need to worry about the 'BUILD_*'
+         # ones.
+-        ([var_name + '_FOR_BUILD'] if is_cross else [var_name]),
++        [var_name + '_FOR_BUILD'] + ([] if is_cross else [var_name]),
+         # Always just the unprefixed host versions
+         [var_name]
+     )[for_machine]

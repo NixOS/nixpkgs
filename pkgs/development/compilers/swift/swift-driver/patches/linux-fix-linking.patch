@@ -1,0 +1,40 @@
+--- a/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
++++ b/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
+@@ -9,6 +9,7 @@
+ // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+ //
+ //===----------------------------------------------------------------------===//
++import Foundation
+ import TSCBasic
+ import SwiftOptions
+ 
+@@ -116,7 +117,20 @@ extension GenericUnixToolchain {
+       // just using `clang` and avoid a dependency on the C++ runtime.
+       let clangTool: Tool =
+         parsedOptions.hasArgument(.enableExperimentalCxxInterop) ? .clangxx : .clang
+-      var clangPath = try getToolPath(clangTool)
++
++      // For Nix, prefer linking using the wrapped system clang, instead of using
++      // the unwrapped clang packaged with swift. The latter is unable to link, but
++      // we still want to use it for other purposes (clang importer).
++      var clangPath: AbsolutePath
++      let env = ProcessInfo.processInfo.environment
++      if let nixCC = env["NIX_CC"],
++         let binPath = try? AbsolutePath(validating: "\(nixCC)/bin"),
++         let tool = lookupExecutablePath(filename: parsedOptions.hasArgument(.enableExperimentalCxxInterop)
++                                                        ? "clang++" : "clang",
++                                         searchPaths: [binPath]) {
++        clangPath = tool
++      } else {
++      clangPath = try getToolPath(clangTool)
+       if let toolsDirPath = parsedOptions.getLastArgument(.toolsDirectory) {
+         // FIXME: What if this isn't an absolute path?
+         let toolsDir = try AbsolutePath(validating: toolsDirPath.asSingle)
+@@ -132,6 +146,7 @@ extension GenericUnixToolchain {
+         commandLine.appendFlag("-B")
+         commandLine.appendPath(toolsDir)
+       }
++      } // nixCC
+ 
+       // Executables on Linux get -pie
+       if targetTriple.os == .linux && linkerOutputType == .executable {

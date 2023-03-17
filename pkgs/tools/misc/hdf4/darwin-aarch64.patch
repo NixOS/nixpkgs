@@ -1,0 +1,11 @@
+--- a/hdf/src/hdfi.h	2021-06-16 16:31:31.000000000 +1200
++++ b/hdf/src/hdfi.h	2021-06-16 16:42:26.000000000 +1200
+@@ -1343,7 +1343,7 @@
+ #endif /* IA64 */
+ 
+ /* Linux AArch64 */
+-#if defined __aarch64__
++#if defined __aarch64__ && !defined __APPLE__
+ 
+ #ifdef GOT_MACHINE
+ If you get an error on this line more than one machine type has been defined.

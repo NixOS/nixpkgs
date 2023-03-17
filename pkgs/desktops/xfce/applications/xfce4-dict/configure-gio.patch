@@ -1,0 +1,11 @@
+diff -urNZ a/configure.ac.in b/configure.ac.in
+--- a/configure.ac.in	2017-12-16 19:46:13.784914017 +0000
++++ b/configure.ac.in	2017-12-16 19:46:38.612477052 +0000
+@@ -53,6 +53,7 @@
+ dnl ***********************************
+ dnl *** Check for required packages ***
+ dnl ***********************************
++XDT_CHECK_PACKAGE([GIO], [gio-unix-2.0], [2.32.0])
+ XDT_CHECK_PACKAGE([GTHREAD], [gthread-2.0], [2.24.0])
+ XDT_CHECK_PACKAGE([GTK], [gtk+-3.0], [3.20.0])
+ XDT_CHECK_PACKAGE([LIBXFCE4UI], [libxfce4ui-2], [4.12.0])
