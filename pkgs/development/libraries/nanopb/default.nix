@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nanopb";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-B9J+GkgOBR4iZaP6/2ykcjbkifoyhkuukkjK/CLBZj0=";
+    sha256 = "sha256-EgrEUQbxLn3Hxn33UokkkDRgkmDwCC/h6lA6YPX4yp8=";
   };
 
   nativeBuildInputs = [ cmake python3 python3.pkgs.wrapPython ];
