@@ -110,13 +110,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-dOcsD5yJrn+zpX5F0ImIqD9d+iC228Wem/668RtsQNY=",
+    "hash": "sha256-j+hKWMHnIE6nmRdGHaQxLybeljmheZ7t83NSXVWViZI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.58.0",
+    "rev": "v4.59.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-nNQmiPBkIuQSBGDujMZI+dZMwv6xQcd8+nc1cMKrJws="
+    "vendorHash": "sha256-TGzTElOmYW6XO4EtMD9MWvdvd1opnFSAVcEA2eYCQdk="
   },
   "azuread": {
     "hash": "sha256-MGCGfocs16qmJnvMRRD7TRHnPkS17h+oNUkMARAQhLs=",
@@ -128,11 +128,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-XcqBkb+de+ikNtrDe33OZHhhv6ed2pXhbXXb7L661RI=",
+    "hash": "sha256-Sv9e48+2rV3t9dmg6COWfrxnfMaxS9xJAPN1sEPen60=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.47.0",
+    "rev": "v3.48.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -155,11 +155,11 @@
     "vendorHash": null
   },
   "bigip": {
-    "hash": "sha256-nlk3ckrLNtPQ9s8uQ2jvARinPVF+A2T0IUY2rBcUFDk=",
+    "hash": "sha256-XnCwJxMuLysle4+UioJ/1e+FFZ39PkaEkdGGOePMo5s=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.16.2",
+    "rev": "v1.17.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -182,14 +182,14 @@
     "vendorHash": "sha256-IiP1LvAX8fknB56gJoI75kGGkRIIoSfpmPkoTxujVDU="
   },
   "buildkite": {
-    "hash": "sha256-BpQpMAecpknI8b1q6XuZPty8I/AUTAwQWm5Y28XJ+G4=",
+    "hash": "sha256-H9kVHGnIzOHViTAuJnLJqcxDjSRXVqyKBAFfOd8fkHo=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "proxyVendor": true,
     "repo": "terraform-provider-buildkite",
-    "rev": "v0.11.0",
+    "rev": "v0.11.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-j56iEtoyKzB8oIMptJDbXCKXOC1L5v1+cpwWU1+uARE="
+    "vendorHash": "sha256-C7bm9wDNEO7fJuqssUxQ4t9poVkPkKd8MU7S9MJTOW4="
   },
   "checkly": {
     "hash": "sha256-LhqdFNTc0RdKmivHI6CnBPmtMW8Sml+5MT8ZjNA4rLY=",
@@ -382,11 +382,11 @@
     "vendorHash": "sha256-E1gzdES/YVxQq2J47E2zosvud2C/ViBeQ8+RfNHMBAg="
   },
   "fastly": {
-    "hash": "sha256-XvDsL2N/S7DE+9ks8Y6ZY3hcogzUsiF7VymNK7NnmaI=",
+    "hash": "sha256-60WydEYr/U1oDVq2YI5W86ivbLw/MRztOOQbTqbDQSg=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v4.0.0",
+    "rev": "v4.1.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -765,13 +765,13 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-p+RsuBthW5ohY1PC7Z/PNyLjpif/blQuonCRm+R0uTc=",
+    "hash": "sha256-1COn48CDGvRnM4M7tWZd5XxEW0vdeFmpOMEhi3sI2to=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.16.1",
+    "rev": "v3.17.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-yF2yk85RLbvmULakODOV2V0Z9dzKfLClUSZTnECdO3o="
+    "vendorHash": "sha256-QL9uEO89PwU8UFbLWCytXpzgrVeXKmaPmFm844ABAvI="
   },
   "nomad": {
     "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",
@@ -1027,13 +1027,13 @@
     "vendorHash": null
   },
   "snowflake": {
-    "hash": "sha256-MMWObJRS7FKvOfor2j0QywRMRbGsE5QcyDGbY2CXjo4=",
+    "hash": "sha256-kkkpXIpioLHBbJCv7t6b17e3Coj4GoYORZaVp14K4nw=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.58.0",
+    "rev": "v0.58.2",
     "spdx": "MIT",
-    "vendorHash": "sha256-yFk5ap28JluaKkUPfePBuRUEg6/Ma5MrRkmWK6iAGNg="
+    "vendorHash": "sha256-vxJGQkrbGITool/45JpBqdqrlSeP3xeWMkSLmFh4K+s="
   },
   "sops": {
     "hash": "sha256-D1Yzs8hDimMP9y8ZRbizEhic3vGtLcZjOVSuSMUAqPk=",

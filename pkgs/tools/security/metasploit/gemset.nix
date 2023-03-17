@@ -104,10 +104,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pn77j932x8p5z992arfjwdjpp5m6zl8llma6pk61hm8dh9wxfw5";
+      sha256 = "19klif1mj36h4706gc3l1frl8xgdpzfxjxg88l2scskyaz307r6p";
       type = "gem";
     };
-    version = "1.726.0";
+    version = "1.729.0";
   };
   aws-sdk-core = {
     groups = ["default"];
@@ -124,20 +124,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0kzlkvidm3hzh0168m0jz9w2c2r47dy8n97l2qyys77hl1cxa6kf";
+      sha256 = "01p8cp7r3yn2i987m8bghxr3y8a8qmpfim6vys1lfbfhlhxvacyx";
       type = "gem";
     };
-    version = "1.369.0";
+    version = "1.370.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1n6hg0sfnhm5yhfvs68fikfpkq9hydiw2081fdikpf0fwp5ny8zw";
+      sha256 = "0simahi29npj078qbrk60vlf5qsdkpgm2y62qlnps7g8lbv2vj1w";
       type = "gem";
     };
-    version = "1.75.0";
+    version = "1.76.0";
   };
   aws-sdk-kms = {
     groups = ["default"];
@@ -614,12 +614,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "f6fdb097af15319fe1755e4e5fa5918edacbd5ca";
-      sha256 = "0acavnkz5pm4rx4bq1jcj82qfqwk41hrhxdvg2lzzpbk4cz8lgji";
+      rev = "06f7a29c0dca9ab33799c1a26f6e97207a111395";
+      sha256 = "1rn1kixms4klnvxqr60zjdr0p8zzis7wfxpx22d7m9sgq7fyx5lk";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.3.7";
+    version = "6.3.8";
   };
   metasploit-model = {
     groups = ["default"];
@@ -977,10 +977,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0rjl709krgf499dhjdapg580l2qaj9d91pwzk8ck8fpnazlx1bdd";
+      sha256 = "1ysx29gk9k14a14zsp5a8czys140wacvp91fja8xcja0j1hzqq8c";
       type = "gem";
     };
-    version = "2.0.2";
+    version = "2.1.0";
   };
   rails-dom-testing = {
     groups = ["default"];
@@ -1207,10 +1207,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "02s5x8i0iz5x5y45xasdqx7iz6z9yyqycqmrn41q9rlys4689jwj";
+      sha256 = "1raplxkkx2jl8zlpy02g3qn45dmfv1zgbac12f1r6w7rq7f264gf";
       type = "gem";
     };
-    version = "0.1.47";
+    version = "0.1.48";
   };
   rex-sslscan = {
     groups = ["default"];
