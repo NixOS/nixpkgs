@@ -98,7 +98,7 @@ let
   '';
 
   bwrapCmd = { initArgs ? "" }: ''
-    blacklist=(/nix /dev /proc /etc)
+    ignored=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
     etc_ignored=()
@@ -108,10 +108,10 @@ let
         :
       elif [[ -L $i ]]; then
         symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$path")
-        blacklist+=("$path")
+        ignored+=("$path")
       else
         ro_mounts+=(--ro-bind "$i" "$path")
-        blacklist+=("$path")
+        ignored+=("$path")
       fi
     done
 
@@ -142,8 +142,8 @@ let
     declare -a auto_mounts
     # loop through all directories in the root
     for dir in /*; do
-      # if it is a directory and it is not in the blacklist
-      if [[ -d "$dir" ]] && [[ ! "''${blacklist[@]}" =~ "$dir" ]]; then
+      # if it is a directory and it is not ignored
+      if [[ -d "$dir" ]] && [[ ! "''${ignored[@]}" =~ "$dir" ]]; then
         # add it to the mount list
         auto_mounts+=(--bind "$dir" "$dir")
       fi
