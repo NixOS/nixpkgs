@@ -19,8 +19,8 @@ index 22d3632e6e..1e8bbb242b 100644
  
 -#define DEFAULT_PATH_NORMAL PATH_SBIN_BIN("/usr/local/") ":" PATH_SBIN_BIN("/usr/")
 -#define DEFAULT_PATH_NORMAL_NULSTR PATH_SBIN_BIN_NULSTR("/usr/local/") PATH_SBIN_BIN_NULSTR("/usr/")
-+#define DEFAULT_PATH_NORMAL "@defaultPathNormal@"
-+#define DEFAULT_PATH_NORMAL_NULSTR "@defaultPathNormal@\0"
++#define DEFAULT_PATH_NORMAL "@defaultPathNormal@" ":" PATH_SBIN_BIN("/run/current-system/sw/")
++#define DEFAULT_PATH_NORMAL_NULSTR "@defaultPathNormal@\0" PATH_SBIN_BIN_NULSTR("/run/current-system/sw/")
  #define DEFAULT_PATH_SPLIT_USR DEFAULT_PATH_NORMAL ":" PATH_SBIN_BIN("/")
  #define DEFAULT_PATH_SPLIT_USR_NULSTR DEFAULT_PATH_NORMAL_NULSTR PATH_SBIN_BIN_NULSTR("/")
 -#define DEFAULT_PATH_COMPAT PATH_SPLIT_SBIN_BIN("/usr/local/") ":" PATH_SPLIT_SBIN_BIN("/usr/") ":" PATH_SPLIT_SBIN_BIN("/")
