@@ -141,6 +141,7 @@ let
       kigo = callPackage ./kigo.nix {};
       killbots = callPackage ./killbots.nix {};
       kimap = callPackage ./kimap.nix {};
+      kio-admin = callPackage ./kio-admin.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kio-gdrive = callPackage ./kio-gdrive.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};

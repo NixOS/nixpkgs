@@ -8963,8 +8963,6 @@ with pkgs;
 
   kibi = callPackage ../applications/editors/kibi { };
 
-  kio-admin = libsForQt5.callPackage ../tools/filesystems/kio-admin { };
-
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
