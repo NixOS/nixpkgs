@@ -76,7 +76,7 @@ let
   ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.12-unstable-2022-08-31";
+  version = "2.99.14-unstable-2023-03-17";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -92,8 +92,8 @@ in stdenv.mkDerivation (finalAttrs: {
     name = "gimp-dev-${rev}"; # to make sure the hash is updated
     owner = "GNOME";
     repo = "gimp";
-    rev = "a791151ed05b6e2f7b0ecb71db8be9629d61f5df";
-    sha256 = "0IIQwJW/HwkvKmjrs2xOhbpyLvvqJ0PR3q75PF+b/Ac=";
+    rev = "ad7a2e53eb72ef471566fa2d0ce9faeec929fbcf";
+    sha256 = "IJMUJc817EDWIRqqkCuwAcSw7gcgCkXxPan5fEq1AO0=";
   };
 
   patches = [
@@ -124,11 +124,6 @@ in stdenv.mkDerivation (finalAttrs: {
     # the correct directory at the moment. There is a MR against isocodes to fix that:
     # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
     ./fix-isocodes-paths.patch
-
-    (fetchpatch {
-      url = "https://github.com/GNOME/gimp/commit/a61299ddb184babca015a846c72bf3e1a57faf2a.patch";
-      sha256 = "I4p2LFUW69es/gWsqbyp7cdAVzHSZOMfHGXca+nPERU=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -245,6 +240,10 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    patchShebangs \
+      app/tests/create_test_env.sh \
+      tools/gimp-mkenums
+
     # Bypass the need for downloading git archive.
     substitute app/git-version.h.in git-version.h \
       --subst-var-by GIMP_GIT_VERSION "GIMP_2.99.?-g${builtins.substring 0 10 finalAttrs.src.rev}" \
