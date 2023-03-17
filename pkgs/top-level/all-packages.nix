@@ -30079,8 +30079,6 @@ with pkgs;
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
 
-  ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
-
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { };

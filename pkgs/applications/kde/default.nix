@@ -86,6 +86,7 @@ let
       falkon = callPackage ./falkon.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
+      ghostwriter = callPackage ./ghostwriter.nix {};
       granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
