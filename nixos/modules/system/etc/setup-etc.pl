@@ -14,7 +14,8 @@ my $etc = $ARGV[0];
 if ($etc eq "") {
     die("This script must be called with an argument which expresses the new /etc directory in the nix store");
 }
-my $static = "/etc/static";
+use constant STATIC => "/etc/static";
+
 my @cleanup_errors;
 my @symlink_errors;
 
@@ -34,7 +35,7 @@ sub atomic_symlink ($source, $target) {
 # Atomically update /etc/static to point at the etc files of the
 # current configuration.
 try {
-    atomic_symlink($etc, $static);
+    atomic_symlink($etc, STATIC);
 }
 catch ($e) {
     die("Failed to create symlink for /etc: $e");
@@ -47,7 +48,7 @@ catch ($e) {
 sub is_static ($path) {
     if (-l $path) {
         my $target = readlink($path);
-        return substr($target, 0, length($static)) eq $static;
+        return substr($target, 0, length(STATIC)) eq STATIC;
     }
 
     if (-d $path) {
@@ -71,14 +72,14 @@ sub cleanup {
     my $filename = $_;
 
     try {
-        if ($File::Find::name eq "/etc/nixos" || $File::Find::name eq $static) {
+        if ($File::Find::name eq "/etc/nixos" || $File::Find::name eq STATIC) {
             $File::Find::prune = 1;
             return;
         }
         if (-l $filename) {
             my $target = readlink($filename);
-            if (substr($target, 0, length($static)) eq $static) {
-                my $x = $static . substr($File::Find::name, length("/etc/"));
+            if (substr($target, 0, length(STATIC)) eq STATIC) {
+                my $x = STATIC . substr($File::Find::name, length("/etc/"));
                 # Check if symlink is still present in new etc
                 if (not (-l $x)) {
                     warn("removing obsolete symlink ‘$File::Find::name’...\n");
@@ -146,11 +147,11 @@ sub make_symlinks {
         if (-e "$path_to_file.mode") {
             chomp(my $mode = read_file("$path_to_file.mode"));
             if ($mode eq "direct-symlink") {
-                atomic_symlink(readlink("$static/$fn"), $target) or warn("Failed to symlink `$target`");
+                atomic_symlink(readlink(STATIC . "/$fn"), $target) or warn("Failed to symlink `$target`");
             } else {
                 my $uid = read_file("$path_to_file.uid", { chomp => 1 });
                 my $gid = read_file("$path_to_file.gid", { chomp => 1 });
-                copy("$static/$fn", "$target.tmp") or warn("Copy failed: $!");
+                copy(STATIC . "/$fn", "$target.tmp") or warn("Copy failed: $!");
 
                 # uid could either be an uid or an username, this gets the uid
                 if ($uid !~ /^\+/) {
@@ -166,7 +167,7 @@ sub make_symlinks {
             }
             push(@copied, $fn);
         } elsif (-l $path_to_file) {
-            atomic_symlink("$static/$fn", $target) or warn("Atomic symlink failed for `$target`");
+            atomic_symlink(STATIC . "/$fn", $target) or warn("Atomic symlink failed for `$target`");
         }
         return;
     }
