@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/paolostivanin/OTPClient";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexbakker ];
+    platforms = platforms.linux;
   };
 }
