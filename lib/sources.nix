@@ -270,17 +270,26 @@ let
       outPath = builtins.path { inherit filter name; path = origSrc; };
     };
 
-  predicateFilter = { name ? "source", src, predicate }:
+  predicateFilterPath = { src, predicate }:
     let
-      isFiltered = src ? _isLibCleanSourceWith;
-      origSrc = if isFiltered then src.origSrc else src;
-      removeBase = lib.path.subpath.removePrefix (lib.path.deconstructPath origSrc).subpath;
-    in lib.cleanSourceWith {
-      inherit name src;
-      filter = absolutePath: type:
-        assert lib.isString absolutePath;
-        let subpath = removeBase (lib.substring 1 (-1) absolutePath);
-        in predicate { inherit type subpath; };
+      orig = toSourceAttributes src;
+      removeBase = lib.path.subpath.removePrefix (lib.path.deconstructPath orig.origSrc).subpath;
+      toPath = str: lib.path.append orig.origSrc (removeBase (lib.substring 1 (-1) str));
+    in fromSourceAttributes {
+      inherit (orig) name origSrc;
+      filter = pathString: type: predicate { path = toPath pathString; inherit type; }
+        && orig.filter pathString type;
+    };
+
+  predicateFilterSubpath = { src, predicate }:
+    let
+      orig = toSourceAttributes src;
+      removeBase = lib.path.subpath.removePrefix (lib.path.deconstructPath orig.origSrc).subpath;
+      toSubpath = str: removeBase (lib.substring 1 (-1) str);
+    in fromSourceAttributes {
+      inherit (orig) name origSrc;
+      filter = pathString: type: predicate { subpath = toSubpath pathString; inherit type; }
+        && orig.filter pathString type;
     };
 
 in {
@@ -302,6 +311,7 @@ in {
     sourceFilesBySuffices
 
     trace
-    predicateFilter
+    predicateFilterPath
+    predicateFilterSubpath
     ;
 }
