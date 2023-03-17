@@ -103,8 +103,26 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
+  nixosWithBuildPlatform = buildSystem: let
+    buildModule =
+      if nixosWithUserModules.options.nixpkgs.hostPlatform.isDefined
+      then {
+        nixpkgs.buildPlatform.system = buildSystem;
+      }
+      else {
+        nixpkgs.localSystem = lib.systems.elaborate buildSystem;
+        nixpkgs.crossSystem = nixosWithUserModules.config.nixpkgs.localSystem;
+      };
+    nixos = noUserModules.extendModules {
+      modules = allUserModules ++ [ buildModule ];
+    };
+  in nixos // {
+    inherit (nixos._module.args) pkgs;
+  };
+  buildPlatform = lib.genAttrs lib.systems.flakeExposed nixosWithBuildPlatform;
+
 in
 withWarnings nixosWithUserModules // {
-  inherit extraArgs;
+  inherit extraArgs buildPlatform;
   inherit (nixosWithUserModules._module.args) pkgs;
 }
