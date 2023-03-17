@@ -31879,6 +31879,8 @@ with pkgs;
 
   rofi-top = callPackage ../applications/misc/rofi-top { };
 
+  rofi-blezz = callPackage ../applications/misc/rofi-blezz { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
