@@ -22,7 +22,7 @@ in
       description = lib.mdDoc ''
         Port where the Portunus webserver should listen on.
 
-        This must be put behind a TLS-capable reverse proxy because Portunus only listens on localhost.
+        This must be put behind a TLS-capable reverse proxy because Portunus is only configured to listen on ::1, the IPv6 loopback address.
       '';
     };
 
@@ -238,7 +238,7 @@ in
           PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
           PORTUNUS_SERVER_GROUP = cfg.group;
           PORTUNUS_SERVER_USER = cfg.user;
-          PORTUNUS_SERVER_HTTP_LISTEN = "[::]:${toString cfg.port}";
+          PORTUNUS_SERVER_HTTP_LISTEN = "[::1]:${toString cfg.port}";
           PORTUNUS_SERVER_STATE_DIR = cfg.stateDir;
           PORTUNUS_SLAPD_BINARY = "${cfg.ldap.package}/libexec/slapd";
           PORTUNUS_SLAPD_GROUP = cfg.ldap.group;
