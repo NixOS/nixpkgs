@@ -246,6 +246,7 @@ let
       kclock = callPackage ./kclock.nix {};
       keysmith = callPackage ./keysmith.nix {};
       koko = callPackage ./koko.nix {};
+      kongress = callPackage ./kongress.nix {};
       krecorder = callPackage ./krecorder.nix {};
       ktrip = callPackage ./ktrip.nix {};
       kweather = callPackage ./kweather.nix {};
