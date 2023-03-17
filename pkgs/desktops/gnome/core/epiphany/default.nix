@@ -4,7 +4,6 @@
 , ninja
 , gettext
 , fetchurl
-, fetchpatch2
 , pkg-config
 , gtk4
 , glib
@@ -37,20 +36,12 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "44.rc";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "33X7U1yAQbzvhNZSWGfVEjw58MaIUDxGBhTNs3Tp+Sk=";
+    sha256 = "qr3J3oDECQc2duAOFbqXGHcV5LhLx3b+htuG0PgUC7E=";
   };
-
-  patches = [
-    # Fix compatibility with WebkitGTk 2.39.91
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1295.patch";
-      hash = "sha256-xlgGaAzMYgwSty992EKWK5emkyZxyLoCw/HI+Uz74go=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -97,8 +88,8 @@ stdenv.mkDerivation rec {
   # Tests need an X display
   mesonFlags = [
     "-Dunit_tests=disabled"
-  ] ++ lib.optionals (!withPantheon) [
-    "-Dgranite=disabled"
+  ] ++ lib.optionals withPantheon [
+    "-Dgranite=enabled"
   ];
 
   passthru = {
