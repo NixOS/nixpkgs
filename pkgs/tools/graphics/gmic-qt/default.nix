@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

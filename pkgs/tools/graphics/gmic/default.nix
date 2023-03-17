@@ -111,6 +111,7 @@ stdenv.mkDerivation rec {
     description = "Open and full-featured framework for image processing";
     homepage = "https://gmic.eu/";
     license = licenses.cecill21;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }
