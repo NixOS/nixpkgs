@@ -31668,6 +31668,10 @@ with pkgs;
 
   miniaudicle = callPackage ../applications/audio/miniaudicle { stdenv = gcc10StdenvCompat; };
 
+  minidsp = callPackage ../applications/audio/minidsp {
+    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+  };
+
   minicom = callPackage ../tools/misc/minicom { };
 
   minigalaxy = callPackage ../applications/misc/minigalaxy { };
