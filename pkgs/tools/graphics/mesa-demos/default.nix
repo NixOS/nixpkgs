@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     freeglut glew libX11 libXext libGL libGLU mesa wayland
     wayland-protocols
   ] ++ lib.optional (mesa ? osmesa) mesa.osmesa ;
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
 
   mesonFlags = [
     "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
