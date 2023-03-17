@@ -5000,12 +5000,23 @@ with pkgs;
   hunt = callPackage ../tools/misc/hunt { };
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
-    cairo = cairo.override { xcbSupport = true; };
+    cairo = cairo.override { xcbSupport = true; };  };
+
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
+    stdenv = gcc12Stdenv;
+    wlroots = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
+    udis86 = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
+  hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
-  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
+  hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
+
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
+    stdenv = gcc12Stdenv;
+  };
+
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -34538,6 +34549,8 @@ with pkgs;
   xdg-desktop-portal-gnome = callPackage ../development/libraries/xdg-desktop-portal-gnome { };
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
+
+  xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland { };
 
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
