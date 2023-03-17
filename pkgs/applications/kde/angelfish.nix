@@ -3,7 +3,6 @@
 , cmake
 , corrosion
 , extra-cmake-modules
-, gcc12
 , kconfig
 , kcoreaddons
 , kdbusaddons
@@ -15,13 +14,14 @@
 , kwindowsystem
 , qtfeedback
 , qtquickcontrols2
+, qqc2-desktop-style
 , qtwebengine
 , rustPlatform
 , srcs
 
 # These must be updated in tandem with package updates.
-, cargoShaForVersion ? "23.01.0"
-, cargoSha256 ? "sha256-dIXA875HsG56baHrTWw9L560n4s0wRv6Ag/2oj1x0gk="
+, cargoShaForVersion ? "23.03.80"
+, cargoSha256 ? "sha256-nXWQNXVlPWRQdDPXR5NsHJR6kaLxV7UxPC0OIubH/4c="
 }:
 
 # Guard against incomplete updates.
@@ -46,7 +46,6 @@ mkDerivation rec {
     cmake
     corrosion
     extra-cmake-modules
-    gcc12 # doesn't build with GCC 9 from stdenv on aarch64
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
@@ -65,6 +64,7 @@ mkDerivation rec {
     kwindowsystem
     qtfeedback
     qtquickcontrols2
+    qqc2-desktop-style
     qtwebengine
   ];
 

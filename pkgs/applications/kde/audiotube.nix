@@ -2,7 +2,6 @@
 , mkDerivation
 
 , extra-cmake-modules
-, gcc12
 , wrapGAppsHook
 
 , gst_all_1
@@ -10,6 +9,7 @@
 , kcrash
 , ki18n
 , kirigami2
+, kirigami-addons
 , qtimageformats
 , qtmultimedia
 , qtquickcontrols2
@@ -22,7 +22,6 @@ mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     wrapGAppsHook
-    gcc12 # doesn't build with GCC 9 from stdenv on aarch64
     python3Packages.wrapPython
     python3Packages.pybind11
   ];
@@ -32,6 +31,7 @@ mkDerivation rec {
     kcrash
     ki18n
     kirigami2
+    kirigami-addons
     qtimageformats
     qtmultimedia
     qtquickcontrols2
