@@ -63,6 +63,12 @@ buildPythonPackage rec {
       url = "https://github.com/twisted/twisted/pull/11787.diff";
       hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
     })
+    (fetchpatch {
+      # Conditionally skip tests that require METHOD_CRYPT
+      # https://github.com/twisted/twisted/pull/11827
+      url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
+      hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
+    })
   ] ++ lib.optionals (pythonAtLeast "3.11") [
     (fetchpatch {
       url = "https://github.com/twisted/twisted/pull/11734.diff";
