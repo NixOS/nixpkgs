@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       processing applications.
     '';
     license = licenses.cecill-c;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ maintainers.AndersonTorres maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }
