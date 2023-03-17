@@ -47,4 +47,7 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+
+  th-desugar = doDistribute self.th-desugar_1_15;
+  th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
 }

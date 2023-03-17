@@ -131,7 +131,8 @@ in {
   syb = dontCheck super.syb;
 
   splitmix = doJailbreak super.splitmix;
-  th-desugar = self.th-desugar_1_14;
+  th-desugar = doDistribute self.th-desugar_1_15;
+  th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
