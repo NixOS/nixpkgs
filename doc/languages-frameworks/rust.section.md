@@ -693,7 +693,7 @@ In particular, note that the argument given as `--src` is copied
 verbatim to the source. If we look at a more complicated
 dependencies, for instance by adding a single line `libc="*"` to our
 `Cargo.toml`, we first need to run `cargo build` to update the
-`Cargo.lock`. Then, `carnix` needs to be run again, and produces the
+`Cargo.lock`. Then, `crate2nix` needs to be run again, and produces the
 following nix file:
 
 ```nix
