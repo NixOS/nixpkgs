@@ -253,6 +253,7 @@ let
       neochat = callPackage ./neochat.nix {};
       plasmatube = callPackage ./plasmatube {};
       qmlkonsole = callPackage ./qmlkonsole.nix {};
+      telly-skout = callPackage ./telly-skout.nix {};
       tokodon = callPackage ./tokodon.nix {};
     };
 
