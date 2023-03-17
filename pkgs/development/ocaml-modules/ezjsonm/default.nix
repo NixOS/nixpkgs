@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "ezjsonm";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-v${version}.tbz";
-    sha256 = "1q6cf63cc614lr141rzhm2w4rhi1snfqai6fmkhvfjs84hfbw2w7";
+    url = "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-${version}.tbz";
+    hash = "sha256-CGM+Dw52eoroGTXKfnTxaTuFp5xFAtVo7t/1Fw8M13s=";
   };
 
   propagatedBuildInputs = [ jsonm hex sexplib0 ];
