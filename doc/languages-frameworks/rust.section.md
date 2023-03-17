@@ -648,7 +648,7 @@ buildPythonPackage rec {
 
 When run, `cargo build` produces a file called `Cargo.lock`,
 containing pinned versions of all dependencies. Nixpkgs contains a
-tool called `carnix` (`nix-env -iA nixos.carnix`), which can be used
+tool called `crate2Nix` (`nix-shell -p crate2nix`), which can be used
 to turn a `Cargo.lock` into a Nix expression.
 
 That Nix expression calls `rustc` directly (hence bypassing Cargo),
