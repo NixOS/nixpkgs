@@ -35,7 +35,7 @@
 
 let
   inherit (lib) lists strings trivial;
-  inherit (cudaPackages) cudatoolkit cudaFlags cudaVersion;
+  inherit (cudaPackages) backendStdenv cudaFlags cudaVersion;
   inherit (magmaRelease) version hash supportedGpuTargets;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
@@ -148,8 +148,8 @@ stdenv.mkDerivation {
   ] ++ lists.optionals cudaSupport [
     "-DCMAKE_CUDA_ARCHITECTURES=${cudaArchitecturesString}"
     "-DMIN_ARCH=${minArch}" # Disarms magma's asserts
-    "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/cc"
-    "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/c++"
+    "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
+    "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
     "-DMAGMA_ENABLE_CUDA=ON"
   ] ++ lists.optionals rocmSupport [
     "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
