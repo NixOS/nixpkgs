@@ -11717,6 +11717,7 @@ with pkgs;
 
   rnote = callPackage ../applications/graphics/rnote {
     inherit (gst_all_1) gstreamer;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
 
   rnp = callPackage ../tools/security/rnp { };
@@ -33785,8 +33786,6 @@ with pkgs;
   };
 
   tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
-
-  tixati = callPackage ../applications/networking/p2p/tixati { };
 
   tkrev = callPackage ../applications/version-management/tkrev { };
 
