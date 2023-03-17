@@ -6,15 +6,18 @@
 , isPy38
 , isPy39
 , isPy310
+, isPy311
 , python
 , torch-bin
 , pythonOlder
 , pythonAtLeast
+, patchelf
+, addOpenGLRunpath
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "0.13.1";
+  version = "2.0.1";
   format = "wheel";
 
   src =
@@ -23,7 +26,12 @@ buildPythonPackage rec {
         srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
     in fetchurl srcs;
 
-  disabled = !(isPy38 || isPy39 || isPy310);
+  disabled = !(isPy38 || isPy39 || isPy310 || isPy311);
+
+  nativeBuildInputs = [
+    patchelf
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     torch-bin
@@ -34,12 +42,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchaudio" ];
 
-  postFixup = ''
-    # Note: after patchelf'ing, libcudart can still not be found. However, this should
-    #       not be an issue, because PyTorch is loaded before torchvision and brings
-    #       in the necessary symbols.
-    patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:${torch-bin}/${python.sitePackages}/torch/lib:" \
-      "$out/${python.sitePackages}/torchaudio/_torchaudio.so"
+  postFixup = let
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+  in ''
+    find $out/${python.sitePackages}/torchaudio/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      echo "setting rpath for $lib..."
+      patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torchaudio/lib" "$lib"
+      addOpenGLRunpath "$lib"
+    done
   '';
 
   meta = with lib; {
