@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, fetchFromGitLab
+, fetchFromGitHub
 , fetchpatch
 , substituteAll
 , meson
@@ -88,9 +88,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # We should not use fetchFromGitLab because the build system
   # will complain and mark the build as unsupported when it cannot find
   # .git directory but downloading the whole repo is jus too much.
-  src = fetchFromGitLab rec {
+  src = fetchFromGitHub rec {
     name = "gimp-dev-${rev}"; # to make sure the hash is updated
-    domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gimp";
     rev = "a791151ed05b6e2f7b0ecb71db8be9629d61f5df";
