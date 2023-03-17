@@ -79,7 +79,7 @@ assert (lib.assertMsg (hidpiXWayland -> enableXWayland) ''
       ])
       ++ (lib.optionals nvidiaPatches [
         (fetchpatch {
-          url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-nvidia-format-workaround.patch?h=hyprland-nvidia-screenshare-git";
+          url = "https://aur.archlinux.org/cgit/aur.git/plain/nvidia.patch?h=hyprland-nvidia-git&id=757614af7729352fda534abe9eb1a88fe77dfe04";
           sha256 = "A9f1p5EW++mGCaNq8w7ZJfeWmvTfUm4iO+1KDcnqYX8=";
         })
       ]);
