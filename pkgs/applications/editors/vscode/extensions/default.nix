@@ -1632,6 +1632,23 @@ let
         };
       };
 
+      kalebpace.balena-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "balena-vscode";
+          publisher = "kalebpace";
+          version = "0.1.3";
+          sha256 = "sha256-CecEv19nEtnMe0KlCMNBM9ZAjbAVgPNUcZ6cBxHw44M=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/kalebpace.balena-vscode/changelog";
+          description = "VS Code extension for integration with Balena";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=kalebpace.balena-vscode";
+          homepage = "https://github.com/balena-vscode/balena-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kalebpace ];
+        };
+      };
+
       kamadorueda.alejandra = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "alejandra";
