@@ -182,6 +182,8 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
+
+    python2Support = withPython;
   };
 
   meta = with lib; {
