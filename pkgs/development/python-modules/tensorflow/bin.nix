@@ -22,7 +22,7 @@
 , tensorboard
 , cudaSupport ? false
 , cudaPackages ? {}
-, patchelfUnstable
+, patchelf
 , zlib
 , python
 , keras-applications
@@ -84,8 +84,7 @@ in buildPythonPackage {
   ] ++ lib.optional (!isPy3k) mock
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
-  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath patchelf ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
