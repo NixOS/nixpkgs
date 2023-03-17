@@ -33755,8 +33755,6 @@ with pkgs;
 
   tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
 
-  tixati = callPackage ../applications/networking/p2p/tixati { };
-
   tkrev = callPackage ../applications/version-management/tkrev { };
 
   tla = callPackage ../applications/version-management/arch { };
