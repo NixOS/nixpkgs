@@ -44,6 +44,13 @@ buildPythonPackage rec {
     "test_82_crypt_support"
   ];
 
+  pytestFlagsArray = [
+    # hashing algorithms we don't support anymore
+    "--deselect=passlib/tests/test_handlers.py::des_crypt_os_crypt_test::test_82_crypt_support"
+    "--deselect=passlib/tests/test_handlers.py::md5_crypt_os_crypt_test::test_82_crypt_support"
+    "--deselect=passlib/tests/test_handlers.py::sha256_crypt_os_crypt_test::test_82_crypt_support"
+  ];
+
   meta = with lib; {
     description = "A password hashing library for Python";
     homepage = "https://foss.heptapod.net/python-libs/passlib";
