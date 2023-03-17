@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "jdom";
-  version = "1.0";
+  version = "2.0.6.1";
 
-  src = fetchurl {
-    url = "http://www.jdom.org/dist/binary/jdom-${version}.tar.gz";
-    sha256 = "1igmxzcy0s25zcy9vmcw0kd13lh60r0b4qg8lnp1jic33f427pxf";
+  src = fetchzip {
+    url = "http://www.jdom.org/dist/binary/jdom-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-Y++mlO+7N5EU2NhRzLl5x5WXNqu/2tDO/NpNhfRegcg=";
   };
 
-  buildCommand = ''
-    cp -r ./ $out
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/java
+    cp -a . $out/share/java
+
+    runHook postInstall
   '';
 
   meta = with lib; {
