@@ -33,16 +33,17 @@ let
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
-      gradle \
-          --no-daemon \
-        build \
-          -Dorg.gradle.java.home="${jdk11.home}" \
-          -x test \
-          -x checkstyleMain \
-          -x checkstyleGenerated \
-          -x checkstyleGeneratedTest \
-          -x checkstyleMain \
-          -x checkstyleTest
+      gradle :aeron-all:assemble \
+        --project-prop VERSION=${version} \
+        --no-daemon \
+        --console=plain \
+        --quiet \
+        --no-configuration-cache \
+        --no-build-cache \
+        --max-workers $NIX_BUILD_CORES \
+        --system-prop org.gradle.java.home="${jdk11.home}" \
+        --exclude-task test \
+        --exclude-task javadoc
     '';
 
     # Mavenize dependency paths
@@ -56,7 +57,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-QRL3y7HF6/pWsC5MbtIqhZ4HR8jcWtQG6x9kajeoNMY=";
+    outputHash = "sha256-xwk1hwdOmRWtCXL7gXqky+2gMC9A4lvIuSq3U9PZ0o8=";
   };
 
   # Point to our local deps repo
@@ -109,18 +110,15 @@ in stdenv.mkDerivation rec {
     export GRADLE_USER_HOME=$(mktemp -d)
     cp ${buildSrc} ./buildSrc/build.gradle
 
-    gradle -PVERSION=${version} \
-        --offline \
-        --no-daemon \
-        --init-script "${gradleInit}" \
-      build \
-        -Dorg.gradle.java.home="${jdk11.home}" \
-        -x test \
-        -x checkstyleMain \
-        -x checkstyleGenerated \
-        -x checkstyleGeneratedTest \
-        -x checkstyleMain \
-        -x checkstyleTest
+    gradle :aeron-all:clean :aeron-all:assemble \
+      --project-prop VERSION=${version} \
+      --offline \
+      --no-daemon \
+      --init-script "${gradleInit}" \
+      --max-workers $NIX_BUILD_CORES \
+      --system-prop org.gradle.java.home="${jdk11.home}" \
+      --exclude-task test \
+      --exclude-task javadoc
 
     runHook postBuild
   '';
@@ -129,10 +127,7 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D --mode=0444 --target-directory="$out/share/java" \
-      "./aeron-all/build/libs/aeron-all-${version}.jar" \
-      "./aeron-agent/build/libs/aeron-agent-${version}.jar" \
-      "./aeron-archive/build/libs/aeron-archive-${version}.jar" \
-      "./aeron-client/build/libs/aeron-client-${version}.jar"
+      "./aeron-all/build/libs/aeron-all-${version}.jar"
 
     runHook postInstall
   '';

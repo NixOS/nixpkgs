@@ -17182,6 +17182,8 @@ with pkgs;
 
   aeron = callPackage ../servers/aeron { };
 
+  aeronmd = callPackage ../servers/aeronmd { };
+
   inherit (callPackage ../development/tools/alloy { })
     alloy5
     alloy6
