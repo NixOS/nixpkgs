@@ -290,6 +290,20 @@ let
       inherit (orig) name origSrc;
       filter = pathString: type: predicate { subpath = toSubpath pathString; inherit type; }
         && orig.filter pathString type;
+      };
+
+  unionPath = root: list:
+    lib.sources.predicateFilterPath {
+      src = root;
+      predicate = { path, ... }:
+        lib.any (el: lib.path.hasPrefix path el || lib.path.hasPrefix el path) list;
+    };
+
+  unionSubpath = root: list:
+    lib.sources.predicateFilterSubpath {
+      src = root;
+      predicate = { subpath, ... }:
+        lib.any (el: lib.path.subpath.hasPrefix subpath el || lib.path.subpath.hasPrefix el subpath) list;
     };
 
 in {
@@ -313,5 +327,7 @@ in {
     trace
     predicateFilterPath
     predicateFilterSubpath
+    unionPath
+    unionSubpath
     ;
 }
