@@ -19447,6 +19447,8 @@ with pkgs;
 
   cimg = callPackage  ../development/libraries/cimg { };
 
+  cista = callPackage ../development/libraries/cista { };
+
   cjose = callPackage ../development/libraries/cjose { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
