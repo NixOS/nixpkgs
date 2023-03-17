@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mononoki";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchzip {
     url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
     stripRoot = false;
-    hash = "sha256-H5Iu7nSrB5UGlCSjTM3SLu+IjaAffk9TCm5OoOleKvw=";
+    hash = "sha256-HQM9rzIJXLOScPEXZu0MzRlblLfbVVNJ+YvpONxXuwQ=";
   };
 
   installPhase = ''
