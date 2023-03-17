@@ -700,6 +700,7 @@ let
               || cfg.pamMount
               || cfg.enableKwallet
               || cfg.enableGnomeKeyring
+              || config.services.intune.enable
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
@@ -726,6 +727,7 @@ let
                 kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
               }; }
               { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
+              { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
@@ -867,6 +869,7 @@ let
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
             no-autostart = cfg.gnupg.noAutostart;
           }; }
+          { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
         ];
       };
     };
