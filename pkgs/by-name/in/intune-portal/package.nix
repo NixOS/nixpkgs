@@ -19,6 +19,7 @@
 , msalsdk-dbusclient
 , pam
 , dbus
+, nixosTests
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
@@ -97,7 +98,10 @@ stdenv.mkDerivation rec {
   # Without this network requests fail
   dontPatchELF = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) intune; };
+  };
 
   meta = with lib; {
     description = "Microsoft Intune Portal allows you to securely access corporate apps, data, and resources";
