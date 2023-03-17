@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, glfw3 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, glfw3
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "glfw";
   version = "2.5.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "FlorianRhiem";
@@ -13,10 +21,14 @@ buildPythonPackage rec {
 
   # Patch path to GLFW shared object
   patches = [ ./search-path.patch ];
+
   postPatch = ''
     substituteInPlace glfw/library.py --replace "@GLFW@" '${glfw3}/lib'
   '';
-  propagatedBuildInputs = [ glfw3 ];
+
+  propagatedBuildInputs = [
+    glfw3
+  ];
 
   # Project has no tests
   doCheck = false;
