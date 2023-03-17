@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
   preFixup = ''
-    wrapProgram $out/bin/bal --set JAVA_HOME ${openjdk}/lib/openjdk
+    wrapProgram $out/bin/bal --set JAVA_HOME ${openjdk}
   '';
 
   passthru.tests.smokeTest = let
