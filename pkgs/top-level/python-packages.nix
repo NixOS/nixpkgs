@@ -11443,6 +11443,11 @@ self: super: with self; {
 
   tblib = callPackage ../development/python-modules/tblib { };
 
+  tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
+    tblite = pkgs.tblite;
+    meson = pkgs.meson;
+  };
+
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
