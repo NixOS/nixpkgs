@@ -11721,6 +11721,8 @@ self: super: with self; {
 
   tls-parser = callPackage ../development/python-modules/tls-parser { };
 
+  tlv8 = callPackage ../development/python-modules/tlv8 { };
+
   tmb = callPackage ../development/python-modules/tmb { };
 
   todoist = callPackage ../development/python-modules/todoist { };
