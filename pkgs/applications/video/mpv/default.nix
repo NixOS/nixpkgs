@@ -99,7 +99,7 @@ in stdenv.mkDerivation (self: {
       # fixes EDL error on youtube DASH streams https://github.com/mpv-player/mpv/issues/11392
       # to be removed on next release
       url = "https://github.com/mpv-player/mpv/commit/94c189dae76ba280d9883b16346c3dfb9720687e.patch";
-      sha256 = "sha256-MGXU1L5OSxY5bdEpu9vHngnRXMr7WHeHWuamhjcUD4A=";
+      sha256 = "sha256-GeAltLAwkOKk82YfXYSrkNEX08uPauh7+kVbBGPWeT8=";
     })
   ];
 
