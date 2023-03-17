@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, lxml
 , pyproj
 , pytestCheckHook
 , python-dateutil
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.28.0";
+  version = "0.28.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "geopython";
     repo = "OWSLib";
     rev = "refs/tags/${version}";
-    hash = "sha256-o/sNhnEZ9e0BsftN9AhJKuUjKHAHNRPe0grxdAWRVao=";
+    hash = "sha256-qiH6teCJ/4oftSRyBTtiJdlmJn02VwacU72dWi6OXdc=";
   };
 
   postPatch = ''
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    lxml
     pyproj
     python-dateutil
     pytz

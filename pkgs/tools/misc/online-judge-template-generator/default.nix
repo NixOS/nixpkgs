@@ -4,7 +4,7 @@
 , beautifulsoup4
 , colorlog
 , fetchFromGitHub
-, Mako
+, mako
 , online-judge-api-client
 , online-judge-tools
 , ply
@@ -29,7 +29,7 @@ buildPythonApplication rec {
     appdirs
     beautifulsoup4
     colorlog
-    Mako
+    mako
     online-judge-api-client
     online-judge-tools
     ply

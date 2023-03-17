@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.1.1";
+  version = "6.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-6TpDzk0GjIn9AnWadwHoYRc3SNi9nBAM7GyKm338wH8=";
+    hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
   };
 
   nativeBuildInputs = [

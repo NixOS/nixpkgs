@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.5.27";
+  version = "3.5.31";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "flexget";
     repo = "flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EeQs7WcNpnz2KrgUel9OF9pwW7WzKJrv5pvsZkV4RVg=";
+    hash = "sha256-v6N1isaTVPwV/LC/a2lzrboLI6V/4W586RE5esfR500=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
-    APScheduler
+    apscheduler
     beautifulsoup4
     click
     colorama
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     packaging
     psutil
     pynzb
-    PyRSS2Gen
+    pyrss2gen
     python-dateutil
     pyyaml
     rebulk
@@ -68,6 +68,10 @@ python3Packages.buildPythonApplication rec {
 
     # Plugins requirements
     transmission-rpc
+  ];
+
+  pythonImportsCheck = [
+    "flexget"
   ];
 
   meta = with lib; {

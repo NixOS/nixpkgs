@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "BlinkStick";
+  pname = "blinkstick";
   version = "1.2.0";
 
   src = fetchPypi {

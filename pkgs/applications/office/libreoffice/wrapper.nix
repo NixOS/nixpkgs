@@ -18,6 +18,8 @@
 }:
 
 let
+  inherit (unwrapped.srcs.primary) major minor;
+
   makeWrapperArgs = builtins.concatStringsSep " " ([
     "--set" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
     "--prefix" "GIO_EXTRA_MODULES" ":" "${lib.getLib dconf}/lib/gio/modules"
@@ -86,8 +88,22 @@ in runCommand "${unwrapped.name}-wrapped" {
   };
 } (''
   mkdir -p "$out/bin"
-  ln -s ${unwrapped}/share $out/share
+  mkdir -p "$out/share"
+  for dir in ${unwrapped}/share/*; do
+    dirname="''${dir##*/}"
+    if [[ $dirname == "applications" ]]; then
+      cp -r $dir/ $out/share/
+    else
+      ln -s $dir $out/share/
+    fi
+  done
+
   ln -s ${unwrapped}/lib $out/lib
+  for f in $out/share/applications/*.desktop; do
+    substituteInPlace "$f" \
+      --replace "Exec=libreoffice${major}.${minor}" "Exec=soffice"
+  done
+
   for i in sbase scalc sdraw smath swriter simpress soffice unopkg; do
     makeWrapper ${unwrapped}/lib/libreoffice/program/$i $out/bin/$i ${makeWrapperArgs}
 '' + lib.optionalString dbusVerify ''

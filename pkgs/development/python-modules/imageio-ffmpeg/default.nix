@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
-  version = "0.4.7";
+  version = "0.4.8";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-egiDj5fzY+N8pBghuGT9P9yZqx/iQhBAx4619Wqecj4=";
+    hash = "sha256-/aoFrRD+Bwt/qOX2FcsNKPO5t5HQCvbSoR5pQVjRCqk=";
   };
 
   patches = [

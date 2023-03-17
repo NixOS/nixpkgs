@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "djtimca";
     repo = "aurora-api";
     rev = version;
-    sha256 = "sha256-ho0O5aEHCKaTuWh2eW2kY5a7dVGIGBLm4nKxAMq0bZ4=";
+    hash = "sha256-ho0O5aEHCKaTuWh2eW2kY5a7dVGIGBLm4nKxAMq0bZ4=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

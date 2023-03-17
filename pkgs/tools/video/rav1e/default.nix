@@ -29,9 +29,11 @@ in rustPlatform.buildRustPackage rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ cargo-c libgit2 nasm zlib ];
+  nativeBuildInputs = [ cargo-c libgit2 nasm ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
   ];

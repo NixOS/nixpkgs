@@ -142,6 +142,7 @@ with lib.maintainers; {
       # gares has no entry in the maintainers list
       siraben
       vbgl
+      alizter
     ];
     scope = "Maintain the Coq theorem prover and related packages.";
     shortName = "Coq";

@@ -152,9 +152,11 @@ let
 
       ${lib.optionalString cfg.useBootLoader
       ''
-        # Create a writable copy/snapshot of the boot disk.
-        # A writable boot disk can be booted from automatically.
-        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
+        if ${if !cfg.persistBootDevice then "true" else "! test -e $TMPDIR/disk.img"}; then
+          # Create a writable copy/snapshot of the boot disk.
+          # A writable boot disk can be booted from automatically.
+          ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
+        fi
 
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
 
@@ -368,6 +370,17 @@ in
           lib.mdDoc ''
             The disk to be used for the root filesystem.
           '';
+      };
+
+    virtualisation.persistBootDevice =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            If useBootLoader is specified, whether to recreate the boot device
+            on each instantiaton or allow it to persist.
+            '';
       };
 
     virtualisation.emptyDiskImages =
@@ -853,6 +866,8 @@ in
     # * The disks are attached in `virtualisation.qemu.drives`.
     #   Their order makes them appear as devices `a`, `b`, etc.
     # * `fileSystems."/boot"` is adjusted to be on device `b`.
+    # * The disk.img is recreated each time the VM is booted unless
+    #   virtualisation.persistBootDevice is set.
 
     # If `useBootLoader`, GRUB goes to the second disk, see
     # note [Disk layout with `useBootLoader`].
@@ -1086,15 +1101,17 @@ in
         what = "overlay";
         type = "overlay";
         options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
-        wantedBy = ["local-fs.target"];
-        before = ["local-fs.target"];
-        requires = ["sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service"];
-        after = ["sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service"];
-        unitConfig.IgnoreOnIsolate = true;
+        wantedBy = ["initrd-fs.target"];
+        before = ["initrd-fs.target"];
+        requires = ["rw-store.service"];
+        after = ["rw-store.service"];
+        unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
       }];
       services.rw-store = {
-        after = ["sysroot-nix-.rw\\x2dstore.mount"];
-        unitConfig.DefaultDependencies = false;
+        unitConfig = {
+          DefaultDependencies = false;
+          RequiresMountsFor = "/sysroot/nix/.rw-store";
+        };
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";

@@ -2,12 +2,12 @@
 let
   docker_compose = changeVersion (with localPython.pkgs; docker-compose_1.override {
     inherit colorama pyyaml six dockerpty docker jsonschema requests websocket-client paramiko;
-  }).overridePythonAttrs "1.25.5" "1ijhg93zs3lswkljnm0rhww7gdy0g94psvsya2741prz2zcbcbks";
+  }).overridePythonAttrs "1.25.5" "sha256-ei622Bc/30COUF5vfUl6wLd3OIcZVCvp5JoO/Ud6UMY=";
 
-  changeVersion = overrideFunc: version: sha256: overrideFunc (oldAttrs: rec {
+  changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
     inherit version;
     src = oldAttrs.src.override {
-      inherit version sha256;
+      inherit version hash;
     };
   });
 
@@ -15,9 +15,9 @@ let
     {
       self = localPython;
       packageOverrides = self: super: {
-        cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
-        wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "1wf5ycjx8s066rdvr0fgz4xds9a8zhs91c4jzxvvymm1c8l8cwzf";
-        semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";
+        cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
+        wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "sha256-7nOGKGKhVr93/5KwkDT8SCXdOvnPgbxbNgZo1CXzxfE=";
+        semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "sha256-0sst4FWHYpNGebmhBOguynr0SMn0l00fPuzP9lHfilQ=";
         pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
           version = "5.4.1";
           checkPhase = ''
@@ -28,7 +28,7 @@ let
           src = localPython.pkgs.fetchPypi {
             pname = "PyYAML";
             inherit version;
-            sha256 = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
+            hash = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
           };
         });
       };
@@ -36,30 +36,26 @@ let
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.20.3";
+  version = "3.20.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-W3nUXPAXoicDQNXigktR1+b/9W6qvi90fujrXAekxTU=";
+    hash = "sha256-EoSEanwGvP3RcemXrVy7iAGrY/vMC6LbwcrXj2OsF8Q=";
   };
 
 
   preConfigure = ''
-    substituteInPlace setup.py \
+    substituteInPlace requirements.txt \
       --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
       --replace "requests>=2.20.1,<=2.26" "requests<3" \
-      --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<2" \
-      --replace "pathspec==0.9.0" "pathspec>=0.10.0,<0.11.0" \
+      --replace "pathspec==0.10.1" "pathspec>=0.10.0,<1" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
-      --replace "future>=0.16.0,<0.17.0" "future" \
-      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<2.2.0"
+      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<3"
   '';
 
   buildInputs = [
     glibcLocales
   ];
-
-  LC_ALL = "en_US.UTF-8";
 
   nativeCheckInputs = [
     pytest
@@ -93,6 +89,7 @@ with localPython.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
     maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;
   };

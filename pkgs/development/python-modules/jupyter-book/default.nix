@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "0.14.0";
+  version = "0.15.1";
 
   format = "flit";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BxrVrOsCqFRmx16l6YdkJplwdnU2XhRFMHd5DGy+dqE=";
+    hash = "sha256-ihY07Bb37t7g0Rbx5ft8SCAyia2S2kLglRnccdlWwBA=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "docutils"
-    "sphinx-book-theme"
   ];
 
   pythonImportsCheck = [
@@ -75,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Build a book with Jupyter Notebooks and Sphinx";
     homepage = "https://jupyterbook.org/";
+    changelog = "https://github.com/executablebooks/jupyter-book/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
   };

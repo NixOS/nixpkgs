@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-aCdVu9R1RGju05lAeXtm47ZroNOcqTSr/vYH6capcjs=";
+    hash = "sha256-EmkPH0TjLa9ouRjgv0IEyhqx5VaHR2TUQdqznKIKZdY=";
   };
 
-  cargoHash = "sha256-uiKKyIy2IHDtHWJmG3G9UVHaASL9uEg5Zu+2Wj8mw0k=";
+  cargoHash = "sha256-vEged6GfcdcibCm4JX4/GIo1qbVtT+jX721+iLKOQsc=";
 
-  buildInputs = lib.optional stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
   ];
 

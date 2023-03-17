@@ -62,5 +62,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sohalt ];
     platforms = platforms.linux;
+    broken = true;  # doesn't build with latest Marble
   };
 }

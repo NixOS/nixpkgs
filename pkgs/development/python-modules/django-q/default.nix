@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Koed00";
     repo = "django-q";
-    sha256 = "sha256-gFSrAl3QGoJEJfvTTvLQgViPPjeJ6BfvgEwgLLo+uAA=";
+    hash = "sha256-gFSrAl3QGoJEJfvTTvLQgViPPjeJ6BfvgEwgLLo+uAA=";
     rev = "v${version}";
   };
 

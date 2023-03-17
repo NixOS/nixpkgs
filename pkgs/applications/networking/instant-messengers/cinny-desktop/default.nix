@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cinny-desktop";
+  pname = "cinny-desktop";
   version = "2.2.4";
 
   src = fetchurl {

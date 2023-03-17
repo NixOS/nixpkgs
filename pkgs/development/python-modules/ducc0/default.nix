@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     rev = "ducc0_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-yh7L87s3STL2usGBXgIhCS7GKQuau/PV6US3T06bb0M=";
+    hash = "sha256-yh7L87s3STL2usGBXgIhCS7GKQuau/PV6US3T06bb0M=";
   };
 
   buildInputs = [ pybind11 ];

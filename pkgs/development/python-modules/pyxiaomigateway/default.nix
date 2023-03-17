@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "PyXiaomiGateway";
     rev = version;
-    sha256 = "sha256-TAbZvs1RrUy9+l2KpfbBopc3poTy+M+Q3ERQLFYbQis=";
+    hash = "sha256-TAbZvs1RrUy9+l2KpfbBopc3poTy+M+Q3ERQLFYbQis=";
   };
 
   propagatedBuildInputs = [ cryptography ];

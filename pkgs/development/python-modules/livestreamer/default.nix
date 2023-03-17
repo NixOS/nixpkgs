@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "chrippa";
     repo = "livestreamer";
     rev = "v${version}";
-    sha256 = "sha256-PqqyBh+oMmu7Ynly3fqx/+6mQYX+6SpI0Okj2O+YLz0=";
+    hash = "sha256-PqqyBh+oMmu7Ynly3fqx/+6mQYX+6SpI0Okj2O+YLz0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

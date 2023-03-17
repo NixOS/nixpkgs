@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/dA3OwBBMjykSYaIbvhJZj9Z8/0+mfL5pW4GqgMgops=";
+    hash = "sha256-/dA3OwBBMjykSYaIbvhJZj9Z8/0+mfL5pW4GqgMgops=";
   };
 
   propagatedBuildInputs = [

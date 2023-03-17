@@ -11,6 +11,8 @@
 , iptables
 , makeWrapper
 , protoc-gen-go-grpc
+, testers
+, opensnitch
 }:
 
 buildGoModule rec {
@@ -69,6 +71,11 @@ buildGoModule rec {
     wrapProgram $out/bin/opensnitchd \
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = opensnitch;
+    command = "opensnitchd -version";
+  };
 
   meta = with lib; {
     description = "An application firewall";

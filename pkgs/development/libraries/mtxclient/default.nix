@@ -53,9 +53,6 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
-
   meta = with lib; {
     description = "Client API library for the Matrix protocol.";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";

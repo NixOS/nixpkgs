@@ -8,7 +8,7 @@ buildPythonPackage {
     owner = "Unrud";
     repo = "RadicaleInfCloud";
     rev = "53d3a95af5b58cfa3242cef645f8d40c731a7d95";
-    sha256 = "sha256-xzBWIx2OOkCtBjlff1Z0VqgMhxWtgiOKutXUadT3tIo=";
+    hash = "sha256-xzBWIx2OOkCtBjlff1Z0VqgMhxWtgiOKutXUadT3tIo=";
   };
 
   propagatedBuildInputs = [ radicale ];

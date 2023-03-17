@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-x1p9dWrbDtDreXdBuzOA4Za+ZC40y4xdEU7MGb9uUec=";
+    hash = "sha256-x1p9dWrbDtDreXdBuzOA4Za+ZC40y4xdEU7MGb9uUec=";
   };
 
   propagatedBuildInputs = [

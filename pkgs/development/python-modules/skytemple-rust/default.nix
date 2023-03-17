@@ -15,13 +15,13 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rC7KA79va8gZpMKJQ7s3xYdbopNqmWdRYDCbaWaxsR0=";
+    hash = "sha256-rC7KA79va8gZpMKJQ7s3xYdbopNqmWdRYDCbaWaxsR0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-lXPCxRbaqUC5EfyeBPtJDuGADYOA+DWMaOZRwXppP8E=";
+    hash = "sha256-lXPCxRbaqUC5EfyeBPtJDuGADYOA+DWMaOZRwXppP8E=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];

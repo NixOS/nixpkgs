@@ -8,7 +8,7 @@
 , pyproj
 , pytestCheckHook
 , pythonOlder
-, Rtree
+, rtree
 , shapely
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    Rtree
+    rtree
   ];
 
   doCheck = !stdenv.isDarwin;

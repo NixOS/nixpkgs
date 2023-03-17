@@ -4,12 +4,8 @@
 }:
 
 # Type aliases
-# Gpu = {
-#   archName: String, # e.g., "Hopper"
-#   computeCapability: String, # e.g., "9.0"
-#   minCudaVersion: String, # e.g., "11.8"
-#   maxCudaVersion: String, # e.g., "12.0"
-# }
+# Gpu :: AttrSet
+#   - See the documentation in ./gpus.nix.
 
 let
   inherit (lib) attrsets lists strings trivial versions;
@@ -34,21 +30,39 @@ let
   # gpus :: List Gpu
   gpus = builtins.import ./gpus.nix;
 
-  # isVersionIn :: Gpu -> Bool
+  # isSupported :: Gpu -> Bool
   isSupported = gpu:
     let
       inherit (gpu) minCudaVersion maxCudaVersion;
       lowerBoundSatisfied = strings.versionAtLeast cudaVersion minCudaVersion;
-      upperBoundSatisfied = !(strings.versionOlder maxCudaVersion cudaVersion);
+      upperBoundSatisfied = (maxCudaVersion == null)
+        || !(strings.versionOlder maxCudaVersion cudaVersion);
     in
     lowerBoundSatisfied && upperBoundSatisfied;
+
+  # isDefault :: Gpu -> Bool
+  isDefault = gpu:
+    let
+      inherit (gpu) dontDefaultAfter;
+      newGpu = dontDefaultAfter == null;
+      recentGpu = newGpu || strings.versionAtLeast dontDefaultAfter cudaVersion;
+    in
+    recentGpu;
 
   # supportedGpus :: List Gpu
   # GPUs which are supported by the provided CUDA version.
   supportedGpus = builtins.filter isSupported gpus;
 
+  # defaultGpus :: List Gpu
+  # GPUs which are supported by the provided CUDA version and we want to build for by default.
+  defaultGpus = builtins.filter isDefault supportedGpus;
+
   # supportedCapabilities :: List Capability
   supportedCapabilities = lists.map (gpu: gpu.computeCapability) supportedGpus;
+
+  # defaultCapabilities :: List Capability
+  # The default capabilities to target, if not overridden by the user.
+  defaultCapabilities = lists.map (gpu: gpu.computeCapability) defaultGpus;
 
   # cudaArchNameToVersions :: AttrSet String (List String)
   # Maps the name of a GPU architecture to different versions of that architecture.
@@ -151,6 +165,6 @@ assert (formatCapabilities { cudaCapabilities = [ "7.5" "8.6" ]; }) == {
   # dropDot :: String -> String
   inherit dropDot;
 } // formatCapabilities {
-  cudaCapabilities = config.cudaCapabilities or supportedCapabilities;
+  cudaCapabilities = config.cudaCapabilities or defaultCapabilities;
   enableForwardCompat = config.cudaForwardCompat or true;
 }

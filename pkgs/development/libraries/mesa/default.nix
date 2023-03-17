@@ -88,7 +88,7 @@
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.3.5";
+  version = "22.3.7";
   branch  = lib.versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
@@ -120,7 +120,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9";
+    hash = "sha256-iUzi9KHC52F3zdIoRiAZLQ2jBmskPuwvux18838TBCw=";
   };
 
   # TODO:
@@ -227,7 +227,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako python3Packages.ply
+    python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
   ] ++ lib.optional haveWayland wayland-scanner;
 

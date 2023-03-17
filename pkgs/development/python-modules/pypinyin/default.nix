@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "mozillazg";
     repo = "python-pinyin";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gt0jrDPr6FeLB5P9HCSosCHb/W1sAKSusTrCpkqO26E=";
+    hash = "sha256-gt0jrDPr6FeLB5P9HCSosCHb/W1sAKSusTrCpkqO26E=";
   };
 
   postPatch = ''

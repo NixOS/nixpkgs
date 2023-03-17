@@ -21,10 +21,11 @@ with python3.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace 'uvicorn==%s" % ("0.16.0" if PY36 else "0.19.*")' 'uvicorn>=0.16"' \
-      --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.21.*")' 'starlette>=0.19.1"' \
+      --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
+      --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
+      --replace 'uvicorn==%s" % ("0.16.0" if PY36 else "0.20.*")' 'uvicorn"' \
       --replace 'tabulate==%s" % ("0.8.10" if PY36 else "0.9.*")' 'tabulate>=0.8.10,<=0.9"' \
-      --replace 'wsproto==' 'wsproto>='
+      --replace 'wsproto==%s" % ("1.0.0" if PY36 else "1.2.*")' 'wsproto"'
   '';
 
   propagatedBuildInputs = [

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
     rev = version;
-    sha256 = "sha256-k2nOidUk87EZbFsqQ7zr/4eHk+T7wUOYimjbllfneUM=";
+    hash = "sha256-k2nOidUk87EZbFsqQ7zr/4eHk+T7wUOYimjbllfneUM=";
   };
 
   propagatedBuildInputs = [

@@ -896,7 +896,7 @@ self: with self; {
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libX11-1.8.4.tar.xz";
-      sha256 = "sha256-yaKHpa76mATOPPr89Rb+lu0/fo5FwOLuWehMhnV99Rg=";
+      sha256 = "067mgmsqck78b7pf5h25irz3zvcnzqbgbz7s7k70967smsjqg8n9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1356,11 +1356,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86vm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     pname = "libXxf86vm";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2";
-      sha256 = "0mydhlyn72i7brjwypsqrpkls3nm6vxw0li8b2nw0caz7kwjgvmg";
+      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.5.tar.xz";
+      sha256 = "1rw8z01vgfc4wvf0q75sgnj6n04dkrw1w7z455qydrz0nd4fyzr4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3052,11 +3052,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbcomp = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     pname = "xkbcomp";
-    version = "1.4.5";
+    version = "1.4.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbcomp-1.4.5.tar.bz2";
-      sha256 = "0pmhshqinwqh5rip670l3szjpywky67hv232ql6gvdj489n0hlb8";
+      url = "mirror://xorg/individual/app/xkbcomp-1.4.6.tar.xz";
+      sha256 = "164fqnpq80vbl7693x82h38kvxcdf668vggpg9439q21xw8xcl7s";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3328,7 +3328,7 @@ self: with self; {
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/xserver/xorg-server-21.1.7.tar.xz";
-      sha256 = "sha256-2cYLLdDsUjJspqsg2w5JCx/09Wb1nKdC1lMuknlYd7s=";
+      sha256 = "1fvpb1wr4bjksr1ag77mcvsz87qb947dn85blrn34lpcs0nhpinr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

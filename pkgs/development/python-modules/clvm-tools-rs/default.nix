@@ -15,13 +15,13 @@ buildPythonPackage rec {
     owner = "Chia-Network";
     repo = "clvm_tools_rs";
     rev = version;
-    sha256 = "sha256-7eGOJgcZcSGmvLJc5BVfWarcu9kQb/uEcnG70JWXDSw=";
+    hash = "sha256-7eGOJgcZcSGmvLJc5BVfWarcu9kQb/uEcnG70JWXDSw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-46WEmp1FT6biM9A2M7z5onb45XhWjePKb6NSwLjuemc=";
+    hash = "sha256-46WEmp1FT6biM9A2M7z5onb45XhWjePKb6NSwLjuemc=";
   };
 
   nativeBuildInputs = with rustPlatform; [

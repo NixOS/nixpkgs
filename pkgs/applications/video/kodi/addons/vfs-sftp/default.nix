@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "vfs.sftp";
-  version = "19.0.1";
+  version = "20.1.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-UXycPqPEn3W5X3SQs1fxgkdV5PSkzs3pjYyuhAVngt8=";
+    sha256 = "sha256-Dv/C8PHaSx13JoGp77rQPtp5G5EH5tqKqzjwZZA7+80=";
   };
 
   extraBuildInputs = [ openssl libssh zlib ];

@@ -160,7 +160,7 @@ let
           hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
         };
         propagatedBuildInputs = [
-          self.APScheduler
+          self.apscheduler
           self.cachetools
           self.certifi
           self.cryptography
@@ -181,11 +181,11 @@ let
       });
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.5.post1";
+        version = "2.0.6";
         src = super.fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-E+sqWILP2fTu2q7BSlYDoJbwEl98PLSGEbO/o8JT8l0=";
+          hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
         };
         nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
           pytest-xdist
@@ -263,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.2";
+  hassVersion = "2023.3.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,7 +279,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I6NSVoMS3xbUqh/7BxJj/Evkk7+g3N0dZVJjEbr2pCs=";
+    hash = "sha256-BJCik8TxNzOsehD1fBNQO8Kvmb6ZaqEy4oEVmtIhwp0=";
   };
 
   # Secondary source is git for tests
@@ -287,7 +287,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qd++/73c9VDNe4AMdiDIVJXxh4qFx2x4HDkY1An2VjE=";
+    hash = "sha256-iwRjyOgQNTs54mnL3mlL9O3wVD5SWZIl+Hhxir6F+3o=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -320,10 +320,12 @@ in python.pkgs.buildPythonApplication rec {
       "httpx"
       "ifaddr"
       "orjson"
+      "pip"
       "PyJWT"
       "pyOpenSSL"
       "requests"
       "typing-extensions"
+      "voluptuous-serialize"
       "yarl"
     ];
   in ''
@@ -442,6 +444,7 @@ in python.pkgs.buildPythonApplication rec {
       python
       supportedComponentsWithTests;
     pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mailgun";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
+    hash = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
   };
 
   nativeCheckInputs = [

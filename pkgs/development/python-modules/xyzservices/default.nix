@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "xyzservices";
-  version = "2022.9.0";
+  version = "2023.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VWUZYXCLmhSEmXizOd92AIyIbfeoMmMIpVSbrlUWJgw=";
+    hash = "sha256-M0K7pBDXlBKQ7tDlii5arbD3uXhj7EKDsoPEBu5yOig=";
   };
 
   pythonImportsCheck = [

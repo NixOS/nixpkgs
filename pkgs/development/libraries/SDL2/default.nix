@@ -33,8 +33,6 @@
 , udev
 , ibusSupport ? false
 , ibus
-, fcitxSupport ? false
-, fcitx
 , libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libdecor
 , pipewireSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
@@ -57,11 +55,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.24.2";
+  version = "2.26.3";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-s17wqAKwnZDtOt0NysDpWCCAQgKRT1u3sP63EPGhMp8=";
+    sha256 = "sha256-xmEgWlU7fSUkJfS3Uf8TIJ5eAguHa7+hWYSUr2F5AFc=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -109,7 +107,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
-    ++ lib.optional fcitxSupport fcitx
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;

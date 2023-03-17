@@ -15,13 +15,13 @@
 }:
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.302.1";
+  version = "2.303.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-hPZzqTJGwcBxajLjU0TuIQ2KLnDl9E66seuutm9JWDo=";
+    hash = "sha256-gGIYlYM4Rf7Ils2rThsQHWIkLDt5Htg4NDuJhxvl1rU=";
     # Required to obtain HEAD's Git commit hash
     leaveDotGit = true;
   };

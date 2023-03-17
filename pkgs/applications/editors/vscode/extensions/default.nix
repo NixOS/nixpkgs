@@ -753,8 +753,8 @@ let
         mktplcRef = {
           name = "vscode-eslint";
           publisher = "dbaeumer";
-          version = "2.2.6";
-          sha256 = "sha256-1yZeyLrXuubhKzobWcd00F/CdU824uJDTkB6qlHkJlQ=";
+          version = "2.4.0";
+          sha256 = "sha256-7MUQJkLPOF3oO0kpmfP3bWbS3aT7J0RF7f74LW55BQs=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";
@@ -927,8 +927,12 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "2023.2.2804";
-          sha256 = "sha256-3jQ0CpAGrPLQPpwZx2u3ylfOwy6cBu7WLr0w3h8IM2Y=";
+          # Stable versions are listed on the GitHub releases page and use a
+          # semver scheme, contrary to preview versions which are listed on
+          # the VSCode Marketplace and use a calver scheme. We should avoid
+          # using preview versions, because they expire after two weeks.
+          version = "13.3.2";
+          sha256 = "sha256-4o4dmjio/I531szcoeGPVtfrNAyRAPJRrmsNny/PY2w=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1264,6 +1268,23 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      jellyedwards.gitsweep = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "jellyedwards";
+          name = "gitsweep";
+          version = "0.0.15";
+          sha256 = "rKAy84Uiat5VOQXd4OXToNfxAJ6SuWPT47vuiyK4qwg=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/jellyedwards.gitsweep/changelog";
+          description = "VS Code extension which allows you to easily exclude modified or new files so they don't get committed accidentally";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jellyedwards.gitsweep";
+          homepage = "https://github.com/jellyedwards/gitsweep";
+          license = licenses.mit;
+          maintainers = with maintainers; [ MatthieuBarthel ];
         };
       };
 

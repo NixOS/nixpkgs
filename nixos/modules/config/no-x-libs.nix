@@ -61,7 +61,7 @@ with lib;
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
-      qt5 = super.qt5.overrideScope' (const (super': {
+      qt5 = super.qt5.overrideScope (const (super': {
         qtbase = super'.qtbase.override { withGtk3 = false; };
       }));
       stoken = super.stoken.override { withGTK3 = false; };

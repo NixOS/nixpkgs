@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Yapsy";
+  pname = "yapsy";
   version = "1.12.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Yapsy";
+    inherit version;
     sha256 = "12rznbnswfw0w7qfbvmmffr9r317gl1rqg36nijwzsklkjgks4fq";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, lib, pkgArches, callPackage, makeSetupHook,
   pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
-  autoconf, hexdump, perl, nixosTests,
+  nixosTests,
   supportFlags,
   patches,
   moltenvk,
@@ -54,11 +54,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     fontforge
     makeWrapper
     pkg-config
-
-    # Required by staging
-    autoconf
-    hexdump
-    perl
   ]
   ++ lib.optionals supportFlags.mingwSupport (mingwGccs
     ++ lib.optional stdenv.isDarwin setupHookDarwin);

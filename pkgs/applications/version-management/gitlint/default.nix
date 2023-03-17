@@ -7,20 +7,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
-  version = "0.19.0";
+  version = "0.19.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
-    rev = "v${version}";
-    sha256 = "sha256-w4v6mcjCX0V3Mj1K23ErpXdyEKQcA4vykns7UwNBEZ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4SGkkC4LjZXTDXwK6jMOIKXR1qX76CasOwSqv8XUrjs=";
   };
-
-  patches = [
-    # otherwise hatch tries to run git to collect some metadata about the build
-    ./dont-try-to-use-git.diff
-  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -51,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Linting for your git commit messages";
     homepage = "https://jorisroovers.com/gitlint/";
+    changelog = "https://github.com/jorisroovers/gitlint/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 fab ];
   };

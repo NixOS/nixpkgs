@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "fipy";
     rev = version;
-    sha256 = "sha256-oTg/5fGXqknWBh1ShdAOdOwX7lVDieIoM5aALcOWFqY=";
+    hash = "sha256-oTg/5fGXqknWBh1ShdAOdOwX7lVDieIoM5aALcOWFqY=";
   };
 
   propagatedBuildInputs = [

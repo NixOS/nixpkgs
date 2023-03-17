@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7gQZCjsCtzvmV5NPZNAW4d34TkKemH9FgeN0Iwydwgc=";
+    hash = "sha256-7gQZCjsCtzvmV5NPZNAW4d34TkKemH9FgeN0Iwydwgc=";
   };
 
   nativeBuildInputs = [

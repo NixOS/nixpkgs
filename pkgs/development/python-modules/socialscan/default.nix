@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "iojw";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jiyTcpJ00DvfweChawj1ugdCVHHAdwDbHEp9jivH7gs=";
+    hash = "sha256-jiyTcpJ00DvfweChawj1ugdCVHHAdwDbHEp9jivH7gs=";
   };
 
   propagatedBuildInputs = [

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "somm15";
     repo = "PyViCare";
     rev = version;
-    sha256 = "sha256-OZvYl8wl8kOIOfsWVn74XFKMX/jAmtoMTIEQpAZmTeo=";
+    hash = "sha256-OZvYl8wl8kOIOfsWVn74XFKMX/jAmtoMTIEQpAZmTeo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

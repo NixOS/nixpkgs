@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.3.2";
+  version = "2023.3.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -325,7 +325,7 @@
       blinkpy
     ];
     "blinksticklight" = ps: with ps; [
-      BlinkStick
+      blinkstick
     ];
     "bliss_automation" = ps: with ps; [
     ];
@@ -513,7 +513,7 @@
       plexapi
       plexauth
       plexwebsocket
-      PyChromecast
+      pychromecast
       sqlalchemy
       zeroconf
     ];
@@ -2381,7 +2381,7 @@
       mutesync
     ];
     "mvglive" = ps: with ps; [
-      PyMVGLive
+      pymvglive
     ];
     "my" = ps: with ps; [
       aiohttp-cors

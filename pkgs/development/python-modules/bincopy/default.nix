@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bincopy";
-  version = "17.14.0";
+  version = "17.14.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sx+0sBbY2P6vQt38e2M72GLU8tRwKOMpVWNNNtEXx0k=";
+    hash = "sha256-X03nw3o9t63PPtxIM6Ij8zVtm/CL5y7G5DHJ8KzSnxg=";
   };
 
   propagatedBuildInputs = [

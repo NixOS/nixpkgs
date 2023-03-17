@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-90rOvu+CbHtammrMDZpPx7rIboIT2X/jL1GtfjpmuOk=";
+    hash = "sha256-90rOvu+CbHtammrMDZpPx7rIboIT2X/jL1GtfjpmuOk=";
   };
 
   propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ];

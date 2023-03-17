@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
     rev = "v${version}";
-    sha256 = "sha256-PnNJEtcWaisOlt6OmYUl97TlZb9cK2ORvtEcmGPxSB0=";
+    hash = "sha256-PnNJEtcWaisOlt6OmYUl97TlZb9cK2ORvtEcmGPxSB0=";
   };
 
   propagatedBuildInputs = [

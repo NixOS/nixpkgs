@@ -50,7 +50,7 @@ let
             {
               nativeBuildInputs =
                 (old.nativeBuildInputs or [ ])
-                ++ lib.optionals (!(builtins.isNull buildSystem)) [ buildSystem ]
+                ++ lib.optionals (buildSystem != null) [ buildSystem ]
                 ++ map (a: self.${a}) extraAttrs;
             }
         )

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "frmdstryr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-LHqOZ1uLWFbUeQAGKoMH9GljhRq1K4RTVWzgV/pt3g8=";
+    hash = "sha256-LHqOZ1uLWFbUeQAGKoMH9GljhRq1K4RTVWzgV/pt3g8=";
   };
 
   propagatedBuildInputs = [

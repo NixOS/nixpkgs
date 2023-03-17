@@ -8,7 +8,7 @@ buildPythonPackage rec {
     pname = "PyLyrics";
     inherit version;
     extension = "zip";
-    sha256 = "sha256-xfNujvDtO0h6kkLONMGfloTkGKW7/9XTZ9wdFgS0zQs=";
+    hash = "sha256-xfNujvDtO0h6kkLONMGfloTkGKW7/9XTZ9wdFgS0zQs=";
   };
 
   propagatedBuildInputs = [

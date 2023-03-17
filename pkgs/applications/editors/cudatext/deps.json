@@ -11,18 +11,18 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.02.05",
-    "hash": "sha256-ZOnIhUnFd+7mBEz6YIhUOQkhBbCNeTFD0tfUILuC1x4="
+    "rev": "2023.03.10",
+    "hash": "sha256-RHNWJN+P3w67UupeikHn6GrWZCOSoGCrP7BYG7myx+A="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.03.02",
-    "hash": "sha256-rZzcWED8c68wtejUho71kbPtLyDyOlXpS/eg8Ti0r2A="
+    "rev": "2023.03.10",
+    "hash": "sha256-NdLg/cQNy5SaC/zPb3bLplUe6FiO7ePi1++WDIvQziI="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2022.10.18",
-    "hash": "sha256-yaS1XF0v5rkfKj9aksSc4XimKh5wpL7yLt4ElcIKAIE="
+    "rev": "2023.03.10",
+    "hash": "sha256-KfzTO0GMFkWRFxbRSdKAh4sr7cx7A2snj/UO1nsvacI="
   },
   "EControl": {
     "owner": "Alexey-T",

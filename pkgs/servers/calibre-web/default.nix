@@ -5,7 +5,21 @@
 , fetchpatch
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.46";
+        src = self.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
   version = "0.6.19";
 
@@ -16,8 +30,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-mNYLQ+3u6xRaoZ5oH6HdylFfgz1fq1ZB86AWk9vULWQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    APScheduler
+  propagatedBuildInputs = with python.pkgs; [
+    apscheduler
     advocate
     chardet
     flask-babel
@@ -64,6 +78,7 @@ python3.pkgs.buildPythonApplication rec {
 
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+      --replace "APScheduler>=3.6.3,<3.10.0" "APScheduler>=3.6.3" \
       --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
       --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
       --replace "Flask-Babel>=0.11.1,<2.1.0" "Flask-Babel>=0.11.1" \

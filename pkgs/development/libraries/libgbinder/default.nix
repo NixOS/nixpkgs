@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
     libglibutil
   ];
 
+  postPatch = ''
+    # Fix pkg-config and ranlib names for cross-compilation
+    substituteInPlace Makefile \
+      --replace "pkg-config" "$PKG_CONFIG" \
+      --replace "ranlib" "$RANLIB"
+  '';
+
   makeFlags = [
     "LIBDIR=$(out)/lib"
     "INSTALL_INCLUDE_DIR=$(dev)/include/gbinder"

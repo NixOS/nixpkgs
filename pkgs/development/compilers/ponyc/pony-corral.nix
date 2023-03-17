@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation ( rec {
   pname = "corral";
-  version = "0.6.1";
+  version = "unstable-2023-02-11";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Rv1K6kFRylWodm1uACBs8KqqEqQZh86NqAG50heNteE=";
+    rev = "f31353a9ec9cd7eab6ee89079ae6a782192fd4b5";
+    hash = "sha256-jTx/7iFvmwOdjGVf/6NUy+FTkv6Mkv8DeotJ67pvmtc=";
   };
 
   buildInputs = [ ponyc ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation ( rec {
     homepage = "https://www.ponylang.io";
     changelog = "https://github.com/ponylang/corral/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ redvers ];
+    maintainers = with maintainers; [ redvers superherointj ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 })

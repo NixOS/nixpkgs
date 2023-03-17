@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "PySide";
     repo = "Generatorrunner";
     rev = version;
-    sha256 = "sha256-JAghKY033RTD5b2elitzVQbbN3PMmT3BHwpqx8N5EYg=";
+    hash = "sha256-JAghKY033RTD5b2elitzVQbbN3PMmT3BHwpqx8N5EYg=";
   };
 
   outputs = [ "out" "dev" ];
