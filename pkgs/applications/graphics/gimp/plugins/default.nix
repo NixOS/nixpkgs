@@ -214,6 +214,10 @@ in
       rev = "v${version}";
       sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
     };
+
+    meta = {
+      broken = !gimp.python2Support;
+    };
   };
 
   texturize = pluginDerivation {
