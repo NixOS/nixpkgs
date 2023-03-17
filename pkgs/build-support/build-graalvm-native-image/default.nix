@@ -34,6 +34,9 @@ let
     "dontUnpack"
     "LC_ALL"
     "meta"
+    "buildPhase"
+    "nativeBuildInputs"
+    "installPhase"
   ];
 in
 stdenv.mkDerivation ({
