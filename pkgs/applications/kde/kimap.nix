@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  cyrus_sasl, kcoreaddons, ki18n, kio, kmime
+  cyrus_sasl, kcoreaddons, ki18n, kio, kmime, kitemmodels
 }:
 
 mkDerivation {
@@ -12,6 +12,6 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ ki18n kio ];
-  propagatedBuildInputs = [ cyrus_sasl kcoreaddons kmime ];
+  propagatedBuildInputs = [ cyrus_sasl kcoreaddons kmime kitemmodels ];
   outputs = [ "out" "dev" ];
 }
