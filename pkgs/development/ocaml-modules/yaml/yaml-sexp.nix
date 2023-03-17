@@ -5,6 +5,8 @@ buildDunePackage rec {
 
   inherit (yaml) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ yaml ppx_sexp_conv sexplib ];
 
   meta = yaml.meta // {
