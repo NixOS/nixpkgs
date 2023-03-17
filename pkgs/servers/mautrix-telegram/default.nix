@@ -45,6 +45,7 @@ python.pkgs.buildPythonPackage rec {
     tulir-telethon
     asyncpg
     mako
+    setuptools
     # speedups
     cryptg
     aiodns

@@ -1856,6 +1856,8 @@ with pkgs;
 
   git-delete-merged-branches = callPackage ../applications/version-management/git-delete-merged-branches { };
 
+  git-dive = callPackage ../applications/version-management/git-dive { };
+
   git-extras = callPackage ../applications/version-management/git-extras { };
 
   git-fame = callPackage ../applications/version-management/git-fame { };
@@ -10742,6 +10744,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  orz = callPackage ../tools/compression/orz { };
+
   os-prober = callPackage ../tools/misc/os-prober { };
 
   oshka = callPackage ../development/tools/oshka { };
@@ -11713,6 +11717,7 @@ with pkgs;
 
   rnote = callPackage ../applications/graphics/rnote {
     inherit (gst_all_1) gstreamer;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
 
   rnp = callPackage ../tools/security/rnp { };
@@ -12767,6 +12772,8 @@ with pkgs;
   tio = callPackage ../tools/misc/tio { };
 
   tiv = callPackage ../applications/misc/tiv { };
+
+  tkman = callPackage ../tools/misc/tkman { };
 
   tldr = callPackage ../tools/misc/tldr { };
 
@@ -20831,6 +20838,8 @@ with pkgs;
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
+  json-fortran = callPackage ../development/libraries/json-fortran { };
+
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
@@ -22420,6 +22429,22 @@ with pkgs;
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 
   mergerfs-tools = callPackage ../tools/filesystems/mergerfs/tools.nix { };
+
+  mctc-lib = callPackage ../development/libraries/science/chemistry/mctc-lib { };
+
+  mstore = callPackage ../development/libraries/science/chemistry/mstore { };
+
+  multicharge = callPackage ../development/libraries/science/chemistry/multicharge { };
+
+  test-drive = callPackage ../development/libraries/test-drive { };
+
+  dftd4 = callPackage ../development/libraries/science/chemistry/dftd4 { };
+
+  simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
+
+  tblite = callPackage ../development/libraries/science/chemistry/tblite { };
+
+  toml-f = callPackage ../development/libraries/toml-f { };
 
   ## libGL/libGLU/Mesa stuff
 
@@ -24227,6 +24252,8 @@ with pkgs;
     lastfm = callPackage ../development/libraries/gsignond/plugins/lastfm.nix { };
     mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
   };
+
+  plumed = callPackage ../development/libraries/science/chemistry/plumed { };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
@@ -29941,6 +29968,8 @@ with pkgs;
   };
   wireshark-qt = wireshark;
 
+  qtwirediff = qt6Packages.callPackage ../applications/networking/sniffers/qtwirediff {};
+
   tshark = wireshark-cli;
   wireshark-cli = wireshark.override {
     withQt = false;
@@ -31098,10 +31127,9 @@ with pkgs;
       Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
       CoreMediaIO QuartzCore AppKit CoreWLAN WebKit IOKit GSS MediaPlayer IOSurface Metal MetalKit;
 
-    # C++20 is required, aarch64 has gcc 9 by default
     stdenv = if stdenv.isDarwin
       then darwin.apple_sdk_11_0.stdenv
-      else if stdenv.isAarch64 then gcc10Stdenv else stdenv;
+      else stdenv;
 
     # tdesktop has random crashes when jemalloc is built with gcc.
     # Apparently, it triggers some bug due to usage of gcc's builtin
@@ -33755,8 +33783,6 @@ with pkgs;
   };
 
   tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
-
-  tixati = callPackage ../applications/networking/p2p/tixati { };
 
   tkrev = callPackage ../applications/version-management/tkrev { };
 

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "sexpdata";
-  version = "0.0.4";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5Xb2Lq0y1QQeYw+UV9LBp1RNf+XdlqSbVRWSORFcN3M=";
+    hash = "sha256-6NX3XDeKB8bRzGH62WEbRRyTg8AlMFLhYZioUuFiBwU=";
   };
 
   doCheck = false;

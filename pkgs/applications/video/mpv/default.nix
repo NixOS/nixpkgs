@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , addOpenGLRunpath
 , docutils
 , meson
@@ -92,6 +93,15 @@ in stdenv.mkDerivation (self: {
     rev = "v${self.version}";
     sha256 = "sha256-CoYTX9hgxLo72YdMoa0sEywg4kybHbFsypHk1rCM6tM=";
   };
+
+  patches = [
+    (fetchpatch {
+      # fixes EDL error on youtube DASH streams https://github.com/mpv-player/mpv/issues/11392
+      # to be removed on next release
+      url = "https://github.com/mpv-player/mpv/commit/94c189dae76ba280d9883b16346c3dfb9720687e.patch";
+      sha256 = "sha256-GeAltLAwkOKk82YfXYSrkNEX08uPauh7+kVbBGPWeT8=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs version.* ./TOOLS/

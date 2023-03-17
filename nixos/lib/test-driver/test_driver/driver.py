@@ -179,7 +179,6 @@ class Driver:
             start_command=cmd,
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),
-            allow_reboot=args.get("allow_reboot", False),
         )
 
     def serial_stdout_on(self) -> None:

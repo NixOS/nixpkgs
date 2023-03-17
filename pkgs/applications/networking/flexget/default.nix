@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     beautifulsoup4
     click
     colorama
+    commonmark
     feedparser
     guessit
     html5lib

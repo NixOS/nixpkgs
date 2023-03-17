@@ -23,14 +23,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.92";
+  version = "2.3.96";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7Mr9mWnUuxfGJZVx845JHtIbWZeWStY/xbWUVjOcksM=";
+    hash = "sha256-jQ5VaOvJkxhZ0fHrNmkuFK+qmRUNdzR5XCWqWv1iBs4=";
   };
 
   patches = [
@@ -114,7 +114,7 @@ buildPythonApplication rec {
     # Tests are comparing console output
     "cli"
     "console"
-    # Starting to fail after 2.3.92
+    # Starting to fail after 2.3.96
     "test_runner_verify_secrets_skip"
   ];
 

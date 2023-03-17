@@ -1,29 +1,31 @@
-From 8e6328e932ab2739f075e8e8d602c2370a2a8ce8 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Mustafa=20=C3=87al=C4=B1=C5=9Fkan?= <musfay@protonmail.com>
-Date: Wed, 28 Jul 2021 02:26:39 +0300
+From a63a4b6de9ba730e10b54f4b5ce454edb10c7c39 Mon Sep 17 00:00:00 2001
+From: dyrnade <gurescicem@gmail.com>
+Date: Wed, 1 Feb 2023 22:28:02 +0100
 Subject: [PATCH] fix application dirs
 
 ---
- cprime/systemxdg.cpp | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ cprime/systemxdg.cpp | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/cprime/systemxdg.cpp b/cprime/systemxdg.cpp
-index f9eee66..ea0553d 100644
+index 4c40d4c..5dbb6ff 100644
 --- a/cprime/systemxdg.cpp
 +++ b/cprime/systemxdg.cpp
-@@ -233,8 +233,10 @@ void SystemXdgMime::setApplicationAsDefault( QString appFileName, QString mimety
- SystemXdgMime::SystemXdgMime() {
+@@ -372,9 +372,10 @@ void SystemXdgMime::setApplicationAsDefault(QString appFileName, QString mimetyp
  
- 	appsDirs << QDir::home().filePath( ".local/share/applications/" );
+ SystemXdgMime::SystemXdgMime()
+ {
+-	appsDirs << QDir::home().filePath(".local/share/applications/");
 -	appsDirs << "/usr/local/share/applications/" << "/usr/share/applications/";
 -	appsDirs << "/usr/share/applications/kde4/" << "/usr/share/gnome/applications/";
-+	appsDirs << QDir::home().filePath( ".nix-profile/share/applications/" );
++	appsDirs << QDir::home().filePath(".nix-profile/share/applications/");
 +	appsDirs << "/run/current-system/sw/share/applications/";
 +	appsDirs << "/run/current-system/sw/share/applications/kde4/";
 +	appsDirs << "/run/current-system/sw/share/gnome/applications/";
- };
+ }
  
- DesktopFile SystemXdgMime::xdgDefaultApp( QMimeType mimeType ) {
+ 
 -- 
-2.32.0
+2.39.0
+
 

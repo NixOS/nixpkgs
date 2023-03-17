@@ -11443,6 +11443,11 @@ self: super: with self; {
 
   tblib = callPackage ../development/python-modules/tblib { };
 
+  tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
+    tblite = pkgs.tblite;
+    meson = pkgs.meson;
+  };
+
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
@@ -11715,6 +11720,8 @@ self: super: with self; {
   tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
 
   tls-parser = callPackage ../development/python-modules/tls-parser { };
+
+  tlv8 = callPackage ../development/python-modules/tlv8 { };
 
   tmb = callPackage ../development/python-modules/tmb { };
 
