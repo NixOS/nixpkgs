@@ -6,13 +6,12 @@
 , psutil
 , pytestCheckHook
 }:
-
-
-buildPythonPackage rec {
+if isPyPy
+then null # builtin for pypy
+else buildPythonPackage rec {
   pname = "greenlet";
   version = "2.0.2";
   format = "setuptools";
-  disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
