@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, qtbase
+, qtsvg
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
@@ -14,18 +16,17 @@
 , wrapQtAppsHook
 , libraw
 , libexif
-, qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-image-viewer";
-  version = "5.9.4";
+  version = "5.9.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5A6K47NcMkvncZIF5CXeHYYZWEHQ4YDnPDQr2axCmaI=";
+    sha256 = "sha256-IkjAW4bqQLEWF2tgccYCVnQgcEp9DJoXrEx2HDC25gs=";
   };
 
   patches = [
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qtbase
+    qtsvg
     dtkwidget
     qt5platform-plugins
     gio-qt
@@ -63,6 +66,8 @@ stdenv.mkDerivation rec {
     libraw
     libexif
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 

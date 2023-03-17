@@ -49,7 +49,7 @@ rec {
     runHook preInstall
     bash install.sh -d $out/share/themes -t all \
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
-      ${lib.optionalString (!isNull border-radius) ("--round " + builtins.toString border-radius + "px")}
+      ${lib.optionalString (border-radius != null) ("--round " + builtins.toString border-radius + "px")}
     ${lib.optionalString withWallpapers ''
       mkdir -p $out/share/backgrounds
       cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds

@@ -62,7 +62,8 @@ let
           substituteInPlace setup.py \
             --replace "requests[socks]~=2.25.1" "requests[socks]~=2.25" \
             --replace "cryptography>=3.2,<3.4" "cryptography" \
-            --replace "msal-extensions>=0.3.1,<0.4" "msal-extensions"
+            --replace "msal-extensions>=0.3.1,<0.4" "msal-extensions" \
+            --replace "packaging>=20.9,<22.0" "packaging"
         '';
         nativeCheckInputs = with self; [ pytest ];
         doCheck = stdenv.isLinux;

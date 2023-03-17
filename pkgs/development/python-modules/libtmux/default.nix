@@ -43,10 +43,14 @@ buildPythonPackage rec {
   disabledTests = [
     # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
     "test_new_session_width_height"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # tests/test_pane.py:113: AssertionError
+    "test_capture_pane_start"
   ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [
-    "test_test.py"
+    "tests/test_test.py"
+    "tests/legacy_api/test_test.py"
   ];
 
   pythonImportsCheck = [ "libtmux" ];

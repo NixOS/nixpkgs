@@ -70,7 +70,7 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '';
-  ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
+  ocamlPackages = if customOCamlPackages != null then customOCamlPackages
     else with versions; switch coq-version [
       { case = range "8.16" "8.17"; out = ocamlPackages_4_14; }
       { case = range "8.14" "8.15"; out = ocamlPackages_4_12; }

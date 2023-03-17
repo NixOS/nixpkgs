@@ -1856,6 +1856,8 @@ with pkgs;
 
   git-delete-merged-branches = callPackage ../applications/version-management/git-delete-merged-branches { };
 
+  git-dive = callPackage ../applications/version-management/git-dive { };
+
   git-extras = callPackage ../applications/version-management/git-extras { };
 
   git-fame = callPackage ../applications/version-management/git-fame { };
@@ -2665,10 +2667,7 @@ with pkgs;
 
   android-backup-extractor = callPackage ../tools/backup/android-backup-extractor { };
 
-  android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools
-    (lib.optionalAttrs (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isLinux) {
-      stdenv = gcc10Stdenv;
-    }));
+  android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
   anewer = callPackage ../tools/text/anewer { };
 
@@ -10744,6 +10743,8 @@ with pkgs;
   orangefs = callPackage ../tools/filesystems/orangefs {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  orz = callPackage ../tools/compression/orz { };
 
   os-prober = callPackage ../tools/misc/os-prober { };
 
@@ -24227,6 +24228,8 @@ with pkgs;
     mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
   };
 
+  plumed = callPackage ../development/libraries/science/chemistry/plumed { };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = callPackage ./agda-packages.nix {
@@ -25656,7 +25659,10 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    # Version 1.38.1 requires Go >= 1.20
+    buildGoModule = buildGo120Module;
+  };
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
@@ -29937,6 +29943,8 @@ with pkgs;
   };
   wireshark-qt = wireshark;
 
+  qtwirediff = qt6Packages.callPackage ../applications/networking/sniffers/qtwirediff {};
+
   tshark = wireshark-cli;
   wireshark-cli = wireshark.override {
     withQt = false;
@@ -31094,10 +31102,9 @@ with pkgs;
       Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
       CoreMediaIO QuartzCore AppKit CoreWLAN WebKit IOKit GSS MediaPlayer IOSurface Metal MetalKit;
 
-    # C++20 is required, aarch64 has gcc 9 by default
     stdenv = if stdenv.isDarwin
       then darwin.apple_sdk_11_0.stdenv
-      else if stdenv.isAarch64 then gcc10Stdenv else stdenv;
+      else stdenv;
 
     # tdesktop has random crashes when jemalloc is built with gcc.
     # Apparently, it triggers some bug due to usage of gcc's builtin
@@ -32976,7 +32983,7 @@ with pkgs;
   radioboat = callPackage ../applications/audio/radioboat { };
 
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
   };
 
   raiseorlaunch = callPackage ../applications/misc/raiseorlaunch { };
@@ -38522,7 +38529,7 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
-  qMasterPassword = qt6Packages.callPackage ../applications/misc/qMasterPassword { };
+  qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
   qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
 
@@ -39150,7 +39157,7 @@ with pkgs;
 
   spdlog = spdlog_1;
 
-  dart = callPackage ../development/interpreters/dart { };
+  dart = callPackage ../development/compilers/dart { };
 
   httrack = callPackage ../tools/backup/httrack { };
 
