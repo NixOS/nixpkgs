@@ -1181,6 +1181,18 @@ final: prev:
     meta.homepage = "https://github.com/bbchung/clighter8/";
   };
 
+  clipboard-image-nvim = buildVimPluginFrom2Nix {
+    pname = "clipboard-image.nvim";
+    version = "2022-11-10";
+    src = fetchFromGitHub {
+      owner = "ekickx";
+      repo = "clipboard-image.nvim";
+      rev = "d1550dc26729b7954f95269952e90471b838fa25";
+      sha256 = "0lq13rscsnjglnbynisz4fmsh4xzn12lisgjk9cm61sjg9pw6yl9";
+    };
+    meta.homepage = "https://github.com/ekickx/clipboard-image.nvim/";
+  };
+
   cmd-parser-nvim = buildVimPluginFrom2Nix {
     pname = "cmd-parser.nvim";
     version = "2022-02-23";
