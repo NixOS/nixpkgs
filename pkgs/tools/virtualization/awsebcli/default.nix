@@ -36,30 +36,26 @@ let
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.20.3";
+  version = "3.20.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W3nUXPAXoicDQNXigktR1+b/9W6qvi90fujrXAekxTU=";
+    hash = "sha256-EoSEanwGvP3RcemXrVy7iAGrY/vMC6LbwcrXj2OsF8Q=";
   };
 
 
   preConfigure = ''
-    substituteInPlace setup.py \
+    substituteInPlace requirements.txt \
       --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
       --replace "requests>=2.20.1,<=2.26" "requests<3" \
-      --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<2" \
-      --replace "pathspec==0.9.0" "pathspec>=0.10.0,<1" \
+      --replace "pathspec==0.10.1" "pathspec>=0.10.0,<1" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
-      --replace "future>=0.16.0,<0.17.0" "future" \
       --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<3"
   '';
 
   buildInputs = [
     glibcLocales
   ];
-
-  LC_ALL = "en_US.UTF-8";
 
   nativeCheckInputs = [
     pytest
@@ -93,6 +89,7 @@ with localPython.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
     maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;
   };
