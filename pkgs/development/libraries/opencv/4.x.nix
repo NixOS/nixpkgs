@@ -230,7 +230,7 @@ let
   #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags cudatoolkit cudaVersion;
+  inherit (cudaPackages) backendStdenv cudaFlags cudaVersion;
   inherit (cudaFlags) cudaCapabilities;
 
   cuda-common-redist = with cudaPackages; [
@@ -383,15 +383,15 @@ stdenv.mkDerivation {
       enableLto && (
         # Only clang supports thin LTO, so we must either be using clang through the stdenv,
         stdenv.cc.isClang ||
-          # or through cudatoolkit.
-          (enableCuda && cudatoolkit.cc.isClang)
+          # or through the backend stdenv.
+          (enableCuda && backendStdenv.cc.isClang)
       )
     ))
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     # We need to set the C and C++ host compilers for CUDA to the same compiler.
-    "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/cc"
-    "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/c++"
+    "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
+    "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
 
     # OpenCV respects at least three variables:
