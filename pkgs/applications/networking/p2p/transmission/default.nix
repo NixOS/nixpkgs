@@ -13,6 +13,7 @@
 , pcre
 , libb64
 , libutp
+, libpsl
 , miniupnpc
 , dht
 , libnatpmp
@@ -20,10 +21,14 @@
   # Build options
 , enableGTK3 ? false
 , gtk3
+, gtkmm3
+, glibmm
 , xorg
 , wrapGAppsHook
 , enableQt ? false
+, qtVersion ? 6
 , qt5
+, qt6
 , nixosTests
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
@@ -33,7 +38,8 @@
 }:
 
 let
-  version = "3.00";
+  version = "4.0.2";
+  qt = if (qtVersion == 6) then qt6 else qt5;
 
 in stdenv.mkDerivation {
   pname = "transmission";
@@ -43,17 +49,9 @@ in stdenv.mkDerivation {
     owner = "transmission";
     repo = "transmission";
     rev = version;
-    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    sha256 = "sha256-DaaJnnWEZOl6zLVxgg+U8C5ztv7Iq0wJ9yle0Gxwybc=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix build with openssl 3.0
-    (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
-      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
-    })
-  ];
 
   outputs = [ "out" "apparmor" ];
 
@@ -75,7 +73,7 @@ in stdenv.mkDerivation {
     cmake
   ]
   ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
-  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
+  ++ lib.optionals enableQt [ qt.wrapQtAppsHook ]
   ;
 
   buildInputs = [
@@ -89,9 +87,11 @@ in stdenv.mkDerivation {
     miniupnpc
     dht
     libnatpmp
+    libpsl
   ]
-  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
-  ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
+  ++ lib.optionals enableQt [ qt.qttools qt.qtbase qt.qtsvg ]
+  ++ lib.optionals (enableQt && stdenv.isLinux) [ qt.qtwayland ]
+  ++ lib.optionals enableGTK3 [ gtk3 gtkmm3 glibmm xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
@@ -105,7 +105,7 @@ in stdenv.mkDerivation {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib libnatpmp miniupnpc
+        curl libevent openssl pcre zlib libnatpmp miniupnpc libpsl
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
