@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchmate";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "azymohliad";
     repo = "watchmate";
     rev = "v${version}";
-    hash = "sha256-UHlHfDFTQapQcETCvtch72DqelfBYMymMD/zODFtr1c=";
+    hash = "sha256-LwtlI6WCOO24w8seUzyhCp51pfEiCM+iL6lu/J6v4PQ=";
   };
 
-  cargoHash = "sha256-QYw/am5cMVbRdx/XQ+lZv2Jo9Aiwd2ypUlo854sm7i4=";
+  cargoHash = "sha256-MD0eWZDpCevBY1Y3Gzgk13qCFtL7QOPDATv8MA+Q5go=";
 
   nativeBuildInputs = [
     pkg-config
