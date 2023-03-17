@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   replaceVars,
   meson,
   ninja,
@@ -77,7 +76,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.12-unstable-2022-08-31";
+  version = "2.99.14-unstable-2023-03-17";
 
   outputs = [
     "out"
@@ -92,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gimp";
-    rev = "a791151ed05b6e2f7b0ecb71db8be9629d61f5df";
-    hash = "sha256-0IIQwJW/HwkvKmjrs2xOhbpyLvvqJ0PR3q75PF+b/Ac=";
+    rev = "ad7a2e53eb72ef471566fa2d0ce9faeec929fbcf";
+    hash = "sha256-IJMUJc817EDWIRqqkCuwAcSw7gcgCkXxPan5fEq1AO0=";
   };
 
   patches = [
@@ -122,18 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     # the correct directory at the moment. There is a MR against isocodes to fix that:
     # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
     ./fix-isocodes-paths.patch
-
-    # Make the babl-0.1 patch apply
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/06b481a3ecf49563050935ad0e965a664648e450.patch";
-      hash = "sha256-mlYj29m1Ay9FFOCTAv01ipiK8VTdjh+Es4fnhBR/Vzs=";
-    })
-
-    # Fix compatibility with babl-0.1
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/04a78154e1af5e30dcedde6dbaa321be3f0e24b1.patch";
-      hash = "sha256-oSfkTPJb4ai8z3o7QHgrNzwJEtJj04R9mKufXxGNWU8=";
-    })
   ];
 
   nativeBuildInputs =
@@ -244,8 +231,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-Djpeg-xl=disabled"
       # Broken references
       "-Dgi-docgen=disabled"
-      # Removed pkg-config variable
-      "-Dheif=disabled"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Dalsa=disabled"
