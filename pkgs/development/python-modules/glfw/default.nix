@@ -20,11 +20,15 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "glfw" ];
+
+  pythonImportsCheck = [
+    "glfw"
+  ];
 
   meta = with lib; {
     description = "Python bindings for GLFW";
     homepage = "https://github.com/FlorianRhiem/pyGLFW";
+    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.McSinyx ];
   };
