@@ -9,7 +9,7 @@
 , vala
 , glib
 , liburing
-, gitUpdater
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gnome.updateScript {
+    packageName = pname;
+  };
 
   meta = with lib; {
     description = "Library supporting deferred execution for GNOME and GTK";
