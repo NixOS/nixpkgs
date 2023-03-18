@@ -183,6 +183,19 @@ final: prev:
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
   };
 
+  LuaSnip = buildVimPluginFrom2Nix {
+    pname = "LuaSnip";
+    version = "2023-03-13";
+    src = fetchFromGitHub {
+      owner = "L3MON4D3";
+      repo = "LuaSnip";
+      rev = "54e06334a440b476fcc184fcf555cfd4ad9110c0";
+      sha256 = "1pl7rndvvgy143aj6xc4znihp7c8skx790kah5ww94cq4mk2x6zs";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/L3MON4D3/LuaSnip/";
+  };
+
   MatchTagAlways = buildVimPluginFrom2Nix {
     pname = "MatchTagAlways";
     version = "2017-05-20";
@@ -4698,19 +4711,6 @@ final: prev:
       sha256 = "01v3612yplmgwbdiz7pgrc3a660q4z3v3g554nzxd3wn39cmd2wq";
     };
     meta.homepage = "https://github.com/nvim-lualine/lualine.nvim/";
-  };
-
-  luasnip = buildVimPluginFrom2Nix {
-    pname = "luasnip";
-    version = "2023-03-13";
-    src = fetchFromGitHub {
-      owner = "l3mon4d3";
-      repo = "luasnip";
-      rev = "54e06334a440b476fcc184fcf555cfd4ad9110c0";
-      sha256 = "1pl7rndvvgy143aj6xc4znihp7c8skx790kah5ww94cq4mk2x6zs";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/l3mon4d3/luasnip/";
   };
 
   luatab-nvim = buildVimPluginFrom2Nix {

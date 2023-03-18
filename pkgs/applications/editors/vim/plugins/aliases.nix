@@ -85,6 +85,7 @@ mapAliases (with prev; {
   indent-blankline-nvim-lua = indent-blankline-nvim; # backwards compat, added 2021-07-05
   ipython             = vim-ipython;
   latex-live-preview  = vim-latex-live-preview;
+  luasnip             = LuaSnip;
   maktaba             = vim-maktaba;
   multiple-cursors    = vim-multiple-cursors;
   necoGhc             = neco-ghc; # backwards compat, added 2014-10-18
