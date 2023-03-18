@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.13";
+  version = "0.4.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9pJi80V7WKvsgtp0ffItWnjoOvFvfE/Sz6y2VlsU+wQ=";
+    hash = "sha256-MnYkCAI8x65kU0EoTRf4ZVsbjNravjokepX4yViu7go=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src postPatch;
     name = "${pname}-${version}";
-    hash = "sha256-TjRdHSXHmF6fzCshX1I4Sq+A/fEmBHDPGZvJUxL13aM=";
+    hash = "sha256-HwWH8/UWKWOdRmyCVQtNqJxXD55f6zxLY0LhR7JU9ro=";
   };
 
   nativeBuildInputs = [
