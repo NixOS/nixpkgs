@@ -133,7 +133,7 @@ fn convert(attr: &str, hashes: &mut HashMap<String, String>) -> anyhow::Result<(
 
         let prefetch_output: PrefetchOutput = serde_json::from_slice(
             &Command::new("nix-prefetch-git")
-                .args(["--url", url, "--rev", rev, "--quiet"])
+                .args(["--url", url, "--rev", rev, "--quiet", "--fetch-submodules"])
                 .output()?
                 .stdout,
         )?;
