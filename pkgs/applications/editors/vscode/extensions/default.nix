@@ -2069,7 +2069,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
+      ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter {};
 
       ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
         mktplcRef = {
