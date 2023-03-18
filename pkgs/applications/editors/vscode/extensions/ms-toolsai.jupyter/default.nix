@@ -30,10 +30,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq "$(print_jq_query)" ./package.json | sponge ./package.json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter extension for vscode";
     homepage = "https://github.com/microsoft/vscode-jupyter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jraygauthier ];
   };
 }

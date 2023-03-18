@@ -25,10 +25,10 @@ stdenv.mkDerivation {
     install -D -m0555 rescript-editor-analysis.exe $out/bin/rescript-editor-analysis.exe
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analysis binary for the ReScript VSCode plugin";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
-    maintainers = with maintainers; [ dlip jayesh-bhoot ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.dlip lib.maintainers.jayesh-bhoot ];
+    license = lib.licenses.mit;
   };
 }
