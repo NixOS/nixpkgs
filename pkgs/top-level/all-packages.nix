@@ -20069,6 +20069,8 @@ with pkgs;
     geoipDatabase = geolite-legacy;
   };
 
+  geogram = callPackage ../development/libraries/geogram { };
+
   geographiclib = callPackage ../development/libraries/geographiclib { };
 
   geoip = callPackage ../development/libraries/geoip { };
