@@ -25918,17 +25918,16 @@ with pkgs;
 
   tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
 
-  alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };
-  alsa-lib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
-  alsa-oss = callPackage ../os-specific/linux/alsa-project/alsa-oss { };
-  alsa-plugins = callPackage ../os-specific/linux/alsa-project/alsa-plugins { };
-  alsa-plugins-wrapper = callPackage ../os-specific/linux/alsa-project/alsa-plugins/wrapper.nix { };
-  alsa-tools = callPackage ../os-specific/linux/alsa-project/alsa-tools { };
-  alsa-topology-conf = callPackage ../os-specific/linux/alsa-project/alsa-topology-conf { };
-  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-project/alsa-ucm-conf { };
-  alsa-utils = callPackage ../os-specific/linux/alsa-project/alsa-utils {
-    fftw = fftwFloat;
-  };
+  inherit (callPackage ../os-specific/linux/alsa-project { })
+    alsa-firmware
+    alsa-lib
+    alsa-oss
+    alsa-plugins
+    alsa-plugins-wrapper
+    alsa-tools
+    alsa-topology-conf
+    alsa-ucm-conf
+    alsa-utils;
 
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
