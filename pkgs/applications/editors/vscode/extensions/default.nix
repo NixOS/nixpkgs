@@ -1944,7 +1944,7 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools { };
+      ms-vscode.cpptools = callPackage ./ms-vscode.cpptools { };
 
       ms-vscode.cmake-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
