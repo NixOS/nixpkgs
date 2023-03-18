@@ -32601,6 +32601,8 @@ with pkgs;
     nodejs = nodejs-16_x;
   };
 
+  peroxide = callPackage ../applications/networking/peroxide { };
+
   pflask = callPackage ../os-specific/linux/pflask { };
 
   pfsshell = callPackage ../tools/misc/pfsshell { };
