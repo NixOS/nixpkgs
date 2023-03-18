@@ -8,6 +8,7 @@
 , pycognito
 , pytest-aiohttp
 , pytestCheckHook
+, pythonOlder
 , snitun
 , warrant
 }:
@@ -15,6 +16,9 @@
 buildPythonPackage rec {
   pname = "hass-nabucasa";
   version = "0.61.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
@@ -47,7 +51,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "hass_nabucasa" ];
+  pythonImportsCheck = [
+    "hass_nabucasa"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
