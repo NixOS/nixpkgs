@@ -105,7 +105,9 @@ in {
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
   shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
   libmpd = doJailbreak super.libmpd;
-  base-orphans = dontCheck super.base-orphans;
+  # generically needs base-orphans for 9.4 only
+  base-orphans = dontCheck (doDistribute super.base-orphans);
+  generically = addBuildDepend self.base-orphans super.generically;
 
   # Note: Any compilation fixes need to be done on the versioned attributes,
   # since those are used for the internal dependencies between the versioned
