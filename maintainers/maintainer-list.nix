@@ -9255,6 +9255,12 @@
     github = "marius851000";
     githubId = 22586596;
   };
+  markbeep = {
+    email = "mrkswrn@gmail.com";
+    github = "markbeep";
+    githubId = 20665331;
+    name = "Mark";
+  };
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";
