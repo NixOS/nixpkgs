@@ -1,4 +1,6 @@
-{ airspy
+{ lib
+, stdenv
+, airspy
 , airspyhf
 , aptdec
 , boost
@@ -13,7 +15,6 @@
 , glew
 , hackrf
 , hidapi
-, lib
 , ffmpeg
 , libiio
 , libopus
@@ -95,7 +96,7 @@ mkDerivation rec {
     "-DDAB_LIB=${dab_lib}"
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
-    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
@@ -110,6 +111,6 @@ mkDerivation rec {
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alkeryn ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
