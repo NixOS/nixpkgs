@@ -27179,6 +27179,8 @@ with pkgs;
 
   usbguard = callPackage ../os-specific/linux/usbguard { };
 
+  usbguard-notifier = callPackage ../os-specific/linux/usbguard-notifier { };
+
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
