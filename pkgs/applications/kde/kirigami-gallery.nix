@@ -6,10 +6,9 @@
 , qtgraphicaleffects
 , qtquickcontrols2
 , qttools
-, qtbase
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kirigami-gallery";
 
   nativeBuildInputs = [ extra-cmake-modules qttools ];
@@ -26,6 +25,5 @@ mkDerivation rec {
     description = "View examples of Kirigami components";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ shadowrz ];
-    broken = versionOlder qtbase.version "5.15";
   };
 }
