@@ -44,13 +44,10 @@ let
   nixosLib = import ../lib {};
 
   inherit
-    (nixosLibExperimental)
-    evalModules;
-  inherit
     (nixosLib)
     evalSystemConfiguration;
 
-  evalMinimalConfig = module: evalModules { modules = [ module ]; };
+  evalMinimalConfig = module: nixosLibExperimental.evalModules { modules = [ module ]; };
 
   inherit
     (rec {
@@ -192,7 +189,7 @@ in {
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
-  documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit evalModules; };
+  documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit (nixosLibExperimental) evalModules; };
   doh-proxy-rust = handleTest ./doh-proxy-rust.nix {};
   dokuwiki = handleTest ./dokuwiki.nix {};
   dolibarr = handleTest ./dolibarr.nix {};
