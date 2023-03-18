@@ -89,6 +89,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Manga reader for GNOME";
     homepage = "https://valos.gitlab.io/Komikku/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ chuangzhu infinitivewitch ];
   };
 }
