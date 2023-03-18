@@ -635,7 +635,7 @@ let
         };
       };
 
-      chenglou92.rescript-vscode = callPackage ./rescript { };
+      chenglou92.rescript-vscode = callPackage ./chenglou92.rescript-vscode { };
 
       christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1416,7 +1416,7 @@ let
         };
       };
 
-      hashicorp.terraform = callPackage ./terraform { };
+      hashicorp.terraform = callPackage ./hashicorp.terraform { };
 
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1930,7 +1930,7 @@ let
 
       ms-ceintl = callPackage ./language-packs.nix {}; # non-English language packs
 
-      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
+      ms-dotnettools.csharp = callPackage ./ms-dotnettools.csharp { };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1944,7 +1944,7 @@ let
         };
       };
 
-      ms-vscode.cpptools = callPackage ./cpptools { };
+      ms-vscode.cpptools = callPackage ./ms-vscode.cpptools { };
 
       ms-vscode.cmake-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1996,7 +1996,7 @@ let
         };
       };
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
+      ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
 
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2031,7 +2031,7 @@ let
         };
       };
 
-      ms-python.python = callPackage ./python { };
+      ms-python.python = callPackage ./ms-python.python { };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2069,7 +2069,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
+      ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter {};
 
       ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2257,7 +2257,7 @@ let
         };
       };
 
-      rust-lang.rust-analyzer = callPackage ./rust-analyzer { };
+      rust-lang.rust-analyzer = callPackage ./rust-lang.rust-analyzer { };
       matklad.rust-analyzer = self.rust-lang.rust-analyzer; # Previous publisher
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
@@ -2648,7 +2648,7 @@ let
         };
       };
 
-      sumneko.lua = callPackage ./lua { };
+      sumneko.lua = callPackage ./sumneko.lua { };
 
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2858,7 +2858,7 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vscode-lldb { llvmPackages = llvmPackages_14; };
+      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb { llvmPackages = llvmPackages_14; };
 
       valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
         mktplcRef = {
@@ -2868,9 +2868,9 @@ let
         };
 
         vsix = fetchurl {
-           name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
-           url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
-           sha256 = "1nlrijjwc35n1xgb5lgnr4yvlgfcxd0vdj93ip8lv2xi8x1ni5f6";
+          name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+          url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
+          sha256 = "1nlrijjwc35n1xgb5lgnr4yvlgfcxd0vdj93ip8lv2xi8x1ni5f6";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -2914,7 +2914,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
       vscjava.vscode-java-debug = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3119,7 +3119,7 @@ let
         };
       };
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime { };
+      WakaTime.vscode-wakatime = callPackage ./WakaTime.vscode-wakatime { };
 
       wingrunr21.vscode-ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
