@@ -71,9 +71,7 @@ in {
 
   # Jailbreaks & Version Updates
 
-  # Jailbreak to allow quickcheck-instances-0.3.28 (too strict lower bound)
-  aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
-
+  aeson = doDistribute self.aeson_2_1_2_1;
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
