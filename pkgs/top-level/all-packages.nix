@@ -1429,6 +1429,8 @@ with pkgs;
 
   asleap = callPackage ../tools/networking/asleap { };
 
+  balena-cli = callPackage ../tools/admin/balena-cli { };
+
   butler = callPackage ../games/itch/butler.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -27183,6 +27185,8 @@ with pkgs;
   upower = callPackage ../os-specific/linux/upower { };
 
   usbguard = callPackage ../os-specific/linux/usbguard { };
+
+  usbguard-notifier = callPackage ../os-specific/linux/usbguard-notifier { };
 
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
