@@ -29,26 +29,35 @@ let
     locatedModules = if modulesLocation == null then modules
       else map (lib.setDefaultModuleLocation modulesLocation) modules;
 
-    # `noUserModules` is a contract consumed by
-    # modules/system/activation/specialisation.nix
-    # TODO (during review): critically revise & discuss! (and then remove this line :-)
-    noUserModules = standardModules;
-
-    # Standard Modules: Gather standard modules that are always part of a standard
-    #                   configuration and place them into extra arguments so that
-    #                   a configuration can reproduce a variant of itself inside
-    #                   the module system.
-    standardModules = let
-      # Extra arguments that are useful for constructing a similar configuration.
+    # Evaluate Base System Configuration:
+    #      1. Add modulesModule which implements _module.args contracts that
+    #         inform the module sets at the time of evaluation.
+    #      2. evaluate the resulting module set
+    noUserModules = let
       modulesModule = {
-        config._module.args = { modules = locatedModules; inherit baseModules noUserModules; };
+        config._module.args = {
+          # can be used to create a new variant of any given configuration
+          modules = locatedModules;
+          # noUserModules is a contract consumed by
+          # modules/system/activation/specialisation.nix
+          # a better name would be: baseSystemConfiguration
+          # as it represents an `evalSystemConfiguration` of
+          # `baseModules` + [`modulesModule`], but w/o `locatedModules`
+          inherit noUserModules;
+          # typically used for rendering the nixos documentation
+          # can also be used to create a new variant of any given
+          # configuration
+          inherit baseModules;
+        };
       };
     in evalModulesMinimal {
       inherit prefix specialArgs;
       modules = baseModules ++ [modulesModule];
     };
 
-  in standardModules.extendModules { modules = locatedModules; };
+  # Note: extendModules bears no cost, here, since evalModulesMinimal
+  #       not actually evaluate eagerly.
+  in noUserModules.extendModules { modules = locatedModules; };
 
 in
 {
