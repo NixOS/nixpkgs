@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5hgd4t9ZKHmv8wzED7Tn+ykzUM0EbQqRX15HBHzXtJY=";
+    sha256 = "sha256-vBnHNc/kCyZ8gTWhQShn4lBQECguFBzBd7xIfLBgm7A=";
   };
 
-  cargoSha256 = "sha256-cK5n75T+Kkd6F4q4MFZNn0R6W6Nk2/H23AGhIe2FCig=";
+  cargoSha256 = "sha256-ZnDerzDdCLjslszSn0z0BevP5qpkuYDCDLyv66+psdo=";
 
   auditable = true; # TODO: remove when this is the default
 
@@ -49,9 +49,7 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  postPatch = ''
-    touch ../$(stripHash $cargoDeps)/taffy/README.md
-  '';
+  cargoBuildFlags = [ "--bin" "jumpy" ];
 
   postInstall = ''
     mkdir $out/share
