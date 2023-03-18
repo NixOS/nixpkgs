@@ -215,11 +215,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "Automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [
-      tshaynik
-      magnetophon
-      yuu
-    ];
+    maintainers = with maintainers; [ tshaynik magnetophon yuu ];
     platforms = platforms.linux;
     license = licenses.agpl3Plus;
   };
