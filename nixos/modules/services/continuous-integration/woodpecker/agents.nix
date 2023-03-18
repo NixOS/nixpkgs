@@ -99,7 +99,7 @@ let
   };
 in
 {
-  meta.maintainers = [ lib.maintainers.janik ];
+  meta.maintainers = with lib.maintainers; [ janik ambroisie ];
 
   options = {
     services.woodpecker-agents = {
