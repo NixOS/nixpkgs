@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl }:
+{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk17, curl }:
 
 stdenv.mkDerivation rec {
   pname = "codeql";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrender
     freetype
-    jdk11
+    jdk17
     stdenv.cc.cc.lib
     curl
   ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     ln -sf $out/codeql/tools/linux64/lib64trace.so $out/codeql/tools/linux64/libtrace.so
 
-    sed -i 's%\$CODEQL_DIST/tools/\$CODEQL_PLATFORM/java%\${jdk11}%g' $out/codeql/codeql
+    sed -i 's%\$CODEQL_DIST/tools/\$CODEQL_PLATFORM/java%\${jdk17}%g' $out/codeql/codeql
 
     ln -s $out/codeql/codeql $out/bin/
   '';
