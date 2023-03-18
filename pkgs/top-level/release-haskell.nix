@@ -423,6 +423,7 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
+        compilerNames.ghc944
       ];
     })
     {
