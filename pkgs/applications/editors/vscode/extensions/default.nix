@@ -635,7 +635,7 @@ let
         };
       };
 
-      chenglou92.rescript-vscode = callPackage ./rescript { };
+      chenglou92.rescript-vscode = callPackage ./chenglou92.rescript-vscode { };
 
       christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
