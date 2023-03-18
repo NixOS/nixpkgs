@@ -1996,7 +1996,7 @@ let
         };
       };
 
-      ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
+      ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
 
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
         mktplcRef = {
