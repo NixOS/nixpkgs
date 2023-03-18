@@ -796,18 +796,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.2.8";
+      version = "1.2.13";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        sha256 = "sha256-iPZ0DPAErkMJIn85t1FIiGhLcMZlL06iNKLqmRu7gXI=";
+        hash = "sha256-VDLBktZChRgorJt/V/wuFQn/SL4yOZIElmntEQEi8Tc=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-HZEh6jtuRqsyjyDbDIV38x2N1unbSu24D8vrPZ17ktE=";
+        cargoSha256 = "sha256-cJwmuwsC81fSH36TRU7xGzlR4pVdjsw73uRaH1uWY+0=";
 
         nativeBuildInputs = [ makeWrapper ];
 
