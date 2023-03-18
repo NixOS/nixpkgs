@@ -2914,7 +2914,7 @@ let
         };
       };
 
-      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
+      ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
       vscjava.vscode-java-debug = buildVscodeMarketplaceExtension {
         mktplcRef = {
