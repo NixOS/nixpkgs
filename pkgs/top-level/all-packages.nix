@@ -3812,6 +3812,8 @@ with pkgs;
 
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
+  tiny-cuda-nn = callPackage ../development/libraries/science/math/tiny-cuda-nn { };
+
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
 
   behave = with python3Packages; toPythonApplication behave;
