@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "netdata-go-plugins";
-  version = "0.51.3";
+  version = "0.51.4";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "go.d.plugin";
     rev = "v${version}";
-    sha256 = "sha256-z4sw/OJYgc2SaGsGwWcX2zAxnCkTTbK8G/XKGCGega0=";
+    hash = "sha256-yYagbTrUpynvmd20MATQvsR+jZM7dhrQdfSjuayrZJI=";
   };
 
   vendorHash = "sha256-lKoFm+wch9/ZgDSNSgYUrOq/X8DUEuSAQ4cc8UGaJzU=";
