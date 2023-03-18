@@ -39116,6 +39116,8 @@ with pkgs;
 
   zoneminder = callPackage ../servers/zoneminder { };
 
+  zrok = callPackage ../tools/networking/zrok { };
+
   xcp = callPackage ../tools/misc/xcp { };
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
