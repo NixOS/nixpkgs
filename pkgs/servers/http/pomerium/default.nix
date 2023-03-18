@@ -111,9 +111,12 @@ buildGoModule rec {
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pomerium;
-    inherit pomerium-cli;
+  passthru = {
+    tests = {
+      inherit (nixosTests) pomerium;
+      inherit pomerium-cli;
+    };
+    updateScript = ./updater.sh;
   };
 
   meta = with lib; {
