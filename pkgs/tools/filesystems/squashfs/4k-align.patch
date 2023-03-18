@@ -1,9 +1,11 @@
 This patch is an old patch; see below for the original message body. The patch
-has been updated twice: Once to apply to squashfs 4.4, commit
-52eb4c279cd283ed9802dd1ceb686560b22ffb67, and later to apply to squashfs 4.5,
-commit 0496d7c3de3e09da37ba492081c86159806ebb07.
+has been updated several times to be compatible with new releases.
 
-From 7bda7c75748f36b0a50f93e46144d5a4de4974ad Mon Sep 17 00:00:00 2001
+ * To apply to squashfs 4.4, commit 52eb4c279cd283ed9802dd1ceb686560b22ffb67.
+ * To apply to squashfs 4.5, commit 0496d7c3de3e09da37ba492081c86159806ebb07.
+ * To apply to squashfs 4.6, commit f7623b3d9953a1190fec181708c9489ef3522b9f.
+
+From af8a6dca694ddd38d8a775a2b5f9a24fe2d10153 Mon Sep 17 00:00:00 2001
 From: Amin Hassani <ahassani@google.com>
 Date: Thu, 15 Dec 2016 10:43:15 -0800
 Subject: [PATCH] mksquashfs 4K aligns the files inside the squashfs image
@@ -21,23 +23,23 @@ increased_size = (number_of_unfragmented_files_in_image + number of fragments) *
 
 The 4k alignment can be enabled by flag '-4k-align'
 ---
- squashfs-tools/mksquashfs.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ squashfs-tools/mksquashfs.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
-index aaa4b00..eb2fb23 100644
+index 3429aac..db164c2 100644
 --- a/squashfs-tools/mksquashfs.c
 +++ b/squashfs-tools/mksquashfs.c
-@@ -99,6 +99,8 @@ int nopad = FALSE;
- int exit_on_error = FALSE;
- long long start_offset = 0;
- int sleep_time = 0;
+@@ -82,6 +82,8 @@ int noI = FALSE;
+ int noId = FALSE;
+ int noD = FALSE;
+ int noX = FALSE;
 +int do_4k_align = FALSE;
 +#define ALIGN_UP(bytes, size) (bytes = (bytes + size - 1) & ~(size - 1))
  
- long long global_uid = -1, global_gid = -1;
- 
-@@ -1553,6 +1555,9 @@ static void unlock_fragments()
+ /* block size used to build filesystem */
+ int block_size = SQUASHFS_FILE_SIZE;
+@@ -1624,6 +1626,9 @@ static void unlock_fragments()
  	 * queue at this time.
  	 */
  	while(!queue_empty(locked_fragment)) {
@@ -47,7 +49,7 @@ index aaa4b00..eb2fb23 100644
  		write_buffer = queue_get(locked_fragment);
  		frg = write_buffer->block;	
  		size = SQUASHFS_COMPRESSED_SIZE_BLOCK(fragment_table[frg].size);
-@@ -2460,6 +2465,9 @@ static void *frag_deflator(void *arg)
+@@ -2627,6 +2632,9 @@ static void *frag_deflator(void *arg)
  		write_buffer->size = compressed_size;
  		pthread_mutex_lock(&fragment_mutex);
  		if(fragments_locked == FALSE) {
@@ -57,7 +59,7 @@ index aaa4b00..eb2fb23 100644
  			fragment_table[file_buffer->block].size = c_byte;
  			fragment_table[file_buffer->block].start_block = bytes;
  			write_buffer->block = bytes;
-@@ -2850,6 +2858,10 @@ static struct file_info *write_file_blocks(int *status, struct dir_ent *dir_ent,
+@@ -3021,6 +3029,10 @@ static struct file_info *write_file_blocks(int *status, struct dir_ent *dir_ent,
  	struct file_info *file;
  	int bl_hash = 0;
  
@@ -68,15 +70,15 @@ index aaa4b00..eb2fb23 100644
  	if(pre_duplicate(read_size, dir_ent->inode, read_buffer, &bl_hash))
  		return write_file_blocks_dup(status, dir_ent, read_buffer, dup, bl_hash);
  
-@@ -5975,6 +5987,7 @@ static void print_options(FILE *stream, char *name, int total_mem)
- 	fprintf(stream, "actions from <f>\n");
- 	fprintf(stream, "-false-action-file <f>\tas -false-action, but read ");
- 	fprintf(stream, "actions from <f>\n");
+@@ -6169,6 +6181,7 @@ static void print_options(FILE *stream, char *name, int total_mem)
+ 	fprintf(stream, "or metadata.  This is\n\t\t\tequivalent to ");
+ 	fprintf(stream, "specifying -noI -noD -noF and -noX\n");
+ 	fprintf(stream, "\nFilesystem build options:\n");
 +	fprintf(stream, "-4k-align\t\tenables 4k alignment of all files\n");
- 	fprintf(stream, "\nFilesystem filter options:\n");
- 	fprintf(stream, "-p <pseudo-definition>\tAdd pseudo file definition\n");
- 	fprintf(stream, "-pf <pseudo-file>\tAdd list of pseudo file definitions\n");
-@@ -6198,6 +6211,7 @@ static void print_summary()
+ 	fprintf(stream, "-tar\t\t\tread uncompressed tar file from standard in (stdin)\n");
+ 	fprintf(stream, "-no-strip\t\tact like tar, and do not strip leading ");
+ 	fprintf(stream, "directories\n\t\t\tfrom source files\n");
+@@ -6690,6 +6703,7 @@ static void print_summary()
  		"compressed", no_fragments ? "no" : noF ? "uncompressed" :
  		"compressed", no_xattrs ? "no" : noX ? "uncompressed" :
  		"compressed", noI || noId ? "uncompressed" : "compressed");
@@ -84,15 +86,15 @@ index aaa4b00..eb2fb23 100644
  	printf("\tduplicates are %sremoved\n", duplicate_checking ? "" :
  		"not ");
  	printf("Filesystem size %.2f Kbytes (%.2f Mbytes)\n", bytes / 1024.0,
-@@ -7499,6 +7513,9 @@ print_compressor_options:
- 			root_name = argv[i];
- 		} else if(strcmp(argv[i], "-version") == 0) {
- 			print_version("mksquashfs");
-+
+@@ -8417,6 +8431,8 @@ print_compressor_options:
+ 		} else if(strcmp(argv[i], "-comp") == 0) {
+ 			/* parsed previously */
+ 			i++;
 +		} else if(strcmp(argv[i], "-4k-align") == 0) {
 +			do_4k_align = TRUE;
  		} else {
  			ERROR("%s: invalid option\n\n", argv[0]);
  			print_options(stderr, argv[0], total_mem);
 -- 
-2.32.0
+2.39.2
+
