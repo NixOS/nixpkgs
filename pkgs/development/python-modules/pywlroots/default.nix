@@ -15,6 +15,7 @@
 , xkbcommon
 , xorg
 , pytestCheckHook
+, qtile
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "wlroots" ];
+
+  passthru.tests = { inherit qtile; };
 
   meta = with lib; {
     homepage = "https://github.com/flacjacket/pywlroots";
