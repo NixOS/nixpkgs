@@ -1942,7 +1942,6 @@ broken-packages:
   - hactor
   - hactors
   - haddock-api
-  - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
   - hadoop-formats

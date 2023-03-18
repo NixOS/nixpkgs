@@ -511,6 +511,10 @@ self: super: {
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
 
+  # Package exists only to be example of documentation, yet it has restrictive
+  # "base" dependency.
+  haddock-cheatsheet = doJailbreak super.haddock-cheatsheet;
+
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
 
