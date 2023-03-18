@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Xerbo/aptdec";
     license = licenses.gpl2;
     maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

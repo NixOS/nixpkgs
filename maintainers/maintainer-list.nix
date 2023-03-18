@@ -7804,7 +7804,6 @@
     name = "Claudius Holeksa";
   };
   ken-matsui = {
-    email = "nix@kmatsui.me";
     github = "ken-matsui";
     githubId = 26405363;
     name = "Ken Matsui";
@@ -9254,6 +9253,12 @@
     name = "Marius David";
     github = "marius851000";
     githubId = 22586596;
+  };
+  markbeep = {
+    email = "mrkswrn@gmail.com";
+    github = "markbeep";
+    githubId = 20665331;
+    name = "Mark";
   };
   markus1189 = {
     email = "markus1189@gmail.com";

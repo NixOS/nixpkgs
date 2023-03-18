@@ -44,6 +44,9 @@ buildGoModule rec {
     export CI=true
   '';
 
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
+
   installPhase = ''
     runHook preInstall
 
