@@ -12810,6 +12810,10 @@ with pkgs;
 
   tmux-mem-cpu-load = callPackage ../tools/misc/tmux-mem-cpu-load { };
 
+  tmux-sessionizer = callPackage ../tools/misc/tmux-sessionizer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tmux-xpanes = callPackage ../tools/misc/tmux-xpanes { };
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
