@@ -9,6 +9,7 @@
 , libX11
 , lib
 , stdenv
+, libgcrypt
 }:
 
 stdenv.mkDerivation {
@@ -33,6 +34,7 @@ stdenv.mkDerivation {
     stdenv.cc.cc.lib
     libGL
     libX11
+    libgcrypt
   ];
 
   nativeBuildInputs = [
