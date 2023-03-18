@@ -15,7 +15,7 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2022.7.5";
+  version = "2023.1.0";
 
   src = fetchurl {
     url =
