@@ -11714,6 +11714,8 @@ with pkgs;
 
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
 
+  remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr { };
