@@ -18880,6 +18880,8 @@ with pkgs;
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
+  sqlcmd = callPackage ../development/tools/database/sqlcmd { };
+
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
   sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
