@@ -2257,7 +2257,7 @@ let
         };
       };
 
-      rust-lang.rust-analyzer = callPackage ./rust-analyzer { };
+      rust-lang.rust-analyzer = callPackage ./rust-lang.rust-analyzer { };
       matklad.rust-analyzer = self.rust-lang.rust-analyzer; # Previous publisher
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
