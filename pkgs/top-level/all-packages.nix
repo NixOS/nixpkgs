@@ -20068,6 +20068,8 @@ with pkgs;
     geoipDatabase = geolite-legacy;
   };
 
+  geogram = callPackage ../development/libraries/geogram { };
+
   geographiclib = callPackage ../development/libraries/geographiclib { };
 
   geoip = callPackage ../development/libraries/geoip { };
@@ -32607,6 +32609,8 @@ with pkgs;
   peertube = callPackage ../servers/peertube {
     nodejs = nodejs-16_x;
   };
+
+  peroxide = callPackage ../applications/networking/peroxide { };
 
   pflask = callPackage ../os-specific/linux/pflask { };
 

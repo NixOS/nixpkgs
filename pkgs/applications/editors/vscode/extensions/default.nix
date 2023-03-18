@@ -931,8 +931,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "13.3.2";
-          sha256 = "sha256-4o4dmjio/I531szcoeGPVtfrNAyRAPJRrmsNny/PY2w=";
+          version = "13.4.0";
+          sha256 = "sha256-CYI62sWPlJNRP2KIkg4vQutIMC6gaCxtTVoOWZIS8Lw=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1629,6 +1629,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      kalebpace.balena-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "balena-vscode";
+          publisher = "kalebpace";
+          version = "0.1.3";
+          sha256 = "sha256-CecEv19nEtnMe0KlCMNBM9ZAjbAVgPNUcZ6cBxHw44M=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/kalebpace.balena-vscode/changelog";
+          description = "VS Code extension for integration with Balena";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=kalebpace.balena-vscode";
+          homepage = "https://github.com/balena-vscode/balena-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kalebpace ];
         };
       };
 
