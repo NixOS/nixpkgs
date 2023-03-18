@@ -1,0 +1,26 @@
+pe: don't embed current timestampl into PE files by default
+
+Make builds more deterministic by default: use --no-insert-timestamp.
+--- a/ld/emultempl/pe.em
++++ b/ld/emultempl/pe.em
+@@ -159,7 +159,7 @@ static int support_old_code = 0;
+ static char * thumb_entry_symbol = NULL;
+ static lang_assignment_statement_type *image_base_statement = 0;
+ static unsigned short pe_dll_characteristics = DEFAULT_DLL_CHARACTERISTICS;
+-static bool insert_timestamp = true;
++static bool insert_timestamp = false;
+ static const char *emit_build_id;
+ #ifdef PDB_H
+ static int pdb;
+--- a/ld/emultempl/pep.em
++++ b/ld/emultempl/pep.em
+@@ -180,7 +180,7 @@ static flagword real_flags = IMAGE_FILE_LARGE_ADDRESS_AWARE;
+ static int support_old_code = 0;
+ static lang_assignment_statement_type *image_base_statement = 0;
+ static unsigned short pe_dll_characteristics = DEFAULT_DLL_CHARACTERISTICS;
+-static bool insert_timestamp = true;
++static bool insert_timestamp = false;
+ static const char *emit_build_id;
+ #ifdef PDB_H
+ static int pdb;
+

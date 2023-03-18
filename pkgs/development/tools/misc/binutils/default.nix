@@ -88,6 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     # not need to know binutils' BINDIR at all. It's an absolute path
     # where libraries are stored.
     ./plugins-no-BINDIR.patch
+
+    # Disable current timestamp embedding into PE files. Improve output
+    # file determinism: https://github.com/NixOS/nixpkgs/issues/221419
+    ./PE-dont-embed-timestamps.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
