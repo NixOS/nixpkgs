@@ -2,9 +2,11 @@
 , mkXfceDerivation
 , glib
 , gtk3
+, libcanberra-gtk3
 , libnotify
 , libxfce4ui
 , libxfce4util
+, sqlite
 , xfce4-panel
 , xfconf
 }:
@@ -12,16 +14,18 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
-  version = "0.6.5";
+  version = "0.8.2";
 
-  sha256 = "sha256-NUEqQk9EcDl23twbo+DUt7QYZrPmWpsRzmi5wIdolqw=";
+  sha256 = "sha256-M8L2HWTuQDl/prD7s6uptkW4XDscpk6fc+epoxjFNS8=";
 
   buildInputs = [
     gtk3
     glib
+    libcanberra-gtk3
     libnotify
     libxfce4ui
     libxfce4util
+    sqlite
     xfce4-panel
     xfconf
   ];
@@ -30,6 +34,7 @@ mkXfceDerivation {
 
   configureFlags = [
     "--enable-dbus-start-daemon"
+    "--enable-sound"
   ];
 
   meta = with lib; {
