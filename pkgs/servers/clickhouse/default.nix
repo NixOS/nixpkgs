@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, findutils
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
+, xxHash, zstd, darwin
 , nixosTests
 }:
 
@@ -20,13 +20,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZFS7RgeTV/eMSiI0o9WO1fHjRkPDNZs0Gm3w+blGsz0=";
   };
 
-  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
     boost brotli capnproto cctz clang-unwrapped double-conversion
     icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
     poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
-  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isx86 libcpuid
+  ++ lib.optional stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.ApplicationServices
+  ];
+  nativeBuildInputs =
+    [cmake darwin.cctools llvm-bintools ninja findutils]
+    ++ lib.optional stdenv.isDarwin darwin.bootstrap_cmds;
+
+  prePatch = ''
+    sed -i 's|gfind|find|' cmake/tools.cmake
+    sed -i 's|ggrep|grep|' cmake/tools.cmake
+  '';
 
   postPatch = ''
     patchShebangs src/
@@ -71,6 +83,6 @@ stdenv.mkDerivation rec {
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    platforms = [platforms.linux platforms.darwin];
   };
 }
