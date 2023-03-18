@@ -7712,6 +7712,13 @@
     githubId = 87115;
     name = "Wael Nasreddine";
   };
+  kalebpace = {
+    email = "kaleb.pace@pm.me";
+    matrix = "@kalebpace:matrix.org";
+    github = "kalebpace";
+    githubId = 5586615;
+    name = "Kaleb Pace";
+  };
   kalekseev = {
     email = "mail@kalekseev.com";
     github = "kalekseev";
