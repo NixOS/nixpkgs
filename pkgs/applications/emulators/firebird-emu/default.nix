@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "firebird-emu";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "nspire-emus";
     repo = "firebird";
     rev = "v${version}";
-    sha256 = "sha256-T62WB6msdB6/wIulqd/468JrCEiPGUrvtpjkZyo4wiA=";
+    sha256 = "sha256-ZptjlnOiF+hKuKYvBFJL95H5YQuR99d4biOco/MVEmE=";
     fetchSubmodules = true;
   };
 
