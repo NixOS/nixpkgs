@@ -43,8 +43,8 @@ self: super: {
       # !!! Use cself/csuper inside for the actual overrides
       cabalInstallOverlay = cself: csuper:
         lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
-          Cabal = cself.Cabal_3_8_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_8_1_0;
+          Cabal = cself.Cabal_3_10_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_10_1_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
           # GHC 9.2.5 starts shipping 1.6.16.0
           process = cself.process_1_6_17_0;
