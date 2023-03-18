@@ -8,6 +8,9 @@
 , libuv
 , util-linux
 , nixosTests
+, libsodium
+, pkg-config
+, substituteAll
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,20 +24,30 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-vI3uHZwmbFqxGasKqgCl0PLEEO8RNEhwkn5ZA8K7bxU=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./system-libsodium.patch;
+      libsodium_include_dir = "${libsodium.dev}/include";
+    })
+  ];
+
   cargoSha256 = "sha256-x3LxGOhGXrheqdke0eYiQVo/IqgWgcDrDNupdLjRPjA=";
 
   nativeBuildInputs = [
     which
     python39
     nodejs
+    pkg-config
   ] ++
     # for flock
     lib.optional stdenv.isLinux util-linux;
 
   buildInputs = [
     libuv
+    libsodium
   ];
 
+  env.SODIUM_USE_PKG_CONFIG = 1;
   env.NIX_CFLAGS_COMPILE = toString ([
     "-O2"
     "-Wno-error=array-bounds"
