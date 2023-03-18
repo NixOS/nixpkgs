@@ -3119,7 +3119,7 @@ let
         };
       };
 
-      WakaTime.vscode-wakatime = callPackage ./wakatime { };
+      WakaTime.vscode-wakatime = callPackage ./WakaTime.vscode-wakatime { };
 
       wingrunr21.vscode-ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
