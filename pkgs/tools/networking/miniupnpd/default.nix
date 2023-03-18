@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     bittorrent-integration = nixosTests.bittorrent;
+    inherit (nixosTests) upnp;
   };
 
   meta = with lib; {
