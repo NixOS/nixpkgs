@@ -2031,7 +2031,7 @@ let
         };
       };
 
-      ms-python.python = callPackage ./python { };
+      ms-python.python = callPackage ./ms-python.python { };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
