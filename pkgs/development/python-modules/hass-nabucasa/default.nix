@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-xYcq1NZWyW3uZCDm2VesXr2f94ZnWbPj7YwpXrUkrWI=";
   };
 
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Python module for the Home Assistant cloud integration";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
