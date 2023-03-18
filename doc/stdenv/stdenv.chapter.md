@@ -101,11 +101,11 @@ To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unst
 
 ```bash
 nix-shell '<nixpkgs>' -A some_package
-eval ${unpackPhase:-unpackPhase}
+eval "${unpackPhase:-unpackPhase}"
 cd $sourceRoot
-eval ${patchPhase:-patchPhase}
-eval ${configurePhase:-configurePhase}
-eval ${buildPhase:-buildPhase}
+eval "${patchPhase:-patchPhase}"
+eval "${configurePhase:-configurePhase}"
+eval "${buildPhase:-buildPhase}"
 ```
 
 To modify a [phase](#sec-stdenv-phases), first print it with

@@ -95,18 +95,6 @@ in
       description = lib.mdDoc "Phonon audio backend to install.";
     };
 
-    supportDDC = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Support setting monitor brightness via DDC.
-
-        This is not needed for controlling brightness of the internal monitor
-        of a laptop and as it is considered experimental by upstream, it is
-        disabled by default.
-      '';
-    };
-
     useQtScaling = mkOption {
       type = types.bool;
       default = false;
@@ -173,6 +161,7 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "supportDDC" ] "DDC/CI is no longer supported upstream.")
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
   ];
 
@@ -200,12 +189,6 @@ in
           source = "${getBin plasma5.kwin}/bin/kwin_wayland";
         };
       };
-
-      # DDC support
-      boot.kernelModules = lib.optional cfg.supportDDC "i2c_dev";
-      services.udev.extraRules = lib.optionalString cfg.supportDDC ''
-        KERNEL=="i2c-[0-9]*", TAG+="uaccess"
-      '';
 
       environment.systemPackages =
         with libsForQt5;

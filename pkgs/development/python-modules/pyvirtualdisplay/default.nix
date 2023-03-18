@@ -1,10 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, EasyProcess }:
+{ lib, buildPythonPackage, fetchPypi, easyprocess }:
 
 buildPythonPackage rec {
   pname = "pyvirtualdisplay";
   version = "3.0";
 
-  propagatedBuildInputs = [ EasyProcess ];
+  propagatedBuildInputs = [ easyprocess ];
 
   src = fetchPypi {
     pname = "PyVirtualDisplay";

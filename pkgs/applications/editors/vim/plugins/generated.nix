@@ -171,6 +171,18 @@ final: prev:
     meta.homepage = "https://github.com/vigoux/LanguageTool.nvim/";
   };
 
+  LazyVim = buildVimPluginFrom2Nix {
+    pname = "LazyVim";
+    version = "2023-03-17";
+    src = fetchFromGitHub {
+      owner = "LazyVim";
+      repo = "LazyVim";
+      rev = "c10e550639caef68146d122d9bc4a66f2f38650a";
+      sha256 = "04d062kxa0pz57liymim3i17hz51w0690c2y4q22h3kfarcmj0ws";
+    };
+    meta.homepage = "https://github.com/LazyVim/LazyVim/";
+  };
+
   LeaderF = buildVimPluginFrom2Nix {
     pname = "LeaderF";
     version = "2023-03-02";
@@ -1167,6 +1179,18 @@ final: prev:
       sha256 = "01r92idbym2p1hiqszrprrl1hrqzz2yhzv8n08m8gycd7m227cwg";
     };
     meta.homepage = "https://github.com/bbchung/clighter8/";
+  };
+
+  clipboard-image-nvim = buildVimPluginFrom2Nix {
+    pname = "clipboard-image.nvim";
+    version = "2022-11-10";
+    src = fetchFromGitHub {
+      owner = "ekickx";
+      repo = "clipboard-image.nvim";
+      rev = "d1550dc26729b7954f95269952e90471b838fa25";
+      sha256 = "0lq13rscsnjglnbynisz4fmsh4xzn12lisgjk9cm61sjg9pw6yl9";
+    };
+    meta.homepage = "https://github.com/ekickx/clipboard-image.nvim/";
   };
 
   cmd-parser-nvim = buildVimPluginFrom2Nix {
@@ -6895,6 +6919,18 @@ final: prev:
       sha256 = "04kg7g6v6k6jv2pmapaqvkvf6py1i211l822m3lsvf26jcyfs3ag";
     };
     meta.homepage = "https://github.com/steelsojka/pears.nvim/";
+  };
+
+  persistence-nvim = buildVimPluginFrom2Nix {
+    pname = "persistence.nvim";
+    version = "2023-02-28";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "persistence.nvim";
+      rev = "adcf6913693a0434665d162ee45a186230496f8a";
+      sha256 = "1fx713swa6138mpmqgpc6lf7nvm4j7nm6fr8zwpgqn6dv71jdhxd";
+    };
+    meta.homepage = "https://github.com/folke/persistence.nvim/";
   };
 
   peskcolor-vim = buildVimPluginFrom2Nix {
