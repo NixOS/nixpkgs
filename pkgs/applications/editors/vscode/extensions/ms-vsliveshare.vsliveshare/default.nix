@@ -44,11 +44,11 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
       --replace "'xsel'" "'${xsel}/bin/xsel'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Live Share lets you achieve greater confidence at speed by streamlining collaborative editing, debugging, and more in real-time during development";
     homepage = "https://aka.ms/vsls-docs";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jraygauthier V ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.jraygauthier lib.maintainers.V ];
     platforms = [ "x86_64-linux" ];
   };
 })

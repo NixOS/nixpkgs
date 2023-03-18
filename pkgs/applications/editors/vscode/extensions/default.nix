@@ -40,13 +40,13 @@ let
           version = "1.0.1";
           sha256 = "sha256-0SsHf1zZgmrb7oIsRU6Xpa3AvR8bSfANz5ZlRogjiS0=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://github.com/1Password/op-vscode/releases";
           description = "A VSCode extension that integrates your development workflow with 1Password service";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=1Password.op-vscode";
           homepage = "https://github.com/1Password/op-vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ _2gn ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers._2gn ];
         };
       };
 
@@ -57,12 +57,12 @@ let
           version = "0.0.6";
           sha256 = "TVBvF/5KQVvWX1uHwZDlmvwGjOO5/lXbgVzB26U8rNQ=";
         };
-        meta = with lib; {
+        meta = {
           description = "A Visual Studio Code extension providing rainbow brackets";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
           homepage = "https://github.com/lcultx/rainbow-brackets";
-          license = licenses.mit;
-          maintainers = with maintainers; [ CompEng0001 ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.CompEng0001 ];
         };
       };
 
@@ -75,7 +75,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ kamadorueda ];
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -170,13 +170,13 @@ let
           version = "13.3.4";
           sha256 = "sha256-odFh4Ms60tW+JOEbzzglgKe7BL1ccv3TKGir5NlvIrQ=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
           description = "Editor services for Angular templates";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Angular.ng-template";
           homepage = "https://github.com/angular/vscode-ng-language-service";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -188,8 +188,8 @@ let
             version = "0.2.2";
             sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
           };
-          meta = with lib; {
-            license = licenses.mit;
+          meta = {
+            license = lib.licenses.mit;
           };
         };
 
@@ -200,8 +200,8 @@ let
             version = "0.3.3";
             sha256 = "0pqiwcvn5c8kwqlmz4ribwwra69gbiqvz41ig4fh29hkyh078rfk";
           };
-          meta = with lib; {
-            license = licenses.mit;
+          meta = {
+            license = lib.licenses.mit;
           };
         };
       };
@@ -213,11 +213,11 @@ let
           version = "1.1.1";
           sha256 = "1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/Antyos.openscad/changelog";
           description = "OpenSCAD highlighting, snippets, and more for VSCode";
           homepage = "https://github.com/Antyos/vscode-openscad";
-          license = licenses.gpl3;
+          license = lib.licenses.gpl3;
         };
       };
 
@@ -228,13 +228,13 @@ let
           version = "1.19.11";
           sha256 = "sha256-EixefDuJiw/p5yAR/UQLK1a1RXJLXlTmOlD34qpAN+U=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
           description = "Rich editor support for GraphQL client and server development that seamlessly integrates with the Apollo platform";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo";
           homepage = "https://github.com/apollographql/vscode-graphql";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -245,13 +245,13 @@ let
           version = "0.19.0";
           sha256 = "sha256-awbqFv6YuYI0tzM/QbHRTUl4B2vNUdy52F4nPmv+dRU=";
         };
-        meta = with lib; {
+        meta = {
           description = "An arctic, north-bluish clean and elegant Visual Studio Code theme.";
           downloadPage =
             "https://marketplace.visualstudio.com/items?itemName=arcticicestudio.nord-visual-studio-code";
           homepage = "https://github.com/arcticicestudio/nord-visual-studio-code";
-          license = licenses.mit;
-          maintainers = with maintainers; [ imgabe ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.imgabe ];
         };
       };
 
@@ -296,8 +296,8 @@ let
                       "get('asciidoctorpdf_command', '${asciidoctor}/bin/asciidoctor-pdf')"
         '';
 
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -308,13 +308,13 @@ let
           version = "0.29.1";
           sha256 = "sha256-fMeEeYCZuORhZRds0A8HjHPncK0+SQbV0+f/zU5AIg4=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
           description = "Astro language support for VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
           homepage = "https://github.com/withastro/language-tools";
-          license = licenses.mit;
-          maintainers = with maintainers; [ wackbyte ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
         };
       };
 
@@ -337,13 +337,13 @@ let
           version = "0.0.1";
           sha256 = "sha256-ZcZlHoa2aoCeruMWbUUgfFHsPqyWmd2xFY6AKxJysYE=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/attilabuti.brainfuck-syntax/changelog";
           description = "VSCode extension providing syntax highlighting support for Brainfuck";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=attilabuti.brainfuck-syntax";
           homepage = "https://github.com/attilabuti/brainfuck-syntax";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -359,11 +359,11 @@ let
           cd "$out/$installPrefix"
           jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/lang-srv"' package.json | sponge package.json
         '';
-        meta = with lib; {
+        meta = {
           description = "Standard ML support for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=azdavis.millet";
-          license = licenses.mit;
-          maintainers = with maintainers; [ smasher164 ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.smasher164 ];
         };
       };
 
@@ -399,12 +399,12 @@ let
 
         buildInputs = [ nodePackages.pyright ];
 
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";
           description = "A performant, feature-rich language server for Python in VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance";
           homepage = "https://github.com/microsoft/pylance-release";
-          license = licenses.unfree;
+          license = lib.licenses.unfree;
         };
       };
 
@@ -420,8 +420,8 @@ let
           cd "$out/$installPrefix"
           jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json | sponge package.json
         '';
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -444,12 +444,12 @@ let
           version = "2.0.5";
           sha256 = "sha256-D04EJButnam/l4aAv1yNbHlTKMb3x1yrS47+9XjpCLI=";
         };
-        meta = with lib; {
+        meta = {
           description = "VSCode Extension Formatter for OCaml language";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=badochov.ocaml-formatter";
           homepage = "https://github.com/badochov/ocamlformatter-vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -460,8 +460,8 @@ let
           version = "1.0.1";
           sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -472,8 +472,8 @@ let
           version = "0.3.0";
           sha256 = "1x80s8l8djchg17553aiwaf4b49hf6awiayk49wyii0i26hlpjk1";
         };
-        meta = with lib; {
-          license = licenses.asl20;
+        meta = {
+          license = lib.licenses.asl20;
         };
       };
 
@@ -489,8 +489,8 @@ let
           cd "$out/$installPrefix"
           jq '.contributes.configuration[0].properties."calva.clojureLspPath".default = "${clojure-lsp}/bin/clojure-lsp"' package.json | sponge package.json
         '';
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -501,8 +501,8 @@ let
           version = "0.2.10";
           sha256 = "sha256-RW4vm0Hum9AeN4Rq7MSJOIHnALU0L1tBLKjaRLA2hL8=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -513,8 +513,8 @@ let
           version = "0.9.0";
           sha256 = "0gpcpwh57lqlynsrkv3smykndb46xjh7r85lb291wdklq5ahmb2j";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -525,8 +525,8 @@ let
           version = "0.3.1";
           sha256 = "0x57dnr6ksqxi28g1c392k04vxy0vdni9nl4xps3i5zh0pyxizhw";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -537,8 +537,8 @@ let
           version = "0.2.1";
           sha256 = "1lcg2b39jydl40wcfrbgshl2i1r58k92c7dipz0hl1fa1v23vj4v";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -549,8 +549,8 @@ let
           version = "1.17.4";
           sha256 = "sha256-jJnALJJc8G4/0L7WMmKSZ7I+7Usmyj+WhufBdSzcEK0=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -571,8 +571,8 @@ let
           version = "0.8.6";
           sha256 = "sha256-v15KuD3eYFCsrworCJ1SZAMkyZKztAwWKmfwmbirleI=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -583,8 +583,8 @@ let
           version = "0.0.1";
           sha256 = "07w35c69vk1l6vipnq3qfack36qcszqxn8j3v332bl0w6m02aa7k";
         };
-        meta = with lib; {
-          license = licenses.mpl20;
+        meta = {
+          license = lib.licenses.mpl20;
         };
       };
 
@@ -595,13 +595,13 @@ let
           version = "0.3.2";
           sha256 = "sha256-g+LfgjAnSuSj/nSmlPdB0t29kqTmegZB5B1cYzP8kCI=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/bungcip.better-toml/changelog";
           description = "Better TOML Language support";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml";
           homepage = "https://github.com/bungcip/better-toml/blob/master/README.md";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -612,11 +612,11 @@ let
           version = "1.8.2";
           sha256 = "OvWdDQfhprQNve017pNSksMuCK3Ccaar5Ko5Oegdiuo=";
         };
-        meta = with lib; {
+        meta = {
           description = "PHP code intelligence for Visual Studio Code";
-          license = licenses.mit;
+          license = lib.licenses.mit;
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client";
-          maintainers = with maintainers; [ drupol ];
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 
@@ -627,11 +627,11 @@ let
           version = "2.5.0";
           sha256 = "sha256-+dM6MKIjzPdYoRe1DYJ08A+nHHlkTsm+I6CYmnmSRj4=";
         };
-        meta = with lib; {
+        meta = {
           description = "Soothing pastel theme for VSCode";
-          license = licenses.mit;
+          license = lib.licenses.mit;
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
-          maintainers = with maintainers; [ nullx76 ];
+          maintainers = [ lib.maintainers.nullx76 ];
         };
       };
 
@@ -644,12 +644,12 @@ let
           version = "2.8.1";
           sha256 = "sha256-lTKzMphkGgOG2XWqz3TW2G9sISBc/kG7oXqcIH8l+Mg=";
         };
-        meta = with lib; {
+        meta = {
           description = "Visual Studio Code plugin that autocompletes filenames";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
           homepage = "https://github.com/ChristianKohler/PathIntellisense";
-          license = licenses.mit;
-          maintainers = with maintainers; [ imgabe  ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.imgabe  ];
         };
       };
 
@@ -660,8 +660,8 @@ let
           version = "0.1.0";
           sha256 = "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -672,19 +672,19 @@ let
           version = "0.7.0";
           sha256 = "0fm4sxx1cb679vn4v85dw8dfp5x0p74m9p2b56gqkvdap0f2q351";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
       coenraads.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/CoenraadS.bracket-pair-colorizer/changelog";
           description = "A customizable extension for colorizing matching brackets";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer";
           homepage = "https://github.com/CoenraadS/BracketPair";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
         mktplcRef = {
           name = "bracket-pair-colorizer";
@@ -701,8 +701,8 @@ let
           version = "0.2.2";
           sha256 = "0zcbs7h801agfs2cggk1cz8m8j0i2ypmgznkgw17lcx3zisll9ad";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -713,12 +713,12 @@ let
           version = "0.0.3";
           sha256 = "sha256-D5zLp3ruq0F9UFT9emgOBDLr1tya2Vw52VvCc40TtV0=";
         };
-        meta = with lib; {
+        meta = {
           description = "Lightweight syntax highlighting for LLVM IR";
           homepage = "https://github.com/colejcummins/llvm-syntax-highlighting";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=colejcummins.llvm-syntax-highlighting";
-          maintainers = with lib.maintainers; [ inclyc ];
-          license = licenses.mit;
+          maintainers = [ lib.maintainers.inclyc ];
+          license = lib.licenses.mit;
         };
       };
 
@@ -731,7 +731,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ kamadorueda ];
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -756,13 +756,13 @@ let
           version = "2.4.0";
           sha256 = "sha256-7MUQJkLPOF3oO0kpmfP3bWbS3aT7J0RF7f74LW55BQs=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";
           description = "Integrates ESLint JavaScript into VS Code.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint";
           homepage = "https://github.com/Microsoft/vscode-eslint";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -775,7 +775,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ kamadorueda ];
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -786,13 +786,13 @@ let
           version = "0.49.0";
           sha256 = "sha256-Mh/OoRK410aXEr3sK2CYFDsXGSqFT+JOWi9jHOdK01Y=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
           description = "Markdown linting and style checking for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint";
           homepage = "https://github.com/DavidAnson/vscode-markdownlint";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -803,12 +803,12 @@ let
           version = "0.19.0";
           sha256 = "sha256-crq6CTXpzwHJL8FPIBneAGjDgUUNdpBt6rIaMCr1F1U=";
         };
-        meta = with lib; {
+        meta = {
           description = "LanguageTool integration for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=davidlday.languagetool-linter";
           homepage = "https://github.com/davidlday/vscode-languagetool-linter";
-          license = licenses.asl20;
-          maintainers = with maintainers; [ ebbertd ];
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.ebbertd ];
         };
       };
 
@@ -819,13 +819,13 @@ let
           version = "3.12.0";
           sha256 = "sha256-ZsHCWQtEQKkdZ3uk072ZBfHFRzk4Owf4h7+szHLgIeo=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
           description = "A language server client for Deno";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno";
           homepage = "https://github.com/denoland/vscode_deno";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -866,24 +866,24 @@ let
           version = "5.8.5";
           sha256 = "25v2tdAX7fVl2B5nvOIKN9vP1G5rA0G67CiDQn9n9Uc=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
           description = "Makes judging, compiling, and downloading problems for competitve programming easy. Also supports auto-submit for a few sites.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DivyanshuAgrawal.competitive-programming-helper";
           homepage = "https://github.com/agrawal-d/cph";
-          license = licenses.gpl3;
-          maintainers = with maintainers; [ arcticlimer ];
+          license = lib.licenses.gpl3;
+          maintainers = [ lib.maintainers.arcticlimer ];
         };
       };
 
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/donjayamanne.githistory/changelog";
           description = "View git log, file history, compare branches or commits";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory";
           homepage = "https://github.com/DonJayamanne/gitHistoryVSCode/";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
         mktplcRef = {
           name = "githistory";
@@ -914,12 +914,12 @@ let
           version = "2.24.2";
           sha256 = "sha256-YNqWEIvlEI29mfPxOQVdd4db9G2qNodhz8B0MCAAWK8=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
           description = "Dark theme for many editors, shells, and more";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula";
           homepage = "https://draculatheme.com/";
-          license = licenses.mit;
+          license = lib.licenses.mit;
         };
       };
 
@@ -934,7 +934,7 @@ let
           version = "13.4.0";
           sha256 = "sha256-CYI62sWPlJNRP2KIkg4vQutIMC6gaCxtTVoOWZIS8Lw=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
           description = "GitLens supercharges the Git capabilities built into Visual Studio Code.";
           longDescription = ''
@@ -944,8 +944,8 @@ let
           '';
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens";
           homepage = "https://gitlens.amod.io/";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -956,13 +956,13 @@ let
           version = "0.16.4";
           sha256 = "0fa4h9hk1xq6j3zfxvf483sbb4bd17fjl5cdm3rll7z9kaigdqwg";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
           description = "EditorConfig Support for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig";
           homepage = "https://github.com/editorconfig/editorconfig-vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ dbirks ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dbirks ];
         };
       };
 
@@ -997,13 +997,13 @@ let
           version = "2.4.0";
           sha256 = "sha256-5hYlkx8hlwS8iWTlfupX8XjTLAY/KUi0bd3jf/tm92o=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/Elmtooling.elm-ls-vscode/changelog";
           description = "Elm language server";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Elmtooling.elm-ls-vscode";
           homepage = "https://github.com/elm-tooling/elm-language-client-vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ mcwitt ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.mcwitt ];
         };
       };
 
@@ -1014,8 +1014,8 @@ let
           version = "2.1.79";
           sha256 = "1cr1pxgxlfr643sfxbcr2xd53s1dnzcpacjj0ffkgizfda2psy78";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1026,13 +1026,13 @@ let
           version = "9.10.4";
           sha256 = "sha256-khtyB0Qbm+iuM1GsAaF32YRv1VBTIy7daeCKdgwCIC8=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
           description = "Code formatter using prettier";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
           homepage = "https://github.com/prettier/prettier-vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo  ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.datafoo  ];
         };
       };
 
@@ -1058,12 +1058,12 @@ let
           jq '.contributes.configuration.properties."magicRacket.general.racketPath".default = "${racket}/bin/racket"' package.json | sponge package.json
           jq '.contributes.configuration.properties."magicRacket.general.racoPath".default = "${racket}/bin/raco"' package.json | sponge package.json
         '';
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
           description = "The best coding experience for Racket in VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
           homepage = "https://github.com/Eugleo/magic-racket";
-          license = licenses.agpl3Only;
+          license = lib.licenses.agpl3Only;
         };
       };
 
@@ -1074,24 +1074,24 @@ let
           version = "0.0.3";
           sha256 = "6254f52157dc796eae7bf135ac88c1c9cc19d884625331a1e634f9768722cc3d";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/faustinoaq.lex-flex-yacc-bison/changelog";
           description = "Language support for Lex, Flex, Yacc and Bison.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=faustinoaq.lex-flex-yacc-bison";
           homepage = "https://github.com/faustinoaq/vscode-lex-flex-yacc-bison";
-          license = licenses.mit;
-          maintainers = with maintainers; [ emilytrau ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.emilytrau ];
         };
       };
 
       file-icons.file-icons = buildVscodeMarketplaceExtension {
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
           description = "File-specific icons in VSCode for improved visual grepping.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=file-icons.file-icons";
           homepage = "https://github.com/file-icons/vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
         mktplcRef = {
           name = "file-icons";
@@ -1108,13 +1108,13 @@ let
           version = "2.9.8";
           sha256 = "sha256-MCL562FPgEfhUM1KH5LMl7BblbjIkQ4UEwB67RlO5Mk=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/firefox-devtools.vscode-firefox-debug/changelog";
           description = "A Visual Studio Code extension for debugging web applications and browser extensions in Firefox";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug";
           homepage = "https://github.com/firefox-devtools/vscode-firefox-debug";
-          license = licenses.mit;
-          maintainers = with maintainers; [ felschr ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.felschr ];
         };
       };
 
@@ -1125,13 +1125,13 @@ let
           version = "0.18.3";
           sha256 = "sha256-qbF4k3GP7UdQrw0x/egVRkv5TYDwYWoycxY/HJSFTkI=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
           description = "A personal knowledge management and sharing system for VSCode ";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=foam.foam-vscode";
           homepage = "https://foambubble.github.io/";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -1186,22 +1186,22 @@ let
           jq '.contributes.configuration.properties."shellformat.path".default = "${shfmt}/bin/shfmt"' package.json | sponge package.json
         '';
 
-        meta = with lib; {
+        meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format";
           homepage = "https://github.com/foxundermoon/vs-shell-format";
-          license = licenses.mit;
-          maintainers = with maintainers; [ dbirks ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dbirks ];
         };
       };
 
       freebroccolo.reasonml = buildVscodeMarketplaceExtension {
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/freebroccolo.reasonml/changelog";
           description = "Reason support for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=freebroccolo.reasonml";
           homepage = "https://github.com/reasonml-editor/vscode-reasonml";
-          license = licenses.asl20;
-          maintainers = with maintainers; [ ];
+          license = lib.licenses.asl20;
+          maintainers = [ ];
         };
         mktplcRef = {
           name = "reasonml";
@@ -1218,12 +1218,12 @@ let
           version = "1.7.8";
           sha256 = "18qws35qvnl0ahk5sxh4mzkw0ib788y1l97ijmpjszs0cd4bfsa6";
         };
-        meta = with lib; {
+        meta = {
           description = "VSCode extension for SCSS";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=gencer.html-slim-scss-css-class-completion";
           homepage = "https://github.com/gencer/SCSS-Everywhere";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -1234,12 +1234,12 @@ let
           version = "3.44.2";
           sha256 = "sha256-S2PI+r4LrHA7tW2EMfcAkP5jUnd0mCEV72oTXMa9Xkc=";
         };
-        meta = with lib; {
+        meta = {
           description = "GitLab extension for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=gitlab.gitlab-workflow";
           homepage = "https://gitlab.com/gitlab-org/gitlab-vscode-extension#readme";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -1250,12 +1250,12 @@ let
           version = "4.2.55";
           sha256 = "sha256-yHl6ZTGIKOEsqmyeYtgDUhNAN9uRpoFApA7FKkPWW3E=";
         };
-        meta = with lib; {
+        meta = {
           description = "Edit Excel spreadsheets and CSV files in Visual Studio Code and VS Code for the Web";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=grapecity.gc-excelviewer";
           homepage = "https://github.com/jjuback/gc-excelviewer";
-          license = licenses.mit;
-          maintainers = with maintainers; [ kamadorueda ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -1266,8 +1266,8 @@ let
           version = "0.24.6";
           sha256 = "196pm7gv0488bpv1lklh8hpwmdqc4yimz389gad6nsna368m4m43";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1278,13 +1278,13 @@ let
           version = "0.0.15";
           sha256 = "rKAy84Uiat5VOQXd4OXToNfxAJ6SuWPT47vuiyK4qwg=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/jellyedwards.gitsweep/changelog";
           description = "VS Code extension which allows you to easily exclude modified or new files so they don't get committed accidentally";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jellyedwards.gitsweep";
           homepage = "https://github.com/jellyedwards/gitsweep";
-          license = licenses.mit;
-          maintainers = with maintainers; [ MatthieuBarthel ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.MatthieuBarthel ];
         };
       };
 
@@ -1297,7 +1297,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ kamadorueda ];
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -1331,12 +1331,12 @@ let
             version = "1.70.8099";
             sha256 = "sha256-+jlLM9UC1DZFBrtiiri4jvpuc/Rf9PcSVP8D8pmQC2s=";
           };
-          meta = with lib; {
+          meta = {
             description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
             downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
             homepage = "https://github.com/features/copilot";
-            license = licenses.unfree;
-            maintainers = with maintainers; [ Zimmi48 ];
+            license = lib.licenses.unfree;
+            maintainers = [ lib.maintainers.Zimmi48 ];
           };
         };
 
@@ -1347,13 +1347,13 @@ let
             version = "4.1.1";
             sha256 = "14wz2b0bn1rnmpj28c0mivz2gacla2dgg8ncv7qfx9bsxhf95g68";
           };
-          meta = with lib; {
+          meta = {
             description = "GitHub theme for VS Code";
             downloadPage =
               "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme";
             homepage = "https://github.com/primer/github-vscode-theme";
-            license = licenses.mit;
-            maintainers = with maintainers; [ hugolgst ];
+            license = lib.licenses.mit;
+            maintainers = [ lib.maintainers.hugolgst ];
           };
         };
 
@@ -1399,8 +1399,8 @@ let
           version = "0.0.224";
           sha256 = "sha256-ObFmzAaOlbtWC31JRYR/1y+JK1h22SVDPPRWWqPzrQs=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1411,8 +1411,8 @@ let
           version = "2.2.1";
           sha256 = "14p9g07zsb3da4ilaasgsdvh3wagfzayqr8ichsf6k5c952zi8fk";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta ={
+          license = lib.licenses.mit;
         };
       };
 
@@ -1425,8 +1425,8 @@ let
           version = "1.5.0";
           sha256 = "1c0kfavdwgwham92xrh0gnyxkrl9qlkpv39l1yhrldn8vd10fj5i";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1437,8 +1437,8 @@ let
           version = "0.1.2";
           sha256 = "0i9kpnlk3naycc7k8gmcxas3s06d67wxr3nnyv5hxmsnsx5sfvb7";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1449,13 +1449,13 @@ let
           version = "1.6.0";
           sha256 = "1pbk8kflywll6lqhmffz9yjf01dn8xq8sk6rglnfn2kl2ildfhh6";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/iciclesoft.workspacesort/changelog";
           description = "Sort workspace-folders alphabetically rather than in chronological order";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=iciclesoft.workspacesort";
           homepage = "https://github.com/iciclesoft/workspacesort-for-VSCode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ dbirks ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dbirks ];
         };
       };
 
@@ -1466,13 +1466,13 @@ let
           version = "7.5.1";
           sha256 = "sha256-AiDYqYF+F69O/aeolIEzqLmg20YN/I4EV6XMa8UgMns=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
           description = "Enhanced F# Language Features for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp";
           homepage = "https://ionide.io";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -1483,13 +1483,13 @@ let
           version = "0.13.0";
           sha256 = "sha256-1uaLFTMvkcYrYAt9qDdISJneKxHo9qsris70iowGW2s=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
           description = "Elixir support with debugger, autocomplete, and more. Powered by ElixirLS.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=JakeBecker.elixir-ls";
           homepage = "https://github.com/elixir-lsp/elixir-ls";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -1500,8 +1500,8 @@ let
           version = "0.6.13";
           sha256 = "0myl7rppzcz7hxy9zjs81vs9p66lnbfcrdr6s5qb4i6929gmywfy";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1512,12 +1512,12 @@ let
           version = "0.1.0";
           sha256 = "sha256-URq90lOFtPCNfSIl2NUwihwRQyqgDysGmBc3NG7o7vk=";
         };
-        meta = with lib; {
+        meta = {
           description = "Adds formatting and syntax highlighting support for env files (.env) to Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=IronGeek.vscode-env";
           homepage = "https://github.com/IronGeek/vscode-env.git";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -1528,12 +1528,13 @@ let
           version = "9.7.0";
           sha256 = "sha256-Y1KoCOoOJ8CZ3IReDoyzF404CBy1BAWaZSr48EP7bz4=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
           description = "LaTeX Workshop Extension";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop";
           homepage = "https://github.com/James-Yu/LaTeX-Workshop";
-          license = licenses.mit;
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -1544,12 +1545,12 @@ let
           version = "1.8.0";
           sha256 = "sha256-P4FbbcRcKWbnC86TSnzQaGn2gHWkDM9I4hj4GiHNPS4=";
         };
-        meta = with lib; {
+        meta = {
           description = "Gruvbox Theme";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
           homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
-          license = licenses.mit;
-          maintainers = with maintainers; [ imgabe ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.imgabe ];
         };
       };
 
@@ -1562,13 +1563,13 @@ let
           version = "0.2.1";
           sha256 = "sha256-yC4ybThMFA2ncGhp8BYD7IrwYiDU3226hewsRvJYKy4=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
           description = "Nix language support with formatting and error report";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
-          license = licenses.mit;
-          maintainers = with maintainers; [  SuperSandro2000 ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.SuperSandro2000 ];
         };
       };
 
@@ -1579,8 +1580,8 @@ let
           version = "1.5.0";
           sha256 = "sha256-anIZxqO4pK77FmhUamRnJVN2q8FifH6ffqRE2eFwyWM=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1591,8 +1592,8 @@ let
           version = "4.2.2";
           sha256 = "1z9crpz025ha9hgc9mxxg3vyrsfpf9d16zm1vrf4q592j9156d2m";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1639,13 +1640,13 @@ let
           version = "0.1.3";
           sha256 = "sha256-CecEv19nEtnMe0KlCMNBM9ZAjbAVgPNUcZ6cBxHw44M=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/kalebpace.balena-vscode/changelog";
           description = "VS Code extension for integration with Balena";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=kalebpace.balena-vscode";
           homepage = "https://github.com/balena-vscode/balena-vscode";
-          license = licenses.mit;
-          maintainers = with maintainers; [ kalebpace ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.kalebpace ];
         };
       };
 
@@ -1669,11 +1670,11 @@ let
           < package.json \
           | sponge package.json
         '';
-        meta = with lib; {
+        meta = {
           description = "The Uncompromising Nix Code Formatter";
           homepage = "https://github.com/kamadorueda/alejandra";
-          license = licenses.unlicense;
-          maintainers = with maintainers; [ kamadorueda ];
+          license = lib.licenses.unlicense;
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -1696,11 +1697,11 @@ let
           jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
         '';
 
-        meta = with lib; {
+        meta = {
           description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
           homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
           license = lib.licenses.asl20;
-          maintainers = with maintainers; [ wolfangaukang ];
+          maintainers = [ lib.maintainers.wolfangaukang ];
         };
       };
 
@@ -1752,7 +1753,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=lucperkins.vrl-vscode";
           homepage = "https://github.com/lucperkins/vrl-vscode";
           license = lib.licenses.mpl20;
-          maintainers = with lib.maintainers; [ lucperkins ];
+          maintainers = [ lib.maintainers.lucperkins ];
         };
       };
 
@@ -1765,7 +1766,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ kamadorueda ];
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -1792,7 +1793,7 @@ let
           homepage = "https://github.com/caddyserver/vscode-caddyfile";
           changelog = "https://marketplace.visualstudio.com/items/matthewpi.caddyfile-support/changelog";
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ matthewpi ];
+          maintainers = [ lib.maintainers.matthewpi ];
         };
       };
 
@@ -1803,13 +1804,13 @@ let
           version = "0.1.12";
           sha256 = "sha256-x6aFrcX0YElEFEr0qA669/LPlab15npmXd5Q585pIEw=";
         };
-        meta = with lib; {
+        meta = {
           description = "Lisp syntax for vscode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=mattn.lisp";
           homepage = "https://github.com/mattn/vscode-lisp";
           changelog = "https://marketplace.visualstudio.com/items/mattn.lisp/changelog";
-          license = licenses.mit;
-          maintainers = with maintainers; [ kamadorueda ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -1820,12 +1821,12 @@ let
           version = "0.3.7";
           sha256 = "sha256-QT+fb23g+IXlNKNAbjADEpqrS6ll2W8Yd0YzwJAjhQQ=";
         };
-        meta = with lib; {
+        meta = {
           description = "VsCoq is an extension for Visual Studio Code (VS Code) and VSCodium with support for the Coq Proof Assistant.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=maximedenes.vscoq";
           homepage = "https://github.com/coq-community/vscoq";
-          license = licenses.mit;
-          maintainers = with maintainers; [ Zimmi48 ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.Zimmi48 ];
         };
       };
 
@@ -1884,11 +1885,11 @@ let
           version = "0.10.1";
           sha256 = "0m89sx1qqdkwa9pfmd9b11lp8z0dqpi6jn27js5q4ymscyg41bqd";
         };
-        meta = with lib; {
+        meta = {
           description = "direnv support for Visual Studio Code";
-          license = licenses.bsd0;
+          license = lib.licenses.bsd0;
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkhl.direnv";
-          maintainers = with maintainers; [ nullx76 ];
+          maintainers = [ lib.maintainers.nullx76 ];
         };
       };
 
@@ -1987,12 +1988,12 @@ let
           version = "2023.1.0";
           sha256 = "sha256-OiVb88BGvzsPTzKU1rGLGSMQSwKV4zI9FthOmutz34U=";
         };
-        meta = with lib; {
+        meta = {
           description = "A Visual Studio Code extension for PowerShell language support";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell";
           homepage = "https://github.com/PowerShell/vscode-powershell";
-          license = licenses.mit;
-          maintainers = with maintainers; [ rhoriguchi ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.rhoriguchi ];
         };
       };
 
@@ -2005,12 +2006,12 @@ let
           version = "0.1.4";
           sha256 = "sha256-qakwJWak+IrIeeVcMDWV/fLPx5M8LQGCyhVt4TS/Lmc=";
         };
-        meta = with lib; {
+        meta = {
           description = "Additional Tomorrow and Tomorrow Night themes for VS Code. Based on the TextMate themes.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.Theme-TomorrowKit";
           homepage = "https://github.com/microsoft/vscode-themes";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -2021,13 +2022,13 @@ let
           version = "1.1.282";
           sha256 = "14qkk9gbpwnbkk3dk7b7s92smj374ha7axlsi74fllw74lp4ziwn";
         };
-        meta = with lib; {
+        meta = {
           description = "VS Code static type checking for Python";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-pyright.pyright";
           homepage = "https://github.com/Microsoft/pyright#readme";
           changelog = "https://marketplace.visualstudio.com/items/ms-pyright.pyright/changelog";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -2126,13 +2127,13 @@ let
           version = "2.6.0";
           sha256 = "sha256-TcPQOAHCYeFHPdR85GIXsy3fx70p8cLdO2UNO0krUOs=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/naumovs.color-highlight/changelog";
           description = "Highlight web colors in your editor";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight";
           homepage = "https://github.com/enyancc/vscode-ext-color-highlight";
-          license = licenses.gpl3Only;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.gpl3Only;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -2143,13 +2144,13 @@ let
           version = "0.6.1";
           sha256 = "sha256-NI0cbjsZPW8n6qRTRKoqznSDhLZRUguP7Sa/d0feeoc=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/njpwerner.autodocstring/changelog";
           description = "Generates python docstrings automatically";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring";
           homepage = "https://github.com/NilsJPWerner/autoDocstring";
-          license = licenses.mit;
-          maintainers = with maintainers; [ kamadorueda ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -2172,12 +2173,12 @@ let
           version = "8.2.2";
           sha256 = "sha256-7kkJc+hhYaSKUbK4eYwOnLvae80sIg7rd0E4YyCXtPc=";
         };
-        meta = with lib; {
+        meta = {
           description = "Makes indentation easier to read";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow";
           homepage = "https://github.com/oderwat/vscode-indent-rainbow";
-          license = licenses.mit;
-          maintainers = with maintainers; [ imgabe ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.imgabe ];
         };
       };
 
@@ -2188,12 +2189,12 @@ let
           version = "0.1.1";
           sha256 = "sha256-AfCwU4FF8a8C9D6+lyUDbAOLlD5SpZZw8CZVGpzRoV0=";
         };
-        meta = with lib; {
+        meta = {
           description = "Syntax highlighting support for HEEx / Phoenix templates";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=phoenixframework.phoenix";
           homepage = "https://github.com/phoenixframework/vscode-phoenix";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -2252,8 +2253,8 @@ let
           version = "0.0.8";
           sha256 = "0fqwcvwq37ndms6vky8jjv0zliy6fpfkh8d9raq8hkinfxq6klgl";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -2261,13 +2262,13 @@ let
       matklad.rust-analyzer = self.rust-lang.rust-analyzer; # Previous publisher
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
           description = "Official OCaml Support from OCamlLabs";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform";
           homepage = "https://github.com/ocamllabs/vscode-ocaml-platform";
-          license = licenses.isc;
-          maintainers = with maintainers; [ ratsclub  ];
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
         mktplcRef = {
           name = "ocaml-platform";
@@ -2308,12 +2309,12 @@ let
           version = "1.1.0";
           sha256 = "sha256-tKpKLUcc33YrgDS95PJu22ngxhwjqeVMC1Mhhy+IPGE=";
         };
-        meta = with lib; {
+        meta = {
           description = "Theme for the GNOME desktop";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=piousdeer.adwaita-theme";
           homepage = "https://github.com/piousdeer/vscode-adwaita";
-          license = licenses.gpl3;
-          maintainers = with maintainers; [ wyndon ];
+          license = lib.licenses.gpl3;
+          maintainers = [ lib.maintainers.wyndon ];
         };
       };
 
@@ -2324,13 +2325,13 @@ let
           version = "4.2.0";
           sha256 = "sha256-1U3JlWfIlTt0AMPsiP3vD2ZEzD2oUsYsqRRwBQeoLIA=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
           description = "VSCode extension for syntax highlighting, formatting, auto-completion, jump-to-definition and linting for .prisma files";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Prisma.prisma";
           homepage = "https://github.com/prisma/language-tools";
-          license = licenses.asl20;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.asl20;
+          maintainers = [ ];
         };
       };
 
@@ -2352,8 +2353,8 @@ let
           version = "0.6.0";
           sha256 = "0wkpq9f48hplrgabb0v1ij6fc4sb8h4a93dagw4biprhnnm3qx49";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -2364,8 +2365,8 @@ let
           version = "5.6.1";
           sha256 = "sha256-QPMZMttYV+dQfWTniA7nko7kXukqU9g6Wj5YDYfL6hw=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -2421,7 +2422,7 @@ let
           '';
           homepage = "https://github.com/sana-ajani/taskrunner-code";
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ pbsds ];
+          maintainers = [ lib.maintainers.pbsds ];
         };
       };
 
@@ -2470,7 +2471,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ kamadorueda ];
+          maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
 
@@ -2490,7 +2491,7 @@ let
           '';
           homepage = "https://github.com/shd101wyy/vscode-markdown-preview-enhanced";
           license = lib.licenses.ncsa;
-          maintainers = with lib.maintainers; [ pbsds ];
+          maintainers = [ lib.maintainers.pbsds ];
         };
       };
 
@@ -2525,13 +2526,13 @@ let
           version = "2.0.0";
           sha256 = "sha256-FOp/dcW0+07rADEpUMzx+SGYjhvE4IhcCOqUQ38yCN4=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://github.com/skellock/vscode-just/blob/master/CHANGELOG.md";
           description = "Provides syntax and recipe launcher for Just scripts";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=skellock.just";
           homepage = "https://github.com/skellock/vscode-just";
-          license = licenses.mit;
-          maintainers = with maintainers; [ maximsmol ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.maximsmol ];
         };
       };
 
@@ -2576,8 +2577,8 @@ let
           version = "0.9.3";
           sha256 = "1kvsj085w1xax6fg0kvsj1cizqh86i0pkzpwi0sbfvmcq21i6ghn";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -2588,12 +2589,12 @@ let
           version = "0.0.8";
           sha256 = "0j8pmrs1lk138vhqx594pzxvrma4yl3jh7ihqm2kgh0cwnkbj36m";
         };
-        meta = with lib; {
+        meta = {
           description = "VSCode extension for Elixir EEx and HTML (EEx) code snippets";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=stefanjarina.vscode-eex-snippets";
           homepage = "https://github.com/stefanjarina/vscode-eex-snippets";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -2604,13 +2605,13 @@ let
           version = "0.0.6";
           sha256 = "0mph2nval1ddmv9hpl51fdvmagzkqsn8ljwqsfha2130bb7la0d9";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/stephlin.vscode-tmux-keybinding/changelog";
           description = "A simple extension for tmux behavior in vscode terminal.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=stephlin.vscode-tmux-keybinding";
           homepage = "https://github.com/StephLin/vscode-tmux-keybinding";
-          license = licenses.mit;
-          maintainers = with maintainers; [ dbirks ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dbirks ];
         };
       };
 
@@ -2621,13 +2622,13 @@ let
           version = "1.16.3";
           sha256 = "sha256-WHeLTN992ltEZw2W7B3sJrHfAFsOGMq3llV4C0hXLNA=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
           description = "Hard word wrapping for comments and other text at a given column.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=stkb.rewrap";
           homepage = "https://github.com/stkb/Rewrap#readme";
-          license = licenses.asl20;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -2638,13 +2639,13 @@ let
           version = "2.19.0";
           sha256 = "sha256-c95u++tkK8hToauulY8faNITUmsCBEeC2B8mHY0oEmA=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
           description = "Spelling checker for source code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker";
           homepage = "https://streetsidesoftware.github.io/vscode-spell-checker";
-          license = licenses.gpl3Only;
-          maintainers = with maintainers; [ datafoo ];
+          license = lib.licenses.gpl3Only;
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -2663,7 +2664,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode";
           homepage = "https://github.com/sveltejs/language-tools#readme";
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ fabianhauser ];
+          maintainers = [ lib.maintainers.fabianhauser ];
         };
       };
 
@@ -2674,13 +2675,13 @@ let
           version = "0.3.18";
           sha256 = "sha256-ypYqVH1ViJE7+mAJnxmpvUSmiImOo7rE7m+ijTEpmwg=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/svsool.markdown-memo/changelog";
           description = "Markdown knowledge base with bidirectional [[link]]s built on top of VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=svsool.markdown-memo";
           homepage = "https://github.com/svsool/vscode-memo";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ratsclub ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ratsclub ];
         };
       };
 
@@ -2727,12 +2728,12 @@ let
           version = "0.1.6";
           sha256 = "096wwmwpas21f03pbbz40rvc792xzpl5qqddzbry41glxpzywy6b";
         };
-        meta = with lib; {
+        meta = {
           description = "VSCode extension for high-quality Pascal highlighting";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal";
           homepage = "https://github.com/ALANVF/vscode-pascal-magic";
-          license = licenses.mit;
-          maintainers = with maintainers; [  ];
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -2848,13 +2849,13 @@ let
           version = "3.6.0";
           sha256 = "sha256-oNzB81mPZjEwrqbeFMvTlXERXrYBpF03EH9ZXz/daOs=";
         };
-        meta = with lib; {
+        meta = {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
           description = "Improve highlighting of errors, warnings and other language diagnostics.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
           homepage = "https://github.com/usernamehw/vscode-error-lens";
-          license = licenses.mit;
-          maintainers = with maintainers; [ imgabe ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.imgabe ];
         };
       };
 
@@ -2882,9 +2883,9 @@ let
           jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
         '';
 
-        meta = with lib; {
-          license = licenses.mpl20;
-          maintainers = [ maintainers._0xbe7a ];
+        meta = {
+          license = lib.licenses.mpl20;
+          maintainers = [ lib.maintainers._0xbe7a ];
         };
       };
 
@@ -2895,9 +2896,9 @@ let
           version = "1.3.0";
           sha256 = "sha256-1JDm/cWNWwxa1gNsHIM/DIvqjXsO++hAf0mkjvKyi4g=";
         };
-        meta = with lib; {
-          license = licenses.mit;
-          maintainers = with maintainers; [ wolfangaukang ];
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wolfangaukang ];
         };
       };
 
@@ -2983,12 +2984,12 @@ let
           version = "12.2.0";
           sha256 = "12s5br0s9n99vjn6chivzdsjb71p0lai6vnif7lv13x497dkw4rz";
         };
-        meta = with lib; {
+        meta = {
           description = "Bring real icons to your Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons";
           homepage = "https://github.com/vscode-icons/vscode-icons";
-          license = licenses.mit;
-          maintainers = with maintainers; [ ggwpaiushtha ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.ggwpaiushtha ];
         };
       };
 
@@ -3035,8 +3036,8 @@ let
           version = "3.3.0";
           sha256 = "0wl8vl8n0avd6nbfmis0lnlqlyh4yp3cca6kvjzgw5xxdc5bl38r";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -3047,8 +3048,8 @@ let
           version = "2.1.2";
           sha256 = "sha256-n91Rj1Rpp7j7gndkt0bV+jT1nRMv7+coVoSL5c7Ii3A=";
         };
-        meta = with lib; {
-          license = licenses.mit;
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -3059,9 +3060,9 @@ let
           version = "1.9.0";
           sha256 = "abd0ef9176eff864f278c548c944032b8f4d8ec97d9ac6e7383d60c92e258c2f";
         };
-        meta = with lib; {
-          license = licenses.mit;
-          maintainers = [ maintainers.zeratax ];
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.zeratax ];
         };
       };
 
@@ -3151,12 +3152,12 @@ let
           version = "0.0.8";
           sha256 = "sha256-PXaHSEXoN0ZboHIoDg37tZ+Gv6xFXP4wGBS3YS/53TY=";
         };
-        meta = with lib; {
+        meta = {
           description = "Basic RISC-V colorization and snippets support.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=zhwu95.riscv";
           homepage = "https://github.com/zhuanhao-wu/vscode-riscv-support";
-          license = licenses.mit;
-          maintainers = [ maintainers.CardboardTurkey ];
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.CardboardTurkey ];
         };
       };
 

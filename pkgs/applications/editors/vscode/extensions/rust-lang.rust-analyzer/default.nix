@@ -80,11 +80,11 @@ vscode-utils.buildVscodeExtension {
       package.json | sponge package.json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An alternative rust language server to the RLS";
     homepage = "https://github.com/rust-lang/rust-analyzer";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = [ lib.licenses.mit lib.licenses.asl20 ];
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

@@ -13,8 +13,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     substituteInPlace out/serverPath.js --replace TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
+  meta = {
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.rhoriguchi ];
   };
 }
