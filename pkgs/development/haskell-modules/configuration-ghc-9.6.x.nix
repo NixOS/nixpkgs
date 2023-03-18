@@ -68,6 +68,10 @@ self: super: {
   # Too strict bounds on ghc-prim and template-haskell
   aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
 
+  ghc-lib = doDistribute self.ghc-lib_9_6_1_20230312;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_1_20230312;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;
+
   #
   # Too strict bounds without upstream fix
   #
