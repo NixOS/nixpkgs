@@ -34,9 +34,9 @@ let
       };
 
       environmentFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        example = "/var/secrets/woodpecker-agent.env";
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
+        example = [ "/var/secrets/woodpecker-agent.env" ];
         description = lib.mdDoc ''
           File to load environment variables
           from. This is helpful for specifying secrets.
@@ -59,7 +59,7 @@ let
       serviceConfig = {
         DynamicUser = true;
         SupplementaryGroups = lib.optionals (agentCfg.extraGroups != null) agentCfg.extraGroups;
-        EnvironmentFile = lib.optional (agentCfg.environmentFile != null) agentCfg.environmentFile;
+        EnvironmentFile = agentCfg.environmentFile;
         ExecStart = lib.getExe agentCfg.package;
         Restart = "on-failure";
         RestartSec = 15;
