@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    sha256 = "sha256-+wjsZxW2l0WGyGTm/6vyzPEeqCfyxJml9oP/zn6W1L0=";
+    hash = "sha256-+wjsZxW2l0WGyGTm/6vyzPEeqCfyxJml9oP/zn6W1L0=";
   };
 
   postPatch = ''
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "NEST is a command line tool for simulating neural networks";
     homepage = "https://www.nest-simulator.org/";
+    changelog = "https://github.com/nest/nest-simulator/releases/tag/v${version}";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jiegec davidcromp ];
     platforms = platforms.unix;
