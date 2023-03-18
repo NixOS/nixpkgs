@@ -114,11 +114,6 @@ fn convert(attr: &str, hashes: &mut HashMap<String, String>) -> anyhow::Result<(
             .expect("dependency should have well-formed source url");
 
         if let Some(hash) = hashes.get(original_url) {
-            git_dependencies.push((
-                format!("{}-{}", package.name, package.version),
-                hash.clone(),
-            ));
-
             continue;
         }
 
