@@ -11,6 +11,7 @@
 , wrapGAppsHook4
 , ninja
 , gnome
+, cairo
 , enchant
 , icu
 , itstool
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "44.rc";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-n1tx0nqFC0c6sjzv+SHafeEIOqKyBwPZtM8bvE8dO3s=";
+    sha256 = "sha256-9nvDeAc0/6gV/MTF2qe1VdJORZ+B6itUjmqFwWEqMco=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     enchant
     icu
     glib
