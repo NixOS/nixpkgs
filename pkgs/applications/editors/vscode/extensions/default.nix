@@ -1242,6 +1242,23 @@ let
         };
       };
 
+      genieai.chatgpt-vscode = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/genieai.chatgpt-vscode/changelog";
+          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=genieai.chatgpt-vscode";
+          homepage = "https://github.com/ai-genie/chatgpt-vscode";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+        mktplcRef = {
+          name = "chatgpt-vscode";
+          publisher = "genieai";
+          version = "0.0.2";
+          sha256 = "sha256-mdBSZ8BAJ1dFy5MXBPMwXlSmNsY5vD/+gBAI+3+QT84=";
+        };
+      };
+
       github = {
         codespaces = buildVscodeMarketplaceExtension {
           mktplcRef = {
