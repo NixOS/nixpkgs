@@ -7779,6 +7779,8 @@ self: super: with self; {
 
   purepng = callPackage ../development/python-modules/purepng { };
 
+  pure-protobuf = callPackage ../development/python-modules/pure-protobuf { };
+
   pure-python-adb = callPackage ../development/python-modules/pure-python-adb { };
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
