@@ -12277,8 +12277,6 @@ with pkgs;
 
   sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
 
-  solr = callPackage ../servers/search/solr { };
-
   solvespace = callPackage ../applications/graphics/solvespace { };
 
   sonarr = callPackage ../servers/sonarr { };
@@ -19457,6 +19455,8 @@ with pkgs;
   cdo = callPackage ../development/libraries/cdo { };
 
   cimg = callPackage  ../development/libraries/cimg { };
+
+  cista = callPackage ../development/libraries/cista { };
 
   cjose = callPackage ../development/libraries/cjose { };
 
@@ -30580,9 +30580,7 @@ with pkgs;
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
-  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
