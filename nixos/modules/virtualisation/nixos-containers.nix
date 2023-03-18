@@ -482,7 +482,6 @@ in
               '';
               type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                # TODO (during review): clarify whether `lib` be extended with nixos-lib - remove this comment
                 merge = loc: defs: ((import "${toString config.nixpkgs}/nixos/lib" {}).evalSystemConfiguration {
                   modules =
                     let
