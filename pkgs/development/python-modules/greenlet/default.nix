@@ -12,7 +12,6 @@ buildPythonPackage rec {
   pname = "greenlet";
   version = "2.0.2";
   format = "setuptools";
-  disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
