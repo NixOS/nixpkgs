@@ -25,8 +25,8 @@ let
       };
 
       extraGroups = lib.mkOption {
-        default = null;
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
         example = [ "podman" ];
         description = lib.mdDoc ''
           Additional groups for the systemd service.
@@ -58,7 +58,7 @@ let
       wants = [ "network-online.target" ];
       serviceConfig = {
         DynamicUser = true;
-        SupplementaryGroups = lib.optionals (agentCfg.extraGroups != null) agentCfg.extraGroups;
+        SupplementaryGroups = agentCfg.extraGroups;
         EnvironmentFile = agentCfg.environmentFile;
         ExecStart = lib.getExe agentCfg.package;
         Restart = "on-failure";
