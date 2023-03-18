@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atomix";
-  version = "44.rc";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/atomix/${lib.versions.major finalAttrs.version}/atomix-${finalAttrs.version}.tar.xz";
-    sha256 = "pujNEnUJNLv+6Grwd/uxnTcuq+GxXeemxecOjLdDJAw=";
+    sha256 = "yISTF2iNh9pzTJBjA1YxBSAH8qh5m2xsyRUmWIC1X7Q=";
   };
 
   nativeBuildInputs = [
