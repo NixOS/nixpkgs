@@ -6703,10 +6703,6 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
-  dir2opus = callPackage ../tools/audio/dir2opus {
-    inherit (python2Packages) mutagen python wrapPython;
-  };
-
   dsp = callPackage ../tools/audio/dsp { };
 
   dirdiff = callPackage ../tools/text/dirdiff {
