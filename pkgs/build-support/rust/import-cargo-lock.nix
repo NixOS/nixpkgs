@@ -138,6 +138,7 @@ let
               inherit (gitParts) url;
               rev = gitParts.sha;
               allRefs = true;
+              submodules = true;
             }
           else
             missingHash;
