@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
 
   postBuild = lib.optionalString pythonSupport ''
     make -C pjsip-apps/src/swig/python
