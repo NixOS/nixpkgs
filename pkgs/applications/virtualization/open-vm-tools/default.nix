@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "12.1.0";
+  version = "12.1.5";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     rev = "stable-${version}";
-    hash = "sha256-PgrLu0Bm9Vom5WNl43312QFWKojdXDAGn3Nvj4hzPrQ=";
+    hash = "sha256-CffJg29qM9ex1RAq5t2dE/GX8ud9TylQbYiwBkh8nxE=";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -137,6 +137,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
+    changelog = "https://github.com/vmware/open-vm-tools/releases/tag/stable-${version}";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''
       A set of services and modules that enable several features in VMware products for
