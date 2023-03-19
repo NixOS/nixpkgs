@@ -611,6 +611,7 @@ in {
   searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
   sfxr-qt = handleTest ./sfxr-qt.nix {};
+  sgtpuzzles = handleTest ./sgtpuzzles.nix {};
   shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
