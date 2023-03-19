@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext libev pcre udns ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/dlundquist/sniproxy";
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
     license = licenses.bsd2;
     maintainers = with maintainers; [ womfoo raitobezarius ];
