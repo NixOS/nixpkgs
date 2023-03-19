@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , arc4
 , asn1crypto
 , asn1tools
@@ -7,6 +8,7 @@
 , buildPythonPackage
 , colorama
 , fetchFromGitHub
+, iconv
 , minikerberos
 , pillow
 , pyperclip
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     tqdm
     unicrypto
     winsspi
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    iconv
   ];
 
   # Module doesn't have tests
