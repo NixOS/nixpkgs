@@ -13,7 +13,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.9") pytz;
 
-  nativeCheckInputs = [ pytestCheckHook freezegun ];
+  nativeCheckInputs = [ pytestCheckHook freezegun pytz ];
+
+  preCheck = ''
+    export TZ="UTC"
+  '';
+
+  disabledTests = [
+    # https://github.com/python-babel/babel/issues/988
+    "test_format_time"
+  ];
 
   meta = with lib; {
     homepage = "https://babel.pocoo.org/";
