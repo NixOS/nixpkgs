@@ -38516,9 +38516,7 @@ with pkgs;
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
-  pjsip = callPackage ../applications/networking/pjsip {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation Security;
-  };
+  pjsip = darwin.apple_sdk_11_0.callPackage ../applications/networking/pjsip { };
 
   pounce = callPackage ../servers/pounce { };
 

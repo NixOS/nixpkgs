@@ -54,10 +54,7 @@ stdenv.mkDerivation rec {
     make -C pjsip-apps/src/swig/python
   '';
 
-  configureFlags = [ "--enable-shared" ]
-    # darwin-ssl is a deprecated SSL library that requires
-    # a more recent version of Apple SDK 10 which is not in nixpkgs.
-    ++ lib.optional stdenv.isDarwin "--disable-darwin-ssl";
+  configureFlags = [ "--enable-shared" ];
 
   outputs = [ "out" ]
     ++ lib.optional pythonSupport "py";
