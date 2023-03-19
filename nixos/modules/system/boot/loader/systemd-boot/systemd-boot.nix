@@ -20,7 +20,7 @@ let
 
     nix = config.nix.package.out;
 
-    timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
+    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
     editor = if cfg.editor then "True" else "False";
 
@@ -32,9 +32,9 @@ let
 
     inherit (config.system.nixos) distroName;
 
-    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
+    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86-efi;
 
-    netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
+    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(${pkgs.coreutils}/bin/mktemp)

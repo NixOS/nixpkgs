@@ -10,10 +10,7 @@ let
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
   };
 
-  impanel =
-    if cfg.panel != null
-    then "--panel=${cfg.panel}"
-    else "";
+  impanel = optionalString (cfg.panel != null) "--panel=${cfg.panel}";
 
   ibusAutostart = pkgs.writeTextFile {
     name = "autostart-ibus-daemon";

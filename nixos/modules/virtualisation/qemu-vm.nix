@@ -214,11 +214,11 @@ let
               mkdir $out
               diskImage=$out/disk.img
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "120M"
-              ${if cfg.useEFIBoot then ''
+              ${lib.optionalString cfg.useEFIBoot ''
                 efiVars=$out/efi-vars.fd
                 cp ${cfg.efi.variables} $efiVars
                 chmod 0644 $efiVars
-              '' else ""}
+              ''}
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"

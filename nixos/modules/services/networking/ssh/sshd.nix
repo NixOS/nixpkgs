@@ -474,10 +474,10 @@ in
                       mkdir -m 0755 -p "$(dirname '${k.path}')"
                       ssh-keygen \
                         -t "${k.type}" \
-                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
-                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
-                        ${if k ? comment then "-C '${k.comment}'" else ""} \
-                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+                        ${optionalString (k ? bits) "-b ${toString k.bits}"} \
+                        ${optionalString (k ? rounds) "-a ${toString k.rounds}"} \
+                        ${optionalString (k ? comment) "-C '${k.comment}'"} \
+                        ${optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
                         -f "${k.path}" \
                         -N ""
                   fi
@@ -550,7 +550,7 @@ in
         '') cfg.ports}
 
         ${concatMapStrings ({ port, addr, ... }: ''
-          ListenAddress ${addr}${if port != null then ":" + toString port else ""}
+          ListenAddress ${addr}${optionalString (port != null) (":" + toString port)}
         '') cfg.listenAddresses}
 
         ${optionalString cfgc.setXAuthLocation ''
