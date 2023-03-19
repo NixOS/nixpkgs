@@ -18,6 +18,7 @@
 , libXi
 , libXext
 , gnome
+, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    systemd
     makeWrapper
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
@@ -67,6 +69,7 @@ stdenv.mkDerivation rec {
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
   ];
 
   passthru = {
