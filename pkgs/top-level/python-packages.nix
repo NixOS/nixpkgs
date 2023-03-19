@@ -5341,6 +5341,8 @@ self: super: with self; {
 
   laszip = callPackage ../development/python-modules/laszip { };
 
+  latex2mathml = callPackage ../development/python-modules/latex2mathml { };
+
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
