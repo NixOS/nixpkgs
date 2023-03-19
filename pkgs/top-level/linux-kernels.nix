@@ -308,6 +308,8 @@ in {
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
+    ch9344 = callPackage ../os-specific/linux/ch9344 { };
+
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
       withDriver = true;
