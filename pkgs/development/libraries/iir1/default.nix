@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "irr1";
+  pname = "iir1";
   version = "1.9.4";
 
   src = fetchFromGitHub {

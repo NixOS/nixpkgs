@@ -20774,7 +20774,7 @@ with pkgs;
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
-  irr1 = callPackage ../development/libraries/irr1 { };
+  iir1 = callPackage ../development/libraries/iir1 { };
 
   irrlicht = if !stdenv.isDarwin then
     callPackage ../development/libraries/irrlicht { }
