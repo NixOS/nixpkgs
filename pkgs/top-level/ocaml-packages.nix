@@ -787,6 +787,8 @@ let
       inherit (pkgs) file;
     };
 
+    lwd = callPackage ../development/ocaml-modules/lwd { };
+
     lwt = callPackage ../development/ocaml-modules/lwt { };
 
     lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
@@ -983,6 +985,12 @@ let
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
     note = callPackage ../development/ocaml-modules/note { };
+
+    nottui = callPackage ../development/ocaml-modules/lwd/nottui.nix { };
+
+    nottui-lwt = callPackage ../development/ocaml-modules/lwd/nottui-lwt.nix { };
+
+    nottui-pretty = callPackage ../development/ocaml-modules/lwd/nottui-pretty.nix { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
 
@@ -1295,6 +1303,8 @@ let
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
+
+    tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
