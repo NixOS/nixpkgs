@@ -11,6 +11,8 @@
 buildPythonPackage rec {
   pname = "pyprosegur";
   version = "0.0.9";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Prosegur Residential Alarms";
     homepage = "https://github.com/dgomes/pyprosegur";
+    changelog = "https://github.com/dgomes/pyprosegur/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
