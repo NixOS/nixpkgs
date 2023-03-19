@@ -5,7 +5,6 @@
 , mock
 }:
 
-
 buildPythonPackage rec {
   pname = "transaction";
   version = "3.1.0";
@@ -19,7 +18,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Transaction management";
-    homepage = "https://pypi.python.org/pypi/transaction";
+    homepage = "https://transaction.readthedocs.io/";
+    changelog = "https://github.com/zopefoundation/transaction/blob/${version}/CHANGES.rst";
     license = licenses.zpl20;
+    maintainers = with maintainers; [ ];
   };
 }
