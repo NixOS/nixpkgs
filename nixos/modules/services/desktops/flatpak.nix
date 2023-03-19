@@ -34,6 +34,8 @@ in {
 
     services.dbus.packages = [ pkgs.flatpak ];
 
+    services.dbus.implementation = "broker";
+
     systemd.packages = [ pkgs.flatpak ];
 
     environment.profiles = [
