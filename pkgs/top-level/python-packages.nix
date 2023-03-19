@@ -10613,6 +10613,8 @@ self: super: with self; {
 
   pandera = callPackage ../development/python-modules/pandera { };
 
+  pandoc = callPackage ../development/python-modules/pandoc { };
+
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
   pandoc-latex-environment = callPackage ../development/python-modules/pandoc-latex-environment { };
