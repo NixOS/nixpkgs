@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   inherit (linuxHeaders) version src;
 
+  separateDebugInfo = true;
+
   patches = [
     # fix unknown type name '__vector128' on ppc64le
     ./include-asm-types-for-ppc64le.patch
