@@ -27371,6 +27371,8 @@ with pkgs;
 
   brise = callPackage ../data/misc/brise { };
 
+  bqn386 = callPackage ../data/fonts/bqn386 { };
+
   cacert = callPackage ../data/misc/cacert { };
 
   caladea = callPackage ../data/fonts/caladea { };
