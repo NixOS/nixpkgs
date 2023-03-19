@@ -26940,6 +26940,8 @@ with pkgs;
 
   sassc = callPackage ../development/tools/sassc { };
 
+  sbom-scorecard = callPackage ../tools/misc/sbom-scorecard { };
+
   scanmem = callPackage ../tools/misc/scanmem { };
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
