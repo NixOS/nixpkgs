@@ -1330,6 +1330,7 @@
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/userdbd.nix
   ./system/boot/systemd/homed.nix
+  ./system/boot/systemd/ultrablue.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/boot/uvesafb.nix
