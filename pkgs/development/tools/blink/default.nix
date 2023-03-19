@@ -4,25 +4,24 @@
 
 stdenv.mkDerivation (rec {
   pname = "blink";
-  version = "7d3fa0d1525dd0863dd57cfc4a6e60000795fab6";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = "blink";
     rev = "${version}";
-    hash = "sha256-LbvMh3FyV8dHIIQhYAY8U1na79ksmrf5vFmWdfk5cC8=";
+    hash = "sha256-GQ1uOZr75CXLQ6aUX4oohJhwsYy41StaZiQRNrD/FXQ=";
   };
 
-  doCheck = false;
+  doCheck = true;
   enableParallelBuilding = true;
 
-  preCheck = ''
-    rm third_party/cosmo/cosmo.mk
-    # Removing that file because of the following problems:
-    #  > make: *** [third_party/cosmo/cosmo.mk:6: third_party/cosmo/2/intrin_test.com.dbg.gz] Error 127
-    #  > make: *** [third_party/cosmo/cosmo.mk:6: third_party/cosmo/2/lockscale_test.com.gz] Error 127
-    #  > make: *** [third_party/cosmo/cosmo.mk:6: third_party/cosmo/2/lockscale_test.com.dbg.gz] Error 127
-    #  > make: *** [third_party/cosmo/cosmo.mk:6: third_party/cosmo/2/palignr_test.com.gz] Error 127
+  checkPhase = ''
+          runHook preCheck
+          # The library author suggested this test as a fast one but very thorough.
+          # Right now they depend on downloading binaries and that is why it is commented out.
+          #make o//third_party/cosmo/2/intrin_test.com.ok
+          runHook postCheck
   '';
 
   installPhase = ''
