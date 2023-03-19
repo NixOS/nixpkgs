@@ -13,11 +13,14 @@
 , pythonOlder
 , sniffio
 , socksio
+# for passthru.tests
+, httpx
+, httpx-socks
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.16.3";
+  version = "0.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3bC97CTZi6An+owjoJF7Irtr7ONbP8RtNdTIGJRy0Ng=";
+    hash = "sha256-DGGCCdnfe9gpW2EC9iDLZmZmowRDTKICaTIU+7ThwmE=";
   };
 
   propagatedBuildInputs = [
@@ -67,6 +70,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--asyncio-mode=strict"
   ];
+
+  passthru.tests = {
+    inherit httpx httpx-socks;
+  };
 
   meta = with lib; {
     description = "A minimal low-level HTTP client";
