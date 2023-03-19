@@ -41,6 +41,12 @@ buildPythonPackage rec {
     hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"httpcore>=0.15.0,<0.17.0",' "" \
+      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
+  '';
+
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatchling
@@ -86,11 +92,6 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.http2
     ++ passthru.optional-dependencies.brotli
     ++ passthru.optional-dependencies.socks;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
-  '';
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
