@@ -23,6 +23,10 @@ buildPythonPackage rec {
     mock
   ];
 
+  pythonImportsCheck = [
+    "transaction"
+  ];
+
   meta = with lib; {
     description = "Transaction management";
     homepage = "https://transaction.readthedocs.io/";
