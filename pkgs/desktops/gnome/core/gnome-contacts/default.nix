@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "44.rc";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "/GTJTk/w6+o6vKF2ngEDtzUVEQ7wVQdjYhP8kRbjS2o=";
+    sha256 = "fdEWO8HwavY4La5AFcQ0Q+4sEpKBKPyZ/USSktDee+0=";
   };
 
   nativeBuildInputs = [
