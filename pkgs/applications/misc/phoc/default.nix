@@ -52,7 +52,7 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.25.0";
+  version = "0.25.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1cbv4vzQ+RcRoT1pOT8Q0nxuZzKUlec38KCNMYaceeE=";
+    sha256 = "sha256-Vf3WZg305s9dZv2/PIxmPNf7X3Hs5K6d3DrsL3e6MP8=";
     fetchSubmodules = true;
   };
 
