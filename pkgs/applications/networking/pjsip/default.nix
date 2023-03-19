@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
-    ${python3.withPackages (pkgs: [ pkgs.pjsua2 ])}/bin/python -c "import pjsua2" > $out
+    ${(python3.withPackages (pkgs: [ pkgs.pjsua2 ])).interpreter} -c "import pjsua2" > $out
   '';
 
   meta = with lib; {
