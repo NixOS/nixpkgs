@@ -13,6 +13,9 @@
 , pythonOlder
 , sniffio
 , socksio
+# for passthru.tests
+, httpx
+, httpx-socks
 }:
 
 buildPythonPackage rec {
@@ -69,6 +72,10 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit httpx httpx-socks;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
