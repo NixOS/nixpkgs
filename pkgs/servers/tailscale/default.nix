@@ -18,7 +18,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
-  ldflags = [ "-X tailscale.com/version.Long=${version}" "-X tailscale.com/version.Short=${version}" ];
+  ldflags = [ "-X tailscale.com/version.longStamp=${version}" "-X tailscale.com/version.shortStamp=${version}" ];
 
   doCheck = false;
 
