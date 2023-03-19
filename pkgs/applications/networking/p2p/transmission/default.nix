@@ -4,6 +4,7 @@
 , fetchurl
 , cmake
 , pkg-config
+, python3
 , openssl
 , curl
 , libevent
@@ -33,7 +34,7 @@
 }:
 
 let
-  version = "3.00";
+  version = "4.0.2";
 
 in stdenv.mkDerivation {
   pname = "transmission";
@@ -43,17 +44,9 @@ in stdenv.mkDerivation {
     owner = "transmission";
     repo = "transmission";
     rev = version;
-    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    sha256 = "DaaJnnWEZOl6zLVxgg+U8C5ztv7Iq0wJ9yle0Gxwybc=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix build with openssl 3.0
-    (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
-      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
-    })
-  ];
 
   outputs = [ "out" "apparmor" ];
 
@@ -73,6 +66,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     cmake
+    python3
   ]
   ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
   ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
@@ -142,7 +136,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "http://www.transmissionbt.com/";
     license = lib.licenses.gpl2Plus; # parts are under MIT
-    maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
+    maintainers = with lib.maintainers; [ astsmtl stephenmw vcunat wizeman ];
     platforms = lib.platforms.unix;
   };
 
