@@ -12938,6 +12938,8 @@ self: super: with self; {
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
+  ziafont = callPackage ../development/python-modules/ziafont { };
+
   zict = callPackage ../development/python-modules/zict { };
 
   zigpy = callPackage ../development/python-modules/zigpy { };
