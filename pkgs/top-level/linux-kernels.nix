@@ -620,7 +620,7 @@ in {
     linux_latest = packages.linux_6_2;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_5_10;
+    linux_rt_latest = packages.linux_rt_5_15;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
