@@ -12940,6 +12940,8 @@ self: super: with self; {
 
   ziafont = callPackage ../development/python-modules/ziafont { };
 
+  ziamath = callPackage ../development/python-modules/ziamath { };
+
   zict = callPackage ../development/python-modules/zict { };
 
   zigpy = callPackage ../development/python-modules/zigpy { };
