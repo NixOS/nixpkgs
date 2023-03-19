@@ -1,6 +1,6 @@
 # Building a Bun project with nix
 
-[Here](../../test/bun/default.nix) is a very simple example of how to package a hono service in bun: 
+[Here](../../test/bun/default.nix) is a very simple example of how to package a hono service in bun:
 ```nix
 pkgs.buildBunModules {
   pname = "bun-hono-example";
