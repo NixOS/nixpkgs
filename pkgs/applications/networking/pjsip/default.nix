@@ -14,7 +14,6 @@
 , pjsip
 , runCommand
 }:
-
 stdenv.mkDerivation rec {
   pname = "pjsip";
   version = "2.13";
