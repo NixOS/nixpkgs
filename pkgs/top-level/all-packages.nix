@@ -39541,4 +39541,6 @@ with pkgs;
   udict = callPackage ../applications/misc/udict { };
 
   duden = callPackage ../applications/misc/duden { };
+
+  pulsar = callPackage ../applications/editors/pulsar {};
 }
