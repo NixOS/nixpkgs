@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , click
 , fetchFromGitHub
@@ -43,7 +42,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     mock
     pytest-asyncio
     pytest-rerunfailures
