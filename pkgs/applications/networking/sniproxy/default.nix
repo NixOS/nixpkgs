@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
     license = licenses.bsd2;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = with maintainers; [ womfoo raitobezarius ];
     platforms = platforms.linux;
   };
 
