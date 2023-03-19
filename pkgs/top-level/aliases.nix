@@ -113,6 +113,7 @@ mapAliases ({
   ### B ###
 
   badtouch = authoscope; # Project was renamed, added 20210626
+  baget = throw "'baget' has been removed due to being unmaintained";
   bar-xft = throw "'bar-xft' has been renamed to/replaced by 'lemonbar-xft'"; # Converted to throw 2022-02-22
   bashCompletion = throw "'bashCompletion' has been renamed to/replaced by 'bash-completion'"; # Converted to throw 2022-02-22
   bashInteractive_5 = bashInteractive; # Added 2021-08-20
