@@ -116,6 +116,12 @@ in stdenv.mkDerivation rec {
         --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
     done
 
+    for f in scripts/ZoneMinder/lib/ZoneMinder/Event.pm \
+             scripts/ZoneMinder/lib/ZoneMinder/Storage.pm ; do
+      substituteInPlace $f \
+        --replace '/bin/rm' "${coreutils}/bin/rm"
+    done
+
     substituteInPlace web/includes/functions.php \
       --replace "'date " "'${coreutils}/bin/date " \
       --subst-var-by srcHash "`basename $out`"
