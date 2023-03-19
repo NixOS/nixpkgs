@@ -10,13 +10,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    sha256 = "sha256-1fWcrMd+TSrlS1H0z7XwVCQzZAa8DAFtlekEZNRMAPA=";
+    sha256 = "sha256-C7N23s/GA66gQ5SVXtXcM9lXIjScR3pLYCrf0w2nHfY=";
   };
 
   web = mkYarnPackage {
@@ -45,7 +45,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorSha256 = "sha256-Ud4pwS0lz7zSTowg3gXNllfDyj8fu33H1L20szxPcOA=";
+  vendorSha256 = "sha256-vnhqI9G/p+SLLA4sre2wfmg1RKIYZmzeL0pSTbHb+Ck=";
 
   ldflags = [
     "-s"
