@@ -50,6 +50,7 @@ buildPythonPackage rec {
     "TestPipRunner"
     "TestPythonPipWorkflow"
     "TestRubyWorkflow"
+    "TestRustCargo"
     # Tests which are passing locally but not on Hydra
     "test_copy_dependencies_action_1_multiple_files"
     "test_move_dependencies_action_1_multiple_files"
