@@ -31,13 +31,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.75.90";
+  version = "1.76.0";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Yv04Az03T/cU62rjtUWSWbHFN/2CLewdkpRIA6JEX3I=";
+    sha256 = "sha256-pj8VaWSxNgU+q1HqATEU59fBk7dRjSjAQLawLDyTOm0=";
   };
 
   patches = [
