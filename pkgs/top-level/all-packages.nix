@@ -19418,7 +19418,7 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = (haskell.lib.compose.justStaticExecutables haskellPackages.cachix).overrideAttrs(o: {
+  cachix = (haskell.lib.compose.justStaticExecutables haskell.packages.ghc94.cachix).overrideAttrs(o: {
     passthru = o.passthru or {} // {
       tests = o.passthru.tests or {} // {
         inherit hci;
@@ -20778,7 +20778,7 @@ with pkgs;
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
-  irr1 = callPackage ../development/libraries/irr1 { };
+  iir1 = callPackage ../development/libraries/iir1 { };
 
   irrlicht = if !stdenv.isDarwin then
     callPackage ../development/libraries/irrlicht { }
