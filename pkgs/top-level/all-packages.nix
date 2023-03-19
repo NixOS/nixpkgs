@@ -36881,6 +36881,8 @@ with pkgs;
 
   treemix = callPackage ../applications/science/biology/treemix { };
 
+  trf = callPackage ../applications/science/biology/trf { };
+
   trimal = callPackage ../applications/science/biology/trimal { };
 
   truvari = callPackage ../applications/science/biology/truvari { };
