@@ -39587,4 +39587,6 @@ with pkgs;
   udict = callPackage ../applications/misc/udict { };
 
   duden = callPackage ../applications/misc/duden { };
+
+  buildBunModules = callPackage ../build-support/bun { };
 }

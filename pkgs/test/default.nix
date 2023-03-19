@@ -99,4 +99,6 @@ with pkgs;
   };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+
+  bun = callPackage ./bun { };
 }
