@@ -918,26 +918,26 @@ self: super: builtins.intersectAttrs super {
         }}/hnix-store-core";
       }) super.hnix-store-core;
     in overrideCabal (drv: {
-    version = "1.3.1";
+    version = "1.3.3";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.3.1";
-      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+      rev = "v1.3.3";
+      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
     };
     buildDepends = [ self.conduit-zstd self.conduit-concurrent-map (dontCheck self.fsnotify_0_4_1_0) hnix-store-core_0_6_1_0 ];
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.3/1.3.1/' cachix.cabal
+      sed -i 's/1.3.2/1.3.3/' cachix.cabal
     '';
   }) (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
   cachix-api = overrideCabal (drv: {
-    version = "1.3.1";
+    version = "1.3.3";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.3.1";
-      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+      rev = "v1.3.3";
+      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
     };
     buildDepends = [ self.stm-chans ];
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
