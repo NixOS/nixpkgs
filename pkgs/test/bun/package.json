@@ -1,0 +1,14 @@
+{
+  "version": "1.0.87",
+  "name": "test",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "dependencies": {
+    "hono": "^2.2.5"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts"
+  },
+  "module": "src/index.js"
+}
