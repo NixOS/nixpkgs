@@ -10,15 +10,15 @@
 }:
 
 let
-  openShiftVersion = "4.12.1";
-  okdVersion = "4.11.0-0.okd-2022-11-05-030711";
+  openShiftVersion = "4.12.5";
+  okdVersion = "4.12.0-0.okd-2023-02-18-033438";
   podmanVersion = "4.3.1";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
 in
 buildGoModule rec {
-  version = "2.14.0";
+  version = "2.15.0";
   pname = "crc";
-  gitCommit = "868d96cd4f73dad72df54475c52c65f9741dc240";
+  gitCommit = "72256c3cb00ac01519b26658dd5cfb0dd09b37a1";
   modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
