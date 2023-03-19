@@ -127,6 +127,23 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
     })
 
+    # https://github.com/sagemath/sage/pull/35235
+    (fetchpatch {
+      name = "ipython-8.11-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/23471e2d242c4de8789d7b1fc8b07a4b1d1e595a.diff";
+      sha256 = "sha256-wvH4BvDiaBv7jbOP8LvOE5Vs16Kcwz/C9jLpEMohzLQ=";
+    })
+
+    # positively reviewed
+    (fetchpatch {
+      name = "matplotlib-3.7.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/pull/35177.diff";
+      sha256 = "sha256-YdPnMsjXBm9ZRm6a8hH8rSynkrABjLoIzqwp3F/rKAw=";
+    })
+
+    # rebased from https://github.com/sagemath/sage/pull/34994, merged in sage 10.0.beta2
+    ./patches/numpy-1.24-upgrade.patch
+
     # temporarily paper over https://github.com/jupyter-widgets/ipywidgets/issues/3669
     ./patches/ipywidgets-on_submit-deprecationwarning.patch
 
