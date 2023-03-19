@@ -186,5 +186,6 @@ in stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    broken = (versionOlder version "6.0" && stdenv.system == "aarch64-darwin");
   };
 }
