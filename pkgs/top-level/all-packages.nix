@@ -3083,6 +3083,8 @@ with pkgs;
 
   cloudfox = callPackage ../tools/security/cloudfox { };
 
+  cloudhunter = callPackage ../tools/security/cloudhunter { };
+
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
