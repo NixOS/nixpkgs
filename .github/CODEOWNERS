@@ -238,7 +238,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode @superherointj
-/pkgs/applications/editors/vscode/extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions   @jonringer @superherointj
 
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
@@ -310,3 +310,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
+
+# OCaml
+/pkgs/build-support/ocaml           @romildo @superherointj @ulrikstrid
+/pkgs/development/compilers/ocaml   @romildo @superherointj @ulrikstrid
+/pkgs/development/ocaml-modules     @romildo @superherointj @ulrikstrid

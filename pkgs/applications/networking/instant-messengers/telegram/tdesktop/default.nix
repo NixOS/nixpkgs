@@ -54,7 +54,6 @@
 , microsoft_gsl
 , rlottie
 , stdenv
-, gcc10Stdenv
 }:
 
 # Main reference:
@@ -70,10 +69,8 @@ let
       cxxStandard = "20";
     };
   };
-  # Aarch64 default gcc9 will cause ICE. For reference #108305
-  env = if stdenv.isAarch64 then gcc10Stdenv else stdenv;
 in
-env.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "telegram-desktop";
   version = "4.6.5";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py

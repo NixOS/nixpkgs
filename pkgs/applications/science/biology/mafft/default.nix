@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mafft";
-  version = "7.508";
+  version = "7.515";
 
   src = fetchFromGitLab {
     owner = "sysimm";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-XQllmTgLntCBUFJzV2HL4f4oMilcUVTRgcfeZBdD5c0=";
+    rev = "v${version}";
+    sha256 = "sha256-ssZvjOHJLsBjB48sKr1U7VrRZUIduFkme22MdVbzoNk=";
   };
 
   preBuild = ''
