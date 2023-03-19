@@ -84,8 +84,7 @@ stdenv.mkDerivation rec {
     # First, find all libraries (and their symlinks) in our outputs to define
     # the install_name_tool -change arguments we should pass.
     readarray -t libraries < <(
-      for outputName in $(getAllOutputNames)
-      do
+      for outputName in $(getAllOutputNames); do
         find "''${!outputName}" \( -name '*.dylib*' -o -name '*.so*' \)
       done
     )
@@ -93,18 +92,15 @@ stdenv.mkDerivation rec {
     # Determine the install_name_tool -change arguments that are going to be
     # applied to all libraries.
     change_args=()
-    for lib in "''${libraries[@]}"
-    do
+    for lib in "''${libraries[@]}"; do
       lib_name="$(basename $lib)"
       change_args+=(-change ../lib/$lib_name $lib)
       change_args+=(-change ../../lib/$lib_name $lib)
     done
 
     # Rewrite id and library refences for all non-symlinked libraries.
-    for lib in "''${libraries[@]}"
-    do
-      if [ -f "$lib" ]
-      then
+    for lib in "''${libraries[@]}"; do
+      if [ -f "$lib" ]; then
         install_name_tool -id $lib "''${change_args[@]}" $lib
       fi
     done
