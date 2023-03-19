@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , gi-docgen
 , meson
 , ninja
@@ -33,20 +32,6 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-RIJtlSBZX4+rMOGQaFn31CCEKkWtPjtzO4fcX+iApvs=";
   };
-
-  patches = [
-    # Fixes for the broken carousel test
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1456610692
-    # https://gitlab.gnome.org/GNOME/libadwaita/-/merge_requests/786
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libadwaita/-/commit/cbfd8e57d5ba684c8744f6955e0435e7a09b993e.patch";
-      hash = "sha256-nVJD5Eu4gjyfIJf4/6e/ah10/dSxjLk5weWKxSP8byE=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libadwaita/-/commit/78dc3b1dc8527b29c8610a1ad3dee82c8b2b3771.patch";
-      hash = "sha256-Nthf5crWjNlAPI+8SQ7YfUBCcmCJrHcfkpankqSm+Ic=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
