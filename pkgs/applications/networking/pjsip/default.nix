@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
+  preConfigure = ''
+    export LD=$CC
+  '';
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
 
