@@ -1,13 +1,20 @@
 { lib, buildDotnetModule, dotnetCorePackages
+, fetchFromGitHub
 , SDL2, freetype, openal, lua51Packages
 }:
 engine:
 
 buildDotnetModule rec {
-  pname = "openra";
-  version = "${engine.name}-${engine.version}";
+  pname = "openra-${engine.build}";
+  inherit (engine) version;
 
-  src = engine.src;
+  src = if engine ? src then engine.src else fetchFromGitHub {
+    owner = "OpenRA";
+    repo = "OpenRA";
+    rev = "${engine.build}-${engine.version}";
+    sha256 = engine.sha256;
+  };
+
   nugetDeps = engine.deps;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -38,7 +45,10 @@ buildDotnetModule rec {
     touch './IP2LOCATION-LITE-DB1.IPV6.BIN.ZIP'
 
     # Install all the asset data
-    sh -c '. ./packaging/functions.sh; install_data . "$out/lib/${pname}" cnc d2k ra'
+    (
+      . ./packaging/functions.sh
+      install_data . "$out/lib/${pname}" cnc d2k ra
+    )
 
     # Replace precompiled libraries with links to native one.
     # This is similar to configure-system-libraries.sh in the source repository
@@ -49,17 +59,20 @@ buildDotnetModule rec {
   '';
 
   postFixup = ''
-    sh -c '. ./packaging/functions.sh; install_linux_shortcuts . "" "$out/lib/${pname}" "$out/.bin-unwrapped" "$out/share" "${version}" cnc d2k ra'
+    (
+      . ./packaging/functions.sh
+      install_linux_shortcuts . "" "$out/lib/${pname}" "$out/.bin-unwrapped" "$out/share" "${version}" cnc d2k ra
+    )
 
     # Create Nix wrappers to the application scripts which setup the needed environment
     for bin in $(find $out/.bin-unwrapped -type f); do
       makeWrapper "$bin" "$out/bin/$(basename "$bin")" \
-        --suffix "PATH" : "${lib.makeBinPath [ dotnet-runtime ]}"
+        --prefix "PATH" : "${lib.makeBinPath [ dotnet-runtime ]}"
     done
   '';
 
   meta = with lib; {
-    description = "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert. ${engine.name} version.";
+    description = "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert. ${engine.build} version.";
     homepage = "https://www.openra.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mdarocha ];
