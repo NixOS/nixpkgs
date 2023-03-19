@@ -15998,9 +15998,7 @@ with pkgs;
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-update = callPackage ../development/tools/rust/cargo-update {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-update = callPackage ../development/tools/rust/cargo-update { };
 
   cargo-asm = callPackage ../development/tools/rust/cargo-asm {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -18884,6 +18882,8 @@ with pkgs;
   sqlc = callPackage ../development/tools/database/sqlc { };
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
+
+  sqlcmd = callPackage ../development/tools/database/sqlcmd { };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
@@ -36892,6 +36892,8 @@ with pkgs;
   tebreak = callPackage ../applications/science/biology/tebreak { };
 
   treemix = callPackage ../applications/science/biology/treemix { };
+
+  trf = callPackage ../applications/science/biology/trf { };
 
   trimal = callPackage ../applications/science/biology/trimal { };
 

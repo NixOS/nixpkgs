@@ -166,7 +166,11 @@ let
         --manpage-urls ${manpageUrls} \
         --revision ${lib.escapeShellArg revision} \
         ./manual.md \
-        ./manual-combined.xml
+        ./manual-combined-pre.xml
+
+      ${pkgs.libxslt.bin}/bin/xsltproc \
+        -o manual-combined.xml ${./../../lib/make-options-doc/postprocess-option-descriptions.xsl} \
+        manual-combined-pre.xml
 
       ${linterFunctions}
 
