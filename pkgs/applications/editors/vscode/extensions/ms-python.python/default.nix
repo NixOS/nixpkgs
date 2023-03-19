@@ -76,13 +76,13 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A Visual Studio Code extension with rich support for the Python language";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.python";
     homepage = "https://github.com/Microsoft/vscode-python";
     changelog = "https://github.com/microsoft/vscode-python/releases";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jraygauthier jfchevrette ];
+    maintainers = [ lib.maintainers.jraygauthier lib.maintainers.jfchevrette ];
   };
 }

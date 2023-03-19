@@ -87,9 +87,9 @@ buildVscodeMarketplaceExtension {
       --replace '# Start the server\n' '${patch}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Use any remote machine with a SSH server as your development environment.";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ SuperSandro2000 tbenst ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.SuperSandro2000 lib.maintainers.tbenst ];
   };
 }

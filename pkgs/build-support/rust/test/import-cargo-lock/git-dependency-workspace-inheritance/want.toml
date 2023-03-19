@@ -1,0 +1,12 @@
+[package]
+version = "1.0.0"
+
+[dependencies]
+bar = "1.0.0"
+
+[dependencies.foo]
+features = [
+    "cat",
+    "meow",
+]
+version = "1.0.0"

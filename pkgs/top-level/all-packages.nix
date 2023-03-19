@@ -5613,9 +5613,7 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
-  srvc = callPackage ../applications/version-management/srvc {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  srvc = callPackage ../applications/version-management/srvc { };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -19507,9 +19505,7 @@ with pkgs;
 
   chromaprint = callPackage ../development/libraries/chromaprint { };
 
-  cl = callPackage ../development/libraries/cl {
-    erlang = erlangR23;
-  };
+  cl = callPackage ../development/libraries/cl { };
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
@@ -31692,6 +31688,10 @@ with pkgs;
 
   miniaudicle = callPackage ../applications/audio/miniaudicle { stdenv = gcc10StdenvCompat; };
 
+  minidsp = callPackage ../applications/audio/minidsp {
+    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+  };
+
   minicom = callPackage ../tools/misc/minicom { };
 
   minigalaxy = callPackage ../applications/misc/minigalaxy { };
@@ -34398,9 +34398,7 @@ with pkgs;
 
   wily = callPackage ../applications/editors/wily { };
 
-  wings = callPackage ../applications/graphics/wings {
-    erlang = erlangR21;
-  };
+  wings = callPackage ../applications/graphics/wings { };
 
   write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
 
@@ -37290,7 +37288,9 @@ with pkgs;
   glom = callPackage ../applications/misc/glom { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
-  glucose-syrup = callPackage ../applications/science/logic/glucose/syrup.nix { };
+  glucose-syrup = callPackage ../applications/science/logic/glucose {
+    enableUnfree = true;
+  };
 
   hol = callPackage ../applications/science/logic/hol { };
 

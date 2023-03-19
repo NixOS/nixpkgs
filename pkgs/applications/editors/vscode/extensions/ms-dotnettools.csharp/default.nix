@@ -121,11 +121,11 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     '')
     vsixInfo.binaries));
 
-  meta = with lib; {
+  meta = {
     description = "C# for Visual Studio Code (powered by OmniSharp)";
     homepage = "https://github.com/OmniSharp/omnisharp-vscode";
-    license = licenses.mit;
-    maintainers = [ maintainers.jraygauthier ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jraygauthier ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
