@@ -198,18 +198,14 @@ let
       '';
 
       buildFlags = [
+        "DTC_FLAGS=-@"
         "KBUILD_BUILD_VERSION=1-NixOS"
 
         # Set by default in the kernel since a73619a845d5,
         # replicated here to apply to older versions.
         # Makes __FILE__ relative to the build directory.
         "KCPPFLAGS=-fmacro-prefix-map=$(sourceRoot)/="
-
-        kernelConf.target
-        "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules"
-        ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
-      ++ extraMakeFlags;
+      ] ++ extraMakeFlags;
 
       installFlags = [
         "INSTALL_PATH=$(out)"
