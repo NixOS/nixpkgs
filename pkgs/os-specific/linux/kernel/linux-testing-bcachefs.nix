@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchpatch
 , kernel
 , commitDate ? "2023-02-01"
@@ -16,6 +17,7 @@
 
   extraMeta = {
     branch = "master";
+    broken = stdenv.isAarch64;
     maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
   };
 
