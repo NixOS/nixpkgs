@@ -2811,7 +2811,18 @@ with pkgs;
 
   audiowaveform = callPackage ../tools/audio/audiowaveform { };
 
-  authenticator = callPackage ../applications/misc/authenticator { };
+  authenticator = callPackage ../applications/misc/authenticator rec {
+    # Remove when GTK is upgraded past 4.8
+    # https://github.com/NixOS/nixpkgs/issues/216770
+    gtk4 = pkgs.gtk4.overrideAttrs (_: rec {
+      version = "4.9.4";
+      src = fetchurl {
+        url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+        sha256 = "sha256-kaOv1YQB1OXYHjCwjuPxE6R2j/EBQDNqcqMmx3JyvjA=";
+      };
+    });
+    wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
+   };
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
 
