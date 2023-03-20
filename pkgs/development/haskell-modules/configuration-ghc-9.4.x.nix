@@ -103,6 +103,8 @@ in {
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
   shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
   libmpd = doJailbreak super.libmpd;
+  generics-sop = doJailbreak super.generics-sop;
+  microlens-th = doJailbreak super.microlens-th;
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
   generically = addBuildDepend self.base-orphans super.generically;
