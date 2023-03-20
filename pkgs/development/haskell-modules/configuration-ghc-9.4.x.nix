@@ -210,13 +210,6 @@ in {
   servant-client = doJailbreak super.servant-client;
   relude = doJailbreak super.relude;
 
-  cborg = appendPatch (pkgs.fetchpatch {
-    name = "cborg-support-ghc-9.4.patch";
-    url = "https://github.com/well-typed/cborg/pull/304.diff";
-    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
-    relative = "cborg";
-  }) super.cborg;
-
   # https://github.com/tweag/ormolu/issues/941
   ormolu = doDistribute self.ormolu_0_5_3_0;
   fourmolu = overrideCabal (drv: {
@@ -240,10 +233,18 @@ in {
   # https://github.com/well-typed/cborg/pull/307
   # https://github.com/well-typed/cborg/pull/304
   # https://github.com/well-typed/cborg/issues/309#issuecomment-1471862045
-  cborg = overrideCabal rec {
+  cborg = overrideCabal (old: rec {
+    patches = old.patches or [] ++ [
+      (pkgs.fetchpatch {
+        name = "cborg-support-ghc-9.4.patch";
+        url = "https://github.com/well-typed/cborg/pull/304.diff";
+        sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
+        relative = "cborg";
+      })
+    ];
     badPlatforms = lib.platforms.aarch64;
     hydraPlatforms = lib.subtractLists badPlatforms lib.platforms.all;
-  } super.cborg;
+  }) super.cborg;
   weeder = overrideCabal {
     inherit (self.cborg.meta) hydraPlatforms;
   } super.weeder;
