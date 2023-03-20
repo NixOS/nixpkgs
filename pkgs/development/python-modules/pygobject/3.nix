@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.43.1";
+  version = "3.44.0";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "55ImenkMC5kJkru8QUmIy5apXAotSBQ2Xn9WzfqN9hM=";
+    sha256 = "9oY9ajtw2azkw2qZAdOeQsiAHREwnKKos0WdHCTjS38=";
   };
 
   depsBuildBuild = [
