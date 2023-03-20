@@ -4,7 +4,7 @@
 # often change with updating of git or cgit.
 # stripLen acts as the -p parameter when applying a patch.
 
-{ lib, fetchurl, patchutils }:
+{ lib, fetchurl, patchutils, fetchpatchVersion }:
 
 { relative ? null
 , stripLen ? 0
@@ -14,6 +14,7 @@
 , includes ? []
 , revert ? false
 , postFetch ? ""
+, passthru ? {}
 , ...
 }@args:
 let
@@ -87,7 +88,10 @@ fetchurl ({
     ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
     mv "$tmpfile" "$out"
   '' + postFetch;
+
+  passthru = { inherit fetchpatchVersion; } // passthru;
+
 } // builtins.removeAttrs args [
   "relative" "stripLen" "decode" "extraPrefix" "excludes" "includes" "revert"
-  "postFetch"
+  "postFetch" "passthru"
 ])
