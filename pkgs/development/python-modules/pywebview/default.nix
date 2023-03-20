@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, bottle
 , importlib-resources
 , proxy_tools
 , pygobject3
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bottle
     pyqtwebengine
     proxy_tools
     six
