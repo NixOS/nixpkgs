@@ -3,7 +3,7 @@
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, nim-unwrapped
-, nimble-unwrapped }:
+, nimble-unwrapped, darwin }:
 
 let
   parseCpu = platform:
@@ -94,7 +94,8 @@ in {
       hash = "sha256-rO8LCrdzYE1Nc5S2hRntt0+zD0aRIpSyi8J+DHtLTcI=";
     };
 
-    buildInputs = [ boehmgc openssl pcre readline sqlite ];
+    buildInputs = [ boehmgc openssl pcre readline sqlite ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -268,10 +269,12 @@ in {
         }/bin"
         # Used by nim-gdb
 
-        "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl pcre ]}"
+        "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ openssl pcre ]
+          ++ lib.optionals stdenv.isDarwin [ darwin.Security ]) }"
         # These libraries may be referred to by the standard library.
         # This is broken for cross-compilation because the package
         # set will be shifted back by nativeBuildInputs.
+        # `LD_LIBRARY_PATH` is also used as propagatedBuildInputs.
 
         "--set NIM_CONFIG_PATH ${placeholder "out"}/etc/nim"
         # Use the custom configuration
