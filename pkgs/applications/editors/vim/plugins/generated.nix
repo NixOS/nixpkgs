@@ -4773,6 +4773,18 @@ final: prev:
     meta.homepage = "https://github.com/mkasa/lushtags/";
   };
 
+  magma-nvim-goose = buildVimPluginFrom2Nix {
+    pname = "magma-nvim-goose";
+    version = "2023-03-13";
+    src = fetchFromGitHub {
+      owner = "WhiteBlackGoose";
+      repo = "magma-nvim-goose";
+      rev = "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f";
+      sha256 = "10d6dh0czdpgfpzqs5vzxfffkm0460qjzi2mfkacgghqf3iwkbja";
+    };
+    meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
+  };
+
   markdown-preview-nvim = buildVimPluginFrom2Nix {
     pname = "markdown-preview.nvim";
     version = "2022-05-13";
