@@ -16422,6 +16422,12 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xel = {
+    email = "xel@github.com";
+    github = "xel";
+    githubId = 886449;
+    name = "Elorm";
+  };
   xfix = {
     email = "konrad@borowski.pw";
     matrix = "@xfix:matrix.org";

@@ -465,9 +465,9 @@ with pkgs;
   confy = callPackage ../applications/misc/confy { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
-   
+
   copilot-cli = callPackage ../tools/admin/copilot-cli { };
-  
+
   countryfetch = callPackage ../tools/misc/countryfetch { };
 
   cp437 = callPackage ../tools/misc/cp437 { };
