@@ -2074,15 +2074,6 @@
     githubId = 68566724;
     name = "bootstrap-prime";
   };
-  boppyt = {
-    email = "boppy@nwcpz.com";
-    github = "boppyt";
-    githubId = 71049646;
-    name = "Zack A";
-    keys = [{
-      fingerprint = "E8D7 5C19 9F65 269B 439D  F77B 6310 C97D E31D 1545";
-    }];
-  };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
@@ -13556,6 +13547,16 @@
     github = "SebTM";
     githubId = 17243347;
     name = "Sebastian Sellmeier";
+  };
+  sefidel = {
+    name = "sefidel";
+    email = "contact@sefidel.net";
+    matrix = "@sef:exotic.sh";
+    github = "sefidel";
+    githubId = 71049646;
+    keys = [{
+      fingerprint = "8BDF DFB5 6842 2393 82A0  441B 9238 BC70 9E05 516A";
+    }];
   };
   sei40kr = {
     name = "Seong Yong-ju";
