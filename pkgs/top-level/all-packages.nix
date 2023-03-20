@@ -16097,9 +16097,16 @@ with pkgs;
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
-  cargo-pgx = callPackage ../development/tools/rust/cargo-pgx {
+  cargo-pgx_0_6_1 = callPackage ../development/tools/rust/cargo-pgx/0_6_1.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-pgx_0_7_1 = callPackage ../development/tools/rust/cargo-pgx/0_7_1.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  cargo-pgx_0_7_4 = callPackage ../development/tools/rust/cargo-pgx/0_7_4.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  cargo-pgx = cargo-pgx_0_7_4;
   buildPgxExtension = callPackage ../development/tools/rust/cargo-pgx/buildPgxExtension.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
