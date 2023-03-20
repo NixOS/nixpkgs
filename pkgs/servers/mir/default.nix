@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , cmake
 , pkg-config
@@ -49,25 +48,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mir";
-  version = "2.12.1";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${version}";
-    hash = "sha256-c9lFlzoxj45Xx5FYd0O/arVCV9ilArzj5GrPuJigJ4E=";
+    hash = "sha256-Ip8p4mjcgmZQJTU4MNvWkTTtSJc+cCL3x1mMDFlZrVY=";
   };
-
-  patches = [
-    # Fixes various path concatenation problems and missing GNUInstallDirs variable uses that affect
-    # install locations and generated pkg-config files
-    # Remove when a version > 2.12.1 has the fixes
-    (fetchpatch {
-      name = "0001-mir-Better-install-path-concatenations-and-more-GNUInstallDirs-variables.patch";
-      url = "https://github.com/MirServer/mir/commit/58c4ca628748278b1eb7a3721ad9a0c3590e28f2.patch";
-      hash = "sha256-+FNVlApaVzA94cy4awulLwTtggD07xACbvjII/RxyRM=";
-    })
-  ];
 
   postPatch = ''
     # Fix scripts that get run in tests
