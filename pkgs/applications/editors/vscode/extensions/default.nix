@@ -33,7 +33,7 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
-      _1Password.op-vscode = buildVscodeMarketplaceExtension {
+      "1Password".op-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
@@ -50,7 +50,7 @@ let
         };
       };
 
-      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+      "2gua".rainbow-brackets = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "2gua";
           name = "rainbow-brackets";
@@ -66,7 +66,7 @@ let
         };
       };
 
-      _4ops.terraform = buildVscodeMarketplaceExtension {
+      "4ops".terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
           name = "terraform";
@@ -3194,13 +3194,15 @@ let
           license = lib.licenses.mit;
         };
       };
-
     };
 
   aliases = self: super: {
     # aliases
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
+    _1Password = throw ''_1Password has been replaced with "1Password"'';
+    _2gua = throw ''_2gua has been replaced with "2gua"'';
+    _4ops = throw ''_4ops has been replaced with "4ops"'';
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix
