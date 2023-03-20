@@ -93,7 +93,7 @@ let
       api_token = server.succeed(
           "curl --fail -X POST http://test:totallysafe@localhost:3000/api/v1/users/test/tokens "
           + "-H 'Accept: application/json' -H 'Content-Type: application/json' -d "
-          + "'{\"name\":\"token\"}' | jq '.sha1' | xargs echo -n"
+          + "'{\"name\":\"token\",\"scopes\":[\"all\"]}' | jq '.sha1' | xargs echo -n"
       )
 
       server.succeed(
