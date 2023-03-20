@@ -8,12 +8,6 @@ stdenv.mkDerivation rec {
   pname = "tmpreaper";
   version = "1.6.17";
 
-  preConfigure = ''
-    if ! stdenv.isDarwin then
-      throw "Error: tmpreaper is not supported on non-Darwin platforms"
-    fi
-  '';
-
   buildInputs = [ autoconf automake ];
 
   installPhase = ''
@@ -32,4 +26,5 @@ stdenv.mkDerivation rec {
   homepage = "https://packages.debian.org/sid/tmpreaper";
   description = "Clean up files in directories based on their age";
   license = "GPL-2.0-only";
+  platforms = platforms.darwin;
 }
