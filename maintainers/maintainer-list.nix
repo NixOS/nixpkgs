@@ -6571,6 +6571,13 @@
     github = "ius";
     githubId = 529626;
   };
+  ivabus = {
+    name = "Ivan Bushchik";
+    email = "ivabus@ivabus.dev";
+    matrix = "@ivabus:matrix.org";
+    github = "ivabus";
+    githubId = 71599788;
+  };
   ivan = {
     email = "ivan@ludios.org";
     github = "ivan";
