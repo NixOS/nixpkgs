@@ -5,6 +5,8 @@
 , geojson
 , google-api-core
 , imagesize
+, nbconvert
+, nbformat
 , ndjson
 , numpy
 , opencv
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "-s -vv -x --reruns 5 --reruns-delay 10 --durations=20" "-s -vv -x --durations=20"
+      --replace "--reruns 5 --reruns-delay 10" ""
   '';
 
   nativeBuildInputs = [
@@ -79,6 +81,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    nbconvert
+    nbformat
     pytest-cases
     pytestCheckHook
   ] ++ passthru.optional-dependencies.data;
@@ -88,6 +92,11 @@ buildPythonPackage rec {
     "tests/integration"
     # Missing requirements
     "tests/data"
+  ];
+
+  pytestFlagsArray = [
+    # see tox.ini
+    "-k 'not notebooks'"
   ];
 
   pythonImportsCheck = [

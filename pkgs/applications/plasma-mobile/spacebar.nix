@@ -1,7 +1,5 @@
 { lib
 , mkDerivation
-, gcc12Stdenv
-, srcs
 
 , cmake
 , extra-cmake-modules
@@ -17,17 +15,14 @@
 , knotifications
 , kpeople
 , libphonenumber
-, libqofono
 , modemmanager-qt
 , protobuf
 , qcoro
 , qtquickcontrols2
 }:
 
-# Workaround for AArch64 still using GCC9.
-gcc12Stdenv.mkDerivation rec {
+mkDerivation {
   pname = "spacebar";
-  inherit (srcs.spacebar) version src;
 
   nativeBuildInputs = [
     cmake

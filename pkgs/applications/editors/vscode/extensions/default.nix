@@ -33,7 +33,7 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
-      _1Password.op-vscode = buildVscodeMarketplaceExtension {
+      "1Password".op-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
@@ -50,7 +50,7 @@ let
         };
       };
 
-      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+      "2gua".rainbow-brackets = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "2gua";
           name = "rainbow-brackets";
@@ -66,7 +66,7 @@ let
         };
       };
 
-      _4ops.terraform = buildVscodeMarketplaceExtension {
+      "4ops".terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
           name = "terraform";
@@ -691,6 +691,23 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      chris-hayes.chatgpt-reborn = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/chris-hayes.chatgpt-reborn/changelog";
+          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=chris-hayes.chatgpt-reborn";
+          homepage = "https://github.com/christopher-hayes/vscode-chatgpt-reborn";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+        mktplcRef = {
+          name = "chatgpt-reborn";
+          publisher = "chris-hayes";
+          version = "3.10.2";
+          sha256 = "sha256-rVfHJxJYgwaiWuckHGcTMIoaFSs3RH4vIrp1I/48pCI=";
         };
       };
 
@@ -2484,8 +2501,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.6.3";
-          sha256 = "dCWERQ5rHnmYLtYl12gJ+dXLnpMu55WnmF1VfdP0x34=";
+          version = "0.6.8";
+          sha256 = "9NRaHgtyiZJ0ic6h1B01MWzYhDABAl3Jm2IUPogYWr0=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -3177,13 +3194,15 @@ let
           license = lib.licenses.mit;
         };
       };
-
     };
 
   aliases = self: super: {
     # aliases
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
+    _1Password = throw ''_1Password has been replaced with "1Password"'';
+    _2gua = throw ''_2gua has been replaced with "2gua"'';
+    _4ops = throw ''_4ops has been replaced with "4ops"'';
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

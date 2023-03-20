@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.248";
+  version = "0.0.257";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qsjn8AW6Wx0ZaTht9BToQxYWngrrrR8LIIWcNfr8fXw=";
+    hash = "sha256-PkKUQPkZtwqvWhWsO4Pej/T1haJvMP7HpF6XjZSoqQg=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -22,8 +22,14 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "libcst-0.1.0" = "sha256-66Td5jnLEEDHgYapsSmxfgIE43T7PSTYRznllIOw81U=";
-      "rustpython-ast-0.2.0" = "sha256-k2WHnRtqSzdawHQKOfTjvyZxgRWXRv9dvSzfYC7171o=";
+      "libcst-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
+      "libcst_derive-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
+      "pep440_rs-0.2.0" = "sha256-wDJGz7SbHItYsg0+EgIoH48WFdV6MEg+HkeE07JE6AU=";
+      "rustpython-ast-0.2.0" = "sha256-0SHtycgDVOtiz7JZwd1v9lv2exxemcntm9lciih+pgc=";
+      "rustpython-common-0.2.0" = "sha256-0SHtycgDVOtiz7JZwd1v9lv2exxemcntm9lciih+pgc=";
+      "rustpython-compiler-core-0.2.0" = "sha256-0SHtycgDVOtiz7JZwd1v9lv2exxemcntm9lciih+pgc=";
+      "rustpython-parser-0.2.0" = "sha256-0SHtycgDVOtiz7JZwd1v9lv2exxemcntm9lciih+pgc=";
+      "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
     };
   };
 
