@@ -15,7 +15,6 @@
 , recurseIntoAttrs, emacsPackagesFor
 , libgccjit, makeWrapper # native-comp params
 , fetchFromSavannah, fetchFromBitbucket
-, patchelf_0_15
 
   # macOS dependencies for NS and macPort
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
@@ -137,9 +136,6 @@ assert withTreeSitter -> tree-sitter != null;
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ]
-    # TODO: remove once it's fixed upstream and released:
-    #   https://github.com/NixOS/patchelf/issues/482
-    ++ [ patchelf_0_15 ]
     ++ lib.optionals (srcRepo || withMacport) [ texinfo ]
     ++ lib.optionals srcRepo [ autoreconfHook ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;

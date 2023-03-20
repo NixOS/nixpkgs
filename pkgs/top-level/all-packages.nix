@@ -18570,11 +18570,6 @@ with pkgs;
   patchelf_0_13 = callPackage ../development/tools/misc/patchelf/0.13.nix {
     patchelf = patchelfStable;
   };
-
-  # used by emacs which is not compatible to 0.17.2 release:
-  #   https://github.com/NixOS/patchelf/issues/482
-  patchelf_0_15 = callPackage ../development/tools/misc/patchelf/0.15.nix { };
-
   patchelfStable = callPackage ../development/tools/misc/patchelf { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
