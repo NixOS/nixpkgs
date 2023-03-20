@@ -8192,6 +8192,12 @@
     githubId = 56614642;
     name = "Ilan Joselevich";
   };
+  kranurag7 = {
+    email = "contact.anurag7@email.com";
+    github = "kranurag7";
+    githubId = "81210977";
+    name = "Anurag";
+  };
   krav = {
     email = "kristoffer@microdisko.no";
     github = "krav";
