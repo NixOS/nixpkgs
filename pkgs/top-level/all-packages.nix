@@ -2789,8 +2789,6 @@ with pkgs;
 
   ashpd-demo = callPackage ../development/tools/ashpd-demo { };
 
-  asls = callPackage ../development/tools/misc/asls { };
-
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
@@ -22531,7 +22529,9 @@ with pkgs;
 
   minizip-ng = callPackage ../development/libraries/minizip-ng { };
 
-  mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
+  mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
@@ -33252,6 +33252,8 @@ with pkgs;
   shortwave = callPackage ../applications/audio/shortwave { };
 
   shotgun = callPackage ../tools/graphics/shotgun { };
+
+  shot-scraper = callPackage ../tools/graphics/shot-scraper { };
 
   shutter = callPackage ../applications/graphics/shutter { };
 
