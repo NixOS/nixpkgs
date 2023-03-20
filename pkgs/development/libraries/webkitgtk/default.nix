@@ -2,7 +2,6 @@
 , stdenv
 , runCommand
 , fetchurl
-, fetchpatch2
 , perl
 , python3
 , ruby
@@ -72,7 +71,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.39.91";
+  version = "2.40.0";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kuim9ZlFBSnrC9VS5PwtH2kYMetNicr/uW+1gdLINtM=";
+    hash = "sha256-pGB+ob+JZp6JscssY/quxRP5PeCbauYMxx1qiqt6s5M=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -98,17 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
-    })
-
-    # Various build fixes for 2.39.91, should be part of final release
-    # https://src.fedoraproject.org/rpms/webkitgtk/blob/1c16daccce69d47df5381968e9c7be8ed72e4f90/f/fix-installed-headers.patch
-    (fetchpatch2 {
-      url = "https://github.com/WebKit/WebKit/commit/53a8890833684fe813efd7b7a2b7417dbfa7b826.patch";
-      hash = "sha256-utenJzQMr8AUMRT6CL06hi5sXPiXEJJmM7Vht+qxiw8=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/WebKit/WebKit/commit/10c9256883bf38b9fbcfbc91577783d4df90d1bd.patch";
-      hash = "sha256-eXMRh9oEcBeOiJvj+kRJHEIUwnviBvlI2JdBS6MVxtk=";
     })
   ];
 
