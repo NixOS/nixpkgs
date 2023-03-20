@@ -108,7 +108,7 @@ in
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR24.elixir`.
     inherit (self.packages.erlang)
-      elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir_ls;
+      elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls;
 
     inherit (self.packages.erlang) lfe lfe_1_3;
   };
