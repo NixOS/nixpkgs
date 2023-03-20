@@ -33241,6 +33241,8 @@ with pkgs;
 
   shotgun = callPackage ../tools/graphics/shotgun { };
 
+  shot-scraper = callPackage ../tools/graphics/shot-scraper { };
+
   shutter = callPackage ../applications/graphics/shutter { };
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
