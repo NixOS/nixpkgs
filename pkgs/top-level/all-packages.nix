@@ -20906,7 +20906,7 @@ with pkgs;
 
   lcm = callPackage ../development/libraries/lcm { };
 
-  lcms = lcms1;
+  lcms = lcms2;
 
   lcms1 = callPackage ../development/libraries/lcms { };
 
