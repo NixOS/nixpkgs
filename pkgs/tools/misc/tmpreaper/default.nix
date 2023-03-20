@@ -23,8 +23,12 @@ stdenv.mkDerivation rec {
     url = "https://deb.debian.org/debian/pool/main/t/tmpreaper/tmpreaper_${version}.tar.gz";
     sha256 = sha256-default;
   };
-  homepage = "https://packages.debian.org/sid/tmpreaper";
-  description = "Clean up files in directories based on their age";
-  license = "GPL-2.0-only";
-  platforms = platforms.darwin;
+
+  meta = {
+    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    homepage = "https://packages.debian.org/sid/tmpreaper";
+    description = "Clean up files in directories based on their age";
+    license = "GPL-2.0-only";
+  };
+
 }
