@@ -621,6 +621,8 @@ with pkgs;
 
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
 
+  protoc-gen-grpc-java = callPackage ../development/tools/protoc-gen-grpc-java { };
+
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
 
   protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
