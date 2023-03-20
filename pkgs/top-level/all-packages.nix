@@ -39645,4 +39645,6 @@ with pkgs;
   udict = callPackage ../applications/misc/udict { };
 
   duden = callPackage ../applications/misc/duden { };
+
+  ory-hydra = callPackage ../servers/ory-hydra { };
 }
