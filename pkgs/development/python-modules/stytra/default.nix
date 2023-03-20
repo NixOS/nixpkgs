@@ -1,49 +1,51 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k, callPackage
-, opencv3
-, pyqt5
-, pyqtgraph
-, numpy
-, scipy
-, numba
-, pandas
-, tables
-, git
-, ffmpeg
-, scikitimage
-, matplotlib
-, qdarkstyle
-, GitPython
+{ lib
 , anytree
-, pims
+, arrayqueues
+, av
+, buildPythonPackage
+, colorspacious
+, fetchPypi
+, flammkuchen
+, git
+, gitpython
 , imageio
 , imageio-ffmpeg
-, av
-, nose
-, pytest
-, pyserial
-, arrayqueues
-, colorspacious
-, qimage2ndarray
-, flammkuchen
 , lightparam
+, matplotlib
+, nose
+, numba
+, numpy
+, opencv3
+, pandas
+, pims
+, pyqt5
+, pyqtgraph
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, qdarkstyle
+, qimage2ndarray
+, scikitimage
+, scipy
+, tables
 }:
 
 buildPythonPackage rec {
   pname = "stytra";
-  version = "0.8.26";
-  disabled = !isPy3k;
+  version = "0.8.34";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "81842a957e3114230c2d628f64325cd89d166913b68c3f802c89282f40918587";
+    sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
   };
-  doCheck = false;
-  checkInputs = [
-    nose
-    pytest
-    pyserial
-  ];
 
+  # crashes python
+  preCheck = ''
+    rm stytra/tests/test_z_experiments.py
+  '';
 
   propagatedBuildInputs = [
     opencv3
@@ -55,11 +57,10 @@ buildPythonPackage rec {
     pandas
     tables
     git
-    ffmpeg
     scikitimage
     matplotlib
     qdarkstyle
-    GitPython
+    gitpython
     anytree
     qimage2ndarray
     flammkuchen
@@ -72,10 +73,16 @@ buildPythonPackage rec {
     av
   ];
 
-  meta = {
-    homepage = "https://github.com/portugueslab/stytra";
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+    pyserial
+  ];
+
+  meta = with lib; {
     description = "A modular package to control stimulation and track behaviour";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ tbenst ];
+    homepage = "https://github.com/portugueslab/stytra";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ tbenst ];
   };
 }

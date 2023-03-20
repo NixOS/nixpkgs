@@ -1,21 +1,25 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.08"
 then throw "wasm is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-wasm-${version}";
-  version = "1.1.1";
+  pname = "ocaml${ocaml.version}-wasm";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "spec";
     rev = "opam-${version}";
-    sha256 = "1kp72yv4k176i94np0m09g10cviqp2pnpm7jmiq6ik7fmmbknk7c";
+    sha256 = "sha256:09s0v79x0ymzcp2114zkm3phxavdfnkkq67qz1ndnknbkziwqf3v";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = true;
+
+  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
+  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
 
   makeFlags = [ "-C" "interpreter" ];
 
@@ -28,8 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An executable and OCaml library to run, read and write Web Assembly (wasm) files and manipulate their AST";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/WebAssembly/spec/tree/master/interpreter";
     inherit (ocaml.meta) platforms;
   };

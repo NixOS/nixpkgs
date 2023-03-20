@@ -1,32 +1,53 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, ncurses
-, libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
+, libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper
+, opencl-headers, ocl-icd
+, vulkan-headers, vulkan-loader, glfw
+, libXdmcp, pcre, util-linux
+, libselinux, libsepol
+, libthai, libdatrie, libxkbcommon, libepoxy
+, dbus, at-spi2-core
+, libXtst
+}:
+
+# Known issues:
+# - The daemon can't be started from the GUI, because pkexec requires a shell
+#   registered in /etc/shells. The nix's bash is not in there when running
+#   cpu-x from nixpkgs.
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
-  version = "4.0.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
     rev = "v${version}";
-    sha256 = "00xngmlayblvkg3l0rcfpxmnkkdz49ydh4smlhpii23gqii0rds3";
+    sha256 = "sha256-VPmwnzoOBNLDYZsoEknbcX7QP2Tcm08pL/rw1uCK8xM=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook nasm makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
   buildInputs = [
     gtk3 ncurses libcpuid pciutils procps
+    vulkan-headers vulkan-loader glfw
+    opencl-headers ocl-icd
+    libXdmcp pcre util-linux
+    libselinux libsepol
+    libthai libdatrie libxkbcommon libepoxy
+    dbus at-spi2-core
+    libXtst
   ];
 
   postInstall = ''
     wrapProgram $out/bin/cpu-x \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ stdenv.cc ]}
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
+      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free software that gathers information on CPU, motherboard and more";
-    homepage = src.meta.homepage;
-    license = licenses.gpl3;
+    homepage = "https://thetumultuousunicornofdarkness.github.io/CPU-X";
+    license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ viraptor ];
   };
 }

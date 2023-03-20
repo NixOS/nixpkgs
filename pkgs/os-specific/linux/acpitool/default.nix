@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{lib, stdenv, fetchurl, fetchpatch}:
 
 let
    acpitool-patch-051-4 = params: fetchpatch rec {
@@ -7,10 +7,11 @@ let
    };
 
 in stdenv.mkDerivation rec {
-  name = "acpitool-0.5.1";
+  pname = "acpitool";
+  version = "0.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/acpitool/${name}.tar.bz2";
+    url = "mirror://sourceforge/acpitool/acpitool-${version}.tar.bz2";
     sha256 = "004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f";
   };
 
@@ -44,8 +45,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A small, convenient command-line ACPI client with a lot of features";
     homepage = "https://sourceforge.net/projects/acpitool/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.guibert ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.guibert ];
+    platforms = lib.platforms.unix;
   };
 }

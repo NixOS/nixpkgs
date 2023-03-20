@@ -1,24 +1,58 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, makeWrapper }:
 
 buildGoModule rec {
   pname = "3mux";
-  version = "0.2.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "aaronjanse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02ry066psvlqdyhimci7nskw4sfb70dw5z7ag7s7rz36gmx1vnmr";
+    sha256 = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
   };
 
-  vendorSha256 = "1hjzpg3q4znvgzk0wbl8rq6cq877xxdsf950bcsks92cs8386847";
+  patches = [
+    # Needed so that the subsequent patch applies.
+    (fetchpatch {
+      name = "use-shorter-uuids.patch";
+      url = "https://github.com/aaronjanse/3mux/commit/6dd36694586f96e3c82ef7db1a0e7917ceb05794.patch";
+      hash = "sha256-FnFupOIIQi66mvjshn3EQ6XRzC4cLx3vGTeTUM1HOwM=";
+    })
+    # Fix the build for Darwin when building with Go 1.18.
+    # https://github.com/aaronjanse/3mux/pull/127
+    (fetchpatch {
+      name = "darwin-go-1.18-fix.patch";
+      url = "https://github.com/aaronjanse/3mux/commit/f2c26c1037927896d6e9a17ea038f8260620fbd4.patch";
+      hash = "sha256-RC3p30r0PGUKrxo8uOLL02oyfLqLfhNjBYy6E+OQ2f0=";
+    })
+  ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ makeWrapper ];
+
+  vendorHash = "sha256-KMcl6mj+cEgvdZMzBxUtGJsgwPdFuXrY3yjmkB3CS4o=";
+
+  # This is a package used for internally testing 3mux. It's meant for
+  # use by 3mux maintainers/contributors only.
+  excludedPackages = [ "fuzz" ];
+
+  # 3mux needs to have itself in the path so users can run `3mux detach`.
+  # This ensures that, while inside 3mux, the binary in the path is the
+  # same version as the 3mux hosting the session. This also allows users
+  # to use 3mux via `nix run nixpkgs#_3mux` (otherwise they'd get "command
+  # not found").
+  postInstall = ''
+    wrapProgram $out/bin/3mux --prefix PATH : $out/bin
+  '';
+
+  meta = with lib; {
     description = "Terminal multiplexer inspired by i3";
+    longDescription = ''
+      Terminal multiplexer with out-of-the-box support for search,
+      mouse-controlled scrollback, and i3-like keybindings
+    '';
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjanse filalex77 ];
-    # TODO: fix modules build on darwin
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ aaronjanse Br1ght0ne ];
+    platforms = platforms.unix;
   };
 }

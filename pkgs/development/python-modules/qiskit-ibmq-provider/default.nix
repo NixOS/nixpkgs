@@ -7,34 +7,48 @@
 , qiskit-terra
 , requests
 , requests_ntlm
-, websockets
+, websocket-client
   # Visualization inputs
-, ipykernel
+, withVisualization ? true
+, ipython
 , ipyvuetify
 , ipywidgets
 , matplotlib
-, nbconvert
-, nbformat
 , plotly
 , pyperclip
 , seaborn
   # check inputs
 , pytestCheckHook
+, nbconvert
+, nbformat
 , pproxy
+, qiskit-aer
+, websockets
 , vcrpy
 }:
 
+let
+  visualizationPackages = [
+    ipython
+    ipyvuetify
+    ipywidgets
+    matplotlib
+    plotly
+    pyperclip
+    seaborn
+  ];
+in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.7.0";
+  version = "0.20.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "1n13jjx1cx5gswwk8rpxfjqyk97cwx1n2hwsabkcbi7fksw3c5jk";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BFiGMPiO9Xcl8EiTZYiwHCpo7z+tRaBkIb8GTo01rBA=";
   };
 
   propagatedBuildInputs = [
@@ -43,48 +57,48 @@ buildPythonPackage rec {
     qiskit-terra
     requests
     requests_ntlm
+    websocket-client
     websockets
-    # Visualization/Jupyter inputs
-    ipykernel
-    ipyvuetify
-    ipywidgets
-    matplotlib
-    nbconvert
-    nbformat
-    plotly
-    pyperclip
-    seaborn
-  ];
+  ] ++ lib.optionals withVisualization visualizationPackages;
 
-  # websockets seems to be pinned b/c in v8+ it drops py3.5 support. Not an issue here (usually py3.7+, and disabled for older py3.6)
-  prePatch = ''
-    substituteInPlace requirements.txt --replace "websockets>=7,<8" "websockets"
-    substituteInPlace setup.py --replace "websockets>=7,<8" "websockets"
+  postPatch = ''
+    substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
   '';
 
   # Most tests require credentials to run on IBMQ
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    nbconvert
+    nbformat
     pproxy
+    qiskit-aer
     vcrpy
-  ];
-  dontUseSetuptoolsCheck = true;
+  ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
-  # These disabled tests require internet connection, aren't skipped elsewhere
   disabledTests = [
+    "test_coder_operators"  # fails for some reason on nixos-21.05+
+    # These disabled tests require internet connection, aren't skipped elsewhere
     "test_old_api_url"
     "test_non_auth_url"
     "test_non_auth_url_with_hub"
+    "test_coder_optimizers" # TODO: reenable when package scikit-quant is packaged, either in NUR or nixpkgs
+
+    # slow tests
+    "test_websocket_retry_failure"
+    "test_invalid_url"
   ];
 
   # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
   # Options defined in qiskit.terra.test.testing_options.py::get_test_options
-  QISKIT_TESTS = "skip_online";
+  preCheck = ''
+    export QISKIT_TESTS=skip_online
+  '';
 
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";
     homepage = "https://github.com/Qiskit/qiskit-ibmq-provider";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

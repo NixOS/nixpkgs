@@ -1,69 +1,92 @@
-{ stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, blas, lapack, hdf5-cpp, python3, texlive
-, armadillo, openmpi, globalarrays, openssh
-, makeWrapper, fetchpatch
+{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
+, blas-ilp64, hdf5-cpp, python3, texlive
+, armadillo, libxc, makeWrapper
+# Note that the CASPT2 module is broken with MPI
+# See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
+, enableMpi ? false
+, mpi, globalarrays
 } :
 
-assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+assert blas-ilp64.isILP64;
+assert lib.elem blas-ilp64.passthru.implementation [ "openblas" "mkl" ];
 
 let
-  version = "19.11";
-  gitLabRev = "v${version}";
-
-  python = python3.withPackages (ps : with ps; [ six pyparsing ]);
+  python = python3.withPackages (ps : with ps; [ six pyparsing numpy h5py ]);
 
 in stdenv.mkDerivation {
   pname = "openmolcas";
-  inherit version;
+  version = "23.02";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    rev = gitLabRev;
-    sha256 = "1wwqhkyyi7pw5x1ghnp83ir17zl5jsj7phhqxapybyi3bmg0i00q";
+    # The tag keeps moving, fix a hash instead
+    rev = "03265f62cd98b985712b063aea88313f984a8857"; # 2023-02-11
+    sha256 = "sha256-Kj2RDJq8PEvKclLrSYIOdl6g6lcRsTNZCjwxGOs3joY=";
   };
 
-  patches = [ (fetchpatch {
-    name = "Fix-MPI-INT-size"; # upstream patch, fixes a Fortran compiler error
-    url = "https://gitlab.com/Molcas/OpenMolcas/commit/860e3350523f05ab18e49a428febac8a4297b6e4.patch";
-    sha256 = "0h96h5ikbi5l6ky41nkxmxfhjiykkiifq7vc2s3fdy1r1siv09sb";
-  }) (fetchpatch {
-    name = "fix-cisandbox"; # upstream patch, fixes a Fortran compiler error
-    url = "https://gitlab.com/Molcas/OpenMolcas/commit/d871590c8ce4689cd94cdbbc618954c65589393d.patch";
-    sha256 = "0dgz1w2rkglnis76spai3m51qa72j4bz6ppnk5zmzrr6ql7gwpgg";
-  })];
+  patches = [
+    # Required to handle openblas multiple outputs
+    ./openblasPath.patch
+  ];
 
-  nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
-  buildInputs = [
+  postPatch = ''
+    # Using env fails in the sandbox
+    substituteInPlace Tools/pymolcas/export.py --replace \
+      "/usr/bin/env','python3" "python3"
+  '';
+
+  nativeBuildInputs = [
+    perl
     gfortran
-    openblas
+    cmake
+    texlive.combined.scheme-minimal
+    makeWrapper
+  ];
+
+  buildInputs = [
+    blas-ilp64.passthru.provider
     hdf5-cpp
     python
     armadillo
-    openmpi
+    libxc
+  ] ++ lib.optionals enableMpi [
+    mpi
     globalarrays
-    openssh
   ];
 
-  enableParallelBuilding = true;
+  passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
   cmakeFlags = [
     "-DOPENMP=ON"
-    "-DGA=ON"
-    "-DMPI=ON"
     "-DLINALG=OpenBLAS"
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DOPENBLASROOT=${openblas}"
+    "-DEXTERNAL_LIBXC=${libxc}"
+  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
+    "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}" "-DLINALG=OpenBLAS"
+  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
+    "-DMKLROOT=${blas-ilp64.passthru.provider}" "-DLINALG=MKL"
+  ] ++ lib.optionals enableMpi [
+    "-DGA=ON"
+    "-DMPI=ON"
   ];
 
-  GAROOT=globalarrays;
+  preConfigure = lib.optionalString enableMpi ''
+    export GAROOT=${globalarrays};
+  '';
 
   postConfigure = ''
     # The Makefile will install pymolcas during the build grrr.
     mkdir -p $out/bin
     export PATH=$PATH:$out/bin
+  '';
+
+  postInstall = ''
+    mv $out/pymolcas $out/bin
+    find $out/Tools -type f -exec mv \{} $out/bin \;
+    rm -r $out/Tools
   '';
 
   postFixup = ''
@@ -74,12 +97,13 @@ in stdenv.mkDerivation {
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = licenses.lgpl21Only;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "pymolcas";
   };
 }
 

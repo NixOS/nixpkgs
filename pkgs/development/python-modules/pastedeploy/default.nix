@@ -1,31 +1,42 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, pytestrunner
-, pytest
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
-  pname = "PasteDeploy";
+  pname = "pastedeploy";
+  version = "3.0.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d423fb9d51fdcf853aa4ff43ac7ec469b643ea19590f67488122d6d0d772350a";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Pylons";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-8MNeOcYPEYAfghZN/K/1v/tAAdgz/fCvuVnBoru+81Q=";
   };
 
-  buildInputs = [ pytestrunner ];
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov" ""
+  '';
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # no tests in PyPI tarball
-  # should be included with versions > 2.0.1
-  doCheck = false;
+  pythonImportsCheck = [
+    "paste.deploy"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Load, configure, and compose WSGI applications and servers";
-    homepage = "http://pythonpaste.org/deploy/";
+    homepage = "https://github.com/Pylons/pastedeploy";
+    changelog = "https://github.com/Pylons/pastedeploy/blob/${version}/docs/news.rst";
     license = licenses.mit;
+    maintainers = teams.openstack.members;
   };
-
 }

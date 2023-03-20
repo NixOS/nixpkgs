@@ -1,27 +1,56 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, AppKit
+, Cocoa
+, Foundation
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "4.5.0";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
-    owner = "r-darwish";
-    repo = pname;
+    owner = "topgrade-rs";
+    repo = "topgrade";
     rev = "v${version}";
-    sha256 = "0df79vlbclv1qx4zwir728c6ggqfawxh2x1py16m5q0ga1hd799j";
+    hash = "sha256-yYRKNiX8JvCP44+mdLIOSjpxaVDz1YUNrj/IZ0bC72Y=";
   };
 
-  cargoSha256 = "0wwxh71i94h68sryckbvrr43gd19qjcs0cgcpycnimkhdcdy8nlj";
+  cargoHash = "sha256-2b6TOkjoycPA8rwca3nT212Yxl6q2Hmvv0f4Ic9hnWM=";
 
-  buildInputs = lib.optional stdenv.isDarwin Foundation;
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  # TODO: add manpage (topgrade.8) to postInstall on next update
+  buildInputs = lib.optionals stdenv.isDarwin [
+    AppKit
+    Cocoa
+    Foundation
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-framework"
+    "AppKit"
+  ]);
+
+  postInstall = ''
+    installShellCompletion --cmd topgrade \
+      --bash <($out/bin/topgrade --gen-completion bash) \
+      --fish <($out/bin/topgrade --gen-completion fish) \
+      --zsh <($out/bin/topgrade --gen-completion zsh)
+
+    $out/bin/topgrade --gen-manpage > topgrade.8
+    installManPage topgrade.8
+  '';
 
   meta = with lib; {
     description = "Upgrade all the things";
-    homepage = "https://github.com/r-darwish/topgrade";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ filalex77 hugoreeves ];
+    homepage = "https://github.com/topgrade-rs/topgrade";
+    changelog = "https://github.com/topgrade-rs/topgrade/releases/tag/v${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ SuperSandro2000 xyenon ];
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
+{ lib, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
 
 # Don't use this for anything important yet!
 
 buildGoModule rec {
   pname = "fscrypt";
-  version = "0.2.8";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "0433f9kx43842ic8dydxhz8plyyrrxvqqwg7kd5ghn599ix28avy";
+    hash = "sha256-4Im3YWhLs5Q+o4DtpSuSMuKtKqXaICL9/EB0q5um6mQ=";
   };
 
   postPatch = ''
@@ -19,24 +19,26 @@ buildGoModule rec {
       --replace "/usr/local" "$out"
   '';
 
-  vendorSha256 = "0yak221mlyfacvlsaq9g3xiyk94n94vqgkbaji8d21pi8hhr38m6";
+  vendorHash = "sha256-APW0XM6fTQOCw4tE1NA5VNN3fBUmsvn99NqqJnB3Q0s=";
+
+  doCheck = false;
 
   nativeBuildInputs = [ gnum4 ];
   buildInputs = [ pam ];
 
   buildPhase = ''
+    runHook preBuild
     make
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     make install
+    runHook postInstall
   '';
 
-  preFixup = ''
-    remove-references-to -t ${fscrypt-experimental.go} $out/lib/security/pam_fscrypt.so
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A high-level tool for the management of Linux filesystem encryption";
     longDescription = ''

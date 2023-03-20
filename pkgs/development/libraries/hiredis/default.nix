@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "hiredis";
-  version = "0.14.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis";
     rev = "v${version}";
-    sha256 = "1r93ssniiv610pj6d78i1cngism0cdv2k8cmzy7jf9klf76jiwfq";
+    sha256 = "sha256-0ESRnZTL6/vMpek+2sb0YQU3ajXtzj14yvjfOSQYjf4=";
   };
 
   PREFIX = "\${out}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/redis/hiredis";
     description = "Minimalistic C client for Redis >= 1.2";
     license = licenses.bsd3;

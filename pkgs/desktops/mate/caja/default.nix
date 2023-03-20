@@ -1,16 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, libnotify
+, libxml2
+, libexif
+, exempi
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "caja";
-  version = "1.24.0";
+  version = "1.26.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1cnfy481hcwjv3ia3kw0d4h7ga8cng0pqm3z349v4qcmfdapmqc0";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "MP1ubwCjggD24uiYrX+nl4drsGDx0DQd0vc5MnnhTAc=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];
@@ -25,19 +39,17 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  patches = [
-    ./caja-extension-dirs.patch
-  ];
-
   configureFlags = [ "--disable-update-mimedb" ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
     description = "File manager for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    platforms = platforms.unix;
+    maintainers = teams.mate.members;
   };
 }

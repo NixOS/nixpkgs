@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, fontforge, python3 }:
+{ lib, stdenv, fetchFromGitHub, fontforge, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "rictydiminished-with-firacode";
   version = "1.2.2";
 
-  src = fetchgit {
-    url = "https://github.com/hakatashi/RictyDiminished-with-FiraCode.git";
+  src = fetchFromGitHub {
+    owner = "hakatashi";
+    repo = "RictyDiminished-with-FiraCode";
     rev = version;
     sha256 = "sha256-twh3yLAM4MUjWzSDNmo8gNIRf01hieXeOS334sNdFk4=";
     fetchSubmodules = true;
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/hakatashi/RictyDiminished-with-FiraCode";
     description = "The best Japanese programming font meets the awesome ligatures of Firacode";
     license = licenses.ofl;

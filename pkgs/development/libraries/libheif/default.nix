@@ -1,8 +1,28 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng, libjpeg }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, dav1d
+, rav1e
+, libde265
+, x265
+, libpng
+, libjpeg
+, libaom
+, gdk-pixbuf
+
+# for passthru.tests
+, gimp
+, imagemagick
+, imlib2Full
+, imv
+, vips
+}:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.6.2";
+  version = "1.15.1";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -10,20 +30,39 @@ stdenv.mkDerivation rec {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "0ngbzban585hsgs6fb6fkhccc91kxn1n59qvqjp8bw41l24i3nr2";
+    sha256 = "sha256-5908S46hEXhCYcTsqulmUnat0KOlXsnY5LI/l1l7/1Q=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libde265 x265 libpng libjpeg ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    dav1d
+    rav1e
+    libde265
+    x265
+    libpng
+    libjpeg
+    libaom
+    gdk-pixbuf
+  ];
 
   enableParallelBuilding = true;
+
+  # Fix installation path for gdk-pixbuf module
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+
+  passthru.tests = {
+    inherit gimp imagemagick imlib2Full imv vips;
+  };
 
   meta = {
     homepage = "http://www.libheif.org/";
     description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ gebner ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gebner ];
   };
-
 }

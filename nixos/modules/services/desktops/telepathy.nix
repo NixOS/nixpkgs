@@ -19,7 +19,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Telepathy service, a communications framework
           that enables real-time communication via pluggable protocol backends.
         '';
@@ -38,6 +38,11 @@ with lib;
 
     services.dbus.packages = [ pkgs.telepathy-mission-control ];
 
+    # Enable runtime optional telepathy in gnome-shell
+    services.xserver.desktopManager.gnome.sessionPath = with pkgs; [
+      telepathy-glib
+      telepathy-logger
+    ];
   };
 
 }

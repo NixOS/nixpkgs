@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, makeWrapper, nixosTests,
+{ lib, stdenv, fetchFromGitLab, makeWrapper, nixosTests,
 # optional dependencies, the command(s) they provide
 coreutils,  # mktemp
 grub2,      # grub-mount and grub-probe
@@ -11,17 +11,17 @@ lvm2        # lvs
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.77";
+  version = "1.81";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = pname;
     rev = version;
-    sha256 = "05sji756xdl67pp2sf7rk0ih9h6f6kgk9nvxlyv1bzbmcizlh2d2";
+    sha256 = "sha256-3FXfGadIcmKp4qn6ZDcOSQHYsUNP2ObL1cJesNle+8A=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     # executables
     install -Dt $out/bin os-prober linux-boot-prober
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 udev coreutils cryptsetup libuuid ntfs3g lvm2 dmraid ]} \
+        --suffix PATH : ${lib.makeBinPath [ grub2 udev coreutils cryptsetup libuuid ntfs3g lvm2 dmraid ]} \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     os-prober = nixosTests.os-prober;
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility to detect other OSs on a set of drives";
     homepage = "http://packages.debian.org/source/sid/os-prober";
     license = licenses.gpl2Plus;

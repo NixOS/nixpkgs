@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, openssl, mlton
+{ lib, stdenv, fetchurl, file, openssl, mlton
 , libmysqlclient, postgresql, sqlite, gcc, icu
 }:
 
@@ -27,11 +27,16 @@ stdenv.mkDerivation rec {
 
     export CC="${gcc}/bin/gcc";
     export CCARGS="-I$out/include \
-                   -L${openssl.out}/lib \
+                   -L${lib.getLib openssl}/lib \
                    -L${libmysqlclient}/lib \
                    -L${postgresql.lib}/lib \
                    -L${sqlite.out}/lib";
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=use-after-free"
+  ];
 
   # Be sure to keep the statically linked libraries
   dontDisableStatic = true;
@@ -39,8 +44,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Advanced purely-functional web programming language";
     homepage    = "http://www.impredicative.com/ur/";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice stdenv.lib.maintainers.sheganinans ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.thoughtpolice lib.maintainers.sheganinans ];
   };
 }

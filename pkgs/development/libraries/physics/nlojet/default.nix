@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "nlojet++";
@@ -13,11 +13,14 @@ stdenv.mkDerivation rec {
     ./nlojet_clang_fix.patch
   ];
 
+  # error: no member named 'finite' in the global namespace; did you mean simply 'finite'?
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+
   meta = {
     homepage    = "http://www.desy.de/~znagy/Site/NLOJet++.html";
-    license     = stdenv.lib.licenses.gpl2;
+    license     = lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -1,61 +1,70 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib
+, fetchFromSourcehut
 , buildGoModule
-, srht, minio, pygit2, scmsrht }:
-
+, buildPythonPackage
+, python
+, srht
+, pygit2
+, scmsrht
+, unzip
+}:
 let
-  version = "0.50.3";
+  version = "0.78.20";
 
-  buildShell = src: buildGoModule {
-    inherit src version;
-    pname = "gitsrht-shell";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-shell";
-
-  vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "git.sr.ht";
+    rev = version;
+    sha256 = "sha256-rZsTtHobsgRVmMOjPa1fiKrPsNyFu/gOsmO0cTl5MqQ=";
   };
 
-  buildDispatcher = src: buildGoModule {
+  gitApi = buildGoModule ({
     inherit src version;
-    pname = "gitsrht-dispatcher";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-dispatch";
+    pname = "gitsrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
-  vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
+  gitDispatch = buildGoModule {
+    inherit src version;
+    pname = "gitsrht-dispatch";
+    modRoot = "gitsrht-dispatch";
+    vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
   };
 
-  buildKeys = src: buildGoModule {
+  gitKeys = buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-keys";
-
-  vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
+    modRoot = "gitsrht-keys";
+    vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
   };
 
-  buildUpdateHook = src: buildGoModule {
+  gitShell = buildGoModule {
+    inherit src version;
+    pname = "gitsrht-shell";
+    modRoot = "gitsrht-shell";
+    vendorSha256 = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+  };
+
+  gitUpdateHook = buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-update-hook";
-
-  vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
+    modRoot = "gitsrht-update-hook";
+    vendorSha256 = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
   };
-in buildPythonPackage rec {
-  inherit version;
+
+in
+buildPythonPackage rec {
+  inherit src version;
   pname = "gitsrht";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
-    rev = version;
-    sha256 = "dmcTee3hp6ZkwwunG4ouEVmCxQ1a9LfQ7oWpHxnKumc=";
-  };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
-
-  nativeBuildInputs = srht.nativeBuildInputs;
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
+  '';
 
   propagatedBuildInputs = [
     srht
-    minio
     pygit2
     scmsrht
   ];
@@ -67,16 +76,19 @@ in buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildShell "${src}/gitsrht-shell"}/bin/gitsrht-shell $out/bin/gitsrht-shell
-    cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
-    cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
-    cp ${buildUpdateHook "${src}/gitsrht-update-hook"}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    ln -s ${gitApi}/bin/api $out/bin/gitsrht-api
+    ln -s ${gitDispatch}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
+    ln -s ${gitKeys}/bin/gitsrht-keys $out/bin/gitsrht-keys
+    ln -s ${gitShell}/bin/gitsrht-shell $out/bin/gitsrht-shell
+    ln -s ${gitUpdateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "gitsrht" ];
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

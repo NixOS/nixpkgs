@@ -37,8 +37,8 @@ if ! az disk show -g "${group}" -n "${img_name}" &>/dev/null; then
   )"
 
   azcopy copy "${img_file}" "${sasurl}" \
-    --blob-type PageBlob 
-    
+    --blob-type PageBlob
+
   az disk revoke-access \
     --resource-group "${group}" \
     --name "${img_name}"

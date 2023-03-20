@@ -1,25 +1,61 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, file
+, docbook_xsl
+, gtk-doc ? null
+, buildDevDoc ? gtk-doc != null
 
-stdenv.mkDerivation rec {
-  name = "orc-0.4.29";
+# for passthru.tests
+, gnuradio
+, gst_all_1
+, qt6
+, vips
+
+}: let
+  inherit (lib) optional optionals;
+in stdenv.mkDerivation rec {
+  pname = "orc";
+  version = "0.4.33";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/${name}.tar.xz";
-    sha256 = "1cisbbn69p9c8vikn0nin14q0zscby5m8cyvzxyw2pjb2kwh32ag";
+    url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
+    sha256 = "sha256-hE5tfbgIb3k/V2GNPUto0p2ZsWA05xQw3zwhz9PDVCo=";
   };
 
-  outputs = [ "out" "dev" ];
-  outputBin = "dev"; # compilation tools
-
-  postInstall = ''
-    sed "/^toolsdir=/ctoolsdir=$dev/bin" -i "$dev"/lib/pkgconfig/orc*.pc
+  postPatch = lib.optionalString stdenv.isAarch32 ''
+    # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/20
+    sed -i '/exec_opcodes_sys/d' testsuite/meson.build
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # This benchmark times out on Hydra.nixos.org
+    sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
 
-  # i686   https://gitlab.freedesktop.org/gstreamer/orc/issues/18
-  # armv7l https://gitlab.freedesktop.org/gstreamer/orc/issues/9
-  doCheck = (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isAarch32);
+  outputs = [ "out" "dev" ]
+     ++ optional buildDevDoc "devdoc"
+  ;
+  outputBin = "dev"; # compilation tools
 
-  meta = with stdenv.lib; {
+  mesonFlags =
+    optionals (!buildDevDoc) [ "-Dgtk_doc=disabled" ]
+  ;
+
+  nativeBuildInputs = [ meson ninja ]
+    ++ optionals buildDevDoc [ gtk-doc file docbook_xsl ]
+  ;
+
+  # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12");
+
+  passthru.tests = {
+    inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+    inherit gnuradio vips;
+    qt6-qtmultimedia = qt6.qtmultimedia;
+  };
+
+  meta = with lib; {
     description = "The Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     # The source code implementing the Marsenne Twister algorithm is licensed

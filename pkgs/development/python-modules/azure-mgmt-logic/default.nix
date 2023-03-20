@@ -4,33 +4,41 @@
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-logic";
-  version = "3.0.0";
+  version = "10.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "d163dfc32e3cfa84f3f8131a75d9e94f5c4595907332cc001e45bf7e4efd5add";
+    hash = "sha256-s/pIZPFKqnr0HXeNkl8FHtKbYBb0Y0R2Xs0PSdDwTdY=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "azure.mgmt.logic"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Logic Apps Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

@@ -1,28 +1,30 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , lxqt
 , libconfig
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "compton-conf";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1wqnajarkrpmc60jr1zw5w39lvlf9ii4ri9wgyn55hh1rkbzi7py";
+    sha256 = "0gcvyn7aabdz5yj0jzv14hlgjgbm8d9ib5r73i842f0hv4cv9m0q";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt.lxqt-build-tools
   ];
 
@@ -37,13 +39,14 @@ mkDerivation rec {
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
-  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "GUI configuration tool for compton X composite manager";
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
-    license = licenses.lgpl21;
+    description = "GUI configuration tool for compton X composite manager";
+    license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -15,16 +15,29 @@ let
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
+  # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
+  # or equivalently, ‘nix-build tests/login.nix’.
+  # See also nixosTests in pkgs/top-level/all-packages.nix
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = t: {
-        ${system} = hydraJob t.test;
+      callTest = config: {
+        ${system} = hydraJob config.test;
+      };
+    } // {
+      # for typechecking of the scripts and evaluation of
+      # the nodes, without running VMs.
+      allDrivers =
+        import ./tests/all-tests.nix {
+        inherit system;
+        pkgs = import ./.. { inherit system; };
+        callTest = config: {
+          ${system} = hydraJob config.driver;
+        };
       };
     };
+
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
@@ -79,7 +92,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.linux-kernel.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -105,7 +118,7 @@ let
         modules = makeModules module {};
       };
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -131,14 +144,20 @@ in rec {
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
-  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+  kexec = forMatchingSystems supportedSystems (system: (import lib/eval-config.nix {
+    inherit system;
+    modules = [
+      ./modules/installer/netboot/netboot-minimal.nix
+    ];
+  }).config.system.build.kexecTree);
+
+  netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
   });
@@ -149,45 +168,56 @@ in rec {
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix;
+  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
-  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;
   });
 
-  # A variant with a more recent (but possibly less stable) kernel
-  # that might support more hardware.
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # This variant keeps zfs support enabled, hoping it will build and work.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
   });
 
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # ZFS support disabled since it is unlikely to support the latest kernel.
+  iso_minimal_new_kernel_no_zfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel-no-zfs.nix;
+    type = "minimal-new-kernel-no-zfs";
+    inherit system;
+  });
+
   sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
     module = {
-        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
-        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+        armv6l-linux = ./modules/installer/sd-card/sd-image-raspberrypi-installer.nix;
+        armv7l-linux = ./modules/installer/sd-card/sd-image-armv7l-multiplatform-installer.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-installer.nix;
       }.${system};
     inherit system;
   });
 
   sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = {
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
       }.${system};
     type = "minimal-new-kernel";
     inherit system;
   });
 
-  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+  sd_image_new_kernel_no_zfs = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-no-zfs-installer.nix;
+      }.${system};
+    type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
 
@@ -206,6 +236,29 @@ in rec {
 
   );
 
+  # KVM image for proxmox in VMA format
+  proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-image.nix
+      ];
+    }).config.system.build.VMA)
+  );
+
+  # LXC tarball for proxmox
+  proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-lxc.nix
+      ];
+    }).config.system.build.tarball)
+  );
 
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
@@ -222,7 +275,71 @@ in rec {
     }).config.system.build.amazonImage)
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+
+  # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
+  # automatic sizing without blocking the channel.
+  amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+          ({ ... }: { amazonImage.sizeMB = "auto"; })
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+  # An image that can be imported into lxd and used for container creation
+  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-image.nix
+        ];
+    }).config.system.build.tarball)
+
+  );
+
+  # Metadata for the lxd image
+  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
@@ -239,38 +356,11 @@ in rec {
     "mkdir $out; ln -s $toplevel $out/dummy");
 
 
-  # Provide a tarball that can be unpacked into an SD card, and easily
-  # boot that system from uboot (like for the sheevaplug).
-  # The pc variant helps preparing the expression for the system tarball
-  # in a machine faster than the sheevpalug
-  /*
-  system_tarball_pc = forAllSystems (system: makeSystemTarball {
-    module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
-    inherit system;
-  });
-  */
-
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
     module = ./modules/virtualisation/lxc-container.nix;
     inherit system;
   });
-
-  /*
-  system_tarball_fuloong2f =
-    assert builtins.currentSystem == "mips64-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
-      system = "mips64-linux";
-    };
-
-  system_tarball_sheevaplug =
-    assert builtins.currentSystem == "armv5tel-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
-      system = "armv5tel-linux";
-    };
-  */
 
   tests = allTests;
 
@@ -304,10 +394,15 @@ in rec {
         services.xserver.desktopManager.xfce.enable = true;
       });
 
-    gnome3 = makeClosure ({ ... }:
+    gnome = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.gdm.enable = true;
-        services.xserver.desktopManager.gnome3.enable = true;
+        services.xserver.desktopManager.gnome.enable = true;
+      });
+
+    pantheon = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.desktopManager.pantheon.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

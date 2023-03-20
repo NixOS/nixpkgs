@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "ctop";
-  version = "0.7.3";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y72l65xgfqrgghzbm1zcy776l5m31z0gn6vfr689zyi3k3f4kh8";
+    sha256 = "sha256-tojSzgpoGQg6MwV/MVpQpCA5w6bZO+9IOvfkw0Ydr6c=";
   };
 
-  vendorSha256 = "1x4li44vg0l1x205v9a971cgphplxhsrn59q97gmj9cfy4m7jdfw";
+  vendorSha256 = "sha256-UAja7XuoLqJFNcK1PgHGcuf/HbvSrWyRvW2D3T7Hg0g=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.build=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.build=v${version}" ];
 
   meta = with lib; {
     description = "Top-like interface for container metrics";
     homepage = "https://ctop.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux marsam ];
+    maintainers = with maintainers; [ apeyroux marsam SuperSandro2000 ];
   };
 }

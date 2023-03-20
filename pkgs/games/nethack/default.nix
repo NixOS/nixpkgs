@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less
 , buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
+, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
 }:
 
 let
@@ -19,14 +19,14 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
-  version = "3.6.6";
-  name = if x11Mode then "nethack-x11-${version}"
-         else if qtMode then "nethack-qt-${version}"
-         else "nethack-${version}";
+  version = "3.6.7";
+  pname = if x11Mode then "nethack-x11"
+         else if qtMode then "nethack-qt"
+         else "nethack";
 
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
-    sha256 = "1liyckjp34j354qnxc1zn9730lh1p2dabrg1hap24z6xnqx0rpng";
+    sha256 = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
   buildInputs = [ ncurses ]
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison ]
                       ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
-                           pkgconfig mkfontdir qt5.qtbase.dev
+                           pkg-config mkfontdir qt5.qtbase.dev
                            qt5.qtmultimedia.dev qt5.wrapQtAppsHook
                            bdftopcf
                          ];
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
       -i sys/unix/hints/linux
     sed \
-      -e 's,^CC=.*$,CC=cc,' \
+      -e 's,^CC=.*$,CC=${stdenv.cc.targetPrefix}cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preFixup = stdenv.lib.optionalString qtMode ''
+  preFixup = lib.optionalString qtMode ''
     wrapQtApp "$out/games/nethack"
   '';
 
@@ -141,7 +141,7 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = "nethack";

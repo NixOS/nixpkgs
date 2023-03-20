@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "foremost";
@@ -6,12 +6,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "0d2zxw0ijg8cd3ksgm8cf8jg128zr5x7z779jar90g9f47pm882h";
-    url = "http://foremost.sourceforge.net/pkg/${pname}-${version}.tar.gz";
+    url = "https://foremost.sourceforge.net/pkg/${pname}-${version}.tar.gz";
   };
 
   patches = [ ./makefile.patch ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  # -fcommon: Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: api.o:(.bss+0xbdba0): multiple definition of `wildcard'; main.o:(.bss+0xbd760): first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
+  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals stdenv.isDarwin [ "mac" ];
 
   enableParallelBuilding = true;
 
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/man/man8}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recover files based on their contents";
     longDescription = ''
       Foremost is a console program to recover files based on their headers,
@@ -32,8 +37,9 @@ stdenv.mkDerivation rec {
       look at the data structures of a given file format allowing for a more
       reliable and faster recovery.
     '';
-    homepage = "http://foremost.sourceforge.net/";
+    homepage = "https://foremost.sourceforge.net/";
     license = licenses.publicDomain;
-    platforms = platforms.linux;
+    maintainers = [ maintainers.jiegec ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, premake5, doxygen, libsodium, mbedtls }:
+{ lib, stdenv, fetchFromGitHub, premake5, doxygen, libsodium, mbedtls_2 }:
 
 stdenv.mkDerivation {
   pname = "yojimbo";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ premake5 doxygen ];
-  propagatedBuildInputs = [ libsodium mbedtls ];
+  propagatedBuildInputs = [ libsodium mbedtls_2 ];
 
   postBuild = ''
     premake5 docs
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network library for client/server games with dedicated servers";
     longDescription = ''
       yojimbo is a network library for client/server games with dedicated servers.

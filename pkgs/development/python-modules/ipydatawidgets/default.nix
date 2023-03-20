@@ -3,8 +3,9 @@
 , fetchPypi
 , isPy27
 , pytest
-, pytestcov
+, pytest-cov
 , nbval
+, jupyter-packaging
 , ipywidgets
 , numpy
 , six
@@ -13,14 +14,20 @@
 
 buildPythonPackage rec {
   pname = "ipydatawidgets";
-  version = "4.0.1";
+  version = "4.3.3";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h7cppy959q6x5rvkdjhzxhqh57s37i2xsish5rfavcqbp2xgk4g";
+    hash = "sha256-T7LOaT+yaM2ukAN0z6GpFkHiLZUU0eweYtp0cFCST3Y=";
   };
+
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
+
+  setupPyBuildFlags = [ "--skip-npm" ];
 
   propagatedBuildInputs = [
     ipywidgets
@@ -29,7 +36,7 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  checkInputs = [ pytest pytestcov nbval ];
+  nativeCheckInputs = [ pytest pytest-cov nbval ];
 
   checkPhase = "pytest ipydatawidgets/tests";
 

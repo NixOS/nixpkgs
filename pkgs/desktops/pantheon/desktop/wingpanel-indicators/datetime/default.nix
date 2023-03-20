@@ -1,7 +1,9 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, substituteAll
+, pkg-config
 , meson
 , python3
 , ninja
@@ -12,42 +14,36 @@
 , evolution-data-server
 , libical
 , libgee
+, libhandy
 , libxml2
 , libsoup
+, libgdata
 , elementary-calendar
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0a0pqrpmrdd5pch30lizr9righlc7165z7krmnaxrzd0fvfkbr2h";
+    sha256 = "sha256-5hg0TH12bEeEPhUUmZz7vS4YTB6t779CXyOCf0c4/X4=";
   };
 
   patches = [
-    # https://github.com/elementary/wingpanel-indicator-datetime/pull/207
-    # Fixes lots of issues despite being rejected upstream
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/206
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/55
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/127
-    ./207.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      elementary_calendar = elementary-calendar;
+    })
   ];
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -57,6 +53,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     libical
     libsoup
     wingpanel
@@ -67,11 +64,15 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Date & Time Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

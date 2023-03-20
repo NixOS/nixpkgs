@@ -1,16 +1,27 @@
-{ mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3, glib
-, libnotify, libxfce4ui, libxfce4util, libxklavier
-, upower, xfconf, xf86inputlibinput }:
+{ lib
+, mkXfceDerivation
+, exo
+, garcon
+, gtk3
+, glib
+, libnotify
+, libxfce4ui
+, libxfce4util
+, libxklavier
+, upower
+, xfconf
+, xf86inputlibinput
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.14.3";
+  version = "4.18.2";
 
-  sha256 = "1zzngdj7mp2r6rcs8gvda1218zlz5gpnc6gsp20z32l69psp3yld";
+  sha256 = "sha256-u8xto4tP9fsaPaY6dzv4Bj/C6qvltT5wXJlV+TzP5uE=";
 
   postPatch = ''
-    for f in $(find . -name \*.c); do
+    for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do
       substituteInPlace $f --replace \"libinput-properties.h\" '<xorg/libinput-properties.h>'
     done
   '';
@@ -34,7 +45,8 @@ mkXfceDerivation {
     "--enable-sound-settings"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Settings manager for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

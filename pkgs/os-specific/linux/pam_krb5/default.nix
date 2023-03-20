@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, pam, kerberos }:
+{ lib, stdenv, fetchurl, pam, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "pam-krb5-4.9";
+  pname = "pam-krb5";
+  version = "4.11";
 
   src = fetchurl {
-    url = "https://archives.eyrie.org/software/kerberos/${name}.tar.gz";
-    sha256 = "0kzz6mjkzw571pkv684vyczhl874f6p7lih3dj7s764gxdxnv4y5";
+    url = "https://archives.eyrie.org/software/kerberos/pam-krb5-${version}.tar.gz";
+    sha256 = "sha256-UDy+LLGv9L39o7z3+T+U+2ulLCbXCJNOcDmyGC/hCyA=";
   };
 
-  buildInputs = [ pam kerberos ];
+  buildInputs = [ pam libkrb5 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.eyrie.org/~eagle/software/pam-krb5/";
     description = "PAM module allowing PAM-aware applications to authenticate users by performing an AS exchange with a Kerberos KDC";
     longDescription = ''

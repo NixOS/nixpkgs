@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libevent, libiconv, openssl, pcre, zlib
+{ lib, stdenv, fetchurl, pkg-config, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
-, snmpSupport ? true, net-snmp
+, snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform, net-snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
 , mysqlSupport ? false, libmysqlclient
@@ -13,7 +13,7 @@ assert postgresqlSupport -> !mysqlSupport && !sqliteSupport;
 assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 in
   import ./versions.nix ({ version, sha256 }:
     stdenv.mkDerivation {
@@ -21,11 +21,11 @@ in
       inherit version;
 
       src = fetchurl {
-        url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
         inherit sha256;
       };
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libevent
         libiconv
@@ -41,6 +41,7 @@ in
       ++ optional postgresqlSupport postgresql;
 
       configureFlags = [
+        "--enable-ipv6"
         "--enable-proxy"
         "--with-iconv"
         "--with-libevent"
@@ -59,6 +60,11 @@ in
         find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
       '';
 
+      makeFlags = [
+        "AR:=$(AR)"
+        "RANLIB:=$(RANLIB)"
+      ];
+
       postInstall = ''
         mkdir -p $out/share/zabbix/database/
       '' + optionalString sqliteSupport ''
@@ -72,7 +78,7 @@ in
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/database/postgresql/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
         homepage = "https://www.zabbix.com/";
         license = licenses.gpl2;

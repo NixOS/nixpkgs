@@ -1,35 +1,29 @@
 { lib
 , fetchgit
-, buildGoPackage
+, buildGoModule
 , pigeon
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "verifpal";
-  version = "0.7.5";
-
-  goPackagePath = "github.com/SymbolicSoft/verifpal";
-  goDeps = ./deps.nix;
+  version = "0.26.1";
 
   src = fetchgit {
     url = "https://source.symbolic.software/verifpal/verifpal.git";
-    rev = version;
-    sha256 = "0njgn6j5qg5kgid6ddv23axhw5gwjbayhdjkj4ya08mnxndr284m";
+    rev = "v${version}";
+    sha256 = "sha256-y07RXv2QSyUJpGuFsLJ2sGNo4YzhoCYQr3PkUj4eIOY=";
   };
+
+  vendorSha256 = "sha256-gUpgnd/xiLqRNl1bPzVp+0GM/J5GEx0VhUfo6JsX8N8=";
 
   nativeBuildInputs = [ pigeon ];
 
-  postPatch = ''
-    sed -e 's|/bin/echo |echo |g' -i Makefile
-  '';
+  subPackages = [ "cmd/verifpal" ];
 
-  buildPhase = ''
-    make -C go/src/$goPackagePath parser linux
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp go/src/$goPackagePath/build/bin/linux/verifpal $out/bin/
+  # goversioninfo is for Windows only and can be skipped during go generate
+  preBuild = ''
+    substituteInPlace cmd/verifpal/main.go --replace "go:generate goversioninfo" "(disabled goversioninfo)"
+    go generate verifpal.com/cmd/verifpal
   '';
 
   meta = {

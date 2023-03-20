@@ -1,27 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, intltool,
-  wrapGAppsHook, libxml2, curl, mpd_clientlib, dbus-glib,
-  libsoup, avahi, taglib
-  }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, intltool
+, avahi
+, curl
+, dbus-glib
+, gettext
+, gtk3
+, libmpdclient
+, libsoup
+, libxml2
+, taglib
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.6";
   pname = "ario";
+  version = "1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/ario-player/${pname}-${version}.tar.gz";
     sha256 = "16nhfb3h5pc7flagfdz7xy0iq6kvgy6h4bfpi523i57rxvlfshhl";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext intltool wrapGAppsHook ];
-  buildInputs = [
-    gtk3 libxml2 curl mpd_clientlib dbus-glib libsoup avahi taglib
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    gettext
+    intltool
+    wrapGAppsHook
   ];
 
-  meta = {
+  buildInputs = [
+    avahi
+    curl
+    dbus-glib
+    gtk3
+    libmpdclient
+    libsoup
+    libxml2
+    taglib
+  ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    for file in $out/lib/ario/plugins/*.dylib; do
+      ln -s $file $out/lib/ario/plugins/$(basename $file .dylib).so
+    done
+  '';
+
+  meta = with lib; {
     description = "GTK client for MPD (Music player daemon)";
-    homepage = "http://ario-player.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.garrison ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://ario-player.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.garrison ];
+    platforms = platforms.all;
   };
 }

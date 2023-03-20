@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "smmap";
-  version = "3.0.1";
+  version = "5.0.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ijlnv60y8f41py1wnn5n1a1i81cxd9dfpdhr0k3cgkrcbz8850p";
+    sha256 = "c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936";
   };
 
-  checkInputs = [ nosexcover ];
+  nativeCheckInputs = [ nosexcover ];
 
   meta = {
     description = "A pure python implementation of a sliding window memory map manager";

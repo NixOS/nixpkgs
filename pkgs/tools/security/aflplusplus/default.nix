@@ -1,6 +1,6 @@
-{ stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
-, clang_9, llvm_9, gcc, which, libcgroup, python, perl, gmp
-, file, cmocka, wine ? null, fetchpatch
+{ lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
+, clang, llvm, gcc, which, libcgroup, python, perl, gmp
+, file, wine ? null, fetchpatch
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -17,38 +17,28 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "2.64c";
+    version = "2.65c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       rev = version;
-      sha256 = "0n618pk6nlmkcbv1qm05fny4mnhcprrw0ppmra1phvk1y22iildj";
+      sha256 = "1np2a3kypb2m8nyv6qnij18yzn41pl8619jzydci40br4vxial9l";
     };
     enableParallelBuilding = true;
 
-    # build of unsigaction32 broken in 2.64c:
-    # https://github.com/AFLplusplus/AFLplusplus/commit/079fdbf9bc5be1adba19e4bd08be965bd4dd79dc#commitcomment-38428357
-    # The applied patch fixes it.
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/AFLplusplus/AFLplusplus/commit/5b9928f1a9d4b017ea04365ca8b522fde71236eb.patch";
-        sha256 = "1m4w9w4jaxb2mjkwvr6r4qa2j5cdzzpchjphpwd95861h0zvb6hh";
-      })
-    ];
-
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    nativeBuildInputs = [ makeWrapper which clang_9 gcc ];
-    buildInputs = [ llvm_9 python gmp ]
-      ++ stdenv.lib.optional (wine != null) python.pkgs.wrapPython;
+    nativeBuildInputs = [ makeWrapper which clang gcc ];
+    buildInputs = [ llvm python gmp ]
+      ++ lib.optional (wine != null) python.pkgs.wrapPython;
 
 
     postPatch = ''
       # Replace the CLANG_BIN variables with the correct path
       substituteInPlace llvm_mode/afl-clang-fast.c \
-        --replace "CLANGPP_BIN" '"${clang_9}/bin/clang++"' \
-        --replace "CLANG_BIN" '"${clang_9}/bin/clang"' \
+        --replace "CLANGPP_BIN" '"${clang}/bin/clang++"' \
+        --replace "CLANG_BIN" '"${clang}/bin/clang"' \
         --replace 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
 
       # Replace "gcc" and friends with full paths in afl-gcc
@@ -60,6 +50,11 @@ let
         --replace '"clang"' '"clang-UNSUPPORTED"' \
         --replace '"clang++"' '"clang++-UNSUPPORTED"'
     '';
+
+    env.NIX_CFLAGS_COMPILE = toString [
+      # Needed with GCC 12
+      "-Wno-error=use-after-free"
+    ];
 
     makeFlags = [ "PREFIX=$(out)" ];
     buildPhase = ''
@@ -101,7 +96,7 @@ let
 
       patchShebangs $out/bin
 
-    '' + stdenv.lib.optionalString (wine != null) ''
+    '' + lib.optionalString (wine != null) ''
       substitute afl-wine-trace $out/bin/afl-wine-trace \
         --replace "qemu_mode/unsigaction" "$out/lib/afl"
       chmod +x $out/bin/afl-wine-trace
@@ -115,7 +110,7 @@ let
         wrapPythonProgramsIn $out/bin ${python.pkgs.pefile}
     '';
 
-    installCheckInputs = [ perl file cmocka ];
+    nativeInstallCheckInputs = [ perl file ];
     doInstallCheck = true;
     installCheckPhase = ''
       # replace references to tools in build directory with references to installed locations
@@ -123,7 +118,7 @@ let
         --replace '../libcompcov.so' '`$out/bin/get-afl-qemu-libcompcov-so`' \
         --replace '../libdislocator.so' '`$out/bin/get-libdislocator-so`' \
         --replace '../libtokencap.so' '`$out/bin/get-libtokencap-so`'
-      perl -pi -e 's|(?<!\.)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
+      perl -pi -e 's|(?<!\.)(?<!-I)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
       cd test && ./test.sh
     '';
 
@@ -134,13 +129,13 @@ let
 
     meta = {
       description = ''
-        AFL++ is a heavily enhanced version of AFL, incorporating many features and
-        improvements from the community.
+        A heavily enhanced version of AFL, incorporating many features
+        and improvements from the community
       '';
       homepage    = "https://aflplus.plus";
-      license     = stdenv.lib.licenses.asl20;
+      license     = lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = with stdenv.lib.maintainers; [ ris mindavi ];
+      maintainers = with lib.maintainers; [ ris mindavi ];
     };
   };
 in aflplusplus

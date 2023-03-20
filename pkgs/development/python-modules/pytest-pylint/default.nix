@@ -5,25 +5,28 @@
 , pytest
 , pylint
 , six
-, pytestrunner
+, pytest-runner
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "pytest-pylint";
-  version = "0.15.1";
+  version = "0.19.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sbmnw3bly4pry5lp6q6g0r8xzaxwbdlf0k19k8pygkhllnj6gnx";
+    hash = "sha256-2I6DwQI8ZBVIqew1Z3B87udhZjKphq8TNCbUp00GaTI=";
   };
 
-  buildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    pytest
     pylint
     six
+    toml
   ];
 
   # tests not included with release

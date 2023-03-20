@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , docbook_xsl
@@ -8,19 +8,28 @@
 , libidn2
 , libunistring
 , libxslt
-, pkgconfig
+, pkg-config
 , python3
 , valgrind
 , publicsuffix-list
 }:
 
-stdenv.mkDerivation rec {
+let
+  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    # Apparently valgrind doesn't support some new ARM features on (some) Hydra machines:
+    #  VEX: Mismatch detected between RDMA and atomics features.
+    && !stdenv.isAarch64
+    # Valgrind on musl does not hook malloc calls properly, resulting in errors `Invalid free() / delete / delete[] / realloc()`
+    # https://bugs.kde.org/show_bug.cgi?id=435441
+    && !stdenv.hostPlatform.isMusl
+  ;
+in stdenv.mkDerivation rec {
   pname = "libpsl";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchurl {
-    url = "https://github.com/rockdaboot/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.lz";
-    sha256 = "183hadbira0d2zvv8272lspy31dgm9x26z35c61s5axcd5wd9g9i";
+    url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
+    sha256 = "sha256-qj1wbEUnhtE0XglNriAc022B8Dz4HWNtXPwQ02WQfxc=";
   };
 
   nativeBuildInputs = [
@@ -29,10 +38,11 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gtk-doc
     lzip
-    pkgconfig
+    pkg-config
     python3
-    valgrind
     libxslt
+  ] ++ lib.optionals enableValgrindTests [
+    valgrind
   ];
 
   buildInputs = [
@@ -56,17 +66,18 @@ stdenv.mkDerivation rec {
   configureFlags = [
     # "--enable-gtk-doc"
     "--enable-man"
-    "--enable-valgrind-tests"
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+  ] ++ lib.optionals enableValgrindTests [
+    "--enable-valgrind-tests"
   ];
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"
@@ -78,7 +89,8 @@ stdenv.mkDerivation rec {
     homepage = "https://rockdaboot.github.io/libpsl/";
     changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = [ maintainers.c0bw3b ];
+    mainProgram = "psl";
+    platforms = platforms.unix;
   };
 }

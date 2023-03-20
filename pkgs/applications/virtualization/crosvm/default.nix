@@ -1,93 +1,49 @@
-{ stdenv, lib, rustPlatform, fetchgit, runCommand, symlinkJoin
-, pkgconfig, minijail, dtc, libusb1, libcap, linux
+{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
+, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
-let
+rustPlatform.buildRustPackage rec {
+  pname = "crosvm";
+  version = "111.1";
 
-  upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
-
-  arch = with stdenv.hostPlatform;
-    if isAarch64 then "arm"
-    else if isx86_64 then "x86_64"
-    else throw "no seccomp policy files available for host platform";
-
-  crosvmSrc = fetchgit {
-    inherit (upstreamInfo.components."chromiumos/platform/crosvm")
-      url rev sha256 fetchSubmodules;
+  src = fetchgit {
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
+    rev = "9ad89972330f70fca5a29967f226cf905977bf7f";
+    sha256 = "hvP3V7kzfPXOIe+6GBWupfhW5SM3ifoqmx7dyTgSTeU=";
+    fetchSubmodules = true;
   };
 
-  adhdSrc = fetchgit {
-    inherit (upstreamInfo.components."chromiumos/third_party/adhd")
-      url rev sha256 fetchSubmodules;
+  separateDebugInfo = true;
+
+  cargoSha256 = "S8zeOB+S5ZTuHqWNjxDIa4ev24ose/fByYwPrhR9OY8=";
+
+  nativeBuildInputs = [
+    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
+  ];
+
+  buildInputs = [
+    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+  ];
+
+  preConfigure = ''
+    patchShebangs third_party/minijail/tools/*.py
+  '';
+
+  # crosvm mistakenly expects the stable protocols to be in the root
+  # of the pkgdatadir path, rather than under the "stable"
+  # subdirectory.
+  PKG_CONFIG_WAYLAND_PROTOCOLS_PKGDATADIR =
+    "${wayland-protocols}/share/wayland-protocols/stable";
+
+  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
+
+  passthru.updateScript = ./update.py;
+
+  meta = with lib; {
+    description = "A secure virtual machine monitor for KVM";
+    homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.bsd3;
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
-
-in
-
-  rustPlatform.buildRustPackage rec {
-    pname = "crosvm";
-    inherit (upstreamInfo) version;
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      mkdir -p chromiumos/platform chromiumos/third_party
-
-      pushd chromiumos/platform
-      unpackFile ${crosvmSrc}
-      mv ${crosvmSrc.name} crosvm
-      popd
-
-      pushd chromiumos/third_party
-      unpackFile ${adhdSrc}
-      mv ${adhdSrc.name} adhd
-      popd
-
-      chmod -R u+w -- "$sourceRoot"
-
-      runHook postUnpack
-    '';
-
-    sourceRoot = "chromiumos/platform/crosvm";
-
-    patches = [
-      ./default-seccomp-policy-dir.diff
-    ];
-
-    cargoSha256 = "0lhivwvdihslwp81i3sa5q88p5hr83bzkvklrcgf6x73arwk8kdz";
-
-    nativeBuildInputs = [ pkgconfig ];
-
-    buildInputs = [ dtc libcap libusb1 minijail ];
-
-    postPatch = ''
-      sed -i "s|/usr/share/policy/crosvm/|$out/share/policy/|g" \
-             seccomp/*/*.policy
-    '';
-
-    preBuild = ''
-      export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
-    '';
-
-    postInstall = ''
-      mkdir -p $out/share/policy/
-      cp seccomp/${arch}/* $out/share/policy/
-    '';
-
-    CROSVM_CARGO_TEST_KERNEL_BINARY =
-      lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
-        "${linux}/${stdenv.hostPlatform.platform.kernelTarget}";
-
-    passthru = {
-      inherit adhdSrc;
-      src = crosvmSrc;
-      updateScript = ./update.py;
-    };
-
-    meta = with lib; {
-      description = "A secure virtual machine monitor for KVM";
-      homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
-      maintainers = with maintainers; [ qyliss ];
-      license = licenses.bsd3;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
-    };
-  }
+}

@@ -1,22 +1,24 @@
-{stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, libXinerama, imlib2 }:
 
 stdenv.mkDerivation rec {
 
   pname = "bgs";
   version = "0.8";
 
-  src = fetchurl {
-    url = "https://github.com/Gottox/bgs/archive/v${version}.tar.gz";
-    sha256 = "1rw9ingkkpvvr2dixx126ziim67a54r8k49918h1mbph0fjj08n5";
+  src = fetchFromGitHub {
+    owner = "Gottox";
+    repo = "bgs";
+    rev = "v${version}";
+    sha256 = "V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libX11 libXinerama imlib2 ];
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast and small background setter for X";
     license = licenses.mit;
     platforms = platforms.linux;

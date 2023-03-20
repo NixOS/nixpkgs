@@ -1,28 +1,30 @@
 { stdenv
+, lib
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , vala
 , glib
 , meson
 , ninja
-, python3
 , libxslt
 , gtk3
-, webkitgtk
+, enableBackend ? stdenv.isLinux
+, webkitgtk_4_1
 , json-glib
-, librest
+, librest_1_0
+, libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
 , gettext
 , icu
 , glib-networking
-, libsoup
-, docbook_xsl
+, libsoup_3
+, docbook-xsl-nons
 , docbook_xml_dtd_412
-, gnome3
+, gnome
 , gcr
-, kerberos
+, libkrb5
 , gvfs
 , dbus
 , wrapGAppsHook
@@ -30,7 +32,9 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.36.0";
+  version = "3.46.0";
+
+  outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -38,31 +42,28 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "15j3xh93rqjphjw56j00g40m684nr4zy3hs7dsngm6a21l87fkfd";
+    sha256 = "sha256-qVd55fmhY05zJ871OWc3hd1eWjYbYJuxlE/T2i3VCUA=";
   };
-
-  outputs = [ "out" "man" "dev" "devdoc" ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
-    "-Dgtk_doc=true"
-    "-Dlastfm=true"
-    "-Dman=true"
+    "-Dgoabackend=${lib.boolToString enableBackend}"
+    "-Dgtk_doc=${lib.boolToString enableBackend}"
+    "-Dman=${lib.boolToString enableBackend}"
     "-Dmedia_server=true"
   ];
 
   nativeBuildInputs = [
-    dbus # used for checks and pkgconfig to install dbus service/s
+    dbus # used for checks and pkg-config to install dbus service/s
     docbook_xml_dtd_412
-    docbook_xsl
+    docbook-xsl-nons
     gettext
     gobject-introspection
     gtk-doc
     libxslt
     meson
     ninja
-    pkgconfig
-    python3
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -75,30 +76,30 @@ stdenv.mkDerivation rec {
     gvfs # OwnCloud, Google Drive
     icu
     json-glib
-    kerberos
-    librest
+    libkrb5
+    librest_1_0
+    libxml2
     libsecret
-    libsoup
-    webkitgtk
+    libsoup_3
+  ] ++ lib.optionals enableBackend [
+    webkitgtk_4_1
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
+  separateDebugInfo = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
+      versionPolicy = "odd-unstable";
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
     description = "Single sign-on framework for GNOME";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
   };

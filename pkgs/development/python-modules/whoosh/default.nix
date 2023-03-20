@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "Whoosh";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # Wrong encoding
   postPatch = ''
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     py.test -k "not test_timelimit and not test_minimize_dfa"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, pure-Python full text indexing, search, and spell
 checking library.";
     homepage    = "https://bitbucket.org/mchaput/whoosh";
     license     = licenses.bsd2;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

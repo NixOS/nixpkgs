@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
-, polkit, utillinuxMinimal, x264, zlib
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
+, polkit, util-linuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
@@ -41,27 +41,6 @@
 # around it.
 
 let
-  modules = [
-    {
-      path = "web/api/app/Plugin/Crud";
-      src = fetchFromGitHub {
-        owner = "ZoneMinder";
-        repo = "crud";
-        rev = "3.1.0-zm";
-        sha256 = "061avzyml7mla4hlx057fm8a9yjh6m6qslgyzn74cv5p2y7f463l";
-      };
-    }
-    {
-      path = "web/api/app/Plugin/CakePHP-Enum-Behavior";
-      src = fetchFromGitHub {
-        owner = "ZoneMinder";
-        repo = "CakePHP-Enum-Behavior";
-        rev = "1.0-zm";
-        sha256 = "0zsi6s8xymb183kx3szspbrwfjqcgga7786zqvydy6hc8c909cgx";
-      };
-    }
-  ];
-
   addons = [
     {
       path = "scripts/ZoneMinder/lib/ZoneMinder/Control/Xiaomi.pm";
@@ -78,13 +57,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.34.9";
+  version = "1.36.33";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "1xvgfsm260a3v0vqgbk7m9jzayhcs4ysyadnnxajyrndjhn802ic";
+    sha256 = "sha256-KUhFZrF7BuLB2Z3LnTcHEEZVA6iosam6YsOd8KWvx7E=";
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -93,11 +73,6 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    ${lib.concatStringsSep "\n" (map (e: ''
-      rm -rf ${e.path}/*
-      cp -r ${e.src}/* ${e.path}/
-    '') modules)}
-
     rm -rf web/api/lib/Cake/Test
 
     ${lib.concatStringsSep "\n" (map (e: ''
@@ -122,15 +97,15 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mysql.client}/bin/mysqldump
+      --replace /usr/bin/mysqldump ${mariadb.client}/bin/mysqldump
 
     substituteInPlace scripts/zmupdate.pl.in \
-      --replace "'mysql'" "'${mysql.client}/bin/mysql'" \
-      --replace "'mysqldump'" "'${mysql.client}/bin/mysqldump'"
+      --replace "'mysql'" "'${mariadb.client}/bin/mysql'" \
+      --replace "'mysqldump'" "'${mariadb.client}/bin/mysqldump'"
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
-             src/zm_config.h.in \
+             src/zm_config_data.h.in \
              web/api/app/Config/bootstrap.php.in \
              web/includes/config.php.in ; do
       substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
@@ -141,14 +116,20 @@ in stdenv.mkDerivation rec {
         --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
     done
 
+    for f in scripts/ZoneMinder/lib/ZoneMinder/Event.pm \
+             scripts/ZoneMinder/lib/ZoneMinder/Storage.pm ; do
+      substituteInPlace $f \
+        --replace '/bin/rm' "${coreutils}/bin/rm"
+    done
+
     substituteInPlace web/includes/functions.php \
       --replace "'date " "'${coreutils}/bin/date " \
       --subst-var-by srcHash "`basename $out`"
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
-    utillinuxMinimal # for libmount
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb pcre perl polkit x264 zlib
+    util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
@@ -157,9 +138,7 @@ in stdenv.mkDerivation rec {
     CryptEksblowfish DataEntropy # zmupdate.pl
   ]);
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   cmakeFlags = [
     "-DWITH_SYSTEMD=ON"
@@ -196,11 +175,11 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

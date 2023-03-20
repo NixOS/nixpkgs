@@ -1,68 +1,134 @@
-{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
-, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
-, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, pkg-config
+, autoreconfHook
+, rake
+, boost
+, cmark
+, docbook_xsl
+, expat
+, file
+, flac
+, fmt
+, gettext
+, gmp
+, gtest
+, libdvdread
+, libebml
+, libiconv
+, libmatroska
+, libogg
+, libvorbis
+, libxslt
+, nlohmann_json
+, pugixml
+, qtbase
+, qtmultimedia
+, xdg-utils
+, zlib
 , withGUI ? true
-  , qtbase ? null
-  , qtmultimedia ? null
-  , wrapQtAppsHook ? null
+, wrapQtAppsHook
 }:
 
-assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
+let
+  inherit (lib) enableFeature optional optionals optionalString;
 
-with stdenv.lib;
+  phase = name: args:
+    ''
+      runHook pre${name}
 
+      rake ${args}
+
+      runHook post${name}
+    '';
+
+in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "46.0.0";
+  version = "74.0.0";
 
   src = fetchFromGitLab {
-    owner  = "mbunkus";
-    repo   = "mkvtoolnix";
-    rev    = "release-${version}";
-    sha256 = "1vyfvpsllnzhzaaz3s9lqlnkmnqchyhxj2d47bfyizs982r5kg24";
+    owner = "mbunkus";
+    repo = "mkvtoolnix";
+    rev = "release-${version}";
+    sha256 = "sha256-p8rIAHSqYCOlNbuxisQlIkMh2OArc+MOYn1kgC5kJsc=";
   };
 
   nativeBuildInputs = [
-    pkgconfig autoconf automake gettext
-    drake ruby docbook_xsl libxslt
-  ];
+    autoreconfHook
+    docbook_xsl
+    gettext
+    gtest
+    libxslt
+    pkg-config
+    rake
+  ]
+  ++ optional withGUI wrapQtAppsHook;
 
+  # 1. qtbase and qtmultimedia are needed without the GUI
+  # 2. we have utf8cpp in nixpkgs but it doesn't find it
   buildInputs = [
-    expat file xdg_utils boost libebml zlib fmt
-    libmatroska libogg libvorbis flac cmark
-  ] ++ optional  stdenv.isDarwin libiconv
-    ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
+    boost
+    expat
+    file
+    flac
+    fmt
+    gmp
+    libdvdread
+    libebml
+    libmatroska
+    libogg
+    libvorbis
+    nlohmann_json
+    pugixml
+    qtbase
+    qtmultimedia
+    xdg-utils
+    zlib
+  ]
+  ++ optional withGUI cmark
+  ++ optional stdenv.isDarwin libiconv;
 
-  preConfigure = "./autogen.sh; patchShebangs .";
-  buildPhase   = "drake -j $NIX_BUILD_CORES";
-  installPhase = "drake install -j $NIX_BUILD_CORES";
+  # autoupdate is not needed but it silences a ton of pointless warnings
+  postPatch = ''
+    patchShebangs . > /dev/null
+    autoupdate configure.ac ac/*.m4
+  '';
 
   configureFlags = [
-    "--enable-magic"
-    "--enable-optimization"
-    "--with-boost-libdir=${boost.out}/lib"
     "--disable-debug"
-    "--disable-profiling"
     "--disable-precompiled-headers"
+    "--disable-profiling"
     "--disable-static-qt"
-    "--with-gettext"
+    "--enable-optimization"
+    "--with-boost-libdir=${lib.getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
-    (enableFeature withGUI "qt")
+    "--with-gettext"
+    (enableFeature withGUI "gui")
   ];
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++14";
+  buildPhase = phase "Build" "";
+
+  installPhase = phase "Install" "install";
+
+  doCheck = true;
+
+  checkPhase = phase "Check" "tests:run_unit";
 
   dontWrapQtApps = true;
+
   postFixup = optionalString withGUI ''
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform tools for Matroska";
-    homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
-    license     = licenses.gpl2;
+    homepage = "https://mkvtoolnix.download/";
+    license = licenses.gpl2Only;
+    mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
     maintainers = with maintainers; [ codyopel rnhmjoj ];
-    platforms   = platforms.linux
-      ++ optionals (!withGUI) platforms.darwin;
+    platforms = platforms.unix;
   };
 }

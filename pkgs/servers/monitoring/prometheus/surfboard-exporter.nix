@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "surfboard_exporter";
@@ -13,7 +13,9 @@ buildGoPackage rec {
     sha256 = "11qms26648nwlwslnaflinxcr5rnp55s908rm1qpnbz0jnxf5ipw";
   };
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) surfboard; };
+
+  meta = with lib; {
     description = "Arris Surfboard signal metrics exporter";
     homepage = "https://github.com/ipstatic/surfboard_exporter";
     license = licenses.mit;

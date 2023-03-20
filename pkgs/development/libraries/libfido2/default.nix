@@ -1,44 +1,52 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
-, fetchpatch
 , cmake
-, pkgconfig
+, pkg-config
 , hidapi
 , libcbor
 , openssl
 , udev
+, zlib
+, withPcsclite ? true
+, pcsclite
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.4.0";
+  version = "1.13.0";
+
+  # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0v1a3n0qljmrp8y9pmnmbsdsy79l3z84qmhyjx50xdsbgnz1z4md";
+    sha256 = "sha256-UdQ3J+KhxFRMf9DuR3hvRD458TiK2nNaUJrUrwokWco=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ hidapi libcbor openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ udev ];
+  buildInputs = [ libcbor zlib ]
+    ++ lib.optionals stdenv.isDarwin [ hidapi ]
+    ++ lib.optionals stdenv.isLinux [ udev ]
+    ++ lib.optionals (stdenv.isLinux && withPcsclite) [ pcsclite ];
 
-  patches = [
-    # make build reproducible
-    (fetchpatch {
-      url = "https://github.com/Yubico/libfido2/commit/e79f7d7996e70d6b2ae9826fce81d61659cab4f6.patch";
-      sha256 = "0jwg69f95qqf0ym24q1ka50d3d3338cyw4fdfzpw4sab0shiaq9v";
-    })
-  ];
+  propagatedBuildInputs = [ openssl ];
+
+  outputs = [ "out" "dev" "man" ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
-    "-DUSE_HIDAPI=1"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DUSE_HIDAPI=1"
+  ] ++ lib.optionals stdenv.isLinux [
+    "-DNFC_LINUX=1"
+  ] ++ lib.optionals (stdenv.isLinux && withPcsclite) [
+    "-DUSE_PCSC=1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
-    Provides library functionality for FIDO 2.0, including communication with a device over USB.
+      Provides library functionality for FIDO 2.0, including communication with a device over USB.
     '';
     homepage = "https://github.com/Yubico/libfido2";
     license = licenses.bsd2;

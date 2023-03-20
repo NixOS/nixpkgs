@@ -1,18 +1,44 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  kconfig, kcmutils, kconfigwidgets, kdbusaddons, kglobalaccel, ki18n,
-  kwidgetsaddons, kxmlgui, libkscreen, qtdeclarative, qtgraphicaleffects,
-  kwindowsystem, kdeclarative, plasma-framework
+{ mkDerivation
+, extra-cmake-modules
+, kconfig
+, kcmutils
+, kconfigwidgets
+, kdbusaddons
+, kglobalaccel
+, ki18n
+, kwidgetsaddons
+, kxmlgui
+, libkscreen
+, qtdeclarative
+, qtgraphicaleffects
+, qtsensors
+, kwindowsystem
+, kdeclarative
+, plasma-framework
+, qtx11extras
+, layer-shell-qt
 }:
 
 mkDerivation {
-  name = "kscreen";
-  patches = [ ./kscreen-417316.patch ];
+  pname = "kscreen";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kconfig kcmutils kconfigwidgets kdbusaddons kglobalaccel ki18n
-    kwidgetsaddons kxmlgui libkscreen qtdeclarative qtgraphicaleffects
-    kwindowsystem kdeclarative plasma-framework
+    kconfig
+    kcmutils
+    kconfigwidgets
+    kdbusaddons
+    kglobalaccel
+    ki18n
+    kwidgetsaddons
+    kxmlgui
+    libkscreen
+    qtdeclarative
+    qtgraphicaleffects
+    qtsensors
+    kwindowsystem
+    kdeclarative
+    plasma-framework
+    qtx11extras
+    layer-shell-qt
   ];
 }

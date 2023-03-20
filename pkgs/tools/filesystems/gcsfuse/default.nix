@@ -1,30 +1,48 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gcsfuse";
-  version = "0.29.0";
+  version = "0.41.12";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    sha256 = "11an7cxgg3x830mwlhyx50xkcv7zpa9aziz6gz1crwp8shr4hdik";
+    hash = "sha256-s28vtcNodc5IL8SnZLTgSQBTPUf0FiIAv3TxZXMDuYE=";
   };
 
-  goPackagePath = "github.com/googlecloudplatform/gcsfuse";
+  vendorHash = null;
 
   subPackages = [ "." "tools/mount_gcsfuse" ];
+
+  ldflags = [ "-s" "-w" "-X main.gcsfuseVersion=${version}" ];
+
+  preCheck =
+    let
+      skippedTests = [
+        "Test_Main"
+        "TestFlags"
+      ];
+    in
+    ''
+      # Disable flaky tests
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
 
   postInstall = ''
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.gcsfuse
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.fuse.gcsfuse
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     description = "A user-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
+    changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [];
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

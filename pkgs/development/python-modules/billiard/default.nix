@@ -1,23 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest, case, psutil }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, case
+, psutil
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "3.6.3.0";
-  disabled = isPyPy;
+  version = "4.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0spssl3byzqsplra166d59jx8iqfxyzvcbx7vybkmwr5ck72a5yr";
+    hash = "sha256-GtLuro4oBT1ym6M3PTTZ1uIQ9uTYvwqcZPkr0FPx7fU=";
   };
 
-  checkInputs = [ pytest case psutil ];
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    case
+    psutil
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/celery/billiard";
+  disabledTests = [
+    # psutil.NoSuchProcess: process no longer exists (pid=168)
+    "test_set_pdeathsig"
+  ];
+
+  pythonImportsCheck = [
+    "billiard"
+  ];
+
+  meta = with lib; {
     description = "Python multiprocessing fork with improvements and bugfixes";
+    homepage = "https://github.com/celery/billiard";
+    changelog = "https://github.com/celery/billiard/blob/v${version}/CHANGES.txt";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

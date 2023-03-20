@@ -1,18 +1,66 @@
-{ stdenv, fetchurl, zlib, bzip2, openssl, attr, lzo, libgcrypt, e2fsprogs, gpgme, xz }:
+args @ {
+  lib,
+  stdenv,
+  llvmPackages_12, # Anything newer than 11
+  fetchzip,
+  which,
+  attr,
+  e2fsprogs,
+  curl,
+  libargon2,
+  librsync,
+  libthreadar,
+  gpgme,
+  libgcrypt,
+  openssl,
+  bzip2,
+  lz4,
+  lzo,
+  xz,
+  zlib,
+  zstd,
+  CoreFoundation,
+}:
 
-with stdenv.lib;
+let
+  # Fails to build with clang-11 on Darwin:
+  # error: exception specification of overriding function is more lax than base version
+  stdenv = if args.stdenv.isDarwin then llvmPackages_12.stdenv else args.stdenv;
+in
 
 stdenv.mkDerivation rec {
-  version = "2.6.9";
+  version = "2.7.8";
   pname = "dar";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "1jzqq54w1dix2qdlj4hr9dpq9fnp23h102bk8d2gq6k7n2zgaj6v";
+    sha256 = "sha256-W/6kSkIaeHumE2yGGbU4Z2lk1d2toQ1AM012TUI1EZw=";
   };
 
-  buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]
-    ++ optionals stdenv.isLinux [ attr e2fsprogs ];
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ which ];
+
+  buildInputs = [
+    curl
+    librsync
+    libthreadar
+    gpgme
+    libargon2
+    libgcrypt
+    openssl
+    bzip2
+    lz4
+    lzo
+    xz
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.isLinux [
+    attr
+    e2fsprogs
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+  ];
 
   configureFlags = [
     "--disable-birthtime"
@@ -22,18 +70,20 @@ stdenv.mkDerivation rec {
     "--enable-threadar"
   ];
 
-  postInstall = ''
-    rm -r "$out"/share/dar # Disable html help
-  '';
+  hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  postInstall = ''
+    # Disable html help
+    rm -r "$out"/share/dar
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ izorkin ];
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
   };
 }

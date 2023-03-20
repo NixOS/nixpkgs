@@ -1,53 +1,44 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , python3
 , ninja
 , vala
 , gtk3
 , libgee
+, libhandy
 , granite
-, gettext
-, clutter-gtk
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.3.9";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0gq2gi14ywmhhlq3vablzqjzxq2ms60l9b10splzsf3zd7k2dqz2";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-2c+anQ17lrdFy+cbjoYY94EFxYUcS+4mZrwbrLohfUg=";
   };
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    clutter-gtk
-    elementary-icon-theme
     granite
     gtk3
     libgee
+    libhandy
   ];
 
   patches = [
@@ -59,11 +50,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Extensible System Settings app for Pantheon";
     homepage = "https://github.com/elementary/switchboard";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.switchboard";
   };
 }

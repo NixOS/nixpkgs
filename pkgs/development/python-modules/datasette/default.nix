@@ -2,92 +2,106 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aiofiles
+, asgi-csrf
 , click
 , click-default-group
+, itsdangerous
 , janus
 , jinja2
 , hupper
+, mergedeep
 , pint
 , pluggy
+, python-baseconv
+, pyyaml
 , uvicorn
-# Check Inputs
+, httpx
 , pytestCheckHook
-, pytestrunner
 , pytest-asyncio
-, black
+, pytest-timeout
 , aiohttp
 , beautifulsoup4
 , asgiref
+, setuptools
+, trustme
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.39";
+  version = "0.64.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = "datasette";
-    rev = version;
-    sha256 = "07d46512bc9sdan9lv39sf1bwlf7vf1bfhcsm825vk7sv7g9kczd";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-AxIJUJzFEAvAV59hYDB3pb5/1rS9d7T0ltl6lVWTCrE=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' "" \
+      --replace "click-default-group-wheel>=1.2.2" "click-default-group"
+  '';
 
   propagatedBuildInputs = [
     aiofiles
+    asgi-csrf
+    asgiref
     click
     click-default-group
+    httpx
+    hupper
+    itsdangerous
     janus
     jinja2
-    hupper
+    mergedeep
     pint
     pluggy
+    python-baseconv
+    pyyaml
+    setuptools
     uvicorn
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
+  nativeCheckInputs = [
     aiohttp
     beautifulsoup4
-    black
-    asgiref
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+    trustme
   ];
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "click~=7.1.1" "click" \
-      --replace "click-default-group~=1.2.2" "click-default-group" \
-      --replace "Jinja2~=2.10.3" "Jinja2" \
-      --replace "hupper~=1.9" "hupper" \
-      --replace "pint~=0.9" "pint" \
-      --replace "pluggy~=0.13.0" "pint" \
-      --replace "uvicorn~=0.11" "uvicorn" \
-      --replace "aiofiles~=0.4.0" "aiofiles" \
-      --replace "janus~=0.4.0" "janus" \
-      --replace "PyYAML~=5.3" "PyYAML"
-  '';
-
-  # many tests require network access
-  # test_black fails on darwin
-  dontUseSetuptoolsCheck = true;
+  # takes 30-180 mins to run entire test suite, not worth the CPU resources, slows down reviews
+  # with pytest-xdist, it still takes around 10 mins with 32 cores
+  # just run the csv tests, as this should give some indictation of correctness
   pytestFlagsArray = [
-    "--ignore=tests/test_api.py"
-    "--ignore=tests/test_csv.py"
-    "--ignore=tests/test_html.py"
-    "--ignore=tests/test_docs.py"
-    "--ignore=tests/test_black.py"
+    "tests/test_csv.py"
   ];
+
   disabledTests = [
     "facet"
     "_invalid_database" # checks error message when connecting to invalid database
   ];
 
-  meta = with lib; {
-    description = "An instant JSON API for your SQLite databases";
-    homepage = "https://github.com/simonw/datasette";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
-  };
+  pythonImportsCheck = [
+    "datasette"
+    "datasette.cli"
+    "datasette.app"
+    "datasette.database"
+    "datasette.renderer"
+    "datasette.tracer"
+    "datasette.plugins"
+  ];
 
+  meta = with lib; {
+    description = "Multi-tool for exploring and publishing data";
+    homepage = "https://datasette.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ costrouc ];
+  };
 }

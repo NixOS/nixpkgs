@@ -1,4 +1,4 @@
-{ pkgs }:
+{ lib, pkgs }:
 
 with pkgs;
 
@@ -11,19 +11,15 @@ rec {
   makeSourceTarball = sourceTarball; # compatibility
 
   binaryTarball = args: import ./binary-tarball.nix (
-    { inherit stdenv;
-    } // args);
-
-  antBuild = args: import ./ant-build.nix (
-    { inherit pkgs;
+    { inherit lib stdenv;
     } // args);
 
   mvnBuild = args: import ./maven-build.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   nixBuild = args: import ./nix-build.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   coverageAnalysis = args: nixBuild (
@@ -41,16 +37,12 @@ rec {
       doCoverityAnalysis = true;
     } // args);
 
-  gcovReport = args: import ./gcov-report.nix (
-    { inherit runCommand lcov rsync;
-    } // args);
-
   rpmBuild = args: import ./rpm-build.nix (
-    { inherit vmTools;
+    { inherit lib vmTools;
     } // args);
 
   debBuild = args: import ./debian-build.nix (
-    { inherit stdenv vmTools checkinstall;
+    { inherit lib stdenv vmTools checkinstall;
     } // args);
 
   aggregate =
@@ -98,7 +90,7 @@ rec {
 
       phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
-      patchPhase = stdenv.lib.optionalString isNixOS ''
+      patchPhase = lib.optionalString isNixOS ''
         touch .update-on-nixos-rebuild
       '';
 

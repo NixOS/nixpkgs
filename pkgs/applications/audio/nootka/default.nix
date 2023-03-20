@@ -1,18 +1,30 @@
-{ stdenv, fetchurl, cmake
-, alsaLib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch, qtbase
+{ lib, stdenv, fetchurl, cmake
+, alsa-lib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch
+, qtbase, qtdeclarative, qtgraphicaleffects, qtquickcontrols2, qttools, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "nootka-1.4.7";
+  pname = "nootka";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nootka/${name}-source.tar.bz2";
-    sha256 = "1y9wlwri74v2z9dwbcfjs7xri54yra24vpwq19xi2lfv1nbs518x";
+    url = "mirror://sourceforge/nootka/${pname}-${version}-source.tar.bz2";
+    sha256 = "sha256-ZHdyLZ3+TCpQ77tcNuDlN2124qLDZu9DdH5x7RI1HIs=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
-    alsaLib fftwSinglePrec libjack2 libpulseaudio libvorbis soundtouch qtbase
+    alsa-lib
+    fftwSinglePrec
+    libjack2
+    libpulseaudio
+    libvorbis
+    soundtouch
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtquickcontrols2
+    qttools
   ];
 
   cmakeFlags = [
@@ -21,11 +33,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for practicing playing musical scores and ear training";
     homepage = "https://nootka.sourceforge.io/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ mmlb orivej ];
     platforms = platforms.linux;
   };
 }

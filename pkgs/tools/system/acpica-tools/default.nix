@@ -1,36 +1,54 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+}:
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20200430";
+  version = "20221020";
 
   src = fetchurl {
-    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0z19bniqsa8y0n1qrxmb6gz7m63jpwx22zgk5ablyriixhfpz07v";
+    # 20221020 has a weird filename published: https://acpica.org/node/201
+    name = "acpica-unix-${version}.tar.gz";
+    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar_0.gz";
+    hash = "sha256-M6LjlKygylfUAYr+PaNA361etFsbkwDoHdWV/aB88cU=";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ bison flex ];
 
   buildFlags = [
     "acpibin"
     "acpidump"
+    "acpiexamples"
     "acpiexec"
     "acpihelp"
-    "acpinames"
+    "acpisrc"
     "acpixtract"
+    "iasl"
   ];
 
-  nativeBuildInputs = [ bison flex ];
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-O3"
+  ] ++ lib.optionals (stdenv.cc.isGNU) [
+    # Needed with GCC 12
+    "-Wno-dangling-pointer"
+  ]);
+
+  enableParallelBuilding = true;
+
+  # We can handle stripping ourselves.
+  # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
+  INSTALLFLAGS = lib.optionals (!stdenv.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
-    description = "ACPICA Tools";
+  meta = with lib; {
     homepage = "https://www.acpica.org/";
-    license = with licenses; [ gpl2 bsd3 ];
-    platforms = platforms.linux;
+    description = "ACPICA Tools";
+    license = with licenses; [ iasl gpl2Only bsd3 ];
     maintainers = with maintainers; [ tadfisher ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

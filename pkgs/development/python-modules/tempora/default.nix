@@ -1,30 +1,59 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools_scm, pytest, freezegun, backports_unittest-mock
-, six, pytz, jaraco_functools }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+
+# build time
+, setuptools-scm
+
+# runtime
+, pytz
+, jaraco_functools
+
+# tests
+, freezegun
+, pytest-freezegun
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "1.14.1";
+  version = "5.2.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb60b1d2b1664104e307f8e5269d7f4acdb077c82e35cd57246ae14a3427d2d6";
+    hash = "sha256-txdkhsWUinUgHo0LIe8sI8qAhHQGDfRyGMkilb3OUnY=";
   };
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ six pytz jaraco_functools ];
+  propagatedBuildInputs = [
+    jaraco_functools
+    pytz
+  ];
 
-  checkInputs = [ pytest freezegun backports_unittest-mock ];
+  nativeCheckInputs = [
+    freezegun
+    pytest-freezegun
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    substituteInPlace pytest.ini --replace "--flake8" ""
-    pytest
-  '';
+  pythonImportsCheck = [
+    "tempora"
+    "tempora.schedule"
+    "tempora.timing"
+    "tempora.utc"
+  ];
 
   meta = with lib; {
     description = "Objects and routines pertaining to date and time";
     homepage = "https://github.com/jaraco/tempora";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

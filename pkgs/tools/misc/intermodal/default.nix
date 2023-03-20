@@ -1,25 +1,35 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "intermodal";
-  version = "0.1.7";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05wjzx1ibd7cyl5lgmmn5y8dhsk71wz2bnimbmq7z51ds6cbyw5i";
+    hash = "sha256-yPyKo2j0Up8gDzi2xOBqpMwIw6rpXDCxc8fCuEblwFY=";
   };
 
-  cargoSha256 = "04xqk1mmbrz8bjn36nxabwla3y62wfdly5bckkya6y2dhf1vkdjq";
+  cargoHash = "sha256-inJZTP4YwCZZ0JvSdGWnZbLN0A0B/+fz4g0XsfIQeq8=";
 
   # include_hidden test tries to use `chflags` on darwin
-  checkFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
+  checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd imdl \
+      --bash <($out/bin/imdl completions bash) \
+      --fish <($out/bin/imdl completions fish) \
+      --zsh  <($out/bin/imdl completions zsh)
+  '';
+
+  meta = with lib; {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
     license = licenses.cc0;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne xrelkd ];
+    mainProgram = "imdl";
   };
 }

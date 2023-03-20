@@ -61,12 +61,12 @@ Readonly::Hash my %LICENSE_MAP => (
 
     # GNU Free Documentation License, Version 1.2.
     gfdl_1_2 => {
-        licenses => [qw( fdl12 )]
+        licenses => [qw( fdl12Plus )]
     },
 
     # GNU Free Documentation License, Version 1.3.
     gfdl_1_3 => {
-        licenses => [qw( fdl13 )]
+        licenses => [qw( fdl13Plus )]
     },
 
     # GNU General Public License, Version 1.
@@ -309,7 +309,7 @@ sub render_license {
     # "GPL v2" or to "GPL v2 or later".
     my $amb = 0;
 
-    # Whether the license is available inside `stdenv.lib.licenses`.
+    # Whether the license is available inside `lib.licenses`.
     my $in_set = 1;
 
     my $nix_license = $LICENSE_MAP{$cpan_license};
@@ -331,7 +331,7 @@ sub render_license {
         # Avoid defining the license line.
     }
     elsif ($in_set) {
-        my $lic = 'stdenv.lib.licenses';
+        my $lic = 'lib.licenses';
         if ( @$licenses == 1 ) {
             $license_line = "$lic.$licenses->[0]";
         }
@@ -449,7 +449,7 @@ print <<EOF;
     meta = {
 EOF
 print <<EOF if defined $homepage;
-      homepage = $homepage;
+      homepage = "$homepage";
 EOF
 print <<EOF if defined $description && $description ne "Unknown";
       description = "$description";

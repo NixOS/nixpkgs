@@ -1,52 +1,62 @@
 { lib
-, substituteAll
-, buildPythonApplication
-, fetchFromGitHub
-, distutils_extra
-, setuptools-git
-, intltool
-, pygtk
-, libX11
-, libXtst
+, fetchFromGitLab
 , wrapGAppsHook
-, gnome3
+, xorg
+, gobject-introspection
+, gtk3
+, libappindicator-gtk3
+, slop
+, python3
 }:
-buildPythonApplication rec {
-  pname = "screenkey";
-  version = "0.9";
 
-  src = fetchFromGitHub {
-    owner = "wavexx";
-    repo = "screenkey";
-    rev = "screenkey-${version}";
-    sha256 = "14g7fiv9n7m03djwz1pp5034pffi87ssvss9bc1q8vq0ksn23vrw";
+python3.pkgs.buildPythonApplication rec {
+  pname = "screenkey";
+  version = "1.5";
+
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-kWktKzRyWHGd1lmdKhPwrJoSzAIN2E5TKyg30uhM4Ug=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit libX11 libXtst;
-    })
-  ];
-
   nativeBuildInputs = [
-    distutils_extra
-    setuptools-git
-    intltool
-
     wrapGAppsHook
+    # for setup hook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gtk3
+    libappindicator-gtk3
   ];
 
-  propagatedBuildInputs = [
-    pygtk
+  propagatedBuildInputs = with python3.pkgs; [
+    babel
+    pycairo
+    pygobject3
+    dbus-python
   ];
+
+  # Prevent double wrapping because of wrapGAppsHook
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      --prefix PATH ":" "${lib.makeBinPath [ slop ]}"
+      "''${gappsWrapperArgs[@]}"
+      )
+  '';
 
   # screenkey does not have any tests
   doCheck = false;
+
+  # Fix CDLL python calls for non absolute paths of xorg libraries
+  postPatch = ''
+    substituteInPlace Screenkey/xlib.py \
+      --replace libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
+      --replace libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
+  '';
 
   meta = with lib; {
     homepage = "https://www.thregr.org/~wavexx/software/screenkey/";

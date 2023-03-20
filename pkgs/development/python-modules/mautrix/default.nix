@@ -1,36 +1,82 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, future-fstrings, pythonOlder
-, sqlalchemy, ruamel_yaml, CommonMark, lxml, fetchpatch
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+  # deps
+, aiohttp
+, attrs
+, yarl
+  # optional deps
+, python-magic
+, python-olm
+, unpaddedbase64
+, pycryptodome
+  # check deps
+, pytestCheckHook
+, pytest-asyncio
+, aiosqlite
+, sqlalchemy
+, asyncpg
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.4.2";
+  version = "0.19.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f8pzi7ip82p7hn6d9xrgp5wsl4s3w6gmjsgb8gjy2606f7czqyg";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "mautrix";
+    repo = "python";
+    rev = "v${version}";
+    hash = "sha256-zPcqM+Ge7K4pJD4K0MkkGdSiYvXxe0K1qbfHzVYmGx0=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    future-fstrings
-
-    # defined in optional-requirements.txt
-    sqlalchemy
-    ruamel_yaml
-    CommonMark
-    lxml
+    attrs
+    yarl
   ];
 
-  disabled = pythonOlder "3.5";
+  passthru.optional-dependencies = {
+    detect_mimetype = [
+      python-magic
+    ];
+    encryption = [
+      python-olm
+      unpaddedbase64
+      pycryptodome
+    ];
+  };
 
-  # no tests available
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    aiosqlite
+    sqlalchemy
+    asyncpg
+  ] ++ passthru.optional-dependencies.encryption;
+
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  disabledTestPaths = [
+    # sqlalchemy 2 unsupported
+    "mautrix/client/state_store/tests/store_test.py"
+  ];
+
+  pythonImportsCheck = [
+    "mautrix"
+  ];
 
   meta = with lib; {
+    description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
-    description = "A Python 3 asyncio Matrix framework.";
+    changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 ];
+    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans nickcao ];
   };
 }

@@ -1,34 +1,108 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, joblib
-, matplotlib
-, six
-, scikitlearn
-, decorator
+, fetchFromGitHub
+
+# build-system
+, setuptools
+
+# runtime
 , audioread
-, resampy
+, decorator
+, joblib
+, lazy-loader
+, matplotlib
+, msgpack
+, numba
+, numpy
+, pooch
+, scikit-learn
+, scipy
 , soundfile
+, soxr
+, typing-extensions
+
+# tests
+, ffmpeg-headless
+, packaging
+, pytest-mpl
+, pytestCheckHook
+, resampy
+, samplerate
 }:
 
 buildPythonPackage rec {
   pname = "librosa";
-  version = "0.7.1";
+  version = "0.10.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cca58a2d9a47e35be63a3ce36482d241453bfe9b14bde2005430f969bd7d013a";
+  src = fetchFromGitHub {
+    owner = "librosa";
+    repo = "librosa";
+    rev = "refs/tags/${version}";
+    fetchSubmodules = true; # for test data
+    hash = "sha256-MXzPIcbG8b1JwhEyAZG4DRObGaHq+ipVHMrZCzaxLdE=";
   };
 
-  propagatedBuildInputs = [ joblib matplotlib six scikitlearn decorator audioread resampy soundfile ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  # No tests
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report term-missing --cov librosa --cov-report=xml " ""
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Python module for audio and music processing";
-    homepage = "http://librosa.github.io/";
+  propagatedBuildInputs = [
+    audioread
+    decorator
+    joblib
+    lazy-loader
+    msgpack
+    numba
+    numpy
+    pooch
+    scipy
+    scikit-learn
+    soundfile
+    soxr
+    typing-extensions
+  ];
+
+  passthru.optional-dependencies.matplotlib = [
+    matplotlib
+  ];
+
+  # check that import works, this allows to capture errors like https://github.com/librosa/librosa/issues/1160
+  pythonImportsCheck = [
+    "librosa"
+  ];
+
+  nativeCheckInputs = [
+    ffmpeg-headless
+    packaging
+    pytest-mpl
+    pytestCheckHook
+    resampy
+    samplerate
+  ] ++ passthru.optional-dependencies.matplotlib;
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  disabledTests = [
+    # requires network access
+    "test_example"
+    "test_example_info"
+    "test_load_resample"
+  ];
+
+  meta = with lib; {
+    description = "Python library for audio and music analysis";
+    homepage = "https://github.com/librosa/librosa";
+    changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
     license = licenses.isc;
+    maintainers = with maintainers; [ GuillaumeDesforges ];
   };
 
 }

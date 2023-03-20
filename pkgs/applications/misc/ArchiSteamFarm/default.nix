@@ -1,52 +1,84 @@
-{ stdenv, fetchurl, unzip, makeWrapper, autoPatchelfHook
-, zlib, lttng-ust, curl, icu, openssl }:
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, libkrb5
+, zlib
+, openssl
+, callPackage
+, stdenvNoCC
+}:
 
-stdenv.mkDerivation rec {
-  pname = "ArchiSteamFarm";
-  version = "4.2.0.6";
+buildDotnetModule rec {
+  pname = "archisteamfarm";
+  # nixpkgs-update: no auto update
+  version = "5.4.3.2";
 
-  src = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-linux-x64.zip";
-      sha256 = "05hx6q1lkbjbqhwi9xxvm7ycnsnpl1cnqzyy2yn0q4x27im399cn";
-    };
-    armv7l-linux = fetchurl {
-      url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-linux-arm.zip";
-      sha256 = "0l8irqrpl5vbjj84k4makj2ph2z6kpny7qz51zrzbgwhrlw0w4vg";
-    };
-    aarch64-linux = fetchurl {
-      url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-linux-arm64.zip";
-      sha256 = "0hg2g4i8sj3fxqfy4imz1iarby1d9f8dh59j266lbbdf2vfz2cml";
-    };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  src = fetchFromGitHub {
+    owner = "justarchinet";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-SRWqe8KTjFdgVW7/EYRVUONtDWwxpcZ1GXWFPjKZzpI=";
+  };
 
-  nativeBuildInputs = [ unzip makeWrapper autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc zlib lttng-ust curl ];
+  patches = [
+    # otherwise installPhase fails with NETSDK1129
+    ./fix-framework.diff
+  ];
 
-  sourceRoot = ".";
+  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
 
-  installPhase = ''
-    dist=$out/opt/asf
-    mkdir -p $dist
-    cp -r * $dist
-    chmod +x $dist/ArchiSteamFarm
-    makeWrapper $dist/ArchiSteamFarm $out/bin/ArchiSteamFarm \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ icu openssl ] }" \
-      --add-flags "--path ~/.config/asf" \
-      --run "mkdir -p ~/.config/asf" \
-      --run "cd ~/.config/asf" \
-      --run "[ -d config ] || cp --no-preserve=mode -r $dist/config ." \
-      --run "[ -d logs ] || cp --no-preserve=mode -r $dist/logs ." \
-      --run "[ -d plugins ] || cp --no-preserve=mode -r $dist/plugins ." \
-      --run "[ -d www ] || cp --no-preserve=mode -r $dist/www ." \
+  nugetDeps = ./deps.nix;
+
+  projectFile = "ArchiSteamFarm.sln";
+  executables = [ "ArchiSteamFarm" ];
+  dotnetFlags = [
+    "-p:PublishSingleFile=true"
+    "-p:PublishTrimmed=true"
+  ];
+  selfContainedBuild = true;
+
+  runtimeDeps = [ libkrb5 zlib openssl ];
+
+  doCheck = true;
+
+  preBuild = ''
+    export projectFile=(ArchiSteamFarm)
   '';
 
-  meta = with stdenv.lib; {
+  preInstall = ''
+    # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
+    makeWrapperArgs+=(
+      --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
+      --set "ASF_PATH" "~/.config/archisteamfarm"
+    )
+  '';
+
+  postInstall = ''
+    buildPlugin() {
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/${pname}/plugins/$1 --configuration Release \
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore
+     }
+
+     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
+     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  '';
+
+  passthru = {
+    # nix-shell maintainers/scripts/update.nix --argstr package ArchiSteamFarm
+    updateScript = ./update.sh;
+    ui = callPackage ./web-ui { };
+  };
+
+  meta = with lib; {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
-    hydraPlatforms = [];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

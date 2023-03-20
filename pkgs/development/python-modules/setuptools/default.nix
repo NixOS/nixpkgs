@@ -2,9 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, wrapPython
-, unzip
-, callPackage
 , bootstrapped-pip
 , lib
 , pipInstallHook
@@ -13,7 +10,7 @@
 
 let
   pname = "setuptools";
-  version = "45.2.0";
+  version = "67.4.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -22,22 +19,32 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
-      rev = "v${version}";
-      sha256 = "003iflm3ifjab3g1bnmhpwx1v3vpl4w90vwcvn8jf9449302d0md";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-QDHycUFA2VRUE9alan8rF0efZTNV3Jt0CskjkCc+in0=";
       name = "${pname}-${version}-source";
     };
 
+    patches = [
+      ./tag-date.patch
+      ./setuptools-distutils-C++.patch
+    ];
+
     buildPhase = ''
-      ${python.pythonForBuild.interpreter} bootstrap.py
+      ${python.pythonForBuild.interpreter} setup.py egg_info
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
+
+      # Here we untar the sdist and retar it in order to control the timestamps
+      # of all the files included
+      tar -xzf dist/${pname}-${version}.post0.tar.gz -C dist/
+      tar -czf dist/${name} -C dist/ --mtime="@$SOURCE_DATE_EPOCH" --sort=name ${pname}-${version}.post0
     '';
 
     installPhase = ''
       echo "Moving sdist..."
-      mv dist/*.tar.gz $out
+      mv dist/${name} $out
     '';
   };
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit pname version;
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.
@@ -52,7 +59,7 @@ in buildPythonPackage rec {
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
 
-  preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
 
@@ -64,11 +71,13 @@ in buildPythonPackage rec {
   # Requires pytest, causing infinite recursion.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = "https://pypi.python.org/pypi/setuptools";
-    license = with licenses; [ psfl zpl20 ];
+    homepage = "https://github.com/pypa/setuptools";
+    changelog = "https://setuptools.pypa.io/en/stable/history.html#v${replaceStrings [ "." ] [ "-" ] version}";
+    license = with licenses; [ mit ];
     platforms = python.meta.platforms;
     priority = 10;
+    maintainers = teams.python.members;
   };
 }

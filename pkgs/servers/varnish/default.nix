@@ -1,55 +1,64 @@
-{ stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
-, python3, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
+, coreutils, python3, makeWrapper, nixosTests }:
 
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, hash, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
 
       src = fetchurl {
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
-        inherit sha256;
+        inherit hash;
       };
 
-      passthru.python = python3;
-
-      nativeBuildInputs = with python3.pkgs; [ pkgconfig docutils sphinx ];
+      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx makeWrapper];
       buildInputs = [
-        pcre libxslt groff ncurses readline libedit makeWrapper python3
-      ];
+        libxslt groff ncurses readline libedit python3
+      ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
 
+      postPatch = ''
+        substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
+      '';
+
       postInstall = ''
-        wrapProgram "$out/sbin/varnishd" --prefix PATH : "${stdenv.lib.makeBinPath [ stdenv.cc ]}"
+        wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
-      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
+      env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
 
       outputs = [ "out" "dev" "man" ];
 
-      meta = with stdenv.lib; {
+      passthru = {
+        python = python3;
+        tests = nixosTests."varnish${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version)}";
+      };
+
+      meta = with lib; {
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = with maintainers; [ fpletz ];
+        maintainers = with maintainers; [ ajs124 ];
         platforms = platforms.unix;
       };
     };
 in
 {
+  # EOL TBA
   varnish60 = common {
-    version = "6.0.5";
-    sha256 = "11aw202s7zdp5qp66hii5nhgm2jk0d86pila7gqrnjgc7x8fs8a0";
+    version = "6.0.11";
+    hash = "sha256-UVkA2+tH/9MOs5BlyuAzFnmD7Pm9A6lDWic2B+HRKNs=";
   };
-  varnish62 = common {
-    version = "6.2.2";
-    sha256 = "10s3qdvb95pkwp3wxndrigb892h0109yqr8dw4smrhfi0knhnfk5";
-  };
-  varnish63 = common {
-    version = "6.3.1";
-    sha256 = "0xa14pd68zpi5hxcax3arl14rcmh5d1cdwa8gv4l5f23mmynr8ni";
+  # EOL 2023-09-15
+  varnish72 = common {
+    version = "7.2.1";
+    hash = "sha256-TZN9FyCo7BnFM/ly2TA6HJiJt7/KdDeJOuXCfPIEqUA=";
   };
 }

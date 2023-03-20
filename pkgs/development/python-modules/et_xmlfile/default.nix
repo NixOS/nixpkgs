@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , lxml
@@ -14,12 +14,12 @@ buildPythonPackage rec {
     sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
   };
 
-  checkInputs = [ lxml pytest ];
+  nativeCheckInputs = [ lxml pytest ];
   checkPhase = ''
     py.test $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of lxml.xmlfile for the standard library";
     longDescription = ''
       et_xmlfile is a low memory library for creating large XML files.
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://pypi.python.org/pypi/et_xmlfile";
     license = licenses.mit;
-    maintainers = with maintainers; [ sjourdois ];
+    maintainers = with maintainers; [ ];
   };
 
 }

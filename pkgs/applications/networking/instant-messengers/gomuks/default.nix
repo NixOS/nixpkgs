@@ -1,41 +1,58 @@
-{ stdenv, buildGoModule, fetchFromGitHub, makeDesktopItem }:
+{ lib
+, stdenv
+, substituteAll
+, buildGoModule
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, libnotify
+, olm
+, pulseaudio
+, sound-theme-freedesktop
+}:
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "2020-03-20";
-
-  goPackagePath = "maunium.net/go/gomuks";
-  patches = [ ./gomod.patch ];
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
-    rev = "bce30e32a049b3ee76081c8d3881a3820b0e7341";
-    sha256 = "0f7i88vrvl1xl4hmjplq3wwihqwijbgxy6nk5fkvc8pfmm5hsjcs";
+    rev = "v${version}";
+    sha256 = "sha256-gLyjqmGZudj8PmsYUGXHOjetZzi6u5CFI7Y50y2XAzk=";
   };
 
-  vendorSha256 = "0awiw41nzgp4gj9fd8lcgk880aa07n535jksn0ya1cmsgavcfbvc";
+  vendorSha256 = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ olm ];
 
   postInstall = ''
     cp -r ${
       makeDesktopItem {
         name = "net.maunium.gomuks.desktop";
         exec = "@out@/bin/gomuks";
-        terminal = "true";
+        terminal = true;
         desktopName = "Gomuks";
         genericName = "Matrix client";
-        categories = "Network;Chat";
+        categories = [ "Network" "Chat" ];
         comment = meta.description;
       }
     }/* $out/
     substituteAllInPlace $out/share/applications/*
+    wrapProgram $out/bin/gomuks \
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}" \
+      --set-default GOMUKS_SOUND_NORMAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message-new-instant.oga" \
+      --set-default GOMUKS_SOUND_CRITICAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tilpner emily ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ chvp emily ];
     platforms = platforms.unix;
   };
 }

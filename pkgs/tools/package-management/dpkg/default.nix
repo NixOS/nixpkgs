@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
+{ lib, stdenv, fetchgit, perl, gnutar, zlib, bzip2, xz, zstd
+, libmd, makeWrapper, coreutils, autoreconfHook, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.20.0";
+  version = "1.21.21ubuntu1";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "0009dp4p3d2j5vd956achqczf8qizfixha8hw5hzn3h31qmwqcxn";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/dpkg";
+    rev = "applied/${version}";
+    hash = "sha256-ZrJdf4oEvNeSMVHB8/TJgz5+YqLhih70ktLdnDurhUc=";
   };
 
   configureFlags = [
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
-    (stdenv.lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
-    (stdenv.lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
+    "TAR=${gnutar}/bin/tar"
+    (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
   ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     # Nice: dpkg has a circular dependency on itself. Its configure
@@ -49,14 +55,15 @@ stdenv.mkDerivation rec {
        --replace '"diff"' \"${coreutils}/bin/diff\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz ];
-  nativeBuildInputs = [ makeWrapper perl ];
+  buildInputs = [ perl zlib bzip2 xz zstd libmd ];
+  nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =
     ''
       for i in $out/bin/*; do
         if head -n 1 $i | grep -q perl; then
-          wrapProgram $i --prefix PERL5LIB : $out/${perl.libPrefix}
+          substituteInPlace $i --replace \
+            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
         fi
       done
 
@@ -64,11 +71,11 @@ stdenv.mkDerivation rec {
       cp -r scripts/t/origins $out/etc/dpkg
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

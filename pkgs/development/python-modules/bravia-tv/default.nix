@@ -1,20 +1,25 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy27, requests }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "bravia-tv";
-  version = "1.0.1";
-  disabled = isPy27;
+  version = "1.0.11";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dcnielsen90";
     repo = "python-bravia-tv";
     rev = "v${version}";
-    sha256 = "0jlrin5qw3ny2r961y5divd5xa9giprxhhxdc84rjlq9qdmnsk68";
+    hash = "sha256-g47bDd5bZl0jad3o6T1jJLcnZj8nx944kz3Vxv8gD2U=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  # package does not include tests
+  # Package does not include tests
   doCheck = false;
 
   pythonImportsCheck = [ "bravia_tv" ];

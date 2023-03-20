@@ -1,28 +1,60 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
-, flask, blinker, twill }:
-
-with stdenv.lib;
+{ lib
+, stdenv
+, blinker
+, pytestCheckHook
+, buildPythonPackage
+, fetchPypi
+, flask
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Testing";
-  version = "0.8.0";
+  pname = "flask-testing";
+  version = "0.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1rkkqgmrzmhpv6y1xysqh0ij03xniic8h631yvghksqwxd9vyjfq";
+    pname = "Flask-Testing";
+    inherit version;
+    hash = "sha256-CnNNe2jmOpQQtBPNex+WRW+ahYvQmmIi1GVlDMeC6wE=";
   };
 
-  postPatch = ''
-    sed -i -e 's/twill==0.9.1/twill/' setup.py
-  '';
+  propagatedBuildInputs = [
+    flask
+  ];
 
-  buildInputs = optionals (pythonOlder "3.0") [ twill ];
-  propagatedBuildInputs = [ flask blinker ];
+  nativeCheckInputs = [
+    blinker
+    pytestCheckHook
+  ];
 
-  meta = {
-    description = "Flask unittest integration.";
+  # Some of the tests use localhost networking on darwin
+  doCheck = !stdenv.isDarwin;
+
+  disabledTests = [
+    # RuntimeError and NotImplementedError
+    "test_assert_redirects"
+    "test_server_listening"
+    "test_server_process_is_spawned"
+    # change in repr(template) in recent flask
+    "test_assert_template_rendered_signal_sent"
+  ];
+
+  disabledTestPaths = [
+    # twill is only used by Python 2 according setup.py
+    "tests/test_twill.py"
+  ];
+
+  pythonImportsCheck = [
+    "flask_testing"
+  ];
+
+  meta = with lib; {
+    description = "Extension provides unit testing utilities for Flask";
     homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

@@ -12,7 +12,7 @@ let
 
   optimizedKeymap = pkgs.runCommand "keymap" {
     nativeBuildInputs = [ pkgs.buildPackages.kbd ];
-    LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
+    LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
     preferLocalBuild = true;
   } ''
     loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
@@ -21,12 +21,12 @@ let
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
   vconsoleConf = pkgs.writeText "vconsole.conf" ''
     KEYMAP=${cfg.keyMap}
-    FONT=${cfg.font}
+    ${optionalString (cfg.font != null) "FONT=${cfg.font}"}
   '';
 
-  consoleEnv = pkgs.buildEnv {
+  consoleEnv = kbd: pkgs.buildEnv {
     name = "console-env";
-    paths = [ pkgs.kbd ] ++ cfg.packages;
+    paths = [ kbd ] ++ cfg.packages;
     pathsToLink = [
       "/share/consolefonts"
       "/share/consoletrans"
@@ -34,22 +34,32 @@ let
       "/share/unimaps"
     ];
   };
-
-  setVconsole = !config.boot.isContainer;
 in
 
 {
   ###### interface
 
   options.console  = {
+    enable = mkEnableOption (lib.mdDoc "virtual console") // {
+      default = true;
+    };
+
     font = mkOption {
-      type = types.str;
+      type = with types; nullOr (either str path);
       default = "Lat2-Terminus16";
       example = "LatArCyrHeb-16";
-      description = ''
+      description = mdDoc ''
         The font used for the virtual consoles.  Leave empty to use
-        whatever the <command>setfont</command> program considers the
+        whatever the {command}`setfont` program considers the
         default font.
+        Can be either a font name or a path to a PSF font file.
+
+        Use `null` to let the kernel choose a built-in font.
+        The default is 8x16, and, as of Linux 5.3, Terminus 32 bold for display
+        resolutions of 2560x1080 and higher.
+        These fonts cover the [IBM437][] character set.
+
+        [IBM437]: https://en.wikipedia.org/wiki/Code_page_437
       '';
     };
 
@@ -57,21 +67,21 @@ in
       type = with types; either str path;
       default = "us";
       example = "fr";
-      description = ''
+      description = lib.mdDoc ''
         The keyboard mapping table for the virtual consoles.
       '';
     };
 
     colors = mkOption {
-      type = types.listOf types.str;
-      default = [];
+      type = with types; listOf (strMatching "[[:xdigit:]]{6}");
+      default = [ ];
       example = [
         "002b36" "dc322f" "859900" "b58900"
         "268bd2" "d33682" "2aa198" "eee8d5"
         "002b36" "cb4b16" "586e75" "657b83"
         "839496" "6c71c4" "93a1a1" "fdf6e3"
       ];
-      description = ''
+      description = lib.mdDoc ''
         The 16 colors palette used by the virtual consoles.
         Leave empty to use the default colors.
         Colors must be in hexadecimal format and listed in
@@ -82,32 +92,17 @@ in
 
     packages = mkOption {
       type = types.listOf types.package;
-      default = with pkgs.kbdKeymaps; [ dvp neo ];
-      defaultText = ''with pkgs.kbdKeymaps; [ dvp neo ]'';
-      description = ''
+      default = [ ];
+      description = lib.mdDoc ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
-      '';
-    };
-
-    extraTTYs = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      example = ["tty8" "tty9"];
-      description = ''
-        TTY (virtual console) devices, in addition to the consoles on
-        which mingetty and syslogd run, that must be initialised.
-        Only useful if you have some program that you want to run on
-        some fixed console.  For example, the NixOS installation CD
-        opens the manual in a web browser on console 7, so it sets
-        <option>console.extraTTYs</option> to <literal>["tty7"]</literal>.
       '';
     };
 
     useXkbConfig = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If set, configure the virtual console keymap from the xserver
         keyboard settings.
       '';
@@ -116,7 +111,7 @@ in
     earlySetup = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Enable setting virtual console options as early as possible (in initrd).
       '';
     };
@@ -130,38 +125,72 @@ in
     { console.keyMap = with config.services.xserver;
         mkIf cfg.useXkbConfig
           (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
-            '${pkgs.ckbcomp}/bin/ckbcomp' -model '${xkbModel}' -layout '${layout}' \
+            '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
+              ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+                "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+              } \
+              -model '${xkbModel}' -layout '${layout}' \
               -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
           '');
     }
 
-    (mkIf (!setVconsole) {
-      systemd.services.systemd-vconsole-setup.enable = false;
+    (mkIf (!cfg.enable) {
+      systemd.services = {
+        "serial-getty@ttyS0".enable = false;
+        "serial-getty@hvc0".enable = false;
+        "getty@tty1".enable = false;
+        "autovt@".enable = false;
+        systemd-vconsole-setup.enable = false;
+      };
     })
 
-    (mkIf setVconsole (mkMerge [
+    (mkIf cfg.enable (mkMerge [
       { environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
         environment.etc."vconsole.conf".source = vconsoleConf;
         # Provide kbd with additional packages.
-        environment.etc.kbd.source = "${consoleEnv}/share";
+        environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
-        boot.initrd.preLVMCommands = mkBefore ''
+        boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
           kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
           printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
           loadkmap < ${optimizedKeymap}
 
-          ${optionalString cfg.earlySetup ''
+          ${optionalString (cfg.earlySetup && cfg.font != null) ''
             setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
           ''}
-        '';
+        '');
 
-        systemd.services.systemd-vconsole-setup =
-          { before = [ "display-manager.service" ];
-            after = [ "systemd-udev-settle.service" ];
-            restartTriggers = [ vconsoleConf consoleEnv ];
+        boot.initrd.systemd.contents = {
+          "/etc/vconsole.conf".source = vconsoleConf;
+          # Add everything if we want full console setup...
+          "/etc/kbd" = lib.mkIf cfg.earlySetup { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share"; };
+          # ...but only the keymaps if we don't
+          "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
+        };
+        boot.initrd.systemd.storePaths = [
+          "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
+          "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
+          "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
+          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
+        ] ++ optionals (cfg.font != null && hasPrefix builtins.storeDir cfg.font) [
+          "${cfg.font}"
+        ] ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [
+          "${cfg.keyMap}"
+        ];
+
+        systemd.services.reload-systemd-vconsole-setup =
+          { description = "Reset console on configuration changes";
+            wantedBy = [ "multi-user.target" ];
+            restartTriggers = [ vconsoleConf (consoleEnv pkgs.kbd) ];
+            reloadIfChanged = true;
+            serviceConfig =
+              { RemainAfterExit = true;
+                ExecStart = "${pkgs.coreutils}/bin/true";
+                ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
+              };
           };
       }
 
@@ -173,13 +202,13 @@ in
         ];
       })
 
-      (mkIf cfg.earlySetup {
+      (mkIf (cfg.earlySetup && cfg.font != null && !config.boot.initrd.systemd.enable) {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
           ${if substring 0 1 cfg.font == "/" then ''
             font="${cfg.font}"
           '' else ''
-            font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
+            font="$(echo ${consoleEnv pkgs.kbd}/share/consolefonts/${cfg.font}.*)"
           ''}
           if [[ $font == *.gz ]]; then
             gzip -cd $font > $out/share/consolefonts/font.psf
@@ -199,5 +228,9 @@ in
     (mkRenamedOptionModule [ "i18n" "consoleUseXkbConfig" ] [ "console" "useXkbConfig" ])
     (mkRenamedOptionModule [ "boot" "earlyVconsoleSetup" ] [ "console" "earlySetup" ])
     (mkRenamedOptionModule [ "boot" "extraTTYs" ] [ "console" "extraTTYs" ])
+    (mkRemovedOptionModule [ "console" "extraTTYs" ] ''
+      Since NixOS switched to systemd (circa 2012), TTYs have been spawned on
+      demand, so there is no need to configure them manually.
+    '')
   ];
 }

@@ -1,50 +1,41 @@
-{ stdenv, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
-, libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify
-}:
+{ appimageTools, lib, fetchurl, makeDesktopItem }:
 
 let
-  version = "0.7.5";
-in stdenv.mkDerivation rec {
   pname = "rambox";
-  inherit version;
-  src = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-amd64.deb";
-      sha256 = "108yd5djnap37yh0nbjyqkp5ci1zmydfzqcsbapin40a4f36zm31";
-    };
-    i686-linux = fetchurl {
-      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.deb";
-      sha256 = "1pvh048h6m19rmbscsy69ih0jkyhazmq2pcagmf3kk8gmbi7y6p6";
-    };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  version = "2.1.0";
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
-  buildInputs = [ libXtst libXScrnSaver gtk3 nss alsaLib ];
-  runtimeDependencies = [ udev.lib libnotify ];
+  src = fetchurl {
+    url = "https://github.com/ramboxapp/download/releases/download/v${version}/Rambox-${version}-linux-x64.AppImage";
+    sha256 = "sha256-MQBDX4gCpEERdgimAAhKvnN76L1ckpsfWIHZqIsSJOE=";
+  };
 
-  unpackPhase = "dpkg-deb -x $src .";
+  desktopItem = (makeDesktopItem {
+    desktopName = "Rambox";
+    name = pname;
+    exec = "rambox";
+    icon = pname;
+    categories = [ "Network" ];
+  });
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r opt $out
-    ln -s $out/opt/Rambox/rambox $out/bin
+  appimageContents = appimageTools.extractType2 {
+    inherit pname version src;
+  };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
 
-    # provide resources
-    cp -r usr/share $out
-    substituteInPlace $out/share/applications/rambox.desktop \
-      --replace Exec=/opt/Rambox/rambox Exec=rambox
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
+    ln -sf rambox-${version} $out/bin/${pname}
+    install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/rambox*.png $out/share/icons/hicolor/256x256/apps/${pname}.png
+    install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  postFixup = ''
-    wrapProgram $out/opt/Rambox/rambox --prefix PATH : ${xdg_utils}/bin
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Free and Open Source messaging and emailing app that combines common web applications into one";
-    homepage = "https://rambox.pro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gnidorah ma27 ];
-    platforms = ["i686-linux" "x86_64-linux"];
-    hydraPlatforms = [];
+  meta = with lib; {
+    description = "Workspace Simplifier - a cross-platform application organizing web services into Workspaces similar to browser profiles";
+    homepage = "https://rambox.app";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ nazarewk ];
+    platforms = [ "x86_64-linux" ];
   };
 }

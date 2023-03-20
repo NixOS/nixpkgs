@@ -2,19 +2,21 @@
 
 buildPythonPackage rec {
   pname = "stem";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hk8alc0r4m669ggngdfvryndd0fbx0w62sclcmg55af4ak8xd50";
+    hash = "sha256-gdQ6fGaLqde8EQOy56kR6dFIKUs3PSelmujaee96Pi8=";
   };
 
   postPatch = ''
     rm test/unit/installation.py
     sed -i "/test.unit.installation/d" test/settings.cfg
+    # https://github.com/torproject/stem/issues/56
+    sed -i '/MOCK_VERSION/d' run_tests.py
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   checkPhase = ''
     touch .gitignore
@@ -25,6 +27,6 @@ buildPythonPackage rec {
     description = "Controller library that allows applications to interact with Tor";
     homepage = "https://stem.torproject.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ ];
   };
 }

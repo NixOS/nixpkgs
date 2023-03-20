@@ -1,49 +1,74 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
-, Security, libiconv, installShellFiles, makeWrapper
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, less
+, Security
+, libiconv
+, installShellFiles
+, makeWrapper
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname   = "bat";
-  version = "0.15.1";
+  pname = "bat";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "10cs94ja1dmn0f24gqkcy8rf68b3b43k6qpbb5njbg0hcx3x6cyj";
-    fetchSubmodules = true;
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-xkGGnWjuZ5ZR4Ll+JwgWyKZFboFZ6HKA8GviR3YBAnM=";
   };
+  cargoSha256 = "sha256-ye6GH4pcI9h1CNpobUzfJ+2WlqJ98saCdD77AtSGafg=";
 
-  cargoSha256 = "13cphi08bp6lg054acgliir8dx2jajll4m3c4xxy04skmx555zr8";
+  cargoPatches = [
+    # merged upstream in https://github.com/sharkdp/bat/pull/2399
+    (fetchpatch {
+      name = "disable-completion-of-cache-subcommand.patch";
+      url = "https://github.com/sharkdp/bat/commit/b6b9d3a629bd9b08725df2a4e7b92c3023584a89.patch";
+      hash = "sha256-G4LajO09+qfhpr+HRvAHCuE9EETit2e16ZEyAtz26B4=";
+      excludes = [ "CHANGELOG.md" ];
+    })
+  ];
 
-  # Disable test that's broken on macOS.
-  # This should probably be removed on the next release.
-  # https://github.com/sharkdp/bat/issues/983
-  patches = [ ./macos.patch ];
+  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
-    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.fish
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{bash,fish,zsh}
   '';
 
   # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
   # expected with certain flag combinations.
   postFixup = ''
     wrapProgram "$out/bin/bat" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testFile=$(mktemp /tmp/bat-test.XXXX)
+    echo -ne 'Foobar\n\n\n42' > $testFile
+    $out/bin/bat -p $testFile | grep "Foobar"
+    $out/bin/bat -p $testFile -r 4:4 | grep 42
+    rm $testFile
+
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
-    homepage    = "https://github.com/sharkdp/bat";
-    license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir lilyball ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/sharkdp/bat";
+    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
   };
 }

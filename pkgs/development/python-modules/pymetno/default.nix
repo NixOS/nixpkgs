@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
@@ -8,22 +8,33 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyMetno";
-  version = "0.5.0";
+  pname = "pymetno";
+  version = "0.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
     owner = "Danielhiversen";
-    rev = version;
-    sha256 = "00v2r3nn48svni9rbmbf0a4ylgfcf93gk2wg7qnm1fv1qrkgscvg";
+    repo = "PyMetno";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Do9RQS4gE2BapQtKQsnMzJ8EJzzxkCBA5r3z1zHXIsA=";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout pytz xmltodict ];
+  propagatedBuildInputs = [
+    aiohttp
+    async-timeout
+    pytz
+    xmltodict
+  ];
 
-  pythonImportsCheck = [ "metno"];
+  pythonImportsCheck = [
+    "metno"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A library to communicate with the met.no api";
+  # Project has no tests
+  doCheck = false;
+
+  meta = with lib; {
+    description = "A library to communicate with the met.no API";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     license = licenses.mit;
     maintainers = with maintainers; [ flyfloh ];

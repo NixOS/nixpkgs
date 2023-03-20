@@ -1,5 +1,6 @@
 { lib, buildDunePackage
-, macaddr, ounit
+, macaddr, domain-name, stdlib-shims
+, ounit, ppx_sexp_conv
 }:
 
 buildDunePackage rec {
@@ -7,16 +8,13 @@ buildDunePackage rec {
 
   inherit (macaddr) version src;
 
-  buildInputs = [ ounit ];
+  propagatedBuildInputs = [ macaddr domain-name stdlib-shims ];
 
-  propagatedBuildInputs = [ macaddr ];
-
+  checkInputs = [ ppx_sexp_conv ounit ];
   doCheck = true;
 
-  meta = with lib; {
-    homepage = "https://github.com/mirage/ocaml-ipaddr";
+  meta = macaddr.meta // {
     description = "A library for manipulation of IP (and MAC) address representations ";
-    license = licenses.isc;
-    maintainers = with maintainers; [ alexfmpe ericbmerritt ];
+    maintainers = with lib.maintainers; [ alexfmpe ericbmerritt ];
   };
 }

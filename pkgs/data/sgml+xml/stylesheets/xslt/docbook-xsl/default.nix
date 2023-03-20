@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
+{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash, withManOptDedupPatch ? false }:
 
 let
 
@@ -36,6 +36,10 @@ let
           src = ./catalog-legacy-uris.patch;
           inherit legacySuffix suffix version;
         })
+      ] ++ lib.optionals withManOptDedupPatch [
+        # Fixes https://github.com/NixOS/nixpkgs/issues/166304
+        # https://github.com/docbook/xslt10-stylesheets/pull/241
+        ./fix-man-options-duplication.patch
       ];
 
       propagatedBuildInputs = [ findXMLCatalogs ];
@@ -63,8 +67,9 @@ let
         '';
 
       meta = {
-        homepage = "http://wiki.docbook.org/topic/DocBookXslStylesheets";
+        homepage = "https://github.com/docbook/wiki/wiki/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
+        license = lib.licenses.mit;
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.all;
       };

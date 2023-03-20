@@ -1,20 +1,27 @@
-{ stdenv, fetchurl, nasm
-, alsaLib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
+{ lib, stdenv, fetchFromGitHub, nasm
+, alsa-lib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libtheora, libvorbis, libGLU, libGL, SDL2, zlib
+, Cocoa, AudioToolbox, Carbon, CoreMIDI, AudioUnit, cctools
 }:
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.1.2";
+  version = "2.7.0";
 
-  src = fetchurl {
-    url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1c4fz1nfg0nqnqx9iipayhzcsiqdmfxm2i95nw9dbhshhsdnrhf4";
+  src = fetchFromGitHub {
+    owner = "scummvm";
+    repo = "scummvm";
+    rev = "v${version}";
+    hash = "sha256-kyWgy5Nm8v/zbnhNMUyy/wUIq0I6nQyM9UqympYfwvg=";
   };
 
   nativeBuildInputs = [ nasm ];
 
-  buildInputs = [
-    alsaLib curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis libGLU libGL SDL2 zlib
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
+  ] ++ [
+    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis libGLU libGL SDL2 zlib
   ];
 
   dontDisableStatic = true;
@@ -23,20 +30,23 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ "host" ];
   configureFlags = [
-    "--enable-c++11"
     "--enable-release"
   ];
 
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace config.mk \
+      --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
+      --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     homepage = "https://www.scummvm.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.peterhoeg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

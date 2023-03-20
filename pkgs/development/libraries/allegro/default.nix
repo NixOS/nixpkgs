@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, texinfo, libXext, xorgproto, libX11
-, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+{ lib, stdenv, fetchurl, texinfo6_5, libXext, xorgproto, libX11
+, libXpm, libXt, libXcursor, alsa-lib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc
 , libXxf86vm, openal, libGLU, libGL }:
 
@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-unstable-sandbox-fix.patch
+    ./encoding.patch
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    texinfo libXext xorgproto libX11 libXpm libXt libXcursor
-    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    texinfo6_5 libXext xorgproto libX11 libXpm libXt libXcursor
+    alsa-lib zlib libpng libvorbis libXxf86dga libXxf86misc
     libXxf86vm openal libGLU libGL
   ];
 
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A game programming library";
     homepage = "https://liballeg.org/";
     license = licenses.free; # giftware

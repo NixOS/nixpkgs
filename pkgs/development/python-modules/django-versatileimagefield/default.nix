@@ -1,27 +1,29 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
-, python
 , pillow
+, python-magic
 }:
 
 buildPythonPackage rec {
   pname = "django-versatileimagefield";
-  version = "1.11";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8322ee9d7bf5ffa5360990320d2cc2efc7017feff35422636d49f625721edf82";
+    hash = "sha256-FlHbLtNthDz7F4jyYBRyopPZuoZyk2m29uVZERI1esc=";
   };
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [ pillow python-magic ];
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "versatileimagefield" ];
+
+  meta = with lib; {
     description = "Replaces django's ImageField with a more flexible interface";
     homepage = "https://github.com/respondcreate/django-versatileimagefield/";
     license = licenses.mit;

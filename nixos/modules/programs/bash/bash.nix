@@ -11,33 +11,8 @@ let
 
   cfg = config.programs.bash;
 
-  bashCompletion = optionalString cfg.enableCompletion ''
-    # Check whether we're running a version of Bash that has support for
-    # programmable completion. If we do, enable all modules installed in
-    # the system and user profile in obsolete /etc/bash_completion.d/
-    # directories. Bash loads completions in all
-    # $XDG_DATA_DIRS/bash-completion/completions/
-    # on demand, so they do not need to be sourced here.
-    if shopt -q progcomp &>/dev/null; then
-      . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
-      nullglobStatus=$(shopt -p nullglob)
-      shopt -s nullglob
-      for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"*; do
-          . $m
-        done
-      done
-      eval "$nullglobStatus"
-      unset nullglobStatus p m
-    fi
-  '';
-
-  lsColors = optionalString cfg.enableLsColors ''
-    eval "$(${pkgs.coreutils}/bin/dircolors -b)"
-  '';
-
   bashAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+    mapAttrsFlatten (k: v: "alias -- ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
@@ -55,10 +30,10 @@ in
       /*
       enable = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whenever to configure Bash as an interactive shell.
           Note that this tries to make Bash the default
-          <option>users.defaultUserShell</option>,
+          {option}`users.defaultUserShell`,
           which in turn means that you might need to explicitly
           set this variable if you have another shell configured
           with NixOS.
@@ -69,16 +44,16 @@ in
 
       shellAliases = mkOption {
         default = {};
-        description = ''
-          Set of aliases for bash shell, which overrides <option>environment.shellAliases</option>.
-          See <option>environment.shellAliases</option> for an option format description.
+        description = lib.mdDoc ''
+          Set of aliases for bash shell, which overrides {option}`environment.shellAliases`.
+          See {option}`environment.shellAliases` for an option format description.
         '';
         type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during bash shell initialisation.
         '';
         type = types.lines;
@@ -86,7 +61,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during login bash shell initialisation.
         '';
         type = types.lines;
@@ -94,7 +69,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during interactive bash shell initialisation.
         '';
         type = types.lines;
@@ -103,10 +78,10 @@ in
       promptInit = mkOption {
         default = ''
           # Provide a nice prompt if the terminal supports it.
-          if [ "$TERM" != "dumb" -o -n "$INSIDE_EMACS" ]; then
+          if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
-            let $UID && PROMPT_COLOR="1;32m"
-            if [ -n "$INSIDE_EMACS" -o "$TERM" == "eterm" -o "$TERM" == "eterm-color" ]; then
+            ((UID)) && PROMPT_COLOR="1;32m"
+            if [ -n "$INSIDE_EMACS" ] || [ "$TERM" = "eterm" ] || [ "$TERM" = "eterm-color" ]; then
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else
@@ -117,26 +92,19 @@ in
             fi
           fi
         '';
-        description = ''
+        description = lib.mdDoc ''
           Shell script code used to initialise the bash prompt.
         '';
         type = types.lines;
       };
 
-      enableCompletion = mkOption {
-        default = true;
-        description = ''
-          Enable Bash completion for all interactive bash shells.
+      promptPluginInit = mkOption {
+        default = "";
+        description = lib.mdDoc ''
+          Shell script code used to initialise bash prompt plugins.
         '';
-        type = types.bool;
-      };
-
-      enableLsColors = mkOption {
-        default = true;
-        description = ''
-          Enable extra colors in directory listings.
-        '';
-        type = types.bool;
+        type = types.lines;
+        internal = true;
       };
 
     };
@@ -167,8 +135,7 @@ in
         set +h
 
         ${cfg.promptInit}
-        ${bashCompletion}
-        ${lsColors}
+        ${cfg.promptPluginInit}
         ${bashAliases}
 
         ${cfge.interactiveShellInit}
@@ -206,7 +173,7 @@ in
         # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_BASHRC_SOURCED" -o -n "$NOSYSBASHRC" ]; then return; fi
+        if [ -n "$__ETC_BASHRC_SOURCED" ] || [ -n "$NOSYSBASHRC" ]; then return; fi
         __ETC_BASHRC_SOURCED=1
 
         # If the profile was not loaded in a parent process, source
@@ -237,9 +204,6 @@ in
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];
-
-    environment.systemPackages = optional cfg.enableCompletion
-      pkgs.nix-bash-completions;
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"

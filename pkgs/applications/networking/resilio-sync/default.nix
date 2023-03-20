@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, ... }:
+{ lib, stdenv, fetchurl, libxcrypt, ... }:
 
-let
-  arch = {
-    x86_64-linux = "x64";
-    i686-linux = "i386";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "resilio-sync";
-  version = "2.7.0";
+  version = "2.7.3";
 
-  src = fetchurl {
-    url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
-    sha256 = {
-      x86_64-linux = "17vw4kyggmi8phm91jx1skkd7vrdhbahibv6d6zm14q87r01a56f";
-      i686-linux   = "0yvy3lif2g4jchcp5q1r5b8ndj8009pcq5js7r0kl20bmmcmzklg";
-    }.${stdenv.hostPlatform.system};
-  };
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://download-cdn.resilio.com/${version}/linux-x64/resilio-sync_x64.tar.gz";
+      sha256 = "sha256-DYQs9KofHkvtlsRQHRLwQHoHwSZkr40Ih0RVAw2xv3M=";
+    };
+
+    i686-linux = fetchurl {
+      url = "https://download-cdn.resilio.com/${version}/linux-i386/resilio-sync_i386.tar.gz";
+      sha256 = "sha256-PFKVBs0KthG4tuvooHkAciPhNQP0K8oi2LyoRUs5V7I=";
+    };
+
+    aarch64-linux = fetchurl {
+      url = "https://download-cdn.resilio.com/${version}/linux-arm64/resilio-sync_arm64.tar.gz";
+      sha256 = "sha256-o2DlYOBTkFhQMEDJySlVSNlVqLNbBzacyv2oTwxrXto=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontStrip = true; # Don't strip, otherwise patching the rpaths breaks
   sourceRoot = ".";
@@ -26,14 +28,15 @@ in stdenv.mkDerivation rec {
     install -D rslsync "$out/bin/rslsync"
     patchelf \
       --interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} "$out/bin/rslsync"
+      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc libxcrypt ]} "$out/bin/rslsync"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically sync files via secure, distributed technology";
     homepage    = "https://www.resilio.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];
+    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac jwoudenberg ];
   };
 }

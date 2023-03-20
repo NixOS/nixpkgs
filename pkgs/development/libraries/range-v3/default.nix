@@ -1,32 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "range-v3";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ericniebler";
     repo = "range-v3";
     rev = version;
-    sha256 = "1h9h5j7pdi0afpip9ncq76h1xjhvb8bnm585q17afz2l4fydy8qj";
+    hash = "sha256-bRSX91+ROqG1C3nB9HSQaKgLzOHEFy9mrD2WW3PRBWU=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   # Building the tests currently fails on AArch64 due to internal compiler
   # errors (with GCC 9.2):
-  cmakeFlags = stdenv.lib.optional stdenv.isAarch64 "-DRANGE_V3_TESTS=OFF";
+  cmakeFlags = [ "-DRANGES_ENABLE_WERROR=OFF" ]
+    ++ lib.optional stdenv.isAarch64 "-DRANGE_V3_TESTS=OFF";
 
   doCheck = !stdenv.isAarch64;
   checkTarget = "test";
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental range library for C++11/14/17";
     homepage = "https://github.com/ericniebler/range-v3";
+    changelog = "https://github.com/ericniebler/range-v3/releases/tag/${version}";
     license = licenses.boost;
     platforms = platforms.all;
-    maintainers = with maintainers; [ primeos xwvvvvwx ];
+    maintainers = with maintainers; [ ];
   };
 }

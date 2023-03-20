@@ -1,68 +1,82 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, autoreconfHook
+, cmake
+, pkg-config
 , fltk
-, jansson
 , rtmidi
 , libsamplerate
 , libsndfile
 , jack2
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , libXpm
-, libXinerama
-, libXcursor
-, catch2
-, nlohmann_json
+, flac
+, libogg
+, libvorbis
+, libopus
 }:
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.16.2.2";
+  version = "unstable-2021-09-24";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0rpg5qmw3b76xcra869shb8fwk5wfzpzw216n96hxa5s6k69cm0p";
+    # Using master with https://github.com/monocasual/giada/pull/509 till a new release is done.
+    rev = "f117a8b8eef08d904ef1ab22c45f0e1fad6b8a56";
+    sha256 = "01hb981lrsyk870zs8xph5fm0z7bbffpkxgw04hq487r804mkx9j";
+    fetchSubmodules = true;
   };
 
-  configureFlags = [
-    "--target=linux"
-    "--enable-system-catch"
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-w"
+    "-Wno-error"
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
+    rtmidi
     fltk
     libsndfile
     libsamplerate
-    jansson
-    rtmidi
+    alsa-lib
     libXpm
-    jack2
-    alsaLib
     libpulseaudio
-    libXinerama
-    libXcursor
-    catch2
-    nlohmann_json
+    jack2
+    flac
+    libogg
+    libvorbis
+    libopus
   ];
 
   postPatch = ''
-    sed -i 's:"deps/json/single_include/nlohmann/json\.hpp":<nlohmann/json.hpp>:' \
-        src/core/{conf,init,midiMapConf,patch}.cpp
+    local fixup_list=(
+      src/core/kernelMidi.cpp
+      src/gui/elems/config/tabMidi.cpp
+      src/utils/ver.cpp
+    )
+    for f in "''${fixup_list[@]}"; do
+      substituteInPlace "$f" \
+        --replace "<RtMidi.h>" "<${rtmidi.src}/RtMidi.h>"
+    done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isAarch64; # produces build failure on aarch64-linux
   };
 }

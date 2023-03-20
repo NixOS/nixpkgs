@@ -2,17 +2,19 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
 
 {
   name = "login";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, lib, ... }:
     { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
       sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     };
 
   testScript = ''
+      machine.start(allow_reboot = True)
+
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
       machine.screenshot("postboot")
@@ -29,11 +31,11 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           machine.wait_until_succeeds("pgrep -f 'agetty.*tty2'")
 
       with subtest("Log in as alice on a virtual console"):
-          machine.wait_until_tty_matches(2, "login: ")
+          machine.wait_until_tty_matches("2", "login: ")
           machine.send_chars("alice\n")
-          machine.wait_until_tty_matches(2, "login: alice")
+          machine.wait_until_tty_matches("2", "login: alice")
           machine.wait_until_succeeds("pgrep login")
-          machine.wait_until_tty_matches(2, "Password: ")
+          machine.wait_until_tty_matches("2", "Password: ")
           machine.send_chars("foobar\n")
           machine.wait_until_succeeds("pgrep -u alice bash")
           machine.send_chars("touch done\n")
@@ -50,10 +52,17 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
       with subtest("Virtual console logout"):
           machine.send_chars("exit\n")
           machine.wait_until_fails("pgrep -u alice bash")
-          machine.screenshot("mingetty")
+          machine.screenshot("getty")
 
       with subtest("Check whether ctrl-alt-delete works"):
-          machine.send_key("ctrl-alt-delete")
-          machine.wait_for_shutdown()
+          boot_id1 = machine.succeed("cat /proc/sys/kernel/random/boot_id").strip()
+          assert boot_id1 != ""
+
+          machine.reboot()
+
+          boot_id2 = machine.succeed("cat /proc/sys/kernel/random/boot_id").strip()
+          assert boot_id2 != ""
+
+          assert boot_id1 != boot_id2
   '';
 })

@@ -1,36 +1,56 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
+, fetchFromGitHub
+, cffi
 , numpy
-, pkgs
+, libsamplerate
+, pytestCheckHook
 }:
 
-buildPythonPackage {
-  pname = "scikits.samplerate";
-  version = "0.3.3";
+buildPythonPackage rec {
+  pname = "samplerate";
+  version = "0.1.0";
+  format = "setuptools";
 
-  src = pkgs.fetchgit {
-    url = "https://github.com/cournape/samplerate";
-    rev = "a536c97eb2d6195b5f266ea3cc3a35364c4c2210";
-    sha256 = "0mgic7bs5zv5ji05vr527jlxxlb70f9dg93hy1lzyz2plm1kf7gg";
+  src = fetchFromGitHub {
+    owner = "tuxu";
+    repo = "python-samplerate";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lHZ9SVnKcsEsnKYXR/QocGbKPEoA7yCZxXvrNPeH1rA=";
   };
 
-  buildInputs =  [ pkgs.libsamplerate ];
-  propagatedBuildInputs = [ numpy ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace ", 'pytest-runner'" ""
 
-  preConfigure = ''
-     cat > site.cfg << END
-     [samplerate]
-     library_dirs=${pkgs.libsamplerate.out}/lib
-     include_dirs=${pkgs.libsamplerate.dev}/include
-     END
+    substituteInPlace samplerate/lowlevel.py --replace \
+      "lib_filename = _find_library('samplerate')" \
+      'lib_filename = "${libsamplerate.out}/lib/libsamplerate${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    cffi
+    numpy
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/cournape/samplerate";
-    description = "High quality sampling rate convertion from audio data in numpy arrays";
-    license = licenses.gpl2;
+  pythonImportsCheck = [
+    "samplerate"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    rm -rf samplerate
+  '';
+
+  meta = with lib; {
+    description = "Python bindings for libsamplerate based on CFFI and NumPy";
+    homepage = "https://github.com/tuxu/python-samplerate";
+    changelog = "https://github.com/tuxu/python-samplerate/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
   };
-
 }

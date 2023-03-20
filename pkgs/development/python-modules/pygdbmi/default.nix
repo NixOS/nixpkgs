@@ -1,23 +1,26 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , gdb
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "pygdbmi";
-  version = "0.9.0.2";
+  version = "0.11.0.0";
 
   src = fetchFromGitHub {
-    #inherit pname version;
-    #inherit pname version;
     owner = "cs01";
     repo = "pygdbmi";
-    rev = version;
-    sha256 = "01isx7912dbalmc3xsafk1a1n6bzzfrjn2363djcq0v57rqii53d";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
   };
 
-  checkInputs = [ gdb ];
+  nativeCheckInputs = [ gdb pytest ];
+
+  # tests require gcc for some reason
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     # tries to execute flake8,

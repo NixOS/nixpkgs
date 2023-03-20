@@ -5,15 +5,15 @@
 
 buildPythonPackage rec {
   pname = "outcome";
-  version = "1.0.1";
+  version = "1.2.0";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc7822068ba7dd0fc2532743611e8a73246708d3564e29a39f93d6ab3701b66f";
+    hash = "sha256-b4K9PeRdowPPH3ceyvoWM3UKNYQ2qLtg4Goc63RdJnI=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ attrs ];
   # Has a test dependency on trio, which depends on outcome.
   doCheck = false;

@@ -1,21 +1,25 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , intltool
-, gtk3
 , wrapGAppsHook
-, alsaLib
+, gtk3
+, alsa-lib
 , libpulseaudio
 , fftw
+, json_c
+, libjack2
+, jackSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "lingot";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "cbjHe7mI6DhKDsv0yGHYOPe5hShKjhj3VTKrmBbGoA8=";
+    sha256 = "sha256-xPl+SWo2ZscHhtE25vLMxeijgT6wjNo1ys1+sNFvTVY=";
   };
 
   nativeBuildInputs = [
@@ -26,20 +30,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    alsaLib
+    alsa-lib
     libpulseaudio
     fftw
-  ];
+    json_c
+  ] ++ lib.optional jackSupport libjack2;
 
-  configureFlags = [
-    "--disable-jack"
-  ];
+  configureFlags = lib.optional (!jackSupport) "--disable-jack";
 
   meta = {
     description = "Not a Guitar-Only tuner";
     homepage = "https://www.nongnu.org/lingot/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ viric ];
   };
 }

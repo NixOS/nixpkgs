@@ -1,42 +1,46 @@
-{ buildPythonPackage, lib, fetchgit, isPy3k
-, git, makeWrapper, sassc, hyperkitty, postorius, whoosh
-, django
+{ lib, python3
+, sassc, hyperkitty, postorius
 }:
 
-buildPythonPackage rec {
-  pname = "mailman-web-unstable";
-  version = "2019-09-29";
-  disabled = !isPy3k;
+with python3.pkgs;
 
-  src = fetchgit {
-    url = "https://gitlab.com/mailman/mailman-web";
-    rev = "d17203b4d6bdc71c2b40891757f57a32f3de53d5";
-    sha256 = "124cxr4vfi1ibgxygk4l74q4fysx0a6pga1kk9p5wq2yvzwg9z3n";
-    leaveDotGit = true;
+buildPythonPackage rec {
+  pname = "mailman-web";
+  version = "0.0.5";
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-9pvs/VATAsMcGNrj58b/LifysEPTNhrAP57sfp4nX6Q=";
   };
 
-  # This is just so people installing from pip also get uwsgi
-  # installed, AFAICT.
   postPatch = ''
-    sed -i '/^  uwsgi$/d' setup.cfg
+    # Django is depended on transitively by hyperkitty and postorius,
+    # and mailman_web has overly restrictive version bounds on it, so
+    # let's remove it.
+    sed -i '/^[[:space:]]*django/Id' setup.cfg
+
+    # Upstream seems to mostly target installing on top of existing
+    # distributions, and uses a path appropriate for that, but we are
+    # a distribution, so use a state directory appropriate for a
+    # distro package.
+    substituteInPlace mailman_web/settings/base.py \
+        --replace /opt/mailman/web /var/lib/mailman-web
   '';
 
-  nativeBuildInputs = [ git makeWrapper ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ hyperkitty postorius whoosh ];
 
   # Tries to check runtime configuration.
   doCheck = false;
 
-  postInstall = ''
-    wrapProgram $out/bin/mailman-web \
-        --suffix PATH : ${lib.makeBinPath [ sassc ]}
-  '';
+  makeWrapperArgs = [
+    "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
+  ];
 
   meta = with lib; {
     description = "Django project for Mailman 3 web interface";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peti qyliss ];
-    # mailman-web requires django < 2.2
-    broken = versionOlder "2.2" django.version;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ qyliss m1cr0man ];
   };
 }

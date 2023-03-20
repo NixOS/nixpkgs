@@ -1,56 +1,61 @@
-{ stdenv, fetchurl, graalvm8, glibcLocales }:
+{ lib
+, buildGraalvmNativeImage
+, graalvmCEPackages
+, removeReferencesTo
+, fetchurl
+, writeScript }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
+buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "0.0.97";
-
-  reflectionJson = fetchurl {
-    name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1gd9ih9l02n1j9qkbxb36d3cb5sddwvxiw8kkicgc4xig77lsa7z";
-  };
+  version = "1.3.176";
 
   src = fetchurl {
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "08py6bawfrhg90fbcnv2mq4c91g5wa1q2q6zdjy2i1b9q4x1654r";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
+    sha256 = "sha256-Kf7Yb7IrXiX5MGbpxvXSKqx3LEdHFV8+hgq43SAoe00=";
   };
 
-  dontUnpack = true;
+  graalvmDrv = graalvmCEPackages.graalvm19-ce;
 
-  LC_ALL = "en_US.UTF-8";
-  nativeBuildInputs = [ graalvm8 glibcLocales ];
+  executable = "bb";
 
-  buildPhase = ''
-    native-image \
-      -jar ${src} \
-      -H:Name=bb \
-      -H:+ReportExceptionStackTraces \
-      -J-Dclojure.spec.skip-macros=true \
-      -J-Dclojure.compiler.direct-linking=true \
-      "-H:IncludeResources=BABASHKA_VERSION" \
-      "-H:IncludeResources=SCI_VERSION" \
-      -H:ReflectionConfigurationFiles=${reflectionJson} \
-      --initialize-at-run-time=java.lang.Math\$RandomNumberGeneratorHolder \
-      --initialize-at-build-time \
-      -H:Log=registerResource: \
-      -H:EnableURLProtocols=http,https \
-      --enable-all-security-services \
-      -H:+JNI \
-      --verbose \
-      --no-fallback \
-      --no-server \
-      --report-unsupported-elements-at-runtime \
-      "--initialize-at-run-time=org.postgresql.sspi.SSPIClient" \
-      "-J-Xmx4500m"
+  nativeBuildInputs = [ removeReferencesTo ];
+
+  extraNativeImageBuildArgs = [
+    "-H:+ReportExceptionStackTraces"
+    "--no-fallback"
+    "--native-image-info"
+    "--enable-preview"
+  ];
+
+  installCheckPhase = ''
+    $out/bin/bb --version | grep '${version}'
+    $out/bin/bb '(+ 1 2)' | grep '3'
+    $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bb $out/bin/bb
+  # As of v1.2.174, this will remove references to ${graalvmDrv}/conf/chronology,
+  # not sure the implications of this but this file is not available in
+  # graalvm19-ce anyway.
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${executable}
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = writeScript "update-babashka" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
+      -s "https://api.github.com/repos/babashka/babashka/releases/latest" \
+      | jq -r '.tag_name')"
+
+    # v0.6.2 -> 0.6.2
+    update-source-version babashka "''${latest_version/v/}"
+  '';
+
+  meta = with lib; {
     description = "A Clojure babushka for the grey areas of Bash";
     longDescription = ''
       The main idea behind babashka is to leverage Clojure in places where you
@@ -76,9 +81,16 @@ stdenv.mkDerivation rec {
     - Batteries included (tools.cli, cheshire, ...)
     - Library support via popular tools like the clojure CLI
     '';
-    homepage = "https://github.com/borkdude/babashka";
+    homepage = "https://github.com/babashka/babashka";
+    changelog = "https://github.com/babashka/babashka/blob/v${version}/CHANGELOG.md";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
-    platforms = graalvm8.meta.platforms;
-    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [
+      bandresen
+      bhougland
+      DerGuteMoritz
+      jlesquembre
+      thiagokokada
+    ];
   };
 }

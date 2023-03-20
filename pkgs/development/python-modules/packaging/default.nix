@@ -1,30 +1,47 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pyparsing, six, pytest, pretend }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pretend
+, pytestCheckHook
+, pythonOlder
+}:
 
-buildPythonPackage rec {
-  pname = "packaging";
-  version = "20.1";
+let
+  packaging = buildPythonPackage rec {
+    pname = "packaging";
+    version = "23.0";
+    format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e665345f9eef0c621aa0bf2f8d78cf6d21904eef16a93f020240b704a57f1334";
+    disabled = pythonOlder "3.7";
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-tq0pf4kH3g+i/hzL0m/a84f19Hxydf7fjM6J+ZRGz5c=";
+    };
+
+    nativeBuildInputs = [
+      flit-core
+    ];
+
+    nativeCheckInputs = [
+      pytestCheckHook
+      pretend
+    ];
+
+    # Prevent circular dependency with pytest
+    doCheck = false;
+
+    pythonImportsCheck = [ "packaging" ];
+
+    passthru.tests = packaging.overridePythonAttrs (_: { doCheck = true; });
+
+    meta = with lib; {
+      description = "Core utilities for Python packages";
+      homepage = "https://github.com/pypa/packaging";
+      license = with licenses; [ bsd2 asl20 ];
+      maintainers = with maintainers; [ bennofs SuperSandro2000 ];
+    };
   };
-
-  propagatedBuildInputs = [ pyparsing six ];
-
-  checkInputs = [ pytest pretend ];
-
-  checkPhase = ''
-    py.test tests
-  '';
-
-  # Prevent circular dependency
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    description = "Core utilities for Python packages";
-    homepage = "https://github.com/pypa/packaging";
-    license = [ licenses.bsd2 licenses.asl20 ];
-    maintainers = with maintainers; [ bennofs ];
-  };
-}
+in
+packaging

@@ -1,54 +1,134 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, autoconf, boost
-, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4, perl
-, python3, rapidjson, snappy, thrift, which, zlib, zstd
-, enableShared ? true }:
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, fixDarwinDylibNames
+, autoconf
+, aws-sdk-cpp
+, boost
+, brotli
+, c-ares
+, cmake
+, crc32c
+, curl
+, flatbuffers
+, gflags
+, glog
+, google-cloud-cpp
+, grpc
+, gtest
+, libbacktrace
+, lz4
+, minio
+, ninja
+, nlohmann_json
+, openssl
+, perl
+, protobuf
+, python3
+, rapidjson
+, re2
+, snappy
+, sqlite
+, thrift
+, tzdata
+, utf8proc
+, which
+, zlib
+, zstd
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableFlight ? true
+, enableJemalloc ? !stdenv.isDarwin
+  # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
+  # non-existent in older versions
+  # see https://github.com/boostorg/process/issues/55
+, enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
+, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
+}:
+
+assert lib.asserts.assertMsg
+  ((enableS3 && stdenv.isDarwin) -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70"))
+  "S3 on Darwin requires Boost != 1.69";
 
 let
+  arrow-testing = fetchFromGitHub {
+    name = "arrow-testing";
+    owner = "apache";
+    repo = "arrow-testing";
+    rev = "ecab1162cbec872e17d949ecc86181670aee045c";
+    hash = "sha256-w6rEuxfLTEO8DyXV44G6JOMeTfYtskFCOj9rHXNmj2Y=";
+  };
+
   parquet-testing = fetchFromGitHub {
+    name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "bcd9ebcf9204a346df47204fe21b85c8d0498816";
-    sha256 = "0m16pqzbvxiaradq088q5ai6fwnz9srbap996397znwppvva479b";
+    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
+    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
   };
 
-in stdenv.mkDerivation rec {
+  aws-sdk-cpp-arrow = aws-sdk-cpp.override {
+    apis = [
+      "cognito-identity"
+      "config"
+      "identity-management"
+      "s3"
+      "sts"
+      "transfer"
+    ];
+  };
+
+in
+stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.17.1";
+  version = "11.0.0";
 
   src = fetchurl {
-    url =
-      "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "18lyvbibfdw3w77cy5whbq7c6mshn5fg2bhvgw7v226a7cs1rifb";
+    url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
+    hash = "sha256-Ldjw6ghIpYeFYo7jpXZ1VI1QnhchOi9dcrDZALQ/VDA=";
   };
-
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ARROW_JEMALLOC_URL = fetchurl {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
-    url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
-    sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
+  # versions are all taken from
+  # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
+
+  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+  # collisions as well as custom build flags
+  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
+    hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+  };
+
+  # mimalloc: arrow uses custom build flags for mimalloc
+  ARROW_MIMALLOC_URL = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    rev = "v2.0.6";
+    hash = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
+  };
+
+  ARROW_XSIMD_URL = fetchFromGitHub {
+    owner = "xtensor-stack";
+    repo = "xsimd";
+    rev = "9.0.1";
+    hash = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
+  };
+
+  ARROW_SUBSTRAIT_URL = fetchFromGitHub {
+    owner = "substrait-io";
+    repo = "substrait";
+    rev = "v0.20.0";
+    hash = "sha256-71hAwJ0cGvpwK/ibeeQt82e9uqxcu9sM1rPtPENMPfs=";
   };
 
   patches = [
     # patch to fix python-test
     ./darwin.patch
-
-    # fix musl build
-    (fetchpatch {
-      url = "https://github.com/apache/arrow/commit/de4168786dfd8ab932f48801e0a7a6b8a370c19d.diff";
-      sha256 = "1nl4y1rwdl0gn67v7l05ibc4lwkn6x7fhwbmslmm08cqmwfjsx3y";
-      stripLen = 1;
-    })
-  ] ++ lib.optionals (!enableShared) [
-    # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
-    ./jemalloc-disable-shared.patch
   ];
 
   nativeBuildInputs = [
     cmake
+    ninja
     autoconf # for vendored jemalloc
     flatbuffers
   ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -59,73 +139,139 @@ in stdenv.mkDerivation rec {
     gflags
     glog
     gtest
+    libbacktrace
     lz4
+    nlohmann_json # alternative JSON parser to rapidjson
+    protobuf # substrait requires protobuf
     rapidjson
+    re2
     snappy
     thrift
+    utf8proc
     zlib
     zstd
-  ] ++ lib.optionals enableShared [
-    python3.pkgs.python
-    python3.pkgs.numpy
+  ] ++ lib.optionals enableFlight [
+    grpc
+    openssl
+    protobuf
+    sqlite
+  ] ++ lib.optionals enableS3 [ aws-sdk-cpp-arrow openssl ]
+  ++ lib.optionals enableGcs [
+    crc32c
+    curl
+    google-cloud-cpp
+    grpc
+    nlohmann_json
   ];
 
   preConfigure = ''
-    substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-
     patchShebangs build-support/
+    substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
+      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags = [
-    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+    "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"
+    "-DARROW_BUILD_INTEGRATION=ON"
+    "-DARROW_BUILD_UTILITIES=ON"
+    "-DARROW_EXTRA_ERROR_CONTEXT=ON"
+    "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
-    "-DARROW_PLASMA=ON"
-    # Disable Python for static mode because openblas is currently broken there.
-    "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
+    "-Dxsimd_SOURCE=AUTO"
+    "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_COMPUTE=ON"
+    "-DARROW_CSV=ON"
+    "-DARROW_DATASET=ON"
+    "-DARROW_FILESYSTEM=ON"
+    "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_HDFS=ON"
+    "-DARROW_IPC=ON"
+    "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
+    "-DARROW_JSON=ON"
     "-DARROW_USE_GLOG=ON"
+    "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
     "-DARROW_WITH_LZ4=ON"
+    "-DARROW_WITH_NLOHMANN_JSON=ON"
     "-DARROW_WITH_SNAPPY=ON"
+    "-DARROW_WITH_UTF8PROC=ON"
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
+    "-DARROW_MIMALLOC=ON"
+    "-DARROW_SUBSTRAIT=ON"
+    "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
+    "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
+    "-DPARQUET_REQUIRE_ENCRYPTION=ON"
   ] ++ lib.optionals (!enableShared) [
-    "-DARROW_BUILD_SHARED=OFF"
-    "-DARROW_BOOST_USE_SHARED=OFF"
-    "-DARROW_GFLAGS_USE_SHARED=OFF"
-    "-DARROW_PROTOBUF_USE_SHARED=OFF"
     "-DARROW_TEST_LINKAGE=static"
-    "-DOPENSSL_USE_STATIC_LIBS=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
+  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ];
 
   doInstallCheck = true;
-  PARQUET_TEST_DATA =
-    if doInstallCheck then "${parquet-testing}/data" else null;
-  installCheckInputs = [ perl which ];
-  installCheckPhase =
-  let
-    excludedTests = lib.optionals stdenv.isDarwin [
-      # Some plasma tests need to be patched to use a shorter AF_UNIX socket
-      # path on Darwin. See https://github.com/NixOS/nix/pull/1085
-      "plasma-external-store-tests"
-      "plasma-client-tests"
-    ];
-  in ''
-    ctest -L unittest -V \
-      --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+  ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
+  PARQUET_TEST_DATA = lib.optionalString doInstallCheck "${parquet-testing}/data";
+  GTEST_FILTER =
+    let
+      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+        "TestCompareKernel.PrimitiveRandomTests"
+      ] ++ lib.optionals enableS3 [
+        "S3OptionsTest.FromUri"
+        "S3RegionResolutionTest.NonExistentBucket"
+        "S3RegionResolutionTest.PublicBucket"
+        "S3RegionResolutionTest.RestrictedBucket"
+        "TestMinioServer.Connect"
+        "TestS3FS.*"
+        "TestS3FSGeneric.*"
+      ] ++ lib.optionals stdenv.isDarwin [
+        # TODO: revisit at 12.0.0 or when
+        # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
+        # is available, see
+        # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
+        "ExecPlanExecution.StressSourceSinkStopped"
+      ];
+    in
+    lib.optionalString doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ perl which sqlite ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
+
+  disabledTests = [
+    # requires networking
+    "arrow-gcsfs-test"
+    "arrow-flight-integration-test"
+  ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+
+    runHook postInstallCheck
   '';
 
-  meta = {
-    description = "A  cross-language development platform for in-memory data";
-    homepage = "https://arrow.apache.org/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tobim veprbl ];
+  meta = with lib; {
+    description = "A cross-language development platform for in-memory data";
+    homepage = "https://arrow.apache.org/docs/cpp/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ tobim veprbl cpcloud ];
+  };
+  passthru = {
+    inherit enableFlight enableJemalloc enableS3 enableGcs;
   };
 }

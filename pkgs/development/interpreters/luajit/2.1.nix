@@ -1,8 +1,14 @@
-{ self, callPackage }:
+{ self, callPackage, fetchFromGitHub, passthruFun }:
+
 callPackage ./default.nix {
-  inherit self;
-  version = "2.1.0-2020-03-20";
-  rev = "9143e86";
-  isStable = false;
-  sha256 = "1zw1yr0375d6jr5x20zvkvk76hkaqamjynbswpl604w6r6id070b";
+  version = "2.1.0-2022-10-04";
+
+  src = fetchFromGitHub {
+    owner = "LuaJIT";
+    repo = "LuaJIT";
+    rev = "6c4826f12c4d33b8b978004bc681eb1eef2be977";
+    hash = "sha256-GMgoSVHrfIuLdk8mW9XgdemNFsAkkQR4wiGGjaAXAKg=";
+  };
+
+  inherit self passthruFun;
 }

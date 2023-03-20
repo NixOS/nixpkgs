@@ -1,45 +1,62 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pipInstallHook
+, writeText
 , blessed
 , docutils
 , libcxx
-, libcxxabi
 , llvm
-, openmp
-, pytest
+, pytestCheckHook
 , typesentry
 }:
 
 buildPythonPackage rec {
   pname = "datatable";
-  version = "0.9.0";
-  disabled = pythonOlder "3.5";
+  # python 3.10+ support is not in the 1.0.0 release
+  version = "unstable-2022-12-15";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1shwjkm9nyaj6asn57vwdd74pn13pggh14r6dzv729lzxm7nm65f";
+  src = fetchFromGitHub {
+    owner = "h2oai";
+    repo = pname;
+    rev = "9522f0833d3e965656396de4fffebd882d39c25d";
+    hash = "sha256-lEXQwhx2msnJkkRrTkAwYttlYTISyH/Z7dSalqRrOhI=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    # Replace the library auto-detection with hardcoded paths.
-    (substituteAll {
-      src = ./hardcode-library-paths.patch;
+  postPatch = ''
+    # tarball doesn't appear to have been shipped totally ready-to-build
+    substituteInPlace ci/ext.py \
+      --replace \
+        'shell_cmd(["git"' \
+        '"0000000000000000000000000000000000000000" or shell_cmd(["git"'
+    # TODO revert back to use ${version} when bumping to the next stable release
+    echo '1.0' > VERSION.txt
 
-      libomp_dylib = "${lib.getLib openmp}/lib/libomp.dylib";
-      libcxx_dylib = "${lib.getLib libcxx}/lib/libc++.1.dylib";
-      libcxxabi_dylib = "${lib.getLib libcxxabi}/lib/libc++abi.dylib";
-    })
-  ];
+    # don't make assumptions about architecture
+    sed -i '/-m64/d' ci/ext.py
+  '';
+  DT_RELEASE = "1";
 
   propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm ] ++ lib.optionals stdenv.isDarwin [ openmp ];
-  checkInputs = [ docutils pytest ];
+  buildInputs = [ llvm pipInstallHook ];
+  nativeCheckInputs = [ docutils pytestCheckHook ];
 
   LLVM = llvm;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
 
-  checkPhase = ''
-    mv datatable datatable.hidden
-    pytest
-  '';
+  # test suite is very cpu intensive, only run small subset to ensure package is working as expected
+  pytestFlagsArray = [ "tests/test-sets.py" ];
+
+  disabledTests = [
+    # skip tests which are irrelevant to our installation or use way too much memory
+    "test_xfunction_paths"
+    "test_fread_from_cmd2"
+    "test_cast_huge_to_str"
+    "test_create_large_string_column"
+  ];
+  pythonImportsCheck = [ "datatable" ];
 
   meta = with lib; {
     description = "data.table for Python";

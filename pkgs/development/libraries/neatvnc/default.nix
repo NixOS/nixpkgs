@@ -1,26 +1,54 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja
-, pixman, libuv, gnutls, libdrm
-# libjpeg_turbo: Optional, for tight encoding (disabled because experimental)
-, enableCpuAcceleration ? false # Whether to use CPU extensions (e.g. AVX)
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, aml
+, ffmpeg
+, gnutls
+, libjpeg_turbo
+, mesa
+, pixman
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.1.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04wcpwxlcf0bczcs97j21346mn6finfj7xgc2dsrwrw9xq8qa7wc";
+    sha256 = "sha256-3hNdgfAJGJkMXdB86+u3bKwrvXoMei1YCFXDG4ObkU4=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ pixman libuv gnutls libdrm ];
+  strictDeps = true;
 
-  patches = stdenv.lib.optional (!enableCpuAcceleration) ./disable-cpu-acceleration.patch;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    aml
+    ffmpeg
+    gnutls
+    libjpeg_turbo
+    mesa
+    pixman
+    zlib
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "tests" true)
+  ];
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "A VNC server library";
     longDescription = ''
       This is a liberally licensed VNC server library that's intended to be
@@ -30,8 +58,9 @@ stdenv.mkDerivation rec {
       - Interoperability with the Freedesktop.org ecosystem
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/any1/neatvnc/releases/tag/v${version}";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

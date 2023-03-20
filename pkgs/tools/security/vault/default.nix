@@ -1,37 +1,50 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
+, makeWrapper
+, gawk
+, glibc
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vault";
-  version = "1.4.2";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "0aschysngs6f50plqkqbnhgl6zryd0bpypr50zd45cgww7jvvqd4";
+    sha256 = "sha256-F9Ki+3jMkJ+CI2yQmrnqT98xJqSSKQTtYHxQTYdfNbQ=";
   };
 
-  goPackagePath = "github.com/hashicorp/vault";
+  vendorHash = "sha256-Ny4TTa67x/mwTclZrtPoWU6nHu5q4KafP1s4rvk21Hs=";
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildFlagsArray = [
-    "-tags='vault'"
-    "-ldflags=\"-X github.com/hashicorp/vault/sdk/version.GitCommit='v${version}'\""
+  tags = [ "vault" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev; };
+
+  meta = with lib; {
     homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
-    platforms = platforms.linux ++ platforms.darwin;
+    changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man techknowlogick ];
   };
 }

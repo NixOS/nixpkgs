@@ -1,49 +1,35 @@
-{ stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, pythonPackages ? null,
-  gnome2 ? null,
-  openexrSupport ? true, openexr ? null,
-  libzipSupport ? true, libzip ? null,
-  libxml2Support ? true, libxml2 ? null,
-  libwebpSupport ? true, libwebp ? null,
+{ lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
+  pythonSupport ? false, python2Packages,
+  gnome2,
+  openexrSupport ? true, openexr,
+  libzipSupport ? true, libzip,
+  libxml2Support ? true, libxml2,
+  libwebpSupport ? true, libwebp,
   # libXmu is not used if libunique is.
-  libXmuSupport ? false, xorg ? null,
-  libxsltSupport ? true, libxslt ? null,
-  fitsSupport ? true, cfitsio ? null,
-  zlibSupport ? true, zlib ? null,
-  libuniqueSupport ? true, libunique ? null,
-  libpngSupport ? true, libpng ? null,
+  libXmuSupport ? false, xorg,
+  libxsltSupport ? true, libxslt,
+  fitsSupport ? true, cfitsio,
+  zlibSupport ? true, zlib,
+  libuniqueSupport ? true, libunique,
+  libpngSupport ? true, libpng,
   openglSupport ? !stdenv.isDarwin
 }:
 
-assert openexrSupport -> openexr != null;
-assert libzipSupport -> libzip != null;
-assert libxml2Support -> libxml2 != null;
-assert libwebpSupport -> libwebp != null;
-assert libXmuSupport -> xorg != null;
-assert libxsltSupport -> libxslt != null;
-assert fitsSupport -> cfitsio != null;
-assert zlibSupport -> zlib != null;
-assert libuniqueSupport -> libunique != null;
-assert libpngSupport -> libpng != null;
-assert openglSupport -> gnome2 != null;
-assert pythonSupport -> (pythonPackages != null && gnome2 != null);
-
 let
-    inherit (pythonPackages) pygtk pygobject2 python;
-
+    inherit (python2Packages) pygtk pygobject2 python;
 in
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.55";
+   version = "2.61";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "0l00zszvginpriv12idc0y1x28qmicdmrwkqa007srkxvrdgxwdi";
+    sha256 = "sha256-rDhYVMDTH9mSu90HZAX8ap4HF//8fYhW/ozzJdIrUgo=";
   };
-  
+
   nativeBuildInputs = [ pkg-config file ];
-  
-  buildInputs = with stdenv.lib;
+
+  buildInputs = with lib;
     [ gtk2 fftw ] ++
     optional openglSupport gnome2.gtkglext ++
     optional openexrSupport openexr ++
@@ -57,7 +43,7 @@ stdenv.mkDerivation rec {
     optional libuniqueSupport libunique ++
     optional libzipSupport libzip;
 
-  propagatedBuildInputs = with stdenv.lib;
+  propagatedBuildInputs = with lib;
     optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
 
   # This patch corrects problems with python support, but should apply cleanly
@@ -79,8 +65,10 @@ stdenv.mkDerivation rec {
       analysis of profilometry data or thickness maps from imaging
       spectrophotometry.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = [ stdenv.lib.maintainers.cge ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.cge ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

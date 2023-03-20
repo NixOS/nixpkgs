@@ -1,14 +1,14 @@
-{ fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
-  pname = "z88dk-unstable";
-  version = "2020-01-27";
+  pname = "z88dk";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "z88dk";
-    repo  = "z88dk";
-    rev = "efdd07c2e2229cac7cfef97ec01f478004846e39";
-    sha256 = "0jcks5ygp256lmzmllffp4yb38cxjgdyqnnimkj4s65095cfasyb";
+    repo = "z88dk";
+    rev = "v${version}";
+    sha256 = "sha256-vf/hEmcl6R3nsc66G6eETNeW0SV/odk14XIpEPPAbKo=";
     fetchSubmodules = true;
   };
 
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.hostPlatform.system != "aarch64-linux";
 
   #_FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O";
+  env.NIX_CFLAGS_COMPILE = "-O";
 
   short_rev = builtins.substring 0 7 src.rev;
   makeFlags = [
     "git_rev=${short_rev}"
     "version=${version}"
-    "prefix=$(out)"
+    "DESTDIR=$(out)"
     "git_count=0"
   ];
 
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "libs" "install" ];
 
-  meta = with stdenv.lib; {
-    homepage    = "https://www.z88dk.org";
+  meta = with lib; {
+    homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
-    license     = licenses.clArtistic;
-    maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux;
+    license = licenses.clArtistic;
+    maintainers = [ maintainers.siraben ];
+    platforms = platforms.unix;
   };
 }

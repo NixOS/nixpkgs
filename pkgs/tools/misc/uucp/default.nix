@@ -1,10 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "uucp-1.07";
+  pname = "uucp";
+  version = "1.07";
 
   src = fetchurl {
-    url = "mirror://gnu/uucp/${name}.tar.gz";
+    url = "mirror://gnu/uucp/uucp-${version}.tar.gz";
     sha256 = "0b5nhl9vvif1w3wdipjsk8ckw49jj1w85xw1mmqi3zbcpazia306";
   };
 
@@ -16,6 +17,8 @@ stdenv.mkDerivation rec {
       --replace 4555 0555
     sed -i '/chown $(OWNER)/d' Makefile.in
   '';
+
+  makeFlags = [ "AR:=$(AR)" ];
 
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";
@@ -29,9 +32,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/uucp/uucp.html";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sphfile";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "mirror://pypi/s/sphfile/${pname}-${version}.tar.gz";
-    sha256 = "422b0704107b02ef3ca10e55ccdc80b0bb5ad8e2613b6442f8e2ea372c7cf5d8";
+    sha256 = "1596d801facc2b03a40a1bc67a839701f068a41597059feb82fc9378420c52c0";
   };
 
   propagatedBuildInputs = [ numpy ];

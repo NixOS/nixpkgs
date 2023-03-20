@@ -1,4 +1,5 @@
 { runCommand
+, lib
 , stdenv
 , storeDir ? builtins.storeDir
 , writeScript
@@ -7,10 +8,10 @@
 , bash
 , vmTools
 , gawk
-, utillinux
+, util-linux
 , runtimeShell
-, e2fsprogs }:
-
+, e2fsprogs
+}:
 rec {
   shellScript = name: text:
     writeScript name ''
@@ -19,40 +20,53 @@ rec {
       ${text}
     '';
 
-  mkLayer = {
-    name,
-    contents ? [],
-  }:
-    runCommand "singularity-layer-${name}" {
-      inherit contents;
-    } ''
+  mkLayer =
+    { name
+    , contents ? [ ]
+      # May be "apptainer" instead of "singularity"
+    , projectName ? (singularity.projectName or "singularity")
+    }:
+    runCommand "${projectName}-layer-${name}"
+      {
+        inherit contents;
+      } ''
       mkdir $out
       for f in $contents ; do
         cp -ra $f $out/
       done
     '';
 
-  buildImage = {
-    name,
-    contents ? [],
-    diskSize ? 1024,
-    runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-    runAsRoot ? null
-  }:
-    let layer = mkLayer {
-          inherit name;
-          contents = contents ++ [ bash runScriptFile ];
-          };
-        runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
-        runScriptFile = shellScript "run-script.sh" runScript;
-        result = vmTools.runInLinuxVM (
-          runCommand "singularity-image-${name}.img" {
-            buildInputs = [ singularity e2fsprogs utillinux gawk ];
+  buildImage =
+    let
+      defaultSingularity = singularity;
+    in
+    { name
+    , contents ? [ ]
+    , diskSize ? 1024
+    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
+    , runAsRoot ? null
+    , memSize ? 512
+    , singularity ? defaultSingularity
+    }:
+    let
+      projectName = singularity.projectName or "singularity";
+      layer = mkLayer {
+        inherit name;
+        contents = contents ++ [ bash runScriptFile ];
+        inherit projectName;
+      };
+      runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
+      runScriptFile = shellScript "run-script.sh" runScript;
+      result = vmTools.runInLinuxVM (
+        runCommand "${projectName}-image-${name}.img"
+          {
+            buildInputs = [ singularity e2fsprogs util-linux gawk ];
             layerClosure = writeReferencesToFile layer;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
-              fullName = "singularity-run-disk";
+              fullName = "${projectName}-run-disk";
             };
+            inherit memSize;
           }
           ''
             rm -rf $out
@@ -64,7 +78,7 @@ rec {
             mkdir proc sys dev
 
             # Run root script
-            ${stdenv.lib.optionalString (runAsRoot != null) ''
+            ${lib.optionalString (runAsRoot != null) ''
               mkdir -p ./${storeDir}
               mount --rbind ${storeDir} ./${storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
@@ -72,7 +86,7 @@ rec {
             ''}
 
             # Build /bin and copy across closure
-            mkdir -p bin nix/store
+            mkdir -p bin ./${builtins.storeDir}
             for f in $(cat $layerClosure) ; do
               cp -ar $f ./$f
             done
@@ -86,19 +100,23 @@ rec {
             done
 
             # Create runScript and link shell
-            ln -s ${runtimeShell} bin/sh
-            mkdir -p .singularity.d
-            ln -s ${runScriptFile} .singularity.d/runscript
+            if [ ! -e bin/sh ]; then
+              ln -s ${runtimeShell} bin/sh
+            fi
+            mkdir -p .${projectName}.d
+            ln -s ${runScriptFile} .${projectName}.d/runscript
 
-            # Fill out .singularity.d
-            mkdir -p .singularity.d/env
-            touch .singularity.d/env/94-appsbase.sh
+            # Fill out .${projectName}.d
+            mkdir -p .${projectName}.d/env
+            touch .${projectName}.d/env/94-appsbase.sh
 
             cd ..
-            mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
+            mkdir -p /var/lib/${projectName}/mnt/{container,final,overlay,session,source}
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
-            TMPDIR=$(pwd -P) singularity build $out ./img
+            echo > /etc/resolv.conf
+            TMPDIR=$(pwd -P) ${projectName} build $out ./img
           '');
 
-    in result;
+    in
+    result;
 }

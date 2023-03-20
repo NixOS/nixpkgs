@@ -1,34 +1,61 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
+{ lib
+, async-timeout
+, bluez
+, buildPythonPackage
+, dbus-fast
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.6.2";
+  version = "0.19.5";
+  format = "pyproject";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kmq2z3dhq6dd20i5w71gshjrfvyw0pkpnld8iib9ai2rz6a8aj0";
+  src = fetchFromGitHub {
+    owner = "hbldh";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KKZrp5yNuslEPn/TS4eAOMT48C4A5Da5/NhklyFcy7M=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
+    dbus-fast
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
   postPatch = ''
-    # bleak checks BlueZ's version with a call to `bluetoothctl -v` twice
-    substituteInPlace bleak/__init__.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-    substituteInPlace bleak/backends/bluezdbus/client.py \
+    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+    substituteInPlace bleak/backends/bluezdbus/__init__.py \
       --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  propagatedBuildInputs = [ txdbus ];
-  checkInputs = [ pytest pytestcov ];
+  pythonImportsCheck = [
+    "bleak"
+  ];
 
-  checkPhase = "AGENT_OS=linux py.test";
-
-  meta = with stdenv.lib; {
-    description = "Bluetooth Low Energy platform Agnostic Klient for Python";
+  meta = with lib; {
+    description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
+    changelog = "https://github.com/hbldh/bleak/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

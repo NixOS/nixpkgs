@@ -1,49 +1,36 @@
-{ stdenv, lib, fetchurl, openssl, fetchpatch, static ? false }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, openssl, readline, fetchurl }:
 
 let
-  pkgname = "ipmitool";
-  version = "1.8.18";
-in
-stdenv.mkDerivation {
-  name = "${pkgname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pkgname}/${pkgname}-${version}.tar.gz";
-    sha256 = "0kfh8ny35rvwxwah4yv91a05qwpx74b5slq2lhrh71wz572va93m";
+  iana-enterprise-numbers = fetchurl {
+    url = "https://web.archive.org/web/20230312103209id_/https://www.iana.org/assignments/enterprise-numbers.txt";
+    sha256 = "sha256-huFWygMEylBKBMLV16UE6xLWP6Aw1FGYk5h1q5CErUs=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/i/ipmitool/1.8.18-6/debian/patches/0120-openssl1.1.patch";
-      sha256 = "1xvsjxb782lzy72bnqqnsk3r5h4zl3na95s4pqn2qg7cic2mnbfk";
-    })
-    # Fix build on non-linux systems
-    (fetchpatch {
-      url = "https://github.com/ipmitool/ipmitool/commit/5db314f694f75c575cd7c9ffe9ee57aaf3a88866.patch";
-      sha256 = "01niwrgajhrdhl441gzmw6v1r1yc3i8kn98db4b6smfn5fwdp1pa";
-    })
-  ];
+in stdenv.mkDerivation rec {
+  pname = "ipmitool";
+  version = "1.8.19";
 
-  buildInputs = [ openssl ];
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "IPMITOOL_${lib.replaceStrings ["."] ["_"] version}";
+    hash = "sha256-VVYvuldRIHhaIUibed9cLX8Avfy760fdBLNO8MoUKCk=";
+  };
 
-  configureFlags = [
-    "--infodir=${placeholder "out"}/share/info"
-    "--mandir=${placeholder "out"}/share/man"
-  ] ++ stdenv.lib.optionals static [
-    "LDFLAGS=-static"
-    "--enable-static"
-    "--disable-shared"
-  ] ++ stdenv.lib.optionals (!static) [
-    "--enable-shared"
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl readline ];
 
-  makeFlags = stdenv.lib.optional static "AM_LDFLAGS=-all-static";
-  dontDisableStatic = static;
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'AC_MSG_WARN([** Neither wget nor curl could be found.])' 'AM_CONDITIONAL([DOWNLOAD], [true])'
+    cp ${iana-enterprise-numbers} enterprise-numbers
+  '';
 
   meta = with lib; {
-    description = ''Command-line interface to IPMI-enabled devices'';
+    description = "Command-line interface to IPMI-enabled devices";
     license = licenses.bsd3;
-    homepage = "https://sourceforge.net/projects/ipmitool/";
+    homepage = "https://github.com/ipmitool/ipmitool";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
   };

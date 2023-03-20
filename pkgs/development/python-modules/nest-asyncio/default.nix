@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.3.2";
+  version = "1.5.6";
   pname = "nest_asyncio";
   disabled = !(pythonAtLeast "3.5");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l43k0lx7r6izancfhhg68x82mvws2di1a9w2y12l1a446vr9q8l";
+    hash = "sha256-0mfMH/eUQD999pKWTR0qP6lBj/6io/aFmkOf9IL+8pA=";
   };
 
   # tests not packaged with source dist as of 1.3.2/1.3.2, and

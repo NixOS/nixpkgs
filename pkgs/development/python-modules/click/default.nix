@@ -1,20 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, locale, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, importlib-metadata
+, pytestCheckHook
+
+# large-rebuild downstream dependencies and applications
+, flask
+, black
+, magic-wormhole
+, mitmproxy
+, typer
+}:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "7.1.1";
+  version = "8.1.3";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k60i2fvxf8rxazlv04mnsmlsjrj5i5sda3x1ifhr0nqi7mb864a";
+    hash = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
   };
 
-  postPatch = ''
-    substituteInPlace src/click/_unicodefun.py \
-      --replace "'locale'" "'${locale}/bin/locale'"
-  '';
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  passthru.tests = {
+    inherit black flask magic-wormhole mitmproxy typer;
+  };
 
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";
@@ -24,5 +43,6 @@ buildPythonPackage rec {
       composable way, with as little code as necessary.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

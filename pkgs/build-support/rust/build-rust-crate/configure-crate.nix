@@ -1,6 +1,8 @@
-{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs }:
-{ build
+{ lib, stdenv, rust, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
+{
+  build
 , buildDependencies
+, codegenUnits
 , colors
 , completeBuildDeps
 , completeDeps
@@ -12,11 +14,10 @@
 , crateRenames
 , crateVersion
 , extraLinkFlags
-, extraRustcOpts
+, extraRustcOptsForBuildRs
 , libName
 , libPath
 , release
-, target_os
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
@@ -24,12 +25,15 @@ let version_ = lib.splitString "-" crateVersion;
     version = lib.splitVersion (lib.head version_);
     rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
+        (["-C codegen-units=${toString codegenUnits}"] ++ extraRustcOptsForBuildRs);
     buildDeps = mkRustcDepArgs buildDependencies crateRenames;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
+    envFeatures = lib.concatStringsSep " " (
+      map (f: lib.replaceStrings ["-"] ["_"] (lib.toUpper f)) crateFeatures
+    );
 in ''
   ${echo_colored colors}
   ${noisily colors verbose}
@@ -39,7 +43,7 @@ in ''
   noisily cd "${workspace_member}"
 ''}
   ${lib.optionalString (workspace_member == null) ''
-  echo_colored "Searching for matching Cargo.toml (${crateName})" 
+  echo_colored "Searching for matching Cargo.toml (${crateName})"
   local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
   if [ -z "$cargo_toml_dir" ]; then
     echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
@@ -49,7 +53,7 @@ in ''
 ''}
 
   runHook preConfigure
- 
+
   symlink_dependency() {
     # $1 is the nix-store path of a dependency
     # $2 is the target path
@@ -120,20 +124,20 @@ in ''
   export CARGO_PKG_AUTHORS="${authors}"
   export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
-  export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}
-  export CARGO_CFG_TARGET_OS=${target_os}
+  export CARGO_CFG_TARGET_ARCH=${rust.toTargetArch stdenv.hostPlatform}
+  export CARGO_CFG_TARGET_OS=${rust.toTargetOs stdenv.hostPlatform}
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
   export CARGO_CFG_TARGET_ENV="gnu"
   export CARGO_CFG_TARGET_ENDIAN=${if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"}
-  export CARGO_CFG_TARGET_POINTER_WIDTH=${toString stdenv.hostPlatform.parsed.cpu.bits}
+  export CARGO_CFG_TARGET_POINTER_WIDTH=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}
   export CARGO_CFG_TARGET_VENDOR=${stdenv.hostPlatform.parsed.vendor.name}
 
   export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${stdenv.hostPlatform.config}"
-  export HOST="${stdenv.hostPlatform.config}"
+  export TARGET="${rust.toRustTargetSpec stdenv.hostPlatform}"
+  export HOST="${rust.toRustTargetSpec stdenv.buildPlatform}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
@@ -141,7 +145,7 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
-  export NUM_JOBS=1
+  export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
 
@@ -161,27 +165,52 @@ in ''
        EXTRA_BUILD_FLAGS="$EXTRA_BUILD_FLAGS $(tr '\n' ' ' < target/link.build)"
      fi
      noisily rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
-       ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
+       ${mkRustcFeatureArgs crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
        -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
 
      mkdir -p target/build/${crateName}.out
      export RUST_BACKTRACE=1
      BUILD_OUT_DIR="-L $OUT_DIR"
      mkdir -p $OUT_DIR
-     target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+
+     (
+       # Features should be set as environment variable for build scripts:
+       # https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
+       for feature in ${envFeatures}; do
+         export CARGO_FEATURE_$feature=1
+       done
+
+       target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+     )
+
      set +e
      EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
      EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS=$(sed -n "s/^cargo:rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo:rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo:rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_LIBS=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
      EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
 
+     # We want to read part of every line that has cargo:rustc-env= prefix and
+     # export it as environment variables. This turns out tricky if the lines
+     # have spaces: we can't wrap the command in double quotes as that captures
+     # all the lines in single output. We can't use while read loop because
+     # exporting from inside of it doesn't make it to the outside scope. We
+     # can't use xargs as export is a built-in and does not work from it. As a
+     # last resort then, we change the IFS so that the for loop does not split
+     # on spaces and reset it after we are done. See ticket #199298.
+     #
+     _OLDIFS="$IFS"
+     IFS=$'\n'
      for env in $(sed -n "s/^cargo:rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
-       export $env
+       export "$env"
      done
+     IFS="$_OLDIFS"
 
-     CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/")
+     CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
      grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
-       | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
+       | awk -F= "/^cargo:/ { sub(/^cargo:/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \$2 }" > target/env
      set -e
   fi
   runHook postConfigure

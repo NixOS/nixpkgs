@@ -1,33 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, cmake, libyamlcpp,
-  libevdev, udev }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, yaml-cpp,
+  libevdev, udev, boost }:
 
-let
-  version = "0.1.1";
-  baseName = "interception-tools";
-in stdenv.mkDerivation {
-  name = "${baseName}-${version}";
-
-  src = fetchurl {
-    url = "https://gitlab.com/interception/linux/tools/repository/v${version}/archive.tar.gz";
-    sha256 = "14g4pphvylqdb922va322z1pbp12ap753hcf7zf9sii1ikvif83j";
+stdenv.mkDerivation rec {
+  pname = "interception-tools";
+  version = "0.6.8";
+  src = fetchFromGitLab {
+    owner = "interception/linux";
+    repo = "tools";
+    rev = "v${version}";
+    sha256 = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libevdev udev libyamlcpp ];
-
-  prePatch = ''
-    substituteInPlace CMakeLists.txt --replace \
-      '"/usr/include/libevdev-1.0"' \
-      "\"$(pkg-config --cflags libevdev | cut -c 3-)\""
-  '';
-
-  patches = [ ./fix-udevmon-configuration-job-path.patch ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libevdev udev yaml-cpp boost ];
 
   meta = {
     description = "A minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.vyp ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.vyp ];
+    platforms = lib.platforms.linux;
   };
 }

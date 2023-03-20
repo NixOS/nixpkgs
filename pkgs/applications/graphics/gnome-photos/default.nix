@@ -1,5 +1,7 @@
 { stdenv
+, lib
 , fetchurl
+, fetchpatch2
 , at-spi2-core
 , babl
 , dbus
@@ -7,26 +9,24 @@
 , dleyna-renderer
 , gdk-pixbuf
 , gegl
-, geocode-glib
+, geocode-glib_2
 , gettext
 , gexiv2
-, gfbgraph
 , glib
 , gnome-online-accounts
-, gnome3
+, gnome
 , gobject-introspection
-, grilo
-, grilo-plugins
 , gsettings-desktop-schemas
 , gtk3
 , itstool
 , libdazzle
-, libgdata
+, libportal-gtk3
+, libhandy
 , libxml2
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , python3
 , tracker
 , tracker-miners
@@ -35,17 +35,27 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.34.2";
+  version = "43.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06ml5sf8xhpan410msqz085hmfc7082d368pb82yq646y9pcfn9w";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "x6x0WNUz8p2VUBHHS3YiTXnqMbzBLp1tDOe2w3BNCOE=";
   };
 
   patches = [
     ./installed-tests-path.patch
+
+    # Support babel 0.1.100
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/64c6f733a44bac5b7f08445a686c000681f93f5f.patch";
+      hash = "sha256-iB5qCcDEH8pEX42ypEGJ9QMJWE8VXirv5JfdC1jP218=";
+    })
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/9db32c3508a8c5d357a053d5f8278c34b4df18f3.patch";
+      hash = "sha256-iz6gSu5rUBZ3Ki5GSRVuLcwX0LRQvJT17XmXQ7WJSmI=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -57,7 +67,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     (python3.withPackages (pkgs: with pkgs; [
       dogtail
       pygobject3
@@ -72,18 +82,15 @@ stdenv.mkDerivation rec {
     dleyna-renderer
     gdk-pixbuf
     gegl
-    geocode-glib
+    geocode-glib_2
     gexiv2
-    gfbgraph
     glib
     gnome-online-accounts
-    gnome3.adwaita-icon-theme
-    grilo
-    grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
-    libgdata
+    libportal-gtk3
+    libhandy
     tracker
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 
@@ -106,16 +113,16 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
 
     tests = {
-      installed-tests = nixosTests.gnome-photos;
+      installed-tests = nixosTests.installed-tests.gnome-photos;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Access, organize and share your photos";
     homepage = "https://wiki.gnome.org/Apps/Photos";
     license = licenses.gpl3Plus;

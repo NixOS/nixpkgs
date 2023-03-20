@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.38";
+  version = "0.4.40";
   pname = "libzen";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libzen/${version}/libzen_${version}.tar.bz2";
-    sha256 = "1nkygc17sndznpcf71fdrhwpm8z9a3hc9csqlafwswh49axhfkjr";
+    sha256 = "sha256-VUPixFIUudnwuk9D3uYdApbh/58UJ+1sh53dG2K59p4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shared library for libmediainfo and mediainfo";
     homepage = "https://mediaarea.net/";
     license = licenses.bsd2;

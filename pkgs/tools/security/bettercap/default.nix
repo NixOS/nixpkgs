@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
@@ -10,28 +10,32 @@
 
 buildGoModule rec {
   pname = "bettercap";
-  version = "2.27.1";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jb78c3s6p210mj28qg4aacd8ly6d6k5h9c48y88vmcyllzjvbhl";
+    sha256 = "sha256-OND8WPqU/95rKykqMAPWmDsJ+AjsjGjrncZ2/m3mpt0=";
   };
 
-  vendorSha256 = "1j272w0zdndcz4fmh9fzbk2q8wmyfi70vn0p6d8cg0r0l231sbyx";
+  vendorSha256 = "sha256-QKv8F9QLRi+1Bqj9KywJsTErjs7o6gFM4tJLA8y52MY=";
+
+  doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];
+  buildInputs = [ libpcap libusb1 ]
+    ++ lib.optionals stdenv.isLinux [ libnfnetlink libnetfilter_queue ];
 
   meta = with lib; {
     description = "A man in the middle tool";
     longDescription = ''
-      BetterCAP is a powerful, flexible and portable tool created to perform various types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic in realtime, sniff for credentials and much more.
+      BetterCAP is a powerful, flexible and portable tool created to perform various
+      types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic
+      in realtime, sniff for credentials and much more.
     '';
     homepage = "https://www.bettercap.org/";
-    license = with licenses; gpl3;
+    license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ y0no ];
-    platforms = platforms.all;
   };
 }

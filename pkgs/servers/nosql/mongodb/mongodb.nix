@@ -1,17 +1,66 @@
-{ stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
+{ lib
+, stdenv
+, fetchurl
+, sconsPackages
+, boost
+, gperftools
+, pcre-cpp
+, snappy
+, zlib
+, yaml-cpp
+, sasl
+, openssl
+, libpcap
+, python3
+, curl
+, Security
+, CoreFoundation
+, cctools
+, xz
+}:
 
 # Note:
-# The command line tools are written in Go as part of a different package (mongodb-tools)
+#   The command line administrative tools are part of other packages:
+#   see pkgs.mongodb-tools and pkgs.mongosh.
 
-with stdenv.lib;
+with lib;
 
 { version, sha256, patches ? []
-, license ? stdenv.lib.licenses.sspl
-}@args:
+, license ? lib.licenses.sspl
+}:
 
 let
-  python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+  variants =
+    if versionAtLeast version "6.0" then rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        cheetah3
+        psutil
+        setuptools
+        packaging
+        pymongo
+      ]);
+
+      scons = sconsPackages.scons_3_1_2;
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    } else rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        cheetah3
+        psutil
+        setuptools
+      ]);
+
+      scons = sconsPackages.scons_3_1_2;
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    };
+
   system-libraries = [
     "boost"
     "pcre"
@@ -23,31 +72,33 @@ let
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
   ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
-  inherit (stdenv.lib) systems subtractLists;
+  inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "mongodb-${version}";
+  pname = "mongodb";
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ variants.scons ]
+    ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+
   buildInputs = [
     boost
     curl
     gperftools
     libpcap
-    libyamlcpp
+    yaml-cpp
     openssl
     pcre-cpp
-    python
+    variants.python
     sasl
     snappy
     zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -58,22 +109,29 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
-
+   '' + lib.optionalString (versionAtLeast version "4.4") ''
+    # Fix debug gcc 11 and clang 12 builds on Fedora
+    # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
+    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
+    #include <string>'
+    substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
+    #include <string>'
+  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
+    substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
+  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
-  '' + stdenv.lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.isi686 ''
 
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [
@@ -85,7 +143,8 @@ in stdenv.mkDerivation rec {
     "--use-sasl-client"
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
-  ] ++ map (lib: "--use-system-${lib}") system-libraries;
+  ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
+    ++ map (lib: "--use-system-${lib}") system-libraries;
 
   preBuild = ''
     sconsFlags+=" CC=$CC"
@@ -102,7 +161,19 @@ in stdenv.mkDerivation rec {
     rm -f "$out/bin/install_compass" || true
   '';
 
-  prefixKey = "--prefix=";
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    "$out/bin/mongo" --version
+    runHook postInstallCheck
+  '';
+
+  installTargets =
+    if (versionAtLeast version "6.0") then "install-devcore"
+    else if (versionAtLeast version "4.4") then "install-core"
+    else "install";
+
+  prefixKey = if (versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
 
   enableParallelBuilding = true;
 

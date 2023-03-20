@@ -1,16 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+}:
+
 stdenv.mkDerivation {
   pname = "sta";
-  version = "unstable-2016-01-25";
+  version = "unstable-2021-11-30";
 
   src = fetchFromGitHub {
     owner = "simonccarter";
     repo = "sta";
-    rev = "2aa2a6035dde88b24978b875e4c45e0e296f77ed";
-    sha256 = "05804f106nb89yvdd0csvpd5skwvnr9x4qr3maqzaw0qr055mrsk";
+    rev = "94559e3dfa97d415e3f37b1180b57c17c7222b4f";
+    sha256 = "sha256-AiygCfBze7J1Emy6mc27Dim34eLR7VId9wodUZapIL4=";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     description = "Simple statistics from the command line interface (CLI), fast";
@@ -26,5 +31,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
+    mainProgram = "sta";
   };
 }

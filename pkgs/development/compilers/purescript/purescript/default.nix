@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, zlib, gmp, ncurses5, lib }:
+{ stdenv, pkgs, fetchurl, zlib, gmp, lib }:
 
 # from justinwoo/easy-purescript-nix
 # https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
@@ -18,25 +18,24 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.13.6";
+  version = "0.15.8";
 
+  # These hashes can be updated automatically by running the ./update.sh script.
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "04kwjjrriyizpvhs96jgyx21ppyd1ynblk24i5825ywxlw9hja25";
+      sha256 = "0aq6b8yw2ll3qgmc21ap2pxfnr7glqhrjx3ggc21q4gwq3zxrrrp";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "012znrj32aq96qh1g2hscdvhl3flgihhimiz40agk0dykpksblns";
+      sha256 = "192px9a4ja1iazhahc6ilgxk0x2bjp59qxd9zaww4pldj1b7z20y";
     };
 
 
-  buildInputs = [ zlib
-                  gmp
-                  ncurses5 ];
+  buildInputs = [ zlib gmp ];
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
@@ -47,19 +46,25 @@ in stdenv.mkDerivation rec {
     install -D -m555 -T purs $PURS
     ${patchelf libPath}
 
-    mkdir -p $out/etc/bash_completion.d/
-    $PURS --bash-completion-script $PURS > $out/etc/bash_completion.d/purs-completion.bash
+    mkdir -p $out/share/bash-completion/completions
+    $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
   '';
 
-  passthru.tests = {
-    minimal-module = pkgs.callPackage ./test-minimal-module {};
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      minimal-module = pkgs.callPackage ./test-minimal-module {};
+    };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.justinwoo maintainers.mbbx6spp ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "purs";
+    changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
 }

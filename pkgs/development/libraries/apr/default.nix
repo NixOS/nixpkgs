@@ -1,14 +1,17 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "apr-1.7.0";
+  pname = "apr";
+  version = "1.7.2";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${name}.tar.bz2";
-    sha256 = "1spp6r2a3xcl5yajm9safhzyilsdzgagc2dadif8x6z9nbq4iqg2";
+    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-ded8yGd2wDDApcQI370L8qC3Xu1TUeUtVDn6HlUJpD4=";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
+  patches = [
+    ./cross-assume-dev-zero-mmappable.patch
+  ];
 
   # This test needs the net
   postPatch = ''
@@ -23,23 +26,45 @@ stdenv.mkDerivation rec {
       configureFlagsArray+=("--with-installbuilddir=$dev/share/build")
     '';
 
-  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # For cross builds, provide answers to the configure time tests.
+    # These answers are valid on x86_64-linux and aarch64-linux.
     "ac_cv_file__dev_zero=yes"
-    "ac_cv_func_setpgrp_void=0"
-    "apr_cv_process_shared_works=1"
-    "apr_cv_tcp_nodelay_with_cork=1"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.system == "i686-cygwin") [
+    "ac_cv_func_setpgrp_void=yes"
+    "apr_cv_tcp_nodelay_with_cork=yes"
+    "ac_cv_define_PTHREAD_PROCESS_SHARED=yes"
+    "apr_cv_process_shared_works=yes"
+    "apr_cv_mutex_robust_shared=yes"
+    "ap_cv_atomic_builtins=yes"
+    "apr_cv_mutex_recursive=yes"
+    "apr_cv_epoll=yes"
+    "apr_cv_epoll_create1=yes"
+    "apr_cv_dup3=yes"
+    "apr_cv_accept4=yes"
+    "apr_cv_sock_cloexec=yes"
+    "ac_cv_struct_rlimit=yes"
+    "ac_cv_func_sem_open=yes"
+    "ac_cv_negative_eai=yes"
+    "apr_cv_gai_addrconfig=yes"
+    "ac_cv_o_nonblock_inherited=no"
+    "apr_cv_pthreads_lib=-lpthread"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "i686-cygwin") [
     # Including the Windows headers breaks unistd.h.
     # Based on ftp://sourceware.org/pub/cygwin/release/libapr1/libapr1-1.3.8-2-src.tar.bz2
     "ac_cv_header_windows_h=no"
   ];
 
-  CPPFLAGS=stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-DAPR_IOVEC_DEFINED";
+  # - Update libtool for macOS 11 support
+  # - Regenerate for cross fix patch
+  nativeBuildInputs = [ autoreconfHook ];
+
+  doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = "http://apr.apache.org/";
+  meta = with lib; {
+    homepage = "https://apr.apache.org/";
     description = "The Apache Portable Runtime library";
     platforms = platforms.all;
     license = licenses.asl20;

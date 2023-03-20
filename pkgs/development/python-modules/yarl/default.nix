@@ -1,27 +1,61 @@
-{ stdenv
-, fetchPypi
+{ lib
 , buildPythonPackage
-, multidict
-, pytestrunner
-, pytest
+, fetchPypi
+, pythonAtLeast
+, pythonOlder
 , idna
+, multidict
+, typing-extensions
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.4.2";
+  version = "1.8.2";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58cd9c469eced558cd81aa3f484b2924e8897049e06889e8ff2510435b7ef74b";
+    hash = "sha256-SdQ0AsbjATrQl4YCv2v1MoU1xI0ZIwS5G5ejxnkLFWI=";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ multidict idna ];
+  postPatch = ''
+    sed -i '/^addopts/d' setup.cfg
+  '';
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    idna
+    multidict
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  preCheck = ''
+    # don't import yarl from ./ so the C extension is available
+    pushd tests
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_not_a_scheme2"
+  ];
+
+  postCheck = ''
+    popd
+  '';
+
+  pythonImportsCheck = [ "yarl" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/aio-libs/yarl/blob/v${version}/CHANGES.rst";
     description = "Yet another URL library";
-    homepage = "https://github.com/aio-libs/yarl/";
+    homepage = "https://github.com/aio-libs/yarl";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -1,22 +1,34 @@
-{ buildPythonPackage, fetchPypi, lib, cython, jq }:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, jq, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "0.1.6";
+  version = "1.3.0";
 
-  srcs = fetchPypi {
-    inherit pname version;
-    sha256 = "34bdf9f9e49e522e1790afc03f3584c6b57329215ea0567fb2157867d6d6f602";
+  src = fetchFromGitHub {
+    owner = "mwilliamson";
+    repo = "jq.py";
+    rev = version;
+    hash = "sha256-1EQm5ShjFHbO1IO5QD42fsGHFGDBrJulLrcl+WeU7wo=";
   };
-  patches = [ ./jq-py-setup.patch ];
+
+  patches = [
+    # Removes vendoring
+    ./jq-py-setup.patch
+  ];
 
   nativeBuildInputs = [ cython ];
+
+  buildInputs = [ jq ];
 
   preBuild = ''
     cython jq.pyx
   '';
 
-  buildInputs = [ jq ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "jq" ];
 
   meta = {
     description = "Python bindings for jq, the flexible JSON processor";

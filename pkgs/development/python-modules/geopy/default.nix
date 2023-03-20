@@ -1,30 +1,54 @@
-{ stdenv
+{ lib
+, async_generator
 , buildPythonPackage
+, docutils
 , fetchFromGitHub
-, isPy3k
 , geographiclib
+, pytestCheckHook
+, pythonOlder
+, pytz
 }:
 
 buildPythonPackage rec {
-  pname = "geopy-unstable";
-  version = "2019-11-10";
-
-  disabled = !isPy3k; # only Python 3
-  doCheck = false; # Needs network access
-
-  propagatedBuildInputs = [ geographiclib ];
+  pname = "geopy";
+  version = "2.3.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "geopy";
-    repo = "geopy";
-    rev = "531b7de6126838a3e69370227aa7f2086ba52b89";
-    sha256 = "07l1pblzg3hb3dbvd9rq8x78ly5dv0zxbc5hwskqil0bhv5v1p39";
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    geographiclib
+  ];
+
+  nativeCheckInputs = [
+    async_generator
+    docutils
+    pytestCheckHook
+    pytz
+  ];
+
+  disabledTests = [
+    # ignore --skip-tests-requiring-internet flag
+    "test_user_agent_default"
+  ];
+
+  pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
+
+  pythonImportsCheck = [ "geopy" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
-    license = licenses.mit;
-    maintainers = with maintainers; [GuillaumeDesforges];
+    changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ GuillaumeDesforges ];
   };
 }

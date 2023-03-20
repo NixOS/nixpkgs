@@ -72,11 +72,14 @@ def main():
                     f"Setting session name: {session}, as we found the existing wayland-session: {session_file}"
                 )
                 user.set_session(session)
+                user.set_session_type("wayland")
             elif is_session_xsession(session_file):
                 logging.debug(
                     f"Setting session name: {session}, as we found the existing xsession: {session_file}"
                 )
                 user.set_x_session(session)
+                user.set_session(session)
+                user.set_session_type("x11")
             else:
                 logging.error(f"Couldn't figure out session type for {session_file}")
                 sys.exit(1)

@@ -1,85 +1,92 @@
-{ fetchPypi
-, lib
-, fetchpatch
-, buildPythonPackage
-, isPy3k
-, appdirs
+{ lib
+, aiohttp
+, aioresponses
 , attrs
+, buildPythonPackage
 , cached-property
 , defusedxml
+, fetchFromGitHub
+, fetchpatch
+, freezegun
+, httpx
 , isodate
 , lxml
-, requests
-, requests_toolbelt
-, six
-, pytz
-, tornado
-, aiohttp
-# test dependencies
-, freezegun
 , mock
+, platformdirs
 , pretend
-, pytest
-, pytestcov
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+, pythonOlder
+, pytz
+, requests
+, requests-toolbelt
+, requests-file
 , requests-mock
-, aioresponses
+, xmlsec
 }:
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "3.4.0";
+  version = "4.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0e98669cfeb60756231ae185498f9ae21b30b2681786b8de58ed34c3b93e41dd";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "mvantellingen";
+    repo = "python-zeep";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
   };
 
-  patches = [
-    ( fetchpatch {
-        url = "https://github.com/mvantellingen/python-zeep/pull/1006/commits/ba7edd6bf2b31023b31e8f17c161e1d6d5af3d29.patch";
-        sha256 = "1j0jd5hmh457im9sbawaqf6pnfy36fhr9wqdim8wk5da9ixr0ajs";
-     })
-  ];
-
   propagatedBuildInputs = [
-    appdirs
     attrs
     cached-property
     defusedxml
+    httpx
     isodate
     lxml
-    requests
-    requests_toolbelt
-    six
+    platformdirs
     pytz
+    requests
+    requests-file
+    requests-toolbelt
+    xmlsec
+  ];
 
-    # optional requirements
-    tornado
-  ] ++ lib.optional isPy3k aiohttp;
-
-  checkInputs = [
+  nativeCheckInputs = [
+    aiohttp
+    aioresponses
     freezegun
     mock
     pretend
-    pytestcov
-    pytest
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
     requests-mock
-  ] ++ lib.optional isPy3k aioresponses;
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    # fix compatibility with pytest 4
-    substituteInPlace tests/conftest.py \
-       --replace 'request.node.get_marker("requests")' 'request.node.get_closest_marker("requests")'
-    # ignored tests requires xmlsec python module
-    HOME=$(mktemp -d) pytest tests --ignore tests/test_wsse_signature.py
-    runHook postCheck
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
+  disabledTests = [
+    # lxml.etree.XMLSyntaxError: Extra content at the end of the document, line 2, column 64
+    "test_mime_content_serialize_text_xml"
+    # Tests are outdated
+    "test_load"
+    "test_load_cache"
+    "test_post"
+  ];
+
+  pythonImportsCheck = [
+    "zeep"
+  ];
+
   meta = with lib; {
+    description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = licenses.mit;
-    description = "A modern/fast Python SOAP client based on lxml / requests";
     maintainers = with maintainers; [ rvl ];
   };
 }

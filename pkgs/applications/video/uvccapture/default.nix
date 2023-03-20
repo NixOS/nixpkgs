@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg }:
+{ lib, stdenv, fetchurl, libjpeg }:
 
 let
   debianPatches = fetchurl {
@@ -8,11 +8,12 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "uvccapture-0.5";
+stdenv.mkDerivation rec {
+  pname = "uvccapture";
+  version = "0.5";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/u/uvccapture/uvccapture_0.5.orig.tar.gz";
+    url = "mirror://debian/pool/main/u/uvccapture/uvccapture_${version}.orig.tar.gz";
     sha256 = "1b3akkcmr3brbf93akr8xi20w8zqf2g0qfq928500wy04qi6jqpi";
   };
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
     cp -v debian/uvccapture.1 "$out/share/man/man1/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Capture image from USB webcam at a specified interval";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

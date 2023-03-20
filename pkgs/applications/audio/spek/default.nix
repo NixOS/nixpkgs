@@ -1,27 +1,25 @@
-{ stdenv, fetchzip, autoconf, automake, intltool, pkgconfig, ffmpeg, wxGTK }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, intltool, pkg-config, ffmpeg, wxGTK32, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "spek";
-  version = "0.8.3";
+  version = "0.8.4";
 
-  src = fetchzip {
-    name = "${pname}-${version}-src";
-    url = "https://github.com/alexkay/spek/archive/v${version}.tar.gz";
-    sha256 = "0y4hlhswpqkqpsglrhg5xbfy1a6f9fvasgdf336vhwcjqsc3k2xv";
+  src = fetchFromGitHub {
+    owner = "alexkay";
+    repo = "spek";
+    rev = "v${version}";
+    sha256 = "sha256-JLQx5LlnVe1TT1KVO3/QSVRqYL+pAMCxoDWrnkUNmRU=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake intltool ffmpeg wxGTK ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  buildInputs = [ ffmpeg wxGTK32 gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Analyse your audio files by showing their spectrogram";
     homepage = "http://spek.cc/";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
   };
 }

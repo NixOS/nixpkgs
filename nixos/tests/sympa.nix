@@ -2,10 +2,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "sympa";
   meta.maintainers = with lib.maintainers; [ mmilata ];
 
-  machine =
+  nodes.machine =
     { ... }:
     {
-      virtualisation.memorySize = 1024;
 
       services.sympa = {
         enable = true;
@@ -14,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             webHost = "localhost";
           };
         };
-        listMasters = [ "joe@example.org" ];
+        listMasters = [ "bob@example.org" ];
         web.enable = true;
         web.https = false;
         database = {
@@ -30,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_unit("sympa.service")
     machine.wait_for_unit("wwsympa.service")
     assert "Mailing lists service" in machine.succeed(
-        "curl --insecure -L http://localhost/"
+        "curl --fail --insecure -L http://localhost/"
     )
   '';
 })

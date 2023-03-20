@@ -1,46 +1,48 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+{ lib, fetchFromGitHub, rustPackages, pkg-config, openssl
+, withALSA ? true, alsa-lib
+, withPulseAudio ? false, libpulseaudio
+, withPortAudio ? false, portaudio
 , withMpris ? false
 , withKeyring ? false
-, dbus ? null
+, dbus
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.2.24";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     rev = "v${version}";
-    sha256 = "08i0zm7kgprixqjpgaxk7xid1njgj6lmi896jf9fsjqzdzlblqk8";
+    sha256 = "sha256-9zwHBDrdvE2R/cdrWgjsfHlm3wEZ9SB2VNcqezB/Op0=";
   };
 
-  cargoSha256 = "0200apqbx769ggjnjr0m72g61ikhml2xak5n1il2pvfx1yf5nw0n";
+  cargoSha256 = "sha256-fQm7imXpm5AcKdg0cU/Rf2mAeg2ebZKRisJZSnG0REI=";
 
-  cargoBuildFlags = [
-    "--no-default-features"
-    "--features"
-    "${stdenv.lib.optionalString withALSA "alsa_backend,"}${stdenv.lib.optionalString withPulseAudio "pulseaudio_backend,"}${stdenv.lib.optionalString withPortAudio "portaudio_backend,"}${stdenv.lib.optionalString withMpris "dbus_mpris,"}${stdenv.lib.optionalString withKeyring "dbus_keyring,"}"
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional withALSA alsaLib
-    ++ stdenv.lib.optional withPulseAudio libpulseaudio
-    ++ stdenv.lib.optional withPortAudio portaudio
-    ++ stdenv.lib.optional (withMpris || withKeyring) dbus;
+    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withPulseAudio libpulseaudio
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional (withMpris || withKeyring) dbus;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withALSA "alsa_backend"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withKeyring "dbus_keyring";
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source Spotify client running as a UNIX daemon";
     homepage = "https://github.com/Spotifyd/spotifyd";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ anderslundstedt filalex77 marsam ];
+    changelog = "https://github.com/Spotifyd/spotifyd/raw/v${version}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ anderslundstedt Br1ght0ne marsam ];
     platforms = platforms.unix;
   };
 }

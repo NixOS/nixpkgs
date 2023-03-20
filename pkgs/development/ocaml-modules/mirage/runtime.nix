@@ -1,18 +1,15 @@
 { lib, buildDunePackage, fetchurl, ipaddr, functoria-runtime
-, fmt, logs, ocaml_lwt, alcotest }:
+, fmt, logs, lwt
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "mirage-runtime";
-  version = "3.7.7";
+  inherit (functoria-runtime) src version;
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.08";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-v${version}.tbz";
-    sha256 = "1ds5zfwb0g340kbdlsjayyw4n25nj7skdl1mwyvpzmkv4qcsmdiv";
-  };
-
-  propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs ocaml_lwt ];
+  propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs lwt ];
   checkInputs = [ alcotest ];
   doCheck = true;
 

@@ -1,27 +1,29 @@
-{ fetchPypi
+{ fetchFromGitHub
 , lib
 , buildPythonPackage
-, attrs
-, click
-, effect
-, jinja2
+, git
+, which
+, pythonOlder
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "2.3.2";
+  version = "6.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18xj618zjs13ib7f996fnl0xiqig0w48yns45nvy3xab55wximdx";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "seppeljordan";
+    repo = "nix-prefetch-github";
+    rev = "v${version}";
+    sha256 = "tvoDSqg4g517c1w0VcsVm3r4mBFG3RHaOTAJAv1ooc4=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    click
-    effect
-    jinja2
-  ];
+  nativeCheckInputs = [ unittestCheckHook git which ];
+
+  # ignore tests which are impure
+  DISABLED_TESTS = "network requires_nix_build";
 
   meta = with lib; {
     description = "Prefetch sources from github";

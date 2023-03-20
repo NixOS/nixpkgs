@@ -1,27 +1,33 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "1.0.6";
-in
-fetchzip rec {
-  name = "JetBrainsMono-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "jetbrains-mono";
+  version = "2.304";
 
-  url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
+    sha256 = "sha256-rv5A3F1zdcUJkmw09st1YxmEIkIoYJaMYGyZjic8jfc=";
+    stripRoot = false;
+  };
 
-  sha256 = "1198k5zw91g85h6n7rg3y7wcj1nrbby9zlr6zwlmiq0nb37n0d3g";
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+  doCheck = false;
+  dontFixup = true;
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.eot -d $out/share/fonts/eot
-    unzip -j $downloadedFile \*.woff -d $out/share/fonts/woff
-    unzip -j $downloadedFile \*.woff2 -d $out/share/fonts/woff2
+  installPhase = ''
+    runHook preInstall
+    install -Dm644 -t $out/share/fonts/truetype/ fonts/ttf/*.ttf
+    install -Dm644 -t $out/share/fonts/truetype/ fonts/variable/*.ttf
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
-    license = licenses.asl20;
+    changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
+    license = licenses.ofl;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };

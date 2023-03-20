@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , appstream-glib
@@ -13,19 +13,20 @@
 , gdk-pixbuf
 , pango
 , gettext
+, itstool
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "drawing";
-  version = "0.4.13";
+  version = "1.0.1";
 
   format = "other";
-  
+
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = pname;
     rev = version;
-    sha256 = "0mj2nmfrckv89srgkn16fnbrb35f5a655ak8bb3rd9na3hd5bq53";
+    sha256 = "sha256-9nosriI3Kdf1M5/TYFWn1jtQTqNKhBcFh7q3E4Uoq4s=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +35,11 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     glib
     gettext
+    itstool
   ];
 
   buildInputs = [

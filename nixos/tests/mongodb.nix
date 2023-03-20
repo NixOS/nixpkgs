@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       node.wait_for_open_port(27017)
 
       assert "hello" in node.succeed(
-          "mongo ${testQuery}"
+          "${pkg}/bin/mongo ${testQuery}"
       )
 
       node.execute(
@@ -26,16 +26,16 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   in {
     name = "mongodb";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ bluescreen303 offline cstrahan rvl phile314 ];
     };
 
     nodes = {
       node = {...}: {
         environment.systemPackages = with pkgs; [
-          mongodb-3_4
-          mongodb-3_6
-          mongodb-4_0
+          mongodb-4_2
+          mongodb-4_4
+          mongodb-5_0
         ];
       };
     };
@@ -43,9 +43,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testScript = ''
       node.start()
     ''
-      + runMongoDBTest pkgs.mongodb-3_4
-      + runMongoDBTest pkgs.mongodb-3_6 
-      + runMongoDBTest pkgs.mongodb-4_0
+      + runMongoDBTest pkgs.mongodb-4_2
+      + runMongoDBTest pkgs.mongodb-4_4
+      + runMongoDBTest pkgs.mongodb-5_0
       + ''
         node.shutdown()
       '';

@@ -1,16 +1,27 @@
-{ stdenv, runCommand, fetchurl
+{ lib, stdenv, runCommand, fetchurl, fetchpatch
 , ensureNewerSourcesHook
-, cmake, pkgconfig
+, cmake, pkg-config
 , which, git
-, boost, python3Packages
+, boost175, xz
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
 , gtest
 , cunit, snappy
-, rocksdb, makeWrapper
-, leveldb, oathToolkit
+, makeWrapper
+, leveldb, oath-toolkit
 , libnl, libcap_ng
+, rdkafka
+, nixosTests
+, cryptsetup
+, sqlite
+, lua
+, icu
+, bzip2
+, doxygen
+, graphviz
+, fmt
+, python39
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -26,15 +37,14 @@
 , nss ? null, nspr ? null
 
 # Linux Only Dependencies
-, linuxHeaders, utillinux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
-, libaio ? null, libxfs ? null, zfs ? null
+, linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
+, libaio ? null, libxfs ? null, zfs ? null, liburing ? null
 , ...
 }:
 
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with stdenv.lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -74,56 +84,131 @@ let
     none = [ ];
   };
 
-  ceph-python-env = python3Packages.python.withPackages (ps: [
+  getMeta = description: with lib; {
+     homepage = "https://ceph.io/en/";
+     inherit description;
+     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+     maintainers = with maintainers; [ adev ak johanot krav ];
+     platforms = [ "x86_64-linux" "aarch64-linux" ];
+   };
+
+  ceph-common = python.pkgs.buildPythonPackage rec{
+    pname = "ceph-common";
+    inherit src version;
+
+    sourceRoot = "ceph-${version}/src/python-common";
+
+    nativeCheckInputs = [ python.pkgs.pytest ];
+    propagatedBuildInputs = with python.pkgs; [ pyyaml six ];
+
+    meta = getMeta "Ceph common module for code shared by manager modules";
+  };
+
+  # Boost 1.75 is not compatible with Python 3.10
+  python = python39.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+    };
+  };
+
+  boost = boost175.override {
+    enablePython = true;
+    inherit python;
+  };
+
+  ceph-python-env = python.withPackages (ps: [
+    # Check .requires files below https://github.com/ceph/ceph/tree/main/debian for dependencies
     ps.sphinx
     ps.flask
+    ps.routes
     ps.cython
     ps.setuptools
     ps.virtualenv
     # Libraries needed by the python tools
-    ps.Mako
+    ps.mako
+    ceph-common
     ps.cherrypy
+    ps.cmd2
+    ps.colorama
+    ps.python-dateutil
+    ps.jsonpatch
     ps.pecan
     ps.prettytable
+    ps.pyopenssl
     ps.pyjwt
     ps.webob
     ps.bcrypt
+    ps.scipy
     ps.six
     ps.pyyaml
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.9";
+  version = "16.2.10";
+  src = fetchurl {
+    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    sha256 = "sha256-342+nUV3mCX7QJfZSnKEfnQFCJwJmVQeYnefJwW/AtU=";
+  };
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
-    inherit version;
-
-    src = fetchurl {
-      url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0zkh1a23v8g1fa5flqa2d53lv08ancab3li57gybpqpnja90k7il";
-    };
+    inherit src version;
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      # pacific: include/buffer: include <memory>
+      # fixes build with gcc 12
+      # https://github.com/ceph/ceph/pull/47295
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/df88789a38c053513d3b2a9b7d12a952fc0c9042.patch";
+        hash = "sha256-je65kBfa5hR0ZKo6ZI10XmD5ZUbKj5rxlGxxI9ZJVfo=";
+      })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/2abcbe4e47705e6e0fcc7d9d9b75625f563199af.patch";
+        hash = "sha256-8sWQKoZNHuGuhzX/F+3fY4+kjsrwsfoMdVpfVSj2x5w=";
+      })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/13dc077cf6c65a3b8c4f13d896847b9964b3fcbb.patch";
+        hash = "sha256-byfiZh9OJrux/y5m3QCPg0LET6q33ZDXmp/CN+yOSQQ=";
+      })
     ];
 
     nativeBuildInputs = [
       cmake
-      pkgconfig which git python3Packages.wrapPython makeWrapper
-      python3Packages.python # for the toPythonPath function
+      pkg-config which git python.pkgs.wrapPython makeWrapper
+      python.pkgs.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
+      python
+      fmt
+      # for building docs/man-pages presumably
+      doxygen
+      graphviz
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+      boost xz ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng
-    ] ++ optionals stdenv.isLinux [
-      linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
+      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
+      cryptsetup sqlite lua icu bzip2
+    ] ++ lib.optionals stdenv.isLinux [
+      linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
-    ] ++ optionals hasRadosgw [
+    ] ++ lib.optionals hasRadosgw [
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 
@@ -132,9 +217,8 @@ in rec {
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
+      substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
 
-      # for pybind/rgw to find internal dep
-      export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
       export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
@@ -142,20 +226,20 @@ in rec {
     '';
 
     cmakeFlags = [
-      "-DWITH_PYTHON3=ON"
-      "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-
       "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_ROCKSDB=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
       "-DWITH_TESTS=OFF"
+      "-DWITH_CEPHFS_SHELL=ON"
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
-    ];
+      # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
+      ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
+    ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     postFixup = ''
       wrapPythonPrograms
@@ -166,38 +250,31 @@ in rec {
       test -f $out/bin/ceph-volume
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 
     doCheck = false; # uses pip to install things from the internet
 
-    meta = {
-      homepage = "https://ceph.com/";
-      description = "Distributed storage system";
-      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-      maintainers = with maintainers; [ adev ak krav johanot ];
-      platforms = [ "x86_64-linux" ];
-    };
+    # Takes 7+h to build with 2 cores.
+    requiredSystemFeatures = [ "big-parallel" ];
+
+    meta = getMeta "Distributed storage system";
 
     passthru.version = version;
+    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-     meta = {
-        homepage = "https://ceph.com/";
-        description = "Tools needed to mount Ceph's RADOS Block Devices";
-        license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-        maintainers = with maintainers; [ adev ak johanot krav ];
-        platforms = [ "x86_64-linux" ];
-      };
+      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
     } ''
-      mkdir -p $out/{bin,etc,${sitePackages}}
+      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
-      cp -r ${ceph}/etc/bash_completion.d $out/etc
+      cp -r ${ceph}/sbin/mount.ceph $out/bin
+      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+      ln -s bin $out/sbin
+      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
+      cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out
       substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out

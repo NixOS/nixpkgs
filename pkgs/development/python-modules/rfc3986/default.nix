@@ -1,23 +1,39 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, idna
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "rfc3986";
-  version = "1.4.0";
+  version = "2.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17dvx15m3r49bmif5zlli8kzjd6bys6psixzbp14sd5367d9h8qi";
+    hash = "sha256-l6rPnb1L/YKbqtbmMJ+mVzqvG+P2+nNcirBeRs7LJhw=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest
-  '';
+  propagatedBuildInputs = [
+    idna
+  ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "rfc3986"
+  ];
+
+  meta = with lib; {
+    description = "Validating URI References per RFC 3986";
     homepage = "https://rfc3986.readthedocs.org";
     license = licenses.asl20;
-    description = "Validating URI References per RFC 3986";
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

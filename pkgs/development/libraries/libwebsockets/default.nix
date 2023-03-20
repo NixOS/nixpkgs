@@ -1,51 +1,73 @@
-{ fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, zlib
+, libuv
+  # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
+, withExternalPoll ? false
+}:
 
-let
-  generic = { version, sha256 }: stdenv.mkDerivation rec {
-    pname = "libwebsockets";
-    inherit version;
+stdenv.mkDerivation rec {
+  pname = "libwebsockets";
+  version = "4.3.2";
 
-    src = fetchFromGitHub {
-      owner = "warmcat";
-      repo = "libwebsockets";
-      rev = "v${version}";
-      inherit sha256;
-    };
-
-    buildInputs = [ openssl zlib libuv ];
-
-    nativeBuildInputs = [ cmake ];
-
-    cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
-    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
-
-    meta = with stdenv.lib; {
-      description = "Light, portable C library for websockets";
-      longDescription = ''
-        Libwebsockets is a lightweight pure C library built to
-        use minimal CPU and memory resources, and provide fast
-        throughput in both directions.
-      '';
-      homepage = "https://libwebsockets.org/";
-      license = licenses.lgpl21;
-      platforms = platforms.all;
-    };
+  src = fetchFromGitHub {
+    owner = "warmcat";
+    repo = "libwebsockets";
+    rev = "v${version}";
+    hash = "sha256-why8LAcc4XN0JdTJ1JoNWijKENL5mOHBsi9K4wpYr2c=";
   };
 
-in
-rec {
-  libwebsockets_3_1 = generic {
-    sha256 = "1w1wz6snf3cmcpa3f4dci2nz9za2f5rrylxl109id7bcb36xhbdl";
-    version = "3.1.0";
-  };
+  outputs = [ "out" "dev" ];
 
-  libwebsockets_3_2 = generic {
-    version = "3.2.2";
-    sha256 = "0m1kn4p167jv63zvwhsvmdn8azx3q7fkk8qc0fclwyps2scz6dna";
-  };
+  buildInputs = [ openssl zlib libuv ];
 
-  libwebsockets_4_0 = generic {
-    version = "4.0.1";
-    sha256 = "1pf7km0w5q7dqlwcwqizdpfqgg10prfq8g2c093f5nghwsfv8mmf";
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DLWS_WITH_PLUGINS=ON"
+    "-DLWS_WITH_IPV6=ON"
+    "-DLWS_WITH_SOCKS5=ON"
+    "-DDISABLE_WERROR=ON"
+    "-DLWS_BUILD_HASH=no_hash"
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+  ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
+  ++ (
+    if stdenv.hostPlatform.isStatic then
+      [ "-DLWS_WITH_SHARED=OFF" ]
+    else
+      [ "-DLWS_WITH_STATIC=OFF" "-DLWS_LINK_TESTAPPS_DYNAMIC=ON" ]
+  );
+
+  postInstall = ''
+    # Fix path that will be incorrect on move to "dev" output.
+    substituteInPlace "$out/lib/cmake/libwebsockets/LibwebsocketsTargets-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}" "$out"
+
+    # The package builds a few test programs that are not usually necessary.
+    # Move those to the dev output.
+    moveToOutput "bin/libwebsockets-test-*" "$dev"
+    moveToOutput "share/libwebsockets-test-*" "$dev"
+  '';
+
+  # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
+  disallowedReferences = [ stdenv.cc.cc ];
+
+  meta = with lib; {
+    description = "Light, portable C library for websockets";
+    longDescription = ''
+      Libwebsockets is a lightweight pure C library built to
+      use minimal CPU and memory resources, and provide fast
+      throughput in both directions.
+    '';
+    homepage = "https://libwebsockets.org/";
+    # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
+    # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
+    license = with licenses; [ mit publicDomain bsd3 asl20 ];
+    maintainers = with maintainers; [ mindavi ];
+    platforms = platforms.all;
   };
 }
+

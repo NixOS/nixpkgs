@@ -1,59 +1,63 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
 , django
 , factory_boy
-, glibcLocales
 , mock
 , pygments
-, pytest
-, pytestcov
 , pytest-django
-, python-dateutil
+, pytestCheckHook
 , shortuuid
-, six
-, tox
-, typing
 , vobject
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.2.8";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "1gd3nykwzh3azq1p9cvgkc3l5dwrv7y86sfjxd9llbyj8ky71iaj";
+    rev = "refs/tags/${version}";
+    hash = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  patches = [
+    (fetchpatch {
+      # pygments 2.14 compat for tests
+      url = "https://github.com/django-extensions/django-extensions/commit/61ebfe38f8fca9225b41bec5418e006e6a8815e1.patch";
+      hash = "sha256-+sxaQMmKi/S4IlfHqARPGhaqc+F1CXUHVFyeU/ArW2U=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
+  '';
+
+  propagatedBuildInputs = [
+    django
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [ six ]
-    ++ lib.optional (pythonOlder "3.5") typing;
-
-  checkInputs = [
-    django
+  nativeCheckInputs = [
     factory_boy
-    glibcLocales
     mock
     pygments # not explicitly declared in setup.py, but some tests require it
-    pytest
-    pytestcov
     pytest-django
-    python-dateutil
+    pytestCheckHook
     shortuuid
-    tox
     vobject
     werkzeug
   ];
 
-  # tests not compatible with pip>=20
-  checkPhase = ''
-    rm tests/management/commands/test_pipchecker.py
-    ${python.interpreter} setup.py test
-  '';
+  disabledTestPaths = [
+    # requires network access
+    "tests/management/commands/test_pipchecker.py"
+  ];
 
   meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";

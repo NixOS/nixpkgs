@@ -8,15 +8,19 @@
 , plugs
   # Only useful to disable for development testing.
 , useDefaultPlugs ? true
+, testName ? null
 }:
 
 let
   selectedPlugs =
     if plugs == null then switchboardPlugs
     else plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
+
+  testingName = lib.optionalString (testName != null) "${testName}-";
 in
 stdenv.mkDerivation rec {
-  name = "${switchboard.name}-with-plugs";
+  pname = "${testingName}${switchboard.pname}-with-plugs";
+  inherit (switchboard) version;
 
   src = null;
 

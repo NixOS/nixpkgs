@@ -1,16 +1,17 @@
-Index: libkscreen-5.9.4/src/backendmanager.cpp
-===================================================================
---- libkscreen-5.9.4.orig/src/backendmanager.cpp
-+++ libkscreen-5.9.4/src/backendmanager.cpp
-@@ -178,17 +178,11 @@ QFileInfo BackendManager::preferredBacke
+diff --git a/src/backendmanager.cpp b/src/backendmanager.cpp
+index e1013d5..4bded53 100644
+--- a/src/backendmanager.cpp
++++ b/src/backendmanager.cpp
+@@ -164,18 +164,11 @@ QFileInfo BackendManager::preferredBackend(const QString &backend)
+ 
  QFileInfoList BackendManager::listBackends()
  {
-     // Compile a list of installed backends first
+-    // Compile a list of installed backends first
 -    const QString backendFilter = QStringLiteral("KSC_*");
 -    const QStringList paths = QCoreApplication::libraryPaths();
 -    QFileInfoList finfos;
 -    for (const QString &path : paths) {
--        const QDir dir(path + QLatin1String("/kf5/kscreen/"),
+-        const QDir dir(path + QStringLiteral("/kf" QT_STRINGIFY(QT_VERSION_MAJOR) "/kscreen/"),
 -                       backendFilter,
 -                       QDir::SortFlags(QDir::QDir::Name),
 -                       QDir::NoDotAndDotDot | QDir::Files);
@@ -24,4 +25,4 @@ Index: libkscreen-5.9.4/src/backendmanager.cpp
 +    return dir.entryInfoList();
  }
  
- KScreen::AbstractBackend *BackendManager::loadBackendPlugin(QPluginLoader *loader, const QString &name,
+ void BackendManager::setBackendArgs(const QVariantMap &arguments)

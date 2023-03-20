@@ -1,12 +1,12 @@
-{ stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils }:
+{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "spring-boot-cli";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchzip {
     url = "https://repo.spring.io/release/org/springframework/boot/${pname}/${version}.RELEASE/${pname}-${version}.RELEASE-bin.zip";
-    sha256 = "1zjbgs1qx75jgxc46x9380iqh8pfgacih38ad3qxd0106a8lcp5h";
+    sha256 = "1zqfnxz57234227rp303iwis0mjkkjkpcqnj9jgw78gykjnqdmmq";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       CLI which makes it easy to create spring-based applications
     '';
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       a command line tool that runs “spring scripts”.
     '';
     homepage = "https://spring.io/projects/spring-boot";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];

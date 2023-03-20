@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo }:
+{ lib, stdenv, fetchFromGitHub, cairo }:
 
 stdenv.mkDerivation rec {
   version = "0.4";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compute text widths";
     homepage = "https://github.com/baskerville/txtw";
     maintainers = with maintainers; [ lihop ];

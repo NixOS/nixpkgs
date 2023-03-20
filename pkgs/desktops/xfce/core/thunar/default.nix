@@ -10,9 +10,9 @@
 , libxfce4ui
 , libxfce4util
 , libxslt
+, pcre
 , xfconf
 , gobject-introspection
-, gvfs
 , makeWrapper
 , symlinkJoin
 , thunarPlugins ? []
@@ -21,9 +21,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "1.8.14";
+  version = "4.18.4";
 
-  sha256 = "1ph9bcqfm2nccliagl8zdl1dizh62qnr8m5hacri3cs2jhc0jjpy";
+  sha256 = "sha256-tdk0sWUzTmYXk+dOPVOpjmODpqmhzQc9jAOCk2+yNKM=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -35,18 +35,16 @@ let unwrapped = mkXfceDerivation {
     exo
     gdk-pixbuf
     gtk3
-    gvfs
     libX11
     libgudev
     libnotify
     libxfce4ui
     libxfce4util
+    pcre
     xfconf
   ];
 
-  patches = [
-    ./thunarx_plugins_directory.patch
-  ];
+  configureFlags = [ "--with-custom-thunarx-dirs-enabled" ];
 
   # the desktop file … is in an insecure location»
   # which pops up when invoking desktop files that are
@@ -58,8 +56,9 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Xfce file manager";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };
 

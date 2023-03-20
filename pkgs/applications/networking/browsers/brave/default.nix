@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl
+{ lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
 , dpkg
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -12,11 +12,9 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gtk3
-, libpulseaudio
 , libuuid
 , libdrm
 , libX11
@@ -26,84 +24,102 @@
 , libXext
 , libXfixes
 , libXi
+, libxkbcommon
 , libXrandr
 , libXrender
 , libXScrnSaver
+, libxshmfence
 , libXtst
 , mesa
 , nspr
 , nss
 , pango
+, pipewire
 , udev
+, wayland
 , xorg
 , zlib
-, xdg_utils
-, wrapGAppsHook
+, xdg-utils
+, snappy
+
+# command line arguments which are always set e.g "--disable-gpu"
+, commandLineArgs ? ""
+
+# Necessary for USB audio devices.
+, pulseSupport ? stdenv.isLinux
+, libpulseaudio
+
+# For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
+, libGL
+
+# For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
+, libvaSupport ? stdenv.isLinux
+, libva
+, enableVideoAcceleration ? libvaSupport
+
+# For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
+, vulkanSupport ? false
+, addOpenGLRunpath
+, enableVulkan ? vulkanSupport
 }:
 
 let
+  inherit (lib) optional optionals makeLibraryPath makeSearchPathOutput makeBinPath
+    optionalString strings escapeShellArg;
 
-rpath = lib.makeLibraryPath [
-  alsaLib
-  at-spi2-atk
-  at-spi2-core
-  atk
-  cairo
-  cups
-  dbus
-  expat
-  fontconfig
-  freetype
-  gdk-pixbuf
-  glib
-  gnome2.GConf
-  gtk3
-  libdrm
-  libpulseaudio
-  libX11
-  libXScrnSaver
-  libXcomposite
-  libXcursor
-  libXdamage
-  libXext
-  libXfixes
-  libXi
-  libXrandr
-  libXrender
-  libXtst
-  libuuid
-  mesa
-  nspr
-  nss
-  pango
-  udev
-  xdg_utils
-  xorg.libxcb
-  zlib
-];
+  deps = [
+    alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
+    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
+    libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
+    libXext libXfixes libXi libXrandr libXrender libxshmfence
+    libXtst libuuid mesa nspr nss pango pipewire udev wayland
+    xorg.libxcb zlib snappy
+  ]
+    ++ optional pulseSupport libpulseaudio
+    ++ optional libvaSupport libva;
 
+  rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
+  binpath = makeBinPath deps;
+
+  enableFeatures = optionals enableVideoAcceleration [ "VaapiVideoDecoder" "VaapiVideoEncoder" ]
+    ++ optional enableVulkan "Vulkan";
+
+    # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
+  disableFeatures = optional enableVideoAcceleration "UseChromeOSDirectVideoDecoder";
 in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.8.95";
+  version = "1.49.120";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "1mlffg2v31b42gj354w5yv0yzlqc2f4f3cmdnddzkplw10jgw6f1";
+    sha256 = "sha256-KSu6HaNKc7uVY1rSyzU+VZSE2dbIOOrsUx1RYKnz8yU=";
   };
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  doInstallCheck = true;
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [
+    dpkg
+    (wrapGAppsHook.override { inherit makeWrapper; })
+  ];
 
-  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [
+    # needed for GSETTINGS_SCHEMAS_PATH
+    glib gsettings-desktop-schemas gtk3
+
+    # needed for XDG_ICON_DIRS
+    gnome.adwaita-icon-theme
+  ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out $out/bin
 
       cp -R usr/share $out
@@ -117,9 +133,11 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
-      patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
+          patchelf \
+              --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+              --set-rpath "${rpath}" $exe
+      done
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
@@ -132,7 +150,7 @@ stdenv.mkDerivation rec {
           --replace /opt/brave.com $out/opt/brave.com
 
       # Correct icons location
-      icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
+      icon_sizes=("16" "24" "32" "48" "64" "128" "256")
 
       for icon in ''${icon_sizes[*]}
       do
@@ -141,21 +159,51 @@ stdenv.mkDerivation rec {
       done
 
       # Replace xdg-settings and xdg-mime
-      ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-      ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+      ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
+      ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+
+      runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    # Add command line args to wrapGApp.
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : ${rpath}
+      --prefix PATH : ${binpath}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      ${optionalString (enableFeatures != []) ''
+      --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
+      ''}
+      ${optionalString (disableFeatures != []) ''
+      --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
+      ''}
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      ${optionalString vulkanSupport ''
+      --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+      ''}
+      --add-flags ${escapeShellArg commandLineArgs}
+    )
+  '';
+
+  installCheckPhase = ''
+    # Bypass upstream wrapper which suppresses errors
+    $out/opt/brave.com/brave/brave --version
+  '';
+
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#" + replaceStrings [ "." ] [ "" ] version;
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you
       contribute to your favorite creators automatically.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht jefflabonte ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
     platforms = [ "x86_64-linux" ];
   };
 }

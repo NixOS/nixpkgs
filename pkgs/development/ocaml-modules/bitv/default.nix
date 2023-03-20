@@ -1,27 +1,29 @@
-{ stdenv, fetchzip, autoreconfHook, which, ocaml, findlib }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, which, ocaml, findlib }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "bitv is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-bitv-${version}";
+  pname = "ocaml${ocaml.version}-bitv";
   version = "1.3";
 
-  src = fetchzip {
-    url = "https://github.com/backtracking/bitv/archive/${version}.tar.gz";
-    sha256 = "0vkh1w9fpi5m1sgiqg6r38j3fqglhdajmbyiyr91113lrpljm75i";
+  src = fetchFromGitHub {
+    owner = "backtracking";
+    repo = "bitv";
+    rev = version;
+    sha256 = "sha256-sZwq6c10hBBS9tGvKlWD9GE3JBrZPByfDrXE6xIPcG4=";
   };
 
-  buildInputs = [ autoreconfHook which ocaml findlib ];
+  nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
 
   createFindlibDestdir = true;
 
   meta = {
     description = "A bit vector library for OCaml";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "https://github.com/backtracking/bitv";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

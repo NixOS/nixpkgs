@@ -1,27 +1,51 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.8.11";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "0imnvx3v0msk9qf72zy1qg5q52dmc8xfs9iwdwa2q13scjslgmwn";
+    hash = "sha256-HU+9y4btWbYrkHazOudY2j9RceieBK3BS2jgLbwcEdk=";
   };
 
-  cargoSha256 = "1aqqx0pdq3vp5c06pjwsrbrqfkz5dhxnpvv3vnr3pqfm62xrffgg";
+  cargoHash = "sha256-YORQHX4RPPHDErgo4c3SxvxklJ9mxHeP/1GiwhuL+J0=";
 
-  SODIUM_USE_PKG_CONFIG = 1;
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = [ openssl libsodium ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
-  meta = with stdenv.lib; {
+  buildFeatures = [
+    "trust-dns"
+    "local-http-native-tls"
+    "local-tunnel"
+    "local-socks4"
+    "local-redir"
+    "local-dns"
+    "local-tun"
+    "aead-cipher-extra"
+    "aead-cipher-2022"
+    "aead-cipher-2022-extra"
+  ];
+
+  # all of these rely on connecting to www.example.com:80
+  checkFlags = [
+    "--skip=http_proxy"
+    "--skip=tcp_tunnel"
+    "--skip=udp_tunnel"
+    "--skip=udp_relay"
+    "--skip=socks4_relay_connect"
+    "--skip=socks5_relay_aead"
+    "--skip=socks5_relay_stream"
+  ];
+
+  meta = with lib; {
+    description = "A Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
-    description = "A Rust port of shadowsocks";
+    changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

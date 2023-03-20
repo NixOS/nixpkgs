@@ -1,26 +1,24 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python2, lndir
-, openssl_1_1, openldap, sope, libmemcached, curl }: with lib; gnustep.stdenv.mkDerivation rec {
+{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir, libxcrypt
+, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
+, oath-toolkit
+, enableActiveSync ? false
+, libwbxml }:
+gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "4.3.2";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    sha256 = "1xxad23a8zy6w850x5nrrf54db0x73lc9drmc5kpfk870fk2lmr0";
+    hash = "sha256-lHUEV5yYLs3oc8Arl3KX8G/OEAoLmS7pRLCGsRAJAr4=";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python2 ];
-  buildInputs = [ gnustep.base sope openssl_1_1 libmemcached (curl.override { openssl = openssl_1_1; }) ]
-    ++ optional (openldap != null) openldap;
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
+    ++ lib.optional enableActiveSync libwbxml;
 
-  patches = [
-    # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/s/sogo/4.3.0-1/debian/patches/0005-Remove-build-date.patch";
-      sha256 = "0lrh3bkfj3r0brahfkyb0g7zx7r2jjd5cxzjl43nqla0fs09wsh8";
-    })
-  ];
+  patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
   postPatch = ''
     # Exclude NIX_ variables
@@ -40,7 +38,11 @@
     find . -type f -name GNUmakefile -exec sed -i "s:\\$.GNUSTEP_MAKEFILES.:$PWD/makefiles:g" {} +
   '';
 
-  configureFlags = [ "--disable-debug" "--with-ssl=ssl" ];
+  configureFlags = [
+    "--disable-debug"
+    "--with-ssl=ssl"
+    "--enable-mfa"
+  ];
 
   preFixup = ''
     # Create gnustep.conf
@@ -49,7 +51,7 @@
     sed -i "s:${gnustep.make}:$out:g" $out/share/GNUstep/GNUstep.conf
 
     # Link in GNUstep base
-    ${lndir}/bin/lndir ${gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
+    ${lndir}/bin/lndir ${lib.getLib gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
 
     # Link in sope
     ${lndir}/bin/lndir ${sope}/ $out/
@@ -63,11 +65,15 @@
     for bin in $out/bin/*; do
       wrapProgram $bin --prefix LD_LIBRARY_PATH : $out/lib/sogo --prefix GNUSTEP_CONFIG_FILE : $out/share/GNUstep/GNUstep.conf
     done
+
+    rmdir $out/nix
   '';
 
-  meta = {
-    description = "SOGo is a very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2 lgpl21 ];
+  passthru.tests.sogo = nixosTests.sogo;
+
+  meta = with lib; {
+    description = "A very fast and scalable modern collaboration suite (groupware)";
+    license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 das_j ];

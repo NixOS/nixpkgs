@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
 
 let
   pname = "jadx";
-  version = "1.1.0";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dx3g0sm46qy57gggpg8bpmin5glzbxdbf0qzvha9r2dwh4mrwlg";
+    hash = "sha256-nxEK2K6id1Rnqo85ls6YEHXrhc9ykJU17+olGqg+aGA=";
   };
 
   deps = stdenv.mkDerivation {
@@ -21,6 +21,14 @@ let
       export GRADLE_USER_HOME=$(mktemp -d)
       export JADX_VERSION=${version}
       gradle --no-daemon jar
+
+      # Apparently, Gradle won't cache the `compileOnlyApi` dependency
+      # `org.jetbrains:annotations:22.0.0` which is defined in
+      # `io.github.skylot:raung-common`. To make it available in the
+      # output, we patch `build.gradle` and run Gradle again.
+      substituteInPlace build.gradle \
+        --replace 'org.jetbrains:annotations:23.0.0' 'org.jetbrains:annotations:22.0.0'
+      gradle --no-daemon jar
     '';
 
     # Mavenize dependency paths
@@ -29,16 +37,22 @@ let
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
+
+      # Work around okio-2.10.0 bug, fixed in 3.0. Remove "-jvm" from filename.
+      # https://github.com/square/okio/issues/954
+      mv $out/com/squareup/okio/okio/2.10.0/okio{-jvm,}-2.10.0.jar
     '';
 
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "083r4hg6m9cxzm2m8nckf10awq8kh901v5i39r60x47xk5yw84ps";
+    outputHash = "sha256-QebPRmfLtXy4ZlyKeGC5XNzhMTsYI0X36My+nTFvQpM=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle jdk makeWrapper ];
+
+  # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
+  __darwinAllowLocalNetworking = true;
 
   buildPhase = ''
     # The installDist Gradle build phase tries to copy some dependency .jar
@@ -90,12 +104,16 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dex to Java decompiler";
     longDescription = ''
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];

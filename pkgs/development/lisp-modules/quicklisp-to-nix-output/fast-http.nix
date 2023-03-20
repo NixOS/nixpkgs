@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''fast-http'';
-  version = ''20191007-git'';
+  baseName = "fast-http";
+  version = "20191007-git";
 
-  description = ''A fast HTTP protocol parser in Common Lisp'';
+  description = "A fast HTTP protocol parser in Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."cl-utilities" args."flexi-streams" args."proc-parse" args."smart-buffer" args."trivial-features" args."trivial-gray-streams" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fast-http/2019-10-07/fast-http-20191007-git.tgz'';
-    sha256 = ''00qnl56cfss2blm4pp03dwv84bmkyd0kbarhahclxbn8f7pgwf32'';
+    url = "http://beta.quicklisp.org/archive/fast-http/2019-10-07/fast-http-20191007-git.tgz";
+    sha256 = "00qnl56cfss2blm4pp03dwv84bmkyd0kbarhahclxbn8f7pgwf32";
   };
 
   packageName = "fast-http";

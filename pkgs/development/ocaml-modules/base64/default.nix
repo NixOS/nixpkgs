@@ -1,28 +1,22 @@
-{ lib, fetchpatch, fetchzip, buildDunePackage, alcotest, bos }:
-
-let version = "3.2.0"; in
+{ lib, fetchurl, buildDunePackage, ocaml, findlib, alcotest, bos, rresult }:
 
 buildDunePackage rec {
   pname = "base64";
-  inherit version;
+  version = "3.5.1";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-base64/archive/v${version}.tar.gz";
-    sha256 = "1ilw3zj0w6cq7i4pvr8m2kv5l5f2y9aldmv72drlwwns013b1gwy";
+  minimalOCamlVersion = "4.03";
+  duneVersion = "3";
+
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-${version}.tbz";
+    hash = "sha256-2P7apZvRL+rnrMCLWSjdR4qsUj9MqNJARw0lAGUcZe0=";
   };
 
-  minimumOCamlVersion = "4.03";
+  nativeBuildInputs = [ findlib ];
 
-  buildInputs = [ bos ];
-
-  # Fix test-suite for alcotest ≥ 1.0
-  patches = [(fetchpatch {
-    url = "https://github.com/mirage/ocaml-base64/commit/8d334d02aa52875158fae3e2fb8fe0a5596598d0.patch";
-    sha256 = "0lvqdp98qavpzis1wgwh3ijajq79hq47898gsrk37fpyjbrdzf5q";
-  })];
-
-  doCheck = true;
-  checkInputs = [ alcotest ];
+  # otherwise fmt breaks evaluation
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ alcotest bos rresult ];
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-base64";

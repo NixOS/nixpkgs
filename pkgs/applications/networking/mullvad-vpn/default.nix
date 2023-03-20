@@ -1,11 +1,12 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
-, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+{ stdenv, lib, fetchurl, dpkg
+, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
+, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
+, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+, makeWrapper
 }:
 
 let deps = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups
@@ -15,11 +16,11 @@ let deps = [
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     pango
     gtk3
     libappindicator
     libnotify
+    mesa
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -32,6 +33,7 @@ let deps = [
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
+    xorg.libxshmfence
     nspr
     nss
     systemd
@@ -41,16 +43,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.4";
+  version = "2023.1";
 
   src = fetchurl {
-    url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "17xi8g2k89vi4d0j7pr33bx9zjapa2qh4pymbrqvxwli3yhq6zwr";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-+Nh4CYjivjrCmohzQMSjb9z5bgACAvot5oUABPUFExQ=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    makeWrapper
   ];
 
   buildInputs = deps;
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ systemd.lib libnotify libappindicator ];
+  runtimeDependencies = [ (lib.getLib systemd) libGL libnotify libappindicator wayland ];
 
   installPhase = ''
     runHook preInstall
@@ -71,22 +74,27 @@ stdenv.mkDerivation rec {
     mv usr/bin/* $out/bin
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
-    sed -i 's|\/opt\/Mullvad.*VPN|'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
-
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
-    ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
+
+    wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
+
+    wrapProgram $out/bin/mullvad-daemon \
+        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
+
+    sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 
 }

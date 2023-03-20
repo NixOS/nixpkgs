@@ -1,26 +1,28 @@
 { lib, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
 buildGoModule rec {
   pname = "browserpass";
-  version = "3.0.6";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "browserpass";
     repo = "browserpass-native";
     rev = version;
-    sha256 = "0q3bsla07zjl6i69nj1axbkg2ia89pvh0jg6nlqgbm2kpzzbn0pz";
+    sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorSha256 = "1wcbn0ip596f2dp68y6jmxgv20l0dgrcxg5cwclkawigj05416zj";
+  vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
+
+  doCheck = false;
 
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch
     # variables to be valid by default
     substituteInPlace Makefile \
       --replace "PREFIX ?= /usr" ""
-    sed -i -e 's/SED :=.*/SED := sed/' Makefile
-    sed -i -e 's/INSTALL :=.*/INSTALL := install/' Makefile
+    sed -i -e 's/SED =.*/SED = sed/' Makefile
+    sed -i -e 's/INSTALL =.*/INSTALL = install/' Makefile
   '';
 
   DESTDIR = placeholder "out";
@@ -48,7 +50,6 @@ buildGoModule rec {
     description = "Browserpass native client app";
     homepage = "https://github.com/browserpass/browserpass-native";
     license = licenses.isc;
-    platforms = platforms.all;
     maintainers = with maintainers; [ rvolosatovs infinisil ];
   };
 }

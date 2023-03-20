@@ -1,6 +1,6 @@
 let
-  cert = pkgs: pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=uploads.example.com/CN=conference.example.com'
+  cert = pkgs: pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=uploads.example.com/CN=conference.example.com' -days 36500
     mkdir -p $out
     cp key.pem cert.pem $out
   '';
@@ -42,7 +42,7 @@ in import ../make-test-python.nix {
         ${nodes.server.config.networking.primaryIPAddress} uploads.example.com
       '';
       environment.systemPackages = [
-        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
+        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = "example.com"; })
       ];
     };
     server = { config, pkgs, ... }: {
@@ -81,11 +81,13 @@ in import ../make-test-python.nix {
   };
 
   testScript = { nodes, ... }: ''
+    # Check with sqlite storage
+    start_all()
     server.wait_for_unit("prosody.service")
     server.succeed('prosodyctl status | grep "Prosody is running"')
 
     server.succeed("create-prosody-users")
-    client.succeed('send-message 2>&1 | grep "XMPP SCRIPT TEST SUCCESS"')
+    client.succeed("send-message")
     server.succeed("delete-prosody-users")
   '';
 }

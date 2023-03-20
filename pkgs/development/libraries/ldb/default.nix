@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python3
 , pkg-config
@@ -12,15 +12,16 @@
 , docbook_xml_dtd_42
 , cmocka
 , wafHook
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "ldb";
-  version = "2.1.3";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
-    sha256 = "0xkps414ndb87abla7dlv44ndnfg5r5vwgmkm3ngcq9knbv1x6w7";
+    sha256 = "sha256-RnQD9334Z4LDlluxdUQLqi7XUan+uVYBlL2MBr8XNsk=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    tdb
+    tevent
   ];
 
   buildInputs = [
@@ -42,7 +45,15 @@ stdenv.mkDerivation rec {
     tevent
     popt
     cmocka
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 
@@ -52,9 +63,15 @@ stdenv.mkDerivation rec {
     "--without-ldb-lmdb"
   ];
 
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
+
   stripDebugList = [ "bin" "lib" "modules" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A LDAP-like embedded database";
     homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;

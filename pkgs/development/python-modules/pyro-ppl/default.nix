@@ -1,39 +1,73 @@
-{ buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
-, graphviz, networkx, six, opt-einsum, tqdm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, graphviz
+, jupyter
+, matplotlib
+, networkx
+, opt-einsum
+, pandas
+, pillow
+, pyro-api
+, pythonOlder
+, torch
+, scikit-learn
+, seaborn
+, torchvision
+, tqdm
+, wget
+}:
+
 buildPythonPackage rec {
-  version = "1.1.0";
   pname = "pyro-ppl";
+  version = "1.8.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "5ca2fd19276fcfcf52babb48d22892a41d6238d7a6c65e63f704b070a3816479";
+    hash = "sha256-dm+tYeUt9IiF3pbUEhPaH46MG3ns8witUxifzRXBy0E=";
   };
 
   propagatedBuildInputs = [
-    pytorch
-    contextlib2
-    # TODO(tom): graphviz pulls in a lot of dependencies - make
-    # optional when some time to figure out how.
-    graphviz
+    pyro-api
+    torch
     networkx
-    six
     opt-einsum
     tqdm
   ];
 
-  # pyro not shipping tests do simple smoke test instead
-  checkPhase = ''
-    python -c "import pyro"
-    python -c "import pyro.distributions"
-    python -c "import pyro.infer"
-    python -c "import pyro.optim"
-  '';
+  passthru.optional-dependencies = {
+    extras = [
+      graphviz
+      jupyter
+      # lap
+      matplotlib
+      pandas
+      pillow
+      scikit-learn
+      seaborn
+      torchvision
+      # visdom
+      wget
+    ];
+  };
 
-  meta = {
-    description = "A Python library for probabilistic modeling and inference";
+  # pyro not shipping tests do simple smoke test instead
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pyro"
+    "pyro.distributions"
+    "pyro.infer"
+    "pyro.optim"
+  ];
+
+  meta = with lib; {
+    description = "Library for probabilistic modeling and inference";
     homepage = "http://pyro.ai";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh ];
-    broken = true;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ teh georgewhewell ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Can't get them working
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ericflo/pynzb";
     description = "Unified API for parsing NZB files";
     license = licenses.bsd3;

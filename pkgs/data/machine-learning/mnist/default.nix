@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 let
   srcs = {
     train-images = fetchurl {
@@ -29,8 +29,8 @@ in
       ln -s "${srcs.test-images}" "$out/${srcs.test-images.name}"
       ln -s "${srcs.test-labels}" "$out/${srcs.test-labels.name}"
     '';
-    phases = [ "installPhase" ];
-    meta = with stdenvNoCC.lib; {
+    dontUnpack = true;
+    meta = with lib; {
       description = "A large database of handwritten digits";
       longDescription = ''
         The MNIST database (Modified National Institute of Standards and

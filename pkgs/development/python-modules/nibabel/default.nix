@@ -1,38 +1,91 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, nose
-, pytest
+, pythonOlder
+, hatchling
+, hatch-vcs
 , numpy
-, h5py
+, packaging
+, importlib-resources
 , pydicom
+, pillow
+, h5py
 , scipy
+, git
+, pytest-doctestplus
+, pytest-httpserver
+, pytest-xdist
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "3.0.1";
-  disabled = isPy27;
+  version = "5.0.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08nlny8vzkpjpyb0q943cq57m2s4wndm86chvd3d5qvar9z6b36k";
+    hash = "sha256-SvZQFbTMmZQEyvA04cFcGrZ1h5XCXWkH/3T127/p9D4=";
   };
 
-  propagatedBuildInputs = [ numpy scipy h5py pydicom ];
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
 
-  checkInputs = [ nose pytest ];
+  propagatedBuildInputs = [
+    numpy
+    packaging
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
-  checkPhase = ''
-    nosetests
+  passthru.optional-dependencies = rec {
+    all = dicom
+      ++ dicomfs
+      ++ minc2
+      ++ spm
+      ++ zstd;
+    dicom = [
+      pydicom
+    ];
+    dicomfs = [
+      pillow
+    ] ++ dicom;
+    minc2 = [
+      h5py
+    ];
+    spm = [
+      scipy
+    ];
+    zstd = [
+      # TODO: pyzstd
+    ];
+  };
+
+  nativeCheckInputs = [
+    git
+    pytest-doctestplus
+    pytest-httpserver
+    pytest-xdist
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.all;
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
   '';
+
+  disabledTests = [
+    # https://github.com/nipy/nibabel/issues/951
+    "test_filenames"
+  ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";
     description = "Access a multitude of neuroimaging data formats";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];
-    platforms = platforms.x86_64;  # https://github.com/nipy/nibabel/issues/861
   };
 }

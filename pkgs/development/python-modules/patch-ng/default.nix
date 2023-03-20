@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1kja1nn08w0k8k6j4kad48k581hh9drvjjb8x60v9j13sxdvqyk2";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to parse and apply unified diffs.";
     homepage = "https://github.com/conan-io/python-patch";
     license = licenses.mit;

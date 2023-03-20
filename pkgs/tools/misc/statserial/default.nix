@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, glibc }:
+{ lib, stdenv, fetchurl, ncurses, glibc }:
 
 stdenv.mkDerivation rec {
   pname = "statserial";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace 'LDFLAGS = -s -N' '#LDFLAGS = -s -N'
   '';
 
-  buildInputs = [ ncurses glibc stdenv ];
+  buildInputs = [ ncurses glibc ];
 
   installPhase = ''
   mkdir -p $out/bin
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   cp statserial.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sites.google.com/site/tranter/software";
-    description = "Display serial port modem status lines.";
+    description = "Display serial port modem status lines";
     license = licenses.gpl2;
 
     longDescription =

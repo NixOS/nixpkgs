@@ -13,7 +13,7 @@ in {
       # negative numbers obviously make no sense:
       type = types.ints.between 0 32767; # 2^15 - 1
       default = 1000;
-      description = ''
+      description = lib.mdDoc ''
         Set the maximum number of FUSE mounts allowed to non-root users.
       '';
     };
@@ -21,7 +21,7 @@ in {
     userAllowOther = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Allow non-root users to specify the allow_other or allow_root mount
         options, see mount.fuse3(8).
       '';

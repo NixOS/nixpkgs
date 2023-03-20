@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , sphinx
-, pytestcov
+, pytest-cov
 , pytest
-, Mako
+, mako
 , numpy
 , funcsigs
 , withCuda ? false, pycuda
@@ -13,18 +13,18 @@
 
 buildPythonPackage rec {
   pname = "reikna";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d01f4264c8379ef2962a93aacb002d491b92ef9b5b22b45f77e7821dfa87bef7";
+    hash = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
   };
 
-  checkInputs = [ sphinx pytestcov pytest ];
+  nativeCheckInputs = [ sphinx pytest-cov pytest ];
 
-  propagatedBuildInputs = [ Mako numpy funcsigs ]
-    ++ stdenv.lib.optional withCuda pycuda
-    ++ stdenv.lib.optional withOpenCL pyopencl;
+  propagatedBuildInputs = [ mako numpy funcsigs ]
+    ++ lib.optional withCuda pycuda
+    ++ lib.optional withOpenCL pyopencl;
 
   checkPhase = ''
     py.test
@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # Requires device
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "GPGPU algorithms for PyCUDA and PyOpenCL";
     homepage = "https://github.com/fjarri/reikna";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.fridh ];
+    license = licenses.mit;
+    maintainers = [ maintainers.fridh ];
 
   };
 

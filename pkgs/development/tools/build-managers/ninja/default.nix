@@ -1,39 +1,88 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
-
-with stdenv.lib;
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, installShellFiles
+, libxslt
+, python3
+, re2c
+, buildPackages
+, buildDocs ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "ninja";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "1fbzl7mrcrwp527sgkc1npfl3k6bbpydpiq98xcf1a1hkrx0z5x4";
+    hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
   };
 
-  nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [
+    python3
+    re2c
+    installShellFiles
+  ]
+  ++ lib.optionals buildDocs [
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt.bin
+  ];
+
+  postPatch = ''
+    # write rebuild args to file after bootstrap
+    substituteInPlace configure.py --replace "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
+  '';
 
   buildPhase = ''
+    runHook preBuild
+
+    # for list of env vars
+    # see https://github.com/ninja-build/ninja/blob/v1.11.1/configure.py#L264
+    CXX="$CXX_FOR_BUILD" \
+    AR="$AR_FOR_BUILD" \
+    CFLAGS="$CFLAGS_FOR_BUILD" \
+    CXXFLAGS="$CXXFLAGS_FOR_BUILD" \
+    LDFLAGS="$LDFLAGS_FOR_BUILD" \
     python configure.py --bootstrap
-  '' + optionalString buildDocs ''
+    python configure.py
+
+    source rebuild_args
+  '' + lib.optionalString buildDocs ''
     # "./ninja -vn manual" output copied here to support cross compilation.
     asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
     xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
+  '' + ''
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin ninja
-    install -Dm444 misc/bash-completion $out/share/bash-completion/completions/ninja
-    install -Dm444 misc/zsh-completion $out/share/zsh/site-functions/_ninja
-  '' + optionalString buildDocs ''
+    installShellCompletion --name ninja \
+      --bash misc/bash-completion \
+      --zsh misc/zsh-completion
+  '' + lib.optionalString buildDocs ''
     install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
+  '' + ''
+
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Small build system with a focus on speed";
     longDescription = ''
       Ninja is a small build system with a focus on speed. It differs from

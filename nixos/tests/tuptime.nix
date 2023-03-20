@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "tuptime";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ evils ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
     services.tuptime.enable = true;
   };

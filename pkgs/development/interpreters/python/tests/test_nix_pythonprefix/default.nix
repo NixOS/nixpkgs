@@ -1,10 +1,10 @@
-{ interpreter, writeText, runCommandNoCC }:
+{ interpreter, writeText, runCommand }:
 
 let
 
   python = let
     packageOverrides = self: super: {
-      typeddep = super.callPackage ./typeddep {};
+      typeddep = self.callPackage ./typeddep {};
     };
   in interpreter.override {inherit packageOverrides; self = python;};
 
@@ -19,7 +19,7 @@ let
     print(s)
   '';
 
-in runCommandNoCC "${interpreter.name}-site-prefix-mypy-test" {} ''
+in runCommand "${interpreter.name}-site-prefix-mypy-test" {} ''
   ${pythonEnv}/bin/mypy ${pythonScript}
   touch $out
 ''

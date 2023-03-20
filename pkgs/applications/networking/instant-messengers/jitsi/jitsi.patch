@@ -11,7 +11,7 @@
 
  # Get architecture
  ARCH=`uname -m | sed -e s/x86_64/64/ -e s/i.86/32/`
-@@ -6,7 +11,9 @@
+@@ -6,10 +11,12 @@
  # Additionnal JVM arguments
  CLIENTARGS=""
 

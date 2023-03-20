@@ -1,31 +1,46 @@
-{ stdenv, fetchFromGitHub
-, libX11, libXext, libXi
+{ lib, stdenv, fetchFromGitLab
+, desktop-file-utils, shared-mime-info, ninja, pkg-config
+, libiconv
+, libX11, libXcursor, libXext, libXi
 , freetype, fontconfig
-, libpng, libjpeg
+, libjpeg, libpng, libtiff, libwebp
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "2.1.6";
+  version = "3.0.6";
 
-  src = fetchFromGitHub {
-    owner = "Symbian9";
+  src = fetchFromGitLab {
+    owner = "azelpg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-al87Rnf4HkKdmtN3EqxC0zEHgVWwnVi7WttqT/Qxr0Q=";
+    hash = "sha256-/shmLdZ4mCBZAeUuqJtCiUjeI8B5f/8dIGPqmXMjZ1I=";
   };
 
-  buildInputs = [
-    libX11 libXext libXi
-    freetype fontconfig
-    libpng libjpeg
-    zlib
+  nativeBuildInputs = [
+    desktop-file-utils # for update-desktop-database
+    shared-mime-info   # for update-mime-info
+    ninja
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    libX11 libXcursor libXext libXi
+    freetype fontconfig
+    libjpeg libpng libtiff libwebp
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+
+  preBuild = ''
+    cd build
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Full color painting software for illustration drawing";
-    homepage = "https://osdn.net/projects/azpainter";
+    homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ];
     platforms = with platforms; linux ++ darwin;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyramid
@@ -9,23 +9,23 @@
 
 buildPythonPackage rec {
   pname = "cornice";
-  version = "4.0.1";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d083832e9db65da4784436deabd7d37959de88c3b8ba51d539fa1e1f8313439d";
+    sha256 = "6edf6f206ff1c3d108d7a7b9ae640a2f4737cfc04f0914ccc4eefe511d3a8985";
   };
 
   propagatedBuildInputs = [ pyramid simplejson six venusian ];
 
   # tests not packaged with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "cornice" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mozilla-services/cornice";
     description = "Build Web Services with Pyramid";
     license = licenses.mpl20;
     maintainers = [ maintainers.costrouc ];
   };
-
 }

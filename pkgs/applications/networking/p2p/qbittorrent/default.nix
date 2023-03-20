@@ -1,29 +1,33 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig
-, boost, libtorrentRasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false # Debugging
+{ mkDerivation, lib, stdenv, fetchFromGitHub, pkg-config
+, boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
+, debugSupport ? false
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
+, trackerSearch ? true, python3 ? null
 }:
 
 assert guiSupport -> (dbus != null);
-with lib;
+assert trackerSearch -> (python3 != null);
 
 mkDerivation rec {
-  pname = "qbittorrent";
-  version = "4.2.5";
+  pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
-    repo = "qbittorrent";
+    repo = "qBittorrent";
     rev = "release-${version}";
-    sha256 = "1n613ylg6i9gisgk0dbr2kpfasyizrkdjff1r8smd4vri2qrdksn";
+    hash = "sha256-U0JDLLyIrMBqP4EqRAj48sdv9Om9cwdx4vP/0Ob1QB8=";
   };
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkgconfig ];
+  enableParallelBuilding = true;
 
-  buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
+  # NOTE: 2018-05-31: CMake is working but it is not officially supported
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
+    ++ lib.optional guiSupport dbus # D(esktop)-Bus depends on GUI support
+    ++ lib.optional trackerSearch python3;
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
@@ -31,17 +35,24 @@ mkDerivation rec {
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--with-boost=${boost.dev}" ]
-    ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
-    ++ optional (!webuiSupport) "--disable-webui"
-    ++ optional debugSupport "--enable-debug";
+    ++ lib.optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
+    ++ lib.optional (!webuiSupport) "--disable-webui"
+    ++ lib.optional debugSupport "--enable-debug";
 
-  enableParallelBuilding = true;
+  qtWrapperArgs = lib.optional trackerSearch "--prefix PATH : ${lib.makeBinPath [ python3 ]}";
 
-  meta = {
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R src/${pname}.app $out/Applications
+    makeWrapper $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
+  '';
+
+  meta = with lib; {
     description = "Featureful free software BitTorrent client";
     homepage    = "https://www.qbittorrent.org/";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
+    license     = licenses.gpl2Plus;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha ];
   };
 }

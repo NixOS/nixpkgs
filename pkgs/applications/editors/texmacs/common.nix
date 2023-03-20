@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tex, extraFonts, chineseFonts, japaneseFonts, koreanFonts }:
+{ lib, fetchurl, tex, extraFonts, chineseFonts, japaneseFonts, koreanFonts }:
 rec {
   extraFontsSrc = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/TeXmacs/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";
@@ -27,18 +27,18 @@ rec {
 
   postPatch = (if tex == null then ''
     gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else if extraFonts then ''
+   '' else lib.optionalString extraFonts ''
     gunzip < ${extraFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if chineseFonts then ''
+   '') +
+   (lib.optionalString chineseFonts ''
     gunzip < ${chineseFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if japaneseFonts then ''
+   '') +
+   (lib.optionalString japaneseFonts ''
     gunzip < ${japaneseFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if koreanFonts then ''
+   '') +
+   (lib.optionalString koreanFonts ''
     gunzip < ${koreanFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "");
+   '');
 
 
   meta = {
@@ -63,6 +63,6 @@ rec {
     collaborative authoring are planned for later.
   '';
     homepage = "http://texmacs.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
+{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib
+, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
+, gnumake42
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
 , extraPatches ? []
 }:
 
 let
-  llvm     = callPackage ./llvm.nix { };
+  llvm = callPackage ./llvm.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "mono";
@@ -16,25 +18,22 @@ stdenv.mkDerivation rec {
     url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
-  buildInputs =
-    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python autoconf libtool automake cmake which
-    ]
-    ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
-
-  propagatedBuildInputs = [glib];
+  nativeBuildInputs = [ automake bison cmake pkg-config which gnumake42 ];
+  buildInputs = [
+    glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
+  ] ++ lib.optionals stdenv.isDarwin [ Foundation libobjc ];
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
-  ]
-  ++ stdenv.lib.optionals withLLVM [
+  ] ++ lib.optionals withLLVM [
     "--enable-llvm"
     "--with-llvm=${llvm}"
   ];
 
   configurePhase = ''
-    patchShebangs ./
+    patchShebangs autogen.sh mcs/build/start-compiler-server.sh
     ./autogen.sh --prefix $out $configureFlags
   '';
 
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
-  '' + stdenv.lib.optionalString withLLVM ''
+  '' + lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
@@ -75,7 +74,9 @@ stdenv.mkDerivation rec {
 
   inherit enableParallelBuilding;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129
+    broken = stdenv.isDarwin && stdenv.isAarch64 && lib.versionOlder version "6.12.0.129";
     homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;

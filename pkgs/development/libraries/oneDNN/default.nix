@@ -5,38 +5,37 @@
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation rec {
   pname = "oneDNN";
-  version = "1.4";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
     rev = "v${version}";
-    sha256 = "162fb0c7klahz2irchhyxympi4fq4yp284apc53cadbss41mzld9";
+    sha256 = "sha256-HBCuSZkApd/6UkAxz/KDFb/gyX2SI1S2GwgXAXSTU/c=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
+  # Tests fail on some Hydra builders, because they do not support SSE4.2.
+  doCheck = false;
 
-  # The test driver doesn't add an RPath to the build libdir
-  preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/src
-  '';
-
-  # The cmake install gets tripped up and installs a nix tree into $out, in
-  # addition to the correct install; clean it up.
+  # Fixup bad cmake paths
   postInstall = ''
-    rm -r $out/nix
+    substituteInPlace $out/lib/cmake/dnnl/dnnl-config.cmake \
+      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
+
+    substituteInPlace $out/lib/cmake/dnnl/dnnl-targets.cmake \
+      --replace "\''${_IMPORT_PREFIX}/" ""
   '';
 
   meta = with lib; {
     description = "oneAPI Deep Neural Network Library (oneDNN)";
-    homepage = "https://01.org/dnnl";
+    homepage = "https://01.org/oneDNN";
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ alexarice bhipple ];
   };
 }

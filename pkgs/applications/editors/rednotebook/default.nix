@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.19";
+  version = "2.29.3";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
-    rev = "v${version}";
-    sha256 = "1y5slcwgs6p5n52whhhjg0c7053688311wnc9wqrk7vjk10qkx9d";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2qgWJ/bIravil/SuApA7pNXkxS5xUcdFpjVGO/ogDpw=";
   };
 
   # We have not packaged tests.
@@ -30,14 +30,11 @@ buildPythonApplication rec {
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
 
-  # Until gobject-introspection in nativeBuildInputs is supported.
-  # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-472568643
-  strictDeps = false;
-
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";
+    changelog = "https://github.com/jendrikseipp/rednotebook/blob/v${version}/CHANGELOG.md";
     description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej tstrobel ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ orivej ];
   };
 }

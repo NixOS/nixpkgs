@@ -5,9 +5,10 @@
 , intltool
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pulseaudio
 , python3
+, lib
 , stdenv
 , xkeyboard_config
 , xorg
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "4.4.1";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "10db5rai8cbbzphvcwarr3hm1bd9rxchlc0hcghg7qnmvv52fq03";
+    hash = "sha256-h2Jl/4SreniZtxziDwM0iwHXgGBrnHu8NLkIX7VGP18=";
   };
 
   outputs = [ "out" "dev" ];
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     intltool
-    pkgconfig
+    pkg-config
   ];
 
   postPatch = ''
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon-common/share/cinnamon
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-desktop";
     description = "Library and data for various Cinnamon modules";
 
@@ -72,6 +73,6 @@ stdenv.mkDerivation rec {
 
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

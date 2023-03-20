@@ -1,20 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, callPackage
+}:
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "5.4.4";
+  version = "5.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "139d2625547dbfa5fb0b81daebb39601c478c21956dc57e2e07b74450a8c506b";
+    hash = "sha256-rvxRZ1sLUz1Wu1/RyMbAUi/jGJZnmILhxMY9XkoPzLM=";
   };
 
-  # circular dependencies with fixtures
+  # importlib-metadata could be added here if it wouldn't cause an infinite recursion
+  propagatedBuildInputs = [ setuptools ];
+
+  # check in passthru.tests.pytest to escape infinite recursion with fixtures
   doCheck = false;
 
-  meta = {
-    homepage = "http://docs.openstack.org/developer/pbr/";
-    license = stdenv.lib.licenses.asl20;
+  passthru.tests = {
+    tests = callPackage ./tests.nix { };
+  };
+
+  pythonImportsCheck = [ "pbr" ];
+
+  meta = with lib; {
     description = "Python Build Reasonableness";
+    homepage = "https://github.com/openstack/pbr";
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }

@@ -1,26 +1,29 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, ply
-, nose
+, hypothesis
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jmespath";
-  version = "0.9.5";
+  version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nf2ipzvigspy17r16dpkhzn1bqdmlak162rm8dy4wri2n6mr9fc";
+    hash = "sha256-kCYbIG1t79WP3V6F9Hi/YzopAXmJBr4q04kVDFxg7b4=";
   };
 
-  buildInputs = [ nose ];
-  propagatedBuildInputs = [ ply ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/boto/jmespath";
+  meta = with lib; {
+    homepage = "https://github.com/jmespath/jmespath.py";
     description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
-    license = "BSD";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

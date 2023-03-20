@@ -1,36 +1,49 @@
-{ stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, buildGoModule, fetchFromGitHub, testers, wakatime }:
 
-with python3Packages;
-buildPythonApplication rec {
+buildGoModule rec {
   pname = "wakatime";
-  version = "13.0.7";
+  version = "1.68.3";
 
   src = fetchFromGitHub {
     owner = "wakatime";
-    repo = "wakatime";
-    rev = version;
-    sha256 = "1rnapzaabg962wxrmfcq9lxz0yyqd3mxqbx3dq1ih4w33lf4fi8d";
+    repo = "wakatime-cli";
+    rev = "v${version}";
+    hash = "sha256-LifMxov7j2yRDtwh74RjjwfcHfFc/zWrzX96vb2hI9o=";
   };
 
-  # needs more dependencies from https://github.com/wakatime/wakatime/blob/191b302bfb5f272ae928c6d3867d06f3dfcba4a8/dev-requirements.txt
-  # especially nose-capturestderr, which we do not package yet.
-  doCheck = false;
-  checkInputs = [ mock testfixtures pytest glibcLocales ];
+  vendorHash = "sha256-SlYYrlRDBvhNm2BxemK9HzzsqM/RGH/sDQXpoGEY8rw=";
 
-  checkPhase = ''
-    export HOME=$(mktemp -d) LC_ALL=en_US.utf-8
-    pytest tests
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
+  ];
 
-  meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
-    description = "WakaTime command line interface";
-    longDescription = ''
-      Command line interface to WakaTime used by all WakaTime text editor
-      plugins. You shouldn't need to directly use this package unless you
-      are building your own plugin or your text editor's plugin asks you
-      to install the wakatime CLI interface manually.
+  preCheck =
+    let
+      skippedTests = [
+        "TestFileExperts"
+        "TestSendHeartbeats"
+        "TestSendHeartbeats_ExtraHeartbeats"
+        "TestSendHeartbeats_IsUnsavedEntity"
+        "TestSendHeartbeats_NonExistingExtraHeartbeatsEntity"
+      ];
+    in
+    ''
+      # Disable tests requiring network
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
     '';
+
+  passthru.tests.version = testers.testVersion {
+    package = wakatime;
+    command = "HOME=$(mktemp -d) wakatime-cli --version";
+  };
+
+  meta = with lib; {
+    homepage = "https://wakatime.com/";
+    description = "WakaTime command line interface";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "wakatime-cli";
   };
 }

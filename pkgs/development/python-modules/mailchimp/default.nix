@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , docopt
@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.9";
+  version = "2.0.10";
   pname = "mailchimp";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
+    sha256 = "5227999904233a7d2e9ce5eac5225b9a5fac0318ae5107e3ed09c8bf89286768";
   };
 
   buildInputs = [ docopt ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' setup.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI client and Python API library for the MailChimp email platform";
     homepage = "http://apidocs.mailchimp.com/api/2.0/";
     license = licenses.mit;

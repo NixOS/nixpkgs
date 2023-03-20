@@ -2,11 +2,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "buildkite-agent";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.buildkite-agents = {
       one = {
         privateSshKeyPath = (import ./ssh-keys.nix pkgs).snakeOilPrivateKey;

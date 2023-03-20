@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , substituteAll
 , docbook_xml_dtd_42
@@ -14,16 +14,17 @@
 , gtk3
 , json-glib
 , libarchive
-, libsoup
+, curl
 , libuuid
 , libxslt
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pngquant
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.17";
+  pname = "appstream-glib";
+  version = "0.8.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    rev = stdenv.lib.replaceStrings [ "." "-" ] [ "_" "_" ] name;
-    sha256 = "06pm8l58y0ladimyckbvlslr5bjj9rwb70rgjmn09l41pdpipy2i";
+    rev = "${lib.replaceStrings ["-"] ["_"] pname}_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "sha256-3QFiOJ38talA0GGL++n+DaA/AN7l4LOZQ7BJV6o8ius=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libarchive
-    libsoup
+    curl
     libuuid
   ];
 
@@ -84,11 +85,11 @@ stdenv.mkDerivation rec {
     moveToOutput "share/installed-tests" "$installedTests"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lethalman matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

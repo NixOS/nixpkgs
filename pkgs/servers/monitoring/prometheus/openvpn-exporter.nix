@@ -1,25 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "openvpn_exporter-unstable";
-  version = "2017-05-15";
-  rev = "a2a179a222144fa9a10030367045f075375a2803";
-
-  goPackagePath = "github.com/kumina/openvpn_exporter";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "kumina";
     repo = "openvpn_exporter";
-    inherit rev;
-    sha256 = "1cjx7ascf532a20wwzrsx3qqs6dr04jyf700s3jvlvhhhx43l8m4";
+    rev = "v${version}";
+    sha256 = "14m4n5918zimdnyf0yg2948jb1hp1bdf27k07j07x3yrx357i05l";
   };
 
-  goDeps = ./openvpn-exporter-deps.nix;
+  vendorSha256 = "1jgw0nnibydhcd83kp6jqkf41mhwldp8wdhqk0yjw18v9m0p7g5s";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for OpenVPN";
+    broken = true;
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ globin ];
   };
 }

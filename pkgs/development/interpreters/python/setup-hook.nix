@@ -5,7 +5,10 @@ sitePackages:
 let
   hook = ./setup-hook.sh;
 in runCommand "python-setup-hook.sh" {
-  inherit sitePackages;
+  strictDeps = true;
+  env = {
+    inherit sitePackages;
+  };
 } ''
   cp ${hook} hook.sh
   substituteAllInPlace hook.sh

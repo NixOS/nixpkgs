@@ -1,64 +1,69 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, substituteAll
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
+, libgtop
+, libgudev
+, libhandy
 , granite
 , gtk3
 , switchboard
-, pciutils
-, elementary-feedback
+, udisks2
+, fwupd
+, appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "2.6.2";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1cjhip0abc0y5w6cqnjcgi48bfrackp45gz7955l66hxhnm5wyw6";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [
+    appstream
+    fwupd
     granite
     gtk3
     libgee
+    libgtop
+    libgudev
+    libhandy
     switchboard
+    udisks2
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit pciutils;
-      elementary_feedback = elementary-feedback;
-    })
+  mesonFlags = [
+    # Does not play nice with the nix-snowflake logo
+    "-Dwallpaper=false"
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Switchboard About Plug";
     homepage = "https://github.com/elementary/switchboard-plug-about";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
 }

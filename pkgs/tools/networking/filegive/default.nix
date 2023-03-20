@@ -1,22 +1,23 @@
-{ buildGoPackage, stdenv, fetchurl }:
+{ buildGoModule, lib, fetchurl }:
 
-buildGoPackage rec {
-  name = "filegive-0.7.4";
+buildGoModule rec {
+  pname = "filegive";
+  version = "unstable-2022-05-29";
+  rev = "5b28e7087a";
 
   src = fetchurl {
-    url = "http://viric.name/soft/filegive/${name}.tar.gz";
-    sha256 = "1z3vyqfdp271qa5ah0i6jmn9gh3gb296wcm33sd2zfjqapyh12hy";
+    url = "https://viric.name/cgi-bin/filegive/tarball/${rev}/filegive-${rev}.tar.gz";
+    hash = "sha256-A69oys59GEysZvQLaYsfoX/X2ENMMH2BGfJqXohQjpc=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-l7FRl58NWGBynMlGu1SCxeVBEzTdxREvUWzmJDiliZM=";
 
-  goPackagePath = "viric.name/soft/filegive";
+  ldflags = [ "-s" "-w" ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://viric.name/cgi-bin/filegive";
+  meta = with lib; {
+    homepage = "https://viric.name/cgi-bin/filegive";
     description = "Easy p2p file sending program";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.viric ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ viric ];
   };
 }

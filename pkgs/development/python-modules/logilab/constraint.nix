@@ -1,20 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, logilab_common, six }:
+{ lib, buildPythonPackage, fetchPypi, logilab-common, six }:
 
 buildPythonPackage rec {
   pname = "logilab-constraint";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n0xim4ij1n4yvyqqvyc0wllhjs22szglsd5av0j8k2qmck4njcg";
+    hash = "sha256-Jk6wvvcDEeHfy7dUcjbnzFIeGBYm5tXzCI26yy+t2qs=";
   };
 
   propagatedBuildInputs = [
-    logilab_common six
+    logilab-common six
   ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "logilab-database provides some classes to make unified access to different";
     homepage = "https://www.logilab.org/project/logilab-database";
   };

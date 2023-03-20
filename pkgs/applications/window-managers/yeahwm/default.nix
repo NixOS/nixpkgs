@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , lesstif
 , libX11, libXext, libXmu, libXinerama }:
 
@@ -24,12 +24,17 @@ stdenv.mkDerivation rec {
                       prefix="${placeholder "out"}" )
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: screen.o:(.bss+0x40): multiple definition of `fg'; client.o:(.bss+0x40): first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
   postInstall = ''
     gzip -9 --stdout yeahwm.1 > yeahwm.1.gz
     install -m644 yeahwm.1.gz ${placeholder "out"}/share/man/man1/
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "An X window manager based on evilwm and aewm";
     longDescription = ''
       YeahWM is a h* window manager for X based on evilwm and aewm.

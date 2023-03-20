@@ -1,27 +1,45 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, django
+, django-taggit
 , pytz
 , pythonOlder
-, six
+, python
 }:
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "5.0.1";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1fk7fh30i0fzi0hjd841vxh25iryvgp4lirmxfpq428w4nq7p1bg";
-  };
+  version = "6.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
-  doCheck = false;
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-p6hvOkPWRVJYLHvwyn9nS05wblikRFmlSYZuLiCcuqc=";
+  };
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [
+    django
+    pytz
+  ];
 
-  meta = with stdenv.lib; {
+  passthru.optional-dependencies.taggit = [
+    django-taggit
+  ];
+
+  nativeCheckInputs = passthru.optional-dependencies.taggit;
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} ./runtests.py --noinput
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
     homepage = "https://github.com/torchbox/django-modelcluster/";
     license = licenses.bsd2;

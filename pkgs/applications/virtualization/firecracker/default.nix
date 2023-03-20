@@ -1,41 +1,37 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 let
-  version = "0.21.1";
+  version = "1.1.3";
+  # nixpkgs-update: no auto update
 
   suffix = {
-    x86_64-linux  = "x86_64";
+    x86_64-linux = "x86_64";
     aarch64-linux = "aarch64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
-  fetchbin = name: sha256: fetchurl {
-    url    = "${baseurl}/v${version}/${name}-v${version}-${suffix}";
+
+  dlbin = sha256: fetchurl {
+    url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
     sha256 = sha256."${stdenv.hostPlatform.system}";
-  };
-
-  firecracker-bin = fetchbin "firecracker" {
-    x86_64-linux = "0g4fja3bz1fsyz8vj99199yblkn46ygf33ldwd1ssw8f957vbwnb";
-    aarch64-linux = "1qyppcxnh7f42fs4px5rvkk6lza57h2sq9naskvqn5zy4vsvq89s";
-  };
-
-  jailer-bin = fetchbin "jailer" {
-    x86_64-linux = "0x89pfmqci9d3i9fi9b9zm94yr2v7pq7kp3drlb952jkdfj0njyk";
-    aarch64-linux = "03fx9sk88jm23wqm8fraqd1ccfhbqvc310mkfv1f5p2ykhq2ahrk";
   };
 
 in
 stdenv.mkDerivation {
   pname = "firecracker";
   inherit version;
-  srcs = [ firecracker-bin jailer-bin ];
 
-  unpackPhase    = ":";
-  configurePhase = ":";
+  sourceRoot = ".";
+  src = dlbin {
+    x86_64-linux = "sha256-3+CqVBOb2haknQIMzE9kl99pDWm9wZPUX92FlVov3No=";
+    aarch64-linux = "sha256-ii+x4YEZIZJuM+1Njvxe1dz6WOvAK1SWqfuodC7a4yo=";
+  };
 
-  buildPhase     = ''
-    cp ${firecracker-bin} firecracker
-    cp ${jailer-bin}      jailer
+  dontConfigure = true;
+
+  buildPhase = ''
+    mv release-v${version}-${suffix}/firecracker-v${version}-${suffix} firecracker
+    mv release-v${version}-${suffix}/jailer-v${version}-${suffix} jailer
     chmod +x firecracker jailer
   '';
 
@@ -51,11 +47,11 @@ stdenv.mkDerivation {
     install -D jailer      $out/bin/jailer
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
-    homepage    = "http://firecracker-microvm.io";
-    license     = licenses.asl20;
-    platforms   = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    homepage = "http://firecracker-microvm.io";
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ thoughtpolice endocrimes ];
   };
 }

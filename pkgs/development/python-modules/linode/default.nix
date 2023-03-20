@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -15,11 +15,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ghickman/linode";
     description = "A thin python wrapper around Linode's API";
     license = licenses.mit;
-    maintainers = with maintainers; [ nslqqq ];
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "polyline";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x60lm3ccq9zrcqlzyk041xgr1mi0k9lzyyv3cbbdiq9kb88jzvw";
+    hash = "sha256-FJK4/K3CFD+K7cZz08bZXfRRMfHGLrjVHIGDsk53FIY=";
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ flake8 nose ];
+  nativeCheckInputs = [ flake8 nose ];
   checkPhase = ''
     nosetests
   '';

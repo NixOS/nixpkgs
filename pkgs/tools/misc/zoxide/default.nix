@@ -1,31 +1,48 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, withFzf ? true
 , fzf
+, installShellFiles
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.4.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "1qkvmjrkcivfzbm6swl5lgvpqz9av9jxcn9i8ms3wz4vfsibmlxv";
+    sha256 = "sha256-easHqXEHMrRqLmD7GMudoMGRnFOLsnRrgivVaYfQn8k=";
   };
 
-  buildInputs = [
-    fzf
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  cargoSha256 = "1w921f7b6kzc1mjzff1bcs3mg4cp9h48698w2zlv5jzjs7nwgb8n";
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  postPatch = lib.optionalString withFzf ''
+    substituteInPlace src/util.rs \
+      --replace '"fzf"' '"${fzf}/bin/fzf"'
+  '';
+
+  cargoSha256 = "sha256-6SGzMEYQIGDabIlCUmHky34wGMrAkOrweF7VTzzrUPE=";
+
+  postInstall = ''
+    installManPage man/man*/*
+    installShellCompletion --cmd zoxide \
+      --bash contrib/completions/zoxide.bash \
+      --fish contrib/completions/zoxide.fish \
+      --zsh contrib/completions/_zoxide
+  '';
 
   meta = with lib; {
     description = "A fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
+    changelog = "https://github.com/ajeetdsouza/zoxide/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ysndr cole-h ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ ysndr cole-h SuperSandro2000 ];
   };
 }

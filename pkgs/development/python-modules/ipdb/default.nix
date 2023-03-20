@@ -1,27 +1,47 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, decorator
 , ipython
 , isPyPy
+, tomli
+, setuptools
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ipdb";
-  version = "0.13.2";
+  version = "0.13.11";
+  format = "pyproject";
+
   disabled = isPyPy;  # setupterm: could not find terminfo database
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jcd849rx30y3wcgzsqbn06v0yjlzvb9x3076q0yxpycdwm1ryvp";
+    hash = "sha256-wjtnNvAf1Fhswuy+vfeaXrRUeWhT4c2PLtO3uR1KPpM=";
   };
 
-  propagatedBuildInputs = [ ipython ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    ipython
+    decorator
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
     license = licenses.bsd0;

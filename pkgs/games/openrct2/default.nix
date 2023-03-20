@@ -1,79 +1,126 @@
-{ stdenv, fetchFromGitHub,
-  SDL2, cmake, curl, fontconfig, freetype, icu, jansson, libiconv, libpng,
-  libpthreadstubs, libzip, libGLU, openssl, pkgconfig, speexdsp, zlib
+{ lib, stdenv, fetchFromGitHub
+
+, SDL2
+, cmake
+, curl
+, discord-rpc
+, duktape
+, flac
+, fontconfig
+, freetype
+, gbenchmark
+, icu
+, jansson
+, libGLU
+, libiconv
+, libogg
+, libpng
+, libpthreadstubs
+, libvorbis
+, libzip
+, nlohmann_json
+, openssl
+, pkg-config
+, speexdsp
+, zlib
 }:
 
 let
-  version = "0.2.6";
+  openrct2-version = "0.4.3";
+
+  # Those versions MUST match the pinned versions within the CMakeLists.txt
+  # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
+  objects-version = "1.3.7";
+  title-sequences-version = "0.4.0";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
-    rev = "v${version}";
-    sha256 = "1vikbkg3wh5ngzdfilb6irbh6nqinf138qpdz8wz9izlvl8s36k4";
+    rev = "v${openrct2-version}";
+    sha256 = "sha256-TAe9b7uqdC8XzwDWZkyYKFV+Rn2AeR3MMBZ1lo9pRis=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.14";
-    sha256 = "1bqbia5y73v4r0sv5cvi5729jh2ns7cxn557blh715yxswk91590";
+    rev = "v${objects-version}";
+    sha256 = "sha256-6c6bbXFi6iqmOOfqggXv3DyYgo4+eiPUIDnkKAAhX5s=";
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
-    rev = "v0.1.2c";
-    sha256 = "1qdrm4q75bznmgdrpjdaiqvbf3q4vwbkkmls45izxvyg1djrpsdf";
+    rev = "v${title-sequences-version}";
+    sha256 = "sha256-anqCZkhYoaxPu3MYCYSsFFngOmPp2wnx2MGb0hj6W5U=";
   };
 in
 stdenv.mkDerivation {
-  inherit version;
   pname = "openrct2";
+  version = openrct2-version;
 
   src = openrct2-src;
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     SDL2
     curl
+    discord-rpc
+    duktape
+    flac
     fontconfig
     freetype
+    gbenchmark
     icu
     jansson
+    libGLU
     libiconv
+    libogg
     libpng
     libpthreadstubs
+    libvorbis
     libzip
-    libGLU
+    nlohmann_json
     openssl
     speexdsp
     zlib
   ];
-
-  postUnpack = ''
-    cp -r ${objects-src}         $sourceRoot/data/object
-    cp -r ${title-sequences-src} $sourceRoot/data/title
-  '';
 
   cmakeFlags = [
     "-DDOWNLOAD_OBJECTS=OFF"
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ];
+
+  postUnpack = ''
+    cp -r ${objects-src}         $sourceRoot/data/object
+    cp -r ${title-sequences-src} $sourceRoot/data/sequence
+  '';
+
+  preConfigure = ''
+    # Verify that the correct version of each third party repository is used.
+
+    grep -q '^set(OBJECTS_VERSION "${objects-version}")$' CMakeLists.txt \
+      || (echo "OBJECTS_VERSION differs!"; exit 1)
+    grep -q '^set(TITLE_SEQUENCE_VERSION "${title-sequences-version}")$' CMakeLists.txt \
+      || (echo "TITLE_SEQUENCE_VERSION differs!"; exit 1)
+  '';
 
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
-  meta = with stdenv.lib; {
-    description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
+  meta = with lib; {
+    description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
-    license = licenses.gpl3;
+    downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

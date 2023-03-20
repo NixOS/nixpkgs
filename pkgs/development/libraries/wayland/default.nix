@@ -1,53 +1,104 @@
-{ lib, stdenv, fetchurl, meson, pkgconfig, ninja
-, libffi, libxml2, wayland
-, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
-, withDocumentation ? false, graphviz-nox, doxygen, libxslt, xmlto, python3
-, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, meson
+, pkg-config
+, ninja
+, wayland-scanner
+, expat
+, libxml2
+, withLibraries ? stdenv.isLinux
+, libffi
+, withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
+, graphviz-nox
+, doxygen
+, libxslt
+, xmlto
+, python3
+, docbook_xsl
+, docbook_xml_dtd_45
+, docbook_xml_dtd_42
 }:
 
-# Require the optional to be enabled until upstream fixes or removes the configure flag
-assert expat != null;
+# Documentation is only built when building libraries.
+assert withDocumentation -> withLibraries;
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.18.0";
+  version = "1.21.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0k995rn96xkplrapz5k648j651wc43kq817xk1x8280h16gsfxa6";
+    url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    sha256 = "1b0ixya9bfw5c9jx8mzlr7yqnlyvd3jv5z8wln9scdv8q5zlvikd";
   };
-
-  separateDebugInfo = true;
-
-  mesonFlags = [ "-Ddocumentation=${lib.boolToString withDocumentation}" ];
-
-  patches = lib.optional isCross ./fix-wayland-cross-compilation.patch;
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
-  '' + lib.optionalString isCross ''
-    substituteInPlace egl/meson.build --replace \
-      "find_program('nm').path()" \
-      "find_program('${stdenv.cc.targetPrefix}nm').path()"
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # delete line containing os-wrappers-test, disables
+    # the building of os-wrappers-test
+    sed -i '/os-wrappers-test/d' tests/meson.build
   '';
 
+  outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  separateDebugInfo = true;
+
+  mesonFlags = [
+    "-Ddocumentation=${lib.boolToString withDocumentation}"
+    "-Dlibraries=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withLibraries}"
+  ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    meson pkgconfig ninja
+    meson
+    pkg-config
+    ninja
   ] ++ lib.optionals isCross [
-    wayland # For wayland-scanner during the build
+    wayland-scanner
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
-    doxygen libxslt xmlto python3 docbook_xml_dtd_45
+    doxygen
+    libxslt
+    xmlto
+    python3
+    docbook_xml_dtd_45
+    docbook_xsl
   ];
 
-  buildInputs = [ libffi expat libxml2
+  buildInputs = [
+    expat
+    libxml2
+  ] ++ lib.optionals withLibraries [
+    libffi
   ] ++ lib.optionals withDocumentation [
-    docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
+    docbook_xsl
+    docbook_xml_dtd_45
+    docbook_xml_dtd_42
   ];
 
-  meta = {
+  postFixup = ''
+    # The pkg-config file is required for cross-compilation:
+    mkdir -p $bin/lib/pkgconfig/
+    cat <<EOF > $bin/lib/pkgconfig/wayland-scanner.pc
+    wayland_scanner=$bin/bin/wayland-scanner
+
+    Name: Wayland Scanner
+    Description: Wayland scanner
+    Version: ${version}
+    EOF
+  '';
+
+  passthru = { inherit withLibraries; };
+
+  meta = with lib; {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
@@ -57,10 +108,10 @@ in stdenv.mkDerivation rec {
       and other interactions that must go through the compositor (but not
       rendering).
     '';
-    homepage    = "https://wayland.freedesktop.org/";
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ primeos codyopel ];
+    homepage = "https://wayland.freedesktop.org/";
+    license = licenses.mit; # Expat version
+    platforms = if withLibraries then platforms.linux else platforms.unix;
+    maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
 
   passthru.version = version;

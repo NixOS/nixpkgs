@@ -1,22 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, cython, libyaml, buildPackages }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, cython
+, libyaml
+, python
+}:
 
 buildPythonPackage rec {
-  pname = "PyYAML";
-  version = "5.2";
+  pname = "pyyaml";
+  version = "6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c0ee8eca2c582d29c3c2ec6e2c4f703d1b7f1fb10bc72317355a746057e7346c";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "yaml";
+    repo = "pyyaml";
+    rev = version;
+    hash = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
   };
 
-  # force regeneration using Cython
-  postPatch = ''
-    rm ext/_yaml.c
-  '';
-
-  nativeBuildInputs = [ cython buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ cython ];
 
   buildInputs = [ libyaml ];
+
+  checkPhase = ''
+    runHook preCheck
+    PYTHONPATH="tests/lib:$PYTHONPATH" ${python.interpreter} -m test_all
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "yaml" ];
 
   meta = with lib; {
     description = "The next generation YAML parser and emitter for Python";

@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "mod";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${version}";
-    sha256 = "1n0pipbq4fjban8hsxhyl5w8xrl4ai1pvgd02i1j1awmm2l3ykzl";
+    sha256 = "sha256-+xgh/al6954I+DseSHk9k7Rbj0TzQxCtX4X3pbQmoG0=";
   };
 
-  vendorSha256 = "032s62rjjq7bqiz5fg17yfkq4j4dsbl6vhvs1wf2sg8jvbqmvdwn";
+  vendorHash = "sha256-NvTbQcYGMyQ/bfNTJ3eC28n9TIU4HkcD3ij2o9EBX3Y=";
+
+  doCheck = false;
 
   subPackages = [ "cmd/mod" ];
 

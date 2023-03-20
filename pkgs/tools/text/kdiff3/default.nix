@@ -1,26 +1,38 @@
-{
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kcrash, kconfig, kinit, kparts, kiconthemes
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, boost
+, kcrash
+, kconfig
+, kinit
+, kparts
+, kiconthemes
 }:
 
 mkDerivation rec {
   pname = "kdiff3";
-  version = "1.8.2";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0s5vsm1avzv88b6mf2pp20c2sz0srrj52iiqpnwi3p4ihivm8wgv";
+    sha256 = "sha256-s/l+Gz6BF1VKeljVj48PaT/wMKQrvLcwj7RPhZWM1Ss=";
   };
+
+  buildInputs = [ boost ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kparts kiconthemes ];
 
+  cmakeFlags = [ "-Wno-dev" ];
+
   meta = with lib; {
-    homepage = "http://kdiff3.sourceforge.net/";
-    license = licenses.gpl2Plus;
     description = "Compares and merges 2 or 3 files or directories";
+    homepage = "https://invent.kde.org/sdk/kdiff3";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux;
   };

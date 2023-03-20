@@ -1,27 +1,66 @@
-{  mkDerivation, lib, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets, stdenv /* for isLinux */ }:
+{ lib
+, stdenv
+, fetchurl
+, qmake
+, qttools
+, qtbase
+, qtdeclarative
+, qtsvg
+, qtwayland
+, qtwebsockets
+, qtx11extras
+, qtxmlpatterns
+, makeWrapper
+, wrapQtAppsHook
+}:
 
-mkDerivation rec {
+let
   pname = "qownnotes";
-  version = "20.2.5";
+  appname = "QOwnNotes";
+  version = "23.2.4";
+in
+stdenv.mkDerivation {
+  inherit pname appname version;
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    # Can grab official version like so:
-    # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-20.2.5.tar.xz.sha256
-    sha256 = "c26d2a86a521cd243ec0a4788e7627e91cb5877dace73d93dd7d35dd02e9e4c5";
+    sha256 = "sha256-ZliVhnO9fK/6k4Ga86ZSmhzQ3YKziAab19oZs9Pteic=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
+
   buildInputs = [
-    qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets
-  ] ++ lib.optional stdenv.isLinux qtwayland;
+    qtbase
+    qtdeclarative
+    qtsvg
+    qtwebsockets
+    qtx11extras
+    qtxmlpatterns
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+
+  postInstall =
+  # Create a lowercase symlink for Linux
+  lib.optionalString stdenv.isLinux ''
+    ln -s $out/bin/${appname} $out/bin/${pname}
+  ''
+  # Wrap application for macOS as lowercase binary
+  + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/${appname}.app $out/Applications
+    makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+  '';
 
   meta = with lib; {
-    description = "Plain-text file notepad and todo-list manager with markdown support and ownCloud / Nextcloud integration";
-
+    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
-    platforms = platforms.all;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ dtzWill ];
+    changelog = "https://www.qownnotes.org/changelog.html";
+    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ totoroot ];
+    platforms = platforms.unix;
   };
 }

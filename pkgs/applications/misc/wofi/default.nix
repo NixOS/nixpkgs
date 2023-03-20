@@ -1,33 +1,43 @@
-{ stdenv, lib, fetchhg, fetchpatch, pkg-config, meson, ninja, wayland, gtk3, wrapGAppsHook }:
-
+{ stdenv
+, lib
+, fetchFromSourcehut
+, pkg-config
+, meson
+, ninja
+, wayland
+, gtk3
+, wrapGAppsHook
+, installShellFiles
+}:
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.1.2";
+  version = "1.3";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~scoopta/wofi";
+  src = fetchFromSourcehut {
+    repo = pname;
+    owner = "~scoopta";
     rev = "v${version}";
-    sha256 = "086j5wshawjbwdmmmldivfagc2rr7g5a2gk11l0snqqslm294xsn";
+    sha256 = "sha256-GxMjEXBPQniD+Yc9QZjd8TH4ILJAX5dNzrjxDawhy8w=";
+    vc = "hg";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
   buildInputs = [ wayland gtk3 ];
 
-  # Fixes icon bug on NixOS.
-  # Will need to be removed on next release
-  # see https://todo.sr.ht/~scoopta/wofi/54
   patches = [
-    (fetchpatch {
-      url = "https://paste.sr.ht/blob/1cbddafac3806afb203940c029e78ce8390d8f49";
-      sha256 = "1n4jpmh66p7asjhj0z2s94ny91lmaq4hhh2356nj406vlqr15vbb";
-    })
+    # https://todo.sr.ht/~scoopta/wofi/121
+    ./do_not_follow_symlinks.patch
   ];
+
+  postInstall = ''
+    installManPage man/wofi*
+  '';
 
   meta = with lib; {
     description = "A launcher/menu program for wlroots based wayland compositors such as sway";
     homepage = "https://hg.sr.ht/~scoopta/wofi";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ elyhaka ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

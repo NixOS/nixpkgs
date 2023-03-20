@@ -1,27 +1,42 @@
 { lib
 , buildPythonPackage
-, numpy
-, six
-, nose
 , fetchPypi
+, nose
+, numpy
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
-  pname = "py_stringmatching";
-  version = "0.4.1";
+  pname = "py-stringmatching";
+  version = "0.4.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "c46db1e855cef596dfbbe1bd48fcabb30736479eff602c2bf88af10f998f1532";
+    pname = "py_stringmatching";
+    inherit version;
+    sha256 = "sha256-khubsWOzEN80HDOCORMgT3sMqfajGfW0UUCDAL03je4=";
   };
 
-  checkInputs = [ nose ];
-   
-  propagatedBuildInputs = [ numpy six ];
+  propagatedBuildInputs = [
+    numpy
+    six
+  ];
+
+  nativeCheckInputs = [
+    nose
+  ];
+
+  pythonImportsCheck = [
+    "py_stringmatching"
+  ];
 
   meta = with lib; {
-    description = "A Python string matching library including string tokenizers and string similarity measures";
-    homepage =  "https://sites.google.com/site/anhaidgroup/projects/magellan/py_stringmatching";
+    description = "Python string matching library including string tokenizers and string similarity measures";
+    homepage = "https://github.com/anhaidgroup/py_stringmatching";
+    changelog = "https://github.com/anhaidgroup/py_stringmatching/blob/v${version}/CHANGES.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie ];
   };

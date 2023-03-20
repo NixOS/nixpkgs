@@ -1,10 +1,8 @@
-{ stdenv, fetchsvn, libxml2, gtk2, curl, pkgconfig } :
+{ lib, stdenv, fetchsvn, libxml2, gtk2, curl, pkg-config } :
 
-let
+stdenv.mkDerivation rec {
+  pname = "gosmore";
   version = "31801";
-in
-stdenv.mkDerivation {
-  name = "gosmore-r${version}";
   # the gosmore svn repository does not lock revision numbers of its externals
   # so we explicitly disable them to avoid breaking the hash
   # especially as the externals appear to be unused
@@ -17,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libxml2 gtk2 curl ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   prePatch = ''
     sed -e '/curl.types.h/d' -i *.{c,h,hpp,cpp}
@@ -25,13 +23,14 @@ stdenv.mkDerivation {
 
   patches = [ ./pointer_int_comparison.patch ];
   patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
-      
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "Open Street Map viewer";
     homepage = "https://sourceforge.net/projects/gosmore/";
     maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.linux;
+    license = licenses.bsd2;
   };
 }

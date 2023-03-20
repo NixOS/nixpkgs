@@ -1,30 +1,43 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pythonOlder
+
+# tests
+, ipykernel
+, nbconvert
+, pytestCheckHook
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "wasabi";
-  version = "0.6.0";
+  version = "1.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qv0zpr6kwjwygx9k8jgafiil5wh2zsyryvbxghzv4yn7jb3xpdq";
+    hash = "sha256-9e58YJAngRvRbmIPL9enMZRmAFhI5BsFGmIFOrj9cNY=";
   };
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    ipykernel
+    nbconvert
+    typing-extensions
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest wasabi/tests
-  '';
+  pythonImportsCheck = [
+    "wasabi"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight console printing and formatting toolkit";
     homepage = "https://github.com/ines/wasabi";
+    changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
-    };
+    maintainers = with maintainers; [ ];
+  };
 }

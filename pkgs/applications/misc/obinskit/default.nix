@@ -1,83 +1,64 @@
-{ lib
-, stdenv
+{ stdenv
+, lib
 , fetchurl
-, xorg
 , libxkbcommon
 , systemd
-, gcc-unwrapped
-, electron_3
-, wrapGAppsHook
+, xorg
+, electron_13
+, makeWrapper
 , makeDesktopItem
 }:
-
 let
-  libPath = lib.makeLibraryPath [
-    libxkbcommon
-    xorg.libXt
-    systemd.lib
-    stdenv.cc.cc.lib
-  ];
-
   desktopItem = makeDesktopItem rec {
     name = "Obinskit";
     exec = "obinskit";
-    icon = "obinskit.png";
+    icon = "obinskit";
     desktopName = "Obinskit";
     genericName = "Obinskit keyboard configurator";
-    categories = "Utility";
+    categories = [ "Utility" ];
   };
-
-in stdenv.mkDerivation rec {
+  electron = electron_13;
+in
+stdenv.mkDerivation rec {
   pname = "obinskit";
-  version = "1.1.4";
+  version = "1.2.11";
 
   src = fetchurl {
-    url = "http://releases.obins.net/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
-    sha256 = "0q422rmfn4k4ww1qlgrwdmxz4l10dxkd6piynbcw5cr4i5icnh2l";
+    url = "https://s3.hexcore.xyz/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
+    sha256 = "1kcn41wmwcx6q70spa9a1qh7wfrj1sk4v4i58lbnf9kc6vasw41a";
   };
 
   unpackPhase = "tar -xzf $src";
 
   sourceRoot = "ObinsKit_${version}_x64";
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/opt/obinskit
-    install icudtl.dat $out/opt/obinskit/
-    install natives_blob.bin $out/opt/obinskit/
-    install v8_context_snapshot.bin $out/opt/obinskit/
-    install blink_image_resources_200_percent.pak $out/opt/obinskit/
-    install content_resources_200_percent.pak $out/opt/obinskit/
-    install content_shell.pak $out/opt/obinskit/
-    install ui_resources_200_percent.pak $out/opt/obinskit/
-    install views_resources_200_percent.pak $out/opt/obinskit/
+
     cp -r resources $out/opt/obinskit/
     cp -r locales $out/opt/obinskit/
-
-    mkdir -p $out/bin
-    ln -s ${electron_3}/bin/electron $out/bin/obinskit
 
     mkdir -p $out/share/{applications,pixmaps}
     install resources/icons/tray-darwin@2x.png $out/share/pixmaps/obinskit.png
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --add-flags $out/opt/obinskit/resources/app.asar
-      --prefix LD_LIBRARY_PATH : "${libPath}"
-    )
+  postFixup = ''
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/opt/obinskit/resources/app.asar \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib libxkbcommon (lib.getLib systemd) xorg.libXt xorg.libXtst ]}"
   '';
 
   meta = with lib; {
     description = "Graphical configurator for Anne Pro and Anne Pro II keyboards";
-    homepage = "http://en.obins.net/obinskit/";
+    homepage = "https://www.hexcore.xyz/obinskit";
     license = licenses.unfree;
-    maintainers = [ maintainers.shou ];
+    maintainers = with maintainers; [ shou ];
     platforms = [ "x86_64-linux" ];
   };
 }

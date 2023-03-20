@@ -1,23 +1,76 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-resources
+, proxy_tools
+, pygobject3
+, pyqtwebengine
+, pytest
+, pythonOlder
+, qt5
+, qtpy
+, six
+, xvfb-run
+}:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.2";
+  version = "4.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
-    rev = version;
-    sha256 = "0anwm6s0pp7xmgylr4m52v7lw825sdby7fajcl929l099n757gq7";
+    rev = "refs/tags/${version}";
+    hash = "sha256-awgX862p1jU/LWdg7QMC9by0OJMkzGwnC0yrc93I/c0=";
   };
 
-  # disabled due to error in loading unittest
-  # don't know how to make test from: None
-  doCheck = false;
+  nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+  ];
+
+  propagatedBuildInputs = [
+    pyqtwebengine
+    proxy_tools
+    six
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    importlib-resources
+  ];
+
+  nativeCheckInputs = [
+    pygobject3
+    pytest
+    qtpy
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED
+    export HOME=$TMPDIR
+    # QStandardPaths: XDG_RUNTIME_DIR not set
+    export XDG_RUNTIME_DIR=$HOME/xdg-runtime-dir
+
+    pushd tests
+    substituteInPlace run.sh \
+      --replace "PYTHONPATH=.." "PYTHONPATH=$PYTHONPATH" \
+      --replace "pywebviewtest test_js_api.py::test_concurrent ''${PYTEST_OPTIONS}" "# skip flaky test_js_api.py::test_concurrent"
+
+    patchShebangs run.sh
+    wrapQtApp run.sh
+
+    xvfb-run -s '-screen 0 800x600x24' ./run.sh
+    popd
+  '';
+
+  pythonImportsCheck = [
+    "webview"
+  ];
 
   meta = with lib; {
+    description = "Lightweight cross-platform wrapper around a webview";
     homepage = "https://github.com/r0x0r/pywebview";
-    description = "Lightweight cross-platform wrapper around a webview.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jojosch ];
   };

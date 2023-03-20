@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "lr";
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/chneukirchen/lr";
     description = "List files recursively";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vika_nezrimaya ];
+    maintainers = with maintainers; [ vikanezrimaya ];
   };
 }

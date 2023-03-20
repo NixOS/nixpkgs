@@ -1,96 +1,96 @@
-{ stdenv, python3, glibcLocales }:
+{ lib, python3, glibcLocales, docker-compose_1 }:
 let
+  docker_compose = changeVersion (with localPython.pkgs; docker-compose_1.override {
+    inherit colorama pyyaml six dockerpty docker jsonschema requests websocket-client paramiko;
+  }).overridePythonAttrs "1.25.5" "sha256-ei622Bc/30COUF5vfUl6wLd3OIcZVCvp5JoO/Ud6UMY=";
 
-  localPython = python3.override {
-    packageOverrides = self: super: {
-      cement = super.cement.overridePythonAttrs (oldAttrs: rec {
-        version = "2.8.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
-        };
-      });
-
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
-        };
-      });
-
-      pathspec = super.pathspec.overridePythonAttrs (oldAttrs: rec {
-        name = "${oldAttrs.pname}-${version}";
-        version = "0.5.5";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3";
-        };
-      });
-
-      requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-        version = "2.9.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0zsqrzlybf25xscgi7ja4s48y2abf9wvjkn47wh984qgs1fq2xy5";
-        };
-      });
-
-      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0p5n3d6blgkncxdz00yxqav0cis87fisdkirjm0ljjh7rdfx7aiv";
-        };
-      });
-
-      tabulate = super.tabulate.overridePythonAttrs (oldAttrs: rec {
-        version = "0.7.5";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "03l1r7ddd1a0j2snv1yd0hlnghjad3fg1an1jr8936ksv75slwch";
-        };
-      });
+  changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
+    inherit version;
+    src = oldAttrs.src.override {
+      inherit version hash;
     };
-  };
-in with localPython.pkgs; buildPythonApplication rec {
+  });
+
+  localPython = python3.override
+    {
+      self = localPython;
+      packageOverrides = self: super: {
+        cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
+        wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "sha256-7nOGKGKhVr93/5KwkDT8SCXdOvnPgbxbNgZo1CXzxfE=";
+        semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "sha256-0sst4FWHYpNGebmhBOguynr0SMn0l00fPuzP9lHfilQ=";
+        pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+          version = "5.4.1";
+          checkPhase = ''
+            runHook preCheck
+            PYTHONPATH="tests/lib3:$PYTHONPATH" ${localPython.interpreter} -m test_all
+            runHook postCheck
+          '';
+          src = localPython.pkgs.fetchPypi {
+            pname = "PyYAML";
+            inherit version;
+            hash = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
+          };
+        });
+      };
+    };
+in
+with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.12.4";
+  version = "3.20.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
+    hash = "sha256-EoSEanwGvP3RcemXrVy7iAGrY/vMC6LbwcrXj2OsF8Q=";
   };
+
+
+  preConfigure = ''
+    substituteInPlace requirements.txt \
+      --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
+      --replace "requests>=2.20.1,<=2.26" "requests<3" \
+      --replace "pathspec==0.10.1" "pathspec>=0.10.0,<1" \
+      --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
+      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<3"
+  '';
 
   buildInputs = [
     glibcLocales
   ];
 
-  LC_ALL = "en_US.UTF-8";
-
-  checkInputs = [
-    pytest mock nose pathspec colorama requests docutils
+  nativeCheckInputs = [
+    pytest
+    mock
+    nose
+    pathspec
+    colorama
+    requests
+    docutils
   ];
 
-  doCheck = false;
+  doCheck = true;
 
   propagatedBuildInputs = [
-    # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
-    # Otherwise, awsebcli will try to install it using pip when using some
-    # commands (like "eb local run").
-    blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket_client
+    blessed
+    botocore
+    cement
+    colorama
+    pathspec
+    pyyaml
+    future
+    requests
+    semantic-version
+    setuptools
+    tabulate
+    termcolor
+    websocket-client
+    docker_compose
   ];
 
-  postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/bin/eb_completion.bash $out/etc/bash_completion.d
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
-    maintainers = with maintainers; [ eqyiel ];
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
+    maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;
   };
 }

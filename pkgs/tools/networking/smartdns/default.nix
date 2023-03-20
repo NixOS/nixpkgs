@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl, testers, smartdns }:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version =
-    "30"; # This would be used later in the next release as the FHS commit integrated into realse 31.
+  version = "41";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
-    rev = "3ad7cd7f454eec2fbdf338c0eb0541da301f1e73";
-    sha256 = "1y9p8gxpj2k4a10maggkxg8l55jvr7x1wyxi69waxf56ggh2dvv0";
+    rev = "Release${version}";
+    sha256 = "sha256-FVHOjW5SEShxTPPd4IuEfPV6vvqr0RepV976eJmxqwM=";
   };
 
   buildInputs = [ openssl ];
@@ -18,11 +17,17 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
     "RUNSTATEDIR=/run"
+    # by default it is the build time... weird... https://github.com/pymumu/smartdns/search?q=ver
+    "VER=${version}"
   ];
 
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    version = testers.testVersion { package = smartdns; };
+  };
+
+  meta = with lib; {
     description =
       "A local DNS server to obtain the fastest website IP for the best Internet experience";
     longDescription = ''

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -9,7 +9,7 @@
 , gtk-doc
 , docbook_xsl
 , glib
-, libsoup
+, libsoup_3
 , libxml2
 , libxslt
 , check
@@ -23,17 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.7.1";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1s97sv24bybggjx6hgqba2qdqz3ivfpd4cmkh4zm5y59sim109mv";
+    sha256 = "sha256-olLgD8WA3rIdoNqMCqA7jDHoRAuESMi5gUP6tHfTIwU=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     vala
@@ -45,11 +46,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
     libxslt
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     check
     curl
     perl
@@ -68,16 +69,18 @@ stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  # FIXME: fails two new tests added in 1.7.1:
-  # libosinfo:symbols / check-symfile
-  # 3/24 libosinfo:symbols / check-symsorting
-  doCheck = false;
+  preCheck = ''
+    patchShebangs ../osinfo/check-symfile.pl ../osinfo/check-symsorting.pl
+  '';
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  meta = with lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
+    changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

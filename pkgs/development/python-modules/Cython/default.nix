@@ -4,50 +4,60 @@
 , fetchPypi
 , fetchpatch
 , python
-, glibcLocales
-, pkgconfig
+, pkg-config
 , gdb
 , numpy
 , ncurses
 }:
 
 let
-  excludedTests = []
-    ++ [ "reimport_from_subinterpreter" ]
+  excludedTests = [ "reimport_from_subinterpreter" ]
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
-    ++ stdenv.lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
+    ++ lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
     # Some tests in the test suite isn't working on aarch64. Disable them for
     # now until upstream finds a workaround.
     # Upstream issue here: https://github.com/cython/cython/issues/2308
-    ++ stdenv.lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
-    ++ stdenv.lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
+    ++ lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
+    ++ lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
   ;
 
 in buildPythonPackage rec {
-  pname = "Cython";
-  version = "0.29.14";
+  pname = "cython";
+  version = "0.29.33";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414";
+    pname = "Cython";
+    inherit version;
+    hash = "sha256-UEB2TEpNLOlko5XaJPDRrlgUSZXauSxrlvRMP01yKGo=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
-  checkInputs = [
-    numpy ncurses
+
+  nativeCheckInputs = [
+    gdb numpy ncurses
   ];
-  buildInputs = [ glibcLocales gdb ];
+
   LC_ALL = "en_US.UTF-8";
 
   patches = [
-    # https://github.com/cython/cython/issues/2752, needed by sage (https://trac.sagemath.org/ticket/26855) and up to be included in 0.30
+    # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
+    # it does not affect Python code unless the code explicitly uses the feature.
+    # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
+    ./trashcan.patch
+    # The above commit introduces custom trashcan macros, as well as
+    # compiler changes to use them in Cython-emitted code. The latter
+    # change is still useful, but the former has been upstreamed as of
+    # Python 3.8, and the patch below makes Cython use the upstream
+    # trashcan macros whenever available. This is needed for Python
+    # 3.11 support, because the API used in Cython's implementation
+    # changed: https://github.com/cython/cython/pull/4475
     (fetchpatch {
-      name = "non-int-conversion-to-pyhash.patch";
-      url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
-      sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
+      name = "disable-trashcan.patch";
+      url = "https://github.com/cython/cython/commit/e337825cdcf5e94d38ba06a0cb0188e99ce0cc92.patch";
+      hash = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
     })
   ];
 
@@ -55,18 +65,17 @@ in buildPythonPackage rec {
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
       --no-code-style \
-      ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
+      ${lib.optionalString (builtins.length excludedTests != 0)
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-
-#   doCheck = !stdenv.isDarwin;
-
+  # doCheck = !stdenv.isDarwin;
 
   meta = {
+    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;

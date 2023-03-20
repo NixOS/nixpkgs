@@ -1,50 +1,43 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper
 , git, bash, gzip, openssh, pam
 , sqliteSupport ? true
 , pamSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gogs";
-  version = "0.11.91";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "1yfimgjg9n773kdml17119539w9736mi66bivpv5yp3cj2hj9mlj";
+    sha256 = "sha256-UfxE+NaqDr3XUXpvlV989Iwjq/lsAwpMTDAPkcOmma8=";
   };
 
-  patches = [ ./static-root-path.patch ];
+  vendorSha256 = "sha256-ISJOEJ1DWO4nnMpDuZ36Nq528LhgekDh3XUF8adlj2w=";
+
+  subPackages = [ "." ];
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace pkg/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper openssh ];
 
   buildInputs = optional pamSupport pam;
 
-  buildFlags = [ "-tags" ];
-
-  buildFlagsArray =
+  tags =
     (  optional sqliteSupport "sqlite"
     ++ optional pamSupport "pam");
 
-  outputs = [ "out" "data" ];
-
   postInstall = ''
-    mkdir $data
-    cp -R $src/{public,templates} $data
 
     wrapProgram $out/bin/gogs \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
-
-  goPackagePath = "github.com/gogs/gogs";
 
   meta = {
     description = "A painless self-hosted Git service";

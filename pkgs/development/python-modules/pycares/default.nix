@@ -1,35 +1,55 @@
-{ stdenv
+{ lib
+, aiodns
 , buildPythonPackage
-, fetchPypi
-, python
 , c-ares
 , cffi
+, fetchPypi
+, idna
+, pythonOlder
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "3.1.0";
+  version = "4.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794";
+    hash = "sha256-xUJpb22sl46dmRkjhHRaZfgKfZRQUBFR5KdWPgYBDUU=";
   };
 
-  buildInputs = [ c-ares ];
+  buildInputs = [
+    c-ares
+  ];
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [
+    cffi
+    idna
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} tests/tests.py
-  '';
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
 
-  # requires network access
+  # Requires network access
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/saghul/pycares";
-    description = "Interface for c-ares";
-    license = licenses.mit;
+  passthru.tests = {
+    inherit aiodns tornado;
   };
 
+  pythonImportsCheck = [
+    "pycares"
+  ];
+
+  meta = with lib; {
+    description = "Python interface for c-ares";
+    homepage = "https://github.com/saghul/pycares";
+    changelog = "https://github.com/saghul/pycares/releases/tag/pycares-${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

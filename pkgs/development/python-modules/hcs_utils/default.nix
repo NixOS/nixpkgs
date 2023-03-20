@@ -1,4 +1,4 @@
-{ stdenv, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
+{ lib, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
 
 buildPythonPackage rec {
   pname = "hcs_utils";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ six glibcLocales ];
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   disabled = pythonOlder "3.4";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library collecting some useful snippets";
     homepage    = "https://pypi.python.org/pypi/hcs_utils/1.3";
     license     = licenses.isc;

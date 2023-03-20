@@ -1,34 +1,67 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, Libsystem
+, SystemConfiguration
+, installShellFiles
+, libiconv
+, rustPlatform
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "0.5.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
-    repo = pname;
+    repo = "pueue";
     rev = "v${version}";
-    sha256 = "17v760mh5k5vb1h3xvaph5rfc5wdl6q42isil2k9n6y8bxr3yw84";
+    hash = "sha256-Q9NHkVOWVWAty6iIhN0GmUkKB+nDqmxiPVnhbQvup9M=";
   };
 
-  cargoSha256 = "1m659i3v3b5hfn5vb5126izcy690bkmlyihz2w90h2d02ig7170p";
+  cargoHash = "sha256-YSD7RXU3eBlELx76gU5eNOGkSoK9SRQZOV+7lil1fyQ=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
-  checkFlagsArray = [ "--skip=test_single_huge_payload" ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Libsystem
+    SystemConfiguration
+    libiconv
+  ];
+
+  checkFlags = [
+    "--test client_tests"
+    "--skip=test_single_huge_payload"
+    "--skip=test_create_unix_socket"
+  ];
 
   postInstall = ''
-    # zsh completion generation fails. See: https://github.com/Nukesor/pueue/issues/57
-    for shell in bash fish; do
+    for shell in bash fish zsh; do
       $out/bin/pueue completions $shell .
-      installShellCompletion pueue.$shell
     done
+    installShellCompletion pueue.{bash,fish} _pueue
   '';
 
   meta = with lib; {
-    description = "A daemon for managing long running shell commands";
     homepage = "https://github.com/Nukesor/pueue";
+    description = "A daemon for managing long running shell commands";
+    longDescription = ''
+      Pueue is a command-line task management tool for sequential and parallel
+      execution of long-running tasks.
+
+      Simply put, it's a tool that processes a queue of shell commands. On top
+      of that, there are a lot of convenient features and abstractions.
+
+      Since Pueue is not bound to any terminal, you can control your tasks from
+      any terminal on the same machine. The queue will be continuously
+      processed, even if you no longer have any active ssh sessions.
+    '';
+    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

@@ -30,7 +30,8 @@ in stdenv.mkDerivation {
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
-  buildInputs = [ autoconf libtool automake
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool
                   cups popt libtiff libpng
                   ghostscript glib libusb1 libxml2 ];
 
@@ -41,6 +42,7 @@ in stdenv.mkDerivation {
     ./patches/cnijfilter-4.00-4-ppd.patch
     ./patches/cnijfilter-4.00-5-abi_x86_32.patch
     ./patches/cnijfilter-4.00-6-headers.patch
+    ./patches/cnijfilter-4.00-7-sysctl.patch
   ];
 
   postPatch = ''
@@ -141,8 +143,12 @@ in stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series.";
+    description = "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series";
     homepage = "https://www.canon-europe.com/support/consumer_products/products/fax__multifunctionals/inkjet/pixma_mg_series/pixma_mg5550.aspx?type=drivers&driverdetailid=tcm:13-1094072";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chpatrick ];

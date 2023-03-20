@@ -1,22 +1,19 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl, python3 }:
 
-let
-  version = "6.4.5";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fetchmail";
-  inherit version;
+  version = "6.4.37";
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "073bjh8qbvww7f5gbd6pq640qspi7dc6cjndvm0h2jcl0a90c3yk";
+    sha256 = "sha256-ShguXYk+mr5qw3rnHlQmUfzm1gYjT8c1wqquGGV+aeo=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl python3 ];
 
   configureFlags = [ "--with-ssl=${openssl.dev}" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.fetchmail.info/";
     description = "A full-featured remote-mail retrieval and forwarding utility";
     longDescription = ''
@@ -27,9 +24,7 @@ stdenv.mkDerivation {
       all flavors of IMAP, ETRN, and ODMR. It can even support IPv6 and
       IPSEC.
     '';
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,30 +1,39 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
-, ruamel_yaml
+, ruamel-yaml
 , xmltodict
 , pygments
-, isPy27
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.10.12";
-  disabled = isPy27;
+  version = "1.23.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
-    repo = "jc";
-    rev = "v${version}";
-    sha256 = "04gggx47acckyd96cginrw7ldw7fqgkiggk9fxdij2hwi03mk4n4";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0ZKdySzRHHtDWvSrQ0qJTggu48TyCBVrtEZZkM8HqNQ=";
   };
 
-  propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
+  propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];
 
-  meta = with stdenv.lib; {
-    description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output.";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "jc" ];
+
+  # tests require timezone to set America/Los_Angeles
+  doCheck = false;
+
+  meta = with lib; {
+    description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
     maintainers = with maintainers; [ atemu ];
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/v${version}/CHANGELOG";
   };
 }

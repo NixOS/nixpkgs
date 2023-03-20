@@ -1,30 +1,64 @@
-{ stdenv, fetchFromGitHub, systemd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, formats
+, systemd
+}:
 
+let
+  ini = formats.ini { };
+
+  unit = ini.generate "systembus-notify.service" {
+    Unit = {
+      Description = "system bus notification daemon";
+    };
+
+    Service = {
+      Type = "exec";
+      ExecStart = "@out@/bin/systembus-notify";
+      PrivateTmp = true;
+      ProtectHome = true;
+      ProtectSystem = "strict";
+      Restart = "on-failure";
+      Slice = "background.slice";
+    };
+  };
+
+in
 stdenv.mkDerivation rec {
   pname = "systembus-notify";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "systembus-notify";
     rev = "v${version}";
-    sha256 = "11zq84qfmbyl51d3r6294l2bjhlgwa9bx7d263g9fkqrwsg0si0y";
+    sha256 = "sha256-WzuBw7LXW54CCMgFE9BSJ2skxaz4IA2BcBny63Ihtt0=";
   };
 
   buildInputs = [ systemd ];
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 systembus-notify -t $out/bin
-    install -Dm644 systembus-notify.desktop -t $out/etc/xdg/autostart
+
+    install -Dm555 -t $out/bin systembus-notify
+    install -Dm444 -t $out/share/systembus-notify systembus-notify.desktop
+
+    install -d $out/lib/systemd/user
+    substitute ${unit} $out/lib/systemd/user/${unit.name} \
+      --subst-var out
+
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  # requires a running dbus instance
+  doCheck = false;
+
+  meta = with lib; {
     description = "System bus notification daemon";
     homepage = "https://github.com/rfjakob/systembus-notify";
     license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
   };
 }

@@ -1,26 +1,43 @@
-{stdenv, fetchurl, help2man}:
+{ lib
+, stdenv
+, fetchurl
+, help2man
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.6.2.605";
+  version = "1.6.4.625";
   pname = "fatsort";
 
   src = fetchurl {
     url = "mirror://sourceforge/fatsort/${pname}-${version}.tar.xz";
-    sha256 = "1dzzsl3a1ampari424vxkma0i87qkbgkgm2169x9xf3az0vgmjh8";
+    sha256 = "sha256-mm+JoGQLt4LYL/I6eAyfCuw9++RoLAqO2hV+CBBkLq0=";
   };
 
-  patches = [ ./fatsort-Makefiles.patch ];
+  buildInputs = [ help2man libiconv ];
 
-  buildInputs = [ help2man ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+    "UNAME_O=${stdenv.hostPlatform.uname.system}"
+    "UNAME_S=${stdenv.hostPlatform.uname.system}"
+  ];
 
-  meta = with stdenv.lib; {
+  # make install target is broken (DESTDIR usage is insane)
+  # it's easier to just skip make and install manually
+  installPhase = ''
+    runHook preInstall
+    install -D -m 755 ./src/fatsort   $out/bin/fatsort
+    install -D -m 644 ./man/fatsort.1 $out/man/man1/fatsort.1
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     homepage = "http://fatsort.sourceforge.net/";
     description = "Sorts FAT partition table, for devices that don't do sorting of files";
     maintainers = [ maintainers.kovirobi ];
-    license = licenses.gpl2;
-    inherit version;
-    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

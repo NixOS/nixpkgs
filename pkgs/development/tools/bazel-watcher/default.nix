@@ -1,41 +1,60 @@
 { buildBazelPackage
+, bazel_5
 , fetchFromGitHub
-, fetchpatch
 , git
 , go
-, python
-, stdenv
-, iana-etc
-, mailcap
-, tzdata
+, python3
+, lib, stdenv
 }:
 
 let
   patches = [
     ./use-go-in-path.patch
+    ./fix-rules-go-3408.patch
   ];
+
+  # Patch the protoc alias so that it always builds from source.
+  rulesProto = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_proto";
+    rev = "4.0.0-3.19.2";
+    sha256 = "sha256-wdmp+Tmf63PPr7G4X5F7rDas45WEETU3eKb47PFVI6o=";
+    postFetch = ''
+      sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
+      cat <<EOF >>$out/proto/private/BUILD.release
+      alias(name = "protoc", actual = "@com_github_protocolbuffers_protobuf//:protoc", visibility = ["//visibility:public"])
+      EOF
+    '';
+  };
+
 in
 buildBazelPackage rec {
-  name = "bazel-watcher-${version}";
-  version = "0.13.0";
+  pname = "bazel-watcher";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "1fc3sp79znbbq1yjap56lham72n7cap8yfghpzrzmpl5brybjkvm";
+    sha256 = "sha256-wigrE9u1VuFnqLWyVJK3M7xsjyme2dDG6YTcD9whKnw=";
   };
 
-  nativeBuildInputs = [ go git python ];
+  nativeBuildInputs = [ go git python3 ];
   removeRulesCC = false;
 
-  bazelTarget = "//ibazel";
+  bazel = bazel_5;
+  bazelFlags = [ "--override_repository=rules_proto=${rulesProto}" ];
+  bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
+  bazelTarget = "//cmd/ibazel";
 
+  fetchConfigured = false; # we want to fetch all dependencies, regardless of the current system
   fetchAttrs = {
     inherit patches;
 
     preBuild = ''
       patchShebangs .
+
+      echo ${bazel_5.version} > .bazelversion
     '';
 
     preInstall = ''
@@ -58,9 +77,12 @@ buildBazelPackage rec {
       # should be equivalent.
       rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
+
+      # remove com_google_protobuf because it had files with different permissions on linux and darwin
+      rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "0ili0123xcl0mjcrn4r1r1q9d7a8a3bbh9r3zhlshl39awfm4r2d";
+    sha256 = "sha256-le8IepS+IGVX45Gj1aicPjYOkuUA+VVUy/PEeKLNYss=";
   };
 
   buildAttrs = {
@@ -68,18 +90,22 @@ buildBazelPackage rec {
 
     preBuild = ''
       patchShebangs .
+
+      substituteInPlace cmd/ibazel/BUILD.bazel --replace '{STABLE_GIT_VERSION}' ${version}
+      echo ${bazel_5.version} > .bazelversion
     '';
 
     installPhase = ''
-      install -Dm755 bazel-bin/ibazel/*_pure_stripped/ibazel $out/bin/ibazel
+      install -Dm755 bazel-bin/cmd/ibazel/ibazel_/ibazel $out/bin/ibazel
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
-    description = "Tools for building Bazel targets when source files change.";
+    description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "ibazel";
     platforms = platforms.all;
   };
 }

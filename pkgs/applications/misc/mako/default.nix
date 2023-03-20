@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
 , systemd, pango, cairo, gdk-pixbuf
 , wayland, wayland-protocols
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mako";
-  version = "1.4.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hwvibpnrximb628w9dsfjpi30b5jy7nfkm4d94z5vhp78p43vxh";
+    sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc wayland-protocols wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
-  mesonFlags = [ "-Dzsh-completions=true" ];
+  mesonFlags = [
+    "-Dzsh-completions=true"
+    "-Dsd-bus-provider=libsystemd"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight Wayland notification daemon";
     homepage = "https://wayland.emersion.fr/mako/";
     license = licenses.mit;

@@ -2,8 +2,8 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "netdata";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ cransom ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ cransom raitobezarius ];
   };
 
   nodes = {

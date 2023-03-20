@@ -1,35 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkgconfig
-, ncursesSupport ? true, ncurses ? null
-, waylandSupport ? true, wayland ? null, wayland-protocols ? null
-, x11Support ? true, xlibs ? null, xorg ? null
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
+, pango, fribidi, harfbuzz, pcre, pkg-config, scdoc
+, ncursesSupport ? true, ncurses
+, waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
+, x11Support ? true, xorg
 }:
-
-assert ncursesSupport -> ncurses != null;
-assert waylandSupport -> ! lib.elem null [wayland wayland-protocols];
-assert x11Support -> xlibs != null && xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.4.1";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = pname;
     rev = version;
-    sha256 = "1fjcs9d3533ay3nz79cx3c0lmy2chgragr2lhsy0xl2ckr0iins0";
+    sha256 = "sha256-bMnnuT+LNNKphmvVcD1aaNZxasSGOEcAveC4stCieG8=";
   };
 
-  nativeBuildInputs = [ pkgconfig pcre ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config scdoc ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
-  makeFlags = ["PREFIX=$(out)"];
-
-  buildFlags = ["clients"]
-    ++ lib.optional ncursesSupport "curses"
-    ++ lib.optional waylandSupport "wayland"
-    ++ lib.optional x11Support "x11";
-
-  buildInputs = with stdenv.lib; [
+  buildInputs = with lib; [
     cairo
     fribidi
     harfbuzz
@@ -38,9 +29,16 @@ stdenv.mkDerivation rec {
   ] ++ optional ncursesSupport ncurses
     ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optionals x11Support [
-      xlibs.libX11 xlibs.libXinerama xlibs.libXft
+      xorg.libX11 xorg.libXinerama xorg.libXft
       xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
     ];
+
+  makeFlags = ["PREFIX=$(out)"];
+
+  buildFlags = ["clients"]
+    ++ lib.optional ncursesSupport "curses"
+    ++ lib.optional waylandSupport "wayland"
+    ++ lib.optional x11Support "x11";
 
   meta = with lib; {
     homepage = "https://github.com/Cloudef/bemenu";

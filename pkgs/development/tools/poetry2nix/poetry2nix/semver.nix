@@ -3,7 +3,7 @@ let
   inherit (builtins) elemAt match;
   operators =
     let
-      matchWildCard = s: match "([^\*])(\.[\*])" s;
+      matchWildCard = s: match "([^*])(\\.[*])" s;
       mkComparison = ret: version: v: builtins.compareVersions version v == ret;
       mkIdxComparison = idx: version: v:
         let
@@ -39,10 +39,9 @@ let
           # Prune constraint
           parts = builtins.splitVersion c;
           pruned = lib.take ((builtins.length parts) - 1) parts;
-          upper = builtins.toString
-            (
-              (lib.toInt (builtins.elemAt pruned (builtins.length pruned - 1))) + 1
-            );
+          upper = builtins.toString (
+            (lib.toInt (builtins.elemAt pruned (builtins.length pruned - 1))) + 1
+          );
           upperConstraint = builtins.concatStringsSep "." (ireplace (builtins.length pruned - 1) upper pruned);
         in
         operators.">=" v c && operators."<" v upperConstraint;
@@ -53,8 +52,8 @@ let
       #
     };
   re = {
-    operators = "([=><!~\^]+)";
-    version = "([0-9\.\*x]+)";
+    operators = "([=><!~^]+)";
+    version = "([0-9.*x]+)";
   };
   parseConstraint = constraint:
     let
@@ -69,7 +68,7 @@ let
         op = elemAt mPre 0;
         v = elemAt mPre 1;
       }
-        # Infix operators are range matches
+      # Infix operators are range matches
       else if mIn != null then {
         op = elemAt mIn 1;
         v = {
@@ -82,6 +81,7 @@ let
   satisfiesSemver = version: constraint:
     let
       inherit (parseConstraint constraint) op v;
-    in if constraint == "*" then true else operators."${op}" version v;
+    in
+    if constraint == "*" then true else operators."${op}" version v;
 in
 { inherit satisfiesSemver; }

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "html2text-1.3.2a";
+stdenv.mkDerivation rec {
+  pname = "html2text";
+  version = "1.3.2a";
 
   src = fetchurl {
-    url = "http://www.mbayer.de/html2text/downloads/html2text-1.3.2a.tar.gz";
+    url = "http://www.mbayer.de/html2text/downloads/html2text-${version}.tar.gz";
     sha256 = "000b39d5d910b867ff7e087177b470a1e26e2819920dcffd5991c33f6d480392";
   };
 
@@ -25,8 +26,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Convert HTML to plain text";
     homepage = "http://www.mbayer.de/html2text/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.eikek ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.eikek ];
   };
 }

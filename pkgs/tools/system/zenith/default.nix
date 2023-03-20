@@ -1,26 +1,51 @@
-{ stdenv, rustPlatform, fetchFromGitHub, IOKit }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, IOKit
+, nvidiaSupport ? false
+, makeWrapper
+, llvmPackages
+}:
+
+assert nvidiaSupport -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "1yfbr8zmcy7zp9s9cqv7qypj2vvhpq09r0398gr7ckjk6v70hhfg";
+    sha256 = "sha256-GrrdE9Ih8x8N2HN+1NfxfthfHbufLAT/Ac+ZZWW5Zg8=";
   };
 
-  cargoSha256 = "1l4cjcpfghis983y31s54fzjppdnh3wa4anwi7bdsbyvqz3n3ywj";
+  # remove cargo config so it can find the linker on aarch64-linux
+  postPatch = ''
+    rm .cargo/config
+  '';
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  cargoHash = "sha256-2VgyUVBcmSlmPSqAWrzWjH5J6Co/rAC9EQCckYzfW2o=";
 
-  meta = with stdenv.lib; {
-    description = "Sort of like top or htop but with zoom-able charts, network, and disk usage";
+  nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
+  buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+
+  buildFeatures = lib.optional nvidiaSupport "nvidia";
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  postInstall = lib.optionalString nvidiaSupport ''
+    wrapProgram $out/bin/zenith \
+      --suffix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
+  '';
+
+  meta = with lib; {
+    description = "Sort of like top or htop but with zoom-able charts, network, and disk usage"
+      + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
-    # doesn't build on aarch64 https://github.com/bvaisvil/zenith/issues/19
-    platforms = platforms.x86;
+    platforms = platforms.unix;
   };
 }

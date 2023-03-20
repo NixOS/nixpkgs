@@ -1,49 +1,54 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , jmespath
 , docutils
-, ordereddict
-, simplejson
-, mock
-, nose
 , urllib3
+, pytestCheckHook
+, jsonschema
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.14.13"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.29.79"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6478d9207db6dbcb5106fd4db2cdd5194d0b2dc0b73776019d56877ab802fe87";
+    hash = "sha256-x97UQGK+07kolEz7CeFXjtP+0OTJjeTyM/PCBWqNSR4=";
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     jmespath
     docutils
-    ordereddict
-    simplejson
     urllib3
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace ",<0.16" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    jsonschema
+  ];
 
-  checkInputs = [ mock nose ];
+  doCheck = true;
 
-  checkPhase = ''
-    nosetests -v
-  '';
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
 
-  # Network access
-  doCheck = false;
+    # Disable slow tests (only run unit tests)
+    "tests/functional"
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "botocore"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/boto/botocore";
-    license = "bsd";
+    changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
+    license = licenses.asl20;
     description = "A low-level interface to a growing number of Amazon Web Services";
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

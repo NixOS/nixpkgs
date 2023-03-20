@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , ninja
 , vala
@@ -14,26 +15,20 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-nightlight";
-  version = "2.0.3";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1ihg5iz69jgcbyzdkcc2fqmr5l34h2d1jjsx7y86ag1jvhljb82r";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-oZUPveNlm9p8gKeDGopfhu1rBbydLaQSlkPs6+WHrUo=";
   };
 
   nativeBuildInputs = [
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -44,13 +39,15 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Night Light Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-nightlight";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

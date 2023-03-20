@@ -1,57 +1,87 @@
-{ stdenv
+{ lib
+, stdenv
+, aiohttp
+, boto3
 , buildPythonPackage
 , fetchFromGitHub
-, aiohttp
-, black
-, codecov
-, flake8
-, isPy3k
+, flask
+, flask-sockets
+, pythonOlder
 , mock
+, moto
+, psutil
+, pytest-cov
 , pytest-mock
 , pytestCheckHook
-, pytestcov
-, pytestrunner
+, pytest-runner
 , requests
 , responses
-, six
-, websocket_client
+, sqlalchemy
+, websockets
+, websocket-client
 }:
 
 buildPythonPackage rec {
-  pname = "python-slackclient";
-  version = "2.5.0";
+  pname = "slackclient";
+  version = "3.20.1";
+  format =  "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = "slackapi";
-    repo   = pname;
-    rev    = version;
-    sha256 = "1ngj1mivbln19546195k400w9yaw69g0w6is7c75rqwyxr8wgzsk";
+    owner = "slackapi";
+    repo = "python-slack-sdk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-etPNhGjLrXOwkM7m2Q1xGoGraBq/2tq58bWXqncHy+w=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    websocket_client
+    websocket-client
     requests
-    six
   ];
 
-  checkInputs = [
-    black
-    codecov
-    flake8
+  nativeCheckInputs = [
+    boto3
+    flask
+    flask-sockets
     mock
+    moto
+    psutil
     pytest-mock
     pytestCheckHook
-    pytestcov
-    pytestrunner
     responses
+    sqlalchemy
+    websockets
   ];
 
-  meta = with stdenv.lib; {
+  # Exclude tests that requires network features
+  pytestFlagsArray = [ "--ignore=integration_tests" ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
+    "test_interactions"
+    "test_send_message_while_disconnection"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # these fail with `ConnectionResetError: [Errno 54] Connection reset by peer`
+    "test_issue_690_oauth_access"
+    "test_issue_690_oauth_v2_access"
+    "test_send"
+    "test_send_attachments"
+    "test_send_blocks"
+    "test_send_dict"
+  ];
+
+  pythonImportsCheck = [ "slack" ];
+
+  meta = with lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";
+    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli psyanticy ];
   };

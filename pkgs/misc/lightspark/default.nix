@@ -1,36 +1,34 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, zlib, ffmpeg, glew, pcre
-, rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, gnome2, lzma, nasm
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, zlib, ffmpeg, glew, pcre
+, rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, pango, xz, nasm
 , llvm, glibmm
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightspark";
-  version = "0.8.2";
+  version = "0.8.6.1";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
     rev = version;
-    sha256 = "04wn6d6gmpf848x0yghw26m9syv0hm6q5dwqiw3fxhs155jjqfgv";
+    sha256 = "sha256-/w0cqPIeQC1Oz1teSjMpeiQEI6bIpnyOOu0GoGyi6Kg=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/SET(ETCDIR "\/etc")/SET(ETCDIR "etc")/g' CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [
     curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
-    gnome2.pango lzma nasm llvm glibmm
+    pango xz nasm llvm glibmm
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source Flash Player implementation";
     homepage = "https://lightspark.github.io/";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jchw ];
     platforms = platforms.linux;
   };

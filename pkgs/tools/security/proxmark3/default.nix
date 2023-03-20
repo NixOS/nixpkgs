@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, pcsclite, qt5
+{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline, pcsclite, qt5
 , gcc-arm-embedded }:
 
 let
@@ -12,8 +12,10 @@ let
         inherit rev sha256;
       };
 
-      nativeBuildInputs = [ pkgconfig gcc-arm-embedded ];
+      nativeBuildInputs = [ pkg-config gcc-arm-embedded ];
       buildInputs = [ ncurses readline pcsclite qt5.qtbase ];
+
+      dontWrapQtApps = true;
 
       postPatch = ''
         substituteInPlace client/Makefile --replace '-ltermcap' ' '
@@ -33,7 +35,7 @@ let
         install -Dt $out/firmware bootrom/obj/bootrom.elf armsrc/obj/fullimage.elf
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Client for proxmark3, powerful general purpose RFID tool";
         homepage = "http://www.proxmark.org";
         license = licenses.gpl2Plus;

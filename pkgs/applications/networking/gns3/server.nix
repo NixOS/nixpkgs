@@ -1,17 +1,16 @@
-{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+}:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-let
-  defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
-  ];
-
-  python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
-  };
-in python.pkgs.buildPythonPackage {
+python3.pkgs.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -23,14 +22,29 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # yarl 1.4+ only requires Python 3.6+
-    sed -iE "s/yarl==1.3.0//" requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "psutil==" "psutil>=" \
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
+      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+  propagatedBuildInputs = with python3.pkgs; [
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async_generator
+    distro
+    importlib-resources
+    jinja2
+    jsonschema
+    multidict
+    prompt-toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    setuptools
+    yarl
+    zipstream
   ];
 
   # Requires network access
@@ -40,7 +54,7 @@ in python.pkgs.buildPythonPackage {
     rm $out/bin/gns3loopback # For Windows only
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
@@ -51,6 +65,6 @@ in python.pkgs.buildPythonPackage {
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

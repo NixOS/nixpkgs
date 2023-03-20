@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , chardet
@@ -16,14 +16,14 @@ buildPythonPackage rec {
     sha256 = "1f5hxyzlh5mdvvi52qapys9qcinffr6ghgivb6k4jxa92cbs3mfg";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   checkPhase = ''
     nosetests -v
   '';
 
   propagatedBuildInputs = [ chardet ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/byroot/pysrt";
     license = licenses.gpl3;
     description = "Python library used to edit or create SubRip files";

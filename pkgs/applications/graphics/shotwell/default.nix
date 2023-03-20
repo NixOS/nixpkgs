@@ -1,22 +1,25 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , gtk3
 , libexif
 , libgphoto2
 , libwebp
-, libsoup
+, libsoup_3
 , libxml2
 , vala
 , sqlite
-, webkitgtk
-, pkgconfig
-, gnome3
+, webkitgtk_4_1
+, pkg-config
+, gnome
 , gst_all_1
 , libgudev
 , libraw
 , glib
+, glib-networking
 , json-glib
 , gcr
 , libgee
@@ -29,8 +32,8 @@
 , wrapGAppsHook
 , gobject-introspection
 , itstool
-, libgdata
-, libchamplain
+, libsecret
+, libportal-gtk3
 , gsettings-desktop-schemas
 , python3
 }:
@@ -39,18 +42,27 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.1";
+  version = "0.31.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mbgrad4d4snffw2z3rkhwqq1bkxdgy52pblx99vjadvpgspb034";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-gPCj2HVS+L3vpeNig77XZ9AFdtqMyWpEo9NKQjXEmeA=";
   };
+
+  patches = [
+    # Fix build with vala 0.56.4, can be removed on next update
+    # https://gitlab.gnome.org/GNOME/shotwell/-/merge_requests/69
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/shotwell/-/commit/cd82759231e5ece2fa0dea40397c9051d15fd5c2.patch";
+      hash = "sha256-Vy2kvUlmPdEEuPB1RTcI5pGYNveeiQ+lId0YVlWo4wU=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     itstool
     gettext
     desktop-file-utils
@@ -64,12 +76,14 @@ stdenv.mkDerivation rec {
     libexif
     libgphoto2
     libwebp
-    libsoup
+    libsoup_3
     libxml2
     sqlite
-    webkitgtk
+    webkitgtk_4_1
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libgee
     libgudev
     gexiv2
@@ -77,13 +91,14 @@ stdenv.mkDerivation rec {
     libraw
     json-glib
     glib
+    glib-networking
     gdk-pixbuf
     librsvg
     librest
     gcr
-    gnome3.adwaita-icon-theme
-    libgdata
-    libchamplain
+    gnome.adwaita-icon-theme
+    libsecret
+    libportal-gtk3
   ];
 
   postPatch = ''
@@ -92,17 +107,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [domenkozar];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

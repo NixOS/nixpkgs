@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "swift-corefoundation";
+  pname = "swift-corefoundation";
+  version = "unstable-2018-09-14";
 
   src = fetchFromGitHub {
     owner  = "apple";
@@ -23,9 +24,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ ninja python3 ];
   buildInputs = [ curl libxml2 objc4 ICU ];
 
-  sourceRoot = "source/CoreFoundation";
+  patches = [ ./0001-Add-missing-TARGET_OS_-defines.patch ];
 
-  patchPhase = ''
+  postPatch = ''
+    cd CoreFoundation
+
     cp ${sysdir-free-system-directories} Base.subproj/CFSystemDirectories.c
 
     # In order, since I can't comment individual lines:
@@ -39,6 +42,7 @@ stdenv.mkDerivation {
     # Fix sandbox impurities.
     substituteInPlace ../lib/script.py \
       --replace '/bin/cp' cp
+    patchShebangs --build ../configure
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
@@ -70,23 +74,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # FIXME: Workaround for intermittent build failures of CFRuntime.c.
-  # Based on testing this issue seems to only occur with clang_7, so
-  # please remove this when updating the default llvm versions to 8 or
-  # later.
-  buildPhase = stdenv.lib.optionalString true ''
-    for i in {1..512}; do
-        if ninja -j $NIX_BUILD_CORES; then
-            break
-        fi
+  buildPhase = ''
+    runHook preBuild
 
-        echo >&2
-        echo "[$i/512] retrying build, workaround for #66811" >&2
-        echo "  With clang_7 the build of CFRuntime.c fails intermittently." >&2
-        echo "  See https://github.com/NixOS/nixpkgs/issues/66811 for more details." >&2
-        echo >&2
-        continue
-    done
+    ninja -j $NIX_BUILD_CORES
+
+    runHook postBuild
   '';
 
   # TODO: their build system sorta kinda can do this, but it doesn't seem to work right now

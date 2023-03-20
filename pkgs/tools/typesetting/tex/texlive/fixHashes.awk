@@ -10,7 +10,7 @@ BEGIN {
     print "No match for \""$0"\"" > "/dev/stderr"
     exit 1
   }
-  cmd="nix-hash --type sha1 --base32 "$0
+  cmd="nix-hash --type sha256 --base32 "$0
   if (( cmd | getline hash ) <= 0) {
     print "Error executing nix-hash" > "/dev/stderr"
     exit 1

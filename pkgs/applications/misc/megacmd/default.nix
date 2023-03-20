@@ -1,55 +1,51 @@
-{ stdenv
-, autoconf
-, automake
+{ lib
+, stdenv
+, autoreconfHook
 , c-ares
 , cryptopp
 , curl
 , fetchFromGitHub
-, ffmpeg
+  # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
+  # to be re-enabled when patch available
+  # , ffmpeg
 , freeimage
 , gcc-unwrapped
 , libmediainfo
 , libraw
 , libsodium
-, libtool
 , libuv
 , libzen
 , pcre-cpp
-, pkgconfig
+, pkg-config
 , readline
 , sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.2.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "0czyhsms0a0237d6h9b21n9p4nm4zkjanhhbvw26k6266g6c1nyr";
+    sha256 = "sha256-EPY2BjTECia0eBGmv8tmeil1WibIA6R+DK7MmOMufLw=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkgconfig
-  ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg
+    # ffmpeg
     freeimage
     gcc-unwrapped
     libmediainfo
     libraw
     libsodium
-    libtool
     libuv
     libzen
     pcre-cpp
@@ -57,17 +53,13 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   configureFlags = [
     "--disable-curl-checks"
     "--disable-examples"
     "--with-cares"
     "--with-cryptopp"
     "--with-curl"
-    "--with-ffmpeg"
+    # "--with-ffmpeg"
     "--with-freeimage"
     "--with-libmediainfo"
     "--with-libuv"
@@ -78,11 +70,11 @@ stdenv.mkDerivation rec {
     "--with-termcap"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
-    homepage    = "https://mega.nz/";
-    license     = licenses.unfree;
-    platforms   = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.wedens ];
+    homepage = "https://mega.io/cmd";
+    license = with licenses; [ bsd2 gpl3Only ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ lunik1 ];
   };
 }

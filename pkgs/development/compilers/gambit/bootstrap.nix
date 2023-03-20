@@ -33,7 +33,7 @@ gccStdenv.mkDerivation {
   '';
 
   installPhase = ''
-    cp -fa ./ $out/gambit/
+    cp -fa ./gsc-boot $out/gambit/
   '';
 
   forceShare = [ "info" ];

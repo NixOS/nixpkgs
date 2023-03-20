@@ -1,25 +1,48 @@
-{ stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
-, autoconf-archive, libXfixes, libXcursor }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, imlib2
+, autoreconfHook
+, autoconf-archive
+, libX11
+, libXext
+, libXfixes
+, libXcomposite
+, pkg-config
+, libbsd
+}:
 
 stdenv.mkDerivation rec {
   pname = "scrot";
-  version = "1.3";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = pname;
     rev = version;
-    sha256 = "0x70hd59ik37kqd8xqpwrz46np01jv324iz28x2s0kk36d7sblsj";
+    sha256 = "sha256-oVmEPkEK1xDcIRUQjCp6CKf+aKnnVe3L7aRTdSsCmmY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive ];
-  buildInputs = [ giblib xlibsWrapper libXfixes libXcursor ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    imlib2
+    libX11
+    libXext
+    libXfixes
+    libXcomposite
+    libbsd
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ];
-    license = licenses.mit;
+    license = licenses.mitAdvertising;
   };
 }

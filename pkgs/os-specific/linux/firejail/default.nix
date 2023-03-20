@@ -1,30 +1,58 @@
-{stdenv, fetchurl, which}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="firejail";
-    version="0.9.62";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
-    sha256="1q2silgy882fl61p5qa9f9jqkxcqnwa71jig3c729iahx4f0hs05";
-  };
-  buildInputs = [
-    which
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-    name = "${s.name}.tar.bz2";
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, libapparmor
+, which
+, xdg-dbus-proxy
+, nixosTests
+}:
+
+stdenv.mkDerivation rec {
+  pname = "firejail";
+  version = "0.9.72";
+
+  src = fetchFromGitHub {
+    owner = "netblue30";
+    repo = "firejail";
+    rev = version;
+    sha256 = "sha256-XAlb6SSyY2S1iWDaulIlghQ16OGvT/wBCog95/nxkog=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libapparmor
+    which
+  ];
+
+  configureFlags = [
+    "--enable-apparmor"
+  ];
+
+  patches = [
+    # Adds the /nix directory when using an overlay.
+    # Required to run any programs under this mode.
+    ./mount-nix-dir-on-overlay.patch
+
+    # By default fbuilder hardcodes the firejail binary to the install path.
+    # On NixOS the firejail binary is a setuid wrapper available in $PATH.
+    ./fbuilder-call-firejail-on-path.patch
+  ];
+
   prePatch = ''
-    # Allow whitelisting ~/.nix-profile
-    substituteInPlace etc/firejail.config --replace \
-      '# follow-symlink-as-user yes' \
-      'follow-symlink-as-user no'
+    # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
+    substituteInPlace src/include/common.h \
+      --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
+
+    # Workaround for regression introduced in 0.9.72 preventing usage of
+    # end-of-options indicator "--"
+    # See https://github.com/netblue30/firejail/issues/5659
+    substituteInPlace src/firejail/sandbox.c \
+      --replace " && !arg_doubledash" ""
   '';
 
   preConfigure = ''
@@ -53,7 +81,7 @@ stdenv.mkDerivation {
   # See https://github.com/netblue30/firejail/blob/e4cb6b42743ad18bd11d07fd32b51e8576239318/src/firejail/profile.c#L68-L83
   # for the profile file lookup implementation.
   postInstall = ''
-    for local in $(grep -Eh '^include.*local$' $out/etc/firejail/*.profile | awk '{print $2}' | sort | uniq)
+    for local in $(grep -Eh '^include.*local$' $out/etc/firejail/*{.inc,.profile} | awk '{print $2}' | sort | uniq)
     do
       echo "include /etc/firejail/$local" >$out/etc/firejail/$local
     done
@@ -63,13 +91,13 @@ stdenv.mkDerivation {
   # bash: src/fsec-optimize/fsec-optimize: No such file or directory
   enableParallelBuilding = false;
 
+  passthru.tests = nixosTests.firejail;
+
   meta = {
-    inherit (s) version;
-    description = ''Namespace-based sandboxing tool for Linux'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Namespace-based sandboxing tool for Linux";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://firejail.wordpress.com/";
-    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

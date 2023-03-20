@@ -1,33 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, boost, cryptopp, opencl-headers, opencl-info,
-  openmpi, ocl-icd, mesa, gbenchmark, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, gbenchmark, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "ethash";
-  version = "0.4.4";
+  version = "0.8.0";
 
   src =
     fetchFromGitHub {
       owner = "chfast";
       repo = "ethash";
       rev = "v${version}";
-      sha256 = "1gfs8s4nv2ikkn3rhzifr0dx5m0c1kpnhmzf8x6zlwhw3qwlc98w";
+      sha256 = "sha256-4SJk4niSpLPjymwTCD0kHOrqpMf+vE3J/O7DiffUSJ4=";
     };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs = [
-    boost
-    cryptopp
-    opencl-headers
-    opencl-info
-    openmpi
-    ocl-icd
-    mesa
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     gbenchmark
     gtest
   ];
@@ -48,11 +37,11 @@ stdenv.mkDerivation rec {
     #"-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PoW algorithm for Ethereum 1.0 based on Dagger-Hashimoto";
     homepage = "https://github.com/ethereum/ethash";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nand0p ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

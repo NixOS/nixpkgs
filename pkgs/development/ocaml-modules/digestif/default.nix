@@ -1,27 +1,30 @@
-{ lib, fetchurl, fetchpatch, buildDunePackage
-, bigarray-compat, eqaf, stdlib-shims
-, alcotest
+{ lib, ocaml, fetchurl, buildDunePackage
+, pkg-config, which
+, eqaf
+, alcotest, astring, bos, findlib, fpath
 }:
 
 buildDunePackage rec {
   pname = "digestif";
-  version = "0.8.0";
+  version = "1.1.2";
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-v${version}.tbz";
-    sha256 = "09g4zngqiw97cljv8ds4m063wcxz3y7c7vzaprsbpjzi0ja5jdcy";
+    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-${version}.tbz";
+    sha256 = "sha256-edNM5ROxFIV+OAqr328UcyGPGwXdflHQOJB3ntAbRmY=";
   };
 
-  # Fix tests with alcotest ≥ 1
-  patches = [ (fetchpatch {
-    url = "https://github.com/mirage/digestif/commit/b65d996c692d75da0a81323253429e07d14b72b6.patch";
-    sha256 = "0sf7qglcp19dhs65pwrrc7d9v57icf18jsrhpmvwskx8b4dchfiv";
-  })];
+  nativeBuildInputs = [ findlib which ocaml pkg-config ];
 
-  buildInputs = lib.optional doCheck alcotest;
-  propagatedBuildInputs = [ bigarray-compat eqaf stdlib-shims ];
+  propagatedBuildInputs = [ eqaf ];
 
+  checkInputs = [ alcotest astring bos fpath ];
   doCheck = true;
+
+  postCheck = ''
+    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ test/test_runes.ml
+  '';
 
   meta = {
     description = "Simple hash algorithms in OCaml";

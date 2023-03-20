@@ -1,42 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools_scm
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
 , sphinx
 , hypothesis
 , py
-, pytest
+, pytest-xdist
+, pytestCheckHook
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.19.0";
-  disabled = !isPy3k;
+  version = "0.22.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "11wiis62kcw6g3n4gdj39fx1yrlq5vz3zx3kmb6g79mliyhn2x7g";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jab";
+    repo = "bidict";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mPBruasjQwErl5M91OBf71hArztdRVONOCnqos180DY=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ sphinx ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    sphinx
+  ];
+
+  nativeCheckInputs = [
     hypothesis
     py
-    pytest
+    pytest-xdist
+    pytestCheckHook
     pytest-benchmark
     sortedcollections
     sortedcontainers
   ];
-  checkPhase = ''
-    pytest tests
-  '';
+
+  pythonImportsCheck = [ "bidict" ];
 
   meta = with lib; {
     homepage = "https://github.com/jab/bidict";
+    changelog = "https://github.com/jab/bidict/blob/v${version}/CHANGELOG.rst";
     description = "Efficient, Pythonic bidirectional map data structures and related functionality";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jakewaksbaum ];

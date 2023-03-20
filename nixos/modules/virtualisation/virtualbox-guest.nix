@@ -19,13 +19,13 @@ in
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = "Whether to enable the VirtualBox service and other guest additions.";
+      description = lib.mdDoc "Whether to enable the VirtualBox service and other guest additions.";
     };
 
     x11 = mkOption {
       default = true;
       type = types.bool;
-      description = "Whether to enable x11 graphics";
+      description = lib.mdDoc "Whether to enable x11 graphics";
     };
   };
 
@@ -33,7 +33,7 @@ in
 
   config = mkIf cfg.enable (mkMerge [{
     assertions = [{
-      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      assertion = pkgs.stdenv.hostPlatform.isx86;
       message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     }];
 
@@ -68,7 +68,7 @@ in
         SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
       '';
   } (mkIf cfg.x11 {
-    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" "modesetting" ];
+    services.xserver.videoDrivers = [ "vmware" "virtualbox" "modesetting" ];
 
     services.xserver.config =
       ''

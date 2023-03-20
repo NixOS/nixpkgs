@@ -1,23 +1,33 @@
+{ system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
+, systemdStage1 ? false
+}:
+
 import ./make-test-python.nix {
   name = "fsck";
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     virtualisation.emptyDiskImages = [ 1 ];
 
-    fileSystems = lib.mkVMOverride {
+    virtualisation.fileSystems = {
       "/mnt" = {
         device = "/dev/vdb";
         fsType = "ext4";
         autoFormat = true;
       };
     };
+
+    boot.initrd.systemd.enable = systemdStage1;
   };
 
   testScript = ''
     machine.wait_for_unit("default.target")
 
     with subtest("root fs is fsckd"):
-        machine.succeed("journalctl -b | grep 'fsck.ext4.*/dev/vda'")
+        machine.succeed("journalctl -b | grep '${if systemdStage1
+          then "fsck.*vda.*clean"
+          else "fsck.ext4.*/dev/vda"}'")
 
     with subtest("mnt fs is fsckd"):
         machine.succeed("journalctl -b | grep 'fsck.*/dev/vdb.*clean'")

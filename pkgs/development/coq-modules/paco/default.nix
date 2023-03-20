@@ -1,42 +1,20 @@
-{stdenv, fetchFromGitHub, coq, unzip}:
+{ lib, mkCoqDerivation, coq, version ? null }:
 
-let
-  versions = {
-    pre_8_6 = rec {
-      rev = "v${version}";
-      version = "1.2.8";
-      sha256 = "05fskx5x1qgaf9qv626m38y5izichzzqc7g2rglzrkygbskrrwsb";
-    };
-    post_8_6 = rec {
-      rev = "v${version}";
-      version = "4.0.0";
-      sha256 = "1ncrdyijkgf0s2q4rg1s9r2nrcb17gq3jz63iqdlyjq3ylv8gyx0";
-    };
-  };
-  params = {
-    "8.5" = versions.pre_8_6;
-    "8.6" = versions.post_8_6;
-    "8.7" = versions.post_8_6;
-    "8.8" = versions.post_8_6;
-    "8.9" = versions.post_8_6;
-    "8.10" = versions.post_8_6;
-    "8.11" = versions.post_8_6;
-  };
-  param = params.${coq.coq-version};
-in
-
-stdenv.mkDerivation rec {
-  inherit (param) version;
-  name = "coq${coq.coq-version}-paco-${version}";
-
-  src = fetchFromGitHub {
-    inherit (param) rev sha256;
-    owner = "snu-sf";
-    repo = "paco";
-  };
-
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 unzip ];
-  propagatedBuildInputs = [ coq ];
+mkCoqDerivation {
+  pname = "paco";
+  owner = "snu-sf";
+  inherit version;
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.12" "8.17"; out = "4.1.2"; }
+    { case = range "8.9" "8.13"; out = "4.1.1"; }
+    { case = range "8.6" "8.13"; out = "4.0.2"; }
+    { case = isEq "8.5";         out = "1.2.8"; }
+  ] null;
+  release."4.1.2".sha256 = "sha256:1l8mwakqp4wnppsldl8wp2j24h1jvadnvrsgf35xnvdyygypjp2v";
+  release."4.1.1".sha256 = "1qap8cyv649lr1s11r7h5jzdjd4hsna8kph15qy5fw24h5nx6byy";
+  release."4.0.2".sha256 = "1q96bsxclqx84xn5vkid501jkwlc1p6fhb8szrlrp82zglj58b0b";
+  release."1.2.8".sha256 = "05fskx5x1qgaf9qv626m38y5izichzzqc7g2rglzrkygbskrrwsb";
+  releaseRev = v: "v${v}";
 
   preBuild = "cd src";
 
@@ -46,15 +24,9 @@ stdenv.mkDerivation rec {
     cp -pR *.vo $COQLIB/user-contrib/Paco
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://plv.mpi-sws.org/paco/";
+  meta = {
+    homepage = "https://plv.mpi-sws.org/paco/";
     description = "A Coq library implementing parameterized coinduction";
-    maintainers = with maintainers; [ jwiegley ptival ];
-    platforms = coq.meta.platforms;
+    maintainers = with lib.maintainers; [ jwiegley ptival ];
   };
-
-  passthru = {
-    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
-  };
-
 }

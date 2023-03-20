@@ -1,67 +1,103 @@
-{ stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
-, lsb-release, glog, protobuf3_11, cbc, zlib
-, ensureNewerSourcesForZipFilesHook, python, swig }:
+{ abseil-cpp
+, bzip2
+, cbc
+, cmake
+, eigen
+, ensureNewerSourcesForZipFilesHook
+, fetchFromGitHub
+, fetchpatch
+, glpk
+, lib
+, pkg-config
+, protobuf
+, python
+, re2
+, stdenv
+, swig4
+, unzip
+, zlib
+}:
 
-let
-  protobuf = protobuf3_11;
-  pythonProtobuf = python.pkgs.protobuf.override { inherit protobuf; };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "7.6";
+  version = "9.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "0605q3y7vh7x7m9azrbkx44blq12zrab6v28b9wmpcn1lmykbw1b";
+    sha256 = "sha256-joWonJGuxlgHhXLznRhC1MDltQulXzpo4Do9dec1bLY=";
   };
-
-  # The original build system uses cmake which does things like pull
-  # in dependencies through git and Makefile creation time. We
-  # obviously don't want to do this so instead we provide the
-  # dependencies straight from nixpkgs and use the make build method.
-  configurePhase = ''
-    cat <<EOF > Makefile.local
-    UNIX_ABSL_DIR=${abseil-cpp}
-    UNIX_GFLAGS_DIR=${gflags}
-    UNIX_GLOG_DIR=${glog}
-    UNIX_PROTOBUF_DIR=${protobuf}
-    UNIX_CBC_DIR=${cbc}
-    EOF
-  '';
-
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "PROTOBUF_PYTHON_DESC=${pythonProtobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
+  patches = [
+    # Disable test that requires external input: https://github.com/google/or-tools/issues/3429
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/7072ae92ec204afcbfce17d5360a5884c136ce90.patch";
+      hash = "sha256-iWE+atp308q7pC1L1FD6sK8LvWchZ3ofxvXssguozbM=";
+    })
+    # Fix test that broke in parallel builds: https://github.com/google/or-tools/issues/3461
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/a26602f24781e7bfcc39612568aa9f4010bb9736.patch";
+      hash = "sha256-gM0rW0xRXMYaCwltPK0ih5mdo3HtX6mKltJDHe4gbLc=";
+    })
   ];
-  buildFlags = [ "cc" "pypi_archive" ];
 
-  checkTarget = "test_cc";
-  doCheck = true;
-
-  installTargets = [ "install_cc" ];
-  # The upstream install_python target installs to $HOME.
-  postInstall = ''
-    mkdir -p "$python/${python.sitePackages}"
-    (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
-  '';
-
+  cmakeFlags = [
+    "-DBUILD_DEPS=OFF"
+    "-DBUILD_PYTHON=ON"
+    "-DBUILD_pybind11=OFF"
+    "-DFETCH_PYTHON_DEPS=OFF"
+    "-DUSE_GLPK=ON"
+    "-DUSE_SCIP=OFF"
+  ];
   nativeBuildInputs = [
-    cmake lsb-release swig which zlib python
+    cmake
     ensureNewerSourcesForZipFilesHook
-    python.pkgs.setuptools python.pkgs.wheel
+    pkg-config
+    python
+    python.pkgs.pip
+    swig4
+    unzip
+  ];
+  buildInputs = [
+    bzip2
+    cbc
+    eigen
+    glpk
+    python.pkgs.absl-py
+    python.pkgs.mypy-protobuf
+    python.pkgs.pybind11
+    python.pkgs.setuptools
+    python.pkgs.wheel
+    re2
+    zlib
   ];
   propagatedBuildInputs = [
-    abseil-cpp gflags glog protobuf cbc
-    pythonProtobuf python.pkgs.six
+    abseil-cpp
+    protobuf
+    python.pkgs.protobuf
+    python.pkgs.numpy
+  ];
+  nativeCheckInputs = [
+    python.pkgs.matplotlib
+    python.pkgs.pandas
+    python.pkgs.virtualenv
   ];
 
-  enableParallelBuilding = true;
+  doCheck = true;
+
+  # This extra configure step prevents the installer from littering
+  # $out/bin with sample programs that only really function as tests,
+  # and disables the upstream installation of a zipped Python egg that
+  # can’t be imported with our Python setup.
+  installPhase = ''
+    cmake . -DBUILD_EXAMPLES=OFF -DBUILD_PYTHON=OFF -DBUILD_SAMPLES=OFF
+    cmake --install .
+    pip install --prefix="$python" python/
+  '';
 
   outputs = [ "out" "python" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/or-tools";
     license = licenses.asl20;
     description = ''

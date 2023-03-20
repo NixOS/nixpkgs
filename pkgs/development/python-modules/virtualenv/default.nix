@@ -1,53 +1,92 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{ lib
 , stdenv
+, buildPythonPackage
 , pythonOlder
 , isPy27
-, appdirs
-, contextlib2
+, cython
 , distlib
+, fetchPypi
 , filelock
+, flaky
+, hatch-vcs
+, hatchling
 , importlib-metadata
 , importlib-resources
 , pathlib2
-, setuptools_scm
-, six
+, platformdirs
+, pytest-freezegun
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.0.21";
+  version = "20.19.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kxnxxwa25ghlkpyrxa8pi49v87b7ps2gyla7d1h6kbz9sfn45m1";
-
+    hash = "sha256-N6ZAuoLtQLImWZxSLUEeS+XtszmgwN4DDA3HtkbWFZA=";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
-    appdirs
     distlib
     filelock
-    six
-  ] ++ lib.optionals isPy27 [
-    contextlib2
-  ] ++ lib.optionals (isPy27 && !stdenv.hostPlatform.isWindows) [
-    pathlib2
+    platformdirs
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  meta = {
+  patches = lib.optionals (isPy27) [
+    ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
+  ];
+
+  nativeCheckInputs = [
+    cython
+    flaky
+    pytest-freezegun
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # Ignore tests which require network access
+    "tests/unit/create/test_creator.py"
+    "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
+  ];
+
+  disabledTests = [
+    # Network access
+    "test_create_no_seed"
+    "test_seed_link_via_app_data"
+    # Permission Error
+    "test_bad_exe_py_info_no_raise"
+  ];
+
+  pythonImportsCheck = [
+    "virtualenv"
+  ];
+
+  meta = with lib; {
     description = "A tool to create isolated Python environments";
     homepage = "http://www.virtualenv.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ goibhniu ];
+    changelog = "https://github.com/pypa/virtualenv/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

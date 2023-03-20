@@ -1,29 +1,31 @@
-{ stdenv
+{ lib, stdenv
+, fetchFromGitLab
 , fetchpatch
-, fetchurl
-, pythonPackages
+, python3
 , librsync
 , ncftp
 , gnupg
 , gnutar
 , par2cmdline
-, utillinux
+, util-linux
 , rsync
-, backblaze-b2
 , makeWrapper
 , gettext
 }:
 let
-  inherit (stdenv.lib.versions) majorMinor splitVersion;
-  majorMinorPatch = v: builtins.concatStringsSep "." (stdenv.lib.take 3 (splitVersion v));
+  pythonPackages = python3.pkgs;
+  inherit (lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.12.1612";
+  version = "0.8.23";
 
-  src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "06n58pwqg6kfigckjlslz2kx1lsykz1kn9a0r1cl8r3kn93zhk07";
+  src = fetchFromGitLab {
+    owner = "duplicity";
+    repo = "duplicity";
+    rev = "rel.${version}";
+    sha256 = "0my015zc8751smjgbsysmca7hvdm96cjw5zilqn3zq971nmmrksb";
   };
 
   patches = [
@@ -33,58 +35,67 @@ pythonPackages.buildPythonApplication rec {
     # Our Python infrastructure runs test in installCheckPhase so we need
     # to make the testing code stop assuming it is run from the source directory.
     ./use-installed-scripts-in-test.patch
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
+    # Broken on Linux in Nix' build environment
     ./linux-disable-timezone-test.patch
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  preConfigure = ''
+    # fix version displayed by duplicity --version
+    # see SourceCopy in setup.py
+    ls
+    for i in bin/*.1 duplicity/__init__.py; do
+      substituteInPlace "$i" --replace '$version' "${version}"
+    done
+  '';
 
   nativeBuildInputs = [
     makeWrapper
     gettext
     pythonPackages.wrapPython
+    pythonPackages.setuptools-scm
   ];
   buildInputs = [
     librsync
   ];
 
-  propagatedBuildInputs = [
-    backblaze-b2
-  ] ++ (with pythonPackages; [
-    boto
+  pythonPath = with pythonPackages; [
+    b2sdk
+    boto3
     cffi
     cryptography
     ecdsa
     idna
     pygobject3
     fasteners
-    ipaddress
     lockfile
     paramiko
     pyasn1
     pycrypto
-    pydrive
+    pydrive2
     future
-  ] ++ stdenv.lib.optionals (!isPy3k) [
-    enum
-  ]);
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnupg # Add 'gpg' to PATH.
     gnutar # Add 'tar' to PATH.
     librsync # Add 'rdiff' to PATH.
     par2cmdline # Add 'par2' to PATH.
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    utillinux # Add 'setsid' to PATH.
+  ] ++ lib.optionals stdenv.isLinux [
+    util-linux # Add 'setsid' to PATH.
   ] ++ (with pythonPackages; [
     lockfile
     mock
     pexpect
     pytest
-    pytestrunner
+    pytest-runner
   ]);
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
+      --prefix PATH : "${lib.makeBinPath [ gnupg ncftp rsync ]}"
   '';
 
   preCheck = ''
@@ -100,7 +111,10 @@ pythonPackages.buildPythonApplication rec {
 
     # Don't run developer-only checks (pep8, etc.).
     export RUN_CODE_TESTS=0
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+
+    # check version string
+    duplicity --version | grep ${version}
+  '' + lib.optionalString stdenv.isDarwin ''
     # Work around the following error when running tests:
     # > Max open files of 256 is too low, should be >= 1024.
     # > Use 'ulimit -n 1024' or higher to correct.
@@ -112,11 +126,10 @@ pythonPackages.buildPythonApplication rec {
   # > OSError: out of pty devices
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = "https://www.nongnu.org/duplicity";
+    homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;
   };
 }

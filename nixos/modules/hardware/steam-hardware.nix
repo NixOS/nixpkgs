@@ -13,7 +13,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable udev rules for Steam hardware such as the Steam Controller, other supported controllers and the HTC Vive";
+      description = lib.mdDoc "Enable udev rules for Steam hardware such as the Steam Controller, other supported controllers and the HTC Vive";
     };
   };
 

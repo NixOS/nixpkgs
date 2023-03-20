@@ -2,65 +2,124 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
-, pythonAtLeast
+# install_requires
 , attrs
-, chardet
+, charset-normalizer
 , multidict
 , async-timeout
 , yarl
-, idna-ssl
+, frozenlist
+, aiosignal
+, aiodns
+, brotli
+, faust-cchardet
+, asynctest
 , typing-extensions
-, pytestrunner
-, pytest
-, gunicorn
-, pytest-timeout
+, idna-ssl
+# tests_require
 , async_generator
-, pytest_xdist
-, pytestcov
-, pytest-mock
-, trustme
-, brotlipy
 , freezegun
+, gunicorn
+, pytest-mock
+, pytestCheckHook
+, re-assert
+, trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.6.2";
-  # https://github.com/aio-libs/aiohttp/issues/4525 python3.8 failures
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
+  version = "3.8.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
+    hash = "sha256-vy4akWLB5EG/gFof0WbiSdV0ygTgOzT5fikodp6Rq1w=";
   };
 
-  checkInputs = [
-    pytestrunner pytest gunicorn async_generator pytest_xdist
-    pytest-mock pytestcov trustme brotlipy freezegun
+  patches = [
+    (fetchpatch {
+      # https://github.com/aio-libs/aiohttp/pull/7178
+      url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
+      hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
+    })
   ];
 
-  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
+  postPatch = ''
+    sed -i '/--cov/d' setup.cfg
 
-  # disable tests which attempt to do loopback connections
-  checkPhase = ''
-    cd tests
-    pytest -k "not get_valid_log_format_exc \
-               and not test_access_logger_atoms \
-               and not aiohttp_request_coroutine \
-               and not server_close_keepalive_connection \
-               and not connector \
-               and not client_disconnect \
-               and not handle_keepalive_on_closed_connection \
-               and not proxy_https_bad_response \
-               and not partially_applied_handler \
-               ${lib.optionalString stdenv.is32bit "and not test_cookiejar"} \
-               and not middleware" \
-      --ignore=test_connector.py
+    substituteInPlace setup.cfg \
+      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
 
+  propagatedBuildInputs = [
+    attrs
+    charset-normalizer
+    multidict
+    async-timeout
+    yarl
+    typing-extensions
+    frozenlist
+    aiosignal
+    aiodns
+    brotli
+    faust-cchardet
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    idna-ssl
+  ];
+
+  nativeCheckInputs = [
+    async_generator
+    freezegun
+    gunicorn
+    pytest-mock
+    pytestCheckHook
+    re-assert
+  ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+    # Optional test dependency. Depends indirectly on pyopenssl, which is
+    # broken on aarch64-darwin.
+    trustme
+  ];
+
+  disabledTests = [
+    # Disable tests that require network access
+    "test_client_session_timeout_zero"
+    "test_mark_formdata_as_processed"
+    "test_requote_redirect_url_default"
+    # Disable tests that trigger deprecation warnings in pytest
+    "test_async_with_session"
+    "test_session_close_awaitable"
+    "test_close_run_until_complete_not_deprecated"
+  ] ++ lib.optionals stdenv.is32bit [
+    "test_cookiejar"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_close"
+  ];
+
+  disabledTestPaths = [
+    "test_proxy_functional.py" # FIXME package proxy.py
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  # aiohttp in current folder shadows installed version
+  # Probably because we run `python -m pytest` instead of `pytest` in the hook.
+  preCheck = ''
+    cd tests
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+   '';
+
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";

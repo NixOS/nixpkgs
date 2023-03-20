@@ -1,31 +1,87 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3.pkgs;
+
+buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.3.22";
-
-  propagatedBuildInputs = with python3Packages; [ requests tldextract future cryptography pyyaml boto3 zeep xmltodict beautifulsoup4 dnspython pynamecheap softlayer transip localzone ];
-
-  checkInputs = with python3Packages; [ pytest pytestcov pytest_xdist vcrpy mock ];
-
-  checkPhase = ''
-    pytest --ignore=lexicon/tests/providers/test_auto.py
-  '';
+  version = "3.11.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1adwqglh3lrx04y0f6slp1l97xzbsqgw0v5i4jll3a54aqyzfz0a";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TySgIxBEl2RolndAkEN4vCIDKaI48vrh2ocd+CTn7Ow=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    beautifulsoup4
+    cryptography
+    importlib-metadata
+    pyyaml
+    requests
+    tldextract
+  ];
+
+  passthru.optional-dependencies = {
+    route53 = [
+      boto3
+    ];
+    localzone = [
+      localzone
+    ];
+    softlayer = [
+      softlayer
+    ];
+    gransy = [
+      zeep
+    ];
+    ddns = [
+      dnspython
+    ];
+    oci = [
+      oci
+    ];
+    full = [
+      boto3
+      dnspython
+      localzone
+      oci
+      softlayer
+      zeep
+    ];
+  };
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+    pytest-xdist
+    vcrpy
+  ] ++ passthru.optional-dependencies.full;
+
+  disabledTestPaths = [
+    # Tests require network access
+    "lexicon/tests/providers/test_auto.py"
+    # Tests require an additional setup
+    "lexicon/tests/providers/test_localzone.py"
+  ];
+
+  pythonImportsCheck = [
+    "lexicon"
+  ];
+
   meta = with lib; {
-    description = "Manipulate DNS records on various DNS providers in a standardized way.";
+    description = "Manipulate DNS records of various DNS providers in a standardized way";
     homepage = "https://github.com/AnalogJ/lexicon";
-    maintainers = with maintainers; [ flyfloh ];
+    changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    maintainers = with maintainers; [ flyfloh ];
   };
 }

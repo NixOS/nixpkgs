@@ -1,9 +1,9 @@
-{ fetchFromGitHub, stdenv, lib, pkgconfig, autoreconfHook
+{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre
-, ldns, libedit, yasm, which, libsndfile, libtiff
+, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
+, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
 
-, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
+, callPackage
 
 , SystemConfiguration
 
@@ -13,9 +13,7 @@
 
 let
 
-availableModules = import ./modules.nix {
-  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
-};
+availableModules = callPackage ./modules.nix { };
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
@@ -90,31 +88,48 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.3";
+  version = "1.10.9";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rp4sxqxd2wsb5iyv0mh11l16zxvh7rbgfg0vcgns823gvh8lqai";
+    sha256 = "sha256-65DH2HxiF8wqzmzbIqaQZjSa/JPERHIS2FW6F18c6Pw=";
   };
+
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
       --replace AS=\''${AS} AS=yasm
+
+    # Disable advertisement banners
+    for f in src/include/cc.h libs/esl/src/include/cc.h; do
+      {
+        echo 'const char *cc = "";'
+        echo 'const char *cc_s = "";'
+      } > $f
+    done
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
   buildInputs = [
-    openssl ncurses gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which
+    openssl ncurses gnutls readline libjpeg
+    sqlite pcre speex ldns libedit
     libsndfile libtiff
+    libuuid libxcrypt
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  # Using c++14 because of build error
+  # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
+  CXXFLAGS = "-std=c++14";
+
+  CFLAGS = "-D_ANSI_SOURCE";
 
   hardeningDisable = [ "format" ];
 
@@ -135,8 +150,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
-    license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ misuzu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.mpl11;
+    maintainers = with lib.maintainers; [ misuzu ];
+    platforms = with lib.platforms; unix;
+    broken = stdenv.isDarwin;
   };
 }

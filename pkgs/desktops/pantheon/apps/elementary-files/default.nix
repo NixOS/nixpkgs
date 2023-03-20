@@ -1,10 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, fetchpatch
+, nix-update-script
+, pkg-config
 , meson
 , ninja
-, gettext
 , vala
 , python3
 , desktop-file-utils
@@ -12,50 +13,47 @@
 , gtk3
 , glib
 , libgee
+, libhandy
 , granite
 , libnotify
-, libunity
 , pango
-, plank
+, elementary-dock
 , bamf
 , sqlite
-, libdbusmenu-gtk3
 , zeitgeist
-, glib-networking
-, elementary-icon-theme
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.4.2";
-
-  repoName = "files";
+  version = "6.3.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "files";
     rev = version;
-    sha256 = "1n18b3m3vgvmmgpfbgnfnz0z98bkgbfrfkx25jqbwsdnwrlb4li6";
+    sha256 = "sha256-DS39jCeN+FFiEqJqxa5F2XRKF7SJsm2qi5KKb79guKo=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Avoid crash due to ref counting issues in Directory cache
+    # https://github.com/elementary/files/pull/2149
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/6a0d16e819dea2d0cd2d622414257da9433afe2f.patch";
+      sha256 = "sha256-ijuSMZzVbSwWMWsK24A/24NfxjxgK/BU2qZlq6xLBEU=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    gettext
-    glib-networking
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -63,39 +61,37 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
-    elementary-icon-theme
+    elementary-dock
+    glib
     granite
     gtk3
     libcanberra
     libcloudproviders
-    libdbusmenu-gtk3
     libgee
     libgit2-glib
+    libhandy
     libnotify
-    libunity
     pango
-    plank
     sqlite
+    systemd
     zeitgeist
-  ];
-
-  patches = [
-    ./hardcode-gsettings.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace filechooser-module/FileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.files";
   };
 }

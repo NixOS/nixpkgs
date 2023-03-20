@@ -50,7 +50,7 @@ sub getDeps {
 # virtual dependencies.
 my %provides;
 
-foreach my $cdata (values %packages) {
+foreach my $cdata (sort {$a->{Package} cmp $b->{Package}} (values %packages)) {
     if (defined $cdata->{Provides}) {
         my @provides = getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}));
         foreach my $name (@provides) {
@@ -156,7 +156,7 @@ foreach my $pkgName (@order) {
     $cleanedName =~ s/~//g;
 
     print "    (fetchurl {\n";
-    print "      url = $urlPrefix/$cdata->{Filename};\n";
+    print "      url = \"$urlPrefix/$cdata->{Filename}\";\n";
     print "      sha256 = \"$cdata->{SHA256}\";\n";
     print "      name = \"$cleanedName\";\n" if $cleanedName ne $origName;
     print "    })\n";

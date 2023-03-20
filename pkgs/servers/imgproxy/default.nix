@@ -1,21 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, vips, gobject-introspection }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, vips, gobject-introspection
+, stdenv, libunwind }:
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "2.13.1";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    sha256 = "105mjlbzgv1c8argwgs0d9wm28m06nqi5hrk3358zg2jaa7ahaqf";
+    sha256 = "sha256-12yThmRsRW0RLNAgafZaciqJP5sRonyrkVSUf+LM7J0=";
     rev = "v${version}";
   };
 
-  vendorSha256 = "069if1ifsmdn5hrwybiifhnq6xzmdccq85mzi9v98iii18pzfwqx";
+  vendorHash = "sha256-6rEGuuw3UJyWeaIm9v5P8/V0Nxd9ySe0PCf0rWRDB9s=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gobject-introspection vips ];
+  buildInputs = [ gobject-introspection vips ]
+    ++ lib.optionals stdenv.isDarwin [ libunwind ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'
@@ -24,6 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Fast and secure on-the-fly image processing server written in Go";
     homepage = "https://imgproxy.net";
+    changelog = "https://github.com/imgproxy/imgproxy/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ paluh ];
   };

@@ -1,28 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi
-, cryptography, ecdsa
-, pytestrunner, pytestcov, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, pytestCheckHook
+, pythonOlder
+, sphinxHook
+, sphinx-rtd-theme
+, zope_interface
+}:
 
 buildPythonPackage rec {
-  pname = "PyJWT";
-  version = "1.7.1";
+  pname = "pyjwt";
+  version = "2.6.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
+    pname = "PyJWT";
+    inherit version;
+    hash = "sha256-aShcfjH8RPaKH+swnpSODfUyWdV5KV5s/isXkjKfBf0=";
   };
 
-  propagatedBuildInputs = [ cryptography ecdsa ];
-
-  checkInputs = [ pytestrunner pytestcov pytest ];
-
   postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=4.0.1,<5.0.0" "pytest"
+    sed -i '/types-cryptography/d' setup.cfg
   '';
 
-  # ecdsa changed internal behavior
-  checkPhase = ''
-    pytest tests -k 'not ec_verify_should_return_false_if_signature_invalid'
-  '';
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    zope_interface
+  ];
+
+  passthru.optional-dependencies.crypto = [
+    cryptography
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ (lib.flatten (lib.attrValues passthru.optional-dependencies));
+
+  pythonImportsCheck = [ "jwt" ];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";

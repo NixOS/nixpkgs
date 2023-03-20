@@ -1,22 +1,34 @@
-{ lib, fetchFromGitHub, rustPlatform,
-  libsodium, libseccomp, sqlite, pkgconfig }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libsodium
+, libseccomp
+, sqlite
+, pkg-config
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sn0int";
-  version = "0.18.2";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0b21b0ryq03zrhqailg2iajirn30l358aj3k44lfnravr4h9zwkj";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+LplLeczLS+9EG0tZsiEs162/65zMCZfDDEq0iYQrGY=";
   };
 
-  cargoSha256 = "1pvn0sc325b5fh29m2l6cack4qfssa4lp3zhyb1qzkb3fmw3lgcy";
+  cargoHash = "sha256-FpoRO2g+R+Fo146kM0W8b1LHTEBHbGXURoX5jJk7lqY=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ libsodium libseccomp sqlite ];
+  buildInputs = [
+    libsodium
+    libseccomp
+    sqlite
+  ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
   # in "checkPhase", hence fails in sandbox of "nix".
@@ -25,8 +37,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ xrelkd ];
+    changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab xrelkd ];
     platforms = platforms.linux;
   };
 }

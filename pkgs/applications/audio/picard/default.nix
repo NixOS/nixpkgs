@@ -1,4 +1,10 @@
-{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+{ lib
+, python3Packages
+, fetchFromGitHub
+, fetchpatch
+, gettext
+, chromaprint
+, qt5
 , enablePlayback ? true
 , gst_all_1
 }:
@@ -10,54 +16,56 @@ let
   else
     pythonPackages.pyqt5
   ;
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.3.2";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "sha256-rJbpoPjNMlw4diWjwNQ/DPo3rltvISU4kuRqBbvlBZ0=";
+    rev = "refs/tags/release-${version}";
+    sha256 = "sha256-ukqlAXGaqX89U77cM9Ux0RYquT31Ho8ri1Ue7S3+MwQ=";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
-    ++ stdenv.lib.optionals (pyqt5.multimediaEnabled) [
-      qt5.qtmultimedia.bin
-      gst_all_1.gstreamer
-      gst_all_1.gst-vaapi
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ]
+  ++ lib.optionals (pyqt5.multimediaEnabled) [
+    qt5.qtmultimedia.bin
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-vaapi
+    gst_all_1.gstreamer
+  ]
   ;
 
   propagatedBuildInputs = with pythonPackages; [
-    pyqt5
-    mutagen
     chromaprint
+    python-dateutil
     discid
+    fasteners
+    mutagen
+    pyqt5
+    markdown
+    pyjwt
+    pyyaml
   ];
-
-  prePatch = ''
-    # Pesky unicode punctuation.
-    substituteInPlace setup.cfg --replace "‘" "'"
-  '';
 
   # In order to spare double wrapping, we use:
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   ''
-    + stdenv.lib.optionalString (pyqt5.multimediaEnabled) ''
-      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
-    ''
+  + lib.optionalString (pyqt5.multimediaEnabled) ''
+    makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  ''
   ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://picard.musicbrainz.org/";
+    changelog = "https://picard.musicbrainz.org/changelog/";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

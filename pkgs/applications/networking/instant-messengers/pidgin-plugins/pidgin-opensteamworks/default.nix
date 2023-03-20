@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, glib, json-glib, nss, nspr
+{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, glib, json-glib, nss, nspr
 , libsecret
 } :
 
 stdenv.mkDerivation rec {
   pname = "pidgin-opensteamworks";
-  version = "1.7";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "pidgin-opensteamworks";
     rev = version;
-    sha256 = "0zxd45g9ycw5kmm4i0800jnqg1ms2gbqcld6gkyv6n3ac1wxizpj";
+    sha256 = "sha256-VWsoyFG+Ro+Y6ngSTMQ7yBYf6awCMNOc6U0WqNeg/jU=";
   };
 
   sourceRoot = "source/steam-mobile";
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
     pidgin glib json-glib nss nspr libsecret
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/EionRobb/pidgin-opensteamworks";
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;

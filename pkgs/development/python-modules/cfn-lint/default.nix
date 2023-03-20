@@ -1,45 +1,95 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
-, pyyaml
-, six
-, requests
 , aws-sam-translator
-, importlib-metadata
-, importlib-resources
+, jschema-to-python
 , jsonpatch
 , jsonschema
-, pathlib2
+, junit-xml
+, networkx
+, pyyaml
+, sarif-om
 , setuptools
+, six
+, mock
+, pydot
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.26.2";
+  version = "0.73.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5449313b5f176024bd5fd6ebe69ce986a2d9b8a9d6a147b2d442c8d9fa99a6c5";
+  src = fetchFromGitHub {
+    owner = "aws-cloudformation";
+    repo = "cfn-python-lint";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CNB5LrXllGxy99NjCrbjkUXUpJ72U3pUnWqrqkOiCG8=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "jsonschema~=3.0" "jsonschema>=3.0"
+  '';
+
   propagatedBuildInputs = [
-    pyyaml
-    six
-    requests
     aws-sam-translator
+    jschema-to-python
     jsonpatch
     jsonschema
-    pathlib2
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
+    junit-xml
+    networkx
+    pyyaml
+    sarif-om
+    six
+  ];
 
-  # No tests included in archive
-  doCheck = false;
+  nativeCheckInputs = [
+    mock
+    pydot
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  disabledTests = [
+    # These tests depend on the current date, for example because of issues like this.
+    # This makes it possible for them to succeed on hydra and then begin to fail without
+    # any code changes.
+    # https://github.com/aws-cloudformation/cfn-python-lint/issues/1705
+    # See also: https://github.com/NixOS/nixpkgs/issues/108076
+    "TestQuickStartTemplates"
+    # requires git directory
+    "test_update_docs"
+    # Tests depend on network access (fails in getaddrinfo)
+    "test_update_resource_specs_python_2"
+    "test_update_resource_specs_python_3"
+    "test_sarif_formatter"
+  ];
+
+  pythonImportsCheck = [
+    "cfnlint"
+    "cfnlint.conditions"
+    "cfnlint.core"
+    "cfnlint.decode.node"
+    "cfnlint.decode.cfn_yaml"
+    "cfnlint.decode.cfn_json"
+    "cfnlint.decorators.refactored"
+    "cfnlint.graph"
+    "cfnlint.helpers"
+    "cfnlint.rules"
+    "cfnlint.runner"
+    "cfnlint.template"
+    "cfnlint.transform"
+  ];
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
+    changelog = "https://github.com/aws-cloudformation/cfn-python-lint/blob/master/CHANGELOG.md";
     license = licenses.mit;
   };
 }

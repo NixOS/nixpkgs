@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, gmp }:
+{ lib, gccStdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "cln";
   version = "1.3.6";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C/C++ library for numbers, a part of GiNaC";
     homepage = "https://www.ginac.de/CLN/";
     license = licenses.gpl2;

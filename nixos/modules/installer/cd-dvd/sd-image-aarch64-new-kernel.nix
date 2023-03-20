@@ -1,7 +1,14 @@
-{ pkgs, ... }:
-
+{ config, ... }:
 {
-  imports = [ ./sd-image-aarch64.nix ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  imports = [
+    ../sd-card/sd-image-aarch64-new-kernel-installer.nix
+  ];
+  config = {
+    warnings = [
+      ''
+      .../cd-dvd/sd-image-aarch64-new-kernel.nix is deprecated and will eventually be removed.
+      Please switch to .../sd-card/sd-image-aarch64-new-kernel-installer.nix, instead.
+      ''
+    ];
+  };
 }

@@ -1,42 +1,81 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose
-, parameterized
-, mock
-, glibcLocales
-, six
-, jdatetime
-, dateutil
-, umalqurra
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, python-dateutil
 , pytz
-, tzlocal
 , regex
-, ruamel_yaml }:
+, tzlocal
+, hijri-converter
+, convertdate
+, fasttext
+, langdetect
+, parameterized
+, pytestCheckHook
+, gitpython
+, parsel
+, requests
+, ruamel-yaml
+}:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.2";
+  version = "1.1.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e1eac8ef28de69a554d5fcdb60b172d526d61924b1a40afbbb08df459a36006b";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "scrapinghub";
+    repo = "dateparser";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KQCjXuBDBZduNYJITwk1qx7mBp8CJ95ZbFlhrFMkE8w=";
   };
 
-  checkInputs = [ nose mock parameterized six glibcLocales ];
-  preCheck =''
-    # skip because of missing convertdate module, which is an extra requirement
-    rm tests/test_jalali.py
-  '';
-
   propagatedBuildInputs = [
-    # install_requires
-    dateutil pytz regex tzlocal
-    # extra_requires
-    jdatetime ruamel_yaml umalqurra
+    python-dateutil
+    pytz
+    regex
+    tzlocal
   ];
 
+  passthru.optional-dependencies = {
+    calendars = [ hijri-converter convertdate ];
+    fasttext = [ fasttext ];
+    langdetect = [ langdetect ];
+  };
+
+  nativeCheckInputs = [
+    parameterized
+    pytestCheckHook
+    gitpython
+    parsel
+    requests
+    ruamel-yaml
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  preCheck = ''
+    export HOME="$TEMPDIR"
+  '';
+
+  # Upstream only runs the tests in tests/ in CI, others use git clone
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # access network
+    "test_custom_language_detect_fast_text_0"
+    "test_custom_language_detect_fast_text_1"
+  ];
+
+  pythonImportsCheck = [ "dateparser" ];
+
   meta = with lib; {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.rev}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

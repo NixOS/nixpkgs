@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
+, pkg-config
 , gettext
 , autoreconfHook
 , gmp
@@ -9,16 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fplll";
-  version = "5.3.2";
+  version = "5.4.4";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fplll";
     rev = version;
-    sha256 = "00iyz218ywspizjiimrjdcqvdqmrsb2367zyy3vkmypnf9i9l680";
+    sha256 = "sha256-+1EdNdmEk5tQDd1DXklPbEKC/Dr2yV2gwbtwBtZxpNM=";
   };
 
   nativeBuildInputs = [
+    pkg-config
     gettext
     autoreconfHook
   ];
@@ -28,8 +29,8 @@ stdenv.mkDerivation rec {
     mpfr
   ];
 
-  meta = with stdenv.lib; {
-    description = ''Lattice algorithms using floating-point arithmetic'';
+  meta = with lib; {
+    description = "Lattice algorithms using floating-point arithmetic";
     changelog = [
       # Some release notes are added to the github tags, though they are not
       # always complete.
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
       "https://groups.google.com/forum/#!searchin/fplll-devel/FPLLL$20${version}"
     ];
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [raskin timokau];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

@@ -1,31 +1,32 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests-cache
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "tvdb_api";
-  version = "2.0";
+  version = "3.2.0-beta";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b1de28a5100121d91b1f6a8ec7e86f2c4bdf48fb22fab3c6fe21e7fb7346bf8f";
+  src = fetchFromGitHub {
+    owner = "dbr";
+    repo = "tvdb_api";
+    rev = "ce0382181a9e08a5113bfee0fed2c78f8b1e613f";
+    hash = "sha256-poUuwySr6+8U9PIHhqFaR7nXzh8kSaW7mZkuKTUJKj8=";
   };
 
   propagatedBuildInputs = [ requests-cache ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # requires network access
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple to use TVDB (thetvdb.com) API in Python";
     homepage = "https://github.com/dbr/tvdb_api";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];
   };
-
 }

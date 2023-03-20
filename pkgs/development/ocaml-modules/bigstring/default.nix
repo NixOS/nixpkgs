@@ -2,7 +2,9 @@
 
 buildDunePackage rec {
   pname = "bigstring";
-  version = "0.2";
+  version = "0.3";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.03";
 
@@ -10,10 +12,11 @@ buildDunePackage rec {
     owner = "c-cube";
     repo = "ocaml-bigstring";
     rev = version;
-    sha256 = "0ypdf29cmwmjm3djr5ygz8ls81dl41a4iz1xx5gbcdpbrdiapb77";
+    sha256 = "0bkxwdcswy80f6rmx5wjza92xzq4rdqsb4a9fm8aav8bdqx021n8";
   };
 
-  doCheck = true;
+  # Circular dependency with bigstring-unix
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/c-cube/ocaml-bigstring";

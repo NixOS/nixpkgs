@@ -1,29 +1,74 @@
-{ stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, buildPackages
+, callPackage
+, sqlite
+, libtiff
+, curl
+, gtest
+, nlohmann_json
+, python3
+, cacert
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
-  version = "6.3.1";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "1ildcp57qsa01kvv2qxd05nqw5mg0wfkksiv9l138dbhp0s7rkxp";
+    hash = "sha256-NC5H7ufIXit+PVDwNDhz5cv44fduTytsdmNOWyqDDYQ=";
   };
 
-  outputs = [ "out" "dev"];
+  patches = [
+    # https://github.com/OSGeo/PROJ/pull/3252
+    ./only-add-curl-for-static-builds.patch
+  ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  outputs = [ "out" "dev" ];
 
-  buildInputs = [ sqlite ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  doCheck = stdenv.is64bit;
+  buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [ cacert gtest ];
+
+  cmakeFlags = [
+    "-DUSE_EXTERNAL_GTEST=ON"
+    "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
+    "-DNLOHMANN_JSON_ORIGIN=external"
+    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
+  ];
+
+  preCheck =
+    let
+      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
+      ''
+        export HOME=$TMPDIR
+        export TMP=$TMPDIR
+        export ${libPathEnvVar}=$PWD/lib
+      '';
+
+  doCheck = true;
+
+  passthru.tests = {
+    python = python3.pkgs.pyproj;
+    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
+  };
+
+  meta = with lib; {
+    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/docs/source/news.rst";
     description = "Cartographic Projections Library";
-    homepage = "https://proj4.org";
+    homepage = "https://proj.org/";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ vbgl ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dotlambda ];
   };
-}
+})

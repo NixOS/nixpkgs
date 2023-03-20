@@ -8,7 +8,6 @@ let
   resilioSync = pkgs.resilio-sync;
 
   sharedFoldersRecord = map (entry: {
-    secret = entry.secret;
     dir = entry.directory;
 
     use_relay_server = entry.useRelayServer;
@@ -30,15 +29,45 @@ let
     download_limit = cfg.downloadLimit;
     upload_limit = cfg.uploadLimit;
     lan_encrypt_data = cfg.encryptLAN;
-  } // optionalAttrs cfg.enableWebUI {
+  } // optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; }
+    // optionalAttrs cfg.enableWebUI {
     webui = { listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}"; } //
       (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; }) //
       (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; }) //
-      (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; }) //
-      (optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; });
+      (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
   } // optionalAttrs (sharedFoldersRecord != []) {
     shared_folders = sharedFoldersRecord;
   }));
+
+  sharedFoldersSecretFiles = map (entry: {
+    dir = entry.directory;
+    secretFile = if builtins.hasAttr "secret" entry then
+      toString (pkgs.writeTextFile {
+        name = "secret-file";
+        text = entry.secret;
+      })
+    else
+      entry.secretFile;
+  }) cfg.sharedFolders;
+
+  runConfigPath = "/run/rslsync/config.json";
+
+  createConfig = pkgs.writeShellScriptBin "create-resilio-config" (
+    if cfg.sharedFolders != [ ] then ''
+      ${pkgs.jq}/bin/jq \
+        '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
+        ${
+          lib.concatMapStringsSep " \\\n  "
+          (entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"'')
+          sharedFoldersSecretFiles
+        } \
+        <${configFile} \
+        >${runConfigPath}
+    '' else ''
+      # no secrets, passing through config
+      cp ${configFile} ${runConfigPath};
+    ''
+  );
 
 in
 {
@@ -47,7 +76,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, start the Resilio Sync daemon. Once enabled, you can
           interact with the service through the Web UI, or configure it in your
           NixOS configuration.
@@ -58,7 +87,8 @@ in
         type = types.str;
         example = "Voltron";
         default = config.networking.hostName;
-        description = ''
+        defaultText = literalExpression "config.networking.hostName";
+        description = lib.mdDoc ''
           Name of the Resilio Sync device.
         '';
       };
@@ -67,7 +97,7 @@ in
         type = types.int;
         default = 0;
         example = 44444;
-        description = ''
+        description = lib.mdDoc ''
           Listening port. Defaults to 0 which randomizes the port.
         '';
       };
@@ -75,7 +105,7 @@ in
       checkForUpdates = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Determines whether to check for updates and alert the user
           about them in the UI.
         '';
@@ -84,7 +114,7 @@ in
       useUpnp = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Use Universal Plug-n-Play (UPnP)
         '';
       };
@@ -93,7 +123,7 @@ in
         type = types.int;
         default = 0;
         example = 1024;
-        description = ''
+        description = lib.mdDoc ''
           Download speed limit. 0 is unlimited (default).
         '';
       };
@@ -102,16 +132,16 @@ in
         type = types.int;
         default = 0;
         example = 1024;
-        description = ''
+        description = lib.mdDoc ''
           Upload speed limit. 0 is unlimited (default).
         '';
       };
 
       httpListenAddr = mkOption {
         type = types.str;
-        default = "0.0.0.0";
-        example = "1.2.3.4";
-        description = ''
+        default = "[::1]";
+        example = "0.0.0.0";
+        description = lib.mdDoc ''
           HTTP address to bind to.
         '';
       };
@@ -119,7 +149,7 @@ in
       httpListenPort = mkOption {
         type = types.int;
         default = 9000;
-        description = ''
+        description = lib.mdDoc ''
           HTTP port to bind on.
         '';
       };
@@ -128,7 +158,7 @@ in
         type = types.str;
         example = "allyourbase";
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           HTTP web login username.
         '';
       };
@@ -137,7 +167,7 @@ in
         type = types.str;
         example = "arebelongtous";
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           HTTP web login password.
         '';
       };
@@ -145,23 +175,23 @@ in
       encryptLAN = mkOption {
         type = types.bool;
         default = true;
-        description = "Encrypt LAN data.";
+        description = lib.mdDoc "Encrypt LAN data.";
       };
 
       enableWebUI = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Web UI for administration. Bound to the specified
-          <literal>httpListenAddress</literal> and
-          <literal>httpListenPort</literal>.
+          `httpListenAddress` and
+          `httpListenPort`.
           '';
       };
 
       storagePath = mkOption {
         type = types.path;
         default = "/var/lib/resilio-sync/";
-        description = ''
+        description = lib.mdDoc ''
           Where BitTorrent Sync will store it's database files (containing
           things like username info and licenses). Generally, you should not
           need to ever change this.
@@ -171,20 +201,21 @@ in
       apiKey = mkOption {
         type = types.str;
         default = "";
-        description = "API key, which enables the developer API.";
+        description = lib.mdDoc "API key, which enables the developer API.";
       };
 
       directoryRoot = mkOption {
         type = types.str;
         default = "";
         example = "/media";
-        description = "Default directory to add folders in the web UI.";
+        description = lib.mdDoc "Default directory to add folders in the web UI.";
       };
 
       sharedFolders = mkOption {
         default = [];
+        type = types.listOf (types.attrsOf types.anything);
         example =
-          [ { secret         = "AHMYFPCQAHBM7LQPFXQ7WV6Y42IGUXJ5Y";
+          [ { secretFile     = "/run/resilio-secret";
               directory      = "/home/user/sync_test";
               useRelayServer = true;
               useTracker     = true;
@@ -197,25 +228,22 @@ in
               ];
             }
           ];
-        description = ''
+        description = lib.mdDoc ''
           Shared folder list. If enabled, web UI must be
-          disabled. Secrets can be generated using <literal>rslsync
-          --generate-secret</literal>. Note that this secret will be
-          put inside the Nix store, so it is realistically not very
-          secret.
+          disabled. Secrets can be generated using `rslsync --generate-secret`.
 
           If you would like to be able to modify the contents of this
           directories, it is recommended that you make your user a
-          member of the <literal>resilio</literal> group.
+          member of the `rslsync` group.
 
           Directories in this list should be in the
-          <literal>resilio</literal> group, and that group must have
+          `rslsync` group, and that group must have
           write access to the directory. It is also recommended that
-          <literal>chmod g+s</literal> is applied to the directory
+          `chmod g+s` is applied to the directory
           so that any sub directories created will also belong to
-          the <literal>resilio</literal> group. Also,
-          <literal>setfacl -d -m group:resilio:rwx</literal> and
-          <literal>setfacl -m group:resilio:rwx</literal> should also
+          the `rslsync` group. Also,
+          `setfacl -d -m group:rslsync:rwx` and
+          `setfacl -m group:rslsync:rwx` should also
           be applied so that the sub directories are writable by
           the group.
         '';
@@ -254,10 +282,14 @@ in
         Restart   = "on-abort";
         UMask     = "0002";
         User      = "rslsync";
+        RuntimeDirectory = "rslsync";
+        ExecStartPre = "${createConfig}/bin/create-resilio-config";
         ExecStart = ''
-          ${resilioSync}/bin/rslsync --nodaemon --config ${configFile}
+          ${resilioSync}/bin/rslsync --nodaemon --config ${runConfigPath}
         '';
       };
     };
   };
+
+  meta.maintainers = with maintainers; [ jwoudenberg ];
 }

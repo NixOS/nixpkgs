@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''xembed'';
-  version = ''clx-20191130-git'';
+  baseName = "xembed";
+  version = "clx-20191130-git";
 
-  description = ''An implementation of the XEMBED protocol that integrates with CLX.'';
+  description = "An implementation of the XEMBED protocol that integrates with CLX.";
 
   deps = [ args."clx" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clx-xembed/2019-11-30/clx-xembed-20191130-git.tgz'';
-    sha256 = ''1ik5gxzhn9j7827jg6g8rk2wa5jby11n2db24y6wrf0ldnbpj7jd'';
+    url = "http://beta.quicklisp.org/archive/clx-xembed/2019-11-30/clx-xembed-20191130-git.tgz";
+    sha256 = "1ik5gxzhn9j7827jg6g8rk2wa5jby11n2db24y6wrf0ldnbpj7jd";
   };
 
   packageName = "xembed";

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, gtk3, gnome3, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchurl, gtk3, gnome, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "humanity-icon-theme";
-  version = "0.6.15";
+  version = "0.6.16";
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.tar.xz";
-    sha256 = "19ja47468s3jfabvakq9wknyfclfr31a9vd11p3mhapfq8jv9g4x";
+    sha256 = "sha256-AyHl4zMyFE2/5Cui3Y/SB1yEUuyafDdybFPrafo4Ki0=";
   };
 
   nativeBuildInputs = [
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     hicolor-icon-theme
   ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Humanity icons from Ubuntu";
     homepage = "https://launchpad.net/humanity/";
     license = licenses.gpl2;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "mill";
-  version = "0.6.2";
+  version = "0.10.11";
 
   src = fetchurl {
-    url = "https://github.com/lihaoyi/mill/releases/download/${version}/${version}";
-    sha256 = "1s2ndry0mpjs8hy8rrxnyarkzqjz7zzh5h541v3fkzgc9rsd6ifb";
+    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
+    hash = "sha256-B47C7sqOqiHa/2kC5lk/J1pXK61l1M5umVKaCfVO7cc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -15,19 +15,28 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
+  # this is mostly downloading a pre-built artifact
+  preferLocal = true;
+
   installPhase = ''
     runHook preInstall
     install -Dm555 "$src" "$out/bin/.mill-wrapped"
     # can't use wrapProgram because it sets --argv0
     makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
       --prefix PATH : "${jre}/bin" \
-      --set JAVA_HOME "${jre}" \
-      --set MILL_VERSION "${version}"
+      --set JAVA_HOME "${jre}"
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://www.lihaoyi.com/mill";
+  doInstallCheck = true;
+  # The default release is a script which will do an impure download
+  # just ensure that the application can run without network
+  installCheckPhase = ''
+    $out/bin/mill --help > /dev/null
+  '';
+
+  meta = with lib; {
+    homepage = "https://com-lihaoyi.github.io/mill/";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
     longDescription = ''
@@ -38,6 +47,6 @@ stdenv.mkDerivation rec {
       modules (written in Java or Scala) or through an external subprocesses.
     '';
     maintainers = with maintainers; [ scalavision ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

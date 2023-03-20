@@ -1,46 +1,70 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, six
-, pytest
 , mock
 , parameterized
-, isPy35
+, pyelftools
+, pytestCheckHook
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "0.8.0";
+  version = "1.27.0";
+  format = "setuptools";
 
-  # No tests available in PyPI tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
-    rev = "v${version}";
-    sha256 = "1akiv92cd7ciky0aay94lh9azr73jajn0x0x6ywaf3qm5c4hyvys";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-axg1kwzH6ZRQwyI80oNPjP8ApjAEZ5u0iCIadkEP/Ps=";
   };
-
-  # Package is not compatible with Python 3.5
-  disabled = isPy35;
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
     mock
     parameterized
+    pyelftools
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    pytest tests/functional -k 'not can_invoke_pip'
-  '';
+  disabledTests = [
+    # CLI don't work in the sandbox
+    "test_run_hello_workflow"
+    # Don't tests integrations
+    "TestCustomMakeWorkflow"
+    "TestDotnet31"
+    "TestDotnet6"
+    "TestGoWorkflow"
+    "TestJavaGradle"
+    "TestJavaMaven"
+    "TestNodejsNpmWorkflow"
+    "TestNodejsNpmWorkflowWithEsbuild"
+    "TestPipRunner"
+    "TestPythonPipWorkflow"
+    "TestRubyWorkflow"
+    "TestRustCargo"
+    # Tests which are passing locally but not on Hydra
+    "test_copy_dependencies_action_1_multiple_files"
+    "test_move_dependencies_action_1_multiple_files"
+  ];
+
+  pythonImportsCheck = [
+    "aws_lambda_builders"
+  ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "Tool to compile, build and package AWS Lambda functions";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
-    description = "A tool to compile, build and package AWS Lambda functions";
+    changelog = "https://github.com/aws/aws-lambda-builders/releases/tag/v${version}";
     longDescription = ''
       Lambda Builders is a Python library to compile, build and package
       AWS Lambda functions for several runtimes & frameworks.

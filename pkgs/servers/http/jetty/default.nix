@@ -1,25 +1,26 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "jetty";
-  version = "9.4.26.v20200117";
+  version = "11.0.13";
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
-    name = "jetty-distribution-${version}.tar.gz";
-    sha256 = "0wgh7vap0h6gkz6pk8iycvhwmybyxv25ssinwxxrnzk8jg25g89i";
+    url = "mirror://maven/org/eclipse/jetty/jetty-home/${version}/jetty-home-${version}.tar.gz";
+    sha256 = "sha256-RZryj2AJKKv13iwRBVwushOpPFLUj7wd4JIgJ6JVIz4=";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out
-    mv etc lib modules start.ini start.jar $out
+    mv etc lib modules start.jar $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A Web server and javax.servlet container";
     homepage = "https://www.eclipse.org/jetty/";
-    platforms = stdenv.lib.platforms.all;
-    license = [ stdenv.lib.licenses.asl20 stdenv.lib.licenses.epl10 ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = with licenses; [ asl20 epl10 ];
+    maintainers = with maintainers; [ emmanuelrosa ];
   };
 }

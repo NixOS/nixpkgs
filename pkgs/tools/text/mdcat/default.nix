@@ -1,38 +1,61 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, Security, ansi2html }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, asciidoctor
+, openssl
+, Security
+, ansi2html
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.17.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
-    repo = pname;
+    repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "0kkpacb31d0rg4774a63x3njifn3813d8r8vc8skzv4ki7gvhxkr";
+    sha256 = "sha256-1TP91mZ5f3x2Q0Qv/p+aE+rvWEW3zVArcgELLNWi4JY=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "1pljgnckardy3j81im6k5dssz794c7vjx1dfr7950ndhrzwv7p22";
+  cargoSha256 = "sha256-aqOaU9K+dHwyqPqRnD+Gw2enmHF9eJAAHeP7sGBiWtg=";
 
-  checkInputs = [ ansi2html ];
-  checkPhase = ''
-    # Skip tests that use the network and that include files.
-    cargo test -- --skip terminal::iterm2 \
-      --skip magic::tests::detect_mimetype_of_svg_image \
-      --skip magic::tests::detect_mimetype_of_png_image \
-      --skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length \
-      --skip magic::tests::detect_mimetype_of_magic_param_bytes_max_length \
-      --skip resources::tests::read_url_with_http_url_fails_when_status_404 \
-      --skip resources::tests::read_url_with_http_url_returns_content_when_status_200
+  nativeCheckInputs = [ ansi2html ];
+  # Skip tests that use the network and that include files.
+  checkFlags = [
+    "--skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length"
+    "--skip magic::tests::detect_mimetype_of_magic_param_bytes_max_length"
+    "--skip magic::tests::detect_mimetype_of_png_image"
+    "--skip magic::tests::detect_mimetype_of_svg_image"
+    "--skip resources::tests::read_url_with_http_url_fails_when_size_limit_is_exceeded"
+    "--skip resources::tests::read_url_with_http_url_fails_when_status_404"
+    "--skip resources::tests::read_url_with_http_url_returns_content_when_status_200"
+    "--skip iterm2_tests_render_md_samples_images_md"
+  ];
+
+  postInstall = ''
+    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+    ln -sr $out/bin/{mdcat,mdless}
+
+    for bin in mdcat mdless; do
+      installShellCompletion \
+        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
+        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
+        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+    done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cat for markdown";
     homepage = "https://github.com/lunaryorn/mdcat";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.all;
+    license = with licenses; [ mpl20 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

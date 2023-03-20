@@ -2,18 +2,19 @@
 
 buildDunePackage rec {
   pname = "metrics";
-  version = "0.1.0";
+  version = "0.4.0";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/metrics/releases/download/${version}/metrics-${version}.tbz";
-    sha256 = "0jy88anrx3rh19046rrbrjmx922zvz3wlqkk8asilqv9pbvpnp1a";
+    url = "https://github.com/mirage/metrics/releases/download/v${version}/metrics-${version}.tbz";
+    sha256 = "sha256-kbh1WktQkDcXE8O1WRm+vtagVfSql8S5gr0bXn/jia8=";
   };
 
   propagatedBuildInputs = [ fmt ];
 
-  checkInputs = lib.optional doCheck alcotest;
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

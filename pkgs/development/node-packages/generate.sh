@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
+
 set -eu -o pipefail
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-node2nix=$(nix-build ../../.. --no-out-link -A nodePackages.node2nix)
+cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-cd ${DIR}
+node2nix=$(nix-build ../../.. -A nodePackages.node2nix)
+
 rm -f ./node-env.nix
-for version in 10 12 13; do
-  "${node2nix}/bin/node2nix" --nodejs-$version -i node-packages-v$version.json -o node-packages-v$version.nix -c composition-v$version.nix
-done
+
+# Track the latest active nodejs LTS here: https://nodejs.org/en/about/releases/
+"${node2nix}/bin/node2nix" \
+    -i node-packages.json \
+    -o node-packages.nix \
+    -c composition.nix \
+    --pkg-name nodejs-18_x
+
+# using --no-out-link in nix-build argument would cause the
+# gc to run before the script finishes
+# which would cause a failure
+# it's safer to just remove the link after the script finishes
+# see https://github.com/NixOS/nixpkgs/issues/112846 for more details
+rm ./result

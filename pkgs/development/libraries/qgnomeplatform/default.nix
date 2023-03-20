@@ -1,26 +1,30 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
-, gtk3
+, nix-update-script
+, cmake
+, pkg-config
+, adwaita-qt
+, adwaita-qt6
 , glib
+, gtk3
 , qtbase
-, qmake
-, qtx11extras
+, qtwayland
 , pantheon
 , substituteAll
 , gsettings-desktop-schemas
+, useQt6 ? false
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.6.0";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "0fb1mzs6sx76bl7f0z2xhc0jq6y1c55jrw1v3na8577is6g5ji0a";
+    sha256 = "sha256-DaIBtWmce+58OOhqFG5802c3EprBAtDXhjiSPIImoOM=";
   };
 
   patches = [
@@ -32,36 +36,40 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
-    qmake
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
     glib
     gtk3
     qtbase
-    qtx11extras
+    qtwayland
+  ] ++ lib.optionals (!useQt6) [
+    adwaita-qt
+  ] ++ lib.optionals useQt6 [
+    adwaita-qt6
   ];
 
-  postPatch = ''
-    # Fix plugin dir
-    substituteInPlace decoration/decoration.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-    substituteInPlace theme/theme.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-  '';
+  # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
+  dontWrapQtApps = true;
+
+  cmakeFlags = [
+    "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
+    "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ] ++ lib.optionals useQt6 [
+    "-DUSE_QT6=true"
+  ];
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.linux;
   };
 }

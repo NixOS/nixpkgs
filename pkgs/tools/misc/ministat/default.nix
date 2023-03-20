@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "ministat";
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp ministat.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple tool for statistical comparison of data sets";
     homepage = "https://git.decadent.org.uk/gitweb/?p=ministat.git";
     license = licenses.beerware;
     maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -2,15 +2,17 @@
 
 buildPythonPackage rec {
   pname = "Flask-Assets";
-  version = "0.12";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ivqsihk994rxw58vdgzrx4d77d7lpzjm4qxb38hjdgvi5xm4cb0";
+    sha256 = "1dfdea35e40744d46aada72831f7613d67bf38e8b20ccaaa9e91fdc37aa3b8c2";
   };
 
   patchPhase = ''
     substituteInPlace tests/test_integration.py --replace 'static_path=' 'static_url_path='
+    substituteInPlace tests/test_integration.py --replace "static_folder = '/'" "static_folder = '/x'"
+    substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
   '';
 
   propagatedBuildInputs = [ flask webassets flask_script nose ];

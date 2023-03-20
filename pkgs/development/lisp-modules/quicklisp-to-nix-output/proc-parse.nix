@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''proc-parse'';
-  version = ''20190813-git'';
+  baseName = "proc-parse";
+  version = "20190813-git";
 
-  description = ''Procedural vector parser'';
+  description = "Procedural vector parser";
 
   deps = [ args."alexandria" args."babel" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/proc-parse/2019-08-13/proc-parse-20190813-git.tgz'';
-    sha256 = ''126l7mqxjcgw2limddgrdq63cdhwkhaxabxl9l0bjadf92nczg0j'';
+    url = "http://beta.quicklisp.org/archive/proc-parse/2019-08-13/proc-parse-20190813-git.tgz";
+    sha256 = "126l7mqxjcgw2limddgrdq63cdhwkhaxabxl9l0bjadf92nczg0j";
   };
 
   packageName = "proc-parse";

@@ -1,21 +1,21 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-MPD";
-  version = "3.0.0";
+  version = "3.3.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0prjli4352521igcsfcgmk97jmzgbfy4ik8hnli37wgvv252wiac";
+    sha256 = "sha256-CeLMRqj9cwBvQrOx7XHVV8MjDjwOosONVlsN2o+vTVM=";
   };
 
-  propagatedBuildInputs = [mopidy];
+  propagatedBuildInputs = [ mopidy ];
 
   # no tests implemented
   doCheck = false;
   pythonImportsCheck = [ "mopidy_mpd" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-mpd";
     description = "Mopidy extension for controlling playback from MPD clients";
     license = licenses.asl20;

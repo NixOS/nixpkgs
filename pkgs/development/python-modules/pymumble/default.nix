@@ -1,31 +1,54 @@
-{ buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  lib,
-  opuslib,
-  protobuf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, opuslib
+, protobuf
+, pytestCheckHook
+, pycrypto
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymumble";
-  version = "0.3.1";
-  disabled = isPy27;
+  version = "1.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "azlux";
     repo = "pymumble";
-    rev = "1dd6d6d4df2fdef33202f17e2acf3ba9678a5737";
-    sha256 = "1r1sch8xrpbzffsb72lhp5xjr3ac3xb599n44vsfmaam3xklz6vz";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NMp1yZ+R9vmne7old7z9UvcxSi6C044g68ZQsofT0gA=";
   };
 
-  propagatedBuildInputs = [ opuslib protobuf ];
+  postPatch = ''
+    # Changes all `library==x.y.z` statements to just `library`
+    # So that we aren't constrained to a specific version
+    sed -i 's/\(.*\)==.*/\1/' requirements.txt
+  '';
 
-  pythonImportsCheck = [ "pymumble_py3" ];
+  propagatedBuildInputs = [
+    opuslib
+    protobuf
+  ];
+
+  nativeCheckInputs = [
+    pycrypto
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pymumble_py3"
+    "pymumble_py3.constants"
+  ];
 
   meta = with lib; {
-    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
+    description = "Library to create mumble bots";
     homepage = "https://github.com/azlux/pymumble";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ thelegy ];
+    changelog = "https://github.com/azlux/pymumble/releases/tag/${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ thelegy infinisil ];
   };
 }

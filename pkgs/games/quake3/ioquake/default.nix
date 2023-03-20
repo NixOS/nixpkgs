@@ -1,22 +1,47 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGL, openalSoft
-, curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pkg-config
+, SDL2
+, libGL
+, openalSoft
+, curl
+, speex
+, opusfile
+, libogg
+, libvorbis
+, libopus
+, libjpeg
+, mumble
+, freetype
 }:
 
 stdenv.mkDerivation {
-  pname = "ioquake3-git";
-  version = "2019-05-29";
+  pname = "ioquake3";
+  version = "unstable-2022-11-24";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "350b8f9c7c88c002dccea4f0350f1919b86d3b4e";
-    sha256 = "17qkqi22f2fyh6bnfcf1zz2lycgv08d6aw52sf0hqw7r3qq86d08";
+    rev = "70d07d91d62dcdd2f2268d1ac401bfb697b4c991";
+    sha256 = "sha256-WDjR0ik+xAs6OA1DNbUGIF1MXSuEoy8nNkPiHaegfF0=";
   };
 
-  nativeBuildInputs = [ which pkgconfig ];
+  nativeBuildInputs = [ which pkg-config ];
   buildInputs = [
-    SDL2 libGL openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
-    freetype mumble
+    SDL2
+    libGL
+    openalSoft
+    curl
+    speex
+    opusfile
+    libogg
+    libvorbis
+    libopus
+    libjpeg
+    freetype
+    mumble
   ];
 
   enableParallelBuilding = true;
@@ -25,16 +50,16 @@ stdenv.mkDerivation {
 
   installTargets = [ "copyfiles" ];
 
-  installFlags = [ "COPYDIR=$(out)" ];
+  installFlags = [ "COPYDIR=$(out)" "COPYBINDIR=$(out)/bin" ];
 
   preInstall = ''
-    mkdir -p $out/baseq3
+    mkdir -p $out/baseq3 $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ioquake3.org/";
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rvolosatovs eelco abbradar ];
   };

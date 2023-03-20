@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kmime";
+  pname = "kmime";
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;

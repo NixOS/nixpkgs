@@ -1,11 +1,11 @@
-{ stdenv, ncurses, customConfig ? null, name, src, patches ? [] }:
+{ lib, stdenv, ncurses, customConfig ? null, pname, version, src, patches ? [] }:
 stdenv.mkDerivation {
 
-  inherit name src patches;
+  inherit pname version src patches;
 
-  CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
-  postPatch = stdenv.lib.optionalString (customConfig != null) ''
+  postPatch = lib.optionalString (customConfig != null) ''
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
     license = licenses.mit;

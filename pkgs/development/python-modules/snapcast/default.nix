@@ -1,25 +1,46 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, pytest
-, construct }:
+{ lib
+, buildPythonPackage
+, construct
+, packaging
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.1.0";
+  version = "2.3.2";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1z3c9p22pm3823jzh917c3rryv02mhigrjkjf9wlhzmjwx5vmjqf";
+  src = fetchFromGitHub {
+    owner = "happyleavesaoc";
+    repo = "python-snapcast";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kUUKDcHnWA+saqQM7aCfW9NmhG6DYsB21tlEQ3cYNs4=";
   };
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    construct
+    packaging
+  ];
 
-  propagatedBuildInputs = [ construct ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # no checks from Pypi - https://github.com/happyleavesaoc/python-snapcast/issues/23
-  doCheck = false;
+  pythonImportsCheck = [
+    "snapcast"
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # AssertionError and TypeError
+    "test_stream_setmeta"
+    "est_stream_setproperty"
+  ];
+
+  meta = with lib; {
     description = "Control Snapcast, a multi-room synchronous audio solution";
     homepage = "https://github.com/happyleavesaoc/python-snapcast/";
     license = licenses.mit;

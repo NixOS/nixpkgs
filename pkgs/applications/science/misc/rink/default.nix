@@ -1,31 +1,30 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, gmp, ncurses }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, ncurses
+, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.4.5";
+  version = "0.6.3";
   pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";
     repo = "rink-rs";
     rev = "v${version}";
-    sha256 = "0vl996y58a9b62d8sqrpfn2h8qkya7qbg5zqsmy7nxhph1vhbspj";
+    sha256 = "sha256-AhC3c6CpV0tlD6d/hFWt7hGj2UsXsOCeujkRSDlpvCM=";
   };
 
-  # Upstreamed in https://github.com/tiffany352/rink-rs/pull/53
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "sha256-Xo5iYwL4Db+GWMl5UXbPmj0Y0PJYR4Q0aUGnYCd+NB8=";
 
-  cargoSha256 = "0shlh0m9k0iqxpv9zmiw7a6v197swrvpz9x6qzhximzkdwni9gz9";
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl gmp ncurses ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ncurses ]
+    ++ (if stdenv.isDarwin then [ libiconv Security ] else [ openssl ]);
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unit-aware calculator";
-    homepage = "https://rink.tiffnix.com";
-    license = with licenses; [ mpl20 gpl3 ];
-    maintainers = with maintainers; [ sb0 filalex77 ];
+    homepage = "https://rinkcalc.app";
+    license = with licenses; [ mpl20 gpl3Plus ];
+    maintainers = with maintainers; [ sb0 Br1ght0ne ];
   };
 }

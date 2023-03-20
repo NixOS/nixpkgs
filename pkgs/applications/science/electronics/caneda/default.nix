@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt6_1}:
 
 mkDerivation rec {
   pname = "caneda";
@@ -12,15 +12,13 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase qttools qtsvg qwt ];
-
-  enableParallelBuilding = true;
+  buildInputs = [ qtbase qttools qtsvg qwt6_1 ];
 
   meta = {
     description = "Open source EDA software focused on easy of use and portability";
     homepage = "http://caneda.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

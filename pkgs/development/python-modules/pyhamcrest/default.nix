@@ -1,27 +1,59 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, mock, pytest
-, six
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, numpy
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
 }:
-buildPythonPackage rec {
-  pname = "PyHamcrest";
-  version = "1.9.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8ffaa0a53da57e89de14ced7185ac746227a8894dbd5a3c718bf05ddbd1d56cd";
+buildPythonPackage rec {
+  pname = "pyhamcrest";
+  version = "2.0.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "hamcrest";
+    repo = "PyHamcrest";
+    rev = "refs/tags/V${version}";
+    hash = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ six ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
 
-  doCheck = false;  # pypi tarball does not include tests
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/hamcrest/PyHamcrest";
+  nativeCheckInputs = [
+    numpy
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Tests started failing with numpy 1.24
+    "test_numpy_numeric_type_complex"
+    "test_numpy_numeric_type_float"
+    "test_numpy_numeric_type_int"
+  ];
+
+  pythonImportsCheck = [
+    "hamcrest"
+  ];
+
+  meta = with lib; {
     description = "Hamcrest framework for matcher objects";
+    homepage = "https://github.com/hamcrest/PyHamcrest";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      alunduil
-    ];
+    maintainers = with maintainers; [ alunduil ];
   };
 }

@@ -2,16 +2,16 @@
 , fetchPypi
 , urllib3, requests
 , nosexcover, mock
-, stdenv
+, lib
 }:
 
 buildPythonPackage (rec {
   pname = "elasticsearch";
-  version = "7.6.0";
+  version = "7.16.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1j499w9hbpyx0v83xnn1vrm45amx5lbnhlik65v5z1n0gb9v4a6j";
+    sha256 = "8adf8bc351ed55df7296be1009d38a1c999c0abc7d8700fa88533f1ad6087c5e";
   };
 
   # Check is disabled because running them destroy the content of the local cluster!
@@ -20,7 +20,7 @@ buildPythonPackage (rec {
   propagatedBuildInputs = [ urllib3 requests ];
   buildInputs = [ nosexcover mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     license = licenses.asl20;

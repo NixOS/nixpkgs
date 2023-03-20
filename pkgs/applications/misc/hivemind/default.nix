@@ -1,9 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, runtimeShell }:
+{ lib, buildGoModule, fetchFromGitHub, runtimeShell }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "hivemind";
-  version = "1.0.6";
-  goPackagePath = "github.com/DarthSim/hivemind";
+  version = "1.1.0";
 
   postPatch = ''
     substituteInPlace process.go --replace \"/bin/sh\" \"${runtimeShell}\"
@@ -13,10 +12,11 @@ buildGoPackage rec {
     owner = "DarthSim";
     repo = "hivemind";
     rev = "v${version}";
-    sha256 = "0afcnd03wsdphbbpha65rv5pnv0x6ldnnm6rnv1m6xkkywgnzx95";
+    sha256 = "YUR9OwRuH1xSPs8iTsSIjLCt2TyYH357IAYULGTyYUc=";
   };
+  vendorSha256 = "KweFhT8Zueg45Q/vw3kNET35hB+0WbUPfz0FYaAiIA8=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/DarthSim/";
     description = "Process manager for Procfile-based applications";
     license = with licenses; [ mit ];

@@ -1,65 +1,104 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, uvicorn
-, starlette
 , pydantic
-, isPy3k
-, pytest
-, pytestcov
-, pyjwt
-, passlib
+, starlette
+, pytestCheckHook
+, pytest-asyncio
 , aiosqlite
-, peewee
+, databases
 , flask
+, httpx
+, hatchling
+, orjson
+, passlib
+, peewee
+, python-jose
+, sqlalchemy
+, trio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.54.1";
-  format = "flit";
-  disabled = !isPy3k;
+  version = "0.92.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = "fastapi";
-    rev = version;
-    sha256 = "0k0lss8x6lzf0szcli48v28r269fsx1jdkr9q78liz47dz5x03d8";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-4USWfYvPxR+LzPELRTDg0Jl4K5yBnumYKfXT84FWctg=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "starlette ==0.13.2" "starlette"
+      --replace '"databases[sqlite] >=0.3.2,<0.7.0",' "" \
+      --replace "starlette==" "starlette>="
   '';
 
   propagatedBuildInputs = [
-    uvicorn
     starlette
     pydantic
   ];
 
-  checkInputs = [
-    pytest
-    pytestcov
-    pyjwt
-    passlib
+  nativeCheckInputs = [
     aiosqlite
-    peewee
+    # databases FIXME incompatible with SQLAlchemy 2.0
     flask
+    httpx
+    orjson
+    passlib
+    peewee
+    python-jose
+    pytestCheckHook
+    pytest-asyncio
+    sqlalchemy
+    trio
+  ] ++ passlib.optional-dependencies.bcrypt;
+
+  pytestFlagsArray = [
+    # ignoring deprecation warnings to avoid test failure from
+    # tests/test_tutorial/test_testing/test_tutorial001.py
+    "-W ignore::DeprecationWarning"
   ];
 
-  # test_default_response_class.py: requires orjson, which requires rust toolchain
-  # test_custom_response/test_tutorial001b.py: requires orjson
-  # tests/test_tutorial/test_sql_databases/test_testing_databases.py: just broken, don't know why
-  checkPhase = ''
-    pytest --ignore=tests/test_default_response_class.py \
-           --ignore=tests/test_tutorial/test_custom_response/test_tutorial001b.py \
-           --ignore=tests/test_tutorial/test_sql_databases/test_testing_databases.py
-  '';
+  disabledTestPaths = [
+    # Disabled tests require orjson which requires rust nightly
+    "tests/test_default_response_class.py"
+    # Don't test docs and examples
+    "docs_src"
+    # databases is incompatible with SQLAlchemy 2.0
+    "tests/test_tutorial/test_async_sql_databases"
+    "tests/test_tutorial/test_sql_databases"
+  ];
+
+  disabledTests = [
+    "test_get_custom_response"
+    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
+    "test_websocket_invalid_data"
+    "test_websocket_no_credentials"
+    # TypeError: __init__() missing 1...starlette-releated
+    "test_head"
+    "test_options"
+    "test_trace"
+    # Unexpected number of warnings caught
+    "test_warn_duplicate_operation_id"
+  ];
+
+  pythonImportsCheck = [
+    "fastapi"
+  ];
 
   meta = with lib; {
+    description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
-    description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

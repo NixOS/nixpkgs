@@ -1,71 +1,76 @@
-{ stdenv
-, buildPythonApplication
-, fetchPypi
-# buildInputs
-, glibcLocales
-, pkginfo
-, check-manifest
-# propagatedBuildInputs
-, py
-, devpi-common
-, pluggy
-, setuptools
-# CheckInputs
-, pytest
-, pytest-flake8
-, webtest
-, mock
+{ lib
 , devpi-server
-, tox
-, sphinx
-, wheel
 , git
-, mercurial
-} :
+, glibcLocales
+, python3
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.0.0";
+  version = "6.0.3";
 
-  src = fetchPypi {
+  format = "setuptools";
+
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0hyj3xc5c6658slk5wgcr9rh7hwi5r3hzxk1p6by61sqx5r38v3q";
+    hash = "sha256-csdQUxnopH+kYtoqdvyXKNW3fGkQNSREJYxjes9Dgi8=";
   };
 
-  buildInputs = [ glibcLocales pkginfo check-manifest ];
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--flake8" ""
+  '';
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
-
-  checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+  buildInputs = [
+    glibcLocales
   ];
 
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$TMPDIR # fix tests failing in sandbox due to "/homeless-shelter"
+  propagatedBuildInputs = with python3.pkgs; [
+    argon2-cffi-bindings
+    build
+    check-manifest
+    devpi-common
+    iniconfig
+    pep517
+    pkginfo
+    pluggy
+    platformdirs
+    py
+    setuptools
+  ];
 
-    # test_pypi_index_attributes: tries to connect to upstream pypi
-    # test_test: setuptools does not get propagated into the tox call (cannot import setuptools), also no detox
-    # test_index: hangs forever
-    # test_upload: fails multiple times with
-    # > assert args[0], args
-    # F AssertionError: [None, local('/build/pytest-of-nixbld/pytest-0/test_export_attributes_git_set0/repo2/setupdir/setup.py'), '--name']
+  nativeCheckInputs = [
+    devpi-server
+    git
+  ] ++ (with python3.pkgs; [
+    mercurial
+    mock
+    pypitoken
+    pytestCheckHook
+    sphinx
+    virtualenv
+    webtest
+    wheel
+  ]);
 
-    py.test -k 'not test_pypi_index_attributes \
-                and not test_test \
-                and not test_index \
-                and not test_upload' testing
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
+
+  pytestFlagsArray = [
+    # --fast skips tests which try to start a devpi-server improperly
+    "--fast"
+  ];
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = with stdenv.lib; {
-    homepage = "http://doc.devpi.net";
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "Client for devpi, a pypi index server and packaging meta tool";
+    homepage = "http://doc.devpi.net";
+    changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
   };
-
 }

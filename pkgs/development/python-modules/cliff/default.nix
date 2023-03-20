@@ -1,56 +1,70 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, autopage
+, cmd2
+, importlib-metadata
+, installShellFiles
+, openstackdocstheme
 , pbr
 , prettytable
 , pyparsing
-, six
-, stevedore
 , pyyaml
-, unicodecsv
-, cmd2
-, pytest
-, mock
-, testtools
-, fixtures
+, stevedore
+, sphinx
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "3.1.0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j9q6725226hdhdyy9b0qfjngdj35d3y7fxbmfxpr36ksbh0x6sj";
+    hash = "sha256-l/wx6TVS477GZL6dVa1/kNwqtCqtjfKaW5hbZEybjPI=";
   };
 
+  postPatch = ''
+    # only a small portion of the listed packages are actually needed for running the tests
+    # so instead of removing them one by one remove everything
+    rm test-requirements.txt
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    openstackdocstheme
+    sphinx
+  ];
+
   propagatedBuildInputs = [
+    autopage
+    cmd2
+    importlib-metadata
     pbr
     prettytable
     pyparsing
-    six
-    stevedore
     pyyaml
-    cmd2
-    unicodecsv
+    stevedore
   ];
 
-  # remove version constraints
-  postPatch = ''
-    sed -i '/cmd2/c\cmd2' requirements.txt
+  postInstall = ''
+    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
+    installManPage doc/build/man/cliff.1
   '';
 
-  checkInputs = [ fixtures mock pytest testtools ];
-  # add some tests
-  checkPhase = ''
-    pytest cliff/tests/test_{utils,app,command,help,lister}.py \
-      -k 'not interactive_mode'
-  '';
+  # check in passthru.tests.pytest to escape infinite recursion with stestr
+  doCheck = false;
+
+  pythonImportsCheck = [ "cliff" ];
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";
-    homepage = "https://docs.openstack.org/cliff/latest/";
+    homepage = "https://github.com/openstack/cliff";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = teams.openstack.members;
   };
 }

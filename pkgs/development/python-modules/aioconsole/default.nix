@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+}:
 
 # This package provides a binary "apython" which sometimes invokes
 # [sys.executable, '-m', 'aioconsole'] as a subprocess. If apython is
@@ -10,20 +16,44 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.1.16";
+  version = "0.6.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0yk4ghvg47drfvdrrcw7nk14pg4shccmyhln9d8hy1lyafcqmnd5";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "vxgmichel";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XR79o65jZFR9jr9ubw7wdxCWNH8ANMrBDTVpLnetsuU=";
   };
 
-  # hardcodes a test dependency on an old version of pytest-asyncio
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  meta = {
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov aioconsole --count 2" ""
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    "test_interact_syntax_error"
+    # Output and the sandbox don't work well together
+    "test_interact_multiple_indented_lines"
+  ];
+
+  pythonImportsCheck = [
+    "aioconsole"
+  ];
+
+  meta = with lib; {
     description = "Asynchronous console and interfaces for asyncio";
     homepage = "https://github.com/vxgmichel/aioconsole";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.catern ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ catern ];
   };
 }

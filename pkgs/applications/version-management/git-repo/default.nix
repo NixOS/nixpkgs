@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, python3, git, gnupg, less
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nix-update-script
+, python3, git, gnupg, less, openssh
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.8";
+  version = "2.32";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "00sahddplisg55zpjz4v4sc7zqbh3apx36xv77g55nabwz7han8d";
+    sha256 = "sha256-WY77F4culQ1y8UDIhI117AHBL5mEk40s8HpP3+5muZI=";
   };
 
+  # Fix 'NameError: name 'ssl' is not defined'
   patches = [ ./import-ssl-module.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,17 +26,25 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp repo $out/bin/repo
+
+    runHook postInstall
   '';
 
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ git gnupg less ]}"
+      "${lib.makeBinPath [ git gnupg less openssh ]}"
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git
@@ -45,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
-    maintainers = [ maintainers.primeos ];
+    maintainers = with maintainers; [ otavio ];
     platforms = platforms.unix;
   };
 }

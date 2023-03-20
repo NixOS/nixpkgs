@@ -1,29 +1,38 @@
 { fetchFromGitHub
 , cargo
+, ctags
 , lib
+, makeWrapper
 , rustPlatform
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ptags";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "ptags";
     rev = "v${version}";
-    sha256 = "1xr1szh4dfrcmi6s6dj791k1ix2zbv75rqkqbyb1lmh5548kywkg";
+    sha256 = "sha256-hFHzNdTX3nw2OwRxk9lKrt/YpaBXwi5aE/Qn3W9PRf4=";
   };
 
-  cargoSha256 = "1rsnb4kzfb577xw7jk0939n42sv94vvspvbz783bmpy9vl53i38k";
+  cargoSha256 = "sha256-cFezB7uwUznC/8NXJNrBqP0lf0sXAQBoGksXFOGrUIg=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    # `ctags` must be accessible in `PATH` for `ptags` to work.
+    wrapProgram "$out/bin/ptags" \
+      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
+  '';
 
   # Sanity check.
   checkPhase = ''
     $releaseDir/ptags --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A parallel universal-ctags wrapper for git repository";
     homepage = "https://github.com/dalance/ptags";
     maintainers = with maintainers; [ pamplemousse ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lilypond }:
+{ lib, stdenv, fetchFromGitHub, lilypond }:
 
 let
 
@@ -12,8 +12,6 @@ let
         owner = "OpenLilyPondFonts";
         repo = fontName;
       };
-
-      phases = [ "unpackPhase" "installPhase" ];
 
       installPhase = ''
         local fontsdir="$out/share/lilypond/${lilypond.version}/fonts"
@@ -29,7 +27,7 @@ let
         done
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         inherit (lilypond.meta) homepage platforms;
         description = "${fontName} font for LilyPond";
         license = licenses.ofl;

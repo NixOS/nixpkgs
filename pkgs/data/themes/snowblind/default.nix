@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitLab, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitLab, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "snowblind";
-  version = "2020-02-26";
+  version = "2020-06-07";
 
   src = fetchFromGitLab {
     domain = "www.opencode.net";
     owner = "ju1464";
     repo = pname;
-    rev = "94c35410be5cccc142c9cd6be9dff973ce0761c4";
-    sha256 = "1aqmpg1vyqwp6s6iikp5c5yfrvdkzq75jdr9mmv2ijcam1g0jhnv";
+    rev = "88d626b204e19d1730836289a1c0d83efcf247d0";
+    sha256 = "0admiqwdc0rvl8zxs0b2qyvsi8im7lrpsygm8ky8ymyf7alkw0gd";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{COPYING,CREDITS}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smooth blue theme based on Materia Design";
     homepage = "https://www.opencode.net/ju1464/Snowblind";
     license = licenses.gpl3;

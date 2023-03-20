@@ -1,21 +1,19 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
 , uchar, result, gg, uutf, otfm
-, js_of_ocaml, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx,
+, js_of_ocaml, js_of_ocaml-ppx,
   pdfBackend ? true, # depends on uutf and otfm
   htmlcBackend ? true # depends on js_of_ocaml
 }:
 
-with lib;
-
 let
-  inherit (stdenv.lib) optionals versionAtLeast;
+  inherit (lib) optionals versionOlder;
 
   pname = "vg";
-  version = "0.9.3";
+  version = "0.9.4";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !versionAtLeast ocaml.version "4.03"
+if versionOlder ocaml.version "4.03"
 then throw "vg is not available for OCaml ${ocaml.version}"
 else
 
@@ -25,24 +23,27 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "0jj5hrqxdb6yyplnz0r7am4mbjzgcn876qp7sqs2x93a97fk6lwd";
+    sha256 = "181sz6l5xrj5jvwg4m2yqsjzwp2s5h8v0mwhjcwbam90kdfx2nak";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ uchar result gg ]
                           ++ optionals pdfBackend [ uutf otfm ]
-                          ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ocamlbuild js_of_ocaml-ppx ];
+                          ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ppx ];
+
+  strictDeps = true;
 
   buildPhase = topkg.buildPhase
-    + " --with-uutf ${boolToString pdfBackend}"
-    + " --with-otfm ${boolToString pdfBackend}"
-    + " --with-js_of_ocaml ${boolToString htmlcBackend}"
+    + " --with-uutf ${lib.boolToString pdfBackend}"
+    + " --with-otfm ${lib.boolToString pdfBackend}"
+    + " --with-js_of_ocaml ${lib.boolToString htmlcBackend}"
     + " --with-cairo2 false";
 
   inherit (topkg) installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "Declarative 2D vector graphics for OCaml";
     longDescription = ''
     Vg is an OCaml module for declarative 2D vector graphics. In Vg, images
@@ -54,8 +55,9 @@ stdenv.mkDerivation {
     module. An API allows to implement new renderers.
     '';
     homepage = webpage;
-    inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];
+    mainProgram = "vecho";
+    inherit (ocaml.meta) platforms;
   };
 }

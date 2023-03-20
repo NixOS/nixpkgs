@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchhg, cmake, pkgconfig, makeWrapper, callPackage
-, soundfont-fluid, SDL, libGL, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3, libgme
+{ stdenv, lib, fetchhg, cmake, pkg-config, makeWrapper, callPackage
+, soundfont-fluid, SDL, libGL, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3, game-music-emu
 , serverOnly ? false
 }:
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   version = "3.0.1";
 
   src = fetchhg {
-    url = "https://bitbucket.org/Torr_Samaho/zandronum-stable";
+    url = "https://hg.osdn.net/view/zandronum/zandronum-stable";
     rev = "ZA_${version}";
     sha256 = "16v5b6wfrmabs3ky6isbfhlrqdjrr1pvfxlxwk0im02kcpxxw9qw";
   };
@@ -29,10 +29,10 @@ in stdenv.mkDerivation rec {
 
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
-  buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite libgme ]
+  buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite game-music-emu ]
              ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper python3 ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper python3 ];
 
   preConfigure = ''
     ln -s ${sqlite}/* sqlite/
@@ -50,8 +50,6 @@ in stdenv.mkDerivation rec {
     ++ (if serverOnly
     then [ "-DSERVERONLY=ON" ]
     else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
-
-  enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
@@ -74,7 +72,7 @@ in stdenv.mkDerivation rec {
     inherit fmod sqlite;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zandronum.com/";
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     maintainers = with maintainers; [ lassulus MP2E ];

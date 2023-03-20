@@ -1,66 +1,83 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, tornado
-, toolz
-, zict
-, six
-, pytest
-, networkx
-, distributed
+{ stdenv
+, lib
+, buildPythonPackage
 , confluent-kafka
+, distributed
+, fetchpatch
+, fetchPypi
+, flaky
 , graphviz
+, networkx
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 , requests
+, six
+, toolz
+, tornado
+, zict
 }:
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.5.2";
+  version = "0.6.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "127rpdjgkcyjifmkqbhmqfbzlgi32n54rybrdxja610qr906y40c";
+    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
-
-  patches = [
-    # fix networkx rename issue of GiGraph.node -> DiGraph.nodes, remove on next bump
-    ( fetchpatch {
-      url = "https://github.com/python-streamz/streamz/commit/f8b7bdb6bcb9dd107677e82e755ff4695bf0c4be.patch";
-      sha256 = "1b2frp0j369gf55plxk2pigblhsc44m0rm9az01y83cjlcm26x2s";
-    })
-    # also, fix networkx rename issue of GiGraph.node -> DiGraph.nodes, remove on next bump
-    ( fetchpatch {
-      url = "https://github.com/python-streamz/streamz/commit/f7603f4cbea54f1548885881206a3ca9d6e52250.patch";
-      sha256 = "1125kqiaz6b3cifz0yk1zrkxj5804lfzl4kc58jhqajv8rsrbs45";
-    })
-  ];
 
   propagatedBuildInputs = [
     networkx
-    tornado
-    toolz
-    zict
     six
+    toolz
+    tornado
+    zict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     confluent-kafka
     distributed
+    flaky
     graphviz
-    pytest
+    pytest-asyncio
+    pytestCheckHook
     requests
   ];
 
-  # Disable test_tcp_async because fails on sandbox build
-  # disable kafka tests
-  checkPhase = ''
-    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async \
-      --deselect=streamz/tests/test_sources.py::test_tcp \
-      --ignore=streamz/tests/test_kafka.py
-  '';
+  pythonImportsCheck = [
+    "streamz"
+  ];
+
+  disabledTests = [
+    # Error with distutils version: fixture 'cleanup' not found
+    "test_separate_thread_without_time"
+    "test_await_syntax"
+    "test_partition_then_scatter_sync"
+    "test_sync"
+    "test_sync_2"
+    # Test fail in the sandbox
+    "test_tcp_async"
+    "test_tcp"
+    "test_partition_timeout"
+    # Tests are flaky
+    "test_from_iterable"
+    "test_buffer"
+  ];
+
+  disabledTestPaths = [
+    # Disable kafka tests
+    "streamz/tests/test_kafka.py"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

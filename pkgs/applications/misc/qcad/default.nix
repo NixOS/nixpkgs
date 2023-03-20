@@ -1,35 +1,65 @@
-{ boost
-, fetchFromGitHub
-, mkDerivationWith
-, muparser
-, pkgconfig
-, qmake
-, qt5
+{ lib
 , stdenv
+, mkDerivation
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, qmake
+, qttools
+, boost
 , libGLU
+, muparser
+, qtbase
+, qtscript
+, qtsvg
+, qtxmlpatterns
+, qtmacextras
 }:
 
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qcad";
-  version = "3.24.2.1";
+  version = "3.27.9.3";
 
   src = fetchFromGitHub {
+    name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "1g295gljq051x09f4d8k586bkg3vs8z22dn3rxj6xrm6803z8zw2";
+    sha256 = "sha256-JEUV8TtVYSlO+Gmg/ktMTmTlOmH+2zc6/fLkVHD7eBc=";
   };
 
   patches = [
+    # Patch directory lookup, remove __DATE__ and executable name
     ./application-dir.patch
   ];
 
   postPatch = ''
-    mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}
-    cp \
-      src/3rdparty/qt-labs-qtscriptgenerator-5.12.3/qt-labs-qtscriptgenerator-5.12.3.pro \
-      src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}/qt-labs-qtscriptgenerator-${qt5.qtbase.version}.pro
+    if ! [ -d src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version} ]; then
+      mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}
+      cp \
+        src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
+        src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}/qt-labs-qtscriptgenerator-${qtbase.version}.pro
+    fi
   '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    qmake
+    qttools
+  ];
+
+  buildInputs = [
+    boost
+    libGLU
+    muparser
+    qtbase
+    qtscript
+    qtsvg
+    qtxmlpatterns
+  ] ++ lib.optionals stdenv.isDarwin [
+    qtmacextras
+  ];
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
@@ -37,20 +67,31 @@ mkDerivationWith stdenv.mkDerivation rec {
     "BOOST_DIR=${boost.dev}"
   ];
 
+  qtWrapperArgs =
+    lib.optionals stdenv.isLinux [ "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib" ]
+    ++
+    lib.optionals stdenv.isDarwin [ "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib" ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin release/qcad-bin
-    install -Dm555 -t $out/lib release/libspatialindexnavel.so
-    install -Dm555 -t $out/lib release/libqcadcore.so
-    install -Dm555 -t $out/lib release/libqcadentity.so
-    install -Dm555 -t $out/lib release/libqcadgrid.so
-    install -Dm555 -t $out/lib release/libqcadsnap.so
-    install -Dm555 -t $out/lib release/libqcadoperations.so
-    install -Dm555 -t $out/lib release/libqcadstemmer.so
-    install -Dm555 -t $out/lib release/libqcadspatialindex.so
-    install -Dm555 -t $out/lib release/libqcadgui.so
-    install -Dm555 -t $out/lib release/libqcadecmaapi.so
+  '' + lib.optionalString stdenv.isLinux ''
+    install -Dm555 release/qcad-bin $out/bin/qcad
+  '' + lib.optionalString stdenv.isDarwin ''
+    install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
+    mkdir -p $out/lib
+  '' +
+  ''
+    install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadgrid${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadsnap${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadoperations${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadstemmer${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadspatialindex${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadgui${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadecmaapi${stdenv.hostPlatform.extensions.sharedLibrary}
 
     install -Dm444 -t $out/share/applications qcad.desktop
     install -Dm644 -t $out/share/pixmaps      scripts/qcad_icon.png
@@ -58,35 +99,33 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
+    cp -r fonts $out/lib/fonts
+    cp -r libraries $out/lib/libraries
+    cp -r linetypes $out/lib/linetypes
+    cp -r ts $out/lib/ts
+
+    # workaround to fix the library browser:
+    rm -r $out/lib/plugins/sqldrivers
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
+
+    rm -r $out/lib/plugins/printsupport
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
+
+    rm -r $out/lib/plugins/imageformats
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
 
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
+    installManPage qcad.1
+
     runHook postInstall
-    '';
+  '';
 
-  buildInputs = [
-    boost
-    muparser
-    libGLU
-    qt5.qtbase
-    qt5.qtscript
-    qt5.qtsvg
-    qt5.qtxmlpatterns
-  ];
-
-  nativeBuildInputs = [
-    pkgconfig
-    qt5.qmake
-    qt5.qttools
-  ];
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ yvesf ];
-    platforms = qt5.qtbase.meta.platforms;
+    platforms = qtbase.meta.platforms;
   };
 }

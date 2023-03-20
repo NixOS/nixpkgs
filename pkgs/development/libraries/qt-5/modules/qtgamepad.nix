@@ -1,9 +1,10 @@
-{ qtModule, qtbase, qtdeclarative, pkgconfig }:
+{ lib, stdenv, qtModule, qtbase, qtdeclarative, GameController, pkg-config }:
 
 qtModule {
-  name = "qtgamepad";
-  qtInputs = [ qtbase qtdeclarative ];
+  pname = "qtgamepad";
+  qtInputs = [ qtbase qtdeclarative ]
+    ++ lib.optional stdenv.isDarwin GameController;
   buildInputs = [ ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   outputs = [ "out" "dev" "bin" ];
 }

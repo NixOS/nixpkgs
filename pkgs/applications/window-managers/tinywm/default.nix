@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libX11 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = ''
-    ${stdenv.cc}/bin/cc -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
+    $CC -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
   '';
 
   installPhase = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -m644 annotated.c README -t $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "A tiny window manger for X11";
     longDescription = ''
 
@@ -42,10 +42,11 @@ stdenv.mkDerivation rec {
       - Resize windows interactively with Alt+Button3 drag (right mouse button)
       - Raise windows with Alt+F1 (not high on usability I know, but I needed a
         keybinding in there somewhere)
-      - Focus windows with the mouse pointer (X does this on its own)      
+      - Focus windows with the mouse pointer (X does this on its own)
     '';
     homepage = "http://incise.org/tinywm.html";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = libX11.meta.platforms;
+    license = licenses.publicDomain;
   };
 }

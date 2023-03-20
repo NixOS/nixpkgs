@@ -1,9 +1,9 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "initrd-network";
 
-  meta.maintainers = [ pkgs.stdenv.lib.maintainers.eelco ];
+  meta.maintainers = [ pkgs.lib.maintainers.eelco ];
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
     boot.initrd.network.enable = true;
     boot.initrd.network.postCommands =

@@ -1,23 +1,67 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake
-, python, qtbase, qttools }:
+{ lib
+, stdenv
+, env
+, fetchFromGitHub
+, pkg-config
+, qbs
+, wrapQtAppsHook
+, qtbase
+, qtdeclarative
+, qttools
+, qtsvg
+, zlib
+, libGL
+}:
 
-mkDerivation rec {
+let
+  qtEnv = env "tiled-qt-env" [ qtbase qtdeclarative qtsvg qttools ];
+in
+
+stdenv.mkDerivation rec {
   pname = "tiled";
-  version = "1.3.4";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
-    owner = "bjorn";
+    owner = "mapeditor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q3x1v88szxm8177qcnynfiyc7w8sn07ig6c7fjd164q7w30y24m";
+    sha256 = "sha256-y79trmkRrkOOP6p9VMjo/11IE22J3YJtnerBsVP9134=";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
-  buildInputs = [ python qtbase qttools ];
+  nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];
+  buildInputs = [ qtEnv zlib libGL ];
 
-  enableParallelBuilding = true;
+  outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  strictDeps = true;
+
+  configurePhase = ''
+    runHook preConfigure
+
+    qbs setup-qt --settings-dir . ${qtEnv}/bin/qmake qtenv
+    qbs config --settings-dir . defaultProfile qtenv
+    qbs resolve --settings-dir . config:release qbs.installPrefix:/ projects.Tiled.installHeaders:true
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    qbs build --settings-dir . config:release
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    qbs install --settings-dir . --install-root $out config:release
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "Free, easy to use and flexible tile map editor";
     homepage = "https://www.mapeditor.org/";
     license = with licenses; [

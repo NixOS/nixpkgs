@@ -1,21 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "PyMeeus";
-  version = "0.3.7";
+  version = "0.5.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qjnk9sc65i4by2x4zm6w941a4i31fmhgwbkpbqkk87rwq4h4hsn";
+    hash = "sha256-VI9xhr2LlsvAac9kmo6ON33OSax0SGcJhJ/mOpnK1oQ=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     pytest .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/architest/pymeeus";
     description = "Library of astronomical algorithms";
     license = licenses.lgpl3;

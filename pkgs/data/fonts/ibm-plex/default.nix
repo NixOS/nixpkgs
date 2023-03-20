@@ -1,19 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "4.0.2";
-in fetchzip {
-  name = "ibm-plex-${version}";
-  url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile "OpenType/*/*.otf" -d $out/share/fonts/opentype
+stdenvNoCC.mkDerivation rec {
+  pname = "ibm-plex";
+  version = "6.2.0";
+
+  src = fetchzip {
+    url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
+    hash = "sha256-RvD/aeZrvltJiuAHqYMNaRsjLgTdcC1/5zqlcd4qKAA=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 */*.otf IBM-Plex-Sans-JP/unhinted/* -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-  sha256 = "1v00y1l9sjcv9w8d3115w1vv1b7bgwbrv4d3zv68galk8wz8px1x";
 
   meta = with lib; {
     description = "IBM Plex Typeface";
     homepage = "https://www.ibm.com/plex/";
+    changelog = "https://github.com/IBM/plex/raw/v${version}/CHANGELOG.md";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

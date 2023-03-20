@@ -7,11 +7,15 @@ with lib;
     maintainers = [ maintainers.joachifm ];
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+  ];
+
   options = {
     security.allowUserNamespaces = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to allow creation of user namespaces.
 
         The motivation for disabling user namespaces is the potential
@@ -27,10 +31,20 @@ with lib;
       '';
     };
 
+    security.unprivilegedUsernsClone = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        When disabled, unprivileged users will not be able to create new namespaces.
+        By default unprivileged user namespaces are disabled.
+        This option only works in a hardened profile.
+      '';
+    };
+
     security.protectKernelImage = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to prevent replacing the running kernel image.
       '';
     };
@@ -38,7 +52,7 @@ with lib;
     security.allowSimultaneousMultithreading = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to allow SMT/hyperthreading.  Disabling SMT means that only
         physical CPU cores will be usable at runtime, potentially at
         significant performance cost.
@@ -48,7 +62,7 @@ with lib;
         e.g., shared caches).  This attack vector is unproven.
 
         Disabling SMT is a supplement to the L1 data cache flushing mitigation
-        (see <xref linkend="opt-security.virtualisation.flushL1DataCache"/>)
+        (see [](#opt-security.virtualisation.flushL1DataCache))
         versus malicious VM guests (SMT could "bring back" previously flushed
         data).
       '';
@@ -57,7 +71,7 @@ with lib;
     security.forcePageTableIsolation = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to force-enable the Page Table Isolation (PTI) Linux kernel
         feature even on CPU models that claim to be safe from Meltdown.
 
@@ -69,34 +83,19 @@ with lib;
     security.virtualisation.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.
-        See also <xref linkend="opt-security.allowSimultaneousMultithreading"/>.
+        See also [](#opt-security.allowSimultaneousMultithreading).
 
-        <variablelist>
-          <varlistentry>
-            <term><literal>null</literal></term>
-            <listitem><para>uses the kernel default</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"never"</literal></term>
-            <listitem><para>disables L1 data cache flushing entirely.
-            May be appropriate if all guests are trusted.</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"cond"</literal></term>
-            <listitem><para>flushes L1 data cache only for pre-determined
-            code paths.  May leak information about the host address space
-            layout.</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"always"</literal></term>
-            <listitem><para>flushes L1 data cache every time the hypervisor
-            enters the guest.  May incur significant performance cost.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+        - `null`: uses the kernel default
+        - `"never"`: disables L1 data cache flushing entirely.
+          May be appropriate if all guests are trusted.
+        - `"cond"`: flushes L1 data cache only for pre-determined
+          code paths.  May leak information about the host address space
+          layout.
+        - `"always"`: flushes L1 data cache every time the hypervisor
+          enters the guest.  May incur significant performance cost.
       '';
     };
   };
@@ -109,10 +108,14 @@ with lib;
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
       assertions = [
-        { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
-          message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
+        { assertion = config.nix.settings.sandbox -> config.security.allowUserNamespaces;
+          message = "`nix.settings.sandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
+    })
+
+    (mkIf config.security.unprivilegedUsernsClone {
+      boot.kernel.sysctl."kernel.unprivileged_userns_clone" = mkDefault true;
     })
 
     (mkIf config.security.protectKernelImage {

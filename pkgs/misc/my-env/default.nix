@@ -6,15 +6,15 @@
     packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
-  nativeBuildInputs = [ pkgconfig ];
-          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net];
+          nativeBuildInputs = [ cmake pkg-config ];
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx SDL_net];
       };
     };
   }
 
-  # Then you can install it by:  
+  # Then you can install it by:
   #  $ nix-env -i env-sdl
-  # And you can load it simply calling:  
+  # And you can load it simply calling:
   #  $ load-env-sdl
   # and this will update your env vars to have 'make' and 'gcc' finding the SDL
   # headers and libs.
@@ -29,7 +29,7 @@
     let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
             pkgs.myEnvFun {
               inherit name;
-            buildInputs = buildInputs 
+            buildInputs = buildInputs
                   ++ map (x : sourceWithTagsDerivation
                     ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) cTags;
             extraCmds = ''
@@ -73,7 +73,7 @@ mkDerivation {
   };
 
   buildPhase = let
-    initialPath = import ../../stdenv/common-path.nix { inherit pkgs; };
+    initialPath = import ../../stdenv/generic/common-path.nix { inherit pkgs; };
   in ''
     set -x
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"

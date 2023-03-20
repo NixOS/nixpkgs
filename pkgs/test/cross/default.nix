@@ -8,12 +8,12 @@ let
   ) lib.systems.examples;
 
   getExecutable = pkgs: pkgFun: exec:
-    "${pkgFun pkgs}${exec}${pkgs.hostPlatform.extensions.executable}";
+    "${pkgFun pkgs}${exec}${pkgs.stdenv.hostPlatform.extensions.executable}";
 
   compareTest = { emulator, pkgFun, hostPkgs, crossPkgs, exec, args ? [] }: let
     pkgName = (pkgFun hostPkgs).name;
     args' = lib.concatStringsSep " " args;
-  in pkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
+  in crossPkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
     nativeBuildInputs = [ pkgs.dos2unix ];
   } ''
     # Just in case we are using wine, get rid of that annoying extra
@@ -55,7 +55,7 @@ let
 
   mapMultiPlatformTest = crossSystemFun: test: lib.mapAttrs (name: system: test rec {
     crossPkgs = import pkgs.path {
-      localSystem = { inherit (pkgs.hostPlatform) config; };
+      localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
       crossSystem = crossSystemFun system;
     };
 
@@ -91,6 +91,20 @@ let
       pkgFun = pkgs: pkgs.hello;
     };
 
+    pkg-config = {platformFun, crossPkgs, emulator}: crossPkgs.runCommand
+      "test-pkg-config-${crossPkgs.hostPlatform.config}"
+    {
+      depsBuildBuild = [ crossPkgs.pkgsBuildBuild.pkg-config ];
+      nativeBuildInputs = [ crossPkgs.pkgsBuildHost.pkg-config crossPkgs.buildPackages.zlib ];
+      depsBuildTarget = [ crossPkgs.pkgsBuildTarget.pkg-config ];
+      buildInputs = [ crossPkgs.zlib ];
+      NIX_DEBUG = 7;
+    } ''
+       mkdir $out
+       ${crossPkgs.pkgsBuildBuild.pkg-config.targetPrefix}pkg-config --cflags zlib > "$out/for-build"
+       ${crossPkgs.pkgsBuildHost.pkg-config.targetPrefix}pkg-config --cflags zlib > "$out/for-host"
+       ! diff "$out/for-build" "$out/for-host"
+    '';
   };
 
 in {

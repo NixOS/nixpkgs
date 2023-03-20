@@ -1,17 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2019.3";
+  version = "2022.7.1";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be";
+    hash = "sha256-AaBoHEuWhKKDBGFeulXRqzGuAL9o7BV+w3CKgYLbvNA=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s pytz/tests
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "pytz/tests" ];
+
+  pythonImportsCheck = [ "pytz" ];
 
   meta = with lib; {
     description = "World timezone definitions, modern and historical";

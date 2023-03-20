@@ -1,24 +1,87 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytestrunner, requests, urllib3, mock, setuptools }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, requests
+, setuptools
+, six
+, stone
+, mock
+, pytest-mock
+, pytestCheckHook
+, sphinxHook
+}:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "9.5.0";
+  version = "11.36.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0iz9hg1j7q9chka6fyzgpzqg2v4nbjx61xfvn9ixprxrdhvhr2hi";
+  disabled = pythonOlder "3.7";
+  outputs = ["out" "doc"];
+
+  src = fetchFromGitHub {
+    owner = "dropbox";
+    repo = "dropbox-sdk-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J2AaGkD4TMDcVzTtdcNH0bgy6de+BRjYdtTaRL3lYrs=";
   };
 
-  # Set DROPBOX_TOKEN environment variable to a valid token.
-  doCheck = false;
+  propagatedBuildInputs = [
+    requests
+    setuptools
+    six
+    stone
+  ];
 
-  buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ requests urllib3 mock setuptools ];
+  nativeCheckInputs = [
+    mock
+    pytest-mock
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-    homepage = "https://www.dropbox.com/developers/core/docs";
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace ">= 2.*" ">= 2.0" \
+      --replace "'pytest-runner == 5.2.0'," ""
+    substituteInPlace test/requirements.txt \
+      --replace ">=2.*" ">=2.0"
+  '';
+
+  doCheck = true;
+
+  pythonImportsCheck = [
+    "dropbox"
+  ];
+  nativeBuildInputs = [ sphinxHook ];
+
+  # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
+  disabledTests = [
+    "test_default_oauth2_urls"
+    "test_bad_auth"
+    "test_multi_auth"
+    "test_refresh"
+    "test_app_auth"
+    "test_downscope"
+    "test_rpc"
+    "test_upload_download"
+    "test_bad_upload_types"
+    "test_clone_when_user_linked"
+    "test_with_path_root_constructor"
+    "test_path_root"
+    "test_path_root_err"
+    "test_versioned_route"
+    "test_team"
+    "test_as_user"
+    "test_as_admin"
+    "test_clone_when_team_linked"
+  ];
+
+  meta = with lib; {
+    description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
+    homepage = "https://github.com/dropbox/dropbox-sdk-python";
+    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ sfrijters ];
   };
 }

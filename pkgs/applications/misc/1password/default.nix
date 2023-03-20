@@ -1,47 +1,75 @@
-{ stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
+{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar }:
 
-stdenv.mkDerivation rec {
-  pname = "1password";
-  version = "0.10.0";
+let
+  inherit (stdenv.hostPlatform) system;
+  fetch = srcPlatform: sha256: extension:
+    let
+      args = {
+        url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
+        inherit sha256;
+      } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
+    in
+    if extension == "zip" then fetchzip args else fetchurl args;
+
+  pname = "1password-cli";
+  version = "2.15.0";
+  sources = rec {
+    aarch64-linux = fetch "linux_arm64" "sha256-D+i+RrPBwFHDL7ExiZUL/xc7vBcfHI7C6z0gNIs/Brs=" "zip";
+    i686-linux = fetch "linux_386" "sha256-Y19dbv9eQJF3V+94bByfWLUeDuJ78fUM9vJf1/Nd3rI=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-Mxp6wCwBUNNucN0W0awghUzg2OQTkrwXsZgS/nVP41M=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-KJVXW2Ze1AmDWNeTEfr7SsZMBmLyMfBv/FgC+XAds0A=" "pkg";
+    x86_64-darwin = aarch64-darwin;
+  };
+  platforms = builtins.attrNames sources;
+  mainProgram = "op";
+in
+
+stdenv.mkDerivation {
+  inherit pname version;
   src =
-    if stdenv.hostPlatform.system == "i686-linux" then
-      fetchzip {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
-        sha256 = "07j11ikd0rzsj4d8rv74rfy497svq6l2q94ndf3b0a0mr8riyazj";
-        stripRoot = false;
-      }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
-        sha256 = "177cl4x7rj3d74kzrpmiwps5n31axmlhqdwrdpkmay2gk9inswbs";
-        stripRoot = false;
-      }
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.pkg";
-        sha256 = "13yxmnh77g6zvl2gqf77m5i3v5706p2plgbgsn5hqrrf3g8ql63b";
-      }
-    else throw "Architecture not supported";
+    if (builtins.elem system platforms) then
+      sources.${system}
+    else
+      throw "Source for ${pname} is not available for ${system}";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ xar cpio ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
-  unpackPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+
+  unpackPhase = lib.optionalString stdenv.isDarwin ''
     xar -xf $src
-    zcat Payload | cpio -i
+    zcat op.pkg/Payload | cpio -i
   '';
 
   installPhase = ''
-    install -D op $out/bin/op
+    runHook preInstall
+    install -D ${mainProgram} $out/bin/${mainProgram}
+    runHook postInstall
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  postInstall = ''
+    HOME=$TMPDIR
+    installShellCompletion --cmd ${mainProgram} \
+      --bash <($out/bin/${mainProgram} completion bash) \
+      --fish <($out/bin/${mainProgram} completion fish) \
+      --zsh <($out/bin/${mainProgram} completion zsh)
+  '';
 
-  meta = with stdenv.lib; {
-    description  = "1Password command-line tool";
-    homepage     = "https://support.1password.com/command-line/";
-    downloadPage = "https://app-updates.agilebits.com/product_history/CLI";
-    maintainers  = with maintainers; [ joelburget marsam ];
-    license      = licenses.unfree;
-    platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+  dontStrip = stdenv.isDarwin;
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/${mainProgram} --version
+  '';
+
+  meta = with lib; {
+    description = "1Password command-line tool";
+    homepage = "https://developer.1password.com/docs/cli/";
+    downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
+    maintainers = with maintainers; [ joelburget marsam ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    inherit mainProgram platforms;
   };
 }

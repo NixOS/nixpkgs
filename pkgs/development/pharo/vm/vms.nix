@@ -1,4 +1,5 @@
 { cmake
+, lib
 , stdenv
 , fetchurl
 , bash
@@ -10,7 +11,7 @@
 , libGLU, libGL
 , freetype
 , xorg
-, alsaLib
+, alsa-lib
 , cairo
 , libuuid
 , autoreconfHook
@@ -18,6 +19,7 @@
 , fetchFromGitHub
 , makeWrapper
 , runtimeShell
+, libnsl
 } @args:
 
 let

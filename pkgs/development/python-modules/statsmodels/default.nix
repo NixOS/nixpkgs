@@ -1,35 +1,53 @@
 { lib
-, self
 , buildPythonPackage
+, cython
 , fetchPypi
-, nose
+, matplotlib
 , numpy
-, scipy
 , pandas
 , patsy
-, cython
-, matplotlib
+, pythonOlder
+, scipy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.11.1";
+  version = "0.13.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bde3fa0a35a91b45dba7cbc28270b5b649ff1d721c89290883f6e831672d5f0";
+    hash = "sha256-WTUmrK4cD9oOpsSEOfZ8OUMJTFQv52n4uQ/p5sbMSHE=";
   };
 
-  checkInputs = with self; [ nose ];
-  propagatedBuildInputs = with self; [numpy scipy pandas patsy cython matplotlib];
+  nativeBuildInputs = [
+    cython
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    pandas
+    patsy
+    matplotlib
+  ];
 
   # Huge test suites with several test failures
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "statsmodels"
+  ];
+
+  meta = with lib; {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

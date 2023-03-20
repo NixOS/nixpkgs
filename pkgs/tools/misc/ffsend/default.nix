@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitLab, rustPlatform, cmake, pkgconfig, openssl
-, darwin, installShellFiles
+{ lib, stdenv, fetchFromGitLab, rustPlatform, pkg-config, openssl
+, installShellFiles
+, Security, AppKit
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
@@ -7,7 +8,7 @@
 }:
 
 let
-  usesX11 = stdenv.isLinux || stdenv.hostPlatform.isBSD;
+  usesX11 = stdenv.isLinux || stdenv.isBSD;
 in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
@@ -16,23 +17,24 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.64";
+  version = "0.2.76";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "1fgzcw0955vjypwwx3ja8sil0vxwvhsnspn1bjl869ccbnx2x4hs";
+    sha256 = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
-  cargoSha256 = "0svmbay9waaq9fpc8lg1nys6l35xsjvkri5v1frlgxida5dzghpq";
+  cargoSha256 = "sha256-zNLU9QnBGna5qb+iu2imOUvCIw3ZWRFsQlpFo5ECtKo=";
 
-  nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs =
-    if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    if stdenv.isDarwin then [ Security AppKit ]
     else [ openssl ];
 
-  preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
+  preBuild = lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''
       export XSEL_PATH="${xsel}/bin/xsel"
     '' else ''
@@ -45,7 +47,7 @@ buildRustPackage rec {
   '';
   # There's also .elv and .ps1 completion files but I don't know where to install those
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily and securely share files from the command line. A fully featured Firefox Send client";
     longDescription = ''
       Easily and securely share files and directories from the command line through a safe, private
@@ -54,8 +56,8 @@ buildRustPackage rec {
       web browser.
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ lilyball equirosa ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lilyball equirosa marsam ];
     platforms = platforms.unix;
   };
 }

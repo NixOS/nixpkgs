@@ -1,70 +1,76 @@
-{ stdenv, fetchurl, fetchpatch, lib, enableUnfree ? false }:
+{ lib, stdenv, fetchFromGitHub, enableUnfree ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p7zip";
-  version = "16.02";
+  version = "17.05";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/p7zip/p7zip_${version}_src_all.tar.bz2";
-    sha256 = "5eb20ac0e2944f6cb9c2d51dd6c4518941c185347d4089ea89087ffdd6e2341f";
+  src = fetchFromGitHub {
+    owner = "p7zip-project";
+    repo = "p7zip";
+    rev = "v${finalAttrs.version}";
+    sha256 = {
+      free = "sha256-5r7M9BVcAryZNTkqJ/BfHnSSWov1PwoZhUnLBwEbJoA=";
+      unfree = "sha256-z3qXgv/TkNRbb85Ew1OcJNxoyssfzHShc0b0/4NZOb0=";
+    }.${if enableUnfree then "unfree" else "free"};
+    # remove the unRAR related code from the src drv
+    # > the license requires that you agree to these use restrictions,
+    # > or you must remove the software (source and binary) from your hard disks
+    # https://fedoraproject.org/wiki/Licensing:Unrar
+    postFetch = lib.optionalString (!enableUnfree) ''
+      rm -r $out/CPP/7zip/Compress/Rar*
+      find $out -name makefile'*' -exec sed -i '/Rar/d' {} +
+    '';
   };
-
-  patches = [
-    ./12-CVE-2016-9296.patch
-    ./13-CVE-2017-17969.patch
-    (fetchpatch {
-      name = "3-CVE-2018-5996.patch";
-      url = "https://raw.githubusercontent.com/termux/termux-packages/master/packages/p7zip/3-CVE-2018-5996.patch";
-      sha256 = "1zivvkazmza0653i498ccp3zbpbpc7dvxl3zxwllbx41b6n589yp";
-    })
-    (fetchpatch {
-      name = "4-CVE-2018-10115.patch";
-      url = "https://raw.githubusercontent.com/termux/termux-packages/master/packages/p7zip/4-CVE-2018-10115.patch";
-      sha256 = "1cr7q8gnrk9yp6dcvxaqi1yhdbgp964nkv65ls41mw1kdfm44zn6";
-    })
-  ];
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
   postPatch = ''
     sed -i '/CC=\/usr/d' makefile.macosx_llvm_64bits
+    # Avoid writing timestamps into compressed manpages
+    # to maintain determinism.
+    substituteInPlace install.sh --replace 'gzip' 'gzip -n'
+    chmod +x install.sh
 
     # I think this is a typo and should be CXX? Either way let's kill it
     sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
-  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace makefile.machine \
       --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
       --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
-  '' + lib.optionalString (!enableUnfree) ''
-    # Remove non-free RAR source code
-    # (see DOC/License.txt, https://fedoraproject.org/wiki/Licensing:Unrar)
-    rm -r CPP/7zip/Compress/Rar*
-    find . -name makefile'*' -exec sed -i '/Rar/d' {} +
   '';
 
   preConfigure = ''
-    makeFlagsArray=(DEST_HOME=$out)
     buildFlags=all3
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     cp makefile.macosx_llvm_64bits makefile.machine
   '';
 
   enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+
+  makeFlags = [
+    "DEST_BIN=${placeholder "out"}/bin"
+    "DEST_SHARE=${placeholder "lib"}/lib/p7zip"
+    "DEST_MAN=${placeholder "man"}/share/man"
+    "DEST_SHARE_DOC=${placeholder "doc"}/share/doc/p7zip"
+  ];
+
+  outputs = [ "out" "lib" "doc" "man" ];
 
   setupHook = ./setup-hook.sh;
+  passthru.updateScript = ./update.sh;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
-
-  meta = {
-    homepage = "http://p7zip.sourceforge.net/";
-    description = "A port of the 7-zip archiver";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    knownVulnerabilities = [
-      # p7zip is abandoned, according to this thread on its forums:
-      # https://sourceforge.net/p/p7zip/discussion/383043/thread/fa143cf2/#1817
-      "p7zip is abandoned and may not receive important security fixes"
-    ];
-    # RAR code is under non-free UnRAR license, but we remove it
-    license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
+  meta = with lib; {
+    homepage = "https://github.com/p7zip-project/p7zip";
+    description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
+    license = with licenses;
+      # p7zip code is largely lgpl2Plus
+      # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
+      [ lgpl2Plus /* and */ bsd3 ] ++
+      # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
+      # the unRAR compression code is disabled by default
+      lib.optionals enableUnfree [ unfree ];
+    maintainers = with maintainers; [ raskin jk ];
+    platforms = platforms.unix;
+    mainProgram = "7z";
   };
-}
+})

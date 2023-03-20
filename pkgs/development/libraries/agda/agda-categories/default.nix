@@ -1,15 +1,30 @@
 { lib, mkDerivation, fetchFromGitHub, standard-library }:
 
 mkDerivation rec {
-  version = "0.1";
+  version = "0.1.7.1a";
   pname = "agda-categories";
 
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
-    rev = "release/v${version}";
-    sha256 = "0m4pjy92jg6zfziyv0bxv5if03g8k4413ld8c3ii2xa8bzfn04m2";
+    rev = "v${version}";
+    sha256 = "sha256-VlxRDxXg+unzYlACUU58JQUHXxtg0fI5dEQvlBRxJtU=";
   };
+
+  postPatch = ''
+    # Remove this once agda-categories incorporates this fix or once Agda's
+    # versioning system gets an overhaul in general. Right now there is no middle
+    # ground between "no version constraint" and "exact match down to patch". We
+    # do not want to need to change this postPatch directive on each minor
+    # version update of the stdlib, so we get rid of the version constraint
+    # altogether.
+    sed -Ei 's/standard-library-[0-9.]+/standard-library/' agda-categories.agda-lib
+
+    # The Makefile of agda-categories uses git(1) instead of find(1) to
+    # determine the list of source files. We cannot use git, as $PWD will not
+    # be a valid Git working directory.
+    find src -name '*.agda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.agda//' -e '/import Everything/d' | LC_COLLATE='C' sort > Everything.agda
+  '';
 
   buildInputs = [ standard-library ];
 
@@ -18,11 +33,6 @@ mkDerivation rec {
     description = "A new Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    # agda categories takes a lot of memory to build.
-    # This can be removed if this is eventually fixed upstream.
-    hydraPlatforms = [];
-    # Waiting for release 0.2 for this to work
-    broken = true;
     maintainers = with maintainers; [ alexarice turion ];
   };
 }

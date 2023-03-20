@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "canvas";
+  pname = "canvas";
   version = "2017-11-09";
 
   ipkgName = "idriscanvas";

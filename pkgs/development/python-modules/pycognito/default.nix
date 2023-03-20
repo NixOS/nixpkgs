@@ -1,30 +1,29 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
 , boto3
+, buildPythonPackage
 , envs
+, fetchFromGitHub
+, isPy27
+, freezegun
+, mock
+, moto
+, pytestCheckHook
 , python-jose
 , requests
-, mock
-, isPy27
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pycognito";
-  version = "0.1.2";
+  version = "2022.12.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "pvizeli";
-    repo = "pycognito";
-    rev = version;
-    sha256 = "01zns522awm5yp5cbk1y7k7px534i5akiivip709i1naph3hvnfk";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-WepDna9f3Z3dBxWdE6G7nbl3yPK5vMG+7X1rxbZwdjE=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'python-jose[cryptography]' 'python-jose'
-  '';
 
   propagatedBuildInputs = [
     boto3
@@ -33,14 +32,27 @@ buildPythonPackage rec {
     requests
   ];
 
-  disabled = isPy27;
+  nativeCheckInputs = [
+    freezegun
+    mock
+    moto
+    pytestCheckHook
+    requests-mock
+  ];
 
-  checkInputs = [ mock ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'python-jose[cryptography]' 'python-jose'
+  '';
+
+  pytestFlagsArray = [ "tests.py" ];
+
+  pythonImportsCheck = [ "pycognito" ];
 
   meta = with lib; {
     description = "Python class to integrate Boto3's Cognito client so it is easy to login users. With SRP support";
-    homepage = "https://GitHub.com/pvizeli/pycognito";
+    homepage = "https://github.com/pvizeli/pycognito";
     license = licenses.asl20;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

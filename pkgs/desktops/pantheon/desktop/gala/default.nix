@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , python3
 , ninja
@@ -13,33 +14,31 @@
 , granite
 , libgee
 , bamf
-, libcanberra
 , libcanberra-gtk3
 , gnome-desktop
+, mesa
 , mutter
-, clutter
-, plank
-, elementary-icon-theme
-, elementary-settings-daemon
+, gnome-settings-daemon
 , wrapGAppsHook
+, gexiv2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "3.3.1";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "03cq9ihgjasnv1n4v3dn1m3ypzj26k2ybd5b1a7yrbprb35zbrs4";
+    sha256 = "sha256-YHmmF9tYDgMieLCs9My7NU16Ysq4n2sxWT/7MpaerkI=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # We look for plugins in `/run/current-system/sw/lib/` because
+    # there are multiple plugin providers (e.g. gala and wingpanel).
+    ./plugins-dir.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -55,22 +54,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
-    clutter
-    elementary-icon-theme
+    gnome-settings-daemon
+    gexiv2
     gnome-desktop
-    elementary-settings-daemon
     granite
     gtk3
-    libcanberra
     libcanberra-gtk3
     libgee
+    mesa # for libEGL
     mutter
-    plank
   ];
 
-  patches = [
-    ./plugins-dir.patch
-    ./use-new-notifications-default.patch
+  mesonFlags = [
+    # TODO: enable this and remove --builtin flag from session-settings
+    # https://github.com/NixOS/nixpkgs/pull/140429
+    "-Dsystemd=false"
   ];
 
   postPatch = ''
@@ -78,11 +76,16 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta =  with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "gala";
   };
 }

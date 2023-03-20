@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "gin-config";
-  version = "0.2.1";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6305325d5afe470fa5a7130883035e51950478b317750205a1532e5413d4ba4c";
+    sha256 = "0c6ea5026ded927c8c93c990b01c695257c1df446e45e549a158cfbc79e19ed6";
 
   };
 

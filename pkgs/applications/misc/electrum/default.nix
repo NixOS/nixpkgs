@@ -1,21 +1,17 @@
-{ stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, python3Packages, zbar, secp256k1
-, enableQt ? !stdenv.isDarwin
-
-
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, wrapQtAppsHook
+, python3
+, zbar
+, secp256k1
+, enableQt ? true
+, callPackage
 }:
 
 let
-  version = "3.3.8";
+  version = "4.3.4";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -24,6 +20,7 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -31,22 +28,23 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1di8ba77kgapcys0d7h5nx1qqakv3s60c6sp8skw8p69ramsl73c";
+    sha256 = "sha256-0xYGTCk+Sk7LP+E9r2Y7UJZsfbobLe6Yb+x5ZRCN40Y=";
 
-    extraPostFetch = ''
+    postFetch = ''
       mv $out ./all
       mv ./all/electrum/tests $out
     '';
   };
+
 in
 
-python3Packages.buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1g00cj1pmckd4xis8r032wmraiv3vd3zc803hnyxa2bnhj8z3bg2";
+    sha256 = "sha256-+Z4NZK/unFN6mxCuMleHBxAoD+U1PzVk3/ZnZRmOOxo=";
   };
 
   postUnpack = ''
@@ -54,89 +52,74 @@ python3Packages.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
-    aiorpcx
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
+    aiorpcx
+    attrs
+    bitstring
+    cryptography
     dnspython
-    ecdsa
     jsonrpclib-pelix
     matplotlib
     pbkdf2
     protobuf
-    pyaes
-    pycryptodomex
     pysocks
     qrcode
     requests
     tlslite-ng
-
     # plugins
+    btchip-python
     ckcc-protocol
     keepkey
     trezor
-    btchip
+  ] ++ lib.optionals enableQt [
+    pyqt5
+    qdarkstyle
+  ];
 
-    # TODO plugins
-    # amodem
-  ] ++ stdenv.lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  postPatch = ''
+    # make compatible with protobuf4 by easing dependencies ...
+    substituteInPlace ./contrib/requirements/requirements.txt \
+      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+    # ... and regenerating the paymentrequest_pb2.py file
+    protoc --python_out=. electrum/paymentrequest.proto
 
-  preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
       --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
+  postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
                 "Exec=$out/bin/electrum %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
                 "Exec=$out/bin/electrum --testnet %u"
-
   '';
 
-  postFixup = stdenv.lib.optionalString enableQt ''
+  postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3Packages; [ pytest ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
-  checkPhase = ''
-    py.test electrum/tests
+  pytestFlagsArray = [ "electrum/tests" ];
+
+  postCheck = ''
     $out/bin/electrum help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
+  passthru.updateScript = callPackage ./update.nix { };
 
-  meta = with stdenv.lib; {
-    description = "A lightweight Bitcoin wallet";
+  meta = with lib; {
+    description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
@@ -144,8 +127,10 @@ python3Packages.buildPythonApplication {
       of the blockchain.
     '';
     homepage = "https://electrum.org/";
+    downloadPage = "https://electrum.org/#download";
+    changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry joachifm np ];
+    maintainers = with maintainers; [ joachifm np prusnak ];
   };
 }

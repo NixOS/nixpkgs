@@ -1,26 +1,68 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, which
+, zip
+, wxGTK
+, gtk3
+, sfml
+, fluidsynth
+, curl
+, freeimage
+, ftgl
+, glew
+, lua
+, mpg123
+}:
 
-stdenv.mkDerivation {
-  name = "slade-git-3.1.2.2018.01.29";
+stdenv.mkDerivation rec {
+  pname = "slade";
+  version = "unstable-2022-08-15";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "f7409c504b40c4962f419038db934c32688ddd2e";
-    sha256 = "14icxiy0r9rlcc10skqs1ylnxm1f0f3irhzfmx4sazq0pjv5ivld";
+    rev = "1a0d25eec54f9ca2eb3667676d93fb0b6b6aea26";
+    sha256 = "sha256-mtaJr4HJbp2UnzwaLq12V69DqPYDmSNqMGiuPpMlznI=";
   };
 
-  cmakeFlags = ["-DNO_WEBVIEW=1"];
-  nativeBuildInputs = [ cmake pkgconfig zip ];
-  buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    sed -i '/-msse/d' src/CMakeLists.txt
+  '';
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    which
+    zip
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    wxGTK
+    gtk3
+    sfml
+    fluidsynth
+    curl
+    freeimage
+    ftgl
+    glew
+    lua
+    mpg123
+  ];
+
+  cmakeFlags = [
+    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
+  meta = with lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ertes ];
   };
 }

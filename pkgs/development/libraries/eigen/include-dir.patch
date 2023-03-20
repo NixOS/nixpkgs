@@ -1,14 +1,22 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,6 +1,6 @@
+@@ -1,5 +1,5 @@
+ # cmake_minimum_require must be the first command of the file
+-cmake_minimum_required(VERSION 3.5.0)
++cmake_minimum_required(VERSION 3.7.0)
+ 
  project(Eigen3)
  
--cmake_minimum_required(VERSION 2.8.5)
-+cmake_minimum_required(VERSION 3.7)
+@@ -443,7 +443,7 @@ set(PKGCONFIG_INSTALL_DIR
+     CACHE PATH "The directory relative to CMAKE_INSTALL_PREFIX where eigen3.pc is installed"
+     )
  
- # guard against in-source builds
- 
-@@ -408,13 +408,6 @@ install(FILES
+-foreach(var INCLUDE_INSTALL_DIR CMAKEPACKAGE_INSTALL_DIR PKGCONFIG_INSTALL_DIR)
++foreach(var CMAKEPACKAGE_INSTALL_DIR PKGCONFIG_INSTALL_DIR)
+   # If an absolute path is specified, make it relative to "{CMAKE_INSTALL_PREFIX}".
+   if(IS_ABSOLUTE "${${var}}")
+     file(RELATIVE_PATH "${var}" "${CMAKE_INSTALL_PREFIX}" "${${var}}")
+@@ -466,13 +466,6 @@ install(FILES
    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
    )
  
@@ -19,10 +27,10 @@
 -        )
 -endif()
 -
- add_subdirectory(Eigen)
+ install(DIRECTORY Eigen DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
  
- add_subdirectory(doc EXCLUDE_FROM_ALL)
-@@ -510,8 +503,15 @@ set ( EIGEN_VERSION_MAJOR  ${EIGEN_WORLD_VERSION} )
+ 
+@@ -593,8 +586,15 @@ set ( EIGEN_VERSION_MAJOR  ${EIGEN_WORLD_VERSION} )
  set ( EIGEN_VERSION_MINOR  ${EIGEN_MAJOR_VERSION} )
  set ( EIGEN_VERSION_PATCH  ${EIGEN_MINOR_VERSION} )
  set ( EIGEN_DEFINITIONS "")
@@ -37,8 +45,8 @@
 +        )
 +endif()
  
- # Interface libraries require at least CMake 3.0
- if (NOT CMAKE_VERSION VERSION_LESS 3.0)
+ include (CMakePackageConfigHelpers)
+ 
 --- a/eigen3.pc.in
 +++ b/eigen3.pc.in
 @@ -6,4 +6,4 @@ Description: A C++ template library for linear algebra: vectors, matrices, and r

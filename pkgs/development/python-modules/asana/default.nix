@@ -1,37 +1,46 @@
-{ buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
-, fetchFromGitHub, responses, stdenv
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-oauthlib
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.8.2";
+  version = "3.1.1";
+  format = "setuptools";
 
-  # upstream reportedly doesn't support 3.7 yet, blocked on
-  # https://bugs.python.org/issue34226
-  disabled = pythonAtLeast "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
-    rev = "v${version}";
-    sha256 = "113zwnrpim1pdw8dzid2wpp5gzr2zk26jjl4wrwhgj0xk1cw94yi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7POA3r3PqJ/PcyG7GFugg5p8o0h3OIA8zEIfsTwPxFI=";
   };
 
-  checkInputs = [ pytest responses ];
-  propagatedBuildInputs = [ requests requests_oauthlib six ];
+  propagatedBuildInputs = [
+    requests
+    requests-oauthlib
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "requests_oauthlib >= 0.8.0, == 0.8.*" "requests_oauthlib>=0.8.0<2.0"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
 
-  checkPhase = ''
-    py.test tests
-  '';
+  pythonImportsCheck = [
+    "asana"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Asana";
     homepage = "https://github.com/asana/python-asana";
+    changelog = "https://github.com/Asana/python-asana/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

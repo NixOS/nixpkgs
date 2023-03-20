@@ -2,8 +2,8 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
-, alsaLib
+, pkg-config
+, alsa-lib
 , kguiaddons
 , kwindowsystem
 , libXdamage
@@ -17,7 +17,7 @@
 , lxmenu-data
 , lxqt-build-tools
 , lxqt-globalkeys
-, lxqtUpdateScript
+, gitUpdater
 , menu-cache
 , pcre
 , qtbase
@@ -30,23 +30,23 @@
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.15.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0f3sjzkria61nz342daxps2w57wnx6laq9iww8hha7rbi24yw2sd";
+    sha256 = "TwVM0JY+BMvw6e/mzy82AH5E6pPsffE6oadd0BuCZk0=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     kguiaddons
     kwindowsystem
     libXdamage
@@ -67,16 +67,17 @@ mkDerivation rec {
     qtx11extras
     solid
     xorg.libXdmcp
+    xorg.libXtst
     xorg.libpthreadstubs
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "The LXQt desktop panel";
     homepage = "https://github.com/lxqt/lxqt-panel";
-    license = licenses.lgpl21;
+    description = "The LXQt desktop panel";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

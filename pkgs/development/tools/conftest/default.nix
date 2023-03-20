@@ -1,28 +1,64 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.18.2";
+  version = "0.39.2";
 
   src = fetchFromGitHub {
-    owner = "instrumenta";
+    owner = "open-policy-agent";
     repo = "conftest";
-    rev = "v${version}";
-    sha256 = "15xzldcmnpfg1hd5zr5i7x2zjrgkwnp4nylxbn9kfic2dpjp1a38";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QthFKdO68kFePAMQX239f4HJNG5ZkOyxEq6zmHuDNE4=";
   };
+  vendorHash = "sha256-6JYn8o696uDKayw5zLoys5UNIFS2FK2LOZw62rgP72Y=";
 
-  vendorSha256 = "1kay7b5rxypj4i0d2iwdlb1mj0qq3zvlrjp34zzv5kywz5gy4144";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
+  ];
 
-  buildFlagsArray = ''
-    -ldflags=
-        -X main.version=${version}
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd conftest \
+      --bash <($out/bin/conftest completion bash) \
+      --fish <($out/bin/conftest completion fish) \
+      --zsh <($out/bin/conftest completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export HOME="$(mktemp -d)"
+    $out/bin/conftest --version | grep ${version} > /dev/null
   '';
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
-    homepage = "https://github.com/instrumenta/conftest";
+    downloadPage = "https://github.com/open-policy-agent/conftest";
+    homepage = "https://www.conftest.dev";
+    changelog = "https://github.com/open-policy-agent/conftest/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
+    longDescription = ''
+      Conftest helps you write tests against structured configuration data.
+      Using Conftest you can write tests for your Kubernetes configuration,
+      Tekton pipeline definitions, Terraform code, Serverless configs or any
+      other config files.
+
+      Conftest uses the Rego language from Open Policy Agent for writing the
+      assertions. You can read more about Rego in 'How do I write policies' in
+      the Open Policy Agent documentation.
+    '';
+    maintainers = with maintainers; [ jk yurrriq ];
   };
 }

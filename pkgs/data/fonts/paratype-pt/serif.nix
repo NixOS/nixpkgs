@@ -1,22 +1,28 @@
-{ stdenv, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "paratype-pt-serif";
+stdenvNoCC.mkDerivation rec {
+  pname = "paratype-pt-serif";
+  version = "2.005";
 
-  url = [
-    "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
-    "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
-  ];
+  src = fetchzip {
+    urls = [
+      "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
+      "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
+    ];
+    stripRoot = false;
+    hash = "sha256-4L3t5NEHmj975fn8eBAkRUO1OL0xseNp9g7k7tt/O2c=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 *.txt -t $out/share/doc/paratype
+
+    runHook postInstall
   '';
 
-  sha256 = "1iw5qi4ag3yp1lwmi91lb18gr768bqwl46xskaqnkhr9i9qp0v6d";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 
@@ -29,4 +35,3 @@ fetchzip {
     maintainers = with maintainers; [ raskin ];
   };
 }
-

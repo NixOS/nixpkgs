@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
 
 stdenv.mkDerivation rec {
   pname = "infamousPlugins";
@@ -11,10 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "1r72agk5nxf5k0mghcc2j90z43j5d9i7rqjmf49jfyqnd443isip";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ssj71/infamousPlugins/commit/06dd967b4736ea886dc1dc07f882cb1563961582.patch";
+      sha256 = "08xwh6px13y1gykaw103nhvjms7vgbgkcm0avh9f5d2d7aadq0l2";
+    })
+  ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ssj71.github.io/infamousPlugins";
     description = "A collection of open-source LV2 plugins";
     longDescription = ''

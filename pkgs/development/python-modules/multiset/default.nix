@@ -1,22 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
-, pytestrunner
-, pytest
+, setuptools
+, setuptools-scm
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "multiset";
-  version = "2.1.1";
+  version = "3.0.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4801569c08bfcecfe7b0927b17f079c90f8607aca8fecaf42ded92b737162bc7";
+    hash = "sha256-5FZxyug4Wo5iSKmwejqDKAwtDMQxJxMFjPus3F7Jlz4=";
   };
 
-  buildInputs = [ setuptools_scm pytestrunner ];
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  postPatch = ''
+    # Drop broken version specifier
+    sed -i '/python_requires/d' setup.cfg
+  '';
+
+  pythonImportsCheck = [
+    "multiset"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "An implementation of a multiset";

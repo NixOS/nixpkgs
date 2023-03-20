@@ -1,31 +1,54 @@
-{ rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang, stdenv, darwin }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.16.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1zlljqkkcw8h94ff1w47sqn9pn0zal06s06i8nciv5i2d1xaqg5n";
+    hash = "sha256-vVdvj3Q3weK+yohSaEDaagqWWZkA+KV4gRRbcE3UiPQ=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1hb7l7a76lgbji0qm9qd80m35cp346hyi4rphfk6p80v142cw8hh";
+  cargoHash = "sha256-7FYXKEN17I7sLQid2JGTxFHMhGPka2coEMS6y4HvwPU=";
 
-  nativeBuildInputs = [ python cmake clang ];
-  buildInputs = [ llvmPackages.libclang ] ++
-   lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  cargoBuildFlags = [
+    "--package wasmtime-cli"
+    "--package wasmtime-c-api"
+  ];
 
-  doCheck = true;
+  outputs = [ "out" "dev" ];
+
+  # We disable tests on x86_64-darwin because Hydra runners do not
+  # support SSE3, SSSE3, SSE4.1 and SSE4.2 at this time. This is
+  # required by wasmtime. Given this is very specific to Hydra
+  # runners, just disable tests on this platform, so we don't get
+  # false positives of this package being broken due to failed runs on
+  # Hydra (e.g. https://hydra.nixos.org/build/187667794/)
+  doCheck = (stdenv.system != "x86_64-darwin");
+  cargoTestFlags = [
+    "--package wasmtime-runtime"
+  ];
+
+  postInstall = ''
+    # move libs from out to dev
+    install -d -m 0755 $dev/lib
+    install -m 0644 ''${!outputLib}/lib/* $dev/lib
+    rm -r ''${!outputLib}/lib
+
+    install -d -m0755 $dev/include/wasmtime
+    install -m0644 $src/crates/c-api/include/*.h $dev/include
+    install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
+    install -m0644 $src/crates/c-api/wasm-c-api/include/* $dev/include
+  '';
 
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
-    homepage = "https://github.com/CraneStation/wasmtime";
+    homepage = "https://github.com/bytecodealliance/wasmtime";
     license = licenses.asl20;
-    maintainers = [ maintainers.matthewbauer ];
+    maintainers = with maintainers; [ ereslibre matthewbauer ];
     platforms = platforms.unix;
   };
 }

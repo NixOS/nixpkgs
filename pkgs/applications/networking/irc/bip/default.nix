@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bison, flex, autoconf, automake, openssl }:
+{ lib, stdenv, fetchurl, fetchpatch, bison, flex, autoconf, automake, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "bip";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q942g9lyd8pjvqimv547n6vik5759r9npw3ws3bdj4ixxqhz59w";
   };
 
-  buildInputs = [ bison flex autoconf automake openssl ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ bison flex openssl ];
 
   # includes an important security patch
   patches = [
@@ -37,13 +38,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=duplicate-decl-specifier";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=duplicate-decl-specifier";
 
   meta = {
     description = "An IRC proxy (bouncer)";
     homepage = "http://bip.milkypond.org/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     downloadPage = "https://projects.duckcorp.org/projects/bip/files";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

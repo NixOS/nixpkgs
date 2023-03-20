@@ -1,47 +1,103 @@
-{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
-, withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
-
-# Doc generation is disabled by default when cross compiling because asciidoc
-# does not cross compile for now
-
-assert withDoc -> asciidoc != null;
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, freetype, asciidoc
+, xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, fetchpatch
+, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.8.1";
+  version = "0.9.5";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "0c1lf82z6a56g8asin91cmqhzk3anw0xwc44b31bpjixadmns57y";
+    sha256 = "sha256-stRgCQnlvs5a1jgY37MLsZ/SrJ9ShHsaenStQEBxgQU=";
   };
 
   outputs = [
     "out"
-  ] ++ stdenv.lib.optionals withDoc [
     "doc"
     "man"
   ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
-  ] ++ stdenv.lib.optional (!withDoc) "-DWITH_DOCUMENTATION=OFF";
+  ];
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
-  ] ++ stdenv.lib.optional withDoc asciidoc;
+    pkg-config
+  ];
+
+  depsBuildBuild = [
+    asciidoc
+  ];
 
   buildInputs = [
     libX11
     libXext
     libXinerama
     libXrandr
+    libXft
+    libXrender
+    libXdmcp
+    libXfixes
+    freetype
   ];
 
-  meta = {
+  patches = [
+    ./test-path-environment.patch
+    # Adjust tests for compatibility with gcc 12 (https://github.com/herbstluftwm/herbstluftwm/issues/1512)
+    # Can be removed with the next release (>0.9.5).
+    (fetchpatch {
+      url = "https://github.com/herbstluftwm/herbstluftwm/commit/8678168c7a3307b1271e94974e062799e745ab40.patch";
+      hash = "sha256-uI6ErfDitT2Tw0txx4lMSBn/jjiiyL4Qw6AJa/CTh1E=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs doc/gendoc.py
+
+    # fix /etc/xdg/herbstluftwm paths in documentation and scripts
+    grep -rlZ /etc/xdg/herbstluftwm share/ doc/ scripts/ | while IFS="" read -r -d "" path; do
+      substituteInPlace "$path" --replace /etc/xdg/herbstluftwm $out/etc/xdg/herbstluftwm
+    done
+
+    # fix shebang in generated scripts
+    substituteInPlace tests/conftest.py --replace "/usr/bin/env bash" ${runtimeShell}
+    substituteInPlace tests/test_herbstluftwm.py --replace "/usr/bin/env bash" ${runtimeShell}
+  '';
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
+    xdotool
+    xorgserver
+    xsetroot
+    xterm
+    python3.pkgs.pytestCheckHook
+  ];
+
+  # make the package's module available
+  preCheck = ''
+    export PYTHONPATH="$PYTHONPATH:../python"
+  '';
+
+  pytestFlagsArray = [ "../tests" ];
+  disabledTests = [
+    "test_autostart" # $PATH problems
+    "test_wmexec_to_other" # timeouts in sandbox
+    "test_rules" # timeouts
+  ];
+
+  passthru = {
+    tests.herbstluftwm = nixosTests.herbstluftwm;
+  };
+
+  meta = with lib; {
     description = "A manual tiling window manager for X";
     homepage = "https://herbstluftwm.org/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thibautmarty ];
   };
 }

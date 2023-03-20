@@ -22,12 +22,28 @@ let
       '';
     };
 
-    scudo = {
-      libPath = "${pkgs.llvmPackages.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+    scudo = let
+      platformMap = {
+        aarch64-linux = "aarch64";
+        x86_64-linux  = "x86_64";
+      };
+
+      systemPlatform = platformMap.${pkgs.stdenv.hostPlatform.system} or (throw "scudo not supported on ${pkgs.stdenv.hostPlatform.system}");
+    in {
+      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-${systemPlatform}.so";
       description = ''
         A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
         which aims at providing additional mitigations against heap based
         vulnerabilities, while maintaining good performance.
+      '';
+    };
+
+    mimalloc = {
+      libPath = "${pkgs.mimalloc}/lib/libmimalloc.so";
+      description = ''
+        A compact and fast general purpose allocator, which may
+        optionally be built with mitigations against various heap
+        vulnerabilities.
       '';
     };
   };
@@ -61,24 +77,21 @@ in
     environment.memoryAllocator.provider = mkOption {
       type = types.enum ([ "libc" ] ++ attrNames providers);
       default = "libc";
-      description = ''
+      description = lib.mdDoc ''
         The system-wide memory allocator.
 
         Briefly, the system-wide memory allocator providers are:
-        <itemizedlist>
-        <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
-        ${toString (mapAttrsToList
-            (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
-            providers)}
-        </itemizedlist>
 
-        <warning>
-        <para>
+        - `libc`: the standard allocator provided by libc
+        ${concatStringsSep "\n" (mapAttrsToList
+            (name: value: "- `${name}`: ${replaceStrings [ "\n" ] [ " " ] value.description}")
+            providers)}
+
+        ::: {.warning}
         Selecting an alternative allocator (i.e., anything other than
-        <literal>libc</literal>) may result in instability, data loss,
+        `libc`) may result in instability, data loss,
         and/or service failure.
-        </para>
-        </warning>
+        :::
       '';
     };
   };
@@ -87,5 +100,15 @@ in
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';
+    security.apparmor.includes = {
+      "abstractions/base" = ''
+        r /etc/ld-nix.so.preload,
+        r ${config.environment.etc."ld-nix.so.preload".source},
+        include "${pkgs.apparmorRulesFromClosure {
+            name = "mallocLib";
+            baseRules = ["mr $path/lib/**.so*"];
+          } [ mallocLib ] }"
+      '';
+    };
   };
 }

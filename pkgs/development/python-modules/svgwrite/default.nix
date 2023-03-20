@@ -1,33 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pyparsing
-, pytest
+, pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "svgwrite";
-  version = "1.3.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "svgwrite";
     rev = "v${version}";
-    sha256 = "14wz0y118a5wwfzin6cirr9254p4y825lnrnackihdbpw22gcw11";
+    hash = "sha256-uOsrDhE9AwWU7GIrCVuL3uXTPqtrh8sofvo2C5t+25I=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  # svgwrite requires Python 3.6 or newer
+  disabled = pythonOlder "3.6";
 
-  checkInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  # embed_google_web_font test tried to pull font from internet
-  checkPhase = ''
-    pytest -k "not test_embed_google_web_font"
-  '';
+  disabledTests = [
+    # embed_google_web_font test tried to pull font from internet
+    "test_embed_google_web_font"
+  ];
 
   meta = with lib; {
     description = "A Python library to create SVG drawings";

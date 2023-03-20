@@ -1,29 +1,55 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, awscli }:
-stdenv.mkDerivation rec {
-  pname = "ssm-session-manager-plugin";
-  version = "1.1.61.0";
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGo120Package
+}:
 
-  src = fetchurl {
-    url =
-      "https://s3.amazonaws.com/session-manager-downloads/plugin/${version}/ubuntu_64bit/session-manager-plugin.deb";
-    sha256 = "0z59irrpwhjjhn379454xyraqs590hij2n6n6k25w5hh8ak7imfl";
+buildGo120Package rec {
+  pname = "ssm-session-manager-plugin";
+  version = "1.2.398.0";
+
+  goPackagePath = "github.com/aws/session-manager-plugin";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "session-manager-plugin";
+    rev = version;
+    sha256 = "ufNnr/sxOHUDUsGXwxp1yloVAI6DMtuEdjcQZ2XaHRg=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  postPatch = ''
+    mv vendor{,-old}
+    mv vendor-old/src vendor
+    rm -r vendor-old
+  '';
 
-  buildInputs = [ awscli ];
+  preBuild = ''
+    pushd go/src/${lib.escapeShellArg goPackagePath}
+    echo -n ${lib.escapeShellArg version} > VERSION
+    go run src/version/versiongenerator/version-gen.go
+    popd
+  '';
 
-  unpackPhase = "dpkg-deb -x $src .";
+  doCheck = true;
+  checkFlags = "-skip TestSetSessionHandlers";
 
-  installPhase =
-    "install -m755 -D usr/local/sessionmanagerplugin/bin/session-manager-plugin $out/bin/session-manager-plugin";
+  preCheck = ''
+    if ! [[ $(go/bin/sessionmanagerplugin-main --version) = ${lib.escapeShellArg version} ]]; then
+      echo 'wrong version'
+      exit 1
+    fi
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm555 go/bin/sessionmanagerplugin-main "$out/bin/session-manager-plugin"
+    runHook postInstall
+  '';
 
   meta = with lib; {
-    homepage =
-      "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
+    homepage = "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
     description = "Amazon SSM Session Manager Plugin";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mbaillie ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ amarshall mbaillie ];
   };
 }

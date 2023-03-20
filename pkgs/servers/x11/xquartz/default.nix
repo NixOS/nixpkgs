@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
+{ lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
 , quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf
 , shell ? "${bashInteractive}/bin/bash"
@@ -95,7 +95,8 @@ let
     ];
   };
 in stdenv.mkDerivation {
-  name = "xquartz-${stdenv.lib.getVersion xorg.xorgserver}";
+  pname = "xquartz";
+  version = lib.getVersion xorg.xorgserver;
 
   nativeBuildInputs = [ ruby makeWrapper ];
 
@@ -135,7 +136,7 @@ in stdenv.mkDerivation {
     defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
     ruby ${./patch_plist.rb} \
-      ${stdenv.lib.escapeShellArg (builtins.toXML {
+      ${lib.escapeShellArg (builtins.toXML {
         XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
         XQUARTZ_DEFAULT_SHELL  = shell;
         XQUARTZ_DEFAULT_STARTX = "@STARTX@";
@@ -184,7 +185,7 @@ in stdenv.mkDerivation {
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms   = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];
     license     = licenses.mit;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor";
-  version = "5.4.38";
+  version = "5.9.35";
 
   src = fetchurl {
-    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.amd64.tar.gz";
-    sha256 = "0fidy8gd4mqvyfgmrwdiz8z53dyzihqqhgfrffj0z0idm2zi4mcq";
+    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
+    sha256 = "sha256-c5DYS0PQemZ8Sql2KjnuMspCLDJzU95rsbuIdoxWDM0=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
@@ -36,11 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Master PDF Editor";
     homepage = "https://code-industry.net/free-pdf-editor/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
-    platforms = with platforms; [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cmcdragonkai flokli ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ cmcdragonkai ];
   };
 }

@@ -1,27 +1,58 @@
-{ stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
-, yacc , glibc, perl, kerberos, libxslt, docbook_xsl
-, docbook_xml_dtd_43 , libtool_2, removeReferencesTo
-, ncurses # Extra ncurses utilities. Only needed for debugging.
-, tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, which
+, autoconf
+, automake
+, flex
+, bison
+, glibc
+, perl
+, libkrb5
+, libxslt
+, docbook_xsl
+, file
+, docbook_xml_dtd_43
+, libtool_2
+, withDevdoc ? false
+, doxygen
+, dblatex # Extra developer documentation
+, withNcurses ? false
+, ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
+, withTsm ? false
+, tsm-client # Tivoli Storage Manager Backup Client from IBM
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
+let
+  inherit (lib) optional optionalString optionals;
 
+in
 stdenv.mkDerivation {
   pname = "openafs";
   inherit version srcs;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoconf automake flex libxslt libtool_2 perl
-    removeReferencesTo which yacc ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    libxslt
+    libtool_2
+    perl
+    which
+    bison
+  ] ++ optionals withDevdoc [ doxygen dblatex ];
 
-  buildInputs = [ kerberos ncurses ];
+  buildInputs = [ libkrb5 ] ++ optional withNcurses ncurses;
 
-  patches = [ ./bosserver.patch ./cross-build.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./bosserver.patch ./cross-build.patch ]
+    ++ optional withTsm ./tsmbac.patch;
 
-  outputs = [ "out" "dev" "man" "doc" "server" ];
+  outputs = [ "out" "dev" "man" "doc" ] ++ optional withDevdoc "devdoc";
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   setOutputFlags = false;
 
@@ -44,21 +75,20 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
+
     configureFlagsArray=(
       "--with-gssapi"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
       "--disable-kernel-module"
       "--disable-fuse-client"
-      "--with-html-xsl=${docbook_xsl}/share/xml/docbook-xsl/html/chunk.xsl"
-      ${stdenv.lib.optionalString (tsmbac != null) "--enable-tivoli-tsm"}
-      ${stdenv.lib.optionalString (ncurses == null) "--disable-gtx"}
+      "--with-docbook-stylesheets=${docbook_xsl}/share/xml/docbook-xsl"
+      ${optionalString withTsm "--enable-tivoli-tsm"}
+      ${optionalString (!withNcurses) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
-      "--libexecdir=$server/libexec"
     )
-  '' + stdenv.lib.optionalString (tsmbac != null) ''
-    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsmbac}/lib64/sample -DXBSA_TSMLIB=\\\"${tsmbac}/lib64/libApiTSM64.so\\\""
-    export XBSA_XLIBS="-ldl"
+  '' + optionalString withTsm ''
+    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/lib64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
   '';
 
   buildFlags = [ "all_nolibafs" ];
@@ -67,27 +97,31 @@ stdenv.mkDerivation {
     for d in doc/xml/{AdminGuide,QuickStartUnix,UserGuide}; do
       make -C "''${d}" index.html
     done
+  '' + optionalString withDevdoc ''
+    make dox
   '';
 
   postInstall = ''
     mkdir -p $doc/share/doc/openafs/{AdminGuide,QuickStartUnix,UserGuide}
-    cp -r doc/{pdf,protocol,txt} README LICENSE $doc/share/doc/openafs
+    cp -r doc/txt README LICENSE $doc/share/doc/openafs
     for d in AdminGuide QuickStartUnix UserGuide ; do
       cp "doc/xml/''${d}"/*.html "$doc/share/doc/openafs/''${d}"
     done
 
     rm -r $out/lib/openafs
+  '' + optionalString withDevdoc ''
+    mkdir -p $devdoc/share/devhelp/openafs/doxygen
+    cp -r doc/{pdf,protocol} $devdoc/share/devhelp/openafs
+    cp -r doc/doxygen/output/html $devdoc/share/devhelp/openafs/doxygen
   '';
 
   # Avoid references to $TMPDIR by removing it and let patchelf cleanup the
   # binaries.
   preFixup = ''
     rm -rf "$(pwd)" && mkdir "$(pwd)"
-
-    find $out -type f -exec remove-references-to -t $server '{}' '+'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     outputsToInstall = [ "out" "doc" "man" ];
     description = "Open AFS client";
     homepage = "https://www.openafs.org";

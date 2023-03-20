@@ -1,18 +1,21 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule {
   pname = "bosun";
-  version = "0.5.0";
+  version = "unstable-2021-05-13";
 
   src = fetchFromGitHub {
     owner = "bosun-monitor";
     repo = "bosun";
-    rev = version;
-    sha256 = "1qj97wiqj6awivvac1n00k0x8wdv4ambzdj4502nmmnr5rdbqq88";
+    rev = "e25bc3e69a1fb2e29d28f13a78ffa71cc0b8cc87";
+    hash = "sha256-YL1RqoryHRWKyUwO9NE8z/gsE195D+vFWR8YpZH+gbw=";
   };
 
+  vendorHash = "sha256-5mVI5cyuIB+6KHlTpDxSNGU7yBsGQC4IA+iDgvVFVZM=";
+
   subPackages = [ "cmd/bosun" "cmd/scollector" ];
-  goPackagePath = "bosun.org";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Time Series Alerting Framework";
@@ -20,5 +23,6 @@ buildGoPackage rec {
     homepage = "https://bosun.org";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,30 +1,58 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  # build dependencies
-  cython,
-  leptonica,
-  pkg-config,
-  tesseract,
-  # extra python packages
-  pillow
+{ buildPythonPackage
+, fetchPypi
+, lib
+
+# build dependencies
+, cython
+, leptonica
+, pkg-config
+, tesseract4
+
+# propagates
+, pillow
+
+# tests
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cc7d4r11z26rhcwpmcc42fi9kr3f20nq5pk84jrczr18i0g99mh";
+    sha256 = "1bmj76gi8401lcqdaaznfmz9yf11myy1bzivqwwq08z3dwzxswck";
   };
 
-  nativeBuildInputs = [ cython pkg-config ];
-  buildInputs = [ leptonica tesseract ];
-  propagatedBuildInputs = [ pillow ];
+  # https://github.com/sirfz/tesserocr/issues/314
+  postPatch = ''
+    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesseract.pxd
+  '';
+
+  nativeBuildInputs = [
+    cython
+    pkg-config
+  ];
+
+  buildInputs = [
+    leptonica
+    tesseract4
+  ];
+
+  propagatedBuildInputs = [
+    pillow
+  ];
+
+  pythonImportsCheck = [
+    "tesserocr"
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";
     description = "A simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
     homepage = "https://github.com/sirfz/tesserocr";
     license = licenses.mit;

@@ -3,10 +3,9 @@
 , fetchFromGitHub
 , fetchpatch
 , isPy27
-, pytest
+, pytestCheckHook
 , nose
 , numpy
-, scipy
 , pandas
 , xarray
 , traitlets
@@ -35,7 +34,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ traitlets ];
 
-  checkInputs = [ numpy pandas xarray nose pytest ];
+  nativeCheckInputs = [ numpy pandas xarray nose pytestCheckHook ];
+
+  disabledTestPaths = lib.optional (lib.versionAtLeast numpy.version "1.17") [
+    # https://github.com/jupyter-widgets/traittypes/blob/master/setup.py#L86-L87
+    "traittypes/tests/test_traittypes.py"
+  ];
+
+  pythonImportsCheck = [ "traittypes" ];
 
   meta = with lib; {
     description = "Trait types for NumPy, SciPy, XArray, and Pandas";

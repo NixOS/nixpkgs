@@ -1,35 +1,60 @@
-{ stdenv
+{ lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, zlib
-, openssl
-, Security
+, installShellFiles
+, stdenv
+, darwin
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.7.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "06nrb84xfvx02yc4bjn1szfq3bjy8mqgxwwrjghl7vpcw51qhlk5";
+    hash = "sha256-iI9J1BGD7/SDLoJ2WfizAEHUXBJH4DiUbfGingef9lM=";
   };
 
-  cargoSha256 = "0mk8hvhjqggfr410yka9ygb41l1bnsizs8py3100xf685yxy5mhl";
+  cargoSha256 = "sha256-qvV7rJx0Yrv5CLRqSshGf1JUL6nW5KDb7Sv7B6M6WDs=";
 
-  RUSTC_BOOTSTRAP = 1;
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  nativeBuildInputs = [ pkg-config zlib ];
-  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
-  meta = with stdenv.lib; {
-    description = "For when you really just want to serve some files over HTTP right now!";
+  nativeCheckInputs = [
+    curl
+  ];
+
+  checkFlags = [
+    "--skip=bind_ipv4_ipv6::case_2"
+    "--skip=qrcode_hidden_in_tty_when_disabled"
+    "--skip=qrcode_shown_in_tty_when_enabled"
+  ];
+
+  postInstall = ''
+    $out/bin/miniserve --print-manpage >miniserve.1
+    installManPage miniserve.1
+
+    installShellCompletion --cmd miniserve \
+      --bash <($out/bin/miniserve --print-completions bash) \
+      --fish <($out/bin/miniserve --print-completions fish) \
+      --zsh <($out/bin/miniserve --print-completions zsh)
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
+    description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nequissimus ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

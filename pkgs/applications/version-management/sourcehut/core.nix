@@ -1,31 +1,58 @@
-{ stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, html5lib, markdown, psycopg2, pygments
-, requests, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
-, celery, alembic, importlib-metadata
-, sassc, nodejs
-, writeText }:
+{ lib
+, fetchFromSourcehut
+, fetchNodeModules
+, buildPythonPackage
+, pgpy
+, flask
+, bleach
+, misaka
+, humanize
+, html5lib
+, markdown
+, psycopg2
+, pygments
+, requests
+, sqlalchemy
+, cryptography
+, beautifulsoup4
+, sqlalchemy-utils
+, prometheus-client
+, celery
+, alembic
+, importlib-metadata
+, mistletoe
+, minio
+, sassc
+, nodejs
+, redis
+}:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.59.13";
+  version = "0.69.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "core.sr.ht";
     rev = version;
-    sha256 = "5jc6MtG/cBry05Sq51UAFzSBvKKkdNTA67UIDvJt9uU=";
+    sha256 = "sha256-s/I0wxtPggjTkkTZnhm77PxdQjiT0Vq2MIk7JMvdupc=";
+    fetchSubmodules = true;
   };
 
   node_modules = fetchNodeModules {
     src = "${src}/srht";
     nodejs = nodejs;
-    sha256 = "0gwa2xb75g7fclrsr7r131kj8ri5gmhd96yw1iws5pmgsn2rlqi1";
+    sha256 = "sha256-IWKahdWv3qJ5DNyb1GB9JWYkZxghn6wzZe68clYXij8=";
   };
 
   patches = [
+    # Disable check for npm
     ./disable-npm-install.patch
+    # Fix Unix socket support in RedisQueueCollector
+    patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
-  nativeBuildInputs = [
+  propagatedNativeBuildInputs = [
     sassc
     nodejs
   ];
@@ -41,16 +68,19 @@ buildPythonPackage rec {
     psycopg2
     pygments
     requests
+    mistletoe
     sqlalchemy
     cryptography
     beautifulsoup4
     sqlalchemy-utils
-    prometheus_client
+    prometheus-client
 
     # Unofficial runtime dependencies?
     celery
     alembic
     importlib-metadata
+    minio
+    redis
   ];
 
   PKGVER = version;
@@ -60,8 +90,9 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "srht" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkg-config
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "bluepy" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python interface to Bluetooth LE on Linux";
     homepage = "https://github.com/IanHarvey/bluepy";
     maintainers = with maintainers; [ georgewhewell ];
+    platforms = platforms.linux;
     license = licenses.gpl2;
   };
-
 }

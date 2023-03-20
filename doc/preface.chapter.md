@@ -1,10 +1,4 @@
----
-title: Preface
-author: Frederik Rietdijk
-date: 2015-11-25
----
-
-# Preface
+# Preface {#preface}
 
 The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 [Nix package manager](https://nixos.org/nix/), released under a
@@ -18,7 +12,7 @@ Nixpkgs. If you like to learn more about the Nix package manager and the Nix
 expression language, then you are kindly referred to the [Nix manual](https://nixos.org/nix/manual/).
 The NixOS distribution is documented in the [NixOS manual](https://nixos.org/nixos/manual/).
 
-## Overview of Nixpkgs
+## Overview of Nixpkgs {#overview-of-nixpkgs}
 
 Nix expressions describe how to build packages from source and are collected in
 the [nixpkgs repository](https://github.com/NixOS/nixpkgs). Also included in the
@@ -30,8 +24,8 @@ Packages, including the Nix packages collection, are distributed through
 [channels](https://nixos.org/nix/manual/#sec-channels). The collection is
 distributed for users of Nix on non-NixOS distributions through the channel
 `nixpkgs`. Users of NixOS generally use one of the `nixos-*` channels, e.g.
-`nixos-19.09`, which includes all packages and modules for the stable NixOS
-19.09. Stable NixOS releases are generally only given
+`nixos-22.11`, which includes all packages and modules for the stable NixOS
+22.11. Stable NixOS releases are generally only given
 security updates. More up to date packages and modules are available via the
 `nixos-unstable` channel.
 
@@ -49,4 +43,4 @@ The binaries are made available via a [binary cache](https://cache.nixos.org).
 
 The current Nix expressions of the channels are available in the
 [`nixpkgs`](https://github.com/NixOS/nixpkgs) repository in branches
-that correspond to the channel names (e.g. `nixos-19.09-small`).
+that correspond to the channel names (e.g. `nixos-22.11-small`).

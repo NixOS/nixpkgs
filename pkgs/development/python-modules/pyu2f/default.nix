@@ -1,34 +1,44 @@
-{ stdenv, lib, fetchFromGitHub, buildPythonPackage,
-  six, mock, pyfakefs, unittest2, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, mock
+, pyfakefs
+, pytest-forked
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyu2f";
-  version = "0.1.4";
+  version = "0.1.5a";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = version;
-    sha256 = "0waxdydvxn05a8ab9j235mz72x7p4pwa59pnxyk1zzbwxnpxb3p9";
+    rev = "refs/tags/${version}";
+    sha256 = "0mx7bn1p3n0fxyxa82wg3c719hby7vqkxv57fhf7zvhlg2zfnr0v";
   };
 
-  # Platform detection for linux fails
-  postPatch = lib.optionalString stdenv.isLinux ''
-    rm pyu2f/tests/hid/macos_test.py
-  '';
+  propagatedBuildInputs = [
+    six
+  ];
 
-  propagatedBuildInputs = [ six ];
+  nativeCheckInputs = [
+    mock
+    pyfakefs
+    pytest-forked
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytest six mock pyfakefs unittest2 ];
-
-  checkPhase = ''
-    pytest pyu2f/tests
-  '';
+  disabledTestPaths = [
+    # API breakage with pyfakefs>=5.0
+    "pyu2f/tests/hid/linux_test.py"
+  ];
 
   meta = with lib; {
     description = "U2F host library for interacting with a U2F device over USB";
-    homepage = "https://github.com/google/pyu2f/";
+    homepage = "https://github.com/google/pyu2f";
     license = licenses.asl20;
     maintainers = with maintainers; [ prusnak ];
   };

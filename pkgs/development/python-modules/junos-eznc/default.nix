@@ -1,41 +1,78 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, six
-, scp
-, pyserial
-, paramiko
-, netaddr
-, ncclient
-, lxml
+, fetchFromGitHub
+, fetchpatch
 , jinja2
-, pyyaml
+, lxml
+, mock
+, ncclient
+, netaddr
 , nose
+, ntc-templates
+, paramiko
+, pyparsing
+, pyserial
+, pythonOlder
+, pyyaml
+, scp
+, six
+, transitions
+, yamlordereddictloader
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.3.1";
+  version = "2.6.7";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f8c4763fe2281979bc00350b93d510368992dbae0dae4fea0bafee5904a7e68";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Juniper";
+    repo = "py-junos-eznc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+hGybznip5RpJm89MLg9JO4B/y50OIdgtmV2FIpZShU=";
   };
 
-
-  checkInputs = [ nose ];
+  postPatch = ''
+    # https://github.com/Juniper/py-junos-eznc/issues/1236
+    substituteInPlace lib/jnpr/junos/utils/scp.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
+  '';
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient lxml jinja2 pyyaml
+    jinja2
+    lxml
+    ncclient
+    netaddr
+    ntc-templates
+    paramiko
+    pyparsing
+    pyserial
+    pyyaml
+    scp
+    six
+    transitions
+    yamlordereddictloader
+  ];
+
+  nativeCheckInputs = [
+    mock
+    nose
   ];
 
   checkPhase = ''
-    nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
+    nosetests -v -a unit --exclude=test_sw_put_ftp
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.github.com/Juniper/py-junos-eznc";
+  pythonImportsCheck = [
+    "jnpr.junos"
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     description = "Junos 'EZ' automation for non-programmers";
+    homepage = "https://github.com/Juniper/py-junos-eznc";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };

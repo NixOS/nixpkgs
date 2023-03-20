@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "console";
+  pname = "console";
   version = "2017-04-20";
 
   idrisDeps = [ idrisscript hrtime webgl ];

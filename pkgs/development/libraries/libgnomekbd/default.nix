@@ -1,25 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, glib
+, gtk3
+, libxklavier
+, wrapGAppsHook
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
-  version = "3.26.1";
+  version = "3.28.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0y962ykn3rr9gylj0pwpww7bi20lmhvsw6qvxs5bisbn2mih5jpp";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = pname; };
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "ItxZVm1zwAZTUPWpc0DmLsx7CMTfGRg4BLuL4kyP6HA=";
   };
 
   nativeBuildInputs = [
-    file
-    intltool
-    pkgconfig
+    meson
+    ninja
+    pkg-config
     wrapGAppsHook
+    glib
+    gobject-introspection
   ];
 
   # Requires in libgnomekbd.pc
@@ -29,7 +39,19 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    # Missing post-install script.
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
+
+  meta = with lib; {
     description = "Keyboard management library";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

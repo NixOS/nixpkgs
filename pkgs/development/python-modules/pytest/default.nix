@@ -1,36 +1,61 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+{ lib
+, buildPythonPackage
+, callPackage
+, pythonOlder
+, fetchPypi
+, isPyPy
+, writeText
+
+# build
+, setuptools-scm
+
+# propagates
+, attrs
+, exceptiongroup
+, iniconfig
+, packaging
+, pluggy
+, py
+, tomli
 }:
+
 buildPythonPackage rec {
-  version = "5.3.5";
   pname = "pytest";
-
-  disabled = !isPy3k;
-
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
-  '';
+  version = "7.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d";
+    hash = "sha256-1F4JUvNyckGRi4/Q83b1/2swHMB3fG+aVWk1yS2KfUI=";
   };
 
-  checkInputs = [ hypothesis mock ];
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
-    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  outputs = [
+    "out"
+    "testout"
+  ];
 
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
-  checkPhase = ''
-    runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
-    runHook postCheck
+  propagatedBuildInputs = [
+    attrs
+    iniconfig
+    packaging
+    pluggy
+    py
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+  ];
+
+  postInstall = ''
+    mkdir $testout
+    cp -R testing $testout/testing
   '';
+
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
@@ -38,15 +63,29 @@ buildPythonPackage rec {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
     preDistPhases+=" pytestcachePhase"
+
+    # pytest generates it's own bytecode files to improve assertion messages.
+    # These files similar to cpython's bytecode files but are never laoded
+    # by python interpreter directly. We remove them for a few reasons:
+    # - files are non-deterministic: https://github.com/NixOS/nixpkgs/issues/139292
+    #   (file headers are generatedt by pytest directly and contain timestamps)
+    # - files are not needed after tests are finished
+    pytestRemoveBytecodePhase () {
+        # suffix is defined at:
+        #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
+        find $out -name "*-pytest-*.py[co]" -delete
+    }
+    preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
   pythonImportsCheck = [
     "pytest"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://docs.pytest.org";
+  meta = with lib; {
     description = "Framework for writing tests";
+    homepage = "https://docs.pytest.org";
+    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     license = licenses.mit;
   };

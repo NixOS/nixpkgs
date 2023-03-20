@@ -1,53 +1,93 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
-, which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
-, enableGhostscript ? true, ghostscript ? null, gtk3
-, enableGtk3 ? false, cairo
-# darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt5 ? null
-, Cocoa
+{ lib
+, stdenv
+, fetchPypi
+, writeText
+, buildPythonPackage
 , pythonOlder
+
+# https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
+# build-system
+, pkg-config
+, pybind11
+, setuptools
+, setuptools-scm
+
+# native libraries
+, ffmpeg-headless
+, fontconfig
+, freetype
+, imagemagick
+, qhull
+
+# propagates
+, contourpy
+, cycler
+, fonttools
+, kiwisolver
+, numpy
+, packaging
+, pillow
+, pyparsing
+, python-dateutil
+
+# optional
+, importlib-resources
+
+# GTK3
+, enableGtk3 ? false
+, cairo
+, gobject-introspection
+, gtk3
+, pycairo
+, pygobject3
+
+# Tk
+, enableTk ? !stdenv.isDarwin # darwin has its own "MacOSX" backend
+, tcl
+, tk
+, tkinter
+
+# Ghostscript
+, enableGhostscript ? true
+, ghostscript
+
+# Qt
+, enableQt ? false
+, pyqt5
+
+# Webagg
+, enableWebagg ? false
+, tornado
+
+# nbagg
+, enableNbagg ? false
+, ipykernel
+
+# darwin
+, Cocoa
+
+# required for headless detection
+, libX11
+, wayland
 }:
 
-assert enableGhostscript -> ghostscript != null;
-assert enableTk -> (tcl != null)
-                && (tk != null)
-                && (tkinter != null)
-                && (libX11 != null)
-                ;
-assert enableQt -> pyqt5 != null;
+let
+  interactive = enableTk || enableGtk3 || enableQt;
+in
 
 buildPythonPackage rec {
-  version = "3.2.1";
+  version = "3.7.0";
   pname = "matplotlib";
+  format = "pyproject";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ffe2f9cdcea1086fc414e82f42271ecf1976700b8edd16ca9d376189c6d93aee";
+    hash = "sha256-j279MTQw1+9wo4oydigcsuhkazois7IesifaIOFeaBM=";
   };
 
-  XDG_RUNTIME_DIR = "/tmp";
-
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ which sphinx ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
-
-  propagatedBuildInputs =
-    [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz ]
-    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt5 ];
-
-  setup_cfg = ./setup.cfg;
-  preBuild = ''
-    cp "$setup_cfg" ./setup.cfg
-  '';
+  env.XDG_RUNTIME_DIR = "/tmp";
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if
@@ -57,20 +97,100 @@ buildPythonPackage rec {
   # script.
   postPatch =
     let
-      inherit (stdenv.lib.strings) substring;
-      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${substring 0 3 tk.version}"'';
+      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    stdenv.lib.optionalString enableTk
-      "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
+    lib.optionalString enableTk ''
+      sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
+    '' + lib.optionalString (stdenv.isLinux && interactive) ''
+      # fix paths to libraries in dlopen calls (headless detection)
+      substituteInPlace src/_c_internal_utils.c \
+        --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+    '' +
+    # bring our own system libraries
+    # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst#c-libraries
+    ''
+      echo "[libs]
+      system_freetype=true
+      system_qhull=true" > mplsetup.cfg
+    '';
+
+  nativeBuildInputs = [
+    pkg-config
+    pybind11
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    ffmpeg-headless
+    freetype
+    qhull
+  ] ++ lib.optionals enableGhostscript [
+    ghostscript
+  ] ++ lib.optionals enableGtk3 [
+    cairo
+    gobject-introspection
+    gtk3
+  ] ++ lib.optionals enableTk [
+    libX11
+    tcl
+    tk
+    tkinter
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ];
+
+  # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "strictoverflow"
+  ];
+
+  propagatedBuildInputs = [
+    # explicit
+    contourpy
+    cycler
+    fonttools
+    kiwisolver
+    numpy
+    packaging
+    pillow
+    pyparsing
+    python-dateutil
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ] ++ lib.optionals enableGtk3 [
+    pycairo
+    pygobject3
+  ] ++ lib.optionals enableQt [
+    pyqt5
+  ] ++ lib.optionals enableWebagg [
+    tornado
+  ] ++ lib.optionals enableNbagg [
+    ipykernel
+  ];
+
+  passthru.config = {
+    directories = { basedirlist = "."; };
+    libs = {
+      system_freetype = true;
+      system_qhull = true;
+    } // lib.optionalAttrs stdenv.isDarwin {
+      # LTO not working in darwin stdenv, see #19312
+      enable_lto = false;
+    };
+  };
+
+  env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 
   # Matplotlib needs to be built against a specific version of freetype in
   # order for all of the tests to pass.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "https://matplotlib.org/";
+    homepage = "https://matplotlib.org/";
+    changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
+    license = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
-
 }

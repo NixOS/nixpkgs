@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+
 # TODO: test configuration when building nixexpr (use -t parameter)
 # TODO: support sqlite3 (it's deprecate?) and mysql
 
@@ -18,7 +19,7 @@ let
         Pid Directory = "/run";
         ${fd_cfg.extraClientConfig}
       }
-     
+
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
@@ -26,7 +27,7 @@ let
         Monitor = "${value.monitor}";
       }
       '') fd_cfg.director)}
-     
+
       Messages {
         Name = Standard;
         syslog = all, !skipped, !restored
@@ -35,7 +36,7 @@ let
     '';
 
   sd_cfg = config.services.bacula-sd;
-  sd_conf = pkgs.writeText "bacula-sd.conf" 
+  sd_conf = pkgs.writeText "bacula-sd.conf"
     ''
       Storage {
         Name = "${sd_cfg.name}";
@@ -80,7 +81,7 @@ let
     '';
 
   dir_cfg = config.services.bacula-dir;
-  dir_conf = pkgs.writeText "bacula-dir.conf" 
+  dir_conf = pkgs.writeText "bacula-dir.conf"
     ''
     Director {
       Name = "${dir_cfg.name}";
@@ -111,8 +112,9 @@ let
   {
     options = {
       password = mkOption {
+        type = types.str;
         # TODO: required?
-        description = ''
+        description = lib.mdDoc ''
           Specifies the password that must be supplied for the default Bacula
           Console to be authorized. The same password must appear in the
           Director resource of the Console configuration file. For added
@@ -125,22 +127,23 @@ let
 
           The password is plain text. It is not generated through any special
           process but as noted above, it is better to use random text for
-          security reasons. 
+          security reasons.
         '';
       };
-      
+
       monitor = mkOption {
+        type = types.enum [ "no" "yes" ];
         default = "no";
         example = "yes";
-        description = ''
-          If Monitor is set to <literal>no</literal>, this director will have
+        description = lib.mdDoc ''
+          If Monitor is set to `no`, this director will have
           full access to this Storage daemon. If Monitor is set to
-          <literal>yes</literal>, this director will only be able to fetch the
+          `yes`, this director will only be able to fetch the
           current status of this Storage daemon.
 
           Please note that if this director is being used by a Monitor, we
           highly recommend to set this directive to yes to avoid serious
-          security problems. 
+          security problems.
         '';
       };
     };
@@ -150,25 +153,27 @@ let
   {
     options = {
       changerDevice = mkOption {
-        description = ''
+        type = types.str;
+        description = lib.mdDoc ''
           The specified name-string must be the generic SCSI device name of the
           autochanger that corresponds to the normal read/write Archive Device
           specified in the Device resource. This generic SCSI device name
           should be specified if you have an autochanger or if you have a
           standard tape drive and want to use the Alert Command (see below).
           For example, on Linux systems, for an Archive Device name of
-          <literal>/dev/nst0</literal>, you would specify
-          <literal>/dev/sg0</literal> for the Changer Device name.  Depending
+          `/dev/nst0`, you would specify
+          `/dev/sg0` for the Changer Device name.  Depending
           on your exact configuration, and the number of autochangers or the
           type of autochanger, what you specify here can vary. This directive
           is optional. See the Using AutochangersAutochangersChapter chapter of
           this manual for more details of using this and the following
-          autochanger directives.         
+          autochanger directives.
           '';
       };
 
       changerCommand = mkOption {
-        description = ''
+        type = types.str;
+        description = lib.mdDoc ''
           The name-string specifies an external program to be called that will
           automatically change volumes as required by Bacula. Normally, this
           directive will be specified only in the AutoChanger resource, which
@@ -176,7 +181,7 @@ let
           different Changer Command in each Device resource. Most frequently,
           you will specify the Bacula supplied mtx-changer script as follows:
 
-          <literal>"/path/mtx-changer %c %o %S %a %d"</literal>
+          `"/path/mtx-changer %c %o %S %a %d"`
 
           and you will install the mtx on your system (found in the depkgs
           release). An example of this command is in the default bacula-sd.conf
@@ -190,17 +195,18 @@ let
       };
 
       devices = mkOption {
-        description = ''
-        '';
+        description = lib.mdDoc "";
+        type = types.listOf types.str;
       };
 
       extraAutochangerConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Autochanger directive.
         '';
         example = ''
-   
+
         '';
       };
     };
@@ -212,25 +218,27 @@ let
     options = {
       archiveDevice = mkOption {
         # TODO: required?
-        description = ''
+        type = types.str;
+        description = lib.mdDoc ''
           The specified name-string gives the system file name of the storage
           device managed by this storage daemon. This will usually be the
           device file name of a removable storage device (tape drive), for
-          example <literal>/dev/nst0</literal> or
-          <literal>/dev/rmt/0mbn</literal>. For a DVD-writer, it will be for
-          example <literal>/dev/hdc</literal>. It may also be a directory name
+          example `/dev/nst0` or
+          `/dev/rmt/0mbn`. For a DVD-writer, it will be for
+          example `/dev/hdc`. It may also be a directory name
           if you are archiving to disk storage. In this case, you must supply
           the full absolute path to the directory. When specifying a tape
           device, it is preferable that the "non-rewind" variant of the device
-          file name be given. 
+          file name be given.
         '';
       };
 
       mediaType = mkOption {
         # TODO: required?
-        description = ''
+        type = types.str;
+        description = lib.mdDoc ''
           The specified name-string names the type of media supported by this
-          device, for example, <literal>DLT7000</literal>. Media type names are
+          device, for example, `DLT7000`. Media type names are
           arbitrary in that you set them to anything you want, but they must be
           known to the volume database to keep track of which storage daemons
           can read which volumes. In general, each different storage type
@@ -247,9 +255,9 @@ let
           Storage daemon, but it is with multiple Storage daemons, especially
           if they have incompatible media.
 
-          For example, if you specify a Media Type of <literal>DDS-4</literal>
+          For example, if you specify a Media Type of `DDS-4`
           then during the restore, Bacula will be able to choose any Storage
-          Daemon that handles <literal>DDS-4</literal>. If you have an
+          Daemon that handles `DDS-4`. If you have an
           autochanger, you might want to name the Media Type in a way that is
           unique to the autochanger, unless you wish to possibly use the
           Volumes in other drives. You should also ensure to have unique Media
@@ -265,7 +273,8 @@ let
 
       extraDeviceConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Device directive.
         '';
         example = ''
@@ -286,34 +295,36 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Bacula File Daemon.
         '';
       };
- 
+
       name = mkOption {
         default = "${config.networking.hostName}-fd";
-        description = ''
+        defaultText = literalExpression ''"''${config.networking.hostName}-fd"'';
+        type = types.str;
+        description = lib.mdDoc ''
           The client name that must be used by the Director when connecting.
           Generally, it is a good idea to use a name related to the machine so
           that error messages can be easily identified if you have multiple
           Clients. This directive is required.
         '';
       };
- 
+
       port = mkOption {
         default = 9102;
-        type = types.int;
-        description = ''
+        type = types.port;
+        description = lib.mdDoc ''
           This specifies the port number on which the Client listens for
           Director connections. It must agree with the FDPort specified in
           the Client resource of the Director's configuration file.
         '';
       };
- 
+
       director = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines director resources in Bacula File Daemon.
         '';
         type = with types; attrsOf (submodule directorOptions);
@@ -321,7 +332,8 @@ in {
 
       extraClientConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Client directive.
         '';
         example = ''
@@ -332,7 +344,8 @@ in {
 
       extraMessagesConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Messages directive.
         '';
         example = ''
@@ -345,22 +358,24 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Bacula Storage Daemon.
         '';
       };
- 
+
       name = mkOption {
         default = "${config.networking.hostName}-sd";
-        description = ''
+        defaultText = literalExpression ''"''${config.networking.hostName}-sd"'';
+        type = types.str;
+        description = lib.mdDoc ''
           Specifies the Name of the Storage daemon.
         '';
       };
- 
+
       port = mkOption {
         default = 9103;
-        type = types.int;
-        description = ''
+        type = types.port;
+        description = lib.mdDoc ''
           Specifies port number on which the Storage daemon listens for
           Director connections.
         '';
@@ -368,7 +383,7 @@ in {
 
       director = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
         type = with types; attrsOf (submodule directorOptions);
@@ -376,7 +391,7 @@ in {
 
       device = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines Device resources in Bacula Storage Daemon.
         '';
         type = with types; attrsOf (submodule deviceOptions);
@@ -384,7 +399,7 @@ in {
 
       autochanger = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines Autochanger resources in Bacula Storage Daemon.
         '';
         type = with types; attrsOf (submodule autochangerOptions);
@@ -392,7 +407,8 @@ in {
 
       extraStorageConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Storage directive.
         '';
         example = ''
@@ -403,37 +419,40 @@ in {
 
       extraMessagesConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Messages directive.
         '';
         example = ''
           console = all
         '';
       };
- 
+
     };
 
     services.bacula-dir = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Bacula Director Daemon.
         '';
       };
 
       name = mkOption {
         default = "${config.networking.hostName}-dir";
-        description = ''
+        defaultText = literalExpression ''"''${config.networking.hostName}-dir"'';
+        type = types.str;
+        description = lib.mdDoc ''
           The director name used by the system administrator. This directive is
           required.
         '';
       };
- 
+
       port = mkOption {
         default = 9101;
-        type = types.int;
-        description = ''
+        type = types.port;
+        description = lib.mdDoc ''
           Specify the port (a positive integer) on which the Director daemon
           will listen for Bacula Console connections. This same port number
           must be specified in the Director resource of the Console
@@ -442,17 +461,19 @@ in {
           specify DirAddresses (N.B plural) directive.
         '';
       };
- 
+
       password = mkOption {
         # TODO: required?
-        description = ''
+        type = types.str;
+        description = lib.mdDoc ''
            Specifies the password that must be supplied for a Director.
         '';
       };
 
       extraMessagesConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Messages directive.
         '';
         example = ''
@@ -462,7 +483,8 @@ in {
 
       extraDirectorConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Extra configuration to be passed in Director directive.
         '';
         example = ''
@@ -474,7 +496,7 @@ in {
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration for Bacula Director Daemon.
         '';
         example = ''

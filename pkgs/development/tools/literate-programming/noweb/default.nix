@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, gawk, groff, icon-lang ? null }:
+{ lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
 
-let noweb = stdenv.mkDerivation rec {
+lib.fix (noweb: stdenv.mkDerivation rec {
   pname = "noweb";
   version = "2.12";
 
@@ -11,25 +11,28 @@ let noweb = stdenv.mkDerivation rec {
     sha256 = "1160i2ghgzqvnb44kgwd6s3p4jnk9668rmc15jlcwl7pdf3xqm95";
   };
 
-  patches = [ ./no-FAQ.patch ];
+  sourceRoot = "source/src";
 
-  nativeBuildInputs = [ groff ] ++ stdenv.lib.optionals (!isNull icon-lang) [ icon-lang ];
+  patches = [
+    # Remove FAQ
+    ./no-FAQ.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace 'strip' '${stdenv.cc.targetPrefix}strip'
+  '';
+
+  nativeBuildInputs = [ groff ] ++ lib.optionals useIcon [ icon-lang ];
+  buildInputs = [ nawk ];
 
   preBuild = ''
     mkdir -p "$out/lib/noweb"
-    cd src
   '';
 
-  makeFlags = stdenv.lib.optionals (!isNull icon-lang) [
+  makeFlags = lib.optionals useIcon [
     "LIBSRC=icon"
     "ICONC=icont"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    "CC=clang"
-  ];
-
-
-  installFlags = [
-  ];
+  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p "$tex/tex/latex/noweb"
@@ -50,11 +53,11 @@ let noweb = stdenv.mkDerivation rec {
     for f in $out/bin/no{index,roff,roots,untangle,web} \
              $out/lib/noweb/to{ascii,html,roff,tex} \
              $out/lib/noweb/{bt,empty}defn \
-             $out/lib/noweb/{noidx,unmarkup}; do
+             $out/lib/noweb/{noidx,pipedocs,unmarkup}; do
         # NOTE: substituteInPlace breaks Icon binaries, so make sure the script
         #       uses (n)awk before calling.
         if grep -q nawk "$f"; then
-            substituteInPlace "$f" --replace "nawk" "${gawk}/bin/awk"
+            substituteInPlace "$f" --replace "nawk" "${nawk}/bin/nawk"
         fi
     done
 
@@ -70,11 +73,11 @@ let noweb = stdenv.mkDerivation rec {
   tlType = "run";
   passthru.pkgs = [ noweb.tex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";
     license = licenses.bsd2;
     maintainers = with maintainers; [ yurrriq ];
     platforms = with platforms; linux ++ darwin;
   };
-}; in noweb
+})

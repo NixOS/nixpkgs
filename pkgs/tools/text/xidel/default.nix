@@ -1,48 +1,94 @@
-{ stdenv, fetchurl, dpkg }:
+{ lib, stdenv, fetchsvn, fetchFromGitHub, fpc, openssl }:
 
-stdenv.mkDerivation rec {
+let
+  flreSrc = fetchFromGitHub {
+    owner = "benibela";
+    repo = "flre";
+    rev = "3e926d45d4352f1b7c7cd411ccd625df117dad5c";
+    hash = "sha256-fs7CIjd3fwD/SORYh5pmJxIdrr8F9e36TNmnKUbUxP0=";
+  };
+  synapseSrc = fetchFromGitHub {
+    owner = "benibela";
+    repo = "ararat-synapse";
+    rev = "7a77db926de66809080bada68b54172da7f84c0e";
+    hash = "sha256-bVLQ0ohGJYtuP88Krxy9a7RnHHrW0OWw8H/uxa3PerU=";
+  };
+  rcmdlineSrc = fetchFromGitHub {
+    owner = "benibela";
+    repo = "rcmdline";
+    rev = "ea02b770c4568717dd7b3b72da191a8bbcb4c751";
+    hash = "sha256-6YtvAf0joRvtCKbUAaLwuwABw1GEIzammFLhboq9aG0=";
+  };
+  internettoolsSrc = fetchFromGitHub {
+    owner = "benibela";
+    repo = "internettools";
+    rev = "dd972caaa4415468fa679ea7262976ead3fd3e38";
+    hash = "sha256-09sADxPiE6ky1EX7dTXRBYVT3IarUcLYf5knzi7+CHU=";
+  };
+  pasdblstrutilsSrc = fetchFromGitHub {
+    owner = "BeRo1985";
+    repo = "pasdblstrutils";
+    rev = "1696f0a2b822fef26c8992f96620f1be129cfa99";
+    hash = "sha256-x0AjOTa1g7gJOR2iBO76yBt1kzcRNujHRUsq5QOlfP0=";
+  };
+in stdenv.mkDerivation rec {
   pname = "xidel";
-  version = "0.9.6";
+  version = "unstable-2022-11-01";
 
-  ## Source archive lacks file (manageUtils.sh), using pre-built package for now.
-  #src = fetchurl {
-  #  url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/${name}.src.tar.gz";
-  #  sha256 = "1h5xn16lgzx0s94iyhxa50lk05yf0af44nzm5w5k57615nd82kz2";
-  #};
+  src = fetchFromGitHub {
+    owner = "benibela";
+    repo = pname;
+    rev = "6d5655c1d73b88ddeb32d2450a35ee36e4762bb8";
+    hash = "sha256-9x2d5AKRBjocRawRHdeI4heIM5nb00/F/EIj+/to7ac=";
+  };
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/xidel_${version}-1_amd64.deb";
-        sha256 = "0hskc74y7p4j1x33yx0w4fvr610p2yimas8pxhr6bs7mb9b300h7";
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/xidel_${version}-1_i386.deb";
-        sha256 = "07yk5sk1p4jm0jmgjwdm2wq8d2wybi1wkn1qq5j5y03z1pdc3fi6";
-      }
-    else throw "xidel is not supported on ${stdenv.hostPlatform.system}";
+  nativeBuildInputs = [ fpc ];
+  buildInputs = [ openssl ];
 
-  buildInputs = [ dpkg ];
+  NIX_LDFLAGS = [ "-lcrypto" ];
 
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
+  patchPhase = ''
+    patchShebangs \
+      build.sh \
+      tests/test.sh \
+      tests/tests-file-module.sh \
+      tests/tests.sh \
+      tests/downloadTest.sh \
+      tests/downloadTests.sh \
+      tests/zorbajsoniq.sh \
+      tests/zorbajsoniq/download.sh
   '';
 
-  dontBuild = true;
+  preBuildPhase = ''
+    mkdir -p import/{flre,synapse,pasdblstrutils} rcmdline internettools
+    cp -R ${flreSrc}/. import/flre
+    cp -R ${synapseSrc}/. import/synapse
+    cp -R ${pasdblstrutilsSrc}/. import/pasdblstrutils
+    cp -R ${rcmdlineSrc}/. rcmdline
+    cp -R ${internettoolsSrc}/. internettools
+  '';
+
+  buildPhase = ''
+    runHook preBuildPhase
+    ./build.sh
+    runHook postBuildPhase
+  '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp -a usr/* "$out/"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/bin/xidel"
+    mkdir -p "$out/bin" "$out/share/man/man1"
+    cp meta/xidel.1 "$out/share/man/man1/"
+    cp xidel "$out/bin/"
   '';
 
-  meta = with stdenv.lib; {
-    description = "Command line tool to download and extract data from html/xml pages";
-    homepage = "http://videlibri.sourceforge.net/xidel.html";
-    # source contains no license info (AFAICS), but sourceforge says GPLv2
-    license = licenses.gpl2;
-    # more platforms will be supported when we switch to source build
+  # disabled, because tests require network
+  checkPhase = ''
+    ./tests/tests.sh
+  '';
+
+  meta = with lib; {
+    description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
+    homepage = "https://www.videlibri.de/xidel.html";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

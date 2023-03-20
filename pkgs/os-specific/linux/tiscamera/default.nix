@@ -2,96 +2,130 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
-, pcre
-, tinyxml
+, pkg-config
+, runtimeShell
+, catch2
+, elfutils
+, libselinux
+, libsepol
+, libunwind
 , libusb1
+, libuuid
 , libzip
+, orc
+, pcre
+, zstd
 , glib
 , gobject-introspection
 , gst_all_1
-, libwebcam
-, libunwind
-, gstreamer
-, elfutils
-, orc
-, python3
-, libuuid
+, wrapGAppsHook
+, withDoc ? true
+, sphinx
+, graphviz
+, withAravis ? true
+, aravis
+, meson
+, withAravisUsbVision ? withAravis
+, withGui ? true
+, qt5
 }:
 
 stdenv.mkDerivation rec {
   pname = "tiscamera";
-  version = "0.11.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = pname;
     rev = "v-${pname}-${version}";
-    sha256 = "07vp6khgl6qd3a4519dmx1s5bfw7pld793p50pjn29fqh91fm93g";
+    sha256 = "0msz33wvqrji11kszdswcvljqnjflmjpk0aqzmsv6i855y8xn6cd";
   };
+
+  patches = [
+    ./0001-tcamconvert-tcamsrc-add-missing-include-lib-dirs.patch
+    ./0001-udev-rules-fix-install-location.patch
+    ./0001-cmake-find-aravis-fix-pkg-cfg-include-dirs.patch
+  ];
+
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
+
+    substituteInPlace ./data/udev/80-theimagingsource-cameras.rules.in \
+      --replace "/bin/sh" "${runtimeShell}/bin/sh" \
+      --replace "typically /usr/bin/" "" \
+      --replace "typically /usr/share/theimagingsource/tiscamera/uvc-extension/" ""
+  '';
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
+    wrapGAppsHook
+  ] ++ lib.optionals withDoc [
+    sphinx
+    graphviz
+  ] ++ lib.optionals withAravis [
+    meson
+  ] ++ lib.optionals withGui [
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    pcre
-    tinyxml
+    elfutils
+    libselinux
+    libsepol
+    libunwind
     libusb1
+    libuuid
     libzip
+    orc
+    pcre
+    zstd
     glib
     gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    libwebcam
-    libunwind
-    gstreamer
-    elfutils
-    orc
-    python3
-    libuuid
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+  ] ++ lib.optionals withAravis [
+    aravis
+  ] ++ lib.optionals withGui [
+    qt5.qtbase
   ];
 
+  hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DBUILD_ARAVIS=OFF" # For GigE support. Won't need it as our camera is usb.
-    "-DBUILD_GST_1_0=ON"
-    "-DBUILD_TOOLS=ON"
-    "-DBUILD_V4L2=ON"
-    "-DBUILD_LIBUSB=ON"
+    "-DTCAM_BUILD_GST_1_0=ON"
+    "-DTCAM_BUILD_TOOLS=ON"
+    "-DTCAM_BUILD_V4L2=ON"
+    "-DTCAM_BUILD_LIBUSB=ON"
+    "-DTCAM_BUILD_TESTS=ON"
+    "-DTCAM_BUILD_ARAVIS=${if withAravis then "ON" else "OFF"}"
+    "-DTCAM_BUILD_DOCUMENTATION=${if withDoc then "ON" else "OFF"}"
+    "-DTCAM_BUILD_WITH_GUI=${if withGui then "ON" else "OFF"}"
+    "-DTCAM_DOWNLOAD_MESON=OFF"
+    "-DTCAM_INTERNAL_ARAVIS=OFF"
+    "-DTCAM_ARAVIS_USB_VISION=${if withAravis && withAravisUsbVision then "ON" else "OFF"}"
+    "-DTCAM_INSTALL_FORCE_PREFIX=ON"
   ];
 
-  postPatch = ''
-    substituteInPlace ./data/udev/80-theimagingsource-cameras.rules.in \
-      --replace "/usr/bin/uvcdynctrl" "${libwebcam}/bin/uvcdynctrl" \
-      --replace "/path/to/tiscamera/uvc-extensions" "$out/share/uvcdynctrl/data/199e"
+  doCheck = true;
 
-    substituteInPlace ./src/BackendLoader.cpp \
-      --replace '"libtcam-v4l2.so"' "\"$out/lib/tcam-0/libtcam-v4l2.so\"" \
-      --replace '"libtcam-aravis.so"' "\"$out/lib/tcam-0/libtcam-aravis.so\"" \
-      --replace '"libtcam-libusb.so"' "\"$out/lib/tcam-0/libtcam-libusb.so\""
-  '';
+  # gstreamer tests requires, besides gst-plugins-bad, plugins installed by this expression.
+  checkPhase = "ctest --force-new-ctest-process -E gstreamer";
 
-  preConfigure = ''
-    cmakeFlagsArray=(
-      $cmakeFlagsArray
-      "-DCMAKE_INSTALL_PREFIX=$out"
-      "-DTCAM_INSTALL_UDEV=$out/lib/udev/rules.d"
-      "-DTCAM_INSTALL_UVCDYNCTRL=$out/share/uvcdynctrl/data/199e"
-      "-DTCAM_INSTALL_GST_1_0=$out/lib/gstreamer-1.0"
-      "-DTCAM_INSTALL_GIR=$out/share/gir-1.0"
-      "-DTCAM_INSTALL_TYPELIB=$out/lib/girepository-1.0"
-      "-DTCAM_INSTALL_SYSTEMD=$out/etc/systemd/system"
-    )
-  '';
+  # wrapGAppsHook: make sure we add ourselves to the introspection
+  # and gstreamer paths.
+  GI_TYPELIB_PATH = "${placeholder "out"}/lib/girepository-1.0";
+  GST_PLUGIN_SYSTEM_PATH_1_0 = "${placeholder "out"}/lib/gstreamer-1.0";
 
+  QT_PLUGIN_PATH = lib.optionalString withGui "${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}";
 
-  # There are gobject introspection commands launched as part of the build. Those have a runtime
-  # dependency on `libtcam` (which itself is built as part of this build). In order to allow
-  # that, we set the dynamic linker's path to point on the build time location of the library.
-  preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/src''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

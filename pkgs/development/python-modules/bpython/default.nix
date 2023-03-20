@@ -1,30 +1,70 @@
-{ stdenv, buildPythonPackage, fetchPypi, pygments, greenlet, curtsies, urwid, requests, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, curtsies
+, cwcwidth
+, greenlet
+, jedi
+, pygments
+, pytestCheckHook
+, pythonOlder
+, pyperclip
+, pyxdg
+, requests
+, substituteAll
+, typing-extensions
+, urwid
+, watchdog
+}:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.19";
+  version = "0.24";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1764ikgj24jjq46s50apwkydqvy5a13adb2nbszk8kbci6df0v27";
+    hash = "sha256-mHNv/XqMSP0r+1PYmKR19CQb3gtnISVwavBNnQj9Pb0=";
   };
 
-  propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
+  propagatedBuildInputs = [
+    curtsies
+    cwcwidth
+    greenlet
+    jedi
+    pygments
+    pyperclip
+    pyxdg
+    requests
+    typing-extensions
+    urwid
+    watchdog
+  ];
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # tests fail: https://github.com/bpython/bpython/issues/712
-  doCheck = false;
+  pythonImportsCheck = [
+    "bpython"
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Check for syntax error ends with an AssertionError
+    "test_syntaxerror"
+  ];
+
+  meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dotlambda ];
   };
 }

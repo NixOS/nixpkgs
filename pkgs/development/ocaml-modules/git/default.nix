@@ -1,26 +1,48 @@
-{ lib, fetchurl, buildDunePackage
-, alcotest, git, mtime, nocrypto
-, angstrom, astring, cstruct, decompress, digestif, encore, duff, fmt
-, fpath, hex, ke, logs, lru, ocaml_lwt, ocamlgraph, ocplib-endian, uri, rresult
+{ stdenv, lib, fetchurl, buildDunePackage
+, alcotest, mirage-crypto-rng, git-binary
+, angstrom, astring, cstruct, decompress, digestif, encore, fmt, checkseum
+, fpath, ke, logs, lwt, ocamlgraph, uri, rresult, base64, hxd
+, result, bigstringaf, optint, mirage-flow, domain-name, emile
+, mimic, carton, carton-lwt, carton-git, ipaddr, psq, crowbar, alcotest-lwt, cmdliner
 }:
 
 buildDunePackage rec {
   pname = "git";
-	version = "2.1.2";
+  version = "3.12.0";
 
-	src = fetchurl {
-		url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
-		sha256 = "0yyclsh255k7pvc2fcsdi8k2fcrr0by2nz6g3sqnwlimjyp7mz5j";
-	};
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
-	propagatedBuildInputs = [ angstrom astring cstruct decompress digestif encore duff fmt fpath hex ke logs lru ocaml_lwt ocamlgraph ocplib-endian uri rresult ];
-	checkInputs = lib.optionals doCheck [ alcotest git mtime nocrypto ];
-	doCheck = true;
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
+    hash = "sha256-qgd5fny23J6pcOdgwB3Yt1UxJii2XE25OjcSVFdLMKA=";
+  };
 
-	meta = {
-		description = "Git format and protocol in pure OCaml";
-		license = lib.licenses.isc;
-		maintainers = [ lib.maintainers.vbgl ];
-		homepage = "https://github.com/mirage/ocaml-git";
-	};
+  # remove changelog for the carton package
+  postPatch = ''
+    rm CHANGES.carton.md
+  '';
+
+  buildInputs = [
+    base64
+  ];
+  propagatedBuildInputs = [
+    angstrom astring checkseum cstruct decompress digestif encore fmt fpath
+    ke logs lwt ocamlgraph uri rresult result bigstringaf optint mirage-flow
+    domain-name emile mimic carton carton-lwt carton-git ipaddr psq hxd
+  ];
+  nativeCheckInputs = [
+    git-binary
+  ];
+  checkInputs = [
+    alcotest alcotest-lwt mirage-crypto-rng crowbar cmdliner
+  ];
+  doCheck = !stdenv.isAarch64;
+
+  meta = {
+    description = "Git format and protocol in pure OCaml";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann vbgl ];
+    homepage = "https://github.com/mirage/ocaml-git";
+  };
 }

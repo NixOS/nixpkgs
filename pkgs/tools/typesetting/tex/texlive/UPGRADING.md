@@ -33,15 +33,31 @@ See https://tug.org/texlive/acquire-mirror.html for instructions.
 
 ### Upgrade package information from texlive package database
 
+First, edit `default.nix` as follows.
+
+If upgrading to a daily snapshot:
+- change `snapshot.year`, `snapshot.month`, `snapshot.day`;
+- ensure `urlPrefixes` uses the https://texlive.info/tlnet-archive mirror;
+- ensure `texlive.extraVersion` uses the `snapshot` info.
+
+If upgrading to a final release:
+- upgrade `texlive.bin` first;
+- ensure `urlPrefixes` uses the historic mirrors;
+- ensure `texlive.extraVersion` is `"-final"`.
+
+Then upgrade `tlpdb.hash` to match the new hash of `texlive.tlpdb.xz` and run
 
 ```bash
-curl -L http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
+nix-build ../../../../.. -A texlive.tlpdb-nix --no-out-link
 ```
 
-This will download a current snapshot of the CTAN package database `texlive.tlpdb.xz`
-and regenerate all of the sha512 hashes for the current upstream distribution in `pkgs.nix`.
+This will download the daily snapshot of the CTAN package database
+`texlive.tlpdb.xz` and extract the relevant package info (including version
+numbers and sha512 hashes) for the selected upstream distribution. Then replace
+`tlpdb.nix` with the generated file.
 
+The test `pkgs.tests.texlive.tlpdb-nix` verifies that the file `tlpdb.nix`
+in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
 ### Build packages locally and generate fix hashes
 

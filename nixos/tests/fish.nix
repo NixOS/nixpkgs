@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "fish";
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
 
     {

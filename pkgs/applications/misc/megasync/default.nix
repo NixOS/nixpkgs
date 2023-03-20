@@ -1,36 +1,68 @@
-{ stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
-, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
-, wget }:
-
+{ lib
+, stdenv
+, autoconf
+, automake
+, c-ares
+, cryptopp
+, curl
+, doxygen
+, fetchFromGitHub
+, ffmpeg
+, freeimage
+, libmediainfo
+, libraw
+, libsodium
+, libtool
+, libuv
+, libzen
+, lsb-release
+, mkDerivation
+, pkg-config
+, qtbase
+, qttools
+, qtx11extras
+, sqlite
+, swig
+, unzip
+, wget
+}:
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.0.8";
+  version = "4.9.0.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1rhxkc6j3039rcsi8cxy3n00g6w7acir82ymnksbpsnp4yxqv5r3";
+    sha256 = "sha256-s0E8kJ4PJmhaxVcWPCyCk/KbcX4V3IESdZhSosPlZuM=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkgconfig qttools swig ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    doxygen
+    libtool
+    lsb-release
+    pkg-config
+    qttools
+    swig
+    unzip
+  ];
   buildInputs = [
     c-ares
     cryptopp
     curl
     ffmpeg
+    freeimage
     libmediainfo
     libraw
     libsodium
-    libtool
     libuv
     libzen
     qtbase
+    qtx11extras
     sqlite
-    unzip
     wget
   ];
 
@@ -40,10 +72,11 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
+    ./ffmpeg_44.patch
   ];
 
   postPatch = ''
-    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
+    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
   '';
@@ -65,7 +98,7 @@ mkDerivation rec {
     "--with-cryptopp"
     "--with-curl"
     "--with-ffmpeg"
-    "--without-freeimage" # unreferenced even when found
+    "--with-freeimage"
     "--without-readline"
     "--without-termcap"
     "--with-sodium"
@@ -85,7 +118,7 @@ mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";

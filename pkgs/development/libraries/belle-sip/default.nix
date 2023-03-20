@@ -1,51 +1,50 @@
-{ antlr3_4
-, bctoolbox
+{ bctoolbox
+, belr
 , cmake
 , fetchFromGitLab
-, jre
+, lib
 , libantlr3c
-, mbedtls
+, mbedtls_2
 , stdenv
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-02-18";
+  version = "5.2.23";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "0dcb13416eae87edf140771b886aedaf6be8cf60";
-    sha256 = "0pzxk8mkkg6zsnmj1bwggbdjv864psx89gglfm51h8s501kg11fv";
+    rev = version;
+    sha256 = "sha256-c73PCM+bRz6CjGRY2AapEcvKC1UqyEfzb7qsicmrkQU=";
   };
 
-  nativeBuildInputs = [ jre cmake ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ];
 
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
-    "-Wno-error=cast-function-type"
-  ];
+    "-Wno-error=stringop-overflow"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs and probably clang
+    "-Wno-error=use-after-free"
+  ]);
 
-  propagatedBuildInputs = [ antlr3_4 libantlr3c mbedtls bctoolbox ];
+  propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];
 
-  # Fails to build with lots of parallel jobs
-  enableParallelBuilding = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
-    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
-    license = licenses.gpl3;
+    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers. Part of the Linphone project.";
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };

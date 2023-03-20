@@ -1,27 +1,24 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch }:
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.8.1";
+  version = "0.10.4";
 
-  src = fetchFromGitHub {
-    owner = "lotabout";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0xjb8slrlkrzdqvzmf63lq6rgggrjw3hf9an6h8xf6vizz1vfni0";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-C2yK+SO8Tpw3BxXXu1jeDzYJ2548RZa7NFWaE0SdNJ0=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "14p4ppbl2mak21jvxpbd1b28jaw2629bc8kv7875cdzy3ksxyji3";
-
-  patches = [
-    # Fix bash completion. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/lotabout/skim/commit/60ca3484090c2e73a1de396500c73a6ad6e0bde9.patch";
-      sha256 = "07nibr13vmxscbwavrckhcbsvxwkpan4a6ml0qfr1ny36xbc6y3p";
-    })
-  ];
+  cargoHash = "sha256-jBcgoWbmBOgU7M71lr4OXOe2S6NAXl+I8D+ZtT45Vos=";
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
@@ -29,9 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 555 bin/sk-tmux -t $out/bin
-    install -D -m 644 man/man1/* -t $out/man/man1
-    install -D -m 444 shell/* -t $out/share/skim
+
     install -D -m 444 plugin/skim.vim -t $vim/plugin
+
+    install -D -m 444 shell/* -t $out/share/skim
+
+    installManPage man/man1/*
 
     cat <<SCRIPT > $out/bin/sk-share
     #! ${stdenv.shell}
@@ -42,11 +42,14 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/sk-share
   '';
 
-  meta = with stdenv.lib; {
+  # https://github.com/lotabout/skim/issues/440
+  doCheck = !stdenv.isAarch64;
+
+  meta = with lib; {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
+    mainProgram = "sk";
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ config, lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , librdf_raptor2, ladspaH, openssl, zlib
 , doCheck ? config.doCheckByDefault or false, ladspaPlugins
 }:
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "00wzkfb8y0aqd519ypz067cq099dpc89w69zw8ln39vl6f9x2pd4";
   };
 
-  postPatch = stdenv.lib.optionalString doCheck ''
+  postPatch = lib.optionalString doCheck ''
     sed -i -e 's:usr/local:${ladspaPlugins}:' examples/{instances,remove}_test.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   propagatedBuildInputs = [ librdf_raptor2 ];
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight RDF library with special support for LADSPA plugins";
     homepage = "https://sourceforge.net/projects/lrdf/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,25 +1,29 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "cdk";
-  version ="5.0-20190224";
-
-  buildInputs = [
-    ncurses
-  ];
+  version = "5.0-20221025";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/cdk/cdk-${version}.tgz"
       "https://invisible-mirror.net/archives/cdk/cdk-${version}.tgz"
     ];
-    sha256 = "0767xqwm377ak909c589vqm0v83slsnkm2ycq7bg545xx5nycncs";
+    hash = "sha256-A8z6Icn8PWHd0P2hnaVFNZBVu+71ociC37n/SPN0avI=";
   };
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    ncurses
+  ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Curses development kit";
-    license = licenses.bsdOriginal ;
-    maintainers = [ maintainers.raskin ];
+    homepage = "https://invisible-island.net/cdk/";
+    changelog = "https://invisible-island.net/cdk/CHANGES";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, python3
-, bdftopcf, mkfontscale
-, libfaketime, fonttosfnt
+{ lib, stdenv, fetchFromGitHub, python3
+, bdftopcf, xorg
+, libfaketime,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale
-      libfaketime fonttosfnt
+    [ python3 bdftopcf xorg.mkfontscale
+      libfaketime xorg.fonttosfnt
     ];
 
   postPatch = ''
@@ -38,17 +38,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     fontDir="$out/share/fonts/misc"
-    install -m 644 -D out/* -t "$fontDir"
-    mkfontdir "$fontDir"
-
-    fontDir="$otb/share/fonts/misc"
-    install -m 644 -D *.otb -t "$fontDir"
+    install -m 644 -D *.otb out/* -t "$fontDir"
     mkfontdir "$fontDir"
   '';
 
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A nice bitmap font, readable even at small sizes";
     longDescription = ''
       Tewi is a bitmap font, readable even at very small font sizes. This is

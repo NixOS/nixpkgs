@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, ocaml, findlib, camlp4}:
+{stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, camlp4}:
 
 stdenv.mkDerivation {
   pname = "camomile";
@@ -14,17 +14,19 @@ stdenv.mkDerivation {
     sha256 = "167279lia6qx62mdcyc5rjsi4gf4yi52wn9mhgd9y1v3754z7fwb";
   })];
 
-  buildInputs = [ocaml findlib camlp4];
+  nativeBuildInputs = [ocaml findlib camlp4 ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
   meta = {
     homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
     description = "A comprehensive Unicode library for OCaml";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    license = lib.licenses.lgpl21;
+    inherit (ocaml.meta) platforms;
     maintainers = [
-      stdenv.lib.maintainers.maggesi
+      lib.maintainers.maggesi
     ];
   };
 }

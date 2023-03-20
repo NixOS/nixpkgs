@@ -1,6 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
+, go-md2man
 , installShellFiles
 , pkg-config
 , gpgme
@@ -13,24 +15,27 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.14.9";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "1vp59xp374wr7sbx89aikz4rv8fdg0a40v06saryxww9iqyvk8wp";
+    hash = "sha256-g8Y4ZmQvDbzM7rG1otTxm+SRl/sK3sLM2SOWrBseOPQ=";
   };
 
   outputs = [ "out" "man" ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  doCheck = false;
+
+  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
 
   buildInputs = [
-    btrfs-progs
     gpgme
+  ] ++ lib.optionals stdenv.isLinux [
+    btrfs-progs
     libapparmor
     libseccomp
     libselinux
@@ -38,23 +43,26 @@ buildGoModule rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
-    make GIT_COMMIT="unknown"
-    make -C docs
+    make bin/buildah
+    make -C docs GOMD2MAN="go-md2man"
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm755 buildah $out/bin/buildah
+    runHook preInstall
+    install -Dm755 bin/buildah $out/bin/buildah
     installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool which facilitates building OCI images";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
-    platforms = platforms.linux;
   };
 }

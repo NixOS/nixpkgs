@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, unidecode, nose, yanc }:
+{ lib, buildPythonPackage, fetchPypi, six, unidecode, nose, yanc }:
 
 buildPythonPackage rec {
   pname = "preggy";
   version = "1.4.4";
 
   propagatedBuildInputs = [ six unidecode ];
-  checkInputs = [ nose yanc ];
+  nativeCheckInputs = [ nose yanc ];
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     nosetests .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Assertion library for Python";
     homepage = "http://heynemann.github.io/preggy/";
     license = licenses.mit;

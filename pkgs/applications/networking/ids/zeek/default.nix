@@ -1,44 +1,109 @@
-{stdenv, fetchurl, cmake, flex, bison, openssl, libpcap, zlib, file, curl
-, libmaxminddb, gperftools, python, swig, fetchpatch }:
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, cmake
+, flex
+, bison
+, spicy-parser-generator
+, openssl
+, libkqueue
+, libpcap
+, zlib
+, file
+, curl
+, libmaxminddb
+, gperftools
+, python3
+, swig
+, gettext
+, coreutils
+, ncurses
+}:
+
 let
-  preConfigure = (import ./script.nix);
+  broker = callPackage ./broker { };
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.1.2";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "18aa4pfwav8m6vq7cr4bhfg243da54ak933rqbriljnhsrgp4n0q";
+    sha256 = "sha256-URBHQA3UU5F3VCyEpegNfpetc9KpmG/81s2FtMxxH78=";
   };
 
-  nativeBuildInputs = [ cmake flex bison file ];
-  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ];
+  strictDeps = true;
 
-  #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
-  inherit preConfigure;
-
-  enableParallelBuilding = true;
-
-  patches = stdenv.lib.optionals stdenv.cc.isClang [
-    # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
-    (fetchpatch {
-      url = "https://github.com/pybind/pybind11/commit/759221f5c56939f59d8f342a41f8e2d2cacbc8cf.patch";
-      sha256 = "0l8z7d7chq1awd8dnfarj4c40wx36hkhcan0702p5l89x73wqk54";
-      extraPrefix = "aux/broker/bindings/python/3rdparty/pybind11/";
-      stripLen = 1;
-    })
+  patches = [
+    ./avoid-broken-tests.patch
+    ./debug-runtime-undef-fortify-source.patch
+    ./fix-installation.patch
   ];
+
+  nativeBuildInputs = [
+    bison
+    cmake
+    file
+    flex
+    python3
+  ];
+
+  buildInputs = [
+    broker
+    spicy-parser-generator
+    curl
+    gperftools
+    libkqueue
+    libmaxminddb
+    libpcap
+    ncurses
+    openssl
+    swig
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    gettext
+  ];
+
+  postPatch = ''
+    patchShebangs ./auxil/spicy/spicy/scripts
+
+    substituteInPlace auxil/spicy/CMakeLists.txt --replace "hilti-toolchain-tests" ""
+    substituteInPlace auxil/spicy/spicy/hilti/CMakeLists.txt --replace "hilti-toolchain-tests" ""
+  '';
 
   cmakeFlags = [
-    "-DPY_MOD_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
+    "-DBroker_ROOT=${broker}"
+    "-DSPICY_ROOT_DIR=${spicy-parser-generator}"
+    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
+    "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
+    "-DZEEK_LOG_DIR=/var/log/zeek"
+    "-DZEEK_STATE_DIR=/var/lib/zeek"
+    "-DZEEK_SPOOL_DIR=/var/spool/zeek"
   ];
 
-  meta = with stdenv.lib; {
-    description = "Powerful network analysis framework much different from a typical IDS";
+  postInstall = ''
+    for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
+      substituteInPlace $file \
+         --replace "/bin/rm" "${coreutils}/bin/rm" \
+         --replace "/bin/cat" "${coreutils}/bin/cat"
+    done
+
+    for file in $out/share/zeek/policy/misc/trim-trace-file.zeek $out/share/zeek/base/frameworks/logging/postprocessors/scp.zeek $out/share/zeek/base/frameworks/logging/postprocessors/sftp.zeek; do
+      substituteInPlace $file --replace "/bin/rm" "${coreutils}/bin/rm"
+    done
+  '';
+
+  passthru = {
+    inherit broker;
+  };
+
+  meta = with lib; {
+    description = "Network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
+    changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub marsam tobim ];
     platforms = platforms.unix;

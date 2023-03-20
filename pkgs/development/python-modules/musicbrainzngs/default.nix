@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     rm test/test_submit.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://python-musicbrainzngs.readthedocs.org/";
     description = "Python bindings for musicbrainz NGS webservice";
     license = licenses.bsd2;

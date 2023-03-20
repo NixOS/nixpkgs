@@ -1,56 +1,50 @@
-{ stdenv
+{ lib
+, stdenv
+, nix-update-script
 , appstream
-, appstream-glib
 , dbus
-, desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
 , fetchFromGitHub
-, fetchpatch
 , flatpak
-, gettext
 , glib
 , granite
 , gtk3
 , json-glib
 , libgee
+, libhandy
 , libsoup
 , libxml2
 , meson
 , ninja
 , packagekit
-, pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
+, polkit
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.2.4";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0nhgf5lgy74liml3kzijldan3qgrxh2721yvjdk4jf83b0g1b7yb";
+    sha256 = "sha256-jtNPRsq33bIn3jy3F63UNrwrhaTBYbRYLDxyxgAXjIc=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Having a working nix packagekit backend will supersede this.
+    # https://github.com/NixOS/nixpkgs/issues/177946
+    ./disable-packagekit-backend.patch
+  ];
 
   nativeBuildInputs = [
-    appstream-glib
-    dbus # for pkgconfig
-    desktop-file-utils
-    gettext
+    dbus # for pkg-config
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -58,21 +52,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-icon-theme
-    elementary-gtk-theme
     flatpak
     glib
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libxml2
     packagekit
+    polkit
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -82,11 +75,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

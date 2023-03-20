@@ -4,7 +4,7 @@ let
 
   inherit (builtins) toFile;
   inherit (lib) concatMapStringsSep concatStringsSep mapAttrsToList
-                mkIf mkEnableOption mkOption types literalExample;
+                mkIf mkEnableOption mkOption types literalExpression;
 
   cfg = config.services.strongswan;
 
@@ -51,16 +51,16 @@ let
 in
 {
   options.services.strongswan = {
-    enable = mkEnableOption "strongSwan";
+    enable = mkEnableOption (lib.mdDoc "strongSwan");
 
     secrets = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "/run/keys/ipsec-foo.secret" ];
-      description = ''
+      description = lib.mdDoc ''
         A list of paths to IPSec secret files. These
         files will be included into the main ipsec.secrets file with
-        the <literal>include</literal> directive. It is safer if these
+        the `include` directive. It is safer if these
         paths are absolute.
       '';
     };
@@ -69,9 +69,9 @@ in
       type = types.attrsOf types.str;
       default = {};
       example = { cachecrls = "yes"; strictcrlpolicy = "yes"; };
-      description = ''
+      description = lib.mdDoc ''
         A set of options for the ‘config setup’ section of the
-        <filename>ipsec.conf</filename> file. Defines general
+        {file}`ipsec.conf` file. Defines general
         configuration parameters.
       '';
     };
@@ -79,7 +79,7 @@ in
     connections = mkOption {
       type = types.attrsOf (types.attrsOf types.str);
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "%default" = {
             keyexchange = "ikev2";
@@ -94,9 +94,9 @@ in
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         A set of connections and their options for the ‘conn xxx’
-        sections of the <filename>ipsec.conf</filename> file.
+        sections of the {file}`ipsec.conf` file.
       '';
     };
 
@@ -110,9 +110,9 @@ in
           crluri = "http://crl2.strongswan.org/strongswan.crl";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         A set of CAs (certification authorities) and their options for
-        the ‘ca xxx’ sections of the <filename>ipsec.conf</filename>
+        the ‘ca xxx’ sections of the {file}`ipsec.conf`
         file.
       '';
     };
@@ -120,19 +120,19 @@ in
     managePlugins = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If set to true, this option will disable automatic plugin loading and
         then tell strongSwan to enable the plugins specified in the
-        <option>enabledPlugins</option> option.
+        {option}`enabledPlugins` option.
       '';
     };
 
     enabledPlugins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         A list of additional plugins to enable if
-        <option>managePlugins</option> is true.
+        {option}`managePlugins` is true.
       '';
     };
   };
@@ -152,7 +152,7 @@ in
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ kmod iproute iptables utillinux ]; # XXX Linux
+      path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
       after = [ "network-online.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };

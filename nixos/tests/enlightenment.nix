@@ -2,24 +2,23 @@ import ./make-test-python.nix ({ pkgs, ...} :
 {
   name = "enlightenment";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ romildo ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.desktopManager.enlightenment.enable = true;
-    services.xserver.displayManager.lightdm = {
-      enable = true;
+    services.xserver.displayManager = {
+      lightdm.enable = true;
       autoLogin = {
         enable = true;
         user = "alice";
       };
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
-    virtualisation.memorySize = 1024;
     environment.systemPackages = [ pkgs.xdotool ];
     services.acpid.enable = true;
     services.connman.enable = true;
@@ -41,28 +40,24 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     with subtest("First time wizard"):
         machine.wait_for_text("Default")  # Language
-        machine.succeed("xdotool mousemove 512 185 click 1")  # Default Language
         machine.screenshot("wizard1")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
+        machine.screenshot("wizard2")
 
         machine.wait_for_text("English")  # Keyboard (default)
-        machine.screenshot("wizard2")
-        machine.succeed("xdotool mousemove 512 740 click 1")  # Next
-
-        machine.wait_for_text("Standard")  # Profile (default)
         machine.screenshot("wizard3")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
-        machine.wait_for_text("Title")  # Sizing (default)
+        machine.wait_for_text("Standard")  # Profile (default)
         machine.screenshot("wizard4")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
-        machine.wait_for_text("clicked")  # Windows Phocus
-        machine.succeed("xdotool mousemove 512 370 click 1")  # Click
+        machine.wait_for_text("Title")  # Sizing (default)
         machine.screenshot("wizard5")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
-        machine.wait_for_text("bindings")  # Mouse Modifiers (default)
+        machine.wait_for_text("clicked")  # Windows Focus
+        machine.succeed("xdotool mousemove 512 370 click 1")  # Click
         machine.screenshot("wizard6")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
@@ -74,7 +69,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.screenshot("wizard8")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
-        machine.wait_for_text("Compositing")  # Compositing (default)
+        machine.wait_for_text("OpenGL")  # Compositing (default)
         machine.screenshot("wizard9")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
@@ -92,7 +87,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.screenshot("wizard12")
 
     with subtest("Run Terminology"):
-        machine.succeed("terminology &")
+        machine.succeed("terminology >&2 &")
         machine.sleep(5)
         machine.send_chars("ls --color -alF\n")
         machine.sleep(2)

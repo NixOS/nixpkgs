@@ -1,71 +1,71 @@
-{ stdenv
+{ lib
+, stdenv
 , buildGoModule
-, lib
 , fetchFromGitHub
-, rocksdb
-, bzip2
-, zlib
-, packr
-, snappy
 , pkg-config
-, zeromq
+, bzip2
 , lz4
+, rocksdb_6_23
+, snappy
+, zeromq
+, zlib
+, nixosTests
 }:
 
+let
+  rocksdb = rocksdb_6_23;
+in
 buildGoModule rec {
   pname = "blockbook";
-  version = "0.3.3";
-  commit = "b6961ca";
+  version = "0.3.6";
+  commit = "5f8cf45";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    sha256 = "01nb4if2dix2h95xvqvafil325jjw2a4v1izb9mad0cjqcf8rk6n";
+    sha256 = "1jb195chy3kbspmv9vyg7llw6kgykkmvz3znd97mxf24f4q622jv";
   };
 
-  vendorSha256 = "1qjlvhizl8cy06cgf4phia70bgbm4lj57z5z2gyr8aglx98bnpdn";
+  vendorSha256 = "1w9c0qzah2f9rbjdxqajwrfkia25cwbn30gidviaid3b7ddpd7r8";
 
-  buildInputs = [ bzip2 zlib snappy zeromq lz4 ];
+  nativeBuildInputs = [ pkg-config ];
 
-  nativeBuildInputs = [ pkg-config packr ];
+  buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X github.com/trezor/blockbook/common.version=${version}
-       -X github.com/trezor/blockbook/common.gitcommit=${commit}
-       -X github.com/trezor/blockbook/common.buildDate=unknown
-  '';
+  ldflags = [
+    "-X github.com/trezor/blockbook/common.version=${version}"
+    "-X github.com/trezor/blockbook/common.gitcommit=${commit}"
+    "-X github.com/trezor/blockbook/common.buildDate=unknown"
+  ];
 
-  goethereum = fetchFromGitHub {
-    owner = "ethereum";
-    repo = "go-ethereum";
-    rev = "v1.8.20";
-    sha256 = "0m2q1nz6f39pyr2rk6vflkwi4ykganzwr7wndpwr9rliw0x8jgi0";
-  };
-
-  overrideModAttrs = (_: {
-      postBuild = ''
-      rm -r vendor/github.com/ethereum/go-ethereum
-      cp -r --reflink=auto ${goethereum} vendor/github.com/ethereum/go-ethereum
-      '';
-    });
+  tags = [ "rocksdb_6_16" ];
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
   '' + ''
-    export CGO_CFLAGS="-I${rocksdb}/include"
-    export CGO_LDFLAGS="-L${rocksdb}/lib -lrocksdb -lstdc++ -lm -lz -lbz2 -lsnappy -llz4"
-    packr clean && packr
+    export CGO_LDFLAGS="-L${stdenv.cc.cc.lib}/lib -lrocksdb -lz -lbz2 -lsnappy -llz4 -lm -lstdc++"
+    buildFlagsArray+=("-tags=${lib.concatStringsSep " " tags}")
+    buildFlagsArray+=("-ldflags=${lib.concatStringsSep " " ldflags}")
   '';
 
   subPackages = [ "." ];
+
+  postInstall = ''
+    mkdir -p $out/share/
+    cp -r $src/static/templates/ $out/share/
+    cp -r $src/static/css/ $out/share/
+  '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.blockbook-frontend;
+  };
 
   meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mmahut maintainers."1000101" ];
-    platforms = remove "aarch64-linux" platforms.unix;
+    maintainers = with maintainers; [ mmahut _1000101 ];
+    platforms = platforms.unix;
   };
 }

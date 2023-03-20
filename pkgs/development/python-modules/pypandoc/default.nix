@@ -1,32 +1,47 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pandoc, haskellPackages, texlive }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pandoc
+, pandocfilters
+, pythonOlder
+, substituteAll
+, texlive
+}:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.5";
+  version = "1.10";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "bebraw";
+    owner = "JessicaTegner";
     repo = pname;
-    rev = version;
-    sha256 = "1lpslfns6zxx7b0xr13bzg921lwrj5am8za0b2dviywk6iiib0ld";
+    rev = "v${version}";
+    hash = "sha256:05m585l4sipjzpkrv4yj5s7w45yxhxlym55lkhnavsshlvisinkz";
   };
 
-  postPatch = ''
-    # set pandoc path statically
-    sed -i '/^__pandoc_path = None$/c__pandoc_path = "${pandoc}/bin/pandoc"' pypandoc/__init__.py
+  patches = [
+    (substituteAll {
+      src = ./static-pandoc-path.patch;
+      pandoc = "${lib.getBin pandoc}/bin/pandoc";
+      pandocVersion = pandoc.version;
+    })
+    ./skip-tests.patch
+  ];
 
-    # Skip test that requires network access
-    sed -i '/test_basic_conversion_from_http_url/i\\    @unittest.skip\("no network access during checkPhase"\)' tests.py
-  '';
+  nativeCheckInputs = [
+    texlive.combined.scheme-small
+    pandocfilters
+  ];
 
-  preCheck = ''
-    export PATH="${haskellPackages.pandoc-citeproc}/bin:${texlive.combined.scheme-small}/bin:$PATH"
-  '';
+  pythonImportsCheck = [
+    "pypandoc"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/bebraw/pypandoc";
+    homepage = "https://github.com/JessicaTegner/pypandoc";
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann bennofs ];
   };

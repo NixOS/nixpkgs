@@ -1,35 +1,58 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
-, libXinerama, libXrandr, glib, cairo, xdotool }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libX11
+, xorgproto
+, libXtst
+, libXi
+, libXext
+, libXinerama
+, libXrandr
+, glib
+, cairo
+, xdotool
+}:
 
-let release = "20180821"; in
+let release = "20220825"; in
 stdenv.mkDerivation {
-  name = "keynav-0.${release}.0";
+  pname = "keynav";
+  version = "0.${release}.0";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "keynav";
-    rev = "78f9e076a5618aba43b030fbb9344c415c30c1e5";
-    sha256 = "0hmc14fj612z5h7gjgk95zyqab3p35c4a99snnblzxfg0p3x2f1d";
+    rev = "28a1ba9a045c62a9d2bc5c3474a66d96c8bf5c32";
+    hash = "sha256-y4ONq6fDBFhVGASvz28zlJRXfkCE/j8GDcbq/j8xvUY=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 xorgproto libXtst libXi libXext libXinerama libXrandr
-                  glib cairo xdotool ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libX11
+    xorgproto
+    libXtst
+    libXi
+    libXext
+    libXinerama
+    libXrandr
+    glib
+    cairo
+    xdotool
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     echo >>VERSION MAJOR=0
     echo >>VERSION RELEASE=${release}
     echo >>VERSION REVISION=0
   '';
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/share/keynav/doc
-      cp keynav $out/bin
-      cp keynavrc $out/share/keynav/doc
-    '';
+  installPhase = ''
+    mkdir -p $out/bin $out/share/keynav/doc
+    cp keynav $out/bin
+    cp keynavrc $out/share/keynav/doc
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate X11 mouse clicks from keyboard";
     homepage = "https://www.semicomplete.com/projects/keynav/";
     license = licenses.bsd3;

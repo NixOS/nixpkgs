@@ -1,13 +1,22 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, libmysqlclient, libaio
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libmysqlclient
+, libaio
+, luajit
+# For testing:
+, testers
+, sysbench
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysbench";
   version = "1.0.20";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libmysqlclient libaio ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libmysqlclient luajit ] ++ lib.optionals stdenv.isLinux [ libaio ];
 
   src = fetchFromGitHub {
     owner = "akopytov";
@@ -18,10 +27,30 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  configureFlags = [
+    # The bundled version does not build on aarch64-darwin:
+    # https://github.com/akopytov/sysbench/issues/416
+    "--with-system-luajit"
+  ];
+
+  passthru.tests = {
+    versionTest = testers.testVersion {
+      package = sysbench;
+    };
+  };
+
   meta = {
     description = "Modular, cross-platform and multi-threaded benchmark tool";
+    longDescription = ''
+      sysbench is a scriptable multi-threaded benchmark tool based on LuaJIT.
+      It is most frequently used for database benchmarks, but can also be used
+      to create arbitrarily complex workloads that do not involve a database
+      server.
+    '';
     homepage = "https://github.com/akopytov/sysbench";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    downloadPage = "https://github.com/akopytov/sysbench/releases/tag/${version}";
+    changelog = "https://github.com/akopytov/sysbench/blob/${version}/ChangeLog";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

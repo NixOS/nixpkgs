@@ -1,15 +1,16 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , desktop-file-utils
 , gtk3
-, libaccounts-glib
 , libexif
 , libgee
+, libhandy
 , geocode-glib
 , gexiv2
 , libgphoto2
@@ -22,32 +23,21 @@
 , libsoup
 , sqlite
 , python3
-, scour
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.0";
-
-  repoName = "photos";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "photos";
     rev = version;
-    sha256 = "09jjic165rmprc2cszsgj2m3j3f5p8v9pxx5mj66a0gj3ar3hfbd";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-VhJggQMy1vk21zNA5pR4uAPGCwnIxLUHVO58AZs+h6s=";
   };
 
   nativeBuildInputs = [
@@ -55,38 +45,36 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    elementary-icon-theme
+  buildInputs = [
     geocode-glib
     gexiv2
     granite
+    gtk3
+    json-glib
+    libexif
+    libgee
+    libgphoto2
+    libgudev
+    libhandy
+    libraw
+    librest
+    libsoup
+    libwebp
+    sqlite
+    webkitgtk
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libexif
-    libgee
-    libgphoto2
-    libgudev
-    libraw
-    librest
-    libsoup
-    libunity
-    libwebp
-    scour
-    sqlite
-    webkitgtk
-  ];
+  ]);
 
   mesonFlags = [
     "-Dplugins=false"
@@ -97,11 +85,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta =  with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.photos";
   };
 }

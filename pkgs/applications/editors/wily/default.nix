@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXt } :
+{ lib, stdenv, fetchurl, libX11, libXt } :
 
 stdenv.mkDerivation rec {
   version = "0.13.42";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An emulation of ACME";
     homepage = "http://wily.sourceforge.net";
     license = licenses.artistic1;

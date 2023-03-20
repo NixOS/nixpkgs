@@ -1,16 +1,16 @@
-{ stdenv, lib, python3, fetchFromGitHub, mkdocs, which, findutils, coreutils
-, perl
+{ stdenv, lib, python3, fetchFromGitHub, which, coreutils
+, perl, installShellFiles, gnumake42
 , doCheck ? true
 }: stdenv.mkDerivation rec {
 
   pname = "redo-apenwarr";
-  version = "0.42a";
+  version = "0.42d";
 
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
     rev = "${repo}-${version}";
-    sha256 = "172z2idslhcqibd4lw82k6349nl5fdda2vj10dqcjz0lvv6n7php";
+    sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@
       --replace "/bin/ls" "ls"
 
     substituteInPlace t/110-compile/hello.o.do \
-      --replace "/usr/include" "${stdenv.lib.getDev stdenv.cc.libc}/include"
+      --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
     substituteInPlace t/200-shell/nonshelltest.do \
       --replace "/usr/bin/env perl" "${perl}/bin/perl"
@@ -52,16 +52,22 @@
     python3
     (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
-    findutils
+    installShellFiles
+    gnumake42 # fails with make 4.4
   ];
 
+  postInstall = ''
+    installShellCompletion --bash contrib/bash_completion.d/redo
+  '';
+
   meta = with lib; {
-    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo.";
+    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
     homepage = "https://github.com/apenwarr/redo";
     maintainers = with maintainers; [
       andrewchambers
       ck3d
     ];
     license = licenses.asl20;
+    platforms = python3.meta.platforms;
   };
 }

@@ -1,55 +1,61 @@
-{ stdenv, lib, fetchFromGitHub
-, rustPlatform, pkgconfig, openssl
-# darwin dependencies
-, Security, CoreFoundation, libiconv
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+  # darwin dependencies
+, Security
+, CoreFoundation
+, libiconv
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.9.1";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0kvmjahyx5dcjhry2hkvcshi0lbgipfj0as74a3h3bllfvdfkkg0";
+    sha256 = "sha256-PrrhxY+Hk1XfdV0u4GgIsbo8oNOFnqbCeivY2Ix6g+k=";
   };
+  cargoHash = "sha256-D3upXhKFkuZfEVOPJ9mCwoZkbkX9s2MltyTkKcBvb6I=";
 
-  cargoSha256 = "0v50fkyf0a77l7whxalwnfqfi8lxy82z2gpd0fa0ib80qjla2n5z";
-  cargoPatches = [ ./cargo-lock.patch ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv curl ];
+  nativeBuildInputs = [ pkg-config ]
+    # curl-sys wants to run curl-config on darwin
+    ++ lib.optionals stdenv.isDarwin [ curl.dev ];
 
-  # Multiple tests require internet connectivity, so they are disabled here.
-  # If we ever get cargo-insta (https://crates.io/crates/insta) in tree,
-  # we might be able to run these with something like
-  # `cargo insta review` in the `preCheck` phase.
-  checkPhase = ''
-    cd cargo-geiger/tests/snapshots
-    for file in *
-    do
-      mv $file r#$file
-    done
-    cd -
-    cargo test -- \
-    --skip test_package::case_2 \
-    --skip test_package::case_3 \
-    --skip test_package::case_6
-  '';
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-  nativeBuildInputs = [ pkgconfig ];
-
-  # FIXME: Use impure version of CoreFoundation because of missing symbols.
-  # CFURLSetResourcePropertyForKey is defined in the headers but there's no
-  # corresponding implementation in the sources from opensource.apple.com.
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
-  '';
+  # skip tests with networking or other failures
+  checkFlags = [
+    "--skip serialize_test2_quick_report"
+    "--skip serialize_test3_quick_report"
+    "--skip serialize_test6_quick_report"
+    "--skip serialize_test2_report"
+    "--skip serialize_test3_report"
+    "--skip serialize_test6_report"
+    "--skip test_package::case_2"
+    "--skip test_package::case_3"
+    "--skip test_package::case_6"
+    "--skip test_package_update_readme::case_2"
+    "--skip test_package_update_readme::case_3"
+    "--skip test_package_update_readme::case_5"
+  ];
 
   meta = with lib; {
-    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies.";
     homepage = "https://github.com/rust-secure-code/cargo-geiger";
+    changelog = "https://github.com/rust-secure-code/cargo-geiger/blob/${pname}-${version}/CHANGELOG.md";
+    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
+    longDescription = ''
+      A cargo plugin that detects the usage of unsafe Rust in a Rust crate and
+      its dependencies. It provides information to aid auditing and guide
+      dependency selection but it can not help you decide when and why unsafe
+      code is appropriate.
+    '';
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ evanjs ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ evanjs jk ];
   };
 }

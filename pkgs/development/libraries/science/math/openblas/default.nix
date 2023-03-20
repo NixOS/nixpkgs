@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -15,51 +15,72 @@
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
-, enableStatic ? false
-, enableShared ? true
-}:
+# Select whether DYNAMIC_ARCH is enabled or not.
+, dynamicArch ? null
+# enable AVX512 optimized kernels.
+# These kernels have been a source of trouble in the past.
+# Use with caution.
+, enableAVX512 ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 
-with stdenv.lib;
+# for passthru.tests
+, ceres-solver
+, giac
+, octave
+, opencv
+, python3
+}:
 
 let blas64_ = blas64; in
 
 let
   setTarget = x: if target == null then x else target;
+  setDynamicArch = x: if dynamicArch == null then x else dynamicArch;
 
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
       BINARY = 32;
       TARGET = setTarget "ARMV6";
-      DYNAMIC_ARCH = false;
+      DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
 
     armv7l-linux = {
       BINARY = 32;
       TARGET = setTarget "ARMV7";
-      DYNAMIC_ARCH = false;
+      DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
+    };
+
+    aarch64-darwin = {
+      BINARY = 64;
+      TARGET = setTarget "VORTEX";
+      DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = false;
+      MACOSX_DEPLOYMENT_TARGET = "11.0";
     };
 
     aarch64-linux = {
       BINARY = 64;
       TARGET = setTarget "ARMV8";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
     };
 
     i686-linux = {
       BINARY = 32;
       TARGET = setTarget "P2";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
     };
 
     x86_64-darwin = {
       BINARY = 64;
       TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = true;
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
@@ -67,9 +88,23 @@ let
     x86_64-linux = {
       BINARY = 64;
       TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = true;
-      NO_AVX512 = true;
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
+    powerpc64le-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER5";
+      DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
+    riscv64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "RISCV64_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
     };
   };
 in
@@ -84,7 +119,7 @@ let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+      else lib.hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -92,20 +127,28 @@ let
   mkMakeFlagValue = val:
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
-  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+  mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.9";
+  version = "0.3.21";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "0nq51j45shb32n6086xff3x374kx5qhr2cwjzvppx4s2z0ahflal";
+    sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
   };
+
+  postPatch = ''
+    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
+    substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
+  '';
 
   inherit blas64;
 
@@ -134,11 +177,7 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  # Disable an optimisation which seems to cause issues, pending an
-  # upstream fix: https://github.com/xianyi/OpenBLAS/issues/2496
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
-    ./0001-Disable-optimised-aarch64-dgemm_beta-pending-fix.patch
-  ];
+  enableParallelBuilding = true;
 
   makeFlags = mkMakeFlagsFromConfig (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
@@ -157,7 +196,11 @@ stdenv.mkDerivation rec {
     NO_BINARY_MODE = if stdenv.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
-  } // (stdenv.lib.optionalAttrs singleThreaded {
+    # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
+    # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
+    # https://github.com/xianyi/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
+    MAKE_NB_JOBS = 0;
+  } // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
     USE_LOCKING = true; # available with openblas >= 0.3.7
@@ -181,22 +224,33 @@ EOF
     done
 
     # Setup symlinks for blas / lapack
+  '' + lib.optionalString enableShared ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  '' + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (python3.pkgs) numpy scipy;
+    inherit ceres-solver giac octave opencv;
+  };
+
+  meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = platforms.unix;
+    platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

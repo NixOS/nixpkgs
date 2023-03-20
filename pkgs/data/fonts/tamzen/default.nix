@@ -1,38 +1,28 @@
-{ fetchFromGitHub, fontforge, mkfontscale, stdenv }:
+{ fetchFromGitHub, xorg, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "tamzen-font";
-  version = "1.11.4";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "sunaku";
     repo = "tamzen-font";
     rev = "Tamzen-${version}";
-    sha256 = "17kgmvg6q32mqhx9g44hjvzv0si0mnpprga4z7na930g2zdd8846";
+    sha256 = "00x5fipzqimglvshhqwycdhaqslbvn3rl06jnswhyxfvz16ymj7s";
   };
 
-  nativeBuildInputs = [ fontforge mkfontscale ];
+  nativeBuildInputs = [ xorg.mkfontscale ];
 
   installPhase = ''
-    # convert pcf fonts to otb
-    for i in pcf/*.pcf; do
-      name=$(basename "$i" .pcf)
-      fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otb\")"
-    done
-
-    install -m 644 -D pcf/*.pcf -t "$out/share/fonts/misc"
+    install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"
     install -m 644 -D psf/*.psf -t "$out/share/consolefonts"
-    install -m 644 -D *.otb     -t "$otb/share/fonts/misc"
     mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bitmapped programming font based on Tamsyn";
     longDescription = ''
-    Tamzen is a monospace bitmap font. It is programatically forked
+    Tamzen is a monospace bitmap font. It is programmatically forked
     from Tamsyn version 1.11, which backports glyphs from older
     versions while deleting deliberately empty glyphs to allow
     secondary/fallback fonts to provide real glyphs at those codepoints.

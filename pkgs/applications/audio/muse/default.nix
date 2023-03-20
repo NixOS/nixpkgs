@@ -1,36 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, wrapQtAppsHook
-, alsaLib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
-, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools, wrapQtAppsHook
+, alsa-lib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
+, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord, serd
 }:
 
 stdenv.mkDerivation rec {
   pname = "muse-sequencer";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "muse-sequencer";
     repo = "muse";
     rev = "muse_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "08k25652w88xf2i79lw305x1phpk7idrww9jkqwcs8q6wzgmz8aq";
+    sha256 = "1rasp2v1ds2aw296lbf27rzw0l9fjl0cvbvw85d5ycvh6wkm301p";
   };
 
   sourceRoot = "source/muse3";
 
-  prePatch = ''
-    chmod u+w $NIX_BUILD_TOP
-  '';
-
   patches = [ ./fix-parallel-building.patch ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
-    alsaLib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
+    alsa-lib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
     libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
   ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://www.muse-sequencer.org/";
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev serd}/include/serd-0" ];
+
+  meta = with lib; {
+    homepage = "https://muse-sequencer.github.io/";
     description = "MIDI/Audio sequencer with recording and editing capabilities";
     longDescription = ''
       MusE is a MIDI/Audio sequencer with recording and editing capabilities

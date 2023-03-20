@@ -105,6 +105,14 @@
     type = "pom";
   };
 
+  apache_14 = fetchMaven {
+    version = "14";
+    artifactId = "apache";
+    groupId = "org.apache";
+    sha512 = "08y5k9lny2z171c78l4j70miylj2xy8w48amqwcghy3p9pc1p19qx6146s4mxc2z4wx4z9gpi9agham46m5hqa6k6v2s16v80phi7xi";
+    type = "pom";
+  };
+
   asmParent_4_0 = fetchMaven {
     version = "4.0";
     artifactId = "asm-parent";
@@ -345,6 +353,14 @@
     type = "pom";
   };
 
+  mavenParent_24 = fetchMaven {
+    version = "24";
+    artifactId = "maven-parent";
+    groupId = "org.apache.maven";
+    sha512 = "0w1v36qx53xv5m8kag6wakzy7rjrp4gzfp7zfmrp5kw13ik6k42fnfkknslqc2g2c5dyxra2vpbvz1z9bcqslyaljd4r1rj3qbh5vl7";
+    type = "pom";
+  };
+
   mavenPlugins_22 = fetchMaven {
     version = "22";
     artifactId = "maven-plugins";
@@ -366,6 +382,14 @@
     artifactId = "maven-plugins";
     groupId = "org.apache.maven.plugins";
     sha512 = "07flf37pkkc34466bnzi4rfwdlgvd3ydasm39qzy2hybxv26306zrhipglmgsjvd84z07dscij4n7qdd2jkx9hrkm900hid4xwvxzrs";
+    type = "pom";
+  };
+
+  mavenPlugins_25 = fetchMaven {
+    version = "25";
+    artifactId = "maven-plugins";
+    groupId = "org.apache.maven.plugins";
+    sha512 = "38zx1im9qnblr5p9r4ln91d2280x48n9a11j4476skrgh97l3iqxs5ggqc22wis7r53g4j8ya4dvzqhxx6gymfbz3cn6a6hcmdqbng5";
     type = "pom";
   };
 
@@ -593,11 +617,27 @@
     type = "pom";
   };
 
+  plexusCompiler_2_4 = fetchMaven {
+    version = "2.4";
+    artifactId = "plexus-compiler";
+    groupId = "org.codehaus.plexus";
+    sha512 = "0v89a5kbgyphmvgmdf6kb7zi4fvq16l435cxsp7grc5jy4ir9d0dv5g7xwhsk9ajp1lcy9kp4l4bk2h93g4kvj3bhk548wv284y36bf";
+    type = "pom";
+  };
+
   plexusCompilers_2_2 = fetchMaven {
     version = "2.2";
     artifactId = "plexus-compilers";
     groupId = "org.codehaus.plexus";
     sha512 = "0yvvc8mdz1vd7mpw9h568mhlfxh3qpbz4qpyr5iw7f5ifm46gxsmnfd36ah6mn9hxh6lpra3mi536y5cv1k5mrbr128a1lwyr8p14rg";
+    type = "pom";
+  };
+
+  plexusCompilers_2_4 = fetchMaven {
+    version = "2.4";
+    artifactId = "plexus-compilers";
+    groupId = "org.codehaus.plexus";
+    sha512 = "1zalxaqycaykdn6q6pnxki6yvlpaf5qap1903hcylhbi1gcwmpqys39xg4pah9giy9iis350w2dmsab2prib9lihz4s9z6s6adqcss2";
     type = "pom";
   };
 

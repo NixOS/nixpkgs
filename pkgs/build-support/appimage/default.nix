@@ -1,40 +1,75 @@
-{ stdenv, buildFHSUserEnv, writeScript, pkgs
-, bash, radare2, jq, squashfsTools, ripgrep
-, coreutils, libarchive, file, runtimeShell, pv
-, lib, runCommand }:
+{ lib
+, bash
+, binutils-unwrapped
+, coreutils
+, gawk
+, libarchive
+, pv
+, squashfsTools
+, buildFHSUserEnv
+, pkgs
+}:
 
 rec {
   appimage-exec = pkgs.substituteAll {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = with pkgs; lib.makeBinPath [ pv ripgrep file radare2 libarchive jq squashfsTools coreutils bash ];
+    path = lib.makeBinPath [
+      bash
+      binutils-unwrapped
+      coreutils
+      gawk
+      libarchive
+      pv
+      squashfsTools
+    ];
   };
 
-  extract = { name, src }: runCommand "${name}-extracted" {
-    buildInputs = [ appimage-exec ];
-  } ''
-    appimage-exec.sh -x $out ${src}
-  '';
+  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
+      buildInputs = [ appimage-exec ];
+    } ''
+      appimage-exec.sh -x $out ${src}
+    '';
 
   # for compatibility, deprecated
   extractType1 = extract;
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
-    inherit name;
+  wrapAppImage = args@{
+    name ? "${args.pname}-${args.version}",
+    src,
+    extraPkgs,
+    meta ? {},
+    ...
+  }: buildFHSUserEnv
+    (defaultFhsEnvArgs // {
+      inherit name;
 
-    targetPkgs = pkgs: [ appimage-exec ]
-      ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+      targetPkgs = pkgs: [ appimage-exec ]
+        ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-    runScript = "appimage-exec.sh -w ${src}";
-  } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
+      runScript = "appimage-exec.sh -w ${src} --";
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
-    src = extract { inherit name src; };
-  });
+      meta = {
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      } // meta;
+    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
+
+  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+    (args // {
+      inherit name extraPkgs;
+      src = extract { inherit name src; };
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru = lib.pipe args [
+        lib.attrNames
+        (lib.remove "src")
+        (removeAttrs args)
+      ] // args.passthru or { };
+    });
 
   defaultFhsEnvArgs = {
     name = "appimage-env";
@@ -43,14 +78,15 @@ rec {
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome3.zenity
-      python2
+      gnome.zenity
       xorg.xrandr
       which
       perl
-      xdg_utils
+      xdg-utils
       iana-etc
       krb5
+      gsettings-desktop-schemas
+      hicolor-icon-theme # dont show a gtk warning about hicolor not being installed
     ];
 
     # list of libraries expected in an appimage environment:
@@ -67,6 +103,7 @@ rec {
 
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-base
       libdrm
       xorg.xkeyboardconfig
       xorg.libpciaccess
@@ -86,9 +123,8 @@ rec {
       xorg.libXi
       xorg.libSM
       xorg.libICE
-      gnome2.GConf
       freetype
-      (curl.override { gnutlsSupport = true; sslSupport = false; })
+      curlWithGnuTls
       nspr
       nss
       fontconfig
@@ -102,11 +138,9 @@ rec {
       libusb1
       udev
       dbus-glib
-      libav
       atk
       at-spi2-atk
       libudev0-shim
-      networkmanager098
 
       xorg.libXt
       xorg.libXmu
@@ -129,11 +163,13 @@ rec {
       wayland
       mesa
       libxkbcommon
+      vulkan-loader
 
       flac
       freeglut
       libjpeg
       libpng12
+      libpulseaudio
       libsamplerate
       libmikmod
       libtheora
@@ -145,8 +181,6 @@ rec {
       SDL_mixer
       SDL2_ttf
       SDL2_mixer
-      gstreamer
-      gst-plugins-base
       libappindicator-gtk2
       libcaca
       libcanberra
@@ -155,19 +189,22 @@ rec {
       librsvg
       xorg.libXft
       libvdpau
-      alsaLib
+      alsa-lib
 
       harfbuzz
       e2fsprogs
-      libgpgerror
+      libgpg-error
       keyutils.lib
       libjack2
       fribidi
       p11-kit
 
+      gmp
+
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
     ];
   };

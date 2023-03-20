@@ -1,21 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pynmea2";
-  version = "1.15.0";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b83fa7e3e668af5e182ef1c2fd4a535433ecadf60d7b627280172d695a1646b";
+    hash = "sha256-Hap5uTJ5+IfRwjXlzFx54yZEVkE4zkaYmrD0ovyXDXw=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pynmea2" ];
 
   meta = {
     homepage = "https://github.com/Knio/pynmea2";
     description = "Python library for the NMEA 0183 protcol";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ geistesk ];
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

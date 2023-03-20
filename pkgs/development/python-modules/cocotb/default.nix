@@ -1,19 +1,30 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, cocotb-bus
+, pytestCheckHook
+, swig
+, verilog
+}:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.3.1";
+  version = "1.7.2";
 
+  # pypi source doesn't include tests
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "118wp5sjsl99hj8pqw5n3v2lry9r949p2hv4l92p086q1n0axxk3";
+    owner = "cocotb";
+    repo = "cocotb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gLOYwljqnYkGsdbny7+f93QgroLBaLLnDBRpoCe8uEg=";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -26,18 +37,28 @@ buildPythonPackage rec {
       substituteInPlace $f --replace 'shell which' 'shell command -v'
     done
 
-    # This can probably be removed in the next update after 1.3.1
-    substituteInPlace cocotb/share/makefiles/Makefile.inc --replace "-Werror" ""
+    # remove circular dependency cocotb-bus from setup.py
+    substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
+  '' + lib.optionalString stdenv.isDarwin ''
+    # disable lto on darwin
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    substituteInPlace cocotb_build_libs.py --replace "-flto" ""
   '';
 
-  checkInputs = [ swig verilog ];
+  patches = [
+    # Fix "can't link with bundle (MH_BUNDLE) only dylibs (MH_DYLIB) file" error
+    ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
+  ];
 
-  checkPhase = ''
+  nativeCheckInputs = [ cocotb-bus pytestCheckHook swig verilog ];
+  preCheck = ''
     export PATH=$out/bin:$PATH
-    make test
+    mv cocotb cocotb.hidden
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "cocotb" ];
+
+  meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;

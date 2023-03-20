@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libinsane";
-  version = "1.0.4";
+  version = "1.0.10";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "OpenPaperwork";
     rev = version;
-    sha256 = "1qk0s4m87yqa75h27bl7m03g4gamln43wn4159h7dcnwc36hdzw6";
+    sha256 = "sha256-2BLg8zB0InPJqK9JypQIMVXIJndo9ZuNB4OeOAo/Hsc=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja doxygen gtk-doc docbook_xsl gobject-introspection vala ];
 
   buildInputs = [ sane-backends glib ];
 
-  checkInputs = [ cunit valgrind ];
+  nativeCheckInputs = [ cunit valgrind ];
 
   doCheck = true;
 

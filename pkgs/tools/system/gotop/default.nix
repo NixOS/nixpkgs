@@ -1,23 +1,50 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, IOKit
+}:
 
 buildGoModule rec {
   pname = "gotop";
-  version = "3.5.2";
+  version = "4.2.0";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d08pi213nzvj4vhd2sbri39qlxa7iazc8bcrikhmmr0pghjfwhn";
+    hash = "sha256-W7a3QnSIR95N88RqU2sr6oEDSqOXVfAwacPvS219+1Y=";
   };
 
-  vendorSha256 = "1ais548gii4q7xzysnw2ykjxyzb7azszsqdlp9hgiwp0bax9nj2n";
+  proxyVendor = true;
+  vendorSha256 = "sha256-KLeVSrPDS1lKsKFemRmgxT6Pxack3X3B/btSCOUSUFY=";
 
-  meta = with stdenv.lib; {
+  ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  postInstall = ''
+    $out/bin/gotop --create-manpage > gotop.1
+    installManPage gotop.1
+  '';
+
+  meta = with lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = "https://github.com/xxxserxxx/gotop";
-    license = licenses.agpl3;
+    changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
+    license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
   };
 }

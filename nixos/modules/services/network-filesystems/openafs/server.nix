@@ -4,7 +4,7 @@
 with import ./lib.nix { inherit config lib pkgs; };
 
 let
-  inherit (lib) concatStringsSep mkIf mkOption optionalString types;
+  inherit (lib) concatStringsSep literalExpression mkIf mkOption optionalString types;
 
   bosConfig = pkgs.writeText "BosConfig" (''
     restrictmode 1
@@ -49,40 +49,41 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the OpenAFS server. An OpenAFS server needs a
           complex setup. So, be aware that enabling this service and setting
           some options does not give you a turn-key-ready solution. You need
           at least a running Kerberos 5 setup, as OpenAFS relies on it for
           authentication. See the Guide "QuickStartUnix" coming with
-          <literal>pkgs.openafs.doc</literal> for complete setup
+          `pkgs.openafs.doc` for complete setup
           instructions.
         '';
       };
 
       advertisedAddresses = mkOption {
+        type = types.listOf types.str;
         default = [];
-        description = "List of IP addresses this server is advertised under. See NetInfo(5)";
+        description = lib.mdDoc "List of IP addresses this server is advertised under. See NetInfo(5)";
       };
 
       cellName = mkOption {
         default = "";
         type = types.str;
-        description = "Cell name, this server will serve.";
+        description = lib.mdDoc "Cell name, this server will serve.";
         example = "grand.central.org";
       };
 
       cellServDB = mkOption {
         default = [];
         type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
-        description = "Definition of all cell-local database server machines.";
+        description = lib.mdDoc "Definition of all cell-local database server machines.";
       };
 
       package = mkOption {
         default = pkgs.openafs.server or pkgs.openafs;
-        defaultText = "pkgs.openafs.server or pkgs.openafs";
+        defaultText = literalExpression "pkgs.openafs.server or pkgs.openafs";
         type = types.package;
-        description = "OpenAFS package for the server binaries";
+        description = lib.mdDoc "OpenAFS package for the server binaries";
       };
 
       roles = {
@@ -90,33 +91,33 @@ in {
           enable = mkOption {
             default = true;
             type = types.bool;
-            description = "Fileserver role, serves files and volumes from its local storage.";
+            description = lib.mdDoc "Fileserver role, serves files and volumes from its local storage.";
           };
 
           fileserverArgs = mkOption {
             default = "-vattachpar 128 -vhashsize 11 -L -rxpck 400 -cb 1000000";
             type = types.str;
-            description = "Arguments to the dafileserver process. See its man page.";
+            description = lib.mdDoc "Arguments to the dafileserver process. See its man page.";
           };
 
           volserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = "Arguments to the davolserver process. See its man page.";
+            description = lib.mdDoc "Arguments to the davolserver process. See its man page.";
             example = "-sync never";
           };
 
           salvageserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = "Arguments to the salvageserver process. See its man page.";
+            description = lib.mdDoc "Arguments to the salvageserver process. See its man page.";
             example = "-showlog";
           };
 
           salvagerArgs = mkOption {
             default = "";
             type = types.str;
-            description = "Arguments to the dasalvager process. See its man page.";
+            description = lib.mdDoc "Arguments to the dasalvager process. See its man page.";
             example = "-showlog -showmounts";
           };
         };
@@ -125,10 +126,10 @@ in {
           enable = mkOption {
             default = true;
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Database server role, maintains the Volume Location Database,
               Protection Database (and Backup Database, see
-              <literal>backup</literal> role). There can be multiple
+              `backup` role). There can be multiple
               servers in the database role for replication, which then need
               reliable network connection to each other.
 
@@ -140,14 +141,14 @@ in {
           vlserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = "Arguments to the vlserver process. See its man page.";
+            description = lib.mdDoc "Arguments to the vlserver process. See its man page.";
             example = "-rxbind";
           };
 
           ptserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = "Arguments to the ptserver process. See its man page.";
+            description = lib.mdDoc "Arguments to the ptserver process. See its man page.";
             example = "-restricted -default_access S---- S-M---";
           };
         };
@@ -156,9 +157,9 @@ in {
           enable = mkOption {
             default = false;
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Backup server role. Use in conjunction with the
-              <literal>database</literal> role to maintain the Backup
+              `database` role to maintain the Backup
               Database. Normally only used in conjunction with tape storage
               or IBM's Tivoli Storage Manager.
             '';
@@ -167,14 +168,14 @@ in {
           buserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = "Arguments to the buserver process. See its man page.";
+            description = lib.mdDoc "Arguments to the buserver process. See its man page.";
             example = "-p 8";
           };
 
           cellServDB = mkOption {
             default = [];
             type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
-            description = ''
+            description = lib.mdDoc ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
               other database server machines.
@@ -186,7 +187,7 @@ in {
       dottedPrincipals= mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, allow principal names containing (.) dots. Enabling
           this has security implications!
         '';
@@ -195,11 +196,11 @@ in {
       udpPacketSize = mkOption {
         default = 1310720;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           UDP packet size to use in Bytes. Higher values can speed up
           communications. The default of 1 MB is a sufficient in most
           cases. Make sure to increase the kernel's UDP buffer size
-          accordingly via <literal>net.core(w|r|opt)mem_max</literal>
+          accordingly via `net.core(w|r|opt)mem_max`
           sysctl.
         '';
       };
@@ -247,11 +248,10 @@ in {
     systemd.services = {
       openafs-server = {
         description = "OpenAFS server";
-        after = [ "syslog.target" "network.target" ];
+        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
         unitConfig.ConditionPathExists = [
-          "|/etc/openafs/server/rxkad.keytab"
           "|/etc/openafs/server/KeyFileExt"
         ];
         preStart = ''

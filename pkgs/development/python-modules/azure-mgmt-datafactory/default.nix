@@ -4,26 +4,28 @@
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
-, isPy3k
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "0.10.0";
+  version = "3.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "48b1ec81f30f4b5f38dd17f68f0dfc968db96e0a04fdcfc99f43f80ca041f14b";
+    hash = "sha256-aVfH65fJnsTSr0MR0Fr5yamxIOv2+aST953uCr7QXOk=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   # has no tests
@@ -33,6 +35,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Data Factory Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

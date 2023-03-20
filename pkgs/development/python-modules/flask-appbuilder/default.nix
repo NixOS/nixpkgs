@@ -1,22 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
 , apispec
 , colorama
 , click
+, email-validator
 , flask
 , flask-babel
-, flask_login
+, flask-login
 , flask-openid
-, flask_sqlalchemy
-, flask_wtf
+, flask-sqlalchemy
+, flask-wtf
 , flask-jwt-extended
 , jsonschema
 , marshmallow
 , marshmallow-enum
 , marshmallow-sqlalchemy
 , python-dateutil
+, pythonOlder
 , prison
 , pyjwt
 , pyyaml
@@ -25,28 +26,28 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "2.3.0";
+  version = "4.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "04bsswi7daaqda01a83rd1f2gq6asii520f9arjf7bsy24pmbprc";
+    hash = "sha256-rZbu0Bif5pOa/zu6MCrbGJpkqUdYzWyVgp6tqRzGyIc=";
   };
-
-  checkInputs = [
-    nose
-  ];
 
   propagatedBuildInputs = [
     apispec
     colorama
     click
+    email-validator
     flask
     flask-babel
-    flask_login
+    flask-login
     flask-openid
-    flask_sqlalchemy
-    flask_wtf
+    flask-sqlalchemy
+    flask-wtf
     flask-jwt-extended
     jsonschema
     marshmallow
@@ -55,27 +56,33 @@ buildPythonPackage rec {
     python-dateutil
     prison
     pyjwt
-    sqlalchemy-utils
     pyyaml
-  ];
+    sqlalchemy-utils
+  ] ++ apispec.optional-dependencies.yaml;
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=1.1.1, <2" "apispec" \
-      --replace "jsonschema>=3.0.1, <4" "jsonschema" \
-      --replace "marshmallow>=2.18.0, <4.0.0" "marshmallow" \
-      --replace "PyJWT>=1.7.1" "PyJWT" \
+      --replace "apispec[yaml]>=3.3, <6" "apispec[yaml]" \
       --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
-      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended"
+      --replace "Flask-Babel>=1, <3" "Flask-Babel" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
+      --replace "prison>=0.2.1, <1.0.0" "prison"
   '';
 
-  # majority of tests require network access or mongo
+  # Majority of tests require network access or mongo
   doCheck = false;
 
+  pythonImportsCheck = [
+    "flask_appbuilder"
+  ];
+
   meta = with lib; {
-    description = "Simple and rapid application development framework, built on top of Flask";
+    description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
+    changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
+    # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
+    broken = true;
   };
 }

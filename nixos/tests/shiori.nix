@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
   name = "shiori";
   meta.maintainers = with lib.maintainers; [ minijackson ];
 
-  machine =
+  nodes.machine =
     { ... }:
     { services.shiori.enable = true; };
 
@@ -12,7 +12,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     authJSON = pkgs.writeText "auth.json" (builtins.toJSON {
       username = "shiori";
       password = "gopher";
-      remember = 1; # hour
       owner = true;
     });
 
@@ -28,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     machine.wait_for_unit("shiori.service")
     machine.wait_for_open_port(8080)
     machine.succeed("curl --fail http://localhost:8080/")
-    machine.succeed("curl --fail --location http://localhost:8080/ | grep -qi shiori")
+    machine.succeed("curl --fail --location http://localhost:8080/ | grep -i shiori")
 
     with subtest("login"):
         auth_json = machine.succeed(

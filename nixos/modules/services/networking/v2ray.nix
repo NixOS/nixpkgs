@@ -9,10 +9,19 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run v2ray server.
 
-          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
+          Either `configFile` or `config` must be specified.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.v2ray;
+        defaultText = literalExpression "pkgs.v2ray";
+        description = lib.mdDoc ''
+          Which v2ray package to use.
         '';
       };
 
@@ -20,12 +29,12 @@ with lib;
         type = types.nullOr types.str;
         default = null;
         example = "/etc/v2ray/config.json";
-        description = ''
+        description = lib.mdDoc ''
           The absolute path to the configuration file.
 
-          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
+          Either `configFile` or `config` must be specified.
 
-          See <link xlink:href="https://v2ray.com/en/configuration/overview.html"/>.
+          See <https://www.v2fly.org/en_US/v5/config/overview.html>.
         '';
       };
 
@@ -42,12 +51,12 @@ with lib;
             protocol = "freedom";
           }];
         };
-        description = ''
+        description = lib.mdDoc ''
           The configuration object.
 
           Either `configFile` or `config` must be specified.
 
-          See <link xlink:href="https://v2ray.com/en/configuration/overview.html"/>.
+          See <https://www.v2fly.org/en_US/v5/config/overview.html>.
         '';
       };
     };
@@ -58,7 +67,13 @@ with lib;
     cfg = config.services.v2ray;
     configFile = if cfg.configFile != null
       then cfg.configFile
-      else (pkgs.writeText "v2ray.json" (builtins.toJSON cfg.config));
+      else pkgs.writeTextFile {
+        name = "v2ray.json";
+        text = builtins.toJSON cfg.config;
+        checkPhase = ''
+          ${cfg.package}/bin/v2ray test -c $out
+        '';
+      };
 
   in mkIf cfg.enable {
     assertions = [
@@ -68,14 +83,15 @@ with lib;
       }
     ];
 
+    environment.etc."v2ray/config.json".source = configFile;
+
+    systemd.packages = [ cfg.package ];
+
     systemd.services.v2ray = {
-      description = "v2ray Daemon";
-      after = [ "network.target" ];
+      restartTriggers = [ config.environment.etc."v2ray/config.json".source ];
+
+      # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.v2ray ];
-      script = ''
-        exec v2ray -config ${configFile}
-      '';
     };
   };
 }

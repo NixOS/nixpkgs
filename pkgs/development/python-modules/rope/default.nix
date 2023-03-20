@@ -1,26 +1,51 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytoolconfig
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "0.16.0";
+  version = "1.6.0";
+  format = "pyproject";
 
-  disabled = pythonAtLeast "3.8";  # 0.17 should support Python 3.8
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1zlxdrs6ww2hm41izz67h67z9dkm0rlgw8m04vygaip0q91030yj";
+  src = fetchFromGitHub {
+    owner = "python-rope";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-avNCti288dY9pl5AVTmUzZU/vb6WDkXEtELNlEi6L/o=";
   };
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    # tracked upstream here https://github.com/python-rope/rope/issues/247
-    NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    pytoolconfig
+  ] ++ pytoolconfig.optional-dependencies.global;
+
+  nativeCheckInputs = [
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_search_submodule"
+    "test_get_package_source_pytest"
+    "test_get_modname_folder"
+  ];
+
+  meta = with lib; {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
+    changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu ];
-    license = licenses.gpl2;
   };
 }

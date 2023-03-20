@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyenchant";
-  version = "3.0.1";
+  version = "3.2.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nfmckqm45fbfz795qw5hgvygdxgxchdiwp3kmm1k05z99j6mlhv";
+    sha256 = "1cf830c6614362a78aab78d50eaf7c6c93831369c52e1bb64ffae1df0341e637";
   };
 
   propagatedBuildInputs = [ enchant2 ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # dictionaries needed for tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "pyenchant: Python bindings for the Enchant spellchecker";
     homepage = "https://github.com/pyenchant/pyenchant";
     license = licenses.lgpl21;

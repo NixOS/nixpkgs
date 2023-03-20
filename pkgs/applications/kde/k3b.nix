@@ -1,6 +1,5 @@
 { mkDerivation, lib
 , extra-cmake-modules, kdoctools, makeWrapper, shared-mime-info
-, qtwebkit
 , libkcddb, karchive, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
@@ -9,16 +8,16 @@
 }:
 
 mkDerivation {
-  name = "k3b";
+  pname = "k3b";
   meta = with lib; {
+    homepage = "https://apps.kde.org/k3b/";
+    description = "Disk burning application";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ sander phreedom ];
+    maintainers = with maintainers; [ sander ];
     platforms = platforms.linux;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   buildInputs = [
-    # qt
-    qtwebkit
     # kde
     libkcddb karchive kcmutils kfilemetadata knewstuff knotifyconfig solid kxmlgui
     # formats

@@ -1,32 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
+, pytestCheckHook
 , gdcm
-, nose
 , nibabel
 , numpy
 , pydicom
 , scipy
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.2.8";
-  disabled = isPy27;
+  version = "2.4.3";
+  disabled = pythonOlder "3.6";
 
   # no tests in PyPI dist
   src = fetchFromGitHub {
     owner = "icometrix";
     repo = pname;
     rev = version;
-    sha256 = "1qi2map6f4pa1l8wsif7ff7rhja6ynrjlm7w306dzvi9l25mia34";
+    hash = "sha256-za2+HdnUhPu3+p29JsF4iL1lyPQVmEv3fam0Yf1oeMQ=";
   };
 
-  propagatedBuildInputs = [ gdcm nibabel numpy pydicom scipy ];
+  propagatedBuildInputs = [ gdcm nibabel numpy pydicom scipy setuptools ];
 
-  checkInputs = [ nose gdcm ];
-  checkPhase = "nosetests tests";
+  # python-gdcm just builds the python interface provided by the "gdcm" package, so
+  # we should be able to replace "python-gdcm" with "gdcm" but this doesn't work
+  # (similar to https://github.com/NixOS/nixpkgs/issues/84774)
+  postPatch = ''
+    substituteInPlace setup.py --replace "python-gdcm" ""
+    substituteInPlace tests/test_generic.py --replace "from common" "from dicom2nifti.common"
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "dicom2nifti" ];
 
   meta = with lib; {
     homepage = "https://github.com/icometrix/dicom2nifti";

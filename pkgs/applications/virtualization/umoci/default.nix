@@ -3,28 +3,30 @@
 , buildGoModule
 , go-md2man
 , installShellFiles
+, bash
 }:
 
 buildGoModule rec {
   pname = "umoci";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
-    owner = "openSUSE";
+    owner = "opencontainers";
     repo = "umoci";
     rev = "v${version}";
-    sha256 = "1gzj4nnys73wajdwjn5jsskvnhzh8s2vmyl76ax8drpvw19bd5g3";
+    sha256 = "0in8kyi4jprvbm3zsl3risbjj8b0ma62yl3rq8rcvcgypx0mn7d4";
   };
 
   vendorSha256 = null;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  doCheck = false;
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
   postInstall = ''
-    sed -i '/SHELL =/d' Makefile
-    make local-doc
+    make docs SHELL="$SHELL"
     installManPage doc/man/*.[1-9]
   '';
 
@@ -33,6 +35,6 @@ buildGoModule rec {
     homepage = "https://umo.ci";
     license = licenses.asl20;
     maintainers = with maintainers; [ zokrezyl ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

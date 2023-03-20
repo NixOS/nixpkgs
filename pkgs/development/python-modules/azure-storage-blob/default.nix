@@ -1,33 +1,47 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , azure-common
+, azure-core
 , azure-storage-common
-, isPy3k
-, futures
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, isodate
+, msrest
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "2.1.0";
+  version = "12.15.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b90323aad60f207f9f90a0c4cf94c10acc313c20b39403398dfba51f25f7b454";
+    extension = "zip";
+    hash = "sha256-+LjVgkknQKsWdERVQINC+45MiJe2Soo/wxdDhEciwvI=";
   };
 
   propagatedBuildInputs = [
     azure-common
+    azure-core
     azure-storage-common
-  ] ++ lib.optional (!isPy3k) futures;
+    cryptography
+    isodate
+    msrest
+    typing-extensions
+  ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "Client library for Microsoft Azure Storage services containing the blob service APIs";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-blob_${version}/sdk/storage/azure-storage-blob/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai mwilsoninsight ];
+    maintainers = with maintainers; [ cmcdragonkai maxwilson ];
   };
 }

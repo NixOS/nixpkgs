@@ -1,34 +1,58 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, mock
-, pytest
-, pytestpep8
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
 , snowballstemmer
+, tomli
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pydocstyle";
-  version = "5.0.2";
-  disabled = !isPy3k;
+  version = "6.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = version;
-    sha256 = "03z8miyppm2xncrc9yjilwl7z5c5cpv51zha580v64p8sb2l0j7j";
+    repo = "pydocstyle";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MjRrnWu18f75OjsYIlOLJK437X3eXnlW8WkkX7vdS6k=";
   };
 
-  propagatedBuildInputs = [ snowballstemmer ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  checkInputs = [ pytest pytestpep8 mock ];
-
-  checkPhase = ''
-    # test_integration.py installs packages via pip
-    py.test --pep8 --cache-clear -vv src/tests -k "not test_integration"
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0-dev"' 'version = "${version}"'
   '';
+
+  propagatedBuildInputs = [
+    snowballstemmer
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  passthru.optional-dependencies.toml = [
+    tomli
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.toml;
+
+  disabledTestPaths = [
+    "src/tests/test_integration.py" # runs pip install
+  ];
 
   meta = with lib; {
     description = "Python docstring style checker";
-    homepage = "https://github.com/PyCQA/pydocstyle/";
+    homepage = "https://github.com/PyCQA/pydocstyle";
+    changelog = "https://github.com/PyCQA/pydocstyle/blob/${version}/docs/release_notes.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dzabraev ];
   };

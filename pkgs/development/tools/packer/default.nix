@@ -1,24 +1,39 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
+
+buildGoModule rec {
   pname = "packer";
-  version = "1.5.6";
-
-  goPackagePath = "github.com/hashicorp/packer";
-
-  subPackages = [ "." ];
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "0pwygrh6pjmx8a1jc12929x0slj7w3b8p3pzswnbk7klyhj4jkp8";
+    sha256 = "sha256-Nc4H7qx+TmbG80Ogw4zRofux5VwqeQZIg9gLqZprgVE=";
   };
 
-  meta = with stdenv.lib; {
+  vendorHash = "sha256-poTBx62m9Q4az5BECFKmFAE37B8C/DVIyHeC80P+VYQ=";
+
+  subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh contrib/zsh-completion/_packer
+  '';
+
+  meta = with lib; {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
     homepage    = "https://www.packer.io";
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ cstrahan zimbatm ];
+    maintainers = with maintainers; [ cstrahan zimbatm ma27 techknowlogick ];
+    changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
     platforms   = platforms.unix;
   };
 }

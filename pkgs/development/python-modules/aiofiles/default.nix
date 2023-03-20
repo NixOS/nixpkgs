@@ -1,22 +1,49 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "0.4.0";
+  version = "22.1.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "021ea0ba314a86027c166ecc4b4c07f2d40fc0f4b3a950d1868a0f2571c2bbee";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "Tinche";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-2itjGYusJT6sbCAgvKsI9IXeAOP7VQV0bpifFBZmnAo=";
   };
 
-  disabled = pythonOlder "3.3";
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_sendfile_file"
+
+    # require loopback networking:
+    "test_sendfile_socket"
+    "test_serve_small_bin_file_sync"
+    "test_serve_small_bin_file"
+    "test_slow_file"
+  ];
+
+  pythonImportsCheck = [
+    "aiofiles"
+  ];
 
   meta = {
     description = "File support for asyncio";

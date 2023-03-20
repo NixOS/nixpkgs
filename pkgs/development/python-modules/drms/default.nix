@@ -4,18 +4,27 @@
 , numpy
 , pandas
 , six
-, pytest
-, python
+, astropy
+, pytestCheckHook
+, pytest-doctestplus
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.5.7";
+  version = "0.6.3";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab3ec6d072b1980f77dadf3b2cb0fe56c648eaf927ea381f606b4db66d4cbff2";
+    hash = "sha256-crPVo7ALErZWvNcsaJ/BuBa0VkfCsZ+C929x4kEZHKw=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -23,18 +32,26 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    astropy
+    pytestCheckHook
+    pytest-doctestplus
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m drms.tests
-  '';
+  disabledTests = [
+    "test_query_hexadecimal_strings"
+  ];
+
+  disabledTestPaths = [
+    "docs/tutorial.rst"
+  ];
+
+  pythonImportsCheck = [ "drms" ];
 
   meta = with lib; {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

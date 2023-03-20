@@ -1,7 +1,8 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "Fluid-3";
+  pname = "Fluid";
+  version = "3";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/musescore/soundfont/fluid-soundfont.tar.gz";
@@ -14,7 +15,7 @@ stdenv.mkDerivation {
     install -Dm644 "FluidR3 GM2-2.SF2" $out/share/soundfonts/FluidR3_GM2-2.sf2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Frank Wen's pro-quality GM/GS soundfont";
     homepage = "http://www.hammersound.net/";
     license = licenses.mit;

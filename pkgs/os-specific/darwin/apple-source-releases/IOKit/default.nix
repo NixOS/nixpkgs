@@ -1,11 +1,9 @@
-{ stdenv, appleDerivation, IOKitSrcs, xnu }:
+{ lib, appleDerivation', stdenv, IOKitSrcs, xnu, darwin-stubs }:
 
 # Someday it'll make sense to split these out into their own packages, but today is not that day.
-appleDerivation {
-  srcs = stdenv.lib.attrValues IOKitSrcs;
+appleDerivation' stdenv {
+  srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
-
-  phases = [ "unpackPhase" "installPhase" ];
 
   __propagatedImpureHostDeps = [
     "/System/Library/Frameworks/IOKit.framework/IOKit"
@@ -14,12 +12,15 @@ appleDerivation {
   ];
 
   installPhase = ''
-    ###### IMPURITIES
     mkdir -p $out/Library/Frameworks/IOKit.framework
-    pushd $out/Library/Frameworks/IOKit.framework
-    ln -s /System/Library/Frameworks/IOKit.framework/IOKit
-    ln -s /System/Library/Frameworks/IOKit.framework/Resources
-    popd
+
+    ###### IMPURITIES
+    ln -s /System/Library/Frameworks/IOKit.framework/Resources \
+      $out/Library/Frameworks/IOKit.framework
+
+    ###### STUBS
+    cp ${darwin-stubs}/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit.tbd \
+      $out/Library/Frameworks/IOKit.framework
 
     ###### HEADERS
 
@@ -171,16 +172,16 @@ appleDerivation {
     # stream: missing altogether
 
     # usb: complete
-    cp IOUSBFamily-630.4.5/IOUSBFamily/Headers/IOUSBLib.h            $dest/usb
-    cp IOUSBFamily-630.4.5/IOUSBUserClient/Headers/IOUSBUserClient.h $dest/usb
-    cp IOUSBFamily-560.4.2/IOUSBFamily/Headers/USB.h                 $dest/usb # This file is empty in 630.4.5!
-    cp IOUSBFamily-630.4.5/IOUSBFamily/Headers/USBSpec.h             $dest/usb
+    cp IOUSBFamily*-630.4.5/IOUSBFamily/Headers/IOUSBLib.h            $dest/usb
+    cp IOUSBFamily*-630.4.5/IOUSBUserClient/Headers/IOUSBUserClient.h $dest/usb
+    cp IOUSBFamily*-560.4.2/IOUSBFamily/Headers/USB.h                 $dest/usb # This file is empty in 630.4.5!
+    cp IOUSBFamily*-630.4.5/IOUSBFamily/Headers/USBSpec.h             $dest/usb
 
     # video: missing altogether
   '';
 
-  meta = with stdenv.lib; {
-    maintainers = with maintainers; [ joelteon copumpkin ];
+  meta = with lib; {
+    maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;
   };

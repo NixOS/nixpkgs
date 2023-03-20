@@ -1,47 +1,67 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll
-, geos, pytest, cython
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, cython
+, geos
+, setuptools
 , numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Shapely";
-  version = "1.7.0";
+  pname = "shapely";
+  version = "2.0.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07lmrihj6pa7f99m97hbf2anqlhhwippcdz03bqkyihnlkhry6p2";
+    hash = "sha256-Zqaxo+cuzpf8hVNqKBR2+bd5TeLmRsqKRRfi48FEaJM=";
   };
 
   nativeBuildInputs = [
-    geos # for geos-config
     cython
+    geos # for geos-config
+    setuptools
   ];
 
-  checkInputs = [ pytest ];
-
-  propagatedBuildInputs = [ numpy ];
-
-  # environment variable used in shapely/_buildcfg.py
-  GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-  patches = [
-    (substituteAll {
-      src = ./library-paths.patch;
-      libgeos_c = GEOS_LIBRARY_PATH;
-      libc = "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}"
-               + stdenv.lib.optionalString (!stdenv.isDarwin) ".6";
-    })
+  buildInputs = [
+    geos
   ];
 
-  # Disable the tests that improperly try to use the built extensions
-  checkPhase = ''
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
     rm -r shapely # prevent import of local shapely
-    py.test tests
   '';
 
-  meta = with stdenv.lib; {
-    description = "Geometric objects, predicates, and operations";
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # FIXME(lf-): these logging tests are broken, which is definitely our
+    # fault. I've tried figuring out the cause and failed.
+    #
+    # It is apparently some sandbox or no-sandbox related thing on macOS only
+    # though.
+    "test_error_handler_exception"
+    "test_error_handler"
+    "test_info_handler"
+  ];
+
+  pythonImportsCheck = [ "shapely" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
+    description = "Manipulation and analysis of geometric objects";
+    homepage = "https://github.com/shapely/shapely";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
-    homepage = "https://pypi.python.org/pypi/Shapely/";
   };
 }

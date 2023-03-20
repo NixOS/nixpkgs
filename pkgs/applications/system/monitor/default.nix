@@ -1,30 +1,39 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, gitUpdater
 , meson
 , ninja
 , vala
 , pkg-config
 , pantheon
 , python3
+, curl
 , gettext
 , glib
 , gtk3
-, bamf
-, libwnck3
+, json-glib
+, libwnck
 , libgee
 , libgtop
+, libhandy
+, sassc
+, udisks2
 , wrapGAppsHook
+, libX11
+, libXext
+, libXNVCtrl
 }:
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.7.2";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 ="1gd2i7gja4k9j4xac8jnls3v41d6qqhmqradz2jbsxwm2sk3cgcf";
+    sha256 = "sha256-ZTsb1xcJ7eeCEPebZW0anmG1SUPAzZakw4WzJql9VTQ=";
     fetchSubmodules = true;
   };
 
@@ -39,28 +48,48 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
+    curl
     glib
     gtk3
+    json-glib
     pantheon.granite
     pantheon.wingpanel
     libgee
     libgtop
-    libwnck3
+    libhandy
+    libwnck
+    sassc
+    udisks2
+    libX11
+    libXext
+    libXNVCtrl
   ];
+
+  # Force link against Xext, otherwise build fails with:
+  # ld: /nix/store/...-libXNVCtrl-495.46/lib/libXNVCtrl.a(NVCtrl.o): undefined reference to symbol 'XextAddDisplay'
+  # ld: /nix/store/...-libXext-1.3.4/lib/libXext.so.6: error adding symbols: DSO missing from command line
+  # https://github.com/stsdc/monitor/issues/292
+  NIX_LDFLAGS = "-lXext";
+
+  mesonFlags = [ "-Dindicator-wingpanel=enabled" ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+
+    # Alternatively, using pkg-config here should just work.
+    substituteInPlace meson.build --replace \
+      "meson.get_compiler('c').find_library('libcurl', dirs: vapidir)" \
+      "meson.get_compiler('c').find_library('libcurl', dirs: '${curl.out}/lib')"
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      ignoredVersions = "ci.*";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manage processes and monitor system resources";
     longDescription = ''
       Manage processes and monitor system resources.
@@ -68,8 +97,9 @@ stdenv.mkDerivation rec {
       section in the NixOS manual.
     '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    mainProgram = "com.github.stsdc.monitor";
   };
 }

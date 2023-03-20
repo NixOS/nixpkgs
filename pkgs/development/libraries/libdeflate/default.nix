@@ -1,31 +1,33 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+, pkgsStatic
+, cmake
+}:
 stdenv.mkDerivation rec {
   pname = "libdeflate";
-  version = "1.6";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${version}";
-    sha256 = "1rhichmalqz7p1hiwvn6y0isralpbf0w5nyjp4lg0asawkxy9cww";
+    sha256 = "sha256-tKs8feGbeodOID8FPIUc/1LfBz1p0oN1Jfkv2OnA2qc=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile --replace /usr/local $out
-  '';
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
 
-  configurePhase = ''
-    make programs/config.h
-  '';
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  enableParallelBuilding = true;
+  passthru.tests.static = pkgsStatic.libdeflate;
 
   meta = with lib; {
     description = "Fast DEFLATE/zlib/gzip compressor and decompressor";
     license = licenses.mit;
     homepage = "https://github.com/ebiggers/libdeflate";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej kaction ];
   };
 }

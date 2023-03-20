@@ -1,9 +1,7 @@
 # This module defines a NixOS installation CD that contains X11 and
 # Plasma 5.
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];
@@ -16,8 +14,8 @@ with lib;
     };
 
     # Automatically login as nixos.
-    displayManager.sddm = {
-      enable = true;
+    displayManager = {
+      sddm.enable = true;
       autoLogin = {
         enable = true;
         user = "nixos";

@@ -1,35 +1,56 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib
+, stdenv
+, fetchzip
+, glib
+, jre
+, makeWrapper
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "VASSAL-3.2.17";
+  pname = "VASSAL";
+  version = "3.6.14";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/vassalengine/${name}-linux.tar.bz2";
-    sha256 = "0nxskr46janxnb31c03zv61kr46vy98l7cwxha3vll81l4ij1sjb";
+  src = fetchzip {
+    url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
+    sha256 = "sha256-0/QJyntLV1DLzLJ8p4f+tCXPKl3DMf+j4/gkI+Mt+rc=";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [
+    glib
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/vassal $out/doc
 
-    cp CHANGES LICENSE README $out
+    cp CHANGES LICENSE README.md $out
     cp -R lib/* $out/share/vassal
     cp -R doc/* $out/doc
 
     makeWrapper ${jre}/bin/java $out/bin/vassal \
       --add-flags "-Duser.dir=$out -cp $out/share/vassal/Vengine.jar \
       VASSAL.launch.ModuleManager"
+
+    runHook postInstall
   '';
 
   # Don't move doc to share/, VASSAL expects it to be in the root
   forceShare = [ "man" "info" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       description = "A free, open-source boardgame engine";
-      homepage = "http://www.vassalengine.org/";
-      license = licenses.lgpl21;
+      homepage = "https://vassalengine.org/";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
+      mainProgram = "vassal";
   };
 }

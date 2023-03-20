@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp }:
+{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2020.05";
+  version = "2023.02";
 
   src = fetchurl {
-    url    = "https://www.rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "08d1591k8lhyw3kmxq53lf24wg6d61lg2xc81zzcglask9n9ilc6";
+    url = "https://rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
+    hash = "sha256-/RaGqizzLrnw630Nb5bfyJfPU8z4ntp9Iltoc4CTqhE=";
   };
+
+  nativeBuildInputs = [ removeReferencesTo ];
 
   buildInputs = [ icu zlib gmp perl ];
   configureScript = "perl ./Configure.pl";
@@ -16,14 +18,16 @@ stdenv.mkDerivation rec {
     "--with-nqp=${nqp}/bin/nqp"
   ];
 
-  # Some tests fail on Darwin
-  doCheck = !stdenv.isDarwin;
+  disallowedReferences = [ stdenv.cc.cc ];
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Raku implementation on top of Moar virtual machine";
-    homepage    = "https://www.rakudo.org";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
+    homepage = "https://rakudo.org";
+    license = licenses.artistic2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
   };
 }

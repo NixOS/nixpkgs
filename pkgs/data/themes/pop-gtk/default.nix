@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pop-gtk-theme";
-  version = "2020-04-22";
+  version = "2021-08-19";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "gtk-theme";
-    rev = "b3f98dfd61cfff81f69cdc7f57bce7a9efaa36f4";
-    sha256 = "0vhcc694x33sgcpbqkrc5bycbd7017k4iii0mjjxgd22jd5lzgkb";
+    rev = "6615e4510485c5dc0b379746acc40f538d987c86";
+    sha256 = "16h03x2m4j4hfwp7pdmw1navcy5q7di38jvigfgf263wajyxbznr";
   };
 
   nativeBuildInputs = [
@@ -48,17 +49,17 @@ stdenv.mkDerivation rec {
     for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
         --replace 'INKSCAPE="/usr/bin/inkscape"' \
-                  'INKSCAPE="inkscape"' \
+                  'INKSCAPE="${inkscape}/bin/inkscape"' \
         --replace 'OPTIPNG="/usr/bin/optipng"' \
-                  'OPTIPNG="optipng"'
+                  'OPTIPNG="${optipng}/bin/optipng"'
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System76 Pop GTK+ Theme";
     homepage = "https://github.com/pop-os/gtk-theme";
     license = with licenses; [ gpl3 lgpl21 cc-by-sa-40 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elyhaka ];
+    maintainers = with maintainers; [ ];
   };
 }

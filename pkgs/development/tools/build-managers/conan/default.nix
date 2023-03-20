@@ -1,62 +1,31 @@
-{ lib, python3, git, pkgconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, git
+, pkg-config
+, python3
+, zlib
+}:
 
-# Note:
-# Conan has specific dependency demands; check
-#     https://github.com/conan-io/conan/blob/master/conans/requirements.txt
-#     https://github.com/conan-io/conan/blob/master/conans/requirements_server.txt
-# on the release branch/commit we're packaging.
-#
-# Two approaches are used here to deal with that:
-# Pinning the specific versions it wants in `newPython`,
-# and using `substituteInPlace conans/requirements.txt ...`
-# in `postPatch` to allow newer versions when we know
-# (e.g. from changelogs) that they are compatible.
-
-let newPython = python3.override {
-  packageOverrides = self: super: {
-    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.0";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
-      };
-    });
-    node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
-      version = "0.6.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
-      };
-    });
-    pluginbase = super.pluginbase.overridePythonAttrs (oldAttrs: rec {
-      version = "0.7";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
-      };
-    });
-  };
-};
-
-in newPython.pkgs.buildPythonApplication rec {
-  version = "1.25.0";
+python3.pkgs.buildPythonApplication rec {
   pname = "conan";
+  version = "2.0.0";
+  format = "setuptools";
 
-  src = newPython.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "1wgmx6s4h5m6zixb3wlaicy56rsqcy2srzmvii80xdx9g5wvi9pv";
+  src = fetchFromGitHub {
+    owner = "conan-io";
+    repo = "conan";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yx/MO5QAVKnGraQXJitXxaZooLtBqa+L04s73DwiE14=";
   };
 
-  propagatedBuildInputs = with newPython.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     bottle
     colorama
-    dateutil
-    deprecation
+    python-dateutil
     distro
     fasteners
-    future
     jinja2
-    node-semver
     patch-ng
     pluginbase
     pygments
@@ -64,41 +33,59 @@ in newPython.pkgs.buildPythonApplication rec {
     pylint # Not in `requirements.txt` but used in hooks, see https://github.com/conan-io/conan/pull/6152
     pyyaml
     requests
-    six
     tqdm
     urllib3
+  ] ++ lib.optionals stdenv.isDarwin [
+    idna
+    cryptography
+    pyopenssl
   ];
 
-  checkInputs = [
-    pkgconfig
+  nativeCheckInputs = [
     git
-  ] ++ (with newPython.pkgs; [
-    codecov
+    pkg-config
+    zlib
+  ] ++ (with python3.pkgs; [
     mock
-    pytest
-    node-semver
-    nose
     parameterized
+    pytest-xdist
+    pytestCheckHook
     webtest
   ]);
 
-  # Conan 1.14.0 has removed all tests from the Pypi source dist:
-  #     https://github.com/conan-io/conan/pull/4713
-  # We have recommended they be added back:
-  #     https://github.com/conan-io/conan/issues/4563#issuecomment-602225083
-  doCheck = false;
+  pythonImportsCheck = [
+    "conan"
+  ];
 
-  postPatch = ''
-    substituteInPlace conans/requirements.txt \
-      --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
-      --replace "deprecation>=2.0, <2.1" "deprecation"
-  '';
+  pytestFlagsArray = [
+    "-n"
+    "$NIX_BUILD_CORES"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "TestFTP"
+  ];
+
+  disabledTestPaths = [
+    # Requires cmake, meson, autotools, apt-get, etc.
+    "conans/test/functional/command/new_test.py"
+    "conans/test/functional/command/test_install_deploy.py"
+    "conans/test/functional/layout/test_editable_cmake.py"
+    "conans/test/functional/layout/test_in_subfolder.py"
+    "conans/test/functional/layout/test_source_folder.py"
+    "conans/test/functional/toolchains/"
+    "conans/test/functional/tools_versions_test.py"
+    "conans/test/functional/tools/system/package_manager_test.py"
+    "conans/test/functional/util/test_cmd_args_to_string.py"
+    "conans/test/unittests/tools/env/test_env_files.py"
+  ];
 
   meta = with lib; {
-    homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";
+    homepage = "https://conan.io";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
-    platforms = platforms.linux;
   };
 }

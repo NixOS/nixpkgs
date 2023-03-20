@@ -1,28 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , isPy27
 }:
 
 buildPythonPackage rec {
-  version = "0.1.0";
+  version = "1.2.0";
   pname = "azure-mgmt-redhatopenshift";
   disabled = isPy27; # don't feel like fixing namespace issues on python2
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1g65lbia1i1jw6qkyjz2ldyl3p90rbr78l8kfryg70sj7z3gnnjn";
+    hash = "sha256-ZU4mKTzny9tsKDrFSU+lll5v6oDivYJlXDriWJLAYec=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
   ];
 
   pythonNamespaces = "azure.mgmt";

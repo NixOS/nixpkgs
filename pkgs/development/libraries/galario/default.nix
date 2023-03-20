@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , fetchFromGitHub
 , cmake
 , fftw
 , fftwFloat
 , enablePython ? false
-, pythonPackages
+, pythonPackages ? null
 , llvmPackages
 }:
 let
@@ -18,29 +18,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "galario";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mtazzari";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1akz7md7ly16a89zr880c265habakqdg9sj8iil90klqa0i21w6g";
+    sha256 = "0dw88ga50x3jwyfgcarn4azlhiarggvdg262hilm7rbrvlpyvha0";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ fftw fftwFloat ]
-    ++ stdenv.lib.optional enablePython pythonPackages.python
-    ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optional enablePython pythonPackages.python
+  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = stdenv.lib.optional enablePython [
+  propagatedBuildInputs = lib.optionals enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest
   ];
 
-  checkInputs = stdenv.lib.optional enablePython pythonPackages.scipy;
+  nativeCheckInputs = lib.optionals enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src
@@ -50,17 +50,22 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     ${if stdenv.isDarwin then "export DYLD_LIBRARY_PATH=$(pwd)/src/" else "export LD_LIBRARY_PATH=$(pwd)/src/"}
-    ${if enablePython then "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh" else ""}
+    ${lib.optionalString enablePython "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh"}
   '';
+
+  cmakeFlags = lib.optionals enablePython [
+    # RPATH of binary /nix/store/.../lib/python3.10/site-packages/galario/double/libcommon.so contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   doCheck = true;
 
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enablePython) ''
+  postInstall = lib.optionalString (stdenv.isDarwin && enablePython) ''
     install_name_tool -change libgalario.dylib $out/lib/libgalario.dylib $out/lib/python*/site-packages/galario/double/libcommon.so
     install_name_tool -change libgalario_single.dylib $out/lib/libgalario_single.dylib $out/lib/python*/site-packages/galario/single/libcommon.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPU Accelerated Library for Analysing Radio Interferometer Observations";
     longDescription = ''
       Galario is a library that exploits the computing power of modern

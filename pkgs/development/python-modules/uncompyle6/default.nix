@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , spark_parser
 , xdis
 , nose
@@ -11,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.6.2";
+  version = "3.9.0";
+  disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aac071daef4b6cf95143ef08cd35d762a2bf2ea8249119a9371a91149c9996e7";
+    hash = "sha256-HmqQLeYOpcP30q9+J0UAa05Lm97eiIoH+EQcmTjy7n0=";
   };
 
-  checkInputs = [ nose pytest hypothesis six ];
+  nativeCheckInputs = [ nose pytest hypothesis six ];
   propagatedBuildInputs = [ spark_parser xdis ];
 
   # six import errors (yet it is supplied...)
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python cross-version byte-code deparser";
     homepage = "https://github.com/rocky/python-uncompyle6/";
     license = licenses.gpl3;

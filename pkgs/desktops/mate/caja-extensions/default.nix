@@ -1,16 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, gupnp
+, mate
+, imagemagick
+, wrapGAppsHook
+, mateUpdateScript
+, glib
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "caja-extensions";
-  version = "1.24.0";
+  version = "1.26.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "175v5c05nrdliya23rbqma49alldq67dklmvpq18nq71sfry4pp6";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "WJwZ4/oQJC1iOaXMuVhVmENqVuvpTS6ypQtZUMzh1SA=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];
@@ -23,7 +36,22 @@ stdenv.mkDerivation rec {
     imagemagick
   ];
 
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      caja_gsetttings_path = glib.getSchemaPath mate.caja;
+      desktop_gsetttings_path = glib.getSchemaPath mate.mate-desktop;
+    })
+  ];
+
   postPatch = ''
+    substituteInPlace open-terminal/caja-open-terminal.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace sendto/caja-sendto-command.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace wallpaper/caja-wallpaper-extension.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
     for f in image-converter/caja-image-{resizer,rotator}.c; do
       substituteInPlace $f --replace "/usr/bin/convert" "${imagemagick}/bin/convert"
     done
@@ -33,11 +61,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
     description = "Set of extensions for Caja file manager";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

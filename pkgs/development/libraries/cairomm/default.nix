@@ -1,27 +1,48 @@
-{ fetchurl, stdenv, pkgconfig, darwin, cairo, fontconfig, freetype, libsigcxx }:
+{ fetchurl
+, stdenv
+, lib
+, pkg-config
+, darwin
+, cairo
+, fontconfig
+, freetype
+, libsigcxx
+, meson
+, ninja
+}:
+
 stdenv.mkDerivation rec {
   pname = "cairomm";
-  version = "1.12.2";
-
-  src = fetchurl {
-    url = "https://www.cairographics.org/releases/${pname}-${version}.tar.gz";
-    # gnome doesn't have the latest version ATM; beware: same name but different hash
-    #url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16fmigxsaz85c3lgcls7biwyz8zy8c8h3jndfm54cxxas3a7zi25";
-  };
+  version = "1.14.4";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ cairo libsigcxx ];
-  buildInputs = [ fontconfig freetype ]
-  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  src = fetchurl {
+    url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
+    sha256 = "R0nSWisu9nzAwBTKr1yH+kZ5L8Sz7eGG+w/JMtIFUVg=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    fontconfig
+    freetype
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
   ]);
 
+  propagatedBuildInputs = [
+    cairo
+    libsigcxx
+  ];
+
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''

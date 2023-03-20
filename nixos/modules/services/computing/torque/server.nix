@@ -11,7 +11,7 @@ in
 
     services.torque.server = {
 
-      enable = mkEnableOption "torque server";
+      enable = mkEnableOption (lib.mdDoc "torque server");
 
     };
 
@@ -21,7 +21,7 @@ in
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-server-init = {
-      path = with pkgs; [ torque utillinux procps inetutils ];
+      path = with pkgs; [ torque util-linux procps inetutils ];
 
       script = ''
         tmpsetup=$(mktemp -t torque-XXXX)
@@ -93,4 +93,4 @@ in
     };
 
   };
-}      
+}

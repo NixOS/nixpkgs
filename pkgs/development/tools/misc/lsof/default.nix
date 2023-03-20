@@ -1,32 +1,38 @@
-{ stdenv, fetchFromGitHub, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses }:
 
-let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
+let
+  dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
+in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.93.2";
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ ncurses ];
+  version = "4.98.0";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "1gd6r0nv8xz76pmvk52dgmfl0xjvkxl0s51b4jk4a0lphw3393yv";
+    sha256 = "sha256-DQLY0a0sOCZFEJA4Y4b18OcWZw47RyqKZ0mVG0CDVTI=";
   };
 
-  patches = [ ./no-build-info.patch ];
+  patches = [
+    ./no-build-info.patch
+  ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl which ];
+  buildInputs = [ ncurses ];
+
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
+  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
@@ -43,7 +49,7 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
     description = "A tool to list open files";
     longDescription = ''
@@ -51,8 +57,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
     license = licenses.purdueBsd;
+    maintainers = with maintainers; [ dezgeg ];
+    platforms = platforms.unix;
   };
 }

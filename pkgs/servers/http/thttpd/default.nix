@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "thttpd";
@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's/chmod 2755/chmod 755/' extras/Makefile.in
   '';
 
+  buildInputs = [
+    libxcrypt
+  ];
+
   preInstall = ''
     mkdir -p "$out/man/man1"
     sed -i -e 's/-o bin -g bin *//' Makefile
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tiny/turbo/throttling HTTP server";
     homepage = "http://www.acme.com/software/thttpd/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
   };
 }

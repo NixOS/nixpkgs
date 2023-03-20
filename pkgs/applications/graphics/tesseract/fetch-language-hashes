@@ -25,11 +25,11 @@ else
                    >&2 echo "Invalid tessdataRev: $tessdataRev"
                    exit 1
                })
-    langCodes=$(echo $(echo "$repoPage" | grep -ohP "(?<=/)[^/]+?(?=\.traineddata)" | sort))
+    langCodes=$(echo $(echo "$repoPage" | grep -ohP "(?<=/)[^/ ]+?(?=\.traineddata)" | sort -u))
 fi
 
 for lang in $langCodes; do
     url=https://github.com/tesseract-ocr/tessdata/raw/$tessdataRev/$lang.traineddata
-    hash=$(nix-prefetch-url $url 2>/dev/null)
+    hash=$(nix hash to-sri --type sha256 $(nix-prefetch-url $url 2>/dev/null))
     echo "$lang = \"$hash\";"
 done

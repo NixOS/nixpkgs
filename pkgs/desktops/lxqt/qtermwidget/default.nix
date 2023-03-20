@@ -1,22 +1,23 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , cmake
 , qtbase
 , qttools
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "qtermwidget";
-  version = "0.15.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "07wvcc650998yav9hr4hpm842j0iqdvls3mn9n2n4v8xvm7cii2m";
+    sha256 = "utQC0CNZtwHD0yAaV9Tr0iEUBa8DcrEMNKmWyuhj6GQ=";
   };
 
   nativeBuildInputs = [
@@ -29,13 +30,14 @@ mkDerivation rec {
     qttools
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A terminal emulator widget for Qt 5";
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/qtermwidget";
-    license = licenses.gpl2;
+    description = "A terminal emulator widget for Qt 5";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

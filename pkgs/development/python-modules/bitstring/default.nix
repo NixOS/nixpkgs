@@ -1,16 +1,34 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, unittestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "3.1.5";
+  version = "4.0.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1algq30j6rz12b1902bpw7iijx5lhrfqhl80d4ac6xzkrrpshqy1";
-    extension = "zip";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "scott-griffiths";
+    repo = pname;
+    rev = "bitstring-${version}";
+    hash = "sha256-eHP20F9PRe9ZNXjcDcsI3iFVswA6KtRWhBMAT7dkCv0=";
   };
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "bitstring" ];
+
+  meta = with lib; {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
     license = licenses.mit;

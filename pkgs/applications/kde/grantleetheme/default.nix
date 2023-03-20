@@ -1,17 +1,16 @@
 {
-  mkDerivation, copyPathsToStore, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   grantlee, ki18n, kiconthemes, knewstuff, kservice, kxmlgui, qtbase,
 }:
 
 mkDerivation {
-  name = "grantleetheme";
+  pname = "grantleetheme";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
-  output = [ "out" "dev" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee ki18n kiconthemes knewstuff kservice kxmlgui qtbase

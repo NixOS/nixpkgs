@@ -1,5 +1,5 @@
 diff --git a/fdbrpc/ContinuousSample.h b/fdbrpc/ContinuousSample.h
-index 54ff1b1..577c228 100644
+index 54ff1b109..577c228ae 100644
 --- a/fdbrpc/ContinuousSample.h
 +++ b/fdbrpc/ContinuousSample.h
 @@ -26,6 +26,7 @@
@@ -11,7 +11,7 @@ index 54ff1b1..577c228 100644
  template <class T>
  class ContinuousSample {
 diff --git a/fdbrpc/Smoother.h b/fdbrpc/Smoother.h
-index 3ed8e6e..fb46947 100644
+index 3ed8e6e98..fb4694750 100644
 --- a/fdbrpc/Smoother.h
 +++ b/fdbrpc/Smoother.h
 @@ -23,6 +23,7 @@
@@ -30,7 +30,7 @@ index 3ed8e6e..fb46947 100644
 \ No newline at end of file
 +#endif
 diff --git a/fdbrpc/libcoroutine/Coro.c b/fdbrpc/libcoroutine/Coro.c
-index cbfdc8f..9993cee 100644
+index cbfdc8fde..9993cee44 100644
 --- a/fdbrpc/libcoroutine/Coro.c
 +++ b/fdbrpc/libcoroutine/Coro.c
 @@ -66,6 +66,8 @@ VALGRIND_STACK_DEREGISTER((coro)->valgrindStackId)
@@ -43,7 +43,7 @@ index cbfdc8f..9993cee 100644
  extern intptr_t g_stackYieldLimit;
  
 diff --git a/fdbserver/Knobs.cpp b/fdbserver/Knobs.cpp
-index 819c513..acfbfe7 100644
+index 819c513c6..acfbfe7db 100644
 --- a/fdbserver/Knobs.cpp
 +++ b/fdbserver/Knobs.cpp
 @@ -20,6 +20,7 @@
@@ -55,7 +55,7 @@ index 819c513..acfbfe7 100644
  ServerKnobs const* SERVER_KNOBS = new ServerKnobs();
  
 diff --git a/flow/Knobs.cpp b/flow/Knobs.cpp
-index b485a84..82541d4 100644
+index b485a8495..82541d439 100644
 --- a/flow/Knobs.cpp
 +++ b/flow/Knobs.cpp
 @@ -20,6 +20,7 @@
@@ -67,10 +67,18 @@ index b485a84..82541d4 100644
  FlowKnobs const* FLOW_KNOBS = new FlowKnobs();
  
 diff --git a/flow/Platform.cpp b/flow/Platform.cpp
-index 69dac88..69b86d4 100644
+index 69dac889a..62bda9edb 100644
 --- a/flow/Platform.cpp
 +++ b/flow/Platform.cpp
-@@ -623,7 +623,7 @@ void getDiskStatistics(std::string const& directory, uint64_t& currentIOs, uint6
+@@ -40,6 +40,7 @@
+ #include <algorithm>
+ 
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <time.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
+@@ -623,7 +624,7 @@ void getDiskStatistics(std::string const& directory, uint64_t& currentIOs, uint6
  		unsigned int minorId;
  		disk_stream >> majorId;
  		disk_stream >> minorId;
@@ -79,8 +87,21 @@ index 69dac88..69b86d4 100644
  			std::string ignore;
  			uint64_t rd_ios;	/* # of reads completed */
  			//	    This is the total number of reads completed successfully.
+diff --git a/flow/Profiler.actor.cpp b/flow/Profiler.actor.cpp
+index 27af613e6..69f38c237 100644
+--- a/flow/Profiler.actor.cpp
++++ b/flow/Profiler.actor.cpp
+@@ -35,8 +35,6 @@
+ 
+ extern volatile int profilingEnabled;
+ 
+-static uint64_t gettid() { return syscall(__NR_gettid); }
+-
+ struct SignalClosure {
+ 	void (* func)(int, siginfo_t*, void*, void*);
+ 	void *userdata;
 diff --git a/flow/TDMetric.actor.h b/flow/TDMetric.actor.h
-index 5421b83..711a960 100755
+index 5421b83b5..711a96093 100755
 --- a/flow/TDMetric.actor.h
 +++ b/flow/TDMetric.actor.h
 @@ -36,6 +36,7 @@
@@ -92,7 +113,7 @@ index 5421b83..711a960 100755
  struct MetricNameRef {
  	MetricNameRef() {}
 diff --git a/flow/flow.h b/flow/flow.h
-index 0c220af..f685fbc 100644
+index 0c220afae..f685fbc63 100644
 --- a/flow/flow.h
 +++ b/flow/flow.h
 @@ -248,19 +248,6 @@ public:

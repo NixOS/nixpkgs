@@ -1,28 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
-, IOKit ? null }:
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, perl
+, python3
+, dbus
+, polkit
+, systemdMinimal
+, IOKit
+, pname ? "pcsclite"
+, polkitSupport ? false
+}:
 
 stdenv.mkDerivation rec {
-  pname = "pcsclite";
-  version = "1.8.26";
+  inherit pname;
+  version = "1.9.5";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1ndvvz0fgqwz70pijymsxmx25mzryb0zav1i8jjc067ndryvxdry";
+    hash = "sha256-nuP5szNTdWIXeJNVmtT3uNXCPr6Cju9TBWwC2xQEnQg=";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
 
+  postPatch = ''
+    sed -i configure.ac \
+      -e "s@polkit_policy_dir=.*@polkit_policy_dir=$bin/share/polkit-1/actions@"
+  '';
+
   configureFlags = [
+    "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--enable-confdir=/etc"
+    (lib.enableFeature stdenv.isLinux "libsystemd")
+    (lib.enableFeature polkitSupport "polkit")
+  ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
-  ] ++ stdenv.lib.optional stdenv.isLinux
-         "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
-    ++ stdenv.lib.optional (!stdenv.isLinux)
-         "--disable-libsystemd";
+    "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
+  ];
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
@@ -35,11 +54,16 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ];
-  buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
-             ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
+
+  buildInputs = [ python3 ]
+    ++ lib.optionals stdenv.isLinux [ systemdMinimal ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ]
+    ++ lib.optionals polkitSupport [ dbus polkit ];
+
+  meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
     license = licenses.bsd3;

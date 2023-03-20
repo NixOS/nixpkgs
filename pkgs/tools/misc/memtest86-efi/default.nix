@@ -1,40 +1,32 @@
 { stdenv
 , lib
 , fetchzip
-, utillinux
+, util-linux
 , jq
 , mtools
 }:
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
-  version = "8.3";
+  version = "9.3.1000";
 
   src = fetchzip {
-    # TODO: We're using the previous version of memtest86 because the
-    # company developing memtest86 has stopped providing a versioned download
-    # link for the latest version:
-    #
-    # https://www.passmark.com/forum/memtest86/44494-version-8-1-distribution-file-is-not-versioned?p=44505#post44505
-    #
-    # However, versioned links for the previous version are available, so that
-    # is what is being used.
-    #
-    # It does look like redistribution is okay, so if we had somewhere to host
-    # binaries that we make sure to version, then we could probably keep up
-    # with the latest versions released by the company.
-    url = "https://www.memtest86.com/downloads/memtest86-${version}-usb.zip";
-    sha256 = "0aldz7rvnfnzb4h447q10k9c9p5ghwzdyn7f6g5lrxiv5vxf3x96";
+    # We're using the Internet Archive Wayback Machine because the company developing MemTest86 has stopped providing a versioned download link for the latest version:
+    # https://forums.passmark.com/memtest86/44494-version-8-1-distribution-file-is-not-versioned
+    url = "https://web.archive.org/web/20211111004725/https://www.memtest86.com/downloads/memtest86-usb.zip";
+    sha256 = "sha256-GJdZCUFw1uX4HcaaAy5QqDGNqHTFtrqla13wF7xCAaM=";
     stripRoot = false;
   };
 
   nativeBuildInputs = [
-    utillinux
+    util-linux
     jq
     mtools
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # memtest86 is distributed as a bootable USB image.  It contains the actual
     # memtest86 EFI app.
     #
@@ -50,21 +42,21 @@ stdenv.mkDerivation rec {
     ')
     mkdir $out
     mcopy -vsi $IMG@@$ESP_OFFSET ::'/EFI/BOOT/*' $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://memtest86.com/";
+    homepage = "https://www.memtest86.com/";
     downloadPage = "https://www.memtest86.com/download.htm";
+    changelog = "https://www.memtest86.com/whats-new.html";
     description = "A tool to detect memory errors, to be run from a bootloader";
     longDescription = ''
       A UEFI app that is able to detect errors in RAM.  It can be run from a
       bootloader.  Released under a proprietary freeware license.
     '';
-    # The Memtest86 License for the Free Edition states,
-    # "MemTest86 Free Edition is free to download with no restrictions on usage".
-    # However the source code for Memtest86 does not appear to be available.
-    #
-    # https://www.memtest86.com/license.htm
+    # MemTest86 Free Edition is free to download with no restrictions on usage. However, the source code is not available.
+    # https://www.memtest86.com/tech_license-information.html
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;

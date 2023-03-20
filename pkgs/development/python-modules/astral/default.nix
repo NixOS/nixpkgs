@@ -1,22 +1,46 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytz, requests, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+
+# build
+, poetry-core
+
+# runtime
+, backports-zoneinfo
+
+# tests
+, pytestCheckHook
+, freezegun
+}:
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "1.10.1";
+  version = "3.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1";
+    hash = "sha256-m3w7QS6eadFyz7JL4Oat3MnxvQGijbi+vmbXXMxTPYg=";
   };
 
-  propagatedBuildInputs = [ pytz requests ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test -m "not webtest"
-  '';
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
+  ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/sffjunkie/astral/releases/tag/${version}";
     description = "Calculations for the position of the sun and the moon";
     homepage = "https://github.com/sffjunkie/astral/";
     license = licenses.asl20;

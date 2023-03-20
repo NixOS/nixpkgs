@@ -1,41 +1,43 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gcc-unwrapped
 , dpkg
-, polkit
-, utillinux
+, util-linux
 , bash
-, nodePackages
 , makeWrapper
-, electron_7
+, electron
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
   sha256 = {
-    "x86_64-linux" = "1yvqi86bw0kym401zwknhwq9041fxg047sbj3aydnfcqf11vrrmk";
-    "i686-linux" = "12lghzhsl16h3jvzm3vw4hrly32fz99z6rdmybl8viralrxy8mb8";
-  }."${stdenv.system}";
+    "x86_64-linux" = "1rcidar97nnpjb163x9snnnhw1z1ld4asgbd5dxpzdh8hikh66ll";
+    "i686-linux" = "1jll4i0j9kh78kl10s596xxs60gy7cnlafgpk89861yihj0i73a5";
+  }."${system}" or throwSystem;
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
-  }."${stdenv.system}";
+  }."${system}" or throwSystem;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.86";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
     inherit sha256;
   };
 
-  dontBuild = true;
-  dontConfigure = true;
-
   nativeBuildInputs = [ makeWrapper ];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   unpackPhase = ''
     ${dpkg}/bin/dpkg-deb -x $src .
@@ -43,15 +45,12 @@ stdenv.mkDerivation rec {
 
   # sudo-prompt has hardcoded binary paths on Linux and we patch them here
   # along with some other paths
-  patchPhase = ''
-    ${nodePackages.asar}/bin/asar extract opt/balenaEtcher/resources/app.asar tmp
+  postPatch = ''
     # use Nix(OS) paths
-    sed -i "s|/usr/bin/pkexec|/usr/bin/pkexec', '/run/wrappers/bin/pkexec|" tmp/node_modules/sudo-prompt/index.js
-    sed -i 's|/bin/bash|${bash}/bin/bash|' tmp/node_modules/sudo-prompt/index.js
-    sed -i "s|'lsblk'|'${utillinux}/bin/lsblk'|" tmp/node_modules/drivelist/js/lsblk/index.js
-    sed -i "s|process.resourcesPath|'$out/share/${pname}/resources/'|" tmp/generated/gui.js
-    ${nodePackages.asar}/bin/asar pack tmp opt/balenaEtcher/resources/app.asar
-    rm -rf tmp
+    substituteInPlace opt/balenaEtcher/resources/app/generated/gui.js \
+      --replace '/usr/bin/pkexec' '/usr/bin/pkexec", "/run/wrappers/bin/pkexec' \
+      --replace '/bin/bash' '${bash}/bin/bash' \
+      --replace '"lsblk"' '"${util-linux}/bin/lsblk"'
   '';
 
   installPhase = ''
@@ -63,22 +62,23 @@ stdenv.mkDerivation rec {
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
 
     substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
-      --replace 'Exec=/opt/balenaEtcher/balena-etcher-electron' 'Exec=${pname}'
+      --replace /opt/balenaEtcher/balena-etcher-electron ${pname}
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper ${electron_7}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/resources/app \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flash OS images to SD cards and USB drives, safely and easily";
     homepage = "https://etcher.io/";
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

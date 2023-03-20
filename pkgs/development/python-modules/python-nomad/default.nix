@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "python-nomad";
-  version = "1.2.1";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ivkfdrmb4wpyawvwrgm3jvx6hn49vqjpwbkmkmamigghqqwacx3";
+    hash = "sha256-VpngJvm9eK60lPeFIbjnTwzWWoJ9tRBDYP5SghDMbAg=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -14,7 +14,9 @@ buildPythonPackage rec {
   # Tests require nomad agent
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "nomad" ];
+
+  meta = with lib; {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
     license = licenses.mit;

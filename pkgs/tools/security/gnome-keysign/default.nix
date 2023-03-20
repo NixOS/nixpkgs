@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitLab
 , fetchpatch
 , python3
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
     gobject-introspection
   ] ++ (with python3.pkgs; [
-    Babel
+    babel
     babelgladeextractor
   ]);
 
@@ -67,13 +67,10 @@ python3.pkgs.buildPythonApplication rec {
     twisted
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   # bunch of linting
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://wiki.gnome.org/Apps/Keysign";
     license = licenses.gpl3Plus;

@@ -1,15 +1,29 @@
-{ stdenv, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg_utils, dconf, gtk3, python3Packages,
-  wrapGAppsHook
+{ lib
+, fetchFromGitLab
+, gitUpdater
+, file
+, which
+, intltool
+, gobject-introspection
+, findutils
+, xdg-utils
+, dconf
+, gtk3
+, python3Packages
+, xfconf
+, wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "1.4.13";
+  version = "4.16.4";
 
-  src = fetchurl {
-    url = "https://archive.xfce.org/src/apps/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0fg89946z6n8njxn4mv29jksw8yavg8vypsljn9031pjwl3fmh2q";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-hdrEFdBa/4i/PF7VyEI7ObiJXLIRW+RFSe8yGnUpqRc=";
   };
 
   nativeBuildInputs = [
@@ -27,15 +41,15 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pyxdg
     python3Packages.ptyprocess
     python3Packages.pycairo
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 
   propagatedBuildInputs = [
     python3Packages.dbus-python
     python3Packages.pygobject3
     python3Packages.pexpect
-    xdg_utils
+    xdg-utils
     findutils
+    xfconf
   ];
 
   # Explicitly set the prefix dir in "setup.py" because setuptools is
@@ -50,7 +64,9 @@ python3Packages.buildPythonApplication rec {
   # Disable check because there is no test in the source distribution
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
+
+  meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";
     description = "Handy file search tool";
     longDescription = ''
@@ -61,6 +77,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

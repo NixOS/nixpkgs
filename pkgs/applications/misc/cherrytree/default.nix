@@ -1,24 +1,50 @@
-{ lib, fetchFromGitHub, pythonPackages, gettext }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, python3
+, wrapGAppsHook
+, gtkmm3
+, gtksourceview
+, gtksourceviewmm
+, gspell
+, libxmlxx
+, sqlite
+, curl
+, libuchardet
+, spdlog
+}:
 
-pythonPackages.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "cherrytree";
-  version = "0.39.3";
+  version = "0.99.49";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
-    sha256 = "1k9i7acpphx0if6ij2p9fkmj638ry6hcyr1rdr039a8zi8hq98gz";
-
+    sha256 = "sha256-p7kiOxy4o0RwmN3LFfLSpkz08KcYYMVxVAEUvAX1KEA=";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    wrapGAppsHook
+  ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk dbus-python pygtksourceview ];
-
-  patches = [ ./subprocess.patch ];
-
-  doCheck = false;
+  buildInputs = [
+    gtkmm3
+    gtksourceview
+    gtksourceviewmm
+    gspell
+    libxmlxx
+    sqlite
+    curl
+    libuchardet
+    spdlog
+  ];
 
   meta = with lib; {
     description = "An hierarchical note taking application";
@@ -31,8 +57,9 @@ pythonPackages.buildPythonApplication rec {
       you have scattered around your hard drive can be conveniently placed into
       a Cherrytree document where you can easily find it.
     '';
-    homepage = "http://www.giuspen.com/cherrytree";
-    license = licenses.gpl3;
+    homepage = "https://www.giuspen.com/cherrytree";
+    changelog = "https://raw.githubusercontent.com/giuspen/cherrytree/${version}/changelog.txt";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };
 }

@@ -1,36 +1,65 @@
-{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
-, qtbase, qttools, qtsvg, qtwebkit
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, docbook_xml_dtd_45
+, pkg-config
+, wrapQtAppsHook
+, boost
+, clucene_core_2
+, docbook_xsl_ns
+, perlPackages
+, qtbase
+, qtsvg
+, qttools
+, sword
 }:
 
-mkDerivation rec {
-
-  version = "2.11.2";
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
+  version = "3.0.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/bibletime/${pname}-${version}.tar.xz";
-    sha256 = "1s5bvmwbz1gyp3ml8sghpc00h8nhdvx2iyq96iri30kwx1y1jy6i";
+  src = fetchFromGitHub {
+    owner = "bibletime";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4O8F5/EyoJFJBEWOAs9lzN3TKuu/CEdKfPaOF8gNqps=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [
-   sword boost clucene_core
-   qtbase qttools qtsvg qtwebkit
- ];
+  nativeBuildInputs = [
+    cmake
+    docbook_xml_dtd_45
+    pkg-config
+    wrapQtAppsHook
+  ];
 
-  preConfigure =  ''
-    export CLUCENE_HOME=${clucene_core};
+  buildInputs = [
+    boost
+    clucene_core_2
+    perlPackages.Po4a
+    qtbase
+    qtsvg
+    qttools
+    sword
+  ];
+
+  preConfigure = ''
+    export CLUCENE_HOME=${clucene_core_2};
     export SWORD_HOME=${sword};
   '';
 
-  cmakeFlags = [ "-DUSE_QT_WEBKIT=ON" "-DCMAKE_BUILD_TYPE=Debug" ];
+  cmakeFlags = [
+    "-DBUILD_HOWTO_PDF=OFF"
+    "-DBUILD_HANDBOOK_PDF=OFF"
+    "-DBT_DOCBOOK_XSL_HTML_CHUNK_XSL=${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
+    "-DBT_DOCBOOK_XSL_PDF_DOCBOOK_XSL=${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
+  ];
 
-  meta = {
-    description = "A Qt4 Bible study tool";
+  meta = with lib; {
     homepage = "http://www.bibletime.info/";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.piotr ];
+    description = "A powerful cross platform Bible study tool";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
-}
+})

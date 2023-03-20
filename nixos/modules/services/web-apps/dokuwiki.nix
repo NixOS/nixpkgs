@@ -1,388 +1,594 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 let
-
-  inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types;
-  inherit (lib) concatMapStringsSep flatten mapAttrs mapAttrs' mapAttrsToList nameValuePair concatMapStringSep;
-
-  eachSite = config.services.dokuwiki;
-
+  cfg = config.services.dokuwiki;
+  eachSite = cfg.sites;
   user = "dokuwiki";
-  group = config.services.nginx.group;
+  webserver = config.services.${cfg.webserver};
 
-  dokuwikiAclAuthConfig = cfg: pkgs.writeText "acl.auth.php" ''
+  mkPhpIni = generators.toKeyValue {
+    mkKeyValue = generators.mkKeyValueDefault {} " = ";
+  };
+  mkPhpPackage = cfg: cfg.phpPackage.buildEnv {
+    extraConfig = mkPhpIni cfg.phpOptions;
+  };
+
+  dokuwikiAclAuthConfig = hostName: cfg: let
+    inherit (cfg) acl;
+    acl_gen = concatMapStringsSep "\n" (l: "${l.page} \t ${l.actor} \t ${toString l.level}");
+  in pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
     # <?php exit()?>
     #
     # Access Control Lists
     #
-    ${toString cfg.acl}
+    ${if isString acl then acl else acl_gen acl}
   '';
 
-  dokuwikiLocalConfig = cfg: pkgs.writeText "local.php" ''
-    <?php
-    $conf['savedir'] = '${cfg.stateDir}';
-    $conf['superuser'] = '${toString cfg.superUser}';
-    $conf['useacl'] = '${toString cfg.aclUse}';
-    $conf['disableactions'] = '${cfg.disableActions}';
+  mergeConfig = cfg: {
+    useacl = false; # Dokuwiki default
+    savedir = cfg.stateDir;
+  } // cfg.settings;
+
+  writePhpFile = name: text: pkgs.writeTextFile {
+    inherit name;
+    text = "<?php\n${text}";
+    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+  };
+
+  mkPhpValue = v: let
+    isHasAttr = s: isAttrs v && hasAttr s v;
+  in
+    if isString v then escapeShellArg v
+    # NOTE: If any value contains a , (comma) this will not get escaped
+    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isInt v then toString v
+    else if isBool v then toString (if v then 1 else 0)
+    else if isHasAttr "_file" then "trim(file_get_contents(${lib.escapeShellArg v._file}))"
+    else if isHasAttr "_raw" then v._raw
+    else abort "The dokuwiki localConf value ${lib.generators.toPretty {} v} can not be encoded."
+  ;
+
+  mkPhpAttrVals = v: flatten (mapAttrsToList mkPhpKeyVal v);
+  mkPhpKeyVal = k: v: let
+    values = if (isAttrs v && (hasAttr "_file" v || hasAttr "_raw" v )) || !isAttrs v then
+      [" = ${mkPhpValue v};"]
+    else
+      mkPhpAttrVals v;
+  in map (e: "[${escapeShellArg k}]${e}") (flatten values);
+
+  dokuwikiLocalConfig = hostName: cfg: let
+    conf_gen = c: map (v: "$conf${v}") (mkPhpAttrVals c);
+  in writePhpFile "local-${hostName}.php" ''
+    ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
     ${toString cfg.extraConfig}
   '';
 
-  dokuwikiPluginsLocalConfig = cfg: pkgs.writeText "plugins.local.php" ''
-    <?php
-    ${cfg.pluginsConfig}
+  dokuwikiPluginsLocalConfig = hostName: cfg: let
+    pc = cfg.pluginsConfig;
+    pc_gen = pc: concatStringsSep "\n" (mapAttrsToList (n: v: "$plugins['${n}'] = ${boolToString v};") pc);
+  in writePhpFile "plugins.local-${hostName}.php" ''
+    ${if isString pc then pc else pc_gen pc}
   '';
 
-  pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
-    pname = "dokuwiki-${hostName}";
-    version = src.version;
-    src = cfg.package;
 
-    installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
+  pkg = hostName: cfg: cfg.package.combine {
+    inherit (cfg) plugins templates;
 
-      # symlink the dokuwiki config
-      ln -s ${dokuwikiLocalConfig cfg} $out/share/dokuwiki/local.php
+    pname = p: "${p.pname}-${hostName}";
 
-      # symlink plugins config
-      ln -s ${dokuwikiPluginsLocalConfig cfg} $out/share/dokuwiki/plugins.local.php
-
-      # symlink acl
-      ln -s ${dokuwikiAclAuthConfig cfg} $out/share/dokuwiki/acl.auth.php
-
-      # symlink additional plugin(s) and templates(s)
-      ${concatMapStringsSep "\n" (template: "ln -s ${template} $out/share/dokuwiki/lib/tpl/${template.name}") cfg.templates}
-      ${concatMapStringsSep "\n" (plugin: "ln -s ${plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}") cfg.plugins}
-    '';
+    basePackage = cfg.package;
+    localConfig = dokuwikiLocalConfig hostName cfg;
+    pluginsConfig = dokuwikiPluginsLocalConfig hostName cfg;
+    aclConfig = if cfg.settings.useacl && cfg.acl != null then dokuwikiAclAuthConfig hostName cfg else null;
   };
 
-  siteOpts = { config, lib, name, ...}: {
+  aclOpts = { ... }: {
     options = {
-      enable = mkEnableOption "DokuWiki web application.";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.dokuwiki;
-        description = "Which dokuwiki package to use.";
-      };
-
-      hostName = mkOption {
+      page = mkOption {
         type = types.str;
-        default = "localhost";
-        description = "FQDN for the instance.";
+        description = "Page or namespace to restrict";
+        example = "start";
       };
 
-      stateDir = mkOption {
-        type = types.path;
-        default = "/var/lib/dokuwiki/${name}/data";
-        description = "Location of the dokuwiki state directory.";
+      actor = mkOption {
+        type = types.str;
+        description = "User or group to restrict";
+        example = "@external";
       };
 
-      acl = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-        example = "*               @ALL               8";
+      level = let
+        available = {
+          "none" = 0;
+          "read" = 1;
+          "edit" = 2;
+          "create" = 4;
+          "upload" = 8;
+          "delete" = 16;
+        };
+      in mkOption {
+        type = types.enum ((attrValues available) ++ (attrNames available));
+        apply = x: if isInt x then x else available.${x};
         description = ''
-          Access Control Lists: see <link xlink:href="https://www.dokuwiki.org/acl"/>
-          Mutually exclusive with services.dokuwiki.aclFile
-          Set this to a value other than null to take precedence over aclFile option.
-
-          Warning: Consider using aclFile instead if you do not
-          want to store the ACL in the world-readable Nix store.
+          Permission level to restrict the actor(s) to.
+          See <https://www.dokuwiki.org/acl#background_info> for explanation
         '';
+        example = "read";
       };
 
-      aclFile = mkOption {
-        type = with types; nullOr str;
-        default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
-        description = ''
-          Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
-          Mutually exclusive with services.dokuwiki.acl which is preferred.
-          Consult documentation <link xlink:href="https://www.dokuwiki.org/acl"/> for further instructions.
-          Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/acl.auth.php.dist"/>
-        '';
-        example = "/var/lib/dokuwiki/${name}/acl.auth.php";
-      };
+    };
+  };
 
-      aclUse = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Necessary for users to log in into the system.
-          Also limits anonymous users. When disabled,
-          everyone is able to create and edit content.
-        '';
-      };
+  siteOpts = { config, lib, name, ... }:
+    {
+      imports = [
+        # NOTE: These will sadly not print the absolute argument path but only the name. Related to #96006
+        (mkRenamedOptionModule [ "aclUse" ] [ "settings" "useacl" ] )
+        (mkRenamedOptionModule [ "superUser" ] [ "settings" "superuser" ] )
+        (mkRenamedOptionModule [ "disableActions" ] [ "settings" "disableactions" ] )
+        ({ config, options, name, ...}: {
+          config.warnings =
+            (optional (isString config.pluginsConfig) ''
+              Passing plain strings to services.dokuwiki.sites.${name}.pluginsConfig has been deprecated and will not be continue to be supported in the future.
+              Please pass structured settings instead.
+            '')
+            ++ (optional (isString config.acl) ''
+              Passing a plain string to services.dokuwiki.sites.${name}.acl has been deprecated and will not continue to be supported in the future.
+              Please pass structured settings instead.
+            '')
+            ++ (optional (config.extraConfig != null) ''
+              services.dokuwiki.sites.${name}.extraConfig is deprecated and will be removed in the future.
+              Please pass structured settings to services.dokuwiki.sites.${name}.settings instead.
+            '')
+          ;
+        })
+      ];
 
-      pluginsConfig = mkOption {
-        type = types.lines;
-        default = ''
-          $plugins['authad'] = 0;
-          $plugins['authldap'] = 0;
-          $plugins['authmysql'] = 0;
-          $plugins['authpgsql'] = 0;
-        '';
-        description = ''
-          List of the dokuwiki (un)loaded plugins.
-        '';
-      };
+      options = {
+        enable = mkEnableOption (lib.mdDoc "DokuWiki web application");
 
-      superUser = mkOption {
-        type = types.nullOr types.str;
-        default = "@admin";
-        description = ''
-          You can set either a username, a list of usernames (“admin1,admin2”),
-          or the name of a group by prepending an @ char to the groupname
-          Consult documentation <link xlink:href="https://www.dokuwiki.org/config:superuser"/> for further instructions.
-        '';
-      };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.dokuwiki;
+          defaultText = literalExpression "pkgs.dokuwiki";
+          description = lib.mdDoc "Which DokuWiki package to use.";
+        };
 
-      usersFile = mkOption {
-        type = with types; nullOr str;
-        default = if config.aclUse then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
-        description = ''
-          Location of the dokuwiki users file. List of users. Format:
-          login:passwordhash:Real Name:email:groups,comma,separated
-          Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
-          Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
+        stateDir = mkOption {
+          type = types.path;
+          default = "/var/lib/dokuwiki/${name}/data";
+          description = lib.mdDoc "Location of the DokuWiki state directory.";
+        };
+
+        acl = mkOption {
+          type = with types; nullOr (oneOf [ lines (listOf (submodule aclOpts)) ]);
+          default = null;
+          example = literalExpression ''
+            [
+              {
+                page = "start";
+                actor = "@external";
+                level = "read";
+              }
+              {
+                page = "*";
+                actor = "@users";
+                level = "upload";
+              }
+            ]
           '';
-        example = "/var/lib/dokuwiki/${name}/users.auth.php";
-      };
+          description = lib.mdDoc ''
+            Access Control Lists: see <https://www.dokuwiki.org/acl>
+            Mutually exclusive with services.dokuwiki.aclFile
+            Set this to a value other than null to take precedence over aclFile option.
 
-      disableActions = mkOption {
-        type = types.nullOr types.str;
-        default = "";
-        example = "search,register";
-        description = ''
-          Disable individual action modes. Refer to
-          <link xlink:href="https://www.dokuwiki.org/config:action_modes"/>
-          for details on supported values.
-        '';
-      };
-
-      extraConfig = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-        example = ''
-          $conf['title'] = 'My Wiki';
-          $conf['userewrite'] = 1;
-        '';
-        description = ''
-          DokuWiki configuration. Refer to
-          <link xlink:href="https://www.dokuwiki.org/config"/>
-          for details on supported values.
-        '';
-      };
-
-      plugins = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        description = ''
-              List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
-              <note><para>These plugins need to be packaged before use, see example.</para></note>
-        '';
-        example = ''
-              # Let's package the icalevents plugin
-              plugin-icalevents = pkgs.stdenv.mkDerivation {
-                name = "icalevents";
-                # Download the plugin from the dokuwiki site
-                src = pkgs.fetchurl {
-                  url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
-                  sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
-                };
-                sourceRoot = ".";
-                # We need unzip to build this package
-                buildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-
-              # And then pass this theme to the plugin list like this:
-              plugins = [ plugin-icalevents ];
-        '';
-      };
-
-      templates = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        description = ''
-              List of path(s) to respective template(s) which are copied from the 'tpl' directory.
-              <note><para>These templates need to be packaged before use, see example.</para></note>
-        '';
-        example = ''
-              # Let's package the bootstrap3 theme
-              template-bootstrap3 = pkgs.stdenv.mkDerivation {
-                name = "bootstrap3";
-                # Download the theme from the dokuwiki site
-                src = pkgs.fetchurl {
-                  url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
-                  sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
-                };
-                # We need unzip to build this package
-                buildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-
-              # And then pass this theme to the template list like this:
-              templates = [ template-bootstrap3 ];
-        '';
-      };
-
-      poolConfig = mkOption {
-        type = with types; attrsOf (oneOf [ str int bool ]);
-        default = {
-          "pm" = "dynamic";
-          "pm.max_children" = 32;
-          "pm.start_servers" = 2;
-          "pm.min_spare_servers" = 2;
-          "pm.max_spare_servers" = 4;
-          "pm.max_requests" = 500;
+            Warning: Consider using aclFile instead if you do not
+            want to store the ACL in the world-readable Nix store.
+          '';
         };
-        description = ''
-          Options for the dokuwiki PHP pool. See the documentation on <literal>php-fpm.conf</literal>
-          for details on configuration directives.
-        '';
-      };
 
-      nginx = mkOption {
-        type = types.submodule (
-          recursiveUpdate
-            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+        aclFile = mkOption {
+          type = with types; nullOr str;
+          default = if (config.mergedConfig.useacl && config.acl == null) then "/var/lib/dokuwiki/${name}/acl.auth.php" else null;
+          description = lib.mdDoc ''
+            Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
+            Mutually exclusive with services.dokuwiki.acl which is preferred.
+            Consult documentation <https://www.dokuwiki.org/acl> for further instructions.
+            Example: <https://github.com/splitbrain/dokuwiki/blob/master/conf/acl.auth.php.dist>
+          '';
+          example = "/var/lib/dokuwiki/${name}/acl.auth.php";
+        };
+
+        pluginsConfig = mkOption {
+          type = with types; oneOf [lines (attrsOf bool)];
+          default = {
+            authad = false;
+            authldap = false;
+            authmysql = false;
+            authpgsql = false;
+          };
+          description = lib.mdDoc ''
+            List of the dokuwiki (un)loaded plugins.
+          '';
+        };
+
+        usersFile = mkOption {
+          type = with types; nullOr str;
+          default = if config.mergedConfig.useacl then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
+          description = lib.mdDoc ''
+            Location of the dokuwiki users file. List of users. Format:
+
+                login:passwordhash:Real Name:email:groups,comma,separated
+
+            Create passwordHash easily by using:
+
+                mkpasswd -5 password `pwgen 8 1`
+
+            Example: <https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist>
+            '';
+          example = "/var/lib/dokuwiki/${name}/users.auth.php";
+        };
+
+        plugins = mkOption {
+          type = types.listOf types.path;
+          default = [];
+          description = lib.mdDoc ''
+                List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
+
+                ::: {.note}
+                These plugins need to be packaged before use, see example.
+                :::
+          '';
+          example = literalExpression ''
+                let
+                  plugin-icalevents = pkgs.stdenv.mkDerivation rec {
+                    name = "icalevents";
+                    version = "2017-06-16";
+                    src = pkgs.fetchzip {
+                      stripRoot = false;
+                      url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/''${version}/dokuwiki-plugin-icalevents-''${version}.zip";
+                      hash = "sha256-IPs4+qgEfe8AAWevbcCM9PnyI0uoyamtWeg4rEb+9Wc=";
+                    };
+                    installPhase = "mkdir -p $out; cp -R * $out/";
+                  };
+                # And then pass this theme to the plugin list like this:
+                in [ plugin-icalevents ]
+          '';
+        };
+
+        templates = mkOption {
+          type = types.listOf types.path;
+          default = [];
+          description = lib.mdDoc ''
+                List of path(s) to respective template(s) which are copied from the 'tpl' directory.
+
+                ::: {.note}
+                These templates need to be packaged before use, see example.
+                :::
+          '';
+          example = literalExpression ''
+                let
+                  template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
+                  name = "bootstrap3";
+                  version = "2022-07-27";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "giterlizzi";
+                    repo = "dokuwiki-template-bootstrap3";
+                    rev = "v''${version}";
+                    hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
+                  };
+                  installPhase = "mkdir -p $out; cp -R * $out/";
+                };
+                # And then pass this theme to the template list like this:
+                in [ template-bootstrap3 ]
+          '';
+        };
+
+        poolConfig = mkOption {
+          type = with types; attrsOf (oneOf [ str int bool ]);
+          default = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 4;
+            "pm.max_requests" = 500;
+          };
+          description = lib.mdDoc ''
+            Options for the DokuWiki PHP pool. See the documentation on `php-fpm.conf`
+            for details on configuration directives.
+          '';
+        };
+
+        phpPackage = mkOption {
+          type = types.package;
+          relatedPackages = [ "php80" "php81" ];
+          default = pkgs.php81;
+          defaultText = "pkgs.php81";
+          description = lib.mdDoc ''
+            PHP package to use for this dokuwiki site.
+          '';
+        };
+
+        phpOptions = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = lib.mdDoc ''
+            Options for PHP's php.ini file for this dokuwiki site.
+          '';
+          example = literalExpression ''
+          {
+            "opcache.interned_strings_buffer" = "8";
+            "opcache.max_accelerated_files" = "10000";
+            "opcache.memory_consumption" = "128";
+            "opcache.revalidate_freq" = "15";
+            "opcache.fast_shutdown" = "1";
+          }
+          '';
+        };
+
+        settings = mkOption {
+          type = types.attrsOf types.anything;
+          default = {
+            useacl = true;
+            superuser = "admin";
+          };
+          description = lib.mdDoc ''
+            Structural DokuWiki configuration.
+            Refer to <https://www.dokuwiki.org/config>
+            for details and supported values.
+            Settings can either be directly set from nix,
+            loaded from a file using `._file` or obtained from any
+            PHP function calls using `._raw`.
+          '';
+          example = literalExpression ''
             {
-              # Enable encryption by default,
-              options.forceSSL.default = true;
-              options.enableACME.default = true;
+              title = "My Wiki";
+              userewrite = 1;
+              disableactions = [ "register" ]; # Will be concatenated with commas
+              plugin.smtp = {
+                smtp_pass._file = "/var/run/secrets/dokuwiki/smtp_pass";
+                smtp_user._raw = "getenv('DOKUWIKI_SMTP_USER')";
+              };
             }
-        );
-        default = {forceSSL = true; enableACME = true;};
-        example = {
-          serverAliases = [
-            "wiki.\${config.networking.domain}"
-          ];
-          enableACME = false;
+          '';
         };
-        description = ''
-          With this option, you can customize the nginx virtualHost which already has sensible defaults for DokuWiki.
-        '';
+
+        mergedConfig = mkOption {
+          readOnly = true;
+          default = mergeConfig config;
+          defaultText = literalExpression ''
+            {
+              useacl = true;
+            }
+          '';
+          description = lib.mdDoc ''
+            Read only representation of the final configuration.
+          '';
+        };
+
+        extraConfig = mkOption {
+          # This Option is deprecated and only kept until sometime before 23.05 for compatibility reasons
+          # FIXME (@e1mo): Actually remember removing this before 23.05.
+          visible = false;
+          type = types.nullOr types.lines;
+          default = null;
+          example = ''
+            $conf['title'] = 'My Wiki';
+            $conf['userewrite'] = 1;
+          '';
+          description = lib.mdDoc ''
+            DokuWiki configuration. Refer to
+            <https://www.dokuwiki.org/config>
+            for details on supported values.
+
+            **Note**: Please pass Structured settings via
+            `services.dokuwiki.sites.${name}.settings` instead.
+          '';
+        };
+
+      # Required for the mkRenamedOptionModule
+      # TODO: Remove me once https://github.com/NixOS/nixpkgs/issues/96006 is fixed
+      # or the aclUse, ... options are removed.
+      warnings = mkOption {
+        type = types.listOf types.unspecified;
+        default = [ ];
+        visible = false;
+        internal = true;
       };
+
     };
   };
 in
 {
-  # interface
   options = {
-    services.dokuwiki = mkOption {
-      type = types.attrsOf (types.submodule siteOpts);
-      default = {};
-      description = "Sepcification of one or more dokuwiki sites to service.";
+    services.dokuwiki = {
+
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = lib.mdDoc "Specification of one or more DokuWiki sites to serve";
+      };
+
+      webserver = mkOption {
+        type = types.enum [ "nginx" "caddy" ];
+        default = "nginx";
+        description = lib.mdDoc ''
+          Whether to use nginx or caddy for virtual host management.
+
+          Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
+
+          Further caddy configuration can be done by adapting `services.caddy.virtualHosts.<name>`.
+          See [](#opt-services.caddy.virtualHosts) for further information.
+        '';
+      };
+
     };
   };
 
   # implementation
+  config = mkIf (eachSite != {}) (mkMerge [{
 
-  config = mkIf (eachSite != {}) {
-
-    warnings = mapAttrsToList (hostName: cfg: mkIf (cfg.superUser == null) "Not setting services.dokuwiki.${hostName} superUser will impair your ability to administer DokuWiki") eachSite;
+    warnings = flatten (mapAttrsToList (_: cfg: cfg.warnings) eachSite);
 
     assertions = flatten (mapAttrsToList (hostName: cfg:
     [{
-      assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
-      message = "Either services.dokuwiki.${hostName}.acl or services.dokuwiki.${hostName}.aclFile is mandatory if aclUse true";
+      assertion = cfg.mergedConfig.useacl -> (cfg.acl != null || cfg.aclFile != null);
+      message = "Either services.dokuwiki.sites.${hostName}.acl or services.dokuwiki.sites.${hostName}.aclFile is mandatory if settings.useacl is true";
     }
     {
-      assertion = cfg.usersFile != null -> cfg.aclUse != false;
-      message = "services.dokuwiki.${hostName}.aclUse must must be true if usersFile is not null";
+      assertion = cfg.usersFile != null -> cfg.mergedConfig.useacl != false;
+      message = "services.dokuwiki.sites.${hostName}.settings.useacl must must be true if usersFile is not null";
     }
     ]) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {
         inherit user;
-        inherit group;
-        phpEnv = {
-          DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig cfg}";
-          DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig cfg}";
-        } // optionalAttrs (cfg.usersFile != null) {
+        group = webserver.group;
+
+        phpPackage = mkPhpPackage cfg;
+        phpEnv = optionalAttrs (cfg.usersFile != null) {
           DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
-        } //optionalAttrs (cfg.aclUse) {
-          DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig cfg}" else "${toString cfg.aclFile}";
+        } // optionalAttrs (cfg.mergedConfig.useacl) {
+          DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig hostName cfg}" else "${toString cfg.aclFile}";
         };
 
         settings = {
-          "listen.mode" = "0660";
-          "listen.owner" = user;
-          "listen.group" = group;
+          "listen.owner" = webserver.user;
+          "listen.group" = webserver.group;
         } // cfg.poolConfig;
-      })) eachSite;
+      }
+    )) eachSite;
 
+  }
+
+  {
+    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
+      "d ${cfg.stateDir}/attic 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/cache 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/index 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/locks 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/log 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/media 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/media_attic 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/media_meta 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/meta 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/pages 0750 ${user} ${webserver.group} - -"
+      "d ${cfg.stateDir}/tmp 0750 ${user} ${webserver.group} - -"
+    ] ++ lib.optional (cfg.aclFile != null) "C ${cfg.aclFile} 0640 ${user} ${webserver.group} - ${pkg hostName cfg}/share/dokuwiki/conf/acl.auth.php.dist"
+    ++ lib.optional (cfg.usersFile != null) "C ${cfg.usersFile} 0640 ${user} ${webserver.group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
+    ) eachSite);
+
+    users.users.${user} = {
+      group = webserver.group;
+      isSystemUser = true;
+    };
+  }
+
+  (mkIf (cfg.webserver == "nginx") {
     services.nginx = {
       enable = true;
-      virtualHosts = mapAttrs (hostName: cfg:  mkMerge [ cfg.nginx {
-        root = mkForce "${pkg hostName cfg}/share/dokuwiki";
-        extraConfig = "fastcgi_param HTTPS on;";
+      virtualHosts = mapAttrs (hostName: cfg: {
+        serverName = mkDefault hostName;
+        root = "${pkg hostName cfg}/share/dokuwiki";
 
-        locations."~ /(conf/|bin/|inc/|install.php)" = {
-          extraConfig = "deny all;";
-        };
+        locations = {
+          "~ /(conf/|bin/|inc/|install.php)" = {
+            extraConfig = "deny all;";
+          };
 
-        locations."~ ^/data/" = {
-          root = "${cfg.stateDir}";
-          extraConfig = "internal;";
-        };
+          "~ ^/data/" = {
+            root = "${cfg.stateDir}";
+            extraConfig = "internal;";
+          };
 
-        locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
-          extraConfig = "expires 365d;";
-        };
+          "~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+            extraConfig = "expires 365d;";
+          };
 
-        locations."/" = {
-          priority = 1;
-          index = "doku.php";
-          extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
-        };
+          "/" = {
+            priority = 1;
+            index = "doku.php";
+            extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+          };
 
-        locations."@dokuwiki" = {
-          extraConfig = ''
+          "@dokuwiki" = {
+            extraConfig = ''
               # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
               rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
               rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
               rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
               rewrite ^/(.*) /doku.php?id=$1&$args last;
-          '';
-        };
+            '';
+          };
 
-        locations."~ \.php$" = {
-          extraConfig = ''
+          "~ \\.php$" = {
+            extraConfig = ''
               try_files $uri $uri/ /doku.php;
-              include ${pkgs.nginx}/conf/fastcgi_params;
+              include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
-              fastcgi_param HTTPS on;
-          '';
+              '';
+          };
+
         };
-      }]) eachSite;
+      }) eachSite;
     };
+  })
 
-    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
-      "d ${cfg.stateDir}/attic 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/cache 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/index 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/locks 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media_attic 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media_meta 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
-    ] ++ lib.optional (cfg.aclFile != null) "C ${cfg.aclFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/acl.auth.php.dist"
-    ++ lib.optional (cfg.usersFile != null) "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
-    ) eachSite);
+  (mkIf (cfg.webserver == "caddy") {
+    services.caddy = {
+      enable = true;
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair "http://${hostName}" {
+          extraConfig = ''
+            root * ${pkg hostName cfg}/share/dokuwiki
+            file_server
 
-    users.users.${user} = {
-      group = group;
-      isSystemUser = true;
+            encode zstd gzip
+            php_fastcgi unix/${config.services.phpfpm.pools."dokuwiki-${hostName}".socket}
+
+            @restrict_files {
+              path /data/* /conf/* /bin/* /inc/* /vendor/* /install.php
+            }
+
+            respond @restrict_files 404
+
+            @allow_media {
+              path_regexp path ^/_media/(.*)$
+            }
+            rewrite @allow_media /lib/exe/fetch.php?media=/{http.regexp.path.1}
+
+            @allow_detail   {
+              path /_detail*
+            }
+            rewrite @allow_detail /lib/exe/detail.php?media={path}
+
+            @allow_export   {
+              path /_export*
+              path_regexp export /([^/]+)/(.*)
+            }
+            rewrite @allow_export /doku.php?do=export_{http.regexp.export.1}&id={http.regexp.export.2}
+
+            try_files {path} {path}/ /doku.php?id={path}&{query}
+          '';
+        }
+      )) eachSite;
     };
-  };
+  })
+
+  ]);
+
+  meta.maintainers = with maintainers; [
+    _1000101
+    onny
+    dandellion
+    e1mo
+  ];
 }

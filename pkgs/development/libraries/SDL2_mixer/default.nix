@@ -1,35 +1,73 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
-, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug, opusfile
-, CoreServices, AudioUnit, AudioToolbox
-, enableNativeMidi ? false, fluidsynth ? null }:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, AudioToolbox
+, AudioUnit
+, CoreServices
+, SDL2
+, flac
+, fluidsynth
+, libmodplug
+, libogg
+, libvorbis
+, mpg123
+, opusfile
+, smpeg2
+, timidity
+}:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_mixer";
-  version = "2.0.4";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
-    sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
+    sha256 = "sha256-emuoakeGSM5hfjpekncYG8Z/fOmHZgXupq/9Sg1u6o8=";
   };
 
-  preAutoreconf = ''
-    aclocal
-  '';
+  configureFlags = [
+    "--disable-music-ogg-shared"
+    "--disable-music-flac-shared"
+    "--disable-music-mod-modplug-shared"
+    "--disable-music-mp3-mpg123-shared"
+    "--disable-music-opus-shared"
+    "--disable-music-midi-fluidsynth-shared"
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+    # override default path to allow MIDI files to be played
+    "--with-timidity-cfg=${timidity}/share/timidity/timidity.cfg"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-sdltest"
+    "--disable-smpegtest"
+  ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+  nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug opusfile ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    AudioToolbox
+    AudioUnit
+    CoreServices
+  ];
 
-  configureFlags = [ "--disable-music-ogg-shared" ]
-    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"
-    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
+  propagatedBuildInputs = [
+    SDL2
+    flac
+    fluidsynth
+    libmodplug
+    libogg
+    libvorbis
+    mpg123
+    opusfile
+    smpeg2
+    # MIDI patterns
+    timidity
+  ];
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "dev" ];
+
+  meta = with lib; {
     description = "SDL multi-channel audio mixer library";
     platforms = platforms.unix;
-    homepage = "https://www.libsdl.org/projects/SDL_mixer/";
+    homepage = "https://github.com/libsdl-org/SDL_mixer";
     maintainers = with maintainers; [ MP2E ];
     license = licenses.zlib;
   };

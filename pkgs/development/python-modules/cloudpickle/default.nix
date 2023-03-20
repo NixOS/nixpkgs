@@ -1,27 +1,46 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, psutil
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "1.2.2";
+  version = "2.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "922401d7140e133253ff5fab4faa4a1166416066453a783b00b507dca93f8859";
+    hash = "sha256-2JaEuN6eNKKkOzRg+8oH0J1uJc6FjfTVpEJAQDthePU=";
   };
 
-  buildInputs = [ pytest mock ];
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+  ];
 
-  # See README for tests invocation
-  checkPhase = ''
-    PYTHONPATH=$PYTHONPATH:'.:tests' py.test
-  '';
+  pythonImportsCheck = [
+    "cloudpickle"
+  ];
 
-  # TypeError: cannot serialize '_io.FileIO' object
-  doCheck = false;
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named '_cloudpickle_testpkg'
+    "tests/cloudpickle_test.py"
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # TypeError: cannot pickle 'EncodedFile' object
+    "test_pickling_special_file_handles"
+  ];
+
+  meta = with lib; {
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ ];
   };
 }

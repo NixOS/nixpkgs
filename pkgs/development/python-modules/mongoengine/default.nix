@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pymongo
+, isPy27
 , six
 , blinker
 , nose
@@ -11,13 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mongoengine";
-  version = "0.18.2";
+  version = "0.26.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0gx091h9rcykdj233srrl3dfc0ly52p6r4qc9ah6z0f694kmqj1v";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mPz9Nyoyke++e9vBWSKunc9VGHCP8pbmldgKty5HIMA=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +27,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pillow
     coverage
@@ -34,11 +36,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "coverage==4.2" "coverage"
+      --replace "coverage==4.2" "coverage" \
+      --replace "pymongo>=3.4,<=4.0" "pymongo"
   '';
 
   # tests require mongodb running in background
   doCheck = false;
+
+  pythonImportsCheck = [ "mongoengine" ];
 
   meta = with lib; {
     description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";

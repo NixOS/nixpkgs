@@ -1,33 +1,95 @@
-{ stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
-  libsodium, postgresql, gmp, foundationdb, ... }:
+{ lib
+, stdenv
+, atk
+, pkg-config
+, curl
+, darwin
+, libgit2
+, libssh2
+, openssl
+, sqlite
+, zlib
+, dbus
+, dbus-glib
+, gdk-pixbuf
+, cairo
+, python3
+, libsodium
+, postgresql
+, gmp
+, gobject-introspection
+, foundationdb
+, capnproto
+, nettle
+, gtk4
+, clang
+, llvmPackages
+, linux-pam
+, pango
+, cmake
+, glib
+, freetype
+, fontconfig
+, rdkafka
+, udev
+, libevdev
+, alsa-lib
+, graphene
+, ...
+}:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
+  alsa-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ alsa-lib ];
+  };
+
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };
 
+  cairo-sys-rs = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ cairo ];
+  };
+
+  capnp-rpc = attrs: {
+    nativeBuildInputs = [ capnproto ];
+  };
+
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   };
 
   libz-sys = attrs: {
-    buildInputs = [ pkgconfig zlib ];
-    extraLinkFlags = ["-L${zlib.out}/lib"];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zlib ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   curl-sys = attrs: {
-    buildInputs = [ pkgconfig zlib curl ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zlib curl ];
     propagatedBuildInputs = [ curl zlib ];
-    extraLinkFlags = ["-L${zlib.out}/lib"];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   dbus = attrs: {
-    buildInputs = [ pkgconfig dbus ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ dbus ];
+  };
+
+  evdev-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libevdev ];
+  };
+
+  expat-sys = attrs: {
+    nativeBuildInputs = [ cmake ];
   };
 
   foundationdb-sys = attrs: {
@@ -42,6 +104,16 @@ in
 
   foundationdb = attrs: {
     buildInputs = [ foundationdb ];
+  };
+
+  freetype-sys = attrs: {
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ freetype ];
+  };
+
+  glib-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ glib ];
   };
 
   gobject-sys = attrs: {
@@ -60,21 +132,56 @@ in
     buildInputs = [ gdk-pixbuf ];
   };
 
+  gtk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gdk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gsk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
-    buildInputs = [ pkgconfig openssl zlib libgit2 ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ openssl zlib libgit2 ];
   };
 
   libsqlite3-sys = attrs: {
-    buildInputs = [ pkgconfig sqlite ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ sqlite ];
   };
 
   libssh2-sys = attrs: {
-    buildInputs = [ pkgconfig openssl zlib libssh2 ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ openssl zlib libssh2 ];
   };
 
   libdbus-sys = attrs: {
-    buildInputs = [ pkgconfig dbus ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ dbus ];
+  };
+
+  libudev-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ udev ];
+  };
+
+  graphene-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ graphene gobject-introspection ];
+  };
+
+  nettle-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ nettle clang ];
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   };
 
   openssl = attrs: {
@@ -82,31 +189,94 @@ in
   };
 
   openssl-sys = attrs: {
-    buildInputs = [ pkgconfig openssl ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ openssl ];
+  };
+
+  pam-sys = attr: {
+    buildInputs = [ linux-pam ];
+  };
+
+  pango-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
   };
 
   pq-sys = attr: {
-    buildInputs = [ pkgconfig postgresql ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ postgresql ];
+  };
+
+  rdkafka-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ rdkafka ];
   };
 
   rink = attrs: {
     buildInputs = [ gmp ];
-    crateBin = [ {  name = "rink"; path = "src/bin/rink.rs"; } ];
+    crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
   };
 
   security-framework-sys = attr: {
-    propagatedBuildInputs = [ Security ];
+    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+  };
+
+  sequoia-openpgp = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-openpgp-ffi = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-ipc = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-guide = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  pangocairo-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
+  };
+
+  sequoia-store = attrs: {
+    nativeBuildInputs = [ capnproto ];
+    buildInputs = [ sqlite gmp ];
+  };
+
+  sequoia-sq = attrs: {
+    buildInputs = [ sqlite gmp ];
+  };
+
+  sequoia-tool = attrs: {
+    nativeBuildInputs = [ capnproto ];
+    buildInputs = [ sqlite gmp ];
   };
 
   serde_derive = attrs: {
-    buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+    buildInputs = lib.optional stdenv.isDarwin Security;
+  };
+
+  servo-fontconfig-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ freetype fontconfig ];
   };
 
   thrussh-libsodium = attrs: {
-    buildInputs = [ pkgconfig libsodium ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libsodium ];
   };
 
   xcb = attrs: {
     buildInputs = [ python3 ];
   };
+
+  atk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ atk ];
+  };
+
 }

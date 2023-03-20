@@ -1,28 +1,42 @@
-{ stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gmic
+, gmic-qt
+}:
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "2.9.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    sha256 = "1x43c1w2kzr6h3j7y3kwiwb7nba0iymck6bq9psvp53mh9xxrfd1";
+    hash = "sha256-MPkZGKewusCw5TsW5NOtnrjqEK2dxRSCal1fn7Yiaio=";
   };
-
-  installPhase = ''
-    install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
-
-    install -m 644 CImg.h $out/include/
-    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
-    cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
-    cp README.txt $doc/share/doc/cimg/
-  '';
 
   outputs = [ "out" "doc" ];
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    runHook preInstall
+
+    install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
+    install -m 644 CImg.h $out/include/
+    cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
+    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
+    cp README.txt $doc/share/doc/cimg/
+
+    runHook postInstall
+  '';
+
+  passthru.tests = {
+    # Need to update in lockstep.
+    inherit gmic gmic-qt;
+  };
+
+  meta = with lib; {
+    homepage = "http://cimg.eu/";
     description = "A small, open source, C++ toolkit for image processing";
     longDescription = ''
       CImg stands for Cool Image. It is easy to use, efficient and is intended
@@ -30,7 +44,6 @@ stdenv.mkDerivation rec {
       C++. Due to its generic conception, it can cover a wide range of image
       processing applications.
     '';
-    homepage = "http://cimg.eu/";
     license = licenses.cecill-c;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

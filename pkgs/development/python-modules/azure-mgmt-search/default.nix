@@ -2,35 +2,44 @@
 , buildPythonPackage
 , fetchPypi
 , msrest
-, msrestazure
 , azure-common
-, azure-mgmt-nspkg
+, azure-mgmt-core
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
-  version = "2.1.0";
+  version = "9.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0085c7qi9z1ayxd8683ck79nfnldkrwl481hzav84flyg8d0m94j";
+    hash = "sha256-Gc+qoTa1EE4/YmJvUSqVG+zZ50wfohvWOe/fLJ/vgb0=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
+    msrest
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "azure.mgmt.search"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Search Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

@@ -1,26 +1,81 @@
-{ stdenv, fetchurl, xorg, xorgserver, qt4, libGLU, libGL, geis, qmake4Hook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, systemd
+, libinput
+, pugixml
+, cairo
+, xorg
+, gtk3-x11
+, pcre
+, pkg-config
+, cmake
+, pantheon
+, withPantheon ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
-  version = "1.1.1";
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/touchegg/${pname}-${version}.tar.gz";
-    sha256 = "95734815c7219d9a71282f3144b3526f2542b4fa270a8e69d644722d024b4038";
+  version = "2.0.16";
+
+  src = fetchFromGitHub {
+    owner = "JoseExposito";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-/0XeFW0cdS1/UaE/z2FROwk2dTyZMqXjiBzt62x8f8o=";
   };
 
-  buildInputs = [ xorgserver libGLU libGL xorg.libX11 xorg.libXtst xorg.libXext qt4 geis ];
+  patches = lib.optionals withPantheon [
+    # Required for the next patch to apply
+    # Reverts https://github.com/JoseExposito/touchegg/pull/603
+    (fetchpatch {
+      url = "https://github.com/JoseExposito/touchegg/commit/34e947181d84620021601e7f28deb1983a154da8.patch";
+      sha256 = "sha256-qbWwmEzVXvDAhhrGvMkKN4YNtnFfRW+Yra+i6VEQX4g=";
+      revert = true;
+    })
+    # Disable per-application gesture by default to make sure the default
+    # config does not conflict with Pantheon switchboard settings.
+    (fetchpatch {
+      url = "https://github.com/elementary/os-patches/commit/7d9b133e02132d7f13cf2fe850b2fe4c015c3c5e.patch";
+      sha256 = "sha256-ZOGVkxiXoTORXC6doz5r9IObAbYjhsDjgg3HtzlTSUc=";
+    })
+  ];
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
-  preConfigure = ''
-    sed -e "s@/usr/@$out/@g" -i $(find . -name touchegg.pro)
-    sed -e "s@/usr/@$out/@g" -i $(find ./src/touchegg/config/ -name Config.cpp)
-  '';
+  buildInputs = [
+    systemd
+    libinput
+    pugixml
+    cairo
+    gtk3-x11
+    pcre
+  ] ++ (with xorg; [
+    libX11
+    libXtst
+    libXrandr
+    libXi
+    libXdmcp
+    libpthreadstubs
+    libxcb
+  ]);
 
-  meta = {
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     homepage = "https://github.com/JoseExposito/touchegg";
-    description = "Macro binding for touch surfaces";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    description = "Linux multi-touch gesture recognizer";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.pantheon.members;
   };
 }

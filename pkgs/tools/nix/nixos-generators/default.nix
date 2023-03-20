@@ -1,26 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, jq, findutils, nix  }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, jq, findutils, nix, bash }:
 
 stdenv.mkDerivation rec {
   pname = "nixos-generators";
-  version = "1.1.0";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
     rev = version;
-    sha256 = "04cfhj42c2m7lafir9ksh36n3nhx3x20lhamyk4zc5p3pm1xdbs6";
+    sha256 = "sha256-WecDwDY/hEcDQYzFnccCNa+5Umht0lfjx/d1qGDy/rQ=";
   };
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
   installFlags = [ "PREFIX=$(out)" ];
   postFixup = ''
     wrapProgram $out/bin/nixos-generate \
       --prefix PATH : ${lib.makeBinPath [ jq coreutils findutils nix ] }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of image builders";
     homepage    = "https://github.com/nix-community/nixos-generators";
     license     = licenses.mit;
     maintainers = with maintainers; [ lassulus ];
+    mainProgram = "nixos-generate";
     platforms   = platforms.unix;
   };
 }

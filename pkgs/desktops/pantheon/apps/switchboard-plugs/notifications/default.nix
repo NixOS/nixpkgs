@@ -1,10 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
-, pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -15,34 +16,28 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.1.6";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1ikq058svdan0whg4ks35m50apvbmzcz7h2wznxdbsimczzvj5sz";
+    sha256 = "0zzhgs8m1y7ab31hbn7v8g8k7rx51gqajl243zmysn86lfqk8iay";
   };
 
   patches = [
-    # Fix do not disturb on NixOS
-    # https://github.com/elementary/switchboard-plug-notifications/pull/66
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/switchboard-plug-notifications/pull/83
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-notifications/commit/c306366b39c3199f0b64eda73419005fcb5e29b8.patch";
-      sha256 = "0m018rfw5iv582sw6qgwc8lzn0j32ix1w47fvlfmx0kw04irl2x3";
+      url = "https://github.com/elementary/switchboard-plug-notifications/commit/2e0320aab62b6932e8ef5f941d02e244de381957.patch";
+      sha256 = "0rcamasq837grck0i2yx6psggzrhv7p7m3mra5l0k9zsjxgar92v";
     })
   ];
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -54,11 +49,15 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Switchboard Notifications Plug";
     homepage = "https://github.com/elementary/switchboard-plug-notifications";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

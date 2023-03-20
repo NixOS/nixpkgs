@@ -1,19 +1,22 @@
-{ stdenv
+{ lib, stdenv
+, makeWrapper
 , awscli
 , jq
-, fetchgit
+, unixtools
+, fetchFromGitHub
 , installShellFiles
 , bashInteractive
 }:
 
 stdenv.mkDerivation rec {
   pname = "bash-my-aws";
-  version = "20200111";
+  version = "unstable-2020-01-11";
 
-  src = fetchgit {
-    url = "https://github.com/bash-my-aws/bash-my-aws";
+  src = fetchFromGitHub {
+    owner = "bash-my-aws";
+    repo = "bash-my-aws";
     rev = "5a97ce2c22affca1299022a5afa109d7b62242ba";
-    sha256 = "459bda8b244af059d96c7c8b916cf956b01cb2732d1c2888a3ae06a4d660bea6";
+    sha256 = "sha256-RZvaiyRK8FnZbHyLkWz5VrAcsnMtHCiIo64GpNZgvqY=";
   };
 
   dontConfigure = true;
@@ -22,9 +25,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     awscli
     jq
+    unixtools.column
     bashInteractive
   ];
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   checkPhase = ''
     pushd test
@@ -50,6 +54,7 @@ stdenv.mkDerivation rec {
         --replace .bash-my-aws ""
     substituteInPlace bin/bma \
         --replace '~/.bash-my-aws' $out
+    wrapProgram $out/bin/bma --prefix PATH : ${lib.makeBinPath [awscli jq unixtools.column bashInteractive ]}
     installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
     chmod +x $out/lib/*
     patchShebangs --host $out/lib
@@ -62,7 +67,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bash-my-aws.org";
     description = "CLI commands for AWS";
     license = licenses.mit;

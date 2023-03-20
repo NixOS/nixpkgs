@@ -1,6 +1,12 @@
-{ stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, ncurses, bat
-# batgrep and batwatch
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bat
+# batdiff, batgrep, and batwatch
+, coreutils
+, getconf
 , less
+# tests
+, bash
+, zsh
+, fish
 # batgrep
 , ripgrep
 # prettybat
@@ -10,34 +16,35 @@
 , withRustFmt ? rustfmt != null, rustfmt ? null
 # batwatch
 , withEntr ? entr != null, entr ? null
- }:
+# batdiff
+, gitMinimal
+, withDelta ? delta != null, delta ? null
+# batman
+, util-linux
+}:
 
 let
   # Core derivation that all the others are based on.
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "20200408";
+    version = "2021.04.06";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "184d5rwasfpgbj2k98alg3wy8jmzna2dgfik98w2a297ky67s51v";
+      sha256 = "sha256-MphI2n+oHZrw8bPohNGeGdST5LS1c6s/rKqtpcR9cLo=";
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ bash makeWrapper ];
+    # bat needs to be in the PATH during building so EXECUTABLE_BAT picks it up
+    nativeBuildInputs = [ bat ];
 
     dontConfigure = true;
 
     postPatch = ''
-      substituteInPlace lib/constants.sh \
-        --replace 'EXECUTABLE_BAT="bat"' 'EXECUTABLE_BAT="${bat}/bin/bat"'
-
       patchShebangs --build test.sh test/shimexec .test-framework/bin/best.sh
-      wrapProgram .test-framework/bin/best.sh \
-        --prefix PATH : "${ncurses}/bin"
     '';
 
     buildPhase = ''
@@ -48,6 +55,7 @@ let
 
     # Run the library tests as they don't have external dependencies
     doCheck = true;
+    nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
     checkPhase = ''
       runHook preCheck
       # test list repeats suites. Unique them
@@ -55,12 +63,12 @@ let
       while read -r action arg _; do
         [[ "$action" == "test_suite" && "$arg" == lib_* ]] &&
         test_suites+=(["$arg"]=1)
-      done <<<"$(bash ./test.sh --compiled --list --porcelain)"
+      done <<<"$(./test.sh --compiled --list --porcelain)"
       (( ''${#test_suites[@]} != 0 )) || {
         echo "Couldn't find any library test suites"
         exit 1
       }
-      bash ./test.sh --compiled $(printf -- "--suite %q\n" "''${!test_suites[@]}")
+      ./test.sh --compiled $(printf -- "--suite %q\n" "''${!test_suites[@]}")
       runHook postCheck
     '';
 
@@ -74,7 +82,7 @@ let
     # The per-script derivations will go ahead and patch the files they actually install.
     dontPatchShebangs = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Bash scripts that integrate bat with various command line tools";
       homepage    = "https://github.com/eth-p/bat-extras";
       license     = with licenses; [ mit ];
@@ -91,7 +99,7 @@ let
 
       src = core;
 
-      nativeBuildInputs = [ bash makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       # Make the dependencies available to the tests.
       buildInputs = dependencies;
 
@@ -104,6 +112,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
+      nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}
@@ -114,9 +123,9 @@ let
         runHook preInstall
         mkdir -p $out/bin
         cp -p bin/${name} $out/bin/${name}
-      '' + stdenv.lib.optionalString (dependencies != []) ''
+      '' + lib.optionalString (dependencies != []) ''
         wrapProgram $out/bin/${name} \
-          --prefix PATH : ${stdenv.lib.makeBinPath dependencies}
+          --prefix PATH : ${lib.makeBinPath dependencies}
       '' + ''
         runHook postInstall
       '';
@@ -128,20 +137,17 @@ let
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;
-    stdenv.lib.optional cond dep;
+    lib.optional cond dep;
 in
 {
-  batgrep = script "batgrep" [ less ripgrep ];
-  batman = (script "batman" []).overrideAttrs (drv: {
-    doCheck = stdenv.isDarwin; # test fails on Linux due to SIGPIPE (eth-p/bat-extras#19)
-  });
-  batwatch = script "batwatch" ([ less ] ++ optionalDep withEntr entr);
-  prettybat = (script "prettybat" ([]
+  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
+  batgrep = script "batgrep" [ less coreutils ripgrep ];
+  batman = script "batman" [ util-linux ];
+  batpipe = script "batpipe" [ less ];
+  batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
+  prettybat = script "prettybat" ([]
     ++ optionalDep withShFmt shfmt
     ++ optionalDep withPrettier nodePackages.prettier
     ++ optionalDep withClangTools clang-tools
-    ++ optionalDep withRustFmt rustfmt)
-  ).overrideAttrs (drv: {
-    doCheck = stdenv.isDarwin; # test fails on Linux due to SIGPIPE (eth-p/bat-extras#19)
-  });
+    ++ optionalDep withRustFmt rustfmt);
 }

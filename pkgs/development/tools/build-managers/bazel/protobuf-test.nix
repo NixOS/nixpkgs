@@ -3,9 +3,11 @@
 , bazelTest
 , fetchFromGitHub
 , fetchurl
-, gccStdenv
+, stdenv
+, darwin
 , lib
 , openjdk8
+, jdk11_headless
 , runLocal
 , runtimeShell
 , writeScript
@@ -17,15 +19,29 @@ let
   com_google_protobuf = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
-    rev = "v3.7.0";
-    sha256 = "0nlxif4cajqllsj2vdh7zp14ag48fb8lsa64zmq8625q9m2lcmdh";
+    rev = "v3.13.0";
+    sha256 = "1nqsvi2yfr93kiwlinz8z7c68ilg1j75b2vcpzxzvripxx5h6xhd";
   };
 
   bazel_skylib = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-skylib";
-    rev = "f83cb8dd6f5658bc574ccd873e25197055265d1c";
-    sha256 = "091fb0ky0956wgv8gghy9ay3yfx6497mb72qvibf0y9dllmxyn9l";
+    rev = "2ec2e6d715e993d96ad6222770805b5bd25399ae";
+    sha256 = "1z2r2vx6kj102zvp3j032djyv99ski1x1sl4i3p6mswnzrzna86s";
+  };
+
+  rules_python = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_python";
+    rev = "c8c79aae9aa1b61d199ad03d5fe06338febd0774";
+    sha256 = "1zn58wv5wcylpi0xj7riw34i1jjpqahanxx8y9srwrv0v93b6pqz";
+  };
+
+  rules_proto = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_proto";
+    rev = "a0761ed101b939e19d83b2da5f59034bffc19c12";
+    sha256 = "09lqfj5fxm1fywxr5w8pnpqd859gb6751jka9fhxjxjzs33glhqf";
   };
 
   net_zlib = fetchurl rec {
@@ -40,7 +56,9 @@ let
 
     load("//:proto-support.bzl", "protobuf_deps")
     protobuf_deps()
-  '';
+    load("@rules_proto//proto:repositories.bzl", "rules_proto_toolchains")
+    rules_proto_toolchains()
+    '';
 
   protoSupport = writeText "proto-support.bzl" ''
     """Load dependencies needed to compile the protobuf library as a 3rd-party consumer."""
@@ -62,13 +80,17 @@ let
                 name = "bazel_skylib",
                 path = "${bazel_skylib}",
             )
-
-            native.bind(
-                name = "zlib",
-                actual = "@net_zlib//:zlib",
+            native.local_repository(
+                name = "rules_proto",
+                path = "${rules_proto}",
             )
+            native.local_repository(
+                name = "rules_python",
+                path = "${rules_python}",
+            )
+
             http_archive(
-                name = "net_zlib",
+                name = "zlib",
                 build_file = "@com_google_protobuf//:third_party/zlib.BUILD",
                 sha256 = "${net_zlib.sha256}",
                 strip_prefix = "zlib-1.2.11",
@@ -89,6 +111,8 @@ let
   '';
 
   personBUILD = writeText "BUILD" ''
+    load("@rules_proto//proto:defs.bzl", "proto_library")
+
     proto_library(
         name = "person_proto",
         srcs = ["person.proto"],
@@ -109,9 +133,10 @@ let
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
-    export CXX='${gccStdenv.cc}/bin/g++'
-    export LD='${gccStdenv.cc}/bin/ld'
-    export CC='${gccStdenv.cc}/bin/gcc'
+    export CXX='${stdenv.cc}/bin/clang++'
+    export LD='${darwin.cctools}/bin/ld'
+    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
     # See: https://github.com/bazelbuild/bazel/issues/4231
@@ -129,7 +154,7 @@ let
     cp ${personProto} $out/person/person.proto
     cp ${personBUILD} $out/person/BUILD.bazel
   ''
-  + (lib.optionalString gccStdenv.isDarwin ''
+  + (lib.optionalString stdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
@@ -138,16 +163,24 @@ let
     name = "bazel-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [ openjdk8 ];
+    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
     bazelScript = ''
       ${bazel}/bin/bazel \
         build \
         --distdir=${distDir} \
-          --host_javabase='@local_jdk//:jdk' \
-          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-          --javabase='@local_jdk//:jdk' \
-          --verbose_failures \
-          //...
+        --verbose_failures \
+        --curses=no \
+        --sandbox_debug \
+        --strict_java_deps=off \
+        --strict_proto_deps=off \
+        //... \
+    '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
+    '' + lib.optionalString (stdenv.isDarwin) ''
+        --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
+        --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
     '';
   };
 

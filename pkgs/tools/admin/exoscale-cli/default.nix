@@ -1,32 +1,46 @@
-{ stdenv, buildGo114Package, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGo114Package rec {
+buildGoModule rec {
   pname = "exoscale-cli";
-  version = "1.12.0";
+  version = "1.63.0";
 
   src = fetchFromGitHub {
-    owner  = "exoscale";
-    repo   = "cli";
-    rev    = "v${version}";
-    sha256 = "04ym7mfv565icj3lmd2nrvq9asawwmmzg09681pj9py61ws56bxr";
+    owner = "exoscale";
+    repo = "cli";
+    rev = "v${version}";
+    sha256 = "sha256-YRpaPUKExHewuDqIlXjS32Bu6eMHam153Cfbv+crs9M=";
   };
 
-  goPackagePath = "github.com/exoscale/cli";
-  goDeps = ./deps.nix;
+  vendorSha256 = null;
 
-  # ensures only the cli binary is built and we don't clutter bin/ with submodules
-  subPackages = [ "." ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   # we need to rename the resulting binary but can't use buildFlags with -o here
   # because these are passed to "go install" which does not recognize -o
   postBuild = ''
-    mv go/bin/cli go/bin/exo
+    mv $GOPATH/bin/cli $GOPATH/bin/exo
+
+    mkdir -p manpage
+    $GOPATH/bin/docs --man-page
+    rm $GOPATH/bin/docs
+
+    $GOPATH/bin/completion bash
+    $GOPATH/bin/completion zsh
+    rm $GOPATH/bin/completion
+  '';
+
+  postInstall = ''
+    installManPage manpage/*
+    installShellCompletion --cmd exo --bash bash_completion --zsh zsh_completion
   '';
 
   meta = {
     description = "Command-line tool for everything at Exoscale: compute, storage, dns";
-    homepage    = "https://github.com/exoscale/cli";
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ dramaturg ];
+    homepage = "https://github.com/exoscale/cli";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ viraptor ];
+    mainProgram = "exo";
   };
 }

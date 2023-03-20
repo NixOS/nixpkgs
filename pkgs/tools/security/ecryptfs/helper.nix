@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , python2
@@ -13,9 +13,9 @@ stdenv.mkDerivation {
     sha256 = "0gp4m22zc80814ng80s38hp930aa8r4zqihr7jr23m0m2iq4pdpg";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # Do not hardcode PATH to ${ecryptfs} as we need the script to invoke executables from /run/wrappers/bin
   installPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     makeWrapper "${python2.interpreter}" "$out/bin/ecryptfs-helper" --add-flags "$out/libexec/ecryptfs-helper.py"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description    = "Helper script to create/mount/unemount encrypted directories using eCryptfs without needing root permissions";
     license        = licenses.gpl2Plus;
     maintainers    = with maintainers; [ obadz ];

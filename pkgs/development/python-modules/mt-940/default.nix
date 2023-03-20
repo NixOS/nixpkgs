@@ -3,21 +3,25 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.19.0";
+  version = "4.28.0";
   pname = "mt-940";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d109e8dc4b490a4b92ec0153713710eb067b36b350ce1ff60c406afddc7d3cd";
+    hash = "sha256-ydTOaijDmA2ogIONzRMMoz+5jr99qxWM1zzGGzg7f2Q=";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pyyaml pytest ];
+  nativeCheckInputs = [ pyyaml pytest ];
 
+  # requires tests files that are not present
+  doCheck = false;
   checkPhase = ''
     py.test
   '';
+
+  pythonImportsCheck = [ "mt940" ];
 
   meta = with lib; {
     description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";

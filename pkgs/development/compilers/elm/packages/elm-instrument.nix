@@ -1,8 +1,8 @@
-{ mkDerivation, ansi-terminal, ansi-wl-pprint, base, binary
+{ mkDerivation, fetchpatch, ansi-terminal, ansi-wl-pprint, base, binary
 , bytestring, Cabal, cmark, containers, directory, elm-format
 , fetchgit, filepath, free, HUnit, indents, json, mtl
 , optparse-applicative, parsec, process, QuickCheck, quickcheck-io
-, split, stdenv, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
+, split, lib, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
 , text
 }:
 mkDerivation {
@@ -14,6 +14,15 @@ mkDerivation {
     rev = "63e15bb5ec5f812e248e61b6944189fa4a0aee4e";
     fetchSubmodules = true;
   };
+  patches = [
+    # Update code after breaking change in optparse-applicative
+    # https://github.com/zwilias/elm-instrument/pull/5
+    (fetchpatch {
+      name = "update-optparse-applicative.patch";
+      url = "https://github.com/mdevlamynck/elm-instrument/commit/c548709d4818aeef315528e842eaf4c5b34b59b4.patch";
+      sha256 = "0ln7ik09n3r3hk7jmwwm46kz660mvxfa71120rkbbaib2falfhsc";
+    })
+  ];
   isLibrary = true;
   isExecutable = true;
   setupHaskellDepends = [ base Cabal directory filepath process ];
@@ -30,5 +39,5 @@ mkDerivation {
   ];
   homepage = "https://elm-lang.org";
   description = "Instrumentation library for Elm";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

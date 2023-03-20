@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , intltool
 , vala
 , wrapGAppsHook
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cmake
     intltool
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
     libarchive
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    inherit gtk3;
+  };
+
+  meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
     homepage = "https://www.midori-browser.org/";
     license = with licenses; [ lgpl21Plus ];

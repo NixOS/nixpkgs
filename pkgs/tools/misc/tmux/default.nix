@@ -1,11 +1,15 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
-, pkgconfig
-, makeWrapper
 , bison
-, ncurses
 , libevent
+, ncurses
+, pkg-config
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
+, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 }:
 
 let
@@ -13,15 +17,15 @@ let
   bashCompletion = fetchFromGitHub {
     owner = "imomaliev";
     repo = "tmux-bash-completion";
-    rev = "fcda450d452f07d36d2f9f27e7e863ba5241200d";
-    sha256 = "092jpkhggjqspmknw7h3icm0154rg21mkhbc71j5bxfmfjdxmya8";
+    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
+    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.1b";
+  version = "3.3a";
 
   outputs = [ "out" "man" ];
 
@@ -29,11 +33,15 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0jvyq4r691bn0wsr8i6c0q0lzss25vm9nx8sv3fhw9cs63ncq04y";
+    sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
 
+  patches = [
+    ./CVE-2022-47016.patch
+  ];
+
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     bison
   ];
@@ -41,13 +49,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-    makeWrapper
-  ];
+  ] ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withUtf8proc [ utf8proc ]
+  ++ lib.optionals withUtempter [ libutempter ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ];
+  ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
+  ++ lib.optionals withUtempter [ "--enable-utempter" ]
+  ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
@@ -55,26 +68,23 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://tmux.github.io/";
+    homepage = "https://tmux.github.io/";
     description = "Terminal multiplexer";
-
-    longDescription =
-      '' tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
-
-          * A powerful, consistent, well-documented and easily scriptable command interface.
-          * A window may be split horizontally and vertically into panes.
-          * Panes can be freely moved and resized, or arranged into preset layouts.
-          * Support for UTF-8 and 256-colour terminals.
-          * Copy and paste with multiple buffers.
-          * Interactive menus to select windows, sessions or clients.
-          * Change the current window by searching for text in the target.
-          * Terminal locking, manually or after a timeout.
-          * A clean, easily extended, BSD-licensed codebase, under active development.
-      '';
-
-    license = stdenv.lib.licenses.bsd3;
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thammers fpletz ];
+    longDescription = ''
+      tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
+        * A powerful, consistent, well-documented and easily scriptable command interface.
+        * A window may be split horizontally and vertically into panes.
+        * Panes can be freely moved and resized, or arranged into preset layouts.
+        * Support for UTF-8 and 256-colour terminals.
+        * Copy and paste with multiple buffers.
+        * Interactive menus to select windows, sessions or clients.
+        * Change the current window by searching for text in the target.
+        * Terminal locking, manually or after a timeout.
+        * A clean, easily extended, BSD-licensed codebase, under active development.
+    '';
+    changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thammers fpletz SuperSandro2000 srapenne ];
   };
 }

@@ -1,34 +1,59 @@
-{ lib, buildPythonPackage, fetchPypi, xmltodict, requests
-
-# Test dependencies
-, pytest, pytestcov, coveralls, pylint, flake8, graphviz, mock, sphinx
-, sphinx_rtd_theme
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, graphviz
+, appdirs
+, ifaddr
+, pythonOlder
+, lxml
+, mock
+, nix-update-script
+, pytestCheckHook
+, requests
+, requests-mock
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.19";
+  version = "0.29.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0dgca286vhrabm4r4jj545k895z6w2c70ars06vrjhf9cpgg7qck";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "SoCo";
+    repo = "SoCo";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Kp9rG7fJzvmnLpjVulf9kODoABdjaaHvgyed9I+FHVA=";
   };
 
-  postPatch = ''
-    # https://github.com/SoCo/SoCo/pull/670
-    substituteInPlace requirements-dev.txt \
-      --replace "pytest-cov>=2.4.0,<2.6" "pytest-cov>=2.4.0"
-  '';
-
-  propagatedBuildInputs = [ xmltodict requests ];
-  checkInputs = [
-    pytest pytestcov coveralls pylint flake8 graphviz mock sphinx
-    sphinx_rtd_theme
+  propagatedBuildInputs = [
+    appdirs
+    ifaddr
+    lxml
+    requests
+    xmltodict
   ];
 
-  meta = {
+  nativeCheckInputs = [
+    pytestCheckHook
+    graphviz
+    mock
+    requests-mock
+  ];
+
+  pythonImportsCheck = [
+    "soco"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+    description = "CLI and library to control Sonos speakers";
     homepage = "http://python-soco.com/";
-    description = "A CLI and library to control Sonos speakers";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/SoCo/SoCo/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovesegfault ];
   };
 }

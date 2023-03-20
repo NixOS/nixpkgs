@@ -1,11 +1,8 @@
-{ stdenv, fetchbzr, xlibsWrapper }:
+{ lib, stdenv, fetchbzr, xorg }:
 
-let
-  version = "4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xwinwrap";
-  inherit version;
+  version = "4";
 
   src = fetchbzr {
     url = "https://code.launchpad.net/~shantanu-goel/xwinwrap/devel";
@@ -14,7 +11,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    xlibsWrapper
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
   ];
 
   buildPhase = if stdenv.hostPlatform.system == "x86_64-linux" then ''
@@ -28,7 +27,7 @@ stdenv.mkDerivation {
     mv */xwinwrap $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility that allows you to use an animated X window as the wallpaper";
     longDescription = ''
       XWinWrap is a small utility written a loooong time ago that allowed you to

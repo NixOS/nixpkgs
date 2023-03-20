@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , colord
 , gettext
@@ -7,35 +8,37 @@
 , gobject-introspection
 , gtk-doc
 , docbook-xsl-ns
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_412
 , libxslt
 , glib
+, withGtk4 ? false
 , gtk3
-, pkgconfig
+, gtk4
+, pkg-config
 , lcms2
 }:
 
 stdenv.mkDerivation rec {
   pname = "colord-gtk";
-  version = "0.2.0";
+  version = "0.3.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    sha256 = "05y78jbcbar22sgyhzffhv98dbpl4v6k8j9p807h17y6ighglk1a";
+    sha256 = "uUZmVtZtmm/7wt0E+pHI9q9Ra/nvqstpdE7sD1bzwdA=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja
     gobject-introspection
     gtk-doc
     docbook-xsl-ns
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_412
     libxslt
   ];
@@ -47,12 +50,21 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     colord
+  ] ++ (if withGtk4 then [
+    gtk4
+  ] else [
     gtk3
+  ]);
+
+  mesonFlags = [
+    "-Dgtk4=${lib.boolToString withGtk4}"
+    "-Dgtk3=${lib.boolToString (!withGtk4)}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";
     license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

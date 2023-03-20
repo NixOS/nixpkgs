@@ -1,20 +1,83 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib
+, aiohttp
+, aioredis
+, buildPythonPackage
+, coloredlogs
+, fastapi
+, fetchFromGitHub
+, pillow
+, psutil
+, pytestCheckHook
+, pythonOlder
+, redis
+, requests
+, ujson
+, uvicorn
+, watchdog
+}:
 
 buildPythonPackage rec {
-  pname = "pyTelegramBotAPI";
-  version = "3.6.7";
+  pname = "pytelegrambotapi";
+  version = "4.10.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0spn3gjbppyl4b7kqnc8g30qss72dcb1d6ap2bizyam5wn591z8f";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "eternnoir";
+    repo = "pyTelegramBotAPI";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uzdhNCMl5NdOSHVMZe4BcpCjHQCyaTqlTdWTtzPqj04=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  passthru.optional-dependencies = {
+    json = [
+      ujson
+    ];
+    PIL = [
+      pillow
+    ];
+    redis = [
+      redis
+    ];
+    aioredis = [
+      aioredis
+    ];
+    aiohttp = [
+      aiohttp
+    ];
+    fastapi = [
+      fastapi
+    ];
+    uvicorn = [
+      uvicorn
+    ];
+    psutil = [
+      psutil
+    ];
+    coloredlogs = [
+      coloredlogs
+    ];
+    watchdog = [
+      watchdog
+    ];
+  };
+
+  checkInputs = [
+    pytestCheckHook
+    requests
+  ] ++ passthru.optional-dependencies.watchdog
+  ++ passthru.optional-dependencies.aiohttp;
+
+  pythonImportsCheck = [
+    "telebot"
+  ];
 
   meta = with lib; {
+    description = "Python implementation for the Telegram Bot API";
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";
-    description = "A simple, but extensible Python implementation for the Telegram Bot API";
-    license = licenses.gpl2;
+    changelog = "https://github.com/eternnoir/pyTelegramBotAPI/releases/tag/${version}";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ das_j ];
   };
 }

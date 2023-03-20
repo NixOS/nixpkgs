@@ -1,230 +1,135 @@
-{ lib, fetchurl, fetchFromGitHub, callPackage
+{ lib
+, aws-sdk-cpp
+, boehmgc
+, callPackage
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, fetchpatch2
+, Security
+
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, boehmgc
-, stdenv, llvmPackages_6
 }:
-
 let
+  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
-common =
-  { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , bash, coreutils, gzip, gnutar
-  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
-  , jq, libarchive, rustc, cargo
-  # Used by tests
-  , gmock
-  , busybox-sandbox-shell
-  , storeDir
-  , stateDir
-  , confDir
-  , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-  , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
+  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
+    # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+    patches = (drv.patches or [ ]) ++ [ ./patches/boehmgc-coroutine-sp-fallback.patch ];
+  });
 
-  , name, suffix ? "", src, crates ? null
+  aws-sdk-cpp-nix = (aws-sdk-cpp.override {
+    apis = [ "s3" "transfer" ];
+    customMemoryManagement = false;
+  }).overrideDerivation (args: {
+    patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
 
-  }:
-  let
-     sh = busybox-sandbox-shell;
-     nix = stdenv.mkDerivation rec {
-      inherit name src;
-      version = lib.getVersion name;
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = null;
+  });
 
-      is24 = lib.versionAtLeast version "2.4pre";
-      isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
-
-      VERSION_SUFFIX = suffix;
-
-      outputs = [ "out" "dev" "man" "doc" ];
-
-      nativeBuildInputs =
-        [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
-                                docbook5 docbook_xsl_ns jq gmock ];
-
-      buildInputs =
-        [ curl openssl sqlite xz bzip2 nlohmann_json
-          brotli boost editline
-        ]
-        ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive rustc cargo ]
-        ++ lib.optional withLibseccomp libseccomp
-        ++ lib.optional withAWS
-            ((aws-sdk-cpp.override {
-              apis = ["s3" "transfer"];
-              customMemoryManagement = false;
-            }).overrideDerivation (args: {
-              patches = args.patches or [] ++ [(fetchpatch {
-                url = "https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch";
-                sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
-              })];
-            }));
-
-      propagatedBuildInputs = [ boehmgc ];
-
-      # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
-
-      preConfigure =
-        # Copy libboost_context so we don't get all of Boost in our closure.
-        # https://github.com/NixOS/nixpkgs/issues/45462
-        ''
-          mkdir -p $out/lib
-          cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
-          rm -f $out/lib/*.a
-          ${lib.optionalString stdenv.isLinux ''
-            chmod u+w $out/lib/*.so.*
-            patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
-          ''}
-        '' +
-        # Unpack the Rust crates.
-        lib.optionalString is24 ''
-          tar xvf ${crates} -C nix-rust/
-          mv nix-rust/nix-vendored-crates* nix-rust/vendor
-        '' +
-        # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
-        # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
-          mkdir tmp/
-          substitute corepkgs/config.nix.in tmp/config.nix.in \
-            --subst-var-by bash ${bash}/bin/bash \
-            --subst-var-by coreutils ${coreutils}/bin \
-            --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
-            --subst-var-by gzip ${gzip}/bin/gzip \
-            --subst-var-by xz ${xz}/bin/xz \
-            --subst-var-by tar ${gnutar}/bin/tar \
-            --subst-var-by tr ${coreutils}/bin/tr
-          mv tmp/config.nix.in corepkgs/config.nix.in
-          '';
-
-      configureFlags =
-        [ "--with-store-dir=${storeDir}"
-          "--localstatedir=${stateDir}"
-          "--sysconfdir=${confDir}"
-          "--disable-init-state"
-          "--enable-gc"
-        ]
-        ++ lib.optionals stdenv.isLinux [
-          "--with-sandbox-shell=${sh}/bin/busybox"
-        ]
-        ++ lib.optional (
-            stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
-        ) ''--with-system=${stdenv.hostPlatform.nix.system}''
-           # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-        ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
-
-      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
-
-      installFlags = [ "sysconfdir=$(out)/etc" ];
-
-      doInstallCheck = true; # not cross
-
-      # socket path becomes too long otherwise
-      preInstallCheck = lib.optional stdenv.isDarwin ''
-        export TMPDIR=$NIX_BUILD_TOP
-      '';
-
-      separateDebugInfo = stdenv.isLinux;
-
-      enableParallelBuilding = true;
-
-      meta = {
-        description = "Powerful package manager that makes package management reliable and reproducible";
-        longDescription = ''
-          Nix is a powerful package manager for Linux and other Unix systems that
-          makes package management reliable and reproducible. It provides atomic
-          upgrades and rollbacks, side-by-side installation of multiple versions of
-          a package, multi-user package management and easy setup of build
-          environments.
-        '';
-        homepage = "https://nixos.org/";
-        license = stdenv.lib.licenses.lgpl2Plus;
-        maintainers = [ stdenv.lib.maintainers.eelco ];
-        platforms = stdenv.lib.platforms.unix;
-        outputsToInstall = [ "out" "man" ];
+  common = args:
+    callPackage
+      (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
+      {
+        inherit Security storeDir stateDir confDir;
+        boehmgc = boehmgc-nix;
+        aws-sdk-cpp = aws-sdk-cpp-nix;
       };
 
-      passthru = {
-        perl-bindings = stdenv.mkDerivation {
-          pname = "nix-perl";
-          inherit version;
+  # https://github.com/NixOS/nix/pull/7585
+  patch-monitorfdhup = fetchpatch2 {
+    name = "nix-7585-monitor-fd-hup.patch";
+    url = "https://github.com/NixOS/nix/commit/1df3d62c769dc68c279e89f68fdd3723ed3bcb5a.patch";
+    sha256 = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
+  };
 
-          inherit src;
+  # https://github.com/NixOS/nix/pull/7473
+  patch-sqlite-exception = fetchpatch2 {
+    name = "nix-7473-sqlite-exception-add-message.patch";
+    url = "https://github.com/hercules-ci/nix/commit/c965f35de71cc9d88f912f6b90fd7213601e6eb8.patch";
+    sha256 = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
+  };
 
-          postUnpack = "sourceRoot=$sourceRoot/perl";
-
-          # This is not cross-compile safe, don't have time to fix right now
-          # but noting for future travellers.
-          nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive ];
-
-          configureFlags =
-            [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-              "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-            ];
-
-          preConfigure = "export NIX_STATE_DIR=$TMPDIR";
-
-          preBuild = "unset NIX_INDENT_MAKE";
-        };
-      };
-    };
-  in nix;
-
-in rec {
-
-  nix = nixStable;
-
-  nixStable = callPackage common (rec {
-    name = "nix-2.3.4";
+in lib.makeExtensible (self: {
+  nix_2_3 = (common rec {
+    version = "2.3.16";
     src = fetchurl {
-      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
+      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
+    patches = [
+      patch-monitorfdhup
+    ];
+  }).override { boehmgc = boehmgc-nix_2_3; };
 
-    inherit storeDir stateDir confDir boehmgc;
-  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
-    stdenv = llvmPackages_6.stdenv;
-  });
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre7534_b92f58f6";
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "b92f58f6d9e44f97002d1722bd77bad939824c1c";
-      sha256 = "1p791961y5v04kpz37g6hm98f1ig7i34inxl9dcj3pbqhf5kicxg";
-    };
+  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
 
-    crates = fetchurl {
-      url = "https://hydra.nixos.org/build/118797694/download/1/nix-vendored-crates-2.4pre7534_b92f58f6.tar.xz";
-      sha256 = "a4c2612bbd81732bbb899bc0c230e07b16f6b6150ffbb19c4907dedbbc2bf9fc";
-    };
+  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
 
-    inherit storeDir stateDir confDir boehmgc;
-  });
+  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
 
-  nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20200501_941f952";
+  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
 
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "941f95284ab57e9baa317791327cf1715d8564b5";
-      sha256 = "0d99jl5baxji5dmqb4fwmbffx0z04k0naanms5zzbwvxdmzn3yhs";
-    };
+  nix_2_10 = common {
+    version = "2.10.3";
+    sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+      patch-monitorfdhup
+      patch-sqlite-exception
+    ];
+  };
 
-    crates = fetchurl {
-      url = "https://hydra.nixos.org/build/118093786/download/1/nix-vendored-crates-2.4pre20200501_941f952.tar.xz";
-      sha256 = "060f4n5srdbb8vsj0m14aqch7im79a4h5g3nrs41p1xc602vhcdl";
-    };
+  nix_2_11 = common {
+    version = "2.11.1";
+    sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+      patch-monitorfdhup
+      patch-sqlite-exception
+    ];
+  };
 
-    inherit storeDir stateDir confDir boehmgc;
-  });
+  nix_2_12 = common {
+    version = "2.12.1";
+    sha256 = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
+    patches = [
+      ./patches/flaky-tests.patch
+      patch-monitorfdhup
+      patch-sqlite-exception
+    ];
+  };
 
-}
+  nix_2_13 = common {
+    version = "2.13.3";
+    sha256 = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+  };
+
+  nix_2_14 = common {
+    version = "2.14.1";
+    sha256 = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
+  };
+
+  stable = self.nix_2_13;
+
+  unstable = self.nix_2_14;
+})

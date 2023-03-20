@@ -1,36 +1,40 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.7868";
+  version = "0.1.23845";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1a9gnqrkvifrwr8wpv5f6zv8xs8myzbzlhn5w72xxzh2gxdaflwg";
+    sha256 = "sha256-oLjr3aWJ8+X+T7oD1NdDfNDBuufwA180AOT3K8WR/q0=";
   };
 
-  vendorSha256 = "0y35ps2pw9z7gi4z50byd1py87bf2jdvj7l7w2gxpppmhi83myc9";
+  vendorHash = "sha256-8HAiZ0zEJ+nnCsSUrNv0qQlvROCyNXO49fLWnKi6anE=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    substituteInPlace data/data.go \
-      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
-  '';
+  doCheck = false;
+
+  ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
 
   postInstall = ''
-    install -Dm644 -t $out/share/circleci-cli _data/data.yml
+    mv $out/bin/circleci-cli $out/bin/circleci
+
+    installShellCompletion --cmd circleci \
+      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
+      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "circleci";
     license = licenses.mit;
     homepage = "https://circleci.com/";
   };

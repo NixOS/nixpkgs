@@ -23,21 +23,21 @@ in
         default = false;
         type = types.bool;
         description =
-          ''
+          mdDoc ''
             Setting this option enables the Xen hypervisor, a
             virtualisation technology that allows multiple virtual
-            machines, known as <emphasis>domains</emphasis>, to run
+            machines, known as *domains*, to run
             concurrently on the physical machine.  NixOS runs as the
-            privileged <emphasis>Domain 0</emphasis>.  This option
+            privileged *Domain 0*.  This option
             requires a reboot to take effect.
           '';
       };
 
     virtualisation.xen.package = mkOption {
       type = types.package;
-      defaultText = "pkgs.xen";
-      example = literalExample "pkgs.xen-light";
-      description = ''
+      defaultText = literalExpression "pkgs.xen";
+      example = literalExpression "pkgs.xen-light";
+      description = lib.mdDoc ''
         The package used for Xen binary.
       '';
       relatedPackages = [ "xen" "xen-light" ];
@@ -45,9 +45,9 @@ in
 
     virtualisation.xen.package-qemu = mkOption {
       type = types.package;
-      defaultText = "pkgs.xen";
-      example = literalExample "pkgs.qemu_xen-light";
-      description = ''
+      defaultText = literalExpression "pkgs.xen";
+      example = literalExpression "pkgs.qemu_xen-light";
+      description = lib.mdDoc ''
         The package with qemu binaries for dom0 qemu and xendomains.
       '';
       relatedPackages = [ "xen"
@@ -57,8 +57,9 @@ in
 
     virtualisation.xen.bootParams =
       mkOption {
-        default = "";
-        description =
+        default = [];
+        type = types.listOf types.str;
+        description = lib.mdDoc
           ''
             Parameters passed to the Xen hypervisor at boot time.
           '';
@@ -68,7 +69,8 @@ in
       mkOption {
         default = 0;
         example = 512;
-        description =
+        type = types.addCheck types.int (n: n >= 0);
+        description = lib.mdDoc
           ''
             Amount of memory (in MiB) allocated to Domain 0 on boot.
             If set to 0, all memory is assigned to Domain 0.
@@ -78,7 +80,8 @@ in
     virtualisation.xen.bridge = {
         name = mkOption {
           default = "xenbr0";
-          description = ''
+          type = types.str;
+          description = lib.mdDoc ''
               Name of bridge the Xen domUs connect to.
             '';
         };
@@ -86,7 +89,7 @@ in
         address = mkOption {
           type = types.str;
           default = "172.16.0.1";
-          description = ''
+          description = lib.mdDoc ''
             IPv4 address of the bridge.
           '';
         };
@@ -94,9 +97,9 @@ in
         prefixLength = mkOption {
           type = types.addCheck types.int (n: n >= 0 && n <= 32);
           default = 16;
-          description = ''
+          description = lib.mdDoc ''
             Subnet mask of the bridge interface, specified as the number of
-            bits in the prefix (<literal>24</literal>).
+            bits in the prefix (`24`).
             A DHCP server will provide IP addresses for the whole, remaining
             subnet.
           '';
@@ -105,8 +108,8 @@ in
         forwardDns = mkOption {
           type = types.bool;
           default = false;
-          description = ''
-            If set to <literal>true</literal>, the DNS queries from the
+          description = lib.mdDoc ''
+            If set to `true`, the DNS queries from the
             hosts connected to the bridge will be forwarded to the DNS
             servers specified in /etc/resolv.conf .
             '';
@@ -117,7 +120,7 @@ in
     virtualisation.xen.stored =
       mkOption {
         type = types.path;
-        description =
+        description = lib.mdDoc
           ''
             Xen Store daemon to use. Defaults to oxenstored of the xen package.
           '';
@@ -127,7 +130,7 @@ in
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description =
+          description = lib.mdDoc
             ''
               Options defined here will override the defaults for xendomains.
               The default options can be seen in the file included from
@@ -136,7 +139,7 @@ in
           };
       };
 
-    virtualisation.xen.trace = mkEnableOption "Xen tracing";
+    virtualisation.xen.trace = mkEnableOption (lib.mdDoc "Xen tracing");
 
   };
 
@@ -157,9 +160,6 @@ in
     virtualisation.xen.stored = mkDefault "${cfg.package}/bin/oxenstored";
 
     environment.systemPackages = [ cfg.package ];
-
-    # Make sure Domain 0 gets the required configuration
-    #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
 
     boot.kernelModules =
       [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"
@@ -201,8 +201,8 @@ in
       ''
         if [ -d /proc/xen ]; then
             ${pkgs.kmod}/bin/modprobe xenfs 2> /dev/null
-            ${pkgs.utillinux}/bin/mountpoint -q /proc/xen || \
-                ${pkgs.utillinux}/bin/mount -t xenfs none /proc/xen
+            ${pkgs.util-linux}/bin/mountpoint -q /proc/xen || \
+                ${pkgs.util-linux}/bin/mount -t xenfs none /proc/xen
         fi
       '';
 
@@ -245,7 +245,7 @@ in
     # Xen provides udev rules.
     services.udev.packages = [ cfg.package ];
 
-    services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
+    services.udev.path = [ pkgs.bridge-utils pkgs.iproute2 ];
 
     systemd.services.xen-store = {
       description = "Xen Store Daemon";
@@ -450,5 +450,4 @@ in
     };
 
   };
-
 }

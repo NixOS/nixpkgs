@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
-, substituteAll, gd, geoip, gperftools, jemalloc
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxcrypt, libxml2, libxslt
+, substituteAll, gd, geoip, gperftools, jemalloc, nixosTests
 , withDebug ? false
 , withMail ? false
 , withStream ? false
@@ -7,21 +7,21 @@
 , ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.2";
+  version = "2.4.0";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    sha256 = "04xfnbc0qlk8vi6bb8sl38nxnx9naxh550xsgrb4hql6jdi0wv7l";
+    hash = "sha256-h/eSa2wCPvnX29wdtDHNQh8r1No1/YGinZNYU2MnsTM=";
   };
 
   buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
+    [ openssl zlib pcre libxcrypt libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   patches = singleton (substituteAll {
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
     + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
@@ -111,8 +111,13 @@ stdenv.mkDerivation rec {
     mv $out/sbin $out/bin
   '';
 
+  passthru = {
+    inherit modules;
+    tests = nixosTests.nginx-variants.tengine;
+  };
+
   meta = {
-    description = "A web server based on Nginx and has many advanced features, originated by Taobao.";
+    description = "A web server based on Nginx and has many advanced features, originated by Taobao";
     homepage    = "https://tengine.taobao.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;

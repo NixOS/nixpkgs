@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "msgpack-numpy";
-  version = "0.4.5";
+  version = "0.4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z3ls52iamqv6fbn1ljnd5nnnzaiakczciry5c3vym5r77wgc9mg";
+    hash = "sha256-xmfTGAUTQi+cdUW+XuxdKW3Ls1fgb3LtOcxoN5dVbmk=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ${python.interpreter} msgpack_numpy.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Numpy data type serialization using msgpack";
     homepage = "https://github.com/lebedov/msgpack-numpy";
     license = licenses.bsd3;

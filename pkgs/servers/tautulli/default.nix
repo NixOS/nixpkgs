@@ -1,54 +1,53 @@
-{stdenv, fetchFromGitHub, python }:
+{ lib, fetchFromGitHub, buildPythonApplication, setuptools, wrapPython, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  version = "2.2.3";
+buildPythonApplication rec {
   pname = "Tautulli";
+  version = "2.12.2";
+  format = "other";
 
-  pythonPath = [ python.pkgs.setuptools ];
-  buildInputs = [ python.pkgs.setuptools ];
-  nativeBuildInputs = [ python.pkgs.wrapPython ];
+  pythonPath = [ setuptools ];
+  nativeBuildInputs = [ wrapPython makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ni3dg5ly1xdyj1g931y2by3w17f0q031mpnrw2slhy6i792r5bp";
+    sha256 = "sha256-d2JGVmUQQMlwoEg3hsPB3jgUrUpui5Zsdf9Eq61TyZI=";
   };
 
-  buildPhase = ":";
-
   installPhase = ''
-    mkdir -p $out
-    cp -R * $out/
+    runHook preInstall
 
-    # Remove the PlexPy.py compatibility file as it won't work after wrapping.
-    # We still have the plexpy executable in bin for compatibility.
-    rm $out/PlexPy.py
+    mkdir -p $out/bin $out/libexec/tautulli
+    cp -R contrib data lib plexpy Tautulli.py CHANGELOG.md $out/libexec/tautulli
 
-    # Remove superfluous Python checks from main script;
-    # prepend shebang
-    echo "#!${python.interpreter}" > $out/Tautulli.py
-    tail -n +7 Tautulli.py >> $out/Tautulli.py
+    echo "master" > $out/libexec/tautulli/branch.txt
+    echo "v${version}" > $out/libexec/tautulli/version.txt
 
-
-    mkdir $out/bin
     # Can't just symlink to the main script, since it uses __file__ to
     # import bundled packages and manage the service
-    echo "#!/bin/bash" > $out/bin/tautulli
-    echo "$out/Tautulli.py \$*" >> $out/bin/tautulli
-    chmod +x $out/bin/tautulli
+    makeWrapper $out/libexec/tautulli/Tautulli.py $out/bin/tautulli
+    wrapPythonProgramsIn "$out/libexec/tautulli" "$pythonPath"
 
     # Creat backwards compatibility symlink to bin/plexpy
     ln -s $out/bin/tautulli $out/bin/plexpy
 
-    wrapPythonProgramsIn "$out" "$out $pythonPath"
+    runHook postInstall
   '';
 
-  meta  = with stdenv.lib; {
-    description = "A Python based monitoring and tracking tool for Plex Media Server.";
+  checkPhase = ''
+    runHook preCheck
+
+    $out/bin/tautulli --help
+
+    runHook postCheck
+  '';
+
+  meta  = with lib; {
+    description = "A Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ csingley ];
+    maintainers = with maintainers; [ rhoriguchi ];
   };
 }

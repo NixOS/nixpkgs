@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, buildDunePackage
-, ppx_sexp_conv, sexplib
-, astring, ipaddr, macaddr, uri,
+{ lib, fetchurl, buildDunePackage
+, ppx_sexp_conv, sexplib, astring, uri
+, ipaddr, ipaddr-sexp
 }:
 
 buildDunePackage rec {
   pname = "conduit";
-  version = "1.4.0";
+  version = "6.2.0";
 
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-conduit";
-    rev = "v${version}";
-    sha256 = "1qzamqcmf9ywz04bkwrv17mz9j6zq2w9h1xmnjvp11pnwrs2xq8l";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
+
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-${version}.tbz";
+    sha256 = "sha256-PtRAsO3aGyEt12K9skgx85TcoFmF3RtKxPlFgdFFI5Q=";
   };
 
-  buildInputs = [ ppx_sexp_conv ];
-  propagatedBuildInputs = [ astring ipaddr macaddr sexplib uri ];
+  propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri ppx_sexp_conv ];
 
   meta = {
-    description = "Network connection library for TCP and SSL";
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ alexfmpe vbgl ];
-    inherit (src.meta) homepage;
+    description = "A network connection establishment library";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ alexfmpe vbgl ];
+    homepage = "https://github.com/mirage/ocaml-conduit";
   };
 }

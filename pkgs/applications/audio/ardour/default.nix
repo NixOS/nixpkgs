@@ -1,150 +1,190 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchgit
-, alsaLib
+, fetchzip
+, alsa-lib
 , aubio
 , boost
 , cairomm
+, cppunit
 , curl
+, dbus
 , doxygen
+, ffmpeg
+, fftw
 , fftwSinglePrec
 , flac
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
+, harvid
+, itstool
+, libarchive
 , libjack2
 , liblo
 , libogg
+, libpulseaudio
+, librdf_raptor
+, librdf_rasqal
 , libsamplerate
 , libsigcxx
 , libsndfile
 , libusb1
-, fluidsynth_1
-, hidapi
-, libltc
-, qm-dsp
+, libuv
+, libwebsockets
 , libxml2
+, libxslt
 , lilv
 , lrdf
 , lv2
 , makeWrapper
+, pango
 , perl
 , pkg-config
-, itstool
-, python2
+, python3
+, readline
 , rubberband
 , serd
 , sord
+, soundtouch
 , sratom
+, suil
 , taglib
 , vamp-plugin-sdk
-, dbus
-, fftw
-, pango
-, suil
-, libarchive
 , wafHook
+, xjadeo
+, videoSupport ? true
 }:
-let
-  # Ardour git repo uses a mix of annotated and lightweight tags. Annotated
-  # tags are used for MAJOR.MINOR versioning, and lightweight tags are used
-  # in-between; MAJOR.MINOR.REV where REV is the number of commits since the
-  # last annotated tag. A slightly different version string format is needed
-  # for the 'revision' info that is built into the binary; it is the format of
-  # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
+stdenv.mkDerivation rec {
+  pname = "ardour";
+  version = "7.3";
 
-  # Version to build.
-  tag = "5.12";
-in stdenv.mkDerivation rec {
-  name = "ardour-${tag}";
-
+  # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
+  # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = "ae0dcdc0c5d13483271065c360e378202d20170a";
-    sha256 = "0mla5lm51ryikc2rrk53max2m7a5ds6i1ai921l2h95wrha45nkr";
+    rev = version;
+    hash = "sha256-fDZGmKQ6qgENkq8NY/J67Jym+IXoOYs8DT4xyPXLcC4=";
   };
 
+  bundledContent = fetchzip {
+    url = "https://web.archive.org/web/20221026200824/http://stuff.ardour.org/loops/ArdourBundledMedia.zip";
+    hash = "sha256-IbPQWFeyMuvCoghFl1ZwZNNcSvLNsH84rGArXnw+t7A=";
+    # archive does not contain a single folder at the root
+    stripRoot = false;
+  };
+
+  patches = [
+    # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
+    ./as-flags.patch
+  ];
+
+  # Ardour's wscript requires git revision and date to be available.
+  # Since they are not, let's generate the file manually.
+  postPatch = ''
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
+    patchShebangs ./tools/
+    substituteInPlace libs/ardour/video_tools_paths.cc \
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+  '';
+
   nativeBuildInputs = [
-    wafHook
-    makeWrapper
-    pkg-config
-    itstool
     doxygen
     graphviz # for dot
+    itstool
+    makeWrapper
     perl
-    python2
+    pkg-config
+    python3
+    wafHook
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     boost
     cairomm
+    cppunit
     curl
     dbus
+    ffmpeg
     fftw
     fftwSinglePrec
     flac
     glibmm
     gtkmm2
+    itstool
+    libarchive
     libjack2
     liblo
     libogg
+    libpulseaudio
+    librdf_raptor
+    librdf_rasqal
     libsamplerate
     libsigcxx
     libsndfile
     libusb1
-    fluidsynth_1
-    hidapi
-    libltc
-    qm-dsp
+    libuv
+    libwebsockets
     libxml2
+    libxslt
     lilv
     lrdf
     lv2
     pango
+    perl
+    python3
+    readline
     rubberband
     serd
     sord
+    soundtouch
     sratom
     suil
     taglib
     vamp-plugin-sdk
-    libarchive
-  ];
+  ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
   wafConfigureFlags = [
-    "--optimize"
+    "--cxx11"
     "--docs"
-    "--use-external-libs"
     "--freedesktop"
-    "--with-backends=jack,alsa,dummy"
+    "--no-phone-home"
+    "--optimize"
+    "--ptformat"
+    "--run-tests"
+    "--test"
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${qm-dsp}/include/qm-dsp";
-
-  # ardour's wscript has a "tarball" target but that required the git revision
-  # be available. Since this is an unzipped tarball fetched from github we
-  # have to do that ourself.
-  postPatch = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
-    patchShebangs ./tools/
-  '';
+  # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
+  # "--use-external-libs"
 
   postInstall = ''
     # wscript does not install these for some reason
     install -vDm 644 "build/gtk2_ardour/ardour.xml" \
       -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour5.desktop" \
+    install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
       -t "$out/share/applications"
     for size in 16 22 32 48 256 512; do
       install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour5.png"
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+
+    # install additional bundled beats, chords and progressions
+    cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
+  '' + lib.optionalString videoSupport ''
+    # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+    wrapProgram "$out/bin/ardour${lib.versions.major version}" \
+      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
-  meta = with stdenv.lib; {
+  LINKFLAGS = "-lpthread";
+
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to
@@ -153,11 +193,11 @@ in stdenv.mkDerivation rec {
       music and sound.
 
       Please consider supporting the ardour project financially:
-      https://community.ardour.org/node/8288
+      https://community.ardour.org/donate
     '';
-    homepage = "http://ardour.org/";
-    license = licenses.gpl2;
+    homepage = "https://ardour.org/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu maintainers.fps ];
+    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };
 }

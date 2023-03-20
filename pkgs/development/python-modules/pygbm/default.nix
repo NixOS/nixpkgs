@@ -4,7 +4,7 @@
 , scipy
 , numpy
 , numba
-, scikitlearn
+, scikit-learn
 , pytest
 , pythonOlder
 }:
@@ -25,10 +25,10 @@ buildPythonPackage rec {
     scipy
     numpy
     numba
-    scikitlearn
+    scikit-learn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

@@ -1,22 +1,55 @@
-{ stdenv, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
-, six, munch, urllib3, beautifulsoup4, openidc-client, lockfile }:
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, bunch
+, fetchPypi
+, kitchen
+, lockfile
+, munch
+, openidc-client
+, paver
+, pythonOlder
+, requests
+, six
+, urllib3
+}:
 
 buildPythonPackage rec {
   pname = "python-fedora";
-  version = "0.10.0";
+  version = "1.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5516b8c066bb2eb5d604ae8e84c3d31e27753795c5d84f6a792979363756405c";
+    hash = "sha256-VrnYQaObQDDjiOkMe3fazUefHOXi/5sYw5VNl9Vwmhk=";
   };
-  propagatedBuildInputs = [ kitchen requests bunch paver lockfile
-    six munch urllib3 beautifulsoup4 openidc-client ];
+
+  propagatedBuildInputs = [
+    beautifulsoup4
+    bunch
+    kitchen
+    lockfile
+    munch
+    openidc-client
+    paver
+    requests
+    six
+    urllib3
+  ];
+
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "Python Fedora Module";
+  pythonImportsCheck = [
+    "fedora"
+  ];
+
+  meta = with lib; {
+    description = "Module to interact with the infrastructure of the Fedora Project";
     homepage = "https://github.com/fedora-infra/python-fedora";
-    license = licenses.lgpl2;
+    changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/1.1.1";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];
   };
 }

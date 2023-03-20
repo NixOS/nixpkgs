@@ -1,1 +1,1 @@
-Moved to [/doc/languages-frameworks/node.section.md](/doc/languages-frameworks/node.section.md)
+Moved to [/doc/languages-frameworks/javascript.section.md](/doc/languages-frameworks/javascript.section.md)

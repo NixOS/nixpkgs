@@ -34,7 +34,6 @@ let
 
   generateHost = { pkgs, cephConfig, networkConfig, ... }: {
     virtualisation = {
-      memorySize = 512;
       emptyDiskImages = [ 20480 20480 20480 ];
       vlans = [ 1 ];
     };
@@ -95,6 +94,7 @@ let
     )
     monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
     monA.succeed("ceph mon enable-msgr2")
+    monA.succeed("ceph config set mon auth_allow_insecure_global_id_reclaim false")
 
     # Can't check ceph status until a mon is up
     monA.succeed("ceph -s | grep 'mon: 1 daemons'")
@@ -143,12 +143,12 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     monA.succeed(
-        "ceph osd pool create single-node-test 128 128",
+        "ceph osd pool create single-node-test 32 32",
         "ceph osd pool ls | grep 'single-node-test'",
         "ceph osd pool rename single-node-test single-node-other-test",
         "ceph osd pool ls | grep 'single-node-other-test'",
     )
-    monA.wait_until_succeeds("ceph -s | grep '1 pools, 128 pgs'")
+    monA.wait_until_succeeds("ceph -s | grep '2 pools, 33 pgs'")
     monA.succeed(
         "ceph osd getcrushmap -o crush",
         "crushtool -d crush -o decrushed",
@@ -158,7 +158,7 @@ let
         "ceph osd pool set single-node-other-test size 2",
     )
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
-    monA.wait_until_succeeds("ceph -s | grep '128 active+clean'")
+    monA.wait_until_succeeds("ceph -s | grep '33 active+clean'")
     monA.fail(
         "ceph osd pool ls | grep 'multi-node-test'",
         "ceph osd pool delete single-node-other-test single-node-other-test --yes-i-really-really-mean-it",
@@ -181,10 +181,21 @@ let
     monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Enable the dashboard and recheck health
+    monA.succeed(
+        "ceph mgr module enable dashboard",
+        "ceph config set mgr mgr/dashboard/ssl false",
+        # default is 8080 but it's better to be explicit
+        "ceph config set mgr mgr/dashboard/server_port 8080",
+    )
+    monA.wait_for_open_port(8080)
+    monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
+    monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
   '';
 in {
   name = "basic-single-node-ceph-cluster";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lejonet johanot ];
   };
 

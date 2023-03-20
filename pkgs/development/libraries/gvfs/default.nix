@@ -1,11 +1,14 @@
 { stdenv
+, lib
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , dbus
 , glib
+, udevSupport ? stdenv.isLinux
 , libgudev
 , udisks2
 , libgcrypt
@@ -17,13 +20,14 @@
 , fuse3
 , libcdio
 , libxml2
+, libsoup_3
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
 , samba
 , libmtp
 , gnomeSupport ? false
-, gnome3
+, gnome
 , gcr
 , glib-networking
 , gnome-online-accounts
@@ -41,12 +45,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.44.1";
+  version = "1.50.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ipv0jgzim6glsgizmfjkx0m3gd1l9lr242m0jj6cdmhs52k5vsh";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "aJcRnpe7FgKdJ3jhpaVKamWSYx+LLzoqHepO8rAYA/0=";
   };
+
+  patches = [
+    # Hardcode the ssh path again.
+    # https://gitlab.gnome.org/GNOME/gvfs/-/issues/465
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gvfs/-/commit/8327383e262e1e7f32750a8a2d3dd708195b0f53.patch";
+      hash = "sha256-ReD7qkezGeiJHyo9jTqEQNBjECqGhV9nSD+dYYGZWJ8=";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     # patchShebangs requires executable file
@@ -59,7 +73,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
     libxml2
@@ -70,28 +84,28 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libgudev
-    udisks2
     libgcrypt
     dbus
     libgphoto2
     avahi
     libarchive
+    libimobiledevice
+    libbluray
+    libnfs
+    openssh
+    gsettings-desktop-schemas
+    libsoup_3
+  ] ++ lib.optionals udevSupport [
+    libgudev
+    udisks2
     fuse3
     libcdio
     samba
     libmtp
     libcap
     polkit
-    libimobiledevice
-    libbluray
     libcdio-paranoia
-    libnfs
-    openssh
-    gsettings-desktop-schemas
-    # TODO: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ stdenv.lib.optionals gnomeSupport [
-    gnome3.libsoup
+  ] ++ lib.optionals gnomeSupport [
     gcr
     glib-networking # TLS support
     gnome-online-accounts
@@ -102,13 +116,25 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
-  ] ++ stdenv.lib.optionals (!gnomeSupport) [
+  ] ++ lib.optionals (!udevSupport) [
+    "-Dgudev=false"
+    "-Dudisks2=false"
+    "-Dfuse=false"
+    "-Dcdda=false"
+    "-Dsmb=false"
+    "-Dmtp=false"
+    "-Dadmin=false"
+    "-Dgphoto2=false"
+    "-Dlibusb=false"
+    "-Dlogind=false"
+  ] ++ lib.optionals (!gnomeSupport) [
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
-    "-Dhttp=false"
     "-Dgoogle=false"
-  ] ++ stdenv.lib.optionals (samba == null) [
+  ] ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
+  ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"
   ];
@@ -116,16 +142,19 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = doCheck;
 
+  separateDebugInfo = true;
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ teams.gnome.members;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
   };
 }

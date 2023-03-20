@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, kernel, pciutils, gettext }:
+{ lib, stdenv, buildPackages, kernel, pciutils, gettext }:
 
 stdenv.mkDerivation {
   pname = "cpupower";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     "LD=${stdenv.cc.targetPrefix}cc"
   ];
 
-  installFlags = stdenv.lib.mapAttrsToList
+  installFlags = lib.mapAttrsToList
     (n: v: "${n}dir=${placeholder "out"}/${v}") {
     bin = "bin";
     sbin = "sbin";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to examine and tune power saving features";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2;

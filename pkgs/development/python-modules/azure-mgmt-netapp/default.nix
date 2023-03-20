@@ -1,26 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , azure-common
+, azure-mgmt-core
 , msrest
 , msrestazure
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
   pname = "azure-mgmt-netapp";
-  disabled = isPy27;
+  version = "9.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "380b2153c52a861ae9069fcd601cbaeb9a6f91c49cba823443a9b5fe461c3998";
+    hash = "sha256-PYRMOWaJUXrRgqW3+pLBY+L6HvU1WlPvaatFe4O7RY8=";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ azure-common msrest msrestazure ];
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
+  ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.netapp" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.netapp"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure NetApp Files Management Client Library for Python";

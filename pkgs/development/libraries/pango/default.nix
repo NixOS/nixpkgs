@@ -1,62 +1,109 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cairo, harfbuzz
-, libintl, gobject-introspection, darwin, fribidi, gnome3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
-, meson, ninja, glib
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cairo
+, harfbuzz
+, libintl
+, libthai
+, darwin
+, fribidi
+, gnome
+, gi-docgen
+, makeFontsConf
+, freefont_ttf
+, meson
+, ninja
+, glib
+, python3
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages, gobject-introspection
 }:
 
-with stdenv.lib;
-
-let
+stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.44.7";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.50.12";
+
+  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "07qvxa2sk90chp1l12han6vxvy098mc37sdqcznyywyv2g6bd9b6";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "yu+W0nu+eSpr6ScnxzRo2DKxPaV8gHHvebnfae4Fj+M=";
   };
 
-  # FIXME: docs fail on darwin
-  outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
-    pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
+    pkg-config
+    python3
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
+
   buildInputs = [
     fribidi
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    libthai
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
-    optional x11Support libXft;
 
-  mesonFlags = [
-    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
+  propagatedBuildInputs = [
+    cairo
+    glib
+    libintl
+    harfbuzz
+  ] ++ lib.optionals x11Support [
+    libXft
   ];
 
-  enableParallelBuilding = true;
+  mesonFlags = [
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
+  ];
 
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 
-  doCheck = false; # /layout/valid-1.markup: FAIL
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "dependency('gi-docgen', ver" "dependency('gi-docgen', native:true, ver"
+
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
+
+  doCheck = false; # test-font: FAIL
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      # 1.90 is alpha for API 2.
+      freeze = true;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
@@ -70,7 +117,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.pango.org/";
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    platforms = platforms.unix;
   };
 }

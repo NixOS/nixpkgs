@@ -1,34 +1,31 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , python3
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , libgee
-, pantheon
 , gtk3
 , glib
 , gettext
+, gsettings-desktop-schemas
 , gobject-introspection
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.3.1";
+  version = "6.2.0"; # nixpkgs-update: no auto update
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12f1n07cjlc7czf642ak6964wl4fsgakc39nnmiba22z5aahfpz9";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-WM0Wo9giVP5pkMFaPCHsMfnAP6xD71zg6QLCYV6lmkY=";
   };
 
   nativeBuildInputs = [
@@ -36,14 +33,15 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
+    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
     gtk3
     libgee
   ];
@@ -53,7 +51,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extension to GTK used by elementary OS";
     longDescription = ''
       Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
@@ -62,6 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/granite";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "granite-demo";
   };
 }

@@ -1,25 +1,28 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, pkgconfig, which, perl, libXrandr
+, pkg-config, which, perl, jq, libXrandr
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
-, libXinerama, libnotify, pango, xorgproto, librsvg, dunstify ? false
+, wayland, wayland-protocols
+, libXinerama, libnotify, pango, xorgproto, librsvg
+, testers, dunst
 }:
 
 stdenv.mkDerivation rec {
   pname = "dunst";
-  version = "1.4.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${version}";
-    sha256 = "0xjj1f2jr1ja5grj6wrx5jjz1sx5fpqnvkw7nqi4452j3nc4p4l2";
+    sha256 = "sha256-oCeC/rbI/sydcQ7Rv9feEzw2Gcl7mUde4OOv50dyUSg=";
   };
 
-  nativeBuildInputs = [ perl pkgconfig which systemd makeWrapper ];
+  nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
 
   buildInputs = [
     cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
     libXinerama libnotify pango xorgproto librsvg libXrandr
+    wayland wayland-protocols
   ];
 
   outputs = [ "out" "man" ];
@@ -27,18 +30,22 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "VERSION=$(version)"
+    "SYSCONFDIR=$(out)/etc"
     "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
   ];
 
-  buildFlags = if dunstify then [ "dunstify" ] else [];
-
-  postInstall = lib.optionalString dunstify ''
-    install -Dm755 dunstify $out/bin
-  '' + ''
+  postInstall = ''
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+
+    install -D contrib/_dunst.zshcomp $out/share/zsh/site-functions/_dunst
+    install -D contrib/_dunstctl.zshcomp $out/share/zsh/site-functions/_dunstctl
+    substituteInPlace $out/share/zsh/site-functions/_dunstctl \
+      --replace "jq -M" "${jq}/bin/jq -M"
   '';
+
+  passthru.tests.version = testers.testVersion { package = dunst; };
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";

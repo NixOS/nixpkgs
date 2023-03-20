@@ -13,29 +13,15 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables udev rules for Nitrokey devices. By default grants access
         to users in the "nitrokey" group. You may want to install the
         nitrokey-app package, depending on your device and needs.
       '';
     };
-
-    group = mkOption {
-      type = types.str;
-      default = "nitrokey";
-      example = "wheel";
-      description = ''
-        Grant access to Nitrokey devices to users in this group.
-      '';
-    };
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [
-      (pkgs.nitrokey-udev-rules.override (attrs:
-        { inherit (cfg) group; }
-      ))
-    ];
-    users.groups.${cfg.group} = {};
+    services.udev.packages = [ pkgs.nitrokey-udev-rules ];
   };
 }

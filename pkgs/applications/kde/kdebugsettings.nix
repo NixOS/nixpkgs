@@ -3,18 +3,20 @@
   extra-cmake-modules, kdoctools,
   gettext,
   kcoreaddons, kconfig, kdbusaddons, kwidgetsaddons, kitemviews, kcompletion,
-  python
+  python3
 }:
 
 mkDerivation {
-  name = "kdebugsettings";
+  pname = "kdebugsettings";
   meta = {
+    homepage = "https://apps.kde.org/kdebugsettings/";
+    description = "KDE debug settings";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = [ lib.maintainers.rittelle ];
+    maintainers = [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    gettext kcoreaddons kconfig kdbusaddons kwidgetsaddons kitemviews kcompletion python
+    gettext kcoreaddons kconfig kdbusaddons kwidgetsaddons kitemviews kcompletion python3
   ];
   propagatedUserEnvPkgs = [ ];
 }

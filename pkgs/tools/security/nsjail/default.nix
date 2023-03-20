@@ -1,40 +1,39 @@
-{ stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkgconfig, which
-, libnl, protobuf, protobufc, shadow
+{ lib, stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkg-config, which
+, libnl, protobuf, protobufc, shadow, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsjail";
-  version = "2.9";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner           = "google";
     repo            = "nsjail";
     rev             = version;
     fetchSubmodules = true;
-    sha256          = "0218n0qjb45fawqqfj3gdxgd0fw5k0vxn9iggi0ciljmr9zywkgh";
+    hash            = "sha256-L5x3rUDd1nXxDjoP/ZErQa02w2MJSkMBlgu00cy1D3M=";
   };
 
-  postPatch = ''
-    substituteInPlace user.cc \
-      --replace "/usr/bin/newgidmap" "${shadow}/bin/newgidmap" \
-      --replace "/usr/bin/newuidmap" "${shadow}/bin/newuidmap"
-  '';
-
-  nativeBuildInputs = [ autoconf bison flex libtool pkgconfig which ];
+  nativeBuildInputs = [ autoconf bison flex installShellFiles libtool pkg-config which ];
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-    install nsjail $out/bin/
-    install nsjail.1 $out/share/man/man1/
+  preBuild = ''
+    makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')
   '';
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 nsjail "$out/bin/nsjail"
+    installManPage nsjail.1
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "A light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
-    homepage    = "http://nsjail.com/";
+    homepage    = "https://nsjail.dev/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ bosu c0bw3b ];
+    maintainers = with maintainers; [ arturcygan bosu c0bw3b ];
     platforms   = platforms.linux;
   };
 }

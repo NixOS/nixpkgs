@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p "python38.withPackages (ps: [ps.PyGithub])" git gnupg
+#! nix-shell -i python -p "python3.withPackages (ps: [ps.pygithub])" git gnupg
 
 # This is automatically called by ../update.sh.
 
@@ -31,7 +31,12 @@ VersionComponent = Union[int, str]
 Version = List[VersionComponent]
 
 
-Patch = TypedDict("Patch", {"name": str, "url": str, "sha256": str})
+PatchData = TypedDict("PatchData", {"name": str, "url": str, "sha256": str, "extra": str})
+Patch = TypedDict("Patch", {
+    "patch": PatchData,
+    "version": str,
+    "sha256": str,
+})
 
 
 @dataclass
@@ -99,7 +104,10 @@ def verify_openpgp_signature(
             return False
 
 
-def fetch_patch(*, name: str, release: GitRelease) -> Optional[Patch]:
+def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
+    release = release_info.release
+    extra = f'-{release_info.version[-1]}'
+
     def find_asset(filename: str) -> str:
         try:
             it: Iterator[str] = (
@@ -130,12 +138,20 @@ def fetch_patch(*, name: str, release: GitRelease) -> Optional[Patch]:
     if not sig_ok:
         return None
 
-    return Patch(name=patch_filename, url=patch_url, sha256=sha256)
+    kernel_ver = re.sub(r"(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
+    major = kernel_ver.split('.')[0]
+    sha256_kernel, _ = nix_prefetch_url(f"mirror://kernel/linux/kernel/v{major}.x/linux-{kernel_ver}.tar.xz")
+
+    return Patch(
+        patch=PatchData(name=patch_filename, url=patch_url, sha256=sha256, extra=extra),
+        version=kernel_ver,
+        sha256=sha256_kernel
+    )
 
 
 def parse_version(version_str: str) -> Version:
     version: Version = []
-    for component in version_str.split("."):
+    for component in re.split('\.|\-', version_str):
         try:
             version.append(int(component))
         except ValueError:
@@ -185,7 +201,7 @@ for filename in os.listdir(NIXPKGS_KERNEL_PATH):
             (callPackage {NIXPKGS_KERNEL_PATH / filename} {{}}).version
         """
         kernel_version_json = run(
-            "nix-instantiate", "--eval", "--json", "--expr", nix_version_expr,
+            "nix-instantiate", "--eval", "--system", "x86_64-linux", "--json", "--expr", nix_version_expr,
         ).stdout
         kernel_version = parse_version(json.loads(kernel_version_json))
         if kernel_version < MIN_KERNEL_VERSION:
@@ -203,13 +219,26 @@ failures = False
 
 # Match each kernel version with the best patch version.
 releases = {}
+i = 0
 for release in repo.get_releases():
+    # Dirty workaround to make sure that we don't run into issues because
+    # GitHub's API only allows fetching the last 1000 releases.
+    # It's not reliable to exit earlier because not every kernel minor may
+    # have hardened patches, hence the naive search below.
+    i += 1
+    if i > 500:
+        break
+
     version = parse_version(release.tag_name)
-    # needs to look like e.g. 5.6.3.a
+    # needs to look like e.g. 5.6.3-hardened1
     if len(version) < 4:
         continue
 
+    if not (isinstance(version[-2], int)):
+        continue
+
     kernel_version = version[:-1]
+
     kernel_key = major_kernel_version_key(kernel_version)
     try:
         packaged_kernel_version = kernel_versions[kernel_key]
@@ -223,7 +252,7 @@ for release in repo.get_releases():
     else:
         # Fall back to the latest patch for this major kernel version,
         # skipping patches for kernels newer than the packaged one.
-        if kernel_version > packaged_kernel_version:
+        if '.'.join(str(x) for x in kernel_version) > '.'.join(str(x) for x in packaged_kernel_version):
             continue
         elif (
             kernel_key not in releases or releases[kernel_key].version < version
@@ -242,7 +271,7 @@ for kernel_key in sorted(releases.keys()):
     old_version_str: Optional[str] = None
     update: bool
     try:
-        old_filename = patches[kernel_key]["name"]
+        old_filename = patches[kernel_key]["patch"]["name"]
         old_version_str = old_filename.replace("linux-hardened-", "").replace(
             ".patch", ""
         )
@@ -252,7 +281,7 @@ for kernel_key in sorted(releases.keys()):
         update = True
 
     if update:
-        patch = fetch_patch(name=name, release=release)
+        patch = fetch_patch(name=name, release_info=release_info)
         if patch is None:
             failures = True
         else:

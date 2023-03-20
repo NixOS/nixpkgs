@@ -1,21 +1,21 @@
-{ xorg, stdenv, libev, fetchFromGitHub, pkgconfig }:
+{ xorg, lib, stdenv, libev, fetchFromGitHub, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "xmousepasteblock";
-  version = "1.0";
+  version = "1.3";
   src = fetchFromGitHub {
     owner = "milaq";
     repo = "XMousePasteBlock";
-    sha256 = "0vidckfp277cg2gsww8a8q5b18m10iy4ppyp2qipr89771nrcmns";
+    hash = "sha256-0rpAbYUU0SoeQaVNStmIEuYyiWbRAdTN7Mvm0ySDnhU=";
     rev = version;
   };
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
   buildInputs = with xorg; [ libX11 libXext libXi libev ];
-  nativeBuildInputs = [ pkgconfig ];
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ pkg-config ];
+  meta = with lib; {
     description = "Middle mouse button primary X selection/clipboard paste disabler";
     homepage = "https://github.com/milaq/XMousePasteBlock";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.petercommand ];
   };
 }

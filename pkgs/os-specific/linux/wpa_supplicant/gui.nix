@@ -1,18 +1,8 @@
-{ stdenv, mkDerivation, fetchpatch, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
+{ lib, mkDerivation, fetchpatch, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
 
 mkDerivation {
-  name = "wpa_gui-${wpa_supplicant.version}";
-
-  inherit (wpa_supplicant) src;
-
-  patches = [
-    # Fix build with Inkscape 1.0
-    # https://github.com/NixOS/nixpkgs/issues/86930
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=0388992905a5c2be5cba9497504eaea346474754";
-      sha256 = "YDSY7l/qEco+aZYcYHLf/rxCKvPw35ibGoMorjA5GhY=";
-    })
-  ];
+  pname = "wpa_gui";
+  inherit (wpa_supplicant) version src;
 
   buildInputs = [ qtbase ];
   nativeBuildInputs = [ qmake inkscape imagemagick ];
@@ -32,7 +22,7 @@ mkDerivation {
     cp -av icons/hicolor $out/share/icons
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based GUI for wpa_supplicant";
     homepage = "https://hostap.epitest.fi/wpa_supplicant/";
     license = licenses.bsd3;

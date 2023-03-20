@@ -1,30 +1,42 @@
-{ stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, self, gdbm, db, lzma
+{ lib, stdenv, substituteAll, fetchurl
+, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
+, self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
 , sourceVersion
 , pythonVersion
-, sha256
+, hash
 , passthruFun
+, pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
 }:
 
 assert zlibSupport -> zlib != null;
 
-with stdenv.lib;
-
 let
-  isPy3k = substring 0 1 pythonVersion == "3";
-  passthru = passthruFun {
+  isPy3k = (lib.versions.major pythonVersion) == "3";
+  isPy38OrNewer = lib.versionAtLeast pythonVersion "3.8";
+  isPy39OrNewer = lib.versionAtLeast pythonVersion "3.9";
+  passthru = passthruFun rec {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${if isPy3k then "3" else ""}";
-    pythonForBuild = self; # No cross-compiling for now.
-    sitePackages = "site-packages";
+    executable = "pypy${if isPy39OrNewer then lib.versions.majorMinor pythonVersion else lib.optionalString isPy3k "3"}";
+    sitePackages = "${lib.optionalString isPy38OrNewer "lib/${libPrefix}/"}site-packages";
     hasDistutilsCxxPatch = false;
+    inherit pythonAttr;
+
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -34,34 +46,34 @@ in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-    inherit sha256;
+    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
+    inherit hash;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
-  ]  ++ optionals isPy3k [
-    lzma
-  ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
+    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl libX11 gdbm db
+  ]  ++ lib.optionals isPy3k [
+    xz
+  ] ++ lib.optionals (stdenv ? cc && stdenv.cc.libc != null) [
     stdenv.cc.libc
-  ] ++ optionals zlibSupport [
+  ] ++ lib.optionals zlibSupport [
     zlib
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libunwind Security
   ];
-
-  hardeningDisable = optional stdenv.isi686 "pic";
 
   # Remove bootstrap python from closure
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
 
-  C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
-  LIBRARY_PATH = makeLibraryPath buildInputs;
-  LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
+  C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
+  LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+  LD_LIBRARY_PATH = lib.makeLibraryPath (builtins.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
   patches = [
+    ./dont_fetch_vendored_deps.patch
+
     (substituteAll {
       src = ./tk_tcl_paths.patch;
       inherit tk tcl;
@@ -70,26 +82,58 @@ in with passthru; stdenv.mkDerivation rec {
       tk_libprefix = tk.libPrefix;
       tcl_libprefix = tcl.libPrefix;
     })
+
+    (substituteAll {
+      src = ./sqlite_paths.patch;
+      inherit (sqlite) out dev;
+    })
   ];
 
   postPatch = ''
-    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    substituteInPlace lib_pypy/pypy_tools/build_cffi_imports.py \
+      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
-    # hint pypy to find nix ncurses
-    substituteInPlace pypy/module/_minimal_curses/fficurses.py \
-      --replace "/usr/include/ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
-      --replace "ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
-      --replace "ncurses/term.h" "${ncurses.dev}/include/term.h" \
-      --replace "libraries=['curses']" "libraries=['ncurses']"
-
-    sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
+    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" \
+      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
       -Ojit \
       --batch pypy/goal/targetpypystandalone.py
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,include,lib,${executable}-c}
+
+    cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
+    cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+    ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
+    ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable} $out/bin/pypy3"}
+
+    # other packages expect to find stuff according to libPrefix
+    ln -s $out/${executable}-c/include $out/include/${libPrefix}
+    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${if isPy38OrNewer then sitePackages else "lib/${libPrefix}/${sitePackages}"}/sitecustomize.py
+
+    runHook postInstall
+  '';
+
+  preFixup = lib.optionalString (stdenv.isDarwin) ''
+    install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    mkdir -p $out/${executable}-c/pypy/bin
+    mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
+    ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
   '';
 
   setupHook = python-setup-hook sitePackages;
@@ -103,12 +147,12 @@ in with passthru; stdenv.mkDerivation rec {
       "test_shutil"
       # disable socket because it has two actual network tests that fail
       "test_socket"
-    ] ++ optionals (!isPy3k) [
+    ] ++ lib.optionals (!isPy3k) [
       # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
       "test_urllib2net"
       "test_urllibnet"
       "test_urllib2_localnet"
-    ] ++ optionals isPy3k [
+    ] ++ lib.optionals isPy3k [
       # disable asyncio due to https://github.com/NixOS/nix/issues/1238
       "test_asyncio"
       # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
@@ -126,39 +170,35 @@ in with passthru; stdenv.mkDerivation rec {
     export TERM="xterm";
     export HOME="$TMPDIR";
 
-    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
+    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${lib.concatStringsSep " or " disabledTests})' lib-python
   '';
 
-  installPhase = ''
-    mkdir -p $out/{bin,include,lib,${executable}-c}
-
-    cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
-    cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
-    ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
-
-    # other packages expect to find stuff according to libPrefix
-    ln -s $out/${executable}/include $out/include/${libPrefix}
-    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
-
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change @rpath/libpypy${optionalString isPy3k "3"}-c.dylib $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib $out/bin/${executable}
-    ''}
-
-    # verify cffi modules
-    $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
-
-    # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
+  # verify cffi modules
+  doInstallCheck = true;
+  installCheckPhase = let
+    modules = [
+      "curses"
+      "sqlite3"
+    ] ++ lib.optionals (!isPy3k) [
+      "Tkinter"
+    ] ++ lib.optionals isPy3k [
+      "tkinter"
+      "lzma"
+    ];
+    imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
+  in ''
+    echo "Testing whether we can import modules"
+    $out/bin/${executable} -c '${imports}'
   '';
 
   inherit passthru;
   enableParallelBuilding = true;  # almost no parallelization without STM
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     maintainers = with maintainers; [ andersk ];
   };
 }

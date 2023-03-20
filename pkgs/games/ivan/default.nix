@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_mixer, alsaLib, libpng
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsa-lib, libpng
 , pcre, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
 
   pname = "ivan";
-  version = "058";
+  version = "059";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "04jzs8wad2b3g9hvnijr4r89iiw6b1i44zdzkg0dy447lrw6l6xc";
+    sha256 = "sha256-5Ijy28LLx1TGnZE6ZNQXPYfvW2KprF+91fKx2MzLEms=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ SDL2 SDL2_mixer alsaLib libpng pcre ];
+  buildInputs = [ SDL2 SDL2_mixer alsa-lib libpng pcre ];
 
   hardeningDisable = ["all"];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD"];
 
   # Help CMake find SDL_mixer.h
-  NIX_CFLAGS_COMPILE = "-I${SDL2_mixer}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_mixer}/include/SDL2";
 
   # Create "ivan.desktop" file
   ivanDesktop = makeDesktopItem {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     icon = "ivan.png";
     desktopName = "IVAN";
     genericName = pname;
-    categories = "Game;AdventureGame;RolePlaying;";
+    categories = [ "Game" "AdventureGame" "RolePlaying" ];
     comment = meta.description;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp ${ivanDesktop}/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical roguelike game";
     longDescription = ''
       Iter Vehemens ad Necem (IVAN) is a graphical roguelike game, which currently
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://attnam.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [freepotion];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,29 +1,29 @@
 { lib
-  , buildPythonPackage
-  , isPy3k
-  , pythonOlder
-  , pythonAtLeast
-  , fetchFromGitHub
-  , pyparsing
-  , opencascade
-  , stdenv
-  , python
-  , cmake
-  , swig
-  , ninja
-  , smesh
-  , freetype
-  , libGL
-  , libGLU
-  , libX11
-  , six
-  , pytest
-  , makeFontsConf
-  , freefont_ttf
+, buildPythonPackage
+, toPythonModule
+, pythonOlder
+, pythonAtLeast
+, fetchFromGitHub
+, pyparsing
+, opencascade
+, stdenv
+, python
+, cmake
+, swig
+, smesh
+, freetype
+, libGL
+, libGLU
+, libX11
+, six
+, pytest
+, makeFontsConf
+, freefont_ttf
+, Cocoa
 }:
 
 let
-  pythonocc-core-cadquery = stdenv.mkDerivation {
+  pythonocc-core-cadquery = toPythonModule (stdenv.mkDerivation {
     pname = "pythonocc-core-cadquery";
     version = "0.18.2";
 
@@ -38,7 +38,6 @@ let
     nativeBuildInputs = [
       cmake
       swig
-      ninja
     ];
 
     buildInputs = [
@@ -49,7 +48,7 @@ let
       libGL
       libGLU
       libX11
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
     propagatedBuildInputs = [
       six
@@ -62,7 +61,7 @@ let
       "-DSMESH_LIB_PATH=${smesh}/lib"
       "-DPYTHONOCC_WRAP_SMESH=TRUE"
     ];
-  };
+  });
 
 in
   buildPythonPackage rec {
@@ -89,7 +88,7 @@ in
       fontDirectories = [ freefont_ttf ];
     };
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytest
     ];
 

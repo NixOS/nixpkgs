@@ -1,32 +1,51 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
 , flit
-, pytest
-, pytestcov
+, pytestCheckHook
 , numpy
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "2.0.0";
+  version = "3.1.0";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "joblib";
     repo = pname;
     rev = version;
-    sha256 = "16z4n82f004i4l1jw6qrzazda1m6v2yjnpqlp71ipa8mzy9kw7dw";
+    hash = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
   };
 
-  checkInputs = [ pytest pytestcov numpy scipy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+  ];
 
-  checkPhase = "pytest tests -k 'not test_nested_prange_blas'";
-  # cython doesn't get run on the tests when added to nativeBuildInputs, breaking this test
+  disabledTests = [
+    # accepts a limited set of cpu models based on project
+    # developers' hardware
+    "test_architecture"
+    # https://github.com/joblib/threadpoolctl/issues/128
+    "test_command_line_command_flag"
+    "test_command_line_import_flag"
+    "test_controller_info_actualized"
+    "test_set_threadpool_limits_by_api"
+    "test_set_threadpool_limits_no_limit"
+    "test_threadpool_limits_by_prefix"
+    "test_threadpool_limits_function_with_side_effect"
+    "test_threadpool_limits_manual_restore"
+  ];
+
+  pythonImportsCheck = [
+    "threadpoolctl"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/joblib/threadpoolctl";

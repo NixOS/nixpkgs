@@ -53,8 +53,6 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "A Traybar Application for Syncthing written in C++";
@@ -66,9 +64,6 @@ mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy peterhoeg ];
     platforms = platforms.all;
-    # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
-    # but qt > 5.6 works when only using the native browser
-    # https://github.com/sieren/QSyncthingTray/issues/223
-    broken = (builtins.compareVersions qtbase.version "5.7.0" >= 0 && !preferNative);
+    broken = !preferNative || stdenv.isDarwin;
   };
 }

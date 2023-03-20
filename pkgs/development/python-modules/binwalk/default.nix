@@ -1,35 +1,52 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, stdenv
 , zlib
 , xz
-, ncompress
 , gzip
 , bzip2
 , gnutar
+, p7zip
 , cabextract
-, lzma
+, cramfsprogs
+, cramfsswap
+, sasquatch
+, squashfsTools
+, matplotlib
 , nose
 , pycrypto
-, pyqtgraph ? null }:
+, pyqtgraph
+, visualizationSupport ? false }:
 
-let
-  visualizationSupport = (pyqtgraph != null);
-  version = "2.2.0";
-in
-buildPythonPackage {
-  pname = "binwalk";
-  inherit version;
+buildPythonPackage rec {
+  pname = "binwalk${lib.optionalString visualizationSupport "-full"}";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
-    owner = "devttys0";
+    owner = "ReFirmLabs";
     repo = "binwalk";
-    rev = "be738a52e09b0da2a6e21470e0dbcd5beb42ed1b";
-    sha256 = "1bxgj569fzwv6jhcbl864nmlsi9x1k1r20aywjxc8b9b1zgqrlvc";
+    rev = "v${version}";
+    hash = "sha256-hlPbzqGRSXcIqlI+SNKq37CnnHd1IoMBNSjhyeAM1TE=";
   };
 
-  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar cabextract lzma pycrypto ]
-  ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+  patches = [
+    # test_firmware_zip fails with 2.3.3 upgrade
+    # https://github.com/ReFirmLabs/binwalk/issues/566
+    (fetchpatch {
+      url = "https://github.com/ReFirmLabs/binwalk/commit/dd4f2efd275c9dd1001130e82e0f985110cd2754.patch";
+      sha256 = "1707n4nf1d1ay1yn4i8qlrvj2c1120g88hjwyklpsc2s2dcnqj9r";
+      includes = [
+        "testing/tests/test_firmware_zip.py"
+      ];
+      revert = true;
+    })
+  ];
+
+  propagatedBuildInputs = [ zlib xz gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
+  ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ]
+  ++ lib.optionals (!stdenv.isDarwin) [ cramfsprogs cramfsswap sasquatch ];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''
@@ -41,11 +58,14 @@ buildPythonPackage {
     HOME=$(mktemp -d)
   '';
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "binwalk" ];
+
+  meta = with lib; {
     homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];
+    license = licenses.mit;
   };
 }

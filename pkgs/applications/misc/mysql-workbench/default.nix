@@ -1,15 +1,15 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , glibc
 , gtk3
 , gtkmm3
 , pcre
 , swig
-, antlr4_7
+, antlr4_9
 , sudo
 , mysql
 , libxml2
@@ -23,7 +23,7 @@
 , libzip
 , libsecret
 , libssh
-, python2
+, python3
 , jre
 , boost
 , libsigcxx
@@ -33,23 +33,24 @@
 , proj
 , cairo
 , libxkbcommon
-, epoxy
+, libepoxy
 , wrapGAppsHook
 , at-spi2-core
 , dbus
 , bash
 , coreutils
+, zstd
 }:
 
 let
-  inherit (python2.pkgs) paramiko pycairo pyodbc;
+  inherit (python3.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.20";
+  version = "8.0.32";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0c0ig2fqfpli7fwb4v4iwvfh4szzj3grx8j9rbh40kllkc8v5qh6";
+    sha256 = "sha256-ruGdYTG0KPhRnUdlfaZjt1r/tAhA1XeAtjDgu/K9okI=";
   };
 
   patches = [
@@ -66,6 +67,7 @@ in stdenv.mkDerivation rec {
       nohup = "${coreutils}/bin/nohup";
       rm = "${coreutils}/bin/rm";
       rmdir = "${coreutils}/bin/rmdir";
+      stat = "${coreutils}/bin/stat";
       sudo = "${sudo}/bin/sudo";
     })
 
@@ -77,16 +79,18 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  # have it look for 4.7.2 instead of 4.7.1
+  # 1. have it look for 4.9.3 instead of 4.9.1
+  # 2. for some reason CMakeCache.txt is part of source code
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+      --replace "antlr-4.9.1-complete.jar" "antlr-4.9.3-complete.jar"
+    rm -f build/CMakeCache.txt
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
     jre
     swig
     wrapGAppsHook
@@ -96,8 +100,8 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     libX11
-    antlr4_7.runtime.cpp
-    python2
+    antlr4_9.runtime.cpp
+    python3
     mysql
     libxml2
     libmysqlconnectorcpp
@@ -126,25 +130,34 @@ in stdenv.mkDerivation rec {
     libpthreadstubs
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
+    zstd
   ];
 
   postPatch = ''
     patchShebangs tools/get_wb_version.sh
   '';
 
-  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+    "-Wno-error=deprecated-declarations"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # error: narrowing conversion of '-1' from 'int' to 'char'
+    "-Wno-error=narrowing"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs
+    "-Wno-error=maybe-uninitialized"
+  ]);
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
-    "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
-    # mysql-workbench 8.0.20 depends on libmysqlconnectorcpp 1.1.8.
+    # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
+    "-DWITH_ANTLR_JAR=${antlr4_9.jarLocation}"
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
@@ -154,7 +167,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${python2}/bin"
+      --prefix PATH : "${python3}/bin"
       --prefix PROJSO : "${proj}/lib/libproj.so"
       --set PYTHONPATH $PYTHONPATH
     )
@@ -172,7 +185,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
@@ -183,7 +196,7 @@ in stdenv.mkDerivation rec {
 
     homepage = "http://wb.mysql.com/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.kkallio ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

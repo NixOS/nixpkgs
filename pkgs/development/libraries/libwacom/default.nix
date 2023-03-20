@@ -1,8 +1,19 @@
-{ stdenv, fetchFromGitHub, meson, ninja, glib, pkgconfig, udev, libgudev, doxygen }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, glib
+, pkg-config
+, udev
+, libgudev
+, python3
+, valgrind
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "1.3";
+  version = "2.6.0";
 
   outputs = [ "out" "dev" ];
 
@@ -10,18 +21,44 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "12g8jb67wj6sgg9ar2w8kkw1m1431rn9nd0j64qkrd3vy9g4l0hk";
+    sha256 = "sha256-9zqW6zPrFcxv/yAAtFgdVavKVMXeDBoMP3E/XriUcT0=";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja doxygen ];
+  postPatch = ''
+    patchShebangs test/check-files-in-git.sh
+  '';
 
-  mesonFlags = [ "-Dtests=disabled" ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
 
-  buildInputs = [ glib udev libgudev ];
+  buildInputs = [
+    glib
+    udev
+    libgudev
+  ];
 
-  meta = with stdenv.lib; {
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
+  mesonFlags = [
+    "-Dtests=${if doCheck then "enabled" else "disabled"}"
+  ];
+
+  nativeCheckInputs = [
+    valgrind
+  ] ++ (with python3.pkgs; [
+    libevdev
+    pytest
+    pyudev
+  ]);
+
+  meta = with lib; {
     platforms = platforms.linux;
     homepage = "https://linuxwacom.github.io/";
+    changelog = "https://github.com/linuxwacom/libwacom/blob/${src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     maintainers = teams.freedesktop.members;
     license = licenses.mit;

@@ -1,25 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, tbb, python }:
+{ lib, stdenv, fetchzip, cmake, tbb, python3, ispc }:
 
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
-  version = "1.1.0";
+  version = "1.4.3";
 
-  src = fetchFromGitHub {
-    owner = "OpenImageDenoise";
-    repo = "oidn";
-    rev = "v${version}";
-    sha256 = "032s7vablqnmrcc4xf2c94kwj0kbcd64bram10g0yc42fg0a3r9m";
-    fetchSubmodules = true;
+  # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
+  src = fetchzip {
+    url = "https://github.com/OpenImageDenoise/oidn/releases/download/v${version}/oidn-${version}.src.tar.gz";
+    sha256 = "sha256-i73w/Vkr5TPLB1ulPbPU4OVGwdNlky1brfarueD7akE=";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ispc ];
   buildInputs = [ tbb ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DTBB_ROOT=${tbb}"
+    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+  ];
+
+  meta = with lib; {
     homepage = "https://openimagedenoise.github.io";
     description = "High-Performance Denoising Library for Ray Tracing";
     license = licenses.asl20;
     maintainers = [ maintainers.leshainc ];
     platforms = platforms.unix;
+    changelog = "https://github.com/OpenImageDenoise/oidn/blob/v${version}/CHANGELOG.md";
   };
 }

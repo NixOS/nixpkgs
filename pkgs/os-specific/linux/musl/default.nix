@@ -4,16 +4,25 @@
 }:
 let
   cdefs_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
+    name = "sys-cdefs.h";
+    url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
     sha256 = "16l3dqnfq0f20rzbkhc38v74nqcsh9n3f343bpczqq8b1rz6vfrh";
   };
   queue_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-queue.h";
+    name = "sys-queue.h";
+    url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-queue.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
     sha256 = "12qm82id7zys92a1qh2l1qf2wqgq6jr4qlbjmqyfffz3s3nhfd61";
   };
   tree_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
+    name = "sys-tree.h";
+    url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-tree.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
+  };
+
+  stack_chk_fail_local_c = fetchurl {
+    name = "__stack_chk_fail_local.c";
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?id=9afbe3cbbf4c30ff23c733218c3c03d7e8c6461d";
+    sha256 = "1nhkzzy9pklgjcq2yg89d3l18jif331srd3z3vhy5qwxl1spv6i9";
   };
 
   # iconv tool, implemented by musl author.
@@ -26,14 +35,20 @@ let
     sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
   };
 
+  arch = if stdenv.hostPlatform.isx86_64
+    then "x86_64"
+    else if stdenv.hostPlatform.isx86_32
+      then "i386"
+      else null;
+
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.1.24";
+  version = "1.2.3";
 
   src = fetchurl {
-    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
+    url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-fVsLYGJSHkYn4JnkydyCSNMqMChelZt+7Kp4DPjP1KQ=";
   };
 
   enableParallelBuilding = true;
@@ -56,6 +71,12 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
+
+    # fix parsing lines with optional fields in fstab etc. NOTE: Remove for the next release since it has been merged upstream
+    (fetchurl {
+      url = "https://git.musl-libc.org/cgit/musl/patch/?id=751bee0ee727e8d8b003c87cff77ac76f1dbecd6";
+      sha256 = "sha256-qCw132TCSaZrkISmtDb8Q8ufyt8sAJdwACkvfwuoi/0=";
+    })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
@@ -68,24 +89,34 @@ stdenv.mkDerivation rec {
     "--syslibdir=${placeholder "out"}/lib"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "bin" "dev" ];
 
   dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
   separateDebugInfo = true;
 
   NIX_DONT_SET_RPATH = true;
+
+  preBuild = ''
+    ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
+    "# the -x c flag is required since the file extension confuses gcc
+    # that detect the file as a linker script.
+    $CC -x c -c ${stack_chk_fail_local_c} -o __stack_chk_fail_local.o
+    $AR r libssp_nonshared.a __stack_chk_fail_local.o"
+    }
+  '';
 
   postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-    # Strip debug out of the static library
-    $STRIP -S $out/lib/libc.a
-    mkdir -p $out/bin
+    ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
+      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"
+    }
 
     # Create 'ldd' symlink, builtin
-    ln -rs $out/lib/libc.so $out/bin/ldd
+    ln -s $out/lib/libc.so $bin/bin/ldd
 
     # (impure) cc wrapper around musl for interactive usuage
     for i in musl-gcc musl-clang ld.musl-clang; do
@@ -96,12 +127,15 @@ stdenv.mkDerivation rec {
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
     # provide 'iconv' utility, using just-built headers, libc/ldso
-    $CC ${iconv_c} -o $out/bin/iconv \
+    $CC ${iconv_c} -o $bin/bin/iconv \
       -I$dev/include \
       -L$out/lib -Wl,-rpath=$out/lib \
       -lc \
       -B $out/lib \
       -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+  '' + lib.optionalString (arch != null) ''
+    # Create 'libc.musl-$arch' symlink
+    ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h
@@ -112,7 +146,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "http://www.musl-libc.org";
+    homepage    = "https://musl.libc.org/";
+    changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];

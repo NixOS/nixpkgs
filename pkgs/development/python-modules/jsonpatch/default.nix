@@ -1,25 +1,45 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , jsonpointer
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jsonpatch";
-  version = "1.24";
+  version = "1.32";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cbb72f8bf35260628aea6b508a107245f757d1ec839a19c34349985e2c05645a";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "stefankoegl";
+    repo = "python-json-patch";
+    rev = "v${version}";
+    hash = "sha256-JMGBgYjnjHQ5JpzDwJcR2nVZfzmQ8ZZtcB0GsJ9Q4Jc=";
   };
 
-  # test files are missing
-  doCheck = false;
-  propagatedBuildInputs = [ jsonpointer ];
+  propagatedBuildInputs = [
+    jsonpointer
+  ];
 
-  meta = {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "jsonpatch"
+  ];
+
+  pytestFlagsArray = [
+    "tests.py"
+  ];
+
+  meta = with lib; {
     description = "Library to apply JSON Patches according to RFC 6902";
     homepage = "https://github.com/stefankoegl/python-json-patch";
-    license = lib.licenses.bsd2; # "Modified BSD license, says pypi"
+    license = licenses.bsd2; # "Modified BSD license, says pypi"
+    maintainers = with maintainers; [ ];
   };
 }

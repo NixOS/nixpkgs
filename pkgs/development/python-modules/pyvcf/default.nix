@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0qf9lwj7r2hjjp4bd4vc7nayrhblfm4qcqs4dbd43a6p4bj2jv5p";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     homepage = "https://pyvcf.readthedocs.io/en/latest/index.html";
@@ -23,10 +23,11 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
     longDescription = ''
-      The intent of this module is to mimic the csv module in the Python stdlib, 
-      as opposed to more flexible serialization formats like JSON or YAML. 
-      vcf will attempt to parse the content of each record based on the data 
+      The intent of this module is to mimic the csv module in the Python stdlib,
+      as opposed to more flexible serialization formats like JSON or YAML.
+      vcf will attempt to parse the content of each record based on the data
       types specified in the meta-information lines
     '';
+    broken = true; # uses the 2to3 feature, that got removed in setuptools 0.58
   };
 }

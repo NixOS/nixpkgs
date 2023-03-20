@@ -1,77 +1,132 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.virtualisation.cri-o;
 
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
+  crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
+
+  format = pkgs.formats.toml { };
+
+  cfgFile = format.generate "00-default.conf" cfg.settings;
 in
 {
-  imports = [
-    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
-  ];
-
   meta = {
-    maintainers = lib.teams.podman.members;
+    maintainers = teams.podman.members;
   };
 
   options.virtualisation.cri-o = {
-    enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
+    enable = mkEnableOption (lib.mdDoc "Container Runtime Interface for OCI (CRI-O)");
 
     storageDriver = mkOption {
-      type = types.enum ["btrfs" "overlay" "vfs"];
+      type = types.enum [ "btrfs" "overlay" "vfs" ];
       default = "overlay";
-      description = "Storage driver to be used";
+      description = lib.mdDoc "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum ["trace" "debug" "info" "warn" "error" "fatal"];
+      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
       default = "info";
-      description = "Log level to be used";
+      description = lib.mdDoc "Log level to be used";
     };
 
     pauseImage = mkOption {
-      type = types.str;
-      default = "k8s.gcr.io/pause:3.1";
-      description = "Pause image for pod sandboxes to be used";
+      type = types.nullOr types.str;
+      default = null;
+      description = lib.mdDoc "Override the default pause image for pod sandboxes";
+      example = "k8s.gcr.io/pause:3.2";
     };
 
     pauseCommand = mkOption {
-      type = types.str;
-      default = "/pause";
-      description = "Pause command to be executed";
+      type = types.nullOr types.str;
+      default = null;
+      description = lib.mdDoc "Override the default pause command";
+      example = "/pause";
+    };
+
+    runtime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = lib.mdDoc "Override the default runtime";
+      example = "crun";
+    };
+
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      example = literalExpression ''
+        [
+          pkgs.gvisor
+        ]
+      '';
+      description = lib.mdDoc ''
+        Extra packages to be installed in the CRI-O wrapper.
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = crioPackage;
+      internal = true;
+      description = lib.mdDoc ''
+        The final CRI-O package (including extra packages).
+      '';
+    };
+
+    networkDir = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = lib.mdDoc "Override the network_dir option.";
+      internal = true;
+    };
+
+    settings = mkOption {
+      type = format.type;
+      default = { };
+      description = lib.mdDoc ''
+        Configuration for cri-o, see
+        <https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md>.
+      '';
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      [ cri-o cri-tools conmon iptables runc utillinux ];
+    environment.systemPackages = [ cfg.package pkgs.cri-tools ];
 
-    environment.etc."crictl.yaml".source = copyFile "${pkgs.cri-o.src}/crictl.yaml";
+    environment.etc."crictl.yaml".source = "${cfg.package}/etc/crictl.yaml";
 
-    environment.etc."crio/crio.conf".text = ''
-      [crio]
-      storage_driver = "${cfg.storageDriver}"
+    virtualisation.cri-o.settings.crio = {
+      storage_driver = cfg.storageDriver;
 
-      [crio.image]
-      pause_image = "${cfg.pauseImage}"
-      pause_command = "${cfg.pauseCommand}"
+      image = {
+        pause_image = mkIf (cfg.pauseImage != null) cfg.pauseImage;
+        pause_command = mkIf (cfg.pauseCommand != null) cfg.pauseCommand;
+      };
 
-      [crio.network]
-      plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
-      network_dir = "/etc/cni/net.d/"
+      network = {
+        plugin_dirs = [ "${pkgs.cni-plugins}/bin" ];
+        network_dir = mkIf (cfg.networkDir != null) cfg.networkDir;
+      };
 
-      [crio.runtime]
-      conmon = "${pkgs.conmon}/bin/conmon"
-      log_level = "${cfg.logLevel}"
-      manage_network_ns_lifecycle = true
-    '';
+      runtime = {
+        cgroup_manager = "systemd";
+        log_level = cfg.logLevel;
+        manage_ns_lifecycle = true;
+        pinns_path = "${cfg.package}/bin/pinns";
+        hooks_dir =
+          optional (config.virtualisation.containers.ociSeccompBpfHook.enable)
+            config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
-    environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o.src}/contrib/cni/10-crio-bridge.conf";
+        default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
+        runtimes = mkIf (cfg.runtime != null) {
+          "${cfg.runtime}" = { };
+        };
+      };
+    };
+
+    environment.etc."cni/net.d/10-crio-bridge.conflist".source = "${cfg.package}/etc/cni/net.d/10-crio-bridge.conflist";
+    environment.etc."cni/net.d/99-loopback.conflist".source = "${cfg.package}/etc/cni/net.d/99-loopback.conflist";
+    environment.etc."crio/crio.conf.d/00-default.conf".source = cfgFile;
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
@@ -81,10 +136,10 @@ in
       documentation = [ "https://github.com/cri-o/cri-o" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.utillinux pkgs.runc pkgs.iptables ];
+      path = [ cfg.package ];
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.cri-o}/bin/crio";
+        ExecStart = "${cfg.package}/bin/crio";
         ExecReload = "/bin/kill -s HUP $MAINPID";
         TasksMax = "infinity";
         LimitNOFILE = "1048576";
@@ -94,6 +149,7 @@ in
         TimeoutStartSec = "0";
         Restart = "on-abnormal";
       };
+      restartTriggers = [ cfgFile ];
     };
   };
 }

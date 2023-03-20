@@ -1,31 +1,37 @@
 { lib
-, buildPythonPackage, fetchPypi
-, numpy, requests, six, pyglet, scipy, cloudpickle
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, cloudpickle
+, gym-notices
+, importlib-metadata
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gym";
-  version = "0.16.0";
+  version = "0.26.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06h5b639nmzhmy4m1j3vigm86iv5pv7k8jy6xpldyd4jdlf37nn5";
+  src = fetchFromGitHub {
+    owner = "openai";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-uJgm8l1SxIRC5PV6BIH/ht/1ucGT5UaUhkFMdusejgA=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyglet>=1.2.0,<=1.3.2" "pyglet"
-  '';
-
   propagatedBuildInputs = [
-    numpy requests six pyglet scipy cloudpickle
-  ];
+    cloudpickle
+    numpy
+    gym-notices
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   # The test needs MuJoCo that is not free library.
   doCheck = false;
 
+  pythonImportsCheck = [ "gym" ];
+
   meta = with lib; {
-    description = "A toolkit by OpenAI for developing and comparing your reinforcement learning agents";
+    description = "A toolkit for developing and comparing your reinforcement learning agents";
     homepage = "https://gym.openai.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];

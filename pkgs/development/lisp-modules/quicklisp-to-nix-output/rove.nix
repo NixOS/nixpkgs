@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''rove'';
-  version = ''20191007-git'';
+  baseName = "rove";
+  version = "20211209-git";
 
-  description = ''Yet another testing framework intended to be a successor of Prove'';
+  description = "Yet another testing framework intended to be a successor of Prove";
 
-  deps = [ args."bordeaux-threads" args."dissect" args."trivial-gray-streams" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."dissect" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/rove/2019-10-07/rove-20191007-git.tgz'';
-    sha256 = ''0ngklk69rn13qgsy9h07sqfqzyl1wqsfrp7izx6whgs62bm0vixa'';
+    url = "http://beta.quicklisp.org/archive/rove/2021-12-09/rove-20211209-git.tgz";
+    sha256 = "1b1fajdxnba743l7mv4nc31az2g7mapalq3z3l57j7r5sximf0qr";
   };
 
   packageName = "rove";
@@ -19,11 +20,12 @@ rec {
 }
 /* (SYSTEM rove DESCRIPTION
     Yet another testing framework intended to be a successor of Prove SHA256
-    0ngklk69rn13qgsy9h07sqfqzyl1wqsfrp7izx6whgs62bm0vixa URL
-    http://beta.quicklisp.org/archive/rove/2019-10-07/rove-20191007-git.tgz MD5
-    7ce5d3b0b423f8b68665bbcc51cf18a1 NAME rove FILENAME rove DEPS
-    ((NAME bordeaux-threads FILENAME bordeaux-threads)
+    1b1fajdxnba743l7mv4nc31az2g7mapalq3z3l57j7r5sximf0qr URL
+    http://beta.quicklisp.org/archive/rove/2021-12-09/rove-20211209-git.tgz MD5
+    d9f6cb2e26f06cfbd5c83bf3fa4fc206 NAME rove FILENAME rove DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME dissect FILENAME dissect)
      (NAME trivial-gray-streams FILENAME trivial-gray-streams))
-    DEPENDENCIES (bordeaux-threads dissect trivial-gray-streams) VERSION
-    20191007-git SIBLINGS NIL PARASITES NIL) */
+    DEPENDENCIES (alexandria bordeaux-threads dissect trivial-gray-streams)
+    VERSION 20211209-git SIBLINGS NIL PARASITES NIL) */

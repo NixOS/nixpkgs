@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''xmls'';
-  version = ''3.0.2'';
+  baseName = "xmls";
+  version = "3.0.2";
 
   parasites = [ "xmls/test" "xmls/unit-test" ];
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/xmls/2018-04-30/xmls-3.0.2.tgz'';
-    sha256 = ''1r7mvw62zjcg45j3hm8jlbiisad2b415pghn6qcmhl03dmgp7kgi'';
+    url = "http://beta.quicklisp.org/archive/xmls/2018-04-30/xmls-3.0.2.tgz";
+    sha256 = "1r7mvw62zjcg45j3hm8jlbiisad2b415pghn6qcmhl03dmgp7kgi";
   };
 
   packageName = "xmls";

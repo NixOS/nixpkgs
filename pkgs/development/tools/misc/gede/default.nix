@@ -1,31 +1,33 @@
-{ mkDerivation, lib, fetchurl, makeWrapper, python, qmake, ctags, gdb }:
+{ mkDerivation, lib, fetchurl, makeWrapper, python3, qmake, ctags, gdb }:
 
 mkDerivation rec {
   pname = "gede";
-  version = "2.16.2";
+  version = "2.18.2";
 
   src = fetchurl {
-    url = "http://gede.acidron.com/uploads/source/${pname}-${version}.tar.xz";
-    sha256 = "18a8n9yvhgkbc97p2995j7b5ncfdzy1fy13ahdafqmcpkl4r1hrj";
+    url = "http://gede.dexar.se/uploads/source/${pname}-${version}.tar.xz";
+    sha256 = "sha256-QWrDHV+2trl+wKKibWiDa+kVREN116OwQ6DomaKj3LY=";
   };
 
-  nativeBuildInputs = [ qmake makeWrapper python ];
+  nativeBuildInputs = [ qmake makeWrapper python3 ];
 
   buildInputs = [ ctags ];
 
+  strictDeps = true;
+
   dontUseQmakeConfigure = true;
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
-      --prefix PATH : ${lib.makeBinPath [ ctags gdb ]} 
+      --prefix PATH : ${lib.makeBinPath [ ctags gdb ]}
   '';
 
   meta = with lib; {
     description = "Graphical frontend (GUI) to GDB";
-    homepage = "http://gede.acidron.com";
+    homepage = "http://gede.dexar.se";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ juliendehos ];

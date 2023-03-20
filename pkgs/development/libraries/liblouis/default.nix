@@ -1,7 +1,8 @@
 { fetchFromGitHub
+, lib
 , stdenv
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gettext
 , python3
 , texinfo
@@ -10,22 +11,25 @@
 , perl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblouis";
-  version = "3.13.0";
+  version = "3.25.0";
+
+  outputs = [ "out" "dev" "info" "doc" ]
+    # configure: WARNING: cannot generate manual pages while cross compiling
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "man" ];
 
   src = fetchFromGitHub {
     owner = "liblouis";
     repo = "liblouis";
-    rev = "v${version}";
-    sha256 = "1srpafxdw4627lyv92cn8wd9zda3507qpp5s2z66bsln8jnb1mza";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-On5PbBgvDAeD41oGb5EKBtKvi/VXnLsVrTMX7tcwnq4=";
   };
 
-  outputs = [ "out" "dev" "man" "info" "doc" ];
-
+  strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gettext
     python3
     # Docs, man, info
@@ -36,7 +40,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # lou_checkYaml
     libyaml
-    # maketable.d
+  ];
+
+  nativeCheckInputs = [
     perl
   ];
 
@@ -58,11 +64,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source braille translator and back-translator";
-    homepage = "http://liblouis.org/";
-    license = licenses.lgpl21;
+    homepage = "https://liblouis.io/";
+    license = with licenses; [
+      lgpl21Plus # library
+      gpl3Plus # tools
+    ];
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
-}
+})

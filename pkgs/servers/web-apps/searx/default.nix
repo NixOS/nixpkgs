@@ -1,58 +1,68 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, nixosTests, python3, python3Packages, fetchFromGitHub, fetchpatch }:
 
 with python3Packages;
 
-buildPythonApplication rec {
+toPythonModule (buildPythonApplication rec {
   pname = "searx";
-  version = "0.16.0";
+  version = "1.1.0";
 
-  # Can not use PyPI because certain test files are missing.
+  # pypi doesn't receive updates
   src = fetchFromGitHub {
-    owner = "asciimoo";
+    owner = "searx";
     repo = "searx";
     rev = "v${version}";
-    sha256 = "0hfa4nmis98yvghxw866rzjpmhb2ln8l6l8g9yx4m79b2lk76xcs";
+    sha256 = "sha256-+Wsg1k/h41luk5aVfSn11/lGv8hZYVvpHLbbYHfsExw=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'certifi==2019.3.9' 'certifi' \
-      --replace 'flask==1.0.2' 'flask' \
-      --replace 'flask-babel==0.12.2' 'flask-babel' \
-      --replace 'jinja2==2.10.1' 'jinja2' \
-      --replace 'lxml==4.3.3' 'lxml' \
-      --replace 'idna==2.8' 'idna' \
-      --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
-      --replace 'pyopenssl==19.0.0' 'pyopenssl' \
-      --replace 'python-dateutil==2.8.0' 'python-dateutil==2.8.*' \
-      --replace 'pyyaml==5.1' 'pyyaml'
-    substituteInPlace requirements-dev.txt \
-      --replace 'plone.testing==5.0.0' 'plone.testing' \
-      --replace 'pep8==1.7.0' 'pep8==1.7.*' \
-      --replace 'splinter==0.11.0' 'splinter' \
-      --replace 'selenium==3.141.0' 'selenium'
+    sed -i 's/==.*$//' requirements.txt
+  '';
+
+  preBuild = ''
+    export SEARX_DEBUG="true";
   '';
 
   propagatedBuildInputs = [
-    pyyaml lxml grequests flaskbabel flask requests
-    gevent speaklater Babel pytz dateutil pygments
-    pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
+    babel
+    certifi
+    python-dateutil
+    flask
+    flask-babel
+    gevent
+    grequests
     jinja2
+    langdetect
+    lxml
+    ndg-httpsclient
+    pyasn1
+    pyasn1-modules
+    pygments
+    pysocks
+    pytz
+    pyyaml
+    requests
+    speaklater
+    setproctitle
+    werkzeug
   ];
 
-  checkInputs = [
-    Babel mock nose2 covCore pep8 plone-testing splinter
-    unittest2 zope_testrunner selenium
-  ];
+  # tests try to connect to network
+  doCheck = false;
 
-  preCheck = ''
-    rm tests/test_robot.py # A variable that is imported is commented out
+  pythonImportsCheck = [ "searx" ];
+
+  postInstall = ''
+    # Create a symlink for easier access to static data
+    mkdir -p $out/share
+    ln -s ../${python3.sitePackages}/searx/static $out/share/
   '';
 
+  passthru.tests = { inherit (nixosTests) searx; };
+
   meta = with lib; {
-    homepage = "https://github.com/asciimoo/searx";
+    homepage = "https://github.com/searx/searx";
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ matejc fpletz globin danielfullmer ];
+    maintainers = with maintainers; [ matejc globin danielfullmer ];
   };
-}
+})

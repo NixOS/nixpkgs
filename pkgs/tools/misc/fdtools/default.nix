@@ -2,8 +2,10 @@
 
 let
   pname = "fdtools";
+  # When you update, check whether we can drop the skalibs pin.
   version = "2020.05.04";
   sha256 = "0lnafcp4yipi0dl8gh33zjs8wlpz0mim8mwmiz9s49id0b0fmlla";
+  skalibs = skawarePackages.skalibs_2_10;
 
 in stdenv.mkDerivation {
   inherit pname version;
@@ -13,17 +15,24 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
+  patches = [ ./new-skalibs.patch ];
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  buildInputs = [ skawarePackages.skalibs ];
+  buildInputs = [
+    # temporary, until fdtools catches up to skalibs
+    skalibs
+  ];
 
   configurePhase = ''
     cd ${pname}-${version}
     sed -e 's|gcc|$CC|' \
       conf-compile/defaults/host_link.sh \
       > conf-compile/host_link.sh
+    sed -e 's|gcc|$CC|' \
+      conf-compile/defaults/host_compile.sh \
+      > conf-compile/host_compile.sh
 
-    echo "${skawarePackages.skalibs.lib}/lib/skalibs/sysdeps" \
+    echo "${skalibs.lib}/lib/skalibs/sysdeps" \
       > conf-compile/depend_skalibs_sysdeps
   '';
 
@@ -69,10 +78,10 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://code.dogmap.org./fdtools/";
+    homepage = "https://code.dogmap.org/fdtools/";
     description = "A set of utilities for working with file descriptors";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.Profpatsch ];
   };
 }

@@ -1,60 +1,85 @@
-{ stdenv, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
-, liburcu, zlib, libaio, zstd, lz4, valgrind, python3Packages
-, fuseSupport ? false, fuse3 ? null }:
-
-assert fuseSupport -> fuse3 != null;
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, docutils
+, libuuid
+, libscrypt
+, libsodium
+, keyutils
+, liburcu
+, zlib
+, libaio
+, zstd
+, lz4
+, python3Packages
+, util-linux
+, udev
+, valgrind
+, nixosTests
+, makeWrapper
+, getopt
+, fuse3
+, fuseSupport ? false
+}:
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "2020-04-04";
+  version = "unstable-2023-01-31";
 
-  src = fetchgit {
-    url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "5d6e237b728cfb7c3bf2cb1a613e64bdecbd740d";
-    sha256 = "1syym9k3njb0bk2mg6832cbf6r42z6y8b6hjv7dg4gmv2h7v7l7g";
+  src = fetchFromGitHub {
+    owner = "koverstreet";
+    repo = "bcachefs-tools";
+    rev = "3c39b422acd3346321185be0ce263809e2a9a23f";
+    hash = "sha256-2ci/m4JfodLiPoWfP+QCEqlk0k48zq3mKb8Pdrtln0o=";
   };
 
   postPatch = ''
+    patchShebangs .
     substituteInPlace Makefile \
       --replace "pytest-3" "pytest --verbose" \
       --replace "INITRAMFS_DIR=/etc/initramfs-tools" \
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config docutils python3Packages.python makeWrapper
   ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
-    zstd lz4 python3Packages.pytest
-  ] ++ stdenv.lib.optional fuseSupport fuse3;
+    zstd lz4 python3Packages.pytest udev valgrind
+  ] ++ lib.optional fuseSupport fuse3;
 
-  doCheck = true;
+  doCheck = false; # needs bcachefs module loaded on builder
+  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
+  nativeCheckInputs = [ valgrind ];
 
-  checkFlags = [
-    "BCACHEFS_TEST_USE_VALGRIND=no"
-  ];
-
-  checkInputs = [
-    valgrind
-  ];
-
-  preCheck = stdenv.lib.optionalString fuseSupport ''
+  preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
   '';
 
-  installFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  # this symlink is needed for mount -t bcachefs to work
+  postFixup = ''
+    ln -s $out/bin/mount.bcachefs.sh $out/bin/mount.bcachefs
+    wrapProgram $out/bin/mount.bcachefs.sh \
+      --prefix PATH : ${lib.makeBinPath [ getopt util-linux ]}
+  '';
 
-  meta = with stdenv.lib; {
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.tests = {
+    smoke-test = nixosTests.bcachefs;
+    inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+  };
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak chiiruno ];
+    maintainers = with maintainers; [ davidak Madouura ];
     platforms = platforms.linux;
   };
 }

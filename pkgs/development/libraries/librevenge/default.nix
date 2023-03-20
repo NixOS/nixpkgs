@@ -1,25 +1,20 @@
-{stdenv, fetchurl, boost, pkgconfig, cppunit, zlib}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="librevenge";
-    version="0.0.4";
-    name="${baseName}-${version}";
-    hash="1cj76cz4mqcy2mgv9l5xlc95bypyk8zbq0ls9cswqrs2y0lhfgwk";
-    url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.xz";
-    sha256="1cj76cz4mqcy2mgv9l5xlc95bypyk8zbq0ls9cswqrs2y0lhfgwk";
-  };
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    boost cppunit zlib
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit nativeBuildInputs buildInputs;
+{ lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib }:
+
+stdenv.mkDerivation rec {
+  pname = "librevenge";
+  version = "0.0.5";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "mirror://sourceforge/project/libwpd/librevenge/librevenge-${version}/librevenge-${version}.tar.xz";
+    sha256 = "sha256-EG0MRLtkCLE0i54EZWZvqDuBYXdmWiLNAX6IbBqu6zQ=";
   };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    boost
+    cppunit
+    zlib
+  ];
 
   # Clang and gcc-7 generate warnings, and
   # -Werror causes these warnings to be interpreted as errors
@@ -32,11 +27,10 @@ stdenv.mkDerivation {
     sed -i 's,-DLIBREVENGE_BUILD,\0 -DBOOST_ERROR_CODE_HEADER_ONLY,g' src/lib/Makefile.in
   '';
 
-  meta = {
-    inherit (s) version;
-    description = ''A base library for writing document import filters'';
-    license = stdenv.lib.licenses.mpl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+  meta = with lib; {
+    description = "A base library for writing document import filters";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
   };
 }

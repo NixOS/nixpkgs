@@ -11,11 +11,11 @@ in
 
 {
   name = "udisks2";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
 
-  machine =
+  nodes.machine =
     { ... }:
     { services.udisks2.enable = true;
       imports = [ ./common/user-account.nix ];
@@ -34,7 +34,7 @@ in
 
       with lzma.open(
           "${stick}"
-      ) as data, open(machine.state_dir + "/usbstick.img", "wb") as stick:
+      ) as data, open(machine.state_dir / "usbstick.img", "wb") as stick:
           stick.write(data.read())
 
       machine.succeed("udisksctl info -b /dev/vda >&2")

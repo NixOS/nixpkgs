@@ -2,14 +2,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     chronic (0.10.2)
-    fastercsv (1.5.5)
-    highline (1.7.8)
-    reckon (0.4.4)
+    highline (2.0.3)
+    rchardet (1.8.0)
+    reckon (0.8.0)
       chronic (>= 0.3.0)
-      fastercsv (>= 1.5.1)
       highline (>= 1.5.2)
-      terminal-table (>= 1.4.2)
-    terminal-table (1.6.0)
+      rchardet (>= 1.8.0)
 
 PLATFORMS
   ruby
@@ -18,4 +16,4 @@ DEPENDENCIES
   reckon
 
 BUNDLED WITH
-   2.1.4
+   2.2.20

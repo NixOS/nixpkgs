@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python,
+{ lib, buildPythonPackage, fetchFromGitHub, python,
   django_hijack, django_nose }:
 buildPythonPackage rec {
   pname = "django-hijack-admin";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0m98lchp2y43886n67j4s7miyd50pg2r5r966vjnxmd7nx7qkihf";
   };
 
-  checkInputs = [ django_nose ];
+  nativeCheckInputs = [ django_nose ];
   propagatedBuildInputs = [ django_hijack ];
 
   checkPhase = ''
@@ -29,10 +29,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Admin integration for django-hijack";
     homepage = "https://github.com/arteria/django-hijack-admin";
     license = licenses.mit;
     maintainers = with maintainers; [ lsix ];
+    # may be unmaintained, doesn't work with recent django-hijack:
+    # https://github.com/django-hijack/django-hijack-admin/issues/46
+    broken = true;
   };
 }

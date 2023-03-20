@@ -7,11 +7,11 @@ let
 in {
   options = {
     programs.zsh.zsh-autoenv = {
-      enable = mkEnableOption "zsh-autoenv";
+      enable = mkEnableOption (lib.mdDoc "zsh-autoenv");
       package = mkOption {
         default = pkgs.zsh-autoenv;
-        defaultText = "pkgs.zsh-autoenv";
-        description = ''
+        defaultText = literalExpression "pkgs.zsh-autoenv";
+        description = lib.mdDoc ''
           Package to install for `zsh-autoenv` usage.
         '';
 

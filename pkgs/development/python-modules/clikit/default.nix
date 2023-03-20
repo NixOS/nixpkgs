@@ -1,24 +1,63 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , isPy27
-, pylev, pastel, typing, enum34 }:
+, pythonAtLeast
+, poetry-core
+
+# propagates
+, pylev
+, pastel
+
+# python36+
+, crashtest
+
+# python2
+, typing
+, enum34
+
+# tests
+, pytest-mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "clikit";
-  version = "0.4.3";
+  version = "0.6.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0glppxx0pyppjcigzs8h16srlbxb6nci0282xfy3ayvwbq8pwbbf";
+  src = fetchFromGitHub {
+    owner = "sdispater";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-xAsUNhVQBjtSFHyjjnicAKRC3+Tdn3AdGDUYhmOOIdA=";
   };
 
-  propagatedBuildInputs = [
-    pylev pastel
-  ] ++ lib.optionals isPy27 [ typing enum34 ];
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace \
+      'crashtest = { version = "^0.3.0", python = "^3.6" }' \
+      'crashtest = { version = "*", python = "^3.6" }'
+  '';
 
-  # The Pypi tarball doesn't include tests, and the GitHub source isn't
-  # buildable until we bootstrap poetry, see
-  # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
-  doCheck = false;
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    pylev
+    pastel
+  ]
+  ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
+  ++ lib.optionals isPy27 [ typing enum34 ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "clikit"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/clikit";

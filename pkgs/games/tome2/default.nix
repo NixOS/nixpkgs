@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake }:
 
 let
   pname = "tome2";
@@ -9,10 +9,9 @@ let
     name = pname;
     exec = "${pname}-x11";
     icon = pname;
-    terminal = "False";
     comment = description;
     type = "Application";
-    categories = "Game;RolePlaying;";
+    categories = [ "Game" "RolePlaying" ];
     genericName = pname;
   };
 
@@ -40,7 +39,7 @@ in stdenv.mkDerivation {
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
     license = licenses.unfree;
     maintainers = with maintainers; [ cizra ];

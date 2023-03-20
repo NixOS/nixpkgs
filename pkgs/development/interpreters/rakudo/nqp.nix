@@ -2,16 +2,26 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2020.05";
+  version = "2023.02";
 
   src = fetchurl {
-    url    = "https://github.com/perl6/nqp/releases/download/${version}/nqp-${version}.tar.gz";
-    sha256 = "0xxm0vlra1g467cxc5v65p8pc46w7r9wkcddjl8nk2lnvgcr46r9";
+    url = "https://github.com/raku/nqp/releases/download/${version}/nqp-${version}.tar.gz";
+    hash = "sha256-417V7ZTsMqbXMO6BW/hcX8+IqGf6xlZjaMGtSf5jtT8=";
   };
 
   buildInputs = [ perl ];
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
+
+  # Fix for issue where nqp expects to find files from moarvm in the same output:
+  # https://github.com/Raku/nqp/commit/e6e069507de135cc71f77524455fc6b03b765b2f
+  #
+  preBuild = ''
+    share_dir="share/nqp/lib/MAST"
+    mkdir -p $out/$share_dir
+    ln -fs ${moarvm}/$share_dir/{Nodes,Ops}.nqp $out/$share_dir
+  '';
+
   configureFlags = [
     "--backends=moar"
     "--with-moar=${moarvm}/bin/moar"
@@ -19,11 +29,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Not Quite Perl -- a lightweight Raku-like environment for virtual machines";
-    homepage    = "https://github.com/perl6/nqp";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/Raku/nqp";
+    license = licenses.artistic2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
   };
 }

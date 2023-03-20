@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
 , pythonOlder
-, funcsigs
-, setuptools_scm
+, setuptools-scm
+, importlib-metadata
+, packaging
 # Check Inputs
 , pytestCheckHook
+, pytest-subtests
 , numpy
 , matplotlib
 , uncertainties
@@ -14,34 +15,39 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.11";
+  version = "0.20.1";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "Pint";
-    sha256 = "0kfgnmcs6z9ndhzvwg2xzhpwxgyyagdsdz5dns1jy40fa1q113rh";
+    hash = "sha256-OHzwQHjcff5KcIAzuq1Uq2HYKrBsTuPUkiseRdViYGc=";
   };
 
-  disabled = pythonOlder "3.6";
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    setuptools_scm
-  ] ++ lib.optional isPy27 funcsigs;
+  propagatedBuildInputs = [ packaging ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  # Test suite explicitly requires pytest
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-subtests
     numpy
     matplotlib
     uncertainties
   ];
+
   dontUseSetuptoolsCheck = true;
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Physical quantities module";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc doronbehar ];
   };
-
 }

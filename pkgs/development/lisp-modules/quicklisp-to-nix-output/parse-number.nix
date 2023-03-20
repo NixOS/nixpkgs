@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''parse-number'';
-  version = ''v1.7'';
+  baseName = "parse-number";
+  version = "v1.7";
 
   parasites = [ "parse-number/tests" ];
 
-  description = ''Number parsing library'';
+  description = "Number parsing library";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/parse-number/2018-02-28/parse-number-v1.7.tgz'';
-    sha256 = ''11ji8856ipmqki5i4cw1zgx8hahfi8x1raz1xb20c4rmgad6nsha'';
+    url = "http://beta.quicklisp.org/archive/parse-number/2018-02-28/parse-number-v1.7.tgz";
+    sha256 = "11ji8856ipmqki5i4cw1zgx8hahfi8x1raz1xb20c4rmgad6nsha";
   };
 
   packageName = "parse-number";

@@ -12,13 +12,14 @@ let
 
   mkOpts = rule: concatStringsSep " " [
     (optionalString rule.noPass "nopass")
+    (optionalString rule.noLog "nolog")
     (optionalString rule.persist "persist")
     (optionalString rule.keepEnv "keepenv")
-    "setenv { SSH_AUTH_SOCK ${concatStringsSep " " rule.setEnv} }"
+    "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${concatStringsSep " " rule.setEnv} }"
   ];
 
   mkArgs = rule:
-    if (isNull rule.args) then ""
+    if (rule.args == null) then ""
     else if (length rule.args == 0) then "args"
     else "args ${concatStringsSep " " rule.args}";
 
@@ -26,9 +27,9 @@ let
     let
       opts = mkOpts rule;
 
-      as = optionalString (!isNull rule.runAs) "as ${rule.runAs}";
+      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (!isNull rule.cmd) "cmd ${rule.cmd}";
+      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in
@@ -52,8 +53,8 @@ in
     enable = mkOption {
       type = with types; bool;
       default = false;
-      description = ''
-        Whether to enable the <command>doas</command> command, which allows
+      description = lib.mdDoc ''
+        Whether to enable the {command}`doas` command, which allows
         non-root users to execute commands as root.
       '';
     };
@@ -61,22 +62,24 @@ in
     wheelNeedsPassword = mkOption {
       type = with types; bool;
       default = true;
-      description = ''
-        Whether users of the <code>wheel</code> group must provide a password to
-        run commands as super user via <command>doas</command>.
+      description = lib.mdDoc ''
+        Whether users of the `wheel` group must provide a password to
+        run commands as super user via {command}`doas`.
       '';
     };
 
     extraRules = mkOption {
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Define specific rules to be set in the
-        <filename>/etc/doas.conf</filename> file. More specific rules should
+        {file}`/etc/doas.conf` file. More specific rules should
         come after more general ones in order to yield the expected behavior.
-        You can use <code>mkBefore</code> and/or <code>mkAfter</code> to ensure
-        this is the case when configuration options are merged.
+        You can use `mkBefore` and/or `mkAfter` to ensure
+        this is the case when configuration options are merged. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         [
           # Allow execution of any command by any user in group doas, requiring
           # a password and keeping any previously-defined environment variables.
@@ -112,17 +115,27 @@ in
             noPass = mkOption {
               type = with types; bool;
               default = false;
-              description = ''
-                If <code>true</code>, the user is not required to enter a
+              description = lib.mdDoc ''
+                If `true`, the user is not required to enter a
                 password.
+              '';
+            };
+
+            noLog = mkOption {
+              type = with types; bool;
+              default = false;
+              description = lib.mdDoc ''
+                If `true`, successful executions will not be logged
+                to
+                {manpage}`syslogd(8)`.
               '';
             };
 
             persist = mkOption {
               type = with types; bool;
               default = false;
-              description = ''
-                If <code>true</code>, do not ask for a password again for some
+              description = lib.mdDoc ''
+                If `true`, do not ask for a password again for some
                 time after the user successfully authenticates.
               '';
             };
@@ -130,10 +143,10 @@ in
             keepEnv = mkOption {
               type = with types; bool;
               default = false;
-              description = ''
-                If <code>true</code>, environment variables other than those
+              description = lib.mdDoc ''
+                If `true`, environment variables other than those
                 listed in
-                <citerefentry><refentrytitle>doas</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+                {manpage}`doas(1)`
                 are kept when creating the environment for the new process.
               '';
             };
@@ -141,18 +154,18 @@ in
             setEnv = mkOption {
               type = with types; listOf str;
               default = [];
-              description = ''
+              description = lib.mdDoc ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
-                <code>variable=value</code>. If the first character of
-                <code>value</code> is a '$', the value to be set is taken from
+                `variable=value`. If the first character of
+                `value` is a '$', the value to be set is taken from
                 the existing environment variable of the indicated name. This
                 option is processed after the default environment has been
                 created.
 
-                NOTE: All rules have <code>setenv { SSH_AUTH_SOCK }</code> by
-                default. To prevent <code>SSH_AUTH_SOCK</code> from being
-                inherited, add <code>"-SSH_AUTH_SOCK"</code> anywhere in this
+                NOTE: All rules have `setenv { SSH_AUTH_SOCK }` by
+                default. To prevent `SSH_AUTH_SOCK` from being
+                inherited, add `"-SSH_AUTH_SOCK"` anywhere in this
                 list.
               '';
             };
@@ -160,35 +173,35 @@ in
             users = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = "The usernames / UIDs this rule should apply for.";
+              description = lib.mdDoc "The usernames / UIDs this rule should apply for.";
             };
 
             groups = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = "The groups / GIDs this rule should apply for.";
+              description = lib.mdDoc "The groups / GIDs this rule should apply for.";
             };
 
             runAs = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Which user or group the specified command is allowed to run as.
-                When set to <code>null</code> (the default), all users are
+                When set to `null` (the default), all users are
                 allowed.
 
                 A user can be specified using just the username:
-                <code>"foo"</code>. It is also possible to only allow running as
-                a specific group with <code>":bar"</code>.
+                `"foo"`. It is also possible to only allow running as
+                a specific group with `":bar"`.
               '';
             };
 
             cmd = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The command the user is allowed to run. When set to
-                <code>null</code> (the default), all commands are allowed.
+                `null` (the default), all commands are allowed.
 
                 NOTE: It is best practice to specify absolute paths. If a
                 relative path is specified, only a restricted PATH will be
@@ -199,9 +212,9 @@ in
             args = mkOption {
               type = with types; nullOr (listOf str);
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Arguments that must be provided to the command. When set to
-                <code>[]</code>, the command must be run without any arguments.
+                `[]`, the command must be run without any arguments.
               '';
             };
           };
@@ -212,8 +225,10 @@ in
     extraConfig = mkOption {
       type = with types; lines;
       default = "";
-      description = ''
-        Extra configuration text appended to <filename>doas.conf</filename>.
+      description = lib.mdDoc ''
+        Extra configuration text appended to {file}`doas.conf`. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
     };
   };
@@ -230,9 +245,12 @@ in
       }
     ];
 
-    security.wrappers = {
-      doas.source = "${doas}/bin/doas";
-    };
+    security.wrappers.doas =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${doas}/bin/doas";
+      };
 
     environment.systemPackages = [
       doas
@@ -252,14 +270,14 @@ in
             # completely replace the contents of this file, use
             # `environment.etc."doas.conf"`.
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-
             # extraRules
             ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
             # extraConfig
             ${cfg.extraConfig}
+
+            # "root" is allowed to do anything.
+            permit nopass keepenv root
           '';
           preferLocalBuild = true;
         }

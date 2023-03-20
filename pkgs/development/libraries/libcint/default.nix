@@ -4,18 +4,18 @@
 , cmake
 , blas
   # Check Inputs
-, python2
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "3.0.20";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    sha256 = "0iqqq568q9sxppr08rvmpyjq0n82pm04x9rxhh3mf20x1ds7ngj5";
+    hash = "sha256-sFdigOlS5fAi2dV4dhcPg3roqFdvpnh580WDqTA6DGg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_TEST=1"
     "-DQUICK_TEST=1"
     "-DCMAKE_INSTALL_PREFIX=" # ends up double-adding /nix/store/... prefix, this avoids issue
+    "-DWITH_RANGE_COULOMB:STRING=1"
+    "-DWITH_FORTRAN:STRING=1"
+    "-DMIN_EXPCUTOFF:STRING=20"
   ];
 
+  strictDeps = true;
+
   doCheck = true;
-  # Test syntax (like print statements) is written in python2. Fixed when #33 merged: https://github.com/sunqm/libcint/pull/33
-  checkInputs = [ python2.pkgs.numpy ];
+  nativeCheckInputs = [ python3.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://wiki.sunqm.net/libcint";
     downloadPage = "https://github.com/sunqm/libcint";
+    changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
   };

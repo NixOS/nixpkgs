@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, docbook2x
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, perl, docbook2x
 , docbook_xml_dtd_45, python3Packages, pam
 
 # Optional Dependencies
@@ -6,18 +6,18 @@
 , libcap ? null, systemd ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "lxc";
-  version = "4.0.2";
+  version = "4.0.12";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1c2wbbcvs58slyq0skxizx61q1lb4yvak28x4gzsbzh3yg6nscya";
+    sha256 = "1vyk2j5w9gfyh23w3ar09cycyws16mxh3clbb33yhqzwcs1jy96v";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig perl docbook2x python3Packages.wrapPython
+    autoreconfHook pkg-config perl docbook2x python3Packages.wrapPython
   ];
   buildInputs = [
     pam libapparmor gnutls libselinux libseccomp libcap
@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
   };
 }

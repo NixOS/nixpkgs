@@ -1,32 +1,59 @@
-{ stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql
-, withLuaJIT ? false, lua, luajit }:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, fmt
+, proj
+, bzip2
+, zlib
+, boost
+, postgresql
+, withLuaJIT ? false
+, lua
+, luajit
+, libosmium
+, protozero
+, rapidjson
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.2.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
-    repo = pname;
-    rev = version;
-    sha256 = "1ysan01lpqzjxlq3y2kdminfjs5d9zksicpf9vvzpdk3fzq51fc9";
+    repo = "osm2pgsql";
+    rev = finalAttrs.version;
+    hash = "sha256-8Jefd8dfoh/an7wd+8iTM0uOKA4UiUo8t2WzZs4r/Ck=";
   };
+
+  postPatch = ''
+    # Remove bundled libraries
+    rm -r contrib
+  '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ expat proj bzip2 zlib boost postgresql ]
-    ++ stdenv.lib.optional withLuaJIT luajit
-    ++ stdenv.lib.optional (!withLuaJIT) lua;
+  buildInputs = [ expat fmt proj bzip2 zlib boost postgresql libosmium protozero ]
+    ++ lib.optional withLuaJIT luajit
+    ++ lib.optional (!withLuaJIT) lua;
 
-  cmakeFlags = stdenv.lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
+  cmakeFlags = [
+    "-DEXTERNAL_LIBOSMIUM=ON"
+    "-DEXTERNAL_PROTOZERO=ON"
+    "-DEXTERNAL_FMT=ON"
+  ] ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
-
-  meta = with stdenv.lib; {
-    description = "OpenStreetMap data to PostgreSQL converter";
-    homepage = "https://github.com/openstreetmap/osm2pgsql";
-    license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ jglukasik ];
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
   };
-}
+
+  meta = with lib; {
+    description = "OpenStreetMap data to PostgreSQL converter";
+    homepage = "https://osm2pgsql.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jglukasik das-g ];
+  };
+})

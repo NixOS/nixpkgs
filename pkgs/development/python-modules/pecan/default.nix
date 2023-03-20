@@ -1,38 +1,70 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
-# Python deps
-, singledispatch
 , logutils
+, mako
 , webtest
-, Mako
+, pythonOlder
+, pytestCheckHook
 , genshi
-, Kajiki
-, sqlalchemy
 , gunicorn
 , jinja2
+, six
+, sqlalchemy
 , virtualenv
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "pecan";
-  version = "1.3.3";
+  version = "1.4.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5461add4e3f35a7ee377b3d7f72ff13e93f40f3823b3208ab978b29bde936ff";
+    hash = "sha256-SbJV5wHD8UYWBfWw6PVPDCGSLXhF1BTCTdZAn+aV1VA=";
   };
 
-  propagatedBuildInputs = [ singledispatch logutils ];
-  buildInputs = [
-    webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
+  propagatedBuildInputs = [
+    logutils
+    mako
+    webtest
+    six
   ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    genshi
+    gunicorn
+    jinja2
+    sqlalchemy
+    virtualenv
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Pecan";
-    homepage = "https://github.com/pecan/pecan";
+  pytestFlagsArray = [
+    "--pyargs pecan"
+    # tests fail with sqlalchemy 2.0
+  ] ++ lib.optionals (lib.versionAtLeast sqlalchemy.version "2.0") [
+    # The 'sqlalchemy.orm.mapper()' function is removed as of SQLAlchemy
+    # 2.0.  Use the 'sqlalchemy.orm.registry.map_imperatively()` method
+    # of the ``sqlalchemy.orm.registry`` class to perform classical
+    # mapping.
+    # https://github.com/pecan/pecan/issues/143
+    "--deselect=pecan/tests/test_jsonify.py::TestJsonifySQLAlchemyGenericEncoder::test_result_proxy"
+    "--deselect=pecan/tests/test_jsonify.py::TestJsonifySQLAlchemyGenericEncoder::test_row_proxy"
+    "--deselect=pecan/tests/test_jsonify.py::TestJsonifySQLAlchemyGenericEncoder::test_sa_object"
+  ];
+
+  pythonImportsCheck = [
+    "pecan"
+  ];
+
+  meta = with lib; {
+    changelog = "https://pecan.readthedocs.io/en/latest/changes.html";
+    description = "WSGI object-dispatching web framework";
+    homepage = "https://www.pecanpy.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ applePrincess ];
   };
 }

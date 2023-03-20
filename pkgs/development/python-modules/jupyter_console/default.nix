@@ -1,45 +1,75 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, jupyter_client
-, ipython
-, ipykernel
-, prompt_toolkit
-, pygments
 , pythonOlder
+, substituteAll
+, hatchling
+, ipykernel
+, ipython
+, jupyter-client
+, jupyter-core
+, prompt-toolkit
+, pygments
+, pyzmq
+, traitlets
+, flaky
+, pexpect
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_console";
-  version = "6.1.0";
-  disabled = pythonOlder "3.5";
+  version = "6.6.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06s3kr5vx0l1y1b7fxb04dmrppscl7q69sl9yyfr0d057d1ssvkg";
+    hash = "sha256-WTEhLVy8H5Vvb9YVdVteFfOJqOqmlyiNu+Q3cBdhXsw=";
   };
 
-  propagatedBuildInputs = [
-    jupyter_client
-    ipython
-    ipykernel
-    prompt_toolkit
-    pygments
+  nativeBuildInputs = [
+    hatchling
   ];
-  checkInputs = [ nose ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "prompt_toolkit>=2.0.0,<2.1.0" "prompt_toolkit"
+    # use wrapped executable in tests
+    substituteInPlace jupyter_console/tests/test_console.py \
+      --replace "args = ['-m', 'jupyter_console', '--colors=NoColor']" "args = ['--colors=NoColor']" \
+      --replace "cmd = sys.executable" "cmd = '${placeholder "out"}/bin/jupyter-console'" \
+      --replace "check_output([sys.executable, '-m', 'jupyter_console'," "check_output(['${placeholder "out"}/bin/jupyter-console',"
   '';
 
-  # ValueError: underlying buffer has been detached
-  doCheck = false;
+  propagatedBuildInputs = [
+    ipykernel
+    ipython
+    jupyter-client
+    jupyter-core
+    prompt-toolkit
+    pygments
+    pyzmq
+    traitlets
+  ];
+
+  pythonImportsCheck = [
+    "jupyter_console"
+  ];
+
+  nativeCheckInputs = [
+    flaky
+    pexpect
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   meta = {
     description = "Jupyter terminal console";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/jupyter_console";
+    changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${version}";
     license = lib.licenses.bsd3;
   };
 }

@@ -1,43 +1,40 @@
-{ stdenv, fetchFromGitHub, which, coq, coq-elpi }:
+{ lib, mkCoqDerivation, coq, coq-elpi, version ? null }:
 
-let
-  versions = {
-      "0.9.0" =  {
-        rev = "v0.9.0";
-        sha256 = "1yss9f732r7bjaswgn46vd1rr3688ir0vz37wxkmy598xhrnd2ak";
-      };
-  };
-  version = x: versions.${x} // {version = x;};
-  params = {
-   "8.10" = version "0.9.0";
-   "8.11" = version "0.9.0";
-  };
-  param = params.${coq.coq-version};
-in
-
-stdenv.mkDerivation rec {
-  name = "coq${coq.coq-version}-hierarchy-builder-${param.version}";
-
-  src = fetchFromGitHub {
-    owner = "math-comp";
-    repo = "hierarchy-builder";
-    inherit (param) rev sha256;
-  };
+let hb = mkCoqDerivation {
+  pname = "hierarchy-builder";
+  owner = "math-comp";
+  inherit version;
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.15" "8.17"; out = "1.4.0"; }
+    { case = range "8.13" "8.14"; out = "1.2.0"; }
+    { case = range "8.12" "8.13"; out = "1.1.0"; }
+    { case = isEq "8.11";         out = "0.10.0"; }
+  ] null;
+  release."1.4.0".sha256  = "sha256-tOed9UU3kMw6KWHJ5LVLUFEmzHx1ImutXQvZ0ldW9rw=";
+  release."1.3.0".sha256  = "17k7rlxdx43qda6i1yafpgc64na8br285cb0mbxy5wryafcdrkrc";
+  release."1.2.1".sha256  = "sha256-pQYZJ34YzvdlRSGLwsrYgPdz3p/l5f+KhJjkYT08Mj0=";
+  release."1.2.0".sha256  = "0sk01rvvk652d86aibc8rik2m8iz7jn6mw9hh6xkbxlsvh50719d";
+  release."1.1.0".sha256  = "sha256-spno5ty4kU4WWiOfzoqbXF8lWlNSlySWcRReR3zE/4Q=";
+  release."1.0.0".sha256  = "0yykygs0z6fby6vkiaiv3azy1i9yx4rqg8xdlgkwnf2284hffzpp";
+  release."0.10.0".sha256 = "1a3vry9nzavrlrdlq3cys3f8kpq3bz447q8c4c7lh2qal61wb32h";
+  releaseRev = v: "v${v}";
 
   propagatedBuildInputs = [ coq-elpi ];
-  buildInputs = [ coq coq.ocaml coq.ocamlPackages.elpi ];
 
-  installPhase = ''make -f Makefile.coq VFILES=structures.v COQLIB=$out/lib/coq/${coq.coq-version}/ install'';
+  mlPlugin = true;
 
-  meta = {
-    description = "Coq plugin embedding ELPI.";
-    maintainers = [ stdenv.lib.maintainers.cohencyril ];
-    license = stdenv.lib.licenses.lgpl21;
-    inherit (coq.meta) platforms;
-    inherit (src.meta) homepage;
+  extraInstallFlags = [ "VFILES=structures.v" ];
+
+  meta = with lib; {
+    description = "High level commands to declare a hierarchy based on packed classes";
+    maintainers = with maintainers; [ cohencyril siraben ];
+    license = licenses.mit;
   };
-
-  passthru = {
-    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
-  };
-}
+}; in
+hb.overrideAttrs (o:
+  lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev")
+    { buildPhase = "make build"; }
+  //
+  lib.optionalAttrs (lib.versions.isGe "1.1.0" o.version || o.version == "dev")
+  { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
+)

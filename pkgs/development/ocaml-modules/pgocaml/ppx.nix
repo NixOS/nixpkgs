@@ -1,8 +1,11 @@
-{ buildDunePackage, pgocaml, ppx_tools, ppx_tools_versioned, rresult }:
+{ buildDunePackage, pgocaml, ppx_optcomp }:
 
 buildDunePackage {
   pname = "pgocaml_ppx";
   inherit (pgocaml) src version meta;
 
-  propagatedBuildInputs = [ pgocaml ppx_tools ppx_tools_versioned rresult ];
+  duneVersion = "3";
+
+  buildInputs = [ ppx_optcomp ];
+  propagatedBuildInputs = [ pgocaml ];
 }

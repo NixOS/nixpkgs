@@ -1,55 +1,94 @@
-{ cmake
-, pkg-config
-, alsaLib
-, boost
+{ asio
+, cmake
 , curl
 , fetchFromGitHub
+, fetchpatch
 , ffmpeg
+, gnutls
 , lame
+, lib
 , libev
+, game-music-emu
 , libmicrohttpd
+, libopenmpt
+, mpg123
 , ncurses
-, pulseaudio
+, pkg-config
+, portaudio
 , stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux, systemd
+# Linux Dependencies
+, alsa-lib
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
+, pulseaudio
+, sndioSupport ? true, sndio
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+# Darwin Dependencies
+, Cocoa
+, SystemConfiguration
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.90.1";
+  version = "0.99.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1ff2cgbllrl2pl5zfbf0cd9qbf6hqpwr395sa1k245ar4f1rfwpg";
+    sha256 = "sha256-SbWL36GRIJPSvxZyj6sebJxTkSPsUcsKyC3TmcIq2O0";
   };
 
-  # https://github.com/clangen/musikcube/issues/339
-  patches = [ ./dont-strip.patch ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    alsaLib
-    boost
+    asio
     curl
     ffmpeg
+    gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
+    libopenmpt
+    mpg123
     ncurses
-    pulseaudio
+    portaudio
     taglib
-  ] ++ stdenv.lib.optional systemdSupport systemd;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib pulseaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
+  ] ++ lib.optionals sndioSupport [
+    sndio
+  ] ++ lib.optionals pipewireSupport [
+    pipewire
+  ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DDISABLE_STRIP=true"
+  ];
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+  '';
+
+  meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = with maintainers; [ aanderse srapenne ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+
 stdenv.mkDerivation rec {
   pname = "sdate";
-  version = "0.6";
-  src = fetchurl {
-    url = "https://github.com/ChristophBerg/sdate/archive/${version}.tar.gz";
-    sha256 = "11irlbbhlzkg6y621smk351jl8ay3yjhl2j9hila0xa72hs4n7gz";
+  version = "0.7";
+
+  src = fetchFromGitHub {
+    owner = "ChristophBerg";
+    repo = "sdate";
+    rev = version;
+    hash = "sha256-jkwe+bSBa0p1Xzfetsdpw0RYw/gSRxnY2jBOzC5HtJ8=";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.df7cb.de/projects/sdate";
     description = "Eternal september version of the date program";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ edef ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ edef ];
+    platforms = platforms.all;
   };
 }

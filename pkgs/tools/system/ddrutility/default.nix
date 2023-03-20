@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ddrutility";
@@ -13,9 +13,14 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace /usr/local ""
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: /build/ccltHly5.o:(.bss+0x119f8): multiple definition of `start_time'; /build/cc9evx3L.o:(.bss+0x10978): first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of utilities for hard drive data rescue";
     homepage = "https://sourceforge.net/projects/ddrutility/";
     license = licenses.gpl2Plus;

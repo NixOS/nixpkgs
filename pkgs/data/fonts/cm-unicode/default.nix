@@ -1,22 +1,25 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "cm-unicode";
   version = "0.7.0";
-in fetchzip rec {
-  name = "cm-unicode-${version}";
 
-  url = "mirror://sourceforge/cm-unicode/cm-unicode/${version}/${name}-otf.tar.xz";
+  src = fetchurl {
+    url = "mirror://sourceforge/cm-unicode/cm-unicode/${version}/${pname}-${version}-otf.tar.xz";
+    hash = "sha256-VIp+vk1IYbEHW15wMrfGVOPqg1zBZDpgFx+jlypOHCg=";
+  };
 
-  postFetch = ''
-    tar -xJvf $downloadedFile --strip-components=1
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/opentype *.otf
-    install -m444 -Dt $out/share/doc/${name}    README FontLog.txt
+    install -m444 -Dt $out/share/doc/${pname}-${version}    README FontLog.txt
+
+    runHook postInstall
   '';
 
-  sha256 = "1rzz7yhqq3lljyqxbg46jfzfd09qgpgx865lijr4sgc94riy1ypn";
-
   meta = with lib; {
-    homepage = "http://canopus.iacp.dvo.ru/~panov/cm-unicode/";
+    homepage = "https://cm-unicode.sourceforge.io/";
     description = "Computer Modern Unicode fonts";
     maintainers = with maintainers; [ raskin rycee ];
     license = licenses.ofl;

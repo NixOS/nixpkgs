@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , postgresql
 , openssl
 , zlib
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "repmgr";
-  version = "5.0.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "2ndQuadrant";
     repo = "repmgr";
     rev = "v${version}";
-    hash = "sha256-1CshcutjgwWCRxBfjlNGDLKMT5BYqb+sh4i+/E/YN38=";
+    sha256 = "sha256-M8FMin9y6nAiPYeT5pUUy0KyZ1dkuH708GshZ6GoXXw=";
   };
 
   nativeBuildInputs = [ flex ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp *.control  $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
     license = licenses.postgresql;

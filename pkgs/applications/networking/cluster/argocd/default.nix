@@ -1,40 +1,64 @@
-{ lib, buildGoModule, fetchFromGitHub, packr }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "argocd";
-  version = "1.4.2";
-  commit = "48cced9d925b5bc94f6aa9fa4a8a19b2a59e128a";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "01vsyrks1k5yfvrarv8ia0isr7snilr21b7lfiy860si82r2r8hj";
+    sha256 = "sha256-+3d20bD2sxck8fCrMv6Z9O70g7iWdHA5FdFVoLDtY2k=";
   };
 
-  vendorSha256 = "0r2nh7v00m6zbdnhsgjn01q9pkiz41ckkqgfnpqmkxaqmjz31iyj";
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorHash = "sha256-BqES6nhV17iqK1dsa+2IdNCd1Wl1O6hOBczqxRHewPk=";
 
-  nativeBuildInputs = [ packr ];
+  # Set target as ./cmd per cli-local
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
+  subPackages = [ "cmd" ];
 
-  patches = [ ./use-go-module.patch ];
+  ldflags =
+    let package_url = "github.com/argoproj/argo-cd/v2/common"; in
+    [
+      "-s" "-w"
+      "-X ${package_url}.version=${version}"
+      "-X ${package_url}.buildDate=unknown"
+      "-X ${package_url}.gitCommit=${src.rev}"
+      "-X ${package_url}.gitTag=${src.rev}"
+      "-X ${package_url}.gitTreeState=clean"
+      "-X ${package_url}.kubectlVersion=v0.24.2"
+      # NOTE: Update kubectlVersion when upgrading this package with
+      # https://github.com/argoproj/argo-cd/blob/v${version}/go.mod#L95
+      # Per https://github.com/argoproj/argo-cd/blob/master/Makefile#L18
+      # Will need a way to automate it :P
+    ];
 
-  buildFlagsArray = ''
-     -ldflags=
-      -X github.com/argoproj/argo-cd/common.version=${version}
-      -X github.com/argoproj/argo-cd/common.buildDate=unknown
-      -X github.com/argoproj/argo-cd/common.gitCommit=${commit}
-      -X github.com/argoproj/argo-cd/common.gitTreeState=clean
+  nativeBuildInputs = [ installShellFiles ];
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install -Dm755 "$GOPATH/bin/cmd" -T $out/bin/argocd
+    runHook postInstall
   '';
- 
-  # run packr to embed assets
-  preBuild = ''
-    packr
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/argocd version --client | grep ${src.rev} > /dev/null
   '';
-  
+
+  postInstall = ''
+    installShellCompletion --cmd argocd \
+      --bash <($out/bin/argocd completion bash) \
+      --zsh <($out/bin/argocd completion zsh)
+  '';
+
   meta = with lib; {
-    description = "Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes";
-    homepage = "https://github.com/argoproj/argo";
+    description = "Declarative continuous deployment for Kubernetes";
+    downloadPage = "https://github.com/argoproj/argo-cd";
+    homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shahrukh330 ];
+    maintainers = with maintainers; [ shahrukh330 bryanasdev000 ];
   };
 }

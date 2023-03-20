@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, lv2 }:
+{ lib, stdenv, fetchFromGitHub, lv2 }:
 
 stdenv.mkDerivation {
-  pname = "mod-distortion-git";
-  version = "2016-08-19";
+  pname = "mod-distortion";
+  version = "unstable-2016-08-19";
 
   src = fetchFromGitHub {
     owner = "portalmod";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   installFlags = [ "INSTALL_PATH=$(out)/lib/lv2" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/portalmod/mod-distortion";
     description = "Analog distortion emulation lv2 plugins";
     license = licenses.gpl3;

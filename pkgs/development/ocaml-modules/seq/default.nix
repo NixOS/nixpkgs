@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation ({
   version = "0.1";
-  name = "ocaml${ocaml.version}-seq-0.1";
+  pname = "ocaml${ocaml.version}-seq";
 
   meta = {
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/c-cube/seq";
     inherit (ocaml.meta) platforms;
   };
 
-} // (if stdenv.lib.versionOlder ocaml.version "4.07" then {
+} // (if lib.versionOlder ocaml.version "4.07" then {
 
   src = fetchFromGitHub {
     owner = "c-cube";
@@ -20,7 +20,8 @@ stdenv.mkDerivation ({
     sha256 = "1cjpsc7q76yfgq9iyvswxgic4kfq2vcqdlmxjdjgd4lx87zvcwrv";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

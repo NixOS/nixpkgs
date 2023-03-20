@@ -1,52 +1,55 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, btrfs-progs
+, go-md2man
+, installShellFiles
+, util-linux
+, nixosTests
+}:
 
-with lib;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.2.13";
-  # git commit for the above version's tag
-  commit = "7ad184331fa3e55e52b890ea95e65ba581ae3429";
+  version = "1.6.19";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
+    hash = "sha256-Us7NEv2BngV1Q/Bkuv4XOjVjpqThL0LnIH+yciPG3L8=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  vendorHash = null;
 
-  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${commit}" ];
-
-  BUILDTAGS = []
-    ++ optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
-    make binaries $buildFlags
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
+    runHook postBuild
   '';
 
   installPhase = ''
-    for b in bin/*; do
-      install -Dm555 $b $out/$b
-    done
-
-    make man
-    installManPage man/*.[1-9]
+    runHook preInstall
+    install -Dm555 bin/* -t $out/bin
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    runHook postInstall
   '';
 
-  meta = {
+  passthru.tests = { inherit (nixosTests) docker; };
+
+  meta = with lib; {
+    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
     platforms = platforms.linux;
   };
 }

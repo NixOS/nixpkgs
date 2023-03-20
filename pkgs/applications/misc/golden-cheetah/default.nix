@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, mkDerivation
+{ lib, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1
-, yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
+, qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
+, bison, flex, zlib, qmake, makeDesktopItem, wrapQtAppsHook
 }:
 
 let
@@ -12,41 +12,53 @@ let
     desktopName = "GoldenCheetah";
     genericName = "GoldenCheetah";
     comment = "Performance software for cyclists, runners and triathletes";
-    categories = "Application;Utility;";
+    categories = [ "Utility" ];
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.5-RC2X";
+  version = "3.6-RC3";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    rev = "V${version}";
-    sha256 = "1d85700gjbcw2badwz225rjdr954ai89900vp8sal04sk79wbr6g";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/LGVDeWJZZXy5r5WxElDuxUagpA/RIwHGRbkcdO8IrE=";
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb-compat-0_1
+    gsl
+    blas
   ];
-  nativeBuildInputs = [ flex makeWrapper qmake yacc ];
+  nativeBuildInputs = [ flex wrapQtAppsHook qmake bison ];
 
-  NIX_LDFLAGS = "-lz";
+  patches = [
+    # allow building with bison 3.7
+    # Included in https://github.com/GoldenCheetah/GoldenCheetah/pull/3590,
+    # which is periodically rebased but pre 3.6 release, as it'll break other CI systems
+    ./0001-Fix-building-with-bison-3.7.patch
+  ];
 
-  qtWrapperArgs = [ "--set LD_LIBRARY_PATH ${zlib.out}/lib" ];
+  NIX_LDFLAGS = "-lz -lgsl -lblas";
+
+  qtWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" "${zlib.out}/lib" ];
 
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
-    echo 'QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease' >> src/gcconfig.pri
-    echo 'LIBUSB_INSTALL = ${libusb-compat-0_1}' >> src/gcconfig.pri
-    echo 'LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include' >> src/gcconfig.pri
-    echo 'LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb' >> src/gcconfig.pri
-    sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
-
-    # Use qtwebengine instead of qtwebkit
-    substituteInPlace src/gcconfig.pri \
-      --replace "#DEFINES += NOWEBKIT" "DEFINES += NOWEBKIT"
+    sed -i 's,^#QMAKE_LRELEASE.*,QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease,' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_INSTALL.*,LIBUSB_INSTALL = ${libusb-compat-0_1},' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_INCLUDE.*,LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include,' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_LIBS.*,LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb,' src/gcconfig.pri
   '';
 
   installPhase = ''
@@ -60,10 +72,10 @@ in mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
-    maintainers = [ maintainers.ocharles ];
-    license = licenses.gpl3;
+    maintainers = with maintainers; [ adamcstephens ];
+    license = licenses.gpl2Plus;
   };
 }

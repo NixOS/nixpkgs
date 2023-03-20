@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyopengl";
-  version = "3.1.4";
+  version = "3.1.6";
 
   src = fetchPypi {
     pname = "PyOpenGL";
     inherit version;
-    sha256 = "0bdf5ed600df30c8830455702338902528717c0af85ac5914f1dc5aa0bfa6eee";
+    hash = "sha256-jqbIdzkn7adAW//G9buTvoFWmnsFyMrFDNlOlp3OXic=";
   };
 
   propagatedBuildInputs = [ pillow ];
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   # Should run test suite from $out/${python.sitePackages}
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = "http://pyopengl.sourceforge.net/";
+  meta = with lib; {
+    homepage = "https://pyopengl.sourceforge.net/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
       PyOpenGL is the cross platform Python binding to OpenGL and

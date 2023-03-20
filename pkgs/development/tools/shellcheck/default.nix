@@ -1,4 +1,4 @@
-{ stdenv, lib, haskellPackages, haskell, pandoc }:
+{ stdenv, lib, ShellCheck, haskell, pandoc }:
 
 # this wraps around the haskell package
 # and puts the documentation into place
@@ -15,19 +15,17 @@ let
       };
     in drv' // { meta = meta' // overrideFn meta'; };
 
-  bin = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
+  bin = haskell.lib.compose.justStaticExecutables ShellCheck;
 
   shellcheck = stdenv.mkDerivation {
     pname = "shellcheck";
     version = bin.version;
 
-    inherit (haskellPackages.ShellCheck) meta src;
+    inherit (ShellCheck) meta src;
 
     nativeBuildInputs = [ pandoc ];
 
     outputs = [ "bin" "man" "doc" "out" ];
-
-    phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
 
     buildPhase = ''
       pandoc -s -f markdown-smart -t man shellcheck.1.md -o shellcheck.1
@@ -39,10 +37,15 @@ let
       install -Dm644 shellcheck.1 $man/share/man/man1/shellcheck.1
       mkdir $out
     '';
+
+    passthru = ShellCheck.passthru or {} // {
+      # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
+      unwrapped = ShellCheck;
+    };
   };
 
 in
   overrideMeta shellcheck (old: {
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [ Profpatsch zowoq ];
     outputsToInstall = [ "bin" "man" "doc" ];
   })

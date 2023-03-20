@@ -1,38 +1,113 @@
-{ stdenv, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config, epoxy, libxslt, libunwind, makeWrapper, egl-wayland }:
+{ egl-wayland
+, libepoxy
+, fetchurl
+, fontutil
+, lib
+, libGL
+, libGLU
+, libX11
+, libXau
+, libXaw
+, libXdmcp
+, libXext
+, libXfixes
+, libXfont2
+, libXmu
+, libXpm
+, libXrender
+, libXres
+, libXt
+, libdrm
+, libtirpc
+, libunwind
+, libxcb
+, libxkbfile
+, libxshmfence
+, libxcvt
+, mesa
+, meson
+, ninja
+, openssl
+, pkg-config
+, pixman
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xkbcomp
+, xkeyboard_config
+, xorgproto
+, xtrans
+, zlib
+, defaultFontPath ? "" }:
 
-with stdenv.lib;
+stdenv.mkDerivation rec {
+  pname = "xwayland";
+  version = "22.1.8";
 
-xorgserver.overrideAttrs (oldAttrs: {
+  src = fetchurl {
+    url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
+    sha256 = "sha256-0R7u5zKQuI6o2kKn2TUN7fq6hWzkrkTljARa2eyqL3M=";
+  };
 
-  name = "xwayland-${xorgserver.version}";
-  buildInputs = oldAttrs.buildInputs ++ [ egl-wayland ];
-  propagatedBuildInputs = oldAttrs.propagatedBuildInputs
-    ++ [wayland wayland-protocols epoxy libxslt makeWrapper libunwind];
-  configureFlags = [
-    "--disable-docs"
-    "--disable-devel-docs"
-    "--enable-xwayland"
-    "--enable-xwayland-eglstream"
-    "--disable-xorg"
-    "--disable-xvfb"
-    "--disable-xnest"
-    "--disable-xquartz"
-    "--disable-xwin"
-    "--enable-glamor"
-    "--with-default-font-path="
-    "--with-xkb-bin-directory=${xkbcomp}/bin"
-    "--with-xkb-path=${xkeyboard_config}/etc/X11/xkb"
-    "--with-xkb-output=$(out)/share/X11/xkb/compiled"
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wayland-scanner
+  ];
+  buildInputs = [
+    egl-wayland
+    libepoxy
+    fontutil
+    libGL
+    libGLU
+    libX11
+    libXau
+    libXaw
+    libXdmcp
+    libXext
+    libXfixes
+    libXfont2
+    libXmu
+    libXpm
+    libXrender
+    libXres
+    libXt
+    libdrm
+    libtirpc
+    libunwind
+    libxcb
+    libxkbfile
+    libxshmfence
+    libxcvt
+    mesa
+    openssl
+    pixman
+    wayland
+    wayland-protocols
+    xkbcomp
+    xorgproto
+    xtrans
+    zlib
+  ];
+  mesonFlags = [
+    (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonOption "default_font_path" defaultFontPath)
+    (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
+    (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")
+    (lib.mesonOption "xkb_output_dir" "${placeholder "out"}/share/X11/xkb/compiled")
+    (lib.mesonBool "libunwind" (libunwind != null))
   ];
 
-  postInstall = ''
-    rm -fr $out/share/X11/xkb/compiled
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
+    maintainers = with maintainers; [ emantor ];
     platforms = platforms.linux;
   };
-})
+}

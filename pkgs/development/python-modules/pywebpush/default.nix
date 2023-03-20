@@ -1,23 +1,42 @@
-{ lib, fetchPypi, buildPythonPackage
-, coverage, flake8, mock, nose
-, http-ece, py-vapid, requests }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, cryptography
+, http-ece
+, py-vapid
+, requests
+, six
+, coverage
+, flake8
+, mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.10.1";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e80ae0ea978b2e3b7860d2a9ae836528f5fa2e13936673e0b6613589965937ee";
+    hash = "sha256-bDbhZ5JoIZ5pO6lA2yvyVMJAygJmTeECtyaa/DxUVzE=";
   };
 
   propagatedBuildInputs = [
-    http-ece py-vapid requests
+    cryptography
+    http-ece
+    py-vapid
+    requests
+    six
   ];
 
-  checkInputs = [
-    coverage flake8 mock nose
+  nativeCheckInputs = [
+    coverage
+    flake8
+    mock
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "pywebpush" ];
 
   meta = with lib; {
     description = "Webpush Data encryption library for Python";

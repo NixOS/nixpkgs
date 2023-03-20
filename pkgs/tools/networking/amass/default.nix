@@ -1,28 +1,34 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.6.2";
+  version = "3.22.1";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     rev = "v${version}";
-    sha256 = "1ih681790sp0lqfbsl153dpr5vzxp1jjza28pajrqjzs7zyjmkgs";
+    hash = "sha256-hkYN28M2t8SXmIrSEQEWM5ndCx1xgpHThNg0UFzQqLU=";
   };
 
-  vendorSha256 = "1f8za3z5pv1pznbd91fk5j4y8qg93qk5zvnchjl7inyirciawdf6";
+  vendorHash = "sha256-fZd++VsLcs3MzcM23zE3AVaDPXf+cuLdJp8hsCeEZ1Y=";
 
-  outputs = [ "out" "wordlists" ];
+  outputs = [
+    "out"
+    "wordlists"
+  ];
 
   postInstall = ''
     mkdir -p $wordlists
-    cp -R $src/examples/wordlists/*.txt $wordlists
+    cp -R examples/wordlists/*.txt $wordlists
     gzip $wordlists/*.txt
   '';
+
+  # https://github.com/OWASP/Amass/issues/640
+  doCheck = false;
 
   meta = with lib; {
     description = "In-Depth DNS Enumeration and Network Mapping";
@@ -37,8 +43,9 @@ buildGoModule rec {
       Amass ships with a set of wordlist (to be used with the amass -w flag)
       that are found under the wordlists output.
       '';
-    homepage = "https://www.owasp.org/index.php/OWASP_Amass_Project";
+    homepage = "https://owasp.org/www-project-amass/";
+    changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ kalbasit fab ];
   };
 }

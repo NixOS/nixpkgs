@@ -1,62 +1,110 @@
-{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
-, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
+{ lib
+, hwdata
+, pkg-config
+, lxc
+, buildGoModule
+, fetchurl
+, makeWrapper
+, acl
+, rsync
+, gnutar
+, xz
+, btrfs-progs
+, gzip
+, dnsmasq
+, attr
+, squashfsTools
+, iproute2
+, iptables
+, libcap
+, dqlite
+, raft-canonical
+, sqlite
+, udev
+, writeShellScriptBin
+, apparmor-profiles
+, apparmor-parser
 , criu
 , bash
 , installShellFiles
+, nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "lxd";
-  version = "4.1";
-
-  goPackagePath = "github.com/lxc/lxd";
+  version = "5.11";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0svzj57wwm43d2gnx0myr2p9pzjmkivwhgg0dww6zl169bx32liz";
+    urls = [
+      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
+      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
+    ];
+    hash = "sha256-6z6C1nWmnHLdLtLf7l1f4riGhuP2J2mt8mVWZIiege0=";
   };
+
+  vendorSha256 = null;
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
+  excludedPackages = [ "test" "lxd/db/generate" ];
+
+  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    dqlite.dev
+    raft-canonical.dev
+    sqlite
+    udev.dev
+  ];
+
+  ldflags = [ "-s" "-w" ];
+  tags = [ "libsqlite3" ];
+
   preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm _dist/src/github.com/lxc/lxd
-    cp -r _dist/src/* ../../..
-    popd
+    # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
+    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
   '';
 
-  buildFlags = [ "-tags libsqlite3" ];
+  preCheck =
+    let skippedTests = [
+      "TestValidateConfig"
+      "TestConvertNetworkConfig"
+      "TestConvertStorageConfig"
+      "TestSnapshotCommon"
+      "TestContainerTestSuite"
+    ]; in
+    ''
+      # Disable tests requiring local operations
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
+    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
+      [ iptables ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
+      ++ [ (writeShellScriptBin "apparmor_parser" ''
+             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+           '') ]
+      )
+    }
 
-    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
-      (writeShellScriptBin "apparmor_parser" ''
-        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-      '')
-    ]}
-
-    installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
+    installShellCompletion --bash --name lxd ./scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ installShellFiles pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
-                  raft-canonical.dev sqlite-replication udev.dev ];
+  passthru.tests.lxd = nixosTests.lxd;
+  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
+    changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ marsam adamcstephens ];
     platforms = platforms.linux;
   };
 }

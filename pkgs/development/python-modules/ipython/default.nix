@@ -2,68 +2,89 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
+
 # Build dependencies
-, glibcLocales
-# Test dependencies
-, nose
-, pygments
+, setuptools
+
 # Runtime dependencies
-, jedi
-, decorator
-, pickleshare
-, traitlets
-, prompt_toolkit
-, pexpect
 , appnope
 , backcall
-, fetchpatch
+, decorator
+, jedi
+, matplotlib-inline
+, pexpect
+, pickleshare
+, prompt-toolkit
+, pygments
+, stack-data
+, traitlets
+
+# Test dependencies
+, pytestCheckHook
+, testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.13.0";
-  disabled = pythonOlder "3.6";
+  version = "8.11.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca478e52ae1f88da0102360e57e528b92f3ae4316aabac80a2cd7f7ab2efb48a";
+    sha256 = "735cede4099dbc903ee540307b9171fbfef4aa75cfcacc5a273b2cda2f02be04";
   };
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace setup.py --replace "'gnureadline'" " "
-  '';
-
-  buildInputs = [ glibcLocales ];
-
-  checkInputs = [ nose pygments ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
-    jedi
-    decorator
-    pickleshare
-    traitlets
-    prompt_toolkit
-    pygments
-    pexpect
     backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
-
-  LC_ALL="en_US.UTF-8";
-
-  doCheck = false; # Circular dependency with ipykernel
-
-  checkPhase = ''
-    nosetests
-  '';
+    decorator
+    jedi
+    matplotlib-inline
+    pexpect
+    pickleshare
+    prompt-toolkit
+    pygments
+    stack-data
+    traitlets
+  ] ++ lib.optionals stdenv.isDarwin [
+    appnope
+  ];
 
   pythonImportsCheck = [
     "IPython"
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+
+    # doctests try to fetch an image from the internet
+    substituteInPlace pytest.ini \
+      --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    testpath
+  ];
+
+  disabledTests = [
+    # UnboundLocalError: local variable 'child' referenced before assignment
+    "test_system_interrupt"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
+  ];
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
+    changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };

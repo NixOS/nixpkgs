@@ -1,22 +1,26 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
+, isPy3k
+, backports_functools_lru_cache
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "wcwidth";
-  version = "0.1.7";
+  version = "0.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pn6dflzm609m4r3i8ik5ni9ijjbb5fa3vg1n7hn6vkd49r77wrx";
+    hash = "sha256-pSIHgKQE2+M1N4mHCXjkcs/kd3YfBu5VB3JW5QmxVtA=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
+    backports_functools_lru_cache
+  ];
 
   # To prevent infinite recursion with pytest
   doCheck = false;
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Measures number of Terminal column cells of wide-character codes";

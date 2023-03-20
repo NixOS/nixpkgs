@@ -3,15 +3,13 @@
 
 { name ? "debian-build"
 , diskImage
-, src, stdenv, vmTools, checkinstall
+, src, lib, stdenv, vmTools, checkinstall
 , fsTranslation ? false
 , # Features provided by this package.
   debProvides ? []
 , # Features required by this package.
   debRequires ? []
 , ... } @ args:
-
-with stdenv.lib;
 
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
@@ -23,10 +21,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     prePhases = "installExtraDebsPhase sysInfoPhase";
   }
 
-  // removeAttrs args ["vmTools"] //
+  // removeAttrs args ["vmTools" "lib"] //
 
   {
-    name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
+    name = name + "-" + diskImage.name + (lib.optionalString (src ? version) "-${src.version}");
 
     # !!! cut&paste from rpm-build.nix
     postHook = ''
@@ -45,9 +43,8 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       [ ! -f /etc/lsb-release ] || (source /etc/lsb-release; echo "OS release: $DISTRIB_DESCRIPTION")
       echo "System/kernel: $(uname -a)"
       if test -e /etc/debian_version; then echo "Debian release: $(cat /etc/debian_version)"; fi
-      header "installed Debian packages"
+      echo "installed Debian packages"
       dpkg-query --list
-      stopNest
     '';
 
     installPhase = ''
@@ -59,8 +56,8 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       export PAGER=cat
       ${checkinstall}/sbin/checkinstall --nodoc -y -D \
         --fstrans=${if fsTranslation then "yes" else "no"} \
-        --requires="${concatStringsSep "," debRequires}" \
-        --provides="${concatStringsSep "," debProvides}" \
+        --requires="${lib.concatStringsSep "," debRequires}" \
+        --provides="${lib.concatStringsSep "," debProvides}" \
         ${if (src ? version) then "--pkgversion=$(echo ${src.version} | tr _ -)"
                              else "--pkgversion=0.0.0"} \
         ''${debMaintainer:+--maintainer="'$debMaintainer'"} \
@@ -75,11 +72,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       [ "$(echo $out/debs/*.deb)" != "" ]
 
       for i in $out/debs/*.deb; do
-        header "Generated DEB package: $i"
+        echo "Generated DEB package: $i"
         dpkg-deb --info "$i"
         pkgName=$(dpkg-deb -W "$i" | awk '{print $1}')
         echo "file deb $i" >> $out/nix-support/hydra-build-products
-        stopNest
       done
       dpkg -i $out/debs/*.deb
 

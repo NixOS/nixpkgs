@@ -2,31 +2,35 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
-, nose
+, pytestCheckHook
+, cython
 , toolz
 , python
-, fetchpatch
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.10.1";
+  version = "0.12.1";
+  disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p4a9nadsy1337gy2cnb5yanbn03j3zm6d9adyqad9bk3nlbpxc2";
+    hash = "sha256-/DOQk5dIHJDePOyDG/uI2X4iDckZOdmWkgIC8YS0ZI4=";
   };
 
-  # Extension types
-  disabled = isPyPy;
+  nativeBuildInputs = [ cython ];
 
-  checkInputs = [ nose ];
   propagatedBuildInputs = [ toolz ];
 
-  # Failing test https://github.com/pytoolz/cytoolz/issues/122
-  checkPhase = ''
-    NOSE_EXCLUDE=test_introspect_builtin_modules nosetests -v $out/${python.sitePackages}
+  # tests are located in cytoolz/tests, however we can't import cytoolz
+  # from $PWD, as it will break relative imports
+  preCheck = ''
+    cd cytoolz
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";

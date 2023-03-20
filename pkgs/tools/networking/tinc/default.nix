@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lzo, openssl, zlib}:
+{lib, stdenv, fetchurl, lzo, openssl, zlib}:
 
 stdenv.mkDerivation rec {
   version = "1.0.36";
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       authentication, compression and ethernet bridging.
     '';
     homepage="http://www.tinc-vpn.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "tincd";
+    platforms = lib.platforms.unix;
   };
 }

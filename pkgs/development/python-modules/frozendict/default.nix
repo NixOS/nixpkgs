@@ -1,20 +1,53 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "1.2";
+  version = "2.3.5";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Marco-Sulla";
+    repo = "python-frozendict";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IlKhqQvNaYz4+U8UJ/fGUNNTC3RjyGKCJUzJ6J431Vw=";
   };
 
-  # frozendict does not come with tests
-  doCheck = false;
+  postPatch = ''
+    # https://github.com/Marco-Sulla/python-frozendict/pull/69
+    substituteInPlace setup.py \
+      --replace 'if impl == "PyPy":' 'if impl == "PyPy" or not src_path.exists():'
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/slezica/python-frozendict";
-    description = "An immutable dictionary";
-    license = licenses.mit;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "frozendict"
+  ];
+
+  preCheck = ''
+    pushd test
+  '';
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/Marco-Sulla/python-frozendict/issues/68
+    "test_c_extension"
+  ];
+
+  meta = with lib; {
+    description = "Module for immutable dictionary";
+    homepage = "https://github.com/Marco-Sulla/python-frozendict";
+    changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ ];
   };
 }

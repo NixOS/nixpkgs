@@ -1,39 +1,87 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
+{ lib
+, android-backup
 , appdirs
+, attrs
+, buildPythonPackage
 , click
 , construct
+, croniter
 , cryptography
-, pytest
-, zeroconf
-, attrs
-, pytz
-, tqdm
+, defusedxml
+, fetchPypi
+, fetchpatch
+, importlib-metadata
+, micloud
 , netifaces
+, poetry-core
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pytz
+, pyyaml
+, tqdm
+, zeroconf
 }:
+
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.0.1";
+  version = "0.5.12";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa9c318256945ad4a8623fdf921ce81c466a7aea18b04a6711efb662f520b195";
+    hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ appdirs click construct cryptography zeroconf attrs pytz tqdm netifaces ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  checkPhase = ''
-    pytest
-  '';
+  patches = [
+    (fetchpatch {
+      # Fix pytest 7.2 compat
+      url = "https://github.com/rytilahti/python-miio/commit/67d9d771d04d51f5bd97f361ca1c15ae4a18c274.patch";
+      hash = "sha256-Os9vCSKyieCqHs63oX6gcLrtv1N7hbX5WvEurelEp8w=";
+    })
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    android-backup
+    appdirs
+    attrs
+    click
+    construct
+    croniter
+    cryptography
+    defusedxml
+    micloud
+    netifaces
+    pytz
+    pyyaml
+    tqdm
+    zeroconf
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "miio"
+  ];
+
+  meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ flyfloh ];
   };
 }
-

@@ -27,13 +27,17 @@ existing packages here and modify it as necessary.
 { libsForQt5, lib, fetchurl }:
 
 let
+  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  license = with lib.licenses; [
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12Plus
+  ];
 
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+  mkDerivation = libsForQt5.callPackage ({ stdenv, mkDerivation ? stdenv.mkDerivation }: mkDerivation) {};
 
   packages = self: with self;
     # SUPPORT
@@ -63,8 +67,8 @@ let
         mkDerivation = args:
           let
 
-            inherit (args) name;
-            inherit (srcs.${name}) src version;
+            inherit (args) pname;
+            inherit (srcs.${pname}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
             hasSeparateDev = lib.elem "dev" outputs;
@@ -72,18 +76,17 @@ let
             defaultSetupHook = if hasSeparateDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
-            meta = {
-              homepage = "http://www.kde.org";
-              license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-              ];
-              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              platforms = lib.platforms.linux;
-            } // (args.meta or {});
+            meta =
+              let meta = args.meta or {}; in
+              meta // {
+                homepage = meta.homepage or "https://kde.org";
+                license = meta.license or license;
+                maintainers = (meta.maintainers or []) ++ maintainers;
+                platforms = meta.platforms or lib.platforms.linux;
+              };
 
           in mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit pname meta outputs setupHook src version;
           });
 
       };
@@ -112,6 +115,7 @@ let
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
       kplotting = callPackage ./kplotting.nix {};
+      kquickcharts = callPackage ./kquickcharts.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
       kwindowsystem = callPackage ./kwindowsystem {};
@@ -120,7 +124,7 @@ let
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       prison = callPackage ./prison.nix {};
       qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
-      solid = callPackage ./solid.nix {};
+      solid = callPackage ./solid {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
@@ -144,19 +148,19 @@ let
     # TIER 3
       baloo = callPackage ./baloo.nix {};
       kbookmarks = callPackage ./kbookmarks.nix {};
-      kcmutils = callPackage ./kcmutils {};
-      kconfigwidgets = callPackage ./kconfigwidgets {};
+      kcmutils = callPackage ./kcmutils.nix {};
+      kconfigwidgets = callPackage ./kconfigwidgets.nix {};
+      kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-      kdesu = callPackage ./kdesu.nix {};
-      kdewebkit = callPackage ./kdewebkit.nix {};
+      kdesu = callPackage ./kdesu {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};
       kinit = callPackage ./kinit {};
       kio = callPackage ./kio {};
-      knewstuff = callPackage ./knewstuff.nix {};
+      knewstuff = callPackage ./knewstuff {};
       knotifyconfig = callPackage ./knotifyconfig.nix {};
       kparts = callPackage ./kparts.nix {};
       kpeople = callPackage ./kpeople.nix {};

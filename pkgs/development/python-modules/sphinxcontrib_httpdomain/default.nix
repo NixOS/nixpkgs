@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , sphinx
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-httpdomain";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ac40b4fba58c76b073b03931c7b8ead611066a6aebccafb34dc19694f4eb6335";
+    hash = "sha256-bC3+bKKC119m3zM4absM5zMcAbR122gJ/50Qe3zf4Es=";
   };
 
   propagatedBuildInputs = [ sphinx ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
     homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = licenses.bsd0;

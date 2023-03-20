@@ -1,30 +1,40 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, version ? "3.300" }:
 
 let
-  version = "2.100";
-in fetchzip rec {
-  name = "scheherazade-${version}";
+  new = lib.versionAtLeast version "3.000";
+  hash = {
+    "2.100" = "sha256-d2UyOOOnmE1afCwyIrM1bL3lQC7XRwh03hzetk/4V30=";
+    "3.300" = "sha256-LaaA6DWAE2dcwVVX4go9cJaiuwI6efYbPk82ym3W3IY=";
+  }."${version}";
+  pname = "scheherazade${lib.optionalString new "-new"}";
+in
+stdenvNoCC.mkDerivation rec {
+  inherit pname version;
 
-  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade-${version}.zip";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+    inherit hash;
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*           -d $out/share/doc/${name}/documentation
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc
+    cp -r documentation $out/share/doc/
+
+    runHook postInstall
   '';
-
-  sha256 = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";
     description = "A font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
-      Scheherazade, named after the heroine of the classic Arabian Nights tale,
-      is designed in a similar style to traditional typefaces such as Monotype
-      Naskh, extended to cover the Unicode Arabic repertoire through Unicode
-      8.0.
+
+      Scheherazade${lib.optionalString new " New"}, named after the heroine of
+      the classic Arabian Nights tale, is designed in a similar style to
+      traditional typefaces such as Monotype Naskh, extended to cover the
+      Unicode Arabic repertoire through Unicode ${if new then "14.0" else "8.0"}.
 
       Scheherazade provides a “simplified” rendering of Arabic script, using
       basic connecting glyphs but not including a wide variety of additional

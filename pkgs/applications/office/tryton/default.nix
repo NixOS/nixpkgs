@@ -1,12 +1,12 @@
-{ stdenv
+{ lib
 , python3Packages
-, pkgconfig
+, pkg-config
 , librsvg
 , gobject-introspection
 , atk
 , gtk3
 , gtkspell3
-, gnome3
+, gnome
 , glib
 , goocanvas2
 , gdk-pixbuf
@@ -16,7 +16,7 @@
 , wrapGAppsHook
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
@@ -30,13 +30,13 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil
+    python-dateutil
     pygobject3
     goocalendar
     pycairo
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     atk
     gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     goocanvas2
     fontconfig
     freetype

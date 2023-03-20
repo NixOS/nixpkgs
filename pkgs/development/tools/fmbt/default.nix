@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, python, autoreconfHook, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, python, autoreconfHook, pkg-config, makeWrapper
 , flex
-, gettext, libedit, glib, imagemagick, libxml2, boost, gnuplot, graphviz
+, gettext, libedit, glib, imagemagick6, libxml2, boost, gnuplot, graphviz
 , tesseract, gts, libXtst
 }:
 stdenv.mkDerivation rec {
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1jb9nb2mipc5cg99a80dny4m06vz2zral0q30fv75rz2cb6ja4zp";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig flex makeWrapper
+  nativeBuildInputs = [ autoreconfHook pkg-config flex makeWrapper
     python.pkgs.wrapPython ];
 
-  buildInputs = [ python gettext libedit glib imagemagick libxml2 boost
-    gnuplot graphviz tesseract gts 
+  buildInputs = [ python gettext libedit glib imagemagick6 libxml2 boost
+    gnuplot graphviz tesseract gts
     ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export PYTHONPATH="$PYTHONPATH:$out/lib/python${python.pythonVersion}/site-packages"
     export PATH="$PATH:$out/bin"
-    export LD_LIBRARY_PATH="${stdenv.lib.makeLibraryPath [libXtst]}"
+    export LD_LIBRARY_PATH="${lib.makeLibraryPath [libXtst]}"
   '';
 
   postInstall = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Model-Based Testing tool";
     homepage = "https://github.com/intel/fMBT";
     license = licenses.lgpl21;

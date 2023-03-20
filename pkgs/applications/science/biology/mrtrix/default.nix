@@ -1,17 +1,17 @@
 { stdenv, lib, fetchFromGitHub, python, makeWrapper
 , eigen, fftw, libtiff, libpng, zlib, ants, bc
 , qt5, libGL, libGLU, libX11, libXext
-, withGui ? true }:
+, withGui ? true, less }:
 
 stdenv.mkDerivation rec {
   pname = "mrtrix";
-  version = "3.0.0";
+  version = "unstable-2021-11-25";
 
   src = fetchFromGitHub {
     owner  = "MRtrix3";
     repo   = "mrtrix3";
-    rev    = version;
-    sha256 = "1vvmmbw3m0bdfwp4szr62ygzsvkj0ss91cx5zlkspsr1rff05f9b";
+    rev    = "994498557037c9e4f7ba67f255820ef84ea899d9";
+    sha256 = "sha256-8eFDS5z4ZxMzi9Khk90KAS4ndma/Syd6JDXM2Fpr0M8=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     qt5.qtsvg
   ];
 
-  installCheckInputs = [ bc ];
+  nativeInstallCheckInputs = [ bc ];
 
   postPatch = ''
     patchShebangs ./build ./configure ./run_tests ./bin/*
@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace ./run_tests  \
       --replace 'git submodule update --init $datadir >> $LOGFILE 2>&1' ""
+
+    substituteInPlace ./build  \
+      --replace '"less -RX "' '"${less}/bin/less -RX "'
   '';
 
   configurePhase = ''
@@ -83,6 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
     maintainers = with maintainers; [ bcdarwin ];

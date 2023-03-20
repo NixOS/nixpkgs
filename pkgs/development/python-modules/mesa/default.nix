@@ -1,32 +1,48 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
-, cookiecutter, networkx , pandas, tornado, tqdm
-, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, cookiecutter
+, networkx
+, pandas
+, tornado
+, tqdm
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "mesa";
-  # contains several fixes for networkx 2.4 bump
-  version = "unstable-2019-12-09";
+  version = "1.2.0";
+  format = "setuptools";
 
   # According to their docs, this library is for Python 3+.
   disabled = isPy27;
 
-  src = fetchFromGitHub {
-    owner = "projectmesa";
-    repo = "mesa";
-    rev = "86b343b42630e94d939029ff2cc609ff04ed40e9";
-    sha256 = "1y41s1vd89vcsm4aia18ayfff4w2af98lwn5l9fcwp157li985vw";
+  src = fetchPypi {
+    pname = "Mesa";
+    inherit version;
+    hash = "sha256-Hb+iISf9Aug3JIf+3kcXwYPshAe2CkqbGPEuSY2Ij9s=";
   };
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    cookiecutter
+    networkx
+    pandas
+    tornado
+    tqdm
+  ];
 
-  # Ignore test which tries to mkdir in unreachable location.
-  checkPhase = ''
-    pytest tests -k "not scaffold"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ cookiecutter networkx pandas tornado tqdm ];
+  disabledTests = [
+    "test_examples"
+    "test_run"
+    "test_scaffold_creates_project_dir"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
     description = "An agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;

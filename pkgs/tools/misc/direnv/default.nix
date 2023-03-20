@@ -1,30 +1,40 @@
-{ stdenv, fetchFromGitHub, buildGoModule, bash }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.21.3";
-
-  vendorSha256 = null;
+  version = "2.32.2";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "1adi6ld9g4zgz0f6q0kkzrywclqrmikyp7yh22zm9lfdvd5hs8wp";
+    sha256 = "sha256-Ql/Q9SoCNy2JKt/32RIMx08rbGvrthdgTpFIFx4m1p4=";
   };
 
-  # we have no bash at the moment for windows
-  makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isWindows) [
-    "BASH_PATH=${bash}/bin/bash"
-  ];
+  vendorSha256 = "sha256-eQaQ77pOYC8q+IA26ArEhHQ0DCU093TbzaYhdV3UydE=";
 
-  installPhase = ''
-    make install DESTDIR=$out
-    mkdir -p $out/share/fish/vendor_conf.d
-    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+  # we have no bash at the moment for windows
+  BASH_PATH =
+    lib.optionalString (!stdenv.hostPlatform.isWindows)
+    "${bash}/bin/bash";
+
+  # replace the build phase to use the GNUMakefile instead
+  buildPhase = ''
+    make BASH_PATH=$BASH_PATH
   '';
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    make install PREFIX=$out
+  '';
+
+  nativeCheckInputs = [ fish zsh ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    make test-go test-bash test-fish test-zsh
+  '';
+
+  meta = with lib; {
     description = "A shell extension that manages your environment";
     longDescription = ''
       Once hooked into your shell direnv is looking for an .envrc file in your
@@ -39,6 +49,6 @@ buildGoModule rec {
     '';
     homepage = "https://direnv.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = teams.numtide.members;
   };
 }

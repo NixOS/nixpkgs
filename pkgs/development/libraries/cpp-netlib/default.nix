@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cpp-netlib";
@@ -12,23 +12,17 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ cmake boost openssl ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost openssl ];
 
   cmakeFlags = [
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
   ];
 
-  enableParallelBuilding = true;
-
-  # The test driver binary lacks an RPath to the library's libs
-  preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/libs/network/src
-  '';
-
   # Most tests make network GET requests to various websites
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of open-source libraries for high level network programming";
     homepage    = "https://cpp-netlib.org";
     license     = licenses.boost;

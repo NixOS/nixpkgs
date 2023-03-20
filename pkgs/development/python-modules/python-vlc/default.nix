@@ -2,36 +2,46 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, vlc
+, libvlc
 , substituteAll
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-vlc";
-  version = "3.0.7110";
+  version = "3.0.18121";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ydnqwwgpwq1kz1pjrc7629ljzdd30izymjylsbzzyq8pq6wl6w2";
+    hash = "sha256-JFUDFKPm7VX9NHsAlJHJi4ZfnfoFqS6InXsKIhDnSFs=";
   };
+
+  patches = [
+    # Patch path for VLC
+    (substituteAll {
+      src = ./vlc-paths.patch;
+      libvlcPath="${libvlc}/lib/libvlc.so.5";
+    })
+  ];
 
   propagatedBuildInputs = [
     setuptools
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./vlc-paths.patch;
-      libvlcPath="${vlc}/lib/libvlc.so.5";
-    })
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "vlc"
   ];
 
-  doCheck = false; # no tests
-
   meta = with lib; {
-    homepage = "https://wiki.videolan.org/PythonBinding";
-    maintainers = with maintainers; [ tbenst ];
     description = "Python bindings for VLC, the cross-platform multimedia player and framework";
+    homepage = "https://wiki.videolan.org/PythonBinding";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ tbenst ];
   };
 }

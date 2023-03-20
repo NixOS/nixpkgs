@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hanwen/go-fuse";
-      rev = "730713460d4fc41afdc2533bd37ff60c94c0c586";
-      sha256 = "1y44d08fxyis99s6jxdr6dbbw5kv3wb8lkhq3xmr886i4w41lz03";
+      rev = "0f728ba15b38579efefc3dc47821882ca18ffea7";
+      sha256 = "05ymw2pp58avf19wvi0cgdzqf3d88k1jdf6ldj4hmhbkm3waqf7l";
     };
   }
   {

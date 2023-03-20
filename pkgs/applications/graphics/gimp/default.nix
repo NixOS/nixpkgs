@@ -2,7 +2,8 @@
 , lib
 , fetchurl
 , substituteAll
-, pkgconfig
+, autoreconfHook
+, pkg-config
 , intltool
 , babl
 , gegl
@@ -17,6 +18,7 @@
 , lcms
 , libpng
 , libjpeg
+, libjxl
 , poppler
 , poppler_data
 , libtiff
@@ -28,9 +30,10 @@
 , ghostscript
 , aalib
 , shared-mime-info
-, python2Packages
 , libexif
 , gettext
+, makeWrapper
+, gtk-doc
 , xorg
 , glib-networking
 , libmypaint
@@ -44,26 +47,43 @@
 , AppKit
 , Cocoa
 , gtk-mac-integration-gtk2
+, withPython ? false
+, python2
 }:
 
 let
-  inherit (python2Packages) pygtk wrapPython python;
-in stdenv.mkDerivation rec {
+  python = python2.withPackages (pp: [ pp.pygtk ]);
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.10.18";
+  version = "2.10.34";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "Zb/hEejuv/093jAWzLUH+ZSNJmPZSXy0ONm7YJ4R1xY=";
+    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
+    sha256 = "hABGQtNRs5ikKTzX/TWSBEqUTwW7UoUO5gaPJHxleqM=";
   };
 
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+
+    # Use absolute paths instead of relying on PATH
+    # to make sure plug-ins are loaded by the correct interpreter.
+    ./hardcode-plugin-interpreters.patch
+  ];
+
   nativeBuildInputs = [
-    pkgconfig
+    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
+    pkg-config
     intltool
     gettext
-    wrapPython
+    makeWrapper
+    gtk-doc
   ];
 
   buildInputs = [
@@ -82,6 +102,7 @@ in stdenv.mkDerivation rec {
     lcms
     libpng
     libjpeg
+    libjxl
     poppler
     poppler_data
     libtiff
@@ -96,8 +117,6 @@ in stdenv.mkDerivation rec {
     shared-mime-info
     libwebp
     libheif
-    python
-    pygtk
     libexif
     xorg.libXpm
     glib-networking
@@ -109,49 +128,16 @@ in stdenv.mkDerivation rec {
     gtk-mac-integration-gtk2
   ] ++ lib.optionals stdenv.isLinux [
     libgudev
+  ] ++ lib.optionals withPython [
+    python
+    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
+    python2.pkgs.pygtk
   ];
 
   # needed by gimp-2.0.pc
   propagatedBuildInputs = [
     gegl
   ];
-
-  pythonPath = [ pygtk ];
-
-  # Check if librsvg was built with --disable-pixbuf-loader.
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
-
-  preConfigure = ''
-    # The check runs before glib-networking is registered
-    export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
-  '';
-
-  patches = [
-    # to remove compiler from the runtime closure, reference was retained via
-    # gimp --version --verbose output
-    (substituteAll {
-      src = ./remove-cc-reference.patch;
-      cc_version = stdenv.cc.cc.name;
-    })
-  ];
-
-  postFixup = ''
-    wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
-    wrapProgram $out/bin/gimp-${lib.versions.majorMinor version} \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-  '';
-
-  passthru = rec {
-    # The declarations for `gimp-with-plugins` wrapper,
-    # used for determining plug-in installation paths
-    majorVersion = "${lib.versions.major version}.0";
-    targetPluginDir = "lib/gimp/${majorVersion}/plug-ins";
-    targetScriptDir = "share/gimp/${majorVersion}/scripts";
-
-    # probably its a good idea to use the same gtk in plugins ?
-    gtk = gtk2;
-  };
 
   configureFlags = [
     "--without-webkit" # old version is required
@@ -160,13 +146,45 @@ in stdenv.mkDerivation rec {
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
     # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
     "--libdir=\${exec_prefix}/lib"
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
   ];
 
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
-
   enableParallelBuilding = true;
+
+  doCheck = true;
+
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
+
+    # Check if librsvg was built with --disable-pixbuf-loader.
+    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+  };
+
+  preConfigure = ''
+    # The check runs before glib-networking is registered
+    export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/gimp-${lib.versions.majorMinor finalAttrs.version} \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+  '';
+
+  passthru = {
+    # The declarations for `gimp-with-plugins` wrapper,
+    # used for determining plug-in installation paths
+    majorVersion = "${lib.versions.major finalAttrs.version}.0";
+    targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
+    targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
+    targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
+    targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
+
+    # probably its a good idea to use the same gtk in plugins ?
+    gtk = gtk2;
+
+    python2Support = withPython;
+  };
 
   meta = with lib; {
     description = "The GNU Image Manipulation Program";
@@ -174,5 +192,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "gimp";
   };
-}
+})

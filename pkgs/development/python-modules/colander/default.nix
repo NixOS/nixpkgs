@@ -1,20 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi
-, translationstring, iso8601, enum34 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, babel
+, translationstring
+, iso8601
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "colander";
-  version = "1.7.0";
+  version = "2.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d758163a22d22c39b9eaae049749a5cd503f341231a02ed95af480b1145e81f2";
+    hash = "sha256-QZzWgXjS7m7kyuXVyxgwclY0sKKECRcVbonrJZIjfvM=";
   };
 
-  propagatedBuildInputs = [ translationstring iso8601 enum34 ];
+  nativeBuildInputs = [
+    babel
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    translationstring
+    iso8601
+  ];
+
+  pythonImportsCheck = [
+    "colander"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "A simple schema-based serialization and deserialization library";
-    homepage = "https://docs.pylonsproject.org/projects/colander/en/latest/";
+    homepage = "https://github.com/Pylons/colander";
     license = licenses.free; # http://repoze.org/LICENSE.txt
     maintainers = with maintainers; [ domenkozar ];
   };

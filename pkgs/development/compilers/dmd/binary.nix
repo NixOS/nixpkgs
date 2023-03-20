@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, glibc
+{ lib, stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, glibc
 , version, hashes }:
-with stdenv;
+
 let
+  inherit (stdenv) hostPlatform;
   OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
   MODEL = toString hostPlatform.parsed.cpu.bits;
-in mkDerivation {
+in stdenv.mkDerivation {
   pname = "dmd-bootstrap";
   inherit version;
 
@@ -17,10 +18,21 @@ in mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ fixDarwinDylibNames autoPatchelfHook ];
-  propagatedBuildInputs = [ curl tzdata ] ++ lib.optional hostPlatform.isLinux glibc;
+  nativeBuildInputs = lib.optionals hostPlatform.isLinux [
+    autoPatchelfHook
+  ] ++ lib.optionals hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
+  propagatedBuildInputs = [
+    curl
+    tzdata
+  ] ++ lib.optionals hostPlatform.isLinux [
+    glibc
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
 
     # try to copy model-specific binaries into bin first
@@ -38,10 +50,17 @@ in mkDerivation {
 
     # fix paths in dmd.conf (one level less)
     substituteInPlace $out/bin/dmd.conf --replace "/../../" "/../"
+
+    runHook postInstall
   '';
 
+  # Stripping on Darwin started to break libphobos2.a
+  # Undefined symbols for architecture x86_64:
+  #   "_rt_envvars_enabled", referenced from:
+  #       __D2rt6config16rt_envvarsOptionFNbNiAyaMDFNbNiQkZQnZQq in libphobos2.a(config_99a_6c3.o)
+  dontStrip = hostPlatform.isDarwin;
+
   meta = with lib; {
-    inherit version;
     description = "Digital Mars D Compiler Package";
     # As of 2.075 all sources and binaries use the boost license
     license = licenses.boost;

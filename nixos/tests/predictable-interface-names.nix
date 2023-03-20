@@ -5,14 +5,18 @@
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
+  testCombinations = pkgs.lib.cartesianProductOfSets {
+    predictable = [true false];
+    withNetworkd = [true false];
+  };
+in pkgs.lib.listToAttrs (builtins.map ({ predictable, withNetworkd }: {
   name = pkgs.lib.optionalString (!predictable) "un" + "predictable"
        + pkgs.lib.optionalString withNetworkd "Networkd";
   value = makeTest {
-    name = "${if predictable then "" else "un"}predictableInterfaceNames${if withNetworkd then "-with-networkd" else ""}";
+    name = "${pkgs.lib.optionalString (!predictable) "un"}predictableInterfaceNames${pkgs.lib.optionalString withNetworkd "-with-networkd"}";
     meta = {};
 
-    machine = { lib, ... }: {
+    nodes.machine = { lib, ... }: {
       networking.usePredictableInterfaceNames = lib.mkForce predictable;
       networking.useNetworkd = withNetworkd;
       networking.dhcpcd.enable = !withNetworkd;
@@ -30,4 +34,4 @@ in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
       machine.${if predictable then "fail" else "succeed"}("ip link show eth0")
     '';
   };
-}) [[true false] [true false]])
+}) testCombinations)

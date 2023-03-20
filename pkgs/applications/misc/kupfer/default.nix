@@ -1,52 +1,56 @@
-{ stdenv
+{ lib
 , fetchurl
 , intltool
 , python3Packages
 , gobject-introspection
 , gtk3
-, libwnck3
+, itstool
+, libwnck
 , keybinder3
+, desktop-file-utils
+, shared-mime-info
 , wrapGAppsHook
 , wafHook
+, bash
+, dbus
 }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "kupfer";
-  version = "319";
+  version = "321";
+
+  format = "other";
 
   src = fetchurl {
-    url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";
-    sha256 = "0c9xjx13r8ckfr4az116bhxsd3pk78v04c3lz6lqhraak0rp4d92";
+    url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.bz2";
+    sha256 = "0nagjp63gxkvsgzrpjk78cbqx9a7rbnjivj1avzb2fkhrlxa90c7";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook intltool
     # For setup hook
     gobject-introspection wafHook
+    itstool            # for help pages
+    desktop-file-utils # for update-desktop-database
+    shared-mime-info   # for update-mime-info
+    docutils # for rst2man
+    dbus # for detection of dbus-send during build
   ];
-  buildInputs = [ docutils libwnck3 keybinder3 ];
+  buildInputs = [ libwnck keybinder3 bash ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 
-  # without strictDeps kupfer fails to build: Could not find the python module 'gi.repository.Gtk'
-  # see https://github.com/NixOS/nixpkgs/issues/56943 for details
-  strictDeps = false;
-
-  postInstall = let
-    pythonPath = (stdenv.lib.concatMapStringsSep ":"
-      (m: "${m}/lib/${python.libPrefix}/site-packages")
-      propagatedBuildInputs);
-  in ''
+  postInstall = ''
     gappsWrapperArgs+=(
-      "--prefix" "PYTHONPATH" : "${pythonPath}"
+      "--prefix" "PYTHONPATH" : "${makePythonPath propagatedBuildInputs}"
       "--set" "PYTHONNOUSERSITE" "1"
     )
   '';
 
   doCheck = false; # no tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;

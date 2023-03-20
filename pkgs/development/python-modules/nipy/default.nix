@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, cython
 , nose
 , matplotlib
 , nibabel
@@ -12,17 +13,22 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.2";
+  version = "0.5.0";
   pname = "nipy";
   disabled = pythonOlder "2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pn731nsczrx198i2gadffqmfbhviglrclv6xxwhnbv6w5hfs2yk";
+    sha256 = "a8a2c97ce854fece4aced5a6394b9fdca5846150ad6d2a36b86590924af3c848";
   };
 
-  buildInputs = stdenv.lib.optional doCheck [ nose ];
+  nativeBuildInputs = [ cython ];
+  buildInputs = lib.optionals doCheck [ nose ];
   propagatedBuildInputs = [ matplotlib nibabel numpy scipy sympy ];
+
+  preBuild = ''
+    make recythonize
+  '';
 
   checkPhase = ''    # wants to be run in a different directory
     mkdir nosetests
@@ -40,7 +46,7 @@ buildPythonPackage rec {
   # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nipy.org/nipy";
     description = "Software for structural and functional neuroimaging analysis";
     license = licenses.bsd3;

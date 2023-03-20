@@ -1,22 +1,22 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";
-  version = "0.3";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "tbillington";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rrg0xfm3vn5jh861r4ismrga673g7v6qnzl2v1haflgjhvdazwd";
+    sha256 = "sha256-f0eRM4U2FwMGjmQKb3tjX2TRv1hN//FkoA2h6WmFOQk=";
   };
 
-  cargoSha256 = "1y7g8gw9hsm997d6i99c3dj2gb8y8cgws5001n85f9bpnlvvmf9y";
+  cargoHash = "sha256-DouQN9Lo/CoqZZD3HuO1+Xzvc2yL5l157TeAi+bmfrE=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Save disk space by cleaning unneeded files from software projects";
     homepage = "https://github.com/tbillington/kondo";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

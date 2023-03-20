@@ -1,27 +1,47 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
 , astropy
-, astropy-helpers
+, astropy-extension-helpers
+, setuptools-scm
+, pytestCheckHook
+, pytest-doctestplus
+, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
-  version = "0.5";
-
-  doCheck = false; # tests require pytest-astropy
+  version = "0.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1bfdq33mj6mwk5fkc6n23f9bc9z8j7kmvql3zchz4h58jskmvqas";
+    inherit version;
+    pname = lib.replaceStrings ["-"] ["_"] pname;
+    hash = "sha256-iMOE60MimXpY3ok46RrJ/5D2orbLKuI+IWnHQFrdOtg=";
   };
 
-  propagatedBuildInputs = [ numpy astropy astropy-helpers ];
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    setuptools-scm
+  ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+  propagatedBuildInputs = [
+    numpy
+    astropy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-doctestplus
+    hypothesis
+  ];
+
+  disabledTests = lib.optional (!stdenv.hostPlatform.isDarwin) "test_interpolate_bilinear_skycoord";
+
+  # tests must be run in the build directory
+  preCheck = ''
+    cd build/lib*
   '';
 
   meta = with lib; {

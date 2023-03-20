@@ -1,28 +1,60 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
-, cmake
 , llvmPackages
-, pkg-config
+, libffi
+, libxml2
+, CoreFoundation
+, SystemConfiguration
+, Security
+, withLLVM ? !stdenv.isDarwin
+, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "0.17.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = version;
-    sha256 = "05g4h0xkqd14wnmijiiwmhk6l909fjxr6a2zplrjfxk5bypdalpm";
-    fetchSubmodules = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-797I3FBBfnAgNfOdMajm3WNkMo3MUXb1347LBggXrLk=";
   };
 
-  cargoSha256 = "1ssmgx9fjvkq7ycyzjanqmlm5b80akllq6qyv3mj0k5fvs659wcq";
+  cargoHash = "sha256-zUTwhfRLKUixgj3JXiz2QOuwbFhfget+GcFSRL1QJ3w=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  buildInputs = lib.optionals withLLVM [
+    llvmPackages.llvm
+    libffi
+    libxml2
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    SystemConfiguration
+    Security
+  ];
+
+  LLVM_SYS_120_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+
+  # check references to `compiler_features` in Makefile on update
+  buildFeatures = checkFeatures ++ [
+    "webc_runner"
+  ];
+
+  checkFeatures = [
+    "cranelift"
+    "wasmer-artifact-create"
+    "static-artifact-create"
+    "wasmer-artifact-load"
+    "static-artifact-load"
+  ]
+  ++ lib.optional withLLVM "llvm"
+  ++ lib.optional withSinglepass "singlepass";
+
+  cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
 
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";
@@ -34,7 +66,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Br1ght0ne shamilton ];
   };
 }

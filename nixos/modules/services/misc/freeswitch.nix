@@ -18,32 +18,32 @@ let
 in {
   options = {
     services.freeswitch = {
-      enable = mkEnableOption "FreeSWITCH";
+      enable = mkEnableOption (lib.mdDoc "FreeSWITCH");
       enableReload = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Issue the <literal>reloadxml</literal> command to FreeSWITCH when configuration directory changes (instead of restart).
-          See <link xlink:href="https://freeswitch.org/confluence/display/FREESWITCH/Reloading">FreeSWITCH documentation</link> for more info.
-          The configuration directory is exposed at <filename>/etc/freeswitch</filename>.
-          See also <literal>systemd.services.*.restartIfChanged</literal>.
+        description = lib.mdDoc ''
+          Issue the `reloadxml` command to FreeSWITCH when configuration directory changes (instead of restart).
+          See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Reloading) for more info.
+          The configuration directory is exposed at {file}`/etc/freeswitch`.
+          See also `systemd.services.*.restartIfChanged`.
         '';
       };
       configTemplate = mkOption {
         type = types.path;
         default = "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
-        defaultText = literalExample "\${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
-        example = literalExample "\${config.services.freeswitch.package}/share/freeswitch/conf/minimal";
-        description = ''
+        defaultText = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
+        example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
+        description = lib.mdDoc ''
           Configuration template to use.
-          See available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
+          See available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
           You can also set your own configuration directory.
         '';
       };
       configDir = mkOption {
         type = with types; attrsOf path;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           {
             "freeswitch.xml" = ./freeswitch.xml;
             "dialplan/default.xml" = pkgs.writeText "dialplan-default.xml" '''
@@ -51,19 +51,18 @@ in {
             ''';
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Override file in FreeSWITCH config template directory.
           Each top-level attribute denotes a file path in the configuration directory, its value is the file path.
-          See <link xlink:href="https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration">FreeSWITCH documentation</link> for more info.
-          Also check available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
+          See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration) for more info.
+          Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
       package = mkOption {
         type = types.package;
         default = pkgs.freeswitch;
-        defaultText = literalExample "pkgs.freeswitch";
-        example = literalExample "pkgs.freeswitch";
-        description = ''
+        defaultText = literalExpression "pkgs.freeswitch";
+        description = lib.mdDoc ''
           FreeSWITCH package.
         '';
       };
@@ -95,9 +94,11 @@ in {
           -conf ${configPath} \\
           -base /var/lib/freeswitch";
         ExecReload = "${pkg}/bin/fs_cli -x reloadxml";
-        Restart = "always";
+        Restart = "on-failure";
         RestartSec = "5s";
+        CPUSchedulingPolicy = "fifo";
       };
     };
+    environment.systemPackages = [ pkg ];
   };
 }

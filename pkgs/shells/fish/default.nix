@@ -1,12 +1,13 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , coreutils
-, utillinux
 , which
 , gnused
 , gnugrep
 , groff
+, gawk
 , man-db
 , getent
 , libiconv
@@ -15,11 +16,26 @@
 , ncurses
 , python3
 , cmake
+, fishPlugins
+, procps
+
+# used to generate autocompletions from manpages and for configuration editing in the browser
+, usePython ? true
 
 , runCommand
 , writeText
 , nixosTests
+, nix-update-script
 , useOperatingSystemEtc ? true
+  # An optional string containing Fish code that initializes the environment.
+  # This is run at the very beginning of initialization. If it sets $NIX_PROFILES
+  # then Fish will use that to configure its function, completion, and conf.d paths.
+  # For example:
+  #   fishEnvPreInit = "source /etc/fish/my-env-preinit.fish";
+  # It can also be a function that takes one argument, which is a function that
+  # takes a path to a bash file and converts it to fish. For example:
+  #   fishEnvPreInit = source: source "${nix}/etc/profile.d/nix-daemon.sh";
+, fishEnvPreInit ? null
 }:
 let
   etcConfigAppendix = writeText "config.fish.appendix" ''
@@ -45,8 +61,12 @@ let
     #     source both, but source the more global configuration files earlier
     #     than the more local ones, so that more local configurations inherit
     #     from but override the more global locations.
+    #
+    #     Special care needs to be taken, when fish is called from an FHS user env
+    #     or similar setup, because this configuration file will then be relocated
+    #     to /etc/fish/config.fish, so we test for this case to avoid nontermination.
 
-    if test -f /etc/fish/config.fish
+    if test -f /etc/fish/config.fish && test /etc/fish/config.fish != (status filename)
       source /etc/fish/config.fish
     end
 
@@ -61,8 +81,12 @@ let
     #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
     builtin status --is-login
     or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
+    ${if fishEnvPreInit != null then ''
+    and begin
+    ${lib.removeSuffix "\n" (if lib.isFunction fishEnvPreInit then fishEnvPreInit sourceWithFenv else fishEnvPreInit)}
+    end'' else ''
     and test -f /etc/fish/nixos-env-preinit.fish
-    and source /etc/fish/nixos-env-preinit.fish
+    and source /etc/fish/nixos-env-preinit.fish''}
     and set -gx __fish_nixos_env_preinit_sourced 1
 
     test -n "$NIX_PROFILES"
@@ -79,26 +103,39 @@ let
 
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
-      set -l __nix_profile_paths (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')[-1..1]
+      set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
 
-      set __extra_completionsdir \
+      set -p __extra_completionsdir \
         $__nix_profile_paths"/etc/fish/completions" \
-        $__nix_profile_paths"/share/fish/vendor_completions.d" \
-        $__extra_completionsdir
-      set __extra_functionsdir \
+        $__nix_profile_paths"/share/fish/vendor_completions.d"
+      set -p __extra_functionsdir \
         $__nix_profile_paths"/etc/fish/functions" \
-        $__nix_profile_paths"/share/fish/vendor_functions.d" \
-        $__extra_functionsdir
-      set __extra_confdir \
+        $__nix_profile_paths"/share/fish/vendor_functions.d"
+      set -p __extra_confdir \
         $__nix_profile_paths"/etc/fish/conf.d" \
-        $__nix_profile_paths"/share/fish/vendor_conf.d" \
-        $__extra_confdir
+        $__nix_profile_paths"/share/fish/vendor_conf.d"
     end
+  '';
+
+  # This is wrapped in begin/end in case the user wants to apply redirections.
+  # This does mean the basic usage of sourcing a single file will produce
+  # `begin; begin; …; end; end` but that's ok.
+  sourceWithFenv = path: ''
+    begin # fenv
+      # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
+      # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
+      set fish_function_path ${fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
+      fenv source ${lib.escapeShellArg path}
+      set -l fenv_status $status
+      # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+      set -e fish_function_path
+      test $fenv_status -eq 0
+    end # fenv
   '';
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.1.2";
+    version = "3.6.0";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -107,16 +144,54 @@ let
       # the shell's actual version (and what it displays when running `fish
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1vblmb3x2k2cb0db5jdyflppnlqsm7i6jjaidyhmvaaw7ch2gffm";
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
+      hash = "sha512-oR6nYa2s4C73+IsliTMoAFzvB/ktNi+8eUVA3KJunPyXCHjQMSyuvRnWRIPp88PiStbCffziZNF3+T1lx+9plg==";
     };
 
-    # We don't have access to the codesign executable, so we patch this out.
-    # For more information, see: https://github.com/fish-shell/fish-shell/issues/6952
-    patches = lib.optional stdenv.isDarwin ./dont-codesign-on-mac.diff;
+    # Fix FHS paths in tests
+    postPatch = ''
+      # src/fish_tests.cpp
+      sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/fish_tests.cpp
+      sed -i 's|is_potential_path(L"/usr"|is_potential_path(L"/nix"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
+      sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
 
+      # tests/checks/cd.fish
+      sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
+
+      # tests/checks/redirect.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/redirect.fish
+
+      # tests/checks/vars_as_commands.fish
+      sed -i 's|/usr/bin|${coreutils}/bin|' tests/checks/vars_as_commands.fish
+
+      # tests/checks/jobs.fish
+      sed -i 's|ps -o stat|${procps}/bin/ps -o stat|' tests/checks/jobs.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/jobs.fish
+
+      # tests/checks/job-control-noninteractive.fish
+      sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/job-control-noninteractive.fish
+
+      # tests/checks/complete.fish
+      sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
+    '' + lib.optionalString stdenv.isDarwin ''
+      # Tests use pkill/pgrep which are currently not built on Darwin
+      # See https://github.com/NixOS/nixpkgs/pull/103180
+      rm tests/pexpects/exit.py
+      rm tests/pexpects/job_summary.py
+      rm tests/pexpects/signals.py
+    '' + lib.optionalString stdenv.isLinux ''
+      # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
+      # See https://github.com/fish-shell/fish-shell/issues/8789
+      rm tests/pexpects/exit_handlers.py
+    '';
+
+    outputs = [ "out" "doc" ];
+    strictDeps = true;
     nativeBuildInputs = [
       cmake
+      gettext
     ];
 
     buildInputs = [
@@ -125,46 +200,65 @@ let
       pcre2
     ];
 
+    cmakeFlags = [
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "-DMAC_CODESIGN_ID=OFF"
+    ];
+
+    # The optional string is kind of an inelegant way to get fish to cross compile.
+    # Fish needs coreutils as a runtime dependency, and it gets put into
+    # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
+    # was clobbering the PATH. It probably needs to be fixed at a lower level.
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
+    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      export CMAKE_PREFIX_PATH=
     '';
 
     # Required binaries during execution
-    # Python: Autocompletion generated from manpages and config editing
     propagatedBuildInputs = [
       coreutils
       gnugrep
       gnused
-      python3
       groff
       gettext
     ] ++ lib.optional (!stdenv.isDarwin) man-db;
 
+    doCheck = true;
+
+    nativeCheckInputs = [
+      coreutils
+      (python3.withPackages (ps: [ ps.pexpect ]))
+      procps
+    ];
+
+    checkPhase = ''
+      make test
+    '';
+
     postInstall = with lib; ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
-      sed -i "s|which |${which}/bin/which |"               \
-             "$out/share/fish/functions/type.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
           -i "$out/share/fish/functions/fish_prompt.fish"
-      sed -e "s|gettext |${gettext}/bin/gettext |"         \
-          -e "s|which |${which}/bin/which |"               \
-          -i "$out/share/fish/functions/_.fish"
       sed -e "s|uname|${coreutils}/bin/uname|"             \
           -i "$out/share/fish/functions/__fish_pwd.fish"   \
              "$out/share/fish/functions/prompt_pwd.fish"
       sed -e "s|sed |${gnused}/bin/sed |"                  \
           -i "$out/share/fish/functions/alias.fish"        \
              "$out/share/fish/functions/prompt_pwd.fish"
-      sed -i "s|nroff |${groff}/bin/nroff |"               \
+      sed -i "s|nroff|${groff}/bin/nroff|"                 \
              "$out/share/fish/functions/__fish_print_help.fish"
       sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
-      sed -e "s|python3|${getBin python3}/bin/python3|"    \
-          -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
+      sed -e "s| awk | ${gawk}/bin/awk |"                  \
+          -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
+             $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
+    '' + optionalString usePython ''
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython
           echo ${python3.interpreter}
@@ -173,8 +267,6 @@ let
       EOF
 
     '' + optionalString stdenv.isLinux ''
-      sed -e "s| ul| ${utillinux}/bin/ul|" \
-          -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
@@ -191,14 +283,12 @@ let
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
     '';
 
-    enableParallelBuilding = true;
-
     meta = with lib; {
       description = "Smart and user-friendly command line shell";
-      homepage = "http://fishshell.com/";
+      homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ocharles cole-h ];
+      maintainers = with maintainers; [ cole-h winter srapenne ];
     };
 
     passthru = {
@@ -218,7 +308,7 @@ let
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no
             # tempfile to check)
-            sed -e "s@, mode='w'@, mode='w', delete=False@" -i webconfig.py
+            sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
 
             # we delete everything after the fileurl is assigned
             sed -e '/fileurl =/q' -i webconfig.py
@@ -237,6 +327,7 @@ let
             ${fish}/bin/fish ${fishScript} && touch $out
           '';
       };
+      updateScript = nix-update-script { };
     };
   };
 in

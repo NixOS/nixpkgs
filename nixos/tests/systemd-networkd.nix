@@ -6,19 +6,22 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];
       environment.systemPackages = with pkgs; [ wireguard-tools ];
-      boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
-      systemd.tmpfiles.rules = [
-        "f /run/wg_priv 0640 root systemd-network - ${privk}"
-      ];
       systemd.network = {
         enable = true;
+        config = {
+          routeTables.custom = 23;
+        };
         netdevs = {
           "90-wg0" = {
             netdevConfig = { Kind = "wireguard"; Name = "wg0"; };
             wireguardConfig = {
-              PrivateKeyFile = "/run/wg_priv";
+              # NOTE: we're storing the wireguard private key in the
+              #       store for this test. Do not do this in the real
+              #       world. Keep in mind the nix store is
+              #       world-readable.
+              PrivateKeyFile = pkgs.writeText "wg0-priv" privk;
               ListenPort = 51820;
-              FwMark = 42;
+              FirewallMark = 42;
             };
             wireguardPeers = [ {wireguardPeerConfig={
               Endpoint = "192.168.1.${peerId}:51820";
@@ -39,6 +42,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
             address = [ "10.0.0.${nodeId}/32" ];
             routes = [
               { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }; }
+              { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; Table = "custom"; }; }
             ];
           };
           "30-eth1" = {
@@ -60,7 +64,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
     };
 in import ./make-test-python.nix ({pkgs, ... }: {
   name = "networkd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ninjatrappeur ];
   };
   nodes = {
@@ -86,6 +90,12 @@ testScript = ''
     start_all()
     node1.wait_for_unit("systemd-networkd-wait-online.service")
     node2.wait_for_unit("systemd-networkd-wait-online.service")
+
+    # ================================
+    # Networkd Config
+    # ================================
+    node1.succeed("grep RouteTable=custom:23 /etc/systemd/networkd.conf")
+    node1.succeed("sudo ip route show table custom | grep '10.0.0.0/24 via 10.0.0.1 dev wg0 proto static'")
 
     # ================================
     # Wireguard

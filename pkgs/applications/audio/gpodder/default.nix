@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome3, gtk3, wrapGAppsHook
+{ lib, fetchFromGitHub, python3, python3Packages, intltool
+, glibcLocales, gnome, gtk3, wrapGAppsHook
 , gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.15";
+  version = "3.10.21";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0ghbanj142n0hgydzfjmnkdgri2kswsjal3mn10c723kih4ir4yr";
+    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
   };
 
   patches = [
     ./disable-autoupdate.patch
   ];
 
-  postPatch = with stdenv.lib; ''
+  postPatch = with lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
@@ -27,16 +27,20 @@ python3Packages.buildPythonApplication rec {
     intltool
     wrapGAppsHook
     glibcLocales
+    gobject-introspection
   ];
 
   buildInputs = [
     python3
-    gobject-introspection
-    gnome3.adwaita-icon-theme
+    gtk3
+    gnome.adwaita-icon-theme
   ];
 
-  checkInputs = with python3Packages; [
-    coverage minimock
+  nativeCheckInputs = with python3Packages; [
+    minimock
+    pytest
+    pytest-httpserver
+    pytest-cov
   ];
 
   doCheck = true;
@@ -45,11 +49,11 @@ python3Packages.buildPythonApplication rec {
     feedparser
     dbus-python
     mygpoclient
+    requests
     pygobject3
     eyeD3
     podcastparser
     html5lib
-    gtk3
   ];
 
   makeFlags = [
@@ -64,10 +68,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installCheckPhase = ''
-    LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)

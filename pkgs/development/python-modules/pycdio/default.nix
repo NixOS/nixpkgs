@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycdio";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01b7vqqfry071p60sabydym7r3m3rxszyqpdbs1qi5rk2sfyblnn";
+    sha256 = "61734db8c554b7b1a2cb2da2e2c15d3f9f5973a57cfb06f8854c38029004a9f8";
   };
 
   prePatch = ''
@@ -26,9 +26,9 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ nose pkgs.pkgconfig pkgs.swig ];
+  nativeBuildInputs = [ nose pkgs.pkg-config pkgs.swig ];
   buildInputs = [ setuptools pkgs.libcdio ]
-    ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
+    ++ lib.optional stdenv.isDarwin pkgs.libiconv;
 
   # Run tests using nosetests but first need to install the binaries
   # to the root source directory where they can be found.
@@ -37,10 +37,9 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/libcdio/";
     description = "Wrapper around libcdio (CD Input and Control library)";
-    maintainers = with maintainers; [ rycee ];
     license = licenses.gpl3Plus;
   };
 

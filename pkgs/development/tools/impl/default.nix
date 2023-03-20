@@ -1,29 +1,26 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoModule, lib, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "impl-unstable";
-  version = "2019-11-19";
-  rev = "6b9658ad00c7fbd61a7b50c195754413f6c4142c";
-
-  goPackagePath = "github.com/josharian/impl";
+buildGoModule rec {
+  pname = "impl";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "josharian";
     repo = "impl";
-    sha256 = "1d4fvj7fgiykznx1z4fmcc06x5hsqp9wn62m5qm1ds8m0rjqaxwi";
+    rev = "v${version}";
+    sha256 = "sha256-OztQR1NusP7/FTm5kmuSSi1AC47DJFki7vVlPQIl6+8=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-+5+CM5iGV54zRa7rJoQDBWrO98icNxlAv8JwATynanY=";
+
+  preCheck = ''
+    export GOROOT="$(go env GOROOT)"
+  '';
 
   meta = with lib; {
-    description = "impl generates method stubs for implementing an interface.";
+    description = "Generate method stubs for implementing an interface";
     homepage = "https://github.com/josharian/impl";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,53 +1,51 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, fetchpatch
+, nix-update-script
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, geoclue2
-, libchamplain
-, clutter
-, folks
-, geocode-glib
+, pkg-config
 , python3
-, libnotify
-, libical
-, evolution-data-server
-, appstream-glib
-, elementary-icon-theme
+, vala
 , wrapGAppsHook
+, clutter
+, evolution-data-server
+, folks
+, geoclue2
+, geocode-glib_2
+, granite
+, gtk3
+, libchamplain_libsoup3
+, libgee
+, libhandy
+, libical
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "5.0.4";
-
-  repoName = "calendar";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "calendar";
     rev = version;
-    sha256 = "0ywk9w6d6nw7ir3f11xc13fr08ifvzpavq1c3x48kmmf69ywprdk";
+    sha256 = "sha256-psUVgl/7pmmf+8dP8ghBx5C1u4UT9ncXuVYvDJOYeOI=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # build: support evolution-data-server 3.46
+    # https://github.com/elementary/calendar/pull/758
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/62c20e5786accd68b96c423b04e32c043e726cac.patch";
+      sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
+    })
+  ];
 
   nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -55,17 +53,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clutter
-    elementary-icon-theme
     evolution-data-server
     folks
     geoclue2
-    geocode-glib
+    geocode-glib_2
     granite
     gtk3
-    libchamplain
+    libchamplain_libsoup3
     libgee
+    libhandy
     libical
-    libnotify
   ];
 
   postPatch = ''
@@ -73,11 +70,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Desktop calendar app designed for elementary OS";
     homepage = "https://github.com/elementary/calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.calendar";
   };
 }

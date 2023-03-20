@@ -1,30 +1,45 @@
-{ stdenv, fetchFromGitHub, crystal }:
+{ lib
+, fetchFromGitHub
+, crystal
+}:
 
-crystal.buildCrystalPackage rec {
-  pname = "shards";
-  version = "0.10.0";
+let
+  generic =
+    { version, hash }:
 
-  src = fetchFromGitHub {
-    owner = "crystal-lang";
-    repo = "shards";
-    rev = "v${version}";
-    sha256 = "1bjy3hcdqq8769bx73f3pwn26rnkj23dngyfbw4iv32bw23x1d49";
+    crystal.buildCrystalPackage {
+      pname = "shards";
+      inherit version;
+
+      src = fetchFromGitHub {
+        owner = "crystal-lang";
+        repo = "shards";
+        rev = "v${version}";
+        inherit hash;
+      };
+
+      # we cannot use `make` or `shards` here as it would introduce a cyclical dependency
+      format = "crystal";
+      shardsFile = ./shards.nix;
+      crystalBinaries.shards.src = "./src/shards.cr";
+
+      # tries to execute git which fails spectacularly
+      doCheck = false;
+
+      meta = with lib; {
+        description = "Dependency manager for the Crystal language";
+        license = licenses.asl20;
+        maintainers = with maintainers; [ peterhoeg ];
+        inherit (crystal.meta) homepage platforms;
+      };
+    };
+
+in
+rec {
+  shards_0_17 = generic {
+    version = "0.17.2";
+    hash = "sha256-2HpoMgyi8jnWYiBHscECYiaRu2g0mAH+dCY1t5m/l1s=";
   };
 
-  # we cannot use `make` here as it would introduce a dependency on itself
-  format = "crystal";
-
-  shardsFile = ./shards.nix;
-
-  crystalBinaries.shards.src = "./src/shards.cr";
-
-  # tries to execute git which fails spectacularly
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    description = "Dependency manager for the Crystal language";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
-    inherit (crystal.meta) homepage platforms;
-  };
+  shards = shards_0_17;
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg-safeupdate";
-  version = "1.2";
+  version = "1.4";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "eradman";
     repo   = pname;
     rev    = version;
-    sha256 = "010m57jcv5v8pyfm1cqs3a306y750lvnvla9m5d98v5vdx3349jg";
+    sha256 = "sha256-1cyvVEC9MQGMr7Tg6EUbsVBrMc8ahdFS3+CmDkmAq4Y=";
   };
 
   installPhase = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -D safeupdate.so -t $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";
     homepage    = "https://github.com/eradman/pg-safeupdate";
     platforms   = postgresql.meta.platforms;

@@ -1,21 +1,19 @@
-{stdenv, fetchurl, ghostscript}:
+{lib, stdenv, fetchFromGitHub, ghostscript}:
 
 stdenv.mkDerivation rec {
-  name = "lout-3.40";
+  pname = "lout";
+  version = "3.42.2";
 
-  src = fetchurl {
-    urls = [
-      "ftp://ftp.cs.usyd.edu.au/jeff/lout/${name}.tar.gz"
-      "mirror://savannah/lout/${name}.tar.gz"      # new!
-      "mirror://sourceforge/lout/${name}.tar.gz"   # to be phased out
-      # XXX: We could add the CTAN mirrors
-      # (see https://www.ctan.org/tex-archive/support/lout/).
-    ];
-    sha256 = "1gb8vb1wl7ikn269dd1c7ihqhkyrwk19jwx5kd0rdvbk6g7g25ix";
+  src = fetchFromGitHub {
+    owner = "william8000";
+    repo = pname;
+    rev = version;
+    hash = "sha256-rzCRxmwppBno6o4RM2GjE0pe/5yvyzyo375XdfX04As=";
   };
 
   buildInputs = [ ghostscript ];
-  builder = ./builder.sh;
+
+  makeFlags = [ "PREFIX=$(out)/" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = {
     description = "Document layout system similar in style to LaTeX";
@@ -40,13 +38,11 @@ stdenv.mkDerivation rec {
       went back to the beginning.
     '';
 
-    # Author's page: http://jeffreykingston.id.au/lout/
-    # Wiki: https://sourceforge.net/p/lout/wiki/
-    homepage = "https://savannah.nongnu.org/projects/lout/";
+    homepage = "https://github.com/william8000/lout";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

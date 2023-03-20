@@ -1,29 +1,58 @@
-{ stdenv
+{ lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, help2man
+, installShellFiles
+, libiconv
 , Security
+, CoreServices
+, nix-update-script
 }:
 
+let
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "2.1.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0cmciadiknw6w573v71spzf5ydaz2xxm2snv3n1hks732nahlr56";
+    repo = "texlab";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2P+aidfYkO8l9VjqTstXbksyGTQ3porJhrBYod9oCYQ=";
   };
 
-  cargoSha256 = "0dhbbni8ia0dkwjacx5jlr5rj7173nsbivm9gjsx9j8ais0f0hff";
+  cargoSha256 = "sha256-Yr4i35Yf9kWYD1xQi+RKx6RQtyQUlZS8cXWkGGNuwXI=";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optional (!isCross) help2man;
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+    CoreServices
+  ];
+
+  # When we cross compile we cannot run the output executable to
+  # generate the man page
+  postInstall = lib.optionalString (!isCross) ''
+    # TexLab builds man page separately in CI:
+    # https://github.com/latex-lsp/texlab/blob/v5.4.0/.github/workflows/publish.yml#L127-L131
+    help2man --no-info "$out/bin/texlab" > texlab.1
+    installManPage texlab.1
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";
-    homepage = "https://texlab.netlify.com/";
+    homepage = "https://texlab.netlify.app";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar metadark ];
+    maintainers = with maintainers; [ doronbehar kira-bruneau ];
     platforms = platforms.all;
   };
 }

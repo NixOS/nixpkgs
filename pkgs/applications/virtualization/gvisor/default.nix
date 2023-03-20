@@ -1,101 +1,49 @@
-{ stdenv
-, buildBazelPackage
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, cacert
-, git
-, glibcLocales
-, go
-, iproute
+, iproute2
 , iptables
 , makeWrapper
 , procps
-, python3
 }:
 
-let
-  preBuild = ''
-    patchShebangs .
+buildGoModule rec {
+  pname = "gvisor";
+  version = "20221102.1";
 
-    # Tell rules_go to use the Go binary found in the PATH
-    sed -E -i \
-      -e 's|go_version\s*=\s*"[^"]+",|go_version = "host",|g' \
-      WORKSPACE
-
-    # The gazelle Go tooling needs CA certs
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-
-    # If we don't reset our GOPATH, the rules_go stdlib builder tries to
-    # install something into it. Ideally that wouldn't happen, but for now we
-    # can also get around it by unsetting GOPATH entirely, since rules_go
-    # doesn't need it.
-    export GOPATH=
-  '';
-
-in buildBazelPackage rec {
-  name = "gvisor-${version}";
-  version = "2019-11-14";
+  # gvisor provides a synthetic go branch (https://github.com/google/gvisor/tree/go)
+  # that can be used to build gvisor without bazel.
+  # For updates, you should stick to the commits labeled "Merge release-** (automated)"
 
   src = fetchFromGitHub {
     owner = "google";
-    repo  = "gvisor";
-    rev   = "release-20191114.0";
-    sha256 = "0kyixjjlws9iz2r2srgpdd4rrq94vpxkmh2rmmzxd9mcqy2i9bg1";
+    repo = "gvisor";
+    rev = "bf8eeee3a9eb966bc72c773da060a3c8bb73b8ff";
+    sha256 = "sha256-rADQsJ+AnBVlfQURGJl1xR6Ad5NyRWSrBSpOFMRld+o=";
   };
 
-  nativeBuildInputs = [ git glibcLocales go makeWrapper python3 ];
+  vendorSha256 = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
 
-  bazelTarget = "//runsc:runsc";
+  nativeBuildInputs = [ makeWrapper ];
 
-  # gvisor uses the Starlark implementation of rules_cc, not the built-in one,
-  # so we shouldn't delete it from our dependencies.
-  removeRulesCC = false;
+  CGO_ENABLED = 0;
 
-  fetchAttrs = {
-    inherit preBuild;
+  ldflags = [ "-s" "-w" ];
 
-    preInstall = ''
-      # Remove the go_sdk (it's just a copy of the go derivation) and all
-      # references to it from the marker files. Bazel does not need to download
-      # this sdk because we have patched the WORKSPACE file to point to the one
-      # currently present in PATH. Without removing the go_sdk from the marker
-      # file, the hash of it will change anytime the Go derivation changes and
-      # that would lead to impurities in the marker files which would result in
-      # a different sha256 for the fetch phase.
-      rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
+  subPackages = [ "runsc" "shim" ];
 
-      # Remove the gazelle tools, they contain go binaries that are built
-      # non-deterministically. As long as the gazelle version matches the tools
-      # should be equivalent.
-      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
+  postInstall = ''
+    # Needed for the 'runsc do' subcomand
+    wrapProgram $out/bin/runsc \
+      --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
+    mv $out/bin/shim $out/bin/containerd-shim-runsc-v1
+  '';
 
-      # Remove the gazelle repository cache
-      chmod -R +w $bazelOut/external/bazel_gazelle_go_repository_cache
-      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_cache,\@bazel_gazelle_go_repository_cache.marker}
-
-      # Remove log file(s)
-      rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
-    '';
-
-    sha256 = "0r11kbyp1ambgcj35gvjjmxrsrdg7b9jb9sq3kih4lik7zyljp25";
-  };
-
-  buildAttrs = {
-    inherit preBuild;
-
-    installPhase = ''
-      install -Dm755 bazel-bin/runsc/*_pure_stripped/runsc $out/bin/runsc
-
-      # Needed for the 'runsc do' subcomand
-      wrapProgram $out/bin/runsc \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ iproute iptables procps ]}
-    '';
-  };
-
-  meta = with stdenv.lib; {
-    description = "Container Runtime Sandbox";
+  meta = with lib; {
+    description = "Application Kernel for Containers";
     homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [ andrew-d gpl ];
     platforms = [ "x86_64-linux" ];
   };
 }

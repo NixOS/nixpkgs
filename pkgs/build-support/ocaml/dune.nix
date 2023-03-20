@@ -1,17 +1,22 @@
-{ stdenv, ocaml, findlib, dune, dune_2, opaline }:
+{ lib, stdenv, ocaml, findlib, dune_1, dune_2, dune_3 }:
 
-{ pname, version, buildInputs ? [], enableParallelBuilding ? true, ... }@args:
+{ pname, version, nativeBuildInputs ? [], enableParallelBuilding ? true, ... }@args:
 
-let Dune = if args.useDune2 or false then dune_2 else dune; in
+let Dune =
+  let dune-version = args . duneVersion or (if args.useDune2 or true then "2" else "1"); in
+  { "1" = dune_1; "2" = dune_2; "3" = dune_3; }."${dune-version}"
+; in
 
-if args ? minimumOCamlVersion &&
-   ! stdenv.lib.versionAtLeast ocaml.version args.minimumOCamlVersion
+if (args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion) ||
+   (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion)
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation ({
 
   inherit enableParallelBuilding;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   buildPhase = ''
     runHook preBuild
@@ -25,15 +30,20 @@ stdenv.mkDerivation ({
   '';
   installPhase = ''
     runHook preInstall
-    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
+    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname} \
+     ${if lib.versionAtLeast Dune.version "2.9"
+       then "--docdir $out/share/doc --man $out/share/man"
+       else ""}
     runHook postInstall
   '';
 
-} // args // {
+  strictDeps = true;
+
+} // (builtins.removeAttrs args [ "minimalOCamlVersion"  "duneVersion" ]) // {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  buildInputs = [ ocaml Dune findlib ] ++ buildInputs;
+  nativeBuildInputs = [ ocaml Dune findlib ] ++ nativeBuildInputs;
 
   meta = (args.meta or {}) // { platforms = args.meta.platforms or ocaml.meta.platforms; };
 

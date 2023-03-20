@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -i "s|BPF=.*|BPF=${libpcap}/include/pcap/bpf.h|" configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network packet analyzer";
     longDescription = ''
       ngrep strives to provide most of GNU grep's common features, applying
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.
     license = "ngrep";  # Some custom BSD-style, see LICENSE.txt
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

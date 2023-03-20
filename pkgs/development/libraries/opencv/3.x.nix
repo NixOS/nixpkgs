@@ -1,6 +1,7 @@
 { lib, stdenv
-, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, unzip, zlib, pcre, hdf5
+, fetchFromGitHub
+, fetchpatch
+, cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
 
@@ -9,20 +10,19 @@
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
-                    stdenv.hostPlatform.isx86_64, cudatoolkit
-
+                    stdenv.hostPlatform.isx86_64
+, cudaPackages ? { }
 , enableUnfree    ? false
 , enableIpp       ? false
-, enablePython    ? false, pythonPackages
+, enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
-, enableVtk       ? false, vtk
+, enableVtk       ? false, vtk_8
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
@@ -32,26 +32,31 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
+, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2, CoreMedia, MediaToolbox
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
+assert enablePython -> pythonPackages != null;
+
 let
-  version = "3.4.8";
+  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+
+  version = "3.4.18";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "1dnz3gfj70lm1gbrk8pz28apinlqi2x6nvd6xcy5hs08505nqnjp";
+    hash   = "sha256-PgwAZNoPknFT0jCLt3TCzend6OYFY3iUIzDf/FptAYA=";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "0psaa1yx36n34l09zd1y8jxgf8q4jzxd3vn06fqmzwzy85hcqn8i";
+    hash   = "sha256-TEF/GHglOmsshlC6q4iw14ZMpvA0SaKwlidomAN+sRc=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -150,6 +155,11 @@ stdenv.mkDerivation {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
 
+  # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
+  patches = [
+    ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+  ];
+
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
   # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
@@ -181,13 +191,12 @@ stdenv.mkDerivation {
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
-    ++ lib.optional enableVtk vtk
+    ++ lib.optional enableVtk vtk_8
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
@@ -202,15 +211,15 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
+    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
+    ++ lib.optional enableCuda cudatoolkit;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -225,7 +234,6 @@ stdenv.mkDerivation {
     "-DBUILD_DOCS=${printEnabled enableDocs}"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
@@ -237,18 +245,17 @@ stdenv.mkDerivation {
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
-    "-DBUILD_opencv_videoio=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
-  ] ++ lib.optional enableEigen [
+  ] ++ lib.optionals enableEigen [
     # Autodetection broken by https://github.com/opencv/opencv/pull/13337
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
-
-  enableParallelBuilding = true;
 
   postBuild = lib.optionalString enableDocs ''
     make doxygen
@@ -274,7 +281,7 @@ stdenv.mkDerivation {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;

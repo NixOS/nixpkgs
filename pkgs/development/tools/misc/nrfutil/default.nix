@@ -1,29 +1,51 @@
-{ stdenv, python2Packages, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+}:
 
-with python2Packages; buildPythonApplication rec {
+with python3.pkgs;
+
+buildPythonApplication rec {
   pname = "nrfutil";
-  version = "5.2.0";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
-    rev = "v${version}";
-    sha256 = "1hajjgz8r4fjbwqr22p5dvb6k83dpxf8k7mhx20gkbrrx9ivqh79";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
   };
 
-  propagatedBuildInputs = [ pc-ble-driver-py six pyserial enum34 click ecdsa
-    protobuf tqdm piccata pyspinel intelhex pyyaml crcmod libusb1 ipaddress ];
+  propagatedBuildInputs = [
+    click
+    crcmod
+    ecdsa
+    libusb1
+    intelhex
+    pc-ble-driver-py
+    piccata
+    protobuf
+    pyserial
+    pyspinel
+    pyyaml
+    tqdm
+  ];
 
-  checkInputs = [ nose behave ];
+  nativeCheckInputs = [
+    behave
+    nose
+  ];
 
+  # Workaround: pythonRelaxDepsHook doesn't work for this.
   postPatch = ''
-    # remove version bound on pyyaml
-    sed -i /pyyaml/d requirements.txt
-
     mkdir test-reports
+    substituteInPlace requirements.txt \
+      --replace "libusb1==1.9.3" "libusb1" \
+      --replace "protobuf >=3.17.3, < 4.0.0" "protobuf"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device Firmware Update tool for nRF chips";
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
     license = licenses.unfreeRedistributable;

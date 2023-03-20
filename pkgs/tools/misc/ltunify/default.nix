@@ -1,23 +1,26 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-# Although we copy in the udev rules here, you probably just want to use logitech-udev-rules instead of
-# adding this to services.udev.packages on NixOS
+# Although we copy in the udev rules here, you probably just want to use
+# logitech-udev-rules instead of adding this to services.udev.packages on NixOS
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ltunify";
-  version = "unstable-20180330";
+  version = "0.3";
 
   src = fetchFromGitHub {
-    owner  = "Lekensteyn";
-    repo   = "ltunify";
-    rev    = "f664d1d41d5c4beeac5b81e485c3498f13109db7";
-    sha256 = "07sqhih9jmm7vgiwqsjzihd307cj7l096sxjl25p7nwr1q4180wv";
+    owner = "Lekensteyn";
+    repo = "ltunify";
+    rev = "v${version}";
+    sha256 = "sha256-9avri/2H0zv65tkBsIi9yVxx3eVS9oCkVCCFdjXqSgI=";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for working with Logitech Unifying receivers and devices";
+    longDescription = ''
+      This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
+    '';
     homepage = "https://lekensteyn.nl/logitech-unifying.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ];

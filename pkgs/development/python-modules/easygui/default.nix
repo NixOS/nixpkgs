@@ -1,17 +1,23 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage, tkinter }:
 
 buildPythonPackage rec {
   pname = "easygui";
-  version = "0.98.1";
+  version = "0.98.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zmvmwgxyzvm83818skhn8b4wrci4kmnixaax8q3ia5cn7xrmj6v";
+    hash = "sha256-1lP/ee4fQvY7WgkPL5jOAjNdhq2JY7POJmGAXK/pmgQ=";
   };
+
+  propagatedBuildInputs = [
+    tkinter
+  ];
 
   doCheck = false; # No tests available
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "easygui" ];
+
+  meta = with lib; {
     description = "Very simple, very easy GUI programming in Python";
     homepage = "https://github.com/robertlugg/easygui";
     license = licenses.bsd3;

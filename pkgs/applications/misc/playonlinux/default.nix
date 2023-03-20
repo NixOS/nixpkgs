@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , fetchurl
 , cabextract
@@ -9,7 +9,7 @@
 , imagemagick
 , netcat-gnu
 , p7zip
-, python2
+, python3
 , unzip
 , wget
 , wine
@@ -22,12 +22,18 @@
 , jq
 , xorg
 , libGL
+, steam-run
+# needed for avoiding crash on file selector
+, gsettings-desktop-schemas
+, glib
+, wrapGAppsHook
+, hicolor-icon-theme
 }:
 
 let
-  version = "4.3.4";
+  version = "4.4";
 
-  binpath = stdenv.lib.makeBinPath [ 
+  binpath = lib.makeBinPath [
     cabextract
     python
     gettext
@@ -52,11 +58,12 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
+  libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
-  python = python2.withPackages(ps: with ps; [
-    wxPython
+  python = python3.withPackages(ps: with ps; [
+    wxPython_4_2
     setuptools
+    natsort
   ]);
 
 in stdenv.mkDerivation {
@@ -65,18 +72,30 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "019dvb55zqrhlbx73p6913807ql866rm0j011ix5mkk2g79dzhqp";
+    sha256 = "0n40927c8cnjackfns68zwl7h4d7dvhf7cyqdkazzwwx4k2xxvma";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  patches = [
+    ./0001-fix-locale.patch
+  ];
 
-  buildInputs = [ 
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+
+  preBuild = ''
+    makeFlagsArray+=(PYTHON="python -m py_compile")
+  '';
+
+  buildInputs = [
+    glib
     xorg.libX11
     libGL
     python
+    gsettings-desktop-schemas
+    hicolor-icon-theme
   ];
 
   postPatch = ''
+    substituteAllInPlace python/lib/lng.py
     patchShebangs python tests/python
     sed -i "s/ %F//g" etc/PlayOnLinux.desktop
   '';
@@ -87,8 +106,16 @@ in stdenv.mkDerivation {
 
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
-    makeWrapper $out/share/playonlinux/playonlinux $out/bin/playonlinux \
-      --prefix PATH : ${binpath}
+    makeWrapper $out/share/playonlinux/playonlinux{,-wrapper} \
+      --prefix PATH : ${binpath} \
+      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/GConf
+    # steam-run is needed to run the downloaded wine executables
+    mkdir -p $out/bin
+    cat > $out/bin/playonlinux <<EOF
+    #!${stdenv.shell} -e
+    exec ${steam-run}/bin/steam-run $out/share/playonlinux/playonlinux-wrapper "\$@"
+    EOF
+    chmod a+x $out/bin/playonlinux
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
@@ -103,11 +130,21 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  dontWrapGApps = true;
+  postFixup = ''
+    makeWrapper $out/share/playonlinux/playonlinux{,-wrapped} \
+      --prefix PATH : ${binpath} \
+      ''${gappsWrapperArgs[@]}
+    makeWrapper ${steam-run}/bin/steam-run $out/bin/playonlinux \
+      --add-flags $out/share/playonlinux/playonlinux-wrapped
+  '';
+
+  meta = with lib; {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
-    maintainers = [ maintainers.a1russell ];
+    maintainers = [ maintainers.pasqui23 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
