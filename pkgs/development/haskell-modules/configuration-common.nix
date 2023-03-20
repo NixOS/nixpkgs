@@ -78,6 +78,15 @@ self: super: {
     guardian
   ;
 
+  vector = overrideCabal (old: {
+    # Too strict bounds on doctest which isn't used, but is part of the configuration
+    jailbreak = true;
+    # vector-doctest seems to be broken when executed via ./Setup test
+    testTarget = lib.concatStringsSep " " [
+      "vector-tests-O0"
+      "vector-tests-O2"
+    ];
+  }) super.vector;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
@@ -207,10 +216,6 @@ self: super: {
   ABList = dontCheck super.ABList;
 
   pandoc-cli = throwIfNot (versionOlder super.pandoc.version "3.0.0") "pandoc-cli contains the pandoc executable starting with 3.0, this needs to be considered now." (markBroken (dontDistribute super.pandoc-cli));
-
-  # sse2 flag due to https://github.com/haskell/vector/issues/47.
-  # Jailbreak is necessary for QuickCheck dependency.
-  vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag "--ghc-options=-msse2" super.vector else super.vector);
 
   inline-c-cpp = overrideCabal (drv: {
     patches = drv.patches or [] ++ [

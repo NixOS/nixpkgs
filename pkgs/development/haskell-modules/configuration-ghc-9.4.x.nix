@@ -137,7 +137,6 @@ in {
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
   unordered-containers = doJailbreak super.unordered-containers;
-  vector = dontCheck super.vector;
   vector-binary-instances = doJailbreak super.vector-binary-instances;
 
   hpack = overrideCabal (drv: {

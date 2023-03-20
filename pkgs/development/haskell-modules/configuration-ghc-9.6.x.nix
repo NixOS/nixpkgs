@@ -110,16 +110,6 @@ self: super: {
   # XXX: 1.3 supports 9.6 properly, but is intended for bifunctors >= 5.6
   semialign = doJailbreak super.semialign;
 
-  # Not using latest vector version yet…
-  vector = doDistribute (overrideCabal {
-    jailbreak = true;
-    # vector-doctest seems to be broken when executed via ./Setup test
-    testTarget = lib.concatStringsSep " " [
-      "vector-tests-O0"
-      "vector-tests-O2"
-    ];
-  } super.vector);
-
   #
   # Too strict bounds, waiting on Revision in nixpkgs
   #
