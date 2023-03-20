@@ -3822,6 +3822,8 @@ with pkgs;
 
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
+  tiny-cuda-nn = callPackage ../development/libraries/science/math/tiny-cuda-nn { };
+
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
 
   behave = with python3Packages; toPythonApplication behave;
@@ -4943,6 +4945,8 @@ with pkgs;
     # pre-gcc11, in particular gcc9.
     stdenv = gcc9Stdenv;
   };
+
+  gpu-viewer = callPackage ../applications/misc/gpu-viewer { };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
@@ -24771,6 +24775,8 @@ with pkgs;
   eventstore = callPackage ../servers/nosql/eventstore { };
 
   exim = callPackage ../servers/mail/exim { };
+
+  fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
 
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
