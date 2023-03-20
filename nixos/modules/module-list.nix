@@ -220,6 +220,7 @@
   ./programs/proxychains.nix
   ./programs/qdmr.nix
   ./programs/qt5ct.nix
+  ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
   ./programs/screen.nix
