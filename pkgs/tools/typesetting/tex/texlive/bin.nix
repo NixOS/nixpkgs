@@ -14,16 +14,17 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2022";
+  year = "2023";
   version = year; # keep names simple for now
 
   common = {
     src = fetchurl {
       urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
+        "ftp://ftp.tug.org/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
+        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
       ];
-      hash = "sha256-X/o0heUessRJBJZFD8abnXvXy55TNX2S20vNT9YXm1Y=";
+      hash = "sha256-OHiqDh7QMBwFOw4u5OmtmZxEE0X0iC55vdHI9M6eebk=";
     };
 
     prePatch = ''
@@ -193,7 +194,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   hardeningDisable = [ "format" ];
 
   inherit (core) nativeBuildInputs;
-  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
+  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 potrace ];
 
   configureFlags = common.configureFlags
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
@@ -287,6 +288,17 @@ dvisvgm = stdenv.mkDerivation rec {
   inherit version;
 
   inherit (common) src;
+
+  # the build system tries to 'make' a vendored copy of potrace even
+  # though we use --with-system-potrace (and there isn't even a Makefile generated for potrace).
+  #
+  # Creating a dummy-Makefile that does nothing is easier than fixing the build system.
+  postPatch = ''
+    cat > texk/dvisvgm/dvisvgm-src/libs/potrace/Makefile <<EOF
+    all:
+    install:
+    EOF
+   '';
 
   preConfigure = "cd texk/dvisvgm";
 
