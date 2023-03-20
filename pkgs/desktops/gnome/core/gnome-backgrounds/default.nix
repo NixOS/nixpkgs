@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
-  version = "44.beta";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "UBPTQ4gq+84r35GoiwewsNkG1m3jY8+UOG/oaLbg6cA=";
+    sha256 = "SoOTs4cTXypqQkoaDDrJTgdCtiuCNaCSPJKfUeBL4E4=";
   };
 
   patches = [
