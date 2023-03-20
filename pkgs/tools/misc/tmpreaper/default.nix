@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
   pname = "tmpreaper";
   version = "1.6.17";
 
+  preConfigure = ''
+    if ! stdenv.isDarwin then
+      throw "Error: tmpreaper is not supported on non-Darwin platforms"
+    fi
+  '';
+
   buildInputs = [ autoconf automake ];
 
   installPhase = ''
