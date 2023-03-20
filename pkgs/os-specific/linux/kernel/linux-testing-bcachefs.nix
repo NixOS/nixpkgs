@@ -12,14 +12,12 @@
 
 # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
 (kernel.override ( args // {
-  argsOverride = {
-    version = "${kernel.version}-bcachefs-unstable-${commitDate}";
+  version = "${kernel.version}-bcachefs-unstable-${commitDate}";
 
-    extraMeta = {
-      branch = "master";
-      maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
-    };
-  } // argsOverride;
+  extraMeta = {
+    branch = "master";
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
+  };
 
   kernelPatches = [ {
       name = "bcachefs-${currentCommit}";
