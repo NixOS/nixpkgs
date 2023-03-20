@@ -33851,6 +33851,8 @@ with pkgs;
 
   tonelib-metal = callPackage ../applications/audio/tonelib-metal { };
 
+  tonelib-noisereducer = callPackage ../applications/audio/tonelib-noisereducer { };
+
   tony = libsForQt5.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
