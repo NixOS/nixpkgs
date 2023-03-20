@@ -66,7 +66,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    data-compressed = runCommand "data-compressed" {
+    data-compressed = runCommand "gitea-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
       mkdir $out

@@ -71,7 +71,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    data-compressed = runCommand "data-compressed" {
+    data-compressed = runCommand "forgejo-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
       mkdir $out
