@@ -41,7 +41,10 @@
       \end{document}
     '';
   } ''
-    chktex -v -nall -w1 "$input" 2>&1 | tee "$out"
+    # chktex is supposed to return 2 when it (successfully) finds warnings, but no errors,
+    # see http://git.savannah.nongnu.org/cgit/chktex.git/commit/?id=ec0fb9b58f02a62ff0bfec98b997208e9d7a5998
+    (set +e; chktex -v -nall -w1 "$input" 2>&1; [ $? = 2 ] || exit 1; set -e)  | tee "$out"
+    # also check that the output does indeed contain "One warning printed"
     grep "One warning printed" "$out"
   '';
 
