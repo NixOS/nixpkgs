@@ -46,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.5.0.rc";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "eSv03f+RT7I8Xw3YAFk/qmihi1lLHmtZKn2Bcop+Fgs=";
+    sha256 = "F5ZmA9xDKphSa0kFhqSKzX+fWZNfeJXfxRcppGppAaM=";
   };
 
   nativeBuildInputs = [
