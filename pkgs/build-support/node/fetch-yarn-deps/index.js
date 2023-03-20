@@ -10,6 +10,7 @@ const path = require('path')
 const lockfile = require('./yarnpkg-lockfile.js')
 const { promisify } = require('util')
 const url = require('url')
+const { urlToName } = require('./common.js')
 
 const execFile = promisify(child_process.execFile)
 
@@ -17,20 +18,6 @@ const exec = async (...args) => {
 	const res = await execFile(...args)
 	if (res.error) throw new Error(res.stderr)
 	return res
-}
-
-// This has to match the logic in pkgs/development/tools/yarn2nix-moretea/yarn2nix/lib/urlToName.js
-// so that fixup_yarn_lock produces the same paths
-const urlToName = url => {
-	const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
-
-	if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
-		return path.basename(url)
-	} else {
-		return url
-			.replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
-			.replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
-	}
 }
 
 const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
