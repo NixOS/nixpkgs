@@ -1,7 +1,7 @@
 {
-  "version": "0.17.1",
-  "serverSha256": "sha256-2pSa3IvmEoZbDS3U0yvZfocpgmoHJKm6n2ggPCCXtxY=",
-  "serverCargoSha256": "sha256-uVqRuOSr5Smjpe/HUhIebrBaxJNdMOzHrtQkzTKsLC8=",
-  "uiSha256": "sha256-JehU0Bk0S1qjYRlQSQzQOYSLUScDAAbKp8O9zH40XRc=",
-  "uiYarnDepsSha256": "sha256-AeY6k1qkubTefUofq9ISzXq3huNWHoSpQFFRgCMdFhQ="
+  "version": "0.17.2",
+  "serverSha256": "sha256-QhInIdDMz6XRM4WlWk2TV3sutv7cqhLYM7Cbqy7+FRc=",
+  "serverCargoSha256": "sha256-AC6EP612uaeGfqHbrHrz89h0tsNlMceEg6GxEsm1QMA=",
+  "uiSha256": "sha256-MZ9zrosVNGI2O09s4Ov7P2uxvznftaidmQ3/Wm82PNY=",
+  "uiYarnDepsSha256": "       For full logs, run 'nix log /nix/store/19qj807ibi36y5mvz8p6rdby49a846kc-offline.drv'."
 }
