@@ -5,14 +5,15 @@
 , cmake
 , pkg-config
 , boost
-, expat
 , cairo
+, ceres-solver
+, expat
+, extra-cmake-modules
+, glog
+, libXdmcp
 , python3
 , python3Packages
-, extra-cmake-modules
 , wayland
-, glog
-, ceres-solver
 }:
 
 let
@@ -55,6 +56,7 @@ qt5.mkDerivation {
     wayland
     glog
     ceres-solver
+    libXdmcp
   ];
 
   postInstall = ''
@@ -64,7 +66,7 @@ qt5.mkDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/Natron \
-      --prefix PYTHONPATH : "${python3Packages.makePythonPath [ python3Packages.pyside2 ]}" \
+      --prefix PYTHONPATH : "${python3Packages.makePythonPath [ python3Packages.qtpy python3Packages.pyside2 ]}" \
       --set-default OCIO "$out/share/OpenColorIO-Configs/blender/config.ocio"
   '';
 
