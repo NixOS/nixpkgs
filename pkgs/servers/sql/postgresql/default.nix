@@ -197,8 +197,17 @@ let
 
     disallowedReferences = [ stdenv'.cc ];
 
-    passthru = {
+    passthru = let
+      jitToggle = this.override {
+        jitSupport = !jitSupport;
+        this = jitToggle;
+      };
+    in
+    {
       inherit readline psqlSchema jitSupport;
+
+      withJIT = if jitSupport then this else jitToggle;
+      withoutJIT = if jitSupport then jitToggle else this;
 
       pkgs = let
         scope = {
