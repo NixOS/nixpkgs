@@ -63,6 +63,14 @@ stdenv.mkDerivation rec {
     #
     #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
     ./fix-finding-test-typelibs.patch
+
+    # Fix build with libadwaita 1.3
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2010
+    # https://gitlab.gnome.org/GNOME/libadwaita/-/merge_requests/792
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/d89a5c95e43f4a4e1a4e9d063e3962bac8e51db0.patch";
+      sha256 = "sha256-dSMccodjhGKIGuj+2hi8fxZ3ZQ/pioQYQ36+vpOuJPY=";
+    })
   ];
 
   nativeBuildInputs = [
