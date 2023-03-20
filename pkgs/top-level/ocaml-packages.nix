@@ -265,10 +265,7 @@ let
 
     cstruct-unix = callPackage ../development/ocaml-modules/cstruct/unix.nix {};
 
-    csv =
-      if lib.versionAtLeast ocaml.version "4.2"
-      then callPackage ../development/ocaml-modules/csv { }
-      else callPackage ../development/ocaml-modules/csv/1.5.nix { };
+    csv = callPackage ../development/ocaml-modules/csv { };
 
     csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
 
