@@ -1328,6 +1328,9 @@ let
       propagatedBuildInputs = with pkgs; attrs.propagatedBuildInputs ++ [ (hdf5-blosc.override {hdf5 = hdf5_1_10;}) ];
       patches = [ ./patches/rhdf5filters.patch ];
     });
+
+    rhdf5= old.rhdf5.overrideAttrs (attrs: {
+      patches = [ ./patches/rhdf5.patch ];
     });
   };
 in
