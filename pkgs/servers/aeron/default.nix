@@ -33,15 +33,11 @@ let
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
       gradle \
+          --console plain \
           --no-daemon \
-        build \
-          -Dorg.gradle.java.home="${jdk11.home}" \
-          -x test \
-          -x checkstyleMain \
-          -x checkstyleGenerated \
-          -x checkstyleGeneratedTest \
-          -x checkstyleMain \
-          -x checkstyleTest
+          --system-prop org.gradle.java.home="${jdk11.home}" \
+          --exclude-task javadoc \
+        build
     '';
 
     # Mavenize dependency paths
@@ -55,7 +51,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-QRL3y7HF6/pWsC5MbtIqhZ4HR8jcWtQG6x9kajeoNMY=";
+    outputHash = "sha256-1hvQyEiCMfIw6wv9GOEehX0wrtBnAilVuTGUWAGoH6k=";
   };
 
   # Point to our local deps repo
@@ -110,18 +106,21 @@ in stdenv.mkDerivation rec {
     export GRADLE_USER_HOME=$(mktemp -d)
     cp ${buildSrc} ./buildSrc/build.gradle
 
-    gradle -PVERSION=${version} \
-        --offline \
-        --no-daemon \
+    gradle \
+        --console plain \
+        --exclude-task checkstyleMain \
+        --exclude-task checkstyleGenerated \
+        --exclude-task checkstyleGeneratedTest \
+        --exclude-task checkstyleMain \
+        --exclude-task checkstyleTest \
+        --exclude-task javadoc \
+        --exclude-task test \
         --init-script "${gradleInit}" \
-      build \
-        -Dorg.gradle.java.home="${jdk11.home}" \
-        -x test \
-        -x checkstyleMain \
-        -x checkstyleGenerated \
-        -x checkstyleGeneratedTest \
-        -x checkstyleMain \
-        -x checkstyleTest
+        --no-daemon \
+        --offline \
+        --project-prop VERSION=${version} \
+        --system-prop org.gradle.java.home="${jdk11.home}" \
+      assemble
 
     runHook postBuild
   '';
@@ -139,25 +138,36 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper "${jdk11}/bin/java" "$out/bin/${pname}-stat" \
-      --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
-      --add-flags "-cp $out/share/java/aeron-all-${version}.jar io.aeron.samples.AeronStat"
+    function wrap {
+      makeWrapper "${jdk11}/bin/java" "$out/bin/$1" \
+        --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
+        --add-flags "--class-path $out/share/java/aeron-all-${version}.jar" \
+        --add-flags "$2"
+    }
 
-    makeWrapper "${jdk11}/bin/java" "$out/bin/${pname}-archiving-media-driver" \
-      --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
-      --add-flags "-cp $out/share/java/aeron-all-${version}.jar io.aeron.archive.ArchivingMediaDriver"
+    wrap "${pname}-media-driver" io.aeron.driver.MediaDriver
+    wrap "${pname}-stat" io.aeron.samples.AeronStat
+    wrap "${pname}-archiving-media-driver" io.aeron.archive.ArchivingMediaDriver
+    wrap "${pname}-archive-tool" io.aeron.archive.ArchiveTool
+    wrap "${pname}-logging-agent" io.aeron.agent.DynamicLoggingAgent
+    wrap "${pname}-cluster-tool" io.aeron.cluster.ClusterTool
+  '';
 
-    makeWrapper "${jdk11}/bin/java" "$out/bin/${pname}-archive-tool" \
-      --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
-      --add-flags "-cp $out/share/java/aeron-all-${version}.jar io.aeron.archive.ArchiveTool"
+  doCheck = true;
 
-    makeWrapper "${jdk11}/bin/java" "$out/bin/${pname}-logging-agent" \
-      --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
-      --add-flags "-cp $out/share/java/aeron-all-${version}.jar io.aeron.agent.DynamicLoggingAgent"
+  checkPhase = ''
+    runHook preCheck
 
-    makeWrapper "${jdk11}/bin/java" "$out/bin/${pname}-cluster-tool" \
-      --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
-      --add-flags "-cp $out/share/java/aeron-all-${version}.jar io.aeron.cluster.ClusterTool"
+    gradle \
+        --console plain \
+        --init-script "${gradleInit}" \
+        --no-daemon \
+        --offline \
+        --project-prop VERSION=${version} \
+        --system-prop org.gradle.java.home="${jdk11.home}" \
+      test
+
+    runHook postCheck
   '';
 
   meta = with lib; {
