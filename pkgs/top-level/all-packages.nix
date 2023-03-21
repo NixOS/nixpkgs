@@ -17300,6 +17300,8 @@ with pkgs;
 
   global = callPackage ../development/tools/misc/global { };
 
+  glualint = haskell.lib.compose.justStaticExecutables haskellPackages.glualint;
+
   gnatcoll-db2ada = callPackage ../development/libraries/ada/gnatcoll/db.nix {
     component = "gnatcoll_db2ada";
   };
