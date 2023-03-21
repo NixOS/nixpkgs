@@ -44,6 +44,7 @@ let pygments = buildPythonPackage
     meta = with lib; {
       homepage = "https://pygments.org/";
       description = "A generic syntax highlighter";
+      mainProgram = "pygmentize";
       license = licenses.bsd2;
       maintainers = with maintainers; [ SuperSandro2000 ];
     };
