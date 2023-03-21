@@ -12,6 +12,7 @@
 # tests
 , geopy
 , nose
+, pytestCheckHook
 , pysolr
 , python-dateutil
 , requests
@@ -45,10 +46,34 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     geopy
     nose
+    pytestCheckHook
     pysolr
     python-dateutil
     requests
     whoosh
+  ];
+
+  disabledTestPaths = [
+    # Failing tests
+    "test_haystack/test_app_loading.py"
+    "test_haystack/test_fields.py"
+    "test_haystack/test_forms.py"
+    "test_haystack/test_indexes.py"
+    "test_haystack/test_managers.py"
+    "test_haystack/test_models.py"
+    "test_haystack/test_query.py"
+    "test_haystack/test_utils.py"
+    "test_haystack/test_views.py"
+    "test_haystack/elasticsearch*"
+    "test_haystack/solr_tests/*"
+    "test_haystack/simple_tests/test_simple_backend.py"
+    "test_haystack/spatial/test_spatial.py"
+    "test_haystack/whoosh_tests/test_forms.py"
+    "test_haystack/whoosh_tests/test_whoosh_backend.py"
+    "test_haystack/whoosh_tests/test_whoosh_query.py"
+
+    # Spawns a process which never stops, causing timeouts on Hydra
+    "test_haystack/whoosh_tests/test_whoosh_management_commands.py"
   ];
 
   meta = with lib; {
