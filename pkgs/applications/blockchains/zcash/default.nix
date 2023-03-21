@@ -22,13 +22,14 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   cargoHash = "sha256-/KBgUrvxfGlbY+9XVYASwYZUxbhW5q43NTBsvUZSkuo=";
 
-  nativeBuildInputs = [ autoreconfHook cargo cxx-rs git hexdump makeWrapper pkg-config tl-expected ];
+  nativeBuildInputs = [ autoreconfHook cargo cxx-rs git hexdump makeWrapper pkg-config ];
 
   buildInputs = [
     boost180
     db62
     libevent
     libsodium
+    tl-expected
     utf8cpp
     zeromq
   ] ++ lib.optionals stdenv.isDarwin [
