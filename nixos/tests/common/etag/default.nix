@@ -4,69 +4,53 @@ import ../../make-test-python.nix {
   inherit name;
 
   nodes = {
-    server = { lib, pkgs, ... } @ args: with lib; {
+    server = { lib, pkgs, config, ... } @ args: with lib; {
       options.test-support.etag.root = mkOption {
         default = ./test-1;
       };
 
-      config = serverConfig args // {
+      imports = [
+        (serverConfig args)
+      ];
+
+      config = {
         specialisation.test-2.configuration = {
           test-support.etag.root = ./test-2;
         };
 
         networking.firewall.allowedTCPPorts = [ 80 ];
-      };
-    };
 
-    client = { pkgs, lib, ... }: {
-      virtualisation.memorySize = 512;
-
-      environment.systemPackages = let
-        testRunner = pkgs.writers.writePython3Bin "test-runner" {
-          libraries = [ pkgs.python3Packages.selenium ];
-        } ''
-          import os
-          import time
-
-          from selenium.webdriver import Firefox
-          from selenium.webdriver.firefox.options import Options
-
-          options = Options()
-          options.add_argument('--headless')
-          driver = Firefox(options=options)
-
-          driver.implicitly_wait(20)
-          driver.get('http://server')
-          driver.find_element_by_xpath('//div[@foo="1"]')
-          open('/tmp/test-1-complete', 'w').close()
-
-          while not os.path.exists('/tmp/test-2-ready'):
-              time.sleep(0.5)
-
-          driver.get('http://server')
-          driver.find_element_by_xpath('//div[@foo="2"]')
-          open('/tmp/test-2-complete', 'w').close()
-        '';
-      in [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
     };
   };
 
   testScript = { nodes, ... }: let
-    inherit (nodes.server.config.system.build) toplevel;
+    inherit (nodes.server.system.build) toplevel;
   in ''
     start_all()
 
     server.wait_for_unit("multi-user.target")
-    client.wait_for_unit("multi-user.target")
 
-    client.execute("test-runner &")
-    client.wait_for_file("/tmp/test-1-complete")
+    def check_etag(url):
+        etag = server.succeed(
+            "curl --fail -v '{}' 2>&1 | sed -n -e \"s/^< etag: *//ip\"".format(
+                url
+            )
+        )
+        etag = etag.strip()
+        http_code = server.succeed(
+            "curl --fail --silent --show-error -o /dev/null -w \"%{{http_code}}\" --head -H 'If-None-Match: {}' {}".format(
+                etag, url
+            )
+        )
+        assert int(http_code) == 304, "HTTP code is {}, expected 304".format(http_code)
+        return etag
 
-    server.succeed(
-        "${toplevel}/specialisation/test-2/bin/switch-to-configuration test"
-    )
-
-    client.succeed("touch /tmp/test-2-ready")
-    client.wait_for_file("/tmp/test-2-complete")
+    with subtest("check ETag if serving Nix store paths"):
+        first_etag = check_etag("http://server/index.txt")
+        server.succeed(
+            "${toplevel}/specialisation/test-2/bin/switch-to-configuration test"
+        )
+        second_etag = check_etag("http://server/index.txt")
+        assert first_etag != second_etag, "ETags are the same"
   '';
 }
