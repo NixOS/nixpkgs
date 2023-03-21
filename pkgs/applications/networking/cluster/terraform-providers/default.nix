@@ -6,7 +6,6 @@
 , callPackage
 , config
 , writeShellScript
-
 , cdrtools # libvirt
 }:
 let
@@ -81,6 +80,11 @@ let
       checkly = automated-providers.checkly.override { spdx = "MIT"; };
       gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
+      # Scalr is a very special case because it is not hosted on terraform.io. They do have the source on GitHub however.
+      scalr = automated-providers.scalr.override {
+        homepage = "https://registry.scalr.io/scalr/scalr";
+        mkProviderFetcher = fetchFromGitHub;
+      };
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     };
 

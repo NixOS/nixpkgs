@@ -7,6 +7,7 @@
 # provider source address.
 #
 set -euo pipefail
+set -x
 shopt -s inherit_errexit
 
 show_usage() {
@@ -35,6 +36,24 @@ build=1
 force=
 provider=
 spdx=1
+
+# Providers that are not hosted on terraform.io and have their source code in GitHub, using GitHub releases.
+# This allows us to override values and use GitHub's release API to retrieve the values we need instead of TFC.
+declare -A github_providers=(
+    ["scalr","org"]="scalr"
+    ["scalr","repo"]="terraform-provider-scalr"
+    ["scalr","homepage"]="https://registry.scalr.io/scalr/scalr"
+)
+
+function is_github_provider {
+    local provider=$1
+    local provider_key="$provider,org"
+    if [[ -n github_providers[$provider_key] ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -101,8 +120,13 @@ echo_provider() {
 pushd "$(dirname "$0")" >/dev/null
 
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
-  homepage="https://registry.terraform.io/providers/${provider}"
   provider=$(basename "${provider}")
+  if is_github_provider "$provider"; then
+    homepage_key="${provider},homepage"
+    homepage=${github_providers[$homepage_key]}
+  else
+    homepage="https://registry.terraform.io/providers/${provider}"
+  fi
   echo_provider "init"
   update_attr homepage "${homepage}"
   # create empty stings so nix-prefetch works
@@ -112,10 +136,19 @@ fi
 
 homepage="$(read_attr homepage)"
 
-registry_response=$(curl -s "${homepage//providers/v1/providers}")
-
 old_rev="$(read_attr rev)"
-rev="$(jq -r '.tag' <<<"${registry_response}")"
+
+if is_github_provider "$provider"; then
+  org_key="${provider},org"
+  org=${github_providers[$org_key]}
+  repo_key="${provider},repo"
+  repo=${github_providers[$repo_key]}
+  rev=$(curl "https://api.github.com/repos/$org/$repo/releases/latest" | jq -r '.name')
+else
+  registry_response=$(curl -s "${homepage//providers/v1/providers}")
+  rev="$(jq -r '.tag' <<<"${registry_response}")"
+fi
+
 if [[ ${force} != 1 ]]; then
   if [[ ${old_rev} == "${rev}" ]]; then
     echo_provider "already at version ${rev}"
@@ -129,11 +162,15 @@ fi
 echo_provider "updating from ${old_rev} to ${rev}"
 update_attr rev "${rev}"
 
-provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
+if is_github_provider "$provider"; then
+  provider_source_url="https://github.com/$org/$repo}"
+else
+  provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
+  org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
+  repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
+fi
 
-org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
 update_attr owner "${org}"
-repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
 
 if [[ ${spdx} == 1 ]]; then

@@ -972,6 +972,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-kh1wv7cuWCC1rP0WBQW95pFg53gZTakqGoMIDMDSmt0="
   },
+  "scalr": {
+    "hash": "sha256-you7ohHHLbTAzwkEiErPSgf8Ppuw+EoZ+CDfOi35J4w=",
+    "homepage": "https://registry.scalr.io/scalr/scalr",
+    "owner": "scalr",
+    "repo": "terraform-provider-scalr",
+    "rev": "v1.0.4",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-eTTMxUb097ycHOxPzPRarTdvEhogojMhZRoZMmPCMPA="
+  },
   "secret": {
     "hash": "sha256-MmAnA/4SAPqLY/gYcJSTnEttQTsDd2kEdkQjQj6Bb+A=",
     "homepage": "https://registry.terraform.io/providers/numtide/secret",
