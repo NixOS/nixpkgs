@@ -5652,9 +5652,7 @@ with pkgs;
 
   string-machine = callPackage ../applications/audio/string-machine { };
 
-  stripe-cli = callPackage ../tools/admin/stripe-cli {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  stripe-cli = callPackage ../tools/admin/stripe-cli { };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
@@ -15134,8 +15132,6 @@ with pkgs;
     haxe_4_2
     haxe_4_1
     haxe_4_0
-    haxe_3_4
-    haxe_3_2
     ;
 
   haxe = haxe_4_2;
@@ -27379,6 +27375,8 @@ with pkgs;
   breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
 
   brise = callPackage ../data/misc/brise { };
+
+  bqn386 = callPackage ../data/fonts/bqn386 { };
 
   cacert = callPackage ../data/misc/cacert { };
 

@@ -7,7 +7,7 @@
 , alsa-lib
 , expat
 , fontconfig
-, libGL
+, vulkan-loader
 , xorg
 , darwin
 }:
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
     expat
     fontconfig
-    libGL
+    vulkan-loader
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
   '';
 
   meta = with lib; {
