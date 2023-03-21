@@ -1,0 +1,28 @@
+diff --git a/src/Makevars.in b/src/Makevars.in
+index addb6a0..590784a 100644
+--- a/src/Makevars.in
++++ b/src/Makevars.in
+@@ -18,7 +18,7 @@ USER_LIB_DIR = ${R_PACKAGE_DIR}/lib${R_ARCH}/
+ 
+ PKG_CPPFLAGS = -I${USER_INCLUDE_DIR} ${ZLIB_INCLUDE}
+ PKG_CFLAGS = ${ZLIB_LIB}
+-PKG_LIBS = "${USER_LIB_DIR}libhdf5.a" @SZIP_LIB@ -lz
++PKG_LIBS = -lhdf5 -lsz
+ 
+ 
+ 
+@@ -26,12 +26,12 @@ all: $(SHLIB)
+ 
+ $(SHLIB): Rhdf5lib.o
+ 
+-Rhdf5lib.o: copy-hdf5 @COPY_SZIP@
++Rhdf5lib.o:
+ 
+ copy-szip: copy-hdf5
+ 	cp hdf5/libaec-1.0.4/build/szip/lib/libsz.a "${USER_LIB_DIR}"
+ 	cp hdf5/libaec-1.0.4/build/szip/lib/libaec.a "${USER_LIB_DIR}"
+-	
++
+ #copy hdf5 library headers to package include
+ copy-hdf5: @BUILD_HDF5@
+ 	mkdir -p "${USER_INCLUDE_DIR}"

@@ -389,7 +389,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = with pkgs; [ zlib.dev hdf5.dev ];
+    Rhdf5lib = with pkgs; [ zlib.dev ];
     Rhpc = with pkgs; [ zlib bzip2.dev icu xz.dev mpi pcre.dev ];
     Rhtslib = with pkgs; [ zlib.dev automake autoconf bzip2.dev xz.dev curl.dev ];
     rjags = [ pkgs.jags ];
@@ -1320,7 +1320,9 @@ let
     });
 
     Rhdf5lib = old.Rhdf5lib.overrideAttrs (attrs: {
-      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev ];
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5_1_10.dev pkgs.libaec ];
+      patches = [ ./patches/Rhdf5lib.patch ];
+    });
     });
   };
 in
