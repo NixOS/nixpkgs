@@ -71,6 +71,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "blis>=0.7.8,<0.8.0" "blis"
+  '';
+
   # Add native extensions.
   preCheck = ''
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
