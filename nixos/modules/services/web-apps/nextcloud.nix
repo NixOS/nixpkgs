@@ -673,7 +673,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 25;
+        latest = 26;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -709,6 +709,7 @@ in {
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
+        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional cfg.enableBrokenCiphersForSSE ''
           You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
           This is only necessary if you're using Nextcloud's server-side encryption.
@@ -747,7 +748,8 @@ in {
               `pkgs.nextcloud`.
             ''
           else if versionOlder stateVersion "22.11" then nextcloud24
-          else nextcloud25
+          else if versionOlder stateVersion "23.05" then nextcloud25
+          else nextcloud26
         );
 
       services.nextcloud.phpPackage =
