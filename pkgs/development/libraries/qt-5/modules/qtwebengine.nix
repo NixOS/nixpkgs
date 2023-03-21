@@ -34,8 +34,8 @@ let
   # the build platform yet knows about the host `.pc` files.
   # Most configury allows setting $PKG_CONFIG to point to an
   # arbitrarily-named script which serves this purpose; however QT
-  # insists that it is named `pkg-config` with no target prefix.  So
-  # we re-wrap the host platform's pkg-config.
+  # insists that it is named `pkg-config` with no target prefix.
+  # So we re-wrap the host platform's pkg-config.
   pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
     name = "pkg-config-wrapper-without-target-prefix";
     dontUnpack = true;
