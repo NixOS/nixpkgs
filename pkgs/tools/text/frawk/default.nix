@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "frawk";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fqOFFkw+mV9QLTH3K6Drk3kDqU4wrQTj7OQrtgYuD7M=";
+    sha256 = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
   };
 
-  cargoSha256 = "sha256-G39/CESjMouwPQJBdsmd+MBusGNQmyNjw3PJSFBCdSk=";
+  cargoSha256 = "sha256-Xk+iH90Nb2koCdGmVSiRl8Nq26LlFdJBuKmvcbgnkgs=";
 
   buildInputs = [ libxml2 ncurses zlib ];
 
