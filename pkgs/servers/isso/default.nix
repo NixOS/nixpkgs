@@ -1,28 +1,28 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests }:
-let
-  nodeEnv = import ./node-env.nix {
-    inherit (pkgs) stdenv lib python2 runCommand writeTextFile;
-    inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
-  };
-  nodePackages = import ./node-packages.nix {
-    inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
-    inherit nodeEnv;
-  };
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, nixosTests
 
-  nodeDependencies = (nodePackages.shell.override (old: {
-  })).nodeDependencies;
-in
-with python3Packages; buildPythonApplication rec {
-
+, buildPythonApplication
+, bleach
+, cffi
+, flask-caching
+, html5lib
+, itsdangerous
+, jinja2
+, misaka
+, pytest
+, pytest-cov
+, werkzeug }:
+buildPythonApplication rec {
   pname = "isso";
-  version = "0.12.6.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-T5T3EJS8ef8uo+P9qkC+7I70qv+4PFrnhImr04Fz57U=";
+    hash = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
   };
 
   propagatedBuildInputs = [
@@ -37,14 +37,23 @@ with python3Packages; buildPythonApplication rec {
 
   nativeBuildInputs = [
     cffi
-    nodejs
   ];
 
-  preBuild = ''
-    ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-    export PATH="${nodeDependencies}/bin:$PATH"
+  preBuild = let
+    frontend = buildNpmPackage {
+      inherit version src;
+      pname = "isso-frontend";
 
-    make js
+      npmDepsHash = "sha256-RBpuhFI0hdi8bB48Pks9Ac/UdcQ/DJw+WFnNj5f7IYE=";
+
+      npmBuildScript = "build-prod";
+
+      installPhase = ''
+        cp -R isso/js/. $out/
+      '';
+    };
+  in ''
+    cp -R ${frontend}/. isso/js/
   '';
 
   nativeCheckInputs = [

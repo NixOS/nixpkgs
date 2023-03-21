@@ -20809,9 +20809,7 @@ with pkgs;
     inherit (llvmPackages) stdenv;
   };
 
-  isso = callPackage ../servers/isso {
-    nodejs = nodejs-14_x;
-  };
+  isso = python3.pkgs.callPackage ../servers/isso { };
 
   itk_5_2 = callPackage ../development/libraries/itk/5.2.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
