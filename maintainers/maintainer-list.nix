@@ -271,6 +271,12 @@
     githubId = 12799326;
     name = "Abhinav Sharma";
   };
+  abhishekbiyala = {
+    email = "abhishekbiyala@gmail.com";
+    github = "abhishekbiyala";
+    githubId = 1491408;
+    name = "Abhishek Sharma";
+  };
   abigailbuccaneer = {
     email = "abigailbuccaneer@gmail.com";
     github = "AbigailBuccaneer";
