@@ -33598,6 +33598,7 @@ with pkgs;
   syncterm = callPackage ../applications/terminal-emulators/syncterm { };
 
   inherit (callPackages ../applications/networking/syncthing {
+    inherit (darwin) autoSignDarwinBinariesHook;
     buildGoModule = buildGo119Module; # go 1.20 build failure
    })
     syncthing
