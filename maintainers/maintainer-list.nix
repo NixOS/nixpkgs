@@ -15727,6 +15727,12 @@
     github = "deviant";
     githubId = 68829907;
   };
+  vaci = {
+    email = "vaci@vaci.org";
+    github = "vaci";
+    githubId = 6882568;
+    name = "Vaci";
+  };
   vaibhavsagar = {
     email = "vaibhavsagar@gmail.com";
     matrix = "@vaibhavsagar:matrix.org";
