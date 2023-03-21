@@ -114,7 +114,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.gollum = mkIf (cfg.group == "gollum") { };
+    users.groups."${cfg.group}" = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${config.users.users.gollum.name} ${config.users.groups.gollum.name} - -"
