@@ -71,7 +71,7 @@ index 2ba4679d..452853ca 100644
 +         * it's measurable!) */
 +        char *respath = NULL;
 +        if (strncmp(ref->_path, nix_store_prefix, nix_store_prefix_len) == 0 ||
-+            ((respath = realpath(respath, NULL)) != NULL &&
++             ((respath = realpath(ref->_path, NULL)) != NULL &&
 +             strncmp(respath, nix_store_prefix, nix_store_prefix_len) == 0)) {
 +            const char *path = respath != NULL ? respath : ref->_path;
 +
