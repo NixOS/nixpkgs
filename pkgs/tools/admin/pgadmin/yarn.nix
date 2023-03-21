@@ -6530,14 +6530,6 @@
       };
     }
     {
-      name = "jsoneditor_react___jsoneditor_react_3.1.2.tgz";
-      path = fetchurl {
-        name = "jsoneditor_react___jsoneditor_react_3.1.2.tgz";
-        url  = "https://registry.yarnpkg.com/jsoneditor-react/-/jsoneditor-react-3.1.2.tgz";
-        sha512 = "XqU8BMdIhrlS5HUnn7rGhgZw315bdJGQrf6NG5UH40FSw2xNirQrxnM05aeAplHkp8FNkzN2WX0tfvEWdl2UUA==";
-      };
-    }
-    {
       name = "jsoneditor___jsoneditor_9.9.2.tgz";
       path = fetchurl {
         name = "jsoneditor___jsoneditor_9.9.2.tgz";
