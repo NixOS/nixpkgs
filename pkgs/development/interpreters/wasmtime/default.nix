@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "6.0.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vVdvj3Q3weK+yohSaEDaagqWWZkA+KV4gRRbcE3UiPQ=";
+    hash = "sha256-vbsjUJH6wHmSTwUV5tXrTUljPJNLTms8K6EyWi0mipA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-7FYXKEN17I7sLQid2JGTxFHMhGPka2coEMS6y4HvwPU=";
+  cargoHash = "sha256-eTm0FfWiNpEwj2egLrQGPA1lZ0K5GfVOeULsbNyf18Q=";
 
   cargoBuildFlags = [
     "--package wasmtime-cli"
