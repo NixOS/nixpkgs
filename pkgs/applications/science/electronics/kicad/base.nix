@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"  # upstream issue 12491
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
   ]
+  ++ optionals (!stable) [ # workaround for https://gitlab.com/kicad/code/kicad/-/issues/14346
+    "-DPYTHON_SITE_PACKAGE_PATH=${placeholder "out"}/lib/python${lib.versions.majorMinor python.version}/site-packages"
+  ]
   ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
   ]
