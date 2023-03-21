@@ -582,7 +582,7 @@ let
     podkat = [ pkgs.zlib.dev ];
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
-    rhdf5filters = [ pkgs.zlib.dev ];
+    rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
     rtk = [ pkgs.zlib.dev ];
     scPipe = [ pkgs.zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
@@ -1322,6 +1322,11 @@ let
     Rhdf5lib = old.Rhdf5lib.overrideAttrs (attrs: {
       propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5_1_10.dev pkgs.libaec ];
       patches = [ ./patches/Rhdf5lib.patch ];
+    });
+
+    rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
+      propagatedBuildInputs = with pkgs; attrs.propagatedBuildInputs ++ [ (hdf5-blosc.override {hdf5 = hdf5_1_10;}) ];
+      patches = [ ./patches/rhdf5filters.patch ];
     });
     });
   };

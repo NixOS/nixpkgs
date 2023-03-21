@@ -1,0 +1,46 @@
+diff --git a/src/Makevars.in b/src/Makevars.in
+index 4441634..665a2dd 100644
+--- a/src/Makevars.in
++++ b/src/Makevars.in
+@@ -20,10 +20,9 @@ export PKG_LDFLAGS=@LDFLAGS@
+ all: copying $(SHLIB)
+ 
+ #copy hdf5 library headers to package include
+-copying: blosc/libH5Zblosc.so bzip2/libH5Zbz2.so lzf/libH5Zlzf.so
++copying: bzip2/libH5Zbz2.so lzf/libH5Zlzf.so
+ 	mkdir -p "${USER_LIB_DIR}"
+ 	cp ${BZIP2_LIB} "${USER_LIB_DIR}"
+-	cp ${BLOSC_LIB} "${USER_LIB_DIR}"
+ 	cp ${LZF_LIB} "${USER_LIB_DIR}"
+ 
+ blosc/libH5Zblosc.so:
+diff --git a/src/bzip2/Makefile b/src/bzip2/Makefile
+index 449bbe7..154354e 100644
+--- a/src/bzip2/Makefile
++++ b/src/bzip2/Makefile
+@@ -1,9 +1,9 @@
+ 
+ all: libH5Zbz2.so
+ 
+-libH5Zbz2.so: bzip2-1.0.8/libbz2.a
+-	${CC} ${PKG_CFLAGS} ${PKG_CPICFLAGS} -shared H5Zbzip2.c $(PKG_CPPFLAGS) \
+-	-I./bzip2-1.0.8/ ./bzip2-1.0.8/libbz2.a ${PKG_LDFLAGS} -o libH5Zbz2.so
++libH5Zbz2.so:
++	${CC} ${PKG_CFLAGS} ${PKG_CPICFLAGS} -shared H5Zbzip2.c \
++	   -lbz2 -o libH5Zbz2.so
+ 
+ bzip2-1.0.8/libbz2.a:
+ 	$(MAKE) -C bzip2-1.0.8
+diff --git a/src/lzf/Makefile b/src/lzf/Makefile
+index 837f80b..eeca0c8 100644
+--- a/src/lzf/Makefile
++++ b/src/lzf/Makefile
+@@ -2,7 +2,7 @@
+ all: libH5Zlzf.so
+ 
+ libH5Zlzf.so: lzf/liblzf.a
+-	${CC} ${PKG_CFLAGS} ${PKG_CPICFLAGS} -shared H5Zlzf.c $(PKG_CPPFLAGS) \
++	${CC} ${PKG_CFLAGS} ${PKG_CPICFLAGS} -shared H5Zlzf.c \
+ 	-I./lzf/ ./lzf/liblzf.a ${PKG_LDFLAGS} -o libH5Zlzf.so
+ 
+ lzf/liblzf.a:
