@@ -12,7 +12,10 @@
   Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
+  filelock,
   sympy,
+  networkx,
+  jinja2,
   numpy, pyyaml, cffi, click, typing-extensions,
 
   # Unit tests
@@ -285,8 +288,14 @@ in buildPythonPackage rec {
     click
     numpy
     pyyaml
+
+    # From install_requires:
+    filelock
     typing-extensions
     sympy
+    networkx
+    jinja2
+
     # the following are required for tensorboard support
     pillow six future tensorboard protobuf
   ] ++ lib.optionals MPISupport [ mpi ]
