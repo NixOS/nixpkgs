@@ -8162,9 +8162,7 @@ with pkgs;
 
   sbctl = callPackage ../tools/security/sbctl { };
 
-  sbsigntool = callPackage ../tools/security/sbsigntool {
-    openssl = openssl_1_1;
-  };
+  sbsigntool = callPackage ../tools/security/sbsigntool { };
 
   sonic-server = callPackage ../servers/search/sonic-server { };
 
