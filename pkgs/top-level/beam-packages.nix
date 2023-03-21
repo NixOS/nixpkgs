@@ -14,7 +14,7 @@ let
   self = beam;
 
   # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "25" "24" "23" "22" "21" ];
+  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "25" "24" "23" "22" ];
 
   interpretersAliases = versionLoop (version: {
     "erlangR${version}" = self.interpreters."erlang_${version}";
@@ -99,19 +99,6 @@ in
       odbcSupport = true;
     };
 
-    erlang_21 = self.beamLib.callErlang ../development/interpreters/erlang/21.nix {
-      openssl = openssl_1_1;
-      wxGTK = wxGTK32;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
-    };
-    erlang_21_odbc = self.interpreters.erlang_21.override { odbcSupport = true; };
-    erlang_21_javac = self.interpreters.erlang_21.override { javacSupport = true; };
-    erlang_21_odbc_javac = self.interpreters.erlang_21.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_24.elixir`.
@@ -132,6 +119,5 @@ in
     erlang_24 = self.packagesWith self.interpreters.erlang_24;
     erlang_23 = self.packagesWith self.interpreters.erlang_23;
     erlang_22 = self.packagesWith self.interpreters.erlang_22;
-    erlang_21 = self.packagesWith self.interpreters.erlang_21;
   } // packagesAliases;
 }
