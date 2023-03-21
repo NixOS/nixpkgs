@@ -20,6 +20,9 @@
 , libpng
 , libjpeg8
 , curl
+, vulkan-loader
+, gnome
+, zenity ? gnome.zenity
 }:
 
 stdenvNoCC.mkDerivation {
@@ -64,6 +67,11 @@ stdenvNoCC.mkDerivation {
     libXi
     libXrandr
     libXfixes
+    vulkan-loader
+  ];
+
+  binPath = lib.makeBinPath [
+    zenity
   ];
 
   prepareParsec = ''
@@ -80,6 +88,7 @@ stdenvNoCC.mkDerivation {
     mv usr/* $out
 
     wrapProgram $out/bin/parsecd \
+      --prefix PATH : "$binPath" \
       --prefix LD_LIBRARY_PATH : "$runtimeDependenciesPath" \
       --run "$prepareParsec"
 
