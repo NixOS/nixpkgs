@@ -11,8 +11,7 @@
   desktop client is packaged at <literal>pkgs.nextcloud-client</literal>.
  </para>
  <para>
-  The current default by NixOS is <package>nextcloud25</package> which is also the latest
-  major version available.
+  The current default by NixOS is <package>nextcloud25</package>, the latest version available is <package>nextcloud26</package>.
  </para>
  <section xml:id="module-services-nextcloud-basic-usage">
   <title>Basic usage</title>
