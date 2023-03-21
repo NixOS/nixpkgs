@@ -61,7 +61,7 @@ buildGoModule {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) caddy;
+    inherit (nixosTests) caddy caddy-etag;
     version = testers.testVersion {
       command = "${caddy}/bin/caddy version";
       package = caddy;

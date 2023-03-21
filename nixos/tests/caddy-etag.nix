@@ -1,5 +1,5 @@
 import ./common/etag {
-  name = "caddy2-etag";
+  name = "caddy-etag";
 
   serverConfig = { config, pkgs, ... }: {
     services.caddy = {
