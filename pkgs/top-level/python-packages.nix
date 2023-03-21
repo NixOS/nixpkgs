@@ -6856,6 +6856,8 @@ self: super: with self; {
 
   openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
 
+  openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
+
   openai-whisper = callPackage ../development/python-modules/openai-whisper {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
