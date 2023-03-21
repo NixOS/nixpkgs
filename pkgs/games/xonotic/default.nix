@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
+{ lib, stdenv, stdenvNoCC, fetchurl, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
@@ -134,16 +134,31 @@ let
   };
 
 in rec {
-  xonotic-data = fetchzip {
-    name = "xonotic-data";
-    url = "https://dl.xonotic.org/xonotic-${version}.zip";
-    sha256 = "sha256-/malKGbDdUnqG+bJOJ2f3zHb7hAGiNZdprczr2Fgb5E=";
-    postFetch = ''
-      cd $out
-      rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
+  xonotic-data = stdenvNoCC.mkDerivation {
+    pname = "xonotic-data";
+    inherit version;
+
+    src = fetchurl {
+      url = "https://dl.xonotic.org/xonotic-${version}.zip";
+      hash = "sha256-D5KqI4NirrBZudkCapvTjWIXQjo1wZ8Sb7OeOHNuN+U=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r data key_0.d0pk $out
+
+      runHook postInstall
     '';
-    meta.hydraPlatforms = [];
+
     passthru.version = version;
+
+    meta.hydraPlatforms = [];
   };
 
   xonotic = runCommand "xonotic${variant}-${version}" {
