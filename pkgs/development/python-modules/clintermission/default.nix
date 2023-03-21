@@ -1,21 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
-, prompt-toolkit }:
+, pythonOlder
+, prompt-toolkit
+}:
 
 buildPythonPackage rec {
   pname = "clintermission";
   version = "0.3.0";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sebageek";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-HPeO9K91a0MacSUN0SR0lPEWRTQgP/cF1FZaNvZLxAg=";
+    hash = "sha256-HPeO9K91a0MacSUN0SR0lPEWRTQgP/cF1FZaNvZLxAg=";
   };
 
   propagatedBuildInputs = [
