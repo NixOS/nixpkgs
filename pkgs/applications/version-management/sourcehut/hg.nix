@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.31.3";
+  version = "0.32.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hg.sr.ht";
     rev = version;
-    sha256 = "4Qe08gqsSTMQVQBchFPEUXuxM8ZAAQGJT1EOcDjkZa0=";
+    sha256 = "mYkA44c9wy/Iy1h1lXkVpc9gN7rQXFm4T3YBlQ1Dj60=";
     vc = "hg";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
     inherit src version;
     pname = "hgsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-vuOYpnF3WjA6kOe9MVSuVMhJBQqCmIex+QUBJrP+VDs=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    srht
     python-hglib
     scmsrht
+    srht
     unidiff
   ];
 
