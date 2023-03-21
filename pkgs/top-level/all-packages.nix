@@ -32640,6 +32640,8 @@ with pkgs;
 
   hugo = callPackage ../applications/misc/hugo { };
 
+  ghosttohugo = callPackage ../applications/misc/ghosttohugo {};
+
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
   go-org = callPackage ../applications/misc/go-org { };
