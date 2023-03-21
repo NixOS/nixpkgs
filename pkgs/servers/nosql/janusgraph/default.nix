@@ -1,23 +1,25 @@
-{ lib, stdenv, fetchzip, jdk11, makeWrapper }:
+{ stdenv
+, janusgraph-unwrapped
+, makeWrapper
+, jdk
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "janusgraph";
-  version = "0.6.3";
+  inherit (janusgraph-unwrapped) version meta;
 
-  src = fetchzip {
-    url = "https://github.com/JanusGraph/janusgraph/releases/download/v${version}/janusgraph-${version}.zip";
-    sha256 = "sha256-KpGvDfQExU6pHheqmcOFoAhHdF4P+GBQu779h+/L5mE=";
-  };
+  src = janusgraph-unwrapped;
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/janusgraph
-    install -D $src/lib/*.jar $out/share/janusgraph
-    cd $src
-    find conf scripts -type f -exec install -D {} $out/share/janusgraph/{} \;
+    runHook preInstall
 
-    JANUSGRAPH_LIB=$out/share/janusgraph
+    mkdir -p $out/bin $out/share/janusgraph
+    cp -r $src/conf $src/scripts $src/lib $out/share/janusgraph
+
+    # Adapted from janusgraph-unwrapped.out/bin/janusgraph-server.sh
+    JANUSGRAPH_LIB=$out/share/janusgraph/lib
     classpath=""
     # Add the slf4j-log4j12 binding
     classpath="$classpath":$(find -L $JANUSGRAPH_LIB -name 'slf4j-log4j12*.jar' | sort | tr '\n' ':')
@@ -28,17 +30,12 @@ stdenv.mkDerivation rec {
                     \! -name 'janusgraph*' \
                     \! -name 'slf4j-log4j12*.jar' | sort | tr '\n' ':')
 
-    makeWrapper ${jdk11}/bin/java $out/bin/janusgraph-server \
+    makeWrapper ${jdk}/bin/java $out/bin/janusgraph-server \
       --add-flags "-classpath $classpath org.janusgraph.graphdb.server.JanusGraphServer"
+
+    makeWrapper ${jdk}/bin/java $out/bin/janusgraph-console \
+      --add-flags "-classpath $classpath org.apache.tinkerpop.gremlin.console.Console"
+
+    runHook postInstall
   '';
-
-  meta = with lib; {
-    description = "An open-source, distributed graph database";
-    homepage = "https://janusgraph.org/";
-    mainProgram = "janusgraph-server";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ners ];
-  };
 }
-

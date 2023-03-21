@@ -25304,6 +25304,7 @@ with pkgs;
 
   janus-gateway = callPackage ../servers/janus-gateway { };
 
+  janusgraph-unwrapped = callPackage ../servers/nosql/janusgraph/unwrapped.nix { };
   janusgraph = callPackage ../servers/nosql/janusgraph { };
 
   jboss = callPackage ../servers/http/jboss { };
