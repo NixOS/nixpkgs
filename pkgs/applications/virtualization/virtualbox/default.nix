@@ -229,6 +229,12 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "PC emulator";
+    longDescription = ''
+      VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product for enterprise as well as home use.
+
+      To install on NixOS, please use the option `virtualisation.virtualbox.host.enable = true`.
+      Please also check other options under `virtualisation.virtualbox`.
+    '';
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
