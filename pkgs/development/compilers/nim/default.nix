@@ -3,7 +3,7 @@
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, nim-unwrapped
-, nimble-unwrapped }:
+, nimble-unwrapped, darwin }:
 
 let
   parseCpu = platform:
@@ -94,7 +94,8 @@ in {
       hash = "sha256-rO8LCrdzYE1Nc5S2hRntt0+zD0aRIpSyi8J+DHtLTcI=";
     };
 
-    buildInputs = [ boehmgc openssl pcre readline sqlite ];
+    buildInputs = [ boehmgc openssl pcre readline sqlite ] ++
+      lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -164,7 +165,8 @@ in {
     };
 
     depsBuildBuild = [ nim-unwrapped ];
-    buildInputs = [ openssl ];
+    buildInputs = [ openssl ] ++
+      lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
     nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
 
