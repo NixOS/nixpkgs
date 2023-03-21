@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     description = "A minimal terminal emulator for Wayland";
     license = with licenses; [ mit publicDomain ];
     platforms = with platforms; unix;
+    broken = stdenv.isDarwin; # no wayland support
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }
