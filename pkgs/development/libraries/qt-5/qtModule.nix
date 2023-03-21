@@ -22,11 +22,16 @@ mkDerivation (args // {
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
   nativeBuildInputs = (args.nativeBuildInputs or [])
-    ++ [ perl self.qmake ]
-    # `qmake` expects to find `cc` (with no prefix) in the
-    # `$PATH`, so the following is needed even if
-    # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
+    ++ [ perl self.qmake ];
+
+  # `qmake` expects to find `cc` (with no prefix) in the
+  # `$PATH`, so the following is needed even if
+  # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
+  pkgsBuildBuild =
+    if (stdenv.hostPlatform != stdenv.buildPlatform)
+    then [ buildPackages.stdenv.cc ]
+    else null;
+
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
 
   outputs = args.outputs or [ "out" "dev" ];
