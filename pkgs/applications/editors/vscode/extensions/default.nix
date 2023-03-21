@@ -1242,6 +1242,23 @@ let
         };
       };
 
+      genieai.chatgpt-vscode = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/genieai.chatgpt-vscode/changelog";
+          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=genieai.chatgpt-vscode";
+          homepage = "https://github.com/ai-genie/chatgpt-vscode";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+        mktplcRef = {
+          name = "chatgpt-vscode";
+          publisher = "genieai";
+          version = "0.0.2";
+          sha256 = "sha256-mdBSZ8BAJ1dFy5MXBPMwXlSmNsY5vD/+gBAI+3+QT84=";
+        };
+      };
+
       github = {
         codespaces = buildVscodeMarketplaceExtension {
           mktplcRef = {
@@ -2658,8 +2675,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.19.0";
-          sha256 = "sha256-c95u++tkK8hToauulY8faNITUmsCBEeC2B8mHY0oEmA=";
+          version = "2.20.3";
+          sha256 = "sha256-28ybNBobXoq194d9VGD9kOq/OWscJkSlgSZ7ViaNQtw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

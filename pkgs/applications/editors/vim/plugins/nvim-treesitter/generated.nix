@@ -995,6 +995,17 @@
     };
     meta.homepage = "https://github.com/MunifTanjim/tree-sitter-lua";
   };
+  luadoc = buildGrammar {
+    language = "luadoc";
+    version = "40a67ee";
+    src = fetchFromGitHub {
+      owner = "amaanq";
+      repo = "tree-sitter-luadoc";
+      rev = "40a67ee798eb3c989fffde0277ff6de740ebaf34";
+      hash = "sha256-vhiUaZms4Je/TBTTepQiuddl0sKodrHcrBCauBPgu7Y=";
+    };
+    meta.homepage = "https://github.com/amaanq/tree-sitter-luadoc";
+  };
   luap = buildGrammar {
     language = "luap";
     version = "bfb38d2";

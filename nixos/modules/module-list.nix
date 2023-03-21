@@ -220,6 +220,7 @@
   ./programs/proxychains.nix
   ./programs/qdmr.nix
   ./programs/qt5ct.nix
+  ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
   ./programs/screen.nix
@@ -734,6 +735,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
   ./services/monitoring/parsedmarc.nix
+  ./services/monitoring/prometheus/alertmanager-irc-relay.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/exporters.nix

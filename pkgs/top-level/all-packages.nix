@@ -1900,6 +1900,10 @@ with pkgs;
 
   git-privacy = callPackage ../applications/version-management/git-privacy { };
 
+  git-ps-rs = callPackage ../development/tools/git-ps-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-publish = python3Packages.callPackage ../applications/version-management/git-publish { };
 
   git-quick-stats = callPackage ../applications/version-management/git-quick-stats { };
@@ -3822,6 +3826,8 @@ with pkgs;
 
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
+  tiny-cuda-nn = callPackage ../development/libraries/science/math/tiny-cuda-nn { };
+
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
 
   behave = with python3Packages; toPythonApplication behave;
@@ -4943,6 +4949,8 @@ with pkgs;
     # pre-gcc11, in particular gcc9.
     stdenv = gcc9Stdenv;
   };
+
+  gpu-viewer = callPackage ../applications/misc/gpu-viewer { };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
@@ -16579,7 +16587,7 @@ with pkgs;
     erlang erlangR25 erlangR24 erlangR23 erlangR22 erlangR21
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
-    elixir_ls;
+    elixir-ls;
 
   erlang_nox = beam_nox.interpreters.erlang;
 
@@ -24772,6 +24780,8 @@ with pkgs;
   eventstore = callPackage ../servers/nosql/eventstore { };
 
   exim = callPackage ../servers/mail/exim { };
+
+  fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
 
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
@@ -38200,11 +38210,11 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
-    kops_1_23
     kops_1_24
     kops_1_25
+    kops_1_26
     ;
-  kops = kops_1_25;
+  kops = kops_1_26;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
