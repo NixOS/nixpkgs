@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "43.0";
+  version = "43.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "hmwGIsZv21rSpHXpz8zLIZocZDHwCayyKR1D8hQLFH4=";
+    sha256 = "pUuUPv5CAQqcEuTc2ts3e/NslMOAB3i4Uww6g0QJ3Mc=";
   };
 
   nativeBuildInputs = [

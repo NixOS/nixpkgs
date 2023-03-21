@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.9.2";
+  version = "1.9.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rAPjfk1gGq7kD4CH9j/EoqbJgU3aLI+mqrGxgpZTvfo=";
+    hash = "sha256-j9WJbocYpDcvDqnMnZb2QXybmG4jpNEW3aJrYswp0EY=";
   };
 
   nativeCheckInputs = [

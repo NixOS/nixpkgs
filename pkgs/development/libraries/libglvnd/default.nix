@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "sha256-yXSuG8UwD5KZbn4ysDStTdOGD4uHigjOhazlHT9ndNs=";
+    sha256 = "sha256-p/vLxagN9nCYw1JpUmZetgctQbrp3Wo33OVFrtvmnjQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""

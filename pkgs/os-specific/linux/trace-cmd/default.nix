@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "3.1.6";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
     sha256 = "sha256-qjfeomeExjsx/6XrUaGm5szbL7XVlekGd4Hsuncv8NY=";
   };

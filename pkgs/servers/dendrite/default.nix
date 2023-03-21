@@ -3,16 +3,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.10.8";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-D+hZWcywOCynGxMlJtsr5YaGxwRVGODNYO8jZROsGX8=";
+    hash = "sha256-+REY5an0gTbADEozCI6bkUWbW9VWTtWZ4xXj9qcIkwc=";
   };
 
-  vendorSha256 = "sha256-mNvie0PP0758AndWQ629oY4/aFGwiG358NhwYHSdxEU=";
+  vendorHash = "sha256-/O7zzXYM03K+MresuXIHtgMuD9yS2+NIaLEnm/WRYeA=";
 
   subPackages = [
     # The server as a monolith: https://matrix-org.github.io/dendrite/installation/install/monolith

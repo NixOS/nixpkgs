@@ -12,11 +12,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libxml2 libzip ];
 
-  preConfigure =
-    ''
-      NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libzip)"
-    '';
-
   meta = with lib; {
     homepage = "http://ebook-tools.sourceforge.net";
     description = "Tools and library for dealing with various ebook file formats";

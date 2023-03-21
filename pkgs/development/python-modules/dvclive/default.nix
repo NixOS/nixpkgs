@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "1.3.0";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FAupTvaOLPp5EQ0vvE8tQCa8WnKW/qrQTc7i+6F7F1A=";
+    hash = "sha256-n3JjZrh2ImpjW1MUTwag716qaVjSChrYqNJuNp6K1s8=";
   };
 
   nativeBuildInputs = [

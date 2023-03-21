@@ -22,6 +22,7 @@
 , qtbase
 , qtwayland
 , removeReferencesTo
+, speechd
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
@@ -56,8 +57,6 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
-      setup/build.py
-    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip.platform_tag}\"]/g" \
       setup/build.py
 
     # Remove unneeded files and libs
@@ -100,11 +99,11 @@ stdenv.mkDerivation rec {
         setupPyBuildFlags = [ "--enable=load_extension" ];
       }))
       beautifulsoup4
-      cchardet
       css-parser
       cssselect
       python-dateutil
       dnspython
+      faust-cchardet
       feedparser
       html2text
       html5-parser
@@ -121,6 +120,7 @@ stdenv.mkDerivation rec {
       regex
       sip
       setuptools
+      speechd
       zeroconf
       jeepney
       pycryptodome
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.interpreter} setup.py install --root=$out \
+    ${python3Packages.python.pythonForBuild.interpreter} setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \

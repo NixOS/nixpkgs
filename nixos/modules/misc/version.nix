@@ -130,7 +130,7 @@ in
         to be compatible. The effect is that NixOS will use
         defaults corresponding to the specified release (such as using
         an older version of PostgreSQL).
-        It‘s perfectly fine and recommended to leave this value at the
+        It’s perfectly fine and recommended to leave this value at the
         release version of the first install of this system.
         Changing this option will not upgrade your system. In fact it
         is meant to stay constant exactly when you upgrade your system.

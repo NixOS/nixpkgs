@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "cma";
-  version = "3.2.2";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "CMA-ES";
     repo = "pycma";
     rev = "refs/tags/r${version}";
-    hash = "sha256-STF7jtLqI2KiWvvI9/reRjP1XyW8l4/qy9uAPpE9mTs=";
+    hash = "sha256-+UJI3hDVbDMfRF4bkwHED3eJCHzxS2hO4YPUzJqcoQI=";
   };
 
   propagatedBuildInputs = [

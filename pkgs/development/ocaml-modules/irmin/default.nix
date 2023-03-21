@@ -9,7 +9,8 @@ buildDunePackage {
 
   inherit (ppx_irmin) src version strictDeps;
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.10";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     astring
@@ -28,7 +29,7 @@ buildDunePackage {
     uutf
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     vector
     hex
     alcotest

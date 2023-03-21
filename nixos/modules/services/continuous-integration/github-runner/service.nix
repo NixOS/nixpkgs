@@ -124,6 +124,8 @@ in
               # The state directory is entirely empty which indicates a first start
               copy_tokens
             fi
+            # Always clean workDir
+            find -H "$WORK_DIRECTORY" -mindepth 1 -delete
           '';
           configureRunner = writeScript "configure" ''
             if [[ -e "${newConfigTokenPath}" ]]; then
@@ -147,7 +149,7 @@ in
               else
                 args+=(--token "$token")
               fi
-              ${cfg.package}/bin/config.sh "''${args[@]}"
+              ${cfg.package}/bin/Runner.Listener configure "''${args[@]}"
               # Move the automatically created _diag dir to the logs dir
               mkdir -p  "$STATE_DIRECTORY/_diag"
               cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"
@@ -159,9 +161,6 @@ in
             fi
           '';
           setupWorkDir = writeScript "setup-work-dirs" ''
-            # Cleanup previous service
-            ${pkgs.findutils}/bin/find -H "$WORK_DIRECTORY" -mindepth 1 -delete
-
             # Link _diag dir
             ln -s "$LOGS_DIRECTORY" "$WORK_DIRECTORY/_diag"
 

@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: .libs/hash_drv.o:/build/dspam-3.10.2/src/util.h:96: multiple definition of `verified_user';
   #     .libs/libdspam.o:/build/dspam-3.10.2/src/util.h:96: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
   # and fix directory structure manually after that.

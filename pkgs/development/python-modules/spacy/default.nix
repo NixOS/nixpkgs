@@ -27,18 +27,23 @@
 , typer
 , typing-extensions
 , wasabi
+, writeScript
+, stdenv
+, nix
+, git
+, nix-update
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.4.4";
+  version = "3.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5QDPLLXxhJRhp5KPomlwN1YGm9+3FVkGUkCvbQIIsIw=";
+    hash = "sha256-gRrhRoxYuX/JqjEYfWtVMXeEJY8KR+v2nYHKtjnj+hU=";
   };
 
   propagatedBuildInputs = [
@@ -85,11 +90,24 @@ buildPythonPackage rec {
     "spacy"
   ];
 
-  passthru.tests.annotation = callPackage ./annotation-test { };
+  passthru = {
+    updateScript = writeScript "update-spacy" ''
+    #!${stdenv.shell}
+    set -eou pipefail
+    PATH=${lib.makeBinPath [ nix git nix-update ]}
+
+    nix-update python3Packages.spacy
+
+    # update spacy models as well
+    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+    '';
+    tests.annotation = callPackage ./annotation-test { };
+  };
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

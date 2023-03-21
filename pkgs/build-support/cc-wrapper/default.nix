@@ -9,7 +9,6 @@
 , lib
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, gccForLibs ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -18,6 +17,9 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, gccForLibs ? if useCcForLibs then cc else null
+# same as `gccForLibs`, but generalized beyond clang
+, useCcForLibs ? isClang
 }:
 
 with lib;
@@ -59,11 +61,9 @@ let
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if (buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null"
-    then import ../expand-response-params { inherit (buildPackages) stdenv; }
-    else "";
+    lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
-  useGccForLibs = isClang
+  useGccForLibs = useCcForLibs
     && libcxx == null
     && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
@@ -321,6 +321,11 @@ stdenv.mkDerivation {
                       && !(stdenv.targetPlatform.useLLVM or false)
                       && gccForLibs != null) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
+
+      # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
+      # 'cc.lib'. But it's a gcc package bug.
+      # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
+      echo "-L${gccForLibs}/${optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     ##

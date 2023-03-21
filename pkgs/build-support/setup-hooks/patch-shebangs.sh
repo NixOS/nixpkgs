@@ -62,15 +62,21 @@ patchShebangs() {
         fi
 
         if [[ "$oldPath" == *"/bin/env" ]]; then
+            if [[ $arg0 == "-S" ]]; then
+                arg0=${args%% *}
+                args=${args#* }
+                newPath="$(PATH="${!pathName}" command -v "env" || true)"
+                args="-S $(PATH="${!pathName}" command -v "$arg0" || true) $args"
+
             # Check for unsupported 'env' functionality:
-            # - options: something starting with a '-'
+            # - options: something starting with a '-' besides '-S'
             # - environment variables: foo=bar
-            if [[ $arg0 == "-"* || $arg0 == *"="* ]]; then
+            elif [[ $arg0 == "-"* || $arg0 == *"="* ]]; then
                 echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >&2
                 exit 1
+            else
+                newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
             fi
-
-            newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
         else
             if [[ -z $oldPath ]]; then
                 # If no interpreter is specified linux will use /bin/sh. Set
@@ -100,8 +106,6 @@ patchShebangs() {
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
-
-    stopNest
 }
 
 patchShebangsAuto () {

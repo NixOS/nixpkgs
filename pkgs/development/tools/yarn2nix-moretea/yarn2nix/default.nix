@@ -5,7 +5,7 @@
 }@inputs:
 
 let
-  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal;
+  inherit (pkgs) stdenv lib callPackage git rsync runCommandLocal;
 
   compose = f: g: x: f (g x);
   id = x: x;

@@ -1,12 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-(fetchzip {
-  name = "ipafont-003.03";
+stdenvNoCC.mkDerivation {
+  pname = "ipafont";
+  version = "003.03";
 
-  url = "https://moji.or.jp/wp-content/ipafont/IPAfont/IPAfont00303.zip";
+  src = fetchzip {
+    url = "https://moji.or.jp/wp-content/ipafont/IPAfont/IPAfont00303.zip";
+    hash = "sha256-EzUNKuDNHr0NIXiqX09w99wtz1r2pZurR/izdgzTcAs=";
+  };
 
-  sha256 = "0lrjd0bfy36f9j85m12afg5nvr5id3sig2nmzs5qifskbd7mqv9h";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Japanese font package with Mincho and Gothic fonts";
@@ -19,9 +28,4 @@
     license = lib.licenses.ipa;
     maintainers = [ lib.maintainers.auntie ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/opentype
-  '';
-})
+}

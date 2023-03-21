@@ -339,7 +339,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = !xenSupport;
 
   # Work around a bug in the generated flex lexer (upstream flex bug?)
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -386,9 +386,7 @@ stdenv.mkDerivation rec {
   # save target that grub is compiled for
   grubTarget = if efiSupport
                then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
-               else if inPCSystems
-                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-                    else "";
+               else lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
   doCheck = false;
   enableParallelBuilding = true;

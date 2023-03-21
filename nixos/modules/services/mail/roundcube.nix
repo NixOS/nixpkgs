@@ -132,6 +132,8 @@ in
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
       $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
+      # Roundcube uses PHP-FPM which has `PrivateTmp = true;`
+      $config['temp_dir'] = '/tmp';
       $config['enable_spellcheck'] = ${if cfg.dicts == [] then "false" else "true"};
       # by default, spellchecking uses a third-party cloud services
       $config['spellcheck_engine'] = 'pspell';
@@ -150,9 +152,13 @@ in
             root = cfg.package;
             index = "index.php";
             extraConfig = ''
-              location ~* \.php$ {
+              location ~* \.php(/|$) {
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_pass unix:${fpm.socket};
+
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO       $fastcgi_path_info;
+
                 include ${config.services.nginx.package}/conf/fastcgi_params;
                 include ${pkgs.nginx}/conf/fastcgi.conf;
               }

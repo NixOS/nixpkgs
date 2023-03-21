@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.25.0";
+  version = "1.27.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XdWrEJL/u+B15jAzxS7UZBhFBCVfSlnBtUcKcA0iUOw=";
+    hash = "sha256-axg1kwzH6ZRQwyI80oNPjP8ApjAEZ5u0iCIadkEP/Ps=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
     "TestPipRunner"
     "TestPythonPipWorkflow"
     "TestRubyWorkflow"
+    "TestRustCargo"
     # Tests which are passing locally but not on Hydra
     "test_copy_dependencies_action_1_multiple_files"
     "test_move_dependencies_action_1_multiple_files"

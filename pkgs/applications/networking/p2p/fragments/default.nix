@@ -13,7 +13,6 @@
 , ninja
 , openssl
 , pkg-config
-, python3
 , rustPlatform
 , sqlite
 , transmission
@@ -31,24 +30,22 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "fragments";
-  version = "2.0.2";
+  version = "2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
     rev = version;
-    sha256 = "sha256-CMa1yka0kOxMhxSuazlJxTk4fzxuuwKYLBpEMwHbBUE=";
+    sha256 = "sha256-/KtUcj41s9WeHzIgGWhYQv6oD/Df7WOnJAPuS6yGLHk=";
   };
 
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
+  # https://github.com/gtk-rs/gtk4-rs/issues/1201
+  patches = [ ./gtk4-rs.patch ];
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+    inherit src patches;
     name = "${pname}-${version}";
-    hash = "sha256-/rFZcbpITYkpSCEZp9XH253u90RGmuVLEBGIRNBgI/o=";
+    hash = "sha256-bhQHXx7kZFL+qb+k0gN1NZZ6LYjBUHuNqU528f0QAg0=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +55,6 @@ in stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook

@@ -7,12 +7,15 @@ buildDunePackage {
 
   inherit (awa) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     awa cstruct mtime lwt mirage-crypto-rng
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ cstruct-unix ];
+  nativeCheckInputs = [ awa ];
+  checkInputs = [ cstruct-unix ];
 
   meta = awa.meta // { mainProgram = "awa_lwt_server"; };
 }

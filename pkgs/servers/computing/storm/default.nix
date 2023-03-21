@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
        -e 's|java.library.path: .*|java.library.path: "${lib.concatStringsSep ":" extraLibraryPaths}"|' \
        -e 's|storm.log4j2.conf.dir: .*|storm.log4j2.conf.dir: "conf/log4j2"|' \
       defaults.yaml
-    ${if confFile != "" then "cat ${confFile} >> defaults.yaml" else ""}
+    ${lib.optionalString (confFile != "") "cat ${confFile} >> defaults.yaml"}
     mv defaults.yaml $out/conf;
 
     # Link to extra jars

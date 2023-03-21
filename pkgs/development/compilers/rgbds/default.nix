@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ bison flex pkg-config ];
   buildInputs = [ libpng ];
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-fno-lto";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {

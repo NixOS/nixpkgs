@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2022.12.0";
+  version = "2023.2.2";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -33,11 +33,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-oNqrvbzXeXpMG3v9RK6kppONH4n7xLVaJCEFXxVj2jE=";
+        hash = "sha256-e3OIpTGPMj+YSx/pqzGi5paUAIpDhI94prhHL3DkM18=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-S5n1MUig8ZDSLgWeVmu+5qLZ4kfHQUC9qZcVfM8rPvw=";
+        hash = "sha256-15olERnpfe4PbDsDfw47vsYsqjFe8P8IDmSSGxGLtx8=";
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
@@ -85,9 +85,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python-base APIs and tools for CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
-    platforms = platforms.linux;
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

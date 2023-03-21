@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "rycus86";
     repo = "prometheus_flask_exporter";
     rev = version;
-    sha256 = "sha256-l9Iw9fvXQMXzq1y/4Dml8uLPJWyqX6SDIXptJVw3cVQ=";
+    hash = "sha256-l9Iw9fvXQMXzq1y/4Dml8uLPJWyqX6SDIXptJVw3cVQ=";
   };
 
   propagatedBuildInputs = [ flask prometheus-client ];

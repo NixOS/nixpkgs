@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.3.20230109181936";
+  version = "8.4.20230213094415";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4PuPvnk92kITPzdGQr6fGvFlG7+zyjfjQdiGbWld5Fo=";
+    hash = "sha256-x2co8WjL+e4nBZd0pGUwv39nzNkO5G3dYrYJZeqP31o=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
     "test_outputBinding"
     # Test requires network
     "test_yaml_tab_error"
+    "test_bad_schemas"
   ];
 
   pythonImportsCheck = [

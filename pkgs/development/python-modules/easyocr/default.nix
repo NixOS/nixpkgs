@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "JaidedAI";
     repo = "EasyOCR";
     rev = "v${version}";
-    sha256 = "sha256-f+JBSnFMRvVlhRRiL1rJb7a0CNjZPuh6r8r3K1meQCk=";
+    hash = "sha256-f+JBSnFMRvVlhRRiL1rJb7a0CNjZPuh6r8r3K1meQCk=";
   };
 
   postPatch = ''

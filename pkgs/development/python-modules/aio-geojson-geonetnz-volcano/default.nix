@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wJVFjy6QgYb6GX9pZTylYFvCRWmD2lAFZKnodsa8Yqo=";
+    hash = "sha256-wJVFjy6QgYb6GX9pZTylYFvCRWmD2lAFZKnodsa8Yqo=";
   };
 
   propagatedBuildInputs = [

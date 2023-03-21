@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, stdenv
+, darwin
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
@@ -20,6 +22,11 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-Oq3jF4XeT58rad0MWmqucZZHVAshhA8PViQ+2Q9Shgc=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   nativeBuildInputs = [
     setuptools-rust

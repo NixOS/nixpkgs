@@ -168,7 +168,7 @@ rec {
        ] { a.b.c = 0; }
        => { a = { b = { d = 1; }; }; x = { y = "xy"; }; }
 
-    Type: updateManyAttrsByPath :: [{ path :: [String], update :: (Any -> Any) }] -> AttrSet -> AttrSet
+    Type: updateManyAttrsByPath :: [{ path :: [String]; update :: (Any -> Any); }] -> AttrSet -> AttrSet
   */
   updateManyAttrsByPath = let
     # When recursing into attributes, instead of updating the `path` of each
@@ -333,6 +333,66 @@ rec {
       ) (attrNames set)
     );
 
+   /*
+    Like builtins.foldl' but for attribute sets.
+    Iterates over every name-value pair in the given attribute set.
+    The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
+
+    Attention:
+      There is a completely different function
+      `lib.foldAttrs`
+      which has nothing to do with this function, despite the similar name.
+
+    Example:
+      foldlAttrs
+        (acc: name: value: {
+          sum = acc.sum + value;
+          names = acc.names ++ [name];
+        })
+        { sum = 0; names = []; }
+        {
+          foo = 1;
+          bar = 10;
+        }
+      ->
+        {
+          sum = 11;
+          names = ["bar" "foo"];
+        }
+
+      foldlAttrs
+        (throw "function not needed")
+        123
+        {};
+      ->
+        123
+
+      foldlAttrs
+        (_: _: v: v)
+        (throw "initial accumulator not needed")
+        { z = 3; a = 2; };
+      ->
+        3
+
+      The accumulator doesn't have to be an attrset.
+      It can be as simple as a number or string.
+
+      foldlAttrs
+        (acc: _: v: acc * 10 + v)
+        1
+        { z = 1; a = 2; };
+      ->
+        121
+
+    Type:
+      foldlAttrs :: ( a -> String -> b -> a ) -> a -> { ... :: b } -> a
+  */
+  foldlAttrs = f: init: set:
+    foldl'
+      (acc: name: f acc name set.${name})
+      init
+      (attrNames set);
+
   /* Apply fold functions to values grouped by key.
 
      Example:
@@ -414,7 +474,7 @@ rec {
        => { name = "some"; value = 6; }
 
      Type:
-       nameValuePair :: String -> Any -> { name :: String, value :: Any }
+       nameValuePair :: String -> Any -> { name :: String; value :: Any; }
   */
   nameValuePair =
     # Attribute name
@@ -449,7 +509,7 @@ rec {
        => { foo_x = "bar-a"; foo_y = "bar-b"; }
 
      Type:
-       mapAttrs' :: (String -> Any -> { name = String; value = Any }) -> AttrSet -> AttrSet
+       mapAttrs' :: (String -> Any -> { name :: String; value :: Any; }) -> AttrSet -> AttrSet
   */
   mapAttrs' =
     # A function, given an attribute's name and value, returns a new `nameValuePair`.
@@ -649,7 +709,7 @@ rec {
 
      Example:
        zipAttrsWith (name: values: values) [{a = "x";} {a = "y"; b = "z";}]
-       => { a = ["x" "y"]; b = ["z"] }
+       => { a = ["x" "y"]; b = ["z"]; }
 
      Type:
        zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
@@ -664,7 +724,7 @@ rec {
 
      Example:
        zipAttrs [{a = "x";} {a = "y"; b = "z";}]
-       => { a = ["x" "y"]; b = ["z"] }
+       => { a = ["x" "y"]; b = ["z"]; }
 
      Type:
        zipAttrs :: [ AttrSet ] -> AttrSet

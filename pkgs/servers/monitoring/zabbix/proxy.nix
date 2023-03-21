@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
-, snmpSupport ? true, net-snmp
+, snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform, net-snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
 , mysqlSupport ? false, libmysqlclient
@@ -59,6 +59,11 @@ in
       prePatch = ''
         find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
       '';
+
+      makeFlags = [
+        "AR:=$(AR)"
+        "RANLIB:=$(RANLIB)"
+      ];
 
       postInstall = ''
         mkdir -p $out/share/zabbix/database/

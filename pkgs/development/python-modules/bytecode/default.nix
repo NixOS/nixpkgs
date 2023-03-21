@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "vstinner";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-nGZ4qcms27lYr1dYvVe4ebd/jc5qIb1EDhSpSZmKKIo=";
+    hash = "sha256-nGZ4qcms27lYr1dYvVe4ebd/jc5qIb1EDhSpSZmKKIo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
-  version = "1.2";
+  version = "1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.clfs";
-    rev = version;
-    hash = "sha256-1nh81ppJpYre3y7hJ9xS+TNU1NfTH+9NMHdV55kPEXI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QzEcJvujkNVUXtqu7yY7sJ/U55jzGBbUHxOVDxg4vac=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
     homepage = "https://github.com/fox-it/dissect.clfs";
+    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

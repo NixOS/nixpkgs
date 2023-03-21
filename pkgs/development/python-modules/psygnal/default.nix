@@ -1,43 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, importlib-metadata
+, hatch-vcs
+, hatchling
+, mypy-extensions
 , numpy
 , pydantic
 , pytest-mypy-plugins
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 , typing-extensions
-, wheel
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.6.0";
-  format = "setuptools";
+  version = "0.8.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "tlambert03";
+    owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KCdX+pMUAQxeQRZhkrdGCKGjBaB1Ode/r1W8LJQPxyM=";
+    hash = "sha256-+VO2OlDzBECkasLBvZWDsqDeooU6CnRFjeI/ISLWAnA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
-    setuptools-scm
-    wheel
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
+    mypy-extensions
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -48,18 +47,14 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=psygnal --cov-report=term-missing" ""
-  '';
-
   pythonImportsCheck = [
     "psygnal"
   ];
 
   meta = with lib; {
     description = "Implementation of Qt Signals";
-    homepage = "https://github.com/tlambert03/psygnal";
+    homepage = "https://github.com/pyapp-kit/psygnal";
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

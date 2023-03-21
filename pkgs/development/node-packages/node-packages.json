@@ -39,6 +39,7 @@
 , "awesome-lint"
 , "balanceofsatoshis"
 , "bash-language-server"
+, "bibtex-tidy"
 , "bower"
 , "bower2nix"
 , "browserify"
@@ -183,7 +184,6 @@
 , "insect"
 , "intelephense"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v15.6.3.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"

@@ -1,7 +1,6 @@
 { lib
 , acme
 , aiohttp
-, asynctest
 , atomicwrites-homeassistant
 , attrs
 , buildPythonPackage
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KG2eCwGZWVtepJQdsSwFziWsT1AbV6rYWRIO/I/CR8g=";
+    hash = "sha256-KG2eCwGZWVtepJQdsSwFziWsT1AbV6rYWRIO/I/CR8g=";
   };
 
   postPatch = ''
@@ -44,7 +43,6 @@ buildPythonPackage rec {
   doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
 
   nativeCheckInputs = [
-    asynctest
     pytest-aiohttp
     pytestCheckHook
   ];

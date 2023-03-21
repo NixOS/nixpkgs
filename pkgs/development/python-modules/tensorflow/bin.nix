@@ -18,7 +18,7 @@
 , wheel
 , opt-einsum
 , backports_weakref
-, tensorflow-estimator
+, tensorflow-estimator-bin
 , tensorboard
 , cudaSupport ? false
 , cudaPackages ? {}
@@ -57,7 +57,7 @@ in buildPythonPackage {
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl packages.${key};
+  in fetchurl (packages.${key} or {});
 
   propagatedBuildInputs = [
     astunparse
@@ -76,7 +76,7 @@ in buildPythonPackage {
     opt-einsum
     google-pasta
     wrapt
-    tensorflow-estimator
+    tensorflow-estimator-bin
     tensorboard
     keras-applications
     keras-preprocessing

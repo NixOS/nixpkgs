@@ -2,17 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, doctest
 , gtest
 }:
 stdenv.mkDerivation rec {
   pname = "xtl";
-  version = "0.7.2";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtl";
     rev = version;
-    sha256 = "177ym67sz544wdylksfkkpi6bqn34kagycfnb3cv0nkmpipqj9lg";
+    hash = "sha256-Vc1VKOWmG1sAw3UQpNJAhm9PvXSqJ0iO2qLjP6/xjtI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=ON" ];
 
   doCheck = true;
-  nativeCheckInputs = [ gtest ];
+  nativeCheckInputs = [ doctest ];
   checkTarget = "xtest";
 
   meta = with lib; {

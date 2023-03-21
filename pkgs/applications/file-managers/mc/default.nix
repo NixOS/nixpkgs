@@ -6,7 +6,6 @@
 , gpm
 , file
 , e2fsprogs
-, libX11
 , libICE
 , perl
 , zip
@@ -17,6 +16,7 @@
 , openssl
 , coreutils
 , autoSignDarwinBinariesHook
+, x11Support ? true, libX11
 
 # updater only
 , writeScript
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     gettext
     glib
     libICE
-    libX11
     libssh2
     openssl
     slang
     zip
-  ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+  ] ++ lib.optionals x11Support [ libX11 ]
+    ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
@@ -66,12 +66,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
       --replace /bin/rm ${coreutils}/bin/rm
-
-    substituteInPlace misc/ext.d/misc.sh.in \
-      --replace /bin/cat ${coreutils}/bin/cat
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString ((!stdenv.isDarwin) && x11Support) ''
     # libX11.so is loaded dynamically so autopatch doesn't detect it
     patchelf \
       --add-needed ${libX11}/lib/libX11.so \

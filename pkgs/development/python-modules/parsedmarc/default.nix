@@ -7,6 +7,7 @@
 , pythonOlder
 
 # pythonPackages
+, hatchling
 , dnspython
 , expiringdict
 , publicsuffix2
@@ -40,19 +41,25 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.2.0";
+  version = "8.4.2";
 
   disabled = pythonOlder "3.7";
 
+  format = "pyproject";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb82328dffb4a62ddaefbcc22efd5a2694350504a56d41ba1e161f2d998dcbff";
+    hash = "sha256-6dP9zQI0jYiE+lUhmFBNp8Sv9povm9Pa4R4TuzAmEQk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
       --replace "elasticsearch<7.14.0" "elasticsearch"
   '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     dnspython
@@ -91,6 +98,7 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
     maintainers = with lib.maintainers; [ talyz ];

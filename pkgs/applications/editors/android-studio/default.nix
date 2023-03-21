@@ -10,8 +10,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2022.1.1.19"; # "Android Studio Electric Eel (2022.1.1)"
-    sha256Hash = "luxE6a2C86JB28ezuIZV49TyE314S1RcNXQnCQamjUA=";
+    version = "2022.1.1.20"; # "Android Studio Electric Eel (2022.1.1) Patch 1"
+    sha256Hash = "sha256-UX7aOpTM23S7NBPNAz/fKEyK/dqWpok0NnpX9wck6p4=";
   };
   betaVersion = {
     version = "2022.2.1.12"; # "Android Studio Flamingo (2022.2.1) Beta 1"

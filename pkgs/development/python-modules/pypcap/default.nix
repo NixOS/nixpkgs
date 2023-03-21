@@ -15,7 +15,7 @@ buildPythonPackage rec {
     repo = pname;
     # No release was tagged and PyPI doesn't contain tests.
     rev = "968859f0ffb5b7c990506dffe82457b7de23a026";
-    sha256 = "sha256-NfyEC3qEBm6TjebcDIsoz8tJWaJ625ZFPfx7AMyynWE=";
+    hash = "sha256-NfyEC3qEBm6TjebcDIsoz8tJWaJ625ZFPfx7AMyynWE=";
   };
 
   postPatch = ''

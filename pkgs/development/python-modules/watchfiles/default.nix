@@ -11,6 +11,8 @@
 , pytest-timeout
 , pytestCheckHook
 , python
+, CoreServices
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -32,6 +34,11 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-IWONA3o+2emJ7cKEw5xYSMdWzGuUSwn1B70zUDzj7Cw=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    libiconv
+  ];
 
   nativeBuildInputs = [
   ] ++ (with rustPlatform; [
@@ -69,6 +76,5 @@ buildPythonPackage rec {
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
   };
 }

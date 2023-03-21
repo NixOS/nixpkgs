@@ -56,6 +56,10 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./tg_owt.patch
+  ];
+
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
       --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \

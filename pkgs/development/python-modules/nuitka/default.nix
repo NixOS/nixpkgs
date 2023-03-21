@@ -10,15 +10,15 @@
 }:
 
 buildPythonPackage rec {
+  pname = "nuitka";
   version = "1.1.5";
-  pname = "Nuitka";
+  format = "setuptools";
 
-  # Latest version is not yet on PyPi
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    sha256 = "0wgcl860acbxnq8q9hck147yhxz8pcbqhv9glracfnrsd2qkpgpp";
+    hash = "sha256-8eWOcxATVS866nlN39b2VU1CuXAfcn0yQsDweHS2yDU=";
   };
 
   nativeCheckInputs = [ vmprof pyqt4 ];

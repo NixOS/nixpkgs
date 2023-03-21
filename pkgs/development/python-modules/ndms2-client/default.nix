@@ -6,13 +6,15 @@
 
 buildPythonPackage rec {
   pname = "ndms2-client";
-  version = "0.1.1";
+  version = "0.1.2";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "foxel";
     repo = "python_ndms2_client";
     rev = version;
-    sha256 = "1sc39d10hm1y8xf3gdqzq1akrx94k590l106242j9bvfqyr8lrk9";
+    hash = "sha256-cM36xNLymg5Xph3bvbUGdAEmMABJ9y3/w/U8re6ZfB4=";
   };
 
   nativeCheckInputs = [

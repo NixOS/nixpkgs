@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.7.1";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-MPpAg1PSSx35ed8upK+9GbSuAvsiB/IY0kYzLx4c8U4=";
+    hash = "sha256-gHGsbGXxhewsdv6FCflNmf6ggFGf3CBvkIqSDV4F/kM=";
   };
 
   nativeBuildInputs = [
@@ -118,12 +118,18 @@ buildPythonPackage rec {
     "test_xmliter_encoding"
     "test_download"
     "test_reactor_default_twisted_reactor_select"
+    "URIParamsSettingTest"
+    "URIParamsFeedOptionTest"
+    # flaky on darwin-aarch64
+    "test_fixed_delay"
+    "test_start_requests_laziness"
   ];
 
   postInstall = ''
     installManPage extras/scrapy.1
-    install -m 644 -D extras/scrapy_bash_completion $out/share/bash-completion/completions/scrapy
-    install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
+    installShellCompletion --cmd scrapy \
+      --zsh extras/scrapy_zsh_completion \
+      --bash extras/scrapy_bash_completion
   '';
 
   pythonImportsCheck = [
@@ -143,6 +149,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
-    platforms = platforms.unix;
   };
 }

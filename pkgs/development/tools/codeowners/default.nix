@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "codeowners";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hmarr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lklKZCDX/e3MZ0ix3A4AIEICPoufBq7SAIULqDXOYDI=";
+    hash = "sha256-bjSlt439Y5hmbxR6s4J37ao+P2tuKNuwqRg872P+MUg=";
   };
 
-  vendorSha256 = "sha256-G+oaX3SXsHJu3lq6n8dLmoRXDAYcFkrYarwePB/MdEU=";
+  vendorHash = "sha256-G+oaX3SXsHJu3lq6n8dLmoRXDAYcFkrYarwePB/MdEU=";
 
   meta = with lib; {
     description = "A CLI and Go library for Github's CODEOWNERS file";

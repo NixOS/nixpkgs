@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, coreutils
 , pkg-config
 , perl
 , lvm2
@@ -9,31 +10,28 @@
 , systemd
 , liburcu
 , json_c
-, kmod
+, linuxHeaders
 , cmocka
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-pIGeZ+jB+6GqkfVN83axHIuY/BobQ+zs+tH+MkLIln0=";
+    sha256 = "sha256-CPvtnjzkyxKXrT8+YXaIgDA548h8X61+jCxMHKFfEyg=";
   };
 
   postPatch = ''
-    substituteInPlace libmultipath/Makefile \
-      --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
+    substituteInPlace create-config.mk \
+      --replace /bin/echo ${coreutils}/bin/echo
 
-    # systemd-udev-settle.service is deprecated.
     substituteInPlace multipathd/multipathd.service \
-      --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
-      --replace /sbin/multipathd "$out/bin/multipathd" \
-      --replace " systemd-udev-settle.service" ""
+      --replace /sbin/multipathd "$out/bin/multipathd"
 
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
@@ -45,15 +43,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
+  buildInputs = [ systemd lvm2 libaio readline liburcu json_c linuxHeaders ];
 
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"
+    "systemd_prefix=$(out)"
+    "kernel_incdir=${linuxHeaders}/include/"
     "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"
-    "SYSTEMDPATH=lib"
   ];
 
   doCheck = true;

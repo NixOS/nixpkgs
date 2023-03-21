@@ -1,4 +1,5 @@
 { lib
+, awesomeversion
 , buildPythonPackage
 , aiohttp
 , fetchFromGitHub
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbee";
-  version = "1.7.18";
+  version = "1.7.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "jafar-atili";
     repo = "pySwitchbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-LQjtePFSMvZdAGH6f8CveaE7ASm/x9GuFj9s3TipYHQ=";
+    hash = "sha256-3Ujs9GgdJm69vb8F00ZWaRgWXxkaPguX5DJ71bqOFec=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    awesomeversion
     packaging
   ];
 

@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "pritunl-client";
-  version = "1.3.3373.6";
+  version = "1.3.3467.51";
 
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-Ttg6SNDcNIQlbNnKQY32hmsrgLhzHkeQfwlmCHe0bI0=";
+    sha256 = "sha256-US1A3PjWxycXzOW/1Mi8GVkxvH6xCFq4mo5gU49vytU=";
   };
 
   modRoot = "cli";
-  vendorSha256 = "sha256-fI2RIzvfbqBgchsvY8hsiecXYItM2XX9h8oiP3zmfTA=";
+  vendorHash = "sha256-miwGLWpoaavg/xcw/0pNBYCdovBnvjP5kdaaGPcRuWk=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/pritunl-client

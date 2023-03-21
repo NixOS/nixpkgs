@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "22.3.1";
+  version = "23.0.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mrfd3VWqb4SgSjBJAxBhYegABdJa7pVXL7wA5uZtF/A=";
+    hash = "sha256-BSonlwKmegrlrQTTIL0avPi61/TY2M0f7kOZpSzPRQk=";
     name = "${pname}-${version}-source";
   };
 
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     description = "The PyPA recommended tool for installing Python packages";
     license = with lib.licenses; [ mit ];
     homepage = "https://pip.pypa.io/";
+    changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     priority = 10;
   };
 }

@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
               else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
               else "8"
             else ""}-gcc"
-    (if stdenv.hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
+    (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
     ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"

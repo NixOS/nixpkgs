@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub
-, fetchpatch
 , brotli
 , cmake
 , giflib
@@ -21,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.7.0";
+  version = "0.8.1";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "sha256-9DBLQ/gMyy2ZUm7PCWYJ7XOzkgQM0cAewJZzMNo8UPs=";
+    hash = "sha256-WWuvUTMrlR6ePbEs01ulLnuMiUqGrh4qELWFh0QMaGU=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -89,6 +88,9 @@ stdenv.mkDerivation rec {
 
     # Use our version of highway, though it is still statically linked in
     "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+
+    # Use our version of gtest
+    "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
 
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.

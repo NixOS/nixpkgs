@@ -8,7 +8,7 @@ in
 {
   meta = {
     maintainers = with maintainers; [ cole-h grahamc raitobezarius ];
-    doc = ./external.xml;
+    doc = ./external.md;
   };
 
   options.boot.loader.external = {

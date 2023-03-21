@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-cim";
-  version = "3.3";
+  version = "3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cim";
-    rev = version;
-    hash = "sha256-d02P6RXIiriOujGns9mOkyiJLNQFNTTW61kInzS17Y4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RlkTsAvX+9c69JBy+DZbcCfAvcCnWDisgdQQMBkphtg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Windows Common Information Model (CIM) database";
     homepage = "https://github.com/fox-it/dissect.cim";
+    changelog = "https://github.com/fox-it/dissect.cim/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

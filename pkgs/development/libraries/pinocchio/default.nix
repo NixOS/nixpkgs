@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pinocchio";
-  version = "2.6.14";
+  version = "2.6.17";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-3dPGeWnIVIErLnd+mxwudTj4qHyN2k7H94EsHYmKV1I=";
+    hash = "sha256-P/2cwFMtVaxT+qt2RDa7qjUIFjDBJ7U6epRFahOKux4=";
   };
 
   # error: use of undeclared identifier '__sincos'

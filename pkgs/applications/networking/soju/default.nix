@@ -60,6 +60,6 @@ buildGoModule rec {
     homepage = "https://soju.im";
     changelog = "https://git.sr.ht/~emersion/soju/refs/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ azahi malvo ];
+    maintainers = with maintainers; [ azahi malte-v ];
   };
 }

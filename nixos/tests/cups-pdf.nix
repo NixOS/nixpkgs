@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   testScript = ''
     from subprocess import run
-    machine.wait_for_unit("cups.service")
+    machine.wait_for_unit("multi-user.target")
     for name in ("opt", "noopt"):
         text = f"test text {name}".upper()
         machine.wait_until_succeeds(f"lpstat -v {name}")

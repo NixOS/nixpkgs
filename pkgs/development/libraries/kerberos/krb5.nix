@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "krb5-${version}/src";
 
+  postPatch = ''
+    substituteInPlace config/shlib.conf \
+        --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+  '';
+
   libFolders = [ "util" "include" "lib" "build-tools" ];
 
   buildPhase = lib.optionalString libOnly ''

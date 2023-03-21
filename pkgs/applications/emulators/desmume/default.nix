@@ -6,6 +6,7 @@
 , agg
 , alsa-lib
 , desktop-file-utils
+, wrapGAppsHook
 , gtk3
 , intltool
 , libGLU
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    wrapGAppsHook
     desktop-file-utils
     intltool
     libtool

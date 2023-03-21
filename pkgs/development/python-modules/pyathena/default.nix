@@ -3,6 +3,7 @@
 , botocore
 , buildPythonPackage
 , fetchPypi
+, fsspec
 , pandas
 , pythonOlder
 , tenacity
@@ -10,19 +11,20 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "2.19.0";
+  version = "2.23.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-59NH4HIhgDOxwgSUJq71ewpQTn2sbpNNT9Q3nj8qJss=";
+    hash = "sha256-6T2qr0fcHzgDPZvc3StZwIH2ZRvTOJFXDLPc3iFmwCQ=";
   };
 
   propagatedBuildInputs = [
     boto3
     botocore
+    fsspec
     pandas
     tenacity
   ];

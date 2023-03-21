@@ -36,7 +36,7 @@ _doStrip() {
         local -n ranlibCmd="${ranlibCmds[$i]}"
 
         # `dontStrip` disables them all
-        if [[ "${dontStrip-}" || "${flag-}" ]] || ! type -f "${stripCmd-}" 2>/dev/null
+        if [[ "${dontStrip-}" || "${flag-}" ]] || ! type -f "${stripCmd-}" 2>/dev/null 1>&2
         then continue; fi
 
         stripDirs "$stripCmd" "$ranlibCmd" "$debugDirList" "${stripDebugFlags[*]:--S}"

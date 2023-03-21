@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct logs lwt mirage-flow ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest mirage-flow-combinators ];
+  checkInputs = [ alcotest mirage-flow-combinators ];
 
   meta = {
     description = "Buffered channels for MirageOS FLOW types";

@@ -4,7 +4,7 @@
 , libXcursor, libXrandr, fontconfig, openjdk11, fetchpatch
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -77,7 +77,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
 
     NIX_LDFLAGS = lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"

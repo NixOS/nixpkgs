@@ -51,7 +51,7 @@ let
       Version: ${libflux_version}
       Description: Library for the InfluxData Flux engine
       Cflags: -I/out/include
-      Libs: -L/out/lib -lflux -ldl -lpthread
+      Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
     postInstall = ''

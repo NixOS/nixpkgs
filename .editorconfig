@@ -95,3 +95,9 @@ trim_trailing_whitespace = unset
 
 [pkgs/tools/misc/timidity/timidity.cfg]
 trim_trailing_whitespace = unset
+
+[pkgs/tools/virtualization/ovftool/*.ova]
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset

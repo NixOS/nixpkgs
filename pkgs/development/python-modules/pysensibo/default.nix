@@ -1,22 +1,20 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.0.24";
+  version = "1.0.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "andrey-git";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-lLorBf4HjynkTyLfKGcxEpSzyCawjKDej/HFtHl/Ar8=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-AZpqV/CQ8TLKjaee9b0Zbu6WfnGNenKIvot+TTTSikg=";
   };
 
   propagatedBuildInputs = [

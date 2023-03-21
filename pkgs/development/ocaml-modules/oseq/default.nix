@@ -19,7 +19,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   doCheck = true;
-  nativeCheckInputs = [
+  checkInputs = [
     containers
     qcheck
   ];

@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "qxmpp";
-  version = "1.4.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "qxmpp-project";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1knpq1jkwk0lxdwczbmzf7qrjvlxba9yr40nbq9s5nqkcx6q1c3i";
+    sha256 = "sha256-h2MBs46E2dvwOhs1cnSvrMll3nZSE9o4oEZV2Bd1Yh0=";
   };
 
   nativeBuildInputs = [

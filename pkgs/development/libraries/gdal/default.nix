@@ -61,13 +61,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    hash = "sha256-fdj/o+dm7V8QLrjnaQobaFX80+penn+ohx/yNmUryRA=";
+    hash = "sha256-Rg/dvSkq1Hn8NgZEE0ID92Vihyw7MA78OBnON8Riy38=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/mysql/libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
@@ -183,6 +183,8 @@ stdenv.mkDerivation rec {
     "test_osr_ct_options_area_of_interest"
     # ZIP does not support timestamps before 1980
     " test_sentinel2_zipped"
+    # tries to call unwrapped executable
+    "test_SetPROJAuxDbPaths"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"

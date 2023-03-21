@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "moolticute";
-  version = "1.00.1";
+  version = "1.01.0";
 
   src = fetchFromGitHub {
     owner = "mooltipass";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oENMr3d2vFisEFl7gYBQQ0XRBeogAYOfBE5th463laI=";
+    sha256 = "sha256-6vqYyAJ9p0ey49kc2Tp/HZVv0mePARX2dcmcIG4bcNQ=";
   };
 
   outputs = [ "out" "udev" ];
@@ -40,7 +40,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/mooltipass/moolticute";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.kirikaza ];
+    maintainers = with maintainers; [ kirikaza hughobrien ];
     platforms = platforms.linux;
   };
 }

@@ -464,4 +464,44 @@ rec {
   allowInconsistentDependencies = overrideCabal (drv: {
     allowInconsistentDependencies = true;
   });
+
+  # Work around a Cabal bug requiring pkg-config --static --libs to work even
+  # when linking dynamically, affecting Cabal 3.8 and 3.9.
+  # https://github.com/haskell/cabal/issues/8455
+  #
+  # For this, we treat the runtime system/pkg-config dependencies of a Haskell
+  # derivation as if they were propagated from their dependencies which allows
+  # pkg-config --static to work in most cases.
+  #
+  # Warning: This function may change or be removed at any time, e.g. if we find
+  # a different workaround, upstream fixes the bug or we patch Cabal.
+  __CabalEagerPkgConfigWorkaround =
+    let
+      # Take list of derivations and return list of the transitive dependency
+      # closure, only taking into account buildInputs. Loosely based on
+      # closePropagationFast.
+      propagatedPlainBuildInputs = drvs:
+        builtins.map (i: i.val) (
+          builtins.genericClosure {
+            startSet = builtins.map (drv:
+              { key = drv.outPath; val = drv; }
+            ) drvs;
+            operator = { val, ... }:
+              if !lib.isDerivation val
+              then [ ]
+              else
+                builtins.concatMap (drv:
+                  if !lib.isDerivation drv
+                  then [ ]
+                  else [ { key = drv.outPath; val = drv; } ]
+                ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+          }
+        );
+    in
+    overrideCabal (old: {
+      benchmarkPkgconfigDepends = propagatedPlainBuildInputs old.benchmarkPkgconfigDepends or [ ];
+      executablePkgconfigDepends = propagatedPlainBuildInputs old.executablePkgconfigDepends or [ ];
+      libraryPkgconfigDepends = propagatedPlainBuildInputs old.libraryPkgconfigDepends or [ ];
+      testPkgconfigDepends = propagatedPlainBuildInputs old.testPkgconfigDepends or [ ];
+    });
 }

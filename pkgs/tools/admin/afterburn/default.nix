@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
-  version = "5.3.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "afterburn";
     rev = "v${version}";
-    sha256 = "sha256-yX95qmcyouSSjEHorMpRJjZyrxIjQorwTpGtGZN4s6s=";
+    sha256 = "sha256-QsdTrd9p89SiLCmvNlsLk9ET2BVeaJncDyWzycn5CLw=";
   };
 
-  cargoSha256 = "sha256-DweJ608aJChn2ezAM7Ly0cwtLAvM1DZ5gc4WUVyKIco=";
+  cargoHash = "sha256-lCtG7UmXJegGVbjyYn9YJWSynikOK4qPmLS1XNesMUk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     description = "This is a small utility, typically used in conjunction with Ignition, which reads metadata from a given cloud-provider and applies it to the system.";
     license = licenses.asl20;
     maintainers = [ maintainers.arianvp ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

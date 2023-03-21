@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-L/3PrkfWOGYtqeH/DajGEGCsF5yYnWuESxUTfROSHQ4=";
+    sha256 = "sha256-wj9bvcES8JAgDtW0Damfd8VQNLK+SCFTDVWp/nYGcgI=";
   };
 
   patches = [

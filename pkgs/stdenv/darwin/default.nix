@@ -98,7 +98,6 @@ rec {
 
       doSign = localSystem.isAarch64 && last != null;
       doUpdateAutoTools = localSystem.isAarch64 && last != null;
-      inherit (last.pkgs) runCommandLocal;
 
       mkExtraBuildCommands = cc: ''
         rsrc="$out/resource-root"
@@ -737,6 +736,7 @@ rec {
         pcre.out
         gettext
         binutils.bintools
+        binutils.bintools.lib
         darwin.binutils
         darwin.binutils.bintools
         curl.out

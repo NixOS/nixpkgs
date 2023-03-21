@@ -3,26 +3,20 @@
 
 stdenv.mkDerivation rec {
   pname = "tesseract";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    hash = "sha256-lu/Y5mlCI8AajhiWaID0fGo5PghEQZdgt2X0K9c/QrE=";
+    hash = "sha256-sV3w53ky13ESc0dGPutMGQ4TcmOeWJkvUwBPIyzSTc8=";
   };
 
-  patches = [
-    # https://github.com/tesseract-ocr/tesseract/issues/3447
-    (fetchpatch {
-      url = "https://github.com/tesseract-ocr/tesseract/commit/dbc79b09d195490dfa3f7d338eadac07ad6683f7.patch";
-      sha256 = "sha256-lGlg0etuU4RXfdq1QH2bYObdeGrFHKf9O8zMUAbfNIQ=";
-    })
-    (fetchpatch {
-      url = "https://github.com/tesseract-ocr/tesseract/commit/6dc4b184b1ebf2e68461f6b63f63a033bc7245f7.patch";
-      sha256 = "sha256-DwIX3r5NmeajI6WgIVHDbkhLH/ygJIjPO5XrbzWQhSw=";
-    })
-  ];
+  # leptonica 1.83 made internal structures private. using internal headers isn't
+  # great, but tesseract4's days are numbered anyway
+  postPatch = ''
+    sed -i '/allheaders.h/a#include "pix_internal.h"' src/textord/devanagari_processing.cpp
+  '';
 
   enableParallelBuilding = true;
 

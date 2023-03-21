@@ -12,12 +12,16 @@
   libunwindSupport ? true,
   libunwind,
   pulseaudioSupport ? true,
-  libpulseaudio
+  libpulseaudio,
+  soxSupport ? true,
+  sox
 }:
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
   version = "0.2.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "roc-streaming";
@@ -35,17 +39,17 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     libuv
-    libunwind
-    openfec
-    libpulseaudio
     speexdsp
-  ];
+  ] ++ lib.optional openfecSupport openfec
+    ++ lib.optional libunwindSupport libunwind
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional soxSupport sox;
 
   sconsFlags =
     [ "--build=${stdenv.buildPlatform.config}"
       "--host=${stdenv.hostPlatform.config}"
-      "--prefix=${placeholder "out"}"
-      "--disable-sox" ] ++
+      "--prefix=${placeholder "out"}" ] ++
+    lib.optional (!soxSupport) "--disable-sox" ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++
     lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
     (if (!openfecSupport)

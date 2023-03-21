@@ -11,6 +11,18 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      ipython = super.ipython.overridePythonAttrs (oldAttrs: rec {
+        pname = "ipython";
+        version = "8.5.0";
+
+        src = self.fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-CXvfXNh1dv0GYXnJ9/IIAE96aGTuGyDzfTRsC8sJn4Q=";
+        };
+
+        disabledTests = [ "testIPythonLexer" ] ++ oldAttrs.disabledTests;
+      });
+
       prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.28";
         src = self.fetchPypi {
@@ -25,15 +37,23 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.18"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.11.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-WE0fBw6rBMDK+BHmZT1OXr4nu3G8y0AmdimSRi2RaPs=";
+    hash = "sha256-GFdkE+XClm0L5Y+ZSwMW8gieNoRmNL3K8kVPxpH510k=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/bootstrap.txt \
+      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
+    substituteInPlace pyproject.toml \
+      --replace "distro>=1.5.0,<1.6.0" "distro>=1.5.0" \
+      --replace "cryptography>=3.3.2,<38.0.5" "cryptography>=3.3.2"
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -62,13 +82,6 @@ with py.pkgs; buildPythonApplication rec {
     mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i pyproject.toml \
-      -e 's/colorama.*/colorama",/' \
-      -e 's/cryptography.*/cryptography",/' \
-      -e 's/distro.*/distro",/'
-  '';
 
   postInstall = ''
     mkdir -p $out/${python3.sitePackages}/awscli/data

@@ -11,6 +11,8 @@ lib.makeScope newScope (self:
       };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
+    asciigraph = callPackage ../development/nim-packages/asciigraph { };
+
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
@@ -28,9 +30,15 @@ lib.makeScope newScope (self:
 
     chroma = callPackage ../development/nim-packages/chroma { };
 
+    coap = callPackage  ../development/nim-packages/coap { };
+
     docopt = callPackage ../development/nim-packages/docopt { };
 
+    eris = callPackage ../development/nim-packages/eris { };
+
     flatty = callPackage ../development/nim-packages/flatty { };
+
+    freedesktop_org = callPackage ../development/nim-packages/freedesktop_org { };
 
     frosty = callPackage ../development/nim-packages/frosty { };
 
@@ -38,6 +46,8 @@ lib.makeScope newScope (self:
       inherit (pkgs) getdns; };
 
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
+
+    illwill = callPackage ../development/nim-packages/illwill { };
 
     jester = callPackage ../development/nim-packages/jester { };
 
@@ -65,7 +75,11 @@ lib.makeScope newScope (self:
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
+    parsetoml = callPackage ../development/nim-packages/parsetoml { };
+
     pixie = callPackage ../development/nim-packages/pixie { };
+
+    preserves = callPackage ../development/nim-packages/preserves { };
 
     redis = callPackage ../development/nim-packages/redis { };
 
@@ -76,6 +90,8 @@ lib.makeScope newScope (self:
     rocksdb = callPackage ../development/nim-packages/rocksdb {
       inherit (pkgs) rocksdb;
     };
+
+    safeset = callPackage ../development/nim-packages/safeset { };
 
     sass = callPackage ../development/nim-packages/sass { };
 
@@ -94,6 +110,8 @@ lib.makeScope newScope (self:
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
+    syndicate = callPackage ../development/nim-packages/syndicate { };
+
     taps = callPackage ../development/nim-packages/taps { };
 
     tempfile = callPackage ../development/nim-packages/tempfile { };
@@ -107,6 +125,8 @@ lib.makeScope newScope (self:
     unicodeplus = callPackage ../development/nim-packages/unicodeplus { };
 
     vmath = callPackage ../development/nim-packages/vmath { };
+
+    x11 = callPackage ../development/nim-packages/x11 { };
 
     zippy = callPackage ../development/nim-packages/zippy { };
 

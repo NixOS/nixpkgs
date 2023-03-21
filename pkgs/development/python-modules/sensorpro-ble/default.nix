@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sensorpro-ble";
-  version = "0.5.1";
+  version = "0.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,9 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-D0xHNPsGlNBoHR3LqR6TbVhqXWapzwYsG+uN3kSF1oE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Zqa6qa0Jw79Iu4VEw6KN0GsZcC1X7OpiYUiyT4zwKyY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -36,11 +41,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "sensorpro_ble"

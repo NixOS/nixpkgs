@@ -34,6 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
+, libffi
 , libepoxy
 # postPatch:
 , glibc # gconv + locale
@@ -149,6 +150,7 @@ let
       libdrm wayland mesa.drivers libxkbcommon
       curl
       libepoxy
+      libffi
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
       ++ lib.optional pulseSupport libpulseaudio;
@@ -258,8 +260,6 @@ let
       host_toolchain = "//build/toolchain/linux/unbundle:default";
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
-      # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
       # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
       # We aren't compiling with Chrome's Clang (would enable Chrome-specific
@@ -293,11 +293,9 @@ let
       chrome_pgo_phase = 0;
       clang_base_path = "${llvmPackages.clang}";
       use_qt = false;
-      # The default has changed to false. We'll build with libwayland from
-      # Nixpkgs for now but might want to eventually use the bundled libwayland
-      # as well to avoid incompatibilities (if this continues to be a problem
-      # from time to time):
-      use_system_libwayland = true;
+      # To fix the build as we don't provide libffi_pic.a
+      # (ld.lld: error: unable to find library -l:libffi_pic.a):
+      use_system_libffi = true;
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -326,7 +324,7 @@ let
     # Don't spam warnings about unknown warning options. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       buildCommand = target: ''

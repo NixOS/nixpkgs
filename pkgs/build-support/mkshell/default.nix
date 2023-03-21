@@ -53,4 +53,6 @@ stdenv.mkDerivation ({
       export;
     } >> "$out"
   '';
+
+  preferLocalBuild = true;
 } // rest)

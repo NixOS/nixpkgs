@@ -566,5 +566,5 @@ in {
     })
   ];
 
-  meta.doc = ./default.xml;
+  meta.doc = ./default.md;
 }

@@ -24,6 +24,8 @@ self: super: {
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
 
+    pgaudit = super.callPackage ./ext/pgaudit.nix { };
+
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
     pgvector = super.callPackage ./ext/pgvector.nix { };
@@ -53,6 +55,8 @@ self: super: {
     temporal_tables = super.callPackage ./ext/temporal_tables.nix { };
 
     timescaledb = super.callPackage ./ext/timescaledb.nix { };
+
+    timescaledb_toolkit = super.callPackage ./ext/timescaledb_toolkit.nix { };
 
     tsearch_extras = super.callPackage ./ext/tsearch_extras.nix { };
 

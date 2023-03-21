@@ -78,7 +78,7 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          - [`${lib.optionalString (title != null) "${title} aka "}pkgs.${name}`](
+          - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
               https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
             )${
               lib.optionalString (args ? comment) "\n\n  ${args.comment}"
@@ -91,18 +91,24 @@ let
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
-      --format asciidoc \
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options asciidoc \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > $out
+      $out
   '';
 
-  optionsCommonMark = pkgs.runCommand "options.md" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
-      --format commonmark \
+  optionsCommonMark = pkgs.runCommand "options.md" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > $out
+      $out
   '';
 
   optionsJSON = pkgs.runCommand "options.json"
@@ -148,42 +154,19 @@ in rec {
   '';
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {
-    MANPAGE_URLS = pkgs.path + "/doc/manpage-urls.json";
-    OTD_DOCUMENT_TYPE = documentType;
-    OTD_VARIABLE_LIST_ID = variablelistId;
-    OTD_OPTION_ID_PREFIX = optionIdPrefix;
-    OTD_REVISION = revision;
-
     nativeBuildInputs = [
-      (let
-        # python3Minimal can't be overridden with packages on Darwin, due to a missing framework.
-        # Instead of modifying stdenv, we take the easy way out, since most people on Darwin will
-        # just be hacking on the Nixpkgs manual (which also uses make-options-doc).
-        python = if pkgs.stdenv.isDarwin then pkgs.python3 else pkgs.python3Minimal;
-        self = (python.override {
-          inherit self;
-          includeSiteCustomize = true;
-        });
-      in self.withPackages (p:
-        let
-          # TODO add our own small test suite when rendering is split out into a new tool
-          markdown-it-py = p.markdown-it-py.override {
-            disableTests = true;
-          };
-          mdit-py-plugins = p.mdit-py-plugins.override {
-            inherit markdown-it-py;
-            disableTests = true;
-          };
-        in [
-          markdown-it-py
-          mdit-py-plugins
-        ]))
+      pkgs.nixos-render-docs
     ];
   } ''
-    python ${./optionsToDocbook.py} \
+    nixos-render-docs -j $NIX_BUILD_CORES options docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      --document-type ${lib.escapeShellArg documentType} \
+      --varlist-id ${lib.escapeShellArg variablelistId} \
+      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
       ${lib.optionalString markdownByDefault "--markdown-by-default"} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > options.xml
+      options.xml
 
     if grep /nixpkgs/nixos/modules options.xml; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"

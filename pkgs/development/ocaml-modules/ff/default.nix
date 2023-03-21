@@ -9,7 +9,7 @@ buildDunePackage rec {
     zarith
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     ff-pbt
   ];

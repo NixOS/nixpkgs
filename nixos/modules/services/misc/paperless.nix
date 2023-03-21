@@ -6,6 +6,7 @@ let
   pkg = cfg.package;
 
   defaultUser = "paperless";
+  nltkDir = "/var/cache/paperless/nltk";
 
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
@@ -15,6 +16,7 @@ let
     PAPERLESS_DATA_DIR = cfg.dataDir;
     PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
     PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+    PAPERLESS_NLTK_DIR = nltkDir;
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -24,12 +26,14 @@ let
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
-  manage = let
-    setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-  in pkgs.writeShellScript "manage" ''
-    ${setupEnv}
-    exec ${pkg}/bin/paperless-ngx "$@"
-  '';
+  manage =
+    let
+      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+    in
+    pkgs.writeShellScript "manage" ''
+      ${setupEnv}
+      exec ${pkg}/bin/paperless-ngx "$@"
+    '';
 
   # Secure the services
   defaultServiceConfig = {
@@ -47,6 +51,7 @@ let
       cfg.dataDir
       cfg.mediaDir
     ];
+    CacheDirectory = "paperless";
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
@@ -170,7 +175,7 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = lib.mdDoc ''
         Extra paperless config options.
 
@@ -226,9 +231,26 @@ in
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkg} ]]; then
+        version=$(cat "$versionFile" 2>/dev/null || echo 0)
+
+        if [[ $version != ${pkg.version} ]]; then
           ${pkg}/bin/paperless-ngx migrate
-          echo ${pkg} > "$versionFile"
+
+          # Parse old version string format for backwards compatibility
+          version=$(echo "$version" | grep -ohP '[^-]+$')
+
+          versionLessThan() {
+            target=$1
+            [[ $({ echo "$version"; echo "$target"; } | sort -V | head -1) != "$target" ]]
+          }
+
+          if versionLessThan 1.12.0; then
+            # Reindex documents as mentioned in https://github.com/paperless-ngx/paperless-ngx/releases/tag/v1.12.1
+            echo "Reindexing documents, to allow searching old comments. Required after the 1.12.x upgrade."
+            ${pkg}/bin/paperless-ngx document_index reindex
+          fi
+
+          echo ${pkg.version} > "$versionFile"
         fi
       ''
       + optionalString (cfg.passwordFile != null) ''
@@ -271,6 +293,33 @@ in
             '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
         '';
         Type = "oneshot";
+      };
+    };
+
+    # Download NLTK corpus data
+    systemd.services.paperless-download-nltk-data = {
+      wantedBy = [ "paperless-scheduler.service" ];
+      before = [ "paperless-scheduler.service" ];
+      after = [ "network-online.target" ];
+      serviceConfig = defaultServiceConfig // {
+        User = cfg.user;
+        Type = "oneshot";
+        # Enable internet access
+        PrivateNetwork = false;
+        # Restrict write access
+        BindPaths = [];
+        BindReadOnlyPaths = [
+          "/nix/store"
+          "-/etc/resolv.conf"
+          "-/etc/nsswitch.conf"
+          "-/etc/ssl/certs"
+          "-/etc/static/ssl/certs"
+          "-/etc/hosts"
+          "-/etc/localtime"
+        ];
+        ExecStart = let pythonWithNltk = pkg.python.withPackages (ps: [ ps.nltk ]); in ''
+          ${pythonWithNltk}/bin/python -m nltk.downloader -d '${nltkDir}' punkt snowball_data stopwords
+        '';
       };
     };
 

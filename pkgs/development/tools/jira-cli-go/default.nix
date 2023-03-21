@@ -20,6 +20,8 @@ buildGoModule rec {
     "-X github.com/ankitpokhrel/jira-cli/internal/version.Version=${version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [ less more ]; # Tests expect a pager in $PATH
 
   passthru = {

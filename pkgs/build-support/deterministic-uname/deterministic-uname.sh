@@ -133,7 +133,7 @@ fi
 # NixOS:
 #  Linux *nodename* 6.0.13 #1-NixOS SMP PREEMPT_DYNAMIC Wed Dec 14 10:41:06 UTC 2022 x86_64 GNU/Linux
 if [[ "$all" = "1" ]]; then
-    echo -n "$KERNEL_NAME_VAL $NODENAME_VAL $KERNEL_RELEASE_VAL $KERNEL_VERSION_VAL $MACHINE_VAL"
+    echo -n "$KERNEL_NAME_VAL $NODENAME_VAL $KERNEL_RELEASE_VAL $KERNEL_VERSION_VAL $MACHINE_VAL "
     # in help:  except omit -p and -i if unknown.
     #echo -n "$PROCESSOR_VAL $HARDWARE_PLATFORM_VAL\n"
     echo -n "$OPERATING_SYSTEM_VAL"

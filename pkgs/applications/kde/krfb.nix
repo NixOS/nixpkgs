@@ -3,7 +3,7 @@
 , kconfig, kcoreaddons, kcrash, kdbusaddons, kdnssd, knotifications, kwallet
 , kwidgetsaddons, kwindowsystem, kxmlgui, kwayland
 , libvncserver, libXtst, libXdamage
-, qtx11extras
+, qtx11extras, pipewire, plasma-wayland-protocols, wayland
 }:
 
 mkDerivation {
@@ -20,6 +20,9 @@ mkDerivation {
     kconfig kcoreaddons kcrash kdbusaddons knotifications kwallet kwidgetsaddons
     kwindowsystem kxmlgui kwayland
     qtx11extras
+    pipewire
+    plasma-wayland-protocols
+    wayland
   ];
   propagatedBuildInputs = [ kdnssd ];
 }

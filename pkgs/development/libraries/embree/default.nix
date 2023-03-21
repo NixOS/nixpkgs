@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEMBREE_TUTORIALS=OFF"
     "-DEMBREE_RAY_MASK=ON"
+    "-DTBB_ROOT=${tbb}"
+    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
   ];
 
 
@@ -37,5 +39,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hodapp gebner ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

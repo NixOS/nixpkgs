@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "unstable-2019-07-15";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/ofono/mmsd.git";
+    url = "https://git.kernel.org/pub/scm/network/ofono/mmsd.git";
     rev = "f4b8b32477a411180be1823fdc460b4f7e1e3c9c";
     sha256 = "0hcnpyhsi7b5m825dhnwbp65yi0961wi8mipzdvaw5nc693xv15b";
   };

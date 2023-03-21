@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.12.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tEeAr1QSec1Sayfg2/erk5u6wBZDodZIMYq9MaU7ATA=";
+    hash = "sha256-XiB8ZlbtzU66abM9zJotaMCrbYScqWmDv4ulEeQS6+g=";
   };
 
-  vendorHash = "sha256-FCAxqyacDdt3mR628/sguvrBx+nG10648XqF5hA8z+s=";
+  vendorHash = "sha256-bQKpy5xjUItgQ79r8TrMUOjo0Ze9E25glvOv312W1k0=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -43,6 +43,9 @@ buildGoModule rec {
     # To skip TestCloneBranchAndRefToBucket
     export CI=true
   '';
+
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall

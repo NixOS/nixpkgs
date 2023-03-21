@@ -1,15 +1,22 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "hyperscrypt";
   version = "1.1";
-  pname = "HyperScrypt";
-in
 
-(fetchzip {
-  name = "${lib.toLower pname}-font-${version}";
-  url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
-  sha256 = "01pf5p2scmw02s0gxnibiwxbpzczphaaapv0v4s7svk9aw2gmc0m";
+  src = fetchzip {
+    url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
+    hash = "sha256-ONlAB9C/GYK6KmOaiHCYErkS6OlQ3TUnoumNDHGZnes=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/HyperScrypt_Web/*.ttf -t $out/share/fonts/truetype/
+    install -Dm644 fonts/HyperScrypt_Web/*.otf fonts/*.otf -t $out/share/fonts/opentype/
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://velvetyne.fr/fonts/hyper-scrypt/";
@@ -28,15 +35,9 @@ in
       molted metal, Hyper Scrypt is based upon a rigorous grid,
       allowing some neat alignements between shapes in multi lines
       layouts.
-      '';
+    '';
     license = licenses.ofl;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/{truetype,opentype}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/${pname}.ttf
-    unzip -j $downloadedFile \*${pname}.otf -d $out/share/fonts/opentype/${pname}.otf
-  '';
-})
+}

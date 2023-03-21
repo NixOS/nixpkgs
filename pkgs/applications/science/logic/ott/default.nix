@@ -11,8 +11,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-GzeEiok5kigcmfqf/K/UxvlKkl55zy0vOyiRZ2HyMiE=";
   };
 
-  nativeBuildInputs = [ pkg-config opaline ];
-  buildInputs = with ocamlPackages; [ ocaml findlib ocamlgraph ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config opaline ] ++ (with ocamlPackages; [ findlib ocaml ]);
+  buildInputs = with ocamlPackages; [ ocamlgraph ];
 
   installTargets = "ott.install";
 

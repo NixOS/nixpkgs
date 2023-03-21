@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tfplugindocs";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
     rev = "v${version}";
-    sha256 = "sha256-0FpzUJDFGKLe88QW+7UI6QPwFMUfqPindOHtGRpOLo8=";
+    sha256 = "sha256-GiMjm7XG/gFGOQXYeXsKbU7WQdrkQ0+J/SvfbLu24bo=";
   };
 
-  vendorSha256 = "sha256-gKRgFfyUahWI+c97uYSCAGNoFy2RPgAw0uYGauEOLt8=";
+  vendorHash = "sha256-qUlyOAiLzLgrtaAfs/aGpAikGmGcQ9PI7QRyp9+Qn4w=";
 
   meta = with lib; {
     description = "Generate and validate Terraform plugin/provider documentation";

@@ -7,14 +7,14 @@ buildDunePackage rec {
   pname = "progress";
 
   minimalOCamlVersion = "4.08";
-  useDune2 = true;
+  duneVersion = "3";
 
   inherit (terminal) version src;
 
   propagatedBuildInputs = [ fmt logs mtime optint terminal vector ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest astring ];
+  checkInputs = [ alcotest astring ];
 
   meta = with lib; {
     description = "Progress bar library for OCaml";

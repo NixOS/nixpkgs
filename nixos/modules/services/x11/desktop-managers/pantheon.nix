@@ -17,7 +17,7 @@ in
 {
 
   meta = {
-    doc = ./pantheon.xml;
+    doc = ./pantheon.md;
     maintainers = teams.pantheon.members;
   };
 
@@ -169,6 +169,9 @@ in
       };
       services.udev.packages = [
         pkgs.pantheon.gnome-settings-daemon
+        # Force enable KMS modifiers for devices that require them.
+        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+        pkgs.pantheon.mutter
       ];
       systemd.packages = [
         pkgs.pantheon.gnome-settings-daemon

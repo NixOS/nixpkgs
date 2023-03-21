@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-bundle.patch ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wformat" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wformat" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ hdf5 boost ];

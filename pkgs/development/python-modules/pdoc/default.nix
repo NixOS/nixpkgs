@@ -2,8 +2,8 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
 , fetchFromGitHub
+, setuptools
 , jinja2
 , pygments
 , markupsafe
@@ -14,16 +14,22 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "12.0.2";
+  version = "12.3.1";
   disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   # the Pypi version does not include tests
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    sha256 = "FVfPO/QoHQQqg7QU05GMrrad0CbRR5AQVYUpBhZoRi0=";
+    hash = "sha256-SaLrE/eHxKnlm6BZYbcZZrbrUZMeHJ4eCcqMsFvyZ7I=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     jinja2
@@ -40,14 +46,20 @@ buildPythonPackage rec {
     # This test seems to be sensitive to ordering of dictionary items and the version of dependencies.
     # the only difference between the stored snapshot and the produced documentation is a debug javascript comment
     "html-demopackage_dir"
+    # snapshot tests mismatch with latest pygments version
+    "test_snapshots"
   ];
+
   pytestFlagsArray = [
     ''-m "not slow"'' # skip tests marked slow
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pdoc" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
     license = licenses.unlicense;

@@ -1,12 +1,9 @@
-{ lib, writeShellApplication, cargo, cargo-auditable }:
+{ lib, writeShellScriptBin, cargo, cargo-auditable }:
 
-(writeShellApplication {
-  name = "cargo";
-  runtimeInputs = [ cargo cargo-auditable ];
-  text = ''
-    CARGO_AUDITABLE_IGNORE_UNSUPPORTED=1 cargo auditable "$@"
-  '';
-}) // {
+(writeShellScriptBin "cargo" ''
+  export PATH="${lib.makeBinPath [ cargo cargo-auditable ]}:$PATH"
+  CARGO_AUDITABLE_IGNORE_UNSUPPORTED=1 exec cargo auditable "$@"
+'') // {
   meta = cargo-auditable.meta // {
     mainProgram = "cargo";
   };

@@ -1,6 +1,19 @@
 # Testers {#chap-testers}
 This chapter describes several testing builders which are available in the <literal>testers</literal> namespace.
 
+## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
+
+Checks whether a package exposes a certain `pkg-config` module.
+
+Example:
+
+```nix
+passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  package = finalAttrs.finalPackage;
+  moduleName = "libfoo";
+}
+```
+
 ## `testVersion` {#tester-testVersion}
 
 Checks the command output contains the specified version

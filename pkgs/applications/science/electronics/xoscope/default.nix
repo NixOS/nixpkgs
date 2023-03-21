@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Oscilloscope through the sound card";
-    homepage = "http://xoscope.sourceforge.net";
+    homepage = "https://xoscope.sourceforge.net";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;

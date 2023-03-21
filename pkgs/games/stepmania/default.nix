@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     ./0001-fix-build-with-ffmpeg-4.patch
   ];
 
+  postPatch = ''
+    sed '1i#include <ctime>' -i src/arch/ArchHooks/ArchHooks.h # gcc12
+  '';
+
   nativeBuildInputs = [ cmake nasm ];
 
   buildInputs = [

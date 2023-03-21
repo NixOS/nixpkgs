@@ -1,22 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmocka
 
-stdenv.mkDerivation rec {
+# for passthru.tests
+, libfido2
+, mysql80
+, openssh
+, systemd
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.9.0";
+  version = "unstable-2023-01-29"; # Musl fix hasn't been released yet.
 
   src = fetchFromGitHub {
     owner = "PJK";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Wp/48yQA17mf/dTgeMcMDvPpKOPkfLhQkCnzgGLpLtk=";
+    repo = "libcbor";
+    rev = "cb4162f40d94751141b4d43b07c4add83e738a68";
+    sha256 = "sha256-ZTa+wG1g9KsVoqJG/yqxo2fJ7OhPnaI9QcfOmpOT3pg=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON"
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
+
+  # Tests are restricted while pkgsStatic.cmocka is broken. Tracked at:
+  # https://github.com/NixOS/nixpkgs/issues/213623
+  doCheck = !stdenv.hostPlatform.isStatic
+    && stdenv.hostPlatform == stdenv.buildPlatform;
+
   nativeCheckInputs = [ cmocka ];
 
-  doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
-
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" "-DBUILD_SHARED_LIBS=on" ];
+  passthru.tests = {
+    inherit libfido2 mysql80;
+    openssh = (openssh.override { withFIDO = true; });
+    systemd = (systemd.override {
+      withFido2 = true;
+      withCryptsetup = true;
+    });
+  };
 
   meta = with lib; {
     description = "CBOR protocol implementation for C and others";
@@ -24,4 +49,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };
-}
+})

@@ -3,9 +3,44 @@
 { libpath }:
 let
   lib = import libpath;
-  inherit (lib.path) subpath;
+  inherit (lib.path) append subpath;
 
   cases = lib.runTests {
+    # Test examples from the lib.path.append documentation
+    testAppendExample1 = {
+      expr = append /foo "bar/baz";
+      expected = /foo/bar/baz;
+    };
+    testAppendExample2 = {
+      expr = append /foo "./bar//baz/./";
+      expected = /foo/bar/baz;
+    };
+    testAppendExample3 = {
+      expr = append /. "foo/bar";
+      expected = /foo/bar;
+    };
+    testAppendExample4 = {
+      expr = (builtins.tryEval (append "/foo" "bar")).success;
+      expected = false;
+    };
+    testAppendExample5 = {
+      expr = (builtins.tryEval (append /foo /bar)).success;
+      expected = false;
+    };
+    testAppendExample6 = {
+      expr = (builtins.tryEval (append /foo "")).success;
+      expected = false;
+    };
+    testAppendExample7 = {
+      expr = (builtins.tryEval (append /foo "/bar")).success;
+      expected = false;
+    };
+    testAppendExample8 = {
+      expr = (builtins.tryEval (append /foo "../bar")).success;
+      expected = false;
+    };
+
+    # Test examples from the lib.path.subpath.isValid documentation
     testSubpathIsValidExample1 = {
       expr = subpath.isValid null;
       expected = false;
@@ -30,6 +65,7 @@ let
       expr = subpath.isValid "./foo//bar/";
       expected = true;
     };
+    # Some extra tests
     testSubpathIsValidTwoDotsEnd = {
       expr = subpath.isValid "foo/..";
       expected = false;
@@ -71,6 +107,37 @@ let
       expected = true;
     };
 
+    # Test examples from the lib.path.subpath.join documentation
+    testSubpathJoinExample1 = {
+      expr = subpath.join [ "foo" "bar/baz" ];
+      expected = "./foo/bar/baz";
+    };
+    testSubpathJoinExample2 = {
+      expr = subpath.join [ "./foo" "." "bar//./baz/" ];
+      expected = "./foo/bar/baz";
+    };
+    testSubpathJoinExample3 = {
+      expr = subpath.join [ ];
+      expected = "./.";
+    };
+    testSubpathJoinExample4 = {
+      expr = (builtins.tryEval (subpath.join [ /foo ])).success;
+      expected = false;
+    };
+    testSubpathJoinExample5 = {
+      expr = (builtins.tryEval (subpath.join [ "" ])).success;
+      expected = false;
+    };
+    testSubpathJoinExample6 = {
+      expr = (builtins.tryEval (subpath.join [ "/foo" ])).success;
+      expected = false;
+    };
+    testSubpathJoinExample7 = {
+      expr = (builtins.tryEval (subpath.join [ "../foo" ])).success;
+      expected = false;
+    };
+
+    # Test examples from the lib.path.subpath.normalise documentation
     testSubpathNormaliseExample1 = {
       expr = subpath.normalise "foo//bar";
       expected = "./foo/bar";
@@ -107,6 +174,7 @@ let
       expr = (builtins.tryEval (subpath.normalise "/foo")).success;
       expected = false;
     };
+    # Some extra tests
     testSubpathNormaliseIsValidDots = {
       expr = subpath.normalise "./foo/.bar/.../baz...qux";
       expected = "./foo/.bar/.../baz...qux";

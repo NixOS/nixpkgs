@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.30";
+  version = "2.32";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "sha256-Ck+Q7sHhMqUWu6WeA3DhY+svMxH2sU0WvmyvZ5qsW+E=";
+    sha256 = "sha256-WY77F4culQ1y8UDIhI117AHBL5mEk40s8HpP3+5muZI=";
   };
 
   # Fix 'NameError: name 'ssl' is not defined'

@@ -26,7 +26,7 @@ buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc) version src;
   duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
-  minimumOCamlVersion =
+  minimalOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
       "4.12"
     else
@@ -74,7 +74,6 @@ buildDunePackage rec {
       [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
     else
       [
-        cppo
         ppx_yojson_conv_lib
         ocaml-syntax-shims
         octavius
@@ -82,6 +81,8 @@ buildDunePackage rec {
         omd
         cmdliner
       ];
+
+  nativeBuildInputs = lib.optional (lib.versionOlder version "1.7.0") cppo;
 
   propagatedBuildInputs = [
     csexp

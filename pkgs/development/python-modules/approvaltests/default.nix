@@ -5,10 +5,13 @@
 
 # propagates
 , allpairspy
+, approval-utilities
 , beautifulsoup4
 , empty-files
+, mrjob
 , pyperclip
 , pytest
+, typing-extensions
 
 # tests
 , numpy
@@ -16,26 +19,29 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.4.2";
+  version = "8.2.0";
   pname = "approvaltests";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6.1";
+  disabled = pythonOlder "3.7";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ZXtIM3McpfDFCaedlbJ6SU+Er5NyfI8kGnrn7sb1V5M=";
+    hash = "sha256-7OeFOPBOs+SXKOQGKxiigVvoY50+bqRo+oDbVYTMQxU=";
   };
 
   propagatedBuildInputs = [
     allpairspy
+    approval-utilities
     beautifulsoup4
     empty-files
+    mrjob
     pyperclip
     pytest
+    typing-extensions
   ];
 
   nativeCheckInputs = [

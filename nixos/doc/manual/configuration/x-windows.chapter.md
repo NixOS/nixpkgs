@@ -69,7 +69,7 @@ Wine, you should also set the following:
 hardware.opengl.driSupport32Bit = true;
 ```
 
-## Auto-login {#sec-x11-auto-login .unnumbered}
+## Auto-login {#sec-x11-auto-login}
 
 The x11 login screen can be skipped entirely, automatically logging you
 into your window manager and desktop environment when you boot your
@@ -96,7 +96,7 @@ services.xserver.displayManager.autoLogin.enable = true;
 services.xserver.displayManager.autoLogin.user = "alice";
 ```
 
-## Intel Graphics drivers {#sec-x11--graphics-cards-intel .unnumbered}
+## Intel Graphics drivers {#sec-x11--graphics-cards-intel}
 
 There are two choices for Intel Graphics drivers in X.org: `modesetting`
 (included in the xorg-server itself) and `intel` (provided by the
@@ -136,7 +136,7 @@ services.xserver.deviceSection = ''
 Note that this will likely downgrade the performance compared to
 `modesetting` or `intel` with DRI 3 (default).
 
-## Proprietary NVIDIA drivers {#sec-x11-graphics-cards-nvidia .unnumbered}
+## Proprietary NVIDIA drivers {#sec-x11-graphics-cards-nvidia}
 
 NVIDIA provides a proprietary driver for its graphics cards that has
 better 3D performance than the X.org drivers. It is not enabled by
@@ -158,7 +158,7 @@ services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
 You may need to reboot after enabling this driver to prevent a clash
 with other kernel modules.
 
-## Proprietary AMD drivers {#sec-x11--graphics-cards-amd .unnumbered}
+## Proprietary AMD drivers {#sec-x11--graphics-cards-amd}
 
 AMD provides a proprietary driver for its graphics cards that is not
 enabled by default because it's not Free Software, is often broken in
@@ -173,7 +173,7 @@ services.xserver.videoDrivers = [ "amdgpu-pro" ];
 You will need to reboot after enabling this driver to prevent a clash
 with other kernel modules.
 
-## Touchpads {#sec-x11-touchpads .unnumbered}
+## Touchpads {#sec-x11-touchpads}
 
 Support for Synaptics touchpads (found in many laptops such as the Dell
 Latitude series) can be enabled as follows:
@@ -192,7 +192,7 @@ services.xserver.libinput.touchpad.tapping = false;
 Note: the use of `services.xserver.synaptics` is deprecated since NixOS
 17.09.
 
-## GTK/Qt themes {#sec-x11-gtk-and-qt-themes .unnumbered}
+## GTK/Qt themes {#sec-x11-gtk-and-qt-themes}
 
 GTK themes can be installed either to user profile or system-wide (via
 `environment.systemPackages`). To make Qt 5 applications look similar to
@@ -204,7 +204,7 @@ qt.platformTheme = "gtk2";
 qt.style = "gtk2";
 ```
 
-## Custom XKB layouts {#custom-xkb-layouts .unnumbered}
+## Custom XKB layouts {#custom-xkb-layouts}
 
 It is possible to install custom [ XKB
 ](https://en.wikipedia.org/wiki/X_keyboard_extension) keyboard layouts

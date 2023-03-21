@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jdt-language-server";
-  version = "1.17.0";
-  timestamp = "202210271413";
+  version = "1.20.0";
+  timestamp = "202302201605";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${version}/jdt-language-server-${version}-${timestamp}.tar.gz";
-    sha256 = "sha256-3NVzL3o/8LXR94/3Yma42XHfwNEFEVrmUijkeMs/vL0=";
+    sha256 = "sha256-5izNGPZ3jXtJEPWIFzrwZsNi8esxh4PUn7xIWp4TV2U=";
   };
 
   sourceRoot = ".";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       # The application ships with config directories for linux and mac
       configDir = if stdenv.isDarwin then "config_mac" else "config_linux";
     in
-    ''
+      ''
       # Copy jars
       install -D -t $out/share/java/plugins/ plugins/*.jar
 

@@ -20,17 +20,20 @@
 , dbus
 , xvfb-run
 , shared-mime-info
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.6.1";
+  version = "5.6.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZZ2cydA0oRTwfn4TTugNd97ASXyxUWrlNpEZwvy52hY=";
+    sha256 = "HxRsFW8TWmBJnZeeNXfJm24VoRFEV2er5iGbs0xUXHc=";
   };
 
   patches = [
@@ -117,11 +120,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Source code editing widget for GTK";
     homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    pkgConfigModules = [ "gtksourceview-5" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

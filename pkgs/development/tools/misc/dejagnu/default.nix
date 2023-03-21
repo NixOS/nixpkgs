@@ -36,8 +36,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/runtest" \
-      --prefix PATH ":" "${expect}/bin"
+    # 'runtest' and 'dejagnu' look up 'expect' in their 'bin' path
+    # first. We avoid use of 'wrapProgram' here because  wrapping
+    # of shell scripts does not preserve argv[0] for schell scripts:
+    #   https://sourceware.org/PR30052#c5
+    ln -s ${expect}/bin/expect $out/bin/expect
   '';
 
   meta = with lib; {

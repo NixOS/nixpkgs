@@ -240,25 +240,6 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    if [[ buildConfig == *"linux"* ]]; then
-        # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-        for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
-    fi
-
-    if [[ targetConfig == *"linux"* ]]; then
-        # For some reason, when building for linux on darwin, the libs retain
-        # RPATH to $out.
-        for i in "$lib"/"$targetConfig"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
-    fi
-
     if type "install_name_tool"; then
         for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2023-01-23";
+  version = "unstable-2023-03-07";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "f676cba7f9749825744ec705ee58b9fbea47db51";
-    sha256 = "Zx1fGicCuX+HJm2QFSYQhcd9Ibg3qj5h9NPlSNNVLag=";
+    rev = "6672b90aa6310f2a02d9527f500645dd525a8fe3";
+    sha256 = "uf4fSkMGVS1/H5HwKTo0Fp69CjI3C9Bmw07oP9PYvlQ=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     Cocoa
   ];
 
-  NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     shopt -s extglob

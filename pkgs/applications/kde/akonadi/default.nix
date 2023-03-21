@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
+  extra-cmake-modules, shared-mime-info, accounts-qt,
   boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
   kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mariadb,
   postgresql, qttools, signond, xz,
@@ -17,7 +17,6 @@ mkDerivation {
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
-    broken = lib.versionOlder qtbase.version "5.13";
   };
   patches = [
     ./0001-akonadi-paths.patch

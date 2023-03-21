@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
       --replace "NSUInteger" "size_t"
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
   NIX_CFLAGS_LINK = "-L${luajit52}/lib";
 
   configurePhase = ''

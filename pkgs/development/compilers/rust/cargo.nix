@@ -1,6 +1,6 @@
 { lib, stdenv, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, cacert, rustPlatform, rustc
+, installShellFiles, makeWrapper, rustPlatform, rustc
 , CoreFoundation, Security
 , auditable ? false # TODO: change to true when this is the default
 }:
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
     (lib.getDev pkgsHostHost.curl)
     zlib
   ];
-  buildInputs = [ cacert file curl python3 openssl zlib ]
+  buildInputs = [ file curl python3 openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
@@ -39,14 +39,7 @@ rustPlatform.buildRustPackage {
   RUSTC_BOOTSTRAP = 1;
 
   postInstall = ''
-    # NOTE: We override the `http.cainfo` option usually specified in
-    # `.cargo/config`. This is an issue when users want to specify
-    # their own certificate chain as environment variables take
-    # precedence
-    wrapProgram "$out/bin/cargo" \
-      --suffix PATH : "${rustc}/bin" \
-      --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+    wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
 
     installManPage src/tools/cargo/src/etc/man/*
 
@@ -76,7 +69,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
-    maintainers = with maintainers; [ retrry ];
+    maintainers = with maintainers; [ retrry ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
   };

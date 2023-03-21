@@ -33,13 +33,13 @@ lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (sin
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2022-10-27";
+  version = "2023-02-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jOrTasnkNExCgvST+09JOQ0iosjoEu3aoj3C1pNHTgY=";
+    sha256 = "sha256-RGYD2+ZTUTPyFbaHvXU9VD3W6WTNeg3ifY+DAR3MmtI=";
   };
 
   nativeBuildInputs = [
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
     done
 
     # Do not provide `sudo`, as it is not needed in our use case of the install script
-    substituteInPlace lib-core.sh --replace '$(which sudo)' false
+    substituteInPlace shell/lib-core.sh --replace '$(which sudo)' false
 
     # Provides a dummy home directory
-    substituteInPlace lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
+    substituteInPlace shell/lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
   '';
 
   dontBuild = true;

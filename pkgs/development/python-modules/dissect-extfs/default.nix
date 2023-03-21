@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-extfs";
-  version = "3.2";
+  version = "3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.extfs";
-    rev = version;
-    hash = "sha256-KGqmguKwCSQw2USKuWFMQCz+D8XMv5W12eJfUxgz324=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VCPNY/4SUkFpLuSs2Cxu8u5qt2sQ9VGlfdPssybxhk8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the ExtFS file system";
     homepage = "https://github.com/fox-it/dissect.extfs";
+    changelog = "https://github.com/fox-it/dissect.extfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

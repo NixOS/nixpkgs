@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, decompress, stdlib-shims, alcotest
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, decompress
+, stdlib-shims
+, alcotest
 }:
 
 buildDunePackage rec {
@@ -17,7 +22,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ decompress stdlib-shims ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";

@@ -29,8 +29,8 @@
 
 openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk-jcef";
-  javaVersion = "17.0.5";
-  build = "653.14";
+  javaVersion = "17.0.6";
+  build = "829.5";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
@@ -43,7 +43,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-7Nx7Y12oMfs4zeQMSfnUaDCW1xJYMEkcoTapSpmVCfU=";
+    hash = "sha256-LTwmuoKKwkuel0a1qcYNnb0d3HBFoABvmqCcrsPyh2I=";
   };
 
   BOOT_JDK = openjdk17-bootstrap.home;
@@ -79,8 +79,8 @@ openjdk17.overrideAttrs (oldAttrs: rec {
 
   installPhase = let
     buildType = if debugBuild then "fastdebug" else "release";
-    debugSuffix = if debugBuild then "-fastdebug" else "";
-    jcefSuffix = if debugBuild then "" else "_jcef";
+    debugSuffix = lib.optionalString debugBuild "-fastdebug";
+    jcefSuffix = lib.optionalString (!debugBuild) "_jcef";
   in ''
     runHook preInstall
 

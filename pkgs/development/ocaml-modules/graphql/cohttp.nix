@@ -1,6 +1,14 @@
-{ lib, buildDunePackage, ocaml-crunch
-, astring, cohttp, digestif, graphql, ocplib-endian
-, alcotest, cohttp-lwt-unix, graphql-lwt
+{ lib
+, buildDunePackage
+, ocaml-crunch
+, astring
+, cohttp
+, digestif
+, graphql
+, ocplib-endian
+, alcotest
+, cohttp-lwt-unix
+, graphql-lwt
 }:
 
 buildDunePackage rec {
@@ -13,7 +21,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ ocaml-crunch ];
   propagatedBuildInputs = [ astring cohttp digestif graphql ocplib-endian ];
 
-  nativeCheckInputs = lib.optionals doCheck [ alcotest cohttp-lwt-unix graphql-lwt ];
+  checkInputs = lib.optionals doCheck [ alcotest cohttp-lwt-unix graphql-lwt ];
 
   doCheck = true;
 

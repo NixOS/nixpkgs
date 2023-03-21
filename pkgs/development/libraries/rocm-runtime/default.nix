@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "5.4.1";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";

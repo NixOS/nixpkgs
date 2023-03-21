@@ -62,19 +62,18 @@
 , mesa
 }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.2";
+  version = "43.3";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
+    sha256 = "Sf+NBfVfpPHCLwXQOFhSzrQpprY4DBuoRh5ipG1MBx4=";
   };
 
   patches = [

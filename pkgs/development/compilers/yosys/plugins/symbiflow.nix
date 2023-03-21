@@ -15,11 +15,11 @@
   src = fetchFromGitHub {
     owner  = "chipsalliance";
     repo   = "yosys-f4pga-plugins";
-    rev    = "e23ff6db487da9ceea576c53ac33853566c3a84e";
-    hash   = "sha256-HJ4br6lQwRrcnkLgV3aecr3T3zcPzA11MfxhRjwIb0I=";
+    rev    = "08430ec4f53d1cf9d6a2091211d6c5ce501d5486";
+    hash   = "sha256-xCFi8OrNfsKt7bVSYJ/yuBify/pyCU1rI16gaCBgil8=";
   };
 
-  version = "2022.11.07";
+  version = "2023.02.08";
 
   # Supported symbiflow plugins.
   #
@@ -79,13 +79,13 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   ];
 
   buildFlags = [
-    "PLUGINS_DIR=\${out}/share/yosys/plugins/"
-    "DATA_DIR=\${out}/share/yosys/"
+    "YOSYS_PLUGINS_DIR=\${out}/share/yosys/plugins/"
+    "YOSYS_DATA_DIR=\${out}/share/yosys/"
   ];
 
   checkFlags = [
-    "PLUGINS_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
-    "DATA_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
+    "YOSYS_PLUGINS_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
+    "YOSYS_DATA_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
     ( "NIX_YOSYS_PLUGIN_DIRS=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
       # sdc and xdc plugins use design introspection for their tests
       + (lib.optionalString ( plugin == "sdc" || plugin == "xdc" )

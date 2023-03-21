@@ -33,11 +33,13 @@
 , systemd
 , xdg-utils
 , xorg
+, wayland
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.1.4";
+  version = "3.1.6";
 
   src =
     let
@@ -46,11 +48,11 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          sha256 = "sha256-B/zDcW43ChhnAnGL+UEAt/QChxxEpv+yMgO7WsUi84k=";
+          sha256 = "sha256-xCwAkRtsFmGOIyCftjNqUsaw7/PcxSgWGqW/D1NhC5M=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          sha256 = "sha256-cFmxs7HeF+jxtmZ827bQbRyuXhQx++x5iTIefZ55928=";
+          sha256 = "sha256-ka8hwHhMVTXNS1rktTs3yXfXnyxSmRt41IE8z/ftUVc=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -97,6 +99,8 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    wayland
+    pipewire
   ];
 
   sourceRoot = ".";
@@ -114,9 +118,9 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      "''${gappsWrapperArgs[@]}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     # Fix desktop link
     substituteInPlace $out/share/applications/armcord.desktop \

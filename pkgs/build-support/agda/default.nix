@@ -20,7 +20,11 @@ let
     nativeBuildInputs = [ makeWrapper ];
     passthru = {
       unwrapped = Agda;
-      tests = { inherit (nixosTests) agda; };
+      inherit withPackages;
+      tests = {
+        inherit (nixosTests) agda;
+        allPackages = withPackages (lib.filter self.lib.isUnbrokenAgdaPackage (lib.attrValues self));
+      };
     };
     inherit (Agda) meta;
   } ''
@@ -80,6 +84,13 @@ let
           find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
+
+        # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
+        # we need to set LC_ALL to an UTF-8-supporting locale. However, on
+        # darwin, it seems that there is no standard such locale; luckily,
+        # the referenced issue doesn't seem to surface on darwin. Hence let's
+        # set this only on non-darwin.
+        LC_ALL = lib.optionalString (!stdenv.isDarwin) "C.UTF-8";
 
         meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
 

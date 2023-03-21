@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "1.26.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hIJTdTZ24+VwF1M/RvKcnQRzZga0nsjlTTUFYxZn0lo=";
+    hash = "sha256-rvLWM6G2kOOuFU0JuwdIjSCFNyjBNL+fOoEj+tIR190=";
   };
 
-  vendorHash = "sha256-1Vz+SIrNULajDqzZt53+o9wv1zLPBvKrO28BTqS4VbM=";
+  vendorHash = "sha256-L+Z1k+z/XNO9OeTQVzNJd1caRip6Ti8mPfNmXJx5D5c=";
 
   nativeBuildInputs = [
     makeWrapper

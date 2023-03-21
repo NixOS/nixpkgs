@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's/{UNITTEST++_INCLUDE_DIR}/ENV{UNITTEST++_INCLUDE_DIR}/g' tests/CMakeLists.txt
-    sed -i 's/{_REL_PYTHON_MODULE_PATH}/ENV{_REL_PYTHON_MODULE_PATH}/g' bindings/python/CMakeLists.txt
-    export _REL_PYTHON_MODULE_PATH=$(toPythonPath $out)
   '';
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
@@ -62,7 +60,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  cmakeFlags = [ "-DENABLE_RUBY=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_RUBY=OFF"
+    "-DPYTHON_MODULE_PATH=${python3.sitePackages}"
+  ];
 
   meta = with lib; {
     homepage = "http://openshot.org/";

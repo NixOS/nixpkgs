@@ -5,6 +5,7 @@
 , jinja2
 , markupsafe
 , poetry-core
+, poetry
 , pytestCheckHook
 , pythonOlder
 , tomlkit
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "0.21.3";
+  version = "0.21.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LdcjzfOiKar0BCdU7W+N5adErdk/NOUf+FzeaMlfn3w=";
+    hash = "sha256-1RgxDXzijWr47mZeqfHfFnANdZKyY3QXCZoXijs5nTw=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    poetry
   ];
+
+  # virtualenv: error: argument dest: the destination . is not write-able at /
+  doCheck = false;
 
   disabledTests = [
     # these require .git, but leaveDotGit = true doesn't help

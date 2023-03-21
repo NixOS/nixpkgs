@@ -1,31 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, asciidoc
-, jansson, jose, http-parser, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, asciidoc
+, jansson
+, jose
+, http-parser
+, systemd
+, meson
+, ninja
 }:
 
 stdenv.mkDerivation rec {
   pname = "tang";
-  version = "7";
+  version = "12";
 
   src = fetchFromGitHub {
     owner = "latchset";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0y5w1jrq5djh9gpy2r98ja7676nfxss17s1dk7jvgblsijx9qsd7";
+    repo = "tang";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wfZFOJrVzjtysh0VKdw5O+DJybYkV9bYJNnaku6YctE=";
   };
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  nativeBuildInputs = [
+    asciidoc
+    meson
+    ninja
+    pkg-config
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config asciidoc ];
-  buildInputs = [ jansson jose http-parser systemd ];
+  buildInputs = [
+    jansson
+    jose
+    http-parser
+    systemd
+  ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     description = "Server for binding data to network presence";
     homepage = "https://github.com/latchset/tang";
+    changelog = "https://github.com/latchset/tang/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl3Plus;
   };

@@ -3,7 +3,6 @@
 , aiohttp
 , aioresponses
 , aiounittest
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pubnub
@@ -17,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.2.6";
+  version = "1.2.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-E+Forcx6dRtDeagcjGGE8DFkAKUgsHyCEONW7WU0lpo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SdWfhA6mroZnqHQYPieuZvox+OGEHWOTlfuHqu5r0cg=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     aiounittest
-    asynctest
     pytestCheckHook
     requests-mock
   ];
@@ -59,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
+    changelog = "https://github.com/bdraco/yalexs/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

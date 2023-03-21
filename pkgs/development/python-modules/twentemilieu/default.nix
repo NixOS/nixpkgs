@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-twentemilieu";
     rev = "v${version}";
-    sha256 = "sha256-k2jdw2H/bNejNUjIEQlEA1KkHHpkyFlSDC1HKUoMIqQ=";
+    hash = "sha256-k2jdw2H/bNejNUjIEQlEA1KkHHpkyFlSDC1HKUoMIqQ=";
   };
 
   postPatch = ''

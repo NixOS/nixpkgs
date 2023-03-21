@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "wasi-master";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
+    hash = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
   };
 
   nativeBuildInputs = [

@@ -18,6 +18,8 @@
 , gssSupport   ? true
 , writeScript
 }:
+assert smimeSupport -> sslSupport;
+assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";

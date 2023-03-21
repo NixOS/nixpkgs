@@ -27,18 +27,17 @@
 
 let
   testDeps = [
-    gobject-introspection # for Gio and cairo typelibs
     gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.74.1";
+  version = "1.74.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8h+c0zN6ZypEx+ZL+ajYrXfBuIuVKythhMevmx8+9Fk=";
+    sha256 = "sha256-pAb9ahZSz2bcqyKAYr0Wp19bM3gkjfu74BayEnRKMLY=";
   };
 
   patches = [

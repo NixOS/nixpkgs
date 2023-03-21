@@ -36,10 +36,7 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = mkMerge [
-        (whenOlder "5.2" (if (features.debug or false) then yes else no))
-        (whenBetween "5.2" "5.18" yes)
-      ];
+      DEBUG_INFO                = yes;
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -62,6 +59,8 @@ let
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
+
+      GDB_SCRIPTS               = yes;
     };
 
     power-management = {
@@ -70,12 +69,22 @@ let
       PM_ADVANCED_DEBUG                = yes;
       PM_WAKELOCKS                     = yes;
       POWERCAP                         = yes;
+      # ACPI Firmware Performance Data Table Support
+      ACPI_FPDT                        = whenAtLeast "5.12" (option yes);
+      # ACPI Heterogeneous Memory Attribute Table Support
+      ACPI_HMAT                        = whenAtLeast "5.2" (option yes);
+      # ACPI Platform Error Interface
+      ACPI_APEI                        = (option yes);
+      # APEI Generic Hardware Error Source
+      ACPI_APEI_GHES                   = (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
       X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
+      # Intel DPTF (Dynamic Platform and Thermal Framework) Support
+      ACPI_DPTF                        = whenAtLeast "5.10" yes;
     };
 
     external-firmware = {
@@ -273,9 +282,18 @@ let
       DRM_SIMPLEDRM = whenAtLeast "5.14" no;
     };
 
+    fonts = {
+      FONTS = yes;
+      # Default fonts enabled if FONTS is not set
+      FONT_8x8 = yes;
+      FONT_8x16 = yes;
+      # High DPI font
+      FONT_TER16x32 = whenAtLeast "5.0" yes;
+    };
+
     video = {
       DRM_LEGACY = no;
-      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
@@ -283,7 +301,7 @@ let
       DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
-      DRM_VMWGFX_FBCON       = yes;
+      DRM_VMWGFX_FBCON       = whenOlder "6.2" yes;
       # (experimental) amdgpu support for verde and newer chipsets
       DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
@@ -431,7 +449,7 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = yes;
+      NFSD_V2_ACL            = whenOlder "6.2" yes;
       NFSD_V3                = whenOlder "5.18" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
@@ -457,7 +475,7 @@ let
       CEPH_FS_POSIX_ACL = yes;
 
       SQUASHFS_FILE_DIRECT         = yes;
-      SQUASHFS_DECOMP_MULTI_PERCPU = yes;
+      SQUASHFS_DECOMP_MULTI_PERCPU = whenOlder "6.2" yes;
       SQUASHFS_XATTR               = yes;
       SQUASHFS_ZLIB                = yes;
       SQUASHFS_LZO                 = yes;
@@ -502,8 +520,8 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
-      RANDOM_TRUST_CPU                 = whenAtLeast "4.19" yes; # allow RDRAND to seed the RNG
-      RANDOM_TRUST_BOOTLOADER          = whenAtLeast "5.4" yes; # allow the bootloader to seed the RNG
+      RANDOM_TRUST_CPU                 = whenOlder "6.2" (whenAtLeast "4.19" yes); # allow RDRAND to seed the RNG
+      RANDOM_TRUST_BOOTLOADER          = whenOlder "6.2" (whenAtLeast "5.4" yes); # allow the bootloader to seed the RNG
 
       MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
@@ -632,6 +650,9 @@ let
       XEN_SAVE_RESTORE            = option yes;
       XEN_SCRUB_PAGES             = whenOlder "4.19" yes;
       XEN_SELFBALLOONING          = whenOlder "5.3" yes;
+
+      # Enable device detection on virtio-mmio hypervisors
+      VIRTIO_MMIO_CMDLINE_DEVICES = yes;
     };
 
     media = {
@@ -830,7 +851,7 @@ let
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
       EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
-          whenAtLeast "5.8" yes; # initrd kernel parameter for EFI
+          whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231

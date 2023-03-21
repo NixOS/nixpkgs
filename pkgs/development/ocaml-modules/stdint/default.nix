@@ -26,7 +26,7 @@ buildDunePackage rec {
   '';
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [ qcheck ];
+  checkInputs = [ qcheck ];
 
   meta = {
     description = "Various signed and unsigned integers for OCaml";

@@ -17,19 +17,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.0.2";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kjonyd0xL0QLjPS+U3xDC6AhOOxQmVAZ3STLXaa8eXc=";
+    sha256 = "sha256-ZryzNlEj/2JTp5FJiDzXN9v1DvczfebqEOrJP+dKaRw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-K5oOpo3xJiNg7F549JLGs83658MYcoGfuIcNoF88Njc=";
+    sha256 = "sha256-OgvlRnii4T4HcFPiGkcLcagyHCg+lWXCXQ9XdXjHDbQ=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A podman desktop application";
     homepage = "https://github.com/marhkb/pods";
+    changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.linux;

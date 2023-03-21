@@ -50,19 +50,21 @@ in
     # invocation does not work.
     hardeningDisable = [ "fortify" "pie" "stackprotector" ];
 
-    NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
-      (builtins.concatLists [
-        (lib.optionals withGd gdCflags)
-        # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
-        # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
-        (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-        (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
-          # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
-          # New warning as of GCC 9
-          # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
-          "-Wno-error=missing-attributes"
-        ])
-      ]);
+    env = (previousAttrs.env or { }) // {
+      NIX_CFLAGS_COMPILE = (previousAttrs.env.NIX_CFLAGS_COMPILE or "") + lib.concatStringsSep " "
+        (builtins.concatLists [
+          (lib.optionals withGd gdCflags)
+          # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
+          # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
+          (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+          (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
+            # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
+            # New warning as of GCC 9
+            # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
+            "-Wno-error=missing-attributes"
+          ])
+        ]);
+    };
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
@@ -76,11 +78,19 @@ in
     # - clang-wrapper in cross-compilation
     # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
     preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
+      if [ -f ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
-          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+          cp ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
           # the .so It used to be a symlink, but now it is a script
-          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
+          cp -a ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
+          # wipe out reference to previous libc it was built against
+          chmod +w $out/lib/libgcc_s.so.1
+          # rely on default RUNPATHs of the binary and other libraries
+          # Do no force-pull wrong glibc.
+          patchelf --remove-rpath $out/lib/libgcc_s.so.1
+          # 'patchelf' does not remove the string itself. Wipe out
+          # string reference to avoid possible link to bootstrapTools
+          ${buildPackages.nukeReferences}/bin/nuke-refs $out/lib/libgcc_s.so.1
       fi
     '';
 

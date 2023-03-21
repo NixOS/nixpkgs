@@ -5,13 +5,13 @@
 , libwbxml }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    hash = "sha256-3Xy0y1sdixy4gXhzhP9mfWeaDmOVJty+X95xCyxayPE=";
+    hash = "sha256-lHUEV5yYLs3oc8Arl3KX8G/OEAoLmS7pRLCGsRAJAr4=";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];

@@ -5,7 +5,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
-  meta.doc = ./pict-rs.xml;
+  meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {
     enable = mkEnableOption (lib.mdDoc "pict-rs server");

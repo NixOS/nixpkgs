@@ -1,51 +1,12 @@
-{ lib, stdenv, system ? builtins.currentSystem, ovftoolBundles ? {}
-, requireFile, buildFHSUserEnv, autoPatchelfHook, makeWrapper, unzip
-, glibc, c-ares, libressl, curl, expat, icu60, xercesc, zlib
+{ lib, stdenv, fetchurl, system ? builtins.currentSystem, ovftoolBundles ? {}
+, requireFile, autoPatchelfHook, makeWrapper, unzip
+, glibc, c-ares, libxcrypt, expat, icu60, xercesc, zlib
 }:
 
 let
-  version = "4.4.1-16812187";
+  version = "4.5.0-20459872";
 
-  # FHS environment required to unpack ovftool on x86.
-  ovftoolX86Unpacker = buildFHSUserEnv rec {
-    name = "ovftool-unpacker";
-    targetPkgs = pkgs: [ pkgs.bash ];
-    multiPkgs = targetPkgs;
-    runScript = "bash";
-  };
-
-  # unpackPhase for i686 and x86_64 ovftool self-extracting bundles.
-  ovftoolX86UnpackPhase = ''
-    runHook preUnpack
-    # This is a self-extracting shell script and needs a FHS environment to run.
-    # In reality, it could be doing anything, which is bad for reproducibility.
-    # Our postUnpack uses nix-hash to verify the hash to prevent problems.
-    #
-    # Note that the Arch PKGBUILD at
-    # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=vmware-ovftool
-    # appears to use xvfb-run - this hasn't been proven necessary so far.
-    #
-    cp ${ovftoolSource} ./ovftool.bundle
-    chmod +x ./ovftool.bundle
-    ${ovftoolX86Unpacker}/bin/ovftool-unpacker ./ovftool.bundle -x ovftool
-    rm ovftool.bundle
-    extracted=ovftool/vmware-ovftool/
-    if [ -d "$extracted" ]; then
-      # Move the directory we care about to ovftool/
-      mv "$extracted" .
-      rm -r ovftool
-      mv "$(basename -- "$extracted")" ovftool
-      echo "ovftool extracted successfully" >&2
-    else
-      echo "Could not find $extracted - are you sure this is ovftool?" >&2
-      rm -r ovftool
-      exit 1
-    fi
-    runHook postUnpack
-  '';
-
-  # unpackPhase for aarch64 .zip.
-  ovftoolAarch64UnpackPhase = ''
+  ovftoolZipUnpackPhase = ''
     runHook preUnpack
     unzip ${ovftoolSource}
     extracted=ovftool/
@@ -58,29 +19,20 @@ let
     runHook postUnpack
   '';
 
-  # When the version is bumped, postUnpackHash will change
-  # for all these supported systems. Update it from the printed error on build.
-  #
-  # This is just a sanity check, since ovftool is a self-extracting bundle
-  # that could be doing absolutely anything on 2/3 of the supported platforms.
-  ovftoolSystems = {
-    "i686-linux" = {
-      filename = "VMware-ovftool-${version}-lin.i386.bundle";
-      sha256 = "0gx78g3s77mmpir7jbiskna10i6262ihal1ywivlb6xxxxbhqzwj";
-      unpackPhase = ovftoolX86UnpackPhase;
-      postUnpackHash = "1k8rp8ywhs0cl9aad37v1p0493bdvkxrsvwg5pgv2bhvjs4hqk7n";
+  ovftoolSystems = let
+    baseUrl = "https://vdc-download.vmware.com/vmwb-repository/dcr-public";
+  in {
+    "i686-linux" = rec {
+      filename = "VMware-ovftool-${version}-lin.i386.zip";
+      url = "${baseUrl}/b70b2ad5-861a-4c11-b081-e541586bf934/57109c63-6b80-4ced-95f2-1b7255200a36/${filename}";
+      sha256 = "11zs5dm4gmssm94s501p66l4s8v9p7prrd87cfa903mwmyp0ihnx";
+      unpackPhase = ovftoolZipUnpackPhase;
     };
-    "x86_64-linux" = {
-      filename = "VMware-ovftool-${version}-lin.x86_64.bundle";
-      sha256 = "1kp2bp4d9i8y7q25yqff2bn62mh292lws7b66lyn8ka9b35kvnzc";
-      unpackPhase = ovftoolX86UnpackPhase;
-      postUnpackHash = "0zvyakwi4iishqxxisihgh91bmdsfvj5vchm2c192hia03a143py";
-    };
-    "aarch64-linux" = {
-      filename = "VMware-ovftool-${version}-lin.aarch64.zip";
-      sha256 = "0all8bwv5p5adnzqvrly6nzmxmfpywvlbfr0finr4n100yv0v1xy";
-      unpackPhase = ovftoolAarch64UnpackPhase;
-      postUnpackHash = "16vyyzrmryi8b7mrd6nxnhywvvj2pw0ban4qfiqfahw763fn6971";
+    "x86_64-linux" = rec {
+      filename = "VMware-ovftool-${version}-lin.x86_64.zip";
+      url = "${baseUrl}/f87355ff-f7a9-4532-b312-0be218a92eac/b2916af6-9f4f-4112-adac-49d1d6c81f63/${filename}";
+      sha256 = "1fkm18yfkkm92m7ccl6b4nxy5lagwwldq56b567091a5sgad38zw";
+      unpackPhase = ovftoolZipUnpackPhase;
     };
   };
 
@@ -91,9 +43,9 @@ let
   ovftoolSource = if builtins.hasAttr system ovftoolBundles then
                     ovftoolBundles.${system}
                   else
-                    requireFile {
+                    fetchurl {
                       name = ovftoolSystem.filename;
-                      url = "https://my.vmware.com/group/vmware/downloads/get-download?downloadGroup=OVFTOOL441";
+                      url = ovftoolSystem.url;
                       sha256 = ovftoolSystem.sha256;
                     };
 in
@@ -103,11 +55,13 @@ stdenv.mkDerivation rec {
 
   src = ovftoolSource;
 
+  # Maintainers: try downloading a NixOS OVA and run the following to test:
+  # `./result/bin/ovftool https://channels.nixos.org/nixos-unstable/latest-nixos-x86_64-linux.ova nixos.ovf`
+  # Some dependencies are not loaded until operations actually occur!
   buildInputs = [
     glibc
-    libressl
+    libxcrypt
     c-ares
-    (curl.override { openssl = libressl; })
     expat
     icu60
     xercesc
@@ -116,11 +70,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper unzip ];
 
+  preferLocalBuild = true;
+
   sourceRoot = ".";
 
   unpackPhase = ovftoolSystem.unpackPhase;
-
-  postUnpackHash = ovftoolSystem.postUnpackHash;
 
   # Expects a directory named 'ovftool' containing the ovftool install.
   # Based on https://aur.archlinux.org/packages/vmware-ovftool/
@@ -133,22 +87,20 @@ stdenv.mkDerivation rec {
     fi
     # libraries
     install -m 755 -d "$out/lib/${pname}"
-    # These all appear to be VMWare proprietary except for libgoogleurl.
+    # These all appear to be VMWare proprietary except for libgoogleurl and libcurl.
     # The rest of the libraries that the installer extracts are omitted here,
-    # and provided in buildInputs.
+    # and provided in buildInputs. Since libcurl depends on VMWare's OpenSSL,
+    # we have to use both here too.
     #
     # FIXME: can we replace libgoogleurl? Possibly from Chromium?
+    # FIXME: tell VMware to use a modern version of OpenSSL.
     #
     install -m 644 -t "$out/lib/${pname}" \
       libgoogleurl.so.59 \
       libssoclient.so \
-      libvim-types.so libvmacore.so libvmomi.so
-    # ovftool specifically wants 1.0.2 but our libcrypto is named 1.0.0
-    ln -s "${lib.getLib libressl}/lib/libcrypto.so" \
-      "$out/lib/${pname}/libcrypto.so.1.0.2"
-    ln -s "${lib.getLib libressl}/lib/libssl.so" \
-      "$out/lib/${pname}/libssl.so.1.0.2"
-    # libexec
+      libvim-types.so libvmacore.so libvmomi.so \
+      libcurl.so.4 libcrypto.so.1.0.2 libssl.so.1.0.2
+    # libexec binaries
     install -m 755 -d "$out/libexec/${pname}"
     install -m 755 -t "$out/libexec/${pname}" ovftool.bin
     install -m 644 -t "$out/libexec/${pname}" icudt44l.dat
@@ -175,6 +127,20 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     addAutoPatchelfSearchPath "$out/lib"
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    # This is a NixOS 22.11 image (doesn't actually matter) with a 1 MiB root disk that's all zero.
+    # Make sure that it converts properly.
+    mkdir -p ovftool-check
+    cd ovftool-check
+
+    $out/bin/ovftool ${./installCheckPhase.ova} nixos.ovf
+    if [ ! -f nixos.ovf ] || [ ! -f nixos.mf ] || [ ! -f nixos-disk1.vmdk ]; then
+      exit 1
+    fi
   '';
 
   meta = with lib; {

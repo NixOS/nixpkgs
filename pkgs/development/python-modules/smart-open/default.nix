@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-sVKrCph5M7xsE7gtzsP/eVEbZyFfoucW3p30YYpwVFI=";
+    hash = "sha256-sVKrCph5M7xsE7gtzsP/eVEbZyFfoucW3p30YYpwVFI=";
   };
 
   propagatedBuildInputs = [

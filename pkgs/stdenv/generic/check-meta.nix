@@ -242,7 +242,7 @@ let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
         else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
@@ -271,7 +271,8 @@ let
     sourceProvenance = listOf lib.types.attrs;
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
-    platforms = listOf (oneOf [ str (attrsOf anything) (functionTo bool) ]);   # see lib.meta.platformMatch
+    pkgConfigModules = listOf str;
+    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;
@@ -321,7 +322,7 @@ let
         }"
     else
       "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if config.checkMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+  checkMeta = meta: lib.optionals config.checkMeta (lib.remove null (lib.mapAttrsToList checkMetaAttr meta));
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];

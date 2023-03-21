@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "simber";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "deepjyoti30";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-d9YhqYmRyoYb03GqYKM7HkK8cnTQKPbSP6z2aanB6pQ=";
+    hash = "sha256-kHoFZD7nhVxJu9MqePLkL7KTG2saPecY9238c/oeEco=";
   };
 
   propagatedBuildInputs = [

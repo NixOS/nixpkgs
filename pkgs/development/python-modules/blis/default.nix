@@ -10,6 +10,8 @@
 
 buildPythonPackage rec {
   pname = "blis";
+  # Do not update to BLIS 0.9.x until the following issue is resolved:
+  # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
   version = "0.9.1";
   format = "setuptools";
 
@@ -48,6 +50,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms = platforms.x86_64;
   };
 }

@@ -304,6 +304,10 @@ in
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
+          # We need to pass the Host header that matches the original Host header. Otherwise,
+          # Hawk authentication will fail (because it assumes that the client and server see
+          # the same value of the Host header).
+          recommendedProxySettings = true;
         };
       };
     };
@@ -311,6 +315,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    doc = ./firefox-syncserver.xml;
+    doc = ./firefox-syncserver.md;
   };
 }

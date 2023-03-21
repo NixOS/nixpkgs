@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-card-tools";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Mvnj8AEhREP+nGrioC9IHYX3k6sKGKzOh00V8nslyhw=";
+    sha256 = "sha256-dpXoUJaTrBr4QMehE03BD+704lTNBvfGoAIv9d17A6Q=";
   };
 
-  cargoHash = "sha256-0KRq8GsrQaLJ6fopZpdzgxIWHIse9QWDo24IQj1eAhc=";
+  cargoHash = "sha256-qxKLpxYQTb+8NxOeimnR2SlyfPiZPl0gX8JCSqjZyM0=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ pcsclite nettle ] ++ lib.optionals stdenv.isDarwin [ PCSC ];

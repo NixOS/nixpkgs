@@ -1,12 +1,22 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
-let name = "encode-sans-1.002";
-in (fetchzip rec {
-  inherit name;
+{ lib, stdenvNoCC, fetchzip }:
 
-  url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
+stdenvNoCC.mkDerivation rec {
+  pname = "encode-sans";
+  version = "1.002";
 
-  sha256 = "16mx894zqlwrhnp4rflgayxhxppmsj6k7haxdngajhb30rlwf08p";
+  src = fetchzip {
+    url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
+    hash = "sha256-TPAUc5msAUgJZHibjgYaS2TOuzKFy0rje9ZQTXE6s+w=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf                 -t $out/share/fonts/truetype
+    install -Dm644 README.md FONTLOG.txt -t $out/share/doc/${pname}-${version}
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A versatile sans serif font family";
@@ -23,10 +33,4 @@ in (fetchzip rec {
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf                    -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*README.md \*FONTLOG.txt -d "$out/share/doc/${name}"
-  '';
-})
+}

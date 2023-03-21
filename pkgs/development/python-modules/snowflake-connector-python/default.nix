@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.9.0";
+  version = "3.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dVGyQEsmhQ+xLGIy0BW6XRCtsTsJHjef6Lg2ZJL2JLg=";
+    hash = "sha256-F0EbgRSS/kYKUDPhf6euM0eLqIqVjQsHC6C9ZZSRCIE=";
   };
 
   postPatch = ''

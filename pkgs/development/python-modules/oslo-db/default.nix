@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    sha256 = "sha256-Gd7FAkDwj7q1rnZzVOtZF1oUdz8CcdeDpX/KxJ5KbaE=";
+    hash = "sha256-Gd7FAkDwj7q1rnZzVOtZF1oUdz8CcdeDpX/KxJ5KbaE=";
   };
 
   nativeBuildInputs = [ pbr ];

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.8.1";
+  version = "2.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o4o9x7r7HpwzByUijDegzos35FILro0Esr2ugN2nyws=";
+    hash = "sha256-7rKNcG11cgvvwNEYiN9l8h8UR8u6DFfcI+S1QDi+t/c=";
   };
 
   propagatedBuildInputs = [

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.2.0";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tedder";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-a3OY0Z5GGr3gYa5m4V6ukqQmjZuqtgZjmLGJxmFOPqU=";
+    hash = "sha256-RbaRFMyvK3y7xN+xwNi/lHJjx+xIlpfizJj9BIn6cT4=";
   };
 
   propagatedBuildInputs = [

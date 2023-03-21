@@ -74,10 +74,9 @@ stdenv.mkDerivation (
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
-              header "Copying build directory to $KEEPBUILDDIR"
+              echo "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
               cp -R "$TMPDIR/"* $KEEPBUILDDIR
-              stopNest
           fi
       fi
     '';
@@ -86,7 +85,7 @@ stdenv.mkDerivation (
   // removeAttrs args [ "lib" ] # Propagating lib causes the evaluation to fail, because lib is a function that can't be converted to a string
 
   // {
-    name = name + (if src ? version then "-" + src.version else "");
+    name = name + (lib.optionalString (src ? version) "-${src.version}");
 
     postHook = ''
       . ${./functions.sh}
@@ -168,7 +167,7 @@ stdenv.mkDerivation (
 
           echo "building out of source tree, from \`$PWD'..."
 
-          ${if preConfigure != null then preConfigure else ""}
+          ${lib.optionalString (preConfigure != null) preConfigure}
        '';
    }
    else {})

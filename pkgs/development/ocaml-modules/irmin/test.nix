@@ -8,6 +8,7 @@ buildDunePackage {
   pname = "irmin-test";
 
   inherit (irmin) version src strictDeps;
+  duneVersion = "3";
 
   nativeBuildInputs = [ ppx_irmin ];
 
@@ -27,7 +28,7 @@ buildDunePackage {
     metrics
   ];
 
-  nativeCheckInputs = [ hex vector ];
+  checkInputs = [ hex vector ];
 
   meta = irmin.meta // {
     description = "Irmin test suite";

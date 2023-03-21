@@ -226,7 +226,7 @@ let
 
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
-  meta.doc = ./borgbackup.xml;
+  meta.doc = ./borgbackup.md;
 
   ###### interface
 

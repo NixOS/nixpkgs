@@ -16,17 +16,22 @@ let
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
   makeOverridablePythonPackage = f: origArgs:
     let
-      ff = f origArgs;
-      overrideWith = newArgs: origArgs // (if pkgs.lib.isFunction newArgs then newArgs origArgs else newArgs);
+      args = lib.fix (lib.extends
+        (_: previousAttrs: {
+          passthru = (previousAttrs.passthru or { }) // {
+            overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          };
+        })
+        (_: origArgs));
+      result = f args;
+      overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
     in
-      if builtins.isAttrs ff then (ff // {
+      if builtins.isAttrs result then result
+      else if builtins.isFunction result then {
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-      })
-      else if builtins.isFunction ff then {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-        __functor = self: ff;
+        __functor = self: result;
       }
-      else ff;
+      else result;
 
   buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
@@ -39,7 +44,7 @@ let
   }));
 
   # See build-setupcfg/default.nix for documentation.
-  buildSetupcfg = import ../../../build-support/build-setupcfg self;
+  buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;

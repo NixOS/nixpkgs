@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "Lucretiel";
     repo = "autocommand";
     rev = version;
-    sha256 = "sha256-bjoVGfP57qhvPuHHcMP8JQddAaW4/fEyatElk1UEPZo=";
+    hash = "sha256-bjoVGfP57qhvPuHHcMP8JQddAaW4/fEyatElk1UEPZo=";
   };
 
   # fails with: SyntaxError: invalid syntax

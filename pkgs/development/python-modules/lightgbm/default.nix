@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "lightgbm";
   version = "3.3.5";
-  format = "other";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

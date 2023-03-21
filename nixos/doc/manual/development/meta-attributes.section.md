@@ -23,7 +23,7 @@ file.
 
   meta = {
     maintainers = with lib.maintainers; [ ericsagnes ];
-    doc = ./default.xml;
+    doc = ./default.md;
     buildDocsInSandbox = true;
   };
 }
@@ -31,33 +31,15 @@ file.
 
 -   `maintainers` contains a list of the module maintainers.
 
--   `doc` points to a valid DocBook file containing the module
+-   `doc` points to a valid [Nixpkgs-flavored CommonMark](
+      https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup
+    ) file containing the module
     documentation. Its contents is automatically added to
     [](#ch-configuration). Changes to a module documentation have to
     be checked to not break building the NixOS manual:
 
     ```ShellSession
     $ nix-build nixos/release.nix -A manual.x86_64-linux
-    ```
-
-    This file should *not* usually be written by hand. Instead it is preferred
-    to write documentation using CommonMark and converting it to CommonMark
-    using pandoc. The simplest documentation can be converted using just
-
-    ```ShellSession
-    $ pandoc doc.md -t docbook --top-level-division=chapter -f markdown+smart > doc.xml
-    ```
-
-    More elaborate documentation may wish to add one or more of the pandoc
-    filters used to build the remainder of the manual, for example the GNOME
-    desktop uses
-
-    ```ShellSession
-    $ pandoc gnome.md -t docbook --top-level-division=chapter \
-        --extract-media=media -f markdown+smart \
-        --lua-filter ../../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua \
-        --lua-filter ../../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua \
-        > gnome.xml
     ```
 
 -  `buildDocsInSandbox` indicates whether the option documentation for the

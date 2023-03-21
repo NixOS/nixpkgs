@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.1.5";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-2zMvcva0GUDmSYK0Wk3/2Y6R3F7MgdqGBrOhmWgVA6g=";
+    hash = "sha256-9qYPatpTT28H+fz77o7/Y3YVmiK0OCsiQT5QAYe93M0=";
     fetchSubmodules = true;
   };
 

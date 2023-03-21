@@ -3,6 +3,7 @@
 { stdenv
 , lib
 , nixosTests
+, pkgsCross
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
@@ -63,6 +64,7 @@
 , withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
 , kexec-tools
 , bashInteractive
+, bash
 , libmicrohttpd
 , libfido2
 , p11-kit
@@ -93,6 +95,7 @@
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
@@ -130,7 +133,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.4";
+  version = "252.5";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -138,7 +141,7 @@ let
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1667246393";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
@@ -147,7 +150,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-8ejSEt3QyCSARGGVbXWac2dB9jdUpC4eX2rN0iENQX0=";
+    hash = "sha256-cNZRTuYFMR1z6KpELeQoJahMhRl4fKuRuc3xXH3KzlM=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -174,6 +177,7 @@ stdenv.mkDerivation {
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
     ./0018-core-don-t-taint-on-unmerged-usr.patch
+    ./0019-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -337,7 +341,7 @@ stdenv.mkDerivation {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm)
+    patchShebangs tools test src/!(rpm|kernel-install) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -360,6 +364,7 @@ stdenv.mkDerivation {
       docbook_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_45
+      bash
       (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
     ]
     ++ lib.optionals withLibBPF [
@@ -380,9 +385,10 @@ stdenv.mkDerivation {
       libuuid
       linuxHeaders
       pam
+      bashInteractive # for patch shebangs
     ]
 
-    ++ lib.optional wantGcrypt libgcrypt
+    ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
@@ -394,7 +400,6 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit ]
@@ -628,7 +633,7 @@ stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
@@ -693,6 +698,10 @@ stdenv.mkDerivation {
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    # 'or p' is for manually specified buildPackages as they dont have __spliced
+    (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
+
   passthru = {
     # The interface version prevents NixOS from switching to an
     # incompatible systemd at runtime.  (Switching across reboots is
@@ -706,6 +715,7 @@ stdenv.mkDerivation {
 
     tests = {
       inherit (nixosTests) switchTest;
+      cross = pkgsCross.aarch64-multiplatform.systemd;
     };
   };
 
@@ -714,10 +724,10 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    badPlatforms = [ (plat: plat.isStatic) ];
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk mic92 ];
   };
-}
+})

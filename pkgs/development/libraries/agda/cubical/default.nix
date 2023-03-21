@@ -2,16 +2,14 @@
 
 mkDerivation rec {
   pname = "cubical";
-  version = "0.4";
+  version = "unstable-2023-02-09";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
-    rev = "v${version}";
-    hash = "sha256-bnHz5uZXZnn1Zd36tq/veA4yT7dhJ1c+AYpgdDfSRzE=";
+    rev = "6b1ce0b67fd94693c1a3e340c8e8765380de0edc";
+    hash = "sha256-XRCaW94oAgy2GOnFiI9c5A8mEx7AzlbT4pFd+PMmc9o=";
   };
-
-  LC_ALL = "C.UTF-8";
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.

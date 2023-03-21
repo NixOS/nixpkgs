@@ -13,13 +13,17 @@ let
     # Server components
     , bzip2, lz4, lzo, snappy, xz, zlib, zstd
     , cracklib, judy, libevent, libxml2
-    , linux-pam, numactl, pmdk
+    , linux-pam, numactl
     , fmt_8
     , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
     , withStorageRocks ? true
     , withEmbedded ? false
+    , withNuma ? false
     }:
+
   let
+    isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
     libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
     mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
@@ -45,7 +49,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
         ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
         ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-        ++ (if (lib.versionOlder version "10.6")
+        ++ (if (lib.versionOlder version "10.5")
             then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
             else [ openssl curl ]);
 
@@ -99,7 +103,7 @@ let
       ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10.6") [
         # workaround for https://jira.mariadb.org/browse/MDEV-29925
         "-Dhave_C__Wl___as_needed="
-      ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ] ++ lib.optionals isCross [
         # revisit this if nixpkgs supports any architecture whose stack grows upwards
         "-DSTACK_DIRECTION=-1"
         "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
@@ -169,16 +173,13 @@ let
       buildInputs = common.buildInputs ++ [
         bzip2 lz4 lzo snappy xz zstd
         cracklib judy libevent libxml2
-      ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
+      ] ++ lib.optional withNuma numactl
         ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
-        ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
         ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
         ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
         ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
-      propagatedBuildInputs = lib.optionals withEmbedded
-        (lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.lib
-         ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl);
+      propagatedBuildInputs = lib.optional withNuma numactl;
 
       postPatch = ''
         substituteInPlace scripts/galera_new_cluster.sh \
@@ -197,7 +198,7 @@ let
         "-DWITHOUT_EXAMPLE=1"
         "-DWITHOUT_FEDERATED=1"
         "-DWITHOUT_TOKUDB=1"
-      ] ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
+      ] ++ lib.optionals withNuma [
         "-DWITH_NUMA=ON"
       ] ++ lib.optionals (!withStorageMroonga) [
         "-DWITHOUT_MROONGA=1"
@@ -239,38 +240,53 @@ let
     };
 in
   self: {
+    # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_104 = self.callPackage generic {
       # Supported until 2024-06-18
-      version = "10.4.27";
-      hash = "sha256-SKHyIMoYuwxGN513/pjrdQvMcFLnPxDjJ26ipcUbirI=";
+      version = "10.4.28";
+      hash = "sha256-AD/SPzxu5RYXbhtisLQ822zdPc1OMPhVwcWrK6r1qGw=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.18";
-      hash = "sha256-NZOw3MDy6A6YF3AZ9dz6XMjBQXLOFhpvpQ+AhPLO90k=";
+      version = "10.5.19";
+      hash = "sha256-JExKJCSQZBBmI8uEqm3lFN3xeH3oZmQHUoK7qOxXV/Q=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
-      # Supported until 2026-07
-      version = "10.6.11";
-      hash = "sha256-V4S6TF2Hk7rbpYNIV2gk2YSewVLpy+5HoXZRYdhAyUo=";
+      # Supported until 2026-07-06
+      version = "10.6.12";
+      hash = "sha256-PtLrdCnC+uVCPKVcZhdC0QfjUkbxqwwQcJbwxLg5Rjo=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_108 = self.callPackage generic {
-      # Supported until 2023-05
-      version = "10.8.6";
-      hash = "sha256-qal8eZtpnhDJOWW71wQ0U/eiDhQL0inSCaoWFvKfv20=";
+      # Supported until 2023-05-20. TODO: remove ahead of 23.05 branchoff
+      version = "10.8.7";
+      hash = "sha256-A6uqsKMvNTjqZZFbrUBBWf2mHEJE9HZJpC6xdUIGuAI=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_109 = self.callPackage generic {
-      # Supported until 2023-08
-      version = "10.9.4";
-      hash = "sha256-Hf8IoPN+pc+PAMvRLUDoB1n659cxhMz1a1tRrP3PwFQ=";
+      # Supported until 2023-08-22. TODO: remove ahead of 23.05 branchoff?
+      version = "10.9.5";
+      hash = "sha256-CXYrdcZEuUEukV0w4bJm3tc5ZRf8L9hrvmf+zDcGWtw=";
+      inherit (self.darwin) cctools;
+      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    };
+    mariadb_1010 = self.callPackage generic {
+      # Supported until 2023-11-17
+      version = "10.10.3";
+      hash = "sha256-DQxF/oUFnY0mxuIp8wQQqLj3KC7C1WVg/JqJMOFO130=";
+      inherit (self.darwin) cctools;
+      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    };
+    mariadb_1011 = self.callPackage generic {
+      # Supported until 2028-02-16
+      version = "10.11.2";
+      hash = "sha256-HIne4MrtD2i8Kh0gPrmKEjFQ5qF59u4PH8C6Pwjccdw=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

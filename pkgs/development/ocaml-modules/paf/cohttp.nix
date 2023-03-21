@@ -22,7 +22,8 @@ buildDunePackage {
   inherit (paf)
     version
     src
-  ;
+    patches
+    ;
 
   duneVersion = "3";
 
@@ -35,7 +36,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest-lwt
     fmt
     logs

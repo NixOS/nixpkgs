@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, boost175
+, boost
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfd";
-  version = "0.7.1";
+  version = "22.12";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = lib.toUpper pname;
     rev = "NFD-${version}";
-    sha256 = "sha256-8Zm8oxbpw9qD31NuofDdgPYnTWIz5E04NhkZhiRkK9E=";
+    sha256 = "sha256-epY5qtET7rsKL3KIKvxfa+wF+AGZbYs+zRhy8SnIffk=";
     fetchSubmodules = true;
   };
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
-    "--boost-includes=${boost175.dev}/include"
-    "--boost-libs=${boost175.out}/lib"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
     "--with-tests"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
 
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Named Data Networking (NDN) Forwarding Daemon";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ lib.maintainers.bertof ];
+    maintainers = with maintainers; [ bertof ];
   };
 }

@@ -14,7 +14,7 @@ let
         fetchgit {
           inherit (args) url rev sha256;
           fetchLFS = false;
-          fetchSubmodules = false;
+          fetchSubmodules = true;
           deepClone = false;
           leaveDotGit = false;
         };
@@ -22,19 +22,6 @@ let
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
-  qt3d = {
-    inherit version;
-    src = fetchgit {
-      url = "https://invent.kde.org/qt/qt/qt3d.git";
-      rev = "c3c7e6ebc29cce466d954f72f340a257d76b5ec2";
-      sha256 = "sha256-KMWZ4N2OO7TBVpcgvQf/gweZRT62i9XABOnq0x94PY4=";
-      fetchLFS = false;
-      fetchSubmodules = true;
-      deepClone = false;
-      leaveDotGit = false;
-    };
-  };
-
   # qtwebkit does not have an official release tarball on the qt mirror and is
   # mostly maintained by the community.
   qtwebkit = rec {
@@ -55,7 +42,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 
   qtwebengine =
     let
-      branchName = "5.15.11";
+      branchName = "5.15.12";
       rev = "v${branchName}-lts";
     in
     {
@@ -63,7 +50,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 
       src = fetchgit {
         url = "https://github.com/qt/qtwebengine.git";
-        sha256 = "sha256-yrKPof18G10VjrwCn/4E/ywlpATJQZjvmVeM+9hLY0U=";
+        sha256 = "sha256-8EQqSvxw9rqf+64CIbcCb1VXhNx1GNC8eDIgLyYDyvk=";
         inherit rev branchName;
         fetchSubmodules = true;
         leaveDotGit = true;

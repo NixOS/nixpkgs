@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pytestCheckHook
 , coveralls
 , numpy
-, contextlib2
 , decopatch
 , more-itertools
 , nestedtext
@@ -21,8 +21,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "parametrize_from_file";
-    sha256 = "1c91j869n2vplvhawxc1sv8km8l53bhlxhhms43fyjsqvy351v5j";
+    hash = "sha256-suxQht9YS+8G0RXCTuEahaI60daBda7gpncLmwySIbE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "replace contextlib2-with-contextlib.patch";
+      url = "https://github.com/kalekundert/parametrize_from_file/commit/edee706770a713130da7c4b38b0a07de1bd79c1b.patch";
+      hash = "sha256-VkPKGkYYTB5XCavtEEnFJ+EdNUUhITz/euwlYAPC/tQ=";
+    })
+  ];
 
   # patch out coveralls since it doesn't provide us value
   preBuild = ''
@@ -38,7 +46,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    contextlib2
     decopatch
     more-itertools
     nestedtext
@@ -47,7 +54,14 @@ buildPythonPackage rec {
     toml
   ];
 
-  pythonImportsCheck = [ "parametrize_from_file" ];
+  pythonImportsCheck = [
+    "parametrize_from_file"
+  ];
+
+  disabledTests = [
+    # https://github.com/kalekundert/parametrize_from_file/issues/19
+    "test_load_suite_params_err"
+  ];
 
   meta = with lib; {
     description = "Read unit test parameters from config files";

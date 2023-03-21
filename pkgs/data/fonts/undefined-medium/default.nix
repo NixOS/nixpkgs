@@ -1,12 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
-let name = "undefined-medium-1.0";
-in (fetchzip rec {
-  inherit name;
+{ lib, stdenvNoCC, fetchzip }:
 
-  url = "https://github.com/andirueckel/undefined-medium/archive/v1.0.zip";
+stdenvNoCC.mkDerivation rec {
+  pname = "undefined-medium";
+  version = "1.1";
 
-  sha256 = "1wa04jzbffshwcxm705yb5wja8wakn8j7fvim1mlih2z1sqw0njk";
+  src = fetchzip {
+    url = "https://github.com/andirueckel/undefined-medium/archive/v1.1.zip";
+    hash = "sha256-iquxt7lo92y4AQZf23Ij5Qzg2U7buL3kGLksQSR6vac=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/otf/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://undefined-medium.com/";
@@ -19,9 +28,4 @@ in (fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile ${name}/fonts/otf/\*.otf -d $out/share/fonts/opentype
-  '';
-})
+}

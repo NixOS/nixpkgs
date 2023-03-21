@@ -71,8 +71,10 @@ $ nix-env -f '<nixpkgs>' -qaP -A haskell.compiler
 haskell.compiler.ghc810                  ghc-8.10.7
 haskell.compiler.ghc88                   ghc-8.8.4
 haskell.compiler.ghc90                   ghc-9.0.2
-haskell.compiler.ghc92                   ghc-9.2.4
+haskell.compiler.ghc924                  ghc-9.2.4
 haskell.compiler.ghc925                  ghc-9.2.5
+haskell.compiler.ghc926                  ghc-9.2.6
+haskell.compiler.ghc92                   ghc-9.2.7
 haskell.compiler.ghc942                  ghc-9.4.2
 haskell.compiler.ghc943                  ghc-9.4.3
 haskell.compiler.ghc94                   ghc-9.4.4
@@ -86,13 +88,15 @@ haskell.compiler.ghc924Binary            ghc-binary-9.2.4
 haskell.compiler.ghc924BinaryMinimal     ghc-binary-9.2.4
 haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7
 haskell.compiler.integer-simple.ghc8107  ghc-integer-simple-8.10.7
-haskell.compiler.integer-simple.ghc884   ghc-integer-simple-8.8.4
 haskell.compiler.integer-simple.ghc88    ghc-integer-simple-8.8.4
+haskell.compiler.integer-simple.ghc884   ghc-integer-simple-8.8.4
 haskell.compiler.native-bignum.ghc90     ghc-native-bignum-9.0.2
 haskell.compiler.native-bignum.ghc902    ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.4
 haskell.compiler.native-bignum.ghc924    ghc-native-bignum-9.2.4
 haskell.compiler.native-bignum.ghc925    ghc-native-bignum-9.2.5
+haskell.compiler.native-bignum.ghc926    ghc-native-bignum-9.2.6
+haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.7
+haskell.compiler.native-bignum.ghc927    ghc-native-bignum-9.2.7
 haskell.compiler.native-bignum.ghc942    ghc-native-bignum-9.4.2
 haskell.compiler.native-bignum.ghc943    ghc-native-bignum-9.4.3
 haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.4
@@ -105,15 +109,15 @@ Each of those compiler versions has a corresponding attribute set built using
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.4 is `haskell.packages.ghc944`. In fact `haskellPackages` is just an alias
-for `haskell.packages.ghc924`:
+for `haskell.packages.ghc927`:
 
 ```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc924
-haskell.packages.ghc924.a50                                                         a50-0.5
-haskell.packages.ghc924.AAI                                                         AAI-0.2.0.1
-haskell.packages.ghc924.aasam                                                       aasam-0.2.0.0
-haskell.packages.ghc924.abacate                                                     abacate-0.0.0.0
-haskell.packages.ghc924.abc-puzzle                                                  abc-puzzle-0.2.1
+$ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc927
+haskell.packages.ghc927.a50                                                         a50-0.5
+haskell.packages.ghc927.AAI                                                         AAI-0.2.0.1
+haskell.packages.ghc927.aasam                                                       aasam-0.2.0.0
+haskell.packages.ghc927.abacate                                                     abacate-0.0.0.0
+haskell.packages.ghc927.abc-puzzle                                                  abc-puzzle-0.2.1
 …
 ```
 
@@ -137,7 +141,12 @@ set the default version to a version older than the newest on Hackage. We do
 this to get them or their reverse dependencies to compile in our package set.
 4. For all packages, for which the newest Hackage version is not the default
 version, there will also be a `haskellPackages.foo_x_y_z` package with the
-newest version.
+newest version. The `x_y_z` part encodes the version with dots replaced by
+underscores. When the newest version changes by a new release to Hackage the
+old package will disappear under that name and be replaced by a newer one under
+the name with the new version. The package name including the version will
+also disappear when the default version e.g. from Stackage catches up with the
+newest version from Hackage.
 5. For some packages, we also manually add other `haskellPackages.foo_x_y_z`
 versions, if they are required for a certain build.
 
@@ -161,12 +170,14 @@ given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
 It will simply take as input packages with names off the desired dependencies
-and just check whether they fulfill the version bounds and (by default, see
-`jailbreak`) fail if they don’t.
+and just check whether they fulfill the version bounds and fail if they don’t
+(by default, see `jailbreak` to circumvent this).
 
-The package resolution is done by the `haskellPackages.callPackage` function
-which will, e.g., use `haskellPackages.aeson` for a package input of name
-`aeson`.
+The `haskellPackages.callPackage` function does the package resolution.
+It will, e.g., use `haskellPackages.aeson`which has the default version as
+described above for a package input of name `aeson`. (More general:
+`<packages>.callPackage f` will call `f` with named inputs provided from the
+package set `<packages>`.)
 While this is the default behavior, it is possible to override the dependencies
 for a specific package, see
 [`override` and `overrideScope`](#haskell-overriding-haskell-packages).
@@ -195,7 +206,7 @@ maintenance work for `haskellPackages` is required. Besides that, it is not
 possible to get the dependencies of a legacy project from nixpkgs or to use a
 specific stack solver for compiling a project.
 
-Even though we couldn‘t use them directly in nixpkgs, it would be desirable
+Even though we couldn’t use them directly in nixpkgs, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
 Sadly we currently don’t have tooling for this. For this you might be
@@ -538,7 +549,7 @@ via [`shellFor`](#haskell-shellFor).
 When using `cabal-install` for dependency resolution you need to be a bit
 careful to achieve build purity. `cabal-install` will find and use all
 dependencies installed from the packages `env` via Nix, but it will also
-consult Hackage to potentially download and compile dependencies if it can‘t
+consult Hackage to potentially download and compile dependencies if it can’t
 find a valid build plan locally. To prevent this you can either never run
 `cabal update`, remove the cabal database from your `~/.cabal` folder or run
 `cabal` with `--offline`. Note though, that for some usecases `cabal2nix` needs

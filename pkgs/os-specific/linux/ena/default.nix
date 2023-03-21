@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.0";
+  version = "2.8.3";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    sha256 = "sha256-Nw86s93v8ahc/yt5sNsGz4LRwzDPtBnIZNno8vpFdsY=";
+    sha256 = "sha256-Z5BCqqC4FNKHqpocJ6CsHwhh5sszj5QfxiN6+Dkaqek=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = kernel.makeFlags;
 
   # linux 3.12
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   configurePhase = ''
     runHook preConfigure

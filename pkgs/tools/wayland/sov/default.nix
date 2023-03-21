@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/sov/main.c --replace '/usr' $out
   '';
+
+  strictDeps = true;
   nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
   buildInputs = [ wayland wayland-protocols freetype ];
 
@@ -25,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/milgra/sov";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ travisdavis-ops ];
+    platforms = platforms.linux;
   };
 }

@@ -50,7 +50,7 @@ let
             {
               nativeBuildInputs =
                 (old.nativeBuildInputs or [ ])
-                ++ lib.optionals (!(builtins.isNull buildSystem)) [ buildSystem ]
+                ++ lib.optionals (buildSystem != null) [ buildSystem ]
                 ++ map (a: self.${a}) extraAttrs;
             }
         )
@@ -345,7 +345,7 @@ lib.composeManyExtensions [
           LIB_DIR = "${lib.getLib pkgs.secp256k1}/lib";
 
           # for actual C toolchain build
-          NIX_CFLAGS_COMPILE = "-I ${lib.getDev pkgs.secp256k1}/include";
+          env.NIX_CFLAGS_COMPILE = "-I ${lib.getDev pkgs.secp256k1}/include";
           NIX_LDFLAGS = "-L ${lib.getLib pkgs.secp256k1}/lib";
         }
       );
@@ -457,9 +457,9 @@ lib.composeManyExtensions [
 
         preConfigure = lib.concatStringsSep "\n" [
           (old.preConfigure or "")
-          (if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+          (lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
             MACOSX_DEPLOYMENT_TARGET=10.16
-          '' else "")
+          '')
         ];
 
         preBuild = old.preBuild or "" + ''
@@ -720,7 +720,7 @@ lib.composeManyExtensions [
                 (old.propagatedBuildInputs or [ ])
                 ++ lib.optionals mpiSupport [ self.mpi4py self.openssh ]
               ;
-              preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+              preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
               HDF5_DIR = "${pkgs.hdf5}";
               HDF5_MPI = if mpiSupport then "ON" else "OFF";
               # avoid strict pinning of numpy
@@ -1383,7 +1383,7 @@ lib.composeManyExtensions [
       openexr = super.openexr.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openexr pkgs.ilmbase ];
-          NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
+          env.NIX_CFLAGS_COMPILE = toString [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
         }
       );
 
@@ -1838,7 +1838,7 @@ lib.composeManyExtensions [
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ (
             if withApplePCSC then [ PCSC ] else [ pcsclite ]
           );
-          NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
+          env.NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
             "-I ${lib.getDev pcsclite}/include/PCSC";
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.swig
@@ -2410,9 +2410,7 @@ lib.composeManyExtensions [
 
       # Stop infinite recursion by using bootstrapped pkg from nixpkgs
       bootstrapped-pip = super.bootstrapped-pip.override {
-        wheel = (pkgs.python3.pkgs.override {
-          python = self.python;
-        }).wheel;
+        wheel = self.python.pkgs.wheel;
       };
 
       watchfiles =

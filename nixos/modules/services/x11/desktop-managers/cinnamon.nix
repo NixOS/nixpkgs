@@ -109,6 +109,7 @@ in
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
+      services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
@@ -214,7 +215,6 @@ in
       programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
-      programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
@@ -232,6 +232,7 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
+        gnome-calendar
         gnome-screenshot
       ] config.environment.cinnamon.excludePackages;
     })

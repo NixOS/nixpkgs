@@ -16,7 +16,8 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ result ];
-  nativeCheckInputs = [ alcotest cohttp-lwt-unix cacert ];
+  nativeCheckInputs = [ cacert ];
+  checkInputs = [ alcotest cohttp-lwt-unix ];
   # test dependencies are only available for >= 4.08
   # https://github.com/mirage/ca-certs/issues/16
   doCheck = lib.versionAtLeast ocaml.version "4.08"

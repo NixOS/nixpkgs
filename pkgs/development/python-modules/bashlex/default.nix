@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   # workaround https://github.com/idank/bashlex/issues/51
   preBuild = ''
-    ${python.interpreter} -c 'import bashlex'
+    ${python.pythonForBuild.interpreter} -c 'import bashlex'
   '';
 
   nativeCheckInputs = [

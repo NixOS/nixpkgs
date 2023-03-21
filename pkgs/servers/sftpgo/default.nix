@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sftpgo";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cSA7ndpIV3VvIZTBa9NCIlJn57EtT1qxrB0UsMENUS0=";
+    hash = "sha256-gB3r7Q4M4pXHB9cfCRU8hMccWaJ170es0CJfbo/7lsg=";
   };
 
-  vendorHash = "sha256-C45KA+9tdj+fR3DUBLdG2dGzT59zuAJczpKVoiAZ7lg=";
+  vendorHash = "sha256-og3mn0iYl6aubcSAUohqG4ZSqdBB4AQYZtpKfbp7kcQ=";
 
   ldflags = [
     "-s"

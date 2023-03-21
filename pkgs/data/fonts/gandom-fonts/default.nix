@@ -1,19 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "gandom-fonts";
   version = "0.8";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "rastikerdar";
-  repo = "gandom-font";
-  rev = "v${version}";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "gandom-font";
+    rev = "v${version}";
+    hash = "sha256-nez8T0TtRLyXxIIR69LrVGde5ThCvA0fLXkYLyYQRV8=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/gandom-fonts {} \;
+
+    runHook postInstall
   '';
-  sha256 = "sha256-EDS3wwKwe2BIcOCxu7DxkVLCoEoTPP31k5ID51lqn3M=";
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/gandom-font";

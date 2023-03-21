@@ -16,6 +16,7 @@
 
 # psycopg-c
 , cython_3
+, tomli
 
 # docs
 , furo
@@ -32,13 +33,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.3";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-cAfFxUDgfI3KTlBU9wV/vQkPun4cR3se8eSIHHcEr4g=";
+    hash = "sha256-VmuotHcLWd+k8/GLv0N2wSZR0sZjY+TmGBQjhpYE3YA=";
   };
 
   patches = [
@@ -70,9 +71,10 @@ let
     '';
 
     nativeBuildInputs = [
-      setuptools
       cython_3
       postgresql
+      setuptools
+      tomli
     ];
 
     # tested in psycopg
@@ -96,7 +98,7 @@ let
       cd psycopg_pool
     '';
 
-    propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    propagatedBuildInputs = [
       typing-extensions
     ];
 
@@ -181,10 +183,6 @@ buildPythonPackage rec {
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # racy test
-    "test_sched"
-    "test_sched_error"
   ];
 
   disabledTestPaths = [
@@ -197,7 +195,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$TMPDIR"
+    "-o" "cache_dir=$TMPDIR"
+    "-m" "'not timing'"
   ];
 
   postCheck = ''

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bite-parser";
-  version = "0.2.1";
+  version = "0.2.2";
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "bite_parser";
     inherit version;
-    hash = "sha256-PmZCCQzxCfCq6Mr1qn03tj/7/0we9Bfk5fj4K+wMhsk=";
+    hash = "sha256-mBghKgrNv4ZaRNowo7csWekmqrI0xAVKJKowSeumr4g=";
   };
 
   nativeBuildInputs = [

@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, fetchPypi
 , fetchpatch
 , python3
 , substituteAll
@@ -42,16 +43,6 @@ let
         };
       });
 
-      # https://github.com/postlund/pyatv/issues/1879
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        pname = "aiohttp";
-        version = "3.8.1";
-        src = self.fetchPypi {
-          inherit pname version;
-          hash = "sha256-/FRx4aVN4V73HBvG6+gNTcaB6mAOaL/Ry85AQn8LdXg=";
-        };
-      });
-
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -78,20 +69,13 @@ let
         ];
       });
 
-      caldav = super.caldav.overridePythonAttrs (old: rec {
-        version = "0.9.1";
+      bimmer-connected = super.bimmer-connected.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12.1";
         src = fetchFromGitHub {
-          owner = "python-caldav";
-          repo = "caldav";
-          rev = "v${version}";
-          hash = "sha256-Gil0v4pGyp5+TnYPjb8Vk0xTqnQKaeD8Ko/ZWhvkbUk=";
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-wLQ2UkedLSwfbUqmb85QgsDYh0zcbgQOMnhbRHW5Bnw=";
         };
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace ", 'xandikos<0.2.4'" "" \
-            --replace ", 'radicale'" ""
-        '';
-        nativeCheckInputs = old.nativeCheckInputs ++ [ self.nose ];
       });
 
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
@@ -104,22 +88,31 @@ let
         };
       });
 
-      gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.0";
+      geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.0";
         src = fetchFromGitHub {
-          owner = "klaasnicolaas";
-          repo = "python-gridnet";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
+        };
+        doCheck = false;
+      });
+
+      gios = super.gios.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
         };
       });
 
-      icalendar = super.icalendar.overridePythonAttrs (oldAttrs: rec {
-        version = "4.1.0";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-l0i3wC78xD5Y0GFa4JdqxPJl6Q2t7ptPiE3imQXBs5U=";
+      jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
+        version = "3.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
         };
       });
 
@@ -155,6 +148,15 @@ let
         };
       });
 
+      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
+        };
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -176,24 +178,12 @@ let
         };
       });
 
-      pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.3";
+      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.1";
         src = fetchFromGitHub {
-          owner = "riptideio";
-          repo = "pymodbus";
-          rev= "refs/tags/v${version}";
-          hash = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
-        };
-      });
-
-      # Pinned due to API changes in 1.0.24
-      pysensibo = super.pysensibo.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.22";
-        src = fetchFromGitHub {
-          owner = "andrey-git";
-          repo = "pysensibo";
-          rev = "refs/tags/${version}";
-          hash = "sha256-AUcdKcdoYCg8OgUcFoLLpNK5GQMTg89XCR5CkTfNkcc=";
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
         };
       });
 
@@ -206,6 +196,16 @@ let
         };
       });
 
+      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
+        version = "9.0.1";
+        src = fetchFromGitHub {
+          owner = "home-assistant-libs";
+          repo = "pytradfri";
+          rev = "refs/tags/${version}";
+          hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
+        };
+      });
+
       python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
         version = "13.15";
         src = fetchFromGitHub {
@@ -215,7 +215,7 @@ let
           hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
         };
         propagatedBuildInputs = [
-          self.APScheduler
+          self.apscheduler
           self.cachetools
           self.certifi
           self.cryptography
@@ -235,22 +235,28 @@ let
         doCheck = false;
       });
 
-      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
-        version = "9.0.0";
-        src = fetchFromGitHub {
-          owner = "home-assistant-libs";
-          repo = "pytradfri";
-          rev = "refs/tags/${version}";
-          hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.6";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
         };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
       });
 
-      pysoma = super.pysoma.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.10";
-        src = super.fetchPypi {
-          pname = "pysoma";
-          inherit version;
-          hash = "sha256-sU1qHbAjdIUu0etjate8+U1zvunbw3ddBtDVUU10CuE=";
+      subarulink = super.subarulink.overridePythonAttrs (oldAttrs: rec {
+        version = "0.7.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-BxnpdZwbnZF1oWcu3jRDeXvcaweOuVk1R79KpMLB02c=";
         };
       });
 
@@ -304,8 +310,7 @@ let
   ];
 
   python = python3.override {
-    # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
+    packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
   componentPackages = import ./component-packages.nix;
@@ -321,12 +326,8 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
-  # Create info about included packages and components
-  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
-  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
-
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.1.7";
+  hassVersion = "2023.3.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -334,18 +335,34 @@ in python.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.9";
+  disabled = python.pythonOlder "3.10";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  # PyPI tarball is missing tests/ directory
-  src = fetchFromGitHub {
+  # Primary source is the pypi sdist, because it contains translations
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-+n42LnfZ0R0ugUkse2EJ0wPUHn4YctrAb7hkBd8+ZjA=";
+  };
+
+  # Secondary source is git for tests
+  gitSrc = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-z8dTFRs7Tm4WTQcYeHu9jlGbva9yNPhjmQ+CQY+9DN4=";
+    hash = "sha256-v+c0hnY1Owr2YCQX8TVzKzYCLBsyUKPOvnVOjOeI6Dk=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
+
+  # copy tests early, so patches apply as they would to the git repo
+  prePatch = ''
+    cp --no-preserve=mode --recursive ${gitSrc}/tests ./
+    chmod u+x tests/auth/providers/test_command_line_cmd.sh
+  '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
@@ -367,9 +384,12 @@ in python.pkgs.buildPythonApplication rec {
       "httpx"
       "ifaddr"
       "orjson"
+      "pip"
       "PyJWT"
+      "pyOpenSSL"
       "requests"
       "typing-extensions"
+      "voluptuous-serialize"
       "yarl"
     ];
   in ''
@@ -382,7 +402,7 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    # Only packages required in setup.py
+    # Only packages required in pyproject.toml
     aiohttp
     astral
     async-timeout
@@ -400,6 +420,7 @@ in python.pkgs.buildPythonApplication rec {
     lru-dict
     orjson
     pip
+    pyopenssl
     pyjwt
     python-slugify
     pyyaml
@@ -407,11 +428,9 @@ in python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
-    # Not in setup.py, but used in homeassistant/util/package.py
+    # Implicit dependency via homeassistant/requirements.py
     setuptools
-    # Not in setup.py, but uncounditionally imported via tests/conftest.py
-    paho-mqtt
-  ] ++ componentBuildInputs ++ extraBuildInputs;
+  ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
@@ -423,22 +442,29 @@ in python.pkgs.buildPythonApplication rec {
     freezegun
     pytest-asyncio
     pytest-aiohttp
-    pytest-freezegun
+    pytest-freezer
     pytest-mock
     pytest-rerunfailures
     pytest-socket
+    pytest-timeout
     pytest-unordered
     pytest-xdist
     pytestCheckHook
     requests-mock
     respx
     stdlib-list
-    # required by tests/auth/mfa_modules
+    syrupy
+    tomli
+    # required through tests/auth/mfa_modules/test_otp.py
     pyotp
+    # Sneakily imported in tests/conftest.py
+    paho-mqtt
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
     "hue"
+    # for tests/test_config.py::test_merge_id_schema
+    "qwikswitch"
   ];
 
   pytestFlagsArray = [
@@ -449,8 +475,8 @@ in python.pkgs.buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
-    # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
-    "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
+    # AssertionError: assert 1 == 0
+    "--deselect tests/test_config.py::test_merge"
     # tests are located in tests/
     "tests"
   ];
@@ -462,17 +488,6 @@ in python.pkgs.buildPythonApplication rec {
     "tests/pylint"
     # don't bulk test all components
     "tests/components"
-    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
-    "tests/auth/mfa_modules/test_notify.py"
-  ];
-
-  disabledTests = [
-    # AssertionError: assert 1 == 0
-    "test_merge"
-    # Tests are flaky
-    "test_config_platform_valid"
-    # Test requires pylint>=2.13.0
-    "test_invalid_discovery_info"
   ];
 
   preCheck = ''
@@ -485,11 +500,6 @@ in python.pkgs.buildPythonApplication rec {
     export PATH=${inetutils}/bin:$PATH
   '';
 
-  postInstall = ''
-    cp -v ${extraComponentsFile} $out/extra_components
-    cp -v ${extraPackagesFile} $out/extra_packages
-  '';
-
   passthru = {
     inherit
       availableComponents
@@ -497,6 +507,8 @@ in python.pkgs.buildPythonApplication rec {
       getPackages
       python
       supportedComponentsWithTests;
+    pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;

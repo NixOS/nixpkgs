@@ -1,6 +1,7 @@
 { lib, fetchzip, buildDunePackage, ocaml
 , zarith, eqaf, bigarray-compat, hex, ff-sig, ff
-, alcotest, bisect_ppx }:
+, alcotest, bisect_ppx
+}:
 
 buildDunePackage rec {
   pname = "mec";
@@ -27,7 +28,7 @@ buildDunePackage rec {
     zarith
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     bisect_ppx
   ];

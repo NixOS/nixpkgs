@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , tzdata
 , substituteAll
@@ -46,11 +47,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.19.4";
+  version = "1.19.7";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-7adNtKxJSACj5m7nhOSVv7ubjlNd+SSosBsagCi382g=";
+    hash = "sha256-d1vfKFzqupQNqKL+IBIlAO/XoLZdvO6FJHhUqNdAJjM=";
   };
 
   strictDeps = true;
@@ -87,6 +88,12 @@ stdenv.mkDerivation rec {
     })
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.16.patch
+
+    # runtime: support riscv64 SV57 mode
+    (fetchpatch {
+      url = "https://github.com/golang/go/commit/1e3c19f3fee12e5e2b7802a54908a4d4d03960da.patch";
+      sha256 = "sha256-mk/9gXwQEcAkiRemF6GiNU0c0fhDR29/YcKgQR7ONTA=";
+    })
   ];
 
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
@@ -148,12 +155,12 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
-  '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
+  '' else lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
     rm -rf bin/*_*
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
-  '' else "");
+  '');
 
   installPhase = ''
     runHook preInstall
@@ -173,6 +180,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;

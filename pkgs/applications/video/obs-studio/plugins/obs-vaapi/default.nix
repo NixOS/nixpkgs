@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vaapi";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = pname;
     rev = version;
-    hash = "sha256-qA4xVVShkp40QHp2HmmRzVxQaBwskRpUNEULKetVMu8=";
+    hash = "sha256-wrbVuqIe+DY3R+Jp3zCy2Uw3fv5ejYHtRV2Sv+y/n0w=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
       gst-plugins-bad
       gst-vaapi
     ];
+
+  # Fix output directory
+  postInstall = ''
+    mkdir $out/lib/obs-plugins
+    mv $out/lib/obs-vaapi.so $out/lib/obs-plugins/
+  '';
 
   meta = with lib; {
     description = "OBS Studio VAAPI support via GStreamer";

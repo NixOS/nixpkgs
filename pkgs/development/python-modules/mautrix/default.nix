@@ -1,40 +1,72 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, aiohttp
+, fetchFromGitHub
 , pythonOlder
-, sqlalchemy
-, ruamel-yaml
-, CommonMark
-, lxml
+  # deps
+, aiohttp
+, attrs
+, yarl
+  # optional deps
+, python-magic
+, python-olm
+, unpaddedbase64
+, pycryptodome
+  # check deps
+, pytestCheckHook
+, pytest-asyncio
 , aiosqlite
+, sqlalchemy
+, asyncpg
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.18.9";
+  version = "0.19.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ihaz/izB9L6osu3CPwBWOwLZ2JOLKhsDuqOUf/B02qI=";
+  src = fetchFromGitHub {
+    owner = "mautrix";
+    repo = "python";
+    rev = "v${version}";
+    hash = "sha256-Km6Lh4iKUBwQcsChTrV9yCaPhVBINJotp/5XnPfoOMk=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-
-    # defined in optional-requirements.txt
-    sqlalchemy
-    aiosqlite
-    ruamel-yaml
-    CommonMark
-    lxml
+    attrs
+    yarl
   ];
 
-  # no tests available
-  doCheck = false;
+  passthru.optional-dependencies = {
+    detect_mimetype = [
+      python-magic
+    ];
+    encryption = [
+      python-olm
+      unpaddedbase64
+      pycryptodome
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    aiosqlite
+    sqlalchemy
+    asyncpg
+  ] ++ passthru.optional-dependencies.encryption;
+
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  disabledTestPaths = [
+    # sqlalchemy 2 unsupported
+    "mautrix/client/state_store/tests/store_test.py"
+  ];
 
   pythonImportsCheck = [
     "mautrix"
@@ -45,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tulir/mautrix-python";
     changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans ];
+    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans nickcao ];
   };
 }

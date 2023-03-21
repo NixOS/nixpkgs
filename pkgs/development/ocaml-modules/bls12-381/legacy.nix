@@ -26,7 +26,7 @@ buildDunePackage rec {
     zarith
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
   ];
 

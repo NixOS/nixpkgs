@@ -7,7 +7,7 @@ Check for any minor version changes.
 
 */
 
-{ newScope
+{ makeScopeWithSplicing, generateSplicesForMkScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
@@ -64,6 +64,12 @@ let
         extraPrefix = "src/3rdparty/";
         hash = "sha256-MZGYeMdGzwypfKoSUaa56K3inbcGRx7he/+AFyk5ekA=";
       })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-gcc12.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+        hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
+      })
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -112,6 +118,9 @@ let
 
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
+
+      # remove before 23.11
+      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
 
       inherit callPackage qtCompatVersion qtModule srcs;
 
@@ -204,7 +213,8 @@ let
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
       qmake = makeSetupHook {
-        deps = [ self.qtbase.dev ];
+        name = "qmake-hook";
+        propagatedBuildInputs = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
@@ -212,9 +222,10 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
+        name = "wrap-qt5-apps-hook";
+        propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-in lib.makeScope newScope addPackages
+in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages

@@ -6,8 +6,8 @@ let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "sha256-3LgqMBCnUG2UmsekaIvV43lBpSPEocEXmFV9WpE7wE0=";
-  version = "4.5";
+  sha256 = "sha256-UiUMoqdfkk6mzaPGctpQW3dvOWKhNBNuScJ5BpCykVg=";
+  version = "4.8";
 
   inherit (kernel) stdenv;
 
@@ -19,6 +19,7 @@ let
     nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
     buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
 
   ## a kernel build dir as expected by systemtap
@@ -42,7 +43,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
     homepage = "https://sourceware.org/systemtap/";
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.systems.inspect.patterns.isGnu;
   };
 } ''
   mkdir -p $out/bin

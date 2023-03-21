@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
+  patches = [
+    # pass through NIX_* environment variables to scons.
+    ./scons-nix-env.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     sphinx
@@ -56,9 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    export CFLAGS="$NIX_CFLAGS_COMPILE"
-    export LDFLAGS="''${NIX_LDFLAGS//-rpath /-Wl,-rpath=}"
-
     # remove sources of nondeterminism
     substituteInPlace lib/cmdline.c \
       --replace "__DATE__" "\"Jan  1 1970\"" \
@@ -67,6 +69,7 @@ stdenv.mkDerivation rec {
       --replace "gzip -c " "gzip -cn "
   '';
 
+  # Otherwise tries to access /usr.
   prefixKey = "--prefix=";
 
   sconsFlags = lib.optionals (!withGui) [ "--without-gui" ];

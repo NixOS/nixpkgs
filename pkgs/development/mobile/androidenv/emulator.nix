@@ -1,4 +1,4 @@
-{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux }:
+{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall }:
 
 deployAndroidPackage {
   inherit package os;
@@ -47,6 +47,15 @@ deployAndroidPackage {
       ]} \
       --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
       --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
+
+    mkdir -p $out/bin
+    cd $out/bin
+    find $out/libexec/android-sdk/emulator -type f -executable -mindepth 1 -maxdepth 1 | while read i; do
+      ln -s $i
+    done
+
+    cd $out/libexec/android-sdk
+    ${postInstall}
   '';
   dontMoveLib64 = true;
 }

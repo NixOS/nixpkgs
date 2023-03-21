@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, defusedxml
 , fetchPypi
 , pbr
 , cliff
@@ -14,6 +15,7 @@
 , oslo-serialization
 , oslo-utils
 , fixtures
+, pythonOlder
 , pyyaml
 , subunit
 , stevedore
@@ -29,15 +31,19 @@
 buildPythonPackage rec {
   pname = "tempest";
   version = "33.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aEtBAE3p+HVw/macwZtKo20mSJctrsIN7idqWe6Dvtc=";
+    hash = "sha256-aEtBAE3p+HVw/macwZtKo20mSJctrsIN7idqWe6Dvtc=";
   };
 
   propagatedBuildInputs = [
     pbr
     cliff
+    defusedxml
     jsonschema
     testtools
     paramiko

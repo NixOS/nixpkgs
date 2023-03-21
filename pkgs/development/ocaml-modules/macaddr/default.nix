@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "0mdp38mkvk2f5h2q7nb9fc70a8hyssblnl7kam0d8r5lckgrx5rn";
   };
 
-  nativeCheckInputs = [ ppx_sexp_conv ounit ];
+  checkInputs = [ ppx_sexp_conv ounit ];
   doCheck = true;
 
   meta = with lib; {

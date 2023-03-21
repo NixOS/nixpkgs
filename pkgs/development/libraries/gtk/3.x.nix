@@ -2,13 +2,13 @@
 , stdenv
 , substituteAll
 , fetchurl
-, fetchpatch2
 , pkg-config
 , gettext
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk-doc
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -22,6 +22,8 @@
 , atk
 , at-spi2-atk
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , fribidi
 , xorg
 , libepoxy
@@ -40,13 +42,13 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , cups
 , AppKit
 , Cocoa
 , QuartzCore
 , broadwaySupport ? true
 , wayland-scanner
+, testers
 }:
 
 let
@@ -59,11 +61,11 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.35";
+  version = "3.24.36";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
 
   setupHooks = [
@@ -71,24 +73,16 @@ stdenv.mkDerivation rec {
     gtkCleanImmodulesCache
   ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-7BD+bXEu8LPGO1+TJjnJ0a6Z/OlPUA9vBpZWKf72C9E=";
+    sha256 = "sha256-J6bvFXdDNQyAf/6lm6odcCJtvt6CpelT/9WOpgWf5pE=";
   };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
-
-    # Add accidentally non-dist’d build file.
-    # https://gitlab.gnome.org/GNOME/gtk/-/commit/b2ad8d2abafbd94c7e58e5e1b98c92e6b6fa6d9a
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/66a199806ceb3daa5e2c7d3a5b45a86007cec46a.patch";
-      includes = [
-        "gdk/wayland/cursor/meson.build"
-      ];
-      sha256 = "cOOcSB3yphff2+7l7YpFbGSswWjV8lJ2tk+Vjgl1ras=";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
@@ -102,7 +96,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     makeWrapper
     meson
     ninja
@@ -110,18 +103,20 @@ stdenv.mkDerivation rec {
     python3
     sassc
     gdk-pixbuf
-  ] ++ setupHooks ++ lib.optionals withGtkDoc [
+  ] ++ finalAttrs.setupHooks ++ lib.optionals withIntrospection [
+    gobject-introspection
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
   ];
 
   buildInputs = [
-    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
@@ -166,12 +161,13 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
+    "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+    "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 
   doCheck = false; # needs X11
@@ -180,7 +176,7 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
     # See https://github.com/NixOS/nixpkgs/issues/132259
@@ -224,7 +220,7 @@ stdenv.mkDerivation rec {
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
   '' + lib.optionalString stdenv.isDarwin ''
     # a comment created a cycle between outputs
@@ -237,6 +233,7 @@ stdenv.mkDerivation rec {
       attrPath = "gtk3";
       freeze = true;
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -254,7 +251,14 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    pkgConfigModules = [
+      "gdk-3.0"
+      "gtk+-3.0"
+    ] ++ lib.optionals x11Support [
+      "gdk-x11-3.0"
+      "gtk+-x11-3.0"
+    ];
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
-}
+})

@@ -1,14 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "hack-font";
   version = "3.003";
-in (fetchzip {
-  name = "hack-font-${version}";
 
-  url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
+  src = fetchzip {
+    url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
+    hash = "sha256-SxF4kYp9aL/9L9EUniquFadzWt/+PcvhUQOIOvCrFRM=";
+  };
 
-  sha256 = "1l6ih6v7dqali5c7zh6z2xnbf9h2wz0ag6fdgszmqd5lnhw39v6s";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/hack
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A typeface designed for source code";
@@ -22,7 +29,7 @@ in (fetchzip {
     homepage = "https://sourcefoundry.org/hack/";
 
     /*
-     "The font binaries are released under a license that permits unlimited
+      "The font binaries are released under a license that permits unlimited
       print, desktop, and web use for commercial and non-commercial
       applications. It may be embedded and distributed in documents and
       applications. The source is released in the widely supported UFO format
@@ -33,9 +40,4 @@ in (fetchzip {
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
-  '';
-})
+}

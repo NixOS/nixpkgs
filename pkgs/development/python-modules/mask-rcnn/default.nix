@@ -33,7 +33,7 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/BupyeongHealer/Mask_RCNN_tf_2.x/commit/7957839fe2b248f2f22c7e991ead12068ddc6cfc.diff";
       excludes = [ "mrcnn/model.py" ];
-      sha256 = "sha256-70BGrx6X1uJDA2025f0YTlreT2uB3n35yIzuhf+ypVc=";
+      hash = "sha256-70BGrx6X1uJDA2025f0YTlreT2uB3n35yIzuhf+ypVc=";
     })
   ];
 

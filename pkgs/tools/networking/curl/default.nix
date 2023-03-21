@@ -33,6 +33,7 @@
 , phpExtensions
 , python3
 , tests
+, testers
 , fetchpatch
 }:
 
@@ -47,14 +48,14 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.87.0";
+  version = "7.88.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-XW4Sh2G3EQlG0Sdq/28PJm8rcm9eYZ9+CgV6R0FV8wc=";
+    hash = "sha256-giS0XM4Sq94DnBLcBxG36oWxBLmtU01uTFtOGIphyQc=";
   };
 
   patches = [
@@ -178,10 +179,12 @@ stdenv.mkDerivation (finalAttrs: {
       # Additional checking with support http3 protocol.
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
+    changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     description = "A command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = licenses.curl;
@@ -189,5 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    pkgConfigModules = [ "libcurl" ];
   };
 })

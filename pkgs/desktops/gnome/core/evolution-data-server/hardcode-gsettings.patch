@@ -298,7 +298,7 @@ index e61160c..b6553a4 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 611d5c8..4790fca 100644
+index 28755e2..da8c40c 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
 @@ -5593,7 +5593,18 @@ camel_imapx_server_skip_old_flags_update (CamelStore *store)

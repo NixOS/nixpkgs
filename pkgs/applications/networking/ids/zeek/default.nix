@@ -1,10 +1,13 @@
 { lib
 , stdenv
+, callPackage
 , fetchurl
 , cmake
 , flex
 , bison
+, spicy-parser-generator
 , openssl
+, libkqueue
 , libpcap
 , zlib
 , file
@@ -16,46 +19,69 @@
 , gettext
 , coreutils
 , ncurses
-, caf
 }:
 
+let
+  broker = callPackage ./broker { };
+in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "4.2.2";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "sha256-9Q3X24uAmnSnLUAklK+gC0Mu8eh81ZE2h/7uIVc8cAw=";
+    sha256 = "sha256-URBHQA3UU5F3VCyEpegNfpetc9KpmG/81s2FtMxxH78=";
   };
+
+  strictDeps = true;
+
+  patches = [
+    ./avoid-broken-tests.patch
+    ./debug-runtime-undef-fortify-source.patch
+    ./fix-installation.patch
+  ];
 
   nativeBuildInputs = [
     bison
     cmake
     file
     flex
+    python3
   ];
 
   buildInputs = [
+    broker
+    spicy-parser-generator
     curl
     gperftools
+    libkqueue
     libmaxminddb
     libpcap
     ncurses
     openssl
-    python3
     swig
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     gettext
   ];
 
-  outputs = [ "out" "lib" "py" ];
+  postPatch = ''
+    patchShebangs ./auxil/spicy/spicy/scripts
+
+    substituteInPlace auxil/spicy/CMakeLists.txt --replace "hilti-toolchain-tests" ""
+    substituteInPlace auxil/spicy/spicy/hilti/CMakeLists.txt --replace "hilti-toolchain-tests" ""
+  '';
 
   cmakeFlags = [
-    "-DCAF_ROOT=${caf}"
-    "-DZEEK_PYTHON_DIR=${placeholder "py"}/lib/${python3.libPrefix}/site-packages"
+    "-DBroker_ROOT=${broker}"
+    "-DSPICY_ROOT_DIR=${spicy-parser-generator}"
+    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
+    "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
+    "-DZEEK_LOG_DIR=/var/log/zeek"
+    "-DZEEK_STATE_DIR=/var/lib/zeek"
+    "-DZEEK_SPOOL_DIR=/var/spool/zeek"
   ];
 
   postInstall = ''
@@ -69,6 +95,10 @@ stdenv.mkDerivation rec {
       substituteInPlace $file --replace "/bin/rm" "${coreutils}/bin/rm"
     done
   '';
+
+  passthru = {
+    inherit broker;
+  };
 
   meta = with lib; {
     description = "Network analysis framework much different from a typical IDS";

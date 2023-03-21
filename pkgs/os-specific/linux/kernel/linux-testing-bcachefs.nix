@@ -1,9 +1,10 @@
 { lib
+, stdenv
 , fetchpatch
 , kernel
-, commitDate ? "2022-12-29"
-, currentCommit ? "8f064a4cb5c7cce289b83d7a459e6d8620188b37"
-, diffHash ? "sha256-RnlM7uOSWhFHG1aj5BOjrfRtoZfbx+tqQw1V49nW5vw="
+, commitDate ? "2023-02-01"
+, currentCommit ? "65960c284ad149cc4bfbd64f21e6889c1e3d1c5f"
+, diffHash ? "sha256-4wpY3aYZ93OXSU4wmQs9K62nPyIzjKu4RBQTwksmyyk="
 
 , kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
 , argsOverride ? {}
@@ -12,14 +13,13 @@
 
 # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
 (kernel.override ( args // {
-  argsOverride = {
-    version = "${kernel.version}-bcachefs-unstable-${commitDate}";
+  version = "${kernel.version}-bcachefs-unstable-${commitDate}";
 
-    extraMeta = {
-      branch = "master";
-      maintainers = with lib.maintainers; [ davidak Madouura ];
-    };
-  } // argsOverride;
+  extraMeta = {
+    branch = "master";
+    broken = stdenv.isAarch64;
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
+  };
 
   kernelPatches = [ {
       name = "bcachefs-${currentCommit}";

@@ -10,6 +10,7 @@
 , libpng
 , libjpeg
 , libaom
+, gdk-pixbuf
 
 # for passthru.tests
 , gimp
@@ -21,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.14.2";
+  version = "1.15.1";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -29,13 +30,29 @@ stdenv.mkDerivation rec {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "sha256-JwPeSNUc++z6RfMe0qAuXdekzLWR/MCmsT+Ykvp9a/s=";
+    sha256 = "sha256-5908S46hEXhCYcTsqulmUnat0KOlXsnY5LI/l1l7/1Q=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ dav1d rav1e libde265 x265 libpng libjpeg libaom ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    dav1d
+    rav1e
+    libde265
+    x265
+    libpng
+    libjpeg
+    libaom
+    gdk-pixbuf
+  ];
 
   enableParallelBuilding = true;
+
+  # Fix installation path for gdk-pixbuf module
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
 
   passthru.tests = {
     inherit gimp imagemagick imlib2Full imv vips;

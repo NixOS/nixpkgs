@@ -11,7 +11,7 @@ in
 
   options = {
     services.uptime-kuma = {
-      enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set.");
+      enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set");
 
       package = mkOption {
         type = types.package;
@@ -20,7 +20,7 @@ in
         description = lib.mdDoc "Uptime Kuma package to use.";
       };
 
-      appriseSupport = mkEnableOption (mdDoc "apprise support for notifications.");
+      appriseSupport = mkEnableOption (mdDoc "apprise support for notifications");
 
       settings = lib.mkOption {
         type = lib.types.submodule { freeformType = with lib.types; attrsOf str; };

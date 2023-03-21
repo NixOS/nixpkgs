@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    hash = "sha256-34iwYn9EOAl2c9UWERyzgwlZ+539jW9FygNYwgZ7ClU=";
+    hash = "sha256-r+bD2L5+3AwkdYa3FwsM+yf7V5w+6ZJC92CMdVeYLJQ=";
   };
 
   postPatch = ''
@@ -52,9 +52,6 @@ stdenv.mkDerivation rec {
     re2
     spdlog
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   meta = with lib; {
     description = "Client API library for the Matrix protocol.";

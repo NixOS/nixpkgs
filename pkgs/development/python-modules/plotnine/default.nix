@@ -36,7 +36,7 @@ buildPythonPackage rec {
       --replace " --cov=plotnine --cov-report=xml" ""
   '';
 
-  buildInputs = [
+  propagatedBuildInputs = [
     matplotlib
     mizani
     pandas

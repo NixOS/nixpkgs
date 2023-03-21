@@ -16,20 +16,20 @@
 
 stdenv.mkDerivation rec {
   pname = "helvum";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = pname;
     rev = version;
-    sha256 = "0nhv6zw2zzxz2bg2zj32w1brywnm5lv6j3cvmmvwshc389z2k5x1";
+    hash = "sha256-TvjO7fGobGmAltVHeXWyMtMLANdVWVGvBYq20JD3mMI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-EIHO9qVPIXgezfFOaarlTU0an762nFmX1ELbQuAZ7rY";
+    hash = "sha256-W5Imlut30cjV4A6TCjBFLbViB0CDUucNsvIUiCXqu7I=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,6 @@ stdenv.mkDerivation rec {
     gtk4
     pipewire
   ];
-
-  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
-  NIX_CFLAGS_COMPILE = [ "-DPW_ENABLE_DEPRECATED" ];
 
   meta = with lib; {
     description = "A GTK patchbay for pipewire";

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4, lxd }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.16.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qDLAEhknY+BB83OC6tfi7w/ZY/K492J5ZglLNUoBwbc=";
+    hash = "sha256-P6IYl6xcsqXw1ilt6HYw757FL2syy1XePBVGbPAlz6Q=";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   outputs = [ "dev" "out" ];
+
+  passthru.tests = {
+    inherit lxd;
+  };
 
   meta = with lib; {
     description = ''

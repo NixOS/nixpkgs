@@ -3,7 +3,7 @@
 , ki18n, xcb-util-cursor
 , kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins
 , knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi
-, qtbase, qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
+, qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
 }:
 
 mkDerivation {
@@ -23,6 +23,5 @@ mkDerivation {
     homepage = "https://apps.kde.org/spectacle/";
     description = "Screenshot capture utility";
     maintainers = with maintainers; [ ttuegel ];
-    broken = versionOlder qtbase.version "5.15";
   };
 }

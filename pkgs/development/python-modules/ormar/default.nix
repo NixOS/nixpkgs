@@ -11,6 +11,7 @@
 , httpx
 , importlib-metadata
 , mysqlclient
+, nest-asyncio
 , orjson
 , poetry-core
 , psycopg2
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "collerek";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-B6dC9+t/pe7vsPb7rkGAbJWLfCAF7lIElFvt1pUu5yA=";
+    hash = "sha256-7d0vmYDN1EjzNWmylb/As4ywo8YYzQ88UwigIsVnwMM=";
   };
 
   pythonRelaxDeps = [
@@ -50,32 +51,63 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aiomysql
-    aiosqlite
-    asyncpg
-    cryptography
     databases
-    orjson
     psycopg2
     pydantic
     sqlalchemy
+    psycopg2
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
     importlib-metadata
   ];
 
+  passthru.optional-dependencies = {
+    postgresql = [
+      asyncpg
+    ];
+    postgres = [
+      asyncpg
+    ];
+    aiopg = [
+      aiopg
+    ];
+    mysql = [
+      aiomysql
+    ];
+    sqlite = [
+      aiosqlite
+    ];
+    orjson = [
+      orjson
+    ];
+    crypto = [
+      cryptography
+    ];
+    all = [
+      aiomysql
+      aiopg
+      aiosqlite
+      asyncpg
+      cryptography
+      mysqlclient
+      orjson
+      pymysql
+    ];
+  };
+
   nativeCheckInputs = [
-    aiomysql
-    aiopg
-    aiosqlite
-    asyncpg
+    pytestCheckHook
+  ];
+
+  checkInputs = [
     fastapi
     httpx
-    mysqlclient
-    psycopg2
-    pymysql
+    nest-asyncio
     pytest-asyncio
-    pytestCheckHook
+  ] ++ passthru.optional-dependencies.all;
+
+  disabledTestPaths = [
+    "benchmarks/test_benchmark_*.py"
   ];
 
   disabledTests = [

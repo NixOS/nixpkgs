@@ -7,13 +7,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "chia-dev-tools";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lE7FTSDqVS6AstcxZSMdQwgygMvcvh1fqYVTTSSNZpA=";
+    hash = "sha256-qWWLQ+SkoRu5cLytwwrslqsKORy+4ebO8brULEFGaF0=";
   };
 
   patches = [
@@ -36,13 +36,15 @@ python3Packages.buildPythonApplication rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   propagatedBuildInputs = with python3Packages; [
+    anyio
     (toPythonModule chia)
+    pytest # required at runtime by the "test" command
+    pytest-asyncio
     pytimeparse
   ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
-    pytest-asyncio
   ];
 
   preCheck = ''

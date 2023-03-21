@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.14.2";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "radish";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xyj9yA4Rif3/BWEBnFubXQxwMM0IkHQ1koFZ+HWYQcI=";
+    hash = "sha256-SEW10ka0aQAXtW2UNCVJHMVhhZ9JTTj4IbskL87/Dn4=";
   };
 
   propagatedBuildInputs = [

@@ -34,14 +34,14 @@
 libsForQt5.mkDerivation rec {
   pname = "tokodon";
 
-  version = "22.11.2";
+  version = "23.01.0";
   # NOTE: the tokodon point release was not uploaded to the Plasma Mobile gear repo.
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uE9iHZDfpn1NTCeJPgsp2WBe0curdguTUbMTrkrmJ6M=";
+    hash = "sha256-iJRyKEFdoWtZLZ/nkMvy2S7EF+JRHXi3O0DswfrClDU=";
   };
 
   nativeBuildInputs = [

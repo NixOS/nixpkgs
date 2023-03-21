@@ -42,7 +42,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace ">= 2.*" ">= 2.0" \
       --replace "'pytest-runner == 5.2.0'," ""
+    substituteInPlace test/requirements.txt \
+      --replace ">=2.*" ">=2.0"
   '';
 
   doCheck = true;

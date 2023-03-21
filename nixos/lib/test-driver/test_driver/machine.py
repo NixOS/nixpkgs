@@ -1,4 +1,4 @@
-from contextlib import _GeneratorContextManager
+from contextlib import _GeneratorContextManager, nullcontext
 from pathlib import Path
 from queue import Queue
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
@@ -144,7 +144,7 @@ class StartCommand:
         self,
         monitor_socket_path: Path,
         shell_socket_path: Path,
-        allow_reboot: bool = False,  # TODO: unused, legacy?
+        allow_reboot: bool = False,
     ) -> str:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
@@ -152,16 +152,14 @@ class StartCommand:
             display_opts += " -nographic"
 
         # qemu options
-        qemu_opts = ""
-        qemu_opts += (
-            ""
-            if allow_reboot
-            else " -no-reboot"
+        qemu_opts = (
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
             " -device virtio-rng-pci"
             " -serial stdio"
         )
+        if not allow_reboot:
+            qemu_opts += " -no-reboot"
         # TODO: qemu script already catpures this env variable, legacy?
         qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
@@ -195,9 +193,10 @@ class StartCommand:
         shared_dir: Path,
         monitor_socket_path: Path,
         shell_socket_path: Path,
+        allow_reboot: bool,
     ) -> subprocess.Popen:
         return subprocess.Popen(
-            self.cmd(monitor_socket_path, shell_socket_path),
+            self.cmd(monitor_socket_path, shell_socket_path, allow_reboot),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -312,7 +311,6 @@ class Machine:
 
     start_command: StartCommand
     keep_vm_state: bool
-    allow_reboot: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -337,13 +335,11 @@ class Machine:
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
-        allow_reboot: bool = False,
         callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
-        self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
@@ -406,25 +402,23 @@ class Machine:
         return rootlog.nested(msg, my_attrs)
 
     def wait_for_monitor_prompt(self) -> str:
-        with self.nested("waiting for monitor prompt"):
-            assert self.monitor is not None
-            answer = ""
-            while True:
-                undecoded_answer = self.monitor.recv(1024)
-                if not undecoded_answer:
-                    break
-                answer += undecoded_answer.decode()
-                if answer.endswith("(qemu) "):
-                    break
-            return answer
+        assert self.monitor is not None
+        answer = ""
+        while True:
+            undecoded_answer = self.monitor.recv(1024)
+            if not undecoded_answer:
+                break
+            answer += undecoded_answer.decode()
+            if answer.endswith("(qemu) "):
+                break
+        return answer
 
     def send_monitor_command(self, command: str) -> str:
         self.run_callbacks()
-        with self.nested(f"sending monitor command: {command}"):
-            message = f"{command}\n".encode()
-            assert self.monitor is not None
-            self.monitor.send(message)
-            return self.wait_for_monitor_prompt()
+        message = f"{command}\n".encode()
+        assert self.monitor is not None
+        self.monitor.send(message)
+        return self.wait_for_monitor_prompt()
 
     def wait_for_unit(
         self, unit: str, user: Optional[str] = None, timeout: int = 900
@@ -547,7 +541,7 @@ class Machine:
         self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
         rc = int(self._next_newline_closed_block_from_shell().strip())
 
-        return (rc, output.decode())
+        return (rc, output.decode(errors="replace"))
 
     def shell_interact(self, address: Optional[str] = None) -> None:
         """Allows you to interact with the guest shell for debugging purposes.
@@ -685,9 +679,9 @@ class Machine:
             retry(tty_matches)
 
     def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
-        with self.nested(f"sending keys '{chars}'"):
+        with self.nested(f"sending keys {repr(chars)}"):
             for char in chars:
-                self.send_key(char, delay)
+                self.send_key(char, delay, log=False)
 
     def wait_for_file(self, filename: str) -> None:
         """Waits until the file exists in machine's file system."""
@@ -860,11 +854,15 @@ class Machine:
                 if matches is not None:
                     return
 
-    def send_key(self, key: str, delay: Optional[float] = 0.01) -> None:
+    def send_key(
+        self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
+    ) -> None:
         key = CHAR_TO_KEY.get(key, key)
-        self.send_monitor_command(f"sendkey {key}")
-        if delay is not None:
-            time.sleep(delay)
+        context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
+        with context:
+            self.send_monitor_command(f"sendkey {key}")
+            if delay is not None:
+                time.sleep(delay)
 
     def send_console(self, chars: str) -> None:
         assert self.process
@@ -872,7 +870,7 @@ class Machine:
         self.process.stdin.write(chars.encode())
         self.process.stdin.flush()
 
-    def start(self) -> None:
+    def start(self, allow_reboot: bool = False) -> None:
         if self.booted:
             return
 
@@ -896,6 +894,7 @@ class Machine:
             self.shared_dir,
             self.monitor_path,
             self.shell_path,
+            allow_reboot,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
@@ -943,6 +942,15 @@ class Machine:
         self.log("forced crash")
         self.send_monitor_command("quit")
         self.wait_for_shutdown()
+
+    def reboot(self) -> None:
+        """Press Ctrl+Alt+Delete in the guest.
+
+        Prepares the machine to be reconnected which is useful if the
+        machine was started with `allow_reboot = True`
+        """
+        self.send_key(f"ctrl-alt-delete")
+        self.connected = False
 
     def wait_for_x(self) -> None:
         """Wait until it is possible to connect to the X server.  Note that

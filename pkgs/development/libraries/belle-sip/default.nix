@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "5.1.55";
+  version = "5.2.23";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wMf570/RP2Q4yluedECs+AKoH92PQQ8yVY+eBGGSAP4=";
+    sha256 = "sha256-c73PCM+bRz6CjGRY2AapEcvKC1UqyEfzb7qsicmrkQU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,12 +29,15 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-overflow"
-  ];
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs and probably clang
+    "-Wno-error=use-after-free"
+  ]);
 
   propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];
 

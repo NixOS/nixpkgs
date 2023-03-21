@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "5.3.0";
+  version = "5.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tomerfiliba";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-gqYjCvyiLhgosmzYITrthMkjLA6WJcBbmjkTNXZKUxc=";
+    hash = "sha256-2b6ryqDqZPs5VniLhCwA1/c9+3CT+JJrr3VwP3G6tpY=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
     homepage = "https://rpyc.readthedocs.org";
+    changelog = "https://github.com/tomerfiliba-org/rpyc/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -40,6 +40,13 @@ self: super: ({
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
 
+  # Framework deps are hidden behind a flag
+  hmidi = addExtraLibraries [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.CoreAudio
+    darwin.apple_sdk.frameworks.CoreMIDI
+  ] super.hmidi;
+
   # "erf table" test fails on Darwin
   # https://github.com/bos/math-functions/issues/63
   math-functions = dontCheck super.math-functions;

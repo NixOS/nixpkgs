@@ -62,7 +62,7 @@ buildDunePackage rec {
     mirage-crypto-rng
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     jsonm
   ];

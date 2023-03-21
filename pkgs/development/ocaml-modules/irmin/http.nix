@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ astring cohttp-lwt cohttp-lwt-unix fmt jsonm logs lwt uri irmin webmachine ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     digestif git-unix irmin-git irmin-test irmin-fs cacert
   ];
 

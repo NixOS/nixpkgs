@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ];
   buildInputs = [ piqi stdlib-shims ];
 
-  nativeCheckInputs  = [ num ];
+  checkInputs = [ num ];
 
   strictDeps = true;
 

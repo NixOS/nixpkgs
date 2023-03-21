@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rhboot/efivar/commit/ca48d3964d26f5e3b38d73655f19b1836b16bd2d.patch";
       hash = "sha256-DkNFIK4i7Eypyf2UeK7qHW36N2FSVRJ2rnOVLriWi5c=";
     })
+    (fetchpatch {
+      name = "musl-backport.patch";
+      url = "https://github.com/rhboot/efivar/commit/cece3ffd5be2f8641eb694513f2b73e5eb97ffd3.patch";
+      sha256 = "7/E0gboU0A45/BY6jGPLuvds6qKtNjzpgKgdNTaVaZQ=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config mandoc ];

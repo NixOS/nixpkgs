@@ -11,26 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wx7xQBCfLu3UWB7ghp8dZ7OB2MFd5i8X0/ygyvW2K50=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   makeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
     ("CONFIG_PLATFORM_ARM_RPI=" + (if (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) then "y" else "n"))
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

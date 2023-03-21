@@ -2,6 +2,7 @@
 , lib
 , buildPackages
 , fetchFromGitLab
+, fetchpatch
 , python3
 , meson
 , ninja
@@ -60,6 +61,8 @@
 , x11Support ? true
 , libcanberra
 , xorg
+, mysofaSupport ? true
+, libmysofa
 }:
 
 let
@@ -67,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.64";
+    version = "0.3.66";
 
     outputs = [
       "out"
@@ -85,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-wIvdciLBWIQjENEipzbVID0eliOcEwqS567pLxVVOsc=";
+      sha256 = "sha256-qx4mgNRhMdha+8ap+FhVfxpsHE9TcTx29uwQIHLyMHA=";
     };
 
     patches = [
@@ -103,6 +106,7 @@ let
       ./0095-spa-data-dir.patch
     ];
 
+    strictDeps = true;
     nativeBuildInputs = [
       docutils
       doxygen
@@ -111,6 +115,7 @@ let
       ninja
       pkg-config
       python3
+      glib
     ];
 
     buildInputs = [
@@ -136,7 +141,8 @@ let
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
+    ++ lib.optional mysofaSupport libmysofa;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -171,7 +177,9 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
+      "-Drlimits-install=false" # installs to /etc, we won't use this anyway
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -222,6 +230,7 @@ let
             "nix-support/jack.conf.json"
             "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
+            "nix-support/pipewire-aes67.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];
           paths-lib = [
@@ -237,7 +246,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes ];
+      maintainers = with maintainers; [ jtojnar kranzes k900 ];
     };
   };
 

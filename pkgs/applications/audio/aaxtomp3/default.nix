@@ -27,10 +27,6 @@ resholve.mkDerivation rec {
     hash = "sha256-7a9ZVvobWH/gPxa3cFiPL+vlu8h1Dxtcq0trm3HzlQg=";
   };
 
-  # use whitespace to show osh arithmetic is not file redirection
-  # see: https://github.com/oilshell/oil/issues/1446
-  patches = [./osh.patch];
-
   postPatch = ''
     substituteInPlace AAXtoMP3 \
       --replace 'AAXtoMP3' 'aaxtomp3'

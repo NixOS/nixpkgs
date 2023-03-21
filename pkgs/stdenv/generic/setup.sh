@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=1090,2154,2123,2034,2178,2048,2068,1091
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
@@ -27,12 +28,18 @@ if [ -n "$__structuredAttrs" ]; then
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-    # $NIX_ATTRS_JSON_FILE points to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736
-    export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+
+    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
+    # https://github.com/NixOS/nix/issues/6736; please keep around until the
+    # fix reaches *every patch version* that's >= lib/minver.nix
+    if ! [[ -e "$NIX_ATTRS_JSON_FILE" ]]; then
+        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
+    fi
+    if ! [[ -e "$NIX_ATTRS_SH_FILE" ]]; then
+        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+    fi
 else
-    : ${outputs:=out}
+    : "${outputs:=out}"
 fi
 
 getAllOutputNames() {
@@ -125,11 +132,6 @@ _eval() {
 ######################################################################
 # Logging.
 
-# Obsolete.
-stopNest() { true; }
-header() { echo "$1"; }
-closeNest() { true; }
-
 # Prints a command such that all word splits are unambiguous. We need
 # to split the command in three parts because the middle format string
 # will be, and must be, repeated for each argument. The first argument
@@ -210,8 +212,8 @@ addToSearchPath() {
 # syntax when they switch to setting __structuredAttrs = true.
 prependToVar() {
     local -n nameref="$1"
+    local useArray type
 
-    useArray=
     if [ -n "$__structuredAttrs" ]; then
         useArray=true
     else
@@ -243,8 +245,8 @@ prependToVar() {
 # Same as above
 appendToVar() {
     local -n nameref="$1"
+    local useArray type
 
-    useArray=
     if [ -n "$__structuredAttrs" ]; then
         useArray=true
     else
@@ -398,7 +400,7 @@ fi
 # implementation uses zip archive and zip does not support dates going back to
 # 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=315532800}
+: "${SOURCE_DATE_EPOCH:=315532800}"
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -448,7 +450,6 @@ runHook addInputsHook
 
 # Package accumulators
 
-# shellcheck disable=SC2034
 declare -a pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
 declare -a pkgsHostHost pkgsHostTarget
 declare -a pkgsTargetTarget
@@ -473,7 +474,6 @@ declare -a pkgTargetHookVars=(envTargetTargetHook)
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
 # those variables are declared here, since where and if they are used varies
-# shellcheck disable=SC2034
 declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
 
 # Add env hooks for all sorts of deps with the specified host offset.
@@ -521,7 +521,7 @@ findInputs() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
     local varRef="$varVar[$((targetOffset - hostOffset))]"
@@ -610,12 +610,12 @@ findInputs() {
 # in each list must be store paths, and therefore space-free.
 
 # Make sure all are at least defined as empty
-: ${depsBuildBuild=} ${depsBuildBuildPropagated=}
-: ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
-: ${depsBuildTarget=} ${depsBuildTargetPropagated=}
-: ${depsHostHost=} ${depsHostHostPropagated=}
-: ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
-: ${depsTargetTarget=} ${depsTargetTargetPropagated=}
+: "${depsBuildBuild=}" "${depsBuildBuildPropagated=}"
+: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}" "${defaultNativeBuildInputs=}"
+: "${depsBuildTarget=}" "${depsBuildTargetPropagated=}"
+: "${depsHostHost=}" "${depsHostHostPropagated=}"
+: "${buildInputs=}" "${propagatedBuildInputs=}" "${defaultBuildInputs=}"
+: "${depsTargetTarget=}" "${depsTargetTargetPropagated=}"
 
 for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
@@ -650,7 +650,7 @@ activatePackage() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
@@ -798,10 +798,6 @@ unset _HOST_PATH
 unset _XDG_DATA_DIRS
 
 
-# Make GNU Make produce nested output.
-export NIX_INDENT_MAKE=1
-
-
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
@@ -888,7 +884,7 @@ substituteStream() {
 # fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -d '' $1 ; then
+    if IFS='' read -r -d '' "$1" ; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
@@ -999,16 +995,58 @@ stripHash() {
 }
 
 
+recordPropagatedDependencies() {
+    # Propagate dependencies into the development output.
+    declare -ra flatVars=(
+        # Build
+        depsBuildBuildPropagated
+        propagatedNativeBuildInputs
+        depsBuildTargetPropagated
+        # Host
+        depsHostHostPropagated
+        propagatedBuildInputs
+        # Target
+        depsTargetTargetPropagated
+    )
+    declare -ra flatFiles=(
+        "${propagatedBuildDepFiles[@]}"
+        "${propagatedHostDepFiles[@]}"
+        "${propagatedTargetDepFiles[@]}"
+    )
+
+    local propagatedInputsIndex
+    for propagatedInputsIndex in "${!flatVars[@]}"; do
+        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
+        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
+
+        [[ "${!propagatedInputsSlice}" ]] || continue
+
+        mkdir -p "${!outputDev}/nix-support"
+        # shellcheck disable=SC2086
+        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
+    done
+}
+
+
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
     local fn="$1"
+    local destination
 
     if [ -d "$fn" ]; then
+
+        destination="$(stripHash "$fn")"
+
+        if [ -e "$destination" ]; then
+            echo "Cannot copy $fn to $destination: destination already exists!"
+            echo "Did you specify two \"srcs\" with the same \"name\"?"
+            return 1
+        fi
 
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto -- "$fn" "$(stripHash "$fn")"
+        cp -pr --reflink=auto -- "$fn" "$destination"
 
     else
 
@@ -1033,7 +1071,7 @@ _defaultUnpack() {
 
 unpackFile() {
     curSrc="$1"
-    header "unpacking source archive $curSrc" 3
+    echo "unpacking source archive $curSrc"
     if ! runOneHook unpackCmd "$curSrc"; then
         echo "do not know how to unpack source archive $curSrc"
         exit 1
@@ -1079,7 +1117,7 @@ unpackPhase() {
     # Find the source directory.
 
     # set to empty if unset
-    : ${sourceRoot=}
+    : "${sourceRoot=}"
 
     if [ -n "${setSourceRoot:-}" ]; then
         runOneHook setSourceRoot
@@ -1130,7 +1168,7 @@ patchPhase() {
     fi
 
     for i in "${patchesArray[@]}"; do
-        header "applying patch $i" 3
+        echo "applying patch $i"
         local uncompress=cat
         case "$i" in
             *.gz)
@@ -1183,7 +1221,7 @@ configurePhase() {
     runHook preConfigure
 
     # set to empty if unset
-    : ${configureScript=}
+    : "${configureScript=}"
 
     if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
@@ -1253,7 +1291,7 @@ buildPhase() {
     runHook preBuild
 
     if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
-        echo "no Makefile, doing nothing"
+        echo "no Makefile or custom buildPhase, doing nothing"
     else
         foundMakefile=1
 
@@ -1323,6 +1361,15 @@ checkPhase() {
 installPhase() {
     runHook preInstall
 
+    # Dont reuse 'foundMakefile' set in buildPhase, a makefile may have been created in buildPhase
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+        echo "no Makefile or custom installPhase, doing nothing"
+        runHook postInstall
+        return
+    else
+        foundMakefile=1
+    fi
+
     if [ -n "$prefix" ]; then
         mkdir -p "$prefix"
     fi
@@ -1365,36 +1412,8 @@ fixupPhase() {
     done
 
 
-    # Propagate dependencies & setup hook into the development output.
-    declare -ra flatVars=(
-        # Build
-        depsBuildBuildPropagated
-        propagatedNativeBuildInputs
-        depsBuildTargetPropagated
-        # Host
-        depsHostHostPropagated
-        propagatedBuildInputs
-        # Target
-        depsTargetTargetPropagated
-    )
-    declare -ra flatFiles=(
-        "${propagatedBuildDepFiles[@]}"
-        "${propagatedHostDepFiles[@]}"
-        "${propagatedTargetDepFiles[@]}"
-    )
-
-    local propagatedInputsIndex
-    for propagatedInputsIndex in "${!flatVars[@]}"; do
-        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
-        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
-
-        [[ "${!propagatedInputsSlice}" ]] || continue
-
-        mkdir -p "${!outputDev}/nix-support"
-        # shellcheck disable=SC2086
-        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
-    done
-
+    # record propagated dependencies & setup hook into the development output.
+    recordPropagatedDependencies
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
@@ -1436,7 +1455,7 @@ installCheckPhase() {
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
-       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+       && ! make -n ${makefile:+-f $makefile} "${installCheckTarget:-installcheck}" >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         # Old bash empty array hack
@@ -1485,15 +1504,15 @@ distPhase() {
 showPhaseHeader() {
     local phase="$1"
     case "$phase" in
-        unpackPhase) header "unpacking sources";;
-        patchPhase) header "patching sources";;
-        configurePhase) header "configuring";;
-        buildPhase) header "building";;
-        checkPhase) header "running tests";;
-        installPhase) header "installing";;
-        fixupPhase) header "post-installation fixup";;
-        installCheckPhase) header "running install tests";;
-        *) header "$phase";;
+        unpackPhase) echo "unpacking sources";;
+        patchPhase) echo "patching sources";;
+        configurePhase) echo "configuring";;
+        buildPhase) echo "building";;
+        checkPhase) echo "running tests";;
+        installPhase) echo "installing";;
+        fixupPhase) echo "post-installation fixup";;
+        installCheckPhase) echo "running install tests";;
+        *) echo "$phase";;
     esac
 }
 
@@ -1503,19 +1522,23 @@ showPhaseFooter() {
     local startTime="$2"
     local endTime="$3"
     local delta=$(( endTime - startTime ))
-    (( $delta < 30 )) && return
+    (( delta < 30 )) && return
 
     local H=$((delta/3600))
     local M=$((delta%3600/60))
     local S=$((delta%60))
     echo -n "$phase completed in "
-    (( $H > 0 )) && echo -n "$H hours "
-    (( $M > 0 )) && echo -n "$M minutes "
+    (( H > 0 )) && echo -n "$H hours "
+    (( M > 0 )) && echo -n "$M minutes "
     echo "$S seconds"
 }
 
 
 genericBuild() {
+    # variable used by our gzip wrapper to add -n.
+    # gzip is in common-path.nix and is added to nix-shell but we only want to change its behaviour in nix builds. do not move to a setupHook in gzip.
+    export GZIP_NO_TIMESTAMPS=1
+
     if [ -f "${buildCommandPath:-}" ]; then
         source "$buildCommandPath"
         return
@@ -1548,7 +1571,7 @@ genericBuild() {
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
         if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
+            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
         fi
 
         showPhaseHeader "$curPhase"

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stellar-core";
-  version = "19.6.0";
+  version = "19.8.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lDefmPZM8ow6t5CpNBxef+9BoT773p5UgeMhgF+em2w=";
+    sha256 = "sha256-OaJztBOl5rDiCq+s1sXwuX+Yh+LSJtcnGIQeuMANLdU=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       store historical records of the ledger and participate in consensus.
     '';
     homepage = "https://www.stellar.org/";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };

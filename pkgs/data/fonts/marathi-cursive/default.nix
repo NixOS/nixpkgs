@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "marathi-cursive";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
-    hash = "sha256-JE9T3UMSYn/JfEWuWHikDJIlt4nZl6GzY98v3vG6di4=";
+    hash = "sha256-C/z8ALV9bht0SaYqACO5ulSVCk1d6wBwvpVC4ZLgtek=";
   };
 
   installPhase = ''

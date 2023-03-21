@@ -1,14 +1,15 @@
 ---
 name: Packaging requests
 about: For packages that are missing
-title: ''
+title: 'Package request: PACKAGENAME'
 labels: '0.kind: packaging request'
 assignees: ''
 
 ---
 
 **Project description**
-_describe the project a little_
+
+<!-- Describe the project a little: -->
 
 **Metadata**
 

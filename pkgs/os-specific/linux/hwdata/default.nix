@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hwdata";
-  version = "0.364";
+  version = "0.368";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
-    sha256 = "sha256-9fGYoyj7vN3j72H+6jv/R0MaWPZ+4UNQhCSWnZRZZS4=";
+    sha256 = "sha256-+9UyF4tcy5cJPjbyQ2RuWVJkBsZut+YX2ncUJIqIQZo=";
   };
 
   postPatch = ''
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vcrhonek/hwdata";
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pedrohlc ];
     platforms = lib.platforms.all;
   };
 }

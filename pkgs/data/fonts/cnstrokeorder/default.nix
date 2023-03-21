@@ -1,20 +1,23 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "cnstrokeorder";
   version = "0.0.4.7";
-in fetchurl {
-  name = "cnstrokeorder-${version}";
 
-  url = "http://rtega.be/chmn/CNstrokeorder-${version}.ttf";
+  src = fetchurl {
+    url = "http://rtega.be/chmn/CNstrokeorder-${version}.ttf";
+    hash = "sha256-YYtOcUvt1V0DwAs/vf9KltcmYCFJNirvwjGyOK4JpIY=";
+  };
 
-  recursiveHash = true;
-  downloadToTemp = true;
+  dontUnpack = true;
 
-  postFetch = ''
-    install -D $downloadedFile $out/share/fonts/truetype/CNstrokeorder-${version}.ttf
+  installPhase = ''
+    runHook preInstall
+
+    install -D $src $out/share/fonts/truetype/CNstrokeorder-${version}.ttf
+
+    runHook postInstall
   '';
-
-  sha256 = "0cizgfdgbq9av5c8234mysr2q54iw9pkxrmq5ga8gv32hxhl5bx4";
 
   meta = with lib; {
     description = "Chinese font that shows stroke order for HSK 1-4";

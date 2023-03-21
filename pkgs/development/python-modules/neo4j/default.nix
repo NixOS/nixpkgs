@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.4.0";
+  version = "5.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-emUz6DHnrDBOu9Wlhum7ntK3JIt94/05tuBAT2x4Bjs=";
+    hash = "sha256-OjGLV7xHyF8kB++juXTM40aUl4OK+xwhnFaLSyxHMo4=";
   };
 
   propagatedBuildInputs = [

@@ -11,8 +11,8 @@ manual](https://nixos.org/nix/manual/#chap-writing-nix-expressions), but
 here we give a short overview of the most important constructs useful in
 NixOS configuration files.
 
-```{=docbook}
-<xi:include href="config-file.section.xml" />
-<xi:include href="abstractions.section.xml" />
-<xi:include href="modularity.section.xml" />
+```{=include=} sections
+config-file.section.md
+abstractions.section.md
+modularity.section.md
 ```

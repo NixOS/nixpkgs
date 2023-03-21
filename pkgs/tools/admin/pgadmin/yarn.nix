@@ -3434,14 +3434,6 @@
       };
     }
     {
-      name = "context_menu___context_menu_2.0.0.tgz";
-      path = fetchurl {
-        name = "context_menu___context_menu_2.0.0.tgz";
-        url  = "https://registry.yarnpkg.com/context-menu/-/context-menu-2.0.0.tgz";
-        sha512 = "VQrkvcJDevuq+sde0QADRLOdIRpa4a1ti4knstrPILDLfWU/RB4ZIGpj32Chh/mURjrbi0CoLT1eonr3X86Khg==";
-      };
-    }
-    {
       name = "convert_source_map___convert_source_map_1.9.0.tgz";
       path = fetchurl {
         name = "convert_source_map___convert_source_map_1.9.0.tgz";
@@ -6386,14 +6378,6 @@
       };
     }
     {
-      name = "jquery_ui___jquery_ui_1.13.2.tgz";
-      path = fetchurl {
-        name = "jquery_ui___jquery_ui_1.13.2.tgz";
-        url  = "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.13.2.tgz";
-        sha512 = "wBZPnqWs5GaYJmo1Jj0k/mrSkzdQzKDwhXNtHKcBdAcKVxMM3KNYFq+iJ2i1rwiG53Z8M4mTn3Qxrm17uH1D4Q==";
-      };
-    }
-    {
       name = "jquery___jquery_3.6.1.tgz";
       path = fetchurl {
         name = "jquery___jquery_3.6.1.tgz";
@@ -6530,19 +6514,19 @@
       };
     }
     {
-      name = "json5___json5_1.0.1.tgz";
+      name = "json5___json5_1.0.2.tgz";
       path = fetchurl {
-        name = "json5___json5_1.0.1.tgz";
-        url  = "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz";
-        sha512 = "aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==";
+        name = "json5___json5_1.0.2.tgz";
+        url  = "https://registry.yarnpkg.com/json5/-/json5-1.0.2.tgz";
+        sha512 = "g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==";
       };
     }
     {
-      name = "json5___json5_2.2.1.tgz";
+      name = "json5___json5_2.2.3.tgz";
       path = fetchurl {
-        name = "json5___json5_2.2.1.tgz";
-        url  = "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz";
-        sha512 = "1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==";
+        name = "json5___json5_2.2.3.tgz";
+        url  = "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz";
+        sha512 = "XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==";
       };
     }
     {
@@ -8362,22 +8346,6 @@
       };
     }
     {
-    name = "pgadmin4-treeview";
-    path =
-      let
-        repo = fetchgit {
-          url = "https://github.com/EnterpriseDB/pgadmin4-treeview/";
-          rev = "96ceb7f27f43660a804e61d23a76aeb9aa188bb6";
-          sha256 = "1hvr7arywz8rql19ma6w6lj5hrfn8xr4cyiia4bw5l8d061ak1gj";
-        };
-      in
-        runCommand "pgadmin4-treeview" { buildInputs = [gnutar]; } ''
-          # Set u+w because tar-fs can't unpack archives with read-only dirs
-          # https://github.com/mafintosh/tar-fs/issues/79
-          tar cf $out --mode u+w -C ${repo} .
-        '';
-  }
-    {
       name = "picocolors___picocolors_1.0.0.tgz";
       path = fetchurl {
         name = "picocolors___picocolors_1.0.0.tgz";
@@ -9148,18 +9116,16 @@
     {
     name = "react-data-grid.git";
     path =
-      let
-        repo = fetchgit {
-          url = "https://github.com/EnterpriseDB/react-data-grid.git/";
-          rev = "200d2f5e02de694e3e9ffbe177c279bc40240fb8";
-          sha256 = "0s4k8s8ackr5lrvhv7ljbhd90679wh34p2wv71xqn8yy1ykjwm15";
-        };
-      in
-        runCommand "react-data-grid.git" { buildInputs = [gnutar]; } ''
-          # Set u+w because tar-fs can't unpack archives with read-only dirs
-          # https://github.com/mafintosh/tar-fs/issues/79
-          tar cf $out --mode u+w -C ${repo} .
-        '';
+      let repo = fetchgit {
+         url = "https://github.com/pgadmin-org/react-data-grid.git/";
+         rev = "200d2f5e02de694e3e9ffbe177c279bc40240fb8";
+         sha256 = "0s4k8s8ackr5lrvhv7ljbhd90679wh34p2wv71xqn8yy1ykjwm15";
+       };
+      in runCommand "react-data-grid.git" { buildInputs = [gnutar]; } ''
+        # Set u+w because tar-fs can't unpack archives with read-only dirs
+        # https://github.com/mafintosh/tar-fs/issues/79
+        tar cf $out --mode u+w -C ${repo} .
+      '';
   }
     {
       name = "react_dnd_html5_backend___react_dnd_html5_backend_16.0.1.tgz";
@@ -9175,14 +9141,6 @@
         name = "react_dnd___react_dnd_16.0.1.tgz";
         url  = "https://registry.yarnpkg.com/react-dnd/-/react-dnd-16.0.1.tgz";
         sha512 = "QeoM/i73HHu2XF9aKksIUuamHPDvRglEwdHL4jsp784BgUuWcg6mzfxT0QDdQz8Wj0qyRKx2eMg8iZtWvU4E2Q==";
-      };
-    }
-    {
-      name = "react_dom___react_dom_16.14.0.tgz";
-      path = fetchurl {
-        name = "react_dom___react_dom_16.14.0.tgz";
-        url  = "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz";
-        sha512 = "1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==";
       };
     }
     {
@@ -9263,6 +9221,14 @@
         name = "react_property___react_property_2.0.0.tgz";
         url  = "https://registry.yarnpkg.com/react-property/-/react-property-2.0.0.tgz";
         sha512 = "kzmNjIgU32mO4mmH5+iUyrqlpFQhF8K2k7eZ4fdLSOPFrD1XgEuSBv9LDEgxRXTMBqMd8ppT0x6TIzqE5pdGdw==";
+      };
+    }
+    {
+      name = "react_resize_detector___react_resize_detector_8.0.3.tgz";
+      path = fetchurl {
+        name = "react_resize_detector___react_resize_detector_8.0.3.tgz";
+        url  = "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-8.0.3.tgz";
+        sha512 = "c3eqm5BVcluVhxHsBQnhyPO/5uYB3XHIHz6D1ZOHzU2WcnZF0Cr3KLl5OIozRC2RSsdQlu5vn1PHEqrvKRnIYA==";
       };
     }
     {
@@ -9359,14 +9325,6 @@
         name = "react_window___react_window_1.8.8.tgz";
         url  = "https://registry.yarnpkg.com/react-window/-/react-window-1.8.8.tgz";
         sha512 = "D4IiBeRtGXziZ1n0XklnFGu7h9gU684zepqyKzgPNzrsrk7xOCxni+TCckjg2Nr/DiaEEGVVmnhYSlT2rB47dQ==";
-      };
-    }
-    {
-      name = "react___react_16.14.0.tgz";
-      path = fetchurl {
-        name = "react___react_16.14.0.tgz";
-        url  = "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz";
-        sha512 = "0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==";
       };
     }
     {
@@ -9783,14 +9741,6 @@
         name = "sax___sax_1.2.4.tgz";
         url  = "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz";
         sha512 = "NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==";
-      };
-    }
-    {
-      name = "scheduler___scheduler_0.19.1.tgz";
-      path = fetchurl {
-        name = "scheduler___scheduler_0.19.1.tgz";
-        url  = "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz";
-        sha512 = "n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==";
       };
     }
     {
@@ -10770,14 +10720,6 @@
       };
     }
     {
-      name = "tiny_emitter___tiny_emitter_2.1.0.tgz";
-      path = fetchurl {
-        name = "tiny_emitter___tiny_emitter_2.1.0.tgz";
-        url  = "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz";
-        sha512 = "NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==";
-      };
-    }
-    {
       name = "tiny_warning___tiny_warning_1.0.3.tgz";
       path = fetchurl {
         name = "tiny_warning___tiny_warning_1.0.3.tgz";
@@ -10978,11 +10920,11 @@
       };
     }
     {
-      name = "ua_parser_js___ua_parser_js_0.7.32.tgz";
+      name = "ua_parser_js___ua_parser_js_0.7.33.tgz";
       path = fetchurl {
-        name = "ua_parser_js___ua_parser_js_0.7.32.tgz";
-        url  = "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.32.tgz";
-        sha512 = "f9BESNVhzlhEFf2CHMSj40NWOjYPl1YKYbrvIr/hFTDEmLq7SRbWvm7FcdcpCYT95zrOhC7gZSxjdnnTpBcwVw==";
+        name = "ua_parser_js___ua_parser_js_0.7.33.tgz";
+        url  = "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.33.tgz";
+        sha512 = "s8ax/CeZdK9R/56Sui0WM6y9OFREJarMRHqLB2EwkovemBxNQ+Bqu8GAsUnVcXKgphb++ghr/B2BZx4mahujPw==";
       };
     }
     {
@@ -11111,6 +11053,22 @@
         name = "update_browserslist_db___update_browserslist_db_1.0.10.tgz";
         url  = "https://registry.yarnpkg.com/update-browserslist-db/-/update-browserslist-db-1.0.10.tgz";
         sha512 = "OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==";
+      };
+    }
+    {
+      name = "uplot_react___uplot_react_1.1.4.tgz";
+      path = fetchurl {
+        name = "uplot_react___uplot_react_1.1.4.tgz";
+        url  = "https://registry.yarnpkg.com/uplot-react/-/uplot-react-1.1.4.tgz";
+        sha512 = "qO1UkQwjVKdj5vTm3O3yldvu1T6hwY4++rH4KznLhjqpnLdncq1zsRxq/zQz/HUHPVD0j7WBcEISbNM61JsuAQ==";
+      };
+    }
+    {
+      name = "uplot___uplot_1.6.24.tgz";
+      path = fetchurl {
+        name = "uplot___uplot_1.6.24.tgz";
+        url  = "https://registry.yarnpkg.com/uplot/-/uplot-1.6.24.tgz";
+        sha512 = "WpH2BsrFrqxkMu+4XBvc0eCDsRBhzoq9crttYeSI0bfxpzR5YoSVzZXOKFVWcVC7sp/aDXrdDPbDZGCtck2PVg==";
       };
     }
     {
@@ -11290,20 +11248,18 @@
       };
     }
     {
-    name = "wcDocker";
+    name = "wcdocker";
     path =
-      let
-        repo = fetchgit {
-          url = "https://github.com/EnterpriseDB/wcDocker/";
-          rev = "3df8aac825ee2892f4d824de273b779cc6dbcad8";
-          sha256 = "1dihm56s7a34s132a6rh69lri93avz9bwja8bjd9hvpds20phmsg";
-        };
-      in
-        runCommand "wcDocker" { buildInputs = [gnutar]; } ''
-          # Set u+w because tar-fs can't unpack archives with read-only dirs
-          # https://github.com/mafintosh/tar-fs/issues/79
-          tar cf $out --mode u+w -C ${repo} .
-        '';
+      let repo = fetchgit {
+         url = "https://github.com/pgadmin-org/wcdocker/";
+         rev = "3df8aac825ee2892f4d824de273b779cc6dbcad8";
+         sha256 = "1dihm56s7a34s132a6rh69lri93avz9bwja8bjd9hvpds20phmsg";
+       };
+      in runCommand "wcdocker" { buildInputs = [gnutar]; } ''
+        # Set u+w because tar-fs can't unpack archives with read-only dirs
+        # https://github.com/mafintosh/tar-fs/issues/79
+        tar cf $out --mode u+w -C ${repo} .
+      '';
   }
     {
       name = "webfonts_loader___webfonts_loader_7.5.2.tgz";

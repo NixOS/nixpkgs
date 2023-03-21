@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitLab, isPy3k, pytest, baseline }:
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, isPy3k
+, pytestCheckHook
+, baseline
+}:
 
 buildPythonPackage rec {
   pname = "plum-py";
@@ -9,13 +15,24 @@ buildPythonPackage rec {
     owner = "dangass";
     repo = "plum";
     rev = version;
-    sha256 = "sha256-jCZUNT1HpSr0khHsjnxEzN2LCzcDV6W27PjVkwFJHUg=";
+    hash = "sha256-jCZUNT1HpSr0khHsjnxEzN2LCzcDV6W27PjVkwFJHUg=";
   };
+
+  postPatch = ''
+    # Drop broken version specifier
+    sed -i "/python_requires =/d" setup.cfg
+  '';
 
   pythonImportsCheck = [ "plum" ];
 
-  nativeCheckInputs = [ pytest baseline ];
-  checkPhase = "pytest tests";
+  nativeCheckInputs = [
+    baseline
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests"
+  ];
 
   meta = with lib; {
     description = "Classes and utilities for packing/unpacking bytes";

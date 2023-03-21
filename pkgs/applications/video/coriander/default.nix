@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: subtitles.o:src/coriander.h:110: multiple definition of
   #     `main_window'; main.o:src/coriander.h:110: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     cp ${automake}/share/automake-*/mkinstalldirs .

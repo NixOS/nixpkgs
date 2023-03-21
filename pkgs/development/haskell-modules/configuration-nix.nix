@@ -874,11 +874,38 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
-  cachix = super.cachix.override {
+  # Wants running postgresql database accessible over ip, so postgresqlTestHook
+  # won't work (or would need to patch test suite).
+  domaindriven-core = dontCheck super.domaindriven-core;
+
+  cachix = overrideCabal (drv: {
+    version = "1.3.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.3.3";
+      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
+    };
+    buildDepends = [ self.conduit-concurrent-map ];
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+    postPatch = ''
+      sed -i 's/1.3.2/1.3.3/' cachix.cabal
+    '';
+  }) (super.cachix.override {
     nix = self.hercules-ci-cnix-store.passthru.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
-  };
+  });
+  cachix-api = overrideCabal (drv: {
+    version = "1.3.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.3.3";
+      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+  }) super.cachix-api;
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -940,6 +967,9 @@ self: super: builtins.intersectAttrs super {
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
+
+  # Test suite requires network access
+  minicurl = dontCheck super.minicurl;
 
   # procex relies on close_range which has been introduced in Linux 5.9,
   # the test suite seems to force the use of this feature (or the fallback
@@ -1046,10 +1076,12 @@ self: super: builtins.intersectAttrs super {
   hint = dontCheck super.hint;
 
   # Make sure that Cabal 3.8.* can be built as-is
-  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
+  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
+  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+    # Use process core package when possible
+    process = self.process_1_6_17_0;
+  }));
 
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
@@ -1115,7 +1147,7 @@ self: super: builtins.intersectAttrs super {
     hls-splice-plugin
     hls-refactor-plugin
     hls-cabal-plugin;
-  # Tests have file permissions expections that don‘t work with the nix store.
+  # Tests have file permissions expections that don’t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
 

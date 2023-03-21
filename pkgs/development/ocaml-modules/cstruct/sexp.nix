@@ -11,7 +11,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   propagatedBuildInputs = [ cstruct sexplib ];
 }

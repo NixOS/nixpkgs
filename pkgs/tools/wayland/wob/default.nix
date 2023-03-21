@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/francma/wob/releases/tag/${version}";
     license = licenses.isc;
     maintainers = with maintainers; [ primeos ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

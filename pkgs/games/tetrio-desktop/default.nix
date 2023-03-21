@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, dpkg
 , autoPatchelfHook
 , wrapGAppsHook
 , alsa-lib
@@ -29,9 +30,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    dpkg
     autoPatchelfHook
     wrapGAppsHook
   ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -44,24 +48,20 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  dontWrapGApps = true;
-
   libPath = lib.makeLibraryPath [
     libpulseaudio
     systemd
   ];
 
-  unpackPhase = ''
-    mkdir -p $TMP/tetrio-desktop $out/bin
-    cp $src $TMP/tetrio-desktop.deb
-    ar vx $TMP/tetrio-desktop.deb
-    tar --no-overwrite-dir -xvf data.tar.xz -C $TMP/tetrio-desktop/
-  '';
+  unpackCmd = "dpkg -x $curSrc src";
 
   installPhase = ''
     runHook preInstall
 
-    cp -R $TMP/tetrio-desktop/{usr/share,opt} $out/
+    mkdir $out
+    cp -r opt/ usr/share/ $out
+
+    mkdir $out/bin
     ln -s $out/opt/TETR.IO/tetrio-desktop $out/bin/
 
     substituteInPlace $out/share/applications/tetrio-desktop.desktop \
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = lib.strings.optionalString withTetrioPlus ''
-      cp ${tetrio-plus} $out/opt/TETR.IO/resources/app.asar
-    '';
+    cp ${tetrio-plus} $out/opt/TETR.IO/resources/app.asar
+  '';
 
   postFixup = ''
     wrapProgram $out/opt/TETR.IO/tetrio-desktop \

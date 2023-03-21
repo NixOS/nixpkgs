@@ -90,7 +90,7 @@ let
   # copy what we need.  Instead of using statically linked binaries,
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
-  extraUtils = pkgs.runCommandCC "extra-utils"
+  extraUtils = pkgs.runCommand "extra-utils"
     { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }

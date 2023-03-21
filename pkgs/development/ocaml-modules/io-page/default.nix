@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, cstruct, bigarray-compat, ounit }:
+{ lib, fetchurl, buildDunePackage, pkg-config, cstruct, bigarray-compat, ounit }:
 
 buildDunePackage rec {
   pname = "io-page";
@@ -11,8 +11,9 @@ buildDunePackage rec {
     sha256 = "sha256-DjbKdNkFa6YQgJDLmLsuvyrweb4/TNvqAiggcj/3hu4=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ cstruct bigarray-compat ];
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
   doCheck = true;
 
   meta = {

@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
     })
+    ./build-without-dbus-launch.patch
   ];
 
   outputs = [ "out" "dev" "installedTests" ];

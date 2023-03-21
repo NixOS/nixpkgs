@@ -1,13 +1,21 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{lib, fetchzip}:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "jost";
   version = "3.5";
-in (fetchzip {
-  name = "jost-${version}";
-  url = "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
 
-  sha256="0l78vhmbsyfmrva5wc76pskhxqryyg8q5xddpj9g5wqsddy525dq";
+  src = fetchzip {
+    url = "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
+    hash = "sha256-ne81bMhmTzNZ/GGIzb7nCYh19vNLK+hJ3cP/zDxtiGM=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/otf/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/indestructible-type/Jost";
@@ -15,9 +23,4 @@ in (fetchzip {
     license = licenses.ofl;
     maintainers = [ maintainers.ar1a ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
-})
+}

@@ -325,7 +325,7 @@ in {
   };
 
   meta = {
-    doc = ./matomo.xml;
+    doc = ./matomo.md;
     maintainers = with lib.maintainers; [ florianjacob ];
   };
 }

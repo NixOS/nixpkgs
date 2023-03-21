@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "symengine";
     repo = "symengine.py";
     rev = "v${version}";
-    sha256 = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    hash = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
   };
 
   patches = [

@@ -4,18 +4,21 @@
 , colorama
 , tqdm
 , pytestCheckHook
+, pythonOlder
 , ffmpeg
 , procps
 }:
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.6.1";
+  version = "0.7.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JLwvJcYcSe5Z7In34pQqHptd8TCrXJeJ6zPiGGv4T14=";
+    hash = "sha256-wK33h+Qg737hSv+2HF4hvfBDDsJpI+7mGbRgUQvrZb0=";
   };
 
   propagatedBuildInputs = [ colorama tqdm ];
@@ -34,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Run an ffmpeg command with progress";
     homepage = "https://github.com/slhck/ffmpeg-progress-yield";
+    changelog = "https://github.com/slhck/ffmpeg-progress-yield/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ prusnak ];
   };

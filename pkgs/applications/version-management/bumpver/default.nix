@@ -20,6 +20,11 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [ python3.pkgs.pytestCheckHook git mercurial];
 
+  disabledTests = [
+    # fails due to more aggressive setuptools version specifier validation
+    "test_parse_default_pattern"
+  ];
+
   meta = with lib; {
     description = "Bump version numbers in project files";
     homepage = "https://pypi.org/project/bumpver/";

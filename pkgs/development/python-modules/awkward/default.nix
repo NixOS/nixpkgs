@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.0.5";
+  version = "2.0.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kge7BAlBF4L+oibeXIF+tuSNsG1kMjl3WB5PME+RECk=";
+    hash = "sha256-MqV8KeE6KuO8HmrFNjeCW70ixChmlhY71Bod7ChKjuU=";
   };
 
   nativeBuildInputs = [

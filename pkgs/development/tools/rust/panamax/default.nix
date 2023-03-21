@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "panamax";
-  version = "1.0.6";
+  version = "1.0.12";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-/JW2QB5PtwKo0TLU/QmkgsE6/ne+51EVmWyGn7Lljdw=";
+    sha256 = "sha256-nHAsKvNEhGDVrLx8K7xnm7TuCxaZcYwlQ6xjVRvDdSk=";
   };
 
-  cargoSha256 = "sha256-aKdDismdPcExqznS6S2LvAij6gv9/Hw2FBvkhr9rJGo=";
+  cargoSha256 = "sha256-ydZ0KM/g9k0ux7Zr4crlxnKCC9N/qPzn1wmzbTIyz7o=";
 
   nativeBuildInputs = [ pkg-config ];
 

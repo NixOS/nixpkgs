@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
   version = "7.2";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

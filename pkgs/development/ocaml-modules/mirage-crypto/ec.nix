@@ -24,9 +24,10 @@ buildDunePackage rec {
     src
     version;
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    ocaml
     dune-configurator
   ];
   propagatedBuildInputs = [
@@ -37,10 +38,10 @@ buildDunePackage rec {
     ocaml-freestanding
   ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   doCheck = true;
-  nativeCheckInputs = [
+  checkInputs = [
     hex
     alcotest
     asn1-combinators

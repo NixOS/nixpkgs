@@ -37,15 +37,18 @@
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
 , glib
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
   version = "1.20.3";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-fjCz3YGnA4D/dVT5mEcdaZb/drvm/FRHCW+FHiRHPJ8=";
   };
@@ -146,11 +149,19 @@ stdenv.mkDerivation rec {
     waylandEnabled = enableWayland;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-audio-1.0"
+      "gstreamer-base-1.0"
+      "gstreamer-net-1.0"
+      "gstreamer-video-1.0"
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

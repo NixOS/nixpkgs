@@ -30,10 +30,6 @@ buildPythonApplication rec {
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
 
-  # Until gobject-introspection in nativeBuildInputs is supported.
-  # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-472568643
-  strictDeps = false;
-
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";
     changelog = "https://github.com/jendrikseipp/rednotebook/blob/v${version}/CHANGELOG.md";

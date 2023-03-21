@@ -140,11 +140,13 @@ let
       };
 
       wrapQtAppsHook = makeSetupHook {
-          deps = [ buildPackages.makeWrapper ];
+        name = "wrap-qt6-apps-hook";
+        propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
       qmake = makeSetupHook {
-        deps = [ self.qtbase.dev ];
+        name = "qmake6-hook";
+        propagatedBuildInputs = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;

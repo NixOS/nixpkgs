@@ -51,6 +51,9 @@ let
       nativeBuildInputs = [ pkgs.libdevil ];
       nativeLibs = [ pkgs.libdevil ];
     };
+    cl-freeimage = pkg: {
+      nativeLibs = [ freeimage ];
+    };
     cl-freetype2 = pkg: {
       nativeLibs = [ freetype ];
       nativeBuildInputs = [ freetype ];
@@ -144,6 +147,7 @@ let
     };
     classimp = pkg: {
       nativeLibs = [ assimp ];
+      meta.broken = true; # Requires assimp ≤ 5.0.x.
     };
     clsql-postgresql = pkg: {
       nativeLibs = [ postgresql.lib ];

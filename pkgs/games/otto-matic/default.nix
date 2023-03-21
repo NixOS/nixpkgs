@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eHy5yED5qrgHqKuqq1dXhmuR2PQBE5aMhSLPoydlpPk=";
+    sha256 = "sha256-0mqOAdAmJGxKa6yXktrbmdXkoQIliimq37iy9bCBZYg=";
     fetchSubmodules = true;
   };
 

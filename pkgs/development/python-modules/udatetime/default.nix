@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "udatetime";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09vlcskvaxnfk73l9w5xgl2ks9l62g1b24yrm0xxb7gn93qxglw2";
+    hash = "sha256-sQvFVwaZpDinLitaZOdr2MKO4779FvIJOHpVB/oLgwE=";
   };
 
   patches = [

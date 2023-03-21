@@ -49,7 +49,7 @@ let
   ];
 in stdenv.mkDerivation (finalAttrs: {
   pname = "hip-${hipPlatform}";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"

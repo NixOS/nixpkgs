@@ -9,7 +9,7 @@ in
 {
 
   meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
-  meta.doc = ./meilisearch.xml;
+  meta.doc = ./meilisearch.md;
 
   ###### interface
 
@@ -115,7 +115,7 @@ in
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
         MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
-        MEILI_DUMPS_DIR = "/var/lib/meilisearch/dumps";
+        MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
       };

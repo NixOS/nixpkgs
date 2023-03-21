@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "litecoin" + lib.optionalString (!withGui) "d";
-  version = "0.21.2.1";
+  version = "0.21.2.2";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "sha256-WJFdac5hGrHy9o3HzjS91zH+4EtJY7kUJAQK+aZaEyo=";
+    sha256 = "sha256-TuDc47TZOEQA5Lr4DQkEhnO/Szp9h71xPjaBL3jFWuM=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

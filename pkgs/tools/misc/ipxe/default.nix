@@ -30,7 +30,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "unstable-2023-01-25";
+  version = "unstable-2023-03-07";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "4bffe0f0d9d0e1496ae5cfb7579e813277c29b0f";
-    sha256 = "oDQBJz6KKV72DfhNEXjAZNeolufIUQwhroczCuYnGQA=";
+    rev = "9e1f7a3659071004f4b8c76f2593da6287f0d575";
+    sha256 = "a9YvF/oGnZ/GuBDfWj/Uh6ozY0sTztlCqEMk//lb5Lo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.

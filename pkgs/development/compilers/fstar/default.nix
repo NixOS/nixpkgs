@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2022.11.19";
+  version = "2023.02.01";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "sha256-IJMzRi335RbK8mEXQaF1UDPC0JVi6zSqcz6RS874m3Q=";
+    hash = "sha256-sLhbIGF7j1tH8zKsPq1qOSwHvYDrVCyfln9UbE3IYv0=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    z3
     makeWrapper
     installShellFiles
     removeReferencesTo
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     menhir
   ]);
 
-  buildInputs = [
-    z3
-  ] ++ (with ocamlPackages; [
+  buildInputs = with ocamlPackages; [
     batteries
     zarith
     stdint
@@ -39,11 +38,9 @@ stdenv.mkDerivation rec {
     ppx_deriving
     ppx_deriving_yojson
     process
-  ]);
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  buildFlags = [ "libs" ];
 
   enableParallelBuilding = true;
 

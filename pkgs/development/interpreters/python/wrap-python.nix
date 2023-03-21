@@ -4,7 +4,8 @@
 , makeWrapper }:
 
 makePythonHook {
-      deps = makeWrapper;
+      name = "wrap-python-hook";
+      propagatedBuildInputs = [ makeWrapper ];
       substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
       substitutions.python = python.pythonForBuild;

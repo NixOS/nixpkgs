@@ -12,6 +12,8 @@ let
 
 in
 lib.recurseIntoAttrs {
+  hasPkgConfigModule = pkgs.callPackage ../hasPkgConfigModule/tests.nix { };
+
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
   nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, pkgs, figlet, ... }: {

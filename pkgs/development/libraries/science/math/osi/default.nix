@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
 
   # Compile errors
-  NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
+  env.NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;

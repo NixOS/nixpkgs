@@ -15,7 +15,7 @@ buildDunePackage rec {
     uri
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     crowbar
     alcotest
   ];

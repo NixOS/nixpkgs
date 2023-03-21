@@ -11,7 +11,7 @@ let
         version = "2.10.0";
         sha256 = "sha256-R10WovnqYcYCrDJnPuIQx2zHaPchSYfXDAaVMsJ4LQA=";
         duneVersion = "3";
-        propagatedBuildInputs = [ lambda-term zed logs ];
+        propagatedBuildInputs = [ findlib lambda-term zed logs ];
       }
     else
       {

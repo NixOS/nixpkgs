@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.9.0-beta2";
+  version = "1.9.0-rc1";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    hash = "sha256-LTQp5vBMOSlwThYpSIv/UNJ9eIU+WId/XWGFxsrQEzs=";
+    hash = "sha256-BjHuS1pP8S+iZndyGS8HiNzApr7xUYPRPRkX55DEy4Y=";
   };
 
   patches = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [ nickcao joshniemela ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "coredns";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-Kb4nkxuyZHJT5dqFSkqReFkN8q1uYm7wbhSIiLd8Hck=";
+    sha256 = "sha256-/+D/jATZhHSxLPB8RkPLUYAZ3O+/9l8XIhgokXz2SUQ=";
   };
 
-  vendorSha256 = "sha256-nyMeKmGoypDrpZHYHGjhRnjgC3tbOX/dlj96pnXrdLE=";
+  vendorHash = "sha256-aWmwzIHScIMb3DPzr4eto2yETMgKd/hUy18X8KxQGos=";
 
   nativeBuildInputs = [ installShellFiles ];
 

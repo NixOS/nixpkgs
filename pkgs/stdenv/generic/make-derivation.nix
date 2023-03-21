@@ -18,33 +18,34 @@ let
       # separate lines, because Nix would only show the last line of the comment.
 
       # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit finalPackage; });
+      args = rattrs (args // { inherit finalPackage overrideAttrs; });
       #              ^^^^
 
-      finalPackage =
-        mkDerivationSimple
-          (f0:
-            let
-              f = self: super:
-                # Convert f0 to an overlay. Legacy is:
-                #   overrideAttrs (super: {})
-                # We want to introduce self. We follow the convention of overlays:
-                #   overrideAttrs (self: super: {})
-                # Which means the first parameter can be either self or super.
-                # This is surprising, but far better than the confusion that would
-                # arise from flipping an overlay's parameters in some cases.
-                let x = f0 super;
-                in
-                  if builtins.isFunction x
-                  then
-                    # Can't reuse `x`, because `self` comes first.
-                    # Looks inefficient, but `f0 super` was a cheap thunk.
-                    f0 self super
-                  else x;
+      overrideAttrs = f0:
+        let
+          f = self: super:
+            # Convert f0 to an overlay. Legacy is:
+            #   overrideAttrs (super: {})
+            # We want to introduce self. We follow the convention of overlays:
+            #   overrideAttrs (self: super: {})
+            # Which means the first parameter can be either self or super.
+            # This is surprising, but far better than the confusion that would
+            # arise from flipping an overlay's parameters in some cases.
+            let x = f0 super;
             in
-              makeDerivationExtensible
-                (self: let super = rattrs self; in super // f self super))
-          args;
+              if builtins.isFunction x
+              then
+                # Can't reuse `x`, because `self` comes first.
+                # Looks inefficient, but `f0 super` was a cheap thunk.
+                f0 self super
+              else x;
+        in
+          makeDerivationExtensible
+            (self: let super = rattrs self; in super // f self super);
+
+      finalPackage =
+        mkDerivationSimple overrideAttrs args;
+
     in finalPackage;
 
   # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
@@ -170,35 +171,50 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
+  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
+
+  # Turn a derivation into its outPath without a string context attached.
+  # See the comment at the usage site.
+  unsafeDerivationToUntrackedOutpath = drv:
+    if lib.isDerivation drv
+    then builtins.unsafeDiscardStringContext drv.outPath
+    else drv;
 
   noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                   ++ depsHostHost ++ depsHostHostPropagated
                                   ++ buildInputs ++ propagatedBuildInputs
                                   ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
   dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
-  supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+
+  hardeningDisable' = if lib.any (x: x == "fortify") hardeningDisable
+    # disabling fortify implies fortify3 should also be disabled
+    then lib.unique (hardeningDisable ++ [ "fortify3" ])
+    else hardeningDisable;
+  supportedHardeningFlags = [ "fortify" "fortify3" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-                            # Except when:
-                            #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-                            #    - static armv7l, where compilation fails.
-                            !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-                          then supportedHardeningFlags
-                          else lib.remove "pie" supportedHardeningFlags;
+  defaultHardeningFlags = let
+    # not ready for this by default
+    supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
+  in if stdenv.hostPlatform.isMusl &&
+      # Except when:
+      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+      #    - static armv7l, where compilation fails.
+      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
+    then supportedHardeningFlags'
+    else lib.remove "pie" supportedHardeningFlags';
   enabledHardeningOptions =
-    if builtins.elem "all" hardeningDisable
+    if builtins.elem "all" hardeningDisable'
     then []
-    else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
+    else lib.subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    if lib.isDerivation dep || dep == null || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
     else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
     else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
@@ -392,10 +408,8 @@ else let
           # See https://mesonbuild.com/Reference-tables.html#cpu-families
           cpuFamily = platform: with platform;
             /**/ if isAarch32 then "arm"
-            else if isAarch64 then "aarch64"
             else if isx86_32  then "x86"
-            else if isx86_64  then "x86_64"
-            else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
+            else platform.uname.processor;
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
@@ -446,6 +460,40 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+    } //
+    # If we use derivations directly here, they end up as build-time dependencies.
+    # This is especially problematic in the case of disallowed*, since the disallowed
+    # derivations will be built by nix as build-time dependencies, while those
+    # derivations might take a very long time to build, or might not even build
+    # successfully on the platform used.
+    # We can improve on this situation by instead passing only the outPath,
+    # without an attached string context, to nix. The out path will be a placeholder
+    # which will be replaced by the actual out path if the derivation in question
+    # is part of the final closure (and thus needs to be built). If it is not
+    # part of the final closure, then the placeholder will be passed along,
+    # but in that case we know for a fact that the derivation is not part of the closure.
+    # This means that passing the out path to nix does the right thing in either
+    # case, both for disallowed and allowed references/requisites, and we won't
+    # build the derivation if it wouldn't be part of the closure, saving time and resources.
+    # While the problem is less severe for allowed*, since we want the derivation
+    # to be built eventually, we would still like to get the error early and without
+    # having to wait while nix builds a derivation that might not be used.
+    # See also https://github.com/NixOS/nix/issues/4629
+    lib.optionalAttrs (attrs ? disallowedReferences) {
+      disallowedReferences =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+    } //
+    lib.optionalAttrs (attrs ? disallowedRequisites) {
+      disallowedRequisites =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+    } //
+    lib.optionalAttrs (attrs ? allowedReferences) {
+      allowedReferences =
+        lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+    } //
+    lib.optionalAttrs (attrs ? allowedRequisites) {
+      allowedRequisites =
+        lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
   validity = checkMeta { inherit meta attrs; };
@@ -530,6 +578,12 @@ lib.extendDerivation
        # them as runtime dependencies (since Nix greps for store paths
        # through $out to find them)
        args = [ "-c" "export > $out" ];
+
+       # inputDerivation produces the inputs; not the outputs, so any
+       # restrictions on what used to be the outputs don't serve a purpose
+       # anymore.
+       disallowedReferences = [ ];
+       disallowedRequisites = [ ];
      });
 
      inherit meta passthru overrideAttrs;
