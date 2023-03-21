@@ -5,6 +5,7 @@ import ./common/etag {
     h2oConfig = pkgs.writeText "h2o.conf" (builtins.toJSON {
       listen.port = 80;
       hosts.server.paths."/"."file.dir" = config.test-support.etag.root;
+      hosts.server.paths."/symlink/"."file.dir" = "/var/www";
     });
   in {
     systemd.services.h2o = {

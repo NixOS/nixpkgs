@@ -20,6 +20,10 @@ import ../../make-test-python.nix {
 
         networking.firewall.allowedTCPPorts = [ 80 ];
 
+        systemd.tmpfiles.rules = [
+          "L+ /var/www 0755 root root - ${config.test-support.etag.root}"
+        ];
+      };
     };
   };
 
@@ -51,6 +55,14 @@ import ../../make-test-python.nix {
             "${toplevel}/specialisation/test-2/bin/switch-to-configuration test"
         )
         second_etag = check_etag("http://server/index.txt")
+        assert first_etag != second_etag, "ETags are the same"
+
+    with subtest("check ETag if serving Nix store paths through symlinks"):
+        first_etag = check_etag("http://server/symlink/index.txt")
+        server.succeed(
+            "${toplevel}/bin/switch-to-configuration test"
+        )
+        second_etag = check_etag("http://server/symlink/index.txt")
         assert first_etag != second_etag, "ETags are the same"
   '';
 }

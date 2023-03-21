@@ -4,7 +4,10 @@ import ./common/etag {
   serverConfig = { config, ... }: {
     services.nginx = {
       enable = true;
-      virtualHosts.server.root = config.test-support.etag.root;
+      virtualHosts.server = {
+        root = config.test-support.etag.root;
+        locations."/symlink/".alias = "/var/www/";
+      };
     };
   };
 }
