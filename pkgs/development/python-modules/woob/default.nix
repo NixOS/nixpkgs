@@ -23,7 +23,9 @@
 , requests
 , simplejson
 , termcolor
+, testers
 , unidecode
+, woob
 }:
 
 buildPythonPackage rec {
@@ -85,6 +87,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "woob"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = woob;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Collection of applications and APIs to interact with websites";
