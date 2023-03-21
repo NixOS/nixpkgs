@@ -58,6 +58,7 @@ let
 
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = [
+    pahole
     perl
     libelf
     # module makefiles often run uname commands to find out the kernel version
