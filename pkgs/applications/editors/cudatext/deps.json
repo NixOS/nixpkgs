@@ -11,23 +11,23 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.02.05",
-    "hash": "sha256-ZOnIhUnFd+7mBEz6YIhUOQkhBbCNeTFD0tfUILuC1x4="
+    "rev": "2023.03.10",
+    "hash": "sha256-RHNWJN+P3w67UupeikHn6GrWZCOSoGCrP7BYG7myx+A="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.02.12",
-    "hash": "sha256-PSRKxKJkX9GlV8JUACYzDZguv8M8jKVxlW7U4Mmla9o="
+    "rev": "2023.03.14",
+    "hash": "sha256-mrjMG0t10lOd9hOEGBt9iGlpGdHcgbEVRcezyuUOqPQ="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2022.10.18",
-    "hash": "sha256-yaS1XF0v5rkfKj9aksSc4XimKh5wpL7yLt4ElcIKAIE="
+    "rev": "2023.03.14",
+    "hash": "sha256-75ndPG3nSM7Y/jEZFPmKfQMnFrARe1DNva1HoDHxqAE="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.01.18",
-    "hash": "sha256-5R4ZHMTfmIF0VnwOFNOV/i6Dc91yk5dVNcFNrxMMzm0="
+    "rev": "2023.02.25",
+    "hash": "sha256-09jTp0pFbiQ268xB/eDUj98t8WYjzGaTiHdFvWlmoR0="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",

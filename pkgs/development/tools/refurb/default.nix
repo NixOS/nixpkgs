@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "refurb";
-  version = "1.12.0";
+  version = "1.13.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dosisod";
     repo = "refurb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dS9+S3RogsBlbEHyq5Ll3kGbULwIQHQkwwNjjbsrgio=";
+    hash = "sha256-e/gKBgbtjO2XYnAIdHDoVJWyP6cyvsuIFLrV/eqjces=";
   };
 
   nativeBuildInputs = with python3Packages; [

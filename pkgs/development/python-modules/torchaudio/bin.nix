@@ -23,7 +23,7 @@ buildPythonPackage rec {
         srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
     in fetchurl srcs;
 
-  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
+  disabled = !(isPy38 || isPy39 || isPy310);
 
   propagatedBuildInputs = [
     torch-bin
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

@@ -4,7 +4,7 @@
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
-, dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
+, dbus, gtk3, gtk4, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , libkrb5, libdrm, libglvnd, mesa
 , libxkbcommon, pipewire, wayland # ozone/wayland
 
@@ -68,7 +68,7 @@ let
     libxkbcommon pipewire wayland
   ] ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional libvaSupport libva
-    ++ [ gtk3 ];
+    ++ [ gtk3 gtk4 ];
 
   suffix = lib.optionalString (channel != "stable") "-${channel}";
 

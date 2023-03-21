@@ -27,7 +27,7 @@ let
 
       propagatedBuildInputs = with pypkgs; [
         twisted
-        Mako
+        mako
         chardet
         pyxdg
         pyopenssl

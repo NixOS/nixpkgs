@@ -225,7 +225,7 @@ stdenv.mkDerivation ({
   inherit (callFile ../common/dependencies.nix { })
     depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
   preConfigure = callFile ../common/pre-configure.nix { };
@@ -278,6 +278,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

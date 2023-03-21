@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ m4 cmake perl ];
 
-  NIX_CFLAGS_COMPILE = "-w";  # old libiberty emits fatal warnings
+  env.NIX_CFLAGS_COMPILE = "-w";  # old libiberty emits fatal warnings
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;

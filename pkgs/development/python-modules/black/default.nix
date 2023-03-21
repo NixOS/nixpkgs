@@ -11,10 +11,13 @@
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
+, ipython
 , mypy-extensions
+, packaging
 , pathspec
 , parameterized
 , platformdirs
+, tokenize-rt
 , tomli
 , typed-ast
 , typing-extensions
@@ -23,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "22.12.0";
+  version = "23.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IpNR5aGMow9Ee/ck0Af4kPl+E68HC7atTApEHNdZai8=";
+    hash = "sha256-sL2XvqiQP1orpyGSV6ROPx+dAAc9bMGt1o8L7saWkqw=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +42,42 @@ buildPythonPackage rec {
     hatchling
   ];
 
+  propagatedBuildInputs = [
+    click
+    mypy-extensions
+    packaging
+    pathspec
+    platformdirs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+
+  passthru.optional-dependencies = {
+    colorama = [
+      colorama
+    ];
+    d = [
+      aiohttp
+    ];
+    uvloop = [
+      uvloop
+    ];
+    jupyter = [
+      ipython
+      tokenize-rt
+    ];
+  };
+
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook parameterized aiohttp ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    parameterized
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -68,21 +102,6 @@ buildPythonPackage rec {
   ];
   # multiple tests exceed max open files on hydra builders
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
-
-  propagatedBuildInputs = [
-    click
-    mypy-extensions
-    pathspec
-    platformdirs
-    tomli
-  ] ++ lib.optional (pythonOlder "3.8") typed-ast
-  ++ lib.optional (pythonOlder "3.10") typing-extensions;
-
-  passthru.optional-dependencies = {
-    d = [ aiohttp aiohttp-cors ];
-    colorama = [ colorama ];
-    uvloop = [ uvloop ];
-  };
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

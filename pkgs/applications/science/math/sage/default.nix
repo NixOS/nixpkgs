@@ -128,7 +128,7 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  maxima = pkgs.maxima.override {
+  maxima = pkgs.maxima-ecl-5_45.override {
     lisp-compiler = pkgs.ecl.override {
       # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
       # ECL. We apply a patch to fix it (write_error.patch), but it

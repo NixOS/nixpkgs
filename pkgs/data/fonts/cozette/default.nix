@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cozette";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchzip {
     url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";
-    hash = "sha256-nlEnQjQJAFRvZgdGMiloMs4afugmSFnITTIHD+Qkggg=";
+    hash = "sha256-CpabWJJDCY+mgE+9U8L50MmWVfhkm+LnfMQtOTXyE8s=";
   };
 
   installPhase = ''

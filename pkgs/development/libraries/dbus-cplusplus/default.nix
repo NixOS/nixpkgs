@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-ecore" "--disable-tests" ];
 
   meta = with lib; {
-    homepage = "http://dbus-cplusplus.sourceforge.net";
+    homepage = "https://dbus-cplusplus.sourceforge.net";
     description = "C++ API for D-BUS";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

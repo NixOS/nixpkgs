@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "-Dversion=${version}"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString ([
     # Needed with GCC 12
     "-Wno-error=address"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     "-Wno-array-bounds"
     "-Wno-free-nonheap-object"
     "-Wno-stringop-truncation"
-  ];
+  ]);
 
   passthru = {
     updateScript = nix-update-script { };

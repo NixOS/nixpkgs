@@ -11,6 +11,7 @@
 stdenv.mkDerivation rec {
   pname = "zig";
   version = "0.10.1";
+  outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "ziglang";
@@ -34,6 +35,12 @@ stdenv.mkDerivation rec {
     llvm
   ]);
 
+  patches = [
+    # Backport alignment related panics from zig-master to 0.10.
+    # Upstream issue: https://github.com/ziglang/zig/issues/14559
+    ./zig_14559.patch
+  ];
+
   preBuild = ''
     export HOME=$TMPDIR;
   '';
@@ -48,11 +55,24 @@ stdenv.mkDerivation rec {
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
 
+    # always link against static build of LLVM
+    "-DZIG_STATIC_LLVM=ON"
+
     # ensure determinism in the compiler build
     "-DZIG_TARGET_MCPU=baseline"
   ];
 
+  postBuild = ''
+    ./zig2 build-exe ../doc/docgen.zig
+    ./docgen ./zig2 ../doc/langref.html.in ./langref.html
+  '';
+
   doCheck = true;
+
+  postInstall = ''
+    install -Dm644 -t $doc/share/doc/$pname-$version/html ./langref.html
+  '';
+
   installCheckPhase = ''
     $out/bin/zig test --cache-dir "$TMPDIR" -I $src/test $src/test/behavior.zig
   '';
@@ -64,9 +84,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aiotter andrewrk AndersonTorres ];
     platforms = platforms.unix;
-    # Build fails on Darwin on both AArch64 and x86_64:
-    # https://github.com/NixOS/nixpkgs/pull/210324#issuecomment-1381313616
-    # https://github.com/NixOS/nixpkgs/pull/210324#issuecomment-1381236045
-    broken = stdenv.isDarwin;
   };
 }

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.9.3";
+  version = "0.10.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f/4CrFmma+Lc6wZm+YyDupDWfPAtuRsZdRf28sYUWTk=";
+    hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
   };
 
   propagatedBuildInputs = [

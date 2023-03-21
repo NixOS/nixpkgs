@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
                    -L${sqlite.out}/lib";
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=use-after-free"
   ];

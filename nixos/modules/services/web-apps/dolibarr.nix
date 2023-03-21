@@ -5,7 +5,7 @@ let
   package = pkgs.dolibarr.override { inherit (cfg) stateDir; };
 
   cfg = config.services.dolibarr;
-  vhostCfg = lib.optionalAttr (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
+  vhostCfg = lib.optionalAttrs (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
 
   mkConfigFile = filename: settings:
     let
@@ -16,7 +16,7 @@ let
         if (any (str: k == str) secretKeys) then v
         else if isString v then "'${v}'"
         else if isBool v then boolToString v
-        else if isNull v then "null"
+        else if v == null then "null"
         else toString v
       ;
     in

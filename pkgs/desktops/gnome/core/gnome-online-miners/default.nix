@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     dleyna-server
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-security" # https://gitlab.gnome.org/GNOME/gnome-online-miners/merge_requests/3/diffs#note_942747
   ];
 

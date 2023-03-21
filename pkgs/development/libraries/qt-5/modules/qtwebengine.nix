@@ -102,7 +102,7 @@ qtModule {
       --replace "-Wl,-fatal_warnings" ""
   '') + postPatch;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
     "-Wno-class-memaccess"
   ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
@@ -111,7 +111,7 @@ qtModule {
     "-march=westmere"
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-elaborated-enum-base"
-  ];
+  ]);
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -221,6 +221,7 @@ qtModule {
     Prefix = ..
     EOF
 
+  '' + ''
     # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';

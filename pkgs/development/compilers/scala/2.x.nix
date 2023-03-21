@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
           nixfmt
         ]
       }
-      versionSelect='v${versions.major version}.${versions.minor version}.*'
+      versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
       oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
       latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
       if [ "$oldVersion" != "$latestTag" ]; then

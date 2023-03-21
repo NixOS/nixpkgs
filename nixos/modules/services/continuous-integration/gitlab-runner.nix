@@ -577,7 +577,7 @@ in {
       };
     };
     # Enable periodic clear-docker-cache script
-    systemd.services.gitlab-runner-clear-docker-cache = {
+    systemd.services.gitlab-runner-clear-docker-cache = mkIf (cfg.clear-docker-cache.enable && (any (s: s.executor == "docker") (attrValues cfg.services))) {
       description = "Prune gitlab-runner docker resources";
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
@@ -590,7 +590,7 @@ in {
         ${pkgs.gitlab-runner}/bin/clear-docker-cache ${toString cfg.clear-docker-cache.flags}
       '';
 
-      startAt = optional cfg.clear-docker-cache.enable cfg.clear-docker-cache.dates;
+      startAt = cfg.clear-docker-cache.dates;
     };
     # Enable docker if `docker` executor is used in any service
     virtualisation.docker.enable = mkIf (

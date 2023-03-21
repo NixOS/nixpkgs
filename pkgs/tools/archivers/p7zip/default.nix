@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, lib, enableUnfree ? false }:
+{ lib, stdenv, fetchFromGitHub, enableUnfree ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p7zip";
-  version = "17.04";
+  version = "17.05";
 
   src = fetchFromGitHub {
-    owner  = "jinfeihan57";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "p7zip-project";
+    repo = "p7zip";
+    rev = "v${finalAttrs.version}";
     sha256 = {
-      free = "sha256-DrBuf2VPdcprHI6pMSmL7psm2ofOrUf0Oj0qwMjXzkk=";
-      unfree = "sha256-19F4hPV0nKVuFZNbOcXrcA1uW6Y3HQolaHVIYXGmh18=";
+      free = "sha256-5r7M9BVcAryZNTkqJ/BfHnSSWov1PwoZhUnLBwEbJoA=";
+      unfree = "sha256-z3qXgv/TkNRbb85Ew1OcJNxoyssfzHShc0b0/4NZOb0=";
     }.${if enableUnfree then "unfree" else "free"};
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
       --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
   '';
 
-  makeFlags = [ "DEST_HOME=${placeholder "out"}" ];
-
   preConfigure = ''
     buildFlags=all3
   '' + lib.optionalString stdenv.isDarwin ''
@@ -47,15 +45,22 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+
+  makeFlags = [
+    "DEST_BIN=${placeholder "out"}/bin"
+    "DEST_SHARE=${placeholder "lib"}/lib/p7zip"
+    "DEST_MAN=${placeholder "man"}/share/man"
+    "DEST_SHARE_DOC=${placeholder "doc"}/share/doc/p7zip"
+  ];
+
+  outputs = [ "out" "lib" "doc" "man" ];
 
   setupHook = ./setup-hook.sh;
-
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
-
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    homepage = "https://github.com/jinfeihan57/p7zip";
+    homepage = "https://github.com/p7zip-project/p7zip";
     description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
     license = with licenses;
       # p7zip code is largely lgpl2Plus
@@ -68,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "7z";
   };
-}
+})

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "yourlabs";
     repo = "django-autocomplete-light";
     rev = version;
-    sha256 = "sha256-YUiGN6q7ARM/rg7d+ykeDEYZDYjB+DHxMCmdme6QccU=";
+    hash = "sha256-YUiGN6q7ARM/rg7d+ykeDEYZDYjB+DHxMCmdme6QccU=";
   };
 
   propagatedBuildInputs = [

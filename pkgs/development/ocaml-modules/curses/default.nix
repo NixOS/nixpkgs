@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ];
 
   # Fix build for recent ncurses versions
-  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
+  env.NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   createFindlibDestdir = true;
 

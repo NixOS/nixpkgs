@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ fuse glib ];
   nativeCheckInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
     (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 

@@ -1,29 +1,33 @@
-{ lib
-, stdenv
+{ asio
 , cmake
-, pkg-config
 , curl
-, asio
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
 , gnutls
 , lame
+, lib
 , libev
 , game-music-emu
 , libmicrohttpd
 , libopenmpt
 , mpg123
 , ncurses
+, pkg-config
+, portaudio
+, stdenv
 , taglib
 # Linux Dependencies
 , alsa-lib
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
 , pulseaudio
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, sndioSupport ? true, sndio
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 # Darwin Dependencies
 , Cocoa
 , SystemConfiguration
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +60,7 @@ stdenv.mkDerivation rec {
     libopenmpt
     mpg123
     ncurses
+    portaudio
     taglib
   ] ++ lib.optionals systemdSupport [
     systemd
@@ -63,13 +68,19 @@ stdenv.mkDerivation rec {
     alsa-lib pulseaudio
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
+  ] ++ lib.optionals sndioSupport [
+    sndio
+  ] ++ lib.optionals pipewireSupport [
+    pipewire
   ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
-  postFixup = lib.optionals stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
   '';

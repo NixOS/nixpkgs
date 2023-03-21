@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "4.1";
+  version = "5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JXgU2uoMhfqKlQOksbdYZtnJbs7UZKlTxZNo7OIGEig=";
+    hash = "sha256-fHWJWgy/Ven5m2Cf81rG/ZKmFFWiLJsIPVxFe+rr+ms=";
   };
 
   propagatedBuildInputs = [
@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/lelit/pglast/raw/v${version}/CHANGES.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "pgpp";
   };
 }

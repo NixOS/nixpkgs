@@ -118,7 +118,7 @@ let
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
+    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
@@ -155,6 +155,16 @@ in {
       description = lib.mdDoc ''
         Extra config options for systemd. See systemd-system.conf(5) man page
         for available options.
+      '';
+    };
+
+    managerEnvironment = mkOption {
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+      default = {};
+      example = { SYSTEMD_LOG_LEVEL = "debug"; };
+      description = lib.mdDoc ''
+        Environment variables of PID 1. These variables are
+        *not* passed to started units.
       '';
     };
 
@@ -355,7 +365,10 @@ in {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
         umount = "${cfg.package.util-linux}/bin/umount";
+        fsck = "${cfg.package.util-linux}/bin/fsck";
       };
+
+      managerEnvironment.PATH = "/bin:/sbin";
 
       contents = {
         "/init".source = "${cfg.package}/lib/systemd/systemd";
@@ -365,6 +378,7 @@ in {
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
           ${cfg.extraConfig}
+          ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
@@ -427,9 +441,6 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
-
-        # the unwrapped systemd-cryptsetup executable
-        "${cfg.package}/lib/systemd/.systemd-cryptsetup-wrapped"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
@@ -446,21 +457,6 @@ in {
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
-
-      # The unit in /run/systemd/generator shadows the unit in
-      # /etc/systemd/system, but will still apply drop-ins from
-      # /etc/systemd/system/foo.service.d/
-      #
-      # We need IgnoreOnIsolate, otherwise the Requires dependency of
-      # a mount unit on its makefs unit causes it to be unmounted when
-      # we isolate for switch-root. Use a dummy package so that
-      # generateUnits will generate drop-ins instead of unit files.
-      packages = [(pkgs.runCommand "dummy" {} ''
-        mkdir -p $out/etc/systemd/system
-        touch $out/etc/systemd/system/systemd-{makefs,growfs}@.service
-      '')];
-      services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
-      services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
 
       # make sure all the /dev nodes are set up
       services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];

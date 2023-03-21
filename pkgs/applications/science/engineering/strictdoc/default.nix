@@ -19,7 +19,7 @@
 , setuptools
 , textx
 , xlrd
-, XlsxWriter
+, xlsxwriter
 , pytestCheckHook
 }:
 
@@ -70,7 +70,7 @@ buildPythonApplication rec {
     setuptools
     textx
     xlrd
-    XlsxWriter
+    xlsxwriter
   ];
 
   nativeCheckInputs = [

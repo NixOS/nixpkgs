@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       following rfc2104 (HMAC). It also includes some key generation algorithms
       which are based on hash algorithms.
     '';
-    homepage = "http://mhash.sourceforge.net";
+    homepage = "https://mhash.sourceforge.net";
     license = "LGPL";
     platforms = lib.platforms.unix;
   };

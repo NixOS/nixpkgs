@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-968LGj2b8qLs/YQ1DxC1s/xf5qUwnrd8xu5iKrqNN+Y=";
+    sha256 = "sha256-SqboPBqK7gDVTTjGgCUB9oIGBZR55EA7x65a0wumiKw=";
   };
 
   nativeBuildInputs = [
@@ -18,16 +18,15 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-       lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
-    ++ lib.optional stdenv.isSunOS libiconv
-    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  buildInputs = [ libiconv ]
+    ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   cmakeFlags =
     [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
     lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   meta = {

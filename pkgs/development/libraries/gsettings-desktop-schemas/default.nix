@@ -3,6 +3,8 @@
 , pkg-config
 , glib
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , meson
 , ninja
 , python3
@@ -27,7 +29,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   postPatch = ''
@@ -62,6 +69,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas";
     description = "Collection of GSettings schemas for settings shared by various components of a desktop";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

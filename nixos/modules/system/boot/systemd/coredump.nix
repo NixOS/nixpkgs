@@ -66,9 +66,7 @@ in {
         uid = config.ids.uids.systemd-coredump;
         group = "systemd-coredump";
       };
-      users.groups.systemd-coredump = {
-        gid = config.ids.gids.systemd-coredump;
-      };
+      users.groups.systemd-coredump = {};
     })
 
     (mkIf (!cfg.enable) {

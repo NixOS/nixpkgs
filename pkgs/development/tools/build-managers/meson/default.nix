@@ -59,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
 
+    # Nixpkgs cctools does not have bitcode support.
+    ./disable-bitcode.patch
+
     # Fix passing multiple --define-variable arguments to pkg-config.
     # https://github.com/mesonbuild/meson/pull/10670
     (fetchpatch {
@@ -75,13 +78,7 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/mesonbuild/meson/commit/a38ad3039d0680f3ac34a6dc487776c79c48acf3.patch";
       hash = "sha256-9YaXwc+F3Pw4BjuOXqva4MD6DAxX1k5WLbn0xzwuEmw=";
     })
-  ]
-    # Nixpkgs cctools does not have bitcode support.
-    ++ lib.optional stdenv.isDarwin ./disable-bitcode.patch;
-
-  postPatch = if stdenv.isDarwin then ''
-    rm -r 'test cases/osx/7 bitcode'
-  '' else null;
+  ];
 
   setupHook = ./setup-hook.sh;
 
@@ -89,17 +86,23 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ Foundation OpenGL AppKit Cocoa ];
   checkPhase = ''
-    patchShebangs "test cases"
-    substituteInPlace "test cases/native/8 external program shebang parsing/script.int.in" \
+    runHook preCheck
+
+    patchShebangs 'test cases'
+    substituteInPlace 'test cases/native/8 external program shebang parsing/script.int.in' \
       --replace /usr/bin/env ${coreutils}/bin/env
     # requires git, creating cyclic dependency
-    rm -r "test cases/common/66 vcstag"
+    rm -r 'test cases/common/66 vcstag'
     # requires glib, creating cyclic dependency
-    rm -r "test cases/linuxlike/6 subdir include order"
-    rm -r "test cases/linuxlike/9 compiler checks with dependencies"
+    rm -r 'test cases/linuxlike/6 subdir include order'
+    rm -r 'test cases/linuxlike/9 compiler checks with dependencies'
     # requires static zlib, see #66461
-    rm -r "test cases/linuxlike/14 static dynamic linkage"
+    rm -r 'test cases/linuxlike/14 static dynamic linkage'
+    # Nixpkgs cctools does not have bitcode support.
+    rm -r 'test cases/osx/7 bitcode'
     HOME="$TMPDIR" python ./run_project_tests.py
+
+    runHook postCheck
   '';
 
   postFixup = ''

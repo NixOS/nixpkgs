@@ -55,16 +55,16 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
-  version = "17.1.0";
+  version = "20.0.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-xGRymDhkNP9b2JYTEu4M/CrRINmMGY2S5ZuM3Ot1wGg=";
+    hash = "sha256-JXlv9/P5tBAnRVNCBavG5AtM11Q6mikTN+Qu+u3pLP0=";
   };
 
-  npmDepsHash = "sha256-Ncf07ggyOnz/2SpgdmaYS2X/8Bad+J2sz8Yyx9Iri3E=";
+  npmDepsHash = "sha256-fecGkN6MEdBP8UokBY/w0TnPOC93KsAISEg3VW0bvHU=";
 
   nativeBuildInputs = [
     remarshal
@@ -127,7 +127,8 @@ buildNpmPackage rec {
   meta = with lib; {
     homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
-    description = ''
+    description = "Versatile typeface for code, from code.";
+    longDescription = ''
       Iosevka is an open-source, sans-serif + slab-serif, monospace +
       quasi‑proportional typeface family, designed for writing code, using in
       terminals, and preparing technical documents.

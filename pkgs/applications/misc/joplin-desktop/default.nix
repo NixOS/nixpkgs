@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.9.17";
+  version = "2.10.4";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-kdmxSXKHIyVdvVNEoZkSIQlOkTt97bpAdrV0sxhL1Ug=";
-      x86_64-darwin = "sha256-o3Q5foEuBi4OTHr6mP0ZXOxkkUw/c/jXaZOtztQf0gM=";
+      x86_64-linux = "sha256-KEEPPtWxaY6+Nu/CE+AVAnaVZ30zmASWiIYaJt4a+3E=";
+      x86_64-darwin = "sha256-8Rkj1pV6tJygznbfELnAhzhh7ImnTm9dxCxCjYlWdnU=";
     }.${system} or throwSystem;
   };
 
@@ -35,7 +35,7 @@ let
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.mit;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };

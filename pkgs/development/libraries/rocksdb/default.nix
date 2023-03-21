@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "7.9.2";
+  version = "7.10.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
+    sha256 = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "tools"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=deprecated-copy"
     "-Wno-error=pessimizing-move"
     # Needed with GCC 12
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=unused-private-field"
     "-faligned-allocation"
-  ];
+  ]);
 
   cmakeFlags = [
     "-DPORTABLE=1"

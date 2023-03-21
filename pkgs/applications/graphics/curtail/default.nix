@@ -37,24 +37,30 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    appstream-glib
+    gettext
+    gtk3
   ];
 
   propagatedBuildInputs = [
-    appstream-glib
     python3.pkgs.pygobject3
-    gobject-introspection
-    gettext
   ];
-
-  # Currently still required for the gobject-introspection setup hook
-  strictDeps = false;
 
   preInstall = ''
     patchShebangs ../build-aux/meson/postinstall.py
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/curtail --prefix PATH : ${lib.makeBinPath [ jpegoptim libwebp optipng pngquant ]}
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant ]}"
+    )
   '';
 
   meta = with lib; {

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JrzMgeQkPRwP9Uh+a0gd5jKfzWXHk2XCZ87zjzY6K1Y=";
+    hash = "sha256-JrzMgeQkPRwP9Uh+a0gd5jKfzWXHk2XCZ87zjzY6K1Y=";
   };
 
   buildInputs = [ pkgs.portaudio ];

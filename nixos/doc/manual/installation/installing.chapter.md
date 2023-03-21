@@ -428,7 +428,7 @@ Use the following commands:
 
     UEFI systems
 
-    :   You must select a boot-loader, either system-boot or GRUB. The recommended
+    :   You must select a boot-loader, either systemd-boot or GRUB. The recommended
         option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
         to `true`. `nixos-generate-config` should do this automatically
         for new configurations when booted in UEFI mode.
@@ -441,10 +441,10 @@ Use the following commands:
         If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
         [](#opt-boot.loader.grub.efiSupport) to `true`.
 
-        With system-boot, you should not need any special configuration to detect
+        With systemd-boot, you should not need any special configuration to detect
         other installed systems. With GRUB, set [](#opt-boot.loader.grub.useOSProber)
-        to `true`, but this will only detect windows partitions, not other linux
-        distributions. If you dual boot another linux distribution, use system-boot
+        to `true`, but this will only detect windows partitions, not other Linux
+        distributions. If you dual boot another Linux distribution, use systemd-boot
         instead.
 
     If you need to configure networking for your machine the

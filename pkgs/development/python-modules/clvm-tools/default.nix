@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Chia-Network";
     repo = "clvm_tools";
     rev = version;
-    sha256 = "sha256-MAtVTSv1RR2/7QEKCOEQ+QH5vK4aE0Us2TXyRRAMl8U=";
+    hash = "sha256-MAtVTSv1RR2/7QEKCOEQ+QH5vK4aE0Us2TXyRRAMl8U=";
   };
 
   nativeBuildInputs = [

@@ -5,7 +5,7 @@
 , bintools-unwrapped
 , libffi
 , libusb1
-, wxGTK30
+, wxGTK32
 , python3
 , gcc-arm-embedded
 , klipper
@@ -28,7 +28,7 @@
     avrdude
     stm32flash
     pkg-config
-    wxGTK30 # Required for bossac
+    wxGTK32 # Required for bossac
   ];
 
   preBuild = "cp ${firmwareConfig} ./.config";
@@ -40,6 +40,7 @@
   makeFlags = [
     "V=1"
     "KCONFIG_CONFIG=${firmwareConfig}"
+    "WXVERSION=3.2"
   ];
 
   installPhase = ''

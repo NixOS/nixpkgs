@@ -234,6 +234,12 @@ stdenv.mkDerivation rec {
         "TestMinioServer.Connect"
         "TestS3FS.*"
         "TestS3FSGeneric.*"
+      ] ++ lib.optionals stdenv.isDarwin [
+        # TODO: revisit at 12.0.0 or when
+        # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
+        # is available, see
+        # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
+        "ExecPlanExecution.StressSourceSinkStopped"
       ];
     in
     lib.optionalString doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
@@ -262,7 +268,6 @@ stdenv.mkDerivation rec {
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = licenses.asl20;
-    broken = stdenv.isLinux && stdenv.isAarch64; # waiting on gtest changes in staging
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };

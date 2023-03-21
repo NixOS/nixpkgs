@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "zerwes";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    sha256 = "sha256-MVJoMnEi+319ZkhffYWYVi/wj0Ihm0nfVeEXvx7Ac/4=";
+    hash = "sha256-MVJoMnEi+319ZkhffYWYVi/wj0Ihm0nfVeEXvx7Ac/4=";
   };
 
   propagatedBuildInputs = [

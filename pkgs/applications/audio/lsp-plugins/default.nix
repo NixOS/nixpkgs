@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
+  env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   configurePhase = ''
     make config PREFIX=${placeholder "out"}

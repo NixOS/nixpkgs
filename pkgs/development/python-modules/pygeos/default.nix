@@ -30,8 +30,8 @@ buildPythonPackage rec {
   # for the package to function. Therefore override of buildPhase was
   # necessary.
   buildPhase = ''
-    ${python.interpreter} setup.py build_ext --inplace
-    ${python.interpreter} setup.py bdist_wheel
+    ${python.pythonForBuild.interpreter} setup.py build_ext --inplace
+    ${python.pythonForBuild.interpreter} setup.py bdist_wheel
   '';
 
   nativeCheckInputs = [
@@ -50,4 +50,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ nialov ];
   };
 }
-

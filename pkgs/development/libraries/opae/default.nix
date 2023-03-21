@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-truncation"
     "-Wno-error=address-of-packed-member"
     "-Wno-array-bounds"

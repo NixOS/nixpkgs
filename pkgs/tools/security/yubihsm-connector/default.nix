@@ -2,22 +2,16 @@
 
 buildGoModule rec {
   pname = "yubihsm-connector";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-connector";
     rev = version;
-    sha256 = "FQ64tSZN55QpXjMZITzlWOPTKSgnoCpkRngQUQHVavc=";
+    hash = "sha256-snoQZsmKQPcsB5EpZc4yon02QbxNU5B5TAwRPjs1O5I=";
   };
 
-  vendorSha256 = "kVBzdJk/1LvjdUtLqHAw9ZxDfCo3mBWVMYG/nQXpDrk=";
-
-  patches = [
-    # Awaiting a new release to fix the upstream lockfile
-    # https://github.com/Yubico/yubihsm-connector/issues/36
-    ./lockfile-fix.patch
-  ];
+  vendorHash = "sha256-XW7rEHY3S+M3b6QjmINgrCak+BqCEV3PJP90jz7J47A=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,6 +20,8 @@ buildGoModule rec {
   buildInputs = [
     libusb1
   ];
+
+  ldflags = [ "-s" "-w" ];
 
   preBuild = ''
     go generate

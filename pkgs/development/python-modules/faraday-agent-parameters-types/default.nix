@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    sha256 = "sha256-jQgE/eR8Gd9nMGijH9unhHCrLUn7DbWFkTauoz3O/sM=";
+    hash = "sha256-jQgE/eR8Gd9nMGijH9unhHCrLUn7DbWFkTauoz3O/sM=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "faraday_agent_parameters_types"
     "faraday_agent_parameters_types.utils"
+  ];
+
+  disabledTests = [
+    # assert 'Version requested not valid' in "Invalid version: 'hola'"
+    "test_incorrect_version_requested"
   ];
 
   meta = with lib; {

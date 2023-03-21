@@ -2,20 +2,19 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
-, rofi-unwrapped
 , bluez
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-bluetooth";
-  version = "unstable-2021-03-05";
+  version = "unstable-2023-02-03";
 
   src = fetchFromGitHub {
     owner = "nickclyde";
-    repo = "rofi-bluetooth";
+    repo = finalAttrs.pname;
     # https://github.com/nickclyde/rofi-bluetooth/issues/19
-    rev = "893db1f2b549e7bc0e9c62e7670314349a29cdf2";
-    sha256 = "sha256-3oROJKEQCuSnLfbJ+JSSc9hcmJTPrLHRQJsrUcaOMss=";
+    rev = "9d91c048ff129819f4c6e9e48a17bd54343bbffb";
+    sha256 = "sha256-1Xe3QFThIvJDCUznDP5ZBzwZEMuqmxpDIV+BcVvQDG8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     install -D --target-directory=$out/bin/ ./rofi-bluetooth
 
     wrapProgram $out/bin/rofi-bluetooth \
-      --prefix PATH ":" ${lib.makeBinPath [ rofi-unwrapped bluez ] }
+      --prefix PATH ":" ${lib.makeBinPath [ bluez ] }
 
     runHook postInstall
   '';
@@ -38,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ MoritzBoehme ];
     platforms = platforms.linux;
   };
-}
+})

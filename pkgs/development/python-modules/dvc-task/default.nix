@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-task";
-  version = "0.1.9";
+  version = "0.1.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+v1M8bKcHWUTz4DJ85tB1qdFYKI0k8TS/Dvf166o920=";
+    hash = "sha256-0KfH0/rghq+03sFLaR8lsIi4TJuwwca/YhQgILCdHq8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Celery task queue used in DVC";
     homepage = "https://github.com/iterative/dvc-task";
+    changelog = "https://github.com/iterative/dvc-task/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

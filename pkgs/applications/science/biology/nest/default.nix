@@ -5,9 +5,12 @@
 , cmake
 , gsl
 , libtool
+, findutils
+, llvmPackages
 , mpi
 , nest
 , pkg-config
+, boost
 , python3
 , readline
 , autoPatchelfHook
@@ -17,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nest";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    sha256 = "sha256-wmn5LOOHlSuyPdV6O6v7j10dxdcvqpym6MfveZdL+dU=";
+    hash = "sha256-+wjsZxW2l0WGyGTm/6vyzPEeqCfyxJml9oP/zn6W1L0=";
   };
 
   postPatch = ''
@@ -37,23 +40,35 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoPatchelfHook
+    findutils
   ];
 
   buildInputs = [
     gsl
     readline
     libtool # libltdl
+    boost
   ] ++ lib.optionals withPython [
     python3
     python3.pkgs.cython
-  ] ++ lib.optional withMpi mpi;
+  ] ++ lib.optional withMpi mpi
+    ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+
+  propagatedBuildInputs = with python3.pkgs; [
+    numpy
+  ];
 
   cmakeFlags = [
     "-Dwith-python=${if withPython then "ON" else "OFF"}"
     "-Dwith-mpi=${if withMpi then "ON" else "OFF"}"
-    "-Dwith-openmp=${if stdenv.isDarwin then "OFF" else "ON"}"
+    "-Dwith-openmp=ON"
   ];
+
+  postInstall = ''
+    # Alternative to autoPatchElf, moves libraries where
+    # Nest expects them to be
+    find $out/lib/nest -exec ln -s {} $out/lib \;
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = nest;
@@ -63,8 +78,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "NEST is a command line tool for simulating neural networks";
     homepage = "https://www.nest-simulator.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jiegec ];
+    changelog = "https://github.com/nest/nest-simulator/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jiegec davidcromp ];
     platforms = platforms.unix;
   };
 }

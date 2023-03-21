@@ -9,9 +9,8 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
-    broken = lib.versionOlder qtbase.version "5.13.0";
   };
-  output = [ "out" "dev" ];
+  outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee ki18n kiconthemes knewstuff kservice kxmlgui qtbase

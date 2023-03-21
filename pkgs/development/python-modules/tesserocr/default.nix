@@ -6,7 +6,7 @@
 , cython
 , leptonica
 , pkg-config
-, tesseract
+, tesseract4
 
 # propagates
 , pillow
@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bmj76gi8401lcqdaaznfmz9yf11myy1bzivqwwq08z3dwzxswck";
+    sha256 = "sha256-d0MNJytT2s073Ur11WP9wkrlG4b9vJzy6BRvKceryaQ=";
   };
 
   # https://github.com/sirfz/tesserocr/issues/314
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     leptonica
-    tesseract
+    tesseract4
   ];
 
   propagatedBuildInputs = [

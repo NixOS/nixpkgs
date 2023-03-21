@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "284";
+  version = "287";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
-    rev = "80a7c7cfed9157915067666fe95b298896f2aea8";
-    sha256 = "sha256-iAIW6nVUk1FJD2dQvDMREPVqrq0JkExJ7lVio//ALts=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-tIZOI3jiMRaGHMXS1mA1Tom9ij3L/VuxDUJdnEc7SSc=";
     fetchSubmodules = true;
   };
 
@@ -88,23 +88,25 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  patches = [
+  postPatch = ''
     # Instead of requiring Internet access to do an npm install to generate the package-lock.json
     # it copies the package-lock.json already present in the node_modules folder fetched as a git
     # submodule.
-    ./nerf-node-modules.patch
+    echo "#!/bin/sh" > test/node_modules
 
-    # sysconfdir is $(prefix)/etc by default and it breaks the configuration file loading feature
-    # changing sysconfdir to /etc breaks the build in this part of the makefile because it tries
-    # to write to /etc inside the sandbox
-    # this patch redirects it to write to $out/etc instead of /etc
-    ./fix-makefiles.patch
-  ];
+    substituteInPlace src/tls/cockpit-certificate-helper.in \
+      --replace 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
 
-  postPatch = ''
+    substituteInPlace src/tls/cockpit-certificate-ensure.c \
+      --replace '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
+
+    substituteInPlace src/common/cockpitconf.c \
+      --replace 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+
     # instruct users with problems to create a nixpkgs issue instead of nagging upstream directly
     substituteInPlace configure.ac \
       --replace 'devel@lists.cockpit-project.org' 'https://github.com/NixOS/nixpkgs/issues/new?assignees=&labels=0.kind%3A+bug&template=bug_report.md&title=cockpit%25'
+
     patchShebangs \
       test/common/pixel-tests \
       test/common/run-tests \
@@ -114,7 +116,7 @@ stdenv.mkDerivation rec {
       tools/make-compile-commands \
       tools/node-modules \
       tools/termschutz \
-      tools/webpack-make
+      tools/webpack-make.js
 
     for f in node_modules/.bin/*; do
       patchShebangs $(realpath $f)
@@ -145,7 +147,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-prefix-only=yes"
-    "--sysconfdir=/etc"
     "--disable-pcp" # TODO: figure out how to package its dependency
     "--with-default-session-path=/run/wrappers/bin:/run/current-system/sw/bin"
   ];
@@ -158,7 +159,6 @@ stdenv.mkDerivation rec {
   '';
 
   postBuild = ''
-    find | grep cockpit-bridge
     chmod +x \
       src/systemd/update-motd \
       src/tls/cockpit-certificate-helper \
@@ -215,7 +215,10 @@ stdenv.mkDerivation rec {
     npm run stylelint
   '';
 
-  passthru.tests = { inherit (nixosTests) cockpit; };
+  passthru = {
+    tests = { inherit (nixosTests) cockpit; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Web-based graphical interface for servers";

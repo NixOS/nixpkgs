@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/libgovirt/-/issues/9
     ./auto-disable-incompatible-compiler-warnings.patch
   ];
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
     "-Wno-typedef-redefinition"
     "-Wno-missing-field-initializers"
     "-Wno-cast-align"

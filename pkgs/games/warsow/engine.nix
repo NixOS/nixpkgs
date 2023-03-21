@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: CMakeFiles/wswtv_server.dir/__/unix/unix_time.c.o:(.bss+0x8): multiple definition of
   #     `c_pointcontents'; CMakeFiles/wswtv_server.dir/__/null/ascript_null.c.o:(.bss+0x8): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   cmakeFlags = [ "-DQFUSION_GAME=Warsow" ];
 

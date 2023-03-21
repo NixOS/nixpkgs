@@ -34,7 +34,7 @@
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withCrystalhd ? withFullDeps
-, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !isAarch64))
+, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
@@ -57,8 +57,8 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform
-, withNvenc ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform
+, withNvdec ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
+, withNvenc ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
@@ -253,6 +253,7 @@
 , zeromq4
 , zimg
 , zlib
+, vulkan-headers
 , vulkan-loader
 , glslang
 /*
@@ -286,7 +287,6 @@
  */
 
 let
-  inherit (stdenv) isCygwin isDarwin isFreeBSD isLinux isAarch64;
   inherit (lib) optional optionals optionalString enableFeature;
 in
 
@@ -342,6 +342,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+  '' + lib.optionalString withVulkan ''
+    # FIXME: horrible hack, remove for next release
+    substituteInPlace libavutil/hwcontext_vulkan.c \
+      --replace VK_EXT_VIDEO_DECODE VK_KHR_VIDEO_DECODE
   '';
 
   patches = map (patch: fetchpatch patch) extraPatches;
@@ -593,7 +597,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withVorbis [ libvorbis ]
   ++ optionals withVpx [ libvpx ]
   ++ optionals withV4l2 [ libv4l ]
-  ++ optionals withVulkan [ vulkan-loader ]
+  ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
   ++ optionals withWebp [ libwebp ]
   ++ optionals withX264 [ x264 ]
   ++ optionals withX265 [ x265 ]
@@ -653,9 +657,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
-  postFixup = optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/libavcodec.so
-    addOpenGLRunpath $out/lib/libavutil.so
+  postFixup = optionalString (stdenv.isLinux && withLib) ''
+    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boxxy";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "queer";
     repo = "boxxy";
     rev = "v${version}";
-    hash = "sha256-bFDGZhwawOPzXR0ODD61h/wVUibNVl7ayiV9jfvTI6c=";
+    hash = "sha256-Iy4PDtqjAqZ8MKPAnPqLqsd+d37PB57fJE8C1fOdfQ4=";
   };
 
-  cargoHash = "sha256-oO0cb5PZ2BdJnB+Uyu5ZHpYR5znoeGa/RpyQAXLlrBQ=";
+  cargoHash = "sha256-wBSgdVNoGksvMFcRRAvYXrIw12BlW40zSPOmboGuVhQ=";
 
   meta = with lib; {
     description = "Puts bad Linux applications in a box with only their files";

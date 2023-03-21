@@ -75,8 +75,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/lukebfox/nixops-hetznercloud.git";
-        rev = "c00533400506d40940f7c1f67bf3973db37d9dd9";
-        sha256 = "1xfwhiyay7x1r3q6rxn2f3h0llgwf73vl8fxp0ww13rgny2w0dgj";
+        rev = "e14f340f7ffe9e2aa7ffbaac0b8a2e3b4cc116b3";
+        sha256 = "0vhapgzhqfk3y8a26ck09g0ilydsbjlx5g77f8bscdqz818lki12";
       };
     }
   );
@@ -85,8 +85,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/nix-community/nixops-libvirtd.git";
-        rev = "bc3cf1c5c774a80e05991ca040baa2b23e3ecd51";
-        sha256 = "06bcxchjgmgfvhg9dzlcdnr4ak0h1rdpfpgbix3z2via2gad8bvj";
+        rev = "be1ea32e02d8abb3dbe1b09b7c5a7419a7412991";
+        sha256 = "1mklm3lmicvhs0vcib3ss21an45wk24m1mkcwy1zvbpbmvhdz2m4";
       };
     }
   );

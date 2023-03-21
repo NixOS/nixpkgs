@@ -16,7 +16,7 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
         (
-          # with version 3 of flask-limiter octoprint 1.8.6 fails to start with
+          # with version 3 of flask-limiter octoprint 1.8.7 fails to start with
           #  TypeError: Limiter.__init__() got multiple values for argument 'key_func'
           self: super: {
             flask-limiter = super.flask-limiter.overridePythonAttrs (oldAttrs: rec {
@@ -38,6 +38,17 @@ let
               nativeBuildInputs = [ ];
               format = "setuptools";
               outputs = [ "out" ];
+              patches = [ ];
+            });
+            # downgrade needed for flask-babel 2.0.0
+            babel = super.babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.11.0";
+              src = super.fetchPypi {
+                pname = "Babel";
+                inherit version;
+                hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+              };
+              propagatedBuildInputs = [ self.pytz ];
             });
           }
         )
@@ -105,13 +116,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.8.6";
+              version = "1.8.7";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-DCUesPy4/g7DYN/9CDRvwAWHcv4dFsF+gsysg5UWThQ=";
+                hash = "sha256-g4PYB9YbkX0almRPgMFlb8D633Y5fc3H+Boa541suqc=";
               };
 
               propagatedBuildInputs = with self; [

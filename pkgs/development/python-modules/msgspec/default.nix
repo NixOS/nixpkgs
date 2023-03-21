@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jcrist";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-TGCdsimcoY3441/nOXxHGqYM4q8uoWd78HtUts6EOJY=";
+    hash = "sha256-Sq0hV5ZftUCIR/6QOWvdfzg8UHYLZXo5ba5ydTnjqPg=";
   };
 
   # Requires libasan to be accessible

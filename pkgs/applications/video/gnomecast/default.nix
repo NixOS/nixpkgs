@@ -12,7 +12,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
   propagatedBuildInputs = [
-    PyChromecast bottle pycaption paste html5lib pygobject3 dbus-python
+    pychromecast bottle pycaption paste html5lib pygobject3 dbus-python
     gtk3 gobject-introspection
   ];
 

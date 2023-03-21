@@ -22,7 +22,7 @@ let
   # This is over 3GB, to allow hydra caching we separate it
   rf = stdenv.mkDerivation (finalAttrs: {
     pname = "rocfft";
-    version = "5.4.2";
+    version = "5.4.3";
 
     outputs = [
       "out"
@@ -36,7 +36,7 @@ let
       owner = "ROCmSoftwarePlatform";
       repo = "rocFFT";
       rev = "rocm-${finalAttrs.version}";
-      hash = "sha256-NsYeEoBQ/0z31ZQ32l7N+qavWEVkH37snkTHntot7nE=";
+      hash = "sha256-FsefE0B2hF5ZcHDB6TscwFeZ1NKFkWX7VDpEvvbDbOk=";
     };
 
     nativeBuildInputs = [

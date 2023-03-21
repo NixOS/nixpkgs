@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "zhuyifei1999";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f7YpaZ85PU/CSsDwSm2IJ/x2ZxzHoMOVbdbzT1i8y/w=";
+    hash = "sha256-f7YpaZ85PU/CSsDwSm2IJ/x2ZxzHoMOVbdbzT1i8y/w=";
   };
 
   propagatedBuildInputs = [ tkinter ];

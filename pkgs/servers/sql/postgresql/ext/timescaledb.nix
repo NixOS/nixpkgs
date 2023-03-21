@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.9.3";
+  version = "2.10.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "timescale";
     repo = "timescaledb";
     rev = version;
-    sha256 = "sha256-eUn/sk2l/2aEGXupRPNDrbrIpUA3aNPo3tBJhmBoeXk=";
+    sha256 = "sha256-D0jo1Z9hpaJBFJQhypo76cKaahNF498OLDco2YNktA8=";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]

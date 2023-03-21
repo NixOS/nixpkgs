@@ -6,7 +6,7 @@
 , requests
 , setuptools
 , pythonOlder
-, XlsxWriter
+, xlsxwriter
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GL0q6BEUtwg24OMxUicyXhQ5gnUiOZiowjWwmUMvSws=";
+    hash = "sha256-GL0q6BEUtwg24OMxUicyXhQ5gnUiOZiowjWwmUMvSws=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     colorama
     requests
     setuptools
-    XlsxWriter
+    xlsxwriter
   ];
 
   # The tests require a shodan api key, so skip them.

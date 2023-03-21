@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: src/common/mgmt/pint-worker-external.po:(.data.rel.local+0x0): multiple definition of
   #     `PINT_worker_external_impl'; src/common/mgmt/pint-mgmt.po:(.bss+0x20): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
     echo "en

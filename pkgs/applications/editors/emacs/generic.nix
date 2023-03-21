@@ -45,6 +45,7 @@
   else if withAthena then "athena"
   else "lucid")
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, withTreeSitter ? lib.versionAtLeast version "29", tree-sitter ? null
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -58,6 +59,7 @@ assert withGTK2 -> !withGTK3 && gtk2-x11 != null && !withPgtk;
 assert withGTK3 -> !withGTK2 && ((gtk3-x11 != null) || withPgtk);
 assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
+assert withTreeSitter -> tree-sitter != null;
 
 
 (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
@@ -164,7 +166,8 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
       ImageCaptureCore GSS ImageIO
     ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
-    ++ lib.optionals nativeComp [ libgccjit ];
+    ++ lib.optionals nativeComp [ libgccjit ]
+    ++ lib.optionals withTreeSitter [ tree-sitter ];
 
   hardeningDisable = [ "format" ];
 
@@ -193,6 +196,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
     ++ lib.optional withImageMagick "--with-imagemagick"
     ++ lib.optional withXinput2 "--with-xinput2"
     ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
+    ++ lib.optional withTreeSitter "--with-tree-sitter"
   ;
 
   installTargets = [ "tags" "install" ];
@@ -241,6 +245,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 
   passthru = {
     inherit nativeComp;
+    treeSitter = withTreeSitter;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
   };

@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "95.0.4635.37";
+  version = "96.0.4693.31";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-NQv9EVaBPfHygr76neYGACuk8A6Oc1GXAgizMa+jngw=";
+    hash = "sha256-ygJmwwwYg5lc7rDMkc8YH7oThET+4reFqPTrojtFowQ=";
   };
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     # "Illegal instruction (core dumped)"
     gtk3
     gtk4
-  ] ++ lib.optional proprietaryCodecs [
+  ] ++ lib.optionals proprietaryCodecs [
     vivaldi-ffmpeg-codecs
   ];
 

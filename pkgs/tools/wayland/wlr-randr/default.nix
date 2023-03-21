@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~emersion/wlr-randr";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     liboping
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ];
 
   preConfigure = ''
     patchShebangs tests man

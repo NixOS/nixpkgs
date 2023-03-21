@@ -43,7 +43,8 @@ let
       # Use virtualenv from a Nix env.
       nixenv-virtualenv = rec {
         env = runCommand "${python.name}-virtualenv" {} ''
-          ${pythonVirtualEnv.interpreter} -m virtualenv $out
+          ${pythonVirtualEnv.interpreter} -m virtualenv venv
+          mv venv $out
         '';
         interpreter = "${env}/bin/${python.executable}";
         is_venv = "False";
@@ -173,7 +174,7 @@ let
       }
     ) {};
     pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
-    in
+    in lib.optionalAttrs stdenv.isLinux
     {
       condaExamplePackage = runCommand "import-requests" {} ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out

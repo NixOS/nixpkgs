@@ -22,21 +22,23 @@ XDG_CONFIG_HOME = os.environ.get("XDG_CONFIG_HOME") or os.path.join(
 
 settings_path = Path(f"{XDG_CONFIG_HOME}/@configDirName@/settings.json")
 settings_path_temp = Path(f"{XDG_CONFIG_HOME}/@configDirName@/settings.json.tmp")
-try:
+
+if os.path.exists(settings_path):
     with settings_path.open(encoding="utf-8") as settings_file:
         settings = json.load(settings_file)
+else:
+    settings = {}
 
-        if settings.get("SKIP_HOST_UPDATE"):
-            print("[Nix] Disabling updates already done")
-        else:
-            skip_host_update = {"SKIP_HOST_UPDATE": True}
-            settings.update(skip_host_update)
+if settings.get("SKIP_HOST_UPDATE"):
+    print("[Nix] Disabling updates already done")
+else:
+    skip_host_update = {"SKIP_HOST_UPDATE": True}
+    settings.update(skip_host_update)
 
-            with settings_path_temp.open("w", encoding="utf-8") as settings_file_temp:
-                json.dump(settings, settings_file_temp, indent=2)
+    os.makedirs(os.path.dirname(settings_path), exist_ok=True)
 
-            settings_path_temp.rename(settings_path)
-            print("[Nix] Disabled updates")
+    with settings_path_temp.open("w", encoding="utf-8") as settings_file_temp:
+        json.dump(settings, settings_file_temp, indent=2)
 
-except IOError:
-    print("[Nix] settings.json doesn't yet exist, can't disable it yet")
+    settings_path_temp.rename(settings_path)
+    print("[Nix] Disabled updates")

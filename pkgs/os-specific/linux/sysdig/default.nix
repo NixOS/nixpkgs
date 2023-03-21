@@ -22,6 +22,11 @@ let
     rev = "3.0.1+driver";
     sha256 = "sha256-bK9wv17bVl93rOqw7JICnMOM0fDtPIErfMmUmNKOD5c=";
   };
+  # Workaround for scap-driver compilation error on kernel 6.2: https://github.com/falcosecurity/libs/issues/918
+  driverPatch = fetchpatch {
+    url = "https://github.com/falcosecurity/libs/commit/b8ec3e8637c850066d01543616fe413e8deb9e1f.patch";
+    hash = "sha256-s7iHbOjVqHSWRY4gktZldgrU5OClqRmbqmDtUgFIeh0=";
+  };
 
 in
 stdenv.mkDerivation rec {
@@ -67,6 +72,7 @@ stdenv.mkDerivation rec {
     chmod -R +w libs
     cp -r ${driver} driver-src
     chmod -R +w driver-src
+    patch -p1 -d driver-src < ${driverPatch}
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
       "-DVALIJSON_INCLUDE=${valijson}/include"
@@ -84,7 +90,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   # needed since luajit-2.1.0-beta3
-  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
+  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
 
   preConfigure = ''
     if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then

@@ -11,7 +11,7 @@
 , numpy
 , optax
 , scipy
-, scikitlearn
+, scikit-learn
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
     cvxpy
     optax
-    scikitlearn
+    scikit-learn
   ];
 
   pythonImportsCheck = [

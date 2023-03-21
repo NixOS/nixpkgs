@@ -1,32 +1,19 @@
 { lib
-, argon2-cffi-bindings
-, buildPythonApplication
-, check-manifest
-, devpi-common
 , devpi-server
-, fetchPypi
 , git
 , glibcLocales
-, mercurial
-, mock
-, pkginfo
-, pluggy
-, py
-, pytestCheckHook
-, setuptools
-, sphinx
-, tox
-, webtest
-, wheel
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.3";
+  version = "6.0.3";
 
-  src = fetchPypi {
+  format = "setuptools";
+
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-Ni6ybpUTankkkYYcwnKNFKYwmp1MTxOnucPm/TneWOw=";
+    hash = "sha256-csdQUxnopH+kYtoqdvyXKNW3fGkQNSREJYxjes9Dgi8=";
   };
 
   postPatch = ''
@@ -38,12 +25,16 @@ buildPythonApplication rec {
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     argon2-cffi-bindings
+    build
     check-manifest
     devpi-common
+    iniconfig
+    pep517
     pkginfo
     pluggy
+    platformdirs
     py
     setuptools
   ];
@@ -51,14 +42,16 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     devpi-server
     git
+  ] ++ (with python3.pkgs; [
     mercurial
     mock
+    pypitoken
     pytestCheckHook
     sphinx
-    tox
+    virtualenv
     webtest
     wheel
-  ];
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -74,8 +67,9 @@ buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
+    homepage = "http://doc.devpi.net";
+    changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
   };

@@ -199,12 +199,16 @@ in
               # java.security.AccessControlException:
               # access denied ("java.io.FilePermission" "/var/lib/opensearch/config/opensearch.yml" "read")
 
+              rm -f ${configDir}/opensearch.yml
               cp ${opensearchYml} ${configDir}/opensearch.yml
 
               # Make sure the logging configuration for old OpenSearch versions is removed:
               rm -f "${configDir}/logging.yml"
+              rm -f ${configDir}/${loggingConfigFilename}
               cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
               mkdir -p ${configDir}/scripts
+
+              rm -f ${configDir}/jvm.options
               cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options
 
               # redirect jvm logs to the data directory

@@ -98,7 +98,7 @@ in
 
 {
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
-  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; });
+  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; inherit lib; });
 
   outputs-no-out = runCommand "outputs-no-out-assert" {
     result = testers.testBuildFailure (stdenv.mkDerivation {
@@ -113,7 +113,7 @@ in
 
     # Assumption: the first output* variable to be configured is
     #   _overrideFirst outputDev "dev" "out"
-    expectedMsg = "_assignFirst: could not find a non-empty variable to assign to outputDev. The following variables were all unset or empty: dev out.";
+    expectedMsg = "error: _assignFirst: could not find a non-empty variable to assign to outputDev.\n       The following variables were all unset or empty:\n           dev out";
   } ''
     grep -F "$expectedMsg" $result/testBuildFailure.log >/dev/null
     touch $out
@@ -158,7 +158,7 @@ in
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
 
-    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; });
+    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; inherit lib; });
 
     test-cc-wrapper-substitutions = ccWrapperSubstitutionsTest {
       name = "test-cc-wrapper-substitutions-structuredAttrsByDefault";

@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rSXiAEh8r6NpcoYl/gZOiK2hNGYYUmECZZtGQPK0uRE=";
+    hash = "sha256-rSXiAEh8r6NpcoYl/gZOiK2hNGYYUmECZZtGQPK0uRE=";
   };
 
   pythonImportsCheck = [ "gym_notices" ];

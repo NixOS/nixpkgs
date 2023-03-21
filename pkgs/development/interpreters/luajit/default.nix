@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     "HOST_CC=${buildStdenv.cc}/bin/cc"
   ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = XCFLAGS;
+  env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )

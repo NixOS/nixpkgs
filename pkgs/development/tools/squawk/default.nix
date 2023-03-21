@@ -23,16 +23,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-v9F+HfscX4dIExIP1YvxOldZPPtmxh8lO3SREu6M+C0=";
+    hash = "sha256-ObaYGGTAGGLOAji86Q5R9fqbCGg6GP0A3iheNLgzezY=";
   };
 
-  cargoHash = "sha256-kSaQxqom8LSCOQBoIZ1iv+q2+Ih8l61L97xXv5c4a0k=";
+  cargoHash = "sha256-VOGgwBKcJK7x+PwvzvuVu9Zd1G8t9UoC/Me3G6bdtrk=";
 
   cargoPatches = [
     ./correct-Cargo.lock.patch
@@ -54,6 +54,8 @@ rustPlatform.buildRustPackage rec {
     CoreFoundation
     Security
   ]);
+
+  OPENSSL_NO_VENDOR = 1;
 
   LIBPG_QUERY_PATH = libpg_query13;
 

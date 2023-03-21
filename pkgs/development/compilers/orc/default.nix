@@ -46,7 +46,8 @@ in stdenv.mkDerivation rec {
     ++ optionals buildDevDoc [ gtk-doc file docbook_xsl ]
   ;
 
-  doCheck = true;
+  # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12");
 
   passthru.tests = {
     inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;

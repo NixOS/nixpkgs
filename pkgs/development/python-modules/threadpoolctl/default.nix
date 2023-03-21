@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "joblib";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
+    hash = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
   };
 
   nativeCheckInputs = [

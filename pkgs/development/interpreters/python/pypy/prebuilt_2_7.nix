@@ -19,7 +19,7 @@
 , packageOverrides ? (self: super: {})
 , sourceVersion
 , pythonVersion
-, sha256
+, hash
 , passthruFun
 }:
 
@@ -60,7 +60,7 @@ in with passthru; stdenv.mkDerivation {
 
   src = fetchurl {
     url = downloadUrls.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
-    inherit sha256;
+    inherit hash;
   };
 
   buildInputs = [

@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "denaro";
-  version = "2023.2.0";
+  version = "2023.2.2";
 
   src = fetchFromGitHub {
     owner = "nlogozzo";
     repo = "NickvisionMoney";
     rev = version;
-    hash = "sha256-ot6VfCzGrJnLaw658QsOe9M0HiqNDrtxvLWpXj9nXko=";
+    hash = "sha256-B84uzJ+B7kGU+O2tuObrIFCvgUfszLd1VU7F5tL90bU=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;

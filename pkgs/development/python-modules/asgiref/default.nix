@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "sha256-56suF63ePRDprqODhVIPCEGiO8UGgWrpwg2wYEs6OOE=";
+    hash = "sha256-56suF63ePRDprqODhVIPCEGiO8UGgWrpwg2wYEs6OOE=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,8 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_multiprocessing"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "asgiref" ];
 

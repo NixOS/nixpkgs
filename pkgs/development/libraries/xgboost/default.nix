@@ -1,6 +1,18 @@
-{ config, stdenv, lib, fetchFromGitHub, cmake, gtest, doCheck ? true
-, cudaSupport ? config.cudaSupport or false, ncclSupport ? false
-, rLibrary ? false, cudaPackages, llvmPackages, R, rPackages }:
+{ config
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gtest
+, doCheck ? true
+, cudaSupport ? config.cudaSupport or false
+, ncclSupport ? false
+, rLibrary ? false
+, cudaPackages
+, llvmPackages
+, R
+, rPackages
+}:
 
 assert ncclSupport -> cudaSupport;
 # Disable regular tests when building the R package
@@ -25,14 +37,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-unTss2byytG8KUQfg5s34YpRuHHDLo7D/ZickHhz1AE=";
+    hash = "sha256-HGS9w4g2+Aw5foKjHK/XQvSCnFHUswhzAsQf6XkdvOI=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -51,9 +63,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [
-      "-DUSE_CUDA=ON"
-      "-DCUDA_HOST_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc"
-    ] ++ lib.optionals (cudaSupport
+    "-DUSE_CUDA=ON"
+    # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
+    # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
+    "-DCMAKE_C_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/g++"
+  ] ++ lib.optionals
+    (cudaSupport
       && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0")
     [ "-DBUILD_WITH_CUDA_CUB=ON" ]
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
@@ -73,6 +89,18 @@ stdenv.mkDerivation rec {
       lib.optionalString cudaSupport "-E TestXGBoostLib"
     }
   '';
+
+  # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
+  # confirmed xgboost itself does not use this part of the dmlc code.
+  GTEST_FILTER =
+    let
+      # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
+      filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
+        "ThreadGroup.TimerThread"
+        "ThreadGroup.TimerThreadSimple"
+      ];
+    in
+    "-${builtins.concatStringsSep ":" filteredTests}";
 
   installPhase =
     let libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";

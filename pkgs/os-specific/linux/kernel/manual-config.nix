@@ -86,9 +86,6 @@ let
 
       buildDTBs = kernelConf.DTB or false;
 
-      installsFirmware = (config.isEnabled "FW_LOADER") &&
-        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
-        (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
@@ -107,8 +104,6 @@ let
         # Required for deterministic builds along with some postPatch magic.
         ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
         ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
-        # Fixes determinism by normalizing metadata for the archive of kheaders
-        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch
         # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
         # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
         # https://github.com/openzfs/zfs/pull/13367
@@ -119,6 +114,20 @@ let
             url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
             hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
           });
+
+      preUnpack = ''
+        # The same preUnpack is used to build the configfile,
+        # which does not have $dev.
+        if [ -n "$dev" ]; then
+            mkdir -p $dev/lib/modules/${modDirVersion}
+            cd $dev/lib/modules/${modDirVersion}
+        fi
+      '';
+
+      postUnpack = ''
+        mv -Tv "$sourceRoot" source 2>/dev/null || :
+        export sourceRoot=$PWD/source
+      '';
 
       postPatch = ''
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
@@ -161,8 +170,7 @@ let
       configurePhase = ''
         runHook preConfigure
 
-        mkdir build
-        export buildRoot="$(pwd)/build"
+        export buildRoot=$(mktemp -d)
 
         echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
@@ -184,24 +192,24 @@ let
           exit 1
         fi
 
-        # Note: we can get rid of this once http://permalink.gmane.org/gmane.linux.kbuild.devel/13800 is merged.
         buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
 
         cd $buildRoot
       '';
 
       buildFlags = [
+        "DTC_FLAGS=-@"
         "KBUILD_BUILD_VERSION=1-NixOS"
-        kernelConf.target
-        "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules"
-        ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
-      ++ extraMakeFlags;
+
+        # Set by default in the kernel since a73619a845d5,
+        # replicated here to apply to older versions.
+        # Makes __FILE__ relative to the build directory.
+        "KCPPFLAGS=-fmacro-prefix-map=$(sourceRoot)/="
+      ] ++ extraMakeFlags;
 
       installFlags = [
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
       ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
 
       preInstall = let
@@ -268,11 +276,7 @@ let
           else "install"))
       ];
 
-      postInstall = (optionalString installsFirmware ''
-        mkdir -p $out/lib/firmware
-      '') + (if isModular then ''
-        mkdir -p $dev
-        cp vmlinux $dev/
+      postInstall = optionalString isModular ''
         if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
@@ -281,12 +285,7 @@ let
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
-        mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
-
-        # To save space, exclude a bunch of unneeded stuff when copying.
-        (cd .. && rsync --archive --prune-empty-dirs \
-            --exclude='/build/' \
-            * $dev/lib/modules/${modDirVersion}/source/)
+        mkdir $dev/lib/modules/${modDirVersion}/build
 
         cd $dev/lib/modules/${modDirVersion}/source
 
@@ -297,12 +296,16 @@ let
         # from a `try-run` call from the Makefile
         rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
-        # Keep some extra files on some arches (powerpc, aarch64)
-        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
-          if [ -f "$buildRoot/$f" ]; then
-            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+        # Keep some extra files
+        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o \
+                 scripts/gdb/linux vmlinux vmlinux-gdb.py
+        do
+          if [ -e "$buildRoot/$f" ]; then
+            mkdir -p "$(dirname "$dev/lib/modules/${modDirVersion}/build/$f")"
+            cp -HR $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
           fi
         done
+        ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $dev
 
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can add
@@ -343,10 +346,12 @@ let
 
         # Remove reference to kmod
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
-      '' else optionalString installsFirmware ''
-        make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
-      '');
+      '';
+
+      preFixup = ''
+        # Don't strip $dev/lib/modules/*/vmlinux
+        stripDebugList="$(cd $dev && echo lib/modules/*/build/*/)"
+      '';
 
       requiredSystemFeatures = [ "big-parallel" ];
 
@@ -381,7 +386,6 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionOlder version "5.8") libelf
-      # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.9";
+  version = "5.12.14";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HJDtUvXUT94G4WqrK92UMmijnuC4ApkKHU3yE3rOKHQ=";
+    sha256 = "sha256-0F1LdoeGtIKOVepifwdNMohbEb9fakpQLiNHg5H9Nlw=";
   };
 
   postPatch = ''
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     "-DVERSION=${version}"
     "-DUSE_TEST=OFF"
   ];
+
+  strictDeps = true;
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [

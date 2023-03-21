@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sendgrid";
     repo = "python-http-client";
     rev = version;
-    sha256 = "sha256-8Qs5Jw0LMV2UucLnlFKJQ2PUhYaQx6uJdIV/4gaPH3w=";
+    hash = "sha256-8Qs5Jw0LMV2UucLnlFKJQ2PUhYaQx6uJdIV/4gaPH3w=";
   };
 
   nativeCheckInputs = [

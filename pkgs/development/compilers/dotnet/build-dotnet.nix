@@ -42,10 +42,10 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  packageDeps = mkNugetDeps {
+  packageDeps = if type == "sdk" then mkNugetDeps {
     name = "${pname}-${version}-deps";
     nugetDeps = packages;
-  };
+  } else null;
 
 in
 stdenv.mkDerivation (finalAttrs: rec {

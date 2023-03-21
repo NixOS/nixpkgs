@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.1";
+  version = "4.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "django_compressor";
     inherit version;
-    hash = "sha256-js5iHSqY9sZjVIDLizcB24kKmfeT+VyiDLAKvBlNMx0=";
+    hash = "sha256-aIWMDabMCZzCmgIthsO6iu0RTanXCe7OsNe4GBtfiUI=";
   };
 
   postPatch = ''

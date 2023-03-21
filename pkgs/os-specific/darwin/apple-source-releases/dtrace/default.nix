@@ -6,7 +6,7 @@ appleDerivation {
   buildInputs = [ CoreSymbolication apple_sdk.frameworks.CoreSymbolication darling xnu ];
   # -fcommon: workaround build failure on -fno-common toolchains:
   #   duplicate symbol '_kCSRegionMachHeaderName' in: libproc.o dt_module_apple.o
-  NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration -fcommon";
   NIX_LDFLAGS = "-L./Products/Release";
   xcbuildFlags = [ "-target" "dtrace_frameworks" "-target" "dtrace" ];
 

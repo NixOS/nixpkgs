@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-iaDaPjh2wZXxBxBDhWp+hHrJZyXqw6HSzgCzbZj9iho=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KHbeCnsdHP7Zsj9KeVLuumcVOW6m7Tz1GgBBQ25Rbyo=";
   };
 
-  cargoHash = "sha256-I8n/fR1aOsSex2p0u5FaqoJCh2J0oMxkikS9aynxgpA=";
+  cargoHash = "sha256-51xKCiGdvJ8k9ArWBCazJGgRljqHxZiyTdes4i7JZH8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A command driven spotify player";
     homepage = "https://github.com/aome510/spotify-player";
+    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
     mainProgram = "spotify_player";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

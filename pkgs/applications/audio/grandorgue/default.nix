@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.9.5-1";
+  version = "3.10.1-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-5OqTQBOYE6XU3BRiVwXOHrn22bVZzIIeZI8pgsWxhPw=";
+    sha256 = "sha256-QuOHeEgDOXvNFMfMoq0GOnmHKyMG1S8y1lgO9heMk3I=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_DEPEND=OFF"
   ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}

@@ -57,7 +57,7 @@ mkDerivation rec {
     "--without-inotify"
   ]);
 
-  NIX_CFLAGS_COMPILE = [ "-DNIXPKGS" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
 
   patches = [
     # fix "No/bad main configuration file" error
@@ -79,9 +79,9 @@ mkDerivation rec {
     python3Packages.mutagen
     xapian
     zlib
-  ] ++ lib.optional withGui [
+  ] ++ lib.optionals withGui [
     qtbase
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];
 

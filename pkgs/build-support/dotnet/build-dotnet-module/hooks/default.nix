@@ -20,7 +20,7 @@ in
   dotnetConfigureHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-configure-hook";
-      deps = [ dotnet-sdk nuget-source ];
+      propagatedBuildInputs = [ dotnet-sdk nuget-source ];
       substitutions = {
         nugetSource = nuget-source;
         inherit runtimeId;
@@ -30,7 +30,7 @@ in
   dotnetBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-build-hook";
-      deps = [ dotnet-sdk ];
+      propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
@@ -39,7 +39,7 @@ in
   dotnetCheckHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-check-hook";
-      deps = [ dotnet-test-sdk ];
+      propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
         inherit buildType libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
@@ -54,7 +54,7 @@ in
   dotnetInstallHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-install-hook";
-      deps = [ dotnet-sdk ];
+      propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
@@ -63,7 +63,7 @@ in
   dotnetFixupHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-fixup-hook";
-      deps = [ dotnet-runtime ];
+      propagatedBuildInputs = [ dotnet-runtime ];
       substitutions = {
         dotnetRuntime = dotnet-runtime;
         runtimeDeps = libraryPath;

@@ -1,10 +1,6 @@
 .Dd January 1, 1980
-.\" nixpkgs groff will use Nixpkgs as the OS in the title by default, taking it from
-.\" doc-default-operating-system. mandoc doesn't have this register set by default,
-.\" so we can use it as a groff/mandoc switch.
-.ie ddoc-default-operating-system .Dt nixos-enter \&8 "NixOS System Manager's Manual"
-.el .Dt nixos-enter 8
-.Os NixOS
+.Dt nixos-enter 8
+.Os
 .Sh NAME
 .Nm nixos-enter
 .Nd run a command in a NixOS chroot environment

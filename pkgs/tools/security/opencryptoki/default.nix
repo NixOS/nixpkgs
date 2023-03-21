@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencryptoki";
-  version = "3.19.0";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
     rev = "v${version}";
-    hash = "sha256-ym13I34H3d1JuVBnItkceUbqpjYFhD+mPgWYHPetF7Y=";
+    hash = "sha256-Z11CDw9ykmJ7MI7I0H4Y/i+8/I+hRgC2frklYPP1di0=";
   };
 
   nativeBuildInputs = [

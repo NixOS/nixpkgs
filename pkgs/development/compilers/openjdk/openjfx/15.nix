@@ -1,6 +1,9 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_6
-, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby }:
+, pkg-config, perl, cmake, gperf, gtk3, libXtst, libXxf86vm, glib, alsa-lib
+, ffmpeg_4-headless, python3, ruby
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "15";
@@ -21,7 +24,7 @@ let
       sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
+    buildInputs = [ gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -31,7 +34,7 @@ let
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
-    NIX_CFLAGS_COMPILE = [
+    env.NIX_CFLAGS_COMPILE = toString [
       #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
       "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
 
@@ -76,8 +79,8 @@ in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = false
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
   preBuild = ''
@@ -95,7 +98,7 @@ in makePackage {
   # -fcommon: gstreamer workaround for -fno-common toolchains:
   #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
   #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
 
   stripDebugList = [ "." ];
 

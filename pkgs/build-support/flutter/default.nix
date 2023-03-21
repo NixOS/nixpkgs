@@ -187,7 +187,7 @@ let
 
   # TODO: do we need this?
   NIX_LDFLAGS = "-rpath ${lib.makeLibraryPath self.buildInputs}";
-  NIX_CFLAGS_COMPILE = "-I${xorg.libX11}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${xorg.libX11}/include";
   LD_LIBRARY_PATH = lib.makeLibraryPath self.buildInputs;
 
   configurePhase = ''

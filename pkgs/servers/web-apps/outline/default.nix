@@ -56,15 +56,16 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/outline
-    mv node_modules build $out/share/outline/
+    mv public node_modules build $out/share/outline/
+
+    node_modules=$out/share/outline/node_modules
+    build=$out/share/outline/build
+
     # On NixOS the WorkingDirectory is set to the build directory, as
     # this contains files needed in the onboarding process. This folder
     # must also contain the `public` folder for mail notifications to
     # work, as it contains the mail templates.
-    mv public $out/share/outline/build
-
-    node_modules=$out/share/outline/node_modules
-    build=$out/share/outline/build
+    ln -s $out/share/outline/public $build/public
 
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \

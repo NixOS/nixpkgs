@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gmic
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,11 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    # Need to update in lockstep.
+    inherit gmic gmic-qt;
+  };
 
   meta = with lib; {
     homepage = "http://cimg.eu/";

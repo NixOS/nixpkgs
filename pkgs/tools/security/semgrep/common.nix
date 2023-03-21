@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, fetchzip, stdenv }:
 
 rec {
-  version = "1.0.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "returntocorp";
     repo = "semgrep";
     rev = "v${version}";
-    sha256 = "sha256-4fNBpokHKCtMB3P0ot1TzcuzOs5hlyH8nIw+bCGqThA=";
+    sha256 = "sha256-x+AOt6nn2hN4MODFZCvlq0kZ3VLoS7rVcFGGCEssIu0=";
   };
 
   # submodule dependencies
@@ -18,14 +18,14 @@ rec {
     "cli/src/semgrep/lang" = fetchFromGitHub {
       owner = "returntocorp";
       repo = "semgrep-langs";
-      rev = "65cb2ed80e31e01b122f893fef8428d14432da75";
-      sha256 = "sha256-HdPJdOlMM1l7vNSATkEu5KrCkpt2feEAH8LFDU84KUM=";
+      rev = "08656cdefc9e6818c64e168cf51ee1e76ea8829e";
+      sha256 = "sha256-vYf33JhfvEDmt/VW0hBOmqailIERS0GdUgrPuCxWt9I=";
     };
     "cli/src/semgrep/semgrep_interfaces" = fetchFromGitHub {
       owner = "returntocorp";
       repo = "semgrep-interfaces";
-      rev = "c69e30a4cf39f11cab5378700f5e193e8282079e";
-      sha256 = "sha256-Wr3/TWx/LHiTFCoGY4sqdsn3dHvMsEIVYA3RGiv88xQ=";
+      rev = "ba9241ca8f13dea72a4ca5c5eae99f45c071c8b4";
+      sha256 = "sha256-2rcMmN42445AivcyYLPeE+HBYOyxJijQME1UUr9HISA=";
     };
   };
 
@@ -35,11 +35,11 @@ rec {
     data = {
       x86_64-linux = {
         suffix = "-ubuntu-16.04.tgz";
-        sha256 = "sha256-SsaAuhcDyO3nr6H2xOtdxzOoEQd6aIe0mlpehvDWzU0=";
+        sha256 = "sha256-vLtV1WAnOD6HhgrWYIP0NfXHKfvXORksdNp5UTG1QWc=";
       };
       x86_64-darwin = {
         suffix = "-osx.zip";
-        sha256 = "sha256-DAcAB/q6XeljCp4mVljIJB4AUjUuzMSRMFzIuyjWMew=";
+        sha256 = "sha256-6+ENjOOIJ5TSjpnJ5pDudblrWj/FLUe66UGr6V9c0HQ=";
       };
     };
     src = let

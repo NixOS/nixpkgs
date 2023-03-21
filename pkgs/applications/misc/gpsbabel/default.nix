@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   # Floating point behavior on i686 causes nmea.test failures. Preventing
   # extended precision fixes this problem.
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isi686 "-ffloat-store";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-ffloat-store";
 
   doCheck = true;
 

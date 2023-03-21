@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.0-62";
+  version = "7.1.1-3";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-K74BWxGTpkaE+KBrdOCVd+m/2MJP6YUkB2CFh/YEHyI=";
+    hash = "sha256-UYmWNP+2FdBtBUqQtYGtIdw/XN8OKO0r5g4zgzPgbP8=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
     done
   '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do

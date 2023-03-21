@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ygrek/mldonkey/commit/a153f0f7a4826d86d51d4bacedc0330b70fcbc34.patch";
       hash = "sha256-/Muk3mPFjQJ48FqaozGa7o8YSPhDLXRz9K1EyfxlzC8=";
     })
+    # Fixes OCaml 4.14 compat
+    (fetchpatch {
+      url = "https://github.com/FabioLolix/AUR-artifacts/raw/6721c2d4ef0be9a99499ecf2787e378e50b915e9/mldonkey-fix-build.patch";
+      hash = "sha256-HPW/CKfhywy+Km5/64Iok4tO9LJjAk53jVlsYzIRPfs=";
+    })
   ];
 
   preConfigure = ''
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = with ocamlPackages; [ ocaml camlp4];
+  nativeBuildInputs = with ocamlPackages; [ ocaml camlp4 ];
   buildInputs = (with ocamlPackages; [ num ]) ++ [ zlib ];
 
   meta = {

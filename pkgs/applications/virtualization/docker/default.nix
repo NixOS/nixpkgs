@@ -68,7 +68,7 @@ rec {
 
       buildInputs = [ glibc glibc.static ];
 
-      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
+      env.NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
 
     moby-src = fetchFromGitHub {

@@ -3,13 +3,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , matplotlib
-, PyGithub
+, pygithub
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
-  version = "0.5.2";
+  version = "0.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mrbean-bremen";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YKGVDE1cM3Lcr9lHE2iserleob0BE3DxchdSX65CJBE=";
+    hash = "sha256-Mr0FM2CbdgAUF8siMjUIZvypWiPNPU9OncPiBPqK3uE=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     beautifulsoup4
     matplotlib
-    PyGithub
+    pygithub
   ];
 
   # Module has no tests

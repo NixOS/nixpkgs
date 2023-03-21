@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -85,26 +85,8 @@ stdenv.mkDerivation {
     # See: https://github.com/NixOS/nixpkgs/pull/186575
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
-    ./armv7l.patch
-  ]
-    # The `compiler-rt` build inspects `ld` to figure out whether it needs to
-    # explicitly call `codesign`:
-    # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/Modules/AddCompilerRT.cmake#L409-L422
-    #
-    # In our case, despite (currently) having an `ld` version than 609, we don't
-    # need an explicit codesigning step because `postLinkSignHook` handles this
-    # for us.
-    #
-    # Unfortunately there isn't an easy way to override
-    # `NEED_EXPLICIT_ADHOC_CODESIGN`.
-    #
-    # Adding `codesign` as a build input also doesn't currently work because, as
-    # of this writing, `codesign` in nixpkgs doesn't support the `--sign` alias
-    # which the `compiler-rt` build uses. See here for context:
-    # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272116014
-    #
-    # So, for now, we patch `compiler-rt` to skip the explicit codesigning step.
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./skip-explicit-codesign.patch;
+    ../../common/compiler-rt/armv7l-15.patch
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -151,5 +133,8 @@ stdenv.mkDerivation {
       implementations of run-time libraries for dynamic testing tools such as
       AddressSanitizer, ThreadSanitizer, MemorySanitizer, and DataFlowSanitizer.
     '';
+    # "All of the code in the compiler-rt project is dual licensed under the MIT
+    # license and the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
   };
 }

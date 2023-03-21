@@ -89,6 +89,8 @@ let
         python3 = withPython3;
         ruby = withRuby;
       };
+      # as expected by packdir
+      packpathDirs.myNeovimPackages = myVimPackage;
       ## Here we calculate all of the arguments to the 1st call of `makeWrapper`
       # We start with the executable itself NOTE we call this variable "initial"
       # because if configure != {} we need to call makeWrapper twice, in order to
@@ -105,9 +107,10 @@ let
           # vim accepts a limited number of commands so we join them all
           flags = [
             "--cmd" (lib.intersperse "|" hostProviderViml)
+          ] ++ lib.optionals (myVimPackage.start != [] || myVimPackage.opt != []) [
             "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
             "--cmd" "set rtp^=${vimUtils.packDir packDirArgs}"
-            ];
+          ];
         in
         [
           "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
@@ -131,6 +134,7 @@ let
 
     builtins.removeAttrs args ["plugins"] // {
       wrapperArgs = makeWrapperArgs;
+      inherit packpathDirs;
       inherit neovimRcContent;
       inherit manifestRc;
       inherit python3Env;

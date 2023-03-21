@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "abeaumont";
     repo = "ocaml-chacha";
     rev = version;
-    sha256 = "sha256-PmeiFloU0k3SqOK1VjaliiCEzDzrzyMSasgnO5fJS1k=";
+    hash = "sha256-PmeiFloU0k3SqOK1VjaliiCEzDzrzyMSasgnO5fJS1k=";
   };
 
   # Ensure compatibility with cstruct ≥ 6.1.0
@@ -27,6 +27,7 @@ buildDunePackage rec {
   })];
 
   minimalOCamlVersion = "4.02";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ cstruct mirage-crypto ];
 

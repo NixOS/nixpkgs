@@ -46,7 +46,7 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -71,7 +71,8 @@ in {
 
   # Jailbreaks & Version Updates
 
-  aeson = self.aeson_2_1_1_0;
+  # Jailbreak to allow quickcheck-instances-0.3.28 (too strict lower bound)
+  aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
 
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
@@ -146,8 +147,7 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_2;
+  lens = doDistribute self.lens_5_2_1;
 
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
@@ -194,8 +194,30 @@ in {
     hls-stylish-haskell-plugin = null;
   };
 
+  # needed to build servant
+  http-api-data = super.http-api-data_0_5;
+  attoparsec-iso8601 = super.attoparsec-iso8601_1_1_0_0;
+
+  # requires newer versions to work with GHC 9.4
+  swagger2 = dontCheck super.swagger2;
+  servant = doJailbreak super.servant;
+  servant-server = doJailbreak super.servant-server;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
+  servant-swagger = doJailbreak super.servant-swagger;
+  servant-client-core = doJailbreak super.servant-client-core;
+  servant-client = doJailbreak super.servant-client;
+  relude = doJailbreak super.relude;
+
+  cborg = appendPatch (pkgs.fetchpatch {
+    name = "cborg-support-ghc-9.4.patch";
+    url = "https://github.com/well-typed/cborg/pull/304.diff";
+    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
+    relative = "cborg";
+  }) super.cborg;
+
   # https://github.com/tweag/ormolu/issues/941
-  ormolu = doDistribute self.ormolu_0_5_2_0;
+  ormolu = doDistribute self.ormolu_0_5_3_0;
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);

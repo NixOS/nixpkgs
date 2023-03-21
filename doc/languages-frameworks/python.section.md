@@ -1019,7 +1019,7 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+* In the `buildPhase`, it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
   build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
 * In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
@@ -1546,7 +1546,7 @@ of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
 
 ```shell
-${python.interpreter} setup.py install_data --install-dir=$out --root=$out
+${python.pythonForBuild.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data\_files/d' setup.py
 ```
 
@@ -1820,6 +1820,11 @@ hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 
 Updating packages in bulk leads to lots of breakages, which is why a
 stabilization period on the `python-unstable` branch is required.
+
+If a package is fragile and often breaks during these bulks updates, it
+may be reasonable to set `passthru.skipBulkUpdate = true` in the
+derivation. This decision should not be made on a whim and should
+always be supported by a qualifying comment.
 
 Once the branch is sufficiently stable it should normally be merged
 into the `staging` branch.

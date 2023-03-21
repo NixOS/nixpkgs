@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.1.31";
+  version = "2023.2.28";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "intents";
     rev = "refs/tags/${version}";
-    hash = "sha256-buq/SLXDFP0xvIb2yGiHQzuL7HKvc7bxxdkhq4KHpvM=";
+    hash = "sha256-u9CLPikht+T9wdQpLELPH/t+pZNcaOfbtfWT6DBwZaw=";
   };
 
   sourceRoot = "source/package";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   postInstall = ''
     pushd ..
     # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
+    ${python.pythonForBuild.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
     popd
   '';
 

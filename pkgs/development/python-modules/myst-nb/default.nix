@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FN9yXz4Ay17+9PhjvwwnNJDIxmLf7jntins3S/JWGTM=";
+    hash = "sha256-FN9yXz4Ay17+9PhjvwwnNJDIxmLf7jntins3S/JWGTM=";
   };
 
   nativeBuildInputs = [ flit-core ];

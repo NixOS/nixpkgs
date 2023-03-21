@@ -676,10 +676,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - ascii-cows
- - ascii-superset_1_2_7_0
+ - ascii-superset_1_3_0_0
  - ascii-table
  - ascii-th_1_2_0_0
- - ascii_1_5_4_0
+ - ascii_1_6_0_0
  - asic
  - asil
  - assert4hs-hspec
@@ -865,7 +865,6 @@ dont-distribute-packages:
  - bronyradiogermany-streaming
  - btc-lsp
  - btree
- - btree-concurrent
  - buchhaltung
  - buildbox-tools
  - buildwrapper
@@ -1241,7 +1240,6 @@ dont-distribute-packages:
  - dingo-core
  - dingo-example
  - dingo-widgets
- - diohsc
  - diplomacy-server
  - direct-rocksdb
  - directory-contents
@@ -1399,6 +1397,7 @@ dont-distribute-packages:
  - eventuo11y-batteries
  - eventuo11y-json
  - eventuo11y-otel
+ - eventuo11y-prometheus
  - every-bit-counts
  - ewe
  - exference
@@ -1579,6 +1578,7 @@ dont-distribute-packages:
  - geniconvert
  - geniserver
  - genvalidity-appendful
+ - genvalidity-dirforest
  - genvalidity-network-uri
  - genvalidity-sydtest
  - genvalidity-sydtest-aeson
@@ -2201,6 +2201,8 @@ dont-distribute-packages:
  - hoppy-std
  - horizon-gen-nix
  - horizon-spec
+ - horizon-spec-lens
+ - horizon-spec-pretty
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -2460,7 +2462,6 @@ dont-distribute-packages:
  - jvm
  - jvm-batching
  - jvm-streaming
- - kafka-client
  - kafka-device
  - kafka-device-glut
  - kafka-device-joystick
@@ -2474,6 +2475,7 @@ dont-distribute-packages:
  - kansas-lava-shake
  - karakuri
  - katip-rollbar
+ - keelung
  - keera-hails-mvc-environment-gtk
  - keera-hails-mvc-model-lightmodel
  - keera-hails-mvc-model-protectedmodel
@@ -2557,6 +2559,7 @@ dont-distribute-packages:
  - latex-formulae-pandoc
  - latex-svg-hakyll
  - latex-svg-pandoc
+ - launchdarkly-server-sdk-redis-hedis
  - layered-state
  - layers-game
  - layouting
@@ -2805,7 +2808,6 @@ dont-distribute-packages:
  - morley-upgradeable
  - morloc
  - morphisms-functors-inventory
- - mosaico-lib
  - motor-diagrams
  - mp
  - mp3decoder
@@ -3008,7 +3010,7 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
- - pandoc-crossref_0_3_15_0
+ - pandoc-crossref_0_3_15_1
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
  - pandora-io
@@ -3228,7 +3230,6 @@ dont-distribute-packages:
  - qtah-qt5
  - quantfin
  - quantum-random
- - qudb
  - queryparser
  - queryparser-demo
  - queryparser-hive
@@ -3405,6 +3406,7 @@ dont-distribute-packages:
  - rfc-psql
  - rfc-redis
  - rfc-servant
+ - rhine-bayes
  - rhine-gloss
  - rhine-terminal
  - rhythm-game-tutorial
@@ -3666,10 +3668,6 @@ dont-distribute-packages:
  - snaplet-stripe
  - snaplet-tasks
  - snaplet-wordpress
- - snappy-conduit
- - snappy-framing
- - snappy-iteratee
- - snappy-lazy
  - sndfile-enumerators
  - sneakyterm
  - sneathlane-haste
@@ -3869,20 +3867,12 @@ dont-distribute-packages:
  - tbox
  - tcache-AWS
  - tccli
- - tdlib
- - tdlib-gen
- - tdlib-types
  - techlab
  - telegram-bot
  - telegram-raw-api
  - temporal-csound
  - ten-lens
  - ten-unordered-containers
- - tensorflow-core-ops
- - tensorflow-logging
- - tensorflow-ops
- - tensorflow-records
- - tensorflow-records-conduit
  - terminal-text
  - terrahs
  - test-sandbox-compose
@@ -4003,7 +3993,6 @@ dont-distribute-packages:
  - type-sub-th
  - typed-admin
  - typed-encoding-encoding
- - typed-spreadsheet
  - typed-streams
  - typedflow
  - typelevel
@@ -4162,6 +4151,7 @@ dont-distribute-packages:
  - websockets-rpc
  - websockets-simple
  - websockets-simple-extra
+ - weierstrass-functions
  - weighted
  - werewolf-slack
  - wgpu-hs

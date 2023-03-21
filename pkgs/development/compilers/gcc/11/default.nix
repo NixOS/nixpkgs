@@ -27,6 +27,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
 }:
 
 # Make sure we get GNU sed.
@@ -48,6 +49,7 @@ with builtins;
 
 let majorVersion = "11";
     version = "${majorVersion}.3.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -114,7 +116,9 @@ let majorVersion = "11";
         enableLTO
         enableMultilib
         enablePlugin
+        disableGdbPlugin
         enableShared
+        disableBootstrap
         fetchpatch
         fetchurl
         gettext
@@ -280,6 +284,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

@@ -338,7 +338,7 @@ in
       lidarr = 306;
       slurm = 307;
       kapacitor = 308;
-      solr = 309;
+      # solr = 309; removed 2023-03-16
       alerta = 310;
       minetest = 311;
       rss2email = 312;
@@ -510,7 +510,6 @@ in
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
-      systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -649,7 +648,7 @@ in
       lidarr = 306;
       slurm = 307;
       kapacitor = 308;
-      solr = 309;
+      # solr = 309; removed 2023-03-16
       alerta = 310;
       minetest = 311;
       rss2email = 312;

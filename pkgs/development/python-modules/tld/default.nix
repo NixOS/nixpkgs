@@ -9,15 +9,19 @@
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.12.7";
+  version = "0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tvdynhnODrx3ugpltw1iE665UsAf9gXhKZquX7diHF4=";
+    hash = "sha256-k93l4cBL3xhEl26uRAcGN50h9KsjW3PAXXSD4HT7Vik=";
   };
+
+  postPatch = ''
+    sed -i "/--cov/d" pytest.ini
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
