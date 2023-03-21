@@ -6544,6 +6544,16 @@
       fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170";
     }];
   };
+  infinitivewitch = {
+    name = "Infinitive Witch";
+    email = "infinitivewitch@disroot.org";
+    matrix = "@infinitivewitch:fedora.im";
+    github = "infinitivewitch";
+    githubId = 128256833;
+    keys = [{
+      fingerprint = "CF3D F4AD C7BD 1FDB A88B  E4B3 CA2D 43DA 939D 94FB";
+    }];
+  };
   ingenieroariel = {
     email = "ariel@nunez.co";
     github = "ingenieroariel";

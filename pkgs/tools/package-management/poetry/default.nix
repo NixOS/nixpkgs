@@ -19,6 +19,15 @@ let
         };
         SETUPTOOLS_SCM_PRETEND_VERSION = version;
       });
+      poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
+        version = "1.5.2";
+        src = fetchFromGitHub {
+          owner = "python-poetry";
+          repo = "poetry-core";
+          rev = version;
+          hash = "sha256-GpZ0vMByHTu5kl7KrrFFK2aZMmkNO7xOEc8NI2H9k34=";
+        };
+      });
     };
   };
 

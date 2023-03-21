@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
-    owner = "dtschump";
+    owner = "GreycLab";
     repo = "CImg";
     rev = "v.${version}";
-    hash = "sha256-MPkZGKewusCw5TsW5NOtnrjqEK2dxRSCal1fn7Yiaio=";
+    hash = "sha256-koXew0Lwb7wW8MQctTjxpo7TNVtrS5MzxQFfUS1gwZs=";
   };
 
   outputs = [ "out" "doc" ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       processing applications.
     '';
     license = licenses.cecill-c;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ maintainers.AndersonTorres maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }
