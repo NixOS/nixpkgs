@@ -1,13 +1,11 @@
 { lib, config, system, ... }:
 let
   inherit (lib) mkOption types;
-  nixpkgsOverlaySubmodule = lib.types.mkOptionType {
+
+  nixpkgsOverlaySubmodule = types.mkOptionType {
     name = "nixpkgsOverlay";
     description = "A nixpkgs overlay function";
     descriptionClass = "noun";
-    # NOTE: This check is not exhaustive, as there is no way
-    # to check that the function takes two arguments, and
-    # returns an attrset.
     check = lib.isFunction;
     merge = _loc: defs:
       let
@@ -23,15 +21,21 @@ let
       in
       lib.composeManyExtensions overlays;
   };
+
   nixpkgsSubmodule = with types; submodule {
     options = {
       overlays = mkOption {
         type = listOf nixpkgsOverlaySubmodule;
-        description = "Nixpkgs overlay";
-        default = self: super: { };
-        defaultText = lib.literalExpression "self: super: { }";
+        description = "Nixpkgs overlays";
+        default = [ ];
       };
-      output = mkOption { };
+
+      output = mkOption {
+        type = listOf nixpkgsOverlaySubmodule;
+        description = "Output pkgs from nixpkgs' flake module";
+        default = import ./.
+          { inherit system; inherit (config.nixpkgs) overlays; };
+      };
     };
   };
 
@@ -40,19 +44,8 @@ in
   options = {
     nixpkgs = lib.mkOption {
       type = nixpkgsSubmodule;
-      description = ''
-        Configuration of nixpkgs
-      '';
-      default.overlays = [ ];
-    };
-  };
-
-  config = {
-    perSystem = { lib, ... }: {
-      config = {
-        _module.args.pkgs = import ./.
-          { inherit system; inherit (config.nixpkgs) overlays; };
-      };
+      description = "Configuration of nixpkgs";
+      default = { };
     };
   };
 }
