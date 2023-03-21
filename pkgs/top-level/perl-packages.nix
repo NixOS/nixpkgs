@@ -15233,6 +15233,9 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4231.tar.gz";
       hash = "sha256-fg9MaSwXQMGshOoU1+o9i8eYsvsmwJh3Ip4E9DCytxc=";
     };
+    nativeBuildInputs =
+      # Override default intepreter perl.mini, which do not support dynamic linking
+      lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.perl;
     meta = {
       description = "Build and install Perl modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
