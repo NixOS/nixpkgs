@@ -60,11 +60,6 @@ stdenv.mkDerivation rec {
     # TKIP is considered insecure and upstream support will be removed in the future
     CONFIG_NO_TKIP=y
 
-    # Enable Wi-Fi Protected Setup
-    CONFIG_WPS=y
-    CONFIG_WPS_UPNP=y
-    CONFIG_WPS_NFC=y
-
     # Misc
     CONFIG_RADIUS_SERVER=y
     CONFIG_FULL_DYNAMIC_VLAN=y
