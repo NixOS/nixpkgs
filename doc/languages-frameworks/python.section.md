@@ -877,26 +877,17 @@ buildPythonPackage rec {
 }
 ```
 
-It takes an argument `buildPythonPackage`. We now call this function using
-`callPackage` in the definition of our environment
+It takes an argument `buildPythonPackage`. We now call this function using the
+`callPackage` from the `python38Packages` scope in the definition of our environment
 
 ```nix
 with import <nixpkgs> {};
 
 ( let
-    toolz = callPackage /path/to/toolz/release.nix {
-      buildPythonPackage = python38Packages.buildPythonPackage;
-    };
+    toolz = python38Packages.callPackage /path/to/toolz/release.nix { };
   in python38.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
-
-Important to remember is that the Python version for which the package is made
-depends on the `python` derivation that is passed to `buildPythonPackage`. Nix
-tries to automatically pass arguments when possible, which is why generally you
-don't explicitly define which `python` derivation should be used. In the above
-example we use `buildPythonPackage` that is part of the set `python38Packages`,
-and in this case the `python38` interpreter is automatically used.
 
 ## Reference {#reference}
 
