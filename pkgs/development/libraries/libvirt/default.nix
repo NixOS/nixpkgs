@@ -22,6 +22,7 @@
 , makeWrapper
 , meson
 , ninja
+, openssh
 , perl
 , perlPackages
 , polkit
@@ -93,6 +94,7 @@ let
     lvm2
     numactl
     numad
+    openssh
     pmutils
     systemd
   ] ++ optionals enableIscsi [
