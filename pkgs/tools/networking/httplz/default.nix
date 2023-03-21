@@ -1,37 +1,26 @@
 { lib
 , rustPlatform
 , fetchCrate
-, fetchpatch
 , installShellFiles
 , makeWrapper
 , pkg-config
 , ronn
 , openssl
 , stdenv
-, libiconv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.12.5";
+  version = "1.12.6";
 
   src = fetchCrate {
     inherit version;
     pname = "https";
-    sha256 = "sha256-+nCqMTLrBYNQvoKo1PzkyzRCkKdlE88+NYoJcIlAJts=";
+    sha256 = "sha256-qkhou4Rmv31zwyL8aM7U0YUZwOb3KQMHdOQsOrRI1TA=";
   };
 
-  patches = [
-    # https://github.com/thecoshman/http/pull/151
-    (fetchpatch {
-      name = "fix-rust-1.65-compile.patch";
-      url = "https://github.com/thecoshman/http/commit/6e4c8e97cce09d0d18d4936f90aa643659d813fc.patch";
-      hash = "sha256-mXclXfp2Nzq6Pr9VFmxiOzECGZEQRNOAcXoKhiOyuFs=";
-    })
-  ];
-
-  cargoSha256 = "sha256-odiVIfNJPpagoASnYvdOosHXa37gbQM8Zmvtnao0pAs=";
+  cargoSha256 = "sha256-BuNCKtK9ePV0d9o/DlW098Y4DWTIl0YKyryXMv09Woc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -41,8 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   cargoBuildFlags = [ "--bin" "httplz" ];
