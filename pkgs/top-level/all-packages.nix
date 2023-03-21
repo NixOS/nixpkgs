@@ -22776,9 +22776,12 @@ with pkgs;
   };
   ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix { };
   ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
+  ogre1_11 = callPackage ../development/libraries/ogre/1.11.x.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa;
+  };
 
   ogrepaged = callPackage ../development/libraries/ogrepaged {
-    ogre = ogre1_9;
+    ogre = ogre1_11;
   };
 
   olm = callPackage ../development/libraries/olm { };
@@ -36058,12 +36061,9 @@ with pkgs;
   rftg = callPackage ../games/rftg { };
 
   rigsofrods = callPackage ../games/rigsofrods {
-    angelscript = angelscript_2_22;
-    ogre = ogre1_9;
-    ogrepaged = ogrepaged.override {
-      ogre = ogre1_9;
-    };
+    ogre = ogre1_11;
     mygui = mygui.override {
+      ogre = ogre1_11;
       withOgre = true;
     };
   };

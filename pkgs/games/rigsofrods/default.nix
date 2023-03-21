@@ -1,40 +1,80 @@
-{ fetchFromGitHub, lib, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU, libGL, boost,
-  pkg-config, libuuid, openal, ogre, ois, curl, gtk3, mygui, unzip,
-  angelscript, ogrepaged, mysocketw, libxcb
-  }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkg-config
+, unzip
+, ogre
+, openal
+, ois
+, mygui
+, fmt
+, rapidjson
+, mysocketw
+, angelscript
+, curl
+, ogrepaged
+, libX11
+, darwin
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.4.7.0";
   pname = "rigsofrods";
+  version = "2022.12";
 
   src = fetchFromGitHub {
     owner = "RigsOfRods";
     repo = "rigs-of-rods";
     rev = version;
-    sha256 = "0cb1il7qm45kfhh6h6jwfpxvjlh2dmg8z1yz9kj4d6098myf2lg4";
+    hash = "sha256-o/5MNqkzxuSvzZZjLy14OTGTaSt3Gz74+V4TInZVWAo=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    ./gtk3.patch
-  ];
-
-  installPhase = ''
-    sed -e "s@/usr/local/lib/OGRE@${ogre}/lib/OGRE@" -i ../tools/linux/binaries/plugins.cfg
-    mkdir -p $out/share/rigsofrods
-    cp -r bin/* $out/share/rigsofrods
-    cp ../tools/linux/binaries/plugins.cfg $out/share/rigsofrods
-    mkdir -p $out/bin
-    ln -s $out/share/rigsofrods/{RoR,RoRConfig} $out/bin
+  postPatch = ''
+    sed -i '/set(PLUGINS_FOLDER "lib")/d' source/main/CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake pkg-config unzip ];
-  buildInputs = [ wxGTK30 freeimage zziplib libGLU libGL boost
-    libuuid openal ogre ois curl gtk3 mygui angelscript
-    ogrepaged mysocketw libxcb ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    unzip
+  ];
+
+  buildInputs = [
+    ogre
+    openal
+    ois
+    mygui
+    fmt
+    rapidjson
+    mysocketw
+    angelscript
+    curl
+    ogrepaged
+    libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.OpenAL
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_DEV_VERSION=off"
+    "-DUSE_PACKAGE_MANAGER=off"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/share/rigsofrods"
+    "-DOGRE_PLUGIN_DIR=${ogre}/lib/OGRE"
+  ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-format-security";
+
+  postInstall = ''
+    mkdir -p $out/bin
+    makeWrapper $out/share/rigsofrods/RoR $out/bin/RoR
+  '';
 
   meta = with lib; {
     description = "3D simulator game where you can drive, fly and sail various vehicles";
-    homepage = "https://rigsofrods.sourceforge.net/";
+    homepage = "https://www.rigsofrods.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
