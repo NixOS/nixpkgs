@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "elvish";
-  version = "0.18.0";
+  version = "0.19.2";
 
   subPackages = [ "cmd/elvish" ];
 
-  ldflags = [ "-s" "-w" "-X src.elv.sh/pkg/buildinfo.Version==${version}" "-X src.elv.sh/pkg/buildinfo.Reproducible=true" ];
+  ldflags = [ "-s" "-w" "-X src.elv.sh/pkg/buildinfo.Version==${version}" ];
 
   src = fetchFromGitHub {
     owner = "elves";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AyTkJiNebpq17vdPluwJBztivezd+c1KAdWFTYYDIFE=";
+    sha256 = "sha256-eCPJXCgmMvrJ2yVqYgXHXJWb6Ec0sutc91LNs4yRBYk=";
   };
 
-  vendorSha256 = "sha256-iuklI7XEQUgZ2ObYRROxyiccZ1JkajK5OJA7hIcpRZQ=";
+  vendorSha256 = "sha256-VMI20IP1jVkUK3rJm35szaFDfZGEEingUEL/xfVJ1cc=";
 
   strictDeps = true;
   doCheck = false;
@@ -33,7 +33,6 @@ buildGoModule rec {
       }
 
       expect version ${version}
-      expect reproducible \$true
     "
 
     runHook postInstallCheck
