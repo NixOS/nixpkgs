@@ -12,6 +12,11 @@
 
   # Additional registries to pull sources from
   #   { "https://<registry index URL>" = "https://<registry download URL>"; }
+  # where:
+  # - "index URL" is the "index" value of the configuration entry for that registry
+  #   https://doc.rust-lang.org/cargo/reference/registries.html#using-an-alternate-registry
+  # - "download URL" is the "dl" value of its associated index configuration
+  #   https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
 , extraRegistries ? {}
 
   # Hashes for git dependencies.
@@ -93,12 +98,12 @@ let
     '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-      url = "${downloadUrl}/v1/crates/${pkg.name}/${pkg.version}/download";
+      url = "${downloadUrl}/${pkg.name}/${pkg.version}/download";
       sha256 = checksum;
     };
 
   registries = {
-    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api";
+    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
   } // extraRegistries;
 
   # Fetch and unpack a crate.
