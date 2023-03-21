@@ -39,6 +39,11 @@ buildPythonPackage rec {
     "faraday_agent_parameters_types.utils"
   ];
 
+  disabledTests = [
+    # assert 'Version requested not valid' in "Invalid version: 'hola'"
+    "test_incorrect_version_requested"
+  ];
+
   meta = with lib; {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";

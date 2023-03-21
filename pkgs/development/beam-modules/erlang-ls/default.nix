@@ -56,6 +56,7 @@ rebar3Relx {
     description = "The Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
+    mainProgram = "erlang_ls";
   };
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

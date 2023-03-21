@@ -23,7 +23,7 @@ mixRelease  {
     sha256 = pinData.depsSha256;
   };
 
-  # elixir_ls is an umbrella app
+  # elixir-ls is an umbrella app
   # override configurePhase to not skip umbrella children
   configurePhase = ''
     runHook preConfigure
@@ -31,12 +31,12 @@ mixRelease  {
     runHook postConfigure
   '';
 
-  # elixir_ls require a special step for release
+  # elixir-ls require a special step for release
   # compile and release need to be performed together because
   # of the no-deps-check requirement
   buildPhase = ''
     runHook preBuild
-    mix do compile --no-deps-check, elixir_ls.release
+    mix do compile --no-deps-check, elixir-ls.release
     runHook postBuild
   '';
 

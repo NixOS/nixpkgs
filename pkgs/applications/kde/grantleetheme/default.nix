@@ -10,7 +10,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
-  output = [ "out" "dev" ];
+  outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee ki18n kiconthemes knewstuff kservice kxmlgui qtbase

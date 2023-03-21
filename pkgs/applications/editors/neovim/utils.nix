@@ -107,9 +107,10 @@ let
           # vim accepts a limited number of commands so we join them all
           flags = [
             "--cmd" (lib.intersperse "|" hostProviderViml)
+          ] ++ lib.optionals (myVimPackage.start != [] || myVimPackage.opt != []) [
             "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
             "--cmd" "set rtp^=${vimUtils.packDir packDirArgs}"
-            ];
+          ];
         in
         [
           "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)

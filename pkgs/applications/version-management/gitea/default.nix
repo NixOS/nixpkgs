@@ -5,22 +5,26 @@
 , makeWrapper
 , git
 , bash
+, gitea
 , gzip
 , openssh
 , pam
 , sqliteSupport ? true
 , pamSupport ? true
+, runCommand
+, brotli
+, xorg
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "gitea";
-  version = "1.18.5";
+  version = "1.19.0";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://dl.gitea.io/gitea/${version}/gitea-src-${version}.tar.gz";
-    hash = "sha256-OGPn4fknYfzmuAi6CL8m/Ih4uRNraVDmpBm20qT3lKk=";
+    hash = "sha256-9nDzXSGYxYw34/Ekmj44VdGLVhRsGL2e5gfyoyPUqGQ=";
   };
 
   vendorHash = null;
@@ -61,7 +65,21 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  passthru.tests = nixosTests.gitea;
+  passthru = {
+    data-compressed = runCommand "gitea-data-compressed" {
+      nativeBuildInputs = [ brotli xorg.lndir ];
+    } ''
+      mkdir $out
+      lndir ${gitea.data}/ $out/
+
+      # Create static gzip and brotli files
+      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
+        -exec gzip --best --keep --force {} ';' \
+        -exec brotli --best --keep --no-copy-stat {} ';'
+    '';
+
+    tests = nixosTests.gitea;
+  };
 
   meta = with lib; {
     description = "Git with a cup of tea";

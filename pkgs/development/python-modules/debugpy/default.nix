@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , gdb
 , django
@@ -35,6 +36,12 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./hardcode-version.patch;
       inherit version;
+    })
+
+    # https://github.com/microsoft/debugpy/issues/1230
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/microsoft/debugpy/pull/1232.patch";
+      sha256 = "sha256-m5p+xYiJ4w4GcaFIaPmlnErp/7WLwcvJmaCqa2SeSxU=";
     })
 
     # Fix importing debugpy in:
@@ -100,9 +107,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--timeout=0"
   ];
-
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/microsoft/debugpy/issues/1241
+    "test_flask_breakpoint_multiproc"
+  ];
 
   pythonImportsCheck = [
     "debugpy"

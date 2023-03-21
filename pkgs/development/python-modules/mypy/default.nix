@@ -53,8 +53,9 @@ buildPythonPackage rec {
     })
     (fetchpatch {
       # https://github.com/python/mypy/pull/14787
-      url = "https://github.com/AlexWaygood/mypy/commit/8e459eab40ac0fae9740e985ee4aeb348cde28c5.patch";
-      hash = "sha256-R7DU6MFnaeHPobUb8ADhssTKDwdPBXBhDN2mxrrQ51M=";
+      url = "https://github.com/python/mypy/commit/243f584d43e6eb316920f3155067ce7c1b65d473.patch";
+      hash = "sha256-uuh3S5ZyuJeTXyMvav2uSEao2qq23xMjK8rJjkY8RCY=";
+      includes = [ "mypyc/build.py" ];
     })
   ];
 

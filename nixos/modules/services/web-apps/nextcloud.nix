@@ -514,6 +514,27 @@ in {
               `http://hostname.domain/bucket` instead.
             '';
           };
+          sseCKeyFile = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            example = "/var/nextcloud-objectstore-s3-sse-c-key";
+            description = lib.mdDoc ''
+              If provided this is the full path to a file that contains the key
+              to enable [server-side encryption with customer-provided keys][1]
+              (SSE-C).
+
+              The file must contain a random 32-byte key encoded as a base64
+              string, e.g. generated with the command
+
+              ```
+              openssl rand 32 | base64
+              ```
+
+              Must be readable by user `nextcloud`.
+
+              [1]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html
+            '';
+          };
         };
       };
     };
@@ -773,6 +794,7 @@ in {
                 'use_ssl' => ${boolToString s3.useSsl},
                 ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
                 'use_path_style' => ${boolToString s3.usePathStyle},
+                ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('${s3.sseCKeyFile}'),"}
               ],
             ]
           '';

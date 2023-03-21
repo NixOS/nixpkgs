@@ -15,7 +15,7 @@
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) cudatoolkit cudaFlags cudaVersion;
+  inherit (cudaPackages) backendStdenv cudaVersion;
 
   # NOTE: torchvision doesn't use cudnn; torch does!
   #   For this reason it is not included.
@@ -65,8 +65,8 @@ buildPythonPackage {
   # NOTE: We essentially override the compilers provided by stdenv because we don't have a hook
   #   for cudaPackages to swap in compilers supported by NVCC.
   + lib.optionalString cudaSupport ''
-    export CC=${cudatoolkit.cc}/bin/cc
-    export CXX=${cudatoolkit.cc}/bin/c++
+    export CC=${backendStdenv.cc}/bin/cc
+    export CXX=${backendStdenv.cc}/bin/c++
     export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
     export FORCE_CUDA=1
   '';

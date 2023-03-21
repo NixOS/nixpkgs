@@ -12,11 +12,12 @@ with lib;
     boot.loader.systemd-boot.consoleMode = mkDefault "1";
 
 
-    # Grayscale anti-aliasing for fonts
-    fonts.fontconfig.antialias = mkDefault true;
-    fonts.fontconfig.subpixel = {
-      rgba = mkDefault "none";
-      lcdfilter = mkDefault "none";
+    # Disable font anti-aliasing, hinting, and sub-pixel rendering by default
+    # See recommendations in fonts/fontconfig.nix
+    fonts.fontconfig = {
+      antialias = mkDefault false;
+      hinting.enable = mkDefault false;
+      subpixel.lcdfilter = mkDefault "none";
     };
 
     # TODO Find reasonable defaults X11 & wayland

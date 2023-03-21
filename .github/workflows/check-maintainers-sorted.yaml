@@ -1,7 +1,7 @@
 name: "Check that maintainer list is sorted"
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - 'maintainers/maintainer-list.nix'
 permissions:
@@ -13,7 +13,10 @@ jobs:
     if: github.repository_owner == 'NixOS'
     steps:
       - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v19
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: cachix/install-nix-action@v20
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true

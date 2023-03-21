@@ -1416,6 +1416,17 @@
     githubId = 5193600;
     name = "Atkins Chang";
   };
+  atkrad = {
+    name = "Mohammad Abdolirad";
+    email = "m.abdolirad@gmail.com";
+    github = "atkrad";
+    githubId = 351364;
+    keys = [
+      {
+        fingerprint = "0380 F2F8 DF7A BA1A E7DB  D84A 1935 1496 62CA FDB8";
+      }
+    ];
+  };
   atnnn = {
     email = "etienne@atnnn.com";
     github = "AtnNn";
@@ -4123,6 +4134,12 @@
     github = "d-xo";
     githubId = 6689924;
     name = "David Terry";
+  };
+  dylanmtaylor = {
+    email = "dylan@dylanmtaylor.com";
+    github = "dylamtaylor";
+    githubId = 277927;
+    name = "Dylan Taylor";
   };
   dysinger = {
     email = "tim@dysinger.net";
@@ -9168,6 +9185,11 @@
     githubId = 115218;
     name = "Felix Richter";
   };
+  MakiseKurisu = {
+    github = "MakiseKurisu";
+    githubId = 2321672;
+    name = "Makise Kurisu";
+  };
   malbarbo = {
     email = "malbarbo@gmail.com";
     github = "malbarbo";
@@ -12725,6 +12747,11 @@
     githubId = 12279531;
     name = "Ricardo Guevara";
   };
+  rhendric = {
+    name = "Ryan Hendrickson";
+    github = "rhendric";
+    githubId = 1570964;
+  };
   rhoriguchi = {
     email = "ryan.horiguchi@gmail.com";
     github = "rhoriguchi";
@@ -14295,6 +14322,16 @@
     github = "stelcodes";
     githubId = 22163194;
     name = "Stel Abrego";
+  };
+  stepbrobd = {
+    name = "StepBroBD";
+    github = "StepBroBD";
+    githubId = 81826728;
+    email = "Hi@StepBroBD.com";
+    matrix = "@stepbrobd:matrix.org";
+    keys = [{
+      fingerprint = "5D8B FA8B 286A C2EF 6EE4  8598 F742 B72C 8926 1A51";
+    }];
   };
   stephank = {
     email = "nix@stephank.nl";
