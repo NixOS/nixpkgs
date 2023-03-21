@@ -3176,6 +3176,8 @@ with pkgs;
 
   gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
 
+  graphite-cli = nodePackages.graphite-cli;
+
   gucci = callPackage ../tools/text/gucci { };
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
