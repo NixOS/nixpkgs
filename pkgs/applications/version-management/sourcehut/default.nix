@@ -9,11 +9,9 @@
 # Then we expose them through all-packages.nix as an application through `toPythonApplication`
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 let
-  fetchNodeModules = callPackage ./fetchNodeModules.nix { };
-
   python = python3.override {
     packageOverrides = self: super: {
-      srht = self.callPackage ./core.nix { inherit fetchNodeModules; };
+      srht = self.callPackage ./core.nix { };
 
       buildsrht = self.callPackage ./builds.nix { };
       gitsrht = self.callPackage ./git.nix { };
