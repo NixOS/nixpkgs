@@ -15132,8 +15132,6 @@ with pkgs;
     haxe_4_2
     haxe_4_1
     haxe_4_0
-    haxe_3_4
-    haxe_3_2
     ;
 
   haxe = haxe_4_2;
