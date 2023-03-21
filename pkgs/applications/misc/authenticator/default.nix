@@ -78,8 +78,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ austinbutler ];
     platforms = lib.platforms.linux;
-    # Fails to build on aarch64 with error
-    # "a label can only be part of a statement and a declaration is not a statement"
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
