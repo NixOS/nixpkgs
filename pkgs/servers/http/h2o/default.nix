@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll
-, pkg-config, cmake, ninja
-, openssl, libuv, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, substituteAll
+, pkg-config
+, cmake
+, ninja
+, openssl
+, libuv
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +28,10 @@ stdenv.mkDerivation rec {
       inherit (builtins) storeDir;
     })
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) h2o-etag;
+  };
 
   outputs = [ "out" "man" "dev" "lib" ];
 
