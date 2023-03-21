@@ -37,7 +37,8 @@ let
   # insists that it is named `pkg-config` with no target prefix.
   # So we re-wrap the host platform's pkg-config.
   pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
-    name = "pkg-config-wrapper-without-target-prefix";
+    pname = "pkg-config-wrapper-without-target-prefix";
+    inherit (buildPackages.pkg-config) version;
     dontUnpack = true;
     dontBuild = true;
     installPhase = ''
