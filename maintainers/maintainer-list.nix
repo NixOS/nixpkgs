@@ -1416,6 +1416,17 @@
     githubId = 5193600;
     name = "Atkins Chang";
   };
+  atkrad = {
+    name = "Mohammad Abdolirad";
+    email = "m.abdolirad@gmail.com";
+    github = "atkrad";
+    githubId = 351364;
+    keys = [
+      {
+        fingerprint = "0380 F2F8 DF7A BA1A E7DB  D84A 1935 1496 62CA FDB8";
+      }
+    ];
+  };
   atnnn = {
     email = "etienne@atnnn.com";
     github = "AtnNn";
@@ -4123,6 +4134,12 @@
     github = "d-xo";
     githubId = 6689924;
     name = "David Terry";
+  };
+  dylanmtaylor = {
+    email = "dylan@dylanmtaylor.com";
+    github = "dylamtaylor";
+    githubId = 277927;
+    name = "Dylan Taylor";
   };
   dysinger = {
     email = "tim@dysinger.net";
@@ -12729,6 +12746,11 @@
     github = "rguevara84";
     githubId = 12279531;
     name = "Ricardo Guevara";
+  };
+  rhendric = {
+    name = "Ryan Hendrickson";
+    github = "rhendric";
+    githubId = 1570964;
   };
   rhoriguchi = {
     email = "ryan.horiguchi@gmail.com";
