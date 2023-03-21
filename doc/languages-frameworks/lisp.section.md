@@ -4,7 +4,7 @@ This document describes the Nixpkgs infrastructure for building Common Lisp
 libraries that use ASDF (Another System Definition Facility). It lives in
 `pkgs/development/lisp-modules`.
 
-## Overview
+## Overview {#lisp-overview}
 
 The main entry point of the API are the Common Lisp implementation packages
 (e.g. `abcl`, `ccl`, `clasp-common-lisp`, `clisp` `ecl`, `sbcl`)
@@ -33,7 +33,7 @@ together with `overrideLispAttrs` when dealing with slashy ASDF systems, because
 they should stay in the main package and be build by specifying the `systems`
 argument to `build-asdf-system`.
 
-## The 90% use case example
+## The 90% use case example {#lisp-use-case-example}
 
 The most common way to use the library is to run ad-hoc wrappers like this:
 
@@ -65,7 +65,7 @@ buildPhase = ''
 ''
 ```
 
-## Importing packages from Quicklisp
+## Importing packages from Quicklisp {#lisp-importing-packages-from-quicklisp}
 
 The library is able to very quickly import all the packages distributed by
 Quicklisp by parsing its `releases.txt` and `systems.txt` files. These files are
@@ -94,7 +94,7 @@ The maintainer's job there is to:
 Also, the `imported.nix` file **must not be edited manually**! It should only be
 generated as described in this section.
 
-### Adding native dependencies
+### Adding native dependencies {#lisp-quicklisp-adding-native-dependencies}
 
 The Quicklisp files contain ASDF dependency data, but don't include native
 library (CFFI) dependencies, and, in the case of ABCL, Java dependencies.
@@ -104,7 +104,7 @@ can be added.
 
 Packages defined in `packages.nix` contain these dependencies naturally.
 
-### Trusting `systems.txt` and `releases.txt`
+### Trusting `systems.txt` and `releases.txt` {#lisp-quicklisp-trusting}
 
 The previous implementation of `lisp-modules` didn't fully trust the Quicklisp
 data, because there were times where the dependencies specified were not
@@ -122,7 +122,7 @@ its data. This is an example of a situation where such fixes were used, e.g. to
 replace the `systems` attribute of the affected packages. (See the definition of
 `iolib`).
 
-### Quirks
+### Quirks {#lisp-quicklisp-quirks}
 
 During Quicklisp import:
 
@@ -132,7 +132,7 @@ During Quicklisp import:
 - `_` in names is converted to `__` for reversibility
 
 
-## Defining packages manually inside Nixpkgs
+## Defining packages manually inside Nixpkgs {#lisp-defining-packages-inside}
 
 New packages, that for some reason are not in Quicklisp, and so cannot be
 auto-imported, can be written in the `packages.nix` file.
@@ -145,7 +145,7 @@ compilation.
 The `build-asdf-system` function is documented with comments in
 `nix-cl.nix`. Also, `packages.nix` is full of examples of how to use it.
 
-## Defining packages manually outside Nixpkgs
+## Defining packages manually outside Nixpkgs {#lisp-defining-packages-outside}
 
 Lisp derivations (`abcl`, `sbcl` etc.) also export the `buildASDFSystem`
 function, which is the same as `build-asdf-system`, except for the `lisp`
@@ -154,7 +154,7 @@ argument which is set to the given CL implementation.
 It can be used to define packages outside Nixpkgs, and, for example, add them
 into the package scope with `withOverrides` which will be discussed later on.
 
-### Including an external package in scope
+### Including an external package in scope {#lisp-including-external-pkg-in-scope}
 
 A package defined outside Nixpkgs using `buildASDFSystem` can be woven into the
 Nixpkgs-provided scope like this:
@@ -178,7 +178,7 @@ let
 in sbcl'.pkgs.alexandria
 ```
 
-## Overriding package attributes
+## Overriding package attributes {#lisp-overriding-package-attributes}
 
 Packages export the `overrideLispAttrs` function, which can be used to build a
 new package with different parameters.
@@ -198,7 +198,7 @@ sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
 })
 ```
 
-## Overriding packages in scope
+## Overriding packages in scope {#lisp-overriding-packages-in-scope}
 
 Packages can be woven into a new scope by using `withOverrides`:
 
@@ -220,7 +220,7 @@ let
 in builtins.elemAt sbcl'.pkgs.bordeaux-threads.lispLibs 0
 ```
 
-### Dealing with slashy systems
+### Dealing with slashy systems {#lisp-dealing-with-slashy-systems}
 
 Slashy (secondary) systems should not exist in their own packages! Instead, they
 should be included in the parent package as an extra entry in the `systems`
@@ -247,7 +247,7 @@ Note that sometimes the slashy systems might not only have more dependencies
 than the main one, but create a circular dependency between `.asd`
 files. Unfortunately, in this case an adhoc solution becomes necessary.
 
-## Building Wrappers
+## Building Wrappers {#lisp-building-wrappers}
 
 Wrappers can be built using the `withPackages` function of Common Lisp
 implementations (`abcl`, `ecl`, `sbcl` etc.):
@@ -262,7 +262,7 @@ Such a wrapper can then be executed like this:
 result/bin/sbcl
 ```
 
-### Loading ASDF
+### Loading ASDF {#lisp-loading-asdf}
 
 For best results, avoid calling `(require 'asdf)` When using the
 library-generated wrappers.
@@ -271,14 +271,14 @@ Use `(load (ext:getenv "ASDF"))` instead, supplying your implementation's way of
 getting an environment variable for `ext:getenv`. This will load the
 (pre-compiled to FASL) Nixpkgs-provided version of ASDF.
 
-### Loading systems
+### Loading systems {#lisp-loading-systems}
 
 There, you can simply use `asdf:load-system`. This works by setting the right
 values for the `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` environment
 variables, so that systems are found in the Nix store and pre-compiled FASLs are
 loaded.
 
-## Adding a new Lisp
+## Adding a new Lisp {#lisp-adding-a-new-lisp}
 
 The function `wrapLisp` is used to wrap Common Lisp implementations. It adds the
 `pkgs`, `withPackages`, `withOverrides` and `buildASDFSystem` attributes to the
