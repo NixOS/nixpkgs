@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -42,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "44.0";
+  version = "44.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "LrFGnlsZ6gzFTGa59+eqSQwLG6oZ9A/fC5FOZDl+UW4=";
+    sha256 = "+Tmn+VtLbh0EvY20vpygtnsqp2W4bGP03yP9s6ftzz4=";
   };
 
   patches = [
@@ -63,14 +62,6 @@ stdenv.mkDerivation rec {
     #
     #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
     ./fix-finding-test-typelibs.patch
-
-    # Fix build with libadwaita 1.3
-    # https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2010
-    # https://gitlab.gnome.org/GNOME/libadwaita/-/merge_requests/792
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/d89a5c95e43f4a4e1a4e9d063e3962bac8e51db0.patch";
-      sha256 = "sha256-dSMccodjhGKIGuj+2hi8fxZ3ZQ/pioQYQ36+vpOuJPY=";
-    })
   ];
 
   nativeBuildInputs = [
