@@ -12730,6 +12730,11 @@
     githubId = 12279531;
     name = "Ricardo Guevara";
   };
+  rhendric = {
+    name = "Ryan Hendrickson";
+    github = "rhendric";
+    githubId = 1570964;
+  };
   rhoriguchi = {
     email = "ryan.horiguchi@gmail.com";
     github = "rhoriguchi";
