@@ -16576,7 +16576,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlangR25 erlangR24 erlangR23 erlangR22 erlangR21
+    erlang erlang_25 erlang_24 erlang_23 erlang_22 erlang_21
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
     elixir-ls;
@@ -16588,7 +16588,7 @@ with pkgs;
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages;
 
-  inherit (beam.packages.erlangR21) lfe lfe_1_3;
+  inherit (beam.packages.erlang_21) lfe lfe_1_3;
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
@@ -24745,7 +24745,7 @@ with pkgs;
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlangR24; };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
 
   exhibitor = callPackage ../servers/exhibitor { };
 
