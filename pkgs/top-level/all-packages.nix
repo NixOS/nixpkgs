@@ -19810,6 +19810,8 @@ with pkgs;
 
   entt = callPackage ../development/libraries/entt { };
 
+  epoll-shim = callPackage ../development/libraries/epoll-shim { };
+
   libepoxy = callPackage ../development/libraries/libepoxy {
     inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
   };
