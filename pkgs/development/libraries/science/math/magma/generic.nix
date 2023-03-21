@@ -173,7 +173,7 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tbenst ];
+    maintainers = with maintainers; [ connorbaker ];
     # CUDA and ROCm are mutually exclusive
     broken = cudaSupport && rocmSupport || cudaSupport && strings.versionOlder cudaVersion "9";
   };
