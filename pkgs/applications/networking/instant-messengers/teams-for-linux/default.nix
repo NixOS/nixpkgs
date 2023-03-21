@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
     categories = [ "Network" "InstantMessaging" "Chat" ];
   })];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
