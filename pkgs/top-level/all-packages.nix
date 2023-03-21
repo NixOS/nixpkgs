@@ -25265,6 +25265,9 @@ with pkgs;
 
   https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
 
+  hugegraph-unwrapped = callPackage ../servers/nosql/hugegraph/unwrapped.nix { };
+  hugegraph = callPackage ../servers/nosql/hugegraph { };
+
   hydron = callPackage ../servers/hydron { };
 
   hyprspace = callPackage ../applications/networking/hyprspace {
