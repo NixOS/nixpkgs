@@ -51,7 +51,10 @@ in
     extraNativeBuildInputs = [ autoreconfHook ];
 
     extraConfigureFlags = [ "--with-hpn" ];
-    extraMeta.maintainers = with lib.maintainers; [ abbe ];
+    extraMeta = {
+      maintainers = with lib.maintainers; [ abbe ];
+      knownVulnerabilities = [ "CVE-2023-28531" ];
+    };
   };
 
   openssh_gssapi = common rec {
@@ -75,5 +78,6 @@ in
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
+    extraMeta.knownVulnerabilities = [ "CVE-2023-28531" ];
   };
 }
