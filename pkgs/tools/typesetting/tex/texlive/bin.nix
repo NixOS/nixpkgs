@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, buildPackages
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, perlPackages, python3Packages, pkg-config
+, perl, perlPackages, python3Packages, pkg-config, cmake
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
@@ -363,6 +363,39 @@ latexindent = perlPackages.buildPerlPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang "$out"/bin/latexindent
   '';
+};
+
+context = stdenv.mkDerivation rec {
+  pname = "texlive-luametatex.bin";
+  version = "2.10.07";
+
+  # When updating, try to change to switch to sources in the
+  # texlive-source-tarball or tlnet, but at the time of writing, the sources are
+  # not distributed with texlive). Also see UPGRADING.md
+  src = fetchFromGitHub {
+    owner = "contextgarden";
+    repo = "luametatex";
+    rev = "v${version}";
+    hash = "sha256-Ysq/6ms42rczyHAlSO8qwfMxCNT1fvO+x8nmkmSZR54=";
+  };
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ cmake ];
+
+  postInstall = ''
+     pushd $out/bin
+       ln -s luametatex mtxrun
+       ln -s luametatex context
+     popd
+  '';
+
+  meta = with lib; {
+    description = "minimal tex engine based on luatex";
+    homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
+    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ apfelkuchen6 ];
+  };
 };
 
 

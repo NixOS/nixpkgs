@@ -286,17 +286,21 @@ in (buildEnv {
       (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
     fi
   '' +
+  bin.cleanBrokenLinks +
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
 
-  # MkIV uses its own lookup mechanism and we need to initialize
-  # caches for it.
+  # LMTX uses its own lookup mechanism and we need to initialize caches for it.
+  # We also symlink the non-executables context.lua and mtxrun.lua to $out/bin since luametatex requires these locations.
   ''
-    if [[ -e "$out/bin/mtxrun" ]]; then
+    if [[ -e "$out/bin/mtxrun" ]] &&
+       [[ -e "$TEXMFDIST/scripts/context/lua/mtxrun.lua" ]]; then
+      # we intentionally don't use the scripts.lst-mechanism here since we don't want to strip the suffix or wrap the scripts here.
+      # This block must be below bin.cleanBrokenLinks since this would remove the scripts (which don't have +x)
+      ln -s $TEXMFDIST/scripts/context/lua/{context,mtxrun}.lua "$out"/bin
       mtxrun --generate
     fi
-  ''
-    + bin.cleanBrokenLinks +
+  '' +
   # Get rid of all log files. They are not needed, but take up space
   # and render the build unreproducible by their embedded timestamps.
   ''

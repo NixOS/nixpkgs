@@ -59,6 +59,13 @@ numbers and sha512 hashes) for the selected upstream distribution. Then replace
 The test `pkgs.tests.texlive.tlpdb-nix` verifies that the file `tlpdb.nix`
 in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
+Finally, the luametatex sources in `bin.nix` need to be updated separately
+as the sources are (at the time of writing) not available in tlnet.  The
+matching version can be determined by running `./luametatex --version` on the
+binary obtained from the tarball in tlnet (like
+https://texlive.info/tlnet-archive/2023/03/21/tlnet/archive/context.x86_64-linux.tar.xz )
+in a FHSEnv or with patchelf.
+
 ### Build packages locally and generate fix hashes
 
 To save disk space and prevent unnecessary rebuilds, texlive packages are built
