@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for Twente Milieu";
     homepage = "https://github.com/frenck/python-twentemilieu";
+    changelog = "https://github.com/frenck/python-twentemilieu/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
