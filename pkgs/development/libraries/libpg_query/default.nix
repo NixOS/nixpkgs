@@ -13,11 +13,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  makeFlags = [ "build" ];
+  makeFlags = [ "build" "build_shared" ];
 
   installPhase = ''
     install -Dm644 -t $out/lib libpg_query.a
     install -Dm644 -t $out/include pg_query.h
+  '' + lib.optionalString stdenv.isLinux ''
+    install -Dm644 -t $out/lib libpg_query.so
+  '' + lib.optionalString stdenv.isDarwin ''
+    install -Dm644 -t $out/lib libpg_query.dylib
   '';
 
   meta = with lib; {
