@@ -37,13 +37,7 @@ stdenv.mkDerivation rec {
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
-
-    # The following patch has no effect as the code is
-    # "[d]isabled for 2.3.2 to due problems with the standard hkps pool."
-    #./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
-
     ./24-allow-import-of-previously-known-keys-even-without-UI.patch
-
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];

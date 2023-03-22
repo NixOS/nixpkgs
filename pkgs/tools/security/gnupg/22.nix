@@ -36,11 +36,6 @@ stdenv.mkDerivation rec {
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
-
-    # The following patch has no effect as the code is
-    # "[d]isabled for 2.2.19 to due problems with the standard hkps pool."
-    #./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
-
     ./22-allow-import-of-previously-known-keys-even-without-UI.patch
   ];
 
