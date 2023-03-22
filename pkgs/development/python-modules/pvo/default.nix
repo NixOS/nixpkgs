@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-6oVACUnK8WVlEx047CUXmSXQ0+M3xnSvyMHw5Wttk7M=";
   };
 
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
+    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
