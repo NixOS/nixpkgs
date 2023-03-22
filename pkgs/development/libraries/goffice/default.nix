@@ -1,5 +1,24 @@
-{ fetchurl, lib, stdenv, pkg-config, intltool, glib, gtk3, lasem
-, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome }:
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, intltool
+, autoreconfHook
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, glib
+, gtk3
+, lasem
+, libgsf
+, libxml2
+, libxslt
+, cairo
+, pango
+, librsvg
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "goffice";
@@ -12,13 +31,43 @@ stdenv.mkDerivation rec {
     sha256 = "FqIhGRhVpqbA0Gse+OSBzz9SBBplTsltNYFwRboama8=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-
-  propagatedBuildInputs = [
-    glib gtk3 libxml2 cairo pango libgsf lasem
+  patches = [
+    # Support lasem 0.7.
+    # https://gitlab.gnome.org/GNOME/goffice/-/merge_requests/7
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/goffice/-/commit/5ebb6be7ded738c7f7a0ab32e8cf30c5115dcd51.patch";
+      sha256 = "iYQSqsuR+NpXj1T7u6lSlXhHBI3h5OOvVTLDAjNHwhU=";
+    })
   ];
 
-  buildInputs = [ libxslt librsvg ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    autoreconfHook
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    libxml2
+    cairo
+    pango
+    libgsf
+    lasem
+  ];
+
+  buildInputs = [
+    libxslt
+    librsvg
+  ];
+
+  configureFlags = [
+    "--enable-gtk-doc"
+    "--with-lasem"
+  ];
 
   enableParallelBuilding = true;
   doCheck = !stdenv.hostPlatform.isPower64;

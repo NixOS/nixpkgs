@@ -452,7 +452,7 @@ in
       soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
       rpath="$(patchelf --print-rpath "$soPath")"
       patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
-      patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
+      patchelf --replace-needed liblasem.so liblasem-0.7.so "$soPath"
     '';
   };
 
