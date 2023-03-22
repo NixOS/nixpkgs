@@ -4751,6 +4751,8 @@ with pkgs;
 
   fsql = callPackage ../tools/misc/fsql { };
 
+  typst = callPackage ../tools/typesetting/typst { };
+
   ### TOOLS/TYPESETTING/TEX
 
   advi = callPackage ../tools/typesetting/tex/advi { };
