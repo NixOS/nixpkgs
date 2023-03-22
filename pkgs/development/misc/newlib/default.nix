@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPackages, lib, fetchpatch
+{ stdenv, fetchurl, buildPackages, lib, fetchpatch, texinfo
 , # "newlib-nano" is what the official ARM embedded toolchain calls this build
   # configuration that prioritizes low space usage. We include it as a preset
   # for embedded projects striving for a similar configuration.
@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newlib";
-  version = "4.1.0";
+  version = "4.3.0.20230120";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/newlib/newlib-${finalAttrs.version}.tar.gz";
-    sha256 = "0m01sjjyj0ib7bwlcrvmk1qkkgd66zf1dhbw716j490kymrf75pj";
+    sha256 = "sha256-g6Yqma9Z4465sMWO0JLuJNcA//Q6IsA+QzlVET7zUVA=";
   };
 
   patches = lib.optionals nanoizeNewlib [
@@ -23,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    texinfo # for makeinfo
+  ];
 
   # newlib expects CC to build for build platform, not host platform
   preConfigure = ''
