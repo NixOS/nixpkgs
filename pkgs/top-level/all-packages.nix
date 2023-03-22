@@ -22613,7 +22613,6 @@ with pkgs;
 
   mygui = callPackage ../development/libraries/mygui {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    ogre = ogre1_9;
   };
 
   mythes = callPackage ../development/libraries/mythes { };
@@ -22767,7 +22766,6 @@ with pkgs;
   ogre = callPackage ../development/libraries/ogre {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-  ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix { };
   ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
 
   olm = callPackage ../development/libraries/olm { };
