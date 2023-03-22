@@ -25,11 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-wKbCIA6Xp+VYhcQ5ZpHo5usB+ksnMAJyv5naBvl4Cxo=";
   };
 
-  postPatch = ''
-    # Drop broken version specifier
-    sed -i '/python_requires/d' setup.py
-  '';
-
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
