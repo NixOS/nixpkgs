@@ -439,7 +439,11 @@ mapAliases ({
   enyo-doom = enyo-launcher; # Added 2022-09-09
   epoxy = libepoxy; # Added 2021-11-11
   epsxe = throw "epsxe has been removed from nixpkgs, as it was unmaintained."; # added 2021-12-15
-  inherit (beam.interpreters) erlangR25 erlangR24 erlangR23 erlangR22 erlangR21; # added 2023-03-21
+  inherit (beam.interpreters) erlangR25 erlangR24 erlangR23; # added 2023-03-21
+  erlang_21 = throw "erlangR21 has been removed in favor of newer versions."; # added 2023-03-21
+  erlangR21 = erlang_21;
+  erlang_22 = throw "erlangR22 has been removed in favor of newer versions."; # added 2023-03-21
+  erlangR22 = erlang_22;
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # Added 2021-04-12
   etcdctl = throw "'etcdctl' has been renamed to/replaced by 'etcd'"; # Converted to throw 2022-02-22
   eteroj.lv2 = throw "'eteroj.lv2' has been renamed to/replaced by 'open-music-kontrollers.eteroj'"; # Added 2022-03-09
@@ -1374,6 +1378,7 @@ mapAliases ({
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # Added 2020-08-23
   riak = throw "riak has been removed due to lack of maintainer to update the package"; # Added 2022-06-22
   riak-cs = throw "riak-cs is not maintained anymore"; # Added 2020-10-14
+  rigsofrods = rigsofrods-bin; # Added 2023-03-22
   rimshot = throw "rimshot has been removed, because it is broken and no longer maintained upstream"; # Added 2022-01-15
   ring-daemon = jami-daemon; # Added 2021-10-26
   rkt = throw "rkt was archived by upstream"; # Added 2020-05-16

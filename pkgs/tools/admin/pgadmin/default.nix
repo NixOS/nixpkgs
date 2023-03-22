@@ -12,11 +12,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.20";
+  version = "6.21";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    hash = "sha256-6aQvg98LymZGAgAcNX5Xhw/aRdE5h4HOCPS+kQnkstU=";
+    hash = "sha256-9ErMhxzixyiwcwcduLP63JfM3rNy0W/3w0b+BbQAjUA=";
   };
 
   yarnDeps = mkYarnModules {
@@ -53,7 +53,7 @@ let
       };
       propagatedBuildInputs = [ prev.pytz ];
     });
-    # pgadmin 6.20 is incompatible with flask 2.2
+    # pgadmin 6.21 is incompatible with flask 2.2
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.1.3";
@@ -87,7 +87,7 @@ let
         hash = "sha256-NP5cb+4PabUOMPgaO36haqFJKncf6a0JdNFkYQwJpsk=";
       };
     });
-    # pgadmin 6.20 is incompatible with the major flask-security-too update to 5.0.x
+    # pgadmin 6.21 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
