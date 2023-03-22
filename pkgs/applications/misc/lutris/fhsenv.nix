@@ -24,6 +24,9 @@ in buildFHSUserEnv {
     # Adventure Game Studio
     allegro dumb
 
+    # Curl
+    libnghttp2
+
     # Desmume
     lua agg soundtouch openal desktop-file-utils atk
 
