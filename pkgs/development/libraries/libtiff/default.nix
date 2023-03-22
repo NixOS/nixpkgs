@@ -85,7 +85,12 @@ stdenv.mkDerivation rec {
   # sure cross-compilation works first!
   nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+  # TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [
+    libjpeg
+    xz
+    zlib
+  ];
 
   buildInputs = [ libdeflate ];
 
