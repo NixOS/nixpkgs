@@ -19182,6 +19182,8 @@ with pkgs;
 
   adslib = callPackage ../development/libraries/adslib { };
 
+  aeron-cpp = callPackage ../development/libraries/aeron-cpp { };
+
   afflib = callPackage ../development/libraries/afflib { };
 
   aften = callPackage ../development/libraries/aften { };
