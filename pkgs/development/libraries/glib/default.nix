@@ -56,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.76.0";
+  version = "2.76.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "Ulu3A7gHFC4a7lzPIiw0ToBkshwMRWd+9ZTlh4dMZ5c=";
+    sha256 = "Q9wPahJpWPW0VBNsQ5jqtCAknBYXGnaXhEhuJfL9oZ8=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -102,13 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable flaky test.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
-
-    # Fix API break breaking C++ apps.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/2936
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/cc7f2f81cc59751fcc689731dcd60af5da5723ba.patch";
-      hash = "sha256-8y+rl17buxazMK9Oj28CasC9AyRwt700knyCL1jDIJ0=";
-    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
