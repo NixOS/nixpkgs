@@ -121,9 +121,9 @@ let
 
   # for daily snapshots
   snapshot = {
-    year = "2022";
-    month = "12";
-    day = "27";
+    year = "2023";
+    month = "03";
+    day = "20";
   };
 
   # The tarballs on CTAN mirrors for the current release are constantly
@@ -133,17 +133,17 @@ let
   # (https://tug.org/historic/).
   urlPrefixes = [
     # tlnet-final snapshot
-    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
-    "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
+    #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+    #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
     # Daily snapshots hosted by one of the texlive release managers
-    #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+    "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
   ];
 
   tlpdb = fetchurl {
     # use the same mirror(s) as urlPrefixes above
     urls = map (up: "${up}/../tlpkg/texlive.tlpdb.xz") urlPrefixes;
-    hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
+    hash = "sha256-v9NO3kO4kRwUx5rPfuvIknvUwEXqaBDhhLxDg/EBhuc=";
   };
 
   tlpdb-nix = runCommand "tlpdb.nix" {
