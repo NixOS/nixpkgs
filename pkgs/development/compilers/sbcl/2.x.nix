@@ -10,7 +10,7 @@
 , coreCompression ? lib.versionAtLeast version "2.2.6"
 , texinfo
 , version
-, ... }:
+}:
 
 let
   versionMap = {

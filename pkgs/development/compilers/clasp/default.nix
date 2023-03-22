@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, llvmPackages_15, ...}:
+{ pkgs, lib, fetchFromGitHub, llvmPackages_15 }:
 
 
 let

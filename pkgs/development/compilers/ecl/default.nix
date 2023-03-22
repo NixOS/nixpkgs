@@ -15,7 +15,7 @@
 , threadSupport ? true
 , useBoehmgc ? false
 , boehmgc
-, ... }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "ecl";

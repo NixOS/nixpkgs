@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ant, jre, jdk, ...}:
+{lib, stdenv, fetchurl, ant, jre, jdk}:
 stdenv.mkDerivation rec {
   pname = "abcl";
   version = "1.9.0";
