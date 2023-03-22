@@ -24035,6 +24035,8 @@ with pkgs;
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
+  wayprompt = callPackage ../tools/security/wayprompt { };
+
   wayland = callPackage ../development/libraries/wayland { };
   wayland-scanner = wayland.bin;
 
