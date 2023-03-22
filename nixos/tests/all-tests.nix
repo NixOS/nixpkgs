@@ -210,6 +210,7 @@ in {
   envoy = handleTest ./envoy.nix {};
   ergo = handleTest ./ergo.nix {};
   ergochat = handleTest ./ergochat.nix {};
+  esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
