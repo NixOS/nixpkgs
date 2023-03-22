@@ -33651,7 +33651,12 @@ with pkgs;
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
-  tabula = callPackage ../applications/misc/tabula { };
+  tabula = callPackage ../applications/misc/tabula {
+    # Bundled jruby version in "latest" release won't run on modern JRE
+    # https://github.com/jruby/jruby/pull/5731
+    # https://github.com/tabulapdf/tabula/blob/v1.2.1/.ruby-version#L1
+    jre = jre8;
+  };
 
   tabula-java = callPackage ../applications/misc/tabula-java { };
 
