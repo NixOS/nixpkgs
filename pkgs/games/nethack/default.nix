@@ -85,6 +85,9 @@ in stdenv.mkDerivation rec {
       -i sys/unix/Makefile.*
     ''}
     sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
+    # Fix building on darwin where otherwise __has_attribute fails with an empty parameter
+    sed -e 's/define __warn_unused_result__ .*/define __warn_unused_result__ __unused__/' -i include/tradstdc.h
+    sed -e 's/define warn_unused_result .*/define warn_unused_result __unused__/' -i include/tradstdc.h
   '';
 
   configurePhase = ''

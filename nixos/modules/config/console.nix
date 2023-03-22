@@ -46,13 +46,11 @@ in
 
     font = mkOption {
       type = with types; nullOr (either str path);
-      default = "Lat2-Terminus16";
+      default = null;
       example = "LatArCyrHeb-16";
       description = mdDoc ''
-        The font used for the virtual consoles.  Leave empty to use
-        whatever the {command}`setfont` program considers the
-        default font.
-        Can be either a font name or a path to a PSF font file.
+        The font used for the virtual consoles.
+        Can be `null`, a font name, or a path to a PSF font file.
 
         Use `null` to let the kernel choose a built-in font.
         The default is 8x16, and, as of Linux 5.3, Terminus 32 bold for display

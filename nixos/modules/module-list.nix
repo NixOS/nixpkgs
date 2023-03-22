@@ -95,7 +95,6 @@
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/displaylink.nix
-  ./hardware/video/hidpi.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
@@ -1134,7 +1133,6 @@
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
-  ./services/web-apps/baget.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/coder.nix

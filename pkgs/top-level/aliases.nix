@@ -114,6 +114,7 @@ mapAliases ({
   ### B ###
 
   badtouch = authoscope; # Project was renamed, added 20210626
+  baget = throw "'baget' has been removed due to being unmaintained";
   bar-xft = throw "'bar-xft' has been renamed to/replaced by 'lemonbar-xft'"; # Converted to throw 2022-02-22
   bashCompletion = throw "'bashCompletion' has been renamed to/replaced by 'bash-completion'"; # Converted to throw 2022-02-22
   bashInteractive_5 = bashInteractive; # Added 2021-08-20
@@ -438,6 +439,7 @@ mapAliases ({
   enyo-doom = enyo-launcher; # Added 2022-09-09
   epoxy = libepoxy; # Added 2021-11-11
   epsxe = throw "epsxe has been removed from nixpkgs, as it was unmaintained."; # added 2021-12-15
+  inherit (beam.interpreters) erlangR25 erlangR24 erlangR23 erlangR22 erlangR21; # added 2023-03-21
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # Added 2021-04-12
   etcdctl = throw "'etcdctl' has been renamed to/replaced by 'etcd'"; # Converted to throw 2022-02-22
   eteroj.lv2 = throw "'eteroj.lv2' has been renamed to/replaced by 'open-music-kontrollers.eteroj'"; # Added 2022-03-09
@@ -639,6 +641,8 @@ mapAliases ({
   hardlink = throw "hardlink was merged into util-linux since 2019-06-14."; # Added 2022-08-12
   inherit (harePackages) hare harec; # Added 2022-08-10
   hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # Added 2022-01-15
+  haxe_3_2 = throw "'haxe_3_2' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
+  haxe_3_4 = throw "'haxe_3_4' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
   hdr-plus = throw "hdr-plus has been removed because it is unmaintained, often breaks and no longer consumed as a dependency"; # Added 2022-11-08
   heapster = throw "Heapster is now retired. See https://github.com/kubernetes-retired/heapster/blob/master/docs/deprecation.md"; # Added 2022-04-05
   heimdalFull = throw "'heimdalFull' has been renamed to/replaced by 'heimdal'"; # Converted to throw 2022-02-22
