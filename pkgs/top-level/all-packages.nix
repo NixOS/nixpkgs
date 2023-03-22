@@ -8456,9 +8456,7 @@ with pkgs;
 
   httping = callPackage ../tools/networking/httping { };
 
-  httplz = callPackage ../tools/networking/httplz {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  httplz = callPackage ../tools/networking/httplz { };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
@@ -11629,6 +11627,8 @@ with pkgs;
   rs = callPackage ../tools/text/rs { };
 
   rst2html5 = callPackage ../tools/text/rst2html5 { };
+
+  rst2pdf = with python3Packages; toPythonApplication rst2pdf;
 
   rstcheck = with python3Packages; toPythonApplication rstcheck;
 
@@ -16430,8 +16430,6 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
-  angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix { };
-
   babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
 
   # BQN interpreters and compilers
@@ -16575,7 +16573,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_25 erlang_24 erlang_23 erlang_22 erlang_21
+    erlang erlang_25 erlang_24 erlang_23
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
     elixir-ls;
@@ -22615,8 +22613,6 @@ with pkgs;
     ogre = ogre1_9;
   };
 
-  mysocketw = callPackage ../development/libraries/mysocketw { };
-
   mythes = callPackage ../development/libraries/mythes { };
 
   nanodbc = callPackage ../development/libraries/nanodbc { };
@@ -22770,10 +22766,6 @@ with pkgs;
   };
   ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix { };
   ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
-
-  ogrepaged = callPackage ../development/libraries/ogrepaged {
-    ogre = ogre1_9;
-  };
 
   olm = callPackage ../development/libraries/olm { };
 
@@ -31234,6 +31226,8 @@ with pkgs;
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
+  kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
+
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
   kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
@@ -36063,16 +36057,7 @@ with pkgs;
 
   rftg = callPackage ../games/rftg { };
 
-  rigsofrods = callPackage ../games/rigsofrods {
-    angelscript = angelscript_2_22;
-    ogre = ogre1_9;
-    ogrepaged = ogrepaged.override {
-      ogre = ogre1_9;
-    };
-    mygui = mygui.override {
-      withOgre = true;
-    };
-  };
+  rigsofrods-bin = callPackage ../games/rigsofrods-bin { };
 
   riko4 = callPackage ../games/riko4 { };
 
