@@ -52,8 +52,10 @@ buildPythonPackage rec {
     "cmsis-pack-manager"
     "deepmerge"
     "jinja2"
+    "pycryptodome"
     "pylink-square"
     "pyocd"
+    "typing-extensions"
   ];
 
   pythonRemoveDeps = [
