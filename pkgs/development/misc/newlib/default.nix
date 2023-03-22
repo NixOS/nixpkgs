@@ -31,25 +31,32 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePlatforms = [ "build" "target" ];
+  # flags copied from https://community.arm.com/support-forums/f/compilers-and-libraries-forum/53310/gcc-arm-none-eabi-what-were-the-newlib-compilation-options
+  # sort alphabetically
   configureFlags = [
     "--host=${stdenv.buildPlatform.config}"
-
+  ] ++ (if !nanoizeNewlib then [
     "--disable-newlib-supplied-syscalls"
     "--disable-nls"
-    "--enable-newlib-retargetable-locking"
-  ] ++ (if !nanoizeNewlib then [
+    "--enable-newlib-io-c99-formats"
     "--enable-newlib-io-long-long"
+    "--enable-newlib-reent-check-verify"
     "--enable-newlib-register-fini"
+    "--enable-newlib-retargetable-locking"
   ] else [
-    "--enable-newlib-reent-small"
-    "--disable-newlib-fvwrite-in-streamio"
     "--disable-newlib-fseek-optimization"
-    "--disable-newlib-wide-orient"
-    "--enable-newlib-nano-malloc"
+    "--disable-newlib-fvwrite-in-streamio"
+    "--disable-newlib-supplied-syscalls"
     "--disable-newlib-unbuf-stream-opt"
+    "--disable-newlib-wide-orient"
+    "--disable-nls"
     "--enable-lite-exit"
     "--enable-newlib-global-atexit"
     "--enable-newlib-nano-formatted-io"
+    "--enable-newlib-nano-malloc"
+    "--enable-newlib-reent-check-verify"
+    "--enable-newlib-reent-small"
+    "--enable-newlib-retargetable-locking"
   ]);
 
   dontDisableStatic = true;
