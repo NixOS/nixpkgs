@@ -30,6 +30,21 @@
     echo success > $out
   '';
 
+  context = runCommand "texlive-test-context" {
+    nativeBuildInputs = [ texlive.combined.scheme-context ];
+    input = builtins.toFile "context-sample.tex" ''
+      \starttext
+      \startsection[title={ConTeXt test document}]
+        This is an {\em incredibly} simple ConTeXt document.
+      \stopsection
+      \stoptext
+    '';
+  }
+  ''
+    export HOME="$(mktemp -d)"
+    context "$input" 2>&1 | tee $out
+  '';
+
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
       (with texlive; combine { inherit scheme-infraonly chktex; })
