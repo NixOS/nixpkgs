@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for WLED";
     homepage = "https://github.com/frenck/python-wled";
+    changelog = "https://github.com/frenck/python-wled/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
