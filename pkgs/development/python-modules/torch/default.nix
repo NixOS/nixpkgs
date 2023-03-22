@@ -6,6 +6,7 @@
 
   # Native build inputs
   cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  pythonRelaxDepsHook,
 
   # Build inputs
   numactl,
@@ -13,9 +14,10 @@
 
   # Propagated build inputs
   filelock,
-  sympy,
-  networkx,
   jinja2,
+  networkx,
+  openai-triton,
+  sympy,
   numpy, pyyaml, cffi, click, typing-extensions,
 
   # Unit tests
@@ -271,6 +273,7 @@ in buildPythonPackage rec {
     which
     ninja
     pybind11
+    pythonRelaxDepsHook
     removeReferencesTo
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
@@ -298,8 +301,17 @@ in buildPythonPackage rec {
 
     # the following are required for tensorboard support
     pillow six future tensorboard protobuf
-  ] ++ lib.optionals MPISupport [ mpi ]
-    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+  ]
+  ++ lib.optionals MPISupport [ mpi ]
+  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ]
+  # rocm build requires openai-triton;
+  # openai-triton currently requires cuda_nvcc,
+  # so not including it in the cpu-only build;
+  # torch.compile relies on openai-triton,
+  # so we include it for the cuda build as well
+  ++ lib.optionals (rocmSupport || cudaSupport) [
+    openai-triton
+  ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
@@ -325,6 +337,11 @@ in buildPythonPackage rec {
       (optionalString (majorMinor version == "1.3" ) "tensorboard")
     ])
     "runHook postCheck"
+  ];
+
+  pythonRemoveDeps = [
+    # In our dist-info the name is just "triton"
+    "pytorch-triton-rocm"
   ];
 
   postInstall = ''
