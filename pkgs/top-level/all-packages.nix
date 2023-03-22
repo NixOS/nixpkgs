@@ -36067,6 +36067,8 @@ with pkgs;
     };
   };
 
+  rigsofrods-bin = callPackage ../games/rigsofrods-bin { };
+
   riko4 = callPackage ../games/riko4 { };
 
   rili = callPackage ../games/rili { };
