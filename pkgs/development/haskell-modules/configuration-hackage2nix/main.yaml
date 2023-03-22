@@ -44,6 +44,8 @@ default-package-overrides:
   - shake-cabal < 0.2.2.3
   # needed as long as we have pandoc < 3.0, i.e. stackage lts 20
   - pandoc-crossref < 0.3.15.0
+  # Needs to match hspec which is tracked in stackage
+  - hspec-api < 2.10
 
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
