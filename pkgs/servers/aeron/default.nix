@@ -92,12 +92,12 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     mkdir --parents "$out/share/java"
-    ln --symbolic "${aeronAll.jar}" "$out/share/java/${pname}-all-${version}.jar"
-    ln --symbolic "${aeronArchive.jar}" "$out/share/java/${pname}-archive-${version}.jar"
-    ln --symbolic "${aeronClient.jar}" "$out/share/java/${pname}-client-${version}.jar"
-    ln --symbolic "${aeronCluster.jar}" "$out/share/java/${pname}-cluster-${version}.jar"
-    ln --symbolic "${aeronDriver.jar}" "$out/share/java/${pname}-driver-${version}.jar"
-    ln --symbolic "${aeronSamples.jar}" "$out/share/java/${pname}-samples-${version}.jar"
+    ln --symbolic "${aeronAll.jar}" "$out/share/java/${pname}-all.jar"
+    ln --symbolic "${aeronArchive.jar}" "$out/share/java/${pname}-archive.jar"
+    ln --symbolic "${aeronClient.jar}" "$out/share/java/${pname}-client.jar"
+    ln --symbolic "${aeronCluster.jar}" "$out/share/java/${pname}-cluster.jar"
+    ln --symbolic "${aeronDriver.jar}" "$out/share/java/${pname}-driver.jar"
+    ln --symbolic "${aeronSamples.jar}" "$out/share/java/${pname}-samples.jar"
 
     runHook postInstall
   '';
