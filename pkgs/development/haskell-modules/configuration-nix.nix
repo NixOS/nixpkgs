@@ -359,6 +359,13 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
   }) super.ghcide;
 
+  # Tests execute goldplate
+  goldplate = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/goldplate:$PATH"
+    '';
+  }) super.goldplate;
+
   # At least on 1.3.4 version on 32-bit architectures tasty requires
   # unbounded-delays via .cabal file conditions.
   tasty = overrideCabal (drv: {
