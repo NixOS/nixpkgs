@@ -133,7 +133,8 @@ let
   # (https://tug.org/historic/).
   urlPrefixes = [
     # tlnet-final snapshot
-    #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+    #"https://pi.kwarc.info/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+    #"https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
     #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
     # Daily snapshots hosted by one of the texlive release managers

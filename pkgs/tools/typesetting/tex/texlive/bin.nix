@@ -20,9 +20,9 @@ let
   common = {
     src = fetchurl {
       urls = [
+        "https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
+        "https://pi.kwarc.info/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
         "ftp://ftp.tug.org/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
-        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
       ];
       hash = "sha256-OHiqDh7QMBwFOw4u5OmtmZxEE0X0iC55vdHI9M6eebk=";
     };
