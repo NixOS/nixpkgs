@@ -428,6 +428,9 @@ with lib.maintainers; {
       ericson2314
       lovek323
       primeos
+      qyliss
+      raitobezarius
+      rrbutani
       sternenseemann
     ];
     scope = "Maintain LLVM package sets and related packages";
