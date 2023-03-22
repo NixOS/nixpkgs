@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-hsh2HHpm103JfUTPwk+8zIkhVrglIP8xMovFIibn8+g=";
+    hash = "sha256-jrv2/59PL/x/FG/m4YcIlQ/bnzwzwY5qPzL9KB8v/wk=";
   };
 
   postPatch = ''
@@ -34,6 +34,7 @@ let chia = python3Packages.buildPythonApplication rec {
     aiofiles
     aiohttp
     aiosqlite
+    anyio
     bitstring
     blspy
     chiapos
