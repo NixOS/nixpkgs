@@ -21353,6 +21353,8 @@ with pkgs;
 
   libgnurl = callPackage ../development/libraries/libgnurl { };
 
+  libgourou = callPackage ../development/libraries/libgourou { };
+
   libgringotts = callPackage ../development/libraries/libgringotts { };
 
   libgrss = callPackage ../development/libraries/libgrss {
@@ -23907,6 +23909,8 @@ with pkgs;
   unicap = callPackage ../development/libraries/unicap { };
 
   unicon-lang = callPackage ../development/interpreters/unicon-lang { };
+
+  updfparser = callPackage ../development/libraries/updfparser { };
 
   tsocks = callPackage ../development/libraries/tsocks { };
 
