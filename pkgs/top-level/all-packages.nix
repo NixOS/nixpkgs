@@ -34132,6 +34132,7 @@ with pkgs;
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
   neovide = callPackage ../applications/editors/neovim/neovide { };
+  neovide-bin = callPackage ../applications/editors/neovim/neovide/bin.nix { };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
