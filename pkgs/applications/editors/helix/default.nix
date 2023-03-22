@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/lib
     cp -r runtime $out/lib
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
-    mkdir -p $out/share/{applications,icons}
+    mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
-    cp contrib/helix.png $out/share/icons
+    cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
   '';
   postFixup = ''
     wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
