@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, fetchpatch
 , glib
 , gobject-introspection
 , gtk3
@@ -32,6 +33,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-etB+q7FIwbApTUk8RohAy3kHX8Vb4cSY/qkvhj94yTM=";
   };
+
+  patches = [
+    # xapp-sn-watcher crashes on cinnamon with glib 2.76.0
+    # https://github.com/linuxmint/xapp/issues/165
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xapp/commit/3ef9861d6228c2061fbde2c0554be5ae6f42befa.patch";
+      sha256 = "sha256-7hYXA43UQpBLLjRVPoACc8xdhKyKnt3cDUBL4PhEtJY=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

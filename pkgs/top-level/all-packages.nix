@@ -1963,8 +1963,8 @@ with pkgs;
 
   git-town = callPackage ../applications/version-management/git-town { };
 
-  git-trim = callPackage ../applications/version-management/git-trim {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+  git-trim = darwin.apple_sdk_11_0.callPackage ../applications/version-management/git-trim {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Security;
   };
 
   git-up = callPackage ../applications/version-management/git-up {
@@ -3345,6 +3345,8 @@ with pkgs;
   gopacked = callPackage ../applications/misc/gopacked { };
 
   gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
+
+  graphite-cli = nodePackages.graphite-cli;
 
   gucci = callPackage ../tools/text/gucci { };
 
@@ -8456,9 +8458,7 @@ with pkgs;
 
   httping = callPackage ../tools/networking/httping { };
 
-  httplz = callPackage ../tools/networking/httplz {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  httplz = callPackage ../tools/networking/httplz { };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
@@ -10256,16 +10256,16 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud23 nextcloud24 nextcloud25;
+    nextcloud24 nextcloud25 nextcloud26;
 
-  nextcloud23Packages = ( callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/23.json;
-  });
   nextcloud24Packages = ( callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/24.json;
   });
   nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/25.json;
+  });
+  nextcloud26Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/26.json;
   });
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
@@ -11629,6 +11629,8 @@ with pkgs;
   rs = callPackage ../tools/text/rs { };
 
   rst2html5 = callPackage ../tools/text/rst2html5 { };
+
+  rst2pdf = with python3Packages; toPythonApplication rst2pdf;
 
   rstcheck = with python3Packages; toPythonApplication rstcheck;
 
@@ -13057,6 +13059,8 @@ with pkgs;
 
   typos = callPackage ../development/tools/typos { };
 
+  typst = callPackage ../tools/typesetting/typst { };
+
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
@@ -13224,6 +13228,8 @@ with pkgs;
   vgrep = callPackage ../tools/text/vgrep { };
 
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
+
+  vhdl-ls = callPackage ../development/tools/language-servers/vhdl-ls { };
 
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
@@ -15648,10 +15654,6 @@ with pkgs;
 
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
-  opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
-  };
-
   opaline = callPackage ../development/tools/ocaml/opaline { };
 
   opam = callPackage ../development/tools/ocaml/opam {
@@ -16433,8 +16435,6 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
-  angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix { };
-
   babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
 
   # BQN interpreters and compilers
@@ -16578,7 +16578,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_25 erlang_24 erlang_23 erlang_22 erlang_21
+    erlang erlang_25 erlang_24 erlang_23
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
     elixir-ls;
@@ -19809,6 +19809,8 @@ with pkgs;
 
   entt = callPackage ../development/libraries/entt { };
 
+  epoll-shim = callPackage ../development/libraries/epoll-shim { };
+
   libepoxy = callPackage ../development/libraries/libepoxy {
     inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
   };
@@ -22615,10 +22617,7 @@ with pkgs;
 
   mygui = callPackage ../development/libraries/mygui {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    ogre = ogre1_9;
   };
-
-  mysocketw = callPackage ../development/libraries/mysocketw { };
 
   mythes = callPackage ../development/libraries/mythes { };
 
@@ -22771,12 +22770,7 @@ with pkgs;
   ogre = callPackage ../development/libraries/ogre {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-  ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix { };
   ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
-
-  ogrepaged = callPackage ../development/libraries/ogrepaged {
-    ogre = ogre1_9;
-  };
 
   olm = callPackage ../development/libraries/olm { };
 
@@ -24093,16 +24087,6 @@ with pkgs;
 
   wxformbuilder = callPackage ../development/tools/wxformbuilder {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
-    inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
-  };
-
-  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix {
-    inherit (darwin.stubs) derez rez setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel WebKit;
   };
 
   wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
@@ -31229,6 +31213,8 @@ with pkgs;
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
+  kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
+
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
   kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
@@ -36058,16 +36044,7 @@ with pkgs;
 
   rftg = callPackage ../games/rftg { };
 
-  rigsofrods = callPackage ../games/rigsofrods {
-    angelscript = angelscript_2_22;
-    ogre = ogre1_9;
-    ogrepaged = ogrepaged.override {
-      ogre = ogre1_9;
-    };
-    mygui = mygui.override {
-      withOgre = true;
-    };
-  };
+  rigsofrods-bin = callPackage ../games/rigsofrods-bin { };
 
   riko4 = callPackage ../games/riko4 { };
 
@@ -36216,7 +36193,7 @@ with pkgs;
   stt = callPackage ../tools/audio/stt { };
 
   stuntrally = callPackage ../games/stuntrally
-    { ogre = ogre1_9; mygui = mygui.override { withOgre = true; }; };
+    { };
 
   superTux = callPackage ../games/supertux { };
 
@@ -38442,7 +38419,9 @@ with pkgs;
 
   nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
 
-  nix-update = python3Packages.callPackage ../tools/package-management/nix-update { };
+  nix-update = callPackage ../tools/package-management/nix-update {
+    python3 = python311;
+  };
 
   nix-update-source = callPackage ../tools/package-management/nix-update-source { };
 

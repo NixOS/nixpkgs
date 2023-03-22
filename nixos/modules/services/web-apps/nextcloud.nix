@@ -204,7 +204,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud24" "nextcloud25" ];
+      relatedPackages = [ "nextcloud24" "nextcloud25" "nextcloud26" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -673,7 +673,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 25;
+        latest = 26;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -688,20 +688,6 @@ in {
             `services.nextcloud.package`.
           '';
 
-        # FIXME(@Ma27) remove as soon as nextcloud properly supports
-        # mariadb >=10.6.
-        isUnsupportedMariadb =
-          # All currently supported Nextcloud versions are affected (https://github.com/nextcloud/server/issues/25436).
-          (versionOlder cfg.package.version "24")
-          # This module uses mysql
-          && (cfg.config.dbtype == "mysql")
-          # MySQL is managed via NixOS
-          && config.services.mysql.enable
-          # We're using MariaDB
-          && (getName config.services.mysql.package) == "mariadb-server"
-          # MariaDB is at least 10.6 and thus not supported
-          && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
-
       in (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
@@ -709,6 +695,7 @@ in {
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
+        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional cfg.enableBrokenCiphersForSSE ''
           You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
           This is only necessary if you're using Nextcloud's server-side encryption.
@@ -725,18 +712,7 @@ in {
           See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
 
           For more context, here is the implementing pull request: https://github.com/NixOS/nixpkgs/pull/198470
-        '')
-        ++ (optional isUnsupportedMariadb ''
-            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
-            Please note that this isn't supported officially by Nextcloud. You can either
-
-            * Switch to `pkgs.mysql`
-            * Downgrade MariaDB to at least 10.5
-            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
-
-            For further context, please read
-            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
-          '');
+        '');
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -747,12 +723,13 @@ in {
               `pkgs.nextcloud`.
             ''
           else if versionOlder stateVersion "22.11" then nextcloud24
-          else nextcloud25
+          else if versionOlder stateVersion "23.05" then nextcloud25
+          else nextcloud26
         );
 
       services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "24" then pkgs.php80
-        else pkgs.php81;
+        if versionOlder cfg.package.version "26" then pkgs.php81
+        else pkgs.php82;
     }
 
     { assertions = [
@@ -980,6 +957,9 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
+          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
+          # an automatic creation of the database user.
+          environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
         };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
@@ -1031,14 +1011,6 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
         }];
-        # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
-        # this is a workaround.
-        # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        settings = mkIf (versionOlder cfg.package.version "24") {
-          mysqld = {
-            innodb_read_only_compressed = 0;
-          };
-        };
         initialScript = pkgs.writeText "mysql-init" ''
           CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
           CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
