@@ -688,20 +688,6 @@ in {
             `services.nextcloud.package`.
           '';
 
-        # FIXME(@Ma27) remove as soon as nextcloud properly supports
-        # mariadb >=10.6.
-        isUnsupportedMariadb =
-          # All currently supported Nextcloud versions are affected (https://github.com/nextcloud/server/issues/25436).
-          (versionOlder cfg.package.version "24")
-          # This module uses mysql
-          && (cfg.config.dbtype == "mysql")
-          # MySQL is managed via NixOS
-          && config.services.mysql.enable
-          # We're using MariaDB
-          && (getName config.services.mysql.package) == "mariadb-server"
-          # MariaDB is at least 10.6 and thus not supported
-          && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
-
       in (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
@@ -726,18 +712,7 @@ in {
           See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
 
           For more context, here is the implementing pull request: https://github.com/NixOS/nixpkgs/pull/198470
-        '')
-        ++ (optional isUnsupportedMariadb ''
-            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
-            Please note that this isn't supported officially by Nextcloud. You can either
-
-            * Switch to `pkgs.mysql`
-            * Downgrade MariaDB to at least 10.5
-            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
-
-            For further context, please read
-            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
-          '');
+        '');
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -1036,14 +1011,6 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
         }];
-        # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
-        # this is a workaround.
-        # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        settings = mkIf (versionOlder cfg.package.version "24") {
-          mysqld = {
-            innodb_read_only_compressed = 0;
-          };
-        };
         initialScript = pkgs.writeText "mysql-init" ''
           CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
           CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
