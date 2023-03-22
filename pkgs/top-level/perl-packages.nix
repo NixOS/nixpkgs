@@ -1378,6 +1378,10 @@ let
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-Passwd-0.6.tar.gz";
       hash = "sha256-z1W8NiWe3w/Wr5rSusgbMdxbVqFixmBZDsuWnHwWdLI=";
     };
+    # Our C crypt() doesn't support this weak "crypt" algorithm anymore.
+    postPatch = ''
+      sed -e 's/tests => 8/tests => 7/' -e "/'crypt'/d" -i t/04basic.t
+    '';
     propagatedBuildInputs = [ AuthenSimple ];
     meta = {
       description = "Simple Passwd authentication";
