@@ -15,7 +15,7 @@
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
-, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
+, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
@@ -38,19 +38,21 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20230115";
-  kodiVersion = "20.0";
+  kodiReleaseDate = "20230312";
+  kodiVersion = "20.1";
   rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
-    owner  = "xbmc";
-    repo   = "xbmc";
-    rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-0BkbA1iovouwjQVtiKFw3+64i7sMWZNiCUfOQ0EsslY=";
+    owner = "xbmc";
+    repo = "xbmc";
+    rev = "${kodiVersion}-${rel}";
+    hash = "sha256-2nwjW0MYrMVk+dllrAv9yn+YNA6/loZzoK8mbFIZ8Xs=";
   };
 
   # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
 
+  # kodi 20.0 moved to ffmpeg 5, *but* there is a bug making the compilation fail which will
+  # only been fixed in kodi 21, so stick to ffmpeg 4 for now
   ffmpeg = stdenv.mkDerivation rec {
     pname = "kodi-ffmpeg";
     version = "4.4.1";
@@ -71,7 +73,7 @@ let
       "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
       "-DPKG_CONFIG_EXECUTABLE=pkg-config"
     ];
-    buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
+    buildInputs = [ libidn2 libtasn1 p11-kit zlib libva ]
       ++ lib.optional vdpauSupport libvdpau;
     nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
   };
@@ -110,7 +112,7 @@ in stdenv.mkDerivation {
     src = kodi_src;
 
     buildInputs = [
-      gnutls libidn libtasn1 nasm p11-kit
+      gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
