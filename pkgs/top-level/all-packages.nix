@@ -5562,6 +5562,8 @@ with pkgs;
     zig = zig_0_9;
   };
 
+  river-luatile = callPackage ../applications/misc/river-luatile{ };
+
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
   rmate-sh = callPackage ../tools/misc/rmate-sh { };
