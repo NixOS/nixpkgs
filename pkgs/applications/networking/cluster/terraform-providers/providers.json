@@ -283,13 +283,13 @@
     "vendorHash": "sha256-QlmVrcC1ctjAHOd7qsqc9gpqttKplEy4hlT++cFUZfM="
   },
   "datadog": {
-    "hash": "sha256-7z7NjQ6JBZOCEn8ZiyrgiAlzbzWpzNEhveydBmh841E=",
+    "hash": "sha256-rbBLyCxGB1W7VCPs1f/7PQnyvdWo+uhze6p4cucdEG0=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.22.0",
+    "rev": "v3.23.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2cv7ffNuis91C2iUaYqq5uKx7wwpi2ohwU1q7wjurbA="
+    "vendorHash": "sha256-hy4GQKhY+6bYdVAZensLU0EswZXfxZWY2YNyiTA2UaE="
   },
   "dhall": {
     "hash": "sha256-K0j90YAzYqdyJD4aofyxAJF9QBYNMbhSVm/s1GvWuJ4=",
