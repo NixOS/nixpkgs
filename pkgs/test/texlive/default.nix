@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText, texliveInfraOnly, texliveSmall, texliveMedium, texliveFull }:
+{ lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText, texliveInfraOnly, texliveConTeXt, texliveSmall, texliveMedium, texliveFull }:
 
 rec {
 
@@ -73,6 +73,19 @@ rec {
     chktex -v -nall -w1 "$input" 2>&1 | tee "$out"
     grep "One warning printed" "$out"
   '';
+
+  context = mkTeXTest {
+    name = "texlive-test-context";
+    format = "context";
+    texLive = texliveConTeXt;
+    text = ''
+      \starttext
+      \startsection[title={ConTeXt test document}]
+        This is an {\em incredibly} simple ConTeXt document.
+      \stopsection
+      \stoptext
+    '';
+  };
 
   dvipng = lib.recurseIntoAttrs {
     # https://github.com/NixOS/nixpkgs/issues/75605
