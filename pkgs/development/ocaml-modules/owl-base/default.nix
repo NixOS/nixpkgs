@@ -4,14 +4,14 @@ buildDunePackage rec {
   pname = "owl-base";
   version = "1.0.2";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/owlbarn/owl/releases/download/${version}/owl-${version}.tbz";
-    sha256 = "sha256-ONIQzmwcLwljH9WZUUMOTzZLWuA2xx7RsyzlWbKikmM=";
+    hash = "sha256-ONIQzmwcLwljH9WZUUMOTzZLWuA2xx7RsyzlWbKikmM=";
   };
 
-  minimumOCamlVersion = "4.10";
+  minimalOCamlVersion = "4.10";
 
   meta = with lib; {
     description = "Numerical computing library for Ocaml";

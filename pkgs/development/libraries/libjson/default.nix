@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   patches = [ ./install-fix.patch ];
   nativeBuildInputs = [ unzip ];
   makeFlags = [ "prefix=$(out)" ];
-  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
   preInstall = "mkdir -p $out/lib";
 
   meta = with lib; {

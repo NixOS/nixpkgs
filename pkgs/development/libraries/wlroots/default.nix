@@ -121,8 +121,8 @@ rec {
   };
 
   wlroots_0_16 = generic {
-    version = "0.16.1";
-    hash = "sha256-UyPN7zmytre4emwx/ztZ4JefXHwixPV6UEEqnhSLbIY=";
+    version = "0.16.2";
+    hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
     extraBuildInputs = [ vulkan-loader ];
     extraNativeBuildInputs = [ glslang ];
     extraPatch = ''

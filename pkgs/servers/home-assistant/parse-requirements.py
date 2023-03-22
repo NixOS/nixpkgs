@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ mypy attrs packaging rich ])
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ attrs packaging rich ])" -p nodePackages.pyright ruff isort"
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -25,8 +25,9 @@ import tarfile
 import tempfile
 from functools import reduce
 from io import BytesIO
-from typing import Dict, Optional, Set, Any
+from typing import Any, Dict, List, Optional, Set
 from urllib.request import urlopen
+
 from packaging import version as Version
 from rich.console import Console
 from rich.table import Table
@@ -45,17 +46,21 @@ PKG_PREFERENCES = {
 }
 
 
-def run_mypy() -> None:
-    cmd = ["mypy", "--ignore-missing-imports", __file__]
+
+def run_sync(cmd: List[str]) -> None:
     print(f"$ {' '.join(cmd)}")
-    subprocess.run(cmd, check=True)
+    process = subprocess.run(cmd)
+
+    if process.returncode != 0:
+        sys.exit(1)
 
 
-def get_version():
+def get_version() -> str:
     with open(os.path.dirname(sys.argv[0]) + "/default.nix") as f:
         # A version consists of digits, dots, and possibly a "b" (for beta)
-        m = re.search('hassVersion = "([\\d\\.b]+)";', f.read())
-        return m.group(1)
+        if match := re.search('hassVersion = "([\\d\\.b]+)";', f.read()):
+            return match.group(1)
+        raise RuntimeError("hassVersion not in default.nix")
 
 
 def parse_components(version: str = "master"):
@@ -74,7 +79,7 @@ def parse_components(version: str = "master"):
                 components_with_tests.append(entry.name)
 
         sys.path.append(core_path)
-        from script.hassfest.model import Integration
+        from script.hassfest.model import Integration  # type: ignore
         integrations = Integration.load_dir(
             pathlib.Path(
                 os.path.join(core_path, "homeassistant/components")
@@ -270,5 +275,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    run_mypy()
+    run_sync(["pyright", __file__])
+    run_sync(["ruff", "--ignore=E501", __file__])
+    run_sync(["isort", __file__])
     main()

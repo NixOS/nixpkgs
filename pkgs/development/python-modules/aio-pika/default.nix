@@ -1,41 +1,54 @@
 { lib
+, aiomisc
+, aiormq
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
+, poetry-core
 , pytestCheckHook
-, aiormq
-, yarl
-, aiomisc
+, pythonOlder
+, setuptools
 , shortuuid
+, typing-extensions
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "8.3.0";
+  version = "9.0.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = pname;
-    rev = version;
-    sha256 = "CYfj6V/91J7JA8YSctG/FkSHRkwyLKxr27eREbA+MtQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dY4uSkiAZz8kjeqt0QwehogljBrxqhVI9LmRE/I8HKA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiormq
     yarl
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
   checkInputs = [
     aiomisc
     shortuuid
   ];
-  # Tests attempt to connect to a RabbitMQ server
+
   disabledTestPaths = [
+    # Tests attempt to connect to a RabbitMQ server
     "tests/test_amqp.py"
     "tests/test_amqp_robust.py"
     "tests/test_amqp_robust_proxy.py"
@@ -45,11 +58,15 @@ buildPythonPackage rec {
     "tests/test_rpc.py"
     "tests/test_types.py"
   ];
-  pythonImportsCheck = [ "aio_pika" ];
+
+  pythonImportsCheck = [
+    "aio_pika"
+  ];
 
   meta = with lib; {
     description = "AMQP 0.9 client designed for asyncio and humans";
     homepage = "https://github.com/mosquito/aio-pika";
+    changelog = "https://github.com/mosquito/aio-pika/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ emilytrau ];
   };

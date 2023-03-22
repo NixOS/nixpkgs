@@ -10,12 +10,14 @@
 , dissect-extfs
 , dissect-fat
 , dissect-ffs
+, dissect-executable
 , dissect-hypervisor
 , dissect-ntfs
 , dissect-ole
 , dissect-regf
 , dissect-shellitem
 , dissect-sql
+, dissect-squashfs
 , dissect-target
 , dissect-util
 , dissect-vmfs
@@ -29,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.3";
+  version = "3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -37,8 +39,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
-    rev = version;
-    hash = "sha256-1m5reKmPFSqMW/wYdiMw95l8A9E5FS8RHLb8/i1rQKY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+t6v553lP9NEimNlp48NQ+6dpIOrgfZ1FU3LNJF44YY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -56,6 +58,7 @@ buildPythonPackage rec {
     dissect-etl
     dissect-eventlog
     dissect-evidence
+    dissect-executable
     dissect-extfs
     dissect-fat
     dissect-ffs
@@ -65,6 +68,7 @@ buildPythonPackage rec {
     dissect-regf
     dissect-shellitem
     dissect-sql
+    dissect-squashfs
     dissect-target
     dissect-util
     dissect-vmfs
@@ -82,6 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
+    changelog = "https://github.com/fox-it/dissect/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

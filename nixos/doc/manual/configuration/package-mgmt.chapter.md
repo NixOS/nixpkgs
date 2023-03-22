@@ -12,7 +12,7 @@ NixOS has two distinct styles of package management:
     `nix-env` command. This style allows mixing packages from different
     Nixpkgs versions. It's the only choice for non-root users.
 
-```{=docbook}
-<xi:include href="declarative-packages.section.xml" />
-<xi:include href="ad-hoc-packages.section.xml" />
+```{=include=} sections
+declarative-packages.section.md
+ad-hoc-packages.section.md
 ```

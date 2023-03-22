@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3N9S8QhQ3vtC9SZBQqvwVpE8V062VVWTV3nBhPI1lmA=";
+    hash = "sha256-jvrk6m1Cd5ig2LXq6sAIbHDhmtG1gH/7WNAc7oet+tg=";
   };
 
   propagatedBuildInputs = [

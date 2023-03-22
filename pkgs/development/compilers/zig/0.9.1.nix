@@ -62,6 +62,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+
+    # ensure determinism in the compiler build
+    "-DZIG_TARGET_MCPU=baseline"
   ];
 
   doCheck = true;

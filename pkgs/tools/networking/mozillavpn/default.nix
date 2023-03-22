@@ -21,13 +21,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.13.0";
+  version = "2.13.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-EwHuNJZpTb7oFOKKDv0zWgklUe95Th97KP9G5DqRokA=";
+    hash = "sha256-moXCtAFJyNkotYxBZSRP24tNHy5Rb6YW7mSKHDn9oXk=";
   };
 
   netfilter-go-modules = (buildGoModule {
@@ -40,19 +40,19 @@ let
     inherit src;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-q6Wf+jrGjGMiDEmnErnDau6Li64Dyq8t2SN1I4rspBY=";
+    hash = "sha256-/gRP7Th2HnoEQU8psf0797Tq6md4+P5zR13z3U9xlrI=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-Dbu4WX2u3uDDUuZzS/hczypSFkQNnvuj2Su2X0QvSN4=";
+    hash = "sha256-IBT7qTNbGVutR90wUhm7+9tLehDfrYDHTDkBz8hD6G0=";
   };
   vpngleanDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-vpnglean";
     preBuild = "cd vpnglean";
-    hash = "sha256-FDkziDDup+D7Bh+Wclqxn8Dhm/T2DanhjKXIAEFDhzc=";
+    hash = "sha256-vQDXsoKyawdVFIQZfH8LD+ehGk692ZcAwtou4OoqLNI=";
   };
 
 in

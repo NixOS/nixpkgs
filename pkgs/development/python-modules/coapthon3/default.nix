@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "Tanganelli";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
+    hash = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
   };
 
   propagatedBuildInputs = [ cachetools ];

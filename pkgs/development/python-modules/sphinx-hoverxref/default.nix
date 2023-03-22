@@ -10,12 +10,12 @@
 , sphinx-rtd-theme
 , sphinx-tabs
 , sphinx-version-warning
-, sphinxcontrib-autoapi
+, sphinx-autoapi
 , sphinxcontrib-bibtex
 , sphinxemoji
 # runtime dependencies
 , sphinx
-, sphinx-jquery
+, sphinxcontrib-jquery
 }:
 
 buildPythonPackage rec {
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     sphinx-rtd-theme
     sphinx-tabs
     sphinx-version-warning
-    sphinxcontrib-autoapi
+    sphinx-autoapi
     sphinxcontrib-bibtex
     sphinxemoji
   ];
 
-  propagatedBuildInputs = [ sphinx sphinx-jquery ];
+  propagatedBuildInputs = [ sphinx sphinxcontrib-jquery ];
 
   pythonImportsCheck = [ "hoverxref" ];
 

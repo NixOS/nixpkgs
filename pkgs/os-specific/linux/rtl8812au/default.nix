@@ -11,21 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-25NaMQq9H6mqVynNQJXpqISAslxfEVSt3ELzG7s4mV4=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
   hardeningDisable = [ "pic" "format" ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
   makeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
     ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

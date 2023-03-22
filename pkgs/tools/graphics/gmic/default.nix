@@ -21,19 +21,20 @@
 , gnused
 , coreutils
 , jq
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "3.2.0";
+  version = "3.2.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchFromGitHub {
-    owner = "dtschump";
+    owner = "GreycLab";
     repo = "gmic";
     rev = "v.${version}";
-    hash = "sha256-lrIlzxXWqv046G5uRkBQnjvysaIcv+iDKxjuUEJWqcs=";
+    hash = "sha256-XLDnIs7IRIhQtz+qgdNypJODk6WJRPQ2M6LU6DJ+T7I=";
   };
 
   # TODO: build this from source
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    hash = "sha256-kWHzA1Dk7F4IROq/gk+RJllry3BABMbssJxhkQ6Cp2M=";
+    hash = "sha256-lABUPhwlzoRODX7z8arOEU0JJszcXREhZ20WRToKNY4=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +82,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      # Needs to update in lockstep.
+      inherit gmic-qt;
+    };
+
     updateScript = writeShellScript "${pname}-update-script" ''
       set -o errexit
       PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep gnused coreutils jq ]}
@@ -95,7 +101,7 @@ stdenv.mkDerivation rec {
       for component in src gmic_stdlib; do
           # The script will not perform an update when the version attribute is up to date from previous platform run
           # We need to clear it before each run
-          update-source-version "--source-key=$component" "gmic" 0 "$(printf '0%.0s' {1..64})"
+          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
           update-source-version "--source-key=$component" "gmic" $latestVersion
       done
     '';
@@ -104,7 +110,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open and full-featured framework for image processing";
     homepage = "https://gmic.eu/";
-    license = licenses.cecill20;
+    license = licenses.cecill21;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

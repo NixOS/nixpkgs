@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: bookmark.o: (.bss+0x20): multiple definition of `gBm';
   #     gpshare.o:(.bss+0x0): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     find -name Makefile.in | xargs sed -i '/^TMPDIR=/d'

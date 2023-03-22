@@ -53,13 +53,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "4.0-beta16";
+  version = "4.0-stable";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "518b9e5801a19229805fe837d7d0cf92920ad413";
-    sha256 = "sha256-45x4moHOn/PWRazuJ/CBb3WYaPZqv4Sn8ZIugUSaVjY=";
+    rev = version;
+    hash = "sha256-BaSIHTV7LFV5VqjW+q7u/t/DR6JS6vxfREab6EdKYPU=";
   };
 
   nativeBuildInputs = [

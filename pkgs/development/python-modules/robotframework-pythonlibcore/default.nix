@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
-  version = "4.1.0";
+  version = "4.1.2";
 
   disabled = pythonOlder "3.7";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "PythonLibCore";
     rev = "v${version}";
-    hash = "sha256-BgnllONYJjfeKIN8BLfMw1iZrVewtXB1KN8b9KjdtK0=";
+    hash = "sha256-uS0NwyFqidhrMG7thHM0qau22B/kI16c8aXEUuNdioQ=";
   };
 
   nativeCheckInputs = [

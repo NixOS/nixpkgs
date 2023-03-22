@@ -736,6 +736,7 @@ rec {
         pcre.out
         gettext
         binutils.bintools
+        binutils.bintools.lib
         darwin.binutils
         darwin.binutils.bintools
         curl.out

@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.4.4";
+  version = "1.4.5";
 
   format = "other";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec  {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-oHJOwdCvHnPalTHb5E3mNDYBaR9ZvlV1F6ux7nejBlc=";
+    hash = "sha256-5mMV4WinpFR9ihgoQsgIXre0VpBdg9S8GjSkx+7ocLg=";
   };
 
   nativeBuildInputs = [

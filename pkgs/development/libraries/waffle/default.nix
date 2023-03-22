@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waffle";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "waffle";
     rev = "v${version}";
-    sha256 = "iY+dAgXutD/uDFocwd9QXjq502IOsk+3RQMA2S/CMV4=";
+    sha256 = "sha256-dwDNMLgZrILb559yGs4sNA7D+nD60972+JOy0PKfL0w=";
   };
 
   buildInputs = [

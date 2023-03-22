@@ -46,6 +46,11 @@ mkDerivation rec {
       url = "https://github.com/mkroehnert/hdrmerge/commit/472b2dfe7d54856158aea3d5412a02d0bab1da4c.patch";
       sha256 = "0jc713ajr4w08pfbi6bva442prj878nxp1fpl9112i3xj34x9sdi";
     })
+    (fetchpatch {
+      name = "support-libraw-0.21.patch";
+      url = "https://github.com/jcelaya/hdrmerge/commit/779e566b3e2807280b78c79affda2cdfa64bde87.diff";
+      sha256 = "48sivCfJWEtGiBXTrO+SWTVlT9xyx92w2kkB8Wt/clk=";
+    })
   ];
 
   desktopItems = [

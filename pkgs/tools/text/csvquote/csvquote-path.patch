@@ -1,0 +1,14 @@
+--- a/csvheader
++++ b/csvheader
+@@ -29,10 +29,6 @@ while getopts "d:tq:r:" arg; do
+     esac
+ done
+ 
+-CSVQUOTE=`which csvquote` || CSVQUOTE="./csvquote"
+-if [ ! -f $CSVQUOTE ]; then
+-    echo "csvquote program not found. exiting"
+-    exit 1
+-fi
++CSVQUOTE=@out@/bin/csvquote
+ 
+ $CSVQUOTE $@ | head -n 1 | tr "$DEL" '\n' | nl -ba | $CSVQUOTE -u -d "$DEL" -q "$QUO" -r "$REC"

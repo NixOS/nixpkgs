@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Disable assertions which include -dev QtBase file paths.
-  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
+  env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   configureFlags = [
     "--without-python"

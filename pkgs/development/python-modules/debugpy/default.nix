@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , gdb
 , django
@@ -13,6 +14,7 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
+, llvmPackages
 }:
 
 buildPythonPackage rec {
@@ -26,20 +28,20 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
+    hash = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
   };
 
   patches = [
-    # Hard code GDB path (used to attach to process)
-    (substituteAll {
-      src = ./hardcode-gdb.patch;
-      inherit gdb;
-    })
-
     # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
       inherit version;
+    })
+
+    # https://github.com/microsoft/debugpy/issues/1230
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/microsoft/debugpy/pull/1232.patch";
+      sha256 = "sha256-m5p+xYiJ4w4GcaFIaPmlnErp/7WLwcvJmaCqa2SeSxU=";
     })
 
     # Fix importing debugpy in:
@@ -51,6 +53,18 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    # Hard code GDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-gdb.patch;
+      inherit gdb;
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Hard code LLDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-lldb.patch;
+      inherit (llvmPackages) lldb;
+    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -93,9 +107,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--timeout=0"
   ];
-
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/microsoft/debugpy/issues/1241
+    "test_flask_breakpoint_multiproc"
+  ];
 
   pythonImportsCheck = [
     "debugpy"

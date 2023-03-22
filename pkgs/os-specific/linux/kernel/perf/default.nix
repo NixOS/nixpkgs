@@ -25,6 +25,7 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libtraceevent
 , openssl
 , systemtap
 , numactl
@@ -105,6 +106,7 @@ stdenv.mkDerivation {
     elfutils
     newt
     slang
+    libtraceevent
     libunwind
     zlib
     openssl
@@ -121,7 +123,7 @@ stdenv.mkDerivation {
   ++ lib.optional withLibcap libcap
   ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
     "-Wno-error=deprecated-declarations"

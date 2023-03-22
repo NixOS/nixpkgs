@@ -5,22 +5,24 @@ set -eou pipefail
 
 version=$1
 
-linux_cuda_version="cu116"
-linux_bucket="https://download.pytorch.org/whl/${linux_cuda_version}"
+linux_cuda_version="cu117"
+linux_cuda_bucket="https://download.pytorch.org/whl/${linux_cuda_version}"
+linux_cpu_bucket="https://download.pytorch.org/whl"
 darwin_bucket="https://download.pytorch.org/whl/cpu"
 
 url_and_key_list=(
-  "x86_64-linux-37 $linux_bucket/torch-${version}%2B${linux_cuda_version}-cp37-cp37m-linux_x86_64.whl torch-${version}-cp37-cp37m-linux_x86_64.whl"
-  "x86_64-linux-38 $linux_bucket/torch-${version}%2B${linux_cuda_version}-cp38-cp38-linux_x86_64.whl torch-${version}-cp38-cp38-linux_x86_64.whl"
-  "x86_64-linux-39 $linux_bucket/torch-${version}%2B${linux_cuda_version}-cp39-cp39-linux_x86_64.whl torch-${version}-cp39-cp39-linux_x86_64.whl"
-  "x86_64-linux-310 $linux_bucket/torch-${version}%2B${linux_cuda_version}-cp310-cp310-linux_x86_64.whl torch-${version}-cp310-cp310-linux_x86_64.whl"
-  "x86_64-darwin-37 $darwin_bucket/torch-${version}-cp37-none-macosx_10_9_x86_64.whl torch-${version}-cp37-none-macosx_10_9_x86_64.whl"
+  "x86_64-linux-38 $linux_cuda_bucket/torch-${version}%2B${linux_cuda_version}-cp38-cp38-linux_x86_64.whl torch-${version}-cp38-cp38-linux_x86_64.whl"
+  "x86_64-linux-39 $linux_cuda_bucket/torch-${version}%2B${linux_cuda_version}-cp39-cp39-linux_x86_64.whl torch-${version}-cp39-cp39-linux_x86_64.whl"
+  "x86_64-linux-310 $linux_cuda_bucket/torch-${version}%2B${linux_cuda_version}-cp310-cp310-linux_x86_64.whl torch-${version}-cp310-cp310-linux_x86_64.whl"
   "x86_64-darwin-38 $darwin_bucket/torch-${version}-cp38-none-macosx_10_9_x86_64.whl torch-${version}-cp38-none-macosx_10_9_x86_64.whl"
   "x86_64-darwin-39 $darwin_bucket/torch-${version}-cp39-none-macosx_10_9_x86_64.whl torch-${version}-cp39-none-macosx_10_9_x86_64.whl"
   "x86_64-darwin-310 $darwin_bucket/torch-${version}-cp310-none-macosx_10_9_x86_64.whl torch-${version}-cp310-none-macosx_10_9_x86_64.whl"
   "aarch64-darwin-38 $darwin_bucket/torch-${version}-cp38-none-macosx_11_0_arm64.whl torch-${version}-cp38-none-macosx_11_0_arm64.whl"
   "aarch64-darwin-39 $darwin_bucket/torch-${version}-cp39-none-macosx_11_0_arm64.whl torch-${version}-cp39-none-macosx_11_0_arm64.whl"
   "aarch64-darwin-310 $darwin_bucket/torch-${version}-cp310-none-macosx_11_0_arm64.whl torch-${version}-cp310-none-macosx_11_0_arm64.whl"
+  "aarch64-linux-38 $linux_cpu_bucket/torch-${version}-cp38-cp38-manylinux2014_aarch64.whl torch-${version}-cp38-cp38-manylinux2014_aarch64.whl"
+  "aarch64-linux-39 $linux_cpu_bucket/torch-${version}-cp39-cp39-manylinux2014_aarch64.whl torch-${version}-cp39-cp39-manylinux2014_aarch64.whl"
+  "aarch64-linux-310 $linux_cpu_bucket/torch-${version}-cp310-cp310-manylinux2014_aarch64.whl torch-${version}-cp310-cp310-manylinux2014_aarch64.whl"
 )
 
 hashfile="binary-hashes-$version.nix"

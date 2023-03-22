@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pianotrans";
-  version = "1.0";
+  version = "1.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "azuwis";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6Otup1Yat1dBZdSoR4lDfpytUQ2RbDXC6ieo835Nw+U=";
+    hash = "sha256-gRbyUQmPtGvx5QKAyrmeJl0stp7hwLBWwjSbJajihdE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

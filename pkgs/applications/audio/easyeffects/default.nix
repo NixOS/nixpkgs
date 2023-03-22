@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-SjhJj5kClPd8DT1vzbSdqJ9AJw0XiX9Q8/R8SDnxGPQ=";
+    sha256 = "sha256-PI29TJSYa/dARlSHe4mO4ejV+muhGFhwVvhA10jziTA=";
   };
 
   nativeBuildInputs = [
@@ -107,6 +107,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

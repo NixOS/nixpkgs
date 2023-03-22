@@ -22,6 +22,9 @@ let
     url = "mirror://sourceforge/zod/linux_releases/zod_linux-${version}.tar.gz";
     sha256 = "017v96aflrv07g8j8zk9mq8f8rqxl5228rjff5blq8dxpsv1sx7h";
   };
+  postPatch = ''
+    sed '1i#include <ctime>' -i zod_src/common.cpp # gcc12
+  '';
   nativeBuildInputs = [
     makeWrapper
   ];
@@ -37,7 +40,7 @@ let
   hardeningDisable = [ "format" ];
   NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
   zod_engine = stdenv.mkDerivation {
-    inherit version src nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
+    inherit version src postPatch nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
     pname = "${name}-engine";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
@@ -48,7 +51,7 @@ let
     '';
   };
   zod_map_editor = stdenv.mkDerivation {
-    inherit version src nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
+    inherit version src postPatch nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
     pname = "${name}-map_editor";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";

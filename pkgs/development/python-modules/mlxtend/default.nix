@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7G4tIoQGS7/YPpAhUn0CRf8fl/DdjdqySPWgJEL0trA=";
+    hash = "sha256-7G4tIoQGS7/YPpAhUn0CRf8fl/DdjdqySPWgJEL0trA=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

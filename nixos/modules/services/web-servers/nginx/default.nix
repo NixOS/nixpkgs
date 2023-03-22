@@ -112,10 +112,8 @@ let
   ''));
 
   commonHttpConfig = ''
-      # The mime type definitions included with nginx are very incomplete, so
-      # we use a list of mime types from the mailcap package, which is also
-      # used by most other Linux distributions by default.
-      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      # Load mime types.
+      include ${cfg.defaultMimeTypes};
       # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
       # contains 1026 entries and the default is only 1024. Setting to a higher number to remove the need to
       # overwrite it because nginx does not allow duplicated settings.
@@ -526,6 +524,18 @@ in
         example = 8443;
         description = lib.mdDoc ''
           If vhosts do not specify listen.port, use these ports for SSL by default.
+        '';
+      };
+
+      defaultMimeTypes = mkOption {
+        type = types.path;
+        default = "${pkgs.mailcap}/etc/nginx/mime.types";
+        defaultText = literalExpression "$''{pkgs.mailcap}/etc/nginx/mime.types";
+        example = literalExpression "$''{pkgs.nginx}/conf/mime.types";
+        description = lib.mdDoc ''
+          Default MIME types for NGINX, as MIME types definitions from NGINX are very incomplete,
+          we use by default the ones bundled in the mailcap package, used by most of the other
+          Linux distributions.
         '';
       };
 

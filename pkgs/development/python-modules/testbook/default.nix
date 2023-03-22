@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "nteract";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qaDgae/5TRpjmjOf7aom7TC5HLHp0PHM/ds47AKtq8U=";
+    hash = "sha256-qaDgae/5TRpjmjOf7aom7TC5HLHp0PHM/ds47AKtq8U=";
   };
 
   propagatedBuildInputs = [

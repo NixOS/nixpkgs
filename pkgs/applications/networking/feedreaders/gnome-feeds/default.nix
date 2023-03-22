@@ -66,9 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   dontWrapGApps = true;
 
   preFixup = ''

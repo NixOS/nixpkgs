@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"
-    ${python.interpreter} build.py --system-libclang --clang-completer --ninja
+    ${python.pythonForBuild.interpreter} build.py --system-libclang --clang-completer --ninja
   '';
 
   dontConfigure = true;

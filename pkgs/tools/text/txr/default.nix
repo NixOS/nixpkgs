@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       au BufRead,BufNewFile *.txr set filetype=txr | set lisp
       au BufRead,BufNewFile *.tl,*.tlo set filetype=tl | set lisp
     EOF
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/txr $out/share/nvim/site
   '';
 
   meta = with lib; {

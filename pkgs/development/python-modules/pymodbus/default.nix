@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , click
 , fetchFromGitHub
@@ -21,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.1.2";
+  version = "3.1.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kae/TADu23NnCrXkJ/dkDBNIgBm/+BxXf+lh8uMxz/s=";
+    hash = "sha256-GHyDlt046v4KP9KQRnXH6F+3ikoCjbhVHEQuSdm99a8=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
@@ -43,7 +42,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     mock
     pytest-asyncio
     pytest-rerunfailures

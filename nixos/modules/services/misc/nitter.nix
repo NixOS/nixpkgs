@@ -185,6 +185,13 @@ in
           description = lib.mdDoc "Replace YouTube links with links to this instance (blank to disable).";
         };
 
+        replaceReddit = mkOption {
+          type = types.str;
+          default = "";
+          example = "teddit.net";
+          description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
+        };
+
         replaceInstagram = mkOption {
           type = types.str;
           default = "";

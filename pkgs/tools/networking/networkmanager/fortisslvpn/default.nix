@@ -21,7 +21,7 @@
 stdenv.mkDerivation rec {
   pname = "NetworkManager-fortisslvpn";
   version = "1.4.0";
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

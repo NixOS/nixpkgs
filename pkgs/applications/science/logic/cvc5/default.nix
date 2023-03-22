@@ -1,18 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, cadical, symfpu, gmp, git, python3, gtest, libantlr3c, antlr3_4, boost, jdk }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, flex, cadical, symfpu, gmp, python3, gtest, libantlr3c, antlr3_4, boost, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner  = "cvc5";
     repo   = "cvc5";
     rev    = "cvc5-${version}";
-    sha256 = "sha256-CVXK6yehfUrSbo8R1Dk1oc/siCtmV9DjEp6q+aLuVQA=";
+    hash  = "sha256-1yJZtPZ4nMg9Kn3jHpN8b5XeFZ8ZeVLrKYWh7Rp3/oQ=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ cadical.dev symfpu gmp git python3 python3.pkgs.toml gtest libantlr3c antlr3_4 boost jdk ];
+  nativeBuildInputs = [ pkg-config cmake flex ];
+  buildInputs = [
+    cadical.dev symfpu gmp gtest libantlr3c antlr3_4 boost jdk
+    (python3.withPackages (ps: with ps; [ pyparsing toml ]))
+  ];
 
   preConfigure = ''
     patchShebangs ./src/

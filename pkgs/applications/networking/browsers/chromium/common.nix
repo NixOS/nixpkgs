@@ -38,6 +38,8 @@
 , libepoxy
 # postPatch:
 , glibc # gconv + locale
+# postFixup:
+, vulkan-loader
 
 # Package customization:
 , cupsSupport ? true, cups ? null
@@ -150,10 +152,10 @@ let
       libdrm wayland mesa.drivers libxkbcommon
       curl
       libepoxy
+      libffi
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
-      ++ lib.optional pulseSupport libpulseaudio
-      ++ lib.optional (chromiumVersionAtLeast "110") libffi;
+      ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
@@ -293,15 +295,6 @@ let
       chrome_pgo_phase = 0;
       clang_base_path = "${llvmPackages.clang}";
       use_qt = false;
-    } // lib.optionalAttrs (!chromiumVersionAtLeast "110") {
-      # The default has changed to false. We'll build with libwayland from
-      # Nixpkgs for now but might want to eventually use the bundled libwayland
-      # as well to avoid incompatibilities (if this continues to be a problem
-      # from time to time):
-      use_system_libwayland = true;
-      # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
-    } // lib.optionalAttrs (chromiumVersionAtLeast "110") {
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
@@ -333,7 +326,7 @@ let
     # Don't spam warnings about unknown warning options. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       buildCommand = target: ''
@@ -350,10 +343,10 @@ let
     in lib.concatStringsSep "\n" commands;
 
     postFixup = ''
-      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      # Make sure that libGLESv2 and libvulkan are found by dlopen.
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {

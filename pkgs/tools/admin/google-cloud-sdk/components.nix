@@ -3,6 +3,8 @@
 , google-cloud-sdk
 , system
 , snapshotPath
+, autoPatchelfHook
+, python3
 , ...
 }:
 
@@ -100,9 +102,7 @@ let
         pname = component.id;
         version = component.version.version_string;
         src =
-          if lib.hasAttrByPath [ "data" "source" ] component
-          then "${baseUrl}/${component.data.source}"
-          else "";
+          lib.optionalString (lib.hasAttrByPath [ "data" "source" ] component) "${baseUrl}/${component.data.source}";
         sha256 = lib.attrByPath [ "data" "checksum" ] "" component;
         dependencies = builtins.map (dep: builtins.getAttr dep components) component.dependencies;
         platforms =
@@ -137,12 +137,12 @@ let
     }: stdenv.mkDerivation {
       inherit pname version snapshot;
       src =
-        if src != "" then
-          builtins.fetchurl
+        lib.optionalString (src != "")
+          (builtins.fetchurl
             {
               url = src;
               inherit sha256;
-            } else "";
+            }) ;
       dontUnpack = true;
       installPhase = ''
         mkdir -p $out/google-cloud-sdk/.install
@@ -161,6 +161,12 @@ let
         # Write the snapshot file to the `.install` folder
         cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
+      nativeBuildInputs = [
+        python3
+        stdenv.cc.cc
+      ] ++ lib.optionals stdenv.isLinux [
+        autoPatchelfHook
+      ];
       passthru = {
         dependencies = filterForSystem dependencies;
       };

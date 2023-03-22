@@ -1,8 +1,10 @@
 { lib
 , mkDerivationWith
 , appdirs
+, app-model
 , buildPythonPackage
 , cachey
+, certifi
 , dask
 , docstring-parser
 , fetchFromGitHub
@@ -23,6 +25,7 @@
 , scikitimage
 , scipy
 , setuptools-scm
+, sphinx
 , superqt
 , tifffile
 , toolz
@@ -49,15 +52,24 @@ mkDerivationWith buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "scikit-image>=0.19.1" "scikit-image" \
+      --replace "sphinx<5" "sphinx" \
+      --replace "vispy>=0.11.0,<0.12" "vispy"
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
     wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
+    app-model
     appdirs
     cachey
-    dask.optional-dependencies.array
+    certifi
+    dask
     docstring-parser
     imageio
     jsonschema
@@ -74,6 +86,7 @@ mkDerivationWith buildPythonPackage rec {
     pyyaml
     scikitimage
     scipy
+    sphinx
     superqt
     tifffile
     toolz
@@ -81,13 +94,7 @@ mkDerivationWith buildPythonPackage rec {
     typing-extensions
     vispy
     wrapt
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "scikit-image>=0.19.1" "scikit-image" \
-      --replace "vispy>=0.10.0,<0.11" "vispy"
-  '';
+  ] ++ dask.optional-dependencies.array;
 
   dontUseSetuptoolsCheck = true;
 
@@ -98,6 +105,7 @@ mkDerivationWith buildPythonPackage rec {
   meta = with lib; {
     description = "A fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
+    changelog = "https://github.com/napari/napari/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

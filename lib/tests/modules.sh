@@ -141,6 +141,14 @@ checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*-
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
 
+checkConfigOutput '^true$' 'config.positive.enable' ./disable-module-with-key.nix
+checkConfigOutput '^false$' 'config.negative.enable' ./disable-module-with-key.nix
+checkConfigError 'Module ..*disable-module-bad-key.nix. contains a disabledModules item that is an attribute set, presumably a module, that does not have a .key. attribute. .*' 'config.enable' ./disable-module-bad-key.nix
+
+# Not sure if we want to keep supporting module keys that aren't strings, paths or v?key, but we shouldn't remove support accidentally.
+checkConfigOutput '^true$' 'config.positive.enable' ./disable-module-with-toString-key.nix
+checkConfigOutput '^false$' 'config.negative.enable' ./disable-module-with-toString-key.nix
+
 # Check _module.args.
 set -- config.enable ./declare-enable.nix ./define-enable-with-custom-arg.nix
 checkConfigError 'while evaluating the module argument .*custom.* in .*define-enable-with-custom-arg.nix.*:' "$@"
@@ -357,6 +365,10 @@ checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. has been renamed to `c\.d\.e.\."$' \
   config.result \
   ./doRename-warnings.nix
+
+# Anonymous modules get deduplicated by key
+checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
+checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
 cat <<EOF
 ====== module tests ======

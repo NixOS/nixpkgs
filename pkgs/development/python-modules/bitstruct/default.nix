@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.15.1";
+  version = "8.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b6atv7jzuMtowhsTqmXSPrLDrDJBmrkm8/0f/3F6kSU=";
+    hash = "sha256-65S0DkIYojqo+QQGuDap5u2D5IuNESzj+WQIRjvRuHQ=";
   };
 
   pythonImportsCheck = [

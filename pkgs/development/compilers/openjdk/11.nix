@@ -4,15 +4,18 @@
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+# Hold back make-4.4 as 4.4.1 breaks the build:
+#   https://github.com/NixOS/nixpkgs/issues/219513
+, gnumake44
 }:
 
 let
   major = "11";
   minor = "0";
-  update = "17";
-  build = "8";
+  update = "18";
+  build = "10";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,10 +25,10 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "sha256-kvgLYqQZPqyuigVyzbDHc3TMff0clvzM8IdzYLYcxPU=";
+      sha256 = "sha256-QGOpMIrWwOtIcUY/CLbTRDvcVTG2xioZu46v+n+IIQ4=";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf unzip ];
+    nativeBuildInputs = [ gnumake44 pkg-config autoconf unzip ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
@@ -72,7 +75,7 @@ let
     # Workaround for
     # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
     # when building jtreg
-    NIX_CFLAGS_COMPILE = "-Wformat";
+    env.NIX_CFLAGS_COMPILE = "-Wformat";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"

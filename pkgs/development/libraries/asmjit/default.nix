@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "asmjit";
+  pname = "asmjit";
   version = "unstable-2022-11-10";
 
   src = fetchFromGitHub {

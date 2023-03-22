@@ -1,11 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
+, ical
 , parameterized
 , pycryptodome
 , pydantic
 , pytest-aiohttp
+, pytest-asyncio
+, pytest-golden
+, pytest-mock
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
 , pyyaml
 , requests
@@ -15,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "1.1.1";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +30,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-e+neyzH+sGTzGwdy/N7n6GUvctHlHQgwDkRQsnzL7Jw=";
+    hash = "sha256-fQHWamtGA1Cz/9Hbxbns5lDd08Q01nIvaMXp9PWrelM=";
   };
 
   postPatch = ''
@@ -36,15 +42,21 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    ical
     pycryptodome
     pydantic
+    python-dateutil
     pyyaml
     requests
   ];
 
   nativeCheckInputs = [
+    freezegun
     parameterized
     pytest-aiohttp
+    pytest-asyncio
+    pytest-golden
+    pytest-mock
     pytestCheckHook
     requests-mock
     responses

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyvmomi";
-  version = "8.0.0.1.1";
+  version = "8.0.0.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "vmware";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-K3gCG4TYyCiHKhrixPwBtBZ4s0bNd7Z4f3CLGnqCDG0=";
+    hash = "sha256-t54FUgEXEUpb3SqayY7gCmj1egavIaoXMfuShDL9dBo=";
   };
 
   propagatedBuildInputs = [

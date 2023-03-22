@@ -13,24 +13,28 @@
 , xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm , zlib, at-spi2-core
 
   # optional dependencies
-, cups ? null, libmysqlclient ? null, postgresql ? null
+, cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
 
   # options
 , libGLSupported ? !stdenv.isDarwin
 , libGL
+  # qmake detection for libmysqlclient does not seem to work when cross compiling
+, mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+, libmysqlclient
 , buildExamples ? false
 , buildTests ? false
 , debug ? false
 , developerBuild ? false
 , decryptSslTraffic ? false
+, testers
 }:
 
 let
   debugSymbols = debug || developerBuild;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtbase";
   inherit qtCompatVersion src version;
   debug = debugSymbols;
@@ -72,7 +76,7 @@ stdenv.mkDerivation {
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (libmysqlclient != null) libmysqlclient
+    ++ lib.optional (mysqlSupport) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
@@ -175,7 +179,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
     ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
     ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
@@ -257,7 +261,7 @@ stdenv.mkDerivation {
     "-L" "${lib.getLib openssl}/lib"
     "-I" "${openssl.dev}/include"
     "-system-sqlite"
-    ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
+    ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
     "-make libs"
@@ -296,7 +300,7 @@ stdenv.mkDerivation {
     ] ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
-    ] ++ lib.optionals (libmysqlclient != null) [
+    ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
     ]
@@ -338,12 +342,33 @@ stdenv.mkDerivation {
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
+    pkgConfigModules = [
+      "Qt5Concurrent"
+      "Qt5Core"
+      "Qt5DBus"
+      "Qt5Gui"
+      "Qt5Network"
+      "Qt5OpenGL"
+      "Qt5OpenGLExtensions"
+      "Qt5PrintSupport"
+      #"Qt5Qml"
+      #"Qt5QmlModels"
+      #"Qt5Quick"
+      #"Qt5QuickTest"
+      #"Qt5QuickWidgets"
+      "Qt5Sql"
+      "Qt5Test"
+      "Qt5Widgets"
+      "Qt5Xml"
+    ];
     platforms = platforms.unix;
   };
 
-}
+})

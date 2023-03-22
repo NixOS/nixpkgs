@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    hash = "sha256-UhlhNmVPTOXVWpL4pxF5c6ZQj//pXrzZWlRUaKGSTSA=";
+    hash = "sha256-qw7ylukG7M31rUtoZqbcjWchcEB14uvb2k1cjIjy8qA=";
   };
 
   vendorHash = null;
@@ -24,7 +24,6 @@ buildGoModule rec {
     let
       skippedTests = [
         "TestDialogs"
-        "TestNetdialogs"
       ];
     in
     ''

@@ -8,6 +8,7 @@
 , wayland-scanner
 , obs-studio
 , libX11
+, libxcb
 , vulkan-headers
 , vulkan-loader
 , libGL
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGL
     libX11
+    libxcb
     vulkan-headers
     vulkan-loader
     wayland

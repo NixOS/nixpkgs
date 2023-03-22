@@ -29,7 +29,7 @@ gccStdenv.mkDerivation rec {
 
   # The code needs an update for gcc-10:
   #   https://github.com/hackndev/0verkill/issues/7
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   hardeningDisable = [ "all" ]; # Someday the upstream will update the code...
 
   meta = with lib; {

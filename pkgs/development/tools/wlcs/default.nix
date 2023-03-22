@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ];
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };

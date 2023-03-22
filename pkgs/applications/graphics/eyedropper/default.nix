@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An easy-to-use color picker and editor";
+    description = "A powerful color picker and formatter";
     homepage = "https://github.com/FineFindus/eyedropper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

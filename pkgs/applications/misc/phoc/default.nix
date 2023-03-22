@@ -52,7 +52,7 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.21.1";
+  version = "0.25.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -60,7 +60,8 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HPqhro6TE/Ukh4txBPrDoIuDaxSxd/ZkDVZU3+m3GFg=";
+    sha256 = "sha256-1cbv4vzQ+RcRoT1pOT8Q0nxuZzKUlec38KCNMYaceeE=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -95,7 +96,7 @@ in stdenv.mkDerivation rec {
     description = "Wayland compositor for mobile phones like the Librem 5";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
 }

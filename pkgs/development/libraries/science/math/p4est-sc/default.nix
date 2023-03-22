@@ -5,7 +5,7 @@
 }:
 
 let
-  dbg = if debugEnable then "-dbg" else "";
+  dbg = lib.optionalString debugEnable "-dbg";
   debugEnable = p4est-sc-debugEnable;
   mpiSupport = p4est-sc-mpiSupport;
   isOpenmpi = mpiSupport && mpi.pname == "openmpi";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   '';
   preConfigure = ''
     echo "2.8.0" > .tarball-version
-    ${if mpiSupport then "unset CC" else ""}
+    ${lib.optionalString mpiSupport "unset CC"}
   '';
 
   configureFlags = [ "--enable-pthread=-pthread" ]

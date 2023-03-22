@@ -2,11 +2,14 @@
 
 set -eu -o pipefail
 
-dxvk32_dir=@dxvk32@/bin
-dxvk64_dir=@dxvk64@/bin
+# shellcheck disable=SC2034
+{
+    dxvk32_dir=@dxvk32@/bin
+    dxvk64_dir=@dxvk64@/bin
 
-mcfgthreads32_dir=@mcfgthreads32@/bin
-mcfgthreads64_dir=@mcfgthreads64@/bin
+    mcfgthreads32_dir=@mcfgthreads32@/bin
+    mcfgthreads64_dir=@mcfgthreads64@/bin
+}
 
 ## Defaults
 
@@ -42,7 +45,7 @@ usage() {
     exit 1
 }
 
-case "$1" in
+case "${1:-}" in
     uninstall|install)
         action=$1
         shift
@@ -51,7 +54,7 @@ case "$1" in
         usage
         ;;
     *)
-        if [ ! -z "${1:-}" ]; then
+        if [ -n "${1:-}" ]; then
             echo "Unrecognized command: $1"
         fi
         usage
@@ -62,19 +65,19 @@ esac
 do_symlink=false
 do_makeprefix=false
 
-while [ ! -z "${1:-}" ]; do
+while [ -n "${1:-}" ]; do
     case "$1" in
         --with-dxgi)
             targets[dxgi]=1
             ;;
         --without-dxgi)
-            unset targets[dxgi]
+            unset "targets[dxgi]"
             ;;
         --with-d3d10)
             targets[d3d10]=1
             ;;
         --without-d3d10)
-            unset targets[d3d10]
+            unset "targets[d3d10]"
             ;;
         -s|--symlink)
             do_symlink=true
@@ -90,7 +93,7 @@ while [ ! -z "${1:-}" ]; do
             ;;
         -p|--prefix)
             shift
-            if [ ! -z "${1:-}" ]; then
+            if [ -n "${1:-}" ]; then
                 WINEPREFIX=$1
             else
                 echo "Required PREFIX missing"
@@ -223,8 +226,7 @@ uninstall_file() {
 
 install_override() {
     dll=$(basename "$1")
-    $wine reg add 'HKEY_CURRENT_USER\Software\Wine\DllOverrides' /v "$dll" /d native /f >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
+    if ! $wine reg add 'HKEY_CURRENT_USER\Software\Wine\DllOverrides' /v "$dll" /d native /f >/dev/null 2>&1; then
         echo -e "Failed to add override for $dll"
         exit 1
     fi
@@ -232,8 +234,7 @@ install_override() {
 
 uninstall_override() {
     dll=$(basename "$1")
-    $wine reg delete 'HKEY_CURRENT_USER\Software\Wine\DllOverrides' /v "$dll" /f > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
+    if ! $wine reg delete 'HKEY_CURRENT_USER\Software\Wine\DllOverrides' /v "$dll" /f > /dev/null 2>&1; then
         echo "Failed to remove override for $dll"
     fi
 }
@@ -243,16 +244,16 @@ uninstall_override() {
 declare -A paths
 
 for target in "${!targets[@]}"; do
-    [ ${targets[$target]} -eq 1 ] || continue
+    [ "${targets[$target]}" -eq 1 ] || continue
     for dll in ${dlls[$target]}; do
         dllname=$(basename "$dll")
         basedir=$(dirname "$dll")
 
-        if [ ! -z "${win32_sys_path:-}" ]; then
+        if [ -n "${win32_sys_path:-}" ]; then
             basedir32=${basedir}32_dir
             paths["${!basedir32}/$dllname"]="$win32_sys_path/$dllname"
         fi
-        if [ ! -z "${win64_sys_path:-}" ]; then
+        if [ -n "${win64_sys_path:-}" ]; then
             basedir64=${basedir}64_dir
             paths["${!basedir64}/$dllname"]="$win64_sys_path/$dllname"
         fi
@@ -260,6 +261,6 @@ for target in "${!targets[@]}"; do
 done
 
 for srcpath in "${!paths[@]}"; do
-    ${action}_file "$srcpath" "${paths["$srcpath"]}"
-    ${action}_override "$(basename srcpath)"
+    "${action}_file" "$srcpath" "${paths["$srcpath"]}"
+    "${action}_override" "$(basename "$srcpath" .dll)"
 done

@@ -1,19 +1,18 @@
-{ lib, buildGoPackage, fetchgit, nixosTests }:
+{ lib, buildGoModule, fetchgit, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "molly-brown";
-  version = "unstable-2020-08-19";
-  rev = "48f9a206c03c0470e1c132b9667c6daa3583dada";
-
-  goPackagePath = "tildegit.org/solderpunk/molly-brown";
+  version = "unstable-2023-02-10";
 
   src = fetchgit {
-    inherit rev;
     url = "https://tildegit.org/solderpunk/molly-brown.git";
-    sha256 = "1w79a25mbgav95p78fkdm9j62chwwpkqv0m2wmh5my03yq398gya";
+    rev = "56d8dde14abc90b784b7844602f12100af9756e0";
+    hash = "sha256-kfopRyCrDaiVjKYseyWacIT9MJ8PzB8LAs6YMgYqCrs=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-czfHnXS9tf5vQQNXhWH7DStmhsorSc4Di/yZuv4LHRk=";
+
+  ldflags = [ "-s" "-w" ];
 
   passthru.tests.basic = nixosTests.molly-brown;
 

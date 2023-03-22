@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       parallel.
     '';
 
-    homepage = "http://qmidiarp.sourceforge.net";
+    homepage = "https://qmidiarp.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sjfloat ];

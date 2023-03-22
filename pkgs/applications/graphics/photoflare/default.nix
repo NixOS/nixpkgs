@@ -17,7 +17,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  NIX_CFLAGS_COMPILE = "-I${graphicsmagick}/include/GraphicsMagick";
+  env.NIX_CFLAGS_COMPILE = "-I${graphicsmagick}/include/GraphicsMagick";
 
   meta = with lib; {
     description = "A cross-platform image editor with a powerful features and a very friendly graphical user interface";

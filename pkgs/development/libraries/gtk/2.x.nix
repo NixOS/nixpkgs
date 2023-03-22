@@ -5,6 +5,7 @@
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
 , fetchpatch, buildPackages
+, testers
 }:
 
 let
@@ -17,12 +18,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+";
   version = "2.24.33";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/2.24/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
   };
 
@@ -37,7 +38,9 @@ stdenv.mkDerivation rec {
   ];
 
 
-  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
+  nativeBuildInputs = finalAttrs.setupHooks ++ [
+    perl pkg-config gettext gobject-introspection
+  ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
@@ -90,6 +93,7 @@ stdenv.mkDerivation rec {
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
     ''; # workaround for bug of nix-mode for Emacs */ '';
     inherit gdktarget;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -97,6 +101,13 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
+    pkgConfigModules = [
+      "gdk-2.0"
+      "gtk+-2.0"
+    ] ++ lib.optionals (gdktarget == "x11") [
+      "gdk-x11-2.0"
+      "gtk+-x11-2.0"
+    ];
     platforms   = platforms.all;
 
     longDescription = ''
@@ -111,4 +122,4 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
-}
+})

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: ../obj/unix/tiles.o:/build/grafx2/src/global.h:306: multiple definition of
   #     `Main_selector'; ../obj/unix/main.o:/build/grafx2/src/global.h:306: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preInstall = '' mkdir -p "$out" '';
 

@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.1";
+  version = "1.5.2";
   pname = "jpegoptim";
 
   src = fetchFromGitHub {
     owner = "tjko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QPipwBk+BS/u3YxB8ACeFXQSuoW1aynEyG3tEMrhcaE=";
+    sha256 = "sha256-PROQvOqsis8we58OOZ/kuY+L/CoV7XfnY9wvrpsTJu8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-27781.patch";
+      url = "https://github.com/tjko/jpegoptim/commit/29a073ad297a0954f5e865264e24755d0ffe53ed.patch";
+      hash = "sha256-YUjVg0cvElhzMG3b4t5bqcqnHAuzDoNvSqe0yvlgX4E=";
+    })
+  ];
 
   # There are no checks, it seems.
   doCheck = false;

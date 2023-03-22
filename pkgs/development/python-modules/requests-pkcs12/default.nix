@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "requests-pkcs12";
-  version = "1.14";
+  version = "1.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "m-click";
     repo = "requests_pkcs12";
     rev = version;
-    hash = "sha256-LZgKjSas0KdJAf4leSVz8sEnRrlJ20Sm9Ka+S5zDOTM=";
+    hash = "sha256-xk8+oERonZWzxKEmZutfvovzVOz9ZP5O83cMDTz9i3Y=";
   };
 
   propagatedBuildInputs = [

@@ -17,6 +17,7 @@
 , libxcrypt
 , self
 , configd
+, darwin
 , autoreconfHook
 , autoconf-archive
 , pkg-config
@@ -30,7 +31,7 @@
 , pkgsHostHost
 , pkgsTargetTarget
 , sourceVersion
-, sha256
+, hash
 , passthruFun
 , bash
 , stripConfig ? false
@@ -41,6 +42,7 @@
 , stripBytecode ? true
 , includeSiteCustomize ? true
 , static ? stdenv.hostPlatform.isStatic
+, enableFramework ? false
 , enableOptimizations ? false
 # enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 # clang starts supporting `-fno-sematic-interposition` with version 10
@@ -65,6 +67,8 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
+assert enableFramework -> stdenv.isDarwin;
+
 assert lib.assertMsg (reproducibleBuild -> stripBytecode)
   "Deterministic builds require stripping bytecode.";
 
@@ -83,6 +87,8 @@ let
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
+
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
 
   tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
 
@@ -125,6 +131,8 @@ let
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
+
+    ++ optionals enableFramework [ Cocoa ]
     ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -215,7 +223,7 @@ in with passthru; stdenv.mkDerivation {
 
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
-    inherit sha256;
+    inherit hash;
   };
 
   prePatch = optionalString stdenv.isDarwin ''
@@ -235,7 +243,7 @@ in with passthru; stdenv.mkDerivation {
       url = "https://github.com/python/cpython/commit/3fae04b10e2655a20a3aadb5e0d63e87206d0c67.diff";
       revert = true;
       excludes = [ "Misc/NEWS.d/*" ];
-      sha256 = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
+      hash = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
     })
   ] ++ [
     # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -308,8 +316,10 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
-  ] ++ optionals (!static) [
+  ] ++ optionals (!static && !enableFramework) [
     "--enable-shared"
+  ] ++ optionals enableFramework [
+    "--enable-framework=${placeholder "out"}/Library/Frameworks"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
   ] ++ optionals enableLTO [
@@ -390,7 +400,11 @@ in with passthru; stdenv.mkDerivation {
     ] ++ optionals tzdataSupport [
       tzdata
     ]);
-  in ''
+  in lib.optionalString enableFramework ''
+    for dir in include lib share; do
+      ln -s $out/Library/Frameworks/Python.framework/Versions/Current/$dir $out/$dir
+    done
+  '' + ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/${libPrefix}/test/*; do
@@ -487,7 +501,7 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl' != null && !static) [ openssl'.dev ]
+    lib.optionals (openssl' != null && !static && !enableFramework) [ openssl'.dev ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
@@ -521,7 +535,7 @@ in with passthru; stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = licenses.psfl;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ fridh ];
   };
 }

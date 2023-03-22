@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "fastai";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-PSqwpDTzEaBXH77c64yv1s2TvQyIiz6It9cgjnCmrhY=";
+    hash = "sha256-PSqwpDTzEaBXH77c64yv1s2TvQyIiz6It9cgjnCmrhY=";
   };
 
   propagatedBuildInputs = [

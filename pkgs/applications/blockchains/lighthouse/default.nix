@@ -20,7 +20,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.4.0";
+  version = "3.5.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-4auiM5+kj/HjZKu2YP7JEnwDNxHuL39XCfmV/dc5jLE=";
+    hash = "sha256-oF32s1nfzEZbaNUi5sQSrotcyOSinULj/qrRQWdMXHg=";
   };
 
-  cargoHash = "sha256-ihfGwdxL7Ttw86dhaVBp5meb0caXjzgbbP27Io8zv/c=";
+  cargoHash = "sha256-T404OxWBDy8ghQDdhqt0jac+Tff8ph6D3gGnKrToXHY=";
 
   buildFeatures = [ "modern" "gnosis" ];
 
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    CoreFoundation SystemConfiguration
+    CoreFoundation
+    SystemConfiguration
   ];
 
   depositContractSpec = fetchurl {

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ./install_path_fix.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   meta = with lib; {
     description = "Lightweight, cross-platform & full-featured shader IDE";

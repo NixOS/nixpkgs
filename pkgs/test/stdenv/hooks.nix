@@ -1,4 +1,4 @@
-{ stdenv, pkgs }:
+{ stdenv, pkgs, lib }:
 
 # ordering should match defaultNativeBuildInputs
 
@@ -23,19 +23,29 @@
     };
   make-symlinks-relative = stdenv.mkDerivation {
     name = "test-make-symlinks-relative";
+    outputs = [ "out" "man" ];
     buildCommand = ''
       mkdir -p $out/{bar,baz}
+      mkdir -p $man/share/{x,y}
       source1="$out/bar/foo"
       destination1="$out/baz/foo"
+      source2="$man/share/x/file1"
+      destination2="$man/share/y/file2"
       echo foo > $source1
+      echo foo > $source2
       ln -s $source1 $destination1
+      ln -s $source2 $destination2
       echo "symlink before patching: $(readlink $destination1)"
+      echo "symlink before patching: $(readlink $destination2)"
 
-      _makeSymlinksRelative
+      _makeSymlinksRelativeInAllOutputs
 
       echo "symlink after patching: $(readlink $destination1)"
       ([[ -e $destination1 ]] && echo "symlink isn't broken") || (echo "symlink is broken" && exit 1)
       ([[ $(readlink $destination1) == "../bar/foo" ]] && echo "absolute symlink was made relative") || (echo "symlink was not made relative" && exit 1)
+      echo "symlink after patching: $(readlink $destination2)"
+      ([[ -e $destination2 ]] && echo "symlink isn't broken") || (echo "symlink is broken" && exit 1)
+      ([[ $(readlink $destination2) == "../x/file1" ]] && echo "absolute symlink was made relative") || (echo "symlink was not made relative" && exit 1)
     '';
   };
   move-docs = stdenv.mkDerivation {
@@ -81,7 +91,7 @@
     '';
   };
   # TODO: add multiple-outputs
-  # TODO: move patch-shebangs test from pkgs/test/patch-shebangs/default.nix to here
+  patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =
     let
       libFoo = pkgs.writeText "libFoo" ''
@@ -105,7 +115,7 @@
     name = "test-reproducible-builds";
     buildCommand = ''
       # can't be tested more precisely because the value of random-seed changes depending on the output
-      [[ $NIX_CFLAGS_COMPILE =~ "-frandom-seed=" ]]
+      [[ $env.NIX_CFLAGS_COMPILE =~ "-frandom-seed=" ]]
       touch $out
     '';
   };

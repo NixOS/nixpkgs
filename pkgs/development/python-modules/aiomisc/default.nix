@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "16.2.10";
+  version = "16.3.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iQlbd1DoPgxq+Am0BTDYXIBZoC21/54+bywDtcCXlls=";
+    hash = "sha256-lHDjsK8ds1ftovY2IAbJwk3jnn4FoDo6f/Nu/MSAhqM=";
   };
 
   propagatedBuildInputs = [

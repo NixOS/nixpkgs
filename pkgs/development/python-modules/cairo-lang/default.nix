@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   src = fetchzip {
     url = "https://github.com/starkware-libs/cairo-lang/releases/download/v${version}/cairo-lang-${version}.zip";
-    sha256 = "sha256-+PE7RSKEGADbue63FoT6UBOwURJs7lBNkL7aNlpSxP8=";
+    hash = "sha256-+PE7RSKEGADbue63FoT6UBOwURJs7lBNkL7aNlpSxP8=";
   };
 
   # TODO: remove a substantial part when https://github.com/starkware-libs/cairo-lang/pull/88/files is merged.

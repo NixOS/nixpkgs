@@ -3,7 +3,32 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      rich = super.rich.overrideAttrs (old: rec {
+        version = "12.4.0";
+        src = fetchFromGitHub {
+          owner = "Textualize";
+          repo = "rich";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-ryJTusUNpvNF2031ICJWK8ScxHIh+LrXYg7nd0ph4aQ=";
+        };
+      });
+      textual = super.textual.overrideAttrs (old: rec {
+        version = "0.1.18";
+        src = fetchFromGitHub {
+          owner = "Textualize";
+          repo = "textual";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-XVmbt8r5HL8r64ISdJozmM+9HuyvqbpdejWICzFnfiw=";
+        };
+      });
+    };
+  };
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "rich-cli";
   version = "1.8.0";
   format = "pyproject";
@@ -15,11 +40,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-mV5b/J9wX9niiYtlmAUouaAm9mY2zTtDmex7FNWcezQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     rich
     click
     requests

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (rec {
   pname = "ed";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchurl {
     url = "mirror://gnu/ed/${pname}-${version}.tar.lz";
-    sha256 = "sha256-rKjvrZgAxYdySiC5eqj8R+a1pH34Fgb+q6gxsHRGK08=";
+    hash = "sha256-zi8uXEJHkKqW0J2suT2bv9wLfrYknJy3U4RS6Ox3zUg=";
   };
 
   nativeBuildInputs = [ lzip ];

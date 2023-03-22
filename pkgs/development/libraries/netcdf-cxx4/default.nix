@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ netcdf hdf5 curl ];
 
-  # 10 - cxx4_test_filter (Failed)
-  # Setting Filter....Caught unexpected exception.
-  doCheck = false;
+  doCheck = true;
   enableParallelChecking = false;
+  preCheck = ''
+    export HDF5_PLUGIN_PATH=${netcdf}/lib/hdf5-plugins
+  '';
 
   meta = {
     description = "C++ API to manipulate netcdf files";

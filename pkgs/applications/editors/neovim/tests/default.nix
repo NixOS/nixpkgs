@@ -157,6 +157,28 @@ rec {
     '';
   });
 
+  # check that the vim-doc hook correctly generates the tag
+  # for neovim packages from luaPackages
+  # we know for a fact gitsigns-nvim has a doc folder and comes from luaPackages
+  checkForTagsLuaPackages = vimPlugins.gitsigns-nvim.overrideAttrs(oldAttrs: {
+    doInstallCheck = true;
+    installCheckPhase = ''
+      [ -f $out/doc/tags ]
+    '';
+  });
+
+  nvim_with_gitsigns_plugin = neovim.override {
+    extraName = "-with-gitsigns-plugin";
+    configure.packages.plugins = {
+      start = [
+        vimPlugins.gitsigns-nvim
+      ];
+    };
+  };
+  checkHelpLuaPackages = runTest nvim_with_gitsigns_plugin ''
+    export HOME=$TMPDIR
+    ${nvim_with_gitsigns_plugin}/bin/nvim -i NONE -c 'help gitsigns' +quitall! -e
+  '';
 
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;

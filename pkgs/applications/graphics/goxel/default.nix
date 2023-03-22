@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=format-truncation"
+  ];
+
   NIX_LDFLAGS = "-lpthread";
 
   buildPhase = ''

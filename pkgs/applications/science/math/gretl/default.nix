@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    homepage = "http://gretl.sourceforge.net";
+    homepage = "https://gretl.sourceforge.net";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dmrauh ];
     platforms = with platforms; all;

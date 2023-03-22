@@ -8,6 +8,7 @@
 
 { relative ? null
 , stripLen ? 0
+, decode ? "cat" # custom command to decode patch e.g. base64 -d
 , extraPrefix ? null
 , excludes ? []
 , includes ? []
@@ -18,7 +19,7 @@
 let
   args' = if relative != null then {
     stripLen = 1 + lib.length (lib.splitString "/" relative) + stripLen;
-    extraPrefix = if extraPrefix != null then extraPrefix else "";
+    extraPrefix = lib.optionalString (extraPrefix != null) extraPrefix;
   } else {
     inherit stripLen extraPrefix;
   };
@@ -35,6 +36,17 @@ fetchurl ({
       echo "error: Fetched patch file '$out' is empty!" 1>&2
       exit 1
     fi
+
+    set +e
+    ${decode} < "$out" > "$tmpfile"
+    if [ $? -ne 0 ] || [ ! -s "$tmpfile" ]; then
+        echo 'Failed to decode patch with command "'${lib.escapeShellArg decode}'"' >&2
+        echo 'Fetched file was (limited to 128 bytes):' >&2
+        od -A x -t x1z -v -N 128 "$out" >&2
+        exit 1
+    fi
+    set -e
+    mv "$tmpfile" "$out"
 
     "${patchutils}/bin/lsdiff" \
       ${lib.optionalString (relative != null) "-p1 -i ${lib.escapeShellArg relative}/'*'"} \
@@ -76,5 +88,6 @@ fetchurl ({
     mv "$tmpfile" "$out"
   '' + postFetch;
 } // builtins.removeAttrs args [
-  "relative" "stripLen" "extraPrefix" "excludes" "includes" "revert" "postFetch"
+  "relative" "stripLen" "decode" "extraPrefix" "excludes" "includes" "revert"
+  "postFetch"
 ])

@@ -1,8 +1,8 @@
-{ lib, stdenv, runCommand, fetchurl
+{ lib, stdenv, runCommand, fetchurl, fetchpatch
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost175
+, boost175, xz
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
@@ -105,7 +105,25 @@ let
   };
 
   # Boost 1.75 is not compatible with Python 3.10
-  python = python39;
+  python = python39.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+    };
+  };
 
   boost = boost175.override {
     enablePython = true;
@@ -121,7 +139,7 @@ let
     ps.setuptools
     ps.virtualenv
     # Libraries needed by the python tools
-    ps.Mako
+    ps.mako
     ceph-common
     ps.cherrypy
     ps.cmd2
@@ -152,6 +170,21 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      # pacific: include/buffer: include <memory>
+      # fixes build with gcc 12
+      # https://github.com/ceph/ceph/pull/47295
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/df88789a38c053513d3b2a9b7d12a952fc0c9042.patch";
+        hash = "sha256-je65kBfa5hR0ZKo6ZI10XmD5ZUbKj5rxlGxxI9ZJVfo=";
+      })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/2abcbe4e47705e6e0fcc7d9d9b75625f563199af.patch";
+        hash = "sha256-8sWQKoZNHuGuhzX/F+3fY4+kjsrwsfoMdVpfVSj2x5w=";
+      })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/pull/47295/commits/13dc077cf6c65a3b8c4f13d896847b9964b3fcbb.patch";
+        hash = "sha256-byfiZh9OJrux/y5m3QCPg0LET6q33ZDXmp/CN+yOSQQ=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -167,7 +200,7 @@ in rec {
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+      boost xz ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2

@@ -36,7 +36,7 @@ dropping you to the emergency shell. You can make a mount asynchronous
 and non-critical by adding `options = [ "nofail" ];`.
 :::
 
-```{=docbook}
-<xi:include href="luks-file-systems.section.xml" />
-<xi:include href="sshfs-file-systems.section.xml" />
+```{=include=} sections
+luks-file-systems.section.md
+sshfs-file-systems.section.md
 ```

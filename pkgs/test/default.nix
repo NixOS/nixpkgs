@@ -61,7 +61,7 @@ with pkgs;
 
   nixos-functions = callPackage ./nixos-functions {};
 
-  patch-shebangs = callPackage ./patch-shebangs {};
+  overriding = callPackage ./overriding.nix { };
 
   texlive = callPackage ./texlive {};
 

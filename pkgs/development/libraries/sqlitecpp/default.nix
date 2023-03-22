@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sqlite, cppcheck, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, sqlite, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "sqlitecpp";
@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ cppcheck ];
   buildInputs = [ sqlite gtest ];
   doCheck = true;
 

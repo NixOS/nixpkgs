@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       in the Metamath Proof Explorer, and it generated its web pages. The *.mm
       ASCII databases (set.mm and others) are also included in this derivation.
     '';
-    homepage = "http://us.metamath.org";
+    homepage = "https://us.metamath.org";
     downloadPage = "https://us.metamath.org/#downloads";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.taneb ];

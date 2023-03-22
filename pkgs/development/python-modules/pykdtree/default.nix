@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eAtpPQVVuFfXqrMeNdQpO/Tr253sekW6S7I7RAD2Jtw=";
+    hash = "sha256-eAtpPQVVuFfXqrMeNdQpO/Tr253sekW6S7I7RAD2Jtw=";
   };
 
   buildInputs = [ openmp ];

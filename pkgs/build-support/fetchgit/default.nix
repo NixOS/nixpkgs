@@ -7,9 +7,7 @@
 
     short = builtins.substring 0 7 rev;
 
-    appendShort = if (builtins.match "[a-f0-9]*" rev) != null
-      then "-${short}"
-      else "";
+    appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone

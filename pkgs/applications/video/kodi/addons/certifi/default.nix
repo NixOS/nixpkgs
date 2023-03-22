@@ -5,8 +5,8 @@ buildKodiAddon rec {
   version = "2022.9.24";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "kIPGEjmnHlgVb11W2RKBlrMy3/+kUOcQZiLCcnHCcno=";
+    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-kIPGEjmnHlgVb11W2RKBlrMy3/+kUOcQZiLCcnHCcno=";
   };
 
   passthru = {

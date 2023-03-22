@@ -12,6 +12,7 @@
 , dconf
 , dpkg
 , fontconfig
+, gcc-unwrapped
 , gdk-pixbuf
 , glib
 , glibc
@@ -66,6 +67,7 @@ let
   runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
+    gcc-unwrapped.lib
     libudev0-shim
     pulseaudio
   ];

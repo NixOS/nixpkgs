@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "truenas";
     repo = pname;
     rev = "TS-${version}";
-    sha256 = "sha256-BJG+cw07Qu4aL99pVKNd7JAgr+w/6Uv2eI46EB615/I=";
+    hash = "sha256-BJG+cw07Qu4aL99pVKNd7JAgr+w/6Uv2eI46EB615/I=";
   };
 
   nativeBuildInputs = [ cython ];

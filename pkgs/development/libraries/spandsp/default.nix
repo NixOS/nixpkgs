@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
   ];
 
   configureFlags = [

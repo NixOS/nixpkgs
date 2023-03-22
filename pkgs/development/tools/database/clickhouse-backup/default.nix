@@ -34,7 +34,7 @@ buildGoModule rec {
     description = "Tool for easy ClickHouse backup and restore with cloud storages support";
     homepage = "https://github.com/AlexAkulov/clickhouse-backup";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

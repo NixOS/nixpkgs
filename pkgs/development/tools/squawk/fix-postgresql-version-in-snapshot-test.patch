@@ -1,0 +1,13 @@
+diff --git a/parser/src/snapshots/squawk_parser__parse__tests__parse_sql_query_json.snap b/parser/src/snapshots/squawk_parser__parse__tests__parse_sql_query_json.snap
+index 7273b74..ae94927 100644
+--- a/parser/src/snapshots/squawk_parser__parse__tests__parse_sql_query_json.snap
++++ b/parser/src/snapshots/squawk_parser__parse__tests__parse_sql_query_json.snap
+@@ -133,7 +133,7 @@ Ok(
+             }),
+         ]),
+         "version": Number(
+-            130003,
++            130008,
+         ),
+     }),
+ )

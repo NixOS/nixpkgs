@@ -8,14 +8,15 @@
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
 , unicodeSupport ? true
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.4";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${version}.tar.gz";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
@@ -169,11 +170,20 @@ stdenv.mkDerivation rec {
       ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
     license = licenses.mit;
+    pkgConfigModules = let
+      base = [
+        "form"
+        "menu"
+        "ncurses"
+        "panel"
+      ] ++ lib.optional withCxx "ncurses++";
+    in base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
     platforms = platforms.all;
   };
 
   passthru = {
     ldflags = "-lncurses";
     inherit unicodeSupport abiVersion;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
-}
+})

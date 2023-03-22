@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
     systemd
     libgudev

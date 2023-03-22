@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
       LINKFLAGS +=
         ${lib.concatStringsSep " " (map (x: "-L${x}/lib") buildInputs)}
-        -ldl -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
+        -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
         -ljpeg -ltiff -lpng -lssl ;
     '';
   in ''

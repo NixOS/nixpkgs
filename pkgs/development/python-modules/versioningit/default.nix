@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c/KWXjDS6/1/+ra/JjaPIjdXBiLdKknH+8GZXenGdtY=";
+    hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
   };
 
   postPatch = ''

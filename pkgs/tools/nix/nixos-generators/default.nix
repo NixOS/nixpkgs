@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, jq, findutils, nix  }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, jq, findutils, nix, bash }:
 
 stdenv.mkDerivation rec {
   pname = "nixos-generators";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-WecDwDY/hEcDQYzFnccCNa+5Umht0lfjx/d1qGDy/rQ=";
   };
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
   installFlags = [ "PREFIX=$(out)" ];
   postFixup = ''
     wrapProgram $out/bin/nixos-generate \

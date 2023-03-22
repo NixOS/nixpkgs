@@ -151,13 +151,6 @@ stdenv.mkDerivation rec {
     git
   ];
 
-  # Workaround cc-wrapper's --sysroot= value for `staging-next`: it
-  # breaks library lookup via RUNPATH:
-  #   ld: warning: libm.so.6, needed by ./generated/linux/release/64/lib.so, not found (try using -rpath or -rpath-link)
-  #   ld: /build/druntime/generated/linux/release/64/libdruntime.so: undefined reference to `log10@GLIBC_2.2.5'
-  # TODO(trofi): remove the workaround once cc-wrapper is fixed.
-  NIX_CFLAGS_COMPILE = [ "--sysroot=/" ];
-
   buildInputs = [
     curl
     tzdata

@@ -12,11 +12,11 @@
 
 mkDerivation rec {
   pname = "chessx";
-  version = "1.5.7";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
-    sha256 = "sha256-wadIO3iNvj8LgIzExHTmeXxXnWOI+ViLrdhAlzZ79Jw=";
+    sha256 = "sha256-ev+tK1CHLFt/RvmzyPVZ2c0nxfRwwb9ke7uTmm7REaM=";
   };
 
   nativeBuildInputs = [

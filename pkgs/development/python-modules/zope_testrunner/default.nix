@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1r1y9E6jLKpBW5bP4UFSsnhjF67xzW9IqCe2Le8Fj9Q=";
+    hash = "sha256-1r1y9E6jLKpBW5bP4UFSsnhjF67xzW9IqCe2Le8Fj9Q=";
   };
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];

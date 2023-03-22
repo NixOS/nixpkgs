@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "57.2";
+  version = "58.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-uOnvLcvPvILpkhWs/Wj5R7K18ZmbWxVtt1+r44C6fpo=";
+    hash = "sha256-cPSCytjlPCw+rpz4avQS65NAWxash4G1GeozJtR1vW8=";
   };
 
   patches = [

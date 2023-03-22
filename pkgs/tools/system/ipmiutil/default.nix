@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -e "s@/var@$out/var@g" -i Makefile */Makefile */*/Makefile
   '';
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   meta = with lib; {
     description = "An easy-to-use IPMI server management utility";

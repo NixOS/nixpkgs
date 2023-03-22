@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
-  version = "1.0.8";
+  version = "1.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "briis";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1swyqdnvhwaigqhjn5a22gi8if4bl8alfrigln4qa0jl9z03kg09";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LFA1GJCYFIWl7/YblRrYgAB4lbELpzhCJyjB8aCkJ/E=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to get data from WeatherFlow Weather Stations";
     homepage = "https://github.com/briis/pyweatherflowrest";
+    changelog = "https://github.com/briis/pyweatherflowrest/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

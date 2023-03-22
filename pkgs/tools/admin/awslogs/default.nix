@@ -30,7 +30,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "jmespath>=0.7.1,<1.0.0" "jmespath>=0.7.1"
+      --replace "jmespath>=0.7.1,<1.0.0" "jmespath>=0.7.1" \
+      --replace '>=3.5.*' '>=3.5'
   '';
 
   disabledTests = [

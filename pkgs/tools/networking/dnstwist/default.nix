@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     dnspython
-    GeoIP
+    geoip
     ppdeep
     requests
     tld

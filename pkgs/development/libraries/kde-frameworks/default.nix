@@ -27,9 +27,6 @@ existing packages here and modify it as necessary.
 { libsForQt5, lib, fetchurl }:
 
 let
-
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [
     lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12Plus
@@ -86,7 +83,6 @@ let
                 license = meta.license or license;
                 maintainers = (meta.maintainers or []) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
-                broken = meta.broken or broken;
               };
 
           in mkDerivation (args // {
@@ -128,7 +124,7 @@ let
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       prison = callPackage ./prison.nix {};
       qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
-      solid = callPackage ./solid.nix {};
+      solid = callPackage ./solid {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};

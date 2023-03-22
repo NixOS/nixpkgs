@@ -273,6 +273,9 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
+          Note that the {option}`hashedPassword` option will override
+          this option if both are set.
+
           ${hashedPasswordDescription}
         '';
       };
@@ -291,6 +294,9 @@ let
           is world-readable in the Nix store, so it should only be
           used for guest accounts or passwords that will be changed
           promptly.
+
+          Note that the {option}`password` option will override this
+          option if both are set.
         '';
       };
 

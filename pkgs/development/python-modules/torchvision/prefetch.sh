@@ -5,7 +5,7 @@ set -eou pipefail
 
 version=$1
 
-linux_cuda_version="cu116"
+linux_cuda_version="cu117"
 linux_bucket="https://download.pytorch.org/whl/${linux_cuda_version}"
 darwin_bucket="https://download.pytorch.org/whl"
 

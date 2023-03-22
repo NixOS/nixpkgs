@@ -16,7 +16,7 @@ in
     description = lib.mdDoc ''
       Whether to enable MiniDLNA, a simple DLNA server.
       It serves media files such as video and music to DLNA client devices
-      such as televisions and media players. If you use the firewall consider
+      such as televisions and media players. If you use the firewall, consider
       adding the following: `services.minidlna.openFirewall = true;`
     '';
   };
@@ -54,10 +54,7 @@ in
         description = lib.mdDoc ''
           The interval between announces (in seconds).
           Instead of waiting for announces, you should set `openFirewall` option to use SSDP discovery.
-          Furthermore, this option has been set to 90000 in order to prevent disconnects with certain
-          clients and relies solely on the discovery.
-
-          Lower values (e.g. 30 seconds) should be used if you can't use the discovery.
+          Lower values (e.g. 30 seconds) should be used if your network blocks the discovery unicast.
           Some relevant information can be found here:
           https://sourceforge.net/p/minidlna/discussion/879957/thread/1389d197/
         '';
@@ -82,8 +79,8 @@ in
       };
       options.root_container = mkOption {
         type = types.str;
-        default = ".";
-        example = "B";
+        default = "B";
+        example = ".";
         description = lib.mdDoc "Use a different container as the root of the directory tree presented to clients.";
       };
       options.log_level = mkOption {
@@ -133,22 +130,19 @@ in
 
     users.groups.minidlna.gid = config.ids.gids.minidlna;
 
-    systemd.services.minidlna =
-      { description = "MiniDLNA Server";
+    systemd.services.minidlna = {
+      description = "MiniDLNA Server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig =
-          { User = "minidlna";
-            Group = "minidlna";
-            CacheDirectory = "minidlna";
-            RuntimeDirectory = "minidlna";
-            PIDFile = "/run/minidlna/pid";
-            ExecStart =
-              "${pkgs.minidlna}/sbin/minidlnad -S -P /run/minidlna/pid" +
-              " -f ${settingsFile}";
-          };
+      serviceConfig = {
+        User = "minidlna";
+        Group = "minidlna";
+        CacheDirectory = "minidlna";
+        RuntimeDirectory = "minidlna";
+        PIDFile = "/run/minidlna/pid";
+        ExecStart = "${pkgs.minidlna}/sbin/minidlnad -S -P /run/minidlna/pid -f ${settingsFile}";
       };
+    };
   };
 }

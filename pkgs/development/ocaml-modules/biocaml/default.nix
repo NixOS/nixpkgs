@@ -8,6 +8,7 @@ buildDunePackage rec {
   version = "0.11.2";
 
   minimalOCamlVersion = "4.11";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "biocaml";

@@ -7,7 +7,6 @@
 , rocm-cmake
 , hip
 , clang-tools-extra
-, cppcheck
 , openmp
 , rocblas
 , rocmlir
@@ -47,7 +46,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"
@@ -70,7 +69,6 @@ in stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     hip
     clang-tools-extra
-    cppcheck
     python3Packages.python
   ] ++ lib.optionals buildDocs [
     latex

@@ -27,6 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/sigstore/gitsign/releases/tag/v${version}";
     description = "Keyless Git signing using Sigstore";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lesuisse ];
+    maintainers = with lib.maintainers; [ lesuisse developer-guy ];
   };
 }

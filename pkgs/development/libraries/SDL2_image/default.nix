@@ -1,15 +1,20 @@
 { lib, stdenv, fetchurl
 , pkg-config
 , SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation
+, version ? "2.6.3"
+, hash ? "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw="
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "SDL2_image";
-  version = "2.0.5";
+in
+
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
-    sha256 = "1l0864kas9cwpp2d32yxl81g98lx40dhbdp03dz7sbv84vhgdmdx";
+    inherit hash;
   };
 
   nativeBuildInputs = [ pkg-config ];

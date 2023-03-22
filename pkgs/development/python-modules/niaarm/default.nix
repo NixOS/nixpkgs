@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.2.4";
+  version = "0.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaARM";
     rev = version;
-    hash = "sha256-JPsBpVMeVZxUhCHoIBP47LhR8nrc8ZtJHREZLwL5Zxw=";
+    hash = "sha256-5XOE3c7amvhw1KrX1hcmTxneYNvAuiHz+OZLb/yhB+I=";
   };
 
   nativeBuildInputs = [

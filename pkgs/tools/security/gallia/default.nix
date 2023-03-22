@@ -17,8 +17,13 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-McHzHK404kDB992T2f84dZHDxujpPIz4qglYMmv3kTw=";
   };
 
+  pythonRelaxDeps = [
+    "msgspec"
+  ];
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -54,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
+    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab rumpelsepp ];
     platforms = platforms.linux;

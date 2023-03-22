@@ -19,6 +19,7 @@
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
+, testers
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -55,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.3";
+  version = "2.74.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "6bxB7NlpDZvGqXDMc4ARm4KOW2pLFsOTxjiz3CuHy8s=";
+    sha256 = "zrqDpZmc6zGkxPyZISB8uf//0qsdbsA8Fi0/YIpcFMg=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -117,20 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable flaky test.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
-
-    # GVariant security fixes
-    # https://discourse.gnome.org/t/multiple-fixes-for-gvariant-normalisation-issues-in-glib/12835
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3126.patch";
-      sha256 = "CNCxouYy8xNHt4eJtPZ2eOi9b0SxzI2DkklNfQMk3d8=";
-    })
-
-    # Menu model security fix
-    # https://discourse.gnome.org/t/fixes-for-gdbusmenumodel-crashes-in-glib/12846
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/4f4d770a1e40f719d5a310cffdac29cbb4e20c11.patch";
-      sha256 = "+S44AnC86HfbMwkRe1ll54IK9pLxaFD3LqiVhPelnXI=";
-    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -193,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxattr=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain
@@ -280,7 +267,10 @@ stdenv.mkDerivation (finalAttrs: {
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
-    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+    tests = {
+      withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
 
     inherit flattenInclude;
     updateScript = gnome.updateScript {
@@ -306,6 +296,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://wiki.gnome.org/Projects/GLib";
     license     = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
+    pkgConfigModules = [
+      "gio-2.0"
+      "gobject-2.0"
+      "gthread-2.0"
+    ];
     platforms   = platforms.unix;
 
     longDescription = ''

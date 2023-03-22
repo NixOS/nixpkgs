@@ -1,4 +1,5 @@
 { buildPythonApplication
+, charset-normalizer
 , colorama
 , commitizen
 , decli
@@ -26,14 +27,13 @@
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.39.1";
+  version = "2.42.1";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QQIYyg2zwV7cfFxGHVsLiTRBgTGs3O7OJcmURvfY3LQ=";
-    deepClone = true;
+    hash = "sha256-lrZfMqmslwx3B2WkvFosm3EmCHgpZEA/fOzR6UYf6f8=";
   };
 
   format = "pyproject";
@@ -42,10 +42,12 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"'
+      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"' \
+      --replace 'argcomplete = ">=1.12.1,<2.1"' 'argcomplete = ">=1.12.1"'
   '';
 
   propagatedBuildInputs = [
+    charset-normalizer
     termcolor
     questionary
     colorama

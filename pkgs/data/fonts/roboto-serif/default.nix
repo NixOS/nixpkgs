@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "roboto-serif";
-  version = "1.007";
+  version = "1.008";
 
   src = fetchurl {
     url = "https://github.com/googlefonts/roboto-serif/releases/download/v${version}/RobotoSerifFonts-v${version}.zip";
-    hash = "sha256-A14GztkTvaLBvcm1i3A0Vi9vaz77nFYYoSNggqbffFo=";
+    hash = "sha256-Nm9DcxL0CgA51nGeZJPWSCipgqwnNPlhj0wHyGhLaYQ=";
   };
 
   sourceRoot = ".";

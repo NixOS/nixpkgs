@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
     sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
+  patches = [ ./0001-Fix-test.patch ];
+
   hardeningEnable = [ "pie" ];
 
   configurePhase = ''

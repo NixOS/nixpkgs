@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vmZSt0k6h4Zpbf+/Nq19QIkG3Fzjj3K031XnivFDA2s=";
+    hash = "sha256-W6nqhSEoP2mDp7fCoXqwYAafjfESxymYXAdC3BnJJno=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
+    changelog = "https://github.com/containers/conmon/releases/tag/${src.rev}";
     homepage = "https://github.com/containers/conmon";
     description = "An OCI container runtime monitor";
     license = licenses.asl20;

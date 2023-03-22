@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "isbnlib";
-  version = "3.10.12";
+  version = "3.10.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FOZNsZK8PTPJhK0BvGQiPqCr8au3rwHsjE3dCKWGtDM=";
+    hash = "sha256-Rnk0H1ag35HGNeg4oiLOfxB1XLW8yVSOP3qK/1Z009Q=";
   };
 
   nativeCheckInputs = [

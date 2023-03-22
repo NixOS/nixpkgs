@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.16.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${version}";
-    sha256 = "sha256-VkR7fM2WeI1itGq5kl54CVLnNW+NxIodkVKeGv8HoaU=";
+    hash = "sha256-+q6arKZjHVstnbPQhmuxdj/kCPTFf9L0jZYlPS+lksk=";
   };
 
-  cargoSha256 = "sha256-74QVFjDlT3ewx4sCK4/r5In0muqboBFEpMFBv2L5YaM=";
+  cargoHash = "sha256-mS+yQD7ggQJ/6TYgL54+lLsUbKQaZX9oxT2/GaFoWyI=";
 
   nativeBuildInputs = [
     cmake
@@ -43,9 +43,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd zola \
-      --fish completions/zola.fish \
-      --zsh completions/_zola \
-      --bash completions/zola.bash
+      --bash <($out/bin/zola completion bash) \
+      --fish <($out/bin/zola completion fish) \
+      --zsh <($out/bin/zola completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion { package = zola; };

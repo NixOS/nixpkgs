@@ -57,6 +57,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lassulus netali ];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

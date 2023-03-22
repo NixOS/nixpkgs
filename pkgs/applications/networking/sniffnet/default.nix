@@ -1,50 +1,57 @@
 { lib
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , pkg-config
 , libpcap
 , stdenv
+, alsa-lib
+, expat
 , fontconfig
-, libGL
+, vulkan-loader
 , xorg
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.0.1";
+  version = "1.1.2";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-8K774j04BOEuJjnFYjaSctPwBrKYYKqjFS2+PyxJ2FM=";
+  src = fetchFromGitHub {
+    owner = "gyulyvgc";
+    repo = "sniffnet";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QEMd/vOi0DFCq7AJHhii7rnBAHS89XP3/b2UIewAgLc=";
   };
 
-  cargoSha256 = "sha256-096i4wDdoJCICd0L2QNY+7cKHQnijK22zj4XaQNuko8=";
+  cargoHash = "sha256-VcmiM7prK5l8Ow8K9TGUR2xfx9648IoU6i40hOGAqGQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libpcap
   ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    expat
     fontconfig
-    libGL
+    vulkan-loader
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
+    rustPlatform.bindgenHook
   ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
   '';
 
   meta = with lib; {
     description = "Cross-platform application to monitor your network traffic with ease";
     homepage = "https://github.com/gyulyvgc/sniffnet";
-    changelog = "https://github.com/gyulyvgc/sniffnet/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };

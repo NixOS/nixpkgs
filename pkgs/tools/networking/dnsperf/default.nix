@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsperf";
-  version = "2.10.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "sha256-V8wFswGs4p045mOyLA1Zrlz4JtfojHbUir0esS2iUIs=";
+    sha256 = "sha256-dgPpuX8Geo20BV8g0uhjSdsZUOoC+Dnz4Y2vdMW6KjY=";
   };
 
   nativeBuildInputs = [

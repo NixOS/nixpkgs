@@ -4,7 +4,6 @@
 , rust
 , stdenv
 , callPackage
-, cacert
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
@@ -25,7 +24,9 @@
 
 , src ? null
 , srcs ? null
+, preUnpack ? null
 , unpackPhase ? null
+, postUnpack ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -69,7 +70,7 @@ let
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
-      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
       name = cargoDepsName;
       patches = cargoPatches;
     } // lib.optionalAttrs (args ? cargoHash) {
@@ -124,7 +125,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       inherit cargo cargo-auditable;
     })
   ] ++ [
-    cacert
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
@@ -155,8 +155,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   doCheck = args.doCheck or true;
 
   strictDeps = true;
-
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
 
   meta = {
     # default to Rust's platforms

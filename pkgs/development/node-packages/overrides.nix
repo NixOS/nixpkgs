@@ -188,10 +188,12 @@ final: prev: {
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
     nativeBuildInputs = [ pkgs.installShellFiles ];
+    # 'gt completion' auto-detects zshell from environment variables:
+    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
     postInstall = ''
       installShellCompletion --cmd gt \
         --bash <($out/bin/gt completion) \
-        --zsh <($out/bin/gt completion)
+        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
     '';
   };
 
@@ -268,11 +270,7 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${
-        if stdenv.isLinux
-          then "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
-          else ""
-      }
+      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
   };
 
@@ -342,14 +340,22 @@ final: prev: {
     };
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = let
-      # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
-      npmPatch = fetchpatch {
-        name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
-        url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
-        hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
-      };
+      patches = [
+        # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
+        (fetchpatch {
+          name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
+          hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
+        })
+        # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
+        (fetchpatch {
+          name = "convert-crlf-for-script-bin-files.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
+          hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
+        })
+      ];
     in ''
-      patch -d $out/lib/node_modules/node2nix -p1 < ${npmPatch}
+      ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
     '';
   };
@@ -406,7 +412,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-bS96oZ5oDFXYgoF2l7PJ3Mp1wWWfLOo8B/jAfbA2Pn0Wm5Z/owBHzaMQKS3i1CzVBDWWPVnOohmbJmjvkcHS5w==";
+      sha512 = "sha512-4zZmBXssPUEiX+GeL0MUq/Yyie4ltiKmGu7jCJFnYMamNrrulTBc+D+QwAQSJ01tyzeGHlD13kOnqPwRipnlNw==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \

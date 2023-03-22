@@ -4,7 +4,6 @@
 , pytest-runner
 , pytestCheckHook
 , pytest-asyncio
-, sqlalchemy
 , isPy27
 }:
 
@@ -23,10 +22,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     pytest-runner
-  ];
-
-  propagatedBuildInputs = [
-    sqlalchemy
   ];
 
   nativeCheckInputs = [

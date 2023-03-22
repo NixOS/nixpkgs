@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qm9B4m5CLhfqnZj+sdHZ+iA0+YnDR9Dh3lCy/YADkEI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JS134qjK2pT6KLD+91EmrA3HCNmF8DWcq71E/k9ULSA=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the Openexchangerates API";
     homepage = "https://github.com/MartinHjelmare/aioopenexchangerates";
+    changelog = "https://github.com/MartinHjelmare/aioopenexchangerates/blob/vv${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

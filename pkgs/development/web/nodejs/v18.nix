@@ -1,4 +1,4 @@
-{ callPackage, openssl, python3, enableNpm ? true }:
+{ callPackage, fetchpatch, openssl, python3, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -9,8 +9,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.14.0";
-  sha256 = "sha256-Qu+d0xmT1cjoKwqwlpE1CT5qKW76J7G+mvwErADwJno=";
+  version = "18.14.2";
+  sha256 = "sha256-+8Nk3SX+4srMDyAz2y2GEV/AdXUxDqDmRAi4Fw0JxoU=";
   patches = [
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch

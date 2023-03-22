@@ -215,10 +215,12 @@ in
     };
 
     security.pam.services = {
-      sddm = {
-        allowNullPassword = true;
-        startSession = true;
-      };
+      sddm.text = ''
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
+      '';
 
       sddm-greeter.text = ''
         auth     required       pam_succeed_if.so audit quiet_success user = sddm

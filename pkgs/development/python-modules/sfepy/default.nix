@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "sfepy";
     repo = "sfepy";
     rev = "release_${version}";
-    sha256 = "sha256-6AhyO6LRG6N62ZAoPCZpRKu4ZBzj9IHkurhKFIPFAJI=";
+    hash = "sha256-6AhyO6LRG6N62ZAoPCZpRKu4ZBzj9IHkurhKFIPFAJI=";
   };
 
   propagatedBuildInputs = [

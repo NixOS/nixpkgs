@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ilx5mhh91ks7dwvykfyynh53l6vkkignjpwkkss8ss6b2k8gdbj";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = "-O3";
 
   patches = [ (fetchpatch {
     name = "fix-libmicrohttpd-0-9-71.patch";

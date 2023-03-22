@@ -5,7 +5,8 @@
 , python ? null
 , ncurses, swig2
 , extraPackages ? []
-} :
+, testers
+}:
 
 let
 
@@ -14,7 +15,7 @@ let
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   inherit version;
 
@@ -58,12 +59,15 @@ in stdenv.mkDerivation {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
     mainProgram = "SoapySDRUtil";
+    pkgConfigModules = [ "SoapySDR" ];
     platforms = platforms.unix;
   };
-}
+})

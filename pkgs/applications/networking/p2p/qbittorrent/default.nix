@@ -10,14 +10,14 @@ assert guiSupport -> (dbus != null);
 assert trackerSearch -> (python3 != null);
 
 mkDerivation rec {
-  pname = "qbittorrent";
-  version = "4.4.5";
+  pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    sha256 = "sha256-EgRDNOJ4szdZA5ipOuGy2R0oVdjWcuqPU3ecU3ZNK3g=";
+    hash = "sha256-U0JDLLyIrMBqP4EqRAj48sdv9Om9cwdx4vP/0Ob1QB8=";
   };
 
   enableParallelBuilding = true;
@@ -43,8 +43,8 @@ mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin}
-    cp -R src/qbittorrent.app $out/Applications
-    makeWrapper $out/{Applications/qbittorrent.app/Contents/MacOS,bin}/qbittorrent
+    cp -R src/${pname}.app $out/Applications
+    makeWrapper $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
   '';
 
   meta = with lib; {

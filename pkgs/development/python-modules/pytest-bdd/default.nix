@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, Mako
+, mako
 , parse
 , parse-type
 , poetry-core
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Mako
+    mako
     parse
     parse-type
     typing-extensions

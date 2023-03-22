@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 ladspaH gtk2 alsa-lib libxml2 lrdf ];
-  NIX_LDFLAGS = "-ldl -lm -lpthread";
+  NIX_LDFLAGS = "-lm -lpthread";
 
   meta = {
     description = ''An effects "rack" for the JACK low latency audio API'';

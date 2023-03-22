@@ -13,6 +13,7 @@
 , settings32Bit ? false
 
 , prePatch ? ""
+, postPatch ? null
 , patches ? []
 , broken ? false
 , brokenOpen ? broken
@@ -68,7 +69,7 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
-    inherit prePatch;
+    inherit prePatch postPatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
@@ -127,8 +128,7 @@ let
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
       maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-      # proprietary driver currently does not support X86_KERNEL_IBT, which is scheduled to be added in linux 6.2
-      broken = broken || (kernel != null && kernel.kernelAtLeast "6.2");
+      inherit broken;
     };
   };
 

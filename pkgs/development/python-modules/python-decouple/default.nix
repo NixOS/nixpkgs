@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "python-decouple";
-  version = "3.7";
+  version = "3.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "HBNetwork";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sCUlE+92+nG7ZHuGKXRJVx2wokNP7/F7g8LvdRWqHCQ=";
+    hash = "sha256-F9Gu7Y/dJhwOJi/ZaoVclF3+4U/N5JdvpXwgGB3SF3Q=";
   };
 
   nativeCheckInputs = [

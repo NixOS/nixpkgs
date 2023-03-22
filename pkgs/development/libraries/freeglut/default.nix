@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGL, libGLU, cmake }:
+{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGL, libGLU, cmake
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
   version = "3.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
+    url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-xZRKCC3wu6lrV1bd2x910M1yzie1OVxsHd6Fwv8pelA=";
   };
 
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
@@ -34,7 +38,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://freeglut.sourceforge.net/";
     license = licenses.mit;
+    pkgConfigModules = [ "glut" ];
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
-}
+})

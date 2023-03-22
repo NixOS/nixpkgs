@@ -10,13 +10,13 @@ buildDunePackage rec {
   pname = "mirage-bootvar-xen";
   version = "0.8.0";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-bootvar-xen/releases/download/v${version}/mirage-bootvar-xen-v${version}.tbz";
-    sha256 = "0nk80giq9ng3svbnm68fjby2f1dnarddm3lk7mw7w59av71q0rcv";
+    hash = "sha256:0nk80giq9ng3svbnm68fjby2f1dnarddm3lk7mw7w59av71q0rcv";
   };
 
   propagatedBuildInputs = [

@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # Using c++14 because of build error
   # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications

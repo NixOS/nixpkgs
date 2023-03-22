@@ -199,7 +199,8 @@ let
   defaultConfigureFlags = [
     "--verbose"
     "--prefix=$out"
-    "--libdir=\\$prefix/lib/\\$compiler"
+    # Note: This must be kept in sync manually with mkGhcLibdir
+    ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
     "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
@@ -207,7 +208,7 @@ let
     "--with-gcc=$CC" # Clang won't work without that extra information.
   ] ++ [
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghcNameWithPrefix}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
@@ -284,10 +285,13 @@ let
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
 
   ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
+  mkGhcLibdir = ghc: "lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
+    + lib.optionalString (ghc ? hadrian) "/lib";
+  ghcLibdir = mkGhcLibdir ghc;
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
-  buildPkgDb = ghcName: packageConfDir: ''
+  buildPkgDb = thisGhc: packageConfDir: ''
     # If this dependency has a package database, then copy the contents of it,
     # unless it is one of our GHCs. These can appear in our dependencies when
     # we are doing native builds, and they have package databases in them, but
@@ -297,8 +301,8 @@ let
     # we compile with it, and doing so can result in having multiple copies of
     # e.g. Cabal in the database with the same name and version, which is
     # ambiguous.
-    if [ -d "$p/lib/${ghcName}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
+    if [ -d "$p/${mkGhcLibdir thisGhc}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
+      cp -f "$p/${mkGhcLibdir thisGhc}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
   '';
@@ -363,14 +367,14 @@ stdenv.mkDerivation ({
   # pkgs* arrays defined in stdenv/setup.hs
   + ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb "${nativeGhcCommand}-${nativeGhc.version}" "$setupPackageConfDir"}
+      ${buildPkgDb nativeGhc "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
   ''
   # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghcNameWithPrefix "$packageConfDir"}
+      ${buildPkgDb ghc "$packageConfDir"}
       if [ -d "$p/include" ]; then
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
@@ -510,7 +514,7 @@ stdenv.mkDerivation ({
       # just the target specified; "install" will error here, since not all targets have been built.
     else ''
       ${setupCommand} copy ${buildTarget}
-      local packageConfDir="$out/lib/${ghcNameWithPrefix}/package.conf.d"
+      local packageConfDir="$out/${ghcLibdir}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -539,7 +543,7 @@ stdenv.mkDerivation ({
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
     ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && lib.versionOlder ghc.version "7.10") ''
       for exe in "${binDir}/"* ; do
-        install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
+        install_name_tool -add_rpath "$out/${ghcLibdir}/${pname}-${version}" "$exe"
       done
     ''}
 
@@ -675,7 +679,7 @@ stdenv.mkDerivation ({
         "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
         "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
-          else "${ghcEnv}/lib/${ghcCommand}-${ghc.version}";
+          else "${ghcEnv}/${ghcLibdir}";
       });
 
     env = envFunc { };

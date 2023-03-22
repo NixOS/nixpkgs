@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Limiter";
+  pname = "flask-limiter";
   version = "3.1.0";
   format = "setuptools";
 
@@ -88,5 +88,6 @@ buildPythonPackage rec {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

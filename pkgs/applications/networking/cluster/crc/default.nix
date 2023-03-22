@@ -10,22 +10,22 @@
 }:
 
 let
-  openShiftVersion = "4.12.0";
+  openShiftVersion = "4.12.1";
   okdVersion = "4.11.0-0.okd-2022-11-05-030711";
   podmanVersion = "4.3.1";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
 in
 buildGoModule rec {
-  version = "2.13.1";
+  version = "2.14.0";
   pname = "crc";
-  gitCommit = "b5b864fdd4ed047027f439db96c2658aa194d2bc";
+  gitCommit = "868d96cd4f73dad72df54475c52c65f9741dc240";
   modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "crc";
     rev = "v${version}";
-    sha256 = "sha256-0e62mQ01pt0kClrEx4ss2T8BN1+0aQiCFPyDg5agbTU";
+    sha256 = "sha256-q1OJJTveXoNzW9lohQOY7LVR3jOyiQZX5nHBgRupxTM=";
   };
 
   vendorSha256 = null;
@@ -55,7 +55,6 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
-
   passthru.tests.version = testers.testVersion {
     package = crc;
     command = ''
@@ -69,6 +68,6 @@ buildGoModule rec {
     description = "Manages a local OpenShift 4.x cluster or a Podman VM optimized for testing and development purposes";
     homepage = "https://crc.dev";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shikanime tricktron ];
+    maintainers = with maintainers; [ matthewpi shikanime tricktron ];
   };
 }

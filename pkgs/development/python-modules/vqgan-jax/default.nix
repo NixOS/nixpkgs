@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "patil-suraj";
     repo = "vqgan-jax";
     rev = "1be20eee476e5d35c30e4ec3ed12222018af8ce4";
-    sha256 = "sha256-OZihAXpE0UsgauQ38XDmAF+lrIgz05uK0ro8SCdVsPc=";
+    hash = "sha256-OZihAXpE0UsgauQ38XDmAF+lrIgz05uK0ro8SCdVsPc=";
   };
 
   format = "setuptools";

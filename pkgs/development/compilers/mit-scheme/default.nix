@@ -49,6 +49,12 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=array-parameter"
+    "-Wno-error=use-after-free"
+  ];
+
   buildPhase = ''
     runHook preBuild
     cd src

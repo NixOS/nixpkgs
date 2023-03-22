@@ -1,8 +1,9 @@
 use std::collections::{HashSet, VecDeque};
 use std::env;
-use std::ffi::OsStr;
+use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::hash::Hash;
+use std::iter::FromIterator;
 use std::io::{BufRead, BufReader, Error};
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
@@ -163,6 +164,19 @@ fn handle_path(
                 let typ = fs::symlink_metadata(&source)?.file_type();
                 if typ.is_file() && !target.exists() {
                     copy_file(&source, &target, queue)?;
+
+                    if let Some(filename) = source.file_name() {
+                        source.set_file_name(OsString::from_iter([
+                                OsStr::new("."),
+                                filename,
+                                OsStr::new("-wrapped"),
+                        ]));
+
+                        let wrapped_path = source.as_path();
+                        if wrapped_path.exists() {
+                            queue.push_back(Box::from(wrapped_path));
+                        }
+                    }
                 } else if typ.is_symlink() {
                     let link_target = fs::read_link(&source)?;
 

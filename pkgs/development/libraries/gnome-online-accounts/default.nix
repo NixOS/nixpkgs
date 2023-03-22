@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   separateDebugInfo = true;
 

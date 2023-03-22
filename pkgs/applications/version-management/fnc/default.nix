@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ]);
+
   preInstall = ''
     mkdir -p $out/bin
   '';

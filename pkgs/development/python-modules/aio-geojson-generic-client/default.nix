@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , aio-geojson-client
 , fetchFromGitHub
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-asyncio
     pytestCheckHook
   ];

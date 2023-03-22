@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , cmake
 , python3
@@ -16,23 +15,14 @@ assert withDynarec -> stdenv.hostPlatform.isAarch64;
 
 stdenv.mkDerivation rec {
   pname = "box64";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eMp2eSWMRJQvLRQKUirBua6Kt7ZtyebfUnKIlibkNFU=";
+    hash = "sha256-aIvL0H0k0/lz2lCLxB17RxNm0cxVozYthy0z85/FuUE=";
   };
-
-  patches = [
-    # Fix mmx & cppThreads tests on x86_64
-    # Remove when version > 0.2.0
-    (fetchpatch {
-      url = "https://github.com/ptitSeb/box64/commit/3819aecf078fcf47b2bc73713531361406a51895.patch";
-      hash = "sha256-11hy5Ol5FSE/kNJmXAIwNLbapldhlZGKtOLIoL6pYrg=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

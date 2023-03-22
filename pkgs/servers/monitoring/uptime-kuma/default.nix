@@ -1,19 +1,17 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, nixosTests, iputils, nodejs, makeWrapper }:
-let
-  deps = import ./composition.nix { inherit pkgs; };
-in
-stdenv.mkDerivation (finalAttrs: {
+{ pkgs, lib, fetchFromGitHub, buildNpmPackage, python3, nodejs, nixosTests }:
+
+buildNpmPackage rec {
   pname = "uptime-kuma";
-  version = "1.19.6";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
-    rev = finalAttrs.version;
-    sha256 = "sha256-Hk0me4VPP8vKp4IhzQKjjhM2BWLGSHnN7JiDJu2WlE8=";
+    rev = version;
+    sha256 = "sha256-dMjhCsTjXOwxhvJeL25KNkFhRCbCuxG7Ccz8mP7P38A=";
   };
 
-  uiSha256 = "sha256-oeXklGxAPsUoLRT6DAVRgWm0kvKbLFW4IBc0Rh3j5V4=";
+  npmDepsHash = "sha256-Ks6KYHP6+ym9PGJ1a5nMxT7JXZyknHeaCmAkjJuCTXU=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
@@ -21,35 +19,21 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-database-permissions.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ python3 ];
 
-  installPhase = ''
-    mkdir -p $out/share/
-    cp -r server $out/share/
-    cp -r db $out/share/
-    cp -r src $out/share/
-    cp package.json $out/share/
-    ln -s ${deps.package}/lib/node_modules/uptime-kuma/node_modules/ $out/share/
-    ln -s ${finalAttrs.passthru.ui} $out/share/dist
+  CYPRESS_INSTALL_BINARY = 0; # Stops Cypress from trying to download binaries
+
+  postInstall = ''
+    cp -r dist $out/lib/node_modules/uptime-kuma/
   '';
 
   postFixup = ''
     makeWrapper ${nodejs}/bin/node $out/bin/uptime-kuma-server \
-      --add-flags $out/share/server/server.js \
-      --chdir $out/share/
+      --add-flags $out/lib/node_modules/uptime-kuma/server/server.js \
+      --chdir $out/lib/node_modules/uptime-kuma
   '';
 
-  passthru = {
-    tests.uptime-kuma = nixosTests.uptime-kuma;
-
-    updateScript = ./update.sh;
-
-    ui = fetchzip {
-      name = "uptime-kuma-dist-${finalAttrs.version}";
-      url = "https://github.com/louislam/uptime-kuma/releases/download/${finalAttrs.version}/dist.tar.gz";
-      sha256 = finalAttrs.uiSha256;
-    };
-  };
+  passthru.tests.uptime-kuma = nixosTests.uptime-kuma;
 
   meta = with lib; {
     description = "A fancy self-hosted monitoring tool";
@@ -57,5 +41,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ julienmalka ];
   };
-})
-
+}

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "vsajip";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bT1DbcQi+SbeRBsL7ILuQbSnAj3BBB4+FNl+Zek5xU4=";
+    hash = "sha256-bT1DbcQi+SbeRBsL7ILuQbSnAj3BBB4+FNl+Zek5xU4=";
   };
 
   nativeCheckInputs = [

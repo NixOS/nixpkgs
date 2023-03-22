@@ -2,6 +2,7 @@
 , stdenv
 , python3
 , python3Minimal
+, runCommand
 }:
 
 let
@@ -11,19 +12,19 @@ let
   python = ((if stdenv.isDarwin then python3 else python3Minimal).override {
     self = python;
     includeSiteCustomize = true;
-  });
-
-  # TODO add our own small test suite, maybe add tests for these deps to channels?
-  markdown-it-py-no-tests = python.pkgs.markdown-it-py.override {
-    disableTests = true;
-  };
-  mdit-py-plugins-no-tests = python.pkgs.mdit-py-plugins.override {
-    markdown-it-py = markdown-it-py-no-tests;
-    disableTests = true;
+  }).override {
+    packageOverrides = final: prev: {
+      markdown-it-py = prev.markdown-it-py.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+      mdit-py-plugins = prev.mdit-py-plugins.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+    };
   };
 in
 
-python.pkgs.buildPythonApplication {
+python.pkgs.buildPythonApplication rec {
   pname = "nixos-render-docs";
   version = "0.0";
   format = "pyproject";
@@ -42,18 +43,28 @@ python.pkgs.buildPythonApplication {
     src = ./src;
   };
 
-  nativeBuildInputs = [
-    python.pkgs.setuptools
-    python.pkgs.pytestCheckHook
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+    pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    markdown-it-py-no-tests
-    mdit-py-plugins-no-tests
-    python.pkgs.frozendict
+  propagatedBuildInputs = with python.pkgs; [
+    markdown-it-py
+    mdit-py-plugins
   ];
 
   pytestFlagsArray = [ "-vvrP" "tests/" ];
+
+  # NOTE this is a CI test rather than a build-time test because we want to keep the
+  # build closures small. mypy has an unreasonably large build closure for docs builds.
+  passthru.tests.typing = runCommand "${pname}-mypy" {
+    nativeBuildInputs = [
+      (python3.withPackages (ps: with ps; [ mypy pytest markdown-it-py mdit-py-plugins ]))
+    ];
+  } ''
+    mypy --strict ${src}
+    touch $out
+  '';
 
   meta = with lib; {
     description = "Renderer for NixOS manual and option docs";

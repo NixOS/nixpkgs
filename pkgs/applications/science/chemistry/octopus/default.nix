@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = with lib; [
-    "--with-yaml-prefix=${libyaml}"
+    "--with-yaml-prefix=${lib.getDev libyaml}"
     "--with-blas=-lblas"
     "--with-lapack=-llapack"
-    "--with-fftw-prefix=${fftw.dev}"
-    "--with-gsl-prefix=${gsl}"
-    "--with-libxc-prefix=${libxc}"
+    "--with-fftw-prefix=${lib.getDev fftw}"
+    "--with-gsl-prefix=${lib.getDev gsl}"
+    "--with-libxc-prefix=${lib.getDev libxc}"
     "--enable-openmp"
   ] ++ optional enableFma "--enable-fma3"
     ++ optional enableFma4 "--enable-fma4"

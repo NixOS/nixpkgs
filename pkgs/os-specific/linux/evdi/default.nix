@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-mt+vEp9FFf7smmE2PzuH/3EYl7h89RBN1zTVvv2qJ/o=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

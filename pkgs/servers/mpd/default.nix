@@ -166,7 +166,7 @@ let
         ++ lib.optional (builtins.elem "documentation" features_) "man";
 
       # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
-      NIX_CFLAGS_COMPILE = [ "-DPW_ENABLE_DEPRECATED" ];
+      env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
       CXXFLAGS = lib.optionals stdenv.isDarwin [
         "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
