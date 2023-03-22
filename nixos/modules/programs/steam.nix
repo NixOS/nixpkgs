@@ -9,20 +9,26 @@ in {
     enable = mkEnableOption (lib.mdDoc "steam");
 
     package = mkOption {
-      type        = types.package;
-      default     = pkgs.steam.override {
-        extraLibraries = pkgs: with config.hardware.opengl;
-          if pkgs.stdenv.hostPlatform.is64bit
-          then [ package ] ++ extraPackages
-          else [ package32 ] ++ extraPackages32;
-      };
+      type = types.package;
+      default = pkgs.steam.override ({ extraLibraries ? pkgs': [], ... }: {
+        extraLibraries = pkgs': (extraLibraries pkgs') ++ (
+          with config.hardware.opengl;
+          if pkgs'.stdenv.hostPlatform.is64bit then
+            [ package ] ++ extraPackages
+          else
+            [ package32 ] ++ extraPackages32
+        );
+      });
       defaultText = literalExpression ''
-        pkgs.steam.override {
-          extraLibraries = pkgs: with config.hardware.opengl;
-            if pkgs.stdenv.hostPlatform.is64bit
-            then [ package ] ++ extraPackages
-            else [ package32 ] ++ extraPackages32;
-        }
+        pkgs.steam.override ({ extraLibraries ? pkgs': [], ... }: {
+          extraLibraries = pkgs': (extraLibraries pkgs') ++ (
+            with config.hardware.opengl;
+            if pkgs'.stdenv.hostPlatform.is64bit then
+              [ package ] ++ extraPackages
+            else
+              [ package32 ] ++ extraPackages32
+          );
+        })
       '';
       description = lib.mdDoc ''
         steam package to use.
