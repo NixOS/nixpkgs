@@ -87,12 +87,11 @@ stdenv.mkDerivation rec {
 
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
+    libdeflate
     libjpeg
     xz
     zlib
   ];
-
-  buildInputs = [ libdeflate ];
 
   enableParallelBuilding = true;
 
