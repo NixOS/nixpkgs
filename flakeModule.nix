@@ -1,4 +1,4 @@
-{ lib, config, system, ... }:
+{ lib, config, ... }:
 let
   inherit (lib) mkOption types;
 
@@ -22,6 +22,13 @@ let
       lib.composeManyExtensions overlays;
   };
 
+  mkPkgsFromSystemType = types.mkOptionType {
+    name = "mkPkgsfromsystem";
+    description = "";
+    descriptionClass = "noun";
+    check = lib.isFunction;
+  };
+
   nixpkgsSubmodule = with types; submodule {
     options = {
       overlays = mkOption {
@@ -30,11 +37,18 @@ let
         default = [ ];
       };
 
-      output = mkOption {
-        type = listOf nixpkgsOverlaySubmodule;
-        description = "Output pkgs from nixpkgs' flake module";
-        default = import ./.
-          { inherit system; inherit (config.nixpkgs) overlays; };
+      mkPkgsFromSystem = mkOption {
+        type = mkPkgsFromSystemType;
+        description = "Returns `pkgs` from `system";
+        internal = true;
+        default = system: import ./. { inherit system; inherit (config.nixpkgs) overlays; };
+      };
+
+      allPkgsPerSystem = mkOption {
+        type = types.lazyAttrsOf types.unspecified;
+        description = "Attribute set of `pkgs` named by `system`";
+        internal = true;
+        default = genAttrs lib.systems.parsedPlatform config.nixpkgs.mkPkgsFromSystem;
       };
     };
   };
