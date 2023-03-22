@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "0.21.3";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-K4NerJSW3ckXMFFnFCMXIqMeevE3Xzr/Wsz9nloolBI=";
+    hash = "sha256-jY5mIbrcX2B0D6ezi1k0mcRAmrSPIoebJFHn3lZ2t9w=";
   };
 
-  cargoHash = "sha256-YSKnfhSZ885evtEK40QTt90RwtH03aO/aJ6A/DddoVU=";
+  cargoHash = "sha256-+O/+zsiG0wyNKp/2TP5I8EPMf6YPT8VtCD4BXI76J7Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,6 +42,9 @@ rustPlatform.buildRustPackage rec {
     "trust-dns"
     "zstd-thin"
   ];
+
+  cargoBuildFlags = [ "-p" "cargo-binstall" ];
+  cargoTestFlags = [ "-p" "cargo-binstall" ];
 
   checkFlags = [
     # requires internet access
