@@ -6,7 +6,7 @@ rec {
     version = "111.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "e7d248b845cb524efc28818e0a0cad06ba5acac30219886191b702b61314388d10a1690c6d704b0a70d2bc2c4b1f04ed02350dcb9dce9c56503d2af3baefe4d3";
+      sha512 = "b16c9399a19cb1de2d865a023d54fbe71c23a363ea4d36cd58f41f64f7ad04bc1b9d8a8448943417516e17337e0ee2afd370c29a72b51b0947161f4ffab6935f";
     };
 
     meta = {
