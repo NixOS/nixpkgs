@@ -3,17 +3,17 @@
 , fetchFromGitHub
 , pytestCheckHook
 , rustPlatform
+, clvm-tools
 }:
-
 buildPythonPackage rec {
   pname = "chia-rs";
-  version = "0.2.0";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "chia-network";
     repo = "chia_rs";
     rev = version;
-    hash = "sha256-kjURkzynrrb5iD5s77Q3nETt71SCGGazm/2lt9HS5JU=";
+    hash = "sha256-Wzsp3jLC2cAt6mjpO4LD5xA6VOZ0v2v8x1sAebUwv0M=";
   };
 
   patches = [
@@ -39,8 +39,9 @@ buildPythonPackage rec {
     touch wheel/Cargo.lock
   '';
 
-  nativeCheckInputs = [
+  checkInputs = [
     pytestCheckHook
+    clvm-tools
   ];
 
   buildAndTestSubdir = "wheel";
