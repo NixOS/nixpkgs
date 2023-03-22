@@ -33,7 +33,7 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
-      _1Password.op-vscode = buildVscodeMarketplaceExtension {
+      "1Password".op-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
@@ -50,7 +50,7 @@ let
         };
       };
 
-      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+      "2gua".rainbow-brackets = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "2gua";
           name = "rainbow-brackets";
@@ -66,7 +66,7 @@ let
         };
       };
 
-      _4ops.terraform = buildVscodeMarketplaceExtension {
+      "4ops".terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
           name = "terraform";
@@ -1239,6 +1239,23 @@ let
           homepage = "https://github.com/gencer/SCSS-Everywhere";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      genieai.chatgpt-vscode = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/genieai.chatgpt-vscode/changelog";
+          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=genieai.chatgpt-vscode";
+          homepage = "https://github.com/ai-genie/chatgpt-vscode";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+        mktplcRef = {
+          name = "chatgpt-vscode";
+          publisher = "genieai";
+          version = "0.0.2";
+          sha256 = "sha256-mdBSZ8BAJ1dFy5MXBPMwXlSmNsY5vD/+gBAI+3+QT84=";
         };
       };
 
@@ -2501,8 +2518,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.6.3";
-          sha256 = "dCWERQ5rHnmYLtYl12gJ+dXLnpMu55WnmF1VfdP0x34=";
+          version = "0.6.8";
+          sha256 = "9NRaHgtyiZJ0ic6h1B01MWzYhDABAl3Jm2IUPogYWr0=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -2658,8 +2675,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.19.0";
-          sha256 = "sha256-c95u++tkK8hToauulY8faNITUmsCBEeC2B8mHY0oEmA=";
+          version = "2.20.3";
+          sha256 = "sha256-28ybNBobXoq194d9VGD9kOq/OWscJkSlgSZ7ViaNQtw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -3194,13 +3211,15 @@ let
           license = lib.licenses.mit;
         };
       };
-
     };
 
   aliases = self: super: {
     # aliases
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
+    _1Password = throw ''_1Password has been replaced with "1Password"'';
+    _2gua = throw ''_2gua has been replaced with "2gua"'';
+    _4ops = throw ''_4ops has been replaced with "4ops"'';
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

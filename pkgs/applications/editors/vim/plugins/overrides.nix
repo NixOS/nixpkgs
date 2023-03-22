@@ -24,6 +24,7 @@
 , git
 , gnome
 , himalaya
+, htop
 , jq
 , khard
 , languagetool
@@ -31,6 +32,7 @@
 , meson
 , nim
 , nodePackages
+, openscad
 , pandoc
 , parinfer-rust
 , ripgrep
@@ -50,6 +52,7 @@
 , nodejs
 , xdotool
 , xorg
+, zathura
 , zsh
 
   # command-t dependencies
@@ -583,6 +586,18 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  magma-nvim-goose = buildVimPluginFrom2Nix {
+    pname = "magma-nvim-goose";
+    version = "2023-03-13";
+    src = fetchFromGitHub {
+      owner = "WhiteBlackGoose";
+      repo = "magma-nvim-goose";
+      rev = "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f";
+      sha256 = "10d6dh0czdpgfpzqs5vzxfffkm0460qjzi2mfkacgghqf3iwkbja";
+    };
+    meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
+  };
+
   markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
     # We only need its dependencies `node-modules`.
     nodeDep = nodePackages."markdown-preview-nvim-../../applications/editors/vim/plugins/markdown-preview-nvim".overrideAttrs (old: {
@@ -717,6 +732,22 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
+  # avoid choosing one of them and leave it to the user
+  openscad-nvim = super.openscad-nvim.overrideAttrs (old: {
+    buildInputs = [ zathura htop openscad ];
+
+    patches = [ ./patches/openscad.nvim/program_paths.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/openscad.lua --replace '@zathura-path@' ${zathura}/bin/zathura
+      substituteInPlace autoload/health/openscad_nvim.vim --replace '@zathura-path@' ${zathura}/bin/zathura
+      substituteInPlace lua/openscad/terminal.lua --replace '@htop-path@' ${htop}/bin/htop
+      substituteInPlace autoload/health/openscad_nvim.vim --replace '@htop-path@' ${htop}/bin/htop
+      substituteInPlace lua/openscad.lua --replace '@openscad-path@' ${openscad}/bin/openscad
+    '';
+  });
+
   orgmode = super.orgmode.overrideAttrs (old: {
     dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
   });
@@ -762,7 +793,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-nm9muH4RC92HdUiytmcW0WNyMQJcIH6dgwjUrwcqq4I=";
+        cargoHash = "sha256-z3ZWHhqiJKFzVcFJadfPU6+ELlnvEOAprCyStszegdI=";
 
         nativeBuildInputs = [ pkg-config ];
 

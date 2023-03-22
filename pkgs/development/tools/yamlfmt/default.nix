@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yamlfmt";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oTdBFWISOfaz4ZDbJmyxtaKrjo9DVNJ5N7Qxnu7SwZA=";
+    sha256 = "sha256-2gcB44tpYXRES0nqLfXt3Srj2NCuQ/iBdv4yxjfmrnk=";
   };
 
-  vendorSha256 = "sha256-QRY6mYtrMvjUqXJOOvHL0b0OQ28320UwV8HL4fXpcNQ=";
+  vendorHash = "sha256-7Ip6dgpO3sPGXcwymYcaoFydTPIt+BmJC7UqyfltJx0=";
 
   doCheck = false;
 

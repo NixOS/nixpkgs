@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "naabu";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U3rJNYESBL+js2uyBcT2x+XoC2qBseKyCLvwlc5a2rA=";
+    hash = "sha256-QmUGSpuicJnrReAI/XSR8g1t6Tl0vZBUjemrQSO8CiY=";
   };
 
   vendorHash = "sha256-YB2gZYoAyoIK44DTfHvYOyhNggkp4HaC2dvtCy2hc38=";

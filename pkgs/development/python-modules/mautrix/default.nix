@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.19.4";
+  version = "0.19.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "mautrix";
     repo = "python";
     rev = "v${version}";
-    hash = "sha256-zPcqM+Ge7K4pJD4K0MkkGdSiYvXxe0K1qbfHzVYmGx0=";
+    hash = "sha256-Km6Lh4iKUBwQcsChTrV9yCaPhVBINJotp/5XnPfoOMk=";
   };
 
   propagatedBuildInputs = [
