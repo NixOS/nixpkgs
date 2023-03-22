@@ -230,8 +230,8 @@ self: super: builtins.intersectAttrs super {
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK30; };
-  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
+  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
+  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
