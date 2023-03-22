@@ -80,7 +80,6 @@ in {
         nextcloudwithopenssl1.succeed("grep bye /var/lib/nextcloud/data/root/files/test-shared-file2")
         nextcloudwithopenssl1.succeed("${withRcloneEnv3} ${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file2 | grep bye")
 
-
     with subtest("Switch back to OpenSSL 1.1 and ensure that encrypted files are readable again"):
         nextcloudwithopenssl1.succeed("${openssl1-node}/bin/switch-to-configuration test")
         nextcloudwithopenssl1.wait_for_open_port(80)

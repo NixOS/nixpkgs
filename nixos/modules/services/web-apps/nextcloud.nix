@@ -204,7 +204,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud24" "nextcloud25" ];
+      relatedPackages = [ "nextcloud24" "nextcloud25" "nextcloud26" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -728,8 +728,8 @@ in {
         );
 
       services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "24" then pkgs.php80
-        else pkgs.php81;
+        if versionOlder cfg.package.version "26" then pkgs.php81
+        else pkgs.php82;
     }
 
     { assertions = [
