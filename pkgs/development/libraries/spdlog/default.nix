@@ -1,27 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8, fetchpatch
+{ lib, stdenv, fetchFromGitHub, cmake, fmt
 , staticBuild ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdlog";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo  = "spdlog";
     rev   = "v${version}";
-    hash  = "sha256-c6s27lQCXKx6S1FhZ/LiKh14GnXMhZtD1doltU4Avws=";
+    hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
   };
 
-  # in master post 1.10.0, see https://github.com/gabime/spdlog/issues/2380
-  patches = lib.optional (lib.versionAtLeast version "1.4.1") (fetchpatch {
-    name = "fix-pkg-config.patch";
-    url = "https://github.com/gabime/spdlog/commit/afb69071d5346b84e38fbcb0c8c32eddfef02a55.patch";
-    sha256 = "0cab2bbv8zyfhrhfvcyfwf5p2fddlq5hs2maampn5w18f6jhvk6q";
-  });
-
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ fmt_8 ];
+  propagatedBuildInputs = [ fmt ];
 
   cmakeFlags = [
     "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
