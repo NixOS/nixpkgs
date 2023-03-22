@@ -256,7 +256,7 @@ in buildPythonPackage rec {
   # Suppress gcc regression: avx512 math function raises uninitialized variable warning
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
   # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
-  ++ lib.optionals stdenv.cc.isGNU [
+  ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12.0.0") [
     "-Wno-error=maybe-uninitialized"
     "-Wno-error=uninitialized"
   ]
