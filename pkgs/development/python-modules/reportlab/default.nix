@@ -26,7 +26,6 @@ in buildPythonPackage rec {
   nativeCheckInputs = [ glibcLocales ];
 
   buildInputs = [ ft ];
-  
   propagatedBuildInputs = [ pillow ];
 
   postPatch = ''
