@@ -166,7 +166,7 @@ let
   };
 
   mkRepoTmpfilesRule = cfg:
-    "d ${cfg.path} 0700 ${cfg.user} ${cfg.group}";
+    "d '${cfg.path}' 0700 ${cfg.user} ${cfg.group}";
 
   mkAuthorizedKey = cfg: appendOnly: key:
     let
