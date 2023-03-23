@@ -8,15 +8,15 @@ let
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-      sha256 = "";
+      sha256 = "17cc50b1775af77af1947e7e4f988a750edb8db5f55768a19afc6f4e7c9c0a09";
     };
     x86_64-darwin = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.x86_64.tar.gz";
-      sha256 = "";
+      sha256 = "72c642f13ff468d84471ab14ddde690c8bb131db906fd963380d5d95adbfe09d";
     };
     aarch64-darwin = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.arm64.tar.gz";
-      sha256 = "";
+      sha256 = "ebea0a122a2ae4ca36df1bd530991bc25abeb6d011583f1850cf4ab756ed912b";
     };
   };
 in
