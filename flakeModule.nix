@@ -50,7 +50,7 @@ let
         type = types.lazyAttrsOf types.unspecified;
         description = "Attribute set of `pkgs` named by `system`";
         internal = true;
-        default = genAttrs lib.systems.parsedPlatform config.nixpkgs.mkPkgsFromSystem;
+        default = lib.genAttrs lib.systems.flakeExposed config.nixpkgs.mkPkgsFromSystem;
       };
     };
   };
