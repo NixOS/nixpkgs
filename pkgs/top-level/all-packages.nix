@@ -21394,6 +21394,8 @@ with pkgs;
 
   libsecret = callPackage ../development/libraries/libsecret { };
 
+  libsegfault = callPackage ../development/libraries/libsegfault { };
+
   libserdes = callPackage ../development/libraries/libserdes { };
 
   libserialport = callPackage ../development/libraries/libserialport { };
