@@ -11468,6 +11468,12 @@
     github = "p3psi-boo";
     githubId = 43925055;
   };
+  pab = {
+    email = "pab.nix@pab.me.uk";
+    github = "PAB-me-uk";
+    githubId = 2519459;
+    name = "Paul Burridge";
+  };
   pablovsky = {
     email = "dealberapablo07@gmail.com";
     github = "Pablo1107";
