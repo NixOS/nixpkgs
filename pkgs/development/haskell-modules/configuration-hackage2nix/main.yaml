@@ -561,6 +561,7 @@ supported-platforms:
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
   HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
+  hs-swisstable-hashtables-class:               [ platforms.x86_64 ] # depends on swisstable, which Needs AVX2
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
