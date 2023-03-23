@@ -9,7 +9,6 @@
 , importlib-metadata
 , numpy
 , dateparser
-, jinja2
 , remotezip
 , pytestCheckHook
 , requests-mock
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "6.1.0";
+  version = "6.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3CnarUqW7/hEo4zvRGLJ+VAY5X+aacBdY1Epef523vY=";
+    hash = "sha256-4RFGhA9xzc1kxSni6rAbevoDkc1bLdQD1II/2xq/uKM=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     importlib-metadata
     numpy
     dateparser
-    jinja2
     remotezip
   ];
 
@@ -56,6 +54,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
     license = licenses.bsd3;
