@@ -37,17 +37,17 @@
 , python3
 , tzdata
 , nss
-, gcr
+, gcr_4
 , gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "42.2";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nESXFKqOwSccDbUTffNFgZWUPwXM0KyJNdkzl3cLqwA=";
+    sha256 = "NRO7JPxvgYFmciOmSgZ1NP3M879mMmqUA9OLDw1gE9A=";
   };
 
   patches = [
@@ -60,13 +60,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata;
-    })
-
-    # Use geocode-glib_2 dependency
-    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/300
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/03739474621e579e10b72577960ff94b4001e7ff.patch";
-      sha256 = "W4uD4ChNPZSsmQfmfmmXFA2Sm1RDkV7MqG8DmT4qeCY=";
     })
   ];
 
@@ -106,7 +99,7 @@ stdenv.mkDerivation rec {
     systemd
     libgudev
     libwacom
-    gcr
+    gcr_4
   ];
 
   mesonFlags = [
@@ -119,7 +112,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
+    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done
