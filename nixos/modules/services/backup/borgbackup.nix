@@ -165,13 +165,11 @@ let
       + '' borgbackup.jobs.${name}.encryption != "none"'';
   };
 
+  # This does little more than tmpfiles, but we can't use tmpfiles because it doesn't seem to support newlines in paths
   mkRepoService = name: cfg:
     nameValuePair "borgbackup-repo-${name}" {
       description = "Create BorgBackup repository ${name} directory";
-      script = ''
-        mkdir -p ${escapeShellArg cfg.path}
-        chown ${cfg.user}:${cfg.group} ${escapeShellArg cfg.path}
-      '';
+      script = "install -d ${escapeShellArg cfg.path} -o ${cfg.user} -g ${cfg.group} -m 0700";
       serviceConfig = {
         # The service's only task is to ensure that the specified path exists
         Type = "oneshot";
