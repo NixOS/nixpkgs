@@ -5670,6 +5670,8 @@ self: super: with self; {
 
   lomond = callPackage ../development/python-modules/lomond { };
 
+  looker-sdk = callPackage ../development/python-modules/looker-sdk { };
+
   loopy = callPackage ../development/python-modules/loopy { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
