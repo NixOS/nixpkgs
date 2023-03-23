@@ -24,7 +24,7 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  driverVersion = "1.27.1";
+  driverVersion = "1.31.1";
 
   driver = let
     suffix = {
@@ -41,10 +41,10 @@ let
     src = fetchurl {
       url = "https://playwright.azureedge.net/builds/driver/${filename}";
       sha256 = {
-        x86_64-linux = "0x71b4kb8hlyacixipgfbgjgrbmhckxpbmrs2xk8iis7n5kg7539";
-        aarch64-linux = "125lih7g2gj91k7j196wy5a5746wyfr8idj3ng369yh5wl7lfcfv";
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
-        aarch64-darwin = "0qajh4ac5lr1sznb2c471r5c5g2r0dk2pyqz8vhvnbk36r524h1h";
+        x86_64-linux = "1wg49kfs8fflmx8g01bkckbjkghhwy7c44akckjf7dp4lbh1z8fd";
+        aarch64-linux = "0f09a0cxqxihy8lmbjzii80jkpf3n5xlvhjpgdkwmrr3wh0nnixj";
+        x86_64-darwin = "1zd0dz8jazymcpa1im5yzxb7rwl6wn4xz19lpz83bnpd1njq01b3";
+        aarch64-darwin = "0hcn80zm9aki8hzsf1cljzcmi4iaw7fascs8ajj0qcwqkkm4jnw0";
       }.${system} or throwSystem;
     };
 
@@ -87,7 +87,7 @@ let
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
       outputHash = {
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
+        x86_64-darwin = "sha256-ikp4XZ2/m9sZo4uVNewSPUjcZSOTXOAB1D/1yxFJQ4I=";
       }.${system} or throwSystem;
     } ''
       export PLAYWRIGHT_BROWSERS_PATH=$out
@@ -136,7 +136,7 @@ let
 in
 buildPythonPackage rec {
   pname = "playwright";
-  version = "1.27.1";
+  version = "1.31.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -144,7 +144,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
-    hash = "sha256-cI/4GdkmTikoP9O0Skh/0jCxxRypRua0231iKcxtBcY=";
+    hash = "sha256-zVJiRIJDWmFdMCGK9siewiYgjeeTuOPY1wWxArcZDJg=";
   };
 
   patches = [
@@ -166,10 +166,10 @@ buildPythonPackage rec {
     git commit -m "workaround setuptools-scm"
 
     substituteInPlace setup.py \
-      --replace "greenlet==1.1.3" "greenlet>=1.1.3" \
+      --replace "greenlet==2.0.1" "greenlet>=2.0.1" \
       --replace "pyee==8.1.0" "pyee>=8.1.0" \
       --replace "setuptools-scm==7.0.5" "setuptools-scm>=7.0.5" \
-      --replace "wheel==0.37.1" "wheel>=0.37.1"
+      --replace "wheel==0.38.1" "wheel>=0.38.1"
 
     # Skip trying to download and extract the driver.
     # This is done manually in postInstall instead.
