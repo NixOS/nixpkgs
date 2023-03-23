@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.4.3";
+  version = "5.4.4";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
