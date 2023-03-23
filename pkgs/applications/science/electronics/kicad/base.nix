@@ -81,18 +81,26 @@ stdenv.mkDerivation rec {
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
+  # some ngspice tests attempt to write to $HOME/.cache/
+  XDG_CACHE_HOME = "$TMP";
+  # failing tests still attempt to create $HOME though
+
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"  # upstream issue 12491
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
   ]
-  ++ optionals (!stable) [ # workaround for https://gitlab.com/kicad/code/kicad/-/issues/14346
-    "-DPYTHON_SITE_PACKAGE_PATH=${placeholder "out"}/lib/python${lib.versions.majorMinor python.version}/site-packages"
+  ++ optionals (stable) [
+    # https://gitlab.com/kicad/code/kicad/-/issues/12491
+    # should be resolved in the next release
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
   ]
+  ++ optionals (!stable) [ # workaround for https://gitlab.com/kicad/code/kicad/-/issues/14346
+    "-DPYTHON_SITE_PACKAGE_PATH=${placeholder "out"}/${python.sitePackages}/"
+  ]
+  ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
   ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
   ]
-  ++ optional (!withNgspice) "-DKICAD_SPICE=OFF"
   ++ optionals (withI18n) [
     "-DKICAD_BUILD_I18N=ON"
   ]
