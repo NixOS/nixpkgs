@@ -1587,6 +1587,8 @@ self: super: with self; {
 
   canopen = callPackage ../development/python-modules/canopen { };
 
+  camelot = callPackage ../development/python-modules/camelot { };
+
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
   };
