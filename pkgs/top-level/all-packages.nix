@@ -4715,6 +4715,8 @@ with pkgs;
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
+  fetch-scm = callPackage ../tools/misc/fetch-scm { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   filebot = callPackage ../applications/video/filebot { };
