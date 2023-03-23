@@ -9,6 +9,7 @@
 , expat
 , libxml2
 , withLibraries ? stdenv.isLinux
+, withTests ? stdenv.isLinux
 , libffi
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
@@ -23,6 +24,9 @@
 
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
+
+# Tests are only built when building libraries.
+assert withTests -> withLibraries;
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
@@ -50,7 +54,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocumentation=${lib.boolToString withDocumentation}"
     "-Dlibraries=${lib.boolToString withLibraries}"
-    "-Dtests=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withTests}"
   ];
 
   depsBuildBuild = [
