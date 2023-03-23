@@ -1,0 +1,42 @@
+From 21e975381462c0f382797f5ef4cf93fbb042e277 Mon Sep 17 00:00:00 2001
+From: dyrnade <gurescicem@gmail.com>
+Date: Wed, 1 Feb 2023 22:52:37 +0100
+Subject: [PATCH] fix application dirs
+
+---
+ papershell/dock/tasks/tasks.cpp | 5 ++---
+ papershell/menu/papermenu.cpp   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/papershell/dock/tasks/tasks.cpp b/papershell/dock/tasks/tasks.cpp
+index dfb7c58..ee8b8b6 100644
+--- a/papershell/dock/tasks/tasks.cpp
++++ b/papershell/dock/tasks/tasks.cpp
+@@ -65,9 +65,8 @@ static inline QIcon getIconForAppId(QString mAppId)
+ 	}
+ 
+ 	QStringList appDirs = {
+-		QDir::home().filePath(".local/share/applications/"),
+-		"/usr/local/share/applications/",
+-		"/usr/share/applications/",
++		QDir::home().filePath(".nix-profile/share/applications/"),
++		"/run/current-system/sw/share/applications/",
+ 	};
+ 
+ 	QString iconName;
+diff --git a/papershell/menu/papermenu.cpp b/papershell/menu/papermenu.cpp
+index bd1ca1e..146b057 100644
+--- a/papershell/menu/papermenu.cpp
++++ b/papershell/menu/papermenu.cpp
+@@ -109,7 +109,7 @@ void papermenu::startSetup()
+ 
+ 	QFileSystemWatcher *watcher = new QFileSystemWatcher();
+ 
+-	watcher->addPath("/usr/share/applications/");
++	watcher->addPath("/run/current-system/sw/share/applications/");
+ 
+ 	connect(watcher, &QFileSystemWatcher::directoryChanged, this, &papermenu::setupAppsView);
+ 
+-- 
+2.39.0
+
