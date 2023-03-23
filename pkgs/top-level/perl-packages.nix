@@ -5329,7 +5329,6 @@ let
     meta = {
       description = "Perl extension for minifying CSS";
       license = with lib.licenses; [ artistic1 ];
-      maintainers = teams.determinatesystems.members;
     };
   };
 

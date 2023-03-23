@@ -84,6 +84,6 @@ buildPythonPackage rec {
     description = "A set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }
