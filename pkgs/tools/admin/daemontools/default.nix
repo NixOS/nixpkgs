@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     tar -xz --strip-components=2 -f ${man-pages}
     installManPage daemontools-man/*.8
     install -v -Dm644 daemontools-man/README $man/share/doc/daemontools/README.man
-    # fix svscanboot 
+    # fix svscanboot
     sed -i "s_/command/__"                    "$out/bin/svscanboot"
     sed -i "s_/service_/var/service_g"        "$out/bin/svscanboot"
     sed -i "s_^PATH=.*_PATH=$out/bin:\$PATH_" "$out/bin/svscanboot"
