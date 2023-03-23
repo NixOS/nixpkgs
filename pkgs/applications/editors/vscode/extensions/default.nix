@@ -2953,6 +2953,24 @@ let
         };
       };
 
+      vscjava.vscode-gradle = buildVscodeMarketplaceExtension rec {
+        mktplcRef = {
+          name = "vscode-gradle";
+          publisher = "vscjava";
+          version = "3.12.6";
+          sha256 = "sha256-j4JyhNGsRlJmS8Wj38gLpC1gXVvdPx10cgzP8dXmmNo=";
+        };
+
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/vscjava.vscode-gradle/changelog";
+          description = "A Visual Studio Code extension for Gradle build tool";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-gradle";
+          homepage = "https://github.com/microsoft/vscode-gradle";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ rhoriguchi ];
+        };
+      };
+
       vscjava.vscode-java-debug = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-java-debug";
