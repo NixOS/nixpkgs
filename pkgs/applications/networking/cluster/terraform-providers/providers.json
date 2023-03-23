@@ -476,11 +476,11 @@
     "vendorHash": "sha256-zPO+TbJsFrgfjSaSrX5YRop/0LDDw/grNNntaIGiBU0="
   },
   "gridscale": {
-    "hash": "sha256-deEP1x5rGIgX/CcRK4gWYbCsV1IKY7CFkwQl+uKhbEk=",
+    "hash": "sha256-61LZyXqb+1kWHBk1/lw5C5hmeL4aHwSSS++9/9L/tDw=",
     "homepage": "https://registry.terraform.io/providers/gridscale/gridscale",
     "owner": "gridscale",
     "repo": "terraform-provider-gridscale",
-    "rev": "v1.18.0",
+    "rev": "v1.18.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
