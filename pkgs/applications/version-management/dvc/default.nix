@@ -98,5 +98,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://dvc.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
+    broken = true; # requires new python package: dvc-studio-client
   };
 }
