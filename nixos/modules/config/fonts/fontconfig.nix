@@ -218,6 +218,8 @@ let
     paths = cfg.confPackages;
     ignoreCollisions = true;
   };
+
+  fontconfigNote = "Consider manually configuring fonts.fontconfig according to personal preference.";
 in
 {
   imports = [
@@ -229,6 +231,8 @@ in
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
+    (mkRemovedOptionModule [ "hardware" "video" "hidpi" "enable" ] fontconfigNote)
+    (mkRemovedOptionModule [ "fonts" "optimizeForVeryHighDPI" ] fontconfigNote)
   ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
      (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
        The fonts.fontconfig.ultimate module and configuration is obsolete.
