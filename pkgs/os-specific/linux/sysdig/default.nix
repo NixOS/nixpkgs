@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     + lib.optionalString (kernel != null) ''
       make install_driver
       kernel_dev=${kernel.dev}
-      kernel_dev=''${kernel_dev#/nix/store/}
+      kernel_dev=''${kernel_dev#${builtins.storeDir}/}
       kernel_dev=''${kernel_dev%%-linux*dev*}
       if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
           sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko

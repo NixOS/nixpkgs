@@ -3,7 +3,7 @@ let
   stripScheme =
     builtins.replaceStrings [ "https://" "http://" ] [ "" "" ];
   stripNixStore =
-    s: lib.removePrefix "/nix/store/" s;
+    s: lib.removePrefix "${builtins.storeDir}/" s;
 in
 { name
 , registry         ? "https://registry-1.docker.io/v2/"
