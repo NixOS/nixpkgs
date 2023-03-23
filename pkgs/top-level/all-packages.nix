@@ -12314,8 +12314,13 @@ with pkgs;
 
   sozu = callPackage ../servers/sozu { };
 
-  sparrow = callPackage ../applications/blockchains/sparrow {
-    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix { };
+  sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
+    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
+    openjdk = openjdk.override { enableJavaFX = true; };
+  };
+
+  sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
   };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
