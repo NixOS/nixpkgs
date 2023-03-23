@@ -66,10 +66,26 @@ let self = stdenv.mkDerivation rec {
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
 
+    # Fix log spam "Attempting to freeze/thaw notification queue for object ClutterText".
+    # https://gitlab.gnome.org/GNOME/mutter/-/issues/2566
+    # https://github.com/linuxmint/cinnamon/issues/11562 (backported to muffin as well)
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/cff631cb39b1b9d66b791fb51a6f2c3db8e60917.patch";
+      sha256 = "+20GOC0yVQ1HsfGYAxZ0DEw6aTA3eHi/pq/ELKQRmbg=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
     })
+
+    # GLib 2.76 switches from using its own slice allocator to using the system malloc instead.
+    # This makes dragging window between workspace in multitasking view crashes Pantheon's Gala.
+    # Inspiration https://github.com/mate-desktop/mate-desktop/pull/538
+    # Backtrace https://github.com/elementary/gala/issues/1580
+    # Upstream report https://gitlab.gnome.org/GNOME/mutter/-/issues/2495
+    # The patch will not apply on 44.0+, make sure this is fixed when trying to clean this up.
+    ./glib-2-76-gala-crash.patch
   ];
 
   mesonFlags = [
