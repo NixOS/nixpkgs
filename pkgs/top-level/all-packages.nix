@@ -408,6 +408,8 @@ with pkgs;
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
+  ciel = callPackage ../tools/package-management/ciel { };
+
   circt = callPackage ../development/compilers/circt { };
 
   classicube = callPackage ../games/classicube { };
@@ -13396,6 +13398,8 @@ with pkgs;
 
   wimboot = callPackage ../tools/misc/wimboot { };
 
+  wit-bindgen = callPackage ../tools/misc/wit-bindgen { };
+
   wire = callPackage ../development/tools/wire { };
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
@@ -16019,6 +16023,7 @@ with pkgs;
   cargo-binutils = callPackage ../development/tools/rust/cargo-binutils { };
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-bolero = callPackage ../development/tools/rust/cargo-bolero { };
+  cargo-bundle = callPackage ../development/tools/rust/cargo-bundle { };
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -29743,6 +29748,8 @@ with pkgs;
   fnc = callPackage ../applications/version-management/fnc { };
 
   focus = callPackage ../tools/X11/focus { };
+
+  focus-stack = callPackage ../applications/graphics/focus-stack { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
