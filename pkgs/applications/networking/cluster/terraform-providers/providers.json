@@ -28,11 +28,11 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "aiven": {
-    "hash": "sha256-MKxLfR2yV4/LYqQ/yZt44JAHIEinO8078ikWPBD/HXo=",
+    "hash": "sha256-wVgfT/1o5Hz7xbX3OOfjF2P5bhV7kPxnXZOU/3erRpk=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.1.2",
+    "rev": "v4.1.3",
     "spdx": "MIT",
     "vendorHash": "sha256-wz1Wy/4GI8/Wlu828RX7OE+XJHzCS/X45tW3Jb7Tx3E="
   },
