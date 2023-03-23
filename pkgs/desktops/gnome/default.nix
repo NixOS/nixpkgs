@@ -75,8 +75,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
-  # Using 42 to match Mutter used in Pantheon
-  gnome-settings-daemon42 = callPackage ./core/gnome-settings-daemon/42 { };
+  # Using 43 to match Mutter used in Pantheon
+  gnome-settings-daemon43 = callPackage ./core/gnome-settings-daemon/43 { };
 
   gnome-software = callPackage ./core/gnome-software { };
 
@@ -274,4 +274,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   mutter338 = throw "The ‘gnome.mutter338’ package was removed as it is no longer needed by Pantheon."; # added 2023-02-22
   mutter42 = throw "The ‘gnome.mutter42’ package was removed as it is no longer needed by Pantheon."; # added 2023-03-23
   gnome-settings-daemon338 = throw "The ‘gnome.gnome-settings-daemon338’ package was removed as it is no longer needed by Pantheon."; # added 2023-02-22
+  gnome-settings-daemon42 = throw "The ‘gnome.gnome-settings-daemon42’ package was removed as it is no longer needed by Pantheon."; # added 2023-03-23
 }
