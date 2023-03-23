@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "torchvision"
+    "torchinfo"
   ];
 
   meta = with lib; {
