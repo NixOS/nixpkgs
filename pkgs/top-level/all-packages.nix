@@ -29742,6 +29742,8 @@ with pkgs;
 
   focus = callPackage ../tools/X11/focus { };
 
+  focus-stack = callPackage ../applications/graphics/focus-stack { };
+
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
   foliate = callPackage ../applications/office/foliate { };
