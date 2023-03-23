@@ -112,6 +112,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
