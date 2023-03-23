@@ -1319,13 +1319,16 @@ let
       RGL_USE_NULL = "true";
     });
 
-    Rhdf5lib = old.Rhdf5lib.overrideAttrs (attrs: {
-      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5_1_10.dev pkgs.libaec ];
+    Rhdf5lib = let
+      hdf5 = pkgs.hdf5_1_10.overrideAttrs (attrs: {configureFlags = attrs.configureFlags ++ ["--enable-cxx"];});
+    in old.Rhdf5lib.overrideAttrs (attrs: {
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ hdf5.dev pkgs.libaec ];
       patches = [ ./patches/Rhdf5lib.patch ];
+      passthru.hdf5 = hdf5;
     });
 
     rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
-      propagatedBuildInputs = with pkgs; attrs.propagatedBuildInputs ++ [ (hdf5-blosc.override {hdf5 = hdf5_1_10;}) ];
+      propagatedBuildInputs = with pkgs; attrs.propagatedBuildInputs ++ [ (hdf5-blosc.override {hdf5 = self.Rhdf5lib.hdf5;}) ];
       patches = [ ./patches/rhdf5filters.patch ];
     });
 
