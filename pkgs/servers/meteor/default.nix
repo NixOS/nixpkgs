@@ -1,18 +1,22 @@
 { stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
 
 let
-  version = "2.7.3";
+  version = "2.11.0";
 
   inherit (stdenv.hostPlatform) system;
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-      sha256 = "sha256-ovsE7jUJIKf96WEoITXECUlPo+o1tEKvHzCc7Xgj614=";
+      url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
+      sha256 = "";
     };
     x86_64-darwin = fetchurl {
-      url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.x86_64.tar.gz";
-      sha256 = "11206dbda50a680fdab7044def7ea68ea8f4a9bca948ca56df91fe1392b2ac16";
+      url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.x86_64.tar.gz";
+      sha256 = "";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.arm64.tar.gz";
+      sha256 = "";
     };
   };
 in
