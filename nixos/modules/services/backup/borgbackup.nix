@@ -165,19 +165,8 @@ let
       + '' borgbackup.jobs.${name}.encryption != "none"'';
   };
 
-  mkRepoService = name: cfg:
-    nameValuePair "borgbackup-repo-${name}" {
-      description = "Create BorgBackup repository ${name} directory";
-      script = ''
-        mkdir -p ${escapeShellArg cfg.path}
-        chown ${cfg.user}:${cfg.group} ${escapeShellArg cfg.path}
-      '';
-      serviceConfig = {
-        # The service's only task is to ensure that the specified path exists
-        Type = "oneshot";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
+  mkRepoTmpfilesRule = cfg:
+    "d ${cfg.path} 0700 ${cfg.user} ${cfg.group}";
 
   mkAuthorizedKey = cfg: appendOnly: key:
     let
@@ -747,11 +736,11 @@ in {
 
       system.activationScripts = mapAttrs' mkActivationScript jobs;
 
-      systemd.services =
-        # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
-        mapAttrs' mkBackupService jobs
-        # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
-        // mapAttrs' mkRepoService repos;
+      # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
+      systemd.services = mapAttrs' mkBackupService jobs;
+
+      # A repo is mapped to a corresponding tmpfiles rule
+      systemd.tmpfiles.rules = map mkRepoTmpfilesRule (attrValues repos);
 
       # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
       # only generate the timer if interval (startAt) is set
