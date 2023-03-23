@@ -2320,6 +2320,8 @@ self: super: with self; {
 
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
 
+  dbus-deviation = callPackage ../development/python-modules/dbus-deviation { };
+
   dbus-fast = callPackage ../development/python-modules/dbus-fast { };
 
   dbus-next = callPackage ../development/python-modules/dbus-next { };
