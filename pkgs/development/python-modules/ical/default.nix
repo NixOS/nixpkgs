@@ -48,9 +48,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  # https://github.com/allenporter/ical/issues/136
-  disabledTests = [ "test_all_zoneinfo" ];
-
   pythonImportsCheck = [
     "ical"
   ];
