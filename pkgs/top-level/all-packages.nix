@@ -36755,6 +36755,10 @@ with pkgs;
 
   flywheel-cli = callPackage ../applications/science/biology/flywheel-cli { };
 
+  hh-suite = callPackage ../applications/science/biology/hh-suite {
+    inherit (llvmPackages) openmp;
+  };
+
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
