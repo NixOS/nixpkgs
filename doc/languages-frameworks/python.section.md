@@ -857,19 +857,23 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ lib, buildPythonPackage }:
+{ lib
+, pythonPackages
+}:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonPackage rec {
   pname = "toolz";
-  version = "0.10.0";
+  version = "0.12.0";
 
-  src = fetchPypi {
+  src = pythonPackages.fetchPypi {
     inherit pname version;
-    hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
+    hash = "sha256-iMVwhhxEDuPy9gN8RlRhMij/QMk6bCXg66cNFygsYZQ=";
   };
 
+  nativeCheckInputs = with pythonPackages; [ pytestCheckHook ];
+
   meta = with lib; {
-    homepage = "https://github.com/pytoolz/toolz/";
+    homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
@@ -877,14 +881,15 @@ buildPythonPackage rec {
 }
 ```
 
-It takes an argument `buildPythonPackage`. We now call this function using the
-`callPackage` from the `python38Packages` scope in the definition of our environment
+It takes an argument `python38Packages`. We now call this function using `callPackage`
 
 ```nix
 with import <nixpkgs> {};
 
 ( let
-    toolz = python38Packages.callPackage /path/to/toolz/release.nix { };
+    toolz = callPackage /path/to/toolz/release.nix {
+      pythonPackages = __splicedPackages.python38Packages;
+    };
   in python38.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
