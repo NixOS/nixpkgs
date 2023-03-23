@@ -895,6 +895,8 @@ let
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
+    magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
+
     mariadb = callPackage ../development/ocaml-modules/mariadb {
       inherit (pkgs) mariadb;
     };
