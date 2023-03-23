@@ -10,4 +10,5 @@
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
+  redis-datasource = callPackage ./redis-datasource { };
 }
