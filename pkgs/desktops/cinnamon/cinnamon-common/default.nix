@@ -72,13 +72,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.6.7";
+  version = "5.6.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-oBD9jpZSOB7R3bbMv1qOQkkQyFTKkNnNagJ1INeA0s4=";
+    hash = "sha256-qL8GaEH/0d4yEwwdaR55fTp0RitbyptoxKOBO3nmbic=";
   };
 
   patches = [
@@ -158,8 +158,6 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
 
     sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
-
-    sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
 
     sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
       -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js
