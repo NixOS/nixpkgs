@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "23.3.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
