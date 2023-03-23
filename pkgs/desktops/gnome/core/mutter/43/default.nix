@@ -1,18 +1,18 @@
 { fetchurl
-, fetchpatch
-, substituteAll
 , runCommand
 , lib
+, fetchpatch
 , stdenv
 , pkg-config
 , gnome
 , gettext
 , gobject-introspection
 , cairo
+, colord
+, lcms2
 , pango
 , json-glib
 , libstartup_notification
-, zenity
 , libcanberra
 , ninja
 , xvfb-run
@@ -38,6 +38,7 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, gi-docgen
 , sysprof
 , libsysprof-capture
 , desktop-file-utils
@@ -47,15 +48,15 @@
 , wayland-protocols
 }:
 
-let self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "42.7";
+  version = "43.4";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "OwmmsHDRMHwD2EMorIS0+m1jmfk4MEo4wpTxso3yipM=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+    sha256 = "FiU2cxEaLsyW/I0tFfrdobVU0B3CioMEE11J1rqHsUA=";
   };
 
   patches = [
@@ -64,11 +65,6 @@ let self = stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
-    })
-
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit zenity;
     })
   ];
 
@@ -81,6 +77,7 @@ let self = stdenv.mkDerivation rec {
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
+    "-Ddocs=true"
   ];
 
   propagatedBuildInputs = [
@@ -102,6 +99,7 @@ let self = stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
+    gi-docgen
     xorgserver
   ];
 
@@ -123,6 +121,8 @@ let self = stdenv.mkDerivation rec {
     libxkbcommon
     libxkbfile
     libXdamage
+    colord
+    lcms2
     pango
     pipewire
     sysprof # for D-Bus interfaces
@@ -140,16 +140,24 @@ let self = stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    # TODO: Move this into a directory devhelp can find.
+    moveToOutput "share/mutter-11/doc" "$devdoc"
+  '';
+
   # Install udev files into our own tree.
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
+  separateDebugInfo = true;
+
   passthru = {
-    libdir = "${self}/lib/mutter-10";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
-        if [[ ! -d ${self.libdir} ]]; then
-          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+        if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1
         fi
         touch $out
@@ -164,5 +172,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
   };
-};
-in self
+})
