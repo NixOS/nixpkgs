@@ -1,0 +1,10 @@
+--- occt-V7_7_0-185d29b/src/ViewerTest/ViewerTest_CmdParser.cxx     2022-11-11 22:19:44.000000000 +0000
++++ occt-V7_7_0-185d29b/src/ViewerTest/ViewerTest_CmdParser.cxx.new 2023-03-22 22:18:45.500057208 +0000
+@@ -21,6 +21,7 @@
+
+ #include <algorithm>
+ #include <iostream>
++#include <limits>
+
+ namespace
+ {

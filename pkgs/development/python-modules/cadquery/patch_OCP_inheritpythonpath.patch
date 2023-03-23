@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 11a9a4e3..e38fb92c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,7 +25,8 @@ else()
+     set(PLATFORM Linux)
+ endif()
+
+-set(ENV{PYTHONPATH} ${CMAKE_SOURCE_DIR}/pywrap )
++# breaks nixpkgs build
++#set(ENV{PYTHONPATH} ${CMAKE_SOURCE_DIR}/pywrap )
+
+ if( NOT EXISTS ${CMAKE_SOURCE_DIR}/OCP )
+     message( STATUS "Running pywrap")
+@@ -37,7 +38,7 @@ if( NOT EXISTS ${CMAKE_SOURCE_DIR}/OCP )
+             -l ${LIBCLANG_PATH}
+             -i ${CLANG_INCLUDE_DIRS}/
+             -i ${VTK_INCLUDE_DIR}/
+-            -i ${CLANG_INSTALL_PREFIX}/lib/clang/${LLVM_VERSION}/include/
++#            -i ${CLANG_INSTALL_PREFIX}/lib/clang/${LLVM_VERSION}/include/
+             ${CXX_INCLUDES}
+             all ocp.toml ${PLATFORM}
+         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
