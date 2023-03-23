@@ -30618,6 +30618,8 @@ with pkgs;
 
   jay = callPackage ../applications/window-managers/jay { };
 
+  keyleds = callPackage ../applications/misc/keyleds { };
+
   keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
