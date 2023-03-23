@@ -66,6 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # GLib 2.76 switches from using its own slice allocator to using the system malloc instead.
+    # This makes dragging window between workspace in multitasking view crashes Pantheon's Gala.
+    # Inspiration https://github.com/mate-desktop/mate-desktop/pull/538
+    # Backtrace https://github.com/elementary/gala/issues/1580
+    # Upstream report https://gitlab.gnome.org/GNOME/mutter/-/issues/2495
+    # The patch will not apply on 44.0+, make sure this is fixed when trying to clean this up.
+    ./glib-2-76-gala-crash.patch
   ];
 
   mesonFlags = [
