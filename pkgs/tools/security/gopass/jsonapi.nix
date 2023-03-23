@@ -1,9 +1,7 @@
 { lib
-, makeWrapper
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, gopass
 }:
 
 buildGoModule rec {
@@ -21,16 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}"
   ];
-
-  postFixup = ''
-    wrapProgram $out/bin/gopass-jsonapi \
-      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
-  '';
 
   meta = with lib; {
     description = "Enables communication with gopass via JSON messages";
