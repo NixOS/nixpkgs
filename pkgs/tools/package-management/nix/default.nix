@@ -53,6 +53,13 @@ let
     sha256 = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
   };
 
+  patch-non-existing-output = fetchpatch {
+    # https://github.com/NixOS/nix/pull/7283
+    name = "fix-requires-non-existing-output.patch";
+    url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+    sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+  };
+
 in lib.makeExtensible (self: {
   nix_2_3 = (common rec {
     version = "2.3.16";
@@ -82,12 +89,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
     patches = [
       ./patches/flaky-tests.patch
-      (fetchpatch {
-        # https://github.com/NixOS/nix/pull/7283
-        name = "fix-requires-non-existing-output.patch";
-        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-      })
+      patch-non-existing-output
       patch-monitorfdhup
       patch-sqlite-exception
     ];
@@ -98,12 +100,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
     patches = [
       ./patches/flaky-tests.patch
-      (fetchpatch {
-        # https://github.com/NixOS/nix/pull/7283
-        name = "fix-requires-non-existing-output.patch";
-        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-      })
+      patch-non-existing-output
       patch-monitorfdhup
       patch-sqlite-exception
     ];

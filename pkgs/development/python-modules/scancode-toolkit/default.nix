@@ -159,6 +159,6 @@ buildPythonPackage rec {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     license = with licenses; [ asl20 cc-by-40 ];
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }
