@@ -7552,6 +7552,8 @@ self: super: with self; {
 
   pmw = callPackage ../development/python-modules/pmw { };
 
+  pnglatex = callPackage ../development/python-modules/pnglatex { };
+
   pocket = callPackage ../development/python-modules/pocket { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };

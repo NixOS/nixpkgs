@@ -32167,6 +32167,8 @@ with pkgs;
 
   pluto = callPackage ../applications/networking/cluster/pluto { };
 
+  pnglatex = with python3Packages; toPythonApplication pnglatex;
+
   polybar = callPackage ../applications/misc/polybar { };
 
   polybarFull = callPackage ../applications/misc/polybar {
