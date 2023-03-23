@@ -11,6 +11,7 @@
 , withLibraries ? stdenv.isLinux
 , withTests ? stdenv.isLinux
 , libffi
+, epoll-shim
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -82,6 +83,8 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals withLibraries [
     libffi
+  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+    epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
