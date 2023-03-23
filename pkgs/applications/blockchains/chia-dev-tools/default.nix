@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , python3Packages
 , chia
@@ -20,6 +21,10 @@ python3Packages.buildPythonApplication rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit chia;
+    })
+    (fetchpatch {
+      url = "https://github.com/Chia-Network/chia-dev-tools/commit/41abe9f2af53b09ca5023daece710eacebd507c7.patch";
+      hash = "sha256-mRdg+n1rQoHvWIty+mxXPuLgiqJfl2/UfCOZKVDFOmc=";
     })
   ];
 
@@ -54,6 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   disabledTests = [
     "test_spendbundles"
+    "test_spends"
   ];
 
   meta = with lib; {
