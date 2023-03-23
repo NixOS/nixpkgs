@@ -59,6 +59,6 @@
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
       };
 
-      flakeModules.default = import ./flakeModule.nix;
+      flakeModules.default = ./flakeModule.nix;
     };
 }
