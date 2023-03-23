@@ -241,6 +241,10 @@ in (buildEnv {
     then
       faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="$TEXMFSYSVAR"/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
     fi
+    if [[ -f "$TEXMFSYSVAR"/web2c/luatex/dvilualatex.fmt ]]
+    then
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luatex --output-directory="$TEXMFSYSVAR"/web2c/luatex -ini -jobname=dvilualatex -progname=dvilualatex dvilualatex.ini
+    fi
 
     # Disable unavailable map files
     echo y | updmap --sys --syncwithtrees --force
