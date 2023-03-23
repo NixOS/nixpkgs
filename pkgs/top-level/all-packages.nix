@@ -20430,6 +20430,8 @@ with pkgs;
 
   pgweb = callPackage ../development/tools/database/pgweb { };
 
+  granted = callPackage ../tools/admin/granted { };
+
   grantlee = callPackage ../development/libraries/grantlee { };
 
   gsasl = callPackage ../development/libraries/gsasl { };
