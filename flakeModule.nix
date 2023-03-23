@@ -2,7 +2,7 @@
 let
   inherit (lib) mkOption types;
 
-  nixpkgsOverlaySubmodule = types.mkOptionType {
+  nixpkgsOverlayType = types.mkOptionType {
     name = "nixpkgsOverlay";
     description = "A nixpkgs overlay function";
     descriptionClass = "noun";
@@ -24,33 +24,50 @@ let
       lib.composeManyExtensions overlays;
   };
 
-  mkPkgsFromSystemType = types.mkOptionType {
-    name = "mkPkgsfromsystem";
-    description = "";
+  mkPkgsFromArgsType = types.mkOptionType {
+    name = "mkPkgsFromArgs";
+    description = "A function that returns `pkgs` from a set of arguments";
     descriptionClass = "noun";
     check = lib.isFunction;
+  };
+
+  pkgsType = types.mkOptionType {
+    name = "nixpkgs";
+    description = "An evaluation of Nixpkgs; the top level attribute set of packages";
+    check = builtins.isAttrs;
   };
 
   nixpkgsSubmodule = with types; submodule {
     options = {
       overlays = mkOption {
-        type = listOf nixpkgsOverlaySubmodule;
+        type = listOf nixpkgsOverlayType;
         description = "Nixpkgs overlays";
         default = [ ];
       };
 
-      mkPkgsFromSystem = mkOption {
-        type = mkPkgsFromSystemType;
+      mkPkgsFromArgs = mkOption {
+        type = mkPkgsFromArgsType;
         description = "Returns `pkgs` from `system";
         internal = true;
-        default = system: import ./. { inherit system; inherit (config.nixpkgs) overlays; };
+        default = args@{ system, overlays ? config.nixpkgs.overlays, ... }:
+          import ./. args;
       };
 
       allPkgsPerSystem = mkOption {
         type = types.lazyAttrsOf types.unspecified;
         description = "Attribute set of `pkgs` named by `system`";
         internal = true;
-        default = lib.genAttrs lib.systems.flakeExposed config.nixpkgs.mkPkgsFromSystem;
+        default =
+          let
+            mkPkgsFromSystem = system: mkPkgsFromArgs { inherit system; };
+          in
+          lib.genAttrs lib.systems.flakeExposed config.nixpkgs.mkPkgsFromSystem;
+      };
+
+      # TODO: develop or eliminate
+      pkgs = mkOption {
+        internal = true;
+        type = pkgsType;
       };
     };
   };
