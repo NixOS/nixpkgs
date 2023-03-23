@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/williballenthin/viv-utils";
     changelog = "https://github.com/williballenthin/viv-utils/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

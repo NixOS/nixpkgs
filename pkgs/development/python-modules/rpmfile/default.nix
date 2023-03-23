@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Read rpm archive files";
     homepage = "https://github.com/srossross/rpmfile";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }
