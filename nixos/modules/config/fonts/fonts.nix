@@ -13,13 +13,10 @@ let
       pkgs.unifont
       pkgs.noto-fonts-emoji
     ];
-
 in
-
 {
   imports = [
     (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
-    (mkRenamedOptionModule [ "hardware" "video" "hidpi" "enable" ] [ "fonts" "optimizeForVeryHighDPI" ])
   ];
 
   options = {
@@ -42,33 +39,9 @@ in
           and families and reasonable coverage of Unicode.
         '';
       };
-
-      optimizeForVeryHighDPI = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Optimize configuration for very high-density (>200 DPI) displays:
-            - disable subpixel anti-aliasing
-            - disable hinting
-            - automatically upscale the default X11 cursor
-        '';
-      };
     };
 
   };
 
-  config = mkMerge [
-    { fonts.fonts = mkIf cfg.enableDefaultFonts defaultFonts; }
-    (mkIf cfg.optimizeForVeryHighDPI {
-      services.xserver.upscaleDefaultCursor = mkDefault true;
-      # Conforms to the recommendation in fonts/fontconfig.nix
-      # for > 200DPI.
-      fonts.fontconfig = {
-        antialias = mkDefault false;
-        hinting.enable = mkDefault false;
-        subpixel.lcdfilter = mkDefault "none";
-      };
-    })
-  ];
-
+  config = { fonts.fonts = mkIf cfg.enableDefaultFonts defaultFonts; };
 }

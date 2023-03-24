@@ -5,6 +5,7 @@
 , buildGoModule
 , buildVimPluginFrom2Nix
 , fetchFromGitHub
+, fetchFromSourcehut
 , fetchpatch
 , fetchurl
 , substituteAll
@@ -496,12 +497,13 @@ self: super: {
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace plugin/himalaya.vim \
-        --replace "if !executable('himalaya')" "if v:false"
-      substituteInPlace autoload/himalaya/request.vim \
-        --replace "'himalaya" "'${himalaya}/bin/himalaya"
-    '';
+    buildInputs = [ himalaya ];
+    src = fetchFromSourcehut {
+      owner = "~soywod";
+      repo = "himalaya-vim";
+      rev = "v${himalaya.version}";
+      sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
+    };
   });
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
@@ -793,7 +795,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-z3ZWHhqiJKFzVcFJadfPU6+ELlnvEOAprCyStszegdI=";
+        cargoHash = "sha256-GN7KM3fkeOcqmyUwsPMw499kS/eYqh8pbyPgMv4/NN4=";
 
         nativeBuildInputs = [ pkg-config ];
 
