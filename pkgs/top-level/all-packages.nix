@@ -18798,7 +18798,7 @@ with pkgs;
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
 
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
-  scons = sconsPackages.scons_latest;
+  scons = sconsPackages.scons_4_1_0;
 
   mill = callPackage ../development/tools/build-managers/mill { };
 
