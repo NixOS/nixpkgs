@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-JS134qjK2pT6KLD+91EmrA3HCNmF8DWcq71E/k9ULSA=";
+    hash = "sha256-Ykbw/s932XXX3qWutWUOLV1O9MMgBWPJNveKG8SDhWY=";
   };
 
   nativeBuildInputs = [
