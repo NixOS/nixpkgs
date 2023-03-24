@@ -128,13 +128,38 @@ let
   # ```
   versionedCompilerJobs = config: mapTestOn {
     haskell.packages =
-      lib.mapAttrs
-        (ghc: jobs:
+      let
+        # Mapping function that takes an attrset of jobs, and
+        # removes all jobs that are not specified in config.
+        #
+        # For example, imagine a call to onlyConfigJobs like:
+        #
+        # ```
+        # onlyConfigJobs
+        #   "ghc902"
+        #   {
+        #     conduit = [ ... ];
+        #     lens = [ "i686-cygwin" "x86_64-cygwin" ... "x86_64-windows" "i686-windows" ];
+        #   }
+        # ```
+        #
+        # onlyConfigJobs pulls out only those jobs that are specified in config.
+        #
+        # For instance, if config is `{ lens = [ "ghc902" ]; }`, then the above
+        # example call to onlyConfigJobs will return:
+        #
+        # ```
+        # { lens = [ "i686-cygwin" "x86_64-cygwin" ... "x86_64-windows" "i686-windows" ]; }
+        # ```
+        #
+        # If config is `{ lens = [ "ghc8107" ]; }`, then the above example call
+        # to onlyConfigJobs returns `{}`.
+        onlyConfigJobs = ghc: jobs:
           lib.filterAttrs
             (jobName: platforms: lib.elem ghc (config."${jobName}" or []))
-            jobs
-        )
-        compilerPlatforms;
+            jobs;
+      in
+      lib.mapAttrs onlyConfigJobs compilerPlatforms;
   };
 
   # hydra jobs for `pkgs` of which we import a subset of
