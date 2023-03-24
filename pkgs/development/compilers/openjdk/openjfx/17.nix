@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
+{ stdenv, lib, fetchFromGitHub, fetchurl, writeText, openjdk17_headless, gradle_7
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
 , ffmpeg_4-headless, python3, ruby, icu68
 , withMedia ? true
@@ -65,6 +65,14 @@ let
     outputHash = "sha256-dV7/U5GpFxhI13smZ587C6cVE4FRNPY0zexZkYK4Yqo=";
   };
 
+  # ICU data file.
+  # The Gradle build copies this file to the WebKit binary dir, where the WebKit build expects to unzip it.
+  icuDataVersion = s: "71" + s + "1";
+  icuDataZip = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/download/release-${icuDataVersion "-"}/icu4c-${icuDataVersion "_"}-data-bin-l.zip";
+    sha256 = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";
+  };
+
 in makePackage {
   pname = "openjfx-modular-sdk";
 
@@ -78,7 +86,26 @@ in makePackage {
     substituteInPlace build.gradle \
       --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }' \
       --replace 'name: SWT_FILE_NAME' "files('$swtJar')"
-  '';
+  '' +
+  (if withWebKit then ''
+    # Verify that we are supplying the correct ICU version
+    if ! requiredVersion="$(grep -Po 'defineProperty\("icuVersion", "\K.+(?="\))' build.gradle)"; then
+      echo >&2 "Error: Cannot find required ICU version"
+      exit 1
+    fi
+    providedVersion="${icuDataVersion "."}"
+    if [ "$requiredVersion" != "$providedVersion" ]; then
+      echo >&2 "Error: ICU version mismatch"
+      echo >&2 "  Required: $requiredVersion"
+      echo >&2 "  Provided: $providedVersion"
+      exit 1
+    fi
+    # Providing with a file name matching `icu4c-*.zip`
+    icuZip="$(pwd)/icu4c-data-bin-l.zip"
+    ln -s ${icuDataZip} "$icuZip"
+    substituteInPlace build.gradle \
+      --replace 'icu name: "icu4c-''${icuFileVersion}-data-bin-l", ext: "zip"' "icu files('$icuZip')"
+  '' else "");
 
   installPhase = ''
     cp -r build/modular-sdk $out
