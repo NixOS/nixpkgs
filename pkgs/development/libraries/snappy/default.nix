@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  # See https://github.com/NixOS/nixpkgs/pull/219778#issuecomment-1464884412.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isAarch64 && stdenv.isDarwin) "-Wno-sign-compare";
+  # See https://github.com/NixOS/nixpkgs/pull/219778#issuecomment-1464884412
+  # and https://github.com/NixOS/nixpkgs/pull/221215#issuecomment-1482564003.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-sign-compare";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
