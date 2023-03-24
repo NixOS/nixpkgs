@@ -24755,6 +24755,8 @@ with pkgs;
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
 
+  exhaustive = callPackage ../development/tools/exhaustive { };
+
   exhibitor = callPackage ../servers/exhibitor { };
 
   hyp = callPackage ../servers/http/hyp { };
