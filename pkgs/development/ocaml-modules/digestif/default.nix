@@ -5,14 +5,14 @@
 
 buildDunePackage rec {
   pname = "digestif";
-  version = "1.1.3";
+  version = "1.1.4";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-${version}.tbz";
-    hash = "sha256-wyuOy8QLImRa49bjhrucnFqy/eEwolLplLGOsNWAyS4=";
+    hash = "sha256-w3k+cg8NqAVPYobFRcghp/6+iC5/TlSX7ImxWjU1EeE=";
   };
 
   propagatedBuildInputs = [ eqaf ];
