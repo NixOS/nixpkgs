@@ -1,19 +1,17 @@
 { stdenv
-, fetchzip
-, fetchurl
 , fetchFromGitHub
 , lib
 , gradle_7
+, llvmPackages_latest
 , perl
 , makeWrapper
 , openjdk17
 , unzip
 , makeDesktopItem
-, autoPatchelfHook
 , icoutils
 , xcbuild
 , protobuf3_17
-, libredirect
+, swig4
 }:
 
 let
@@ -109,17 +107,25 @@ HERE
     outputHash = "sha256-Z4RS3IzDP8V3SrrwOuX/hTlX7fs3woIhR8GPK/tFAzs=";
   };
 
-in stdenv.mkDerivation rec {
+  lldb = llvmPackages_latest.lldb;
+  # Extract llvm source
+  llvm-src = llvmPackages_latest.llvm.monorepoSrc;
+
+in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
+    gradle unzip makeWrapper icoutils swig4
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
 
   patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
   postPatch = fixProtoc;
+
+  # Ghidra/Debug/Debugger-swig-lldb/src/main/cpp/LLDBWrapJava.cpp:14950
+  # error: format not a string literal and no format arguments [-Werror=format-security]
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
   buildPhase = ''
     export HOME="$NIX_BUILD_TOP/home"
@@ -131,6 +137,17 @@ in stdenv.mkDerivation rec {
     sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
 
     gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
+
+    # Build lldb support as explained in
+    # https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Debug/Debugger-swig-lldb/InstructionsForBuildingLLDBInterface.txt
+    export LLVM_HOME="${llvm-src}"
+    export LLVM_BUILD="${lldb.lib}"
+    pushd Ghidra/Debug/Debugger-swig-lldb
+    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} generateSwig
+    cp -a build/generated/src/main src
+    rm -rf build/generated/src/main
+    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildNatives
+    popd
   '';
 
   installPhase = ''
@@ -145,6 +162,8 @@ in stdenv.mkDerivation rec {
 
     ln -s ${desktopItem}/share/applications/* $out/share/applications
 
+    cp -a Ghidra/Debug/Debugger-swig-lldb/build/os/*/* $out/lib/
+
     icotool -x "Ghidra/RuntimeScripts/Windows/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
     for f in ghidra_*.png; do
@@ -158,7 +177,9 @@ in stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]} \
+      --prefix LD_LIBRARY_PATH : $out/lib:${lib.makeLibraryPath [ lldb.lib ]} \
+      --set LLDB_DEBUGSERVER_PATH ${lldb}/bin/lldb-server
   '';
 
   meta = with lib; {
