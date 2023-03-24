@@ -37,16 +37,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-jFQ8BxCC4PW135igfXA5EmlWYIZ0zF12suiUMiLbArA=";
+    hash = "sha256-CPN8g6LDeS77fveFOK6gExIJq9g+5qXhwDhjw3tWuJc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
