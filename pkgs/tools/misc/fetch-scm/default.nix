@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fetch-scm";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "KikyTokamuro";
     repo = "fetch.scm";
     rev = "v${version}";
-    sha256 = "sha256-H89VCNAYnTwVEqyInATvLHIB7ioe2zvIGTAM2MUo7+g=";
+    sha256 = "sha256-WdYi8EVxQ6xPtld8JyZlUmgpxroevBehtkRANovMh2E=";
   };
 
   dontBuild = true;
