@@ -25,7 +25,7 @@ perl534Packages.buildPerlPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ perl534Packages.IOSocketSSL ];
+  buildInputs = [ perl534Packages.CryptOpenSSLRSA perl534Packages.IOSocketSSL ];
 
   prePatch = ''
     rm -rf Bin
