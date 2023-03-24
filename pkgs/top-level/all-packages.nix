@@ -408,6 +408,8 @@ with pkgs;
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
+  ciel = callPackage ../tools/package-management/ciel { };
+
   circt = callPackage ../development/compilers/circt { };
 
   classicube = callPackage ../games/classicube { };
@@ -4719,6 +4721,8 @@ with pkgs;
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
+  fetch-scm = callPackage ../tools/misc/fetch-scm { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   filebot = callPackage ../applications/video/filebot { };
@@ -4879,6 +4883,8 @@ with pkgs;
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
+
+  ghauri = callPackage ../tools/security/ghauri { };
 
   ghdorker = callPackage ../tools/security/ghdorker { };
 
@@ -12312,8 +12318,13 @@ with pkgs;
 
   sozu = callPackage ../servers/sozu { };
 
-  sparrow = callPackage ../applications/blockchains/sparrow {
-    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix { };
+  sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
+    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
+    openjdk = openjdk.override { enableJavaFX = true; };
+  };
+
+  sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
   };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
@@ -13393,6 +13404,8 @@ with pkgs;
   wifite2 = callPackage ../tools/networking/wifite2 { };
 
   wimboot = callPackage ../tools/misc/wimboot { };
+
+  wit-bindgen = callPackage ../tools/misc/wit-bindgen { };
 
   wire = callPackage ../development/tools/wire { };
 
@@ -16018,6 +16031,7 @@ with pkgs;
   cargo-binutils = callPackage ../development/tools/rust/cargo-binutils { };
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-bolero = callPackage ../development/tools/rust/cargo-bolero { };
+  cargo-bundle = callPackage ../development/tools/rust/cargo-bundle { };
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -21384,6 +21398,8 @@ with pkgs;
 
   libsecret = callPackage ../development/libraries/libsecret { };
 
+  libsegfault = callPackage ../development/libraries/libsegfault { };
+
   libserdes = callPackage ../development/libraries/libserdes { };
 
   libserialport = callPackage ../development/libraries/libserialport { };
@@ -24700,7 +24716,10 @@ with pkgs;
 
   directx-headers = callPackage ../development/libraries/directx-headers { };
 
-  directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler { };
+  directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler {
+    # https://github.com/NixOS/nixpkgs/issues/216294
+    stdenv = if stdenv.cc.isGNU && stdenv.isi686 then gcc11Stdenv else stdenv;
+  };
 
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
 
@@ -29736,6 +29755,8 @@ with pkgs;
   fnc = callPackage ../applications/version-management/fnc { };
 
   focus = callPackage ../tools/X11/focus { };
+
+  focus-stack = callPackage ../applications/graphics/focus-stack { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 

@@ -10,6 +10,7 @@
 , openssl
 , wxGTK32
 , gitUpdater
+, wrapGAppsHook
 }:
 
 gcc12Stdenv.mkDerivation rec {
@@ -45,6 +46,7 @@ gcc12Stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    wrapGAppsHook
     pkg-config
   ];
 

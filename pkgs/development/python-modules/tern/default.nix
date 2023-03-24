@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tern-tools/tern";
     changelog = "https://github.com/tern-tools/tern/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

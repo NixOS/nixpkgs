@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 , pkg-config
 , cmake
@@ -83,6 +84,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "0c65ry82ffmh1qzc2lnsyjs78r9jllv62p9vglpz0ikg86zf36sk";
   };
+
+  patches = [
+    # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
+    # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
+    # see https://github.com/NixOS/nixpkgs/issues/218370
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
+      hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \

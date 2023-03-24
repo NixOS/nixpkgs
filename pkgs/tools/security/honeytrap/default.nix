@@ -23,6 +23,6 @@ buildGoModule {
     description = "Advanced Honeypot framework";
     homepage = "https://github.com/honeytrap/honeytrap";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

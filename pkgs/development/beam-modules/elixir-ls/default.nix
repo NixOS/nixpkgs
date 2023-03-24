@@ -36,7 +36,7 @@ mixRelease  {
   # of the no-deps-check requirement
   buildPhase = ''
     runHook preBuild
-    mix do compile --no-deps-check, elixir-ls.release
+    mix do compile --no-deps-check, elixir_ls.release
     runHook postBuild
   '';
 

@@ -69,6 +69,17 @@
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-bash";
   };
+  bass = buildGrammar {
+    language = "bass";
+    version = "27f110d";
+    src = fetchFromGitHub {
+      owner = "amaanq";
+      repo = "tree-sitter-bass";
+      rev = "27f110dfe79620993f5493ffa0d0f2fe12d250ed";
+      hash = "sha256-OmYtp2TAsAjw2fgdSezHUrP46b/QXgCbDeJa4ANrtvY=";
+    };
+    meta.homepage = "https://github.com/amaanq/tree-sitter-bass";
+  };
   beancount = buildGrammar {
     language = "beancount";
     version = "f3741a3";
@@ -590,12 +601,12 @@
   };
   glimmer = buildGrammar {
     language = "glimmer";
-    version = "40cfb72";
+    version = "bc1c685";
     src = fetchFromGitHub {
       owner = "alexlafroscia";
       repo = "tree-sitter-glimmer";
-      rev = "40cfb72a53654cbd666451ca04ffd500257c7b73";
-      hash = "sha256-h9ZZz6mbkErLIG/BamNRRoRdqmuBO3v17W0uvmpbm7A=";
+      rev = "bc1c685aa6a7caf9e58c5746ab386a1e673eb9af";
+      hash = "sha256-CDXyynCsnmOvOs1rs9e29tNHosywTvGM0UyWVtwMqZ8=";
     };
     meta.homepage = "https://github.com/alexlafroscia/tree-sitter-glimmer";
   };
@@ -1597,12 +1608,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "4cb5b36";
+    version = "d2b64d8";
     src = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "4cb5b36d70687bfe4687c68483b4dacde309ae6f";
-      hash = "sha256-7YkVPuQS8NGcHXHwgFTZ4kWL01AnNeOGxdY8xFISSzY=";
+      rev = "d2b64d85d0cab5edeffe44243134033e6ff07c02";
+      hash = "sha256-Mo87yEF0YGF9t+bXvxuULtlOWAFKyBDjU6rF6eOXLao=";
     };
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
   };
