@@ -128,13 +128,13 @@ let
   # ```
   versionedCompilerJobs = config: mapTestOn {
     haskell.packages =
-      (lib.mapAttrs (
-        ghc: jobs:
-        lib.filterAttrs (
-          jobName: platforms:
-          lib.elem ghc (config."${jobName}" or [])
-        ) jobs
-      ) compilerPlatforms);
+      lib.mapAttrs
+        (ghc: jobs:
+          lib.filterAttrs
+            (jobName: platforms: lib.elem ghc (config."${jobName}" or []))
+            jobs
+        )
+        compilerPlatforms;
   };
 
   # hydra jobs for `pkgs` of which we import a subset of
