@@ -9,7 +9,7 @@
 , CoreFoundation
 , cmake
 , wrapQtAppsHook
-, openimageio2
+, openimageio
 , openexr_3
 , portaudio
 , imath
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     ffmpeg-full
     frei0r
     opencolorio
-    openimageio2
+    openimageio
     imath
     openexr_3
     portaudio
