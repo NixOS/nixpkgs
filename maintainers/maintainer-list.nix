@@ -10327,6 +10327,12 @@
     githubId = 3073833;
     name = "Massimo Redaelli";
   };
+  mrene = {
+    email = "mathieu.rene@gmail.com";
+    github = "mrene";
+    githubId = 254443;
+    name = "Mathieu Rene";
+  };
   mrfreezeex = {
     email = "arthur@cri.epita.fr";
     github = "MrFreezeex";
