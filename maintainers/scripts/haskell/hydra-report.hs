@@ -342,6 +342,9 @@ data SummaryEntry = SummaryEntry {
 }
 type StatusSummary = Map Text SummaryEntry
 
+tableSingleton :: row -> col -> a -> Table row col a
+tableSingleton row col a = Table (Map.singleton (row, col) a)
+
 instance (Ord row, Ord col, Semigroup a) => Semigroup (Table row col a) where
    Table l <> Table r = Table (Map.unionWith (<>) l r)
 instance (Ord row, Ord col, Semigroup a) => Monoid (Table row col a) where
@@ -364,17 +367,38 @@ getBuildState Build{finished, buildstatus} = case (finished, buildstatus) of
    (_, i) -> Unknown i
 
 buildSummary :: MaintainerMap -> ReverseDependencyMap -> Seq Build -> StatusSummary
-buildSummary maintainerMap reverseDependencyMap = foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
+buildSummary maintainerMap reverseDependencyMap =
+   foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
   where
-   unionSummary (SummaryEntry (Table lb) lm lr lu) (SummaryEntry (Table rb) rm rr ru) = SummaryEntry (Table $ Map.union lb rb) (lm <> rm) (max lr rr) (max lu ru)
-   toSummary build@Build{job, id, system} = Map.singleton name (SummaryEntry (Table (Map.singleton (set, Platform system) (BuildResult (getBuildState build) id))) maintainers reverseDeps unbrokenReverseDeps)
+   unionSummary :: SummaryEntry -> SummaryEntry -> SummaryEntry
+   unionSummary (SummaryEntry (Table lb) lm lr lu) (SummaryEntry (Table rb) rm rr ru) =
+      SummaryEntry (Table $ Map.union lb rb) (lm <> rm) (max lr rr) (max lu ru)
+
+   toSummary :: Build -> StatusSummary
+   toSummary build@Build{job, id, system} = Map.singleton name summaryEntry
      where
+      packageName :: Text
       packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)
+
+      splitted :: Maybe (NonEmpty Text)
       splitted = nonEmpty $ Text.splitOn "." packageName
+
+      name :: Text
       name = maybe packageName NonEmpty.last splitted
+
+      set :: Text
       set = maybe "" (Text.intercalate "." . NonEmpty.init) splitted
+
+      maintainers :: Set Text
       maintainers = maybe mempty (Set.fromList . toList) (Map.lookup job maintainerMap)
+
       (reverseDeps, unbrokenReverseDeps) = Map.findWithDefault (0,0) name reverseDependencyMap
+
+      buildTable :: Table Text Platform BuildResult
+      buildTable =
+         tableSingleton set (Platform system) (BuildResult (getBuildState build) id)
+
+      summaryEntry = SummaryEntry buildTable maintainers reverseDeps unbrokenReverseDeps
 
 readBuildReports :: IO (Eval, UTCTime, Seq Build)
 readBuildReports = do
@@ -463,9 +487,16 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT numSummary
    brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
    numSummary = statusToNumSummary summary
+
+   jobsByState :: (BuildState -> Bool) -> Map Text SummaryEntry
    jobsByState predicate = Map.filter (predicate . worstState) summary
+
+   worstState :: SummaryEntry -> BuildState
    worstState = foldl' min Success . fmap state . summaryBuilds
+
+   fails :: Map Text SummaryEntry
    fails = jobsByState (== Failed)
+
    failedDeps = jobsByState (== DependencyFailed)
    unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
    withMaintainer = Map.mapMaybe (\e -> (summaryBuilds e,) <$> nonEmpty (Set.toList (summaryMaintainers e)))
