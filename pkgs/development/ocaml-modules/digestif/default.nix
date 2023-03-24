@@ -1,21 +1,19 @@
 { lib, ocaml, fetchurl, buildDunePackage
-, pkg-config, which
 , eqaf
 , alcotest, astring, bos, findlib, fpath
 }:
 
 buildDunePackage rec {
   pname = "digestif";
-  version = "1.1.2";
+  version = "1.1.3";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-${version}.tbz";
-    sha256 = "sha256-edNM5ROxFIV+OAqr328UcyGPGwXdflHQOJB3ntAbRmY=";
+    hash = "sha256-wyuOy8QLImRa49bjhrucnFqy/eEwolLplLGOsNWAyS4=";
   };
-
-  nativeBuildInputs = [ findlib which ocaml pkg-config ];
 
   propagatedBuildInputs = [ eqaf ];
 
