@@ -267,7 +267,7 @@ getMaintainerMap = do
    handlesMap :: EmailToGitHubHandles <-
       readJSONProcess nixExprCommand ("maintainers/scripts/haskell/maintainer-handles.nix":nixExprParams) "Failed to decode nix output for lookup of github handles: "
    pure $ Map.mapMaybe (splitMaintainersToGitHubHandles handlesMap) hydraJobs
-   where
+  where
    -- Split a comma-spearated string of Maintainers into a NonEmpty list of
    -- GitHub handles.
    splitMaintainersToGitHubHandles
@@ -425,76 +425,76 @@ details summary content = ["<details><summary>" <> summary <> " </summary>", ""]
 
 evalLine :: Eval -> UTCTime -> Text
 evalLine Eval{id, jobsetevalinputs = JobsetEvalInputs{nixpkgs = Nixpkgs{revision}}} fetchTime =
-  "*evaluation ["
-   <> showT id
-   <> "](https://hydra.nixos.org/eval/"
-   <> showT id
-   <> ") of nixpkgs commit ["
-   <> Text.take 7 revision
-   <> "](https://github.com/NixOS/nixpkgs/commits/"
-   <> revision
-   <> ") as of "
-   <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
-   <> "*"
+   "*evaluation ["
+    <> showT id
+    <> "](https://hydra.nixos.org/eval/"
+    <> showT id
+    <> ") of nixpkgs commit ["
+    <> Text.take 7 revision
+    <> "](https://github.com/NixOS/nixpkgs/commits/"
+    <> revision
+    <> ") as of "
+    <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
+    <> "*"
 
 printBuildSummary :: Eval -> UTCTime -> StatusSummary -> [(Text, Int)] -> Text
 printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
-      Text.unlines $
-         headline <> [""] <> tldr <> (("  * "<>) <$> (errors <> warnings)) <> [""]
-            <> totals
-            <> optionalList "#### Maintained packages with build failure" (maintainedList fails)
-            <> optionalList "#### Maintained packages with failed dependency" (maintainedList failedDeps)
-            <> optionalList "#### Maintained packages with unknown error" (maintainedList unknownErr)
-            <> optionalHideableList "#### Unmaintained packages with build failure" (unmaintainedList fails)
-            <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList failedDeps)
-            <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList unknownErr)
-            <> optionalHideableList "#### Top 50 broken packages, sorted by number of reverse dependencies" (brokenLine <$> topBrokenRdeps)
-            <> ["","*:arrow_heading_up:: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
-            <> footer
-     where
-      footer = ["*Report generated with [maintainers/scripts/haskell/hydra-report.hs](https://github.com/NixOS/nixpkgs/blob/haskell-updates/maintainers/scripts/haskell/hydra-report.hs)*"]
-      headline =
-        [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
-        , evalLine eval fetchTime ]
-      totals =
-         [ "#### Build summary"
-         , ""
-         ]
-            <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT numSummary
-      brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
-      numSummary = statusToNumSummary summary
-      jobsByState predicate = Map.filter (predicate . worstState) summary
-      worstState = foldl' min Success . fmap state . summaryBuilds
-      fails = jobsByState (== Failed)
-      failedDeps = jobsByState (== DependencyFailed)
-      unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
-      withMaintainer = Map.mapMaybe (\e -> (summaryBuilds e,) <$> nonEmpty (Set.toList (summaryMaintainers e)))
-      withoutMaintainer = Map.mapMaybe (\e -> if Set.null (summaryMaintainers e) then Just e else Nothing)
-      optionalList heading list = if null list then mempty else [heading] <> list
-      optionalHideableList heading list = if null list then mempty else [heading] <> details (showT (length list) <> " job(s)") list
-      maintainedList = showMaintainedBuild <=< Map.toList . withMaintainer
-      unmaintainedList = showBuild <=< sortOn (\(snd -> x) -> (negate (summaryUnbrokenReverseDeps x), negate (summaryReverseDeps x))) . Map.toList . withoutMaintainer
-      showBuild (name, entry) = printJob id name (summaryBuilds entry, Text.pack (if summaryReverseDeps entry > 0 then " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>" | "<> show (summaryReverseDeps entry) else ""))
-      showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
-      tldr = case (errors, warnings) of
-               ([],[]) -> [":green_circle: **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
-               ([],_) -> [":yellow_circle: **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
-               _ -> [":red_circle: **Branch not mergeable**"]
-      warnings =
-         if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
-         if' (Unfinished == maybe Success worstState mergeableJob) "`mergeable` jobset is not finished." <>
-         if' (Unfinished == maybe Success worstState maintainedJob) "`maintained` jobset is not finished."
-      errors =
-         if' (isNothing mergeableJob) "No `mergeable` job found." <>
-         if' (isNothing maintainedJob) "No `maintained` job found." <>
-         if' (Unfinished > maybe Success worstState mergeableJob) "`mergeable` jobset failed." <>
-         if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too many outstanding jobs on x86_64-linux." <>
-         if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too many outstanding jobs on aarch64-linux." <>
-         if' (outstandingJobs (Platform "aarch64-darwin") > 100) "Too many outstanding jobs on aarch64-darwin."
-      if' p e = if p then [e] else mempty
-      outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
-      maintainedJob = Map.lookup "maintained" summary
-      mergeableJob = Map.lookup "mergeable" summary
+   Text.unlines $
+      headline <> [""] <> tldr <> (("  * "<>) <$> (errors <> warnings)) <> [""]
+         <> totals
+         <> optionalList "#### Maintained packages with build failure" (maintainedList fails)
+         <> optionalList "#### Maintained packages with failed dependency" (maintainedList failedDeps)
+         <> optionalList "#### Maintained packages with unknown error" (maintainedList unknownErr)
+         <> optionalHideableList "#### Unmaintained packages with build failure" (unmaintainedList fails)
+         <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList failedDeps)
+         <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList unknownErr)
+         <> optionalHideableList "#### Top 50 broken packages, sorted by number of reverse dependencies" (brokenLine <$> topBrokenRdeps)
+         <> ["","*:arrow_heading_up:: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
+         <> footer
+  where
+   footer = ["*Report generated with [maintainers/scripts/haskell/hydra-report.hs](https://github.com/NixOS/nixpkgs/blob/haskell-updates/maintainers/scripts/haskell/hydra-report.hs)*"]
+   headline =
+      [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
+      , evalLine eval fetchTime ]
+   totals =
+      [ "#### Build summary"
+      , ""
+      ]
+         <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT numSummary
+   brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
+   numSummary = statusToNumSummary summary
+   jobsByState predicate = Map.filter (predicate . worstState) summary
+   worstState = foldl' min Success . fmap state . summaryBuilds
+   fails = jobsByState (== Failed)
+   failedDeps = jobsByState (== DependencyFailed)
+   unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
+   withMaintainer = Map.mapMaybe (\e -> (summaryBuilds e,) <$> nonEmpty (Set.toList (summaryMaintainers e)))
+   withoutMaintainer = Map.mapMaybe (\e -> if Set.null (summaryMaintainers e) then Just e else Nothing)
+   optionalList heading list = if null list then mempty else [heading] <> list
+   optionalHideableList heading list = if null list then mempty else [heading] <> details (showT (length list) <> " job(s)") list
+   maintainedList = showMaintainedBuild <=< Map.toList . withMaintainer
+   unmaintainedList = showBuild <=< sortOn (\(snd -> x) -> (negate (summaryUnbrokenReverseDeps x), negate (summaryReverseDeps x))) . Map.toList . withoutMaintainer
+   showBuild (name, entry) = printJob id name (summaryBuilds entry, Text.pack (if summaryReverseDeps entry > 0 then " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>" | "<> show (summaryReverseDeps entry) else ""))
+   showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
+   tldr = case (errors, warnings) of
+            ([],[]) -> [":green_circle: **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+            ([],_) -> [":yellow_circle: **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+            _ -> [":red_circle: **Branch not mergeable**"]
+   warnings =
+      if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
+      if' (Unfinished == maybe Success worstState mergeableJob) "`mergeable` jobset is not finished." <>
+      if' (Unfinished == maybe Success worstState maintainedJob) "`maintained` jobset is not finished."
+   errors =
+      if' (isNothing mergeableJob) "No `mergeable` job found." <>
+      if' (isNothing maintainedJob) "No `maintained` job found." <>
+      if' (Unfinished > maybe Success worstState mergeableJob) "`mergeable` jobset failed." <>
+      if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too many outstanding jobs on x86_64-linux." <>
+      if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too many outstanding jobs on aarch64-linux." <>
+      if' (outstandingJobs (Platform "aarch64-darwin") > 100) "Too many outstanding jobs on aarch64-darwin."
+   if' p e = if p then [e] else mempty
+   outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
+   maintainedJob = Map.lookup "maintained" summary
+   mergeableJob = Map.lookup "mergeable" summary
 
 printEvalInfo :: IO ()
 printEvalInfo = do
