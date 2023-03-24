@@ -6,6 +6,7 @@
 # This is the default binutils, but with *this* version of LLD rather
 # than the default LLVM verion's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
+, targetLlvm
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"
     then null
@@ -296,7 +297,7 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
 
