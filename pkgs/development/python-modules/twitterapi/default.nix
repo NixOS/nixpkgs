@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geduldig";
     repo = "TwitterAPI";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-4Z8XfgRhQXawCvaXM+kyMO3fejvXIF2LgVdmfXDDqIA=";
   };
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for Twitter's REST and Streaming APIs";
     homepage = "https://github.com/geduldig/TwitterAPI";
+    changelog = "https://github.com/geduldig/TwitterAPI/blob/v${version}/CHANGE.log";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
