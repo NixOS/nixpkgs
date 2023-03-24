@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "6.5.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-4wSm3H+98ZJZ+fZdLYshPKafRkPq98Pv3Lwh9o0be6U=";
+    hash = "sha256-pWad/OCSoszdEQb6Mb6fD4vsZRagbYa3TKft4IyGg94=";
   };
 
-  cargoHash = "sha256-1p46xvo7abMPlVP8BeQ1j/8QQpK3kCgbTL3cdidfq04=";
+  cargoHash = "sha256-MoWb6slvcTlLYbUg/5xBuOYT40C9SQeHIJKdBdhqics=";
 
   nativeBuildInputs = [
     pkg-config

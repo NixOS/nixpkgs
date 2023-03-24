@@ -311,6 +311,7 @@ in {
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
+  initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   initrd-secrets = handleTest ./initrd-secrets.nix {};
   initrd-secrets-changing = handleTest ./initrd-secrets-changing.nix {};
@@ -662,6 +663,7 @@ in {
   systemd-initrd-btrfs-raid = handleTest ./systemd-initrd-btrfs-raid.nix {};
   systemd-initrd-luks-fido2 = handleTest ./systemd-initrd-luks-fido2.nix {};
   systemd-initrd-luks-keyfile = handleTest ./systemd-initrd-luks-keyfile.nix {};
+  systemd-initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix { systemdStage1 = true; };
   systemd-initrd-luks-password = handleTest ./systemd-initrd-luks-password.nix {};
   systemd-initrd-luks-tpm2 = handleTest ./systemd-initrd-luks-tpm2.nix {};
   systemd-initrd-modprobe = handleTest ./systemd-initrd-modprobe.nix {};
