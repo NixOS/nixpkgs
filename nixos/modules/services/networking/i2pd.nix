@@ -18,7 +18,7 @@ let
   optionalEmptyList = o: l: optional ([] != l) (lstOpt o l);
 
   mkEnableTrueOption = name: mkEnableOption (lib.mdDoc name) // { default = true; };
-  
+
   typeMaps = {
     signatureType = {
       "ECDSA-P256" = 1;
@@ -117,7 +117,7 @@ let
     };
     explicitPeers = mkOption {
       type = with types; nullOr str;
-      description = lib.mdDoc "List of b64 addresses of peers to use.";
+      description = lib.mdDoc "List of comma-separated b64 addresses of peers to use.";
       default = null;
     };
     signatureType = mkOption {
@@ -150,12 +150,12 @@ let
     };
     i2cp.leaseSetClient.dh.nnn = mkOption {
       type = with types; nullOr str;
-      description = lib.mdDoc "Client name:client's public DH in base64.";
+      description = lib.mdDoc "Client name:client's public DH in base64, for authentication type DH.";
       default = null;
     };
     i2cp.leaseSetClient.psk.nnn = mkOption {
       type = with types; nullOr str;
-      description = lib.mdDoc "Client name:client's PSK in base64.";
+      description = lib.mdDoc "Client name:client's PSK in base64, for authentication type PSK.";
       default = null;
     };
     destination = mkOption {
