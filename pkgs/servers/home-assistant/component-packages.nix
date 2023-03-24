@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.3.5";
+  version = "2023.3.6";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -241,8 +241,8 @@
       pyatome
     ];
     "august" = ps: with ps; [
-      yalexs
       yalexs-ble
+      yalexs
     ];
     "august_ble" = ps: with ps; [
     ];
