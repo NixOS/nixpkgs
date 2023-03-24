@@ -113,9 +113,6 @@ let
 
   showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (lib.lists.toList value));
   showLicense = showLicenseOrSourceType;
-  showPlatforms = attrs: toString (builtins.filter
-    (system: lib.meta.availableOn (lib.systems.elaborate { inherit system; }) attrs)
-    lib.platforms.all);
   showSourceType = showLicenseOrSourceType;
 
   pos_str = meta: meta.position or "«unknown-file»";
@@ -371,7 +368,18 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = "no"; reason = "unsupported"; errormsg = "is only supported on `${showPlatforms attrs}` but not on requested ‘${hostPlatform.system}’"; }
+      let toPretty = lib.generators.toPretty {
+            allowPrettyValues = true;
+            indent = "  ";
+          };
+      in { valid = "no"; reason = "unsupported";
+           errormsg = ''
+             is not available on the requested hostPlatform:
+               hostPlatform.config = "${hostPlatform.config}"
+               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+            '';
+         }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
 
