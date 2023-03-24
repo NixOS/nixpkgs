@@ -10,6 +10,8 @@ buildPythonPackage rec {
   pname = "pytest-asyncio-tests";
   inherit (pytest-asyncio) version;
 
+  format = "other";
+
   src = pytest-asyncio.testout;
 
   dontBuild = true;
