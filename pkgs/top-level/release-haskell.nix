@@ -154,10 +154,25 @@ let
         #
         # If config is `{ lens = [ "ghc8107" ]; }`, then the above example call
         # to onlyConfigJobs returns `{}`.
+        #
+        # onlyConfigJobs will also remove all platforms from a job that are not
+        # supported by the GHC it is compiled with.
         onlyConfigJobs = ghc: jobs:
-          lib.filterAttrs
-            (jobName: platforms: lib.elem ghc (config."${jobName}" or []))
-            jobs;
+          let
+            configFilteredJobset =
+              lib.filterAttrs
+                (jobName: platforms: lib.elem ghc (config."${jobName}" or []))
+                jobs;
+
+            # Remove platforms from each job that are not supported by GHC.
+            # This is important so that we don't build jobs for platforms
+            # where GHC can't be compiled.
+            jobsetWithGHCPlatforms =
+              lib.mapAttrs
+                (_: platforms: lib.intersectLists jobs.ghc platforms)
+                configFilteredJobset;
+          in
+          jobsetWithGHCPlatforms;
       in
       lib.mapAttrs onlyConfigJobs compilerPlatforms;
   };
