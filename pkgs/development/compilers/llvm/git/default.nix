@@ -16,12 +16,7 @@
     else pkgs.bintools
 , darwin
 # LLVM release information; specify one of these but not both:
-, gitRelease ? {
-    version = "15.0.0";
-    rev = "a5640968f2f7485b2aa4919f5fa68fd8f23e2d1f";
-    rev-version = "unstable-2022-26-07";
-    sha256 = "1sh5xihdfdn2hp7ds3lkaq1bfrl4alj36gl1aidmhlw65p5rdvl7";
-  }
+, gitRelease ? null
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -29,7 +24,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? null
+, officialRelease ? { version = "15.0.7"; sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s="; }
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
