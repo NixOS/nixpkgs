@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.umiacs.umd.edu/~hal/megam";
     license = "non-commercial";
-    maintainers = [ ];
+    maintainers = with maintainers; [ leixb ];
     platforms = platforms.unix;
   };
 }
