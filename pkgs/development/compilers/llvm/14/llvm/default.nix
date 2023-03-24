@@ -13,6 +13,7 @@
 , ncurses
 , version
 , release_version
+, z3
 , zlib
 , which
 , buildLlvmTools
@@ -23,6 +24,7 @@
 # broken for the armv7l builder
 , enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? false
+, enableZ3 ? false # TODO: if enabled, this flag is not safe to use when cross-compiling
 } @args:
 
 let
@@ -53,7 +55,8 @@ in stdenv.mkDerivation (rec {
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
-    ++ optional enablePFM libpfm; # exegesis
+    ++ optional enablePFM libpfm # exegesis
+    ++ optional enableZ3 z3;
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -151,6 +154,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+    "-DLLVM_ENABLE_Z3_SOLVER=${if enableZ3 then "ON" else "OFF"}"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
