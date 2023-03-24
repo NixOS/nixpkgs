@@ -99,39 +99,36 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-      # Build without manual
-      "--disable-manual"
-      (lib.enableFeature c-aresSupport "ares")
-      (lib.enableFeature ldapSupport "ldap")
-      (lib.enableFeature ldapSupport "ldaps")
-      # The build fails when using wolfssl with --with-ca-fallback
-      (lib.withFeature (!wolfsslSupport) "ca-fallback")
-      (lib.withFeature http3Support "nghttp3")
-      (lib.withFeature http3Support "ngtcp2")
-      (lib.withFeature rtmpSupport "librtmp")
-      (lib.withFeature zstdSupport "zstd")
-      (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
-      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
-      (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
-      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-      (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
-    ]
-    ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
-       # For the 'urandom', maybe it should be a cross-system option
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "--with-random=/dev/urandom"
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "--disable-shared"
-      "--enable-static"
-    ] ++ lib.optionals stdenv.isDarwin [
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
-      # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
-      "--without-ca-bundle"
-      "--without-ca-path"
-    ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport) [
-      "--without-ssl"
-    ];
+    # Build without manual
+    "--disable-manual"
+    (lib.enableFeature c-aresSupport "ares")
+    (lib.enableFeature ldapSupport "ldap")
+    (lib.enableFeature ldapSupport "ldaps")
+    # The build fails when using wolfssl with --with-ca-fallback
+    (lib.withFeature (!wolfsslSupport) "ca-fallback")
+    (lib.withFeature http3Support "nghttp3")
+    (lib.withFeature http3Support "ngtcp2")
+    (lib.withFeature rtmpSupport "librtmp")
+    (lib.withFeature zstdSupport "zstd")
+    (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
+    (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
+    (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
+    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+    (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
+    (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
+    (lib.withFeatureAs gssSupport "gssapi" (lib.getDev libkrb5))
+     # For the 'urandom', maybe it should be a cross-system option
+    (lib.withFeatureAs (stdenv.hostPlatform != stdenv.buildPlatform) "random" "/dev/urandom")
+    # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
+    # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
+    (lib.withFeature stdenv.isDarwin "ca-bundle")
+    (lib.withFeature stdenv.isDarwin "ca-path")
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "--disable-shared"
+    "--enable-static"
+  ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport) [
+    "--without-ssl"
+  ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
