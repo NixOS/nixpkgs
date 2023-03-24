@@ -90,6 +90,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootZfs")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootFat")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleLabels")
