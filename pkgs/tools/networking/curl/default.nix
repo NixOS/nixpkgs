@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./7.85.0-noproxy-tailmatch.path
     ./7.79.1-darwin-no-systemconfiguration.patch
     # https://curl.se/docs/CVE-2022-22576.html
     ./CVE-2022-22576.patch
