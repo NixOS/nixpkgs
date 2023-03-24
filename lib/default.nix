@@ -112,6 +112,7 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
+      callPackageWithNoMkOverridable callPackagesWithNoMkOverridable
       makeScope makeScopeWithSplicing;
     inherit (self.derivations) lazyDerivation;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName

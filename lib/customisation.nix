@@ -126,6 +126,12 @@ rec {
       };
   */
   callPackageWith = autoArgs: fn: args:
+    __callPackageWith { inherit autoArgs fn args; applyMakeOverridable = true; };
+
+  callPackageWithNoMkOverridable = autoArgs: fn: args:
+    __callPackageWith { inherit autoArgs fn args; applyMakeOverridable = false; };
+
+  __callPackageWith = { autoArgs, fn, args, applyMakeOverridable, }:
     let
       f = if lib.isFunction fn then fn else import fn;
       fargs = lib.functionArgs f;
@@ -176,19 +182,28 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg (lib.head missingArgs);
 
-    in if missingArgs == [] then makeOverridable f allArgs else throw error;
+    in if missingArgs == [] then (if applyMakeOverridable then makeOverridable f allArgs else f allArgs) else throw error;
 
 
   /* Like callPackage, but for a function that returns an attribute
      set of derivations. The override function is added to the
      individual attributes. */
   callPackagesWith = autoArgs: fn: args:
+    __callPackagesWith { inherit autoArgs fn args; applyMakeOverridable = true; };
+
+  callPackagesWithNoMkOverridable = autoArgs: fn: args:
+    __callPackagesWith { inherit autoArgs fn args; applyMakeOverridable = false; };
+
+  /* Like callPackage, but for a function that returns an attribute
+     set of derivations. The override function is added to the
+     individual attributes. */
+  __callPackagesWith = { autoArgs, fn, args, applyMakeOverridable, }:
     let
       f = if lib.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
-      mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
+      mkAttrOverridable = name: _: if applyMakeOverridable then makeOverridable (newArgs: (f newArgs).${name}) origArgs else (newArgs: (f newArgs).${name}) origArgs;
     in
       if lib.isDerivation pkgs then throw
         ("function `callPackages` was called on a *single* derivation "
