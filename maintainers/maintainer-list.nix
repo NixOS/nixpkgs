@@ -7433,6 +7433,13 @@
     githubId = 7673602;
     name = "Jonathan Ringer";
   };
+  jopejoe1 = {
+    email = "johannes@joens.email";
+    matrix = "@jopejoe1:matrix.org";
+    github = "jopejoe1";
+    githubId = 34899572;
+    name = "Johannes Jöns";
+  };
   jordanisaacs = {
     name = "Jordan Isaacs";
     email = "nix@jdisaacs.com";
