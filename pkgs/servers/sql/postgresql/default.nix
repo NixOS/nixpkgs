@@ -164,11 +164,13 @@ let
             --replace ${self.llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
             --replace -I${self.llvmPackages.llvm.dev}/include ""
 
-          # Stop lib depending on the -dev output of llvm
-          rpath=$(patchelf --print-rpath $out/lib/llvmjit.so)
-          nuke-refs -e $out $out/lib/llvmjit.so
-          # Restore the correct rpath
-          patchelf $out/lib/llvmjit.so --set-rpath "$rpath"
+          ${lib.optionalString (!stdenv'.isDarwin) ''
+            # Stop lib depending on the -dev output of llvm
+            rpath=$(patchelf --print-rpath $out/lib/llvmjit.so)
+            nuke-refs -e $out $out/lib/llvmjit.so
+            # Restore the correct rpath
+            patchelf $out/lib/llvmjit.so --set-rpath "$rpath"
+          ''}
         ''}
       '';
 
