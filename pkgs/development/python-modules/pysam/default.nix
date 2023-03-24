@@ -28,6 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-7yEZJ+iIw4qOxsanlKQlqt1bfi8MvyYjGJWiVDmXBrc=";
   };
 
+  patches = [
+    ./1147.patch
+  ];
+
   nativeBuildInputs = [ samtools ];
   buildInputs = [
     bzip2
