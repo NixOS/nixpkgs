@@ -105,6 +105,13 @@ buildPythonPackage rec {
     "test_exec_target_command"
     # Issue with tar file
     "test_tar_sensitive_drive_letter"
+    # Tests compare dates and times
+    "yum"
+  ];
+
+  disabledTestPaths = [
+    # Tests are using Windows paths
+    "tests/test_plugins_browsers.py"
   ];
 
   meta = with lib; {
