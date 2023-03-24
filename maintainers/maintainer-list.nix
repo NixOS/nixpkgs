@@ -8318,6 +8318,12 @@
     githubId = 2422454;
     name = "Kai Wohlfahrt";
   };
+  kyaru = {
+    email = "65301509+KiruyaMomochi@users.noreply.github.com";
+    github = "KiruyaMomochi";
+    githubId = 65301509;
+    name = "Kiruya Momochi";
+  };
   kyleondy = {
     email = "kyle@ondy.org";
     github = "KyleOndy";
