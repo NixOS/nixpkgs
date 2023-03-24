@@ -43,6 +43,19 @@ let
     ) jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
+  #
+  # compilerNames looks like the following:
+  #
+  # ```
+  # {
+  #   ghc810 = "ghc810";
+  #   ghc8102Binary = "ghc8102Binary";
+  #   ghc8102BinaryMinimal = "ghc8102BinaryMinimal";
+  #   ghc8107 = "ghc8107";
+  #   ghc924 = "ghc924";
+  #   ...
+  # }
+  # ```
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
 
   # list of all compilers to test specific packages on
@@ -59,6 +72,22 @@ let
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
+  #
+  # This returns an attr set that looks like the following, where each Haskell
+  # package in the compiler attr set has its list of supported platforms as its
+  # value.
+  #
+  # ```
+  # {
+  #   ghc810 = {
+  #     conduit = [ ... ];
+  #     lens = [ "i686-cygwin" "x86_64-cygwin" ... "x86_64-windows" "i686-windows" ]
+  #     ...
+  #   };
+  #   ghc902 = { ... };
+  #   ...
+  # }
+  # ```
   compilerPlatforms = lib.mapAttrs
     (_: v: packagePlatforms v)
     pkgs.haskell.packages;
@@ -66,7 +95,37 @@ let
   # This function lets you specify specific packages
   # which are to be tested on a list of specific GHC
   # versions and returns a job set for all specified
-  # combinations. See `jobs` below for an example.
+  # combinations.
+  #
+  # You can call versionedCompilerJobs like the following:
+  #
+  # ```
+  # versionedCompilerJobs {
+  #   ghc-tags = ["ghc902" "ghc924"];
+  # }
+  # ```
+  #
+  # This would produce an output like the following:
+  #
+  # ```
+  # {
+  #   haskell.packages = {
+  #     ghc884 = {};
+  #     ghc810 = {};
+  #     ghc902 = {
+  #       ghc-tags = {
+  #         aarch64-darwin = <derivation...>;
+  #         aarch64-linux = <derivation...>;
+  #         ...
+  #       };
+  #     };
+  #     ghc924 = {
+  #       ghc-tags = { ... };
+  #     };
+  #     ...
+  #   };
+  # }
+  # ```
   versionedCompilerJobs = config: mapTestOn {
     haskell.packages =
       (lib.mapAttrs (
