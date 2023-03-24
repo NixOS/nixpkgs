@@ -1,47 +1,13 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, buildNpmPackage }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, callPackage }:
 
+let
+  inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src vendorHash;
+  web = callPackage ./web.nix { };
+in
 buildGoModule rec {
-  pname = "authelia";
-  version = "4.37.5";
-
-  src = fetchFromGitHub {
-    owner = "authelia";
-    repo = "authelia";
-    rev = "v${version}";
-    sha256 = "sha256-xsdBnyPHFIimhp2rcudWqvVR36WN4vBXbxRmvgqMcDw=";
-  };
-  vendorSha256 = "sha256-mzGE/T/2TT4+7uc2axTqG3aeLMnt1r9Ya7Zj2jIkw/w=";
+  inherit pname version src vendorHash;
 
   nativeBuildInputs = [ installShellFiles ];
-
-  web = buildNpmPackage {
-    inherit src version;
-
-    pname = "authelia-web";
-    sourceRoot = "source/web";
-
-    patches = [
-      ./change-web-out-dir.patch
-    ];
-
-    postPatch = ''
-      cp ${./package-lock.json} ./package-lock.json
-    '';
-
-    npmDepsHash = "sha256-MGs6UAxT5QZd8S3AO75mxuCb6U0UdRkGEjenOVj+Oqs=";
-
-    npmFlags = [ "--legacy-peer-deps" ];
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share
-      mv dist $out/share/authelia-web
-
-      runHook postInstall
-    '';
-  };
-
 
   postPatch = ''
     cp -r ${web}/share/authelia-web/* internal/server/public_html
