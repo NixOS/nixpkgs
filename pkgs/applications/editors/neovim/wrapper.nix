@@ -32,12 +32,23 @@ let
     # set to false if you want to control where to save the generated config
     # (e.g., in ~/.config/init.vim or project/.nvimrc)
     , wrapRc ? true
-    , neovimRcContent ? ""
+    , neovimRcContent ? null
+    , neovimLuaRcContent ? null
     # entry to load in packpath
     , packpathDirs
     , ...
   }:
+
+  # we can not have both, a lua and a vimL init file, at least one needs to be
+  # null
+  assert isNull neovimRcContent || isNull neovimLuaRcContent;
+
   let
+
+    selectLua = isNull neovimRcContent;
+    initFileName = "init." + (if selectLua then "lua" else "vim");
+    rcContent = if !selectLua then neovimRcContent
+                else if isNull neovimLuaRcContent then "" else neovimLuaRcContent;
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
@@ -66,7 +77,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
+      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText initFileName rcContent}" ]
       ++ commonWrapperArgs
       ;
 
