@@ -11,7 +11,7 @@
 , lib
 , ant
 , ninja
-
+, clang
 , debugBuild ? false
 
 , glib
@@ -73,6 +73,25 @@ let rpath = lib.makeLibraryPath [
 ];
 
 buildType = if debugBuild then "Debug" else "Release";
+  lookupTable = {
+    "x86_64-linux" = {
+      clang_format_version = "942fc8b1789144b8071d3fc03ff0fcbe1cf81ac8";
+      clang_format_sha256 = "sha256-5iAU49tQmLS7zkS+6iGT+6SEdERRo1RkyRpiRvc9nVY=";
+      cef_platform = "linux64";
+      cef_sha256 = "sha256-0PAWWBR+9TO8hhejydWz8R6Df3d9A/Mb0VL8stlPz5Q=";
+    };
+    "aarch64-linux" = {
+      clang_format_version = "942fc8b1789144b8071d3fc03ff0fcbe1cf81ac8";
+      clang_format_sha256 = "sha256-5iAU49tQmLS7zkS+6iGT+6SEdERRo1RkyRpiRvc9nVY=";
+      cef_platform = "linuxarm64";
+      cef_sha256 = "sha256-OGCW5H/2aPuDim3ldUASWOHwlLFD3YLeJBu2Sgx6qxs=";
+    };
+  };
+
+  cef_platform = lookupTable.${builtins.currentSystem}.cef_platform;
+  cef_sha256 = lookupTable.${builtins.currentSystem}.cef_sha256;
+  clang_format_version = lookupTable.${builtins.currentSystem}.clang_format_version;
+  clang_format_sha256 = lookupTable.${builtins.currentSystem}.clang_format_sha256;
 
 in stdenv.mkDerivation rec {
   name = "jcef-jetbrains";
@@ -89,18 +108,17 @@ in stdenv.mkDerivation rec {
     hash = "sha256-Vud4nIT2c7uOK7GKKw3plf41WzKqhg+2xpIwB/LyqnE=";
   };
   cef-bin = let
-    fileName = "cef_binary_104.4.26+g4180781+chromium-104.0.5112.102_linux64_minimal";
+    fileName = "cef_binary_104.4.26+g4180781+chromium-104.0.5112.102_${cef_platform}_minimal";
     urlName = builtins.replaceStrings ["+"] ["%2B"] fileName;
   in fetchzip rec {
     name = fileName;
     url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
-    hash = "sha256-0PAWWBR+9TO8hhejydWz8R6Df3d9A/Mb0VL8stlPz5Q=";
+    hash = "${cef_sha256}";
   };
-  clang-fmt = fetchurl {
-    url = "https://storage.googleapis.com/chromium-clang-format/942fc8b1789144b8071d3fc03ff0fcbe1cf81ac8";
-    hash = "sha256-5iAU49tQmLS7zkS+6iGT+6SEdERRo1RkyRpiRvc9nVY=";
+  clang-format = fetchurl {
+    url = "https://storage.googleapis.com/chromium-clang-format/${clang_format_version}";
+    hash = "${clang_format_sha256}";
   };
-
   configurePhase = ''
     runHook preConfigure
 
@@ -119,13 +137,13 @@ in stdenv.mkDerivation rec {
       -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${commit-num}'"|' \
       -i tools/git_util.py
 
-    cp ${clang-fmt} tools/buildtools/linux64/clang-format
+    cp ${clang-format} tools/buildtools/linux64/clang-format
     chmod +w tools/buildtools/linux64/clang-format
 
     mkdir jcef_build
     cd jcef_build
 
-    cmake -G "Ninja" -DPROJECT_ARCH="x86_64" -DCMAKE_BUILD_TYPE=${buildType} ..
+    cmake -G "Ninja" -DPROJECT_ARCH="${if stdenv.isAarch64 then "arm64" else "x86_64"}" -DCMAKE_BUILD_TYPE=${buildType} ..
 
     runHook postConfigure
   '';
@@ -146,7 +164,7 @@ in stdenv.mkDerivation rec {
     export JB_TOOLS_DIR=$(realpath ../jb/tools)
     export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
     export OUT_CLS_DIR=$(realpath ../out/linux64)
-    export TARGET_ARCH=x86_64 DEPS_ARCH=amd64
+    export TARGET_ARCH=${if stdenv.isAarch64 then "arm64" else "x86_64"} DEPS_ARCH=${if stdenv.isAarch64 then "arm64" else "amd64"}
     export OS=linux
     export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 
@@ -180,7 +198,12 @@ in stdenv.mkDerivation rec {
     jar uf gluegen-rt.jar module-info.class
     rm module-info.class module-info.java
     mkdir lib
-    extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+
+
+    if [ "$OS" == "macosx" ] || [ "$TARGET_ARCH" == "x86_64" ]; then
+        extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+    fi
+    jmod create --class-path gluegen-rt.jar --libs lib gluegen.rt.jmod
 
     cd ../jogl
     cp "$JOGAMP_DIR"/gluegen-rt.jar .
@@ -190,7 +213,12 @@ in stdenv.mkDerivation rec {
     jar uf jogl-all.jar module-info.class
     rm module-info.class module-info.java
     mkdir lib
-    extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+
+
+    if [ "$OS" == "macosx" ] || [ "$TARGET_ARCH" == "x86_64" ]; then
+       extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+    fi
+    jmod create --module-path . --class-path jogl-all.jar --libs lib jogl.all.jmod
 
     cd ../jcef
     cp "$OUT_CLS_DIR"/jcef.jar .
