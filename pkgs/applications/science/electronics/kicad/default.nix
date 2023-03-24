@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath = optionals (withScripting)
-    [ wxPython python.pkgs.six ];
+    [ wxPython python.pkgs.six python.pkgs.requests ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optionals (withScripting)
