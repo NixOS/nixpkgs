@@ -9,6 +9,7 @@
 , libdeflate
 , xz
 , pytest
+, pythonAtLeast
 , samtools
 , zlib
 }:
@@ -75,6 +76,7 @@ buildPythonPackage rec {
 
     # Deselect tests that are known to fail due to upstream issues
     # See https://github.com/pysam-developers/pysam/issues/961
+    # See https://github.com/pysam-developers/pysam/issues/1151
     py.test \
       --deselect tests/AlignmentFileHeader_test.py::TestHeaderBAM::test_dictionary_access_works \
       --deselect tests/AlignmentFileHeader_test.py::TestHeaderBAM::test_header_content_is_as_expected \
@@ -93,6 +95,7 @@ buildPythonPackage rec {
       --deselect tests/AlignmentFile_test.py::TestIteratorRowAllBAM::testIterate \
       --deselect tests/StreamFiledescriptors_test.py::StreamTest::test_text_processing \
       --deselect tests/compile_test.py::BAMTest::testCount \
+      ${lib.optionalString (pythonAtLeast "3.11") "--deselect tests/AlignmentFilePileup_test.py::TestPileupObjects::testIteratorOutOfScope"} \
       tests/
   '';
 
