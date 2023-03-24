@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.9.7";
+  version = "6.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    hash = "sha256-Lx84jmgJz/J5MJtJyqDTVIbN6H63gD2rkJrdNeojd08=";
+    hash = "sha256-/un/m4Br0Ylk00fS/U+QKeXwM1Ix5TFedaPhCyScWvs=";
   };
 
   propagatedBuildInputs = [
