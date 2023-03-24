@@ -9399,6 +9399,12 @@
     githubId = 43853194;
     name = "Matheus Vieira";
   };
+  mathiassven = {
+    email = "github@mathiassven.com";
+    github = "MathiasSven";
+    githubId = 24759037;
+    name = "Mathias Sven";
+  };
   mathnerd314 = {
     email = "mathnerd314.gph+hs@gmail.com";
     github = "Mathnerd314";
