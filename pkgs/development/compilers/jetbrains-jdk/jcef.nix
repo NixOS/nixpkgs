@@ -73,6 +73,25 @@ let rpath = lib.makeLibraryPath [
 ];
 
 buildType = if debugBuild then "Debug" else "Release";
+lookupTable = {
+  "x86_64-linux" = {
+    clang_format_version = "dd736afb28430c9782750fc0fd5f0ed497399263";
+    clang_format_sha256 = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+    cef_platform = "linux64";
+    cef_sha256 = "sha256-r+zXTmDN5s/bYLvbCnHufYdXIqQmCDlbWgs5pdOpLTw=";
+  };
+  "aarch64-linux" = {
+    clang_format_version = "dd736afb28430c9782750fc0fd5f0ed497399263";
+    clang_format_sha256 = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+    cef_platform = "linuxarm64";
+    cef_sha256 = "sha256-gCDIfWsysXE8lHn7H+YM3Jag+mdbWwTQpJf0GKdXEVs=";
+  };
+};
+
+cef_platform = lookupTable.${builtins.currentSystem}.cef_platform;
+cef_sha256 = lookupTable.${builtins.currentSystem}.cef_sha256;
+clang_format_version = lookupTable.${builtins.currentSystem}.clang_format_version;
+clang_format_sha256 = lookupTable.${builtins.currentSystem}.clang_format_sha256;
 
 in stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
@@ -92,46 +111,74 @@ in stdenv.mkDerivation rec {
     hash = "sha256-3HuW8upR/bZoK8euVti2KpCZh9xxfqgyHmgoG1NjxOI=";
   };
   cef-bin = let
-    fileName = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_linux64_minimal";
-    urlName = builtins.replaceStrings ["+"] ["%2B"] fileName;
+    fileName = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_${cef_platform}_minimal";
+    urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] fileName;
   in fetchzip rec {
     name = fileName;
     url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
-    hash = "sha256-r+zXTmDN5s/bYLvbCnHufYdXIqQmCDlbWgs5pdOpLTw=";
+    hash = "${cef_sha256}";
   };
   clang-fmt = fetchurl {
-    url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
-    hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+    url = "https://storage.googleapis.com/chromium-clang-format/${clang_format_version}";
+    hash = "${clang_format_sha256}";
   };
+  configurePhase =
+    if stdenv.isAarch64 then ''
+      runHook preConfigure
 
-  configurePhase = ''
-    runHook preConfigure
+      patchShebangs .
 
-    patchShebangs .
+      cp -r ${cef-bin} third_party/cef/${cef-bin.name}
+      chmod +w -R third_party/cef/${cef-bin.name}
+      patchelf third_party/cef/${cef-bin.name}/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
+      patchelf third_party/cef/${cef-bin.name}/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
+      sed 's/-O0/-O2/' -i third_party/cef/${cef-bin.name}/cmake/cef_variables.cmake
 
-    cp -r ${cef-bin} third_party/cef/${cef-bin.name}
-    chmod +w -R third_party/cef/${cef-bin.name}
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
-    sed 's/-O0/-O2/' -i third_party/cef/${cef-bin.name}/cmake/cef_variables.cmake
+      sed \
+        -e 's|os.path.isdir(os.path.join(path, \x27.git\x27))|True|' \
+        -e 's|"%s rev-parse %s" % (git_exe, branch)|"echo '${rev}'"|' \
+        -e 's|"%s config --get remote.origin.url" % git_exe|"echo 'https://github.com/jetbrains/jcef'"|' \
+        -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${version}'"|' \
+        -i tools/git_util.py
 
-    sed \
-      -e 's|os.path.isdir(os.path.join(path, \x27.git\x27))|True|' \
-      -e 's|"%s rev-parse %s" % (git_exe, branch)|"echo '${rev}'"|' \
-      -e 's|"%s config --get remote.origin.url" % git_exe|"echo 'https://github.com/jetbrains/jcef'"|' \
-      -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${version}'"|' \
-      -i tools/git_util.py
+      cp ${clang-fmt} tools/buildtools/linux64/clang-format
+      chmod +w tools/buildtools/linux64/clang-format
 
-    cp ${clang-fmt} tools/buildtools/linux64/clang-format
-    chmod +w tools/buildtools/linux64/clang-format
+      mkdir jcef_build
+      cd jcef_build
 
-    mkdir jcef_build
-    cd jcef_build
+      cmake -G "Ninja" -DPROJECT_ARCH="arm64" -DCMAKE_BUILD_TYPE=${buildType} ..
 
-    cmake -G "Ninja" -DPROJECT_ARCH="x86_64" -DCMAKE_BUILD_TYPE=${buildType} ..
+      runHook postConfigure
+    '' else ''
+      runHook preConfigure
 
-    runHook postConfigure
-  '';
+      patchShebangs .
+
+      cp -r ${cef-bin} third_party/cef/${cef-bin.name}
+      chmod +w -R third_party/cef/${cef-bin.name}
+      patchelf third_party/cef/${cef-bin.name}/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
+      patchelf third_party/cef/${cef-bin.name}/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
+      sed 's/-O0/-O2/' -i third_party/cef/${cef-bin.name}/cmake/cef_variables.cmake
+
+      sed \
+        -e 's|os.path.isdir(os.path.join(path, \x27.git\x27))|True|' \
+        -e 's|"%s rev-parse %s" % (git_exe, branch)|"echo '${rev}'"|' \
+        -e 's|"%s config --get remote.origin.url" % git_exe|"echo 'https://github.com/jetbrains/jcef'"|' \
+        -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${version}'"|' \
+        -i tools/git_util.py
+
+      cp ${clang-fmt} tools/buildtools/linux64/clang-format
+      chmod +w tools/buildtools/linux64/clang-format
+
+      mkdir jcef_build
+      cd jcef_build
+
+      cmake -G "Ninja" -DPROJECT_ARCH="x86_64" -DCMAKE_BUILD_TYPE=${buildType} ..
+
+      runHook postConfigure
+
+    '';
 
   outputs = [ "out" "unpacked" ];
 
@@ -149,7 +196,7 @@ in stdenv.mkDerivation rec {
     export JB_TOOLS_DIR=$(realpath ../jb/tools)
     export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
     export OUT_CLS_DIR=$(realpath ../out/linux64)
-    export TARGET_ARCH=x86_64 DEPS_ARCH=amd64
+    export TARGET_ARCH=${if stdenv.isAarch64 then "arm64" else "x86_64"} DEPS_ARCH=${if stdenv.isAarch64 then "arm64" else "amd64"}
     export OS=linux
     export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 
@@ -183,7 +230,12 @@ in stdenv.mkDerivation rec {
     jar uf gluegen-rt.jar module-info.class
     rm module-info.class module-info.java
     mkdir lib
-    extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+
+    # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
+    if [ "$OS" == "macosx" ] || [ "$TARGET_ARCH" == "x86_64" ]; then
+        extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+    fi
+    jmod create --class-path gluegen-rt.jar --libs lib gluegen.rt.jmod
 
     cd ../jogl
     cp "$JOGAMP_DIR"/gluegen-rt.jar .
@@ -193,7 +245,12 @@ in stdenv.mkDerivation rec {
     jar uf jogl-all.jar module-info.class
     rm module-info.class module-info.java
     mkdir lib
-    extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+
+    # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
+    if [ "$OS" == "macosx" ] || [ "$TARGET_ARCH" == "x86_64" ]; then
+       extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+    fi
+    jmod create --module-path . --class-path jogl-all.jar --libs lib jogl.all.jmod
 
     cd ../jcef
     cp "$OUT_CLS_DIR"/jcef.jar .

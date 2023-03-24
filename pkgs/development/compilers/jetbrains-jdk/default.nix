@@ -49,45 +49,76 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   BOOT_JDK = openjdk17-bootstrap.home;
   SOURCE_DATE_EPOCH = 1666098567;
 
-  patches = [];
+  patches = [ ];
 
   # Configure is done in build phase
   configurePhase = "true";
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    if stdenv.isAarch64 then ''
+      runHook preBuild
 
-    mkdir -p jcef_linux_x64/jmods
-    cp ${jetbrains.jcef}/* jcef_linux_x64/jmods
+      mkdir -p jcef_linux_aarch64/jmods
+      cp ${jetbrains.jcef}/* jcef_linux_aarch64/jmods
 
-    sed \
-        -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
-        -e "s/SOURCE_DATE_EPOCH=.*//" \
-        -e "s/export SOURCE_DATE_EPOCH//" \
-        -i jb/project/tools/common/scripts/common.sh
-    sed -i "s/STATIC_CONF_ARGS/STATIC_CONF_ARGS \$configureFlags/" jb/project/tools/linux/scripts/mkimages_x64.sh
-    sed \
-        -e "s/create_image_bundle \"jb/#/" \
-        -e "s/echo Creating /exit 0 #/" \
-        -i jb/project/tools/linux/scripts/mkimages_x64.sh
+      sed \
+          -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
+          -e "s/SOURCE_DATE_EPOCH=.*//" \
+          -e "s/export SOURCE_DATE_EPOCH//" \
+          -i jb/project/tools/common/scripts/common.sh
+      sed -i "s/STATIC_CONF_ARGS/STATIC_CONF_ARGS \$configureFlags/" jb/project/tools/linux/scripts/mkimages_aarch64.sh
+      sed \
+          -e "s/create_image_bundle \"jb/#/" \
+          -e "s/echo Creating /exit 0 #/" \
+          -i jb/project/tools/linux/scripts/mkimages_aarch64.sh
 
-    patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_x64.sh ${build} ${if debugBuild then "fd" else "jcef"}
+      patchShebangs .
+      ./jb/project/tools/linux/scripts/mkimages_aarch64.sh ${build} ${if debugBuild then "fd" else "jcef"}
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '' else ''
+      runHook preBuild
 
-  installPhase = let
-    buildType = if debugBuild then "fastdebug" else "release";
-    debugSuffix = lib.optionalString debugBuild "-fastdebug";
-    jcefSuffix = lib.optionalString (!debugBuild) "_jcef";
-  in ''
-    runHook preInstall
+      mkdir -p jcef_linux_x64/jmods
+      cp ${jetbrains.jcef}/* jcef_linux_x64/jmods
 
-    mv build/linux-x86_64-server-${buildType}/images/jdk/man build/linux-x86_64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-x64${debugSuffix}-b${build}
-    rm -rf build/linux-x86_64-server-${buildType}/images/jdk
-    mv build/linux-x86_64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-x64${debugSuffix}-b${build} build/linux-x86_64-server-${buildType}/images/jdk
-  '' + oldAttrs.installPhase + "runHook postInstall";
+      sed \
+          -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
+          -e "s/SOURCE_DATE_EPOCH=.*//" \
+          -e "s/export SOURCE_DATE_EPOCH//" \
+          -i jb/project/tools/common/scripts/common.sh
+      sed -i "s/STATIC_CONF_ARGS/STATIC_CONF_ARGS \$configureFlags/" jb/project/tools/linux/scripts/mkimages_x64.sh
+      sed \
+          -e "s/create_image_bundle \"jb/#/" \
+          -e "s/echo Creating /exit 0 #/" \
+          -i jb/project/tools/linux/scripts/mkimages_x64.sh
+
+      patchShebangs .
+      ./jb/project/tools/linux/scripts/mkimages_x64.sh ${build} ${if debugBuild then "fd" else "jcef"}
+
+      runHook postBuild
+
+    '';
+
+  installPhase =
+    let
+      buildType = if debugBuild then "fastdebug" else "release";
+      debugSuffix = lib.optionalString debugBuild "-fastdebug";
+      jcefSuffix = lib.optionalString (!debugBuild) "_jcef";
+    in
+    (if stdenv.isAarch64 then ''
+      runHook preInstall
+
+      mv build/linux-aarch64-server-${buildType}/images/jdk/man build/linux-aarch64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-aarch64${debugSuffix}-b${build}
+      rm -rf build/linux-aarch64-server-${buildType}/images/jdk
+      mv build/linux-aarch64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-aarch64${debugSuffix}-b${build} build/linux-aarch64-server-${buildType}/images/jdk
+    '' else ''
+      runHook preInstall
+
+      mv build/linux-x86_64-server-${buildType}/images/jdk/man build/linux-x86_64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-x64${debugSuffix}-b${build}
+      rm -rf build/linux-x86_64-server-${buildType}/images/jdk
+      mv build/linux-x86_64-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-x64${debugSuffix}-b${build} build/linux-x86_64-server-${buildType}/images/jdk
+    '') + oldAttrs.installPhase + "runHook postInstall";
 
   postInstall = ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
@@ -96,40 +127,40 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   dontStrip = debugBuild;
 
   postFixup = ''
-      # Build the set of output library directories to rpath against
-      LIBDIRS="${lib.makeLibraryPath [
-        libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
-        nss nspr libdrm mesa wayland udev
-      ]}"
-      for output in $outputs; do
-        if [ "$output" = debug ]; then continue; fi
-        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
+    # Build the set of output library directories to rpath against
+    LIBDIRS="${lib.makeLibraryPath [
+      libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
+      nss nspr libdrm mesa wayland udev
+    ]}"
+    for output in $outputs; do
+      if [ "$output" = debug ]; then continue; fi
+      LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
+    done
+    # Add the local library paths to remove dependencies on the bootstrap
+    for output in $outputs; do
+      if [ "$output" = debug ]; then continue; fi
+      OUTPUTDIR=$(eval echo \$$output)
+      BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
+      echo "$BINLIBS" | while read i; do
+        patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+        patchelf --shrink-rpath "$i" || true
       done
-      # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
-        if [ "$output" = debug ]; then continue; fi
-        OUTPUTDIR=$(eval echo \$$output)
-        BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
-        echo "$BINLIBS" | while read i; do
-          patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
-          patchelf --shrink-rpath "$i" || true
-        done
-      done
-    '';
+    done
+  '';
 
   nativeBuildInputs = [ git autoconf unzip rsync ] ++ oldAttrs.nativeBuildInputs;
 
   meta = with lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";
     longDescription = ''
-     JetBrains Runtime is a runtime environment for running IntelliJ Platform
-     based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
-     based on OpenJDK project with some modifications. These modifications
-     include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
-     support, ligatures, some fixes for native crashes not presented in
-     official build, and other small enhancements.
-     JetBrains Runtime is not a certified build of OpenJDK. Please, use at
-     your own risk.
+      JetBrains Runtime is a runtime environment for running IntelliJ Platform
+      based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
+      based on OpenJDK project with some modifications. These modifications
+      include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
+      support, ligatures, some fixes for native crashes not presented in
+      official build, and other small enhancements.
+      JetBrains Runtime is not a certified build of OpenJDK. Please, use at
+      your own risk.
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk17.meta) license platforms mainProgram;
