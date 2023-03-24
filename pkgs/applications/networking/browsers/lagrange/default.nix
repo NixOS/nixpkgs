@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , cmake
 , pkg-config
@@ -17,14 +18,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.15.5";
+  version = "1.15.6";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TP9Q80QKSkpOOQ7mllnaE1dOnNPU7k3Ij6M3+n8Jv2E=";
+    hash = "sha256-V9zrwSAflatGcN5cOOzHyyW73FN3rU+l5xUlPwy8Huk=";
   };
+
+  patches = [
+    # https://github.com/skyjake/lagrange/issues/589
+    (fetchpatch {
+      url = "https://github.com/skyjake/lagrange/commit/e8a4dad6930d16aa0811d04d06432cd6b59b472e.patch";
+      hash = "sha256-60YPmZPalnoo9AjwqKpswHkKAM/hKSIOapgPwSi4Qzk=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config zip ];
 
