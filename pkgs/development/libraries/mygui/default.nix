@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mygui";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "MyGUI";
     repo = "mygui";
     rev = "MyGUI${version}";
-    sha256 = "0a4zi8w18pjj813n7kmxldl1d9r1jp0iyhkw7pbqgl8f7qaq994w";
+    hash = "sha256-5u9whibYKPj8tCuhdLOhL4nDisbFAB0NxxdjU/8izb8=";
   };
 
   patches = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://mygui.info/";
     description = "Library for creating GUIs for games and 3D applications";
-    license = licenses.lgpl3Plus;
+    license = licenses.mit;
     platforms = platforms.unix;
   };
 }
