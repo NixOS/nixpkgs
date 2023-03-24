@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "christgau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9cwzkF2mg6yOIsurLMXTLoEIOsKbPIWMicpWBQ0XVhE=";
+    hash = "sha256-xfZVGi3OxuRI+Zh6L3Ru4J4j5BB1EAN3fllRCVA/c5o=";
   };
 
   outputs = [ "out" "man" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm0555 src/wsdd.py $out/bin/wsdd
-    installManPage man/wsdd.1
+    installManPage man/wsdd.8
     wrapProgram $out/bin/wsdd --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
