@@ -28791,6 +28791,8 @@ with pkgs;
 
   inherit (gnome) baobab;
 
+  badwolf = callPackage ../applications/networking/browsers/badwolf { };
+
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
   backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
