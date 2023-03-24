@@ -12824,6 +12824,8 @@ with pkgs;
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
+  tmpreaper = callPackage ../tools/misc/tmpreaper { };
+
   tmpmail = callPackage ../applications/networking/tmpmail { };
 
   tmux = callPackage ../tools/misc/tmux { };
