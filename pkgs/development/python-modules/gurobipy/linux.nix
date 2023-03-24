@@ -16,7 +16,7 @@ buildPythonPackage {
 
   postFixup = ''
     patchelf --set-rpath $out/lib \
-      $out/lib/${python.libPrefix}/site-packages/gurobipy/gurobipy.so
+      $out/${python.sitePackages}/gurobipy/gurobipy.so
   '';
 
   meta = with lib; {

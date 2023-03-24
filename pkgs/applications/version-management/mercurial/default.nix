@@ -62,7 +62,7 @@ let
       cp contrib/hgk $out/bin
       cat >> $out/etc/mercurial/hgrc << EOF
       [extensions]
-      hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
+      hgk=$out/${python.sitePackages}/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
       WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
