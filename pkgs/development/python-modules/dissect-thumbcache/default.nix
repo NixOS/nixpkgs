@@ -46,6 +46,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't run Windows related tests
     "windows"
+    "test_index_type"
   ];
 
   meta = with lib; {
