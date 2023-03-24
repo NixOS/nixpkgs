@@ -49,7 +49,7 @@ perl534Packages.buildPerlPackage rec {
     # the firmware is not under a free license!
     # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
     license = licenses.unfree;
-    maintainers = with maintainers; [ jecaro ];
+    maintainers = with maintainers; [ adamcstephens jecaro ];
     platforms = platforms.unix;
   };
 }
