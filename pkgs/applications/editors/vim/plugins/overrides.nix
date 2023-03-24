@@ -597,6 +597,17 @@ self: super: {
       rev = "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f";
       sha256 = "10d6dh0czdpgfpzqs5vzxfffkm0460qjzi2mfkacgghqf3iwkbja";
     };
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim
+      jupyter-client
+      ueberzug
+      pillow
+      cairosvg
+      plotly
+      ipykernel
+      pyperclip
+      pnglatex
+    ];
     meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
   };
 
