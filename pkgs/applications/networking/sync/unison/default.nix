@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unison";
-  version = "2.53.0";
+  version = "2.53.1";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "sha256-4Lyn1UecpVIhoEXIFu35XK4aoAfYGPCZ9L4ZY7224yo=";
+    sha256 = "sha256-WmFphsob8bT2Y5eFk28HN9fKQEXxI+bDPMNWtoIhhAM=";
   };
 
   strictDeps = true;
