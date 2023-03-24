@@ -1,10 +1,10 @@
-{ stdenv, rust, rustPlatform, buildPackages }:
+{ lib, stdenv, rust, rustPlatform, buildPackages }:
 
 { shortTarget, originalCargoToml, target, RUSTFLAGS }:
 
 let
   cargoSrc = import ../../sysroot/src.nix {
-    inherit stdenv rustPlatform buildPackages originalCargoToml;
+    inherit lib stdenv rustPlatform buildPackages originalCargoToml;
   };
 in rustPlatform.buildRustPackage {
   inherit target RUSTFLAGS;
@@ -14,7 +14,7 @@ in rustPlatform.buildRustPackage {
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;
-  cargoSha256 = "0y6dqfhsgk00y3fv5bnjzk0s7i30nwqc1rp0xlrk83hkh80x81mw";
+  cargoSha256 = "sha256-zgkwevitxsu1C4OgGTsqNSc0gDxaNXYK1WPbfER48d0=";
 
   doCheck = false;
 
@@ -29,4 +29,7 @@ in rustPlatform.buildRustPackage {
     host=${rust.toRustTarget stdenv.buildPlatform}
     cp -r $RUST_SYSROOT/lib/rustlib/$host $out
   '';
+
+  # allows support for cross-compilation
+  meta.platforms = lib.platforms.all;
 }

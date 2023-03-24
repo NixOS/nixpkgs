@@ -170,6 +170,7 @@ let
 
     disallowedReferences = [ openjdk19-bootstrap ];
 
+    pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version.feature;
 
     passthru = {

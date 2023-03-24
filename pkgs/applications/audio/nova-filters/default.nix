@@ -17,6 +17,7 @@ stdenv.mkDerivation {
     sed -i -e '4d' SConstruct
     sed -i 's@Options@Variables@g' SConstruct
     sed -i "s@-fomit-frame-pointer -ffast-math -mfpmath=sse@-I ${boost.dev}/include@g" SConstruct
+    sed -i "s@env.has_key('cxx')@'cxx' in env@g" SConstruct
     sed -i "s@ladspa.h@${ladspaH}/include/ladspa.h@g" filters.cpp
     sed -i "s@LADSPA_HINT_SAMPLE_RATE, 0, 0.5@LADSPA_HINT_SAMPLE_RATE, 0.0001, 0.5@g" filters.cpp
     sed -i "s/= check/= detail::filter_base<internal_type, checked>::check/" nova/source/dsp/filter.hpp

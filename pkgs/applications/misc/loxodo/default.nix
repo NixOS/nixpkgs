@@ -11,7 +11,9 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1cips4pvrqga8q1ibs23vjrf8dwan860x8jvjmc52h6qvvvv60yl";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ six wxPython_4_0 ];
+  patches = [ ./wxpython.patch ];
+
+  propagatedBuildInputs = with python3.pkgs; [ six wxPython_4_2 ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo

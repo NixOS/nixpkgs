@@ -50,6 +50,7 @@ buildPythonPackage rec {
     "test_outputBinding"
     # Test requires network
     "test_yaml_tab_error"
+    "test_bad_schemas"
   ];
 
   pythonImportsCheck = [

@@ -38,8 +38,7 @@
   buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
 
   pname = "qutebrowser";
-  version = if isQt6 then "unstable-2022-09-16" else "2.5.3";
-
+  version = if isQt6 then "unstable-2023-03-19" else "2.5.3";
 in
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -49,13 +48,14 @@ buildPythonApplication {
   inherit pname version;
 
   src = if isQt6 then
-    # comes from qt6-v2 branch of upstream
+    # comes from the master branch of upstream
     # https://github.com/qutebrowser/qutebrowser/issues/7202
+    # https://github.com/qutebrowser/qutebrowser/discussions/7628
     fetchFromGitHub {
       owner = "qutebrowser";
       repo = "qutebrowser";
-      rev = "5e11e6c7d413cf5c77056ba871a545aae1cfd66a";
-      sha256 = "sha256-5HNzPO07lUQe/Q3Nb4JiS9kb9GMQ5/FqM5029vLNNWo=";
+      rev = "294e73660c1f3d1aff50843c25e2f8f7574c4332";
+      sha256 = "sha256-vXMME9vqB4C4MScT9j7lOz4Bvu5R8nHFKi+uz9mbqtg=";
     }
   # the release tarballs are different from the git checkout!
    else fetchurl {
@@ -143,6 +143,7 @@ buildPythonApplication {
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+      ${lib.optionalString isQt6 ''--set QUTE_QT_WRAPPER "PyQt6"''}
       ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
     )

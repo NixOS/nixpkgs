@@ -6,7 +6,6 @@
 , gtk2
 , gtk3
 , pkg-config
-, python3
 }:
 
 stdenv.mkDerivation (self: {
@@ -20,7 +19,6 @@ stdenv.mkDerivation (self: {
 
   nativeBuildInputs = [
     pkg-config
-    python3
   ];
 
   buildInputs = [
@@ -40,7 +38,7 @@ stdenv.mkDerivation (self: {
     "hdspconf"
     "hdsploader"
     "hdspmixer"
-    "hwmixvolume"
+    # "hwmixvolume" # Requires old, unmaintained, abandoned EOL Python 2
     "ld10k1"
     # "qlo10k1" # needs Qt
     "mixartloader"
@@ -50,13 +48,9 @@ stdenv.mkDerivation (self: {
     # "seq" # mysterious configure error
     "sscape_ctl"
     "us428control"
-    # "usx2yloader" # tries to create /etc/hptplug/usb
+    # "usx2yloader" # tries to create /etc/hotplug/usb
     "vxloader"
   ];
-
-  postPatch = ''
-    patchShebangs hwmixvolume/
-  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -74,8 +68,8 @@ stdenv.mkDerivation (self: {
   buildPhase = ''
     runHook preBuild
 
-    echo "Building $tool:"
     for tool in $TOOLSET; do
+      echo "Building $tool:"
       pushd "$tool"
       make
       popd
@@ -87,8 +81,8 @@ stdenv.mkDerivation (self: {
   installPhase = ''
     runHook preInstall
 
-    echo "Installing $tool:"
     for tool in $TOOLSET; do
+      echo "Installing $tool:"
       pushd "$tool"
       make install
       popd

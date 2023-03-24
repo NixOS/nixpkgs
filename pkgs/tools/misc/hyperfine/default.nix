@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-cbox7TAgeb0ZPt0i3SphWClAz/mUUgRlFKCOS/E0MT4=";
+    sha256 = "sha256-OdOlFdhIYxBi3e94QAief0xZqVdr+wnbaPFSKJ20DNM=";
   };
 
-  cargoSha256 = "sha256-Bc3twE42iB7NNkI5cPcniEb+JcR1wjc9nx80p6HCDVc=";
+  cargoSha256 = "sha256-RgoMq52GkRbfhsBipMKhCSu3YQoOtDB/Fdg+9OPzGtk=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.isDarwin Security;

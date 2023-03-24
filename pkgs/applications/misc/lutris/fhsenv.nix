@@ -24,13 +24,16 @@ in buildFHSUserEnv {
     # Adventure Game Studio
     allegro dumb
 
+    # Curl
+    libnghttp2
+
     # Desmume
     lua agg soundtouch openal desktop-file-utils atk
 
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls_2 lzo sfml gsm
+    bluez ffmpeg gettext portaudio miniupnpc mbedtls_2 lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox

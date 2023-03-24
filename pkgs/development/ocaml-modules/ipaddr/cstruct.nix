@@ -7,6 +7,8 @@ buildDunePackage rec {
 
   inherit (ipaddr) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ ipaddr cstruct ];
 
   doCheck = true;

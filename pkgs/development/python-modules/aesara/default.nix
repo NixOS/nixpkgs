@@ -1,11 +1,13 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , cons
 , cython
 , etuples
 , fetchFromGitHub
 , filelock
+, hatch-vcs
+, hatchling
 , jax
 , jaxlib
 , logical-unification
@@ -22,7 +24,7 @@
 buildPythonPackage rec {
   pname = "aesara";
   version = "2.8.12";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -35,6 +37,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -57,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--durations=50" ""
   '';
 
@@ -75,12 +79,20 @@ buildPythonPackage rec {
     "tests/tensor/"
     "tests/sandbox/"
     "tests/sparse/sandbox/"
+    # JAX is not available on all platform and often broken
+    "tests/link/jax/"
+  ];
+
+  disabledTests = [
+    # Disable all benchmark tests
+    "test_scan_multiple_output"
+    "test_logsumexp_benchmark"
   ];
 
   meta = with lib; {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     homepage = "https://github.com/aesara-devs/aesara";
-    changelog = "https://github.com/aesara-devs/aesara/releases";
+    changelog = "https://github.com/aesara-devs/aesara/releases/tag/rel-${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Etjean ];
     broken = (stdenv.isLinux && stdenv.isAarch64);

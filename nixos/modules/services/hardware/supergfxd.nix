@@ -32,6 +32,7 @@ in
 
     systemd.packages = [ pkgs.supergfxctl ];
     systemd.services.supergfxd.wantedBy = [ "multi-user.target" ];
+    systemd.services.supergfxd.path = [ pkgs.kmod ];
 
     services.dbus.packages = [ pkgs.supergfxctl ];
     services.udev.packages = [ pkgs.supergfxctl ];

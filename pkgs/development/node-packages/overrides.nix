@@ -625,6 +625,7 @@ final: prev: {
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
     buildInputs = with pkgs; [
+      giflib
       pixman
       cairo
       pango

@@ -61,5 +61,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexnortung ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 , pkg-config
 , cmake
@@ -54,7 +55,6 @@
 , microsoft_gsl
 , rlottie
 , stdenv
-, gcc10Stdenv
 }:
 
 # Main reference:
@@ -70,10 +70,8 @@ let
       cxxStandard = "20";
     };
   };
-  # Aarch64 default gcc9 will cause ICE. For reference #108305
-  env = if stdenv.isAarch64 then gcc10Stdenv else stdenv;
 in
-env.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "telegram-desktop";
   version = "4.6.5";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
@@ -86,6 +84,16 @@ env.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "0c65ry82ffmh1qzc2lnsyjs78r9jllv62p9vglpz0ikg86zf36sk";
   };
+
+  patches = [
+    # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
+    # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
+    # see https://github.com/NixOS/nixpkgs/issues/218370
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
+      hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \

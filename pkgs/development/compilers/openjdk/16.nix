@@ -156,6 +156,7 @@ let
 
     disallowedReferences = [ openjdk16-bootstrap ];
 
+    pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version.feature;
 
     passthru = {

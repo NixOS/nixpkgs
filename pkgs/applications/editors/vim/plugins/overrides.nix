@@ -5,6 +5,7 @@
 , buildGoModule
 , buildVimPluginFrom2Nix
 , fetchFromGitHub
+, fetchFromSourcehut
 , fetchpatch
 , fetchurl
 , substituteAll
@@ -24,6 +25,7 @@
 , git
 , gnome
 , himalaya
+, htop
 , jq
 , khard
 , languagetool
@@ -31,6 +33,7 @@
 , meson
 , nim
 , nodePackages
+, openscad
 , pandoc
 , parinfer-rust
 , ripgrep
@@ -50,6 +53,7 @@
 , nodejs
 , xdotool
 , xorg
+, zathura
 , zsh
 
   # command-t dependencies
@@ -493,12 +497,13 @@ self: super: {
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace plugin/himalaya.vim \
-        --replace "if !executable('himalaya')" "if v:false"
-      substituteInPlace autoload/himalaya/request.vim \
-        --replace "'himalaya" "'${himalaya}/bin/himalaya"
-    '';
+    buildInputs = [ himalaya ];
+    src = fetchFromSourcehut {
+      owner = "~soywod";
+      repo = "himalaya-vim";
+      rev = "v${himalaya.version}";
+      sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
+    };
   });
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
@@ -582,6 +587,29 @@ self: super: {
   lir-nvim = super.lir-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
+
+  magma-nvim-goose = buildVimPluginFrom2Nix {
+    pname = "magma-nvim-goose";
+    version = "2023-03-13";
+    src = fetchFromGitHub {
+      owner = "WhiteBlackGoose";
+      repo = "magma-nvim-goose";
+      rev = "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f";
+      sha256 = "10d6dh0czdpgfpzqs5vzxfffkm0460qjzi2mfkacgghqf3iwkbja";
+    };
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim
+      jupyter-client
+      ueberzug
+      pillow
+      cairosvg
+      plotly
+      ipykernel
+      pyperclip
+      pnglatex
+    ];
+    meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
+  };
 
   markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
     # We only need its dependencies `node-modules`.
@@ -717,6 +745,22 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
+  # avoid choosing one of them and leave it to the user
+  openscad-nvim = super.openscad-nvim.overrideAttrs (old: {
+    buildInputs = [ zathura htop openscad ];
+
+    patches = [ ./patches/openscad.nvim/program_paths.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/openscad.lua --replace '@zathura-path@' ${zathura}/bin/zathura
+      substituteInPlace autoload/health/openscad_nvim.vim --replace '@zathura-path@' ${zathura}/bin/zathura
+      substituteInPlace lua/openscad/terminal.lua --replace '@htop-path@' ${htop}/bin/htop
+      substituteInPlace autoload/health/openscad_nvim.vim --replace '@htop-path@' ${htop}/bin/htop
+      substituteInPlace lua/openscad.lua --replace '@openscad-path@' ${openscad}/bin/openscad
+    '';
+  });
+
   orgmode = super.orgmode.overrideAttrs (old: {
     dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
   });
@@ -762,7 +806,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-nm9muH4RC92HdUiytmcW0WNyMQJcIH6dgwjUrwcqq4I=";
+        cargoHash = "sha256-GN7KM3fkeOcqmyUwsPMw499kS/eYqh8pbyPgMv4/NN4=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -796,18 +840,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.2.8";
+      version = "1.2.13";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        sha256 = "sha256-iPZ0DPAErkMJIn85t1FIiGhLcMZlL06iNKLqmRu7gXI=";
+        hash = "sha256-VDLBktZChRgorJt/V/wuFQn/SL4yOZIElmntEQEi8Tc=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-HZEh6jtuRqsyjyDbDIV38x2N1unbSu24D8vrPZ17ktE=";
+        cargoSha256 = "sha256-cJwmuwsC81fSH36TRU7xGzlR4pVdjsw73uRaH1uWY+0=";
 
         nativeBuildInputs = [ makeWrapper ];
 

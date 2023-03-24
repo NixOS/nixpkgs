@@ -27,6 +27,7 @@
 , help2man
 , jq
 , json-glib
+, kissfft
 , libadwaita
 , libaudec
 , libbacktrace
@@ -86,13 +87,13 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-beta.4.5.62";
+  version = "1.0.0-beta.4.6.3";
 
   src = fetchFromSourcehut {
     owner = "~alextee";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-K93Y4Adh9TqoetSn7nrbbruIri1MKYoSGzoRBGHwbPA=";
+    hash = "sha256-5GBr8N+GzbptrvP/NisBXT0dsl9vn537B4InB00/N+A=";
   };
 
   nativeBuildInputs = [
@@ -135,6 +136,7 @@ in stdenv.mkDerivation rec {
     gtksourceview5
     guile
     json-glib
+    kissfft
     libadwaita
     libbacktrace
     libcyaml
@@ -213,7 +215,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "Automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [ tshaynik magnetophon ];
+    maintainers = with maintainers; [ tshaynik magnetophon yuu ];
     platforms = platforms.linux;
     license = licenses.agpl3Plus;
   };

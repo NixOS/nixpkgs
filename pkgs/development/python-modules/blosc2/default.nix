@@ -35,6 +35,11 @@ buildPythonPackage rec {
     hash = "sha256-nbPMLkTye0/Q05ubE35LssN677sUIQErPTxjAtSuGgI=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements-runtime.txt \
+      --replace "pytest" ""
+  '';
+
   nativeBuildInputs = [
     cmake
     cython
