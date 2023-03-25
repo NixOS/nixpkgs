@@ -21,9 +21,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion {
+  passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
-    command = "twilio version";
   };
 
   meta = with lib; {
