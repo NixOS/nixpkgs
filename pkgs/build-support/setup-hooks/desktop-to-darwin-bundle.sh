@@ -81,6 +81,7 @@ convertIconTheme() {
         local density=$((72 * scale))x$((72 * scale))
         local dim=$((iconSize * scale))
 
+        echo "desktopToDarwinBundle: resizing icon $in to $out, size $dim" >&2
         magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
     }
 
@@ -93,6 +94,8 @@ convertIconTheme() {
         if [[ $in != '-' ]]; then
             local density=$((72 * scale))x$((72 * scale))
             local dim=$((iconSize * scale))
+
+            echo "desktopToDarwinBundle: rasterizing svg $in to $out, size $dim" >&2
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
             magick convert -density "$density" -units PixelsPerInch "$out" "$out"
         else
@@ -134,6 +137,7 @@ convertIconTheme() {
                 local icon=${iconResult#* }
                 local scaleSuffix=${scales[$scale]}
                 local result=${resultdir}/${iconSize}x${iconSize}${scales[$scale]}${scaleSuffix:+x}.png
+                echo "desktopToDarwinBundle: using $type icon $icon for size $iconSize$scaleSuffix" >&2
                 case $type in
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
