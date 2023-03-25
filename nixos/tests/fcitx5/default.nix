@@ -1,64 +1,48 @@
-import ../make-test-python.nix (
+import ../make-test-python.nix ({ pkgs, ... }:
+# copy_from_host works only for store paths
+rec {
+  name = "fcitx5";
+  nodes.machine = { pkgs, ... }:
   {
-    pkgs, ...
-  }:
-    # copy_from_host works only for store paths
-    rec {
-        name = "fcitx";
-        meta.broken = true; # takes hours to time out since October 2021
-        nodes.machine =
-        {
-          pkgs,
-          ...
-        }:
-          {
+    imports = [
+      ../common/user-account.nix
+    ];
 
-            imports = [
-              ../common/user-account.nix
-            ];
+    environment.systemPackages = [
+      # To avoid clashing with xfce4-terminal
+      pkgs.alacritty
+    ];
 
-            environment.systemPackages = [
-              # To avoid clashing with xfce4-terminal
-              pkgs.alacritty
-            ];
+    services.xserver = {
+      enable = true;
 
+      displayManager = {
+        lightdm.enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
+      };
 
-            services.xserver =
-            {
-              enable = true;
+      desktopManager.xfce.enable = true;
+    };
 
-              displayManager = {
-                lightdm.enable = true;
-                autoLogin = {
-                  enable = true;
-                  user = "alice";
-                };
-              };
+    i18n.inputMethod = {
+      enabled = "fcitx5";
+      fcitx5.addons = [
+        pkgs.fcitx5-m17n
+        pkgs.fcitx5-chinese-addons
+      ];
+    };
+  };
 
-              desktopManager.xfce.enable = true;
-            };
-
-            i18n = {
-              inputMethod = {
-                enabled = "fcitx";
-                fcitx.engines = [
-                  pkgs.fcitx-engines.m17n
-                  pkgs.fcitx-engines.table-extra
-                ];
-              };
-            };
-          }
-        ;
-
-        testScript = { nodes, ... }:
-        let
-            user = nodes.machine.config.users.users.alice;
-            userName      = user.name;
-            userHome      = user.home;
-            xauth         = "${userHome}/.Xauthority";
-            fcitx_confdir = "${userHome}/.config/fcitx";
-        in
-        ''
+  testScript = { nodes, ... }:
+    let
+      user = nodes.machine.users.users.alice;
+      xauth         = "${user.home}/.Xauthority";
+      fcitx_confdir = "${user.home}/.config/fcitx5";
+    in
+      ''
             # We need config files before login session
             # So copy first thing
 
@@ -75,13 +59,13 @@ import ../make-test-python.nix (
 
             start_all()
 
-            machine.wait_for_file("${xauth}")
+            machine.wait_for_file("${xauth}}")
             machine.succeed("xauth merge ${xauth}")
 
             machine.sleep(5)
 
-            machine.succeed("su - ${userName} -c 'alacritty&'")
-            machine.succeed("su - ${userName} -c 'fcitx&'")
+            machine.succeed("su - ${user.name} -c 'alacritty&'")
+            machine.succeed("su - ${user.name} -c 'fcitx5&'")
             machine.sleep(10)
 
             ### Type on terminal
@@ -109,8 +93,10 @@ import ../make-test-python.nix (
             machine.send_key("ctrl-spc")
             machine.sleep(1)
 
-            ### Default zhengma, enter 一下
-            machine.send_chars("a2")
+            ### Default wubi, enter 一下
+            machine.send_chars("gggh")
+            machine.sleep(1)
+            machine.send_key("\n")
             machine.sleep(1)
 
             ### Switch to Harvard Kyoto
@@ -134,9 +120,8 @@ import ../make-test-python.nix (
             machine.screenshot("terminal_chars")
 
             ### Verify that file contents are as expected
-            file_content = machine.succeed("cat ${userHome}/fcitx_test.out")
+            file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
             assert file_content == "☺一下क\n"
             ''
-    ;
-  }
-)
+  ;
+})
