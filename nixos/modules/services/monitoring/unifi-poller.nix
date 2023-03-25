@@ -303,7 +303,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.unifi-poller}/bin/unifi-poller --config ${configFile}";
+        ExecStart = "${pkgs.unifi-poller}/bin/unpoller --config ${configFile}";
         Restart = "always";
         PrivateTmp = true;
         ProtectHome = true;
