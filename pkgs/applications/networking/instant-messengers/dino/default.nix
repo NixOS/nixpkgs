@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "sha256-wjSgs1mUMV7j/8ZeXqWs8aOeWvJHwKziUfbtOC1HS3s=";
+    sha256 = "Up9FPh9kDSlYTFa7sgv0xiOm6DfBM3Tn297jOFv3hDo=";
   };
 
   nativeBuildInputs = [
