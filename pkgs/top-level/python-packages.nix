@@ -9304,6 +9304,8 @@ self: super: with self; {
 
   plotext = callPackage ../development/python-modules/plotext { };
 
+  plotink = callPackage ../development/python-modules/plotink { };
+
   plotly = callPackage ../development/python-modules/plotly { };
 
   plotnine = callPackage ../development/python-modules/plotnine { };
