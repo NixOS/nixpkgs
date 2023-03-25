@@ -69,7 +69,7 @@ in pkgs.runCommand "doc-support" {}
   (
     cd result
     ln -s ${functionDocs} ./function-docs
-    ln -s ${optionsDoc.optionsDocBook} ./config-options.docbook.xml
+    ln -s ${optionsDoc.optionsJSON} ./config-options.json
 
     ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
     ln -s ${pkgs.docbook_xsl_ns}/xml/xsl ./xsl
@@ -77,9 +77,6 @@ in pkgs.runCommand "doc-support" {}
     ln -s ${xhtml-xsl} ./xhtml.xsl
 
     ln -s ${./xmlformat.conf} ./xmlformat.conf
-    ln -s ${pkgs.documentation-highlighter} ./highlightjs
-
-    echo -n "${version}" > ./version
   )
   mv result $out
 ''

@@ -47,13 +47,7 @@ in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
   nativeBuildInputs = with pkgs; [
-    pandoc
-    graphviz
-    libxml2
-    libxslt
-    zip
-    jing
-    xmlformat
+    nixos-render-docs
   ];
 
   src = pkgs.nix-gitignore.gitignoreSource [] ./.;
@@ -62,14 +56,43 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${doc-support} ./doc-support/result
   '';
 
-  preBuild = ''
-    make -j$NIX_BUILD_CORES render-md
+  buildPhase = ''
+    cat \
+      ./functions/library.md.in \
+      ./doc-support/result/function-docs/index.md \
+      > ./functions/library.md
+    substitute ./manual.md.in ./manual.md \
+      --replace '@MANUAL_VERSION@' '${pkgs.lib.version}'
+
+    mkdir -p out/media
+
+    mkdir -p out/highlightjs
+    cp -t out/highlightjs \
+      ${pkgs.documentation-highlighter}/highlight.pack.js \
+      ${pkgs.documentation-highlighter}/LICENSE \
+      ${pkgs.documentation-highlighter}/mono-blue.css \
+      ${pkgs.documentation-highlighter}/loader.js
+
+    cp -t out ./overrides.css ./style.css
+
+    nixos-render-docs manual html \
+      --manpage-urls ./manpage-urls.json \
+      --revision ${pkgs.lib.trivial.revisionWithDefault (pkgs.rev or "master")} \
+      --stylesheet style.css \
+      --stylesheet overrides.css \
+      --stylesheet highlightjs/mono-blue.css \
+      --script ./highlightjs/highlight.pack.js \
+      --script ./highlightjs/loader.js \
+      --toc-depth 1 \
+      --section-toc-depth 1 \
+      manual.md \
+      out/index.html
   '';
 
   installPhase = ''
     dest="$out/share/doc/nixpkgs"
     mkdir -p "$(dirname "$dest")"
-    mv out/html "$dest"
+    mv out "$dest"
     mv "$dest/index.html" "$dest/manual.html"
 
     cp ${epub} "$dest/nixpkgs-manual.epub"
@@ -78,8 +101,4 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
-
-  # Environment variables
-  PANDOC_LUA_FILTERS_DIR = "${pkgs.pandoc-lua-filters}/share/pandoc/filters";
-  PANDOC_LINK_MANPAGES_FILTER = import build-aux/pandoc-filters/link-manpages.nix { inherit pkgs; };
 }
