@@ -2,21 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rss-bridge";
-  version = "2022-06-14";
+  version = "2023-03-22";
 
   src = fetchFromGitHub {
     owner = "RSS-Bridge";
     repo = "rss-bridge";
     rev = version;
-    sha256 = "sha256-yH+m65CIZokZSbnv1zfpKC/Qr/mPPC6dG49Zn62X0l4=";
+    sha256 = "sha256-76XmPFb9w//GK9T4H41FxLBpWdTvJA28E0kWCCV/AFM=";
   };
 
-  postPatch = ''
-    substituteInPlace lib/rssbridge.php \
-      --replace "define('PATH_CACHE', PATH_ROOT . 'cache/');" "define('PATH_CACHE', getenv('RSSBRIDGE_DATA') . '/cache/');" \
-      --replace "define('FILE_CONFIG', PATH_ROOT . 'config.ini.php');" "define('FILE_CONFIG', getenv('RSSBRIDGE_DATA') . '/config.ini.php');" \
-      --replace "define('WHITELIST', PATH_ROOT . 'whitelist.txt');" "define('WHITELIST', getenv('RSSBRIDGE_DATA') . '/whitelist.txt');"
-  '';
+  patches = [
+    ./paths.patch
+  ];
 
   installPhase = ''
     mkdir $out/

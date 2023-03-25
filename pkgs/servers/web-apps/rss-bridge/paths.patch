@@ -1,0 +1,32 @@
+diff --git a/lib/RssBridge.php b/lib/RssBridge.php
+index 62e8acc5..00eca8be 100644
+--- a/lib/RssBridge.php
++++ b/lib/RssBridge.php
+@@ -25,8 +25,8 @@ final class RssBridge
+         Configuration::verifyInstallation();
+ 
+         $customConfig = [];
+-        if (file_exists(__DIR__ . '/../config.ini.php')) {
+-            $customConfig = parse_ini_file(__DIR__ . '/../config.ini.php', true, INI_SCANNER_TYPED);
++        if (file_exists(getenv('RSSBRIDGE_DATA') . '/config.ini.php')) {
++            $customConfig = parse_ini_file(getenv('RSSBRIDGE_DATA') . '/config.ini.php', true, INI_SCANNER_TYPED);
+         }
+         Configuration::loadConfiguration($customConfig, getenv());
+ 
+diff --git a/lib/bootstrap.php b/lib/bootstrap.php
+index 8e5cf69c..7fece356 100644
+--- a/lib/bootstrap.php
++++ b/lib/bootstrap.php
+@@ -28,10 +28,10 @@ const PATH_LIB_CACHES = __DIR__ . '/../caches/';
+ const PATH_LIB_ACTIONS = __DIR__ . '/../actions/';
+ 
+ /** Path to the cache folder */
+-const PATH_CACHE = __DIR__ . '/../cache/';
++define('PATH_CACHE', getenv('RSSBRIDGE_DATA') . '/cache/');
+ 
+ /** Path to the whitelist file */
+-const WHITELIST = __DIR__ . '/../whitelist.txt';
++define('WHITELIST', getenv('RSSBRIDGE_DATA') . '/whitelist.txt');
+ 
+ /** Path to the default whitelist file */
+ const WHITELIST_DEFAULT = __DIR__ . '/../whitelist.default.txt';
