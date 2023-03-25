@@ -4,9 +4,9 @@ let mkOni2 = callPackage ./common.nix { };
 in mkOni2 rec {
   variant = "oni2";
   license = {
-    fullName = "Outrun Labs End User License Agreement";
-    url = "https://github.com/onivim/oni2/blob/master/Outrun-Labs-EULA-v1.1.md";
-    free = false;
+    fullName = "MIT";
+    url = "https://github.com/onivim/oni2/blob/master/LICENSE.md";
+    free = true;
   };
   version = "0.5.7";
   rev = "v${version}";
