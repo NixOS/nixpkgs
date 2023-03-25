@@ -1,6 +1,6 @@
-{ lib, stdenv, clang14Stdenv, fetchFromGitHub, openssl, sqlite }:
+{ lib, stdenv, llvmPackages_14, fetchFromGitHub, openssl, sqlite }:
 
-(if stdenv.isDarwin then clang14Stdenv else stdenv).mkDerivation rec {
+(if stdenv.isDarwin then llvmPackages_14.stdenv else stdenv).mkDerivation rec {
   pname = "signalbackup-tools";
   version = "20230316";
 
