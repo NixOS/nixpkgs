@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Declarative Python programming using Parameters";
-    homepage = "https://github.com/pyviz/param";
+    homepage = "https://param.holoviz.org/";
     changelog = "https://github.com/holoviz/param/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
