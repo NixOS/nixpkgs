@@ -135,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.6.0";
+    version = "3.6.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -145,7 +145,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha512-oR6nYa2s4C73+IsliTMoAFzvB/ktNi+8eUVA3KJunPyXCHjQMSyuvRnWRIPp88PiStbCffziZNF3+T1lx+9plg==";
+      hash = "sha256-VUArtHymc52KuiXkF4CQW1zhvOCl4N0X3KkItbwLSbI=";
     };
 
     # Fix FHS paths in tests
