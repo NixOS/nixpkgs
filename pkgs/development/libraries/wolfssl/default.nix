@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
-    rev = "v${version}-stable";
+    rev = "refs/tags/v${version}-stable";
     hash = "sha256-sR/Gjk50kLej5oJzDH1I6/V+7OIRiwtyeg5tEE3fmHk=";
   };
 
@@ -43,13 +43,19 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  propagatedBuildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    openssl
+  ];
 
   postInstall = ''
      # fix recursive cycle:
@@ -62,6 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
     homepage = "https://www.wolfssl.com/";
+    changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${version}-stable";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];
