@@ -15654,6 +15654,13 @@
     githubId = 7401858;
     name = "Sterling Stein";
   };
+  sdedovic = {
+    email = "stevan@dedovic.com";
+    github = "sdedovic";
+    githubId = 599915;
+    matrix = "@sdedovic:matrix.org";
+    name = "Stevan Dedovic";
+  };
   sdier = {
     email = "scott@dier.name";
     matrix = "@sdier:matrix.org";
