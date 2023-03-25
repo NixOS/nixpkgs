@@ -479,8 +479,8 @@ let
         mktplcRef = {
           name = "markdown-checkbox";
           publisher = "bierner";
-          version = "0.3.1";
-          sha256 = "0x57dnr6ksqxi28g1c392k04vxy0vdni9nl4xps3i5zh0pyxizhw";
+          version = "0.4.0";
+          sha256 = "sha256-AoPcdN/67WOzarnF+GIx/nans38Jan8Z5D0StBWIbkk=";
         };
         meta = {
           license = lib.licenses.mit;
