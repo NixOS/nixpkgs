@@ -23170,6 +23170,7 @@ with pkgs;
         bison cups dconf harfbuzz libGL perl gtk3 python3
         darwin buildPackages;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
+      inherit config;
       stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     });
 
@@ -28797,6 +28798,8 @@ with pkgs;
 
   inherit (gnome) baobab;
 
+  badwolf = callPackage ../applications/networking/browsers/badwolf { };
+
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
   backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
@@ -30054,10 +30057,14 @@ with pkgs;
   firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
 
   firefox-unwrapped = firefoxPackages.firefox;
+  firefox-beta-unwrapped = firefoxPackages.firefox-beta;
+  firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
 
   firefox = wrapFirefox firefox-unwrapped { };
+  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
+  firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
   firefox-esr = firefox-esr-102;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
@@ -33482,8 +33489,8 @@ with pkgs;
   snapper = callPackage ../tools/misc/snapper { };
   snapper-gui = callPackage ../applications/misc/snapper-gui { };
 
-  snd = callPackage ../applications/audio/snd {
-    inherit (darwin.apple_sdk.frameworks) CoreServices CoreMIDI;
+  snd = darwin.apple_sdk_11_0.callPackage ../applications/audio/snd {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices CoreMIDI;
   };
 
   shntool = callPackage ../applications/audio/shntool { };
