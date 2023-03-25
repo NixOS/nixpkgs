@@ -740,8 +740,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.50.0";
-          sha256 = "sha256-vdECvW4BfuT3H6GD2cH7lVW0f5591pKjXsWyJzzpHYA=";
+          version = "3.61.20230324";
+          sha256 = "sha256-VVQ32heyzLjM5HdeNAK5PwqB1NsSQ9iQJBwJiJXlu+g=";
         };
 
         meta.license = lib.licenses.mit;
