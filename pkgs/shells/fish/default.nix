@@ -181,6 +181,10 @@ let
       rm tests/pexpects/exit.py
       rm tests/pexpects/job_summary.py
       rm tests/pexpects/signals.py
+
+      # pexpect tests are flaky in general
+      # See https://github.com/fish-shell/fish-shell/issues/8789
+      rm tests/pexpects/bind.py
     '' + lib.optionalString stdenv.isLinux ''
       # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
