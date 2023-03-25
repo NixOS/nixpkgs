@@ -51,6 +51,7 @@ import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Text.Encoding (encodeUtf8)
+import qualified Data.Text.IO as Text
 import Data.Time (defaultTimeLocale, formatTime, getCurrentTime)
 import Data.Time.Clock (UTCTime)
 import GHC.Generics (Generic)
@@ -104,13 +105,36 @@ data Eval = Eval
    }
    deriving (Generic, ToJSON, FromJSON, Show)
 
+-- | Datatype representing the result of querying the build evals of the
+-- haskell-updates Hydra jobset.
+--
+-- The URL <https://hydra.nixos.org/eval/EVAL_ID/builds> (where @EVAL_ID@ is a
+-- value like 1792418) returns a list of 'Build'.
 data Build = Build
    { job :: Text
+     -- ^ Hydra job name.
+     --
+     -- Examples:
+     -- - @"haskellPackages.lens.x86_64-linux"@
+     -- - @"haskell.packages.ghc925.cabal-install.aarch64-darwin"@
    , buildstatus :: Maybe Int
+     -- ^ Status of the build.  See 'getBuildState' for the meaning of each state.
    , finished :: Int
+     -- ^ Whether or not the build is finished.  @0@ if finished, non-zero otherwise.
    , id :: Int
    , nixname :: Text
+     -- ^ Nix name of the derivation.
+     --
+     -- Examples:
+     -- - @"lens-5.2.1"@
+     -- - @"cabal-install-3.8.0.1"@
+     -- - @"lens-static-x86_64-unknown-linux-musl-5.1.1"@
    , system :: Text
+     -- ^ System
+     --
+     -- Examples:
+     -- - @"x86_64-linux"@
+     -- - @"aarch64-darwin"@
    , jobsetevals :: Seq Int
    }
    deriving (Generic, ToJSON, FromJSON, Show)
@@ -540,7 +564,10 @@ printMaintainerPing = do
       let tops = take 50 . sortOn (negate . snd) . fmap (second fst) . filter (\x -> maybe False broken $ Map.lookup (fst x) depMap) . Map.toList $ rdepMap
       pure (rdepMap, tops)
    (eval, fetchTime, buildReport) <- readBuildReports
-   putStrLn (Text.unpack (printBuildSummary eval fetchTime (buildSummary maintainerMap reverseDependencyMap buildReport) topBrokenRdeps))
+   let buildSum :: StatusSummary
+       buildSum = buildSummary maintainerMap reverseDependencyMap buildReport
+       textBuildSummary = printBuildSummary eval fetchTime buildSum topBrokenRdeps
+   Text.putStrLn textBuildSummary
 
 printMarkBrokenList :: IO ()
 printMarkBrokenList = do
