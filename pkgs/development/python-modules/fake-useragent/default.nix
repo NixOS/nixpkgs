@@ -13,6 +13,8 @@ buildPythonPackage rec {
   version = "1.1.3";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "fake-useragent";
     repo = "fake-useragent";
@@ -42,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Up to date simple useragent faker with real world database";
     homepage = "https://github.com/hellysmile/fake-useragent";
+    changelog = "https://github.com/fake-useragent/fake-useragent/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ evanjs ];
   };
