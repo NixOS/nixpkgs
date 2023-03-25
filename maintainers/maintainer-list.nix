@@ -7433,6 +7433,13 @@
     githubId = 7673602;
     name = "Jonathan Ringer";
   };
+  jopejoe1 = {
+    email = "johannes@joens.email";
+    matrix = "@jopejoe1:matrix.org";
+    github = "jopejoe1";
+    githubId = 34899572;
+    name = "Johannes Jöns";
+  };
   jordanisaacs = {
     name = "Jordan Isaacs";
     email = "nix@jdisaacs.com";
@@ -14178,6 +14185,16 @@
     githubId = 6277322;
     name = "Wei Tang";
   };
+  soywod = {
+    name = "Clément DOUIN";
+    email = "clement.douin@posteo.net";
+    matrix = "@soywod:matrix.org";
+    github = "soywod";
+    githubId = 10437171;
+    keys = [{
+      fingerprint = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72";
+    }];
+  };
   spacefrogg = {
     email = "spacefrogg-nixos@meterriblecrew.net";
     github = "spacefrogg";
@@ -15150,6 +15167,12 @@
     github = "Thra11";
     githubId = 1391883;
     name = "Tom Hall";
+  };
+  thubrecht = {
+    email = "tom@hubrecht.ovh";
+    github = "Tom-Hubrecht";
+    githubId = 26650391;
+    name = "Tom Hubrecht";
   };
   Thunderbottom = {
     email = "chinmaydpai@gmail.com";

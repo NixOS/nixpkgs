@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.bsd3;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }

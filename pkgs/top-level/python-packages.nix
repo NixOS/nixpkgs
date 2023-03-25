@@ -5309,6 +5309,10 @@ self: super: with self; {
 
   larynx-train = callPackage ../development/python-modules/larynx-train { };
 
+  laspy = callPackage ../development/python-modules/laspy { };
+
+  laszip = callPackage ../development/python-modules/laszip { };
+
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
@@ -7551,6 +7555,8 @@ self: super: with self; {
   plyvel = callPackage ../development/python-modules/plyvel { };
 
   pmw = callPackage ../development/python-modules/pmw { };
+
+  pnglatex = callPackage ../development/python-modules/pnglatex { };
 
   pocket = callPackage ../development/python-modules/pocket { };
 

@@ -63,8 +63,16 @@ def replace_dependencies(
 
 
 def main() -> None:
+    top_cargo_toml = load_file(sys.argv[2])
+
+    if "workspace" not in top_cargo_toml:
+        # If top_cargo_toml is not a workspace manifest, then this script was probably
+        # ran on something that does not actually use workspace dependencies
+        print(f"{sys.argv[2]} is not a workspace manifest, doing nothing.")
+        return
+
     crate_manifest = load_file(sys.argv[1])
-    workspace_manifest = load_file(sys.argv[2])["workspace"]
+    workspace_manifest = top_cargo_toml["workspace"]
 
     if "workspace" in crate_manifest:
         return
