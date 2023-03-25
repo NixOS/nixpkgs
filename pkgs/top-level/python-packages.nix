@@ -5327,6 +5327,8 @@ self: super: with self; {
 
   inkex = callPackage ../development/python-modules/inkex { };
 
+  ink-extensions = callPackage ../development/python-modules/ink-extensions { };
+
   inlinestyler = callPackage ../development/python-modules/inlinestyler { };
 
   inotify = callPackage ../development/python-modules/inotify { };
