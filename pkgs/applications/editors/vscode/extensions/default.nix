@@ -467,8 +467,8 @@ let
         mktplcRef = {
           name = "emojisense";
           publisher = "bierner";
-          version = "0.9.0";
-          sha256 = "0gpcpwh57lqlynsrkv3smykndb46xjh7r85lb291wdklq5ahmb2j";
+          version = "0.9.1";
+          sha256 = "sha256-bfhImi2qMHWkgKqkoStS0NtbXTfj6GpcLkI0PSMjuvg=";
         };
         meta = {
           license = lib.licenses.mit;
