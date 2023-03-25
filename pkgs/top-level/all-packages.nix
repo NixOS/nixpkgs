@@ -7900,13 +7900,9 @@ with pkgs;
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
-  godot_4 = callPackage ../development/tools/godot/4 {
-    scons = sconsPackages.scons_4_1_0;
-  };
+  godot_4 = callPackage ../development/tools/godot/4 { };
 
-  godot = callPackage ../development/tools/godot/3 {
-    scons = sconsPackages.scons_4_1_0;
-  };
+  godot = callPackage ../development/tools/godot/3 { };
 
   godot-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
 
