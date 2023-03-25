@@ -147,15 +147,27 @@ let
       description = lib.mdDoc "Authentication type for encrypted LeaseSet.";
       default = null;
     };
-    i2cp.leaseSetClient.dh.nnn = mkOption {
-      type = with types; nullOr str;
-      description = lib.mdDoc "Client name:client's public DH in base64, for authentication type DH.";
-      default = null;
+    i2cp.leaseSetClient.dh = mkOption {
+      type = with types; attrsOf str;
+      description = lib.mdDoc "Client's public DHs in base64, for authentication type DH.";
+      default = {};
+      example = ''
+        {
+          "Bob" = "Bob's public DH key in base64";
+          "Alice" = "Alice's public DH key in base64";
+        }
+      '';
     };
-    i2cp.leaseSetClient.psk.nnn = mkOption {
-      type = with types; nullOr str;
-      description = lib.mdDoc "Client name:client's PSK in base64, for authentication type PSK.";
-      default = null;
+    i2cp.leaseSetClient.psk = mkOption {
+      type = with types; attrsOf str;
+      description = lib.mdDoc "Client's PSKs in base64, for authentication type PSK.";
+      default = {};
+      example = ''
+        {
+          "Bob" = "Bob's password in base64";
+          "Alice" = "Alice's password in base64";
+        }
+      '';
     };
     destination = mkOption {
       type = types.str;
@@ -300,10 +312,15 @@ let
             optionalNullString "i2cp.leaseSetPrivKey" tun.i2cp.leaseSetPrivKey else [])
         ++ (if tun ? i2cp.leaseSetAuthType then
             optionalNullInt "i2cp.leaseSetAuthType" tun.i2cp.leaseSetAuthType else [])
-        ++ (if tun ? i2cp.leaseSetClient.dh.nnn then
-            optionalNullString "i2cp.leaseSetClient.dh.nnn" tun.i2cp.leaseSetClient.dh.nnn else [])
-        ++ (if tun ? i2cp.leaseSetClient.psk.nnn then
-            optionalNullString "i2cp.leaseSetClient.psk.nnn" tun.i2cp.leaseSetClient.psk.nnn else []);
+        ++ (let
+              # Format: i2cp.leaseSetClient.(dh/psk).(unique integer) = (client's name):(key in base64)
+              formatter = prefix: attrset:
+                flip genList (length (attrNames attrset))
+                  (n: "${prefix}.${toString n} = ${elemAt (attrNames attrset) n}:${elemAt (attrValues attrset) n}");
+            in
+              (if tun ? i2cp.leaseSetClient.dh then formatter "i2cp.leaseSetClient.dh" tun.i2cp.leaseSetClient.dh else []) ++
+              (if tun ? i2cp.leaseSetClient.psk then formatter "i2cp.leaseSetClient.psk" tun.i2cp.leaseSetClient.psk else [])
+          );
         in concatStringsSep "\n" outTunOpts))
     (flip map
       (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
