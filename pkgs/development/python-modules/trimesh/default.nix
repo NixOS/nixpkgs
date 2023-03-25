@@ -3,6 +3,7 @@
 , fetchPypi
 , setuptools
 , numpy
+, lxml
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  # tests are not included in pypi distributions and would require lots of
-  # optional dependencies
-  doCheck = false;
+  nativeCheckInputs = [ lxml ];
+
+  checkPhase = ''
+    # Disable test_load because requires loading models which aren't part of the tarball
+    substituteInPlace tests/test_minimal.py --replace "test_load" "disable_test_load"
+    python tests/test_minimal.py
+  '';
 
   pythonImportsCheck = [ "trimesh" ];
 
