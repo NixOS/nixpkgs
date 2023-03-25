@@ -1352,7 +1352,7 @@ buildLuarocksPackage {
   };
 }) {};
 
-lua-resty-session = callPackage({ lua_pack, buildLuarocksPackage, fetchgit, luaOlder, lua, lua-ffi-zlib, lua-resty-openssl }:
+lua-resty-session = callPackage({ buildLuarocksPackage, fetchgit, luaOlder, lua, lua-resty-openssl /*, lua_pack, lua-ffi-zlib */  }:
 buildLuarocksPackage {
   pname = "lua-resty-session";
   version = "4.0.3-1";
@@ -1374,12 +1374,13 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua lua-ffi-zlib lua-resty-openssl lua_pack ];
+  propagatedBuildInputs = [ lua lua-resty-openssl /* lua_pack lua-ffi-zlib */ ];
 
   meta = {
     homepage = "https://github.com/bungle/lua-resty-session";
     description = "Session Library for OpenResty - Flexible and Secure";
     license.fullName = "BSD";
+    broken = true; # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
   };
 }) {};
 

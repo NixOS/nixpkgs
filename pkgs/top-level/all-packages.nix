@@ -494,7 +494,7 @@ with pkgs;
 
   dinghy = with python3Packages; toPythonApplication dinghy;
 
-  djhtml = callPackage ../development/tools/djhtml { };
+  djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
   deadcode = callPackage ../development/tools/deadcode { };
 
