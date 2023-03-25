@@ -18,7 +18,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
     pname = "netbox";
-    version = "3.3.9";
+    version = "3.4.6";
 
     format = "other";
 
@@ -26,18 +26,12 @@ py.pkgs.buildPythonApplication rec {
       owner = "netbox-community";
       repo = pname;
       rev = "refs/tags/v${version}";
-      sha256 = "sha256-KhnxD5pjlEIgISl4RMbhLCDwgUDfGFRi88ZcP1ndMhI=";
+      sha256 = "sha256-j2Iwh+yGp0xMnZ+Fh7kepb5xzT3GRNhaAiztITgPuws=";
     };
 
     patches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch
-      ./graphql-3_2_0.patch
-      # fix compatibility ith django 4.1
-      (fetchpatch {
-        url = "https://github.com/netbox-community/netbox/pull/10341/commits/ce6bf9e5c1bc08edc80f6ea1e55cf1318ae6e14b.patch";
-        sha256 = "sha256-aCPQp6k7Zwga29euASAd+f13hIcZnIUu3RPAzNPqgxc=";
-      })
     ];
 
     propagatedBuildInputs = with py.pkgs; [
