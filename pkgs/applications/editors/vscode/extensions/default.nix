@@ -180,29 +180,27 @@ let
         };
       };
 
-      antfu = {
-        icons-carbon = buildVscodeMarketplaceExtension {
-          mktplcRef = {
-            name = "icons-carbon";
-            publisher = "antfu";
-            version = "0.2.2";
-            sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
-          };
-          meta = {
-            license = lib.licenses.mit;
-          };
+      antfu.icons-carbon = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "icons-carbon";
+          publisher = "antfu";
+          version = "0.2.6";
+          sha256 = "sha256-R8eHLuebfgHaKtHPKBaaYybotluuH9WrUBpgyuIVOxc=";
         };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
 
-        slidev = buildVscodeMarketplaceExtension {
-          mktplcRef = {
-            publisher = "antfu";
-            name = "slidev";
-            version = "0.3.3";
-            sha256 = "0pqiwcvn5c8kwqlmz4ribwwra69gbiqvz41ig4fh29hkyh078rfk";
-          };
-          meta = {
-            license = lib.licenses.mit;
-          };
+      antfu.slidev = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "antfu";
+          name = "slidev";
+          version = "0.3.3";
+          sha256 = "0pqiwcvn5c8kwqlmz4ribwwra69gbiqvz41ig4fh29hkyh078rfk";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
