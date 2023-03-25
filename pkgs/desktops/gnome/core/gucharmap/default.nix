@@ -3,6 +3,7 @@
 , intltool
 , fetchFromGitLab
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , python3
@@ -18,7 +19,6 @@
 , docbook_xsl
 , docbook_xml_dtd_412
 , gsettings-desktop-schemas
-, callPackage
 , unzip
 , unicode-character-database
 , unihan-database
@@ -57,6 +57,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-QoHLMq3U/BvpCFKttxLo0qs2xmZ/pCqPjsgq/MMWNbo=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -73,6 +74,8 @@ in stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
