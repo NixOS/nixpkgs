@@ -3,6 +3,7 @@
 , fetchurl
 , gtk3
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gobject-introspection
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "1QEVuFyHKqwpaTS17nJqP6FWxvWtltJ+Dt0Kpa0XMig=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
