@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , stdenv
 , cmake
+, git
 , gn
 , go
 , jdk
@@ -18,30 +19,23 @@
 , wasmRuntime ? "wamr"
 }:
 
-let
-  srcVer = {
-    # We need the commit hash, since Bazel stamps the build with it.
-    # However, the version string is more useful for end-users.
-    # These are contained in a attrset of their own to make it obvious that
-    # people should update both.
-    version = "1.25.1";
-    rev = "bae2e9d642a6a8ae6c5d3810f77f3e888f0d97da";
-  };
-in
 buildBazelPackage rec {
   pname = "envoy";
-  inherit (srcVer) version;
+  version = "1.25.1";
   bazel = bazel_5;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev;
+    rev = "v${version}";
     sha256 = "sha256-qA3+bta2vXGtAYX3mg+CmSIEitk4576JQB/QLPsj9Vc=";
 
+    # We need the commit hash, since Bazel stamps the build with it
+    leaveDotGit = true;
     postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
-      echo ${srcVer.rev} > $out/SOURCE_VERSION
+      ${lib.getExe git} -C $out rev-parse HEAD > $out/SOURCE_VERSION
+      rm -r $out/.git
     '';
   };
 
