@@ -111,6 +111,10 @@ in
         };
       };
 
+    powerManagement.powerDownCommands = ''
+      ${alsa-utils}/sbin/alsactl store --ignore
+    '';
+
     services.actkbd = mkIf config.sound.mediaKeys.enable {
       enable = true;
       bindings = [
