@@ -107,6 +107,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
 
+    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Plesae use fcitx5 instead")
+
     # Do NOT add any option renames here, see top of the file
   ];
 }
