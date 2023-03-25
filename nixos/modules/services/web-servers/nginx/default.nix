@@ -184,8 +184,9 @@ let
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      ${optionalString cfg.recommendedGzipSettings ''
+      ${optionalString cfg.recommendedGzipSettings
         # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+      ''
         gzip on;
         gzip_static on;
         gzip_vary on;
@@ -476,7 +477,8 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+          Enable recommended brotli settings.
+          Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/).
 
           This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
         '';
@@ -487,6 +489,18 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Enable recommended gzip settings.
+          Learn more about compression in Gzip format [here](https://docs.nginx.com/nginx/admin-guide/web-server/compression/).
+        '';
+      };
+
+      recommendedZstdSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended zstd settings.
+          Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
+
+          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -495,16 +509,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether to enable recommended proxy settings if a vhost does not specify the option manually.
-        '';
-      };
-
-      recommendedZstdSettings = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          Enable recommended zstd settings. Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
-
-          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
