@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, clutter, gtk3, glib, cogl, gnome, gdk-pixbuf }:
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, clutter, gtk3, glib, cogl, gnome, gdk-pixbuf, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "clutter-gst";
@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config glib gobject-introspection ];
   propagatedBuildInputs = [ clutter gtk3 glib cogl gdk-pixbuf ];
-  nativeBuildInputs = [ pkg-config ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
 
