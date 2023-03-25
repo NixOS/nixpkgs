@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , php
 , pkgs
+, nixosTests
 , dataDir ? "/var/lib/pixelfed"
 , runtimeDir ? "/run/pixelfed"
 }:
@@ -36,6 +37,8 @@ in package.override rec {
     rev = "v${version}";
     hash = "sha256-ZrvYKMSx5WymWR46/UKr5jCsclXXzBeY21ju22zeqN0=";
   };
+
+  passthru.tests = { inherit (nixosTests) pixelfed; };
 
   meta = with lib; {
     description = "A federated image sharing platform";
