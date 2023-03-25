@@ -18,7 +18,7 @@
 , openal
 , openssl
 , racket_7_9
-, sconsPackages
+, scons
 , zlib
 }:
 let
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     openssl.dev
     racket_7_9
   ];
-  nativeBuildInputs = [ sconsPackages.scons_latest ];
+  nativeBuildInputs = [ scons ];
 
   patches = [ ./fix-build.patch ];
   sconsFlags = [
