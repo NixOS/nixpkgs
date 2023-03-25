@@ -54,21 +54,30 @@ convertIconTheme() {
             $((iconSize - 2))x$((iconSize - 2))${scaleSuffix}
         )
 
+        local fallbackIcon=
+
         for iconIndex in "${!candidateIcons[@]}"; do
             for maybeSize in "${validSizes[@]}"; do
                 icon=${candidateIcons[$iconIndex]}
                 if [[ $icon = */$maybeSize/* ]]; then
                     if [[ $maybeSize = $exactSize ]]; then
                         echo "fixed $icon"
+                        return 0
                     else
                         echo "threshold $icon"
+                        return 0
                     fi
-                elif [[ -a $icon ]]; then
-                  echo "fallback $icon"
+                elif [[ -a $icon && -z "$fallbackIcon" ]]; then
+                    fallbackIcon="$icon"
                 fi
-                return 0
             done
         done
+
+        if [[ -n "$fallbackIcon" ]]; then
+            echo "fallback $fallbackIcon"
+            return 0
+        fi
+
         echo "scalable"
     }
 
