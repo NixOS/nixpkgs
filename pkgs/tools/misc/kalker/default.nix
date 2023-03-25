@@ -15,7 +15,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-D7FlX72fcbeVtQ/OtK2Y3P1hZ5Bmowa04up5rTTXDDU=";
   };
 
-  cargoSha256 = "sha256-r20kQG6YeNGGb7ovYaAx+4DGijZSmf5YoIYh3z5zOpk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "gmp-mpfr-sys-1.4.7" = "sha256-zHpGbEgh3MgAUVdlWrXq4Clj1boybi6DMOcsjgZbAh0=";
+    };
+  };
 
   buildInputs = [ gmp mpfr libmpc ];
 

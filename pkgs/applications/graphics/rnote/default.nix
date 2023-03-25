@@ -33,10 +33,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-N07Y9kmGvMFS0Kq4i2CltJvNTuqbXausZZGjAQRDmNU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-ckYmoZLPPo/3WsdA0ir7iBJDqKn7ZAkN0f110ADSBC0=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-+R3T/9Ty+F6YxxtA0Un6UhFyKbGOvqBKwHt4WSHWhsk=";
+      "librsvg-2.55.92" = "sha256-WVwxjjWR/TloSmyzH8Jo1mTjLHVifBw1Xn965wuoEDs=";
+      "piet-0.6.2" = "sha256-76yeX0yQMC0hh6u2xT/kS/2fjs+GO+nCks2fnOImf0c=";
+    };
   };
 
   patches = [

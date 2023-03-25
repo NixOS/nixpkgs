@@ -29,7 +29,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
   };
 
-  cargoSha256 = "sha256-q+CoXoNZOxDmEJ+q1vPWxBJsfHQiCxAMlCZo8C49aQA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "pathfinder_simd-0.5.1" = "sha256-jQCa8TpGHLWvDT9kXWmlw51QtpKImPlWi082Va721cE=";
+    };
+  };
 
   buildInputs = [ llvmPackages.libclang expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]

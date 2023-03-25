@@ -31,7 +31,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoSha256 = "sha256-x3LxGOhGXrheqdke0eYiQVo/IqgWgcDrDNupdLjRPjA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libsodium-sys-0.2.6" = "sha256-yr6wh0njbCFZViLROcqSSoRFj7ZAMYG5lo1g0j75SN0=";
+    };
+  };
 
   nativeBuildInputs = [
     which

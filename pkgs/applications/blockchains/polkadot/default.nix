@@ -34,7 +34,13 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-gLU/3wHiSpOA7oQwmy7v5s3PiAtElJv4EwLqdOyKhds=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "beefy-gadget-4.0.0-dev" = "sha256-3zOEG4ER0UQK3GRctZw6TgkX/8Ydk1ynU8N6vlepnHw=";
+      "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
