@@ -455,8 +455,8 @@ let
         mktplcRef = {
           name = "file-browser";
           publisher = "bodil";
-          version = "0.2.10";
-          sha256 = "sha256-RW4vm0Hum9AeN4Rq7MSJOIHnALU0L1tBLKjaRLA2hL8=";
+          version = "0.2.11";
+          sha256 = "sha256-yPVhhsAUZxnlhj58fXkk+yhxop2q7YJ6X4W9dXGKJfo=";
         };
         meta = {
           license = lib.licenses.mit;
