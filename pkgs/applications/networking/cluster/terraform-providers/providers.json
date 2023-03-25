@@ -128,11 +128,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-Sv9e48+2rV3t9dmg6COWfrxnfMaxS9xJAPN1sEPen60=",
+    "hash": "sha256-pt+lff+kdiFmYRFpCjF/Ok7Uq6wWGcMZRZJe1Lh+K8s=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.48.0",
+    "rev": "v3.49.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -765,11 +765,11 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-2MbzXcdtP4O+zWGhBCp+uryVJmZoA2kXDe8AH3vZ0zA=",
+    "hash": "sha256-Ibc53R68QOGGcFFXkMZXCPFo6H8nvQ5VYq/DXdLnBEA=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.18.0",
+    "rev": "v3.18.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-dEbJTeHWhfR+8o/s4fi4I0sio1uuh6OIzJhVF5Rup04="
   },
@@ -838,13 +838,13 @@
     "vendorHash": null
   },
   "opennebula": {
-    "hash": "sha256-r8z5rpSvjNSDuvcRLtnOUFnBFFNAlcvfCbmW6LLHP5E=",
+    "hash": "sha256-Y1rNhXnHgwpKPgN5iZxH0ChHUBOj36K3XnSOkObj10g=",
     "homepage": "https://registry.terraform.io/providers/OpenNebula/opennebula",
     "owner": "OpenNebula",
     "repo": "terraform-provider-opennebula",
-    "rev": "v1.1.1",
+    "rev": "v1.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-zKtBDnvlQHe+q0OZUMUGu1gNsx2wIrIoArtJrt0VaBk="
+    "vendorHash": "sha256-W7UGOtyFsIMXPqFDnde2XlzU7klR7Fs00mSuJ9ID20A="
   },
   "openstack": {
     "hash": "sha256-UGs2Os7cWSd69ekzyoDLwzJxhGgUJbDJyrCIc6ipcwY=",
@@ -874,11 +874,11 @@
     "vendorHash": null
   },
   "ovh": {
-    "hash": "sha256-d/G2o1G0cdb5shSv1WG7YBbhNift2sKjUd/Cz9XgvJ8=",
+    "hash": "sha256-ePF3lojT4Dit3n4oI/74u3372gsSW8B1FQfEPhdfmz4=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.28.1",
+    "rev": "v0.29.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1099,11 +1099,11 @@
     "vendorHash": "sha256-GkmUKSnqkabwGCl22/90529BWb0oJaIJHYHlS/h3KNY="
   },
   "tencentcloud": {
-    "hash": "sha256-E1L/xL+8xqNlJamklpgqq9HwdypRIh3jHTdkJtN+WVU=",
+    "hash": "sha256-N6x3CKpLL62lc+V038740EGBicjroc07KhkvyCYgn24=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.79.17",
+    "rev": "v1.79.18",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
