@@ -15337,6 +15337,8 @@ self: super: with self; {
 
   vpk = callPackage ../development/python-modules/vpk { };
 
+  vpype = callPackage ../development/python-modules/vpype { };
+
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
   vsts = callPackage ../development/python-modules/vsts { };
