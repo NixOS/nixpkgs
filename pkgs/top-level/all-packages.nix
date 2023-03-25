@@ -21594,6 +21594,8 @@ with pkgs;
 
   libnice = callPackage ../development/libraries/libnice { };
 
+  libnitrokey = callPackage ../development/libraries/libnitrokey { };
+
   libnsl = callPackage ../development/libraries/libnsl { };
 
   liboping = callPackage ../development/libraries/liboping { };
