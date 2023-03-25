@@ -26727,6 +26727,8 @@ with pkgs;
 
   gotools = callPackage ../development/tools/gotools { };
 
+  gow = callPackage ../development/tools/gow { };
+
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
