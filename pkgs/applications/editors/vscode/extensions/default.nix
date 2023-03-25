@@ -581,8 +581,8 @@ let
         mktplcRef = {
           name = "catppuccin-vsc";
           publisher = "catppuccin";
-          version = "2.5.0";
-          sha256 = "sha256-+dM6MKIjzPdYoRe1DYJ08A+nHHlkTsm+I6CYmnmSRj4=";
+          version = "2.6.1";
+          sha256 = "sha256-B56b7PeuVnkxEqvd4vL9TYO7s8fuA+LOCTbJQD9e7wY=";
         };
         meta = {
           description = "Soothing pastel theme for VSCode";
