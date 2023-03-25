@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, result }:
+{ lib, fetchurl, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "csexp";
@@ -10,10 +10,6 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.03";
-
-  propagatedBuildInputs = [
-    result
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-dune/csexp/";
