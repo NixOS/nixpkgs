@@ -4803,6 +4803,8 @@ with pkgs;
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
+  luametatex = callPackage ../tools/typesetting/tex/luametatex { };
+
   mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
   # Keep the old PGF since some documents don't render properly with
