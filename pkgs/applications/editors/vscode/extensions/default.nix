@@ -37,8 +37,8 @@ let
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
-          version = "1.0.1";
-          sha256 = "sha256-0SsHf1zZgmrb7oIsRU6Xpa3AvR8bSfANz5ZlRogjiS0=";
+          version = "1.0.4";
+          sha256 = "sha256-s6acue8kgFLf5fs4A7l+IYfhibdY76cLcIwHl+54WVk=";
         };
         meta = {
           changelog = "https://github.com/1Password/op-vscode/releases";
