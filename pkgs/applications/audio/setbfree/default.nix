@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation  rec {
   pname = "setbfree";
-  version = "0.8.11";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "pantherb";
     repo = "setBfree";
     rev = "v${version}";
-    sha256 = "sha256-OYrsq3zVaotmS1KUgDIQbVQgxpfweMKiB17/PC1iXDA=";
+    sha256 = "sha256-e/cvD/CtT8dY1lYcsZ21DC8pNqKXqKfC/eRXX8k01eI=";
   };
 
   postPatch = ''
