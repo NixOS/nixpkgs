@@ -11,39 +11,13 @@ let
   strOpt = k: v: k + " = " + v;
   boolOpt = k: v: k + " = " + boolToString v;
   intOpt = k: v: k + " = " + toString v;
-  lstOpt = k: xs: k + " = " + concatStringsSep "," xs;
+  lstOpt = k: xs: k + " = " + concatStringsSep "," (map (v: if isInt v then toString v else v) xs);
   optionalNullString = o: s: optional (s != null) (strOpt o s);
   optionalNullBool = o: b: optional (b != null) (boolOpt o b);
   optionalNullInt = o: i: optional (i != null) (intOpt o i);
   optionalEmptyList = o: l: optional ([] != l) (lstOpt o l);
 
   mkEnableTrueOption = name: mkEnableOption (lib.mdDoc name) // { default = true; };
-
-  typeMaps = {
-    signatureType = {
-      "ECDSA-P256" = 1;
-      "ECDSA-P384" = 2;
-      "ECDSA-P521" = 3;
-      "ED25519-SHA512" = 7;
-      "GOSTR3410-A-GOSTR3411-256" = 9;
-      "GOSTR3410-TC26-A-GOSTR3411-512" = 10;
-      "RED25519-SHA512" = 11;
-    };
-    i2cp.leaseSetType = {
-      "standard" = 3;
-      "encrypted" = 5;
-    };
-    i2cp.leaseSetEncType = {
-      "ELGAMAL" = 0;
-      "ECIES_P256_SHA256_AES256CBC" = 1;
-      "ECIES_X25519_AEAD" = 4;
-    };
-    i2cp.leaseSetAuthType = {
-      "none" = 0;
-      "DH" = 1;
-      "PSK" = 2;
-    };
-  };
 
   mkEndpointOpt = name: addr: port: {
     enable = mkEnableOption (lib.mdDoc name);
@@ -100,6 +74,12 @@ let
       };
     };
 
+  attrEnum = attrset:
+    types.enum (attrNames attrset) // {
+      merge = loc: defs: attrset.${mergeEqualOption loc defs};
+      functor = types.enum.functor // { type = attrEnum; payload = attrset; binOp = a: b: a // b; };
+    };
+
   commonTunOpts = name: rec {
     outbound = (i2cpOpts name) // {
       # This option is defined here because exploratory tunnels (in main config) do not support it
@@ -121,22 +101,37 @@ let
       default = null;
     };
     signatureType = mkOption {
-      type = with types; nullOr (enum (builtins.attrNames typeMaps.signatureType));
+      type = with types; nullOr (attrEnum {
+        "ECDSA-P256" = 1;
+        "ECDSA-P384" = 2;
+        "ECDSA-P521" = 3;
+        "ED25519-SHA512" = 7;
+        "GOSTR3410-A-GOSTR3411-256" = 9;
+        "GOSTR3410-TC26-A-GOSTR3411-512" = 10;
+        "RED25519-SHA512" = 11;
+      });
       description = lib.mdDoc ''
         Signature type for new keys.
         `ED25519-SHA512` is default.
-        `RED25519-SHA512` is adviced for encrypted leaseset.'';
+        `RED25519-SHA512` is recommended for encrypted leaseset.'';
       default = null;
     };
     i2cp.leaseSetType = mkOption {
-      type = with types; nullOr (enum (builtins.attrNames typeMaps.i2cp.leaseSetType));
+      type = with types; nullOr (attrEnum {
+        "standard" = 3;
+        "encrypted" = 5;
+      });
       description = lib.mdDoc "Type of LeaseSet to be sent.";
       default = null;
     };
     i2cp.leaseSetEncType = mkOption {
-      type = with types; nullOr (listOf (enum (builtins.attrNames typeMaps.i2cp.leaseSetEncType)));
+      type = with types; listOf (attrEnum {
+        "ELGAMAL" = 0;
+        "ECIES_P256_SHA256_AES256CBC" = 1;
+        "ECIES_X25519_AEAD" = 4;
+      });
       description = lib.mdDoc "List of LeaseSet encryption types.";
-      default = null;
+      default = [];
     };
     i2cp.leaseSetPrivKey = mkOption {
       type = with types; nullOr str;
@@ -144,7 +139,11 @@ let
       default = null;
     };
     i2cp.leaseSetAuthType = mkOption {
-      type = with types; nullOr (enum (builtins.attrNames typeMaps.i2cp.leaseSetAuthType));
+      type = with types; nullOr (attrEnum {
+        "none" = 0;
+        "DH" = 1;
+        "PSK" = 2;
+      });
       description = lib.mdDoc "Authentication type for encrypted LeaseSet.";
       default = null;
     };
@@ -289,22 +288,18 @@ let
             optionalNullInt "outbound.lengthVariance" tun.outbound.lengthVariance else [])
         ++ (if tun ? crypto.tagsToSend then
             optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else [])
-        ++ (if ! tun ? signatureType then [] else
-              if tun.signatureType == null then [] else
-                optionalNullInt "signaturetype" typeMaps.signatureType.${tun.signatureType})
+        ++ (if tun ? signatureType then
+            optionalNullInt "signaturetype" tun.signatureType else [])
         ++ (if tun ? explicitPeers then
             optionalNullString "explicitPeers" tun.explicitPeers else [])
-        ++ (if ! tun ? i2cp.leaseSetType then [] else
-              if tun.i2cp.leaseSetType == null then [] else
-                optionalNullInt "i2cp.leaseSetType" typeMaps.i2cp.leaseSetType.${tun.i2cp.leaseSetType})
-        ++ (if ! tun ? i2cp.leaseSetEncType then [] else
-              if tun.i2cp.leaseSetEncType == null then [] else
-                optionalNullString "i2cp.leaseSetEncType" (concatStringsSep "," (map (k: toString typeMaps.i2cp.leaseSetEncType.${k}) tun.i2cp.leaseSetEncType)))
+        ++ (if tun ? i2cp.leaseSetType then
+            optionalNullInt "i2cp.leaseSetType" tun.i2cp.leaseSetType else [])
+        ++ (if tun ? i2cp.leaseSetEncType then
+            optionalEmptyList "i2cp.leaseSetEncType" tun.i2cp.leaseSetEncType else [])
         ++ (if tun ? i2cp.leaseSetPrivKey then
             optionalNullString "i2cp.leaseSetPrivKey" tun.i2cp.leaseSetPrivKey else [])
-        ++ (if ! tun ? i2cp.leaseSetAuthType then [] else
-              if tun.i2cp.leaseSetAuthType == null then [] else
-                optionalNullInt "i2cp.leaseSetAuthType" typeMaps.i2cp.leaseSetAuthType.${tun.i2cp.leaseSetAuthType})
+        ++ (if tun ? i2cp.leaseSetAuthType then
+            optionalNullInt "i2cp.leaseSetAuthType" tun.i2cp.leaseSetAuthType else [])
         ++ (if tun ? i2cp.leaseSetClient.dh.nnn then
             optionalNullString "i2cp.leaseSetClient.dh.nnn" tun.i2cp.leaseSetClient.dh.nnn else [])
         ++ (if tun ? i2cp.leaseSetClient.psk.nnn then
