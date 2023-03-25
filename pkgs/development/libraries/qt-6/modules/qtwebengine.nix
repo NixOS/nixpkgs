@@ -55,7 +55,7 @@
 , openbsm
 , runCommand
 , writeScriptBin
-, ffmpeg
+, ffmpeg_4
 , lib
 , stdenv
 , glib
@@ -173,7 +173,7 @@ qtModule {
     re2
 
     libevent
-    ffmpeg
+    ffmpeg_4
 
     dbus
     zlib
