@@ -70,8 +70,8 @@ let
         mktplcRef = {
           publisher = "4ops";
           name = "terraform";
-          version = "0.2.1";
-          sha256 = "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg";
+          version = "0.2.5";
+          sha256 = "sha256-y5LljxK8V9Fir9EoG8g9N735gISrlMg3czN21qF/KjI=";
         };
         meta = {
           license = lib.licenses.mit;
