@@ -7,9 +7,18 @@ let
   cfg = config.services.postgresql;
 
   postgresql =
+    let
+      # ensure that
+      #   services.postgresql = {
+      #     enableJIT = true;
+      #     package = pkgs.postgresql_<major>;
+      #   };
+      # works.
+      base = if cfg.enableJIT && !cfg.package.jitSupport then cfg.package.withJIT else cfg.package;
+    in
     if cfg.extraPlugins == []
-      then cfg.package
-      else cfg.package.withPackages (_: cfg.extraPlugins);
+      then base
+      else base.withPackages (_: cfg.extraPlugins);
 
   toStr = value:
     if true == value then "yes"

@@ -7,9 +7,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   inherit (pkgs) lib;
-  packages = lib.filter
-    (lib.hasSuffix "_jit")
-    (builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs));
+  packages = builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs);
 
   mkJitTest = packageName: makeTest {
     name = "${packageName}";
@@ -17,8 +15,8 @@ let
     nodes.machine = { pkgs, lib, ... }: {
       services.postgresql = {
         enable = true;
+        enableJIT = true;
         package = pkgs.${packageName};
-        settings.jit = "on";
         initialScript = pkgs.writeText "init.sql" ''
           create table demo (id int);
           insert into demo (id) select generate_series(1, 5);
