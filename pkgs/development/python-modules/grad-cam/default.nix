@@ -6,7 +6,7 @@
 , numpy
 , opencv4
 , pillow
-, scikitlearn
+, scikit-learn
 , torch
 , torchvision
 , ttach
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     numpy
     opencv4
     pillow
-    scikitlearn
+    scikit-learn
     torchvision
     ttach
     tqdm

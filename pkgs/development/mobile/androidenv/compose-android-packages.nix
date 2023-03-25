@@ -185,20 +185,38 @@ rec {
 
   system-images = lib.flatten (map (apiVersion:
     map (type:
-      map (abiVersion:
-        lib.optionals (lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages) (
-          deployAndroidPackage {
-            inherit os;
-            package = system-images-packages.${apiVersion}.${type}.${abiVersion};
-            # Patch 'google_apis' system images so they're recognized by the sdk.
-            # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
-            # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
-            patchInstructions = lib.optionalString (lib.hasPrefix "google_apis" type) ''
+      # Deploy all system images with the same  systemImageType in one derivation to avoid the `null` problem below
+      # with avdmanager when trying to create an avd!
+      #
+      # ```
+      # $ yes "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
+      # Error: Package path is not valid. Valid system image paths are:
+      # null
+      # ```
+      let
+        availablePackages = map (abiVersion:
+          system-images-packages.${apiVersion}.${type}.${abiVersion}
+        ) (builtins.filter (abiVersion:
+          lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages
+        ) abiVersions);
+
+        instructions = builtins.listToAttrs (map (package: {
+            name = package.name;
+            value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
+              # Patch 'google_apis' system images so they're recognized by the sdk.
+              # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
+              # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
               sed -i '/^Addon.Vendor/d' source.properties
             '';
-          }
-        )
-      ) abiVersions
+          }) availablePackages
+        );
+      in
+      lib.optionals (availablePackages != [])
+        (deployAndroidPackages {
+          inherit os;
+          packages = availablePackages;
+          patchesInstructions = instructions;
+        })
     ) systemImageTypes
   ) platformVersions);
 
@@ -271,8 +289,8 @@ rec {
     ${lib.concatMapStrings (system-image: ''
       apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
       type=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*/*))
-      mkdir -p system-images/$apiVersion/$type
-      ln -s ${system-image}/libexec/android-sdk/system-images/$apiVersion/$type/* system-images/$apiVersion/$type
+      mkdir -p system-images/$apiVersion
+      ln -s ${system-image}/libexec/android-sdk/system-images/$apiVersion/$type system-images/$apiVersion/$type
     '') images}
   '';
 
@@ -294,7 +312,11 @@ rec {
     You must accept the following licenses:
     ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-    by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+    a)
+      by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+    b)
+      by an environment variable for a single invocation of the nix tools.
+        $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
     inherit deployAndroidPackage os cmdLineToolsVersion;
 

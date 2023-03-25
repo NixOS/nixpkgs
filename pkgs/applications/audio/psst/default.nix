@@ -10,6 +10,7 @@ let
     categories = [ "Audio" "AudioVideo" ];
     icon = "psst";
     terminal = false;
+    startupWMClass = "psst-gui";
   };
 
 in

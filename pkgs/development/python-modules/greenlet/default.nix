@@ -10,13 +10,12 @@
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "2.0.1";
+  version = "2.0.2";
   format = "setuptools";
-  disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QuYCVkRg2g6O5ny21yNjY+5eExqhWUO2Zw5E5cLtD2c=";
+    hash = "sha256-58jcE699sJe+1koFHS3Unp8K9JXCaZXACp7oQmkNNMA=";
   };
 
   nativeCheckInputs = [

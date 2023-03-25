@@ -1,4 +1,4 @@
-From 045f33745f863ba20acfc3fe335c575d9cd87884 Mon Sep 17 00:00:00 2001
+From e01014a745b7f4dbdde2ee0e293c25c4e5eeaabb Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Sat, 10 Sep 2022 15:18:05 +0200
 Subject: [PATCH] Setup: remove custom dbuser creation behavior
@@ -25,15 +25,15 @@ user to operate Nextcloud (which is a good thing in fact).
 
 [1] https://github.com/nextcloud/server/pull/33513
 ---
- lib/private/Setup/MySQL.php      | 53 --------------------------------
- lib/private/Setup/PostgreSQL.php | 26 ----------------
- 2 files changed, 79 deletions(-)
+ lib/private/Setup/MySQL.php      | 56 --------------------------------
+ lib/private/Setup/PostgreSQL.php | 26 ---------------
+ 2 files changed, 82 deletions(-)
 
 diff --git a/lib/private/Setup/MySQL.php b/lib/private/Setup/MySQL.php
-index 2c16cac3d2..9b2265091f 100644
+index fbce31b0f57..9b2265091f0 100644
 --- a/lib/private/Setup/MySQL.php
 +++ b/lib/private/Setup/MySQL.php
-@@ -142,59 +142,6 @@ class MySQL extends AbstractDatabase {
+@@ -142,62 +142,6 @@ class MySQL extends AbstractDatabase {
  		$rootUser = $this->dbUser;
  		$rootPassword = $this->dbPassword;
  
@@ -79,6 +79,9 @@ index 2c16cac3d2..9b2265091f 100644
 -						$i++;
 -					}
 -				}
+-			} else {
+-				// Reuse existing password if a database config is already present
+-				$this->dbPassword = $rootPassword;
 -			}
 -		} catch (\Exception $ex) {
 -			$this->logger->info('Can not create a new MySQL user, will continue with the provided user.', [
@@ -94,7 +97,7 @@ index 2c16cac3d2..9b2265091f 100644
  			'dbuser' => $this->dbUser,
  			'dbpassword' => $this->dbPassword,
 diff --git a/lib/private/Setup/PostgreSQL.php b/lib/private/Setup/PostgreSQL.php
-index bc24909dc3..e49e5508e1 100644
+index bc24909dc3d..e49e5508e15 100644
 --- a/lib/private/Setup/PostgreSQL.php
 +++ b/lib/private/Setup/PostgreSQL.php
 @@ -45,32 +45,6 @@ class PostgreSQL extends AbstractDatabase {
@@ -131,5 +134,5 @@ index bc24909dc3..e49e5508e1 100644
  			$this->config->setValues([
  				'dbuser' => $this->dbUser,
 -- 
-2.36.2
+2.39.1
 

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt6_sip";
     inherit version;
-    sha256 = "sha256-bYej7lhy11EbdpV9aKMhCTUsrzt6QqAdnuIAMrNQ2Xk=";
+    hash = "sha256-bYej7lhy11EbdpV9aKMhCTUsrzt6QqAdnuIAMrNQ2Xk=";
   };
 
   # There is no test code and the check phase fails with:

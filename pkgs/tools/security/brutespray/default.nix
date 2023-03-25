@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
       directly from Nmap output.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -3,6 +3,7 @@
 , lib
 , autossh
 , makeWrapper
+, stdenv
 }:
 
 buildGoPackage rec {
@@ -41,5 +42,6 @@ buildGoPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmahut ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # x/sys/unix needs an update, but software is unmaintained
   };
 }

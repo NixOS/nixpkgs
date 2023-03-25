@@ -37,11 +37,15 @@ let
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
     deepin-calculator = callPackage ./apps/deepin-calculator { };
+    deepin-camera = callPackage ./apps/deepin-camera { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
+    deepin-movie-reborn = callPackage ./apps/deepin-movie-reborn { };
+    deepin-music = callPackage ./apps/deepin-music { };
     deepin-picker = callPackage ./apps/deepin-picker { };
+    deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
     deepin-voice-note = callPackage ./apps/deepin-voice-note { };
@@ -52,8 +56,10 @@ let
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
     dde-api = callPackage ./go-package/dde-api { inherit replaceAll; };
     deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
+    deepin-desktop-schemas = callPackage ./go-package/deepin-desktop-schemas { };
 
     #### TOOLS
+    dde-device-formatter = callPackage ./tools/dde-device-formatter { };
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
 
     #### ARTWORK

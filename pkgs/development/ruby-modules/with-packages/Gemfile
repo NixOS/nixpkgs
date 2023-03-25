@@ -110,7 +110,7 @@ gem 'pry-byebug'
 gem 'pry-doc'
 gem 'public_suffix'
 gem 'puma'
-# gem 'rails'  # causes the Bundler resolver to explode, probably due conflict with CocoaPods activesupport requirement
+gem 'rails'
 gem 'rainbow'
 # gem 'rbczmq' deprecated
 gem 'rbnacl'

@@ -11,7 +11,10 @@
 , ncurses
 , findXMLCatalogs
 , libiconv
-, pythonSupport ? enableShared
+# Python limits cross-compilation to an allowlist of host OSes.
+# https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
+, pythonSupport ? enableShared &&
+    (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic

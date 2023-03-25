@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "somebar";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromSourcehut {
     owner = "~raphi";
     repo = "somebar";
     rev = "${version}";
-    sha256 = "sha256-snCW7dC8JI/pg1+HLjX0JXsTzwa3akA6rLcSNgKLF0c=";
+    sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

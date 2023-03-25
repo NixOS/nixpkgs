@@ -6,6 +6,8 @@
 , pkg-config
 , vala
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   pname = "libmanette";
   version = "0.2.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -30,24 +32,29 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    glib
+  ] ++ lib.optionals withIntrospection [
     vala
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
-    libgudev
     libevdev
+  ] ++ lib.optionals withIntrospection [
+    libgudev
   ];
 
   mesonFlags = [
-    "-Ddoc=true"
+    (lib.mesonBool "doc" withIntrospection)
+    (lib.mesonEnable "gudev" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonBool "vapi" withIntrospection)
   ];
 
   doCheck = true;

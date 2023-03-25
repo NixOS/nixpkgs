@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-EzdKY/VisMUc/5yHN+7JUz1fDM4mCpk5TyApC24z4CU=";
+    hash = "sha256-EzdKY/VisMUc/5yHN+7JUz1fDM4mCpk5TyApC24z4CU=";
   };
 
   buildInputs = [

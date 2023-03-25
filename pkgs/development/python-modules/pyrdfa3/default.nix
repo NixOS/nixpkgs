@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "pyRdfa3";
-    sha256 = "sha256-FXZjqSuH3zRbb2m94jXf9feXiRYI4S/h5PqNrWhxMa4=";
+    hash = "sha256-FXZjqSuH3zRbb2m94jXf9feXiRYI4S/h5PqNrWhxMa4=";
   };
 
   patches = [

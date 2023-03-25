@@ -2,18 +2,21 @@
 
 buildGoModule rec {
   pname = "smimesign";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "smimesign";
     rev = "v${version}";
-    sha256 = "12f8vprp4v78l9ifrlql0mvpyw5qa8nlrh5ajq5js8wljzpx7wsv";
+    hash = "sha256-W9Hj/+snx+X6l95Gt9d8DiLnBPV9npKydc/zMN9G0vQ=";
   };
 
-  vendorSha256 = "1cldxykm9qj5rvyfafam45y5xj4f19700s2f9w7ndhxgfp9vahvz";
+  vendorHash = "sha256-wLqYUICL+gdvRCLNrA0ZNcFI4oV3Oik762q7xF115Lw=";
 
-  ldflags = [ "-X main.versionString=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.versionString=v${version}" ];
+
+  # Fails in sandbox
+  doCheck = false;
 
   meta = with lib; {
     description = "An S/MIME signing utility for macOS and Windows that is compatible with Git";

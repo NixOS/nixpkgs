@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mocnik-science";
     repo = "osm-python-tools";
     rev = "v${version}";
-    sha256 = "sha256-lTDA1Rad9aYI/ymU/0xzdJHmebUGcpVJ0GW7D0Ujdko=";
+    hash = "sha256-lTDA1Rad9aYI/ymU/0xzdJHmebUGcpVJ0GW7D0Ujdko=";
   };
 
   propagatedBuildInputs = [

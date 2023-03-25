@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc6.patch ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-std=c++11"
   ];
 

@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc_cli";
-  version = "1.46.6";
+  version = "1.52.1";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-UPenQh6+FBryQiOoeijsXkCZjlMzYljkg2aUtSFJFL4=";
+    hash = "sha256-TE4Q2L4TF0bhgQyPcfgYolb5VXDWjOIyt5mv/HNIfTk=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ automake cmake autoconf ];
   buildInputs = [ curl numactl ];
   cmakeFlags = [ "-DgRPC_BUILD_TESTS=ON" ];
   makeFlags = [ "grpc_cli" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
   installPhase = ''
     runHook preInstall
 
@@ -26,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grpc/grpc";
     license = licenses.asl20;
     maintainers = with maintainers; [ doriath ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

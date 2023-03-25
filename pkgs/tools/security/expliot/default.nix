@@ -10,7 +10,7 @@ let
         version = "1.5.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0qiax309my534drk81lihq9ghngr96qnm40kbmgc9ay4fncqq6kh";
+          hash = "sha256-cBqMmXXEq8ReXROQarFJ+Vn4EoaRBjRzI6P4msDoKmI=";
         };
         doCheck = false;
       });

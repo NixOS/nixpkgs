@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error"; # generated code redefines yyfree
+  env.NIX_CFLAGS_COMPILE = "-Wno-error"; # generated code redefines yyfree
 
   preConfigure =
     '' for i in "tests/util/"*.in

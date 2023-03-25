@@ -1,0 +1,44 @@
+diff --git a/autoload/health/openscad_nvim.vim b/autoload/health/openscad_nvim.vim
+index 9022d55..30ef53f 100644
+--- a/autoload/health/openscad_nvim.vim
++++ b/autoload/health/openscad_nvim.vim
+@@ -7,7 +7,7 @@ function! s:check_nvim_version_minimum() abort
+ endfunction
+ 
+ function! s:check_zathura_installed() abort
+-	if !executable('zathura')
++	if !executable('@zathura-path@')
+ 		call health#report_error('has(zathura)','install zathura')
+ 	else
+ 		call health#report_ok("zathura is installed")
+@@ -15,7 +15,7 @@ function! s:check_zathura_installed() abort
+ endfunction
+ 
+ function! s:check_htop_installed() abort
+-	if !executable('htop')
++	if !executable('@htop-path@')
+ 		call health#report_error('has(htop)','install htop')
+ 	else
+ 		call health#report_ok("htop is installed")
+diff --git a/lua/openscad.lua b/lua/openscad.lua
+index 7dff2fb..4382003 100644
+--- a/lua/openscad.lua
++++ b/lua/openscad.lua
+@@ -101,7 +101,7 @@ end
+ 
+ function M.manual()
+     local path = U.openscad_nvim_root_dir .. U.path_sep .. "help_source" .. U.path_sep .. "openscad-manual.pdf"
+-    api.nvim_command('silent !zathura --fork '  .. path)
++    api.nvim_command('silent !@zathura-path@ --fork '  .. path)
+ end
+ 
+ function M.help()
+@@ -119,7 +119,7 @@ end
+ 
+ function M.exec_openscad()
+     -- maybe just use api.jobstart .. instead
+-    api.nvim_command[[ call jobstart('openscad ' . shellescape(expand('%:p')), {'detach':1}) ]]
++    api.nvim_command[[ call jobstart('@openscad-path@ ' . shellescape(expand('%:p')), {'detach':1}) ]]
+ end
+ 
+ function M.default_mappings()

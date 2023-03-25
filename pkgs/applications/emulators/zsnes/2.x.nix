@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Until upstream fixes the issues...
     "-Wp,-D_FORTIFY_SOURCE=0"
   ];

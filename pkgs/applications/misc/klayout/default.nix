@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.28.5";
+  version = "0.28.6";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-fjKxQ3oVtnFwzLeeE6kN0jKE5PIfBZubTF54KO+k/DE=";
+    hash = "sha256-Errpn2GHxVncum+6zriM9OrhrCDK8EtD2ZYVYPoyabk=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ mkDerivation rec {
     mv $out/lib/klayout $out/bin/
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-parentheses" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
 
   dontInstall = true; # Installation already happens as part of "build.sh"
 

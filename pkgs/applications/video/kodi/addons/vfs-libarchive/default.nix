@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "vfs.libarchive";
-  version = "19.0.1";
+  version = "20.1.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-4sERFC/XBEE46n+iq6YJg/5Wz0+223tq4+O5cIf6X6E=";
+    sha256 = "sha256-D0eLH+G+qF5xLBBX/FdJC+gKNQpqSb7LjRmi/99rPNg=";
   };
 
   extraBuildInputs = [ libarchive xz bzip2 zlib lz4 lzo openssl ];

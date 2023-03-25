@@ -81,7 +81,7 @@ in {
       extraDisk = mkOption {
         description = lib.mdDoc ''
           Optional extra disk/hdd configuration.
-          The disk will be an 'ext4' partition on a separate VMDK file.
+          The disk will be an 'ext4' partition on a separate file.
         '';
         default = null;
         example = {
@@ -183,8 +183,8 @@ in {
           export HOME=$PWD
           export PATH=${pkgs.virtualbox}/bin:$PATH
 
-          echo "creating VirtualBox pass-through disk wrapper (no copying involved)..."
-          VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
+          echo "converting image to VirtualBox format..."
+          VBoxManage convertfromraw $diskImage disk.vdi
 
           ${optionalString (cfg.extraDisk != null) ''
             echo "creating extra disk: data-disk.raw"
@@ -196,8 +196,8 @@ in {
               mkpart primary ext4 1MiB -1
             eval $(partx $dataDiskImage -o START,SECTORS --nr 1 --pairs)
             mkfs.ext4 -F -L ${cfg.extraDisk.label} $dataDiskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
-            echo "creating extra disk: data-disk.vmdk"
-            VBoxManage internalcommands createrawvmdk -filename data-disk.vmdk -rawdisk $dataDiskImage
+            echo "creating extra disk: data-disk.vdi"
+            VBoxManage convertfromraw $dataDiskImage data-disk.vdi
           ''}
 
           echo "creating VirtualBox VM..."
@@ -209,10 +209,10 @@ in {
             ${lib.cli.toGNUCommandLineShell { } cfg.params}
           VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
           VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
-            --medium disk.vmdk
+            --medium disk.vdi
           ${optionalString (cfg.extraDisk != null) ''
             VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 1 --device 0 --type hdd \
-            --medium data-disk.vmdk
+            --medium data-disk.vdi
           ''}
 
           echo "exporting VirtualBox VM..."

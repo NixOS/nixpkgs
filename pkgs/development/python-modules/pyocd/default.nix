@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pyocd";
-  version = "0.34.1";
+  version = "0.34.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Fpa2IEsLOQ8ylGI/5D6h+22j1pvrvE9IMIyhCtyM6qU=";
+    sha256 = "2zDr6fnA2MCTT/hNVvk7u3gugMo+nUF2E2VsOPhJXH4=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "libusb-package-optional.patch";
       url = "https://github.com/pyocd/pyOCD/commit/0b980cf253e3714dd2eaf0bddeb7172d14089649.patch";
-      sha256 = "sha256-B2+50VntcQELeakJbCeJdgI1iBU+h2NkXqba+LRYa/0=";
+      hash = "sha256-B2+50VntcQELeakJbCeJdgI1iBU+h2NkXqba+LRYa/0=";
     })
   ];
 
@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-        --replace "libusb-package>=1.0,<2.0" ""
+        --replace "libusb-package>=1.0,<2.0" "" \
+        --replace "pylink-square>=0.11.1,<1.0" "pylink-square>=0.11.1,<2.0"
   '';
 
   meta = with lib; {

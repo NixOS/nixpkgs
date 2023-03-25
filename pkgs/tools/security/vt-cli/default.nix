@@ -10,11 +10,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = pname;
-    rev = version;
-    sha256 = "0jqr2xf6f9ywavkx5hzcfnky8ax23ahdj24hjsnq6zlpdqvfn1xb";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qwfrNm6XfoOtlpAI2aAaoivkp3Xsw9LnVtwnZ1wXGUs=";
   };
 
-  vendorSha256 = "sha256-XN6dJpoJe9nJn+Tr9SYD64LE0XFiO2vlpdyI9SrZZjQ=";
+  vendorHash = "sha256-XN6dJpoJe9nJn+Tr9SYD64LE0XFiO2vlpdyI9SrZZjQ=";
 
   ldflags = [
     "-X github.com/VirusTotal/vt-cli/cmd.Version=${version}"
@@ -25,7 +25,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "VirusTotal Command Line Interface";
     homepage = "https://github.com/VirusTotal/vt-cli";
+    changelog = "https://github.com/VirusTotal/vt-cli/releases/tag/${version}";
     license = licenses.asl20;
+    mainProgram = "vt";
     maintainers = with maintainers; [ dit7ya ];
   };
 }

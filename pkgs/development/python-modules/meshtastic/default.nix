@@ -8,11 +8,12 @@
 , pypubsub
 , pyqrcode
 , pyserial
+, pytap2
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , tabulate
-, pytap2
 , timeago
 }:
 
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     pyqrcode
     pyserial
     pyyaml
+    setuptools
     tabulate
     timeago
   ];

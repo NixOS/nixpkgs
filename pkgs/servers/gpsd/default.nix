@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     atk
     dbus-glib
     gdk-pixbuf
-    gobject-introspection
     libX11
     libXaw
     libXext

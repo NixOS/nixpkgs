@@ -63,6 +63,11 @@ stdenv.mkDerivation rec {
     "--without-ldb-lmdb"
   ];
 
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
+
   stripDebugList = [ "bin" "lib" "modules" ];
 
   meta = with lib; {

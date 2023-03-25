@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
   configureFlags = [
     "--with-usbdropdir=${placeholder "out"}/pcsc/drivers"

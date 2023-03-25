@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     set(GLEW_VERSION "$version")
     set(GLEW_LIBRARIES GLEW::glew\''${_glew_target_postfix})
     get_target_property(GLEW_INCLUDE_DIRS GLEW::glew\''${_glew_target_postfix} INTERFACE_INCLUDE_DIRECTORIES)
+    set_target_properties(GLEW::GLEW\''${_glew_target_postfix} PROPERTIES
+        IMPORTED_LINK_INTERFACE_LIBRARIES_RELEASE ""
+        IMPORTED_IMPLIB_RELEASE "GLEW"
+        IMPORTED_IMPLIB_DEBUG "GLEW"
+    )
     EOF
   '';
 

@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "drawterm";
-  version = "unstable-2021-10-02";
+  version = "unstable-2023-03-05";
 
   src = fetchgit {
     url = "git://git.9front.org/plan9front/drawterm";
-    rev = "c6f547e1a46ebbf7a290427fe3a0b66932d671a0";
-    sha256 = "09v2vk5s23q0islfz273pqy696zhzh3gqi25hadr54lif0511wsl";
+    rev = "ed9cff5a4c39322744c4708699c9ae6651b7c9ab";
+    sha256 = "LM6UnggoxKC3e6xOlHYk9VFF99Abbdmp37nuUML8RgI=";
   };
 
   buildInputs = [

@@ -1,17 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.6.0";
+  version = "8.7.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "sha256-RVGCSUYyWo2wKRIrnci+aWEAPW9jHhMfYkYJkCgd7f8=";
+    hash = "sha256-y7IrwMLQnvz1PeKt8BE9hbEBwQBiUXM4geYbiTjMymw=";
   };
 
-  cargoSha256 = "sha256-PT95U1l+BVX7sby3GKktZMmbNNQoPYR8nL+H90EnqZY=";
+  cargoHash = "sha256-AstE8KGICgPhqRKlJecrE9iPUUWaOvca6ocWf85IzNo=";
 
   auditable = true; # TODO: remove when this is the default
 
@@ -30,6 +30,10 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/fd --gen-completions fish)
     installShellCompletion --zsh contrib/completion/_fd
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = fd;
+  };
 
   meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";

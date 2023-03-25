@@ -12,6 +12,9 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+  "PersianCalendar@oxygenws.com" = "persian-calendar";
+  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
+
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
 
@@ -21,6 +24,9 @@
 
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
+
+  "vbox-applet@gs.eros2.info" = "virtualbox-applet";
+  "vbox-applet@buba98" = "virtualbox-applet-2";
 
   "batime@martin.zurowietz.de" = "battery-time";
   "batterytime@typeof.pw" = "battery-time-2";

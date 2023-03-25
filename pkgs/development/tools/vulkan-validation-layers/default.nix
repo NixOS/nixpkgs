@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.236.0";
+  version = "1.3.239.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
-      hash = "sha256-+VbiXtxzYaF5o+wIrJ+09LmgBdaLv/0VJGFDnBkrXms=";
+      hash = "sha256-k/A0TaERQAHSM0Fal2IOaRvTz3FV2Go/17P12FSBG1s=";
     });
 
   nativeBuildInputs = [

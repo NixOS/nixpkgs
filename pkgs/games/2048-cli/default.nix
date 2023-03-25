@@ -35,7 +35,7 @@ stdenv.mkDerivation (self: {
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE="-I${lib.getDev gettext}/share/gettext/";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev gettext}/share/gettext/";
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

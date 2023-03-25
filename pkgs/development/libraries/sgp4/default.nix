@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/dnwrnr/sgp4";
     license = licenses.asl20;
     maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

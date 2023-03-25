@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # openssl 3 generates several deprecation warnings
     "-Wno-error=deprecated-declarations"
   ];

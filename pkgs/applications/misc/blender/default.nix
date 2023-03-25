@@ -95,6 +95,9 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [
       "-DWITH_ALEMBIC=ON"
+      # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
+      "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
+      "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic.so"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
@@ -132,7 +135,7 @@ stdenv.mkDerivation rec {
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.

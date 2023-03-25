@@ -250,7 +250,7 @@ EOF
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = platforms.unix;
+    platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

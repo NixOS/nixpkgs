@@ -1,0 +1,25 @@
+diff --git a/loxodo.py b/loxodo.py
+index 68ad4c8..e96bc1a 100755
+--- a/loxodo.py
++++ b/loxodo.py
+@@ -41,7 +41,7 @@ if len(sys.argv) > 1:
+ # In all other cases, use the "wx" frontend.
+ try:
+     import wx
+-    assert(wx.__version__.startswith('4.0.'))
++    assert(wx.__version__.startswith('4.'))
+ except AssertionError as e:
+     print('Found incompatible wxPython, the wxWidgets Python bindings: %s' % wx.__version__, file=sys.stderr)
+     print('Falling back to cmdline frontend.', file=sys.stderr)
+diff --git a/src/frontends/wx/loxodo.py b/src/frontends/wx/loxodo.py
+index bc3f509..e02c4bf 100644
+--- a/src/frontends/wx/loxodo.py
++++ b/src/frontends/wx/loxodo.py
+@@ -25,6 +25,7 @@ from .loadframe import LoadFrame
+ 
+ 
+ def main():
++    wx.SizerFlags.DisableConsistencyChecks()
+     app = wx.App(False)
+     setup_wx_locale()
+     mainframe = LoadFrame(None, -1, "")

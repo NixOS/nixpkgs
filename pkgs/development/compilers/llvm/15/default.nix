@@ -84,9 +84,20 @@ in let
   inherit (releaseInfo) release_version version;
 
   llvm_meta = {
-    license     = with lib.licenses; [ ncsa llvm-exception ];
+    license     = lib.licenses.ncsa;
     maintainers = lib.teams.llvm.members;
-    platforms   = lib.platforms.all;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.m68k ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
@@ -119,13 +130,13 @@ in let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libclang = callPackage ./clang {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;

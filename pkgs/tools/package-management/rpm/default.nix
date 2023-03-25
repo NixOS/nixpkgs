@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
     ++ lib.optional stdenv.isLinux elfutils;
 
-  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
+  env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
   configureFlags = [
     "--with-external-db"

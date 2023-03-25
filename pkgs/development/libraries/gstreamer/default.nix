@@ -25,5 +25,7 @@
 
   gst-vaapi = callPackage ./vaapi { };
 
+  icamerasrc = callPackage ./icamerasrc { };
+
   # note: gst-python is in ./python/default.nix - called under pythonPackages
 }

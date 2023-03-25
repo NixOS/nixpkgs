@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE="-std=c++98";
+  env.NIX_CFLAGS_COMPILE = "-std=c++98";
 
   installPhase = ''
     runHook preInstall

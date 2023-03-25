@@ -1,0 +1,46 @@
+diff --git a/libdm/Makefile.in b/libdm/Makefile.in
+index 2758648e6..f305a12b0 100644
+--- a/libdm/Makefile.in
++++ b/libdm/Makefile.in
+@@ -47,7 +47,6 @@ endif
+ 
+ LIB_SHARED = $(interface)/libdevmapper.$(LIB_SUFFIX)
+ LIB_VERSION = $(LIB_VERSION_DM)
+-TARGETS = libdevmapper.$(LIB_SUFFIX) libdevmapper.$(LIB_SUFFIX).$(LIB_VERSION) .symver_check
+ 
+ CFLOW_LIST = $(SOURCES)
+ CFLOW_LIST_TARGET = libdevmapper.cflow
+diff --git a/libdm/make.tmpl.in b/libdm/make.tmpl.in
+index a731687c2..9366cdf1c 100644
+--- a/libdm/make.tmpl.in
++++ b/libdm/make.tmpl.in
+@@ -314,7 +314,7 @@ SUBDIRS.cflow := $(SUBDIRS:=.cflow)
+ SUBDIRS.clean := $(SUBDIRS:=.clean)
+ SUBDIRS.distclean := $(SUBDIRS:=.distclean)
+ 
+-TARGETS += $(LIB_SHARED) $(LIB_STATIC)
++TARGETS += $(LIB_STATIC)
+ 
+ all: $(SUBDIRS) $(TARGETS)
+ 
+@@ -431,7 +431,6 @@ DEFS+=-D_FILE_OFFSET_BITS=64
+ 
+ ifneq (,$(LIB_SHARED))
+ 
+-TARGETS += $(LIB_SHARED).$(LIB_VERSION)
+ $(LIB_SHARED).$(LIB_VERSION): $(OBJECTS) $(LDDEPS)
+ 	@echo "    [CC] $@"
+ ifeq ("@LIB_SUFFIX@","so")
+diff --git a/make.tmpl.in b/make.tmpl.in
+index b73176f5a..6100d0dfd 100644
+--- a/make.tmpl.in
++++ b/make.tmpl.in
+@@ -368,7 +368,7 @@ SUBDIRS.cflow := $(SUBDIRS:=.cflow)
+ SUBDIRS.clean := $(SUBDIRS:=.clean)
+ SUBDIRS.distclean := $(SUBDIRS:=.distclean)
+ 
+-TARGETS += $(LIB_SHARED) $(LIB_STATIC)
++TARGETS += $(LIB_STATIC)
+ 
+ INTERNAL_LIBS = \
+ 	$(top_builddir)/libdaemon/client/libdaemonclient.a \

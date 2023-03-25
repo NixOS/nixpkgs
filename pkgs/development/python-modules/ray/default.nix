@@ -57,18 +57,18 @@
 
 let
   pname = "ray";
-  version = "2.0.0";
+  version = "2.3.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}";
+      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or {};
     in
     fetchPypi ({
       inherit pname version format;
@@ -116,7 +116,11 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [ "grpcio" "click" "protobuf" ];
+  pythonRelaxDeps = [
+    "click"
+    "grpcio"
+    "protobuf"
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -151,14 +155,16 @@ buildPythonPackage rec {
 
   postInstall = ''
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}
-    ln -sf ${redis}/bin/redis-server $out/${python.sitePackages}/ray/core/src/ray/thirdparty/redis/src/redis-server
   '';
 
-  pythonImportsCheck = [ "ray" ];
+  pythonImportsCheck = [
+    "ray"
+  ];
 
   meta = with lib; {
     description = "A unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ billhuang ];
     platforms = [ "x86_64-linux" ];

@@ -4,6 +4,7 @@
 , runCommand
 , fetchpatch
 , cmake
+, ninja
 , python3
 , libffi
 , enableGoldPlugin ? (!stdenv.isDarwin && !stdenv.targetPlatform.isWasi)
@@ -50,7 +51,7 @@ in stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake python3 ]
+  nativeBuildInputs = [ cmake ninja python3 ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
@@ -103,7 +104,7 @@ in stdenv.mkDerivation (rec {
   preConfigure = ''
     # Workaround for configure flags that need to have spaces
     cmakeFlagsArray+=(
-      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+      -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
     )
   '';
 
@@ -245,15 +246,10 @@ in stdenv.mkDerivation (rec {
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
 
-  buildPhase = ''
-    make docs-llvm-man
-  '';
-
   propagatedBuildInputs = [];
 
-  installPhase = ''
-    make -C docs install
-  '';
+  ninjaFlags = [ "docs-llvm-man" ];
+  installTargets = [ "install-docs-llvm-man" ];
 
   postPatch = null;
   postInstall = null;

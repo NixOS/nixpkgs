@@ -12,13 +12,13 @@ assert nvidiaSupport -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "sha256-N/DvPVYGM/DjTvKvOlR60q6rvNyfAQlnvFnFG5nbUmQ=";
+    sha256 = "sha256-GrrdE9Ih8x8N2HN+1NfxfthfHbufLAT/Ac+ZZWW5Zg8=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoSha256 = "sha256-Y/vvRJpv82Uc+Bu3lbZxRsu4TL6sAjz5AWHAHkwh98Y=";
+  cargoHash = "sha256-2VgyUVBcmSlmPSqAWrzWjH5J6Co/rAC9EQCckYzfW2o=";
 
   nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
   buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];

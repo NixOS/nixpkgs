@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "wbond";
     repo = "asn1crypto";
     rev = version;
-    sha256 = "sha256-M8vASxhaJPgkiTrAckxz7gk/QHkrFlNz7fFbnLEBT+M=";
+    hash = "sha256-M8vASxhaJPgkiTrAckxz7gk/QHkrFlNz7fFbnLEBT+M=";
   };
 
   nativeCheckInputs = [

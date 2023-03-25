@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   NIX_LDFLAGS = "-lm";
 
   meta = with lib; {

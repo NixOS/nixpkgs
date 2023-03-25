@@ -1,6 +1,13 @@
 { lib, pkgs }:
 
-self: with self; {
+self:
+let
+  inherit (self) callPackage;
+in
+{
+  acm = callPackage ./manual-packages/acm { };
+
+  acm-terminal = callPackage ./manual-packages/acm-terminal { };
 
   agda-input = callPackage ./manual-packages/agda-input { };
 
@@ -46,6 +53,10 @@ self: with self; {
 
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
+  lsp-bridge = callPackage ./manual-packages/lsp-bridge {
+    inherit (pkgs) python3 git go gopls pyright;
+  };
+
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
   };
@@ -86,8 +97,8 @@ self: with self; {
   sunrise-commander = callPackage ./manual-packages/sunrise-commander { };
 
   # camelCase aliases for some of the kebab-case expressions above
-  colorThemeSolarized = color-theme-solarized;
-  emacsSessionManagement = session-management-for-emacs;
-  rectMark = rect-mark;
-  sunriseCommander = sunrise-commander;
+  colorThemeSolarized = self.color-theme-solarized;
+  emacsSessionManagement = self.session-management-for-emacs;
+  rectMark = self.rect-mark;
+  sunriseCommander = self.sunrise-commander;
 }

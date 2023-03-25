@@ -347,6 +347,15 @@ runTests {
     expected = "Hello\\x20World";
   };
 
+  testEscapeURL = testAllTrue [
+    ("" == strings.escapeURL "")
+    ("Hello" == strings.escapeURL "Hello")
+    ("Hello%20World" == strings.escapeURL "Hello World")
+    ("Hello%2FWorld" == strings.escapeURL "Hello/World")
+    ("42%25" == strings.escapeURL "42%")
+    ("%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B" == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;")
+  ];
+
   testToInt = testAllTrue [
     # Naive
     (123 == toInt "123")
@@ -521,6 +530,37 @@ runTests {
       foo = "bar";
       foobar = "baz";
       foobarbaz = "baz";
+    };
+  };
+
+  # code from example
+  testFoldlAttrs = {
+    expr = {
+      example = foldlAttrs
+        (acc: name: value: {
+          sum = acc.sum + value;
+          names = acc.names ++ [ name ];
+        })
+        { sum = 0; names = [ ]; }
+        {
+          foo = 1;
+          bar = 10;
+        };
+      # should just return the initial value
+      emptySet = foldlAttrs (throw "function not needed") 123 { };
+      # should just evaluate to the last value
+      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
+      trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
+    };
+    expected = {
+      example = {
+        sum = 11;
+        names = [ "bar" "foo" ];
+      };
+      emptySet = 123;
+      accNotNeeded = 3;
+      trivialAcc = 121;
     };
   };
 

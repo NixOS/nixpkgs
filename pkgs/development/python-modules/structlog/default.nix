@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "hynek";
     repo = "structlog";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-+r+M+uTXdNBWQf0TGQuZgsCXg2CBKwH8ZE2+uAe0Dzg=";
+    hash = "sha256-+r+M+uTXdNBWQf0TGQuZgsCXg2CBKwH8ZE2+uAe0Dzg=";
   };
 
   nativeBuildInputs = [

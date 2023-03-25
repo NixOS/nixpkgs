@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "9.3.6";
+  version = "9.4.7";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-7t30AvGtCyU02fOYWHYcMWgcnmkepUpZzUMR4NjIlvw=";
+    sha256 = "sha256-vhGFZjxO20M3fQhXlEDDkad/yOyFOu48sHZ63MEnWIA=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-jRUPrb6ocqux4SrMm/Hw/2DuG7sj2jKhSln16ynjHwM=";
+    sha256 = "sha256-HiKr1ier13xUlrwsJrxo60wwqmiPcza2oOLIfMgFWc0=";
   };
 
-  vendorSha256 = "sha256-uGJ3D14qAvDkBUIlNxF1pCHMDYeuUoM8tPWfoEvA5o4=";
+  vendorSha256 = "sha256-sUvjZTg2/6UGjc2Qv8YO4IWlS4Y/FzGRVOQ9I/wp/aM=";
 
   nativeBuildInputs = [ wire ];
 
@@ -28,8 +28,14 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/framework/coremodel
-    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins
+    GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
+    GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
+    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
+    GOARCH= CGO_ENABLED=0 go generate ./pkg/kindsys/report.go
+
+    # Work around `main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/pkg/util/xorm`.
+    # Apparently these files confuse the dependency resolution for the go builder implemented here.
+    rm pkg/util/xorm/go.{mod,sum}
 
     # The testcase makes an API call against grafana.com:
     #

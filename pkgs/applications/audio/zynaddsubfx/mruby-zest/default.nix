@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   # Force optimization to fix:
   # warning: #warning _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = "-O3";
 
   # Remove pre-built y.tab.c to generate with nixpkgs bison
   preBuild = ''

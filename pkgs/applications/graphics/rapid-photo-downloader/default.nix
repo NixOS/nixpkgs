@@ -15,8 +15,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     hash = "sha256-4VC1fwQh9L3c5tgLUaC36p9QHL4dR2vkWc2XlNl0Xzw=";
   };
 
-  # Disable version check
   postPatch = ''
+    # Drop broken version specifier
+    sed -i '/python_requires/d' setup.py
+    # Disable version check
     substituteInPlace raphodo/constants.py \
       --replace "disable_version_check = False" "disable_version_check = True"
   '';

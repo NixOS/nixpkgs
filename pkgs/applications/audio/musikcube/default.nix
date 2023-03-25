@@ -19,7 +19,7 @@
 , taglib
 # Linux Dependencies
 , alsa-lib
-, pipewireSupport ? true, pipewire
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
 , pulseaudio
 , sndioSupport ? true, sndio
 , systemd
@@ -27,18 +27,18 @@
 # Darwin Dependencies
 , Cocoa
 , SystemConfiguration
-, coreaudioSupport ? stdenv.hostPlatform.isDarwin
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.99.5";
+  version = "0.99.6";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SbWL36GRIJPSvxZyj6sebJxTkSPsUcsKyC3TmcIq2O0";
+    sha256 = "sha256-D25P254iaOsS0TyAKAiarDP37D4U9Dw7mdvUin/Qblc=";
   };
 
   outputs = [ "out" "dev" ];
@@ -67,10 +67,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib pulseaudio
   ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa coreaudioSupport SystemConfiguration
-  ] ++ lib.optional sndioSupport [
+    Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
+  ] ++ lib.optionals sndioSupport [
     sndio
-  ] ++ lib.optional pipewireSupport [
+  ] ++ lib.optionals pipewireSupport [
     pipewire
   ];
 
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
     "-DDISABLE_STRIP=true"
   ];
 
-  postFixup = lib.optionals stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
   '';

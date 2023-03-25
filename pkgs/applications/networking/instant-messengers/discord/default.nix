@@ -2,10 +2,10 @@
 let
   versions = if stdenv.isLinux then {
     stable = "0.0.25";
-    ptb = "0.0.38";
-    canary = "0.0.148";
+    ptb = "0.0.39";
+    canary = "0.0.150";
   } else {
-    stable = "0.0.264";
+    stable = "0.0.273";
     ptb = "0.0.59";
     canary = "0.0.283";
   };
@@ -18,17 +18,17 @@ let
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "bPg7ZNQQxEpRSpp8j5/XLBDEJyId8mDGxS6tqkzzI1s=";
+        sha256 = "LoDg3iwK18rDszU/dQEK0/J8DIxrqydsfflZo8IARks=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-2ZrSDyPj3AHriCWZ/bb303H3J97TTun//WjmInNEmwk=";
+        sha256 = "sha256-8huDp1u0t9/kZbeB7bPqQUw8+HQ6rIyzKYUVN02gQfo=";
       };
     };
     x86_64-darwin = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-        sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
+        sha256 = "1vz2g83gz9ks9mxwx7gl7kys2xaw8ksnywwadrpsbj999fzlyyal";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";

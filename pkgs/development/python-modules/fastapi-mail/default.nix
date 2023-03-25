@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.2.5";
+  version = "1.2.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "sabuhish";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-SogtdLTiTCJ8qUYsnwhPgBLFbj66EJC7L4wS64Nmuoo=";
+    hash = "sha256-PL/0swFiAG8HlvxnsEqwEEec1CIsA3qFer3LKyS2y/Y=";
   };
 
   postPatch = ''

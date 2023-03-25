@@ -56,10 +56,10 @@ mkDerivation rec {
     "-DMBGL_WITH_QT_HEADLESS=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
     # Needed with GCC 12 but problematic with some old GCCs
     "-Wno-error=use-after-free"
-  ];
+  ]);
 
   meta = with lib; {
     description = "Open-source alternative to Mapbox GL Native";

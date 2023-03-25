@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "long2ice";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mkYh1fmhtBZ2DyL7a2RduTm+ig4Xnk5Ps1Tm0DS/OEc=";
+    hash = "sha256-mkYh1fmhtBZ2DyL7a2RduTm+ig4Xnk5Ps1Tm0DS/OEc=";
   };
 
   nativeBuildInputs = [

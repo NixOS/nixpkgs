@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "sphinx-copybutton";
     rev = "v${version}";
-    sha256 = "sha256-ptQNeklF9f0XeDbBq64ZFV15O8b4lQQLHRfblOQ3nRQ=";
+    hash = "sha256-ptQNeklF9f0XeDbBq64ZFV15O8b4lQQLHRfblOQ3nRQ=";
     fetchSubmodules = true;
   };
 

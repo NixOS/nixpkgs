@@ -134,10 +134,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   # cc-rs insists on using -mabi=lp64 (soft-float) for riscv64,
   # while we have a double-float toolchain
-  NIX_CFLAGS_COMPILE = lib.optionalString (with stdenv.hostPlatform; isRiscV && is64bit && lib.versionOlder version "91") "-mabi=lp64d";
-
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = if (with stdenv; isAarch64 && isLinux) then [ "-lgcc" ] else null;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (with stdenv.hostPlatform; isRiscV && is64bit && lib.versionOlder version "91") "-mabi=lp64d";
 
   postPatch = lib.optionalString (lib.versionOlder version "102") ''
     # This patch is a manually applied fix of

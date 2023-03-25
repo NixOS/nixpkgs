@@ -30,7 +30,7 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix;
+    orig = import ./tlpdb.nix;
     removeSelfDep = lib.mapAttrs
       (n: p: if p ? deps then p // { deps = lib.filter (dn: n != dn) p.deps; }
                          else p);
@@ -126,15 +126,33 @@ let
     day = "27";
   };
 
+  # The tarballs on CTAN mirrors for the current release are constantly
+  # receiving updates, so we can't use those directly. Stable snapshots
+  # need to be used instead. Ideally, for the release branches of NixOS we
+  # should be switching to the tlnet-final versions
+  # (https://tug.org/historic/).
+  urlPrefixes = [
+    # tlnet-final snapshot
+    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+    "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
+
+    # Daily snapshots hosted by one of the texlive release managers
+    #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+  ];
+
   tlpdb = fetchurl {
-    # use the same mirror(s) as urlPrefixes below
-    urls = [
-      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
-    ];
-    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
+    # use the same mirror(s) as urlPrefixes above
+    urls = map (up: "${up}/../tlpkg/texlive.tlpdb.xz") urlPrefixes;
+    hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
   };
+
+  tlpdb-nix = runCommand "tlpdb.nix" {
+    inherit tlpdb;
+    tl2nix = ./tl2nix.sed;
+  }
+  ''
+    xzcat "$tlpdb" | sed -rn -f "$tl2nix" | uniq > "$out"
+  '';
 
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
@@ -145,21 +163,7 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
-
-      # The tarballs on CTAN mirrors for the current release are constantly
-      # receiving updates, so we can't use those directly. Stable snapshots
-      # need to be used instead. Ideally, for the release branches of NixOS we
-      # should be switching to the tlnet-final versions
-      # (https://tug.org/historic/).
-      urlPrefixes = args.urlPrefixes or [
-        # tlnet-final snapshot
-        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
-        #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
-
-        # Daily snapshots hosted by one of the texlive release managers
-        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
-      ];
+        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") (args.urlPrefixes or urlPrefixes));
 
     in runCommand "texlive-${tlName}"
       ( {
@@ -191,7 +195,7 @@ let
 
 in
   tl // {
-    inherit bin combine;
+    inherit bin combine tlpdb-nix;
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.

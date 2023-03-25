@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, EasyProcess
+, easyprocess
 , path
 , pytestCheckHook
 , pythonOlder
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    EasyProcess
+    easyprocess
     path
     pytestCheckHook
   ];

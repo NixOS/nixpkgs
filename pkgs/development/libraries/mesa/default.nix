@@ -51,9 +51,9 @@
       "imagination-experimental" # PowerVR Rogue (currently N/A)
       "panfrost" # ARM Mali Midgard and up (T/G series)
     ]
-    ++ lib.optionals stdenv.isx86_64 [
-      "intel" # Intel (aka ANV), could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
-      "intel_hasvk" # Intel Haswell/Broadwell, experimental, x86_64 only
+    ++ lib.optionals stdenv.hostPlatform.isx86 [
+      "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
+      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     ]
   else [ "auto" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
@@ -88,7 +88,7 @@
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.3.4";
+  version = "22.3.7";
   branch  = lib.versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
@@ -120,7 +120,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "37a1ddaf03f41919ee3c89c97cff41e87de96e00e9d3247959cc8279d8294593";
+    hash = "sha256-iUzi9KHC52F3zdIoRiAZLQ2jBmskPuwvux18838TBCw=";
   };
 
   # TODO:
@@ -227,7 +227,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako python3Packages.ply
+    python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
   ] ++ lib.optional haveWayland wayland-scanner;
 
@@ -323,10 +323,10 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
-  ];
+  ]);
 
   passthru = {
     inherit (libglvnd) driverLink;

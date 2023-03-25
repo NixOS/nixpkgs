@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: global.o:/build/nuweb-1.62/global.h:91: multiple definition of
   #     `current_sector'; main.o:/build/nuweb-1.62/global.h:91: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
     make nuweb

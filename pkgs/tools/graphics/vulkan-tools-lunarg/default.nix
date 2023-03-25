@@ -10,6 +10,7 @@
 , libXrandr
 , libffi
 , libxcb
+, pkg-config
 , wayland
 , which
 , xcbutilkeysyms
@@ -24,18 +25,18 @@
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
   # The version must match that in vulkan-headers
-  version = "1.3.236.0";
+  version = "1.3.239.0";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "LunarG";
       repo = "VulkanTools";
       rev = "sdk-${version}";
-      hash = "sha256-0dGD3InmEd9hO8+uVGMqBHXXfyX8tswyuOaZCftudz0=";
+      hash = "sha256-zgkuTy9ccg8D/riA1CM/PnbXW1R0jWEINtcEVilETwk=";
       fetchSubmodules = true;
     });
 
-  nativeBuildInputs = [ cmake python3 jq which ];
+  nativeBuildInputs = [ cmake python3 jq which pkg-config ];
 
   buildInputs = [
     expat

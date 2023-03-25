@@ -28,6 +28,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
 }:
 
 # Make sure we get GNU sed.
@@ -53,6 +54,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -64,7 +66,10 @@ let majorVersion = "12";
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
-      ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
+      ]
+      # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
+      # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
+      ++ optional (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) (fetchpatch {
         name = "gcc-12-darwin-aarch64-support.patch";
         url = "https://github.com/Homebrew/formula-patches/raw/1d184289/gcc/gcc-12.2.0-arm.diff";
         sha256 = "sha256-omclLslGi/2yCV4pNBMaIpPDMW3tcz/RXdupbNbeOHA=";
@@ -142,6 +147,8 @@ let majorVersion = "12";
         buildPackages
         cloog
         crossStageStatic
+        disableBootstrap
+        disableGdbPlugin
         enableLTO
         enableMultilib
         enablePlugin

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       --replace '$(TEST_SUITE): $(PROVIDER_LIB) $(TEST_SUITE_OBJ)' '$(TEST_SUITE): $(TEST_SUITE_OBJ)'
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   makeFlags = [
     "-C src/Linux"

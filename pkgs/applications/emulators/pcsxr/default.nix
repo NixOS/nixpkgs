@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: AboutDlg.o:/build/pcsxr/gui/Linux.h:42: multiple definition of `cfgfile';
   #     LnxMain.o:/build/pcsxr/gui/Linux.h:42: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   dynarecTarget =
    if stdenv.isx86_64 then "x86_64"

@@ -50,7 +50,7 @@ mkDerivation rec {
     "-DMBGL_WITH_QT_LIB_ONLY=ON"
     "-DMBGL_WITH_QT_HEADLESS=OFF"
   ];
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
 
   meta = with lib; {
     description = "Interactive, thoroughly customizable maps in native Android, iOS, macOS, Node.js, and Qt applications, powered by vector tiles and OpenGL";

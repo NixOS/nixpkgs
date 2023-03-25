@@ -1,10 +1,12 @@
 { lib
-, mkDerivation
+, stdenv
 , variant ? "standalone"
-, fetchFromGitHub
+, fetchzip
+, fetchpatch
 , cmake
 , pkg-config
 , ninja
+, wrapQtAppsHook
 , opencv3
 , openexr
 , graphicsmagick
@@ -16,15 +18,8 @@
 , curl
 , gimp ? null
 , gmic
-, cimg
 , qtbase
 , qttools
-, writeShellScript
-, common-updater-scripts
-, gnugrep
-, gnused
-, coreutils
-, jq
 , nix-update-script
 , gimpPlugins
 }:
@@ -50,26 +45,34 @@ assert lib.assertMsg (builtins.hasAttr variant variants) "gmic-qt variant “${v
 
 assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or []) "gmic-qt variant “${variant}” is missing one of its dependencies.";
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.1";
+  version = "3.2.2";
 
-  src = fetchFromGitHub {
-    owner = "c-koi";
-    repo = "gmic-qt";
-    rev = "v.${version}";
-    sha256 = "sha256-z+GtYLBcHVufXwdeSd8WKmPmU1+/EKMv26kNaEgyt5w=";
+  src = fetchzip {
+    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
+    hash = "sha256-Z6FU0BRTiOIoM6ViYgcwOifat4/IISFJXvyC8PwR5mA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "gmic-3.2.2-cmake-fixes.patch";
+      url = "https://github.com/c-koi/gmic-qt/compare/5379307f9e484ad171b8d09e3572b93d120a9159..420e85e005401d942a3ca5f5c39ee3c867fe8bdd.diff";
+      hash = "sha256-l2y9EFtE3nv8NBSSn6Wo0pLRoYO2hoyb5HZk0QmlSpk=";
+    })
+  ];
+
+  sourceRoot = "source/gmic-qt";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     ninja
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     gmic
-    cimg
     qtbase
     qttools
     fftw
@@ -85,7 +88,8 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
-    "-DENABLE_SYSTEM_GMIC:BOOL=ON"
+    "-DENABLE_SYSTEM_GMIC=ON"
+    "-DENABLE_DYNAMIC_LINKING=ON"
   ];
 
   postPatch = ''
@@ -108,11 +112,10 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    # Broken since 3.2.0 update, cannot handle system gmic and cimg.
-    broken = true;
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

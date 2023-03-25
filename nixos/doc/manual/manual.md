@@ -47,7 +47,10 @@ development/development.md
 contributing-to-this-manual.chapter.md
 ```
 
-```{=include=} appendix
+```{=include=} appendix html:into-file=//options.html
 nixos-options.md
+```
+
+```{=include=} appendix html:into-file=//release-notes.html
 release-notes/release-notes.md
 ```

@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # `-Wno-format-nonliteral` doesn't work
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;

@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with lib.maintainers; [ sander rszibele asbachb ];
+    maintainers = with lib.maintainers; [ sander rszibele ];
     platforms = lib.platforms.unix;
   };
 }

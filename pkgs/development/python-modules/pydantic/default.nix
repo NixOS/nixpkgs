@@ -26,11 +26,12 @@
 , ujson
 , orjson
 , hypothesis
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.4";
+  version = "1.10.5";
 
   outputs = [
     "out"
@@ -44,12 +45,16 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BFyv1uVq2pLcJeS5955G/pDA3ce9YTqZ6F7kAkwnuvY=";
+    hash = "sha256-hcjnFqHTQiCIJh7L9JfpHHTm8GEZ+Vac6HO59cbEpWM=";
   };
 
   postPatch = ''
     sed -i '/flake8/ d' Makefile
   '';
+
+  buildInputs = lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   nativeBuildInputs = [
     cython

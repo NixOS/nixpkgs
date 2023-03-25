@@ -48,14 +48,14 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.87.0";
+  version = "7.88.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-XW4Sh2G3EQlG0Sdq/28PJm8rcm9eYZ9+CgV6R0FV8wc=";
+    hash = "sha256-giS0XM4Sq94DnBLcBxG36oWxBLmtU01uTFtOGIphyQc=";
   };
 
   patches = [
@@ -129,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
       "--without-ca-bundle"
       "--without-ca-path"
+    ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport) [
+      "--without-ssl"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
@@ -184,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
+    changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     description = "A command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = licenses.curl;

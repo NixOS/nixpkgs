@@ -9,14 +9,9 @@
  }:
 
 buildPythonPackage rec {
-  pname = "PyStemmer";
+  pname = "pystemmer";
   version = "2.2.0";
   format = "setuptools";
-
-  src' = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4hcbkbhrscap3d8J6Mhn5Ij4vWm94H0EEKNc3O4NhXw=";
-  };
 
   src = fetchFromGitHub {
     owner = "snowballstem";
@@ -44,17 +39,13 @@ buildPythonPackage rec {
     export PYSTEMMER_SYSTEM_LIBSTEMMER="${lib.getDev libstemmer}/include"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev libstemmer}/include"
   ];
 
   NIX_CFLAGS_LINK = [
     "-L${libstemmer}/lib"
   ];
-
-  #preBuild = ''
-  #  cython src/Stemmer.pyx
-  #'';
 
   pythonImportsCheck = [
     "Stemmer"

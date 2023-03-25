@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nickmaccarthy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
+    hash = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
   };
 
   patches = [

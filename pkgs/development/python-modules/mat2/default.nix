@@ -23,16 +23,18 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.13.2";
+  version = "0.13.3";
 
   disabled = pythonOlder "3.5";
+
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-gZl2VH7qCmjrM/UrXPief8hCQKkBHdjG8w0MQvkZ7wk=";
+    hash = "sha256-x3vGltGuFjI435lEXZU3p4eQcgRm0Oodqd6pTWO7ZX8=";
   };
 
   patches = [
@@ -56,6 +58,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm pyproject.toml
     substituteInPlace dolphin/mat2.desktop \
       --replace "@mat2@" "$out/bin/mat2" \
       --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"

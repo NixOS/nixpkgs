@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "domwillcode";
     repo = "yale-smart-alarm-client";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Zpj1lLaxiTaYpcj1R/ktuVldl/r19r7fzNKvnSIDq80=";
+    hash = "sha256-Zpj1lLaxiTaYpcj1R/ktuVldl/r19r7fzNKvnSIDq80=";
   };
 
   propagatedBuildInputs = [

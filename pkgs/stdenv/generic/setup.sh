@@ -28,10 +28,16 @@ if [ -n "$__structuredAttrs" ]; then
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-    # $NIX_ATTRS_JSON_FILE points to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736
-    export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+
+    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
+    # https://github.com/NixOS/nix/issues/6736; please keep around until the
+    # fix reaches *every patch version* that's >= lib/minver.nix
+    if ! [[ -e "$NIX_ATTRS_JSON_FILE" ]]; then
+        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
+    fi
+    if ! [[ -e "$NIX_ATTRS_SH_FILE" ]]; then
+        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+    fi
 else
     : "${outputs:=out}"
 fi
@@ -989,6 +995,39 @@ stripHash() {
 }
 
 
+recordPropagatedDependencies() {
+    # Propagate dependencies into the development output.
+    declare -ra flatVars=(
+        # Build
+        depsBuildBuildPropagated
+        propagatedNativeBuildInputs
+        depsBuildTargetPropagated
+        # Host
+        depsHostHostPropagated
+        propagatedBuildInputs
+        # Target
+        depsTargetTargetPropagated
+    )
+    declare -ra flatFiles=(
+        "${propagatedBuildDepFiles[@]}"
+        "${propagatedHostDepFiles[@]}"
+        "${propagatedTargetDepFiles[@]}"
+    )
+
+    local propagatedInputsIndex
+    for propagatedInputsIndex in "${!flatVars[@]}"; do
+        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
+        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
+
+        [[ "${!propagatedInputsSlice}" ]] || continue
+
+        mkdir -p "${!outputDev}/nix-support"
+        # shellcheck disable=SC2086
+        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
+    done
+}
+
+
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
     local fn="$1"
@@ -1373,36 +1412,8 @@ fixupPhase() {
     done
 
 
-    # Propagate dependencies & setup hook into the development output.
-    declare -ra flatVars=(
-        # Build
-        depsBuildBuildPropagated
-        propagatedNativeBuildInputs
-        depsBuildTargetPropagated
-        # Host
-        depsHostHostPropagated
-        propagatedBuildInputs
-        # Target
-        depsTargetTargetPropagated
-    )
-    declare -ra flatFiles=(
-        "${propagatedBuildDepFiles[@]}"
-        "${propagatedHostDepFiles[@]}"
-        "${propagatedTargetDepFiles[@]}"
-    )
-
-    local propagatedInputsIndex
-    for propagatedInputsIndex in "${!flatVars[@]}"; do
-        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
-        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
-
-        [[ "${!propagatedInputsSlice}" ]] || continue
-
-        mkdir -p "${!outputDev}/nix-support"
-        # shellcheck disable=SC2086
-        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
-    done
-
+    # record propagated dependencies & setup hook into the development output.
+    recordPropagatedDependencies
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"

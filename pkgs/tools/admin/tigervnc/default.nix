@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=array-bounds"
   ];
 

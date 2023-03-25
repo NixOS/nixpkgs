@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
+  env.NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
 
   # tenacity only looks for ffmpeg at runtime, so we need to link it in manually
   NIX_LDFLAGS = toString [

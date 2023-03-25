@@ -66,6 +66,8 @@ buildGoModule rec {
     installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
 
     # Install shell integrations
     install -D shell/* -t $out/share/fzf/

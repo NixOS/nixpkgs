@@ -24,6 +24,8 @@ buildDunePackage rec {
     src
     version;
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     dune-configurator

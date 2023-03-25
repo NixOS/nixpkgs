@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "neuron";
-  version = "8.2.1";
+  version = "8.2.2";
 
   # format is for pythonModule conversion
   format = "other";
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     bison
     flex
     git
-  ] ++ lib.optional useCore [ perl gsl ]
-  ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optionals useCore [ perl gsl ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  buildInputs = lib.optional useIv [
+  buildInputs = lib.optionals useIv [
     xorg.libX11.dev
     xorg.libXcomposite.dev
     xorg.libXext.dev
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     python3.pkgs.setuptools
     python3.pkgs.scikit-build
     python3.pkgs.matplotlib
-  ] ++ lib.optional useMpi [
+  ] ++ lib.optionals useMpi [
     mpi
-  ] ++ lib.optional useMpi [
+  ] ++ lib.optionals useMpi [
     python3.pkgs.mpi4py
-  ] ++ lib.optional useRx3d [
+  ] ++ lib.optionals useRx3d [
     python3.pkgs.cython
     python3.pkgs.numpy
   ];
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/neuronsimulator/nrn/releases/download/${version}/full-src-package-${version}.tar.gz";
-    sha256 = "0kb0dn7nmivv3zflzkbj2fj3184zwp2crkxp0mdxkwm4kpnxqz0v";
+    sha256 = "sha256-orGeBxu3pu4AyAW5P1EGJv8G0dOUZcSOjpUaloqicZU=";
   };
 
   meta = with lib; {

@@ -8,6 +8,10 @@ import ../make-test-python.nix (
     nodes = {
       rootful = { pkgs, ... }: {
         virtualisation.podman.enable = true;
+
+        # hack to ensure that podman built with and without zfs in extraPackages is cached
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "00000000";
       };
       rootless = { pkgs, ... }: {
         virtualisation.podman.enable = true;

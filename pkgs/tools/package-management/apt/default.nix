@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apt";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
-    hash = "sha256-cR0ixSnvyj6ZQ9rZielxXr8JfmMJKNru3S++WH4O/YU=";
+    hash = "sha256-Q0Z9HKfebAlV/ZkZJUM+IvpmIwhw5fZsRJhnXQF3bCo=";
   };
 
   nativeBuildInputs = [

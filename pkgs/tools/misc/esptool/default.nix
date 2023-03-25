@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "4.5";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    hash = "sha256-SwMdemCk3e3RyXTzoXIqDRywpg3ogE9nQjXGBz0BjwE=";
+    hash = "sha256-FKFw7czXzC8F3OXjlLoJEFaqsSgqWz0ZEqd7KjCy5Ik=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -45,6 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dezgeg dotlambda ] ++ teams.lumiguide.members;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.20.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-l1SOaQA4C8yXbrfi7pEE1PpUO4DVmLTTDUSACCSQ5LE=";
+    hash = "sha256-0+fMZ5ps0CkBbS+fcxlYrrkQi28tmrKTyl3kPuofqyI=";
   };
 
   passthru.tests = {

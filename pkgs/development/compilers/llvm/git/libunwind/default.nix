@@ -1,6 +1,7 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
 , cmake
+, ninja
 , python3
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake ninja python3 ];
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=libunwind"

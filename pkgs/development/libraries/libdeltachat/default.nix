@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.109.0";
+  version = "1.112.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
-    rev = version;
-    hash = "sha256-6zlXa9N7gaF1ta6mjszsA25+QRrHF8m1brKoSiL5OHo=";
+    rev = "v${version}";
+    hash = "sha256-byUQQu+lzqTVufEHoeSd9hrDBWj92JCokzetdRITRns=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Z7CLKhKWqAaLhsXi81OOKWmwQddHCebCJibbKiNNptk=";
+    hash = "sha256-j0Cz1tl6N1JuKt2io+uoqUo/cL/VRVVasJ0CU3X1xtw=";
   };
 
   nativeBuildInputs = [
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
-    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda srapenne ];
     platforms = platforms.unix;
   };
 }

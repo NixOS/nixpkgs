@@ -1,6 +1,7 @@
 { lib
 , buildDunePackage
 , paf
+, dns-client-mirage
 , duration
 , emile
 , httpaf
@@ -17,12 +18,14 @@ buildDunePackage {
   inherit (paf)
     version
     src
+    patches
   ;
 
   duneVersion = "3";
 
   propagatedBuildInputs = [
     paf
+    dns-client-mirage
     duration
     emile
     httpaf

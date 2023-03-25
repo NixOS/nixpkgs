@@ -80,8 +80,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   drumstick = callPackage ../development/libraries/drumstick { };
 
-  fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
-
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
   qgpgme = callPackage ../development/libraries/gpgme { };
@@ -176,7 +174,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+  qca-qt5 = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca-qt5 {
+    inherit (libsForQt5) qtbase;
+  };
 
   qcoro = callPackage ../development/libraries/qcoro { };
 

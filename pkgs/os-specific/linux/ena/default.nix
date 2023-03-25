@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = kernel.makeFlags;
 
   # linux 3.12
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   configurePhase = ''
     runHook preConfigure

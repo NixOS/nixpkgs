@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=address"
     "-Wno-error=use-after-free"

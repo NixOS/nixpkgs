@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "itchiodl";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Emersont1";
     repo = "itchio";
     rev = "v${version}";
-    hash = "sha256-tylMEsUdeMUuLcxRMkkJE7vPAVuqc/cVJ4DB3xmV+iA=";
+    hash = "sha256-XuNkqTAT9LlSwruchGQbombAKHZvKhpnqLfvJdDcrj0=";
   };
 
   format = "pyproject";

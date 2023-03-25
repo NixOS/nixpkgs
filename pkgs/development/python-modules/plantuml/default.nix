@@ -14,7 +14,7 @@ buildPythonPackage {
     owner = "dougn";
     repo = "python-plantuml";
     rev = "93e1aac25b17d896b0d05d0a1aa352c7bd11dd31";
-    sha256 = "sha256-aPXPqoKlu8VLi0Jn84brG7v3qM9L18Ut4sabYYGb3qQ=";
+    hash = "sha256-aPXPqoKlu8VLi0Jn84brG7v3qM9L18Ut4sabYYGb3qQ=";
   };
 
   propagatedBuildInputs = [

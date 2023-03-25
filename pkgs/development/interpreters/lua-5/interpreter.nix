@@ -32,6 +32,10 @@ plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux
        else if stdenv.hostPlatform.isBSD then "bsd"
        else if stdenv.hostPlatform.isUnix then "posix"
        else "generic";
+
+compatFlags = if (lib.versionOlder self.luaversion "5.3") then " -DLUA_COMPAT_ALL"
+              else if (lib.versionOlder self.luaversion "5.4") then " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
+              else " -DLUA_COMPAT_5_3";
 in
 
 stdenv.mkDerivation rec {
@@ -89,7 +93,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(${
+    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat compatFlags} $(${
       if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 

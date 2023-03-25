@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: /build/ccltHly5.o:(.bss+0x119f8): multiple definition of `start_time'; /build/cc9evx3L.o:(.bss+0x10978): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

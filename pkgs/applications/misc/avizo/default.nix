@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, vala
-, gtk3, glib, gtk-layer-shell
-, dbus, dbus-glib, librsvg
-, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk3
+, glib
+, gtk-layer-shell
+, dbus
+, dbus-glib
+, librsvg
+, gobject-introspection
+, gdk-pixbuf
+, wrapGAppsHook
+, pamixer
+, brightnessctl
 }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 librsvg ];
 
   postInstall = ''
-    substituteInPlace "$out"/bin/volumectl \
-      --replace 'avizo-client' "$out/bin/avizo-client"
-    substituteInPlace "$out"/bin/lightctl \
-      --replace 'avizo-client' "$out/bin/avizo-client"
+    wrapProgram $out/bin/volumectl --suffix PATH : $out/bin:${lib.makeBinPath ([ pamixer ])}
+    wrapProgram $out/bin/lightctl --suffix PATH : $out/bin:${lib.makeBinPath ([ brightnessctl ])}
   '';
 
   meta = with lib; {

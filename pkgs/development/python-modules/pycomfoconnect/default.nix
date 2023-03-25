@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "michaelarnauts";
     repo = "comfoconnect";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-I/0vCgSEi6mgYg1fMH4Ha7PoonewtqYYsvXZT8y4rJE=";
+    hash = "sha256-I/0vCgSEi6mgYg1fMH4Ha7PoonewtqYYsvXZT8y4rJE=";
   };
 
   propagatedBuildInputs = [

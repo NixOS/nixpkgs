@@ -68,7 +68,7 @@ beamPackages.mixRelease {
     license = licenses.agpl3Plus;
     homepage = "https://plausible.io/";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

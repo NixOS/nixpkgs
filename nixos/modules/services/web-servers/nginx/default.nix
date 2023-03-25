@@ -112,10 +112,8 @@ let
   ''));
 
   commonHttpConfig = ''
-      # The mime type definitions included with nginx are very incomplete, so
-      # we use a list of mime types from the mailcap package, which is also
-      # used by most other Linux distributions by default.
-      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      # Load mime types.
+      include ${cfg.defaultMimeTypes};
       # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
       # contains 1026 entries and the default is only 1024. Setting to a higher number to remove the need to
       # overwrite it because nginx does not allow duplicated settings.
@@ -186,8 +184,8 @@ let
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
       ${optionalString cfg.recommendedGzipSettings ''
+        # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
         gzip on;
         gzip_static on;
         gzip_vary on;
@@ -195,6 +193,14 @@ let
         gzip_min_length 256;
         gzip_proxied expired no-cache no-store private auth;
         gzip_types ${lib.concatStringsSep " " compressMimeTypes};
+      ''}
+
+      ${optionalString cfg.recommendedZstdSettings ''
+        zstd on;
+        zstd_comp_level 9;
+        zstd_min_length 256;
+        zstd_static on;
+        zstd_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
       ${optionalString cfg.recommendedProxySettings ''
@@ -492,6 +498,16 @@ in
         '';
       };
 
+      recommendedZstdSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended zstd settings. Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
+
+          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
+        '';
+      };
+
       proxyTimeout = mkOption {
         type = types.str;
         default = "60s";
@@ -526,6 +542,18 @@ in
         example = 8443;
         description = lib.mdDoc ''
           If vhosts do not specify listen.port, use these ports for SSL by default.
+        '';
+      };
+
+      defaultMimeTypes = mkOption {
+        type = types.path;
+        default = "${pkgs.mailcap}/etc/nginx/mime.types";
+        defaultText = literalExpression "$''{pkgs.mailcap}/etc/nginx/mime.types";
+        example = literalExpression "$''{pkgs.nginx}/conf/mime.types";
+        description = lib.mdDoc ''
+          Default MIME types for NGINX, as MIME types definitions from NGINX are very incomplete,
+          we use by default the ones bundled in the mailcap package, used by most of the other
+          Linux distributions.
         '';
       };
 
@@ -1005,7 +1033,8 @@ in
       groups = config.users.groups;
     }) dependentCertNames;
 
-    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli;
+    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
+      ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

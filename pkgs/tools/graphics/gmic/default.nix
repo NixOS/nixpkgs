@@ -26,15 +26,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "3.2.1";
+  version = "3.2.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchFromGitHub {
-    owner = "dtschump";
+    owner = "GreycLab";
     repo = "gmic";
     rev = "v.${version}";
-    hash = "sha256-oEH4GlSV+642TGSJJhV4yzydh1hAQZfzwaiPAZFNQtI=";
+    hash = "sha256-XLDnIs7IRIhQtz+qgdNypJODk6WJRPQ2M6LU6DJ+T7I=";
   };
 
   # TODO: build this from source
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    hash = "sha256-f8d9jTVnHwSoyMuiM+Qv86e/BYX9SSx9cl3borihxnc=";
+    hash = "sha256-lABUPhwlzoRODX7z8arOEU0JJszcXREhZ20WRToKNY4=";
   };
 
   nativeBuildInputs = [
@@ -110,7 +110,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open and full-featured framework for image processing";
     homepage = "https://gmic.eu/";
-    license = licenses.cecill20;
+    license = licenses.cecill21;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

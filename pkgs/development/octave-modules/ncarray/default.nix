@@ -7,11 +7,11 @@
 
 buildOctavePackage rec {
   pname = "ncarray";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0v96iziikvq2v7hczhbfs9zmk49v99kn6z3lgibqqpwam175yqgd";
+    sha256 = "sha256-HhQWLUA/6wqYi6TP3PC+N2zgi4UojDxbG9pgQzFaQ8c=";
   };
 
   buildInputs = [

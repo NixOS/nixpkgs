@@ -165,4 +165,76 @@ rec {
     version = "22.3.1";
     src = fetchurl (source "wasm-installable-svm" javaVersion);
   };
+
+  ### Java 19 ###
+
+  # Mostly available for build purposes, not to be exposed at the top level
+  graalvm19-ce-bare = buildGraalvm rec {
+    version = "22.3.1";
+    javaVersion = "19";
+    src = fetchurl (source "graalvm-ce" javaVersion);
+    meta.platforms = builtins.attrNames javaPlatform;
+    products = [ ];
+  };
+
+  graalvm19-ce = graalvm19-ce-bare.override {
+    products = [ native-image-installable-svm-java19 ];
+  };
+
+  # Mostly available for testing, not to be exposed at the top level
+  graalvm19-ce-full = graalvm19-ce-bare.override {
+    products = [
+      js-installable-svm-java19
+      llvm-installable-svm-java19
+      native-image-installable-svm-java19
+      nodejs-installable-svm-java19
+      python-installable-svm-java19
+      ruby-installable-svm-java19
+      wasm-installable-svm-java19
+    ];
+  };
+
+  js-installable-svm-java19 = callPackage ./js-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "js-installable-svm" javaVersion);
+  };
+
+  llvm-installable-svm-java19 = callPackage ./llvm-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "llvm-installable-svm" javaVersion);
+  };
+
+  native-image-installable-svm-java19 = callPackage ./native-image-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "native-image-installable-svm" javaVersion);
+  };
+
+  nodejs-installable-svm-java19 = callPackage ./nodejs-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "nodejs-installable-svm" javaVersion);
+    graalvm-ce = graalvm19-ce-bare;
+  };
+
+  python-installable-svm-java19 = callPackage ./python-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "python-installable-svm" javaVersion);
+  };
+
+  ruby-installable-svm-java19 = callPackage ./ruby-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "ruby-installable-svm" javaVersion);
+    llvm-installable-svm = llvm-installable-svm-java19;
+  };
+
+  wasm-installable-svm-java19 = callPackage ./wasm-installable-svm.nix rec {
+    javaVersion = "19";
+    version = "22.3.1";
+    src = fetchurl (source "wasm-installable-svm" javaVersion);
+  };
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "xZise";
     repo = "flake8-future-import";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
+    hash = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 
   patches = lib.optionals (pythonAtLeast "3.10") [

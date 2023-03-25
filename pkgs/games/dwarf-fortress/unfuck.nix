@@ -82,6 +82,11 @@ stdenv.mkDerivation {
     sha256 = release.sha256;
   };
 
+  postPatch = ''
+    # https://github.com/svenstaro/dwarf_fortress_unfuck/pull/27
+    substituteInPlace CMakeLists.txt --replace \''${GLEW_LIBRARIES} GLEW::glew
+  '';
+
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"

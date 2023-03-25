@@ -10,13 +10,13 @@
 # gcc only supports objc on darwin
 buildGoModule.override { stdenv = clangStdenv; } rec {
   pname = "go-musicfox";
-  version = "3.7.0";
+  version = "3.7.5";
 
   src = fetchFromGitHub {
     owner = "anhoder";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IXB5eOXVtoe21WbQa9x5SKcgUpgyjVx48998vdccMPM=";
+    hash = "sha256-+0s+MCFLw527gFj7pfiYGfKYihthFjRLPeto2SbALw0=";
   };
 
   deleteVendor = true;
@@ -28,7 +28,7 @@ buildGoModule.override { stdenv = clangStdenv; } rec {
   ldflags = [
     "-s"
     "-w"
-    "-X go-musicfox/pkg/constants.AppVersion=${version}"
+    "-X github.com/go-musicfox/go-musicfox/pkg/constants.AppVersion=${version}"
   ];
 
   nativeBuildInputs = [
@@ -45,6 +45,6 @@ buildGoModule.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/anhoder/go-musicfox";
     license = licenses.mit;
     mainProgram = "musicfox";
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo Ruixi-rebirth ];
   };
 }

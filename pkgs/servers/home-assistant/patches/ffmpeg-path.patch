@@ -1,8 +1,8 @@
 diff --git a/homeassistant/components/ffmpeg/__init__.py b/homeassistant/components/ffmpeg/__init__.py
-index 74c826f47d..91f359da2a 100644
+index a98766c78c..1c47bb1f80 100644
 --- a/homeassistant/components/ffmpeg/__init__.py
 +++ b/homeassistant/components/ffmpeg/__init__.py
-@@ -40,7 +40,7 @@ CONF_FFMPEG_BIN = "ffmpeg_bin"
+@@ -41,7 +41,7 @@ CONF_FFMPEG_BIN = "ffmpeg_bin"
  CONF_EXTRA_ARGUMENTS = "extra_arguments"
  CONF_OUTPUT = "output"
  
@@ -12,7 +12,7 @@ index 74c826f47d..91f359da2a 100644
  CONFIG_SCHEMA = vol.Schema(
      {
 diff --git a/tests/components/ffmpeg/test_init.py b/tests/components/ffmpeg/test_init.py
-index e1730ffdab..e9cd7934fd 100644
+index 521ac732e5..ab8a56934f 100644
 --- a/tests/components/ffmpeg/test_init.py
 +++ b/tests/components/ffmpeg/test_init.py
 @@ -87,7 +87,7 @@ class TestFFmpegSetup:

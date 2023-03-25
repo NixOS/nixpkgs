@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   # the radare2 binary package seems to not install all necessary headers.
-  NIX_CFLAGS_COMPILE = [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
 
   postBuild = ''
     pushd ../../../iaito-translations

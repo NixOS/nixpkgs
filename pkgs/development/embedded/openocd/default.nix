@@ -3,9 +3,13 @@
 , fetchurl
 , pkg-config
 , hidapi
-, libftdi1
 , libusb1
 , libgpiod
+
+, enableFtdi ? true, libftdi1
+
+# Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
+, extraHardwareSupport ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -24,22 +28,19 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-werror"
     "--enable-jtag_vpi"
-    "--enable-usb_blaster_libftdi"
-    (lib.enableFeature (! stdenv.isDarwin) "amtjtagaccel")
-    (lib.enableFeature (! stdenv.isDarwin) "gw16012")
-    "--enable-presto_libftdi"
-    "--enable-openjtag_ftdi"
-    (lib.enableFeature (! stdenv.isDarwin) "oocd_trace")
     "--enable-buspirate"
-    (lib.enableFeature stdenv.isLinux "sysfsgpio")
-    (lib.enableFeature stdenv.isLinux "linuxgpiod")
     "--enable-remote-bitbang"
-  ];
+    (lib.enableFeature enableFtdi "ftdi")
+    (lib.enableFeature stdenv.isLinux "linuxgpiod")
+    (lib.enableFeature stdenv.isLinux "sysfsgpio")
+  ] ++
+    map (hardware: "--enable-${hardware}") extraHardwareSupport
+  ;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=cpp"
     "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
-  ];
+  ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"

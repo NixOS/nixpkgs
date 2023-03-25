@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.cachedescriptors";
     inherit version;
-    sha256 = "sha256-1FxIdIb334HymS8aAJEmJL93JZ2DxdmKp2tnhxbj0Ro=";
+    hash = "sha256-1FxIdIb334HymS8aAJEmJL93JZ2DxdmKp2tnhxbj0Ro=";
   };
 
   propagatedBuildInputs = [

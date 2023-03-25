@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) btrbk btrbk-no-timer btrbk-section-order;
+    inherit (nixosTests) btrbk btrbk-no-timer btrbk-section-order btrbk-doas;
   };
 
   passthru.updateScript = genericUpdater {

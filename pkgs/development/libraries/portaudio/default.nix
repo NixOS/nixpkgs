@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , alsa-lib
+, libjack2
 , pkg-config
 , which
 , AudioUnit
@@ -21,11 +22,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
-  buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
+  buildInputs = [ libjack2 ] ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib ];
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 

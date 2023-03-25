@@ -1,33 +1,34 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml, fetchpatch }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, packaging
+, ply
+, toml
+}:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.7.5";
+  version = "6.7.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
-    pname = "sip";
-    inherit version;
-    sha256 = "sha256-llXQieHQxfv2a94RVYqHSYBykTK1vQwq41WsGnuJOrQ=";
+    inherit pname version;
+    hash = "sha256-3unAb6iubUQaQB+SKGf8YZbt2idO69n7/sVPB2nCqeI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [ packaging ply toml ];
 
   # There aren't tests
   doCheck = false;
-
-  # FIXME: Why isn't this detected automatically?
-  # Needs to be specified in pyproject.toml, e.g.:
-  # [tool.sip.bindings.MODULE]
-  # tags = [PLATFORM_TAG]
-  platform_tag =
-    if stdenv.targetPlatform.isLinux then
-      "WS_X11"
-    else if stdenv.targetPlatform.isDarwin then
-      "WS_MACX"
-    else if stdenv.targetPlatform.isWindows then
-      "WS_WIN"
-    else
-      throw "unsupported platform";
 
   pythonImportsCheck = [ "sipbuild" ];
 

@@ -22,7 +22,6 @@ python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
   version = "0.8.0";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitHub {
     owner = "RogerCrocker";

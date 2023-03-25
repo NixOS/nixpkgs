@@ -850,13 +850,13 @@ let
         sha512 = "AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==";
       };
     };
-    "pg-8.8.0" = {
+    "pg-8.10.0" = {
       name = "pg";
       packageName = "pg";
-      version = "8.8.0";
+      version = "8.10.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pg/-/pg-8.8.0.tgz";
-        sha512 = "UXYN0ziKj+AeNNP7VDMwrehpACThH7LUl/p8TDFpEUuSejCUIwGSfxpHsPvtM6/WXFy6SU4E5RG4IJV/TZAGjw==";
+        url = "https://registry.npmjs.org/pg/-/pg-8.10.0.tgz";
+        sha512 = "ke7o7qSTMb47iwzOSaZMfeR7xToFdkE71ifIipOAAaLIM0DYzfOAXlgFFmYUIE2BcJtvnVlGCID84ZzCegE8CQ==";
       };
     };
     "pg-connection-string-2.5.0" = {
@@ -877,22 +877,22 @@ let
         sha512 = "WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==";
       };
     };
-    "pg-pool-3.5.2" = {
+    "pg-pool-3.6.0" = {
       name = "pg-pool";
       packageName = "pg-pool";
-      version = "3.5.2";
+      version = "3.6.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pg-pool/-/pg-pool-3.5.2.tgz";
-        sha512 = "His3Fh17Z4eg7oANLob6ZvH8xIVen3phEZh2QuyrIl4dQSDVEabNducv6ysROKpDNPSD+12tONZVWfSgMvDD9w==";
+        url = "https://registry.npmjs.org/pg-pool/-/pg-pool-3.6.0.tgz";
+        sha512 = "clFRf2ksqd+F497kWFyM21tMjeikn60oGDmqMT8UBrynEwVEX/5R5xd2sdvdo1cZCFlguORNpVuqxIj+aK4cfQ==";
       };
     };
-    "pg-protocol-1.5.0" = {
+    "pg-protocol-1.6.0" = {
       name = "pg-protocol";
       packageName = "pg-protocol";
-      version = "1.5.0";
+      version = "1.6.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pg-protocol/-/pg-protocol-1.5.0.tgz";
-        sha512 = "muRttij7H8TqRNu/DxrAJQITO4Ac7RmX3Klyr/9mJEOBeIpgnF8f9jAfRz5d3XwQZl5qBjF9gLsUtMPJE0vezQ==";
+        url = "https://registry.npmjs.org/pg-protocol/-/pg-protocol-1.6.0.tgz";
+        sha512 = "M+PDm637OY5WM307051+bsDia5Xej6d9IR4GwJse1qA1DIhiKlksvrneZOYQq42OM+spubpcNYEo2FcKQrDk+Q==";
       };
     };
     "pg-types-2.2.0" = {
@@ -985,13 +985,13 @@ let
         sha512 = "+MeVjFf4L44XUkhM1eYbD8fyEsxcV81pqMSR5gblfcLCHfZvbrqy4/qYHE+/R5HoBUT11WV5O08Cr1n3YXkWVQ==";
       };
     };
-    "readable-stream-3.6.0" = {
+    "readable-stream-3.6.1" = {
       name = "readable-stream";
       packageName = "readable-stream";
-      version = "3.6.0";
+      version = "3.6.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.0.tgz";
-        sha512 = "BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==";
+        url = "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.1.tgz";
+        sha512 = "+rQmrWMYGA90yenhTYsLWAsLsqVC8osOw6PKE1HDYiO0gdPeKe/xDHNzIAIn4C91YQ6oenEhfYqqc1883qHbjQ==";
       };
     };
     "readdirp-3.5.0" = {
@@ -1350,7 +1350,7 @@ let
     name = "haste";
     packageName = "haste";
     version = "0.1.0";
-    src = ../../../../../../../../../nix/store/zmi5rwpy1kmyj52ymv3yc8ziiypjgrxd-source;
+    src = ../../../../../../../../../nix/store/v45nw2igqcjw58j7ns9xrqj6f6n3jafd-source;
     dependencies = [
       sources."@ungap/promise-all-settled-1.1.2"
       sources."ansi-colors-4.1.1"
@@ -1365,7 +1365,7 @@ let
       sources."binary-extensions-2.2.0"
       (sources."bl-4.1.0" // {
         dependencies = [
-          sources."readable-stream-3.6.0"
+          sources."readable-stream-3.6.1"
           sources."string_decoder-1.3.0"
         ];
       })
@@ -1466,11 +1466,11 @@ let
       sources."parseurl-1.3.3"
       sources."path-exists-4.0.0"
       sources."path-is-absolute-1.0.1"
-      sources."pg-8.8.0"
+      sources."pg-8.10.0"
       sources."pg-connection-string-2.5.0"
       sources."pg-int8-1.0.1"
-      sources."pg-pool-3.5.2"
-      sources."pg-protocol-1.5.0"
+      sources."pg-pool-3.6.0"
+      sources."pg-protocol-1.6.0"
       sources."pg-types-2.2.0"
       sources."pgpass-1.0.5"
       sources."picomatch-2.3.1"

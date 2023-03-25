@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchurl
-, jieba
-, pymorphy2
+, protobuf
+, pymorphy3
+, pymorphy3-dicts-uk
 , sentencepiece
 , spacy
 , spacy-pkuseg
@@ -15,8 +16,10 @@
 }:
 let
   buildModelPackage = { pname, version, sha256, license }:
+
     let
       lang = builtins.substring 0 2 pname;
+      requires-protobuf = pname == "fr_dep_news_trf" || pname == "uk_core_news_trf";
     in
     buildPythonPackage {
       inherit pname version;
@@ -27,15 +30,20 @@ let
       };
 
       propagatedBuildInputs = [ spacy ]
-        ++ lib.optionals (lang == "zh") [ jieba spacy-pkuseg ]
         ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-transformers ]
-        ++ lib.optionals (lang == "ru") [ pymorphy2 ]
+        ++ lib.optionals (lang == "ru") [ pymorphy3 ]
+        ++ lib.optionals (lang == "uk") [ pymorphy3 pymorphy3-dicts-uk ]
+        ++ lib.optionals (lang == "zh") [ spacy-pkuseg ]
         ++ lib.optionals (pname == "fr_dep_news_trf") [ sentencepiece ];
 
-      postPatch = lib.optionalString (pname == "fr_dep_news_trf") ''
+      postPatch = lib.optionalString requires-protobuf ''
         substituteInPlace meta.json \
-          --replace "sentencepiece==0.1.91" "sentencepiece>=0.1.91"
+          --replace "protobuf<3.21.0" "protobuf"
       '';
+
+      nativeBuildInputs = lib.optionals requires-protobuf [
+        protobuf
+      ];
 
       pythonImportsCheck = [ pname ];
 

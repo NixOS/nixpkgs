@@ -117,9 +117,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (!stdenv.hostPlatform.isx86) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (!stdenv.hostPlatform.isx86) [
     "-DSQUISH_USE_SSE=0"
-  ];
+  ]);
 
   postInstall = lib.optionals stdenv.isDarwin ''
     mkdir -p $out/Applications

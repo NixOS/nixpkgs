@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-wled";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GmentEsCJQ9N9kXfy5pbkGXi5CvZfbepdCWab+/fLJc=";
+    hash = "sha256-GmentEsCJQ9N9kXfy5pbkGXi5CvZfbepdCWab+/fLJc=";
   };
 
   nativeBuildInputs = [
