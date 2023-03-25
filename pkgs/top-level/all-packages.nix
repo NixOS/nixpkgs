@@ -18758,6 +18758,8 @@ with pkgs;
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
 
+  sca2d = callPackage ../development/tools/sca2d {  };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_4_1_0;
 
