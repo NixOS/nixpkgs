@@ -32086,10 +32086,7 @@ with pkgs;
 
   oroborus = callPackage ../applications/window-managers/oroborus { };
 
-  osm2pgsql = callPackage ../tools/misc/osm2pgsql {
-    # fmt_9 is not supported: https://github.com/openstreetmap/osm2pgsql/issues/1859
-    fmt = fmt_8;
-  };
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
