@@ -83,8 +83,8 @@ let
         mktplcRef = {
           name = "vscode-ron";
           publisher = "a5huynh";
-          version = "0.9.0";
-          sha256 = "0d3p50mhqp550fmj662d3xklj14gvzvhszm2hlqvx4h28v222z97";
+          version = "0.10.0";
+          sha256 = "sha256-DmyYE7RHOX/RrbIPYCq/x0l081SzmyBAd7yHSUOPkOA=";
         };
         meta = {
           license = lib.licenses.mit;
