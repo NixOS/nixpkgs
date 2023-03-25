@@ -16,7 +16,7 @@ stdenv.mkDerivation  rec {
   postPatch = ''
     sed 's#/usr/local#$(out)#g' -i common.mak
     sed 's#/usr/share/fonts/truetype/ttf-bitstream-vera#${ttf_bitstream_vera}/share/fonts/truetype#g' \
-      -i b_synth/Makefile
+      -i common.mak
   '';
 
   nativeBuildInputs = [ pkg-config ];
