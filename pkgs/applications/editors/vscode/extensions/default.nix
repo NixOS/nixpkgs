@@ -426,8 +426,8 @@ let
         mktplcRef = {
           name = "vscode-unison";
           publisher = "benfradet";
-          version = "0.3.0";
-          sha256 = "1x80s8l8djchg17553aiwaf4b49hf6awiayk49wyii0i26hlpjk1";
+          version = "0.4.0";
+          sha256 = "sha256-IDM9v+LWckf20xnRTj+ThAFSzVxxDVQaJkwO37UIIhs=";
         };
         meta = {
           license = lib.licenses.asl20;
