@@ -20,6 +20,7 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -33,6 +34,7 @@ import Control.Monad (forM_, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
 import Data.Aeson (
    FromJSON,
+   FromJSONKey,
    ToJSON,
    decodeFileStrict',
    eitherDecodeStrict',
@@ -92,13 +94,16 @@ import Distribution.Simple.Utils (safeLast, fromUTF8BS)
 newtype JobsetEvals = JobsetEvals
    { evals :: Seq Eval
    }
-   deriving (Generic, ToJSON, FromJSON, Show)
+   deriving stock (Generic, Show)
+   deriving anyclass (ToJSON, FromJSON)
 
 newtype Nixpkgs = Nixpkgs {revision :: Text}
-   deriving (Generic, ToJSON, FromJSON, Show)
+   deriving stock (Generic, Show)
+   deriving anyclass (ToJSON, FromJSON)
 
 newtype JobsetEvalInputs = JobsetEvalInputs {nixpkgs :: Nixpkgs}
-   deriving (Generic, ToJSON, FromJSON, Show)
+   deriving stock (Generic, Show)
+   deriving anyclass (ToJSON, FromJSON)
 
 data Eval = Eval
    { id :: Int
@@ -106,18 +111,24 @@ data Eval = Eval
    }
    deriving (Generic, ToJSON, FromJSON, Show)
 
+-- | Hydra job name.
+--
+-- Examples:
+-- - @"haskellPackages.lens.x86_64-linux"@
+-- - @"haskell.packages.ghc925.cabal-install.aarch64-darwin"@
+-- - @"pkgsMusl.haskell.compiler.ghc90.x86_64-linux"@
+-- - @"arion.aarch64-linux"@
+newtype JobName = JobName { unJobName :: Text }
+   deriving stock (Generic, Show)
+   deriving newtype (Eq, FromJSONKey, FromJSON, Ord, ToJSON)
+
 -- | Datatype representing the result of querying the build evals of the
 -- haskell-updates Hydra jobset.
 --
 -- The URL <https://hydra.nixos.org/eval/EVAL_ID/builds> (where @EVAL_ID@ is a
 -- value like 1792418) returns a list of 'Build'.
 data Build = Build
-   { job :: Text
-     -- ^ Hydra job name.
-     --
-     -- Examples:
-     -- - @"haskellPackages.lens.x86_64-linux"@
-     -- - @"haskell.packages.ghc925.cabal-install.aarch64-darwin"@
+   { job :: JobName
    , buildstatus :: Maybe Int
      -- ^ Status of the build.  See 'getBuildState' for the meaning of each state.
    , finished :: Int
@@ -221,7 +232,7 @@ newtype Maintainers = Maintainers { maintainers :: Maybe Text }
 --
 -- Note that Hydra jobs without maintainers will have an empty string for the
 -- maintainer list.
-type HydraJobs = Map Text Maintainers
+type HydraJobs = Map JobName Maintainers
 
 -- | Map of email addresses to GitHub handles.
 -- This is built from the file @../../maintainer-list.nix@.
@@ -246,7 +257,7 @@ type EmailToGitHubHandles = Map Text Text
 --    , ("conduit.x86_64-darwin", ["snoyb", "webber"])
 --    ]
 -- @@
-type MaintainerMap = Map Text (NonEmpty Text)
+type MaintainerMap = Map JobName (NonEmpty Text)
 
 -- | Information about a package which lists its dependencies and whether the
 -- package is marked broken.
@@ -406,8 +417,10 @@ buildToStatusSummary :: MaintainerMap -> ReverseDependencyMap -> Build -> Status
 buildToStatusSummary maintainerMap reverseDependencyMap build@Build{job, id, system} =
    Map.singleton name summaryEntry
   where
+   jobName = unJobName job
+
    packageName :: Text
-   packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)
+   packageName = fromMaybe jobName (Text.stripSuffix ("." <> system) jobName)
 
    splitted :: Maybe (NonEmpty Text)
    splitted = nonEmpty $ Text.splitOn "." packageName
@@ -580,7 +593,7 @@ printMarkBrokenList :: IO ()
 printMarkBrokenList = do
    (_, fetchTime, buildReport) <- readBuildReports
    runReq defaultHttpConfig $ forM_ buildReport \build@Build{job, id} ->
-      case (getBuildState build, Text.splitOn "." job) of
+      case (getBuildState build, Text.splitOn "." $ unJobName job) of
          (Failed, ["haskellPackages", name, "x86_64-linux"]) -> do
             -- Fetch build log from hydra to figure out the cause of the error.
             build_log <- ByteString.lines <$> hydraPlainQuery ["build", showT id, "nixlog", "1", "raw"]
