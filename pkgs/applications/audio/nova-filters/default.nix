@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, sconsPackages, boost, ladspaH, pkg-config }:
+{lib, stdenv, fetchurl, scons, boost, ladspaH, pkg-config }:
 
 stdenv.mkDerivation {
   version = "0.2-2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "16064vvl2w5lz4xi3lyjk4xx7fphwsxc14ajykvndiz170q32s6i";
   };
 
-  nativeBuildInputs = [ pkg-config sconsPackages.scons_latest ];
+  nativeBuildInputs = [ pkg-config scons ];
   buildInputs = [ boost ladspaH ];
 
   patchPhase = ''
