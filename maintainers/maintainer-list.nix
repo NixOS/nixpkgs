@@ -16176,12 +16176,6 @@
     github = "wegank";
     githubId = 9713184;
   };
-  weihua = {
-    email = "luwh364@gmail.com";
-    github = "weihua-lu";
-    githubId = 9002575;
-    name = "Weihua Lu";
-  };
   welteki = {
     email = "welteki@pm.me";
     github = "welteki";
