@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "django-compression-middleware";
-  version = "0.4.2";
+  version = "0.5.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cdS80JVGz4h4MVCsZGfrQWhZlTR3Swm4Br4wFxOcKVs=";
+    hash = "sha256-DfUPEtd0ZZq8i7yI5MeU8nhajxHzC1uyZ8MUuF2UG3M=";
   };
 
   propagatedBuildInputs = [
