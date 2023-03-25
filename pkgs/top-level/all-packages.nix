@@ -23628,6 +23628,8 @@ with pkgs;
 
   sonic = callPackage ../development/libraries/sonic { };
 
+  sonivox = callPackage ../development/libraries/sonivox { };
+
   sope = callPackage ../development/libraries/sope { };
 
   sord = callPackage ../development/libraries/sord { };
