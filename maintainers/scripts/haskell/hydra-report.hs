@@ -19,6 +19,7 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -357,7 +358,6 @@ platformIcon (Platform x) = case x of
 
 data BuildResult = BuildResult {state :: BuildState, id :: Int} deriving (Show, Eq, Ord)
 newtype Platform = Platform {platform :: Text} deriving (Show, Eq, Ord)
-newtype Table row col a = Table (Map (row, col) a)
 data SummaryEntry = SummaryEntry {
    summaryBuilds :: Table Text Platform BuildResult,
    summaryMaintainers :: Set Text,
@@ -366,8 +366,13 @@ data SummaryEntry = SummaryEntry {
 }
 type StatusSummary = Map Text SummaryEntry
 
-tableSingleton :: row -> col -> a -> Table row col a
-tableSingleton row col a = Table (Map.singleton (row, col) a)
+newtype Table row col a = Table (Map (row, col) a)
+
+singletonTable :: row -> col -> a -> Table row col a
+singletonTable row col a = Table $ Map.singleton (row, col) a
+
+unionTable :: (Ord row, Ord col) => Table row col a -> Table row col a -> Table row col a
+unionTable (Table l) (Table r) = Table $ Map.union l r
 
 instance (Ord row, Ord col, Semigroup a) => Semigroup (Table row col a) where
    Table l <> Table r = Table (Map.unionWith (<>) l r)
@@ -390,39 +395,39 @@ getBuildState Build{finished, buildstatus} = case (finished, buildstatus) of
    (_, Just 11) -> OutputLimitExceeded
    (_, i) -> Unknown i
 
-buildSummary :: MaintainerMap -> ReverseDependencyMap -> Seq Build -> StatusSummary
-buildSummary maintainerMap reverseDependencyMap =
-   foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
+combineStatusSummaries :: Seq StatusSummary -> StatusSummary
+combineStatusSummaries = foldl (Map.unionWith unionSummary) Map.empty
   where
    unionSummary :: SummaryEntry -> SummaryEntry -> SummaryEntry
-   unionSummary (SummaryEntry (Table lb) lm lr lu) (SummaryEntry (Table rb) rm rr ru) =
-      SummaryEntry (Table $ Map.union lb rb) (lm <> rm) (max lr rr) (max lu ru)
+   unionSummary (SummaryEntry lb lm lr lu) (SummaryEntry rb rm rr ru) =
+      SummaryEntry (unionTable lb rb) (lm <> rm) (max lr rr) (max lu ru)
 
-   toSummary :: Build -> StatusSummary
-   toSummary build@Build{job, id, system} = Map.singleton name summaryEntry
-     where
-      packageName :: Text
-      packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)
+buildToStatusSummary :: MaintainerMap -> ReverseDependencyMap -> Build -> StatusSummary
+buildToStatusSummary maintainerMap reverseDependencyMap build@Build{job, id, system} =
+   Map.singleton name summaryEntry
+  where
+   packageName :: Text
+   packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)
 
-      splitted :: Maybe (NonEmpty Text)
-      splitted = nonEmpty $ Text.splitOn "." packageName
+   splitted :: Maybe (NonEmpty Text)
+   splitted = nonEmpty $ Text.splitOn "." packageName
 
-      name :: Text
-      name = maybe packageName NonEmpty.last splitted
+   name :: Text
+   name = maybe packageName NonEmpty.last splitted
 
-      set :: Text
-      set = maybe "" (Text.intercalate "." . NonEmpty.init) splitted
+   set :: Text
+   set = maybe "" (Text.intercalate "." . NonEmpty.init) splitted
 
-      maintainers :: Set Text
-      maintainers = maybe mempty (Set.fromList . toList) (Map.lookup job maintainerMap)
+   maintainers :: Set Text
+   maintainers = maybe mempty (Set.fromList . toList) (Map.lookup job maintainerMap)
 
-      (reverseDeps, unbrokenReverseDeps) = Map.findWithDefault (0,0) name reverseDependencyMap
+   (reverseDeps, unbrokenReverseDeps) = Map.findWithDefault (0,0) name reverseDependencyMap
 
-      buildTable :: Table Text Platform BuildResult
-      buildTable =
-         tableSingleton set (Platform system) (BuildResult (getBuildState build) id)
+   buildTable :: Table Text Platform BuildResult
+   buildTable =
+      singletonTable set (Platform system) (BuildResult (getBuildState build) id)
 
-      summaryEntry = SummaryEntry buildTable maintainers reverseDeps unbrokenReverseDeps
+   summaryEntry = SummaryEntry buildTable maintainers reverseDeps unbrokenReverseDeps
 
 readBuildReports :: IO (Eval, UTCTime, Seq Build)
 readBuildReports = do
@@ -564,8 +569,10 @@ printMaintainerPing = do
       let tops = take 50 . sortOn (negate . snd) . fmap (second fst) . filter (\x -> maybe False broken $ Map.lookup (fst x) depMap) . Map.toList $ rdepMap
       pure (rdepMap, tops)
    (eval, fetchTime, buildReport) <- readBuildReports
-   let buildSum :: StatusSummary
-       buildSum = buildSummary maintainerMap reverseDependencyMap buildReport
+   let statusSummaries =
+          fmap (buildToStatusSummary maintainerMap reverseDependencyMap) buildReport
+       buildSum :: StatusSummary
+       buildSum = combineStatusSummaries statusSummaries
        textBuildSummary = printBuildSummary eval fetchTime buildSum topBrokenRdeps
    Text.putStrLn textBuildSummary
 
