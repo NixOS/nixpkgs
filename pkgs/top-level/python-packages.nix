@@ -9340,6 +9340,8 @@ self: super: with self; {
 
   pnglatex = callPackage ../development/python-modules/pnglatex { };
 
+  pnoise = callPackage ../development/python-modules/pnoise { };
+
   pocket = callPackage ../development/python-modules/pocket { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
