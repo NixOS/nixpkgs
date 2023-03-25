@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, perl, nixosTests }:
+{ lib, stdenv, fetchurl, perl
+# Update the enabled crypt scheme ids in passthru when the enabled hashes change
+, enableHashes ? "strong"
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
@@ -15,8 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    # Update the enabled crypt scheme ids in passthru when the enabled hashes change
-    "--enable-hashes=strong"
+    "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [

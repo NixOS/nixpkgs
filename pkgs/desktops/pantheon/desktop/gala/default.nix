@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -38,6 +39,27 @@ stdenv.mkDerivation rec {
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
+
+    # WindowClone: Don't calculate offset
+    # https://github.com/elementary/gala/pull/1567
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/b7139add2333e5419afd1c82c3790d85044c1f76.patch";
+      sha256 = "sha256-QhBARbA3YEXB/RIM/gmFiry1IzGvFFQVXGDs0kGjf20=";
+    })
+
+    # Map notification windows manually while switching workspace
+    # https://github.com/elementary/gala/pull/1577
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/97b33173e2ee8b4a4af3fe0513b6d264de9d9b2a.patch";
+      sha256 = "sha256-y2PicvHxtKlZTpr6a0Hua1ppXpRwDItsIoGG2r+DAjQ=";
+    })
+
+    # Use ClickAction for FramedBackground and close buttons
+    # https://github.com/elementary/gala/pull/1579
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/79453b324d2e737ba32124212632e1269c6c9af1.patch";
+      sha256 = "sha256-ipOoY3dn0Hs1U2d9OER+ZfgC5AL4yay4FD8ongID/xY=";
+    })
   ];
 
   nativeBuildInputs = [
