@@ -15765,6 +15765,15 @@
     github = "deviant";
     githubId = 68829907;
   };
+  v3s1e = {
+    name = "Veselin Ivanov";
+    email = "v3s1ez@gmail.com";
+    github = "v3s1e";
+    githubId = 51268394;
+    keys = [{
+      fingerprint = "87CF 5D9C 165C 0161 15F4  FED2 B09D DF9D 424E 10D3";
+    }];
+  };
   vaci = {
     email = "vaci@vaci.org";
     github = "vaci";
