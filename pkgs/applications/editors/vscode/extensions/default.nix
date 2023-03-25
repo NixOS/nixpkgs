@@ -727,8 +727,8 @@ let
         mktplcRef = {
           publisher = "daohong-emilio";
           name = "yash";
-          version = "0.2.8";
-          sha256 = "ummOEBSXUI78hBb1AUh+x339T7ocB/evOVaz79geHRM=";
+          version = "0.2.9";
+          sha256 = "sha256-5JX6Z7xVPoqGjD1/ySc9ObD14O1sWDpvBj9VbtGO1Cg=";
         };
         meta = {
           license = lib.licenses.mit;
