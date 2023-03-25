@@ -503,8 +503,8 @@ let
         mktplcRef = {
           name = "markdown-mermaid";
           publisher = "bierner";
-          version = "1.17.4";
-          sha256 = "sha256-jJnALJJc8G4/0L7WMmKSZ7I+7Usmyj+WhufBdSzcEK0=";
+          version = "1.17.7";
+          sha256 = "sha256-WKe7XxBeYyzmjf/gnPH+5xNOHNhMPAKjtLorYyvT76U=";
         };
         meta = {
           license = lib.licenses.mit;
