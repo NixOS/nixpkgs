@@ -70,7 +70,7 @@ let
   deriveCran = mkDerive {
     mkHomepage = {name, snapshot, ...}: "https://cran.r-project.org/${snapshot}/web/packages/${name}/";
     mkUrls = {name, version, snapshot}: [
-      "https://packagemanager.rstudio.com/cran/${snapshot}/src/contrib/${name}_${version}.tar.gz"
+      "mirror://posit/cran/${snapshot}/src/contrib/${name}_${version}.tar.gz"
     ];
   };
 

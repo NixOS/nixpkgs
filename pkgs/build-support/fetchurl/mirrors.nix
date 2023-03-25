@@ -160,6 +160,11 @@
     "https://jaist.dl.sourceforge.jp/"
   ];
 
+  # Posit mirrors
+  posit = [
+    "https://packagemanager.rstudio.com/"
+  ];
+
   # PostgreSQL
   postgresql = [
     "https://ftp.postgresql.org/pub/"
