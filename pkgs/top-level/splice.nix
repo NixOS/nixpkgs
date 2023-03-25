@@ -146,6 +146,12 @@ in
 
   newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
 
+  callPackageNoMkOverridable = pkgs.newScopeNoMkOverridable { };
+
+  callPackagesNoMkOverridable = lib.callPackagesWithNoMkOverridable splicedPackagesWithXorg;
+
+  newScopeNoMkOverridable = extra: lib.callPackageWithNoMkOverridable (splicedPackagesWithXorg // extra);
+
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
 
