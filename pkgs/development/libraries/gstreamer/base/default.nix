@@ -7,6 +7,7 @@
 , gettext
 , python3
 , gstreamer
+, graphene
 , orc
 , pango
 , libtheora
@@ -27,10 +28,8 @@
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsa-lib
-# Enabling Cocoa seems to currently not work, giving compile
-# errors. Suspected is that a newer version than clang
-# is needed than 5.0 but it is not clear.
-, enableCocoa ? false
+# TODO: fix once x86_64-darwin sdk updated
+, enableCocoa ? (stdenv.isDarwin && stdenv.isAarch64)
 , Cocoa
 , OpenGL
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
@@ -73,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gobject-introspection
+    graphene
     orc
     libtheora
     libintl
@@ -105,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
