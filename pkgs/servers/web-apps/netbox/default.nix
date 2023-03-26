@@ -8,10 +8,10 @@
 , plugins ? ps: [] }:
 
 let
-  py = python3.override {
-    packageOverrides = self: super: {
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (self: super: {
       django = super.django_4;
-    };
+    });
   };
 
   extraBuildInputs = plugins py.pkgs;
