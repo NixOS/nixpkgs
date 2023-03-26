@@ -966,8 +966,8 @@ let
         mktplcRef = {
           name = "vscode-command-runner";
           publisher = "edonet";
-          version = "0.0.122";
-          sha256 = "1lvwvcs18azqhkzyvhf83ckfhfdgcqrw2gxb2myspqj59783hfpg";
+          version = "0.0.123";
+          sha256 = "sha256-Fq0KgW5N6urj8hMUs6Spidy47jwIkpkmBUlpXMVnq7s=";
         };
         meta = {
           license = lib.licenses.mit;
