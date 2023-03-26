@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     {name="fix_ffmpeg30.patch";               sha256="sha256-vKEbvbjYVRzEaVYC8XOJBPmk6FDXI/WA0X/dldRRO8c=";}
   ]);
 
+  postPatch = ''
+    substituteInPlace src/mbase/SConscript \
+      --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
+  '';
+
   nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
 
   buildInputs = [
@@ -84,5 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bombono.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ symphorien ];
+    platforms = platforms.linux;
   };
 }
