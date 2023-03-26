@@ -1434,8 +1434,8 @@ let
         mktplcRef = {
           name = "workspacesort";
           publisher = "iciclesoft";
-          version = "1.6.0";
-          sha256 = "1pbk8kflywll6lqhmffz9yjf01dn8xq8sk6rglnfn2kl2ildfhh6";
+          version = "1.6.2";
+          sha256 = "sha256-ZsjBgoTr4LGQW0kn+CtbdLwpPHmlYl5LKhwXIzcPe2o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/iciclesoft.workspacesort/changelog";
