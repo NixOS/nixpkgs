@@ -1053,8 +1053,8 @@ let
         mktplcRef = {
           name = "restore-terminals";
           publisher = "ethansk";
-          version = "1.1.6";
-          sha256 = "sha256-XCgxphXIJ/y85IR/qEQhGsbnqWFRWvbyIDchnVTUqMg=";
+          version = "1.1.8";
+          sha256 = "sha256-pZK/QNomQoFRsL6LRIKvWQj8/SYo2ZdVU47Gsmb9MXo=";
         };
       };
 
