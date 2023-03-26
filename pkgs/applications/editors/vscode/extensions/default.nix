@@ -1272,8 +1272,8 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.70.8099";
-            sha256 = "sha256-+jlLM9UC1DZFBrtiiri4jvpuc/Rf9PcSVP8D8pmQC2s=";
+            version = "1.78.9758";
+            sha256 = "sha256-qIaaM72SenMv+vtkTMBodD2JsroZLpw8qEttr5aIDQk=";
           };
           meta = {
             description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
