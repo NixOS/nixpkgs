@@ -2202,6 +2202,8 @@ dont-distribute-packages:
  - hoppy-runtime
  - hoppy-std
  - horizon-gen-nix
+ - horizon-spec-lens
+ - horizon-spec-pretty
  - hotswap
  - hp2any-graph
  - hp2any-manager

@@ -2246,6 +2246,7 @@ broken-packages:
   - hfann
   - HFitUI
   - hfmt
+  - hfoil # failure building library in job https://hydra.nixos.org/build/213500290 at 2023-03-26
   - hfov
   - HFrequencyQueue
   - hfusion
@@ -2398,6 +2399,7 @@ broken-packages:
   - hops
   - hoq
   - horizon
+  - horizon-spec # dependency missing in job https://hydra.nixos.org/build/213500294 at 2023-03-26
   - horname
   - hosc-json
   - hosts-server
@@ -3035,6 +3037,7 @@ broken-packages:
   - leapseconds
   - learn
   - Learning
+  - learn-physics-examples # dependency missing in job https://hydra.nixos.org/build/213500293 at 2023-03-26
   - leetify
   - lendingclub
   - lens-datetime
@@ -4097,6 +4100,7 @@ broken-packages:
   - pong-server
   - pontarius-xpmn
   - pool
+  - poolboy # test failure in job https://hydra.nixos.org/build/212819440 at 2023-03-26
   - pool-conduit
   - pop3-client
   - poppler
