@@ -4,6 +4,8 @@
 , uvloop
 , postgresql
 , pythonOlder
+, pytest-xdist
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -24,7 +26,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     uvloop
     postgresql
+    pytest-xdist
+    pytestCheckHook
   ];
+
+  preCheck = ''
+    rm -rf asyncpg/
+  '';
 
   pythonImportsCheck = [
     "asyncpg"
