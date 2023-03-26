@@ -978,8 +978,8 @@ let
         mktplcRef = {
           name = "vscode-npm-script";
           publisher = "eg2";
-          version = "0.3.24";
-          sha256 = "sha256-XgdMLecyZQXsgQAUh8V4eFLKaUF4WVlgy9iIGNDnR/I=";
+          version = "0.3.29";
+          sha256 = "sha256-k6DtmhYBj7mg8SUU3pg+ezRzWvhiECqYQVj9LDhhV4I=";
         };
         meta = {
           license = lib.licenses.mit;
