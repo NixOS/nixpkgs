@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.6.0";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    hash = "sha256-oQ3mcDrWWIT/2fu4MBw+0GjxWGFw1aLSTvmaKSDsdz4=";
+    hash = "sha256-x/tHCDplC45XEaBaf0aQ0w8AS1SorXtYilJoiOcBDtM=";
   };
 
   postUnpack = ''
