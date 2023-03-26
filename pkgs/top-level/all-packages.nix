@@ -2189,6 +2189,8 @@ with pkgs;
 
   fsuae-launcher = libsForQt5.callPackage ../applications/emulators/fs-uae/launcher.nix { };
 
+  fuc = callPackage ../tools/misc/fuc { };
+
   fuse-emulator = callPackage ../applications/emulators/fuse-emulator { };
 
   fw = callPackage ../tools/misc/fw {
