@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     # Fix function detection for btf__type_cnt()
     (fetchpatch {
       url = "https://github.com/xdp-project/xdp-tools/commit/a7df567634af77381832a2212c5f5099b07734f3.patch";
-      sha256 = "1i4s4y0z9pf3dnjzxy8k0jkjshhz3b0v49qw4cspjrjlmcmy0x00";
+      sha256 = "n6qG/bojSGUowrAaJWxecYpWdv9OceHkoaGlhbl81hA=";
     })
   ];
 
