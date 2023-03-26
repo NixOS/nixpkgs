@@ -6,6 +6,7 @@
 , cryptography
 , pytestCheckHook
 , pythonOlder
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-xdist
   ] ++ passthru.extras-require.argon2
     ++ passthru.extras-require.bcrypt
     ++ passthru.extras-require.totp;
