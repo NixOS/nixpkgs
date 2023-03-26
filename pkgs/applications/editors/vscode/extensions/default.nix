@@ -2229,8 +2229,8 @@ let
         mktplcRef = {
           name = "vetur";
           publisher = "octref";
-          version = "0.34.1";
-          sha256 = "09w3bik1mxs7qac67wgrc58vl98ham3syrn2anycpwd7135wlpby";
+          version = "0.37.3";
+          sha256 = "sha256-3hi1LOZto5AYaomB9ihkAt4j/mhkCDJ8Jqa16piwHIQ=";
         };
         meta = {
           license = lib.licenses.mit;
