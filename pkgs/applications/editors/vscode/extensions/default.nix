@@ -3020,8 +3020,8 @@ let
         mktplcRef = {
           name = "vscode-spring-initializr";
           publisher = "vscjava";
-          version = "0.11.0";
-          sha256 = "1rbwbfz2wgw57vna8ip5b4k8mpk1d1y9vx0xr6gfqhmh6igigqil";
+          version = "0.11.2023031603";
+          sha256 = "sha256-MSyVLSjaiH+FaeGn/5Y+IWRJmNpAx3UPGpY4VmsiCD8=";
         };
         meta = {
           license = lib.licenses.mit;
