@@ -12,12 +12,14 @@ let
   databaseYml = pkgs.writeText "database.yml" ''
     production:
       adapter: ${cfg.database.type}
-      database: ${cfg.database.name}
-      host: ${if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host}
-      port: ${toString cfg.database.port}
-      username: ${cfg.database.user}
-      password: #dbpass#
-      ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
+      database: ${if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name}
+      ${optionalString (cfg.database.type != "sqlite3") ''
+        host: ${if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host}
+        port: ${toString cfg.database.port}
+        username: ${cfg.database.user}
+        password: #dbpass#
+        ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
+      ''}
   '';
 
   configurationYml = format.generate "configuration.yml" cfg.settings;
@@ -148,7 +150,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "mysql2" "postgresql" ];
+          type = types.enum [ "mysql2" "postgresql" "sqlite3" ];
           example = "postgresql";
           default = "mysql2";
           description = lib.mdDoc "Database engine to use.";
@@ -264,9 +266,6 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
-        message = "one of services.redmine.database.socket or services.redmine.database.passwordFile must be set";
-      }
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
       }
