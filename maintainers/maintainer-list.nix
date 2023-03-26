@@ -1835,6 +1835,12 @@
       fingerprint = "E9A3 7864 2165 28CE 507C  CA82 72EA BF75 C331 CD25";
     }];
   };
+  benkuhn = {
+    email = "ben@ben-kuhn.com";
+    github = "ben-kuhn";
+    githubId = "16821405";
+    name = "Ben Kuhn";
+  };  
   benley = {
     email = "benley@gmail.com";
     github = "benley";
