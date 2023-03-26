@@ -1789,8 +1789,8 @@ let
         mktplcRef = {
           name = "marp-vscode";
           publisher = "marp-team";
-          version = "2.4.1";
-          sha256 = "sha256-h59OmFreja9IdFzH2zZaXXh+pnODirL2fPkUmvAgDyA=";
+          version = "2.5.0";
+          sha256 = "sha256-I8UevZs04tUj/jaHrU7LiMF40ElMqtniU1h/9LNLdac=";
         };
         meta = {
           license = lib.licenses.mit;
