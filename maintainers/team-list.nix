@@ -568,14 +568,6 @@ with lib.maintainers; {
     shortName = "Numtide team";
   };
 
-  ocaml = {
-    members = [
-      alizter
-    ];
-    scope = "Maintain the OCaml ecosystem.";
-    shortName = "OCaml";
-  };
-
   openstack = {
     members = [
       emilytrau
