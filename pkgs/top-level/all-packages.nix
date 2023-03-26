@@ -22501,7 +22501,8 @@ with pkgs;
   # Bump on staging only, tonnes of packages depend on it.
   # See https://github.com/NixOS/nixpkgs/issues/218232
   # Major versions should be bumped when they have proven to be reasonably stable
-  mesa = mesa_22_3_7;
+  # FIXME: split up libgbm properly
+  mesa = mesa_23_0_1;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
