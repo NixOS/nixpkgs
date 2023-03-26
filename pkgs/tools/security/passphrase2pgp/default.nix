@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
 
 buildGoModule rec {
   pname = "passphrase2pgp";
@@ -17,6 +17,8 @@ buildGoModule rec {
     mkdir -p $out/share/doc/$name
     cp README.md $out/share/doc/$name
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Predictable, passphrase-based PGP key generator";
