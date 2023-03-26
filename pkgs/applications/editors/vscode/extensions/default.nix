@@ -1954,8 +1954,8 @@ let
         mktplcRef = {
           name = "pyright";
           publisher = "ms-pyright";
-          version = "1.1.282";
-          sha256 = "14qkk9gbpwnbkk3dk7b7s92smj374ha7axlsi74fllw74lp4ziwn";
+          version = "1.1.300";
+          sha256 = "sha256-GzRJeV4qfgM2kBv6U3MH7lMWl3CL6LWPI/9GaVWZL+o=";
         };
         meta = {
           description = "VS Code static type checking for Python";
