@@ -2297,8 +2297,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "4.2.0";
-          sha256 = "sha256-1U3JlWfIlTt0AMPsiP3vD2ZEzD2oUsYsqRRwBQeoLIA=";
+          version = "4.11.0";
+          sha256 = "sha256-fHvwv9E/O8ZvhnyY7nNF/SIyl87z8KVEXTbhU/37EP0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
