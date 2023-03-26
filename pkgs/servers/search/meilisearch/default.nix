@@ -21,7 +21,16 @@ rustPlatform.buildRustPackage {
     hash = "sha256-2HfwNoluPPOOAdCaqUVaZcAd8M2naPYAsphZO1Inefg=";
   };
 
-  cargoHash = "sha256-HuVNI1Y+rhuAzAkDUuJJCZ500WuGPgABFfEbJNXaVpA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
+      "filter-parser-0.41.3" = "sha256-AhXiOMd9/frioU2K/fAV6Vz+OFyw4MNm4G3kNZSJQac=";
+      "heed-0.12.4" = "sha256-kKwpr5zuTKUkl12J8KgXrlQiK4ee+D5xNq0DF1yWGsQ=";
+      "lmdb-rkv-sys-0.15.1" = "sha256-zLHTprwF7aa+2jaD7dGYmOZpJYFijMTb4I3ODflNUII=";
+      "nelson-0.1.0" = "sha256-eF672quU576wmZSisk7oDR7QiDafuKlSg0BTQkXnzqY=";
+    };
+  };
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;

@@ -57,7 +57,14 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libssh-rs-0.1.4" = "sha256-N1edF1DCSpwXL2lN3Ui3t+fU4Pfx/n7IJVhiIyJn16s=";
+      "xcb-1.1.1" = "sha256-+AtK9SzD7UrfhX2d9ZSr16SpxbCyEhnLurVfsRNF3es=";
+      "xcb-imdkit-0.2.0" = "sha256-gP1BgrFTw8d9SfygMVcjYAdEFstYB+wMHiQ7ERsPVDg=";
+    };
+  };
 
   nativeBuildInputs = [
     installShellFiles

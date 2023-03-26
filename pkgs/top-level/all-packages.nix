@@ -9163,9 +9163,7 @@ with pkgs;
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
 
-  /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
-    (https://github.com/NixOS/nixpkgs/issues/76093) */
-  matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
+  matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
 
@@ -13395,6 +13393,8 @@ with pkgs;
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
 
   woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker/cli.nix { };
+
+  woodpecker-pipeline-transform = callPackage ../development/tools/continuous-integration/woodpecker-pipeline-transform { };
 
   woodpecker-server = callPackage ../development/tools/continuous-integration/woodpecker/server.nix {
     woodpecker-frontend = callPackage ../development/tools/continuous-integration/woodpecker/frontend.nix { };
@@ -23628,6 +23628,8 @@ with pkgs;
 
   sonic = callPackage ../development/libraries/sonic { };
 
+  sonivox = callPackage ../development/libraries/sonivox { };
+
   sope = callPackage ../development/libraries/sope { };
 
   sord = callPackage ../development/libraries/sord { };
@@ -30127,9 +30129,7 @@ with pkgs;
 
   foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
 
-  fractal = callPackage ../applications/networking/instant-messengers/fractal {
-    openssl = openssl_1_1;
-  };
+  fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
@@ -33947,6 +33947,8 @@ with pkgs;
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
   ttyper = callPackage ../applications/misc/ttyper { };
+
+  tuba = callPackage ../applications/misc/tuba { };
 
   tudu = callPackage ../applications/office/tudu { };
 

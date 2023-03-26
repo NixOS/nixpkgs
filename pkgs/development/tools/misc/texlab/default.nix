@@ -24,7 +24,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-2P+aidfYkO8l9VjqTstXbksyGTQ3porJhrBYod9oCYQ=";
   };
 
-  cargoSha256 = "sha256-Yr4i35Yf9kWYD1xQi+RKx6RQtyQUlZS8cXWkGGNuwXI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "salsa-2022-0.1.0" = "sha256-GupU78LkQGUQ+GzqAVZZlNKL1zZkmdqJz9+81ROXDqE=";
+    };
+  };
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 

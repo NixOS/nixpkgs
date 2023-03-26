@@ -31,10 +31,11 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-TS/Q6T3bPjkk1bfINTR6bcPy8fnbAxbKJUrx2pYsPWY=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tempfile-3.3.0" = "sha256-zVbGZOEYEmOJGtl5Ko8rYIW9NY16lq5+zMzJ/TSkfsc=";
+    };
   };
 
   nativeBuildInputs = [

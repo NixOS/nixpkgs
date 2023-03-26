@@ -11,7 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "16ygy1bcbcj69x6ss72g9n62qlsd1bacr5hz91f8whw6qm9am46m";
   };
 
-  cargoSha256 = "14srs2369yryqpkklmfp64fyqxrhf91b2bjy0068nx2myr25m624";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rustdoc-stripper-0.1.18" = "sha256-eQxAS76kV01whXK21PN5U+nkpvpn6r4VOoe9/pkuAQY=";
+    };
+  };
 
   postPatch = ''
     rm build.rs
