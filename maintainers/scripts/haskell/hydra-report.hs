@@ -384,6 +384,15 @@ platformIcon (Platform x) = case x of
    "aarch64-darwin" -> ":green_apple:"
    _ -> x
 
+platformIsOS :: OS -> Platform -> Bool
+platformIsOS os (Platform x) = case (os, x) of
+   (Linux, "x86_64-linux") -> True
+   (Linux, "aarch64-linux") -> True
+   (Darwin, "x86_64-darwin") -> True
+   (Darwin, "aarch64-darwin") -> True
+   _ -> False
+
+
 -- | A package name.  This is parsed from a 'JobName'.
 --
 -- Examples:
@@ -431,6 +440,8 @@ data SummaryEntry = SummaryEntry {
 }
 type StatusSummary = Map PkgName SummaryEntry
 
+data OS = Linux | Darwin
+
 newtype Table row col a = Table (Map (row, col) a)
 
 singletonTable :: row -> col -> a -> Table row col a
@@ -438,6 +449,12 @@ singletonTable row col a = Table $ Map.singleton (row, col) a
 
 unionTable :: (Ord row, Ord col) => Table row col a -> Table row col a -> Table row col a
 unionTable (Table l) (Table r) = Table $ Map.union l r
+
+filterWithKeyTable :: (row -> col -> a -> Bool) -> Table row col a -> Table row col a
+filterWithKeyTable f (Table t) = Table $ Map.filterWithKey (\(r,c) a -> f r c a) t
+
+nullTable :: Table row col a -> Bool
+nullTable (Table t) = Map.null t
 
 instance (Ord row, Ord col, Semigroup a) => Semigroup (Table row col a) where
    Table l <> Table r = Table (Map.unionWith (<>) l r)
@@ -583,12 +600,15 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
    Text.unlines $
       headline <> [""] <> tldr <> (("  * "<>) <$> (errors <> warnings)) <> [""]
          <> totals
-         <> optionalList "#### Maintained packages with build failure" (maintainedList fails)
-         <> optionalList "#### Maintained packages with failed dependency" (maintainedList failedDeps)
-         <> optionalList "#### Maintained packages with unknown error" (maintainedList unknownErr)
-         <> optionalHideableList "#### Unmaintained packages with build failure" (unmaintainedList fails)
-         <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList failedDeps)
-         <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList unknownErr)
+         <> optionalList "#### Maintained Linux packages with build failure" (maintainedList (fails summaryLinux))
+         <> optionalList "#### Maintained Linux packages with failed dependency" (maintainedList (failedDeps summaryLinux))
+         <> optionalList "#### Maintained Linux packages with unknown error" (maintainedList (unknownErr summaryLinux))
+         <> optionalHideableList "#### Maintained Darwin packages with build failure" (maintainedList (fails summaryDarwin))
+         <> optionalHideableList "#### Maintained Darwin packages with failed dependency" (maintainedList (failedDeps summaryDarwin))
+         <> optionalHideableList "#### Maintained Darwin packages with unknown error" (maintainedList (unknownErr summaryDarwin))
+         <> optionalHideableList "#### Unmaintained packages with build failure" (unmaintainedList (fails summary))
+         <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList (failedDeps summary))
+         <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList (unknownErr summary))
          <> optionalHideableList "#### Top 50 broken packages, sorted by number of reverse dependencies" (brokenLine <$> topBrokenRdeps)
          <> ["","*:arrow_heading_up:: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
          <> footer
@@ -619,19 +639,44 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
 
    numSummary = statusToNumSummary summary
 
-   jobsByState :: (BuildState -> Bool) -> StatusSummary
-   jobsByState predicate = Map.filter (predicate . worstState) summary
+   summaryLinux :: StatusSummary
+   summaryLinux = withOS Linux summary
+
+   summaryDarwin :: StatusSummary
+   summaryDarwin = withOS Darwin summary
+
+   -- Remove all BuildResult from the Table that have Platform that isn't for
+   -- the given OS.
+   tableForOS :: OS -> Table PkgSet Platform BuildResult -> Table PkgSet Platform BuildResult
+   tableForOS os = filterWithKeyTable (\_ platform _ -> platformIsOS os platform)
+
+   -- Remove all BuildResult from the StatusSummary that have a Platform that
+   -- isn't for the given OS.  Completely remove all PkgName from StatusSummary
+   -- that end up with no BuildResults.
+   withOS
+      :: OS
+      -> StatusSummary
+      -> StatusSummary
+   withOS os =
+      Map.mapMaybe
+         (\e@SummaryEntry{summaryBuilds} ->
+            let buildsForOS = tableForOS os summaryBuilds
+            in if nullTable buildsForOS then Nothing else Just e { summaryBuilds = buildsForOS }
+         )
+
+   jobsByState :: (BuildState -> Bool) -> StatusSummary -> StatusSummary
+   jobsByState predicate = Map.filter (predicate . worstState)
 
    worstState :: SummaryEntry -> BuildState
    worstState = foldl' min Success . fmap state . summaryBuilds
 
-   fails :: StatusSummary
+   fails :: StatusSummary -> StatusSummary
    fails = jobsByState (== Failed)
 
-   failedDeps :: StatusSummary
+   failedDeps :: StatusSummary -> StatusSummary
    failedDeps = jobsByState (== DependencyFailed)
 
-   unknownErr :: StatusSummary
+   unknownErr :: StatusSummary -> StatusSummary
    unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
 
    withMaintainer :: StatusSummary -> Map PkgName (Table PkgSet Platform BuildResult, NonEmpty Text)
