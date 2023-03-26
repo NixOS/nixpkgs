@@ -1288,8 +1288,8 @@ let
           mktplcRef = {
             name = "github-vscode-theme";
             publisher = "github";
-            version = "4.1.1";
-            sha256 = "14wz2b0bn1rnmpj28c0mivz2gacla2dgg8ncv7qfx9bsxhf95g68";
+            version = "6.3.3";
+            sha256 = "sha256-fN9ljeZlbbSNW9qggLEz5HOLZlPhHmTHNi1VsZo7Uxk=";
           };
           meta = {
             description = "GitHub theme for VS Code";
