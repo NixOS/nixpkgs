@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, intltool, pkg-config, ffmpeg, wxGTK32, gtk3, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, intltool, pkg-config, ffmpeg_4, wxGTK32, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "spek";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
 
-  buildInputs = [ ffmpeg wxGTK32 gtk3 ];
+  buildInputs = [ ffmpeg_4 wxGTK32 gtk3 ];
 
   meta = with lib; {
     description = "Analyse your audio files by showing their spectrogram";

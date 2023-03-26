@@ -1308,11 +1308,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXvMC = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
     pname = "libXvMC";
-    version = "1.0.12";
+    version = "1.0.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXvMC-1.0.12.tar.bz2";
-      sha256 = "1kbdjsvkm5l7axv7g477qj18sab2wnqhliy6197syzizgfbsfgbb";
+      url = "mirror://xorg/individual/lib/libXvMC-1.0.13.tar.xz";
+      sha256 = "0z35xqna3dnrfxgn9aa1y6jx7mrwsn8vi8dcwm3sg23qx9nvx7ha";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

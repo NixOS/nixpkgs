@@ -4,17 +4,19 @@
 { stdenv
 , pkgs
 , lib
-, runCommand
 , testers
 }:
 
 let
   # early enough not to rebuild gcc but late enough to have patchelf
   earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages;
+  earlierPkgs = stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages;
   # use a early stdenv so when hacking on stdenv this test can be run quickly
   bootStdenv = stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
   pkgsStructured = import pkgs.path { config = { structuredAttrsByDefault = true; }; inherit (stdenv.hostPlatform) system; };
   bootStdenvStructuredAttrsByDefault = pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+
+  runCommand = earlierPkgs.runCommand;
 
 
   ccWrapperSubstitutionsTest = { name, stdenv', extraAttrs ? { } }:
@@ -101,7 +103,7 @@ in
   hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; inherit lib; });
 
   outputs-no-out = runCommand "outputs-no-out-assert" {
-    result = testers.testBuildFailure (stdenv.mkDerivation {
+    result = earlierPkgs.testers.testBuildFailure (bootStdenv.mkDerivation {
       NIX_DEBUG = 1;
       name = "outputs-no-out";
       outputs = ["foo"];
@@ -113,7 +115,7 @@ in
 
     # Assumption: the first output* variable to be configured is
     #   _overrideFirst outputDev "dev" "out"
-    expectedMsg = "error: _assignFirst: could not find a non-empty variable to assign to outputDev.\n       The following variables were all unset or empty:\n           dev out";
+    expectedMsg = "error: _assignFirst: could not find a non-empty variable whose name to assign to outputDev.\n       The following variables were all unset or empty:\n           dev out";
   } ''
     grep -F "$expectedMsg" $result/testBuildFailure.log >/dev/null
     touch $out

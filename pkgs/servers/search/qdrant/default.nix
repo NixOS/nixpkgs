@@ -19,7 +19,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-mNprwomTVg/C75tPciQ4J8bb42ejpVKy/RSRcQySdvU=";
   };
 
-  cargoHash = "sha256-HXKV5TaEXlrfbmoPgeS5cPKurmcwOm0ts1IVX7TvjGg=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "quantization-0.1.0" = "sha256-4TY08ScRbL4zVG428BTZu42ocAsPk/8wM+zzI8EFSrs=";
+      "raft-0.7.0" = "sha256-NflESS+CoTFMkCC2SYWgyMRHBe7+sMIbuElhUL5uMcg=";
+      "wal-0.1.2" = "sha256-vaPQff8pBqCJhACj4/t3AyPhnddHwsGWCI3IUr5uWro=";
+    };
+  };
 
   prePatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace .cargo/config.toml \

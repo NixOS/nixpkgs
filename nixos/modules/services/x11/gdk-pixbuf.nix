@@ -21,7 +21,7 @@ in
   # loaders.cache based on that and set the environment variable
   # GDK_PIXBUF_MODULE_FILE to point to it.
   config = lib.mkIf (cfg.modulePackages != []) {
-    environment.variables = {
+    environment.sessionVariables = {
       GDK_PIXBUF_MODULE_FILE = "${loadersCache}";
     };
   };

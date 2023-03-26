@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
+, libiconv
 , pytestCheckHook
 }:
 
@@ -28,6 +30,8 @@ buildPythonPackage rec {
     rust.cargo
     rust.rustc
   ];
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   pythonImportsCheck = [ "y_py" ];
 

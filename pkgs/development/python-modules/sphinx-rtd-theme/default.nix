@@ -31,9 +31,12 @@ buildPythonPackage rec {
     sphinxcontrib-jquery
   ];
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
-    pythonRelaxDepsHook
     readthedocs-sphinx-ext
   ];
 

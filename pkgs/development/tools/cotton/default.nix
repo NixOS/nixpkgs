@@ -16,7 +16,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-jq5aW6dViHTxh2btP5smtcyUSZ1EoMrQVN7K8zs1jJM=";
   };
 
-  cargoSha256 = "sha256-qpV3UriOidIk/0di9d8RjXvjcjgD6dXqg7wLAywI66o=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "node-semver-2.0.1-alpha.0" = "sha256-TIMynpmRIrnft6kZjX3nJC/BafgudH/d01dpraM5YmU=";
+      "tokio-tar-0.3.0" = "sha256-mD6bls4rGsJhu/W56C5VYgK4mzcSJ2DPOaPAbRLStT8=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

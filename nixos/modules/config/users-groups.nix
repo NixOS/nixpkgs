@@ -539,7 +539,9 @@ in {
 
   ###### implementation
 
-  config = {
+  config = let
+    cryptSchemeIdPatternGroup = "(${lib.concatStringsSep "|" pkgs.libxcrypt.enabledCryptSchemeIds})";
+  in {
 
     users.users = {
       root = {
@@ -601,15 +603,16 @@ in {
       text = ''
         users=()
         while IFS=: read -r user hash tail; do
-          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
             users+=("$user")
           fi
         done </etc/shadow
 
         if (( "''${#users[@]}" )); then
           echo "
-        WARNING: The following user accounts rely on password hashes that will
-        be removed in NixOS 23.05. They should be renewed as soon as possible."
+        WARNING: The following user accounts rely on password hashing algorithms
+        that have been removed. They need to be renewed as soon as possible, as
+        they do prevent their users from logging in."
           printf ' - %s\n' "''${users[@]}"
         fi
       '';
@@ -729,7 +732,7 @@ in {
         let
           sep = "\\$";
           base64 = "[a-zA-Z0-9./]+";
-          id = "[a-z0-9-]+";
+          id = cryptSchemeIdPatternGroup;
           value = "[a-zA-Z0-9/+.-]+";
           options = "${id}(=${value})?(,${id}=${value})*";
           scheme  = "${id}(${sep}${options})?";

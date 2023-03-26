@@ -9963,6 +9963,10 @@ self: super: with self; {
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
+  quart = callPackage ../development/python-modules/quart { };
+
+  quart-cors = callPackage ../development/python-modules/quart-cors { };
+
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };

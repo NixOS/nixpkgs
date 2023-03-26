@@ -213,8 +213,8 @@ let
     platforms = lua.meta.platforms;
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ ];
-    broken = disabled;
   } // meta;
 }));
 in
+  assert (disabled -> throw "${pname} not supported for interpreter ${lua.executable}");
   luarocksDrv

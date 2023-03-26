@@ -14,7 +14,7 @@
 , bzip2
 , dbus
 , dtv-scan-tables
-, ffmpeg
+, ffmpeg_4
 , gettext
 , gnutar
 , gzip
@@ -64,7 +64,7 @@ in stdenv.mkDerivation {
     avahi
     bzip2
     dbus
-    ffmpeg
+    ffmpeg_4 # depends on libav
     gettext
     gzip
     libiconv

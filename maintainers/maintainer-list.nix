@@ -1835,6 +1835,12 @@
       fingerprint = "E9A3 7864 2165 28CE 507C  CA82 72EA BF75 C331 CD25";
     }];
   };
+  benkuhn = {
+    email = "ben@ben-kuhn.com";
+    github = "ben-kuhn";
+    githubId = 16821405;
+    name = "Ben Kuhn";
+  };
   benley = {
     email = "benley@gmail.com";
     github = "benley";
@@ -2093,15 +2099,6 @@
     github = "bootstrap-prime";
     githubId = 68566724;
     name = "bootstrap-prime";
-  };
-  boppyt = {
-    email = "boppy@nwcpz.com";
-    github = "boppyt";
-    githubId = 71049646;
-    name = "Zack A";
-    keys = [{
-      fingerprint = "E8D7 5C19 9F65 269B 439D  F77B 6310 C97D E31D 1545";
-    }];
   };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
@@ -9361,6 +9358,12 @@
     githubId = 458783;
     name = "Martin Gammelsæter";
   };
+  martinramm = {
+    email = "martin-ramm@gmx.de";
+    github = "MartinRamm";
+    githubId = 31626748;
+    name = "Martin Ramm";
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
@@ -10326,6 +10329,12 @@
     github = "mredaelli";
     githubId = 3073833;
     name = "Massimo Redaelli";
+  };
+  mrene = {
+    email = "mathieu.rene@gmail.com";
+    github = "mrene";
+    githubId = 254443;
+    name = "Mathieu Rene";
   };
   mrfreezeex = {
     email = "arthur@cri.epita.fr";
@@ -13611,6 +13620,16 @@
     githubId = 17243347;
     name = "Sebastian Sellmeier";
   };
+  sefidel = {
+    name = "sefidel";
+    email = "contact@sefidel.net";
+    matrix = "@sef:exotic.sh";
+    github = "sefidel";
+    githubId = 71049646;
+    keys = [{
+      fingerprint = "8BDF DFB5 6842 2393 82A0  441B 9238 BC70 9E05 516A";
+    }];
+  };
   sei40kr = {
     name = "Seong Yong-ju";
     email = "sei40kr@gmail.com";
@@ -16175,12 +16194,6 @@
     email = "contact@weijia.wang";
     github = "wegank";
     githubId = 9713184;
-  };
-  weihua = {
-    email = "luwh364@gmail.com";
-    github = "weihua-lu";
-    githubId = 9002575;
-    name = "Weihua Lu";
   };
   welteki = {
     email = "welteki@pm.me";

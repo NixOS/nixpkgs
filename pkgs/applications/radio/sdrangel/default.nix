@@ -123,7 +123,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn ];
+    maintainers = with maintainers; [ alkeryn Tungsten842 ];
     platforms = platforms.unix;
   };
 }

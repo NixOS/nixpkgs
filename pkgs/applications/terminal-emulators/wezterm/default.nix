@@ -2,7 +2,6 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
-, fetchpatch
 , ncurses
 , perl
 , pkg-config
@@ -32,23 +31,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20221119-145034-49b9839f";
+  version = "20230320-124340-559cb7b0";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-1gnP2Dn4nkhxelUsXMay2VGvgvMjkdEKhFK5AAST++s=";
+    sha256 = "sha256-u9lOK4DV9NM3CUYjMTovCY4XF5Xxg4V+rQwIjioqTec=";
   };
-
-  patches = [
-    # fix build with rust 1.67
-    (fetchpatch {
-      url = "https://github.com/wez/wezterm/commit/36519f0d90e1875fb4b3f11f6cbf94c7d716ef78.patch";
-      sha256 = "sha256-sOGFmDan1uO1xOBCpvlGrSotjfw01MjRg0KVqa5omig=";
-    })
-  ];
 
   postPatch = ''
     echo ${version} > .tag
@@ -57,7 +48,14 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
+      "libssh-rs-0.1.5" = "sha256-gxT9mZ+whotZhEoj783aQPlQPqQXd8gQL3zZglMYC1k=";
+      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+    };
+  };
 
   nativeBuildInputs = [
     installShellFiles
