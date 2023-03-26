@@ -3072,8 +3072,8 @@ let
         mktplcRef = {
           name = "whichkey";
           publisher = "VSpaceCode";
-          version = "0.9.2";
-          sha256 = "sha256-f+t2d8iWW88OYzuYFxzQPnmFMgx/DELBywYhA8A/0EU=";
+          version = "0.11.3";
+          sha256 = "sha256-PnaOwOIcSo1Eff1wOtQPhoHYvrHDGTcsRy9mQfdBPX4=";
         };
         meta = {
           license = lib.licenses.mit;
