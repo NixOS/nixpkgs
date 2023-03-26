@@ -701,10 +701,12 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
       if' (isNothing maintainedJob) "No `maintained` job found." <>
       if' (Unfinished > maybe Success worstState mergeableJob) "`mergeable` jobset failed." <>
       if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too many outstanding jobs on x86_64-linux." <>
-      if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too many outstanding jobs on aarch64-linux." <>
-      if' (outstandingJobs (Platform "aarch64-darwin") > 100) "Too many outstanding jobs on aarch64-darwin."
+      if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too many outstanding jobs on aarch64-linux."
+
    if' p e = if p then [e] else mempty
+
    outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
+
    maintainedJob = Map.lookup (PkgName "maintained") summary
    mergeableJob = Map.lookup (PkgName "mergeable") summary
 
