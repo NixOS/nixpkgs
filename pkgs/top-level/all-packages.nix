@@ -13392,6 +13392,8 @@ with pkgs;
 
   woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker/cli.nix { };
 
+  woodpecker-pipeline-transform = callPackage ../development/tools/continuous-integration/woodpecker-pipeline-transform { };
+
   woodpecker-server = callPackage ../development/tools/continuous-integration/woodpecker/server.nix {
     woodpecker-frontend = callPackage ../development/tools/continuous-integration/woodpecker/frontend.nix { };
   };
