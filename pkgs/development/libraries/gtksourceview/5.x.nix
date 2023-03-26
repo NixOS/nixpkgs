@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     vala
     gi-docgen
+    gtk4 # for gtk4-update-icon-cache checked during configure
   ];
 
   buildInputs = [
