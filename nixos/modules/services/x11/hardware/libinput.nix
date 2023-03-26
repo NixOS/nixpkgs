@@ -120,8 +120,9 @@ let cfg = config.services.xserver.libinput;
         example = "edge";
         description =
           lib.mdDoc ''
-            Specify the scrolling method: `twofinger`, `edge`,
-            `button`, or `none`
+            Specify the scrolling method.
+            See <https://wayland.freedesktop.org/libinput/doc/latest/scrolling.html>.
+            Beware this can be overridden by the desktop environment.
           '';
       };
 
