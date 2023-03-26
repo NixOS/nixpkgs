@@ -1776,8 +1776,8 @@ let
         mktplcRef = {
           publisher = "mads-hartmann";
           name = "bash-ide-vscode";
-          version = "1.11.0";
-          sha256 = "1hq41fy2v1grjrw77mbs9k6ps6gncwlydm03ipawjnsinxc9rdkp";
+          version = "1.36.0";
+          sha256 = "sha256-DqY2PS4JSjb6VMO1b0Hi/7JOKSTUk5VSxJiCrUKBfLk=";
         };
         meta = {
           license = lib.licenses.mit;
