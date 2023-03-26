@@ -1360,8 +1360,8 @@ let
         mktplcRef = {
           name = "vscode-graphql";
           publisher = "GraphQL";
-          version = "0.3.50";
-          sha256 = "1yf6v2vsgmq86ysb6vxzbg2gh6vz03fsz0d0rhpvpghayrjlk5az";
+          version = "0.8.6";
+          sha256 = "sha256-iQWDYdz/TG8pxPEq9RirNtY4kwhpK+gO0It6OTdrM+0=";
         };
         meta = {
           license = lib.licenses.mit;
