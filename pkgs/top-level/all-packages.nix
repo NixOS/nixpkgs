@@ -38722,6 +38722,9 @@ with pkgs;
   mfcl8690cdwcupswrapper = callPackage ../misc/cups/drivers/mfcl8690cdwcupswrapper { };
   mfcl8690cdwlpr = callPackage ../misc/cups/drivers/mfcl8690cdwlpr { };
 
+  mfc5890cncupswrapper = callPackage ../misc/cups/drivers/mfc5890cncupswrapper { };
+  mfc5890cnlpr = callPackage ../misc/cups/drivers/mfc5890cnlpr { };
+
   mfc9140cdncupswrapper = callPackage ../misc/cups/drivers/mfc9140cdncupswrapper { };
   mfc9140cdnlpr = callPackage ../misc/cups/drivers/mfc9140cdnlpr { };
 
