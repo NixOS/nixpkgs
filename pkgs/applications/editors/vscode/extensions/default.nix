@@ -2241,8 +2241,8 @@ let
         mktplcRef = {
           name = "phoenix";
           publisher = "phoenixframework";
-          version = "0.1.1";
-          sha256 = "sha256-AfCwU4FF8a8C9D6+lyUDbAOLlD5SpZZw8CZVGpzRoV0=";
+          version = "0.1.2";
+          sha256 = "sha256-T+YNRR8jAzNagmoCDzjbytBDFtPhNn289Kywep/w8sw=";
         };
         meta = {
           description = "Syntax highlighting support for HEEx / Phoenix templates";
