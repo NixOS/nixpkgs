@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "passphrase2pgp";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Ik/W3gGvrOyUvYgMYqT8FIFoxp62BXd2GpV14pYXEuY=";
+    hash = "sha256-it1XYzLiteL0oq4SZp5E3s6oSkFKi3ZY0Lt+P0gmNag=";
   };
 
   vendorSha256 = "sha256-2H9YRVCaari47ppSkcQYg/P4Dzb4k5PLjKAtfp39NR8=";
