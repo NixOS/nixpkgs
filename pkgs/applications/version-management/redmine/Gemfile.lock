@@ -190,6 +190,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    sqlite3 (1.4.4)
     thor (1.2.1)
     thread_safe (0.3.6)
     tzinfo (1.2.11)
@@ -246,6 +247,7 @@ DEPENDENCIES
   rubyzip (~> 2.3.0)
   selenium-webdriver (~> 3.142.7)
   simplecov (~> 0.18.5)
+  sqlite3 (~> 1.4.0)
   tzinfo-data
   webdrivers (~> 4.4)
   yard

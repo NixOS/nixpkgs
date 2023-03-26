@@ -58,6 +58,7 @@ end
 # Include database gems for the database adapters NixOS supports
 gem "mysql2", "~> 0.5.0", :platforms => [:mri, :mingw, :x64_mingw]
 gem "pg", "~> 1.2.2", :platforms => [:mri, :mingw, :x64_mingw]
+gem "sqlite3", "~> 1.4.0", :platforms => [:mri, :mingw, :x64_mingw]
 
 group :development do
   gem "yard"

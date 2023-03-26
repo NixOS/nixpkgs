@@ -845,6 +845,24 @@
     };
     version = "3.4.2";
   };
+  sqlite3 = {
+    groups = ["default"];
+    platforms = [{
+      engine = "maglev";
+    } {
+      engine = "mingw";
+    } {
+      engine = "mingw";
+    } {
+      engine = "ruby";
+    }];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1z1wa639c278bsipczn6kv8b13fj85pi8gk7x462chqx6k0wm0ax";
+      type = "gem";
+    };
+    version = "1.4.4";
+  };
   thor = {
     groups = ["default"];
     platforms = [];
