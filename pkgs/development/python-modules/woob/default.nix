@@ -16,6 +16,7 @@
 , nose
 , packaging
 , pdfminer-six
+, pdm-pep517
 , pillow
 , prettytable
 , pyqt5
@@ -32,8 +33,8 @@
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -41,12 +42,13 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
-    hash = "sha256-aPkMfPRDjPfHIlGDEvorGwk09yQuEWwOkJJUST0vLAs=";
+    hash = "sha256-qVE1FQK3+jBKIHW+s1iNZwy8Srb2kQhWNTlZyzc1/jE=";
   };
 
   nativeBuildInputs = [
     packaging
     pyqt5
+    pdm-pep517
   ];
 
   propagatedBuildInputs = [
