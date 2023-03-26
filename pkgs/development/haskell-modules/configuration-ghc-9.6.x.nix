@@ -134,6 +134,8 @@ self: super: {
   generically = jailbreakWhileRevision 0 super.generically;
   # Revision 3 lifts offending template-haskell bound
   hackage-security = jailbreakWhileRevision 2 super.hackage-security;
+  # Revision 6 lifts offending base bound
+  parallel = jailbreakWhileRevision 5 super.parallel;
 
   #
   # Compilation failure workarounds
