@@ -2397,8 +2397,8 @@ let
         mktplcRef = {
           name = "ayu-next";
           publisher = "roman";
-          version = "1.2.9";
-          sha256 = "sha256-rwZnqvHRmMquNq9PnU176vI4g8PtS6wSNvQaZ1BMa4I=";
+          version = "1.2.15";
+          sha256 = "sha256-gGEjb9BrvFmKhAxRUmN3YWx7VZqlUp6w7m4r46DPn50=";
         };
         meta = {
           license = lib.licenses.mit;
