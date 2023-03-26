@@ -33933,6 +33933,8 @@ with pkgs;
 
   ttyper = callPackage ../applications/misc/ttyper { };
 
+  tuba = callPackage ../applications/misc/tuba { };
+
   tudu = callPackage ../applications/office/tudu { };
 
   tumpa = callPackage ../applications/misc/tumpa {
