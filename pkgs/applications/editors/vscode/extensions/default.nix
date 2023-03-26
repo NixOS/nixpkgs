@@ -2817,8 +2817,8 @@ let
         mktplcRef = {
           name = "atom-material-theme";
           publisher = "tobiasalthoff";
-          version = "1.10.7";
-          sha256 = "sha256-t5CKrDEbDCuo28wN+hiWrvkt3C9vQAPfV/nd3QBGQ/s=";
+          version = "1.10.9";
+          sha256 = "sha256-EdU0FMkaQpwhOpPRC+HGIxcrt7kSN+l4+mSgIwogB/I=";
         };
         meta = {
           license = lib.licenses.mit;
