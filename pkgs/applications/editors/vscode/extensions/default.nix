@@ -2656,8 +2656,8 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.16.3";
-          sha256 = "sha256-WHeLTN992ltEZw2W7B3sJrHfAFsOGMq3llV4C0hXLNA=";
+          version = "17.8.0";
+          sha256 = "sha256-9t1lpVbpcmhLamN/0ZWNEWD812S6tXG6aK3/ALJCJvg=";
         };
         meta = {
           changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
