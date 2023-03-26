@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.24.6";
+  version = "0.24.8";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IB+p2pxS+ycPlHgURujBDPppkgF8SjTBa+j1qvzFbjc=";
+    hash = "sha256-cnewZXIgNUtzJk7GQZKdqUZCbp46xYULZKh0A7/La4k=";
   };
 
   cargoLock = {
@@ -41,6 +41,8 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     git
   ];
+
+  OPENSSL_NO_VENDOR = true;
 
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
