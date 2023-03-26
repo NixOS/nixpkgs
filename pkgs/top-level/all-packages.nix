@@ -26963,9 +26963,7 @@ with pkgs;
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
-  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {
-    boost = boost172;
-  };
+  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel { };
 
   setools = callPackage ../os-specific/linux/setools { };
 

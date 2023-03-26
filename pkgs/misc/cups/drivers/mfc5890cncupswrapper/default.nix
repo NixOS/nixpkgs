@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Brother MFC-5890CN CUPS wrapper driver.";
-    londDescription = "Brother MFC-5890CN CUPS wrapper driver. Use the connection string 'lpd://\${IP_ADDRESS}/binary_p1' when connecting to this printer via the network.";
+    longDescription = "Brother MFC-5890CN CUPS wrapper driver. Use the connection string 'lpd://\${IP_ADDRESS}/binary_p1' when connecting to this printer via the network.";
     homepage = "http://www.brother.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl2Plus;
