@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-cZoHUup3Znna4Za5twYyua3r03InapzU4c1aRrG6rpo=";
   };
 
@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     homepage = "https://github.com/pschmitt/roombapy";
+    changelog = "https://github.com/pschmitt/roombapy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ ];
   };
