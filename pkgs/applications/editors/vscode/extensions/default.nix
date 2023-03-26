@@ -2373,8 +2373,8 @@ let
         mktplcRef = {
           name = "commandOnAllFiles";
           publisher = "rioj7";
-          version = "0.3.0";
-          sha256 = "sha256-tNFHrgFJ22YGQgkYw+0l4G6OtlUYVn9brJPLnsvSwRE=";
+          version = "0.3.2";
+          sha256 = "sha256-777jdBpWJ66ASeeETWevWF4mIAj4RWviNSTxzvqwl0U=";
         };
         meta = {
           license = lib.licenses.mit;
