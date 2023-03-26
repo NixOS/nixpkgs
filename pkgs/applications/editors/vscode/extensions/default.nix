@@ -1722,8 +1722,8 @@ let
         mktplcRef = {
           name = "nickel-syntax";
           publisher = "kubukoz";
-          version = "0.0.1";
-          sha256 = "010zn58j9kdb2jpxmlfyyyais51pwn7v2c5cfi4051ayd02b9n3s";
+          version = "0.0.2";
+          sha256 = "sha256-ffPZd717Y2OF4d9MWE6zKwcsGWS90ZJvhWkqP831tVM=";
         };
         meta = {
           license = lib.licenses.asl20;
