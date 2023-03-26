@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.mynacol ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }
