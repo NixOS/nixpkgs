@@ -2750,8 +2750,8 @@ let
         mktplcRef = {
           name = "even-better-toml";
           publisher = "tamasfe";
-          version = "0.14.2";
-          sha256 = "17djwa2bnjfga21nvyz8wwmgnjllr4a7nvrsqvzm02hzlpwaskcl";
+          version = "0.19.0";
+          sha256 = "sha256-MqSQarNThbEf1wHDTf1yA46JMhWJN46b08c7tV6+1nU=";
         };
         meta = {
           license = lib.licenses.mit;
