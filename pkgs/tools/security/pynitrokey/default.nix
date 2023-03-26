@@ -1,4 +1,4 @@
-{ python3Packages, lib, nrfutil }:
+{ python3Packages, lib, nrfutil, libnitrokey }:
 
 with python3Packages;
 
@@ -42,6 +42,12 @@ buildPythonApplication rec {
     "python-dateutil"
     "spsdk"
     "typing_extensions"
+  ];
+
+  # libnitrokey is not propagated to users of pynitrokey
+  # It is only usable from the wrapped bin/nitropy
+  makeWrapperArgs = [
+    "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
   ];
 
   # no tests
