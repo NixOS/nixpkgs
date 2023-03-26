@@ -2788,14 +2788,13 @@ let
         mktplcRef = {
           name = "zig";
           publisher = "tiehuis";
-          version = "0.2.5";
-          sha256 = "sha256-P8Sep0OtdchTfnudxFNvIK+SW++TyibGVI9zd+B5tu4=";
+          version = "0.2.6";
+          sha256 = "sha256-s0UMY0DzEufEF+pizYeH4MKYOiiJ6z05gYHvfpaS4zA=";
         };
         meta = {
           license = lib.licenses.mit;
         };
       };
-
 
       timonwong.shellcheck = buildVscodeMarketplaceExtension {
         mktplcRef = {
