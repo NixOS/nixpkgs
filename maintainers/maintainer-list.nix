@@ -13675,6 +13675,12 @@
     githubId = 4805746;
     name = "Sebastian Jordan";
   };
+  seppesoete = {
+    email = "info@seppesoete.be";
+    github = "SeppeSoete";
+    githubId = 27622994;
+    name = "Seppe Soete";
+  };
   seqizz = {
     email = "seqizz@gmail.com";
     github = "seqizz";
