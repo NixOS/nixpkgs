@@ -104,6 +104,14 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
     })
+
+    # Logout/reboot/poweroff timeout leaves the session in a broken state
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/6506
+    # Should be part of 44.1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/5766d4111ac065b37417bedcc1b998ab6bee5514.patch";
+      sha256 = "d9oEzRnVbaFeCaBFhfLnW/Z8FzyQ7J8L7eAQe91133k=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -187,7 +195,8 @@ stdenv.mkDerivation rec {
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell.css
 
-    # FIXME: Probably an upstream issue, report this to upstream.
+    # Build fails with -Dgtk_doc=true
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/6486
     # element include: XInclude error : could not load xxx, and no fallback was found
     substituteInPlace docs/reference/shell/shell-docs.sgml \
       --replace '<xi:include href="xml/shell-embedded-window.xml"/>' ' ' \
