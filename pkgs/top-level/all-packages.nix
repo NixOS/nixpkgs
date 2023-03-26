@@ -5574,6 +5574,8 @@ with pkgs;
     zig = zig_0_9;
   };
 
+  river-luatile = callPackage ../applications/misc/river-luatile{ };
+
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
   rmate-sh = callPackage ../tools/misc/rmate-sh { };
@@ -7900,13 +7902,9 @@ with pkgs;
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
-  godot_4 = callPackage ../development/tools/godot/4 {
-    scons = sconsPackages.scons_4_1_0;
-  };
+  godot_4 = callPackage ../development/tools/godot/4 { };
 
-  godot = callPackage ../development/tools/godot/3 {
-    scons = sconsPackages.scons_4_1_0;
-  };
+  godot = callPackage ../development/tools/godot/3 { };
 
   godot-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
 
@@ -12077,7 +12075,7 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  signalbackup-tools = darwin.apple_sdk_11_0.callPackage ../applications/networking/instant-messengers/signalbackup-tools { };
+  signalbackup-tools = callPackage ../applications/networking/instant-messengers/signalbackup-tools { };
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
