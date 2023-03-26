@@ -1626,8 +1626,8 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.36";
-          sha256 = "sha256-4712BPibXJkkq0XEO9n0ZrdXAcID7IAabu/FOTiTeTo=";
+          version = "0.6.39";
+          sha256 = "sha256-B9+McdoC7FkfD4yGDIRUtoF0c7cCUfAeIK1r0/zLVVI=";
         };
         meta = {
           license = lib.licenses.mit;
