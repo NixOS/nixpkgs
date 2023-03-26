@@ -884,8 +884,8 @@ let
         mktplcRef = {
           name = "githistory";
           publisher = "donjayamanne";
-          version = "0.6.19";
-          sha256 = "15s2mva9hg2pw499g890v3jycncdps2dmmrmrkj3rns8fkhjn8b3";
+          version = "0.6.20";
+          sha256 = "sha256-nEdYS9/cMS4dcbFje23a47QBZr9eDK3dvtkFWqA+OHU=";
         };
       };
 
