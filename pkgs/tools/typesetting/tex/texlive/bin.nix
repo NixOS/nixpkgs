@@ -203,7 +203,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   hardeningDisable = [ "format" ];
 
-  inherit (core) nativeBuildInputs;
+  inherit (core) nativeBuildInputs depsBuildBuild;
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
 
   configureFlags = common.configureFlags
@@ -218,7 +218,15 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = let
     luajit = lib.optionalString withLuaJIT ",luajit";
-  in ''
+  in
+  lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
+  # without this, the native builds attempt to use the binary
+  # ${target-triple}-gcc, but we need to use the wrapper script.
+  ''
+    export BUILDCC=${buildPackages.stdenv.cc}/bin/cc
+  ''
+  +
+  ''
     mkdir ./WorkDir && cd ./WorkDir
     for path in libs/{pplib,teckit,lua53${luajit}} texk/web2c; do
       (
@@ -227,7 +235,18 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         else
           extraConfig=""
         fi
-
+  '' + lib.optionalString (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    # results of the tests performed by the configure scripts are
+    # toolchain-dependent, so native components and cross components cannot use
+    # the same cached test results.
+    # Disable the caching for components with native subcomponents.
+  ''
+        if [[ "$path" =~ "libs/luajit" ]] || [[ "$path" =~ "texk/web2c" ]]; then
+          extraConfig="$extraConfig --cache-file=/dev/null"
+        fi
+  ''
+  +
+  ''
         mkdir -p "$path" && cd "$path"
         "../../../$path/configure" $configureFlags $extraConfig
 
