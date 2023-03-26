@@ -33357,6 +33357,8 @@ with pkgs;
   
   shell_gpt = callPackage ../tools/misc/shell_gpt { };
 
+  shavee = callPackage ../applications/misc/shavee { };
+
   shfmt = callPackage ../tools/text/shfmt { };
 
   shipments = callPackage ../applications/misc/shipments { };
