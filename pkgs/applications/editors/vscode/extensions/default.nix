@@ -1252,8 +1252,8 @@ let
         mktplcRef = {
           name = "chatgpt-vscode";
           publisher = "genieai";
-          version = "0.0.2";
-          sha256 = "sha256-mdBSZ8BAJ1dFy5MXBPMwXlSmNsY5vD/+gBAI+3+QT84=";
+          version = "0.0.3";
+          sha256 = "sha256-eSRZ9AdXGqGLQw/jt8JCAsTmkvP0N1g5tFP7s1rBtjM=";
         };
       };
 
