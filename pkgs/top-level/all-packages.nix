@@ -12759,6 +12759,8 @@ with pkgs;
 
   tinycbor = callPackage ../development/libraries/tinycbor { };
 
+  tinycompress = callPackage ../development/libraries/tinycompress { };
+
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn { };
 
   tinygltf = callPackage ../development/libraries/tinygltf { };
@@ -15412,7 +15414,6 @@ with pkgs;
       /**/ if platform.isDarwin then 11
       else if platform.isFreeBSD then 12
       else if platform.isAndroid then 12
-      else if platform.system == "armv6l-linux" then 7  # This fixes armv6 cross-compilation
       else if platform.isLinux then 11
       else if platform.isWasm then 12
       else latest_version;
@@ -16895,8 +16896,6 @@ with pkgs;
     ffmpeg = ffmpeg-headless;
   };
 
-  pipewire-media-session = callPackage ../development/libraries/pipewire/media-session.nix { };
-
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix { };
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
@@ -16963,7 +16962,8 @@ with pkgs;
     mkRuby
     ruby_2_7
     ruby_3_0
-    ruby_3_1;
+    ruby_3_1
+    ruby_3_2;
 
   ruby = ruby_2_7;
   rubyPackages = rubyPackages_2_7;
@@ -16971,6 +16971,7 @@ with pkgs;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
   rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
+  rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
 
@@ -18112,8 +18113,6 @@ with pkgs;
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
-  # openjdk-17 fails on 4.4.1. Provide 4.4 until we fix it.
-  gnumake44 = callPackage ../development/tools/build-managers/gnumake/4.4 { };
 
   go-licenses = callPackage ../development/tools/misc/go-licenses  { };
 
@@ -19894,9 +19893,9 @@ with pkgs;
   # update to ffmpeg
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
-  ffmpeg = ffmpeg_4;
-  ffmpeg-headless = ffmpeg_4-headless;
-  ffmpeg-full = ffmpeg_4-full;
+  ffmpeg = ffmpeg_5;
+  ffmpeg-headless = ffmpeg_5-headless;
+  ffmpeg-full = ffmpeg_5-full;
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
@@ -22259,6 +22258,7 @@ with pkgs;
       fetchurl = stdenv.fetchurlBoot;
     };
   };
+  libxcrypt-legacy = libxcrypt.override { enableHashes = "all"; };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
@@ -27029,8 +27029,10 @@ with pkgs;
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
+    withAcl = false;
     withAnalyze = false;
     withApparmor = false;
+    withAudit = false;
     withCompression = false;
     withCoredump = false;
     withCryptsetup = false;
@@ -27041,7 +27043,9 @@ with pkgs;
     withHomed = false;
     withHwdb = false;
     withImportd = false;
+    withKmod = false;
     withLibBPF = false;
+    withLibidn2 = false;
     withLocaled = false;
     withLogind = false;
     withMachined = false;
@@ -27049,6 +27053,7 @@ with pkgs;
     withNss = false;
     withOomd = false;
     withPCRE2 = false;
+    withPam = false;
     withPolkit = false;
     withPortabled = false;
     withRemote = false;
@@ -27061,13 +27066,16 @@ with pkgs;
   };
   systemdStage1 = systemdMinimal.override {
     pname = "systemd-stage-1";
+    withAcl = true;
     withCryptsetup = true;
     withFido2 = true;
+    withKmod = true;
     withTpm2Tss = true;
   };
   systemdStage1Network = systemdStage1.override {
     pname = "systemd-stage-1-network";
     withNetworkd = true;
+    withLibidn2 = true;
   };
 
 

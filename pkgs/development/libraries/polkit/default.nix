@@ -73,13 +73,6 @@ stdenv.mkDerivation rec {
     ninja
     perl
     rsync
-    (python3.pythonForBuild.withPackages (pp: with pp; [
-      dbus-python
-      (python-dbusmock.overridePythonAttrs (attrs: {
-        # Avoid dependency cycle.
-        doCheck = false;
-      }))
-    ]))
 
     # man pages
     libxslt
@@ -108,6 +101,13 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
+    (python3.pythonForBuild.withPackages (pp: with pp; [
+      dbus-python
+      (python-dbusmock.overridePythonAttrs (attrs: {
+        # Avoid dependency cycle.
+        doCheck = false;
+      }))
+    ]))
   ];
 
   mesonFlags = [

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchurl
 , cmake
-, ffmpeg
+, ffmpeg_4
 , libdrm
 , libglvnd
 , libffi
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_4
     libdrm
     libffi
     libglvnd

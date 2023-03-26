@@ -9,7 +9,7 @@ Patch by vcunat.
  1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/src/libsystemd/sd-hwdb/hwdb-internal.h b/src/libsystemd/sd-hwdb/hwdb-internal.h
-index 62d27f7b89..87318e041b 100644
+index 5302679a62..c681f3a984 100644
 --- a/src/libsystemd/sd-hwdb/hwdb-internal.h
 +++ b/src/libsystemd/sd-hwdb/hwdb-internal.h
 @@ -83,8 +83,5 @@ struct trie_value_entry2_f {

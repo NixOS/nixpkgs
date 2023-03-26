@@ -48,5 +48,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    broken = true;
   };
 }

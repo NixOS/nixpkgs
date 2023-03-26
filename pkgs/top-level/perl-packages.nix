@@ -1180,6 +1180,10 @@ let
       hash = "sha256-tfr0fj+UikUoEGzLiMxxBIz+WY5bAmpEQ2i8fjk0gGc=";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
+    # Remove test files that fail after DES support was removed from crypt()
+    postPatch = ''
+      rm t/04core.t t/05edit.t
+    '';
     meta = {
       description = "Interface to read and modify Apache .htpasswd files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -1350,6 +1354,20 @@ let
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-0.5.tar.gz";
       hash = "sha256-As3atH+L8aHL1Mm/jSWPbQURFJnDP4MV5yRIEvcmE6o=";
     };
+    # Our C crypt() doesn't support this weak "crypt" algorithm anymore.
+    postPatch = ''
+      patch -p1 <<-EOF
+        --- a/t/09password.t
+        +++ b/t/09password.t
+        @@ -10 +10 @@
+        -use Test::More tests => 16;
+        +use Test::More tests => 14;
+        @@ -14 +13,0 @@
+        -    [ 'crypt',     'lk9Mh5KHGjAaM',                          'crypt'        ],
+        @@ -18 +16,0 @@
+        -    [ 'crypt',     '{CRYPT}lk9Mh5KHGjAaM',                   '{CRYPT}'      ],
+      EOF
+    '';
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable CryptPasswdMD5 ParamsValidate ];
     meta = {
       description = "Simple Authentication";
@@ -1364,6 +1382,10 @@ let
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-Passwd-0.6.tar.gz";
       hash = "sha256-z1W8NiWe3w/Wr5rSusgbMdxbVqFixmBZDsuWnHwWdLI=";
     };
+    # Our C crypt() doesn't support this weak "crypt" algorithm anymore.
+    postPatch = ''
+      sed -e 's/tests => 8/tests => 7/' -e "/'crypt'/d" -i t/04basic.t
+    '';
     propagatedBuildInputs = [ AuthenSimple ];
     meta = {
       description = "Simple Passwd authentication";
@@ -2234,6 +2256,9 @@ let
     };
     buildInputs = [ ModuleBuildTiny TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ AuthenHtpasswd CatalystPluginAuthentication ];
+    patches = [
+      ../development/perl-modules/CatalystAuthenticationStoreHtpasswd-test-replace-DES-hash-with-bcrypt.patch
+    ];
     meta = {
       description = "Authen::Htpasswd based user storage/authentication";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -19575,6 +19600,9 @@ let
     };
     buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
+    patches = [
+      ../development/perl-modules/Plack-test-replace-DES-hash-with-bcrypt.patch
+    ];
     meta = {
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
       homepage = "https://github.com/plack/Plack";

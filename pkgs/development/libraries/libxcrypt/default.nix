@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, perl, nixosTests }:
+{ lib, stdenv, fetchurl, perl
+# Update the enabled crypt scheme ids in passthru when the enabled hashes change
+, enableHashes ? "strong"
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
@@ -15,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-hashes=all"
+    "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
@@ -30,8 +34,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) login shadow;
+  passthru = {
+    tests = {
+      inherit (nixosTests) login shadow;
+    };
+    enabledCryptSchemeIds = [
+      # https://github.com/besser82/libxcrypt/blob/v4.4.33/lib/hashes.conf
+      "y"   # yescrypt
+      "gy"  # gost_yescrypt
+      "7"   # scrypt
+      "2b"  # bcrypt
+      "2y"  # bcrypt_y
+      "2a"  # bcrypt_a
+      "6"   # sha512crypt
+    ];
   };
 
   meta = with lib; {

@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
+  # Install fails as:
+  #   make[1]: *** No rule to make target '\', needed by 'kmem.lo'.  Stop.
+  enableParallelInstalling = false;
 
   # @sbindir@ is replaced with /run/current-system/sw/bin to fix dependency cycles
   preConfigure = ''

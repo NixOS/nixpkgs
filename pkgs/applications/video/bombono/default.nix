@@ -8,7 +8,7 @@
 , dvdplusrwtools
 , enca
 , cdrkit
-, ffmpeg
+, ffmpeg_4
 , gettext
 , gtk2
 , gtkmm2
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     dvdauthor
     dvdplusrwtools
     enca
-    ffmpeg
+    ffmpeg_4
     gtk2
     gtkmm2
     libdvdread
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     # fix iso authoring
     install -Dt  $out/share/bombono/resources/scons_authoring tools/scripts/SConsTwin.py
 
-    wrapProgram $out/bin/bombono-dvd --prefix PATH : ${lib.makeBinPath [ ffmpeg dvdauthor cdrkit ]}
+    wrapProgram $out/bin/bombono-dvd --prefix PATH : ${lib.makeBinPath [ ffmpeg_4 dvdauthor cdrkit ]}
   '';
 
   meta = with lib; {
