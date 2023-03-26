@@ -1748,8 +1748,8 @@ let
         mktplcRef = {
           name = "i18n-ally";
           publisher = "Lokalise";
-          version = "2.7.1";
-          sha256 = "sha256-nHBYRSiPQ5ucWPr9VCUgMrosloLnVj40Fh+CEBvWONE=";
+          version = "2.8.1";
+          sha256 = "sha256-oDW7ijcObfOP7ZNggSHX0aiI5FkoJ/iQD92bRV0eWVQ=";
         };
         meta = {
           license = lib.licenses.mit;
