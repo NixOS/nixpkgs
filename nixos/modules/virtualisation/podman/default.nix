@@ -142,6 +142,7 @@ in
     defaultNetwork.settings = lib.mkOption {
       type = json.type;
       default = { };
+      example = lib.literalExpression "{ dns_enabled = true; }";
       description = lib.mdDoc ''
         Settings for podman's default network.
       '';
