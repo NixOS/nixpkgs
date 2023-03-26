@@ -1840,7 +1840,7 @@
     github = "ben-kuhn";
     githubId = "16821405";
     name = "Ben Kuhn";
-  };  
+  };
   benley = {
     email = "benley@gmail.com";
     github = "benley";
