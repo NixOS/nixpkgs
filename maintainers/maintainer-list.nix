@@ -6828,6 +6828,12 @@
     githubId = 6874204;
     name = "Jason Carr";
   };
+  jasonodoom = {
+    email = "jasonodoom@riseup.net";
+    github = "jasonodoom";
+    githubId = 6789916;
+    name = "Jason Odoom";
+  };
   javaguirre = {
     email = "contacto@javaguirre.net";
     github = "javaguirre";
