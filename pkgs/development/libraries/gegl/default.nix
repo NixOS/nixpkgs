@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , vala
 , gobject-introspection
@@ -38,27 +37,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.42";
+  version = "0.4.44";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "q6g6DLqmxW7cKeoi8ugXKVClO5bapRWSCD1ZIivd4C0=";
+    sha256 = "CkzbQWNeQGoISc0NPwPK99l8q4qhPShwfVMtAInVYSY=";
   };
-
-  patches = [
-    # Fix memory management issues revealed by GLib 2.76 update.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/f2f2cea219f2265e152e3308004dc98d2fd48f33.patch";
-      hash = "sha256-5GR8zHvuiH9eapPDnIEGr/ksYw6feKqMaJlmj83R4XY=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/79e28a7d3a843114588f4b5a095ff7a797c0e2e1.patch";
-      hash = "sha256-+2iT+THlLcOgFvGl76IUWGhww+H8rzDWmXn0Kq6YCUk=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
