@@ -6,6 +6,7 @@
 , tree-sitter
 , CoreServices
 , glibcLocales ? null, procps ? null
+, callPackage
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
 # also: https://github.com/neovim/neovim/issues/16233
@@ -32,8 +33,7 @@ let
       else lua;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
-in
-  stdenv.mkDerivation rec {
+  nvim = stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
     version = "0.8.3";
 
@@ -153,4 +153,12 @@ in
       maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
-  }
+  };
+in
+  nvim.overrideAttrs(oa: {
+
+    passthru = {
+      # returns a wrapped neovim with everything needed
+      withConfig = callPackage ./wrapper.nix { } nvim;
+    };
+  })

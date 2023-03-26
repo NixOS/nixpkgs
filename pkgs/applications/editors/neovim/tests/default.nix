@@ -1,6 +1,6 @@
 # run tests by building `neovim.tests`
 { vimUtils, writeText, neovim, vimPlugins
-, lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
+, lib, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal
@@ -274,4 +274,14 @@ rec {
     export HOME=$TMPDIR
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
+
+
+  # testing configuration via passthru
+  nvim-passthru = let
+    myNvim = neovim-unwrapped.withConfig nvimConfNix;
+  in
+    runTest nvim_with_opt_plugin ''
+      export HOME=$TMPDIR
+      ${myNvim}/bin/nvim -i NONE +quit! -e
+    '';
 })
