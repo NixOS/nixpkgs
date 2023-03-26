@@ -2517,6 +2517,10 @@ self: super: {
     editedCabalFile = null;
   }) super.true-name);
 
+  # ffmpeg-light works against the ffmpeg-4 API, but the default ffmpeg in nixpkgs is ffmpeg-5.
+  # https://github.com/NixOS/nixpkgs/pull/220972#issuecomment-1484017192
+  ffmpeg-light = super.ffmpeg-light.override { ffmpeg = pkgs.ffmpeg_4; };
+
   # posix-api has had broken tests since 2020 (until at least 2023-01-11)
   # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
   posix-api = dontCheck super.posix-api;
