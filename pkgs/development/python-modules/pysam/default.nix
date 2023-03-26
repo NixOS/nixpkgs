@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , bzip2
 , bcftools
 , curl
@@ -29,7 +30,10 @@ buildPythonPackage rec {
   };
 
   patches = [
-    ./1147.patch
+    (fetchpatch {
+      url = "https://github.com/pysam-developers/pysam/pull/1147.patch";
+      hash = "sha256-ANAcX26QwxlTgmarKobs+UKeRZ5OhbwZbnT9rsqBNKs=";
+    })
   ];
 
   nativeBuildInputs = [ samtools ];
