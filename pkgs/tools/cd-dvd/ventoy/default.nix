@@ -50,7 +50,7 @@ let
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ventoy-bin";
+  pname = "ventoy";
   version = "1.0.90";
 
   src = let
@@ -128,18 +128,18 @@ stdenv.mkDerivation (finalAttrs: {
     cd tool/"$ARCH"
     rm ash* hexdump* mkexfatfs* mount.exfat-fuse* xzcat*
     for archive in *.xz; do
-        xzcat "$archive" > "''${archive%.xz}"
-        rm "$archive"
+      xzcat "$archive" > "''${archive%.xz}"
+      rm "$archive"
     done
     chmod a+x *
     cd -
 
     # Cleanup.
     case "$ARCH" in
-        x86_64) rm -r {tool/,VentoyGUI.}{i386,aarch64,mips64el};;
-        i386) rm -r {tool/,VentoyGUI.}{x86_64,aarch64,mips64el};;
-        aarch64) rm -r {tool/,VentoyGUI.}{x86_64,i386,mips64el};;
-        mips64el) rm -r {tool/,VentoyGUI.}{x86_64,i386,aarch64};;
+      x86_64) rm -r {tool/,VentoyGUI.}{i386,aarch64,mips64el};;
+      i386) rm -r {tool/,VentoyGUI.}{x86_64,aarch64,mips64el};;
+      aarch64) rm -r {tool/,VentoyGUI.}{x86_64,i386,mips64el};;
+      mips64el) rm -r {tool/,VentoyGUI.}{x86_64,i386,aarch64};;
     esac
     rm README
     rm tool/"$ARCH"/Ventoy2Disk.gtk2 || true  # For aarch64 and mips64el.
@@ -153,10 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
              CreatePersistentImg.sh_ventoy-persistent \
              ExtendPersistentImg.sh_ventoy-extend-persistent \
              VentoyPlugson.sh_ventoy-plugson; do
-        local bin="''${f%_*}" wrapper="''${f#*_}"
-        makeWrapper "$VENTOY_PATH/$bin" "$out/bin/$wrapper" \
-                    --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
-                    --chdir "$VENTOY_PATH"
+      local bin="''${f%_*}" wrapper="''${f#*_}"
+      makeWrapper "$VENTOY_PATH/$bin" "$out/bin/$wrapper" \
+        --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
+        --chdir "$VENTOY_PATH"
     done
   ''
   # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
@@ -168,17 +168,13 @@ stdenv.mkDerivation (finalAttrs: {
                 --chdir "$VENTOY_PATH"
     mkdir "$out"/share/{applications,pixmaps}
     ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
-  ''
-  + optionalString (!withGtk3) ''
+  '' + optionalString (!withGtk3) ''
     rm "$VENTOY_PATH"/tool/{"$ARCH"/Ventoy2Disk.gtk3,VentoyGTK.glade}
-  ''
-  + optionalString (!withQt5) ''
+  '' + optionalString (!withQt5) ''
     rm "$VENTOY_PATH/tool/$ARCH/Ventoy2Disk.qt5"
-  ''
-  + optionalString (!withGtk3 && !withQt5) ''
+  '' + optionalString (!withGtk3 && !withQt5) ''
     rm "$VENTOY_PATH"/VentoyGUI.*
-  '' +
-  ''
+  '' + ''
 
     runHook postInstall
   '';
@@ -204,6 +200,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "ventoy";
   };
 })
