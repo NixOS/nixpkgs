@@ -2100,8 +2100,8 @@ let
         mktplcRef = {
           name = "vscode-jupyter-cell-tags";
           publisher = "ms-toolsai";
-          version = "0.1.6";
-          sha256 = "1sb3za0ka8bl1kydlniwlaixldlgqxvfbx7pcyrg1a4sg6zwsvk1";
+          version = "0.1.8";
+          sha256 = "sha256-0oPyptnUWL1h/H13SdR+FdgGzVwEpTaK9SCE7BvI/5M=";
         };
         meta = {
           license = lib.licenses.mit;
