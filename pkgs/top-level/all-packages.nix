@@ -25399,6 +25399,8 @@ with pkgs;
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
+  rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
+
   OVMF = callPackage ../applications/virtualization/OVMF { };
   OVMFFull = callPackage ../applications/virtualization/OVMF {
     secureBoot = true;
