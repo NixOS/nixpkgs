@@ -304,8 +304,8 @@ stdenv.mkDerivation (finalAttrs: {
         if dl.pkg == null then ''
           # remove the dependency on the library by replacing it with an invalid path
           for file in $(grep -lr '"${dl.name}"' src); do
-            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
-            substituteInPlace "$file" --replace '"${dl.name}"' '"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
+            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
+            substituteInPlace "$file" --replace '"${dl.name}"' '"${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
           done
         '' else ''
           # ensure that the library we provide actually exists
