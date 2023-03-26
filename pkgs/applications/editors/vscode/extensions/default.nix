@@ -1992,8 +1992,8 @@ let
         mktplcRef = {
           name = "anycode";
           publisher = "ms-vscode";
-          version = "0.0.57";
-          sha256 = "sha256-XwL7I+vwZJ6zx5IDZdfOUbq6M9IH/gi7MBe92cG1kDs=";
+          version = "0.0.70";
+          sha256 = "sha256-POxgwvKF4A+DxKVIOte4I8REhAbO1U9Gu6r/S41/MmA=";
         };
         meta = {
           license = lib.licenses.mit;
