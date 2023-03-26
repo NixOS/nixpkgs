@@ -849,8 +849,8 @@ let
         mktplcRef = {
           publisher = "disneystreaming";
           name = "smithy";
-          version = "0.0.2";
-          sha256 = "0rdh7b5s7ynsyfrq1r1170g65q9vvvfl3qbfvbh1b38ndvj2f0yq";
+          version = "0.0.8";
+          sha256 = "sha256-BQPiSxiPPjdNPtIJI8L+558DVKxngPAI9sscpcJSJUI=";
         };
         meta = { license = lib.licenses.asl20; };
       };
