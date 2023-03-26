@@ -1410,8 +1410,8 @@ let
         mktplcRef = {
           publisher = "humao";
           name = "rest-client";
-          version = "0.24.6";
-          sha256 = "196pm7gv0488bpv1lklh8hpwmdqc4yimz389gad6nsna368m4m43";
+          version = "0.25.1";
+          sha256 = "sha256-DSzZ9wGB0IVK8gYOzLLbT03WX3xSmR/IUVZkDzcczKc=";
         };
         meta = {
           license = lib.licenses.mit;
