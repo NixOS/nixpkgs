@@ -10,11 +10,14 @@
 , sqlalchemy
 , tabulate
 , pythonOlder
+, setuptools
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
   version = "0.5.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -23,10 +26,10 @@ buildPythonPackage rec {
     sha256 = "87408030a4c8c14fe3f8fe62e6ceeb24c84e544c7ced20bfee45968053d07801";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "nbclient>=0.2,<0.6" "nbclient"
-  '';
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -37,6 +40,11 @@ buildPythonPackage rec {
     pyyaml
     sqlalchemy
     tabulate
+  ];
+
+  pythonRelaxDeps = [
+    "nbclient"
+    "sqlalchemy" # See https://github.com/executablebooks/jupyter-cache/pull/93
   ];
 
   pythonImportsCheck = [ "jupyter_cache" ];
