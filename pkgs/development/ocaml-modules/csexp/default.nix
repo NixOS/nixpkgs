@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage, liquidsoap }:
 
 buildDunePackage rec {
   pname = "csexp";
@@ -10,6 +10,10 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.03";
+
+  passthru.tests = {
+    inherit liquidsoap;
+  };
 
   meta = with lib; {
     description = "Minimal support for Canonical S-expressions";
