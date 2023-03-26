@@ -2076,8 +2076,8 @@ let
         mktplcRef = {
           name = "jupyter-keymap";
           publisher = "ms-toolsai";
-          version = "1.0.0";
-          sha256 = "0wkwllghadil9hk6zamh9brhgn539yhz6dlr97bzf9szyd36dzv8";
+          version = "1.1.0";
+          sha256 = "sha256-krDtR+ZJiJf1Kxcu5mdXOaSAiJb2bXC1H0XWWviWeMQ=";
         };
         meta = {
           license = lib.licenses.mit;
