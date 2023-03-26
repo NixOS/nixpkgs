@@ -11174,6 +11174,8 @@ with pkgs;
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
 
+  podman-desktop = callPackage ../applications/virtualization/podman-desktop {};
+
   pods = callPackage ../applications/virtualization/pods { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
