@@ -21,7 +21,15 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-jS6wAswGqgfmpPV6qERhqn1IhpcBSDNh8HDdPo04F0A=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "curve25519-dalek-3.2.1" = "sha256-T/NGZddFQWq32eRu6FYfgdPqU8Y4Shi1NpMaX4GeQ54=";
+      "libsignal-protocol-0.1.0" = "sha256-gapAurbs/BdsfPlVvWWF7Ai1nXZcxCW8qc5gQdbnthM=";
+      "libsignal-service-0.1.0" = "sha256-CrfTdUcxP591pigS2069gEjzy5jSRz7mHORLCodQDSE=";
+      "presage-0.3.0" = "sha256-Ptyjf5/SI8ftjiIxK+gVya5Cmv5sOBmWXM8ZveVV7Pc=";
+    };
+  };
 
   nativeBuildInputs = [ protobuf ];
 

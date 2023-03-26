@@ -20,7 +20,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "bDLVOXX9nv6Guu5czRFkviJf7dBiaqt5O8SLUJlcBZo=";
   };
 
-  cargoSha256 = "sha256-tv/4GOl93nGLWyoAXY5roxRqS1twskkQTSddltH4n9U=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "modular-bitfield-0.11.2" = "sha256-vcx+xt5owZVWOlKwudAr0EB1zlLLL5pVfWokw034BQI=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl gmp libmpc mpfr ];

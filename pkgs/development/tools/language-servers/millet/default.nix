@@ -11,7 +11,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-b5zb0sDya/58kEEgqWqu4u6Xo61sq8Le0F3Z1Q3dBdk=";
   };
 
-  cargoHash = "sha256-5uURD+c5OR2ACS2a3OYlPX/EpJ966+m97MDKyw3snjA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "char-name-0.1.0" = "sha256-mQU6kmVizJJTb3JF61YWUVZqSeGSs6PluCF32y/uov8=";
+      "rowan-0.15.10" = "sha256-yOaUq2tQEiNgQB7qB8fFzfnwUWagu72MIPHmaTX0B0Y=";
+      "sml-libs-0.1.0" = "sha256-6jbRMqlW5sL0x0i4qatduXvLHhrkUE7gsSwC6JYwiHQ=";
+    };
+  };
 
   postPatch = ''
     rm .cargo/config.toml
