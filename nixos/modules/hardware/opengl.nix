@@ -99,7 +99,7 @@ in
           You should only need to adjust this if you require a newer Mesa
           version for your hardware or because you need to patch a bug.
         '';
-        apply = mesa: mesa.drivers or throw "`mesa` package must have a `drivers` output.";
+        apply = mesa: mesa.drivers or (throw "`mesa` package must have a `drivers` output.");
       };
       mesaPackage32 = mkOption {
         type = types.package;
@@ -110,7 +110,7 @@ in
           Same as {option}`mesaPackage` but for the 32-bit Mesa on 64-bit
           systems. Used when {option}`driSupport32Bit` is set.
         '';
-        apply = mesa: mesa.drivers or throw "`mesa` package must have a `drivers` output.";
+        apply = mesa: mesa.drivers or (throw "`mesa` package must have a `drivers` output.");
       };
 
       extraPackages = mkOption {
