@@ -23,7 +23,12 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-Tl3T/IoBIhYCNDEYT6cV1UyksDkoEDydBjYM9yzT4VQ=";
   };
 
-  cargoHash = "sha256-20rtE8+LLDz97yvk0gKoUielsGZXEEOu2pfShf2WvHA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "enolib-0.1.0" = "sha256-0+T8RRQnqbIiIup/aDJgvxeV8sRV4YrlA9JVbQxMfF0=";
+    };
+  };
 
   nativeBuildInputs = [
     makeWrapper

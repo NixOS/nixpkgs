@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -25,32 +24,20 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    hash = "sha256-To6lr2I+JVrxvuK++2gLWntFGnEBm+B6KTRuOvjASek=";
+    hash = "sha256-/vPadtyiYDX0PdneMxc0oSWb5OYnikevqajl3WgZiGA=";
   };
 
-  patches = [
-    # Fix build with meson 0.61
-    # fractal-gtk/res/meson.build:5:0: ERROR: Function does not take positional arguments.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/-/commit/6fa1a23596d65d94aa889efe725174e6cd2903f0.patch";
-      hash = "sha256-3OzU9XL2V1VNOkvL1j677K3HNoBqPMQudQDmiDxYfAc=";
-    })
-
-    # This is in fractal v4.4.1b1+ so can be removed when fractal is updated.
-    ./update-socket2-for-rust-1.64.diff
-  ];
-
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
+    inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-d99zSaxp22YyLP3Wckgcm7wlz7nFrLJDHq2xPJmZFf0=";
+    hash = "sha256-RbJPhmZLRS4evvzzYQOYWnlxKUd4oC2Dh2GK5X5IF8Q=";
   };
 
   nativeBuildInputs = [

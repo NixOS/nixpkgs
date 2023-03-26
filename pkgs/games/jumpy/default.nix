@@ -24,7 +24,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-vBnHNc/kCyZ8gTWhQShn4lBQECguFBzBd7xIfLBgm7A=";
   };
 
-  cargoSha256 = "sha256-ZnDerzDdCLjslszSn0z0BevP5qpkuYDCDLyv66+psdo=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bevy_simple_tilemap-0.10.1" = "sha256-Q/AsBZjsr+uTIh/oN0OsIJxntZ4nuc1AReo0Ronj930=";
+      "bones_asset-0.1.0" = "sha256-CyP7rbS3X26xlCFxn3g9YhZze7UeqxQ1wULrZ3er7Xc=";
+    };
+  };
 
   auditable = true; # TODO: remove when this is the default
 

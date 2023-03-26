@@ -19,7 +19,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-1WqIQp16bs+UB+NSEZn0JH6NOkuAx8iUfho4roA2B00=";
   };
 
-  cargoHash = "sha256-88ToWRkBDXUvnEB2K6q5f3+IMuC3zNzrXrVFZnjbA9o=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "elefren-0.22.0" = "sha256-zCmopdkBHT0gzNGQqZzsnIyMyAt0XBbQdOCpegF6TsY=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config

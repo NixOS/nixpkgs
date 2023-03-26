@@ -18,7 +18,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QvU1Y3syr6PZbTRebbZF4sEzI4lIj1enJe2F/gGfvQM=";
   };
 
-  cargoHash = "sha256-lylRGg5pzJ4sBS3bY4ObMoJ5s5kakMLTtq1VOnmS5HM";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "multer-2.0.4" = "sha256-962onbcPUjkoIGSQTnF8m1fkamwThpPj4uBJ8EqbouQ=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]

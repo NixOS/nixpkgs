@@ -45,7 +45,16 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-hBEw5sAxex4o/b1nr60dEwZs7nosXU7pUChT1VoI25k=";
   };
 
-  cargoSha256 = "sha256-F47ZIxFsp23sPe1nc3UwLZEXJ5lzKiuSIujBxf4fEBo=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "azure_core-0.5.0" = "sha256-fojO7dhntpymMjV58TtYb7N4UN6rOp30D54x09RDXfQ=";
+      "chrono-0.4.22" = "sha256-c5xHLte0+NpM+UUHEwxu2qdBFUBw62YN9vNkD12llwI=";
+      "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
+      "tokio-util-0.7.4" = "sha256-rAzj44O+GOZhG+o6FVN5qCcG/NWxW8fUpScm+xsRjIs=";
+      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
+    };
+  };
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -116,4 +125,3 @@ rustPlatform.buildRustPackage {
     platforms = with platforms; all;
   };
 }
-
