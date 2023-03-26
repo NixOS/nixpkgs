@@ -38,7 +38,13 @@ let
       # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
       # details
       sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
-    '';
+    '' +
+    # when cross compiling, we must use himktables from PATH
+    # (i.e. from buildPackages.texlive.bin.core.dev)
+    lib.optionalString (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))  ''
+      sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
+    ''
+;
 
     configureFlags = [
       "--with-banner-add=/nixos.org"
@@ -75,13 +81,15 @@ core = stdenv.mkDerivation rec {
 
   inherit (common) src prePatch;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "dev" ];
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     # configure: error: tangle was not found but is required when cross-compiling.
+    # dev (himktables) is used when building hitex to generate the additional source file hitables.c
     texlive.bin.core
+    texlive.bin.core.dev
   ];
 
   buildInputs = [
@@ -156,6 +164,9 @@ core = stdenv.mkDerivation rec {
     mv "$out"/share/{man,info} "$doc"/doc
   '' + /* remove manpages for utils that live in texlive.texlive-scripts to avoid a conflict in buildEnv */ ''
     (cd "$doc"/doc/man/man1; rm {fmtutil-sys.1,fmtutil.1,mktexfmt.1,mktexmf.1,mktexpk.1,mktextfm.1,texhash.1,updmap-sys.1,updmap.1})
+  '' + /* install himktables in separate output for use in cross compilation */ ''
+     mkdir -p $dev/bin
+     cp texk/web2c/.libs/himktables $dev/bin/himktables
   '' + cleanBrokenLinks;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
