@@ -2016,8 +2016,8 @@ let
         mktplcRef = {
           name = "hexeditor";
           publisher = "ms-vscode";
-          version = "1.9.9";
-          sha256 = "0w7b9llgm6plzpkr5g8ikpyxdgfdjcd5v9xzhp6967j0xphisdbb";
+          version = "1.9.11";
+          sha256 = "sha256-w1R8z7Q/JRAsqJ1mgcvlHJ6tywfgKtS6A6zOY2p01io=";
         };
         meta = {
           license = lib.licenses.mit;
