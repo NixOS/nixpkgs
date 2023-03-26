@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "A lightweight text editor written in Lua";
     homepage = "https://github.com/lite-xl/lite-xl";
     license = licenses.mit;
-    maintainers = with maintainers; [ boppyt ];
+    maintainers = with maintainers; [ sefidel ];
     platforms = platforms.unix;
   };
 }
