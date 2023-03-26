@@ -2942,8 +2942,8 @@ let
         mktplcRef = {
           name = "highlight-matching-tag";
           publisher = "vincaslt";
-          version = "0.10.1";
-          sha256 = "0b9jpwiyxax783gyr9zhx7sgrdl9wffq34fi7y67vd68q9183jw1";
+          version = "0.11.0";
+          sha256 = "sha256-PxngjprSpWtD2ZDZfh+gOnZ+fVk5rvgGdZFxqbE21CY=";
         };
         meta = {
           license = lib.licenses.mit;
