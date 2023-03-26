@@ -91,20 +91,6 @@ stdenv.mkDerivation rec {
   ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
-  preInstall = lib.optionalString (stdenv.isDarwin && !headersOnly) ''
-    for file in lib/*.dylib; do
-      if [ -L "$file" ]; then continue; fi
-
-      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
-      installName="$out/lib/$baseName"
-      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
-
-      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
-        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
-      done
-    done
-  '';
-
   passthru = {
     isLLVM = true;
     inherit cxxabi;
