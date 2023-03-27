@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
+    changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${version}";
     longDescription = ''
       Asyncpg is a database interface library designed specifically for
       PostgreSQL and Python/asyncio. asyncpg is an efficient, clean
