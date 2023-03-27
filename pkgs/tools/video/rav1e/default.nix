@@ -25,8 +25,6 @@ in rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-66mVkoqMl+KNCXWsGUbu8nBrazgHP+5dTaT2Ye0btWY=";
 
-  auditable = true; # TODO: remove when this is the default
-
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [ cargo-c libgit2 nasm ];
