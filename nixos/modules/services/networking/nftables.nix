@@ -273,9 +273,10 @@ in
                 ${table.content}
               }
             '') enabledTables)}
-            ${if cfg.rulesetFile != null then ''
+            ${cfg.ruleset}
+            ${lib.optionalString (cfg.rulesetFile != null) ''
               include "${cfg.rulesetFile}"
-            '' else cfg.ruleset}
+            ''}
           '';
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
