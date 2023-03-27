@@ -57,15 +57,17 @@ stdenv.mkDerivation rec {
     mkdir "$out"
     cp -r ./* "$out/"
 
+    # for each library like libfoo.so.1.2.3, create symlinks to it from libfoo.so, libfoo.so.1, libfoo.so.1.2
     (
       cd "$out/lib/" || exit
-      for f in *.so.*.*.*; do
-        ln -sf "$f" "''${f%.*}" || exit
-        ln -sf "$f" "''${f%.*.*}" || exit
-        ln -sf "$f" "''${f%.*.*.*}" || exit
+      for f in *.so.*.*.*; do                # find library names with three-layer suffixes
+        ln -sf "$f" "''${f%.*}" || exit      # strip only one suffix layer
+        ln -sf "$f" "''${f%.*.*}" || exit    # strip two suffix layers
+        ln -sf "$f" "''${f%.*.*.*}" || exit  # strip all three suffix layers
       done
     ) || exit
 
+    # when library links are missing in pcsc/drivers, create them
     (
       cd "$out/pcsc/drivers" || exit
       for f in *; do
