@@ -225,6 +225,7 @@ in
           to be added to make sure sshd will wait for dhcp configuration:
               systemd.services.sshd.wants = [ "network-online.target" ];
               systemd.services.sshd.after = [ "network-online.target" ];
+          See the following issue for details: <https://github.com/NixOS/nixpkgs/issues/105570>
         '';
       };
 
