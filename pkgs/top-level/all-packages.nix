@@ -18733,6 +18733,8 @@ with pkgs;
 
   rsass = callPackage ../development/tools/misc/rsass { };
 
+  rsonpath = callPackage ../development/tools/misc/rsonpath { };
+
   rufo = callPackage ../development/tools/rufo { };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
