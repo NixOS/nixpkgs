@@ -10128,6 +10128,8 @@ with pkgs;
 
   neofetch = callPackage ../tools/misc/neofetch { };
 
+  nerdfix = callPackage ../tools/text/nerdfix { };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
@@ -24747,6 +24749,8 @@ with pkgs;
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
+
+  exhaustive = callPackage ../development/tools/exhaustive { };
 
   exhibitor = callPackage ../servers/exhibitor { };
 
