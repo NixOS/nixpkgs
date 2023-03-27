@@ -3235,6 +3235,8 @@ self: super: with self; {
 
   expecttest = callPackage ../development/python-modules/expecttest { };
 
+  expiring-dict = callPackage ../development/python-modules/expiring-dict { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
