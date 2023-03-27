@@ -1,11 +1,11 @@
-{ callPackage, runCommandLocal, writeScript, stdenv, coreutils }:
+{ lib, callPackage, runCommandLocal, writeScript, stdenv, coreutils }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
-args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
+args@{ name, version ? null, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
 
 let
-  env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
+  env = buildFHSEnv (removeAttrs args [ "version" "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
   chrootenv = callPackage ./chrootenv {};
 
@@ -23,7 +23,11 @@ let
     exec ${run} "$@"
   '';
 
-in runCommandLocal name {
+  versionStr = lib.optionalString (version != null) ("-" + version);
+
+  nameAndVersion = name + versionStr;
+
+in runCommandLocal nameAndVersion {
   inherit meta;
 
   passthru = passthru // {
