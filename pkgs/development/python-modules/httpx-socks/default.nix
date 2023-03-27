@@ -1,7 +1,6 @@
 { lib
 , async-timeout
 , buildPythonPackage
-, curio
 , fetchFromGitHub
 , flask
 , httpcore
@@ -12,7 +11,6 @@
 , pytestCheckHook
 , python-socks
 , pythonOlder
-, sniffio
 , starlette
 , trio
 , yarl
@@ -31,6 +29,11 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-HwLJ2pScgiNmM/l14aKp47MMuGW1qSaIq7ujpCSRtqA=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'httpcore>=0.14.0,<0.17.0'," "'httpcore>=0.14.0,<0.18.0',"
+  '';
 
   propagatedBuildInputs = [
     httpx
