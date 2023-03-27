@@ -3,6 +3,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, setuptools
+, wheel
 , pytz-deprecation-shim
 , pytest-mock
 , pytestCheckHook
@@ -10,14 +12,21 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "4.2"; # version needs to be compatible with APScheduler
+  version = "4.3"; # version needs to be compatible with APScheduler
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee5842fa3a795f023514ac2d801c4a81d1743bbe642e3940143326b3a00addd7";
+    hash = "sha256-PyHQnhsqqfLazKEtokDKN947pSN6k63f1tWTr+kHM1U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     pytz-deprecation-shim
