@@ -17232,6 +17232,8 @@ with pkgs;
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
 
+  phpbench = callPackage ../development/tools/misc/phpbench { php = php80; };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
