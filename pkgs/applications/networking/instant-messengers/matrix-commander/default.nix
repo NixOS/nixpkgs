@@ -7,7 +7,6 @@
 , python-magic
 , markdown
 , pillow
-, urllib3
 , aiofiles
 , notify2
 , dbus-python
@@ -45,7 +44,6 @@ buildPythonApplication rec {
     python-magic
     markdown
     pillow
-    urllib3
     aiofiles
     notify2
     dbus-python
