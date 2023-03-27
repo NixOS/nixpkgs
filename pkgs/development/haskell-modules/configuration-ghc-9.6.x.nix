@@ -141,6 +141,18 @@ self: super: {
   # Compilation failure workarounds
   #
 
+  # Add missing Functor instance for Tuple2
+  # https://github.com/haskell-foundation/foundation/pull/572
+  foundation = appendPatches [
+      (pkgs.fetchpatch {
+        name = "foundation-pr-572.patch";
+        url =
+          "https://github.com/haskell-foundation/foundation/commit/d3136f4bb8b69e273535352620e53f2196941b35.patch";
+        sha256 = "sha256-oPadhQdCPJHICdCPxn+GsSQUARIYODG8Ed6g2sK+eC4=";
+        stripLen = 1;
+      })
+    ] (super.foundation);
+
   # Test suite doesn't compile with base-4.18 / GHC 9.6
   # https://github.com/dreixel/syb/issues/40
   syb = dontCheck super.syb;
