@@ -70,9 +70,9 @@ self: super: {
           # are overridden to take the versioned attributes as inputs, we need
           # to make sure to override the versioned attribute with this fix.
           hspec-discover_2_10_10 = dontCheck csuper.hspec-discover_2_10_10;
-        } // lib.optionalAttrs (lib.versions.majorMinor self.ghc.version == "8.10") {
+
           # Prevent dependency on doctest which causes an inconsistent dependency
-          # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
+          # due to depending on ghc which depends on directory etc.
           vector = dontCheck csuper.vector;
         };
     in
