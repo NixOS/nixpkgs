@@ -16,6 +16,7 @@
 , gst-plugins-bad
 , gst-plugins-ugly
 , wayland
+, pipewire
 , wrapQtAppsHook
 }:
 
@@ -41,6 +42,7 @@ mkDerivation rec {
     qtmultimedia
     qtx11extras
     wayland
+    pipewire
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
