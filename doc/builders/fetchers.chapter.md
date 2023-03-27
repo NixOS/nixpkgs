@@ -3,7 +3,7 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 `nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
 
-## Caveats
+## Caveats {#chap-pkgs-fetchers-caveats}
 
 Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
 Nix can reuse the downloaded files via the hash of the resulting derivation.
