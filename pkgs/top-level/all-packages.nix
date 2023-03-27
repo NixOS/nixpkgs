@@ -36408,6 +36408,8 @@ with pkgs;
 
   xcowsay = callPackage ../games/xcowsay { };
 
+  xgalagapp = callPackage ../games/xgalaga++ { };
+
   xjump = callPackage ../games/xjump { };
 
   xmoto = callPackage ../games/xmoto { };
