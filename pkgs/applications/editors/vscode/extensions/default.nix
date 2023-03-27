@@ -1550,18 +1550,6 @@ let
         };
       };
 
-      jpoissonnier.vscode-styled-components = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-styled-components";
-          publisher = "jpoissonnier";
-          version = "1.4.1";
-          sha256 = "sha256-ojbeuYBCS+DjF5R0aLuBImzoSOb8mXw1s0Uh0CzggzE=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
       justusadam.language-haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-haskell";
@@ -2616,6 +2604,22 @@ let
         };
       };
 
+      styled-components.vscode-styled-components = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-styled-components";
+          publisher = "styled-components";
+          version = "1.7.6";
+          sha256 = "sha256-ZXXXFUriu//2Wmj1N+plj7xzJauGBfj+79SyrkUZAO4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/styled-components.vscode-styled-components/changelog";
+          description = "Syntax highlighting and IntelliSense for styled-components";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components";
+          homepage = "https://github.com/styled-components/vscode-styled-components";
+          license = lib.licenses.mit;
+        };
+      };
+
       sumneko.lua = callPackage ./sumneko.lua { };
 
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
@@ -3161,6 +3165,7 @@ let
   aliases = self: super: {
     # aliases
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
+    jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
     _1Password = throw ''_1Password has been replaced with "1Password"'';
     _2gua = throw ''_2gua has been replaced with "2gua"'';
