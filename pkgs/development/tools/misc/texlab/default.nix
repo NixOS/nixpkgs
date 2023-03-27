@@ -15,13 +15,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2P+aidfYkO8l9VjqTstXbksyGTQ3porJhrBYod9oCYQ=";
+    sha256 = "sha256-rTYcYq8SL404A/ke5Rb9QcCtwHKhs+84TQGNqRn11HM=";
   };
 
   cargoLock = {
