@@ -2486,18 +2486,6 @@ let
         };
       };
 
-      silvenon.mdx = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "mdx";
-          publisher = "silvenon";
-          version = "0.1.0";
-          sha256 = "1mzsqgv0zdlj886kh1yx1zr966yc8hqwmiqrb1532xbmgyy6adz3";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
       skellock.just = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "just";
