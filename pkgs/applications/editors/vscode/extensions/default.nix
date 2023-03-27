@@ -1257,59 +1257,57 @@ let
         };
       };
 
-      github = {
-        codespaces = buildVscodeMarketplaceExtension {
-          mktplcRef = {
-            publisher = "github";
-            name = "codespaces";
-            version = "1.14.1";
-            sha256 = "sha256-oiAn/tW4jfccsY8zH6L7UzldeM7sV9tllSvgZD8c9aY=";
-          };
-          meta = { license = lib.licenses.unfree; };
+      github.codespaces = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "github";
+          name = "codespaces";
+          version = "1.14.1";
+          sha256 = "sha256-oiAn/tW4jfccsY8zH6L7UzldeM7sV9tllSvgZD8c9aY=";
         };
+        meta = { license = lib.licenses.unfree; };
+      };
 
-        copilot = buildVscodeMarketplaceExtension {
-          mktplcRef = {
-            publisher = "github";
-            name = "copilot";
-            version = "1.78.9758";
-            sha256 = "sha256-qIaaM72SenMv+vtkTMBodD2JsroZLpw8qEttr5aIDQk=";
-          };
-          meta = {
-            description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
-            downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
-            homepage = "https://github.com/features/copilot";
-            license = lib.licenses.unfree;
-            maintainers = [ lib.maintainers.Zimmi48 ];
-          };
+      github.copilot = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "github";
+          name = "copilot";
+          version = "1.78.9758";
+          sha256 = "sha256-qIaaM72SenMv+vtkTMBodD2JsroZLpw8qEttr5aIDQk=";
         };
+        meta = {
+          description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
+          homepage = "https://github.com/features/copilot";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.Zimmi48 ];
+        };
+      };
 
-        github-vscode-theme = buildVscodeMarketplaceExtension {
-          mktplcRef = {
-            name = "github-vscode-theme";
-            publisher = "github";
-            version = "6.3.3";
-            sha256 = "sha256-fN9ljeZlbbSNW9qggLEz5HOLZlPhHmTHNi1VsZo7Uxk=";
-          };
-          meta = {
-            description = "GitHub theme for VS Code";
-            downloadPage =
-              "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme";
-            homepage = "https://github.com/primer/github-vscode-theme";
-            license = lib.licenses.mit;
-            maintainers = [ lib.maintainers.hugolgst ];
-          };
+      github.github-vscode-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "github-vscode-theme";
+          publisher = "github";
+          version = "6.3.3";
+          sha256 = "sha256-fN9ljeZlbbSNW9qggLEz5HOLZlPhHmTHNi1VsZo7Uxk=";
         };
+        meta = {
+          description = "GitHub theme for VS Code";
+          downloadPage =
+            "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme";
+          homepage = "https://github.com/primer/github-vscode-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.hugolgst ];
+        };
+      };
 
-        vscode-pull-request-github = buildVscodeMarketplaceExtension {
-          mktplcRef = {
-            name = "vscode-pull-request-github";
-            publisher = "github";
-            version = "0.61.2023032418";
-            sha256 = "sha256-pCFq0lAMH3fno4/BtHJHhS4hX1KqxsPf4wEmAm66Y8E=";
-          };
-          meta = { license = lib.licenses.mit; };
+      github.vscode-pull-request-github = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-pull-request-github";
+          publisher = "github";
+          version = "0.61.2023032418";
+          sha256 = "sha256-pCFq0lAMH3fno4/BtHJHhS4hX1KqxsPf4wEmAm66Y8E=";
         };
+        meta = { license = lib.licenses.mit; };
       };
 
       gitlab.gitlab-workflow = buildVscodeMarketplaceExtension {
