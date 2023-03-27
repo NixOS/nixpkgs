@@ -229,7 +229,8 @@ in
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     networking.networkmanager.firewallBackend = mkDefault "nftables";
-    networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11");
+    # versionOlder for backportability, remove afterwards
+    networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {
       description = "nftables firewall";
       before = [ "network-pre.target" ];
