@@ -12396,6 +12396,12 @@
     githubId = 4579165;
     name = "Danny Bautista";
   };
+  pyxels = {
+    email = "pyxels.dev@gmail.com";
+    github = "Pyxels";
+    githubId = 39232833;
+    name = "Jonas";
+  };
   q3k = {
     email = "q3k@q3k.org";
     github = "q3k";
