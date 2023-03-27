@@ -1,0 +1,151 @@
+diff --git a/elf/dl-load.c b/elf/dl-load.c
+index 5b0ff41ee1..f34758611d 100644
+--- a/elf/dl-load.c
++++ b/elf/dl-load.c
+@@ -1999,6 +1999,62 @@ open_path (const char *name, size_t namelen, int mode,
+   return -1;
+ }
+ 
++static const char *
++_dl_find_nixos_cache(struct link_map *loader)
++{
++  const ElfW(Phdr) *phdr = loader->l_phdr, *pend = phdr + loader->l_phnum;
++  for (; phdr != pend && loader->l_nixos_resolve_cache == NULL; phdr++) {
++    if (phdr->p_type != PT_NOTE) continue;
++    const ElfW(Nhdr) *nhdr = (const void *) (phdr->p_vaddr + loader->l_addr);
++    size_t size = phdr->p_memsz;
++    while (size >= sizeof *nhdr) {
++      const size_t noteSize = sizeof *nhdr + ALIGN_UP(nhdr->n_namesz, 4) + ALIGN_UP(nhdr->n_descsz, 4);
++      if (size < noteSize) break;
++      size -= noteSize;
++      const char *nname = (const char *) (nhdr + 1);
++      const char *desc = (const char *) (nhdr + 1) + ALIGN_UP(nhdr->n_namesz, 4);
++      if (nhdr->n_namesz == sizeof ELF_NOTE_NIXOS
++          && memcmp(nname, ELF_NOTE_NIXOS, sizeof ELF_NOTE_NIXOS) == 0
++          && nhdr->n_type == NT_NIXOS_LD_CACHE
++          && nhdr->n_descsz > 2
++          && desc[nhdr->n_descsz - 2] == '\0'
++          && desc[nhdr->n_descsz - 1] == '\0') {
++        return desc;
++      }
++      nhdr = (const void *) nhdr + noteSize;
++    }
++  }
++
++  return (void *) -1;
++}
++
++static int
++_dl_lookup_nixos_cache(struct link_map *loader, const char *name, char **realname)
++{
++  if (loader->l_nixos_resolve_cache == NULL)
++    loader->l_nixos_resolve_cache = _dl_find_nixos_cache(loader);
++
++  if (loader->l_nixos_resolve_cache == (void *) -1)
++    return 0;
++
++  const char *entries = loader->l_nixos_resolve_cache;
++  while (entries[0] != '\0') {
++    const char *ename = entries;
++    const char *epath = ename + strlen(ename) + 1;
++    if (epath[0] == '\0') {
++      loader->l_nixos_resolve_cache = (void *) -1;
++      return 0;
++    }
++    if (strcmp(name, ename) == 0) {
++      *realname = strdup(epath);
++      return *realname != NULL;
++    }
++    entries = epath + strlen(epath) + 1;
++  }
++
++  return 0;
++}
++
+ /* Map in the shared object file NAME.  */
+ 
+ struct link_map *
+@@ -2009,6 +2065,7 @@ _dl_map_object (struct link_map *loader, const char *name,
+   const char *origname = NULL;
+   char *realname;
+   char *name_copy;
++  char *rescache;
+   struct link_map *l;
+   struct filebuf fb;
+ 
+@@ -2142,6 +2199,34 @@ _dl_map_object (struct link_map *loader, const char *name,
+ 			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
+ 			LA_SER_LIBPATH, &found_other_class);
+ 
++      /* try the runpath resolution cache. */
++      if (fd == -1 && _dl_lookup_nixos_cache(loader, name, &rescache)) {
++	char* tmp = rescache, *iter;
++	while ((iter = strsep(&tmp, ":"))) {
++	  if (iter[0] == '?') {
++	    struct r_search_path_struct sp;
++	    if (decompose_rpath(&sp, iter + 1, loader, "RESCACHE")) {
++	      fd = open_path (name, namelen, mode,
++			      &sp, &realname, &fb, loader,
++			      LA_SER_RUNPATH, &found_other_class);
++	      if (sp.dirs != (void*) -1)
++		free(sp.dirs);
++	    }
++	  } else {
++	    realname = strdup(iter + 1);
++	    fd = open_verify (realname, fd,
++			      &fb, loader ?: GL(dl_ns)[nsid]._ns_loaded,
++			      LA_SER_RUNPATH, mode, &found_other_class,
++			      false);
++	    if (fd == -1)
++	      free(realname);
++	  }
++	  if (fd != -1)
++	    break;
++	}
++	free(rescache);
++      }
++
+       /* Look at the RUNPATH information for this binary.  */
+       if (fd == -1 && loader != NULL
+ 	  && cache_rpath (loader, &loader->l_runpath_dirs,
+diff --git a/elf/elf.h b/elf/elf.h
+index 0735f6b579..7b9b74a4bc 100644
+--- a/elf/elf.h
++++ b/elf/elf.h
+@@ -1261,12 +1261,23 @@ typedef struct
+ /* Note entries for freedesktop.org have this name.  */
+ #define ELF_NOTE_FDO		"FDO"
+ 
++/* Note entries for Nixpkgs/NixOS have this name.  */
++#define ELF_NOTE_NIXOS	"NixOS"
++
+ /* Defined types of notes for Solaris.  */
+ 
+ /* Value of descriptor (one word) is desired pagesize for the binary.  */
+ #define ELF_NOTE_PAGESIZE_HINT	1
+ 
+ 
++/* Defined note types for Nixpkgs/NixOS systems.  */
++
++/* Linker resolution cache. The descriptor consists of pairs of
++   null-terminated strings: (needed, libpath).
++   needed should match a DT_NEEDED entry, libpath provides the
++   search path for this single entry. */
++#define NT_NIXOS_LD_CACHE 0x63a86cb6
++
+ /* Defined note types for GNU systems.  */
+ 
+ /* ABI information.  The descriptor consists of words:
+diff --git a/include/link.h b/include/link.h
+index bef2820b40..b3dea3c5b1 100644
+--- a/include/link.h
++++ b/include/link.h
+@@ -349,6 +349,8 @@ struct link_map
+     size_t l_relro_size;
+ 
+     unsigned long long int l_serial;
++
++    const char *l_nixos_resolve_cache;
+   };
+ 
+ #include <dl-relocate-ld.h>

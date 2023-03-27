@@ -185,6 +185,10 @@ rec {
               pulseSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              jackSupport = false;
+              alsaSupport = false;
+              libiscsiSupport = false;
+              docSupport = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;

@@ -1,0 +1,349 @@
+diff --git a/src/elf.h b/src/elf.h
+index 702f2e6..75c9020 100644
+--- a/src/elf.h
++++ b/src/elf.h
+@@ -1001,12 +1001,24 @@ typedef struct
+ #define ELF_NOTE_GNU		"GNU"
+ 
+ 
++/* Note entries for Nixpkgs/NixOS have this name.  */
++#define ELF_NOTE_NIXOS	"NixOS"
++
+ /* Defined types of notes for Solaris.  */
+ 
+ /* Value of descriptor (one word) is desired pagesize for the binary.  */
+ #define ELF_NOTE_PAGESIZE_HINT	1
+ 
+ 
++/* Defined note types for Nixpkgs/NixOS systems.  */
++
++/* Linker resolution cache. The descriptor consists of pairs of
++   null-terminated strings: (needed, libpath).
++   needed should match a DT_NEEDED entry, libpath provides the
++   search path for this single entry. */
++#define NT_NIXOS_LD_CACHE 0x63a86cb6
++
++
+ /* Defined note types for GNU systems.  */
+ 
+ /* ABI information.  The descriptor consists of words:
+diff --git a/src/patchelf.cc b/src/patchelf.cc
+index 49accae..8d7ff52 100644
+--- a/src/patchelf.cc
++++ b/src/patchelf.cc
+@@ -20,6 +20,7 @@
+ #include <limits>
+ #include <map>
+ #include <memory>
++#include <numeric>
+ #include <set>
+ #include <sstream>
+ #include <stdexcept>
+@@ -295,7 +296,7 @@ ElfFile<ElfFileParamNames>::ElfFile(FileContents fContents)
+ 
+ 
+ template<ElfFileParams>
+-unsigned int ElfFile<ElfFileParamNames>::getPageSize() const
++Elf_Addr ElfFile<ElfFileParamNames>::getPageSize() const
+ {
+     if (forcedPageSize > 0)
+         return forcedPageSize;
+@@ -447,6 +448,26 @@ void ElfFile<ElfFileParamNames>::shiftFile(unsigned int extraPages, Elf_Addr sta
+         }
+     }
+ 
++    // try to extend an existing PT_LOAD segment backwards. not doing this confuses
++    // everything since elf sections need no longer be contained in a single segment.
++    for (auto & phdr : phdrs) {
++        if (rdi(phdr.p_type) != PT_LOAD) continue;
++        if (rdi(phdr.p_offset) != shift) continue;
++        assert(rdi(phdr.p_vaddr) > shift);
++        wri(phdr.p_offset, 0);
++        wri(phdr.p_vaddr, wri(phdr.p_paddr, startPage));
++        wri(phdr.p_filesz, rdi(phdr.p_filesz) + shift);
++        wri(phdr.p_memsz, rdi(phdr.p_memsz) + shift);
++        // FIXME also make this segment writable because we may later relocate writable
++        // sections into it
++        wri(phdr.p_flags, rdi(phdr.p_flags) | PF_R | PF_W);
++        // FIXME rewriteSectionsExecutable should not expect an extra phdr instead
++        phdrs.resize(rdi(hdr()->e_phnum) + 1);
++        wri(hdr()->e_phnum, rdi(hdr()->e_phnum) + 1);
++        wri(phdrs.back().p_type, PT_NULL);
++        return;
++    }
++
+     /* Add a segment that maps the new program/section headers and
+        PT_INTERP segment into memory.  Otherwise glibc will choke. */
+     phdrs.resize(rdi(hdr()->e_phnum) + 1);
+@@ -940,7 +961,6 @@ void ElfFile<ElfFileParamNames>::rewriteSections()
+     } else error("unknown ELF type");
+ }
+ 
+-
+ template<ElfFileParams>
+ void ElfFile<ElfFileParamNames>::rewriteHeaders(Elf_Addr phdrAddress)
+ {
+@@ -957,6 +977,7 @@ void ElfFile<ElfFileParamNames>::rewriteHeaders(Elf_Addr phdrAddress)
+         }
+     }
+ 
++    assert(rdi(hdr()->e_phnum) == phdrs.size());
+     if (!noSort) {
+         sortPhdrs();
+     }
+@@ -1619,6 +1640,166 @@ void ElfFile<ElfFileParamNames>::addNeeded(const std::set<std::string> & libs)
+     this->rewriteSections();
+ }
+ 
++template<ElfFileParams>
++void ElfFile<ElfFileParamNames>::buildResolutionCache()
++{
++    const auto shdrDynamic = findSectionHeader(".dynamic");
++    const auto shdrDynStr = findSectionHeader(".dynstr");
++    const char *strTab = (char *)fileContents->data() + rdi(shdrDynStr.sh_offset);
++    const Elf_Dyn *dyn = (Elf_Dyn *) (fileContents->data() + rdi(shdrDynamic.sh_offset));
++
++    std::vector<std::string> needed, runpath;
++    std::map<std::string, std::string> cache;
++
++    // TODO tests for:
++    //   - add note to {static,dynamic} {library,executable}
++    //   - update note
++    //   - set-interpreter with note in place (initramfs extra-utils)
++    //   - set-rpath with note in place (initramfs extra-utils)
++    for (; rdi(dyn->d_tag) != DT_NULL; dyn++) {
++        if (rdi(dyn->d_tag) == DT_NEEDED) {
++            needed.emplace_back(strTab + rdi(dyn->d_un.d_val));
++        } else if (rdi(dyn->d_tag) == DT_RUNPATH) {
++            runpath = splitColonDelimitedString(strTab + rdi(dyn->d_un.d_val));
++        }
++    }
++
++    // TODO remove old phdr
++    // TODO nuke/rebuild rescache when changing rpath
++    for (const auto &dir : runpath) {
++        // treat everything that could be a variable as a raw path element for simplicity.
++        // this is correct in the vast majority of cases, in the others it just optimizes
++        // less.
++        const auto hasVar = dir.find("$") != std::string::npos;
++
++        // bail on directories with glibc-hwcaps subdirs. they're rare enough to
++        // not be worth handling, and fussy enough to stay away from for good measure.
++        const auto hasHwcaps = access((dir + "/glibc-hwcaps").c_str(), F_OK) == 0;
++
++        for (const auto &dep : needed) {
++            const auto dpath = dir + "/" + dep;
++            if (hasVar || hasHwcaps || access(dpath.c_str(), R_OK) == 0) {
++                auto& cpath = cache[dep];
++                if (!cpath.empty()) cpath += ':';
++                cpath += hasVar || hasHwcaps ? "?" + dir : "=" + dpath;
++            }
++        }
++    }
++
++    // leave the headers well enough alone if we can't resolve anything. this is
++    // especially important for glibc ld.so which indexes into its virtual memory
++    // using file offsets, but since it's static we don't want to touch it anyway.
++    if (cache.empty())
++        return;
++
++    for (const auto &[dep, dir] : cache)
++        debug("resolved %s to %s\n", dep.c_str(), dir.c_str());
++
++    const auto noteSize = std::accumulate(
++        cache.begin(), cache.end(), 1, // extra trailing '\0'
++        [](auto acc, const auto & p) { return acc + p.first.size() + p.second.size() + 2; });
++
++    static const char NOTE_NAME[] = ".note.nixos.ldcache";
++    const auto nameSize = roundUp(strlen(ELF_NOTE_NIXOS) + 1, 4);
++    const auto descSize = roundUp(noteSize, 4);
++    const auto cacheSectionSize = sizeof(Elf_Nhdr) + nameSize + descSize;
++
++    // ordinarily we could place our new note at the end of the current address space and end
++    // of file simultaneously, but qemu-user has a bug in its elf loader that'll detect an
++    // incorrect load base address (and thus phdrs table position) if n.p_offset < n.p_vaddr for
++    // the new PT_LOAD segment n covering the note and n.p_vaddr - n.p_offset < p.p_vaddr for
++    // the PT_PHDR segment p. for dynamic libraries this does not matter (because qemu does not
++    // load those), but executables will have to ensure that they do not cause such a condition.
++    // TODO add an assert to ensure we have the space for the note
++    const Elf_Addr noteAddr = [&] {
++        Elf_Addr addr = 0;
++        for (const auto & phdr : phdrs) {
++            if (rdi(phdr.p_type) != PT_LOAD) continue;
++            addr = std::max<Elf_Addr>(addr, rdi(phdr.p_vaddr) + rdi(phdr.p_memsz));
++        }
++        addr = roundUp(addr, getPageSize());
++
++        if (rdi(hdr()->e_type) == ET_EXEC) {
++            // find the smallest PT_LOAD p_vaddr - p_offset. note that this is *before*
++            // rewriteSections() adds a new PT_LOAD header that covers address space before
++            // the lowest current vaddr, but since rewriteSections() always adds these at the
++            // beginning of the file that offset will be even smaller and we may add more padding
++            // than is absolutely necessary, but never less.
++            Elf_Addr diff = ~0;
++            for (const auto & phdr : phdrs) {
++                if (rdi(phdr.p_type) != PT_LOAD) continue;
++                diff = std::min<Elf_Addr>(diff, rdi(phdr.p_vaddr) - rdi(phdr.p_offset));
++            }
++            addr += roundUp(diff, getPageSize());
++        }
++
++        return addr;
++    }();
++
++    const auto noteOffset = roundUp(fileContents->size(), getPageSize());
++    const auto shdrsOffset = roundUp(noteOffset + cacheSectionSize, sizeof(Elf_Shdr));
++    fileContents->resize(shdrsOffset + (shdrs.size() + 1) * sizeof(Elf_Shdr));
++
++    // HACK alloc new section header table because rewriting can't deal yet
++    wri(hdr()->e_shoff, shdrsOffset);
++
++    auto noteContents = fileContents->data() + noteOffset;
++    Elf_Nhdr &nhdr = *(Elf_Nhdr *) noteContents;
++    wri(nhdr.n_namesz, strlen(ELF_NOTE_NIXOS) + 1);
++    wri(nhdr.n_descsz, noteSize);
++    wri(nhdr.n_type, NT_NIXOS_LD_CACHE);
++    noteContents += sizeof(Elf_Nhdr);
++    memcpy(noteContents, ELF_NOTE_NIXOS, strlen(ELF_NOTE_NIXOS) + 1);
++    noteContents += nameSize;
++    for (const auto & [dep, dir] : cache) {
++        memcpy(noteContents, dep.data(), dep.size());
++        noteContents += dep.size() + 1;
++        memcpy(noteContents, dir.data(), dir.size());
++        noteContents += dir.size() + 1;
++    }
++
++    {
++        auto & loadPhdr = phdrs.emplace_back();
++        wri(loadPhdr.p_type, PT_LOAD);
++        wri(loadPhdr.p_offset, noteOffset);
++        wri(loadPhdr.p_vaddr, wri(loadPhdr.p_paddr, noteAddr));
++        wri(loadPhdr.p_filesz, wri(loadPhdr.p_memsz, cacheSectionSize));
++        wri(loadPhdr.p_flags, PF_R);
++        wri(loadPhdr.p_align, getPageSize());
++        wri(hdr()->e_phnum, rdi(hdr()->e_phnum) + 1);
++
++        auto & notePhdr = phdrs.emplace_back();
++        wri(notePhdr.p_type, PT_NOTE);
++        wri(notePhdr.p_offset, noteOffset);
++        wri(notePhdr.p_vaddr, wri(notePhdr.p_paddr, noteAddr));
++        wri(notePhdr.p_filesz, wri(notePhdr.p_memsz, cacheSectionSize));
++        wri(notePhdr.p_flags, PF_R);
++        wri(notePhdr.p_align, 4);
++        wri(hdr()->e_phnum, rdi(hdr()->e_phnum) + 1);
++
++        // this addition will let us replaceSection(.shstrtab), and thus rewriteSections()!
++        auto & noteShdr = shdrs.emplace_back();
++        wri(noteShdr.sh_name, sectionNames.size());
++        wri(noteShdr.sh_type, SHT_NOTE);
++        wri(noteShdr.sh_flags, SHF_ALLOC);
++        wri(noteShdr.sh_addr, noteAddr);
++        wri(noteShdr.sh_offset, noteOffset);
++        wri(noteShdr.sh_size, cacheSectionSize);
++        wri(noteShdr.sh_addralign, 4);
++        wri(hdr()->e_shnum, rdi(hdr()->e_shnum) + 1);
++    }
++
++    {
++        // .shstrtab is no longer the last section, so we can use replaceSection for this
++        sectionNames += NOTE_NAME;
++        sectionNames += '\0';
++        replaceSection(".shstrtab", sectionNames.size()) = sectionNames;
++    }
++
++    rewriteSections();
++    changed = true;
++}
++
+ template<ElfFileParams>
+ void ElfFile<ElfFileParamNames>::printNeededLibs() // const
+ {
+@@ -1749,6 +1930,7 @@ static bool removeRPath = false;
+ static bool setRPath = false;
+ static bool addRPath = false;
+ static bool addDebugTag = false;
++static bool buildResolutionCache = false;
+ static bool printRPath = false;
+ static std::string newRPath;
+ static std::set<std::string> neededLibsToRemove;
+@@ -1785,6 +1967,9 @@ static void patchElf2(ElfFile && elfFile, const FileContents & fileContents, con
+     else if (addRPath)
+         elfFile.modifyRPath(elfFile.rpAdd, {}, newRPath);
+ 
++    if (buildResolutionCache)
++        elfFile.buildResolutionCache();
++
+     if (printNeeded) elfFile.printNeededLibs();
+ 
+     elfFile.removeNeeded(neededLibsToRemove);
+@@ -1817,9 +2002,9 @@ static void patchElf()
+         const std::string & outputFileName2 = outputFileName.empty() ? fileName : outputFileName;
+ 
+         if (getElfType(fileContents).is32Bit)
+-            patchElf2(ElfFile<Elf32_Ehdr, Elf32_Phdr, Elf32_Shdr, Elf32_Addr, Elf32_Off, Elf32_Dyn, Elf32_Sym, Elf32_Verneed, Elf32_Versym>(fileContents), fileContents, outputFileName2);
++            patchElf2(ElfFile<Elf32_Ehdr, Elf32_Phdr, Elf32_Shdr, Elf32_Nhdr, Elf32_Addr, Elf32_Off, Elf32_Dyn, Elf32_Sym, Elf32_Verneed, Elf32_Versym>(fileContents), fileContents, outputFileName2);
+         else
+-            patchElf2(ElfFile<Elf64_Ehdr, Elf64_Phdr, Elf64_Shdr, Elf64_Addr, Elf64_Off, Elf64_Dyn, Elf64_Sym, Elf64_Verneed, Elf64_Versym>(fileContents), fileContents, outputFileName2);
++            patchElf2(ElfFile<Elf64_Ehdr, Elf64_Phdr, Elf64_Shdr, Elf64_Nhdr, Elf64_Addr, Elf64_Off, Elf64_Dyn, Elf64_Sym, Elf64_Verneed, Elf64_Versym>(fileContents), fileContents, outputFileName2);
+     }
+ }
+ 
+@@ -1856,6 +2041,7 @@ void showHelp(const std::string & progName)
+   [--no-sort]\t\tDo not sort program+section headers; useful for debugging patchelf.\n\
+   [--clear-symbol-version SYMBOL]\n\
+   [--add-debug-tag]\n\
++  [--build-resolution-cache]\n\
+   [--output FILE]\n\
+   [--debug]\n\
+   [--version]\n\
+@@ -1970,6 +2156,9 @@ int mainWrapped(int argc, char * * argv)
+         else if (arg == "--add-debug-tag") {
+             addDebugTag = true;
+         }
++        else if (arg == "--build-resolution-cache") {
++            buildResolutionCache = true;
++        }
+         else if (arg == "--help" || arg == "-h" ) {
+             showHelp(argv[0]);
+             return 0;
+@@ -1984,6 +2173,8 @@ int mainWrapped(int argc, char * * argv)
+     }
+ 
+     if (fileNames.empty()) error("missing filename");
++    if (forceRPath && buildResolutionCache)
++        error("resolution cache not available for RPATH");
+ 
+     if (!outputFileName.empty() && fileNames.size() != 1)
+         error("--output option only allowed with single input file");
+diff --git a/src/patchelf.h b/src/patchelf.h
+index 33ecfc3..620297c 100644
+--- a/src/patchelf.h
++++ b/src/patchelf.h
+@@ -1,7 +1,7 @@
+ using FileContents = std::shared_ptr<std::vector<unsigned char>>;
+ 
+-#define ElfFileParams class Elf_Ehdr, class Elf_Phdr, class Elf_Shdr, class Elf_Addr, class Elf_Off, class Elf_Dyn, class Elf_Sym, class Elf_Verneed, class Elf_Versym
+-#define ElfFileParamNames Elf_Ehdr, Elf_Phdr, Elf_Shdr, Elf_Addr, Elf_Off, Elf_Dyn, Elf_Sym, Elf_Verneed, Elf_Versym
++#define ElfFileParams class Elf_Ehdr, class Elf_Phdr, class Elf_Shdr, class Elf_Nhdr, class Elf_Addr, class Elf_Off, class Elf_Dyn, class Elf_Sym, class Elf_Verneed, class Elf_Versym
++#define ElfFileParamNames Elf_Ehdr, Elf_Phdr, Elf_Shdr, Elf_Nhdr, Elf_Addr, Elf_Off, Elf_Dyn, Elf_Sym, Elf_Verneed, Elf_Versym
+ 
+ template<ElfFileParams>
+ class ElfFile
+@@ -73,7 +73,7 @@ private:
+ 
+     friend struct CompShdr;
+ 
+-    unsigned int getPageSize() const;
++    Elf_Addr getPageSize() const;
+ 
+     void sortShdrs();
+ 
+@@ -127,6 +127,8 @@ public:
+ 
+     void replaceNeeded(const std::map<std::string, std::string> & libs);
+ 
++    void buildResolutionCache();
++
+     void printNeededLibs() /* should be const */;
+ 
+     void noDefaultLib();
