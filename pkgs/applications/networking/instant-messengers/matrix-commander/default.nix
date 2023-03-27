@@ -17,13 +17,13 @@
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "3.5.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-/hNTaajZTyeIcGILIXqUVbBvZ8AUNZKBDsZ4Gr5RL2o=";
+    sha256 = "sha256-NSoMGUQjy4TQXdzZcQfO2rUQDsuSzQnoGDpqFiLQHVQ=";
   };
 
   format = "pyproject";
