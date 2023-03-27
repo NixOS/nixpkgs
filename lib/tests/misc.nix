@@ -936,52 +936,7 @@ runTests {
         };
       };
     };
-    expected = { value = ''<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>nested</key>
-	<dict>
-		<key>values</key>
-		<dict>
-			<key>attrs</key>
-			<dict>
-				<key>foo b/ar</key>
-				<string>baz</string>
-			</dict>
-			<key>bool</key>
-			<true/>
-			<key>emptyattrs</key>
-			<dict>
-
-			</dict>
-			<key>emptylist</key>
-			<array>
-
-			</array>
-			<key>emptystring</key>
-			<string></string>
-			<key>float</key>
-			<real>0.133700</real>
-			<key>int</key>
-			<integer>42</integer>
-			<key>list</key>
-			<array>
-				<integer>3</integer>
-				<integer>4</integer>
-				<string>test</string>
-			</array>
-			<key>newlinestring</key>
-			<string>
-</string>
-			<key>path</key>
-			<string>/foo</string>
-			<key>string</key>
-			<string>fn''${o}"r\d</string>
-		</dict>
-	</dict>
-</dict>
-</plist>''; };
+    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
   };
 
 # CLI
