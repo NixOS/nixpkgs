@@ -1,5 +1,6 @@
 { absl-py
 , buildPythonPackage
+, cloudpickle
 , dm-tree
 , fetchFromGitHub
 , jax
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     absl-py
+    cloudpickle
     dm-tree
     jax
     numpy
