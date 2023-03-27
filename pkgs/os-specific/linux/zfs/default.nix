@@ -250,10 +250,10 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.10-staging-2023-03-15";
-    rev = "a5c469c5f380b09705ad0bee15e2ca7a5f78213c";
+    version = "2.1.10-staging-2023-03-24";
+    rev = "5219a2691e3b3de5b69bc3c97b8f58c272d6fe04";
 
-    sha256 = "sha256-CdPuyZMXFzANEdnsr/rB5ckkT8X5uziniY5vmRCKl1U=";
+    sha256 = "sha256-gn5EHikamach50h0p7HKwYlXc49yFHh6myUZBLOv+BY=";
 
     isUnstable = true;
   };
