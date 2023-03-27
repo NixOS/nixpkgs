@@ -3,7 +3,7 @@ use warnings;
 use Class::Struct;
 use XML::LibXML;
 use File::Basename;
-use File::Path;
+use File::Path qw(make_path);
 use File::stat;
 use File::Copy;
 use File::Copy::Recursive qw(rcopy pathrm);
@@ -98,7 +98,7 @@ $ENV{'PATH'} = get("path");
 
 print STDERR "updating GRUB 2 menu...\n";
 
-mkpath("$bootPath/grub", 0, 0700);
+make_path("$bootPath/grub", {  mode => 0700 });
 
 # Discover whether the bootPath is on the same filesystem as / and
 # /nix/store.  If not, then all kernels and initrds must be copied to
@@ -438,7 +438,7 @@ $conf .= "$extraConfig\n";
 $conf .= "\n";
 
 my %copied;
-mkpath("$bootPath/kernels", 0, 0755) if $copyKernels;
+make_path("$bootPath/kernels", { mode => 0755 }) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
@@ -471,7 +471,7 @@ sub addEntry {
         my $systemName = basename(Cwd::abs_path("$path"));
         my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
-        mkpath(dirname($initrdSecretsPath), 0, 0755);
+        make_path(dirname($initrdSecretsPath), { mode => 0755 });
         my $oldUmask = umask;
         # Make sure initrd is not world readable (won't work if /boot is FAT)
         umask 0137;
