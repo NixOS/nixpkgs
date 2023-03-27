@@ -1749,8 +1749,6 @@ let
         meta.license = lib.licenses.mit;
       };
 
-      matklad.rust-analyzer = self.rust-lang.rust-analyzer; # Previous publisher
-
       matthewpi.caddyfile-support = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "caddyfile-support";
@@ -3166,6 +3164,7 @@ let
     # aliases
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
+    matklad.rust-analyzer = super.rust-lang.rust-analyzer; # Previous publisher
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
     _1Password = throw ''_1Password has been replaced with "1Password"'';
     _2gua = throw ''_2gua has been replaced with "2gua"'';
