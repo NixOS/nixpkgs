@@ -11965,6 +11965,8 @@ self: super: with self; {
 
   trectools = callPackage ../development/python-modules/trectools { };
 
+  tree-sitter = callPackage ../development/python-modules/tree-sitter { };
+
   treelog = callPackage ../development/python-modules/treelog { };
 
   treeo = callPackage ../development/python-modules/treeo { };
