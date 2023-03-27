@@ -11134,6 +11134,8 @@ with pkgs;
 
   playwright = with python3Packages; toPythonApplication playwright;
 
+  playwright-driver = callPackage ../development/web/playwright/driver.nix { };
+
   please = callPackage ../tools/security/please { };
 
   plecost = callPackage ../tools/security/plecost { };
