@@ -355,6 +355,7 @@ rec {
   # PLIST handling
   toPlist = {}: v: let
     isFloat = builtins.isFloat or (x: false);
+    isPath = x: builtins.typeOf x == "path";
     expr = ind: x:  with builtins;
       if x == null  then "" else
       if isBool x   then bool ind x else
@@ -362,6 +363,7 @@ rec {
       if isString x then str ind x else
       if isList x   then list ind x else
       if isAttrs x  then attrs ind x else
+      if isPath x   then str ind (toString x) else
       if isFloat x  then float ind x else
       abort "generators.toPlist: should never happen (v = ${v})";
 
