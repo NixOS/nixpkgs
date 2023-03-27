@@ -914,6 +914,75 @@ runTests {
     expected  = "«foo»";
   };
 
+  testToPlist =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
+    in {
+    expr = mapAttrs (const (generators.toPlist { })) {
+      value = {
+        nested.values = rec {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+        };
+      };
+    };
+    expected = { value = ''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>nested</key>
+	<dict>
+		<key>values</key>
+		<dict>
+			<key>attrs</key>
+			<dict>
+				<key>foo b/ar</key>
+				<string>baz</string>
+			</dict>
+			<key>bool</key>
+			<true/>
+			<key>emptyattrs</key>
+			<dict>
+
+			</dict>
+			<key>emptylist</key>
+			<array>
+
+			</array>
+			<key>emptystring</key>
+			<string></string>
+			<key>float</key>
+			<real>0.133700</real>
+			<key>int</key>
+			<integer>42</integer>
+			<key>list</key>
+			<array>
+				<integer>3</integer>
+				<integer>4</integer>
+				<string>test</string>
+			</array>
+			<key>newlinestring</key>
+			<string>
+</string>
+			<key>path</key>
+			<string>/foo</string>
+			<key>string</key>
+			<string>fn''${o}"r\d</string>
+		</dict>
+	</dict>
+</dict>
+</plist>''; };
+  };
 
 # CLI
 
