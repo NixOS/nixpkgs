@@ -147,7 +147,7 @@ stdenv.mkDerivation {
 
 ### Switching the MPI implementation {#sec-overlays-alternatives-mpi}
 
-All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides two different MPI implementations:
+All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. Nixpkgs natively provides different MPI implementations:
 
 -   [Open MPI](https://www.open-mpi.org/) (default), attribute name
     `openmpi`
@@ -155,6 +155,8 @@ All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Pas
 -   [MPICH](https://www.mpich.org/), attribute name `mpich`
 
 -   [MVAPICH](https://mvapich.cse.ohio-state.edu/), attribute name `mvapich`
+
+-   [Intel MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html), attribute name `intel-mpi`
 
 To provide MPI enabled applications that use `MPICH`, instead of the default `Open MPI`, simply use the following overlay:
 
