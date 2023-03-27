@@ -1,4 +1,4 @@
-{ sstdenv, fetchurl, bash, findutils, gawk, grep, sed, tar }:
+{ stdenv, fetchurl, bash, findutils, gawk, grep, sed, tar }:
 
 
 stdenv.mkDerivation rec {
