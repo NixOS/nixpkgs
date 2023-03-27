@@ -34,16 +34,23 @@ sub getList {
 }
 
 sub readFile {
-    my ($fn) = @_; local $/ = undef;
-    open FILE, "<$fn" or return undef; my $s = <FILE>; close FILE;
-    local $/ = "\n"; chomp $s; return $s;
+    my ($fn) = @_;
+    # enable slurp mode: read entire file in one go
+    local $/ = undef;
+    open my $fh, "<$fn" or return undef;
+    my $s = <$fh>;
+    close $fh;
+    # disable slurp mode
+    local $/ = "\n";
+    chomp $s;
+    return $s;
 }
 
 sub writeFile {
     my ($fn, $s) = @_;
-    open FILE, ">$fn" or die "cannot create $fn: $!\n";
-    print FILE $s or die;
-    close FILE or die;
+    open my $fh, ">$fn" or die "cannot create $fn: $!\n";
+    print $fh $s or die "cannot write to $fn: $!\n";
+    close $fh or die "cannot close $fn: $!\n";
 }
 
 sub runCommand {
