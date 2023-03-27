@@ -7,12 +7,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "22-03-21-2";
+  version = "23-03-21-2";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-bJPGs/Bd9nKYDrCCaFT+20+1wTN4YdkV8bGrtOCR4tM=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "biblatex-0.6.3" = "sha256-TfH2tk7B61HHqpdGY48TdPKelp4+78x+8LRFobAg8QA=";
-      "comemo-macros-0.1.0" = "sha256-zg056kUc8sVLQ8vvT4uOuRJnyrCORsGYUvsjBJEkFPg=";
+      "comemo-0.1.0" = "sha256-zg056kUc8sVLQ8vvT4uOuRJnyrCORsGYUvsjBJEkFPg=";
       "hayagriva-0.1.1" = "sha256-HGQ+jNAnejxUBQNaqXPw57zfAC3qNXSWUVzDALZTXg0=";
       "iai-0.1.1" = "sha256-EdNzCPht5chg7uF9O8CtPWR/bzSYyfYIXNdLltqdlR0=";
       "lipsum-0.8.2" = "sha256-deIbpn4YM7/NeuJ5Co48ivJmxwrcsbLl6c3cP3JZxAQ=";
