@@ -2,6 +2,7 @@
 
 args @ {
   name
+, version ? null
 , runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
@@ -24,6 +25,7 @@ let
   env = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "version"
   ]);
 
   etcBindEntries = let
@@ -203,7 +205,11 @@ let
 
   bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
 
-in runCommandLocal name {
+  versionStr = lib.optionalString (version != null) ("-" + version);
+
+  nameAndVersion = name + versionStr;
+
+in runCommandLocal nameAndVersion {
   inherit meta;
 
   passthru = passthru // {
