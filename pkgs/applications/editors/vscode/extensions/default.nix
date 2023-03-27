@@ -634,18 +634,6 @@ let
         };
       };
 
-      coenraads.bracket-pair-colorizer-2 = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "bracket-pair-colorizer-2";
-          publisher = "CoenraadS";
-          version = "0.2.2";
-          sha256 = "0zcbs7h801agfs2cggk1cz8m8j0i2ypmgznkgw17lcx3zisll9ad";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
       colejcummins.llvm-syntax-highlighting = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "llvm-syntax-highlighting";
