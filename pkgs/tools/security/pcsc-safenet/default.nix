@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , runCommand
-, fetchurl
+, fetchzip
 , autoPatchelfHook
 , dpkg
 , gtk3
@@ -14,24 +14,22 @@ stdenv.mkDerivation rec {
   pname = "pcsc-safenet";
   version = "10.8.28";
 
+  debName = "Installation/Standard/Ubuntu-2004/safenetauthenticationclient_${version}_amd64.deb";
+
   # extract debian package from larger zip file
-  src = runCommand "sac.deb" {
-    zipSrc = let
+  src =
+    let
       versionWithUnderscores = builtins.replaceStrings ["."] ["_"] version;
-    in fetchurl {
+    in fetchzip {
       url = "https://www.digicert.com/StaticFiles/SAC_${versionWithUnderscores}_GA_Build.zip";
-      hash = "sha256-bh+TB7ZGDMh9G4lcPtv7mc0XeGhmCfMMqrlqtyGIIaA=";
+      hash = "sha256-7XWj3T9/KnmgQ05urOJV6dqgkAS/A2G7efnqjQO2ing=";
     };
-    debName = "SAC ${version} GA Build/Installation/Standard/Ubuntu-2004/safenetauthenticationclient_${version}_amd64.deb";
-  } ''
-    ${unzip}/bin/unzip -p "$zipSrc" "$debName" >"$out"
-  '';
 
   dontBuild = true;
   dontConfigure = true;
 
   unpackPhase = ''
-    dpkg-deb -x $src .
+    dpkg-deb -x "$src/$debName" .
   '';
 
   buildInputs = [
