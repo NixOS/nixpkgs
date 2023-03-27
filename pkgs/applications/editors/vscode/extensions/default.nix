@@ -25,11 +25,13 @@ let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
   #
-  # Unless there is a good reason not to, we attempt to use the same name as the
-  # extension's unique identifier (the name the extension gets when installed
-  # from vscode under `~/.vscode`) and found on the marketplace extension page.
-  # So an extension's attribute name should be of the form:
-  # "${mktplcRef.publisher}.${mktplcRef.name}".
+  # Unless there is a good reason not to, we attempt to use the lowercase
+  # version of the extension's unique identifier. The unique identifier can be
+  # found on the marketplace extension page, and is the name under which the
+  # extension is installed by VSCode under `~/.vscode`.
+  #
+  # This means an extension should be located at
+  # ${lib.strings.toLower mktplcRef.publisher}.${lib.string.toLower mktplcRef.name}
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
@@ -253,7 +255,7 @@ let
         };
       };
 
-      Arjun.swagger-viewer = buildVscodeMarketplaceExtension {
+      arjun.swagger-viewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "Arjun";
           name = "swagger-viewer";
@@ -2026,7 +2028,7 @@ let
         };
       };
 
-      ms-vscode.PowerShell = buildVscodeMarketplaceExtension {
+      ms-vscode.powershell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "PowerShell";
           publisher = "ms-vscode";
@@ -2297,7 +2299,7 @@ let
         };
       };
 
-      rioj7.commandOnAllFiles = buildVscodeMarketplaceExtension {
+      rioj7.commandonallfiles = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "commandOnAllFiles";
           publisher = "rioj7";
@@ -3028,7 +3030,7 @@ let
         };
       };
 
-      WakaTime.vscode-wakatime = callPackage ./WakaTime.vscode-wakatime { };
+      wakatime.vscode-wakatime = callPackage ./WakaTime.vscode-wakatime { };
 
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3161,11 +3163,18 @@ let
     };
 
   aliases = self: super: {
-    # aliases
+    Arjun.swagger-viewer = super.arjun.swagger-viewer;
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
     matklad.rust-analyzer = super.rust-lang.rust-analyzer; # Previous publisher
-    ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
+    ms-vscode = lib.recursiveUpdate super.ms-vscode {
+      go = super.golang.go;
+      PowerShell = super.ms-vscode.powershell;
+    };
+    rioj7 = lib.recursiveUpdate super.rioj7 {
+      commandOnAllFiles = super.rioj7.commandonallfiles;
+    };
+    WakaTime.vscode-wakatime = super.wakatime.vscode-wakatime;
     _1Password = throw ''_1Password has been replaced with "1Password"'';
     _2gua = throw ''_2gua has been replaced with "2gua"'';
     _4ops = throw ''_4ops has been replaced with "4ops"'';
