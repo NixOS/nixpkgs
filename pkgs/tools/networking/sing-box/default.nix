@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -50,6 +51,8 @@ buildGoModule rec {
       --fish <(${emulator} $out/bin/sing-box completion fish) \
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";
