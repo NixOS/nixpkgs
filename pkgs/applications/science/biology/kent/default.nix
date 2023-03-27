@@ -43,22 +43,22 @@ stdenv.mkDerivation rec {
     export CFLAGS="-fPIC"
     export MYSQLINC=$(mysql_config --include | sed -e 's/^-I//g')
     export MYSQLLIBS=$(mysql_config --libs)
-    export DESTBINDIR=$NIX_BUILD_TOP/bin
-    export HOME=$NIX_BUILD_TOP
+    export HOME=$TMPDIR
+    export DESTBINDIR=$HOME/bin
+
+    mkdir -p $HOME/lib $HOME/bin/x86_64
 
     cd ./src
     chmod +x ./checkUmask.sh
     ./checkUmask.sh
 
-    mkdir -p $NIX_BUILD_TOP/lib
-    mkdir -p $NIX_BUILD_TOP/bin/x86_64
-
     make libs
     cd jkOwnLib
     make
 
-    cp ../lib/x86_64/jkOwnLib.a $NIX_BUILD_TOP/lib
-    cp ../lib/x86_64/jkweb.a $NIX_BUILD_TOP/lib
+    cp ../lib/x86_64/jkOwnLib.a $HOME/lib
+    cp ../lib/x86_64/jkweb.a $HOME/lib
+    cp -r ../inc  $HOME/
 
     cd ../utils
     make
@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mkdir -p $out/lib
-    cp $NIX_BUILD_TOP/lib/jkOwnLib.a $out/lib
-    cp $NIX_BUILD_TOP/lib/jkweb.a $out/lib
-    cp $NIX_BUILD_TOP/bin/x86_64/* $out/bin
+    mkdir -p $out/bin $out/lib $out/inc
+    cp $HOME/lib/jkOwnLib.a $out/lib
+    cp $HOME/lib/jkweb.a $out/lib
+    cp $HOME/bin/x86_64/* $out/bin
+    cp -r $HOME/inc/* $out/inc/
 
     runHook postInstall
   '';
