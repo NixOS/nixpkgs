@@ -451,18 +451,6 @@ let
         };
       };
 
-      bodil.file-browser = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "file-browser";
-          publisher = "bodil";
-          version = "0.2.11";
-          sha256 = "sha256-yPVhhsAUZxnlhj58fXkk+yhxop2q7YJ6X4W9dXGKJfo=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
       bierner.emojisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "emojisense";
@@ -536,6 +524,18 @@ let
         };
       };
 
+      bodil.file-browser = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "file-browser";
+          publisher = "bodil";
+          version = "0.2.11";
+          sha256 = "sha256-yPVhhsAUZxnlhj58fXkk+yhxop2q7YJ6X4W9dXGKJfo=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
@@ -593,6 +593,23 @@ let
       };
 
       chenglou92.rescript-vscode = callPackage ./chenglou92.rescript-vscode { };
+
+      chris-hayes.chatgpt-reborn = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/chris-hayes.chatgpt-reborn/changelog";
+          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=chris-hayes.chatgpt-reborn";
+          homepage = "https://github.com/christopher-hayes/vscode-chatgpt-reborn";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+        mktplcRef = {
+          name = "chatgpt-reborn";
+          publisher = "chris-hayes";
+          version = "3.11.2";
+          sha256 = "sha256-YidcekYTgPYlzfmDHHAxywF+bJE8Da3pg/TCumK4Epo=";
+        };
+      };
 
       christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -660,23 +677,6 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
-        };
-      };
-
-      chris-hayes.chatgpt-reborn = buildVscodeMarketplaceExtension {
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/chris-hayes.chatgpt-reborn/changelog";
-          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=chris-hayes.chatgpt-reborn";
-          homepage = "https://github.com/christopher-hayes/vscode-chatgpt-reborn";
-          license = lib.licenses.isc;
-          maintainers = [ lib.maintainers.drupol ];
-        };
-        mktplcRef = {
-          name = "chatgpt-reborn";
-          publisher = "chris-hayes";
-          version = "3.11.2";
-          sha256 = "sha256-YidcekYTgPYlzfmDHHAxywF+bJE8Da3pg/TCumK4Epo=";
         };
       };
 
@@ -1928,6 +1928,56 @@ let
         };
       };
 
+      ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter { };
+
+      ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter-keymap";
+          publisher = "ms-toolsai";
+          version = "1.1.0";
+          sha256 = "sha256-krDtR+ZJiJf1Kxcu5mdXOaSAiJb2bXC1H0XWWviWeMQ=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-toolsai.jupyter-renderers = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter-renderers";
+          publisher = "ms-toolsai";
+          version = "1.0.15";
+          sha256 = "sha256-JR6PunvRRTsSqjSGGAn/1t1B+Ia6X0MgqahehcuSNYA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-toolsai.vscode-jupyter-cell-tags = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-jupyter-cell-tags";
+          publisher = "ms-toolsai";
+          version = "0.1.8";
+          sha256 = "sha256-0oPyptnUWL1h/H13SdR+FdgGzVwEpTaK9SCE7BvI/5M=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-toolsai.vscode-jupyter-slideshow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-jupyter-slideshow";
+          publisher = "ms-toolsai";
+          version = "0.1.5";
+          sha256 = "1p6r5vkzvwvxif3wxqi9599vplabzig27fzzz0bx9z0awfglzyi7";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-vscode.anycode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "anycode";
@@ -1992,8 +2042,6 @@ let
         };
       };
 
-      ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
-
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Theme-TomorrowKit";
@@ -2010,55 +2058,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter { };
-
-      ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter-keymap";
-          publisher = "ms-toolsai";
-          version = "1.1.0";
-          sha256 = "sha256-krDtR+ZJiJf1Kxcu5mdXOaSAiJb2bXC1H0XWWviWeMQ=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
-      ms-toolsai.jupyter-renderers = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter-renderers";
-          publisher = "ms-toolsai";
-          version = "1.0.15";
-          sha256 = "sha256-JR6PunvRRTsSqjSGGAn/1t1B+Ia6X0MgqahehcuSNYA=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
-      ms-toolsai.vscode-jupyter-cell-tags = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-jupyter-cell-tags";
-          publisher = "ms-toolsai";
-          version = "0.1.8";
-          sha256 = "sha256-0oPyptnUWL1h/H13SdR+FdgGzVwEpTaK9SCE7BvI/5M=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
-      ms-toolsai.vscode-jupyter-slideshow = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-jupyter-slideshow";
-          publisher = "ms-toolsai";
-          version = "0.1.5";
-          sha256 = "1p6r5vkzvwvxif3wxqi9599vplabzig27fzzz0bx9z0awfglzyi7";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
@@ -2137,6 +2137,18 @@ let
         };
       };
 
+      octref.vetur = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vetur";
+          publisher = "octref";
+          version = "0.37.3";
+          sha256 = "sha256-3hi1LOZto5AYaomB9ihkAt4j/mhkCDJ8Jqa16piwHIQ=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       oderwat.indent-rainbow = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "indent-rainbow";
@@ -2150,18 +2162,6 @@ let
           homepage = "https://github.com/oderwat/vscode-indent-rainbow";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.imgabe ];
-        };
-      };
-
-      octref.vetur = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vetur";
-          publisher = "octref";
-          version = "0.37.3";
-          sha256 = "sha256-3hi1LOZto5AYaomB9ihkAt4j/mhkCDJ8Jqa16piwHIQ=";
-        };
-        meta = {
-          license = lib.licenses.mit;
         };
       };
 
@@ -2263,6 +2263,16 @@ let
         };
       };
 
+      redhat.vscode-xml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-xml";
+          publisher = "redhat";
+          version = "0.25.2023032304";
+          sha256 = "sha256-3hU/MZU9dP91p2PVycFL6yg/nf4/x8tt76vmlkiHnE8=";
+        };
+        meta.license = lib.licenses.epl20;
+      };
+
       redhat.vscode-yaml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-yaml";
@@ -2273,16 +2283,6 @@ let
         meta = {
           license = lib.licenses.mit;
         };
-      };
-
-      redhat.vscode-xml = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-xml";
-          publisher = "redhat";
-          version = "0.25.2023032304";
-          sha256 = "sha256-3hU/MZU9dP91p2PVycFL6yg/nf4/x8tt76vmlkiHnE8=";
-        };
-        meta.license = lib.licenses.epl20;
       };
 
       richie5um2.snake-trail = buildVscodeMarketplaceExtension {
@@ -2333,24 +2333,24 @@ let
         };
       };
 
-      rubymaniac.vscode-paste-and-indent = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-paste-and-indent";
-          publisher = "Rubymaniac";
-          version = "0.0.8";
-          sha256 = "0fqwcvwq37ndms6vky8jjv0zliy6fpfkh8d9raq8hkinfxq6klgl";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
       rubbersheep.gi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gi";
           publisher = "rubbersheep";
           version = "0.2.11";
           sha256 = "0j9k6wm959sziky7fh55awspzidxrrxsdbpz1d79s5lr5r19rs6j";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      rubymaniac.vscode-paste-and-indent = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-paste-and-indent";
+          publisher = "Rubymaniac";
+          version = "0.0.8";
+          sha256 = "0fqwcvwq37ndms6vky8jjv0zliy6fpfkh8d9raq8hkinfxq6klgl";
         };
         meta = {
           license = lib.licenses.mit;
