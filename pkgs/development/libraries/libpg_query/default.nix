@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/lib libpg_query.dylib
   '';
 
+  doCheck = true;
+  checkPhase = ''
+    make test
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/pganalyze/libpg_query";
     description = "C library for accessing the PostgreSQL parser outside of the server environment";
