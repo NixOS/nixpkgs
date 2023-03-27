@@ -13,6 +13,8 @@
 , libpulseaudio
 , makeDesktopItem
 , wrapGAppsHook
+, testers
+, palemoon-bin
 }:
 
 stdenv.mkDerivation rec {
@@ -151,6 +153,10 @@ stdenv.mkDerivation rec {
     )
     wrapGApp $out/lib/palemoon/palemoon
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = palemoon-bin;
+  };
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
