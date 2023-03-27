@@ -7,7 +7,7 @@
 , bos
 , core
 , core_kernel
-, core_unix
+, core_unix ? null
 , lwt_react
 , ocamlgraph
 , ppx_sexp_conv
