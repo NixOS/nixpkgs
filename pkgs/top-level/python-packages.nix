@@ -3701,6 +3701,8 @@ self: super: with self; {
 
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
+  freertos-gdb = callPackage ../development/python-modules/freertos-gdb { };
+
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
