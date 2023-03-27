@@ -21,13 +21,13 @@
 
 buildBazelPackage rec {
   pname = "envoy";
-  version = "1.25.1";
+  version = "1.25.3";
   bazel = bazel_5;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
     rev = "v${version}";
-    sha256 = "sha256-qA3+bta2vXGtAYX3mg+CmSIEitk4576JQB/QLPsj9Vc=";
+    sha256 = "sha256-kL9SWp9HuYb4nqRNhBZxRWqQQeADP8fU+0t21UgdLrs=";
 
     # We need the commit hash, since Bazel stamps the build with it
     leaveDotGit = true;
@@ -74,8 +74,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-H2s8sTbmKF+yRfSzLsZAT2ckFuunFwh/FMSKj+GYyPM=";
-      aarch64-linux = "sha256-R9jzy/dpdCcGgT9yq59Wo/IN/bVo6fxnVPGhLMZ9fbM=";
+      x86_64-linux = "sha256-aqyKYVAjtmiJsyGxoXj0Q0rAPy1UeRAw5TyN97kJPw4=";
+      aarch64-linux = "sha256-qgaBm2VWMiv2wBkpiFhVBOhdcfFu0mKwex0+mGStGJ8=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
