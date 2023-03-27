@@ -19603,6 +19603,8 @@ with pkgs;
 
   cppcms = callPackage ../development/libraries/cppcms { };
 
+  cppcodec = callPackage ../development/libraries/cppcodec { };
+
   cppunit = callPackage ../development/libraries/cppunit { };
 
   cpputest = callPackage ../development/libraries/cpputest { };
