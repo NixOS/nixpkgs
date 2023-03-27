@@ -9,23 +9,23 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
     rev = version;
-    sha256 = "1wdla4ryif1ss37aqi61lcvzddvf568wyh5s3xv1lrryh4al9vpd";
+    sha256 = "sha256-pS7upOYZAjgR3lWxny8TNZEj3Rrbg+L90ANZWFO9UPQ=";
   };
 
   pythonRelaxDeps = [ "attrs" ];
 
   nativeBuildInputs = [
-    python3Packages.pythonRelaxDepsHook
     wrapQtAppsHook
   ] ++ (with python3Packages; [
     poetry-core
+    pythonRelaxDepsHook
   ]);
 
   buildInputs = [
@@ -35,6 +35,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
+    appnope
     atomicwrites
     attrs
     click
