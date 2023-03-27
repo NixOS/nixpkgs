@@ -85,6 +85,22 @@ in
 
     networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "Flush the entire ruleset on each reload.");
 
+    networking.nftables.extraDeletions = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        # this makes deleting a non-existing table a no-op instead of an error
+        table inet some-table;
+
+        delete table inet some-table;
+      '';
+      description =
+        lib.mdDoc ''
+          Extra deletion commands to be run on every firewall start, reload
+          and after stopping the firewall.
+        '';
+    };
+
     networking.nftables.ruleset = mkOption {
       type = types.lines;
       default = "";
@@ -134,6 +150,10 @@ in
         lib.mdDoc ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
+          Note that if the tables should be cleaned first, either:
+          - networking.nftables.flushRuleset = true; needs to be set (flushes all tables)
+          - networking.nftables.extraDeletions needs to be set
+          - or networking.nftables.tables can be used, which will clean up the table automatically
         '';
     };
     networking.nftables.rulesetFile = mkOption {
@@ -218,15 +238,36 @@ in
       reloadIfChanged = true;
       serviceConfig = let
         enabledTables = filterAttrs (_: table: table.enable) cfg.tables;
+        deletionsScript = pkgs.writeScript "nftables-deletions" ''
+          #! ${pkgs.nftables}/bin/nft -f
+          ${if cfg.flushRuleset then "flush ruleset"
+            else concatStringsSep "\n" (mapAttrsToList (_: table: ''
+              table ${table.family} ${table.name}
+              delete table ${table.family} ${table.name}
+            '') enabledTables)}
+          ${cfg.extraDeletions}
+        '';
+        deletionsScriptVar = "/var/lib/nftables/deletions.nft";
+        ensureDeletions = pkgs.writeShellScript "nftables-ensure-deletions" ''
+          touch ${deletionsScriptVar}
+          chmod +x ${deletionsScriptVar}
+        '';
+        saveDeletionsScript = pkgs.writeShellScript "nftables-save-deletions" ''
+          cp ${deletionsScript} ${deletionsScriptVar}
+        '';
+        cleanupDeletionsScript = pkgs.writeShellScript "nftables-cleanup-deletions" ''
+          rm ${deletionsScriptVar}
+        '';
         rulesScript = pkgs.writeTextFile {
           name =  "nftables-rules";
           executable = true;
           text = ''
             #! ${pkgs.nftables}/bin/nft -f
-            ${optionalString cfg.flushRuleset "flush ruleset"}
+            # previous deletions, if any
+            include "${deletionsScriptVar}"
+            # current deletions
+            include "${deletionsScript}"
             ${concatStringsSep "\n" (mapAttrsToList (_: table: ''
-              table ${table.family} ${table.name}
-              delete table ${table.family} ${table.name}
               table ${table.family} ${table.name} {
                 ${table.content}
               }
@@ -237,6 +278,7 @@ in
           '';
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
+            sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
             export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
@@ -246,13 +288,11 @@ in
       in {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = rulesScript;
-        ExecReload = rulesScript;
-        ExecStop = "${pkgs.nftables}/bin/nft ${
-          if cfg.flushRuleset then "flush ruleset"
-          else escapeShellArg (concatStringsSep "; " (
-            mapAttrsToList (_: table: "delete table ${table.family} ${table.name}") enabledTables
-          ))}";
+        ExecStart = [ ensureDeletions rulesScript ];
+        ExecStartPost = saveDeletionsScript;
+        ExecReload = [ rulesScript saveDeletionsScript ];
+        ExecStop = [ deletionsScriptVar cleanupDeletionsScript ];
+        StateDirectory = "nftables";
       };
     };
   };
