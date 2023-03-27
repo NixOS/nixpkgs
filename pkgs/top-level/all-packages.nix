@@ -10128,6 +10128,8 @@ with pkgs;
 
   neofetch = callPackage ../tools/misc/neofetch { };
 
+  nerdfix = callPackage ../tools/text/nerdfix { };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
