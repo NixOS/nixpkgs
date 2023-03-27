@@ -3162,18 +3162,14 @@ let
       };
     };
 
-  aliases = self: super: {
+  aliases = super: {
     Arjun.swagger-viewer = super.arjun.swagger-viewer;
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
     matklad.rust-analyzer = super.rust-lang.rust-analyzer; # Previous publisher
-    ms-vscode = lib.recursiveUpdate super.ms-vscode {
-      go = super.golang.go;
-      PowerShell = super.ms-vscode.powershell;
-    };
-    rioj7 = lib.recursiveUpdate super.rioj7 {
-      commandOnAllFiles = super.rioj7.commandonallfiles;
-    };
+    ms-vscode.go = super.golang.go;
+    ms-vscode.PowerShell = super.ms-vscode.powershell;
+    rioj7.commandOnAllFiles = super.rioj7.commandonallfiles;
     WakaTime.vscode-wakatime = super.wakatime.vscode-wakatime;
     _1Password = throw ''_1Password has been replaced with "1Password"'';
     _2gua = throw ''_2gua has been replaced with "2gua"'';
@@ -3184,7 +3180,9 @@ let
   # then apply extension specific modifcations to packages.
 
   # overlays will be applied left to right, overrides should come after aliases.
-  overlays = lib.optionals config.allowAliases [ aliases ];
+  overlays = lib.optionals config.allowAliases [
+    (self: super: lib.recursiveUpdate super (aliases super))
+  ];
 
   toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
