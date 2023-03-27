@@ -12791,6 +12791,8 @@ with pkgs;
 
   tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
 
+  tmpreaper = callPackage ../tools/misc/tmpreaper { };
+
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmpmail = callPackage ../applications/networking/tmpmail { };
