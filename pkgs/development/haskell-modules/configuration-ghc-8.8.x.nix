@@ -118,9 +118,6 @@ self: super: {
 
   ormolu = super.ormolu_0_2_0_0;
 
-  # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
-  vector = dontCheck super.vector;
-
   ghc-api-compat = doDistribute (unmarkBroken super.ghc-api-compat_8_6);
 
   mime-string = disableOptimization super.mime-string;
