@@ -8,45 +8,38 @@ buildGoModule rec {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-aRzVXmAWRifIGCAPWYciBhK9XMvsmtHc67XRoI19VYU=";
+    sha256 = "sha256-aRzVXmAWRifIGCAPWYciBhK9XMvsmtHc67XRoI19VYU=";
   };
 
-  vendorHash = "sha256-zCE4LO6m4uyOvSzhUbzH2F9EgDs0UZH4eCl6lfRjIRQ=";
+  vendorSha256 = "sha256-cTI/A/TZaBpkZk5lUh0GaW4L1w8FSTPPz7CUyotDTr4=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret ];
 
-  proxyVendor = true; # Bridge uses some C headers so we have to enable proxyVendor
+  buildPhase = ''
+    runHook preBuild
 
-  preBuild = ''
     patchShebangs ./utils/
-    (cd ./utils/ && ./credits.sh bridge)
+    make BUILD_TIME= -j$NIX_BUILD_CORES build-nogui
+
+    runHook postBuild
   '';
 
-  ldflags =
-    let constants = "github.com/ProtonMail/proton-bridge/v3/internal/constants"; in
-    [
-      "-X ${constants}.Version=${version}"
-      "-X ${constants}.Revision=${src.rev}"
-      "-X ${constants}.buildTime=unknown"
-      "-X ${constants}.FullAppName=ProtonMailBridge" # Should be "Proton Mail Bridge", but quoting doesn't seems to work in nix's ldflags
-    ];
+  installPhase = ''
+    runHook preInstall
 
-  subPackages = [
-    "cmd/Desktop-Bridge"
-  ];
+    install -Dm555 proton-bridge $out/bin/protonmail-bridge
 
-  postInstall = ''
-    mv $out/bin/Desktop-Bridge $out/bin/protonmail-bridge # The cli is named like that in other distro packages
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://github.com/ProtonMail/proton-bridge";
-    changelog = "https://github.com/ProtonMail/proton-bridge/blob/${src.rev}/Changelog.md";
+    changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mrfreezeex ];
+    maintainers = with maintainers; [ lightdiscord ];
     description = "Use your ProtonMail account with your local e-mail client";
     longDescription = ''
       An application that runs on your computer in the background and seamlessly encrypts
