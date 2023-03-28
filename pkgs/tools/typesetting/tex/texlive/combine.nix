@@ -302,7 +302,14 @@ in (buildEnv {
       # we intentionally don't use the scripts.lst-mechanism here since we don't want to strip the suffix or wrap the scripts here.
       # This block must be below bin.cleanBrokenLinks since this would remove the scripts (which don't have +x)
       ln -s $TEXMFDIST/scripts/context/lua/{context,mtxrun}.lua "$out"/bin
+
+      # generates the "ls-R replacements"
       mtxrun --generate
+      context --luatex --generate
+
+      # builds the formats
+      context --make
+      context --luatex --make
     fi
   '' +
   # Get rid of all log files. They are not needed, but take up space
