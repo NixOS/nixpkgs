@@ -83,7 +83,7 @@ let
       inherit description;
       homepage = "https://github.com/supermerill/SuperSlicer";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ cab404 moredread ];
+      maintainers = with maintainers; [ cab404 moredread tmarkus ];
       mainProgram = "superslicer";
     };
 
