@@ -39,6 +39,14 @@ stdenv.mkDerivation rec {
     libva
   ];
 
+  # Note: Attempt to remove on next release after 0.0.9
+  # nixpkgs reference: https://github.com/NixOS/nixpkgs/pull/221978#issuecomment-1483892437
+  # upstream: https://github.com/elFarto/nvidia-vaapi-driver/issues/188
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format="
+    "-Wno-error=int-conversion"
+  ];
+
   postFixup = ''
     addOpenGLRunpath "$out/lib/dri/nvidia_drv_video.so"
   '';

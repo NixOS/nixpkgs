@@ -606,7 +606,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
           homepage = "https://github.com/ChristianKohler/PathIntellisense";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.imgabe  ];
+          maintainers = [ lib.maintainers.imgabe ];
         };
       };
 
@@ -1045,7 +1045,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
           homepage = "https://github.com/prettier/prettier-vscode";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.datafoo  ];
+          maintainers = [ lib.maintainers.datafoo ];
         };
       };
 
@@ -1389,7 +1389,7 @@ let
           version = "2.2.2";
           sha256 = "sha256-zWdIVdz+kZg7KZQ7LeBCB4aB9wg8dUbkWfzGlM0Fq7Q=";
         };
-        meta ={
+        meta = {
           license = lib.licenses.mit;
         };
       };
@@ -1525,7 +1525,7 @@ let
         };
       };
 
-      jebbs.plantuml = callPackage ./jebbs.plantuml {};
+      jebbs.plantuml = callPackage ./jebbs.plantuml { };
 
       jellyedwards.gitsweep = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1681,42 +1681,44 @@ let
 
       kamikillerto.vscode-colorize = buildVscodeMarketplaceExtension {
         mktplcRef = {
-            name = "vscode-colorize";
-            publisher = "kamikillerto";
-            version = "0.11.1";
-            sha256 = "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm";
+          name = "vscode-colorize";
+          publisher = "kamikillerto";
+          version = "0.11.1";
+          sha256 = "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm";
         };
         meta = {
           license = lib.licenses.asl20;
         };
       };
 
-      kddejong.vscode-cfn-lint = let
-        inherit (python3Packages) cfn-lint;
-      in buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-cfn-lint";
-          publisher = "kddejong";
-          version = "0.21.0";
-          sha256 = "sha256-IueXiN+077tiecAsVCzgYksWYTs00mZv6XJVMtRJ/PQ=";
+      kddejong.vscode-cfn-lint =
+        let
+          inherit (python3Packages) cfn-lint;
+        in
+        buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "vscode-cfn-lint";
+            publisher = "kddejong";
+            version = "0.21.0";
+            sha256 = "sha256-IueXiN+077tiecAsVCzgYksWYTs00mZv6XJVMtRJ/PQ=";
+          };
+
+          nativeBuildInputs = [ jq moreutils ];
+
+          buildInputs = [ cfn-lint ];
+
+          postInstall = ''
+            cd "$out/$installPrefix"
+            jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
+          '';
+
+          meta = {
+            description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
+            homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
+            license = lib.licenses.asl20;
+            maintainers = [ lib.maintainers.wolfangaukang ];
+          };
         };
-
-        nativeBuildInputs = [ jq moreutils ];
-
-        buildInputs = [ cfn-lint ];
-
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
-        '';
-
-        meta = {
-          description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
-          homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
-          license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.wolfangaukang ];
-        };
-      };
 
       kubukoz.nickel-syntax = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1934,7 +1936,7 @@ let
         };
       };
 
-      ms-ceintl = callPackage ./language-packs.nix {}; # non-English language packs
+      ms-ceintl = callPackage ./language-packs.nix { }; # non-English language packs
 
       ms-dotnettools.csharp = callPackage ./ms-dotnettools.csharp { };
 
@@ -2070,7 +2072,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter {};
+      ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter { };
 
       ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
         mktplcRef = {

@@ -10128,6 +10128,8 @@ with pkgs;
 
   neofetch = callPackage ../tools/misc/neofetch { };
 
+  nerdfix = callPackage ../tools/text/nerdfix { };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
@@ -18731,6 +18733,8 @@ with pkgs;
 
   rsass = callPackage ../development/tools/misc/rsass { };
 
+  rsonpath = callPackage ../development/tools/misc/rsonpath { };
+
   rufo = callPackage ../development/tools/rufo { };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
@@ -19605,6 +19609,8 @@ with pkgs;
   uri = callPackage ../development/libraries/uri { stdenv = gcc10StdenvCompat; };
 
   cppcms = callPackage ../development/libraries/cppcms { };
+
+  cppcodec = callPackage ../development/libraries/cppcodec { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
@@ -21608,6 +21614,8 @@ with pkgs;
   libnfs = callPackage ../development/libraries/libnfs { };
 
   libnice = callPackage ../development/libraries/libnice { };
+
+  libnitrokey = callPackage ../development/libraries/libnitrokey { };
 
   libnsl = callPackage ../development/libraries/libnsl { };
 
@@ -24747,6 +24755,8 @@ with pkgs;
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
+
+  exhaustive = callPackage ../development/tools/exhaustive { };
 
   exhibitor = callPackage ../servers/exhibitor { };
 
@@ -34113,7 +34123,8 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/office/qpdfview { };
 
-  qtile = callPackage ../applications/window-managers/qtile { };
+  qtile-unwrapped = callPackage ../applications/window-managers/qtile { };
+  qtile = callPackage ../applications/window-managers/qtile/wrapper.nix { };
 
   vimgolf = callPackage ../games/vimgolf { };
 
@@ -36396,6 +36407,8 @@ with pkgs;
   };
 
   xcowsay = callPackage ../games/xcowsay { };
+
+  xgalagapp = callPackage ../games/xgalaga++ { };
 
   xjump = callPackage ../games/xjump { };
 
@@ -39304,7 +39317,6 @@ with pkgs;
   pynitrokey = callPackage ../tools/security/pynitrokey { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
-  nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 

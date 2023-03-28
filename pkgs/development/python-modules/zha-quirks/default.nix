@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytestCheckHook
   ];
 

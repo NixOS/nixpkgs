@@ -60,7 +60,7 @@ in {
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
-      <nixpkgs/nixos/tests/matrix-synapse.nix>
+      <nixpkgs/nixos/tests/matrix/synapse.nix>
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
     (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
@@ -711,7 +711,7 @@ in {
 
             If you
             - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
+              for this can be found in <nixpkgs/nixos/tests/matrix/synapse.nix>
             - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
               to your configuration.
 
