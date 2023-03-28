@@ -108,7 +108,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 gpl2 mit ];
     maintainers = [maintainers.raskin];
     platforms = ["x86_64-linux"] ++ platforms.darwin;
-    broken = kernel != null && versionOlder kernel.version "4.14";
+    broken = kernel != null && (versionOlder kernel.version "4.14" ||
+      versionAtLeast kernel.version "6.2" # until sysdig is backported from nixos-unstable to a 6.2 compatible version
+    );
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
