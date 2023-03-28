@@ -13,10 +13,10 @@ let
     inherit pname version src;
   };
 
-in 
+in
 appimageTools.wrapType2 {
   inherit pname version src;
-  
+
   extraInstallCommands = ''
     mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/curo.desktop $out/share/applications/curo.desktop
