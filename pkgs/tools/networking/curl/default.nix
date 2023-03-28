@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    ./7.87.0-noproxy-tailmatch.patch
     ./7.79.1-darwin-no-systemconfiguration.patch
     # curl 7.86.0 fixes
     ./CVE-2022-43551.patch
