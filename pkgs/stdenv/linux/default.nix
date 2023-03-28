@@ -371,11 +371,11 @@ in
 
             # This is a separate phase because gcc assembles its phase scripts
             # in bash instead of nix (we should fix that).
-            preFixupPhases = (a.preFixupPhases or []) ++ [ "postPostInstallPhaseXgcc" ];
+            preFixupPhases = (a.preFixupPhases or []) ++ [ "preFixupXgccPhase" ];
 
             # This is needed to prevent "error: cycle detected in build of '...-xgcc-....drv'
             # in the references of output 'lib' from output 'out'"
-            postPostInstallPhaseXgcc = ''
+            preFixupXgccPhase = ''
               find $lib/lib/ -name \*.so\* -exec patchelf --shrink-rpath {} \; || true
             '';
           });
