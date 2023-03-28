@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "opentracker";
-  version = "unstable-2018-05-26";
+  version = "unstable-2021-08-23";
 
   src = fetchgit {
     url = "https://erdgeist.org/gitweb/opentracker";
-    rev = "6411f1567f64248b0d145493c2e61004d2822623";
-    sha256 = "110nfb6n4clykwdzpk54iccsfjawq0krjfqhg114i1z0ri5dyl8j";
+    rev = "110868ec4ebe60521d5a4ced63feca6a1cf0aa2a";
+    sha256 = "sha256-SuElfmk7zONolTiyg0pyvbfvyJRn3r9OrXwpTzLw8LI=";
   };
 
   buildInputs = [ libowfat zlib ];
