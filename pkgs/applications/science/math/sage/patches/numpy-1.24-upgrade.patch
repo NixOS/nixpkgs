@@ -1,0 +1,58 @@
+diff --git a/src/sage/misc/persist.pyx b/src/sage/misc/persist.pyx
+index 3ac5f1cc2b..cb1f327c19 100644
+--- a/src/sage/misc/persist.pyx
++++ b/src/sage/misc/persist.pyx
+@@ -157,7 +157,7 @@ def load(*filename, compress=True, verbose=True, **kwargs):
+         ....:     _ = f.write(code)
+         sage: load(t)
+         sage: hello
+-        <fortran object>
++        <fortran ...>
+     """
+     import sage.repl.load
+     if len(filename) != 1:
+diff --git a/src/sage/plot/complex_plot.pyx b/src/sage/plot/complex_plot.pyx
+index 6f0aeab87a..b77c69b2f7 100644
+--- a/src/sage/plot/complex_plot.pyx
++++ b/src/sage/plot/complex_plot.pyx
+@@ -461,6 +461,8 @@ def complex_to_rgb(z_values, contoured=False, tiled=False,
+             rgb[i, j, 2] = b
+ 
+     sig_off()
++    nan_indices = np.isnan(rgb).any(-1)     # Mask for undefined points
++    rgb[nan_indices] = 1                    # Make nan_indices white
+     return rgb
+ 
+ 
+diff --git a/src/sage/plot/histogram.py b/src/sage/plot/histogram.py
+index 3bc2b76b58..388c2d1391 100644
+--- a/src/sage/plot/histogram.py
++++ b/src/sage/plot/histogram.py
+@@ -87,13 +87,8 @@ class Histogram(GraphicPrimitive):
+ 
+         TESTS::
+ 
+-            sage: h = histogram([10,3,5], normed=True)[0]
+-            doctest:warning...:
+-            DeprecationWarning: the 'normed' option is deprecated. Use 'density' instead.
+-            See https://trac.sagemath.org/25260 for details.
++            sage: h = histogram([10,3,5], density=True)[0]
+             sage: h.get_minmax_data()
+-            doctest:warning ...
+-            ...VisibleDeprecationWarning: Passing `normed=True` on non-uniform bins has always been broken, and computes neither the probability density function nor the probability mass function. The result is only correct if the bins are uniform, when density=True will produce the same result anyway. The argument will be removed in a future version of numpy.
+             {'xmax': 10.0, 'xmin': 3.0, 'ymax': 0.476190476190..., 'ymin': 0}
+         """
+         import numpy
+diff --git a/src/sage/repl/ipython_extension.py b/src/sage/repl/ipython_extension.py
+index 798671aab4..cad6a47ca8 100644
+--- a/src/sage/repl/ipython_extension.py
++++ b/src/sage/repl/ipython_extension.py
+@@ -405,7 +405,7 @@ class SageMagics(Magics):
+             ....: C END FILE FIB1.F
+             ....: ''')
+             sage: fib
+-            <fortran object>
++            <fortran ...>
+             sage: from numpy import array
+             sage: a = array(range(10), dtype=float)
+             sage: fib(a, 10)

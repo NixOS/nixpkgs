@@ -1,4 +1,6 @@
-{ airspy
+{ lib
+, stdenv
+, airspy
 , airspyhf
 , aptdec
 , boost
@@ -13,7 +15,6 @@
 , glew
 , hackrf
 , hidapi
-, lib
 , ffmpeg
 , libiio
 , libopus
@@ -23,14 +24,20 @@
 , libbladeRF
 , mbelib
 , mkDerivation
+, ninja
 , ocl-icd
 , opencv3
 , pkg-config
 , qtcharts
+, qtdeclarative
+, qtgraphicaleffects
 , qtlocation
 , qtmultimedia
+, qtquickcontrols
+, qtquickcontrols2
 , qtserialport
 , qtspeech
+, qttools
 , qtwebsockets
 , qtwebengine
 , rtl-sdr
@@ -38,6 +45,7 @@
 , sgp4
 , soapysdr-with-plugins
 , uhd
+, zlib
 }:
 
 mkDerivation rec {
@@ -48,10 +56,10 @@ mkDerivation rec {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "sha256-hsYt7zGG6CSWeQ9A3GPt65efjZGPu33O5pIhnZjFgmY=";
+    hash = "sha256-hsYt7zGG6CSWeQ9A3GPt65efjZGPu33O5pIhnZjFgmY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   buildInputs = [
     airspy
@@ -77,10 +85,15 @@ mkDerivation rec {
     mbelib
     opencv3
     qtcharts
+    qtdeclarative
+    qtgraphicaleffects
     qtlocation
     qtmultimedia
+    qtquickcontrols
+    qtquickcontrols2
     qtserialport
     qtspeech
+    qttools
     qtwebsockets
     qtwebengine
     rtl-sdr
@@ -88,14 +101,15 @@ mkDerivation rec {
     sgp4
     soapysdr-with-plugins
     uhd
+    zlib
   ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"
-    "-DDAB_LIB=${dab_lib}"
+    "-DDAB_INCLUDE_DIR:PATH=${dab_lib}/include/dab_lib"
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
-    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
@@ -109,7 +123,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ alkeryn Tungsten842 ];
+    platforms = platforms.unix;
   };
 }

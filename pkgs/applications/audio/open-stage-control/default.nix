@@ -8,7 +8,7 @@ buildNpmPackage rec {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-P3aTGt/T59JE2oy8uRhD8h2NXX/ZXno6qY0frpcir7A=";
+    hash = "sha256-5QMBJw6H9TmyoSMkG5rniq1BdVYuEtQsQF1GGBkxqMI=";
   };
 
   # Remove some Electron stuff from package.json

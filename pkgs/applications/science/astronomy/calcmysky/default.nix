@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "calcmysky";
-  version = "0.2.1";
+  version = "unstable-2023-02-11";
 
   src = fetchFromGitHub {
     owner = "10110111";
     repo = "CalcMySky";
-    rev = "v${version}";
-    hash = "sha256-7Yj6OlZ7weenekXYGhK5EWcME20oCHiLPOxz5KEuKy4=";
+    rev = "c5f281452816d8de775b13a70fb90e79427c93c4";
+    hash = "sha256-mzxtu6YTaZpR17m2WGiSDo/bAPXGJdQskyz7aqtxGoQ=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

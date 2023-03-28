@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "filebot";
-  version = "4.9.6";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20220305095926/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    sha256 = "sha256-3j0WmmamE9KUNwjOVZvrdFH5dS/9FHSdbLfcAsOzQOo=";
+    sha256 = "sha256-0d0+o8ZiF1m83AasjoxUDNtUSquy69wFY1m1oYeybFw=";
   };
 
   unpackPhase = "tar xvf $src";

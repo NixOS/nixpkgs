@@ -1,0 +1,15 @@
+[Groups/0]
+Name=NixOS_test
+Default Layout=us
+DefaultIM=wbx
+
+[Groups/0/Items/0]
+Name=wbx
+Layout=us
+
+[Groups/0/Items/1]
+Name=m17n_sa_harvard-kyoto
+Layout=us
+
+[GroupOrder]
+0=NixOS_test

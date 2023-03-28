@@ -149,6 +149,7 @@ let
 
     disallowedReferences = [ openjdk15-bootstrap ];
 
+    pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version;
 
     passthru = {

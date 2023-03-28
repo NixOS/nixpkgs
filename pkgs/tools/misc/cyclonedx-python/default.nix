@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, setuptools
-, cyclonedx-python-lib
-, packageurl-python
-, importlib-metadata
-, pip-requirements-parser
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  setuptools,
+  cyclonedx-python-lib,
+  packageurl-python,
+  importlib-metadata,
+  pip-requirements-parser,
+  toml,
 }:
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "cyclonedx-python";
   version = "3.11.0";
   format = "pyproject";
@@ -46,6 +47,6 @@
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members ++ [ maintainers.georgesalkhouri ];
+    maintainers = with maintainers; [georgesalkhouri];
   };
 }

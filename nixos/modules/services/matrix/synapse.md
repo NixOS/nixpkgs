@@ -27,10 +27,7 @@ please refer to the
 { pkgs, lib, config, ... }:
 let
   fqdn = "${config.networking.hostName}.${config.networking.domain}";
-  clientConfig = {
-    "m.homeserver".base_url = "https://${fqdn}";
-    "m.identity_server" = {};
-  };
+  clientConfig."m.homeserver".base_url = "https://${fqdn}";
   serverConfig."m.server" = "${fqdn}:443";
   mkWellKnown = data: ''
     add_header Content-Type application/json;

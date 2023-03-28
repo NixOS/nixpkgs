@@ -228,6 +228,10 @@ stdenv.mkDerivation {
 
       if [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
+    '' + lib.optionalString (hostPlatform != targetPlatform) ''
+      elif [ -e $ccPath/${targetPrefix}cpp ]; then
+        wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
+    '' + ''
       fi
     ''
 

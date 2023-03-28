@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchPypi
 , python3
 , git
 }:
@@ -10,11 +10,9 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.6.3";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "pypa";
-    repo = "hatch";
-    rev = "hatch-v${version}";
-    hash = "sha256-3nPh6F+TmLoogz9FgaZMub7hPJIzANCY4oWk9Mq22Pc=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ZQ5nG6MAMY5Jjvk7vjuZsyzhSSB2T7h1P4mZP2Pu15o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -73,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Modern, extensible Python project manager";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/blob/${src.rev}/docs/history.md#hatch";
+    changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history.md#hatch";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

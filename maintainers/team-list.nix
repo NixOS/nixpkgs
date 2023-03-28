@@ -221,6 +221,7 @@ with lib.maintainers; {
 
   docs = {
     members = [
+      asymmetric
       ryantm
     ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
@@ -424,11 +425,14 @@ with lib.maintainers; {
 
   llvm = {
     members = [
-      ericson2314
-      sternenseemann
-      lovek323
       dtzWill
+      ericson2314
+      lovek323
       primeos
+      qyliss
+      raitobezarius
+      rrbutani
+      sternenseemann
     ];
     scope = "Maintain LLVM package sets and related packages";
     shortName = "LLVM";

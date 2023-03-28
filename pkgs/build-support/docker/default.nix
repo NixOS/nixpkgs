@@ -190,7 +190,7 @@ rec {
       cat > /etc/pam.d/other <<EOF
     account sufficient pam_unix.so
     auth sufficient pam_rootok.so
-    password requisite pam_unix.so nullok sha512
+    password requisite pam_unix.so nullok yescrypt
     session required pam_unix.so
     EOF
     fi

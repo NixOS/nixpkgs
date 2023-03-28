@@ -1,4 +1,4 @@
-{ buildDunePackage, lib, faraday, core_unix, async }:
+{ buildDunePackage, lib, faraday, core_unix ? null, async }:
 
 buildDunePackage rec {
   pname = "faraday-async";

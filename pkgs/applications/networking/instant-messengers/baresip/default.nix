@@ -23,6 +23,8 @@
 , spandsp3
 , libuuid
 , libvpx
+, cmake
+, dbusSupport ? true
 }:
 stdenv.mkDerivation rec {
   version = "2.9.0";
@@ -33,7 +35,10 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-B4d8D4IfLYAIYVN80Lrh5bywD5iacSnUVwEzbc6Xq7g=";
   };
-  nativeBuildInputs = [ pkg-config ];
+  prePatch = lib.optionalString (!dbusSupport) ''
+    substituteInPlace cmake/modules.cmake --replace 'list(APPEND MODULES ctrl_dbus)' ""
+  '';
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     zlib
     openssl
@@ -56,9 +61,14 @@ stdenv.mkDerivation rec {
     libuuid
     libvpx
   ] ++ (with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-bad gst-plugins-good ]);
+
+  cmakeFlags = [
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-Dre_DIR=${libre}/include/re"
+  ];
+
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
-    "LIBRE_INC=${libre}/include/re"
     "LIBRE_SO=${libre}/lib"
     "LIBREM_PATH=${librem}"
     "PREFIX=$(out)"

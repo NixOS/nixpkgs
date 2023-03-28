@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ddosify";
-  version = "0.15.0";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pY4rgval017KX2I7ZNbvEbqRAqluC7rS3VzYJos7C94=";
+    sha256 = "sha256-xTalStFym/8l2YDuk2F0ydHnT46sxRj/KmOdIbYAMsQ=";
   };
 
   vendorHash = "sha256-3y5ppTtvGqwWhgnVBpP4gf26DHKPnSNYK4jfhBiYDwY=";

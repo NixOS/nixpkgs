@@ -1,26 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
 , cyclonedds, libmysqlclient, mariadb, mbedtls, sqlite, zeromq
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.15.5";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     rev = finalAttrs.version;
-    hash = "sha256-eIwUsYPpRZMl1oCuuZeOj0SCBHDaJdmdWdoI4yuqxrg=";
+    hash = "sha256-9w4afVxuJbYrkagpAe1diftDnjrRjunyhJdJ0BZq3K0=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix the conflict on function naming in ddsproxy
-    (fetchpatch {
-      url = "https://github.com/emqx/nanomq/commit/20f436a3b9d45f9809d7c7f0714905c657354631.patch";
-      hash = "sha256-ISMlf9QW73oogMTlifi/r08uSxBpzRYvBSJBB1hn2xY=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

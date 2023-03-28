@@ -22,6 +22,11 @@ buildPythonPackage rec {
     fetchSubmodules = false;
   };
 
+  postPatch = ''
+    sed "s|sys\.prefix|'\.'|g" -i setup.py
+    sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i pick/__main__.py
+  '';
+
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook
@@ -36,16 +41,6 @@ buildPythonPackage rec {
     glib
     gtk3
   ];
-
-  preDistPhases = [ "fixupIconPath" ];
-
-  fixupIconPath = ''
-    pickLoc="$out/${python.sitePackages}/pick"
-    shareLoc=$(echo "$out/${python.sitePackages}/nix/store/"*)
-    mv "$shareLoc/share" "$out/share"
-
-    sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i "$pickLoc/__main__.py"
-    '';
 
   meta = with lib; {
     homepage = "https://kryogenix.org/code/pick/";

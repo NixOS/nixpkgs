@@ -18,7 +18,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SMAllqxfae8bNLBkxsY4OmjoIzxFZ0dwIRYconlNZ18=";
   };
 
-  cargoSha256 = "sha256-vqKKv8eNXkDqcgjlybisSmNBijpvHEKsFAENYjD8zQI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "discord-rpc-client-0.3.0" = "sha256-NzrsJYRe4jCZBkIEXbTG9xbHHJHQyIVnDWGx73of8Tw=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
 

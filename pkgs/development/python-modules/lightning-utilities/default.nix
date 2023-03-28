@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xjE5FsU1d/YcVHlfjtZE0T2LjGvsIOzbGJFU7PMDqdc=";
+    hash = "sha256-uwmX+/SK2zBkZQbN/t/DZ3i+XbdAJ/RM+Q649QwMUz0=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,13 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "docs"
+    # doctests that expect docs.txt in the wrong location
+    "src/lightning_utilities/install/requirements.py"
+  ];
 
+  pytestFlagsArray = [
+    # warns about distutils removal in python 3.12
+    "-W" "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

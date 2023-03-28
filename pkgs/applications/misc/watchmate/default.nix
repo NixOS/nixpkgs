@@ -13,16 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchmate";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "azymohliad";
     repo = "watchmate";
     rev = "v${version}";
-    hash = "sha256-LwtlI6WCOO24w8seUzyhCp51pfEiCM+iL6lu/J6v4PQ=";
+    hash = "sha256-+E1tyDfFSu3J89fXd75bdYxh+Z1zTwKL6AmMTNQBEYY=";
   };
 
-  cargoHash = "sha256-MD0eWZDpCevBY1Y3Gzgk13qCFtL7QOPDATv8MA+Q5go=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "mpris2-zbus-0.1.0" = "sha256-f2hth7TnA14I4UPyp0u4IfMi9WY4G3M1sEc4xNtnbr0=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config

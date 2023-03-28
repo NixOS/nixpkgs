@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "eternalegypt";
-  version = "0.0.13";
+  version = "0.0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amelchio";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0wi2cqd81irqm873npkqg3mvdrb57idqdsp8qw8h0s7lk0kil1wi";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-CKiv5gVHaEyO9P5x2FKgpSIm2pUiFptaEQVPZHALASk=";
   };
 
   propagatedBuildInputs = [

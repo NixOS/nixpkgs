@@ -87,8 +87,8 @@ let
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
   vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
-   inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;
-   vscodeDefault = vscode;
+    inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;
+    vscodeDefault = vscode;
   };
 
   vscodeExts2nix = import ./vscodeExts2nix.nix {

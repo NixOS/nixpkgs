@@ -4,7 +4,7 @@
 , SDL2
 , cmake
 , copyDesktopItems
-, ffmpeg
+, ffmpeg_4
 , glew
 , libffi
 , libsForQt5
@@ -59,7 +59,7 @@ stdenv.mkDerivation (self: {
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_4
     (glew.override { enableEGL = forceWayland; })
     libzip
     snappy

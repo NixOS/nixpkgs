@@ -4,21 +4,25 @@
 , pkg-config
   # libgit2-sys doesn't support libgit2 1.6 yet
 , libgit2_1_5
+, oniguruma
 , zlib
+, stdenv
+, darwin
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-dive";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-dive";
     rev = "v${version}";
-    hash = "sha256-nl6JEVOU5eDntPOItYCooBi3zx2ceyRLtelr97uYiOY=";
+    hash = "sha256-LOvrPId/GBWPq73hdCdaMNKH7K7cmGmlkepkQiwGC60=";
   };
 
-  cargoHash = "sha256-johUvl2hPlgn+2wgFJUR6/pR7lx1NzE4ralcjhVqkik=";
+  cargoHash = "sha256-JDybjIUjj9ivJ5hJJB9bvGB18TdwEXQZfKfXPkyopK0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,16 +30,31 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2_1_5
+    oniguruma
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  # don't use vendored libgit2
+  buildNoDefaultFeatures = true;
 
   checkFlags = [
     # requires internet access
     "--skip=screenshot"
   ];
 
-  # don't use vendored libgit2
-  buildNoDefaultFeatures = true;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    git config --global user.name nixbld
+    git config --global user.email nixbld@example.com
+  '';
+
+  RUSTONIG_SYSTEM_LIBONIG = true;
 
   meta = with lib; {
     description = "Dive into a file's history to find root cause";

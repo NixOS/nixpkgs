@@ -737,9 +737,10 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        word_pattern = re.compile(r"^\w+$")
-        if word_pattern.match(filename):
-            filename = os.path.join(self.out_dir, f"{filename}.png")
+        if "." not in filename:
+            filename += ".png"
+        if "/" not in filename:
+            filename = os.path.join(self.out_dir, filename)
         tmp = f"{filename}.ppm"
 
         with self.nested(

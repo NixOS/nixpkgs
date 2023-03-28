@@ -50,6 +50,11 @@ package. `cargoHash256` is used for traditional Nix SHA-256 hashes,
 such as the one in the example above. `cargoHash` should instead be
 used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
 
+Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
+approach will not work, and you will need to copy the `Cargo.lock` file of the application
+to nixpkgs and continue with the next section for specifying the options of the`cargoLock`
+section.
+
 ```nix
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
 ```
@@ -411,13 +416,13 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
-## Compiling non-Rust packages that include Rust code {#compiling-non-rust-packages-that-include-rust-code}
+### Compiling non-Rust packages that include Rust code {#compiling-non-rust-packages-that-include-rust-code}
 
 Several non-Rust packages incorporate Rust code for performance- or
 security-sensitive parts. `rustPlatform` exposes several functions and
 hooks that can be used to integrate Cargo in non-Rust packages.
 
-### Vendoring of dependencies {#vendoring-of-dependencies}
+#### Vendoring of dependencies {#vendoring-of-dependencies}
 
 Since network access is not allowed in sandboxed builds, Rust crate
 dependencies need to be retrieved using a fetcher. `rustPlatform`
@@ -477,7 +482,7 @@ added. To find the correct hash, you can first use `lib.fakeSha256` or
 `lib.fakeHash` as a stub hash. Building `cargoDeps` will then inform
 you of the correct hash.
 
-### Hooks {#hooks}
+#### Hooks {#hooks}
 
 `rustPlatform` provides the following hooks to automate Cargo builds:
 
@@ -513,7 +518,7 @@ you of the correct hash.
 * `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
   `bindgen` find `libclang` and `libclang` find the libraries in `buildInputs`.
 
-### Examples {#examples}
+#### Examples {#examples}
 
 #### Python package using `setuptools-rust` {#python-package-using-setuptools-rust}
 
@@ -642,7 +647,127 @@ buildPythonPackage rec {
 }
 ```
 
-## Setting Up `nix-shell` {#setting-up-nix-shell}
+## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
+
+### Simple operation {#simple-operation}
+
+When run, `cargo build` produces a file called `Cargo.lock`,
+containing pinned versions of all dependencies. Nixpkgs contains a
+tool called `crate2Nix` (`nix-shell -p crate2nix`), which can be
+used to turn a `Cargo.lock` into a Nix expression.  That Nix
+expression calls `rustc` directly (hence bypassing Cargo), and can
+be used to compile a crate and all its dependencies.
+
+See [`crate2nix`'s documentation](https://github.com/kolloch/crate2nix#known-restrictions)
+for instructions on how to use it.
+
+### Handling external dependencies {#handling-external-dependencies}
+
+Some crates require external libraries. For crates from
+[crates.io](https://crates.io), such libraries can be specified in
+`defaultCrateOverrides` package in nixpkgs itself.
+
+Starting from that file, one can add more overrides, to add features
+or build inputs by overriding the hello crate in a separate file.
+
+```nix
+with import <nixpkgs> {};
+((import ./hello.nix).hello {}).override {
+  crateOverrides = defaultCrateOverrides // {
+    hello = attrs: { buildInputs = [ openssl ]; };
+  };
+}
+```
+
+Here, `crateOverrides` is expected to be a attribute set, where the
+key is the crate name without version number and the value a function.
+The function gets all attributes passed to `buildRustCrate` as first
+argument and returns a set that contains all attribute that should be
+overwritten.
+
+For more complicated cases, such as when parts of the crate's
+derivation depend on the crate's version, the `attrs` argument of
+the override above can be read, as in the following example, which
+patches the derivation:
+
+```nix
+with import <nixpkgs> {};
+((import ./hello.nix).hello {}).override {
+  crateOverrides = defaultCrateOverrides // {
+    hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
+      postPatch = ''
+        substituteInPlace lib/zoneinfo.rs \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      '';
+    };
+  };
+}
+```
+
+Another situation is when we want to override a nested
+dependency. This actually works in the exact same way, since the
+`crateOverrides` parameter is forwarded to the crate's
+dependencies. For instance, to override the build inputs for crate
+`libc` in the example above, where `libc` is a dependency of the main
+crate, we could do:
+
+```nix
+with import <nixpkgs> {};
+((import hello.nix).hello {}).override {
+  crateOverrides = defaultCrateOverrides // {
+    libc = attrs: { buildInputs = []; };
+  };
+}
+```
+
+### Options and phases configuration {#options-and-phases-configuration}
+
+Actually, the overrides introduced in the previous section are more
+general. A number of other parameters can be overridden:
+
+- The version of `rustc` used to compile the crate:
+
+  ```nix
+  (hello {}).override { rust = pkgs.rust; };
+  ```
+
+- Whether to build in release mode or debug mode (release mode by
+  default):
+
+  ```nix
+  (hello {}).override { release = false; };
+  ```
+
+- Whether to print the commands sent to `rustc` when building
+  (equivalent to `--verbose` in cargo:
+
+  ```nix
+  (hello {}).override { verbose = false; };
+  ```
+
+- Extra arguments to be passed to `rustc`:
+
+  ```nix
+  (hello {}).override { extraRustcOpts = "-Z debuginfo=2"; };
+  ```
+
+- Phases, just like in any other derivation, can be specified using
+  the following attributes: `preUnpack`, `postUnpack`, `prePatch`,
+  `patches`, `postPatch`, `preConfigure` (in the case of a Rust crate,
+  this is run before calling the "build" script), `postConfigure`
+  (after the "build" script),`preBuild`, `postBuild`, `preInstall` and
+  `postInstall`. As an example, here is how to create a new module
+  before running the build script:
+
+  ```nix
+  (hello {}).override {
+    preConfigure = ''
+       echo "pub const PATH=\"${hi.out}\";" >> src/path.rs"
+    '';
+  };
+  ```
+
+### Setting Up `nix-shell` {#setting-up-nix-shell}
 
 Oftentimes you want to develop code from within `nix-shell`. Unfortunately
 `buildRustCrate` does not support common `nix-shell` operations directly

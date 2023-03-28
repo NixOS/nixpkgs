@@ -8,10 +8,10 @@ Subject: [PATCH] Look for fsck in the right place
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index 73c76fceea..d00cea7158 100644
+index e25c5d5efa..26f4e5669e 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
-@@ -352,6 +352,7 @@ static int run(int argc, char *argv[]) {
+@@ -351,6 +351,7 @@ static int run(int argc, char *argv[]) {
          if (r == 0) {
                  char dash_c[STRLEN("-C") + DECIMAL_STR_MAX(int) + 1];
                  int progress_socket = -1;
@@ -19,7 +19,7 @@ index 73c76fceea..d00cea7158 100644
                  const char *cmdline[9];
                  int i = 0;
  
-@@ -372,7 +373,10 @@ static int run(int argc, char *argv[]) {
+@@ -371,7 +372,10 @@ static int run(int argc, char *argv[]) {
                  } else
                          dash_c[0] = 0;
  

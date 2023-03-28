@@ -159,5 +159,6 @@ buildPythonPackage rec {
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ costrouc ];
+    broken = true;
   };
 }

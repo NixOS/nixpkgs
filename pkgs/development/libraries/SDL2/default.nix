@@ -55,11 +55,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.26.3";
+  version = "2.26.4";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xmEgWlU7fSUkJfS3Uf8TIJ5eAguHa7+hWYSUr2F5AFc=";
+    sha256 = "sha256-Gg9oZJj7dorZ8/gLOQN6fQBurAk6rTnLTrzIMqiIcjE=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -170,6 +170,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.libsdl.org/";
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cpages ];
+    maintainers = with maintainers; [ cpages superherointj ];
   };
 }

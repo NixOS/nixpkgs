@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
   pname = "wayland-protocols";
   version = "1.31";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && wayland.withLibraries;
+  # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && stdenv.targetPlatform.linker == "bfd" && wayland.withLibraries;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${pname}/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
