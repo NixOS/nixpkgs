@@ -1,21 +1,17 @@
-{ lib, buildDunePackage, dune_3, csexp }:
+{ lib, buildDunePackage, dune_2, csexp, result }:
 
 buildDunePackage rec {
   pname = "dune-configurator";
 
-  inherit (dune_3) src version;
+  inherit (dune_2) src version patches;
 
-  # This fixes finding csexp
-  postPatch = ''
-    rm -rf ./vendor
-  '';
+  duneVersion = "2";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.03";
 
-  duneVersion = "3";
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ csexp ];
+  propagatedBuildInputs = [ csexp result ];
 
   meta = with lib; {
     description = "Helper library for gathering system configuration";
