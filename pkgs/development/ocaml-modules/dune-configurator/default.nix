@@ -3,11 +3,11 @@
 buildDunePackage rec {
   pname = "dune-configurator";
 
-  useDune2 = true;
-
   inherit (dune_2) src version patches;
 
-  minimumOCamlVersion = "4.03";
+  duneVersion = "2";
+
+  minimalOCamlVersion = "4.03";
 
   dontAddPrefix = true;
 
