@@ -1164,6 +1164,7 @@ self: super: {
 
   # Requires API keys to run tests
   algolia = dontCheck super.algolia;
+  openai-hs = dontCheck super.openai-hs;
 
   # antiope-s3's latest stackage version has a hspec < 2.6 requirement, but
   # hspec which isn't in stackage is already past that
