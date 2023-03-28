@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.3.2";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "dmulyalin";
     repo = "ttp_templates";
     rev = "refs/tags/${version}";
-    hash = "sha256-Bm9//hahM1sP/XDUDR7JcGWz0qF8ovkWZU5x/qj0UZg=";
+    hash = "sha256-NlTTydGdjn+hwAKYEyINg/9k/EdnLq2gU9cnujpZQLM=";
   };
 
   nativeBuildInputs = [
