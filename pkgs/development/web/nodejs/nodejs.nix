@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
+{ lib, stdenv, fetchurl, fetchpatch2, openssl, python, zlib, libuv, http-parser, bash
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -6,7 +6,7 @@
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
-, procps, icu
+, icu
 , installShellFiles
 }:
 
@@ -60,8 +60,6 @@ let
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
-    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
-
     # NB: technically, we do not need bash in build inputs since all scripts are
     # wrappers over the corresponding JS scripts. There are some packages though
     # that use bash wrappers, e.g. polaris-web.
@@ -105,7 +103,7 @@ let
     dontDisableStatic = true;
 
     configureScript = writeScript "nodejs-configure" ''
-      export CC_host="$CC_FOR_BUILD" CXX_host="$CXX_FOR_BUILD"
+      export CC_host="$CC" CXX_host="$CXX"
       exec ${python.executable} configure.py "$@"
     '';
 
@@ -129,7 +127,24 @@ let
 
     pos = builtins.unsafeGetAttrPos "version" args;
 
-    inherit patches;
+    patches = patches ++ [
+      (fetchpatch2 {
+        name = "add-qemu-wrapper-support.patch";
+        url = "https://github.com/buildroot/buildroot/raw/ecf060a2ff93626fb5fbe1c52b8d42b6ee0fbb5b/package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch";
+        hash = "sha256-c6LY2c4JLuUwSIMvX/vbuUKPsDy0Uk/knW0Xnb4O6RY=";
+      })
+    ];
+
+    postPatch = ''
+      sed -i "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-wrapper',%g" node.gyp
+      sed -i "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-wrapper',%g" tools/v8_gypfiles/v8.gyp
+      mkdir -p out/Release
+      cat > out/Release/v8-wrapper << "EOF"
+      #!${buildPackages.bash}/bin/sh
+      ${stdenv.hostPlatform.emulator buildPackages} "$@"
+      EOF
+      chmod +x out/Release/v8-wrapper
+    '';
 
     doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
 
@@ -180,14 +195,14 @@ let
       pushd out/Release/obj.target
       find . -path "./torque_*/**/*.o" -or -path "./v8*/**/*.o" | sort -u >files
       ${if stdenv.buildPlatform.isGnu then ''
-        ar -cqs $libv8/lib/libv8.a @files
+        $AR -cqs $libv8/lib/libv8.a @files
       '' else ''
         # llvm-ar supports response files, so take advantage of it if it’s available.
         if [ "$(basename $(readlink -f $(command -v ar)))" = "llvm-ar" ]; then
-          ar -cqs $libv8/lib/libv8.a @files
+          $AR -cqs $libv8/lib/libv8.a @files
         else
           cat files | while read -r file; do
-            ar -cqS $libv8/lib/libv8.a $file
+            $AR -cqS $libv8/lib/libv8.a $file
           done
         fi
       ''}
