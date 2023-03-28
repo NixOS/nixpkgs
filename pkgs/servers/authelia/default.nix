@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, callPackage }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, callPackage, nixosTests }:
 
 let
   inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src vendorHash;
@@ -56,6 +56,7 @@ buildGoModule rec {
     # if overriding replace the postPatch to put your web UI output in internal/server/public_html
     inherit web;
     updateScript = ./update.sh;
+    tests = { inherit (nixosTests) authelia; };
   };
 
   meta = with lib; {

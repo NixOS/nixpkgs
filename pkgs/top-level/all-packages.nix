@@ -18733,6 +18733,8 @@ with pkgs;
 
   rsass = callPackage ../development/tools/misc/rsass { };
 
+  rsonpath = callPackage ../development/tools/misc/rsonpath { };
+
   rufo = callPackage ../development/tools/rufo { };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
@@ -19607,6 +19609,8 @@ with pkgs;
   uri = callPackage ../development/libraries/uri { stdenv = gcc10StdenvCompat; };
 
   cppcms = callPackage ../development/libraries/cppcms { };
+
+  cppcodec = callPackage ../development/libraries/cppcodec { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
@@ -21610,6 +21614,8 @@ with pkgs;
   libnfs = callPackage ../development/libraries/libnfs { };
 
   libnice = callPackage ../development/libraries/libnice { };
+
+  libnitrokey = callPackage ../development/libraries/libnitrokey { };
 
   libnsl = callPackage ../development/libraries/libnsl { };
 
@@ -36407,6 +36413,8 @@ with pkgs;
 
   xcowsay = callPackage ../games/xcowsay { };
 
+  xgalagapp = callPackage ../games/xgalaga++ { };
+
   xjump = callPackage ../games/xjump { };
 
   xmoto = callPackage ../games/xmoto { };
@@ -39314,7 +39322,6 @@ with pkgs;
   pynitrokey = callPackage ../tools/security/pynitrokey { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
-  nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 
