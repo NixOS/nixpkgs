@@ -6,9 +6,9 @@ generic: {
   };
 
   v50 = generic {
-    version = "5.0.19";
-    sha256 = "sha256-esa7DczdaWiG8Ru9py8HlOhvhkjV8IQjMwuiJ6F5c6E=";
-    vendorSha256 = "1417qi061xc4m55z0vz420fr7qpi24kw5yj9wq7iic92smakgkjn";
+    version = "5.0.33";
+    sha256 = "sha256-VimTMcnYaFXeBW3zkDRGMxmtOFgPBU2ANKXLjgtr0GE=";
+    vendorSha256 = "sha256-RG6tSQk3dGaoTG/LHsZkayYCHbguSNOOuAFCmpSwElQ=";
   };
 
   v40 = generic {
