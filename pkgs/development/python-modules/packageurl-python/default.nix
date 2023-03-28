@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "packageurl-python";
-  version = "0.10.4";
+  version = "0.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XJEzT5Qs1V1F6wxn3TOaU175DiXwW57AFq0YjtDvkEg=";
+    hash = "sha256-u8xT0stZIMgVwWJsdZkvMZv8RQtziT+nvYqsWGmqSf4=";
   };
 
   nativeCheckInputs = [
