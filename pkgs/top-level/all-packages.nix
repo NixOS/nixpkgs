@@ -402,6 +402,8 @@ with pkgs;
 
   cewl = callPackage ../tools/security/cewl { };
 
+  chatgpt = callPackage ../tools/misc/chatgpt { };
+
   checkov = callPackage ../development/tools/analysis/checkov {};
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
