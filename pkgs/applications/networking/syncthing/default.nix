@@ -1,4 +1,13 @@
-{ pkgsBuildBuild, go, buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
+{ pkgsBuildBuild
+, go
+, buildGoModule
+, stdenv
+, lib
+, procps
+, fetchFromGitHub
+, nixosTests
+, autoSignDarwinBinariesHook
+}:
 
 let
   common = { stname, target, postInstall ? "" }:
@@ -14,6 +23,15 @@ let
       };
 
       vendorHash = "sha256-5NgflkRXkbWiIkASmxIgWliE8sF89HtlMtlIF+5u6Ic=";
+
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [
+        # Recent versions of macOS seem to require binaries to be signed when
+        # run from Launch Agents/Daemons, even on x86 devices where it has a
+        # more lax code signing policy compared to Apple Silicon. So just sign
+        # the binaries on both architectures to make it possible for launchd to
+        # auto-start Syncthing at login.
+        autoSignDarwinBinariesHook
+      ];
 
       doCheck = false;
 
