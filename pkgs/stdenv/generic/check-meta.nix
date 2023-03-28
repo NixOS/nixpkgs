@@ -368,10 +368,7 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      let toPretty = lib.generators.toPretty {
-            allowPrettyValues = true;
-            indent = "  ";
-          };
+      let toPretty = lib.systems.inspect.toPretty { };
       in { valid = "no"; reason = "unsupported";
            errormsg = ''
              is not available on the requested hostPlatform:

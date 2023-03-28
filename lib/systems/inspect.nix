@@ -105,4 +105,22 @@ rec {
   platformPatterns = mapAttrs (_: p: { parsed = {}; } // p) {
     isStatic = { isStatic = true; };
   };
+
+  # Converts a pattern, string, or list thereof into readable form
+  # for debugging.  The first argument can be used to override the
+  # options passed to `lib.generators.toPretty`.
+  toPretty =
+    options:
+    platforms:
+    let
+      options' = {
+        allowPrettyValues = true;
+        multiline = false;
+      } // options;
+      # remove extraneous `parsed={}` entries which convey no information
+      simplify = pat:
+        if lib.isAttrs pat
+        then lib.filterAttrs (k: v: !(k == "parsed" && v == {})) pat
+        else pat;
+    in lib.generators.toPretty options' (map simplify (lib.toList platforms));
 }
