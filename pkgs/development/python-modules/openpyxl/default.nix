@@ -1,11 +1,12 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, jdcal
 , et_xmlfile
+, fetchFromGitLab
+, jdcal
 , lxml
+, pillow
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -15,26 +16,31 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pvWXdBjv87LVUA1U2dtQyCd6NoQ29OT43bG+NCKHAYQ=";
+  src = fetchFromGitLab {
+    domain = "foss.heptapod.net";
+    owner = "openpyxl";
+    repo = "openpyxl";
+    rev = version;
+    hash = "sha256-SWRbjA83AOLrfe6on2CSb64pH5EWXkfyYcTqWJNBEP0=";
   };
 
-  nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [ jdcal et_xmlfile lxml ];
+  propagatedBuildInputs = [
+    jdcal
+    et_xmlfile
+    lxml
+  ];
 
-  postPatch = ''
-    # LICENSE.rst is missing, and setup.cfg currently doesn't contain anything useful anyway
-    # This should likely be removed in the next update
-    rm setup.cfg
-  '';
+  nativeCheckInputs = [
+    pillow
+    pytestCheckHook
+  ];
 
-  # Tests are not included in archive.
-  # https://bitbucket.org/openpyxl/openpyxl/issues/610
-  doCheck = false;
+  pythonImportsCheck = [
+    "openpyxl"
+  ];
 
   meta = with lib; {
-    description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
+    description = "Python library to read/write Excel 2010 xlsx/xlsm files";
     homepage = "https://openpyxl.readthedocs.org";
     changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${version}/doc/changes.rst";
     license = licenses.mit;
