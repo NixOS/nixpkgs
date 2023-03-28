@@ -239,7 +239,7 @@ in {
     #   for future releases, please delete this condition.
     kernelCompatible =
       if stdenv'.isx86_64
-      then kernel.kernelOlder "6.3"
+      then kernel.kernelOlder "6.4"
       else kernel.kernelOlder "6.2";
     latestCompatibleLinuxPackages =
       if stdenv'.isx86_64
@@ -250,19 +250,11 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.10-staging-2023-03-15";
-    rev = "a5c469c5f380b09705ad0bee15e2ca7a5f78213c";
+    version = "2.1.10-staging-2023-03-29";
+    rev = "184508c77880dc85f88277927230c1908d42573d";
 
-    sha256 = "sha256-CdPuyZMXFzANEdnsr/rB5ckkT8X5uziniY5vmRCKl1U=";
+    sha256 = "sha256-FiU4LoFQIleL9Ksg/zDSUdbbbT4Xz3QCc8flApCzvyY=";
 
     isUnstable = true;
-
-    # Necessary for 6.2.8+ and 6.3 compatibility, see https://github.com/openzfs/zfs/issues/14658
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/openzfs/zfs/pull/14668.patch";
-        hash = "sha256-PR7hxxdjLkjszADdw0R0JRmBPfDlsXG6D+VfC7QzEhk=";
-      })
-    ];
   };
 }
