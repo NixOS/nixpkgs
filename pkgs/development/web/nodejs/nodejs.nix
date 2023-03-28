@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, http-parser, bash
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -6,7 +6,7 @@
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
-, procps, icu
+, icu
 , installShellFiles
 }:
 
@@ -16,6 +16,7 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCrossBitness = stdenv.hostPlatform.is32bit != stdenv.buildPlatform.is32bit;
 
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
@@ -60,8 +61,8 @@ let
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
-    CC_host = "cc";
-    CXX_host = "c++";
+    CC_host = if isCrossBitness then "${stdenv.cc.targetPrefix}cc" else "cc";
+    CXX_host = if isCrossBitness then "${stdenv.cc.targetPrefix}c++" else "c++";
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
 
     # NB: technically, we do not need bash in build inputs since all scripts are
@@ -126,7 +127,8 @@ let
 
     pos = builtins.unsafeGetAttrPos "version" args;
 
-    inherit patches;
+    patches = patches
+      ++ (lib.optional isCrossBitness ./add-qemu-wrapper-support.patch);
 
     doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
 
@@ -148,6 +150,17 @@ let
       # Skip some tests that are not passing in this context
       "CI_SKIP_TESTS=test-setproctitle,test-tls-cli-max-version-1.3,test-tls-client-auth,test-child-process-exec-env,test-fs-write-stream-eagain,test-tls-sni-option,test-https-foafssl,test-child-process-uid-gid,test-process-euid-egid,test-process-initgroups,test-process-uid-gid,test-process-setgroups"
     ];
+
+    postPatch = lib.optionalString isCrossBitness ''
+      sed -i "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-qemu-wrapper',%g" node.gyp
+      sed -i "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-qemu-wrapper',%g" tools/v8_gypfiles/v8.gyp
+      mkdir -p out/Release
+      cat > out/Release/v8-qemu-wrapper << "EOF"
+      #!${buildPackages.bash}/bin/sh
+      ${stdenv.hostPlatform.emulator buildPackages} "$@"
+      EOF
+      chmod +x out/Release/v8-qemu-wrapper
+    '';
 
     postInstall = ''
       HOST_PATH=$out/bin patchShebangs --host $out
