@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pytaglib";
-  version = "1.5.0-1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "supermihi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1nssiqzlzvzdd3pc5xd1qwgwgkyazynmq8qiljz0dhy0c8j6mkfp";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-CEpyRxC9d7EuxupMQaX7WUCZ7lhyE6LhQY7Koe0NJ1A=";
   };
 
   buildInputs = [
