@@ -39,6 +39,7 @@ let
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-camera = callPackage ./apps/deepin-camera { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
+    deepin-clone = callPackage ./apps/deepin-clone { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };

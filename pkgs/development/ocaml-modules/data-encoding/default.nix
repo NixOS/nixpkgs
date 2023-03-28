@@ -5,7 +5,7 @@
 , either
 , ezjsonm
 , zarith
-, zarith_stubs_js
+, zarith_stubs_js ? null
 , hex
 , json-data-encoding
 , json-data-encoding-bson
