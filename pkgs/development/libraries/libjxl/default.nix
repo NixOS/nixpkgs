@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, fetchpatch
 , brotli
 , cmake
 , giflib
@@ -32,6 +32,14 @@ stdenv.mkDerivation rec {
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
+
+  # v0.8.1 of libjxl for riscv64 is currently broken https://github.com/libjxl/libjxl/pull/2211
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc.diff";
+      hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
