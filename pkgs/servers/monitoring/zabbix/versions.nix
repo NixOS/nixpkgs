@@ -12,7 +12,7 @@ generic: {
   };
 
   v40 = generic {
-    version = "4.0.37";
-    sha256 = "sha256-Wuexl8I2zA63jyTRDe8bMSP++imwSOxc4LEdUnH8jps=";
+    version = "4.0.44";
+    sha256 = "sha256-qB3hSHnPffenBC6gv/QQXJuVpj4/oN4/jt/O6QmiX+c=";
   };
 }
