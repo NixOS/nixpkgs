@@ -1,30 +1,21 @@
 { lib
 , babel
 , buildPythonPackage
-, colorama
-, cssselect
-, feedparser
 , fetchFromGitLab
 , fetchpatch
-, gdata
 , gnupg
-, google-api-python-client
 , html2text
 , libyaml
 , lxml
-, mechanize
 , nose
 , packaging
-, pdfminer-six
 , pdm-pep517
 , pillow
 , prettytable
-, pyqt5
 , python-dateutil
 , pythonOlder
 , pyyaml
 , requests
-, simplejson
 , termcolor
 , testers
 , unidecode
@@ -47,31 +38,21 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     packaging
-    pyqt5
     pdm-pep517
   ];
 
   propagatedBuildInputs = [
     babel
-    colorama
-    cssselect
     python-dateutil
-    feedparser
-    gdata
     gnupg
-    google-api-python-client
     html2text
     libyaml
     lxml
-    mechanize
     packaging
-    pdfminer-six
     pillow
     prettytable
-    pyqt5
     pyyaml
     requests
-    simplejson
     termcolor
     unidecode
   ];
