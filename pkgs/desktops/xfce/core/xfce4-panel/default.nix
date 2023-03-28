@@ -11,6 +11,8 @@
 , tzdata
 , vala
 , xfconf
+, libxfce4windowing
+, gtk-layer-shell
 , isNixOS ? true
 , lndir
 , embedPlugins ? []
@@ -25,9 +27,9 @@ assert lib.assertMsg (if isNixOS
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
-  version = "4.18.2";
+  version = "4.19.0";
 
-  sha256 = "sha256-kqc+5pClmAPEkyNWKj4uPgwFFKBDWrwFHqRDWjYrwa4=";
+  sha256 = "sha256-fm3xLNc53QY1H93hOJp5tEPXiP1ZL+a/yQ7p3zTgI58=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -42,11 +44,14 @@ mkXfceDerivation {
     libwnck
     xfconf
     tzdata
+    libxfce4windowing
+    gtk-layer-shell
   ];
 
   propagatedBuildInputs = [
     gtk3
     libxfce4util
+    libxfce4windowing
   ];
 
   patches = lib.optional isNixOS [ ./xfce4-panel-datadir.patch ];
