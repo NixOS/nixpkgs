@@ -160,7 +160,7 @@ All `haskell.packages.*` package sets use the same package descriptions and the 
 of versions by default. There are however GHC version specific override `.nix`
 files to loosen this a bit.
 
-### Dependency resolution
+### Dependency resolution {#haskell-dependency-resolution}
 
 Normally when you build Haskell packages with `cabal-install`, `cabal-install`
 does dependency resolution. It will look at all Haskell package versions known
@@ -230,7 +230,7 @@ specification, test suites, benchmarks etc. by compiling and invoking the
 package's `Setup.hs`. It does *not* use or invoke the `cabal-install` binary,
 but uses the underlying `Cabal` library instead.
 
-### General arguments
+### General arguments {#haskell-derivation-args}
 
 `pname`
 : Package name, assumed to be the same as on Hackage (if applicable)
@@ -479,7 +479,7 @@ are especially useful when writing [overrides](#haskell-overriding-haskell-packa
 when you want to make sure that they are definitely included. However, it is
 recommended to use the more accurate ones listed above when possible.
 
-### Meta attributes
+### Meta attributes {#haskell-derivation-meta}
 
 `haskellPackages.mkDerivation` accepts the following attributes as direct
 arguments which are transparently set in `meta` of the resulting derivation. See
@@ -714,7 +714,7 @@ editor plugin to achieve this.
 
 ## Overriding Haskell packages {#haskell-overriding-haskell-packages}
 
-### Overriding a single package
+### Overriding a single package {#haskell-overriding-a-single-package}
 
 <!-- TODO(@sternenseemann): we should document /somewhere/ that base == null etc. -->
 
@@ -803,7 +803,7 @@ lib.pipe my-haskell-package [
 ]
 ```
 
-#### `haskell.lib.compose`
+#### `haskell.lib.compose` {#haskell-haskell.lib.compose}
 
 The base interface for all overriding is the following function:
 
@@ -826,7 +826,7 @@ following overview. Refer to the
 [documentation of `haskellPackages.mkDerivation`](#haskell-mkderivation)
 for a more detailed description of the effects of the respective arguments.
 
-##### Packaging Helpers
+##### Packaging Helpers {#haskell-packaging-helpers}
 
 `overrideSrc { src, version } drv`
 : Replace the source used for building `drv` with the path or derivation given
@@ -875,7 +875,7 @@ sometimes necessary when working with versioned packages in
 altogether. Useful if it fails to evaluate cleanly and is causing
 noise in the evaluation errors tab on Hydra.
 
-##### Development Helpers
+##### Development Helpers {#haskell-development-helpers}
 
 `sdistTarball drv`
 : Create a source distribution tarball like those found on Hackage
@@ -913,7 +913,7 @@ for debugging with e.g. `gdb`.
 
 <!-- TODO(@sternenseemann): shellAware -->
 
-##### Trivial Helpers
+##### Trivial Helpers {#haskell-trivial-helpers}
 
 `doJailbreak drv`
 : Sets the `jailbreak` argument to `true` for `drv`.
@@ -998,7 +998,7 @@ benchmark component.
 `dontCoverage drv`
 : Sets the `doCoverage` argument to `false` for `drv`.
 
-#### Library functions in the Haskell package sets
+#### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
 Some library functions depend on packages from the Haskell package sets. Thus they are
 exposed from those instead of from `haskell.lib.compose` which can only access what is
@@ -1062,7 +1062,7 @@ it does for the unstable branches.
 
 ## F.A.Q. {#haskell-faq}
 
-### Why is topic X not covered in this section? Why is section Y missing?
+### Why is topic X not covered in this section? Why is section Y missing? {#haskell-why-not-covered}
 
 We have been working on [moving the nixpkgs Haskell documentation back into the
 nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). Since this

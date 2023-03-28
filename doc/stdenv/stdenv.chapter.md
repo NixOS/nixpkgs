@@ -703,7 +703,7 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
 
-##### `dontAddStaticConfigureFlags`
+##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
 By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
 
@@ -1095,15 +1095,15 @@ postInstall = ''
 
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
 
-#### `--replace` \<s1\> \<s2\>
+#### `--replace` \<s1\> \<s2\> {#fun-substitute-replace}
 
 Replace every occurrence of the string \<s1\> by \<s2\>.
 
-#### `--subst-var` \<varName\>
+#### `--subst-var` \<varName\> {#fun-substitute-subst-var}
 
 Replace every occurrence of `@varName@` by the contents of the environment variable \<varName\>. This is useful for generating files from templates, using `@...@` in the template as placeholders.
 
-#### `--subst-var-by` \<varName\> \<s\>
+#### `--subst-var-by` \<varName\> \<s\> {#fun-substitute-subst-var-by}
 
 Replace every occurrence of `@varName@` by the string \<s\>.
 
@@ -1244,7 +1244,7 @@ Multiple paths can be specified.
 patchShebangs [--build | --host] PATH...
 ```
 
-##### Flags
+##### Flags {#patch-shebangs.sh-invocation-flags}
 
 `--build`
 : Look up commands available at build time
@@ -1252,7 +1252,7 @@ patchShebangs [--build | --host] PATH...
 `--host`
 : Look up commands available at run time
 
-##### Examples
+##### Examples {#patch-shebangs.sh-invocation-examples}
 
 ```sh
 patchShebangs --host /nix/store/<hash>-hello-1.0/bin
@@ -1339,7 +1339,7 @@ Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard envi
 
 Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.
 
-### Other hooks
+### Other hooks {#stdenv-other-hooks}
 
 Many other packages provide hooks, that are not part of `stdenv`. You can find
 these in the [Hooks Reference](#chap-hooks).
