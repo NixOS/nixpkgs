@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake }:
+{ stdenv, fetchurl, e2fsprogs }:
 
 stdenv.mkDerivation rec {
   pname = "tmpreaper";
@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ca94d156eb68160ec9b6ed8b97d70fbee996de21437f0cf7d0c3b46709fecbc";
   };
 
+  buildInputs = [ e2fsprogs.dev ];
+
   meta = {
-    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-darwin" "aarch64-darwin" "x86_64-linux" "aarch64-darwin"];
     homepage = "https://packages.debian.org/sid/tmpreaper";
     description = "Clean up files in directories based on their age";
-    license = "GPL-2.0-only";
+    license = "lib.licenses.gpl2Only";
   };
-
-  buildInputs = [ autoconf automake ];
 }
