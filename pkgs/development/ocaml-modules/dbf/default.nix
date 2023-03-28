@@ -7,13 +7,13 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "pveber";
     repo = "dbf";
-    rev = "${version}";
-    sha256 = "sha256-h1K5YDLbXGEJi/quKXvSR0gZ+WkBzut7AsVFv+Bm8/g=";
+    rev = version;
+    hash = "sha256-h1K5YDLbXGEJi/quKXvSR0gZ+WkBzut7AsVFv+Bm8/g=";
   };
 
   buildInputs = [ ppx_cstruct ];
