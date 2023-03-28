@@ -17,7 +17,6 @@
 , makeRustPlatform
 , llvmPackages_11
 , llvmPackages_15, llvm_15
-, fetchpatch
 } @ args:
 
 import ./default.nix {
@@ -61,4 +60,4 @@ import ./default.nix {
   rustcPatches = [ ];
 }
 
-(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_15" "llvm_15"])
+(builtins.removeAttrs args [ "pkgsBuildHost" "llvmPackages_11" "llvmPackages_15" "llvm_15"])
