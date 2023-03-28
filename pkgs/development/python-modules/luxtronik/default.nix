@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Bouni";
     repo = "python-luxtronik";
     rev = version;
-    sha256 = "sha256-7TuvqOAb/MUumOF6BKTRLOJuvteqZPmFUXXsuwEpmOM=";
+    hash = "sha256-7TuvqOAb/MUumOF6BKTRLOJuvteqZPmFUXXsuwEpmOM=";
   };
 
   # Project has no tests

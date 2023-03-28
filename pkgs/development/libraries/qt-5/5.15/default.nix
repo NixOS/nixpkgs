@@ -18,6 +18,7 @@ Check for any minor version changes.
 , developerBuild ? false
 , decryptSslTraffic ? false
 , debug ? false
+, config
 }:
 
 let
@@ -118,9 +119,6 @@ let
 
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
-
-      # remove before 23.11
-      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
 
       inherit callPackage qtCompatVersion qtModule srcs;
 
@@ -226,6 +224,9 @@ let
         propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
+    } // lib.optionalAttrs config.allowAliases {
+      # remove before 23.11
+      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
     };
 
 in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "go-tools";
-  version = "2023.1.2";
+  version = "2023.1.3";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
     rev = version;
-    sha256 = "sha256-Xnylkv0n3FExQ4e4pmD6DAUqGtud80wHHoVY56UXfOU=";
+    sha256 = "sha256-ZgPRUkvokHwMHWQMjQJ3Uprt+lf2CAv1kmpUI93J0Cs=";
   };
 
   vendorHash = "sha256-o9UtS6AMgRYuAkOWdktG2Kr3QDBDQTOGSlya69K2br8=";

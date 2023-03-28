@@ -12,14 +12,14 @@ buildPythonPackage rec {
   pname = "blis";
   # Do not update to BLIS 0.9.x until the following issue is resolved:
   # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
-  version = "0.7.9";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ke9MJQB3hakP/C8Ks9O9O3XNLXhWqaSCt9DayNURoJ0=";
+    hash = "sha256-fOrEZoAfnZfss04Q3e2MJM9eCSfqfoNNocydLtP8Nm8=";
   };
 
   postPatch = ''

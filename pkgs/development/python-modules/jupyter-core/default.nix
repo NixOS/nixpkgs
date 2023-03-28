@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , hatchling
 , platformdirs
 , traitlets
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-core";
-  version = "5.1.1";
+  version = "5.2.0";
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
@@ -19,11 +20,16 @@ buildPythonPackage rec {
     owner = "jupyter";
     repo = "jupyter_core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-54zbo+RXgT9AJabmJYHCznyoinTQqrTORzlM48WpnQQ=";
+    hash = "sha256-X3P3bTLhpWIa6EHdxZ/KFiQNAnhszha2cfZ8PynZPRs=";
   };
 
   patches = [
     ./tests_respect_pythonpath.patch
+    (fetchpatch {
+      # add support for platformdirs>=3
+      url = "https://github.com/jupyter/jupyter_core/commit/ff4086cdbdac2ea79c18632e4e35acebc1f7cf57.patch";
+      hash = "sha256-UhHO58xZ4hH47NBhOhsfBjgsUtA+1EIHxPBvnKA5w28=";
+    })
   ];
 
   nativeBuildInputs = [

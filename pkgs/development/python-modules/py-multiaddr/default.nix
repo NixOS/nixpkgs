@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "multiformats";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cGM7iYQPP+UOkbTxRhzuED0pkcydFCO8vpx9wTc0/HI=";
+    hash = "sha256-cGM7iYQPP+UOkbTxRhzuED0pkcydFCO8vpx9wTc0/HI=";
   };
 
   postPatch = ''

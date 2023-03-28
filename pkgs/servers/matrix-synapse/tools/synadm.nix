@@ -1,23 +1,18 @@
 { lib
-, python3Packages
+, python3
 }:
 
-with python3Packages; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.38";
+  version = "0.40";
   format = "setuptools";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-l1KRUnjzj1/MEb1nxV6hMaxi15q7baG+iiK2yatZYRc=";
+    hash = "sha256-iDG2wsC0820unKlKNDKwgCNC+SAWJm8ltSB4knmLqeQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Click>=7.0,<8.0" "Click"
-  '';
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     click-option-group
     dnspython

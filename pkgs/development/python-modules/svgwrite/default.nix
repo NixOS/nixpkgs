@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "svgwrite";
     rev = "v${version}";
-    sha256 = "sha256-uOsrDhE9AwWU7GIrCVuL3uXTPqtrh8sofvo2C5t+25I=";
+    hash = "sha256-uOsrDhE9AwWU7GIrCVuL3uXTPqtrh8sofvo2C5t+25I=";
   };
 
   # svgwrite requires Python 3.6 or newer

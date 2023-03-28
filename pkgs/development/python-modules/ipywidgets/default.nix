@@ -33,6 +33,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # https://github.com/jupyter-widgets/ipywidgets/issues/3711
+    "test_append_display_data"
+  ];
+
   meta = {
     description = "IPython HTML widgets for Jupyter";
     homepage = "https://ipython.org/";

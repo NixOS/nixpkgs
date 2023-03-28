@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     "--with-docbook-xsl-stylesheets=${docbook_xsl}/xml/xsl/docbook"
   ];
 
-  buildInputs = [ pkg-config autoreconfHook expat gpgme libgcrypt libxml2 libxslt gnutls curl docbook_xsl ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs = [ expat gpgme libgcrypt libxml2 libxslt gnutls curl docbook_xsl ];
 
   meta = with lib; {
     description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";

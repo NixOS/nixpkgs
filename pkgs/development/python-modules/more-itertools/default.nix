@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "9.0.0";
+  version = "9.1.0";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WmJX5Ah47wUgsYA5kOPiIwOkG1cUAGwyo/2DBLJuoas=";
+    hash = "sha256-yrqjQa0DieqDwXqUVmpTrkydBzSYYeyxTcbQNFz5rF0=";
   };
 
   nativeBuildInouts = [

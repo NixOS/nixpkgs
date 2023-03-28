@@ -1,6 +1,8 @@
 { lib, newScope, config }:
 
 lib.makeScope newScope (self: with self; {
+  async-prompt = callPackage ./async-prompt.nix { };
+
   autopair = callPackage ./autopair.nix { };
 
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };

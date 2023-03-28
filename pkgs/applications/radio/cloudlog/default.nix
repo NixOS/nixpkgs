@@ -6,7 +6,7 @@
 , php}:
 
 stdenvNoCC.mkDerivation rec {
-  name = "cloudlog";
+  pname = "cloudlog";
   version = "2.4";
 
   src = fetchFromGitHub {

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RCLH1mOvdizXeVd1NmvGpnq0QKGreW6w90JbDpA08HY=";
+    hash = "sha256-RCLH1mOvdizXeVd1NmvGpnq0QKGreW6w90JbDpA08HY=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;

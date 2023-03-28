@@ -29,7 +29,7 @@ let
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-zvXgZdvYycFbbMsBFSqMDzLanEtF9+JuVSQ3AM8/LQk=";
+      hash = "sha256-zvXgZdvYycFbbMsBFSqMDzLanEtF9+JuVSQ3AM8/LQk=";
     };
 
     patches = [ ./add-testing-data.patch ];

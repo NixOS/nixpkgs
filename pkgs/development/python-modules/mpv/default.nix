@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "jaseg";
     repo = "python-mpv";
     rev = "v${version}";
-    sha256 = "sha256-UCJ1PknnWQiFciTEMxTUqDzz0Z8HEWycLuQqYeyQhoM=";
+    hash = "sha256-UCJ1PknnWQiFciTEMxTUqDzz0Z8HEWycLuQqYeyQhoM=";
   };
 
   buildInputs = [ mpv ];

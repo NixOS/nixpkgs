@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jupyter_sphinx";
-    sha256 = "sha256-DBGjjxNDE48sUFHA00xMVF9EgBdMG9QcAlb+gm4LqlU=";
+    hash = "sha256-DBGjjxNDE48sUFHA00xMVF9EgBdMG9QcAlb+gm4LqlU=";
   };
 
   propagatedBuildInputs = [ nbconvert nbformat sphinx ipywidgets ];

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "CairoSVG";
-  version = "2.6.0";
+  version = "2.7.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1eyT6QEBs7boKqJF0FRu6bAWz9oLY0RnUVmDDYU9XQQ=";
+    hash = "sha256-rE3HwdOLOhVxfbJjOjo4MBLgvmZMcnyRFjfmr2pJKTw=";
   };
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];

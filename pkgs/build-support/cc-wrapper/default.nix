@@ -9,7 +9,6 @@
 , lib
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, gccForLibs ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -18,6 +17,9 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, gccForLibs ? if useCcForLibs then cc else null
+# same as `gccForLibs`, but generalized beyond clang
+, useCcForLibs ? isClang
 }:
 
 with lib;
@@ -61,7 +63,7 @@ let
   expand-response-params =
     lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
-  useGccForLibs = isClang
+  useGccForLibs = useCcForLibs
     && libcxx == null
     && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
@@ -226,6 +228,10 @@ stdenv.mkDerivation {
 
       if [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
+    '' + lib.optionalString (hostPlatform != targetPlatform) ''
+      elif [ -e $ccPath/${targetPrefix}cpp ]; then
+        wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
+    '' + ''
       fi
     ''
 

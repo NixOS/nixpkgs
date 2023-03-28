@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TqaUn8uwdrl4VFsJn6xoq6011voYmd7vT2uCo9uiV8E=";
+    hash = "sha256-TqaUn8uwdrl4VFsJn6xoq6011voYmd7vT2uCo9uiV8E=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

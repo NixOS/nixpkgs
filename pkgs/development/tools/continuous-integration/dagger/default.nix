@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dagger";
-  version = "0.3.13";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "dagger";
     repo = "dagger";
     rev = "v${version}";
-    hash = "sha256-J+3wihsZx8ZnanWfahtd9J659dUaQXbD0lz2uMHLb3E=";
+    hash = "sha256-R9O+ilOz5AZmsSR0uoOhXLNMTUEej9sV4ONaIF6ZnVc=";
   };
 
-  vendorHash = "sha256-r8XJrHU8ToqW7CqvpYoHcM0skqWOXZxFAyQQZ2yIBQ4=";
+  vendorHash = "sha256-/ZwIuzUvs7GvpoR6CfxdCivyOS8kDOukM92NuWFXJCY=";
   proxyVendor = true;
 
   subPackages = [

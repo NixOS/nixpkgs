@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "atlassian-api";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-en+4EKkmTQWMgnGZaGs+O9Yh2TI03xW111wbp9O8dYE=";
+    hash = "sha256-en+4EKkmTQWMgnGZaGs+O9Yh2TI03xW111wbp9O8dYE=";
   };
 
   propagatedBuildInputs = [

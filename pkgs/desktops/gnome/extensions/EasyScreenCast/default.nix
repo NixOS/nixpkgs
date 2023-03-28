@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext, jq }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext, jq, intltool }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-EasyScreenCast";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    glib gettext jq
+    glib gettext jq intltool
   ];
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux;
+    broken = true;
   };
 }
-

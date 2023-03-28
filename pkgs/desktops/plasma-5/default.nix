@@ -33,8 +33,6 @@
 }:
 
 let
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [
     lgpl21Plus
@@ -107,10 +105,9 @@ let
                 license = meta.license or license;
                 maintainers = (meta.maintainers or [ ]) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
-                broken = meta.broken or broken;
               };
           in
-          (args.stdenv or qtStdenv).mkDerivation (args // {
+          qtStdenv.mkDerivation (args // {
             inherit pname version meta outputs setupHook src nativeBuildInputs;
           });
       };

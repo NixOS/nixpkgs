@@ -28,6 +28,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
 }:
 
 # Make sure we get GNU sed.
@@ -53,6 +54,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -145,6 +147,8 @@ let majorVersion = "12";
         buildPackages
         cloog
         crossStageStatic
+        disableBootstrap
+        disableGdbPlugin
         enableLTO
         enableMultilib
         enablePlugin
@@ -280,9 +284,11 @@ stdenv.mkDerivation ({
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
-  buildFlags = optional
-    (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
-    (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+  buildFlags =
+    let target =
+          lib.optionalString (profiledCompiler) "profiled" +
+          lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+    in lib.optional (target != "") target;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "RogerSelwyn";
     repo = "skyq_hub";
     rev = version;
-    sha256 = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
+    hash = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
   };
 
   propagatedBuildInputs = [

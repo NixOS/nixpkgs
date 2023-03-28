@@ -230,8 +230,8 @@ self: super: builtins.intersectAttrs super {
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK30; };
-  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
+  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
+  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
@@ -879,17 +879,17 @@ self: super: builtins.intersectAttrs super {
   domaindriven-core = dontCheck super.domaindriven-core;
 
   cachix = overrideCabal (drv: {
-    version = "1.3.1";
+    version = "1.3.3";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.3.1";
-      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+      rev = "v1.3.3";
+      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
     };
     buildDepends = [ self.conduit-concurrent-map ];
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.3/1.3.1/' cachix.cabal
+      sed -i 's/1.3.2/1.3.3/' cachix.cabal
     '';
   }) (super.cachix.override {
     nix = self.hercules-ci-cnix-store.passthru.nixPackage;
@@ -897,12 +897,12 @@ self: super: builtins.intersectAttrs super {
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   });
   cachix-api = overrideCabal (drv: {
-    version = "1.3.1";
+    version = "1.3.3";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.3.1";
-      sha256 = "sha256-fYQrAgxEMdtMAYadff9Hg4MAh0PSfGPiYw5Z4BrvgFU=";
+      rev = "v1.3.3";
+      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;

@@ -144,7 +144,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
-    sha256 = "sha256-cI/4GdkmTikoP9O0Skh/0jCxxRypRua0231iKcxtBcY=";
+    hash = "sha256-cI/4GdkmTikoP9O0Skh/0jCxxRypRua0231iKcxtBcY=";
   };
 
   patches = [

@@ -362,7 +362,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.openFirewall -> !isNull cfg.config;
+        assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
       }
     ];

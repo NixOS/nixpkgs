@@ -105,7 +105,25 @@ let
   };
 
   # Boost 1.75 is not compatible with Python 3.10
-  python = python39;
+  python = python39.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+    };
+  };
 
   boost = boost175.override {
     enablePython = true;
@@ -121,7 +139,7 @@ let
     ps.setuptools
     ps.virtualenv
     # Libraries needed by the python tools
-    ps.Mako
+    ps.mako
     ceph-common
     ps.cherrypy
     ps.cmd2

@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = with pkgs; [
     ffmpegthumbnailer ffmpeg
-  ] ++ lib.optional waylandSupport [ chafa ]
-    ++ lib.optional x11Support [ ueberzug ];
+  ] ++ lib.optionals waylandSupport [ chafa ]
+    ++ lib.optionals x11Support [ ueberzug ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

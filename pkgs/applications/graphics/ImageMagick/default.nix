@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-2";
+  version = "7.1.1-5";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-5B8grg05n+MkHZU76QBsrrU5Z3VZRGMRHX35HXtTbe8=";
+    hash = "sha256-UR5BHCWaecbSF49IMKP/fE+oVVjMlTK41bKcGMtD+O4=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
     done
   '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda ];
+    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

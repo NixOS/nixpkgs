@@ -207,5 +207,6 @@ buildPythonPackage rec {
     homepage = "https://beam.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    broken = true;
   };
 }

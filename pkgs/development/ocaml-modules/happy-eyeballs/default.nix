@@ -7,6 +7,7 @@ buildDunePackage rec {
   version = "0.5.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/roburio/happy-eyeballs/releases/download/v${version}/happy-eyeballs-${version}.tbz";

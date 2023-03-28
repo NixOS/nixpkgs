@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "williballenthin";
     repo = "viv-utils";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ih6CtnsGfHRLDjoaF7BkoUENu+0pU3NB6TG0A70f3nE=";
+    hash = "sha256-ih6CtnsGfHRLDjoaF7BkoUENu+0pU3NB6TG0A70f3nE=";
   };
 
   postPatch = ''
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/williballenthin/viv-utils";
     changelog = "https://github.com/williballenthin/viv-utils/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

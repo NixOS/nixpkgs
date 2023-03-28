@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "easyenergy";
-  version = "0.2.0";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EhpZKwoayT53lhyuM/DlyLQ/1OSGuiAaiBdjM0UTZ8E=";
+    hash = "sha256-jo9Gn5ZPm9jSTB4m1yy779hqzby9abFFDSnKLxYqccg=";
   };
 
   postPatch = ''
@@ -49,6 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "easyenergy"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_json_request"
+    "test_internal_session"
+    "test_electricity_model_usage"
+    "test_electricity_model_return"
+    "test_electricity_none_data"
+    "test_no_electricity_data"
+    "test_gas_morning_model"
+    "test_gas_model"
+    "test_gas_none_data"
+    "test_no_gas_data"
   ];
 
   meta = with lib; {

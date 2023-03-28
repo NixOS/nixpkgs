@@ -12,27 +12,16 @@ let
   python = ((if stdenv.isDarwin then python3 else python3Minimal).override {
     self = python;
     includeSiteCustomize = true;
-  });
-
-  # TODO add our own small test suite, maybe add tests for these deps to channels?
-  markdown-it-py-no-tests = python.pkgs.markdown-it-py.override {
-    disableTests = true;
+  }).override {
+    packageOverrides = final: prev: {
+      markdown-it-py = prev.markdown-it-py.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+      mdit-py-plugins = prev.mdit-py-plugins.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+    };
   };
-  mdit-py-plugins-no-tests = python.pkgs.mdit-py-plugins.override {
-    markdown-it-py = markdown-it-py-no-tests;
-    disableTests = true;
-  };
-
-  makeDeps = pkgs: small:
-    if small
-    then [
-      markdown-it-py-no-tests
-      mdit-py-plugins-no-tests
-    ]
-    else [
-      pkgs.markdown-it-py
-      pkgs.mdit-py-plugins
-    ];
 in
 
 python.pkgs.buildPythonApplication rec {
@@ -54,12 +43,15 @@ python.pkgs.buildPythonApplication rec {
     src = ./src;
   };
 
-  nativeBuildInputs = [
-    python.pkgs.setuptools
-    python.pkgs.pytestCheckHook
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+    pytestCheckHook
   ];
 
-  propagatedBuildInputs = makeDeps python.pkgs true;
+  propagatedBuildInputs = with python.pkgs; [
+    markdown-it-py
+    mdit-py-plugins
+  ];
 
   pytestFlagsArray = [ "-vvrP" "tests/" ];
 
@@ -67,7 +59,7 @@ python.pkgs.buildPythonApplication rec {
   # build closures small. mypy has an unreasonably large build closure for docs builds.
   passthru.tests.typing = runCommand "${pname}-mypy" {
     nativeBuildInputs = [
-      (python3.withPackages (p: [ p.mypy p.pytest ] ++ makeDeps p false))
+      (python3.withPackages (ps: with ps; [ mypy pytest markdown-it-py mdit-py-plugins ]))
     ];
   } ''
     mypy --strict ${src}

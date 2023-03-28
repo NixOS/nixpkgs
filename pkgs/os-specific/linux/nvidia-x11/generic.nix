@@ -13,13 +13,14 @@
 , settings32Bit ? false
 
 , prePatch ? ""
+, postPatch ? null
 , patches ? []
 , broken ? false
 , brokenOpen ? broken
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which
+, kernel ? null, perl, nukeReferences, which, libarchive
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -68,7 +69,7 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
-    inherit prePatch;
+    inherit prePatch postPatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
@@ -97,8 +98,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    buildInputs = [ which ];
-    nativeBuildInputs = [ perl nukeReferences ]
+    nativeBuildInputs = [ perl nukeReferences which libarchive ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];

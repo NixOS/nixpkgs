@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   cudaSupport ? false, cudaPackages, magma,
-  mklDnnSupport ? true, useSystemNccl ? true,
+  useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -9,13 +9,17 @@
 
   # Build inputs
   numactl,
-  CoreServices, libobjc,
+  Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
   numpy, pyyaml, cffi, click, typing-extensions,
 
   # Unit tests
   hypothesis, psutil,
+
+  # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
+  # this is also what official pytorch build does
+  mklDnnSupport ? !(stdenv.isDarwin && stdenv.isAarch64),
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -275,7 +279,7 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
 
   propagatedBuildInputs = [
     cffi
@@ -360,10 +364,14 @@ in buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit cudaSupport cudaPackages gpuTargetString;
-    cudaCapabilities = supportedCudaCapabilities;
+    inherit cudaSupport cudaPackages;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
+  } // lib.optionalAttrs cudaSupport {
+    # NOTE: supportedCudaCapabilities isn't computed unless cudaSupport is true, so we can't use
+    #   it in the passthru set above because a downstream package might try to access it even
+    #   when cudaSupport is false. Better to have it missing than null or an empty list by default.
+    cudaCapabilities = supportedCudaCapabilities;
   };
 
   meta = with lib; {

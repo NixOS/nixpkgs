@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
+    sha256 = "sha256-KoiFxANRbPewkz7UsU1sqjDgIFJInr1BTcdaxS51WeY=";
   };
 
   buildInputs = lib.optionals withRemote [ libxcrypt ];

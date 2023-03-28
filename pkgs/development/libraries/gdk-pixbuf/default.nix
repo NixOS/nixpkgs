@@ -14,19 +14,21 @@
 , libjpeg
 , libpng
 , gnome
-, gobject-introspection
-, buildPackages
 , doCheck ? false
 , makeWrapper
 , lib
 , testers
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
   version = "2.42.10";
 
-  outputs = [ "out" "dev" "man" "devdoc" ]
+  outputs = [ "out" "dev" "man" ]
+    ++ lib.optional withIntrospection "devdoc"
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
   src = let
@@ -56,13 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     makeWrapper
     glib
-    gi-docgen
-    gobject-introspection
 
     # for man pages
     docutils
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -74,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgio_sniffing=false"
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
   ];
 
   postPatch = ''
@@ -104,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
           install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
           mv $f ''${f%.dylib}.so
       done
-    '' + ''
+    '' + lib.optionalString withIntrospection ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
@@ -116,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';

@@ -29,7 +29,6 @@ let
     buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [
@@ -57,9 +56,6 @@ let
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
              lib/Driver/ToolChains/*.cpp
-
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
@@ -90,8 +86,9 @@ let
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ALGyMvnR+QLVeKnXWBS2f6AgdY1a5CLijKjO9iafpcY=";
+    hash = "sha256-ALGyMvnR+QLVeKnXWBS2f6AgdY1a5CLijKjO9iafpcY=";
   };
 
   buildInputs = (if stdenv.isDarwin then [ openblas ] else [ blas lapack ]);

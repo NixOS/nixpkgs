@@ -2,7 +2,7 @@
 , buildPythonPackage
 , decorator
 , fetchPypi
-, FormEncode
+, formencode
 , httpretty
 , libxml2
 , lxml
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     decorator
-    FormEncode
+    formencode
     httpretty
     libxml2
     lxml

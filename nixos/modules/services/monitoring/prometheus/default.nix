@@ -31,7 +31,7 @@ let
     if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package ]; } ''
+        { buildInputs = [ cfg.package.cli ]; } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;

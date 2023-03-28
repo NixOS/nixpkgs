@@ -25,11 +25,11 @@ let
   pname = "teams";
   versions = {
     linux = "1.5.00.23861";
-    darwin = "1.5.00.22362";
+    darwin = "1.6.00.4464";
   };
   hashes = {
     linux = "sha256-h0YnCeJX//l4TegJVZtavV3HrxjYUF2Fa5KmaYmZW8E=";
-    darwin = "sha256-fbw6T+k6R5FyQ7XOKzyNYBvXlxH2xpJsBnsR1L+3Jmw=";
+    darwin = "sha256-DvXMrXotKWUqFCb7rZj8wU7mmZJKuTLGyx8qOB/aQtg=";
   };
   meta = with lib; {
     description = "Microsoft Teams";

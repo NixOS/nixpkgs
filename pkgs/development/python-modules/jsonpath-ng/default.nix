@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = pname;
     # missing tag https://github.com/h2non/jsonpath-ng/issues/114
     rev = "cce4a3d4063ac8af928795acc53beb27a2bfd101";
-    sha256 = "sha256-+9iQHQs5TQhZFeIqMlsa3FFPfZEktAWy1lSdJU7kZrc=";
+    hash = "sha256-+9iQHQs5TQhZFeIqMlsa3FFPfZEktAWy1lSdJU7kZrc=";
   };
 
   propagatedBuildInputs = [

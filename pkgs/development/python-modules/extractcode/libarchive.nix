@@ -56,7 +56,7 @@ buildPythonPackage rec {
     description = "A ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/nexB/scancode-plugins/tree/main/builtins/extractcode_libarchive-linux";
     license = with licenses; [ asl20 bsd2 ];
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

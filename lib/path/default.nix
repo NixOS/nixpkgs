@@ -15,6 +15,9 @@ let
     last
     genList
     elemAt
+    all
+    concatMap
+    foldl'
     ;
 
   inherit (lib.strings)
@@ -189,6 +192,80 @@ in /* No rec! Add dependencies on this file at the top. */ {
     value:
     subpathInvalidReason value == null;
 
+
+  /* Join subpath strings together using `/`, returning a normalised subpath string.
+
+    Like `concatStringsSep "/"` but safer, specifically:
+
+    - All elements must be valid subpath strings, see `lib.path.subpath.isValid`
+
+    - The result gets normalised, see `lib.path.subpath.normalise`
+
+    - The edge case of an empty list gets properly handled by returning the neutral subpath `"./."`
+
+    Laws:
+
+    - Associativity:
+
+          subpath.join [ x (subpath.join [ y z ]) ] == subpath.join [ (subpath.join [ x y ]) z ]
+
+    - Identity - `"./."` is the neutral element for normalised paths:
+
+          subpath.join [ ] == "./."
+          subpath.join [ (subpath.normalise p) "./." ] == subpath.normalise p
+          subpath.join [ "./." (subpath.normalise p) ] == subpath.normalise p
+
+    - Normalisation - the result is normalised according to `lib.path.subpath.normalise`:
+
+          subpath.join ps == subpath.normalise (subpath.join ps)
+
+    - For non-empty lists, the implementation is equivalent to normalising the result of `concatStringsSep "/"`.
+      Note that the above laws can be derived from this one.
+
+          ps != [] -> subpath.join ps == subpath.normalise (concatStringsSep "/" ps)
+
+    Type:
+      subpath.join :: [ String ] -> String
+
+    Example:
+      subpath.join [ "foo" "bar/baz" ]
+      => "./foo/bar/baz"
+
+      # normalise the result
+      subpath.join [ "./foo" "." "bar//./baz/" ]
+      => "./foo/bar/baz"
+
+      # passing an empty list results in the current directory
+      subpath.join [ ]
+      => "./."
+
+      # elements must be valid subpath strings
+      subpath.join [ /foo ]
+      => <error>
+      subpath.join [ "" ]
+      => <error>
+      subpath.join [ "/foo" ]
+      => <error>
+      subpath.join [ "../foo" ]
+      => <error>
+  */
+  subpath.join =
+    # The list of subpaths to join together
+    subpaths:
+    # Fast in case all paths are valid
+    if all isValid subpaths
+    then joinRelPath (concatMap splitRelPath subpaths)
+    else
+      # Otherwise we take our time to gather more info for a better error message
+      # Strictly go through each path, throwing on the first invalid one
+      # Tracks the list index in the fold accumulator
+      foldl' (i: path:
+        if isValid path
+        then i + 1
+        else throw ''
+          lib.path.subpath.join: Element at index ${toString i} is not a valid subpath string:
+              ${subpathInvalidReason path}''
+      ) 0 subpaths;
 
   /* Normalise a subpath. Throw an error if the subpath isn't valid, see
   `lib.path.subpath.isValid`

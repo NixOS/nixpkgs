@@ -28,10 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QPK6Nw0tDdttUDFKMgThTYMTxGXsn5OReqf1LNAai7g=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-Kounxi4JxoU4+rWMWNB8rzTyG3MDKYD0OzYfAHwm6bY=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "nom-bibtex-0.3.0" = "sha256-Dy7xauwXGnMtK/w/T5gZgqJ8fPyyd/FfZTLjvwMODFI=";
+    };
   };
 
   nativeBuildInputs = [
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     poppler
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 

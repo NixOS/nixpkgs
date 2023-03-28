@@ -26,13 +26,13 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 stdenvNoCC.mkDerivation
 rec {
   inherit pname;
-  version = "2023-02-26";
+  version = "2023-03-18";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-Qk5MK8S8rIcwO7Kmze6eAl5qcwnrGsiWbn0WNIPjRnA=";
+    hash = "sha256-ixVHQRJXoXuPEsrbWOVMC/qdF3szpxYzC/8kKe47Bs8=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -49,7 +49,7 @@ rec {
     runHook preInstall
     bash install.sh -d $out/share/themes -t all \
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
-      ${lib.optionalString (!isNull border-radius) ("--round " + builtins.toString border-radius + "px")}
+      ${lib.optionalString (border-radius != null) ("--round " + builtins.toString border-radius + "px")}
     ${lib.optionalString withWallpapers ''
       mkdir -p $out/share/backgrounds
       cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds

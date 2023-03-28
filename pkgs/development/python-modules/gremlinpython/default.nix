@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "tinkerpop";
     rev = version;
-    sha256 = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
+    hash = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
   };
 
   sourceRoot = "source/gremlin-python/src/main/python";

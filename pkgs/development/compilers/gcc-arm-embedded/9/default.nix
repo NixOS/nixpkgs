@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

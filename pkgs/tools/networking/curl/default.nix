@@ -48,19 +48,18 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.88.0";
+  version = "8.0.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-yB9DntAkQvapuVg237OpjgxHdhDKey9NWqH8MpVD0z8=";
+    hash = "sha256-m2selrdI0EuWh4a2vfQHqlx1q1Oj03wcjIHNtzZVXM8=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    ./7.88.0-http2-breakage.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -130,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
       "--without-ca-bundle"
       "--without-ca-path"
+    ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport) [
+      "--without-ssl"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
@@ -169,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit opensslSupport openssl;
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
-      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = fetchpatch.override { fetchurl = useThisCurl fetchurl; }; };
+      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
       curlpp = useThisCurl curlpp;
       coeurl = useThisCurl coeurl;
       haskell-curl = useThisCurl haskellPackages.curl;
@@ -185,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
+    changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     description = "A command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = licenses.curl;

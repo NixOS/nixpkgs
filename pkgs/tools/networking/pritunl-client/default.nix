@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pritunl-client";
-  version = "1.3.3457.61";
+  version = "1.3.3474.95";
 
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-tX+AUm8X1bRvR1Lb93Bwlxx+gm9Xvyw8Fn2odmEqiJA=";
+    sha256 = "sha256-7V+hw/DfyRooef9gwZ5HjcfvabtA2HltJhwwSrQH0X4=";
   };
 
   modRoot = "cli";

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , unstableGitUpdater
 , xxd
 , pkg-config
@@ -12,32 +11,18 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2017-08-20";
+  version = "unstable-2023-03-18";
 
   src = fetchFromGitHub {
-    owner = "3snowp7im";
+    owner = "paoloose";
     repo = "urn";
-    rev = "246a7a642fa7a673166c1bd281585d0fc22e75b2";
-    sha256 = "0bniwf3nhsqapsss9m9y9ylh38v6v7q45999wa1qcsddpa72k0i0";
-    fetchSubmodules = true;
+    rev = "09c075607a6e26307665b45095e133d6805f0aeb";
+    hash = "sha256-0/V1KQxwHhpcruEsll0+JNtgT/6vEkpt+ff3SlsHYr8=";
   };
 
-  patches = [
-    # https://github.com/3snowp7im/urn/pull/50
-    (fetchpatch {
-      name = "stop-hardcoding-prefix";
-      url = "https://github.com/3snowp7im/urn/commit/6054ee62dcd6095e31e8fb2a229155dbbcb39f68.patch";
-      sha256 = "1xdkylbqlqjwqx4pb9v1snf81ag7b6q8vybirz3ibsv6iy79v9pk";
-    })
-    # https://github.com/3snowp7im/urn/pull/53
-    (fetchpatch {
-      name = "create-installation-directories";
-      url = "https://github.com/3snowp7im/urn/commit/fb032851b9c5bebb5066d306f5366f0be34f0797.patch";
-      sha256 = "0jjhcz4n8bm3hl56rvjzkvxr6imc05qlyavzjrlafa19hf036g4a";
-    })
-  ];
-
-  postPatch = ''substituteInPlace GNUmakefile --replace 'rsync -a --exclude=".*"' 'cp -r' '';
+  postPatch = ''
+    substituteInPlace Makefile --replace 'rsync -a --exclude=".*"' 'cp -r'
+  '';
 
   nativeBuildInputs = [
     xxd
@@ -54,13 +39,14 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/3snowp7im/urn.git";
+    url = "https://github.com/paoloose/urn.git";
   };
 
   meta = with lib; {
-    homepage = "https://github.com/3snowp7im/urn";
+    homepage = "https://github.com/paoloose/urn";
     description = "Split tracker / timer for speedrunning with GTK+ frontend";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "urn-gtk";
   };
 }

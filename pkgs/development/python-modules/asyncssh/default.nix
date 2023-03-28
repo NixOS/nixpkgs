@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , bcrypt
 , buildPythonPackage
 , cryptography
@@ -31,23 +31,38 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    bcrypt
     cryptography
-    fido2
-    gssapi
-    libnacl
     libsodium
     nettle
-    pyopenssl
-    python-pkcs11
     typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    bcrypt = [
+      bcrypt
+    ];
+    fido2 = [
+      fido2
+    ];
+    gssapi = [
+      gssapi
+    ];
+    libnacl = [
+      libnacl
+    ];
+    pkcs11 = [
+      python-pkcs11
+    ];
+    pyOpenSSL = [
+      pyopenssl
+    ];
+  };
 
   nativeCheckInputs = [
     openssh
     openssl
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730

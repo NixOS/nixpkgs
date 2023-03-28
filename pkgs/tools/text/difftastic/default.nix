@@ -39,7 +39,12 @@ rustPlatform.buildRustPackage rec {
       popd
     '';
   };
-  cargoSha256 = "sha256-iCkBXbwEUooybQ3IY8bxPZwD2tsWFEpVzJ5l2nkF/dg=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tree_magic_mini-3.0.2" = "sha256-iIX/DeDbquObDPOx/pctVFN4R8GSkD9bPNkNgOLdUJs=";
+    };
+  };
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 

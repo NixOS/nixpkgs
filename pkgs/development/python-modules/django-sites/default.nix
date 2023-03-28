@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "niwinz";
     repo = "django-sites";
     rev = version;
-    sha256 = "sha256-MQtQC+9DyS1ICXXovbqPpkKIQ5wpuJDgq3Lcd/1kORU=";
+    hash = "sha256-MQtQC+9DyS1ICXXovbqPpkKIQ5wpuJDgq3Lcd/1kORU=";
   };
 
   propagatedBuildInputs = [

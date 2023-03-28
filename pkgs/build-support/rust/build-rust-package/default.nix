@@ -24,7 +24,9 @@
 
 , src ? null
 , srcs ? null
+, preUnpack ? null
 , unpackPhase ? null
+, postUnpack ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -68,7 +70,7 @@ let
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
-      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
       name = cargoDepsName;
       patches = cargoPatches;
     } // lib.optionalAttrs (args ? cargoHash) {

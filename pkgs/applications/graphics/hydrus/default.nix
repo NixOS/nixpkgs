@@ -6,23 +6,30 @@
 , enableSwftools ? false
 , swftools
 , python3Packages
+, qtbase
+, qtcharts
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "503";
+  version = "520";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nJn5EphbmVYAAOisV3fym/nHlJl/aPZ2Iyp+Z2/N3Jc=";
+    hash = "sha256-y8KfPe3cBBq/iPCG7hNXrZDkOSNi+qSir6rO/65SHkI=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
     python3Packages.mkdocs-material
+  ];
+
+  buildInputs = [
+    qtbase
+    qtcharts
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -37,8 +44,10 @@ python3Packages.buildPythonPackage rec {
     opencv4
     pillow
     psutil
+    pympler
     pyopenssl
-    pyside2
+    pyqt6
+    pyqt6-charts
     pysocks
     python-dateutil
     python3Packages.mpv
@@ -82,6 +91,7 @@ python3Packages.buildPythonPackage rec {
     -e TestHydrusServer \
     -e TestHydrusSessions \
     -e TestServer \
+    -e TestClientMetadataMigration \
   '';
 
   outputs = [ "out" "doc" ];

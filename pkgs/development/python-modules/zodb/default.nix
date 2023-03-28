@@ -10,7 +10,7 @@
 , zconfig
 , persistent
 , zc_lockfile
-, BTrees
+, btrees
 , manuel
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KNugDvYm3hBYnt7auFrQ8O33KSXnXTahXJnGOsBf52Q=";
+    hash = "sha256-KNugDvYm3hBYnt7auFrQ8O33KSXnXTahXJnGOsBf52Q=";
   };
 
   # remove broken test
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     zconfig
     persistent
     zc_lockfile
-    BTrees
+    btrees
   ];
 
   nativeCheckInputs = [

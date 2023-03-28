@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "Salamek";
     repo = "cron-descriptor";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Qei9f0HlIu5sautMEASvxdUqZyXKvHDWJgd3oST1gJo=";
+    hash = "sha256-Qei9f0HlIu5sautMEASvxdUqZyXKvHDWJgd3oST1gJo=";
   };
 
   # remove tests_require, as we don't do linting anyways

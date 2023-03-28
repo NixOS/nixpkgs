@@ -51,7 +51,7 @@ buildPythonApplication rec {
     dbus-python
     pyxdg
     python-olm
-  ];
+  ] ++ matrix-nio.optional-dependencies.e2e;
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";

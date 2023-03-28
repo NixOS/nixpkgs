@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, extra-cmake-modules
-, qca-qt5, kauth, kio, polkit-qt, qtbase
+, qca-qt5, kauth, kio, polkit-qt
 , util-linux
 }:
 
@@ -42,7 +42,5 @@ stdenv.mkDerivation rec {
     homepage = "https://invent.kde.org/system/kpmcore";
     license = with licenses; [ cc-by-40 cc0 gpl3Plus mit ];
     maintainers = with maintainers; [ peterhoeg oxalica ];
-    # The build requires at least Qt 5.14:
-    broken = versionOlder qtbase.version "5.14";
   };
 }

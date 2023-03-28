@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # GitHub source releases aren't tagged
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TWvDzGX5stynL7Wnh4UKiNro9iDCs2rptVJI5RvNYCY=";
+    hash = "sha256-TWvDzGX5stynL7Wnh4UKiNro9iDCs2rptVJI5RvNYCY=";
   };
 
   doCheck = false;  # No tests included

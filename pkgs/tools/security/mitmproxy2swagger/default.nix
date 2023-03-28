@@ -3,38 +3,23 @@
 , python3
 }:
 
-let
-  python = python3.override {
-    packageOverrides = final: prev: {
-      # https://github.com/alufers/mitmproxy2swagger/issues/27
-      json-stream = prev.json-stream.overridePythonAttrs (old: rec {
-        version = "1.5.1";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-htajifmbXtivUwsORzBzJA68nJCACcL75kiBysVYCxY=";
-        };
-      });
-    };
-  };
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "mitmproxy2swagger";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-F/25fVNM3ZSYqg6oeKT/PxCXBB3z5INBKMqYGAbFiQM=";
+    hash = "sha256-w9Jbtf/BFkr2qEVqpxkRkQ1ve5o77Mhs0kGwdG5ucKI=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     json-stream
     mitmproxy
     ruamel-yaml

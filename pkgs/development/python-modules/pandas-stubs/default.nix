@@ -19,7 +19,7 @@
 , types-pytz
 , typing-extensions
 , xarray
-, XlsxWriter
+, xlsxwriter
 }:
 
 buildPythonPackage rec {
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     tabulate
     typing-extensions
     xarray
-    XlsxWriter
+    xlsxwriter
   ];
 
   disabledTests = [

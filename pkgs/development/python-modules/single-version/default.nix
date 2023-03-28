@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "hongquan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I8ATQzPRH9FVjqPoqrNjYMBU5azpmkLjRmHcz943C10=";
+    hash = "sha256-I8ATQzPRH9FVjqPoqrNjYMBU5azpmkLjRmHcz943C10=";
   };
 
   patches = [

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "anyascii";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
   disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3t9XcoIG4obJHu18dZUFpeRcjNATZ91Awvcki7FcEfY=";
+    hash = "sha256-nV0y74RP4iW4vHy6f5UFNPrk2iepvzpr6iyw6kbORzA=";
   };
 
   nativeCheckInputs = [
@@ -21,6 +21,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/anyascii/anyascii/blob/${version}/CHANGELOG.md";
     description = "Unicode to ASCII transliteration";
     homepage = "https://github.com/anyascii/anyascii";
     license = licenses.isc;

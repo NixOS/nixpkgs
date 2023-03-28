@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub
+{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, fetchpatch
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk
@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
     # Allow forcing the use of XDG portals using NIXOS_XDG_OPEN_USE_PORTAL environment variable.
     # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
     ./allow-forcing-portal-use.patch
+    # Allow opening files when using portal with xdg-open.
+    # Upstream PR: https://gitlab.freedesktop.org/xdg/xdg-utils/-/merge_requests/65
+    (fetchpatch {
+      name = "support-openfile-with-portal.patch";
+      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/5cd8c38f58d9db03240f4bc67267fe3853b66ec7.diff";
+      hash = "sha256-snkhxwGF9hpqEh5NGG8xixTi/ydAk5apXRtgYrVgNY8=";
+    })
   ];
 
   # just needed when built from git

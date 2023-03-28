@@ -6,7 +6,7 @@
 # light] for each ./<version>.nix.
 
 rec {
-  xen_4_10-vanilla = callPackage ./4.10.nix {
+  xen_4_15-vanilla = callPackage ./4.15.nix {
     meta = {
       description = "vanilla";
       longDescription = ''
@@ -19,7 +19,7 @@ rec {
     };
   };
 
-  xen_4_10-slim = xen_4_10-vanilla.override {
+  xen_4_15-slim = xen_4_15-vanilla.override {
     withInternalQemu = false;
     withInternalTraditionalQemu = true;
     withInternalSeabios = false;
@@ -36,7 +36,7 @@ rec {
     };
   };
 
-  xen_4_10-light = xen_4_10-vanilla.override {
+  xen_4_15-light = xen_4_15-vanilla.override {
     withInternalQemu = false;
     withInternalTraditionalQemu = false;
     withInternalSeabios = false;
@@ -52,8 +52,7 @@ rec {
     };
   };
 
-  xen-vanilla = xen_4_10-vanilla;
-  xen-slim = xen_4_10-slim;
-  xen-light = xen_4_10-light;
-
+  xen-vanilla = xen_4_15-vanilla;
+  xen-slim = xen_4_15-slim;
+  xen-light = xen_4_15-light;
 }

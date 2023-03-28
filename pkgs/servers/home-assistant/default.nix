@@ -69,6 +69,15 @@ let
         ];
       });
 
+      bimmer-connected = super.bimmer-connected.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-wLQ2UkedLSwfbUqmb85QgsDYh0zcbgQOMnhbRHW5Bnw=";
+        };
+      });
+
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
         version = "0.33";
         src = fetchFromGitHub {
@@ -76,6 +85,34 @@ let
           repo = "dsmr_parser";
           rev = "refs/tags/v${version}";
           hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
+        };
+      });
+
+      geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
+        };
+        doCheck = false;
+      });
+
+      gios = super.gios.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
+        };
+      });
+
+      jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
+        version = "3.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
         };
       });
 
@@ -111,6 +148,15 @@ let
         };
       });
 
+      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
+        };
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -129,6 +175,15 @@ let
           pname = "PyJWT";
           inherit version;
           hash = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
+        };
+      });
+
+      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
         };
       });
 
@@ -160,7 +215,7 @@ let
           hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
         };
         propagatedBuildInputs = [
-          self.APScheduler
+          self.apscheduler
           self.cachetools
           self.certifi
           self.cryptography
@@ -181,11 +236,11 @@ let
       });
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.5.post1";
+        version = "2.0.6";
         src = super.fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-E+sqWILP2fTu2q7BSlYDoJbwEl98PLSGEbO/o8JT8l0=";
+          hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
         };
         nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
           pytest-xdist
@@ -194,6 +249,15 @@ let
           "test/aaa_profiling"
           "test/ext/mypy"
         ];
+      });
+
+      subarulink = super.subarulink.overridePythonAttrs (oldAttrs: rec {
+        version = "0.7.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-BxnpdZwbnZF1oWcu3jRDeXvcaweOuVk1R79KpMLB02c=";
+        };
       });
 
       # Pinned due to API changes in 0.3.0
@@ -263,7 +327,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.3";
+  hassVersion = "2023.3.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,7 +343,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AJJ0w66a8D3kiLHhnoFmnGRWyDJ4OCebwwKTGdprGa0=";
+    hash = "sha256-4PS6ozyqJddF6Jp9cKRojUtHTTNd3xo2oTDboowQACk=";
   };
 
   # Secondary source is git for tests
@@ -287,7 +351,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-KTmMA8P0MhYAiwp073Q3s60budFKHrsBnAJSqYC7zis=";
+    hash = "sha256-+u1kCyIzTQrMvO6slr1YW0kZqkh4QGxUo5ucJzxkfEE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -320,10 +384,12 @@ in python.pkgs.buildPythonApplication rec {
       "httpx"
       "ifaddr"
       "orjson"
+      "pip"
       "PyJWT"
       "pyOpenSSL"
       "requests"
       "typing-extensions"
+      "voluptuous-serialize"
       "yarl"
     ];
   in ''

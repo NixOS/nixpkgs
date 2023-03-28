@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, bash, pkg-config, autoconf, cpio
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bash, pkg-config, autoconf, cpio
 , file, which, unzip, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib
 , libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk17-bootstrap
@@ -57,6 +57,14 @@ let
       (fetchurl {
         url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
         sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
+      })
+
+      # Fix build for gnumake-4.4.1:
+      #   https://github.com/openjdk/jdk/pull/12992
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
@@ -167,6 +175,7 @@ let
 
     disallowedReferences = [ openjdk17-bootstrap ];
 
+    pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version.feature;
 
     passthru = {

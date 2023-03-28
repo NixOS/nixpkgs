@@ -30,6 +30,7 @@ python3.pkgs.buildPythonPackage rec {
     aiohttp
     asyncpg
     attrs
+    commonmark
     mautrix
     phonenumbers
     pillow

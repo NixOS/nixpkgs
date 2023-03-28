@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lefthook";
-  version = "1.3.3";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "evilmartians";
     repo = "lefthook";
-    sha256 = "sha256-9XmLQPkc8we5wRZe5+bhL1b9lxWX6JAQeF4DmRXBgew=";
+    hash = "sha256-6wVzl2hu6bH2dqB/m/kgUQxRxOxMQltcGlo/TIIgh/Y=";
   };
 
-  vendorHash = "sha256-VeR/lyrQrjXWvHdxpG4H+XPlAud9rrlzX8GqhVzn1sg=";
+  vendorHash = "sha256-cMRl+TqSLlfoAja+JNaNKfHDR9fkvMTWdB1FT3XxPd4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = " Python module to interface with a Balboa Spa";
     homepage = "https://github.com/garbled1/pybalboa";
+    changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

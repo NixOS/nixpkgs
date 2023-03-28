@@ -9,14 +9,14 @@
 , aiohttp
 , aiodns
 , brotli
-, cchardet
+, faust-cchardet
 , orjson
 , pynacl
 }:
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "2.4.0";
+  version = "2.4.1";
 
   format = "setuptools";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TePUsyQ4DCuvfRQD4KAUs94o3MJRmZmu6jMPv4lJtHE=";
+    hash = "sha256-9Zgdaw5JXr0xUhxuhBWyPwKN64NY76Z72KJ571Hko2w=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     aiodns
     aiohttp
     brotli
-    cchardet
+    faust-cchardet
     orjson
     pynacl
   ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "chimpler";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-H460j/DjY1lltapva3l87oyOJVjzUE9Q/oKti3SsUyU=";
+    hash = "sha256-H460j/DjY1lltapva3l87oyOJVjzUE9Q/oKti3SsUyU=";
   };
 
   propagatedBuildInputs = [

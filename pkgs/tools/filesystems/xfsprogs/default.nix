@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-BeihN4cNsdYYLfct2pirenEA3rN2lH6FS51ZyRTCx7s=";
+    hash = "sha256-1n3LpaKOCQS2CIa25fdSvHycOlxwlhU4VbWtyp24bFE=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
+  # Install fails as:
+  #   make[1]: *** No rule to make target '\', needed by 'kmem.lo'.  Stop.
+  enableParallelInstalling = false;
 
   # @sbindir@ is replaced with /run/current-system/sw/bin to fix dependency cycles
   preConfigure = ''

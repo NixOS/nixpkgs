@@ -241,6 +241,10 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
     "clipboard-indicator": [
       "clipboard-indicator@tudmotu.com",
       "clipboard-indicator@Dieg0Js.github.io"

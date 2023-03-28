@@ -5,6 +5,7 @@ buildDunePackage rec {
   version = "6.107.3";
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lustre-v6.v${version}.tgz";

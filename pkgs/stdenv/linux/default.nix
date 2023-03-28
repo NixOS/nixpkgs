@@ -103,6 +103,14 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
+  isFromNixpkgs = pkg: !(isFromBootstrapFiles pkg);
+  isFromBootstrapFiles =
+    pkg: pkg.passthru.isFromBootstrapFiles or false;
+  isBuiltByNixpkgsCompiler =
+    pkg: isFromNixpkgs pkg && isFromNixpkgs pkg.stdenv.cc.cc;
+  isBuiltByBootstrapFilesCompiler =
+    pkg: isFromNixpkgs pkg && isFromBootstrapFiles pkg.stdenv.cc.cc;
+
   commonPreHook =
     ''
       export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -120,16 +128,14 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
     inherit system bootstrapFiles;
-    extraAttrs = lib.optionalAttrs
-      config.contentAddressedByDefault
-      {
-        __contentAddressed = true;
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      };
-  };
+    extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    };
+  }) // { passthru.isFromBootstrapFiles = true; };
 
   getLibc = stage: stage.${localSystem.libc};
 
@@ -189,7 +195,7 @@ let
     };
 
 in
-
+  assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
 [
 
   ({}: {
@@ -203,9 +209,6 @@ in
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
-  #
-  # resulting stage0 stdenv:
-  # - coreutils, binutils, glibc, gcc: from bootstrapFiles
   (prevStage: stageFun prevStage {
     name = "bootstrap-stage0";
 
@@ -233,6 +236,7 @@ in
         '' + lib.optionalString (localSystem.libc == "musl") ''
           ln -s ${bootstrapTools}/include-libc $out/include
         '';
+        passthru.isFromBootstrapFiles = true;
       };
       gcc-unwrapped = bootstrapTools;
       binutils = import ../../build-support/bintools-wrapper {
@@ -261,10 +265,14 @@ in
   # If we ever need to use a package from more than one stage back, we
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
-  #
-  # resulting stage1 stdenv:
-  # - coreutils, binutils, glibc, gcc: from bootstrapFiles
-  (prevStage: stageFun prevStage {
+  (prevStage:
+    # previous stage0 stdenv:
+    assert isFromBootstrapFiles prevStage.binutils.bintools;
+    assert isFromBootstrapFiles prevStage."${localSystem.libc}";
+    assert isFromBootstrapFiles prevStage.gcc-unwrapped;
+    assert isFromBootstrapFiles prevStage.coreutils;
+    assert isFromBootstrapFiles prevStage.gnugrep;
+    stageFun prevStage {
     name = "bootstrap-stage1";
 
     # Rebuild binutils to use from stage2 onwards.
@@ -291,10 +299,14 @@ in
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
   #
-  # resulting stage2 stdenv:
-  # - coreutils, glibc, gcc: from bootstrapFiles
-  # - binutils: from nixpkgs, built by bootstrapFiles toolchain
-  (prevStage: stageFun prevStage {
+  (prevStage:
+    # previous stage1 stdenv:
+    assert isBuiltByBootstrapFilesCompiler prevStage.binutils-unwrapped;
+    assert            isFromBootstrapFiles prevStage."${localSystem.libc}";
+    assert            isFromBootstrapFiles prevStage.gcc-unwrapped;
+    assert            isFromBootstrapFiles prevStage.coreutils;
+    assert            isFromBootstrapFiles prevStage.gnugrep;
+    stageFun prevStage {
     name = "bootstrap-stage2";
 
     overrides = self: super: {
@@ -337,6 +349,7 @@ in
         bintools = self.stdenvNoCC.mkDerivation {
           pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
           inherit (prevStage.bintools.bintools) version;
+          passthru = { inherit (prevStage.bintools.passthru) isFromBootstrapFiles; };
           enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
@@ -363,11 +376,14 @@ in
   # Construct a third stdenv identical to the 2nd, except that this
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
-  #
-  # resulting stage3 stdenv:
-  # - coreutils, gcc: from bootstrapFiles
-  # - glibc, binutils: from nixpkgs, built by bootstrapFiles toolchain
-  (prevStage: stageFun prevStage {
+  (prevStage:
+    # previous stage2 stdenv:
+    assert isBuiltByBootstrapFilesCompiler prevStage.binutils-unwrapped;
+    assert isBuiltByBootstrapFilesCompiler prevStage.${localSystem.libc};
+    assert            isFromBootstrapFiles prevStage.gcc-unwrapped;
+    assert            isFromBootstrapFiles prevStage.coreutils;
+    assert            isFromBootstrapFiles prevStage.gnugrep;
+    stageFun prevStage {
     name = "bootstrap-stage3";
 
     overrides = self: super: rec {
@@ -404,17 +420,21 @@ in
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   #
-  # resulting stage4 stdenv:
-  # - coreutils: from bootstrapFiles
-  # - glibc, binutils: from nixpkgs, built by bootstrapFiles toolchain
-  # - gcc: from nixpkgs, built by bootstrapFiles toolchain. Can assume
-  #        it has almost no code from bootstrapTools as gcc bootstraps
-  #        internally. The only exceptions are crt files from glibc
-  #        built by bootstrapTools used to link executables and libraries,
-  #        and the bootstrapTools-built, statically-linked
-  #        lib{mpfr,mpc,gmp,isl}.a which are linked into the final gcc
-  #        (see commit cfde88976ba4cddd01b1bb28b40afd12ea93a11d).
-  (prevStage: stageFun prevStage {
+  (prevStage:
+    # previous stage3 stdenv:
+    assert isBuiltByBootstrapFilesCompiler prevStage.binutils-unwrapped;
+    assert isBuiltByBootstrapFilesCompiler prevStage.${localSystem.libc};
+    assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
+    assert            isFromBootstrapFiles prevStage.coreutils;
+    assert            isFromBootstrapFiles prevStage.gnugrep;
+    # Can assume prevStage.gcc-unwrapped has almost no code from
+    # bootstrapTools as gcc bootstraps internally. The only
+    # exceptions are crt files from glibc built bybootstrapTools
+    # used to link executables and libraries, and the
+    # bootstrapTools-built, statically-linked
+    # lib{mpfr,mpc,gmp,isl}.a which are linked into the final gcc
+    # (see commit cfde88976ba4cddd01b1bb28b40afd12ea93a11d).
+    stageFun prevStage {
     name = "bootstrap-stage4";
 
     overrides = self: super: {
@@ -471,17 +491,15 @@ in
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
   #
-  # resulting stage5 (final) stdenv:
-  # - coreutils, binutils: from nixpkgs, built by nixpkgs toolchain
-  # - glibc: from nixpkgs, built by bootstrapFiles toolchain
-  # - gcc: from nixpkgs, built by bootstrapFiles toolchain. Can assume
-  #        it has almost no code from bootstrapTools as gcc bootstraps
-  #        internally. The only exceptions are crt files from glibc
-  #        built by bootstrapTools used to link executables and libraries,
-  #        and the bootstrapTools-built, statically-linked
-  #        lib{mpfr,mpc,gmp,isl}.a which are linked into the final gcc
-  #        (see commit cfde88976ba4cddd01b1bb28b40afd12ea93a11d).
-  (prevStage: {
+  (prevStage:
+    # previous stage4 stdenv; see stage3 comment regarding gcc,
+    # which applies here as well.
+    assert        isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
+    assert isBuiltByBootstrapFilesCompiler prevStage.${localSystem.libc};
+    assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
+    assert        isBuiltByNixpkgsCompiler prevStage.coreutils;
+    assert        isBuiltByNixpkgsCompiler prevStage.gnugrep;
+    {
     inherit config overlays;
     stdenv = import ../generic rec {
       name = "stdenv-linux";
@@ -557,4 +575,14 @@ in
     };
   })
 
+  # This "no-op" stage is just a place to put the assertions about stage5.
+  (prevStage:
+    # previous stage5 stdenv; see stage3 comment regarding gcc,
+    # which applies here as well.
+    assert        isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
+    assert isBuiltByBootstrapFilesCompiler prevStage.${localSystem.libc};
+    assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
+    assert        isBuiltByNixpkgsCompiler prevStage.coreutils;
+    assert        isBuiltByNixpkgsCompiler prevStage.gnugrep;
+    { inherit (prevStage) config overlays stdenv; })
 ]

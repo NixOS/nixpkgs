@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p "python3.withPackages (ps: [ps.PyGithub])" git gnupg
+#! nix-shell -i python -p "python3.withPackages (ps: [ps.pygithub])" git gnupg
 
 # This is automatically called by ../update.sh.
 

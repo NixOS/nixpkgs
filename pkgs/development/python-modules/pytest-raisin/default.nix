@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "wimglenn";
     repo = "pytest-raisin";
     rev = "v${version}";
-    sha256 = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
+    hash = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
   };
 
   nativeBuildInputs = [

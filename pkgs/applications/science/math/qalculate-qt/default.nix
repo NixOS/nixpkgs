@@ -12,11 +12,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake intltool pkg-config wrapQtAppsHook ];
-  buildInputs = [ libqalculate qtbase qttools qtsvg qtwayland ];
+  buildInputs = [ libqalculate qtbase qttools qtsvg ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   postPatch = ''
     substituteInPlace qalculate-qt.pro\
       --replace "LRELEASE" "${qttools.dev}/bin/lrelease"
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/qalculate-qt.app $out/Applications
+    makeWrapper $out/{Applications/qalculate-qt.app/Contents/MacOS,bin}/qalculate-qt
   '';
 
   meta = with lib; {
@@ -24,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ _4825764518 ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -227,6 +227,7 @@
 , libxml2
 , xz
 , nv-codec-headers
+, nv-codec-headers-11
 , openal
 , ocl-icd # OpenCL ICD
 , opencl-headers  # OpenCL headers
@@ -348,7 +349,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace VK_EXT_VIDEO_DECODE VK_KHR_VIDEO_DECODE
   '';
 
-  patches = map (patch: fetchpatch patch) extraPatches;
+  patches = map (patch: fetchpatch patch) (extraPatches
+    ++ (lib.optional (lib.versionAtLeast version "6" && lib.versionOlder version "6.1")
+      { # this can be removed post 6.1
+        name = "fix_aacps_tablegen";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/814178f92647be2411516bbb82f48532373d2554";
+        hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
+      }
+    ));
 
   configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them
@@ -539,7 +547,7 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO This was always in buildInputs before, why?
   buildInputs = optionals withFullDeps [ libdc1394 ]
   ++ optionals (withFullDeps && !stdenv.isDarwin) [ libraw1394 ] # TODO where does this belong to
-  ++ optionals (withNvdec || withNvenc) [ nv-codec-headers ]
+  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast version "6") then nv-codec-headers-11 else nv-codec-headers) ]
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAss [ libass ]
@@ -657,9 +665,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
-  postFixup = optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/libavcodec.so
-    addOpenGLRunpath $out/lib/libavutil.so
+  postFixup = optionalString (stdenv.isLinux && withLib) ''
+    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;

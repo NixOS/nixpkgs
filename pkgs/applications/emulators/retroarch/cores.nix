@@ -7,6 +7,7 @@
 , curl
 , fetchFromGitHub
 , ffmpeg
+, ffmpeg_4
 , fluidsynth
 , gettext
 , hexdump
@@ -49,7 +50,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2022-12-20"
+    , version ? "unstable-2023-03-13"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -400,8 +401,6 @@ in
     core = "flycast";
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
-    patches = [ ./fix-flycast-makefile.patch ];
     meta = {
       description = "Flycast libretro port";
       license = lib.licenses.gpl2Only;
@@ -734,9 +733,7 @@ in
 
   picodrive = mkLibretroCore {
     core = "picodrive";
-    version = "unstable-2023-02-15";
     dontConfigure = true;
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
     meta = {
       description = "Fast MegaDrive/MegaCD/32X emulator";
       license = "MAME";
@@ -759,7 +756,7 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -822,8 +819,19 @@ in
     };
   };
 
-  scummvm = mkLibretroCore {
+  scummvm = mkLibretroCore rec {
     core = "scummvm";
+    version = "unstable-2022-04-06";
+    # Commit below introduces libretro platform, that uses libretro-{deps,common} as
+    # submodules. We will probably need to introduce this as separate derivations,
+    # but for now let's just use the last known version that does not use it.
+    # https://github.com/libretro/scummvm/commit/36446fa6eb33e67cc798f56ce1a31070260e2ada
+    src = fetchFromGitHub {
+      owner = "libretro";
+      repo = core;
+      rev = "2fb2e4c551c9c1510c56f6e890ee0300b7b3fca3";
+      hash = "sha256-wrlFqu+ONbYH4xMFDByOgySobGrkhVc7kYWI4JzA4ew=";
+    };
     extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";

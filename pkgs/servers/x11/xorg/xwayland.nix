@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
   ];
   mesonFlags = [
     (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
     (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
     (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")
