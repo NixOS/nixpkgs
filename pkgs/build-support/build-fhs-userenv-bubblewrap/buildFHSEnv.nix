@@ -1,6 +1,6 @@
 { stdenv, lib, buildEnv, writeText, writeShellScriptBin, pkgs, pkgsi686Linux }:
 
-{ name, profile ? ""
+args@{ name, profile ? ""
 , targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
 , extraBuildCommands ? "", extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -216,4 +216,8 @@ in stdenv.mkDerivation {
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;
+
+  passthru = {
+    inherit args multiPaths targetPaths;
+  };
 }
