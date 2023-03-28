@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, hatchling
 , ipykernel
 , jupytext
 , lib
@@ -13,19 +14,18 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.22.0";
+  version = "0.24.1";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WFzGm+pMufr2iYExl43JqbIlCR7UtghPWrZWUqXhIYU=";
+    inherit version;
+    pname = "mkdocs_jupyter";
+    hash = "sha256-lncDf7fpMSaPPfdZn8CCjCYSR989FXW87TILqLfR1G0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "nbconvert>=6.2.0,<7.0.0" "nbconvert>=6.2.0"
-    substituteInPlace mkdocs_jupyter/tests/test_base_usage.py \
-          --replace "[\"mkdocs\"," "[\"${mkdocs.out}/bin/mkdocs\","
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     nbconvert
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_jupyter" ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     pytest-cov
     pytestCheckHook
   ];
