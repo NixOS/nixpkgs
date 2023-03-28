@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
     homepage = "https://openpyxl.readthedocs.org";
+    changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${version}/doc/changes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lihop ];
   };
