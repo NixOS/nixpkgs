@@ -402,6 +402,8 @@ with pkgs;
 
   cewl = callPackage ../tools/security/cewl { };
 
+  chatgpt-cli = callPackage ../tools/misc/chatgpt-cli { };
+
   checkov = callPackage ../development/tools/analysis/checkov {
     python3 = python311;
   };
