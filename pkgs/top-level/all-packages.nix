@@ -572,7 +572,7 @@ with pkgs;
 
   mix2nix = callPackage ../development/tools/mix2nix { };
 
-  n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
+  n98-magerun = callPackage ../development/tools/misc/n98-magerun { php = php80; };
 
   n98-magerun2 = callPackage ../development/tools/misc/n98-magerun2 { };
 
