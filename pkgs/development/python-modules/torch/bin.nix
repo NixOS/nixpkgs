@@ -5,6 +5,7 @@
 , isPy38
 , isPy39
 , isPy310
+, isPy311
 , python
 , addOpenGLRunpath
 , future
@@ -14,13 +15,18 @@
 , requests
 , setuptools
 , typing-extensions
+, sympy
+, jinja2
+, networkx
+, filelock
+, triton-bin
 }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.13.1";
+  version = "2.0.0";
 in buildPythonPackage {
   inherit version;
 
@@ -29,7 +35,7 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = !(isPy38 || isPy39 || isPy310);
+  disabled = !(isPy38 || isPy39 || isPy310 || isPy311);
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -45,6 +51,12 @@ in buildPythonPackage {
     requests
     setuptools
     typing-extensions
+    sympy
+    jinja2
+    networkx
+    filelock
+  ] ++ lib.optionals stdenv.isx86_64 [
+    triton-bin
   ];
 
   postInstall = ''
@@ -55,6 +67,13 @@ in buildPythonPackage {
   postFixup = let
     rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
+    pushd $out/${python.sitePackages}/torch/lib
+      LIBNVRTC=`ls libnvrtc-* |grep -v libnvrtc-builtins`
+      if [ ! -z "$LIBNVRTC" ] ; then
+        ln -s "$LIBNVRTC" libnvrtc.so
+      fi
+    popd
+
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
       patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torch/lib" "$lib"
