@@ -23074,6 +23074,8 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
+  prosemd-lsp = callPackage ../development/tools/misc/prosemd-lsp {};
+
   pru = callPackage ../tools/text/pru { };
 
   prospector = callPackage ../development/tools/prospector { };
