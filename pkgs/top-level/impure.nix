@@ -11,15 +11,10 @@ let
 
 in
 
-{ # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
-  # If neither is passed, assume we are building packages on the current
-  # (build, in GNU Autotools parlance) platform.
-  localSystem ? { system = args.system or builtins.currentSystem; }
-
-# These are needed only because nix's `--arg` command-line logic doesn't work
-# with unnamed parameters allowed by ...
-, system ? localSystem.system
-, crossSystem ? localSystem
+{ # Represents the system on which to build nixpkgs as a string. Eg:
+  # "x86_64-linux". For more sophisticated scenarios, take a look at
+  # localSystem and crossSystem in ./pkgs/top-level/default.nix
+  system ? builtins.currentSystem
 
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
@@ -74,16 +69,9 @@ in
         else overlays homeOverlaysDir
       else []
 
-, crossOverlays ? []
-
 , ...
 } @ args:
 
-# If `localSystem` was explicitly passed, legacy `system` should
-# not be passed, and vice-versa.
-assert args ? localSystem -> !(args ? system);
-assert args ? system -> !(args ? localSystem);
-
-import ./. (builtins.removeAttrs args [ "system" ] // {
-  inherit config overlays localSystem;
+import ./. (args // {
+  inherit config overlays system;
 })

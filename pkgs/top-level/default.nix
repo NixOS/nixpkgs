@@ -16,10 +16,19 @@
    evaluation is taking place, and the configuration from environment variables
    or dot-files. */
 
-{ # The system packages will be built on. See the manual for the
+{ # Represents the system on which to build nixpkgs as a string. Eg:
+  # "x86_64-linux". For more sophisticated scenarios, use localSystem and
+  # crossSystem.
+  system ? null
+
+, # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
-  localSystem
+  #
+  # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
+  # If neither is passed, assume we are building packages on the current
+  # (build, in GNU Autotools parlance) platform.
+  localSystem ? { inherit system; }
 
 , # The system packages will ultimately be run on.
   crossSystem ? localSystem
@@ -42,8 +51,12 @@
   ...
 } @ args:
 
-let # Rename the function arguments
-  config0 = config;
+# Check that either system or localSystem was passed
+assert localSystem.system != null;
+
+let
+  # Rename the function arguments
+  localSystem0 = localSystem;
   crossSystem0 = crossSystem;
 
 in let
