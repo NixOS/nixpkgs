@@ -9783,6 +9783,15 @@ with pkgs;
 
   nodejs-slim = nodejs-slim_18;
 
+  # The NodeJS packages has to be build in 32bit environment if host platform is
+  # also 32bit because it uses 32bit stubs and links against 32bit OpenSSL. The
+  # only architecture that generally supports execution of 32bit is x86_64 and
+  # thus that is the only one handled here.
+  callPackageNodejs =
+    if stdenv.buildPlatform.isx86_64 && stdenv.is32bit
+    then buildPackages.pkgsi686Linux.callPackage
+    else callPackage;
+
   nodejs_14 = callPackage ../development/web/nodejs/v14.nix {
     openssl = openssl_1_1;
   };
@@ -9794,12 +9803,12 @@ with pkgs;
   nodejs-slim_16 = callPackage ../development/web/nodejs/v16.nix {
     enableNpm = false;
   };
-  nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
-  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix {
+  nodejs_18 = callPackageNodejs ../development/web/nodejs/v18.nix { };
+  nodejs-slim_18 = callPackageNodejs ../development/web/nodejs/v18.nix {
     enableNpm = false;
   };
-  nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
-  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix {
+  nodejs_20 = callPackageNodejs ../development/web/nodejs/v20.nix { };
+  nodejs-slim_20 = callPackageNodejs ../development/web/nodejs/v20.nix {
     enableNpm = false;
   };
   # Update this when adding the newest nodejs major version!
