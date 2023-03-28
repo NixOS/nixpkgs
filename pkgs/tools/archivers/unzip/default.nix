@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
         "https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
 
         "https://web.archive.org/web/20230106200319/https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
+
+        "https://gist.githubusercontent.com/arn7av/a8cca7480d54eb0c39e1f430bb7e5345/raw/6c5346247cfec4e8c341a408eb874507bfa5e387/28-cve-2022-0529-and-cve-2022-0530.patch"
       ];
       sha256 = "sha256-on79jElQ+z2ULWAq14RpluAqr9d6itHiZwDkKubBzTc=";
     })
