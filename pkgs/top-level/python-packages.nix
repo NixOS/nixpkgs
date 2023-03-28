@@ -11936,7 +11936,9 @@ self: super: with self; {
     inherit (pkgs.llvmPackages_rocm) openmp;
   };
 
-  torch-bin = callPackage ../development/python-modules/torch/bin.nix { };
+  torch-bin = callPackage ../development/python-modules/torch/bin.nix {
+    openai-triton = self.openai-triton-bin;
+  };
 
   torchWithCuda = self.torch.override {
     magma = pkgs.magma-cuda;
