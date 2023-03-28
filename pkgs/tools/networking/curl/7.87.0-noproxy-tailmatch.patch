@@ -1,0 +1,191 @@
+From 2ae85b19c896c5117a7d5b9927fb36414bda16bf Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Fri, 28 Oct 2022 10:51:49 +0200
+Subject: [PATCH 1/2] noproxy: fix tail-matching
+
+Also ignore trailing dots in both host name and comparison pattern.
+
+Regression in 7.86.0 (from 1e9a538e05c0)
+
+Extended test 1614 to verify better.
+
+Reported-by: Henning Schild
+Fixes #9821
+Closes #9822
+---
+ lib/noproxy.c         | 30 +++++++++++++++++++++++-------
+ tests/unit/unit1614.c |  9 +++++++++
+ 2 files changed, 32 insertions(+), 7 deletions(-)
+
+diff --git a/lib/noproxy.c b/lib/noproxy.c
+index 81f1e0993..9d25c1c4c 100644
+--- a/lib/noproxy.c
++++ b/lib/noproxy.c
+@@ -149,9 +149,14 @@ bool Curl_check_noproxy(const char *name, const char *no_proxy)
+     }
+     else {
+       unsigned int address;
++      namelen = strlen(name);
+       if(1 == Curl_inet_pton(AF_INET, name, &address))
+         type = TYPE_IPV4;
+-      namelen = strlen(name);
++      else {
++        /* ignore trailing dots in the host name */
++        if(name[namelen - 1] == '.')
++          namelen--;
++      }
+     }
+ 
+     while(*p) {
+@@ -173,12 +178,23 @@ bool Curl_check_noproxy(const char *name, const char *no_proxy)
+       if(tokenlen) {
+         switch(type) {
+         case TYPE_HOST:
+-          if(*token == '.') {
+-            ++token;
+-            --tokenlen;
+-            /* tailmatch */
+-            match = (tokenlen <= namelen) &&
+-              strncasecompare(token, name + (namelen - tokenlen), namelen);
++          /* ignore trailing dots in the token to check */
++          if(token[tokenlen - 1] == '.')
++            tokenlen--;
++
++          if(tokenlen && (*token == '.')) {
++            /* A: example.com matches '.example.com'
++               B: www.example.com matches '.example.com'
++               C: nonexample.com DOES NOT match '.example.com'
++            */
++            if((tokenlen - 1) == namelen)
++              /* case A, exact match without leading dot */
++              match = strncasecompare(token + 1, name, namelen);
++            else if(tokenlen < namelen)
++              /* case B, tailmatch with leading dot */
++              match = strncasecompare(token, name + (namelen - tokenlen),
++                                      tokenlen);
++            /* case C passes through, not a match */
+           }
+           else
+             match = (tokenlen == namelen) &&
+diff --git a/tests/unit/unit1614.c b/tests/unit/unit1614.c
+index 60285450c..151acce25 100644
+--- a/tests/unit/unit1614.c
++++ b/tests/unit/unit1614.c
+@@ -77,6 +77,15 @@ UNITTEST_START
+     { NULL, NULL, 0, FALSE} /* end marker */
+   };
+   struct noproxy list[]= {
++    { "www.example.com", "localhost,.example.com,.example.de", TRUE},
++    { "www.example.com.", "localhost,.example.com,.example.de", TRUE},
++    { "example.com", "localhost,.example.com,.example.de", TRUE},
++    { "example.com.", "localhost,.example.com,.example.de", TRUE},
++    { "www.example.com", "localhost,.example.com.,.example.de", TRUE},
++    { "www.example.com", "localhost,www.example.com.,.example.de", TRUE},
++    { "example.com", "localhost,example.com,.example.de", TRUE},
++    { "example.com.", "localhost,example.com,.example.de", TRUE},
++    { "www.example.com", "localhost,example.com,.example.de", FALSE},
+     { "foobar", "barfoo", FALSE},
+     { "foobar", "foobar", TRUE},
+     { "192.168.0.1", "foobar", FALSE},
+-- 
+2.39.2
+
+
+From ca0c1342d06803485195754ef782ace33166b2bc Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Sun, 6 Nov 2022 23:19:51 +0100
+Subject: [PATCH 2/2] noproxy: tailmatch like in 7.85.0 and earlier
+
+A regfression in 7.86.0 (via 1e9a538e05c010) made the tailmatch work
+differently than before. This restores the logic to how it used to work:
+
+All names listed in NO_PROXY are tailmatched against the used domain
+name, if the lengths are identical it needs a full match.
+
+Update the docs, update test 1614.
+
+Reported-by: Stuart Henderson
+Fixes #9842
+Closes #9858
+---
+ docs/libcurl/opts/CURLOPT_NOPROXY.3 |  4 ----
+ lib/noproxy.c                       | 32 +++++++++++++++--------------
+ tests/unit/unit1614.c               |  3 ++-
+ 3 files changed, 19 insertions(+), 20 deletions(-)
+
+diff --git a/docs/libcurl/opts/CURLOPT_NOPROXY.3 b/docs/libcurl/opts/CURLOPT_NOPROXY.3
+index 138f57637..1767ca779 100644
+--- a/docs/libcurl/opts/CURLOPT_NOPROXY.3
++++ b/docs/libcurl/opts/CURLOPT_NOPROXY.3
+@@ -40,10 +40,6 @@ list is matched as either a domain which contains the hostname, or the
+ hostname itself. For example, "ample.com" would match ample.com, ample.com:80,
+ and www.ample.com, but not www.example.com or ample.com.org.
+ 
+-If the name in the \fInoproxy\fP list has a leading period, it is a domain
+-match against the provided host name. This way ".example.com" will switch off
+-proxy use for both "www.example.com" as well as for "foo.example.com".
+-
+ Setting the \fInoproxy\fP string to "" (an empty string) will explicitly
+ enable the proxy for all host names, even if there is an environment variable
+ set for it.
+diff --git a/lib/noproxy.c b/lib/noproxy.c
+index 9d25c1c4c..82e285d65 100644
+--- a/lib/noproxy.c
++++ b/lib/noproxy.c
+@@ -183,22 +183,24 @@ bool Curl_check_noproxy(const char *name, const char *no_proxy)
+             tokenlen--;
+ 
+           if(tokenlen && (*token == '.')) {
+-            /* A: example.com matches '.example.com'
+-               B: www.example.com matches '.example.com'
+-               C: nonexample.com DOES NOT match '.example.com'
+-            */
+-            if((tokenlen - 1) == namelen)
+-              /* case A, exact match without leading dot */
+-              match = strncasecompare(token + 1, name, namelen);
+-            else if(tokenlen < namelen)
+-              /* case B, tailmatch with leading dot */
+-              match = strncasecompare(token, name + (namelen - tokenlen),
+-                                      tokenlen);
+-            /* case C passes through, not a match */
++            /* ignore leading token dot as well */
++            token++;
++            tokenlen--;
+           }
+-          else
+-            match = (tokenlen == namelen) &&
+-              strncasecompare(token, name, namelen);
++          /* A: example.com matches 'example.com'
++             B: www.example.com matches 'example.com'
++             C: nonexample.com DOES NOT match 'example.com'
++          */
++          if(tokenlen == namelen)
++            /* case A, exact match */
++            match = strncasecompare(token, name, namelen);
++          else if(tokenlen < namelen) {
++            /* case B, tailmatch domain */
++            match = (name[namelen - tokenlen - 1] == '.') &&
++              strncasecompare(token, name + (namelen - tokenlen),
++                              tokenlen);
++          }
++          /* case C passes through, not a match */
+           break;
+         case TYPE_IPV4:
+           /* FALLTHROUGH */
+diff --git a/tests/unit/unit1614.c b/tests/unit/unit1614.c
+index 151acce25..ce6e5be8f 100644
+--- a/tests/unit/unit1614.c
++++ b/tests/unit/unit1614.c
+@@ -85,7 +85,8 @@ UNITTEST_START
+     { "www.example.com", "localhost,www.example.com.,.example.de", TRUE},
+     { "example.com", "localhost,example.com,.example.de", TRUE},
+     { "example.com.", "localhost,example.com,.example.de", TRUE},
+-    { "www.example.com", "localhost,example.com,.example.de", FALSE},
++    { "nexample.com", "localhost,example.com,.example.de", FALSE},
++    { "www.example.com", "localhost,example.com,.example.de", TRUE},
+     { "foobar", "barfoo", FALSE},
+     { "foobar", "foobar", TRUE},
+     { "192.168.0.1", "foobar", FALSE},
+-- 
+2.39.2
+
