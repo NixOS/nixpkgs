@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "devploit";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-Gpr2L7iSdMBqwMzdYDtdzyZYu+Uwjn1wZvw4LTr8xWI=";
   };
 
@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to bypass 40X response codes";
     homepage = "https://github.com/devploit/dontgo403";
+    chnagelog = "https://github.com/devploit/dontgo403/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
