@@ -12,7 +12,7 @@
 , meson
 , ninja
 , pkg-config
-, poppler_gi
+, poppler
 , wrapGAppsHook4
 }:
 
@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     libadwaita
     librsvg
-    poppler_gi
+    poppler
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

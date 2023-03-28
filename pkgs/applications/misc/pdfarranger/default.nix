@@ -1,6 +1,6 @@
 { fetchFromGitHub, lib
 , wrapGAppsHook, intltool
-, python3Packages, gtk3, poppler_gi
+, python3Packages, gtk3, poppler
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   buildInputs = [
-    gtk3 poppler_gi
+    gtk3 poppler
   ];
 
   propagatedBuildInputs = with python3Packages; [

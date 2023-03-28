@@ -22,9 +22,11 @@
 , scribus
 , texlive
 , zlib
+, gobject-introspection
+, buildPackages
 , withData ? true, poppler_data
 , qt5Support ? false, qt6Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages && suffix == "glib"
 , utils ? false, nss ? null
 , minimal ? false
 , suffix ? "glib"
@@ -61,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     ninja
     pkg-config
     python3
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -86,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     nss
   ] ++ lib.optionals (qt5Support || qt6Support) [
     qtbase
-  ] ++ lib.optionals introspectionSupport [
+  ] ++ lib.optionals withIntrospection [
+    # TODO: REMOVE
     gobject-introspection
   ];
 

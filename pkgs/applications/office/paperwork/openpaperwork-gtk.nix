@@ -36,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pillow
     pygobject3
-    pkgs.poppler_gi
+    pkgs.poppler
     pkgs.gtk3
     pkgs.libhandy
     distro

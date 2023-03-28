@@ -11,7 +11,7 @@
 , gobject-introspection
 , gtksourceview4
 , gspell
-, poppler_gi
+, poppler
 , webkitgtk
 , librsvg
 }:
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtksourceview4
     gspell
-    poppler_gi
+    poppler
     webkitgtk
     librsvg
   ];

@@ -1263,6 +1263,7 @@ mapAliases ({
   pond = throw "pond has been dropped due to the lack of maintanence from upstream since 2016"; # Added 2022-06-02
   poppler_qt5 = throw "'poppler_qt5' has been renamed to/replaced by 'libsForQt5.poppler'"; # Converted to throw 2022-02-22
   powerdns = pdns; # Added 2022-03-28
+  poppler_gi = poppler; # Added 2023-03-27
   portaudio2014 = throw "'portaudio2014' has been removed"; # Added 2022-05-10
 
   # postgresql

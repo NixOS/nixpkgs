@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication {
   buildInputs = with pkgs; [
     gtk3
     goocanvas2
-    poppler_gi
+    poppler
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pypdf2 ];
 

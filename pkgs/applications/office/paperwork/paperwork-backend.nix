@@ -18,7 +18,7 @@
 , openpaperwork-gtk
 , psutil
 , gtk3
-, poppler_gi
+, poppler
 , gettext
 , which
 , shared-mime-info
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     pyocr
     pypillowfight
     levenshtein
-    poppler_gi
+    poppler
     scikit-learn
     termcolor
     whoosh

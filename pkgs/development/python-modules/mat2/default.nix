@@ -13,7 +13,7 @@
 , gdk-pixbuf
 , gobject-introspection
 , librsvg
-, poppler_gi
+, poppler
 , mutagen
 , pygobject3
 , pycairo
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   buildInputs = [
     gdk-pixbuf
     librsvg
-    poppler_gi
+    poppler
   ];
 
   propagatedBuildInputs = [

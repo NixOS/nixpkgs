@@ -5,7 +5,7 @@
 , gtk3
 , gobject-introspection
 , libcanberra-gtk3
-, poppler_gi
+, poppler
 , withGstreamer ? stdenv.isLinux
 , withVLC ? stdenv.isLinux
  }:
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    poppler_gi
+    poppler
   ] ++ lib.optional withGstreamer libcanberra-gtk3;
 
   propagatedBuildInputs = with python3Packages; [
