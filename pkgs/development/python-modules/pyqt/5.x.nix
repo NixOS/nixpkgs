@@ -117,7 +117,7 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+    ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
     ++ lib.optional withLocation "PyQt5.QtPositioning"
   ;
 
