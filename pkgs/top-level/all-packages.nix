@@ -15583,8 +15583,9 @@ with pkgs;
 
   muonlang = callPackage ../development/compilers/muonlang { };
 
-  inherit (callPackages ../development/compilers/nim { })
-    nim-unwrapped nimble-unwrapped nim;
+  inherit (callPackages ../development/compilers/nim
+                        { inherit (darwin) Security;  }
+          ) nim-unwrapped nimble-unwrapped nim;
   nimPackages = recurseIntoAttrs nim.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
