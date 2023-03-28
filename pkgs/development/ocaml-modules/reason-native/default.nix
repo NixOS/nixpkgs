@@ -10,14 +10,14 @@ let
     in
       buildDunePackage
         ({
-          version = "2021-16-16-aec0ac6";
+          version = "2022-08-31-a0ddab6";
           src = fetchFromGitHub {
             owner = "reasonml";
             repo = "reason-native";
-            rev = "aec0ac681be7211b4d092262281689c46deb63e1";
-            sha256 = "sha256-QoyI50MBY3RJBmM1y90n7oXrLmHe0CQxKojv+7YbegE=";
+            rev = "a0ddab6ab25237961e32d8732b0a222ec2372d4a";
+            hash = "sha256-s2N5OFTwIbKXcv05gQRaBMCHO1Mj563yhryPeo8jMh8=";
           };
-          useDune2 = true;
+          duneVersion = "2";
           meta = with lib; {
             description = "Libraries for building and testing native Reason programs";
             downloadPage = "https://github.com/reasonml/reason-native";

@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   src = ./.;
 
-  useDune2 = true;
+  duneVersion = "2";
 
   buildInputs = [
     reason
