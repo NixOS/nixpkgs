@@ -11,7 +11,16 @@
 , tzdata
 , vala
 , xfconf
+, isNixOS ? true
+, lndir
+, embedPlugins ? []
 }:
+
+assert lib.assertMsg (if isNixOS
+                      then (embedPlugins == [])
+                      else true) ''
+  NixOS does not embed xfce4-panel plugins (use systemPackages instead)
+'';
 
 mkXfceDerivation {
   category = "xfce";
@@ -40,11 +49,19 @@ mkXfceDerivation {
     libxfce4util
   ];
 
-  patches = [ ./xfce4-panel-datadir.patch ];
+  patches = lib.optional isNixOS [ ./xfce4-panel-datadir.patch ];
 
   postPatch = ''
     substituteInPlace plugins/clock/clock.c \
        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+  '';
+
+  inherit embedPlugins;
+  passAsFile = [ "embedPlugins" ];
+  postInstall = lib.optionalString (embedPlugins != []) ''
+    for p in $(cat "$embedPluginsPath"); do
+      ${lndir}/bin/lndir "$p" "$out"
+    done 2>&1
   '';
 
   meta = with lib; {
