@@ -12,6 +12,7 @@ let
                       then pkgs.zfsUnstable.latestCompatibleLinuxPackages
                       else pkgs.linuxPackages
     , enableUnstable ? false
+    , enableSystemdStage1 ? false
     , extraTest ? ""
     }:
     makeTest {
@@ -36,6 +37,7 @@ let
         boot.kernelPackages = kernelPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.zfs.enableUnstable = enableUnstable;
+        boot.initrd.systemd.enable = enableSystemdStage1;
 
         environment.systemPackages = [ pkgs.parted ];
 
@@ -174,6 +176,11 @@ in {
 
   unstable = makeZfsTest "unstable" {
     enableUnstable = true;
+  };
+
+  unstableWithSystemdStage1 = makeZfsTest "unstable" {
+    enableUnstable = true;
+    enableSystemdStage1 = true;
   };
 
   installer = (import ./installer.nix { }).zfsroot;

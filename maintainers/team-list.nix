@@ -221,6 +221,7 @@ with lib.maintainers; {
 
   docs = {
     members = [
+      asymmetric
       ryantm
     ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
