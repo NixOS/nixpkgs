@@ -542,6 +542,8 @@ with pkgs;
 
   frugal = callPackage ../development/tools/frugal { };
 
+  functiontrace-server = callPackage ../development/tools/functiontrace-server { };
+
   glade = callPackage ../development/tools/glade { };
 
   goda = callPackage ../development/tools/goda { };
