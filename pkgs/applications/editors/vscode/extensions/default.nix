@@ -2122,6 +2122,23 @@ let
         };
       };
 
+      nvarner.typst-lsp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "typst-lsp";
+          publisher = "nvarner";
+          version = "0.3.0";
+          sha256 = "sha256-ek5zXK4ecXwSPMJ4Ihy2l3PMxCdHwJN7dbwZfQVjNG8=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
+          description = "A VSCode extension for providing a language server for Typst";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp";
+          homepage = "https://github.com/nvarner/typst-lsp";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
