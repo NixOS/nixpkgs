@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+nuVyqA/V/J6DWAeIs9Pv90ry3px1gJsF460qvfSEH8=";
   };
 
-  buildInputs = [ pkgs.curl ];
+  buildInputs = [ curl ];
 
   makeFlags = [ "PREFIX=$(out)/local"];
 
