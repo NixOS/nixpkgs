@@ -1117,7 +1117,7 @@ with import <nixpkgs> {};
 in python.withPackages(ps: [ps.blaze])).env
 ```
 
-#### Optional extra dependencies
+#### Optional extra dependencies {#python-optional-dependencies}
 
 Some packages define optional dependencies for additional features. With
 `setuptools` this is called `extras_require` and `flit` calls it
@@ -1801,14 +1801,14 @@ The following rules are desired to be respected:
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
 
-## Package set maintenance
+## Package set maintenance {#python-package-set-maintenance}
 
 The whole Python package set has a lot of packages that do not see regular
 updates, because they either are a very fragile component in the Python
 ecosystem, like for example the `hypothesis` package, or packages that have
 no maintainer, so maintenance falls back to the package set maintainers.
 
-### Updating packages in bulk
+### Updating packages in bulk {#python-package-bulk-updates}
 
 There is a tool to update alot of python libraries in bulk, it exists at
 `maintainers/scripts/update-python-libraries` with this repository.
@@ -1836,7 +1836,7 @@ would be:
 $ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
 ```
 
-## CPython Update Schedule
+## CPython Update Schedule {#python-cpython-update-schedule}
 
 With [PEP 602](https://www.python.org/dev/peps/pep-0602/), CPython now
 follows a yearly release cadence. In nixpkgs, all supported interpreters

@@ -20,7 +20,7 @@ pkgs.mkShell {
 }
 ```
 
-## Attributes
+## Attributes {#sec-pkgs-mkShell-attributes}
 
 * `name` (default: `nix-shell`). Set the name of the derivation.
 * `packages` (default: `[]`). Add executable packages to the `nix-shell` environment.
@@ -29,7 +29,7 @@ pkgs.mkShell {
 
 ... all the attributes of `stdenv.mkDerivation`.
 
-## Building the shell
+## Building the shell {#sec-pkgs-mkShell-building}
 
 This derivation output will contain a text file that contains a reference to
 all the build inputs. This is useful in CI where we want to make sure that
