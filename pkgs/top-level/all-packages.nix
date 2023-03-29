@@ -22758,7 +22758,9 @@ with pkgs;
     in symlinkJoin {
       inherit name;
       paths = [
-        (callPackage ../applications/virtualization/libnvidia-container { })
+        (callPackage ../applications/virtualization/libnvidia-container {
+          inherit (linuxPackages) nvidia_x11;
+        })
         nvidia-container-runtime
         (callPackage ../applications/virtualization/nvidia-container-toolkit {
           inherit nvidia-container-runtime;
