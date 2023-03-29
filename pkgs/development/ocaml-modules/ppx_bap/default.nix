@@ -1,4 +1,5 @@
-{ lib, buildDunePackage
+{ lib
+, buildDunePackage
 , fetchFromGitHub
 , ppx_assert
 , ppx_bench
@@ -25,6 +26,8 @@ buildDunePackage rec {
     rev = "v${version}";
     sha256 = "1c6rcdp8bicdiwqc2mb59cl9l2vxlp3y8hmnr9x924fq7acly248";
   };
+
+  duneVersion = "3";
 
   buildInputs = [
     ppx_optcomp

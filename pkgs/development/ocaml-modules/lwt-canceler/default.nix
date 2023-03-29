@@ -10,7 +10,8 @@ buildDunePackage rec {
     rev = "v${version}";
     sha256 = "1xbb7012hp901b755kxmfgg293rz34rkhwzg2z9i6sakwd7i0h9p";
   };
-  useDune2 = true;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     lwt

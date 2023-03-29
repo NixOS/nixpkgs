@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
-  useDune2 = true;
   minimumOcamlVersion = "4.04.1";
 
   src = fetchFromGitHub {
@@ -12,6 +11,8 @@ buildDunePackage rec {
     rev = version;
     sha256 = "0qjlkw35r4q2cm0n2x0i73zvx1xgrp6axaia2nm8zxpm49mid629";
   };
+
+  duneVersion = "3";
 
   patches = [ ./hack_parallel.patch ];
 

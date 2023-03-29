@@ -15,6 +15,8 @@ buildDunePackage rec {
     sha256 = "sha256-rnM50IzeiKOrpFf79jTHp+fXn0tdx+vrLuD3kzqLh5g=";
   };
 
+  duneVersion = "3";
+
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ posix-socket srt ];
 

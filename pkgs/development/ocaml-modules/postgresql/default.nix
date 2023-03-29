@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "postgresql";
   version = "5.0.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
@@ -14,6 +12,8 @@ buildDunePackage rec {
     rev = version;
     sha256 = "1i4pnh2v00i0s7s9pcwz1x6s4xcd77d08gjjkvy0fmda6mqq6ghn";
   };
+
+  duneVersion = "3";
 
   nativeBuildInputs = [ postgresql ];
   buildInputs = [ dune-configurator ];

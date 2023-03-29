@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 
@@ -13,6 +12,8 @@ buildDunePackage rec {
     rev    = version;
     sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
   };
+
+  duneVersion = "3";
 
   checkInputs = [ alcotest ppx_let ];
   buildInputs = [ ocaml-syntax-shims ];

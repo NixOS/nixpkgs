@@ -4,14 +4,14 @@ buildDunePackage rec {
   pname = "pcre";
   version = "7.5.0";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/mmottl/pcre-ocaml/releases/download/${version}/pcre-${version}.tbz";
     sha256 = "sha256-ZxFC9AtthhccvAZyU/qt+QMBkWHVdIi9D7bFRWwsvRo=";
   };
+
+  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
 

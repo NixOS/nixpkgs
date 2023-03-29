@@ -3,9 +3,11 @@
 buildDunePackage rec {
   pname = "angstrom-async";
 
-  inherit (angstrom) version useDune2 src;
+  inherit (angstrom) version src;
 
   minimumOCamlVersion = "4.04.1";
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ angstrom async ];
 

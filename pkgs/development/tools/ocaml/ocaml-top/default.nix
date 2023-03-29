@@ -11,6 +11,8 @@ with ocamlPackages; buildDunePackage rec {
     hash = "sha256-xmPGGB/zUpfeAxUIhR1PhfoESAJq7sTpqHuf++EH3Lw=";
   };
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ ocp-build ];
   buildInputs = [ ncurses lablgtk3-sourceview3 ocp-index ];
 

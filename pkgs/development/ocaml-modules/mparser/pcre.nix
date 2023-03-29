@@ -2,9 +2,10 @@
 
 buildDunePackage rec {
   pname = "mparser-pcre";
-  useDune2 = true;
 
   inherit (mparser) src version;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ ocaml_pcre mparser ];
 

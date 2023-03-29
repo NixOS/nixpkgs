@@ -9,7 +9,6 @@
 , ...}@args:
 
 buildDunePackage (args // {
-  useDune2 = true;
   inherit version buildInputs;
 
   inherit minimumOCamlVersion;
@@ -20,6 +19,8 @@ buildDunePackage (args // {
     rev = "v${version}";
     sha256 = hash;
   };
+
+  duneVersion = "3";
 
   inherit doCheck;
 

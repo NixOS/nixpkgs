@@ -13,6 +13,8 @@ buildDunePackage rec {
     sha256 = "sha256:1788cnn10idp5i1hggg4pys7k0w8m3h2p4xa42jipfg4cpj7shaf";
   };
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ base fmt ];
 
   doCheck = true;

@@ -22,6 +22,8 @@ ocamlPackages.buildDunePackage rec {
       --replace "if Sys.file_exists (to_windows path) then to_windows cmd else cmd" "cmd"
   '';
 
+  duneVersion = "3";
+
   nativeBuildInputs = with ocamlPackages; [
     menhir
   ];

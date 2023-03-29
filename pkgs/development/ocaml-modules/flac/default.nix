@@ -11,6 +11,8 @@ buildDunePackage rec {
     sha256 = "sha256-oMmxZtphEX/OPfyTumjkWQJidAjSRqriygaTjVJTCG0=";
   };
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ ogg flac.dev ];

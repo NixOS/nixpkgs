@@ -11,6 +11,8 @@ buildDunePackage rec {
     sha256 = "sha256-AAB4ZzBnwfwFXOAqX/sIT6imOl70F0YNMt96SWOOE9w=";
   };
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ reason ];
 
   buildInputs = [

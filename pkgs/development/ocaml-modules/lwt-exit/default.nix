@@ -15,9 +15,9 @@ buildDunePackage rec {
     sha256 = "1k763bmj1asj9ijar39rh3h1d59rckmsf21h2y8966lgglsf42bd";
   };
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     lwt

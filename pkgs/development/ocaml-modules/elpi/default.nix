@@ -36,6 +36,8 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.04";
 
+  duneVersion = "3";
+
   # atdgen is both a library and executable
   nativeBuildInputs = [ perl ]
   ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
