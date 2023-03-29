@@ -6,6 +6,7 @@
 , installShellFiles
 , util-linux
 , nixosTests
+, kubernetes
 }:
 
 buildGoModule rec {
@@ -42,7 +43,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; };
+  passthru.tests = { inherit (nixosTests) docker; } // kubernetes.tests;
 
   meta = with lib; {
     changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
