@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver";
-  version = "5.4.2";
+  version = "5.4.4";
 
   outputs = [
     "out"
