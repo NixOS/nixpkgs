@@ -32,7 +32,6 @@ buildDunePackage rec {
     inherit (param) sha256;
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     ppxlib

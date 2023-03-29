@@ -7,7 +7,6 @@ buildDunePackage rec {
   version = "5.4.0";
 
   minimalOCamlVersion = "4.04";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${version}/ipaddr-${version}.tbz";

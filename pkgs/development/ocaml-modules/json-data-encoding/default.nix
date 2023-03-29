@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-4FNUU82sq3ylgw0lxHlwi1OV58NRRh9zJqE47YyQZSc=";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     uri

@@ -9,7 +9,6 @@ buildDunePackage rec {
 
   inherit (kafka) version src;
 
-  duneVersion = "3";
 
   buildInputs = [ cmdliner ];
 

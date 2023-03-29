@@ -9,7 +9,6 @@ buildDunePackage rec {
   version = "0.6.0";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-pcap/releases/download/v${version}/${pname}-${version}.tbz";

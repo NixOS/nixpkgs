@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "resto";
   version = "1.0";
-  duneVersion = "3";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "resto";

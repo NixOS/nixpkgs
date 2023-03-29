@@ -36,7 +36,6 @@ buildDunePackage rec {
     sha256 = "14k67v0b39b8jq3ny2ymi8g8sqx2gd81mlzsjphdzdqnlx6fk716";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ cmdliner hxd ];
 

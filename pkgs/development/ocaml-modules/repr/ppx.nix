@@ -4,7 +4,6 @@ buildDunePackage {
   pname = "ppx_repr";
 
   inherit (repr) src version strictDeps;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     ppx_deriving

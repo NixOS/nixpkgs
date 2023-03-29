@@ -5,7 +5,6 @@
 buildDunePackage rec {
   pname = "iri";
   version = "0.6.0";
-  duneVersion = "3";
 
   src = fetchFromGitLab {
     domain = "framagit.org";

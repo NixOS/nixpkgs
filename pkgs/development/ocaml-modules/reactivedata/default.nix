@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "reactiveData";
   version = "0.3";
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

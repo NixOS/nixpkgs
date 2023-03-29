@@ -16,7 +16,6 @@ buildDunePackage rec {
     sha256 = "sha256-lg5cX9/LQlVmR42XcI17b6KaatnFO2L9A9ZXfID8mTY=";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ zarith_stubs_js ];
   doCheck = true;

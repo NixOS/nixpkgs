@@ -9,7 +9,6 @@ buildDunePackage rec {
   pname = "gluten-lwt-unix";
   inherit (gluten) doCheck meta src version;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     faraday-lwt-unix

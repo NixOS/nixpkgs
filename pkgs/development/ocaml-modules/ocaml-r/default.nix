@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "ocaml-r";
   version = "0.6.0";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

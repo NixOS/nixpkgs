@@ -16,7 +16,6 @@ buildDunePackage rec {
 
   inherit (owl-base) version src meta;
 
-  duneVersion = "3";
 
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator stdio ];

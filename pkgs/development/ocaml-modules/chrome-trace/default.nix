@@ -5,7 +5,6 @@ buildDunePackage rec {
   inherit (dune_3) src version;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   dontAddPrefix = true;
 

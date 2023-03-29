@@ -37,7 +37,6 @@ else
 buildDunePackage {
   pname = "merlin";
   inherit version;
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";

@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "cryptokit";
   version = "1.18";
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

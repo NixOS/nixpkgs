@@ -4,7 +4,6 @@
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   pname = "asn1-combinators";
   version = "0.2.6";

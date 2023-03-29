@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "mirage-time";
   version = "3.0.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-time/releases/download/v${version}/mirage-time-v${version}.tbz";

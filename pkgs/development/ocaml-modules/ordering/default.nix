@@ -3,7 +3,6 @@
 buildDunePackage {
   pname = "ordering";
   inherit (dune_3) version src;
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   dontAddPrefix = true;

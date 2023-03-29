@@ -29,7 +29,6 @@ let
       sha256 = "sha256:15v1cggm7awp11iwl3lzpaar91jzivhdxggp5mr48gd28kfipzk2";
     };
 
-    duneVersion = "3";
 
     propagatedBuildInputs = [ ezjsonm findlib ];
 
@@ -66,7 +65,6 @@ buildDunePackage {
   version = "unstable-2022-04-28";
 
   minimalOCamlVersion = "4.13";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "RedPRL";

@@ -9,7 +9,6 @@ buildDunePackage rec {
   pname = "domainslib";
   version = "0.5.0";
 
-  duneVersion = "3";
   minimalOCamlVersion = "5.0";
 
   src = fetchurl {

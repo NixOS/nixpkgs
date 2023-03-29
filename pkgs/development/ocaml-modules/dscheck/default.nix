@@ -8,7 +8,6 @@ buildDunePackage rec {
   version = "0.1.0";
 
   minimalOCamlVersion = "5.0";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/dscheck/releases/download/${version}/dscheck-${version}.tbz";

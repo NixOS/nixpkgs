@@ -5,7 +5,6 @@ buildDunePackage rec {
   version = "1.0.4";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/hannesm/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";

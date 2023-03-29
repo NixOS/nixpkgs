@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-rMSE+ta7ughjjCnz4oho1D3VGaAsUlLtxizvxZT0/cQ=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ portaudio ];

@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "bigstring";
   version = "0.3";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.03";
 
   # Ensure compatibility with OCaml ≥ 5.0

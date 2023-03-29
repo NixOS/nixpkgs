@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "owl-base";
   version = "1.0.2";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/owlbarn/owl/releases/download/${version}/owl-${version}.tbz";

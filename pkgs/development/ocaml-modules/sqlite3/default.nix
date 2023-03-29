@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "sqlite3";
   version = "5.1.0";
-  duneVersion = "3";
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
@@ -19,7 +18,8 @@ buildDunePackage rec {
     description = "OCaml bindings to the SQLite 3 database access library";
     license = licenses.mit;
     maintainers = with maintainers; [
-      maggesi vbgl
+      maggesi
+      vbgl
     ];
   };
 }

@@ -5,7 +5,6 @@ buildDunePackage rec {
 
   inherit (graphql_parser) version src;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ graphql_parser rresult yojson ];
 

@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "shine";
   version = "0.2.3";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";

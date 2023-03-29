@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "cfstream";
   version = "1.3.2";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.04.1";
 

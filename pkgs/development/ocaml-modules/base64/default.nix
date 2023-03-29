@@ -5,7 +5,6 @@ buildDunePackage rec {
   version = "3.5.1";
 
   minimalOCamlVersion = "4.03";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-${version}.tbz";

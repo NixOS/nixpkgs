@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "dune-action-plugin";
   inherit (dune_3) src version;
 
-  duneVersion = "3";
 
   dontAddPrefix = true;
 

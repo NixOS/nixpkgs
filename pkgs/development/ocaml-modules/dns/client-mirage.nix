@@ -10,7 +10,6 @@
 buildDunePackage {
   pname = "dns-client-mirage";
   inherit (dns) src version;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns-client

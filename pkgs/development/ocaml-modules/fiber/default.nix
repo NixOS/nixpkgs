@@ -11,7 +11,6 @@ buildDunePackage rec {
     hash = "sha256-18GfGXpu+uiIiCuLhIx5z5jRkem1nNWaQB6Ms0AE9sE=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ stdune dyn ];
 

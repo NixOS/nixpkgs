@@ -36,7 +36,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.04";
 
-  duneVersion = "3";
 
   # atdgen is both a library and executable
   nativeBuildInputs = [ perl ]

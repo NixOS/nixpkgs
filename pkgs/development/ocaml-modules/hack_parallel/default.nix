@@ -12,7 +12,6 @@ buildDunePackage rec {
     sha256 = "0qjlkw35r4q2cm0n2x0i73zvx1xgrp6axaia2nm8zxpm49mid629";
   };
 
-  duneVersion = "3";
 
   patches = [ ./hack_parallel.patch ];
 

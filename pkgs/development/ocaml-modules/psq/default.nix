@@ -5,7 +5,6 @@ buildDunePackage rec {
   pname = "psq";
   version = "0.2.1";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/pqwy/psq/releases/download/v${version}/psq-${version}.tbz";

@@ -7,7 +7,7 @@
 buildDunePackage rec {
   pname = "google-drive-ocamlfuse";
   version = "0.7.30";
-  duneVersion = "3";
+
 
   src = fetchFromGitHub {
     owner = "astrada";

@@ -9,7 +9,6 @@ buildDunePackage rec {
     sha256 = "00haz1cmplk3j9ysh6j656zrldy60585fmlndmfhpd5332mxrfdw";
   };
 
-  duneVersion = "3";
 
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ ppxlib ];

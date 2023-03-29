@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "mirage-logs";
   version = "1.3.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-logs/releases/download/v${version}/mirage-logs-${version}.tbz";

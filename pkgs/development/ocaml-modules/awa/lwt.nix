@@ -7,7 +7,6 @@ buildDunePackage {
 
   inherit (awa) version src;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     awa cstruct mtime lwt mirage-crypto-rng

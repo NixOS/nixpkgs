@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "mirage-block-combinators";
   inherit (mirage-block) version src;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ mirage-block logs ];
 

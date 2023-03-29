@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "higlo";
   version = "0.8";
-  duneVersion = "3";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";

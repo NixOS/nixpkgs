@@ -6,7 +6,6 @@ buildDunePackage {
   inherit (mimic) src version;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   strictDeps = true;
 

@@ -15,7 +15,6 @@ buildDunePackage rec {
     hash = "sha256-Q+41LPFZFHi9sXKFV3F13FZZNO3KXRSElEmr+nH58Uw=";
   };
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [

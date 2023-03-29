@@ -8,7 +8,6 @@ buildDunePackage rec {
   version = "3.11";
   pname = "containers";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";

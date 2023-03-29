@@ -11,7 +11,6 @@ buildDunePackage rec {
   pname = "shared-memory-ring";
   version = "3.1.1";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/shared-memory-ring/releases/download/v${version}/shared-memory-ring-${version}.tbz";

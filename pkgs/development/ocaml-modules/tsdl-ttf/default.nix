@@ -11,7 +11,6 @@ buildDunePackage rec {
   pname = "tsdl-ttf";
   version = "0.5";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "sanette";

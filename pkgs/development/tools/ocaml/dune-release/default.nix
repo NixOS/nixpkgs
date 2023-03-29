@@ -11,7 +11,6 @@ let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
 in buildDunePackage rec {
   pname = "dune-release";
   version = "1.6.2";
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.06";
 

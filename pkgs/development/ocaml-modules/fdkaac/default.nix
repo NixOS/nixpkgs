@@ -12,7 +12,6 @@ buildDunePackage rec {
     hash = "sha256-cTPPQKBq0EFo35eK7TXlszbodHYIg1g7v+yQ/rG7Y9I=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ fdk_aac ];

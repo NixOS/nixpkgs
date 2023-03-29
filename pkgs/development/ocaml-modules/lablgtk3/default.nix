@@ -16,7 +16,6 @@ buildDunePackage rec {
     sha256 = "sha256-1kXJP+tKudP3qfosTgZAQueNK46H9aLevEj6wxPKDWY=";
   };
 
-  duneVersion = "3";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator camlp-streams ];

@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "toml";
   version = "7.1.0";
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocaml-toml";

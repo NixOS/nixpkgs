@@ -10,7 +10,6 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   # no need to propagate as this is primarily
   # an executable package

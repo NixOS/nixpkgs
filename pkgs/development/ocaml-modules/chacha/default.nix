@@ -27,7 +27,6 @@ buildDunePackage rec {
   })];
 
   minimalOCamlVersion = "4.02";
-  duneVersion = "3";
 
   propagatedBuildInputs = [ cstruct mirage-crypto ];
 

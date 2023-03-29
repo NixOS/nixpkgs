@@ -11,7 +11,6 @@ buildDunePackage rec {
   pname = "ppx_bitstring";
   inherit (bitstring) version src;
 
-  duneVersion = "3";
 
   buildInputs = [ bitstring ppxlib ];
 

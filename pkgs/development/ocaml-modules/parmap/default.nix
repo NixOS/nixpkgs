@@ -11,7 +11,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
-  duneVersion = "3";
 
   buildInputs = [
     dune-configurator

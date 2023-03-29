@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "dune-private-libs";
 
-  duneVersion = "3";
 
   inherit (dune_3) src version;
 

@@ -25,7 +25,6 @@ buildDunePackage {
     patches
     ;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf

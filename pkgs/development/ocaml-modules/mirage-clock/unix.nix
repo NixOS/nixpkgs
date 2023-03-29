@@ -5,7 +5,6 @@ buildDunePackage {
 
   inherit (mirage-clock) version src;
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
 

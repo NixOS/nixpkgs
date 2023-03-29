@@ -16,7 +16,6 @@ buildDunePackage rec {
   buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [ lwt stringext ];
 
-  duneVersion = "3";
 
   doCheck = true;
   checkInputs = [ alcotest ];

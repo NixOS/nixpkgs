@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "0p4ip37kihlz9qy604llak2kzd00g45ix1yiihnrri2nm01scfab";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ ogg speex.dev ];

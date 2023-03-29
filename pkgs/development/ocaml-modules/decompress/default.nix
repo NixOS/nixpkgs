@@ -9,7 +9,6 @@ buildDunePackage rec {
   version = "1.5.2";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-${version}.tbz";

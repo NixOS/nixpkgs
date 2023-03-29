@@ -14,7 +14,6 @@
 buildDunePackage rec {
   pname = "tezos-bls12-381-polynomial";
   version = "0.1.3";
-  duneVersion = "3";
   src = fetchFromGitLab {
     owner = "nomadic-labs/cryptography";
     repo = "privacy-team";

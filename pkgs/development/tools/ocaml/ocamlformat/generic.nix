@@ -28,7 +28,6 @@ buildDunePackage {
 
   minimumOCamlVersion = "4.08";
 
-  duneVersion = "3";
 
   nativeBuildInputs = [
     menhir

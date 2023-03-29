@@ -18,7 +18,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "fdopen";

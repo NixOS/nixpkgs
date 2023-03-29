@@ -15,7 +15,6 @@ buildDunePackage rec {
 
   inherit (bls12-381-gen) version src doCheck;
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

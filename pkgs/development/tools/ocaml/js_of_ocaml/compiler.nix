@@ -1,12 +1,17 @@
-{ lib, fetchurl, buildDunePackage
-, cmdliner, yojson, ppxlib, findlib
-, menhir, menhirLib
+{ lib
+, fetchurl
+, buildDunePackage
+, cmdliner
+, yojson
+, ppxlib
+, findlib
+, menhir
+, menhirLib
 }:
 
 buildDunePackage rec {
   pname = "js_of_ocaml-compiler";
   version = "4.1.0";
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
@@ -17,7 +22,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   buildInputs = [ cmdliner ppxlib ];
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   propagatedBuildInputs = [ menhirLib yojson findlib ];
 
   meta = {

@@ -19,7 +19,6 @@ buildDunePackage rec {
     sha256 = "a406bc9863b04bb424692045939d6c170a2bb65a98521ae5608d25b0559344f6";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ angstrom fmt bigstringaf ];
   checkInputs = [ alcotest ];

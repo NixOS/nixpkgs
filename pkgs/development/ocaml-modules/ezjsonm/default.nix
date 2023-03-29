@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "ezjsonm";
   version = "1.3.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-${version}.tbz";

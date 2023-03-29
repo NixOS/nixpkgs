@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "1dc1vxnkd0cnrgac5v3zbaj2lq1d2w8118mp1cmsdxylp06yz1sj";
   };
 
-  duneVersion = "3";
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ ppxlib dune-configurator ];

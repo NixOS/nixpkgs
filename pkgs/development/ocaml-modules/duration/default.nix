@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "duration";
   version = "0.2.1";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/hannesm/duration/releases/download/v${version}/duration-${version}.tbz";

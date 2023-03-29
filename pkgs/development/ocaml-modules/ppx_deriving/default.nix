@@ -38,7 +38,6 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  duneVersion = "3";
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ ppxlib ];

@@ -15,7 +15,6 @@
 
 buildDunePackage rec {
   pname = "tezos-plompiler";
-  duneVersion = "3";
 
   inherit (tezos-bls12-381-polynomial) version src;
 

@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "zmq";
   version = "5.1.5";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/issuu/ocaml-zmq/releases/download/${version}/zmq-lwt-${version}.tbz";

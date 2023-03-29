@@ -22,7 +22,6 @@ buildDunePackage rec {
   pname = "piaf";
   version = "0.1.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";

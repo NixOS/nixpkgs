@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "graphql_ppx";
   version = "1.2.2";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

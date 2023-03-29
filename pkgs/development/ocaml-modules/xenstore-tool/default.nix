@@ -5,7 +5,6 @@ buildDunePackage {
 
   inherit (xenstore_transport) src version;
 
-  duneVersion = "3";
 
   buildInputs = [ xenstore_transport xenstore lwt ];
 

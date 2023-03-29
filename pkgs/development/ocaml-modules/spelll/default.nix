@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "spelll";
   version = "0.4";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";

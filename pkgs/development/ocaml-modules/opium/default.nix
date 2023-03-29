@@ -24,7 +24,6 @@
 buildDunePackage rec {
   pname = "opium";
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   inherit (rock) src version;
 

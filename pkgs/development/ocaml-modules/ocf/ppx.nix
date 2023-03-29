@@ -6,7 +6,6 @@ buildDunePackage {
 
   inherit (ocf) src version;
 
-  duneVersion = "3";
 
   buildInputs = [ ppxlib ocf ];
 

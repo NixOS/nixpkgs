@@ -22,7 +22,6 @@ buildDunePackage rec {
   version = "2.1.2";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-${version}.tbz";

@@ -18,7 +18,6 @@ buildDunePackage rec {
   pname = "data-encoding";
   version = "0.6";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.10";
 
   src = fetchFromGitLab {

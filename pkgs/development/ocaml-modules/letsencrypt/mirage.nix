@@ -10,7 +10,6 @@ buildDunePackage {
 
   inherit (letsencrypt) version src;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ emile http-mirage-client letsencrypt paf ];
 

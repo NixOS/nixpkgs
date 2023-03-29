@@ -6,7 +6,6 @@ lib.throwIfNot (lib.versionAtLeast "4.12" ocaml.version)
 buildDunePackage rec {
   pname = "spacetime_lib";
   version = "0.3.0";
-  duneVersion = "2";
 
   src = fetchFromGitHub {
     owner = "lpw25";

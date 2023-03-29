@@ -13,7 +13,6 @@ buildDunePackage rec {
     sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
   };
 
-  duneVersion = "3";
 
   checkInputs = [ alcotest ppx_let ];
   buildInputs = [ ocaml-syntax-shims ];

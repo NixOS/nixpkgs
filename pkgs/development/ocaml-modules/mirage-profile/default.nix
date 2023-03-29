@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "mirage-profile";
   version = "0.9.1";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-profile/releases/download/v${version}/mirage-profile-v${version}.tbz";

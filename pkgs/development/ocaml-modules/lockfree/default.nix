@@ -8,7 +8,6 @@ buildDunePackage rec {
   version = "0.3.0";
 
   minimalOCamlVersion = "5.0";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/lockfree/releases/download/${version}/lockfree-${version}.tbz";

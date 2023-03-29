@@ -47,7 +47,7 @@ ocamlPackages.buildDunePackage rec {
       "\$(DUNE) install \$(DUNEROOT) --prefix $out --docdir $out/share/doc --mandir $out/share/man"
   '';
 
-  duneVersion = "3";
+
 
   nativeBuildInputs = [ fake-opam kpsexpand makeWrapper texlive.combined.scheme-medium which ];
   buildInputs = with ocamlPackages; [ camlimages ghostscriptX graphics ];

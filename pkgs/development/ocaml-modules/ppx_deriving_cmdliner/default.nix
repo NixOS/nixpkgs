@@ -22,7 +22,6 @@ buildDunePackage rec {
     sha256 = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8";
   };
 
-  duneVersion = "3";
 
   patches = [
     # Ppxlib.0.26.0 compatibility

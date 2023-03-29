@@ -20,7 +20,6 @@ buildDunePackage rec {
   version = "7.0.1";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-dns/releases/download/v${version}/dns-${version}.tbz";

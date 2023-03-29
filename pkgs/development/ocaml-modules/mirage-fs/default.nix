@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "mirage-fs";
   version = "4.0.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-fs/releases/download/v${version}/mirage-fs-v${version}.tbz";

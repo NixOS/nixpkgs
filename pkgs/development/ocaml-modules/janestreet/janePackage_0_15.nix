@@ -20,7 +20,6 @@ buildDunePackage (args // {
     sha256 = hash;
   };
 
-  duneVersion = "3";
 
   inherit doCheck;
 

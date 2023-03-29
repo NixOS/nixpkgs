@@ -6,7 +6,6 @@
 buildDunePackage rec {
   pname = "gapi-ocaml";
   version = "0.4.3";
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "npy";
   version = "0.0.9";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.06";
 

@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "terminal_size";
   version = "0.2.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/cryptosense/terminal_size/releases/download/v${version}/terminal_size-${version}.tbz";

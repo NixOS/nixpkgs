@@ -15,7 +15,6 @@ buildDunePackage rec {
     sha256 = "sha256-qIw69OE7wYyZYKnIc9QrmF8MzY5Fg5pBFyIpexmaYxA=";
   };
 
-  duneVersion = "3";
 
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ ppxlib ppx_deriving re uutf uucp ];

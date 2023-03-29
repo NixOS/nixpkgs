@@ -10,7 +10,6 @@ buildDunePackage rec {
   pname = "pbkdf";
   version = "1.2.0";
 
-  duneVersion = "3";
 
   src = fetchzip {
     url = "https://github.com/abeaumont/ocaml-pbkdf/archive/${version}.tar.gz";

@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "promise_jsoo";
   version = "0.3.1";
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mnxn/promise_jsoo/releases/download/v${version}/promise_jsoo-v${version}.tbz";

@@ -16,7 +16,6 @@ buildDunePackage rec {
   version = "0.2.4";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "serokell";

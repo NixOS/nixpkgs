@@ -17,7 +17,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     lwt

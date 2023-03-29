@@ -6,7 +6,6 @@ buildDunePackage rec {
 
   inherit (ocaml_gettext) src version;
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
 

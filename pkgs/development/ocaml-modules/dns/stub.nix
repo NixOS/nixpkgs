@@ -7,7 +7,6 @@ buildDunePackage {
   pname = "dns-stub";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns

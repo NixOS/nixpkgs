@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-d/jkTI/D2LVi9nrndRGgqg6ca1FcmRKknR7YXyA7gWw=";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ ssl lwt ];
 

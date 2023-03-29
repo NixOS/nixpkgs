@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "xml-light";
   version = "2.5";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {

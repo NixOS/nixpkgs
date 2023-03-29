@@ -16,7 +16,6 @@ buildDunePackage rec {
   version = "1.1";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/emile/releases/download/v${version}/emile-v${version}.tbz";

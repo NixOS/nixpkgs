@@ -19,13 +19,12 @@ buildDunePackage rec {
   pname = "torch";
   version = "0.17";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "ocaml-${pname}";
-    rev    = version;
+    repo = "ocaml-${pname}";
+    rev = version;
     hash = "sha256-z/9NUBjeFWE63Z/e8OyzDiy8hrn6qzjaiBH8G9MPeos=";
   };
 

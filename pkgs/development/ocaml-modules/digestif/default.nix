@@ -8,7 +8,6 @@ buildDunePackage rec {
   version = "1.1.4";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-${version}.tbz";

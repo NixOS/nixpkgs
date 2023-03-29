@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-uIcGj/exSfuuzsv6C/bnJXpYRu3OY3dcKMW/7+qwi2U=";
   };
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.12";
 

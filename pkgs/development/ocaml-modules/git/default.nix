@@ -11,7 +11,6 @@ buildDunePackage rec {
   version = "3.13.0";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";

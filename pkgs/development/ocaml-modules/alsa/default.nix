@@ -13,7 +13,6 @@ buildDunePackage rec {
     sha256 = "1qy22g73qc311rmv41w005rdlj5mfnn4yj1dx1jhqzr31zixl8hj";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ alsa-lib ];

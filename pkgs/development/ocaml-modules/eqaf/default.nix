@@ -2,7 +2,6 @@
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.07";
-  duneVersion = "3";
   pname = "eqaf";
   version = "0.9";
 

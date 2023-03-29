@@ -1,4 +1,6 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , fmt
 , lwt
 , alcotest
@@ -8,7 +10,6 @@ buildDunePackage rec {
   pname = "mirage-kv";
   version = "4.0.1";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {

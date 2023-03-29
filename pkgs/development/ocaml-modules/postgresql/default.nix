@@ -13,7 +13,6 @@ buildDunePackage rec {
     sha256 = "1i4pnh2v00i0s7s9pcwz1x6s4xcd77d08gjjkvy0fmda6mqq6ghn";
   };
 
-  duneVersion = "3";
 
   nativeBuildInputs = [ postgresql ];
   buildInputs = [ dune-configurator ];

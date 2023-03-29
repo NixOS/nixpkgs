@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "theora";
   version = "0.4.0";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";

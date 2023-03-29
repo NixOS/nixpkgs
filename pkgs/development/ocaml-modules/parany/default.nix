@@ -16,7 +16,6 @@ buildDunePackage rec {
   pname = "parany";
   inherit (params) version;
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

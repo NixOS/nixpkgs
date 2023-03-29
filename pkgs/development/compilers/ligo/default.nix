@@ -22,7 +22,6 @@ ocamlPackages.buildDunePackage rec {
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
-  duneVersion = "3";
 
   strictDeps = true;
 

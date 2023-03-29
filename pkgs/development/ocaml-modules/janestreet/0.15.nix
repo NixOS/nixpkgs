@@ -89,7 +89,6 @@ with self;
 
   async_js = janePackage {
     pname = "async_js";
-    duneVersion = "3";
     hash = "184j077bz686k5lrqswircnrdqldb316ngpzq7xri1pcsl39sy3q";
     meta.description = "A small library that provide Async support for JavaScript platforms";
     buildInputs = [ js_of_ocaml-ppx ];
@@ -111,7 +110,6 @@ with self;
   };
 
   async_rpc_websocket = janePackage {
-    duneVersion = "3";
     pname = "async_rpc_websocket";
     hash = "1n93jhkz5r76xcc40c4i4sxcyfz1dbppz8sjfxpwcwjyi6lyhp1p";
     meta.description = "Library to serve and dispatch Async RPCs over websockets";
@@ -133,7 +131,6 @@ with self;
   };
 
   async_smtp = janePackage {
-    duneVersion = "3";
     pname = "async_smtp";
     hash = "1m00j7wcb0blipnc1m6by70gd96a1k621b4dgvgffp8as04a461r";
     minimumOCamlVersion = "4.12";
@@ -162,7 +159,6 @@ with self;
   };
 
   async_websocket = janePackage {
-    duneVersion = "3";
     pname = "async_websocket";
     hash = "16ixqfnx9jp77bvx11dlzsq0pzfpyiif60hl2q06zncyswky9xgb";
     meta.description = "A library that implements the websocket protocol on top of Async";
@@ -213,7 +209,6 @@ with self;
 
   bonsai = janePackage {
     pname = "bonsai";
-    duneVersion = "3";
     hash = "150zx2g1dmhyrxwqq8j7f2m3hjpmk5bk182ihx2gdbarhw1ainpm";
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ ppx_pattern_bind ];
@@ -247,7 +242,6 @@ with self;
   };
 
   cohttp_async_websocket = janePackage {
-    duneVersion = "3";
     pname = "cohttp_async_websocket";
     hash = "0d0smavnxpnwrmhlcf3b5a3cm3n9kz1y8fh6l28xv6zrn4sc7ik8";
     meta.description = "Websocket library for use with cohttp and async";
@@ -255,7 +249,6 @@ with self;
   };
 
   cohttp_static_handler = janePackage {
-    duneVersion = "3";
     pname = "cohttp_static_handler";
     version = "0.15.0";
     hash = "sha256-ENaH8ChvjeMc9WeNIhkeNBB7YK9vB4lw95o6FFZI1ys=";
@@ -331,7 +324,6 @@ with self;
   };
 
   email_message = janePackage {
-    duneVersion = "3";
     pname = "email_message";
     hash = "00h66l2g5rjaay0hbyqy4v9i866g779miriwv20h9k4mliqdq7in";
     meta.description = "E-mail message parser";
@@ -405,7 +397,6 @@ with self;
 
   incr_dom = janePackage {
     pname = "incr_dom";
-    duneVersion = "3";
     hash = "1sija9w2im8vdp61h387w0mww9hh7jgkgsjcccps4lbv936ac7c1";
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
@@ -598,7 +589,6 @@ with self;
 
   ppx_css = janePackage {
     pname = "ppx_css";
-    duneVersion = "3";
     hash = "09dpmj3f3m3z1ji9hq775iqr3cfmv5gh7q9zlblizj4wx4y0ibyi";
     meta.description = "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [ core_kernel ppxlib js_of_ocaml js_of_ocaml-ppx sedlex ];
@@ -1073,7 +1063,6 @@ with self;
     hash = "15xia9v4ighzm0gv3vbqk9nvg47cvzqmfnl2zr67yxv4b98kyzv3";
     meta.description = "OCaml bindings for the virtual-dom library";
     buildInputs = [ js_of_ocaml-ppx ];
-    duneVersion = "3";
     propagatedBuildInputs = [ core_kernel gen_js_api js_of_ocaml lambdasoup tyxml ];
   };
 

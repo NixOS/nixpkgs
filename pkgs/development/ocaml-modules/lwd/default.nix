@@ -5,7 +5,6 @@ buildDunePackage rec {
   version = "0.3";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url =

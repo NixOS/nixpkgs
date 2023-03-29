@@ -7,7 +7,6 @@
 buildDunePackage rec {
   pname = "class_group_vdf";
   version = "0.0.4";
-  duneVersion = "3";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs/cryptography";

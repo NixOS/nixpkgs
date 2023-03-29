@@ -16,7 +16,6 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ seq ];
 
-  duneVersion = "3";
 
   doCheck = true;
   checkInputs = [

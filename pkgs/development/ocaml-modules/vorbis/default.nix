@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "vorbis";
   version = "0.8.0";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";

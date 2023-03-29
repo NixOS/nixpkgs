@@ -11,7 +11,6 @@ buildDunePackage rec {
     rm -rf vendor/pp vendor/csexp
   '';
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.04";
 

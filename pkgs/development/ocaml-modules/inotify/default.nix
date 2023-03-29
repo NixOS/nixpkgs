@@ -14,7 +14,6 @@ buildDunePackage rec {
     hash = "sha256-2ATFF3HeATjhWgW4dG4jheQ9m1oE8xTQ7mpMT/1Jdp8=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ lwt ];
 

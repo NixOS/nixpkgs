@@ -47,7 +47,6 @@ buildDunePackage rec {
   inherit (param) version;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";

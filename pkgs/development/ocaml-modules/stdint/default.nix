@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "stdint";
   version = "0.7.2";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.03";
 

@@ -12,7 +12,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-bootvar-xen/releases/download/v${version}/mirage-bootvar-xen-v${version}.tbz";

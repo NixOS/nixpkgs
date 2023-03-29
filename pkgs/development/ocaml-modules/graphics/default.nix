@@ -10,7 +10,6 @@ buildDunePackage rec {
     sha256 = "sha256-QA/YHSPxy0FGuWl5NCwkeXHdVPWHn/0vgOx80CEuMtQ=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libX11 ];

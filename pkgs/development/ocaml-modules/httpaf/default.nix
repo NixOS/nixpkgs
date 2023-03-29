@@ -13,7 +13,6 @@ buildDunePackage rec {
     sha256 = "0zk78af3qyvf6w66mg8sxygr6ndayzqw5s3zfxibvn121xwni26z";
   };
 
-  duneVersion = "3";
 
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ angstrom faraday ];

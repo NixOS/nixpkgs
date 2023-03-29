@@ -12,7 +12,6 @@ buildDunePackage rec {
   version = "20221222";
   pname = "imagelib";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";

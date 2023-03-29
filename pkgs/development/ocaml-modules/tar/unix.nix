@@ -8,7 +8,6 @@
 buildDunePackage rec {
   pname = "tar-unix";
   inherit (tar) version src doCheck;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     tar

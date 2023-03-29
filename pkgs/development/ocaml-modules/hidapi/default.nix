@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "hidapi";
   version = "1.1.2";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "vbmithr";

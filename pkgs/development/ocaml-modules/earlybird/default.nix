@@ -11,7 +11,6 @@ buildDunePackage rec {
   pname = "earlybird";
   version = "1.1.0";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.11";
 

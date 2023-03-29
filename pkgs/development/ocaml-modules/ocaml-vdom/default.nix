@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "ocaml-vdom";
   version = "0.2";
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/LexiFi/ocaml-vdom/archive/refs/tags/v${version}.tar.gz";

@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "mirage-net";
   version = "4.0.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-net/releases/download/v${version}/mirage-net-v${version}.tbz";

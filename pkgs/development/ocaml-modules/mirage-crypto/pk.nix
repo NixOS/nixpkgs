@@ -6,7 +6,6 @@ buildDunePackage rec {
 
   inherit (mirage-crypto) version src;
 
-  duneVersion = "3";
 
   buildInputs = [ gmp ];
   propagatedBuildInputs = [ cstruct mirage-crypto mirage-crypto-rng

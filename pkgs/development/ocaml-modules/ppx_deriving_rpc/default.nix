@@ -6,7 +6,6 @@ buildDunePackage rec {
   inherit (rpclib) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   propagatedBuildInputs = [ ppxlib rpclib ppx_deriving ];
 

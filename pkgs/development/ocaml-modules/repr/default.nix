@@ -12,7 +12,6 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
   strictDeps = true;
 
   propagatedBuildInputs = [

@@ -14,7 +14,6 @@ buildDunePackage {
 
   inherit (shared-memory-ring) version src;
 
-  duneVersion = "3";
 
   buildInputs = [
     ppx_cstruct

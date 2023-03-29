@@ -13,7 +13,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03.0";
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ ctypes lilv ];

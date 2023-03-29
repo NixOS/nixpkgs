@@ -13,7 +13,6 @@ buildDunePackage rec {
     hash = "sha256:0dssc7p6s7z53n0mddyipjghzr8ld8bb7alaxqrx9gdpspwab1gq";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ cstruct sexplib0 mirage-crypto mirage-crypto-pk
                             astring base64 ];

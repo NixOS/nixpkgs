@@ -11,7 +11,6 @@ buildDunePackage rec {
   pname = "mirage-protocols";
   version = "8.0.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-protocols/releases/download/v${version}/mirage-protocols-v${version}.tbz";

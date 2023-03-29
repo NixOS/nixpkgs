@@ -14,7 +14,6 @@ buildDunePackage rec {
     sha256 = "sha256-PQBgJBNx3IcE6/vyNIf26a2xStU22LBhff8eM6UPaJ4=";
   };
 
-  duneVersion = "3";
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [ logs ptime uri bigstringaf ];

@@ -10,7 +10,6 @@ buildDunePackage rec {
   pname = "x509";
   version = "0.16.4";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-${version}.tbz";

@@ -15,7 +15,7 @@ ocamlPackages.buildDunePackage {
 
   minimalOCamlVersion = "4.13";
 
-  duneVersion = "3";
+
 
   src = fetchFromGitea {
     domain = "codeberg.org";

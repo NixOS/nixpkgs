@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "xtmpl";
   version = "0.19.0";
-  duneVersion = "3";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";

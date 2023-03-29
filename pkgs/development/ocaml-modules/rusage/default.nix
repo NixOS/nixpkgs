@@ -4,7 +4,6 @@ buildDunePackage rec {
   pname = "rusage";
   version = "1.0.0";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/CraigFe/ocaml-rusage/releases/download/${version}/rusage-${version}.tbz";

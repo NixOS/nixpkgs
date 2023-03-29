@@ -6,7 +6,6 @@ buildDunePackage {
   pname = "csvtool";
   inherit (csv) src version;
 
-  duneVersion = "3";
 
   buildInputs = [ csv uutf ];
 

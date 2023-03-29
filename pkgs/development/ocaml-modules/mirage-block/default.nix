@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "mirage-block";
   version = "3.0.2";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-block/releases/download/v${version}/mirage-block-${version}.tbz";

@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "irmin-fs";
 
   inherit (irmin) version src strictDeps;
-  duneVersion = "3";
 
   propagatedBuildInputs = [ irmin astring logs lwt ];
 

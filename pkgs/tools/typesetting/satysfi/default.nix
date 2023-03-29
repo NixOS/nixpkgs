@@ -28,7 +28,7 @@ let
       rev = "v1.4.2+satysfi";
       sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
-    duneVersion = "3";
+
     nativeBuildInputs = [ ocamlPackages.cppo ];
     propagatedBuildInputs = [ ocamlPackages.biniou ];
     inherit (ocamlPackages.yojson) meta;
@@ -51,7 +51,7 @@ in
       $out/share/satysfi
     '';
 
-    duneVersion = "3";
+
 
     nativeBuildInputs = with ocamlPackages; [ menhir cppo ];
 

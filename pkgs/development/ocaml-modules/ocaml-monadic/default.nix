@@ -13,7 +13,6 @@ buildDunePackage rec {
     sha256 = "1ynv3yhdqmkhkgnz6c5kv6ryjcc934sdvw9rhh8rjg2dlzlffgbw";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ ppxlib ];
 

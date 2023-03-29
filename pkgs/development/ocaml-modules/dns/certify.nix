@@ -8,7 +8,6 @@ buildDunePackage {
   pname = "dns-certify";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns

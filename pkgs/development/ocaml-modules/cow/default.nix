@@ -1,9 +1,14 @@
-{ lib, fetchurl, buildDunePackage, alcotest
-, uri, xmlm, omd, ezjsonm
+{ lib
+, fetchurl
+, buildDunePackage
+, alcotest
+, uri
+, xmlm
+, omd
+, ezjsonm
 }:
 
 buildDunePackage rec {
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   version = "2.4.0";

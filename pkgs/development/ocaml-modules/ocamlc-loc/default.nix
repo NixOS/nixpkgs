@@ -3,7 +3,6 @@
 buildDunePackage {
   pname = "ocamlc-loc";
   inherit (dune_3) src version;
-  duneVersion = "3";
 
   dontAddPrefix = true;
 

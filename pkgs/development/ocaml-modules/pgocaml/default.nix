@@ -13,7 +13,6 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ];
 

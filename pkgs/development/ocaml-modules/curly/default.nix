@@ -8,7 +8,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.02";
 
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/rgrinberg/curly/releases/download/${version}/curly-${version}.tbz";

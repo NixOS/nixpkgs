@@ -13,7 +13,6 @@ buildDunePackage rec {
     substituteInPlace src/dune --replace '(libraries bytes)' ""
   '';
 
-  duneVersion = "3";
 
   meta = {
     description = "A pure OCaml library to read and write CSV files";

@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
   '';
 
   minimalOCamlVersion = "4.12";
-  duneVersion = "3";
+
 
   nativeBuildInputs = [
     pkg-config

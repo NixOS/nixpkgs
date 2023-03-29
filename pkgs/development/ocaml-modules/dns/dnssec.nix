@@ -14,7 +14,6 @@ buildDunePackage {
   pname = "dnssec";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     cstruct

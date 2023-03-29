@@ -6,7 +6,6 @@
 buildDunePackage rec {
   pname = "webmachine";
   version = "0.7.0";
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.03";
 

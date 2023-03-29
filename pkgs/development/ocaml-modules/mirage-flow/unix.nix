@@ -7,7 +7,6 @@ buildDunePackage {
 
   inherit (mirage-flow) version src;
 
-  duneVersion = "3";
 
   # Make tests compatible with alcotest 1.4.0
   postPatch = ''

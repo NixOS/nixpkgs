@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "0mghsl8b2zd2676mh1r9142hymhvzy9cw8kgkjmirxkn56wbf56b";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ stdlib-shims ];
 

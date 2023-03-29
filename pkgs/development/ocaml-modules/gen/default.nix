@@ -7,7 +7,6 @@ buildDunePackage rec {
   version = "1.1";
   pname = "gen";
   minimalOCamlVersion = "4.03";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";

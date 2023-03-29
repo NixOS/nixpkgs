@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "tuntap";
   version = "2.0.0";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.04.2";
 

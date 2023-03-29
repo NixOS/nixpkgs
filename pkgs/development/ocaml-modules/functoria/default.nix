@@ -1,12 +1,21 @@
-{ lib, fetchurl, buildDunePackage, cmdliner
-, rresult, astring, fmt, logs, bos, fpath, emile, uri
+{ lib
+, fetchurl
+, buildDunePackage
+, cmdliner
+, rresult
+, astring
+, fmt
+, logs
+, bos
+, fpath
+, emile
+, uri
 }:
 
 buildDunePackage rec {
-  pname   = "functoria";
+  pname = "functoria";
   version = "4.3.4";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
@@ -20,8 +29,8 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "A DSL to organize functor applications";
-    homepage    = "https://github.com/mirage/functoria";
-    license     = licenses.isc;
+    homepage = "https://github.com/mirage/functoria";
+    license = licenses.isc;
     maintainers = [ maintainers.vbgl ];
   };
 }

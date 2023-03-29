@@ -11,7 +11,6 @@ else
     inherit (cstruct) version src meta;
 
     minimalOCamlVersion = "4.08";
-    duneVersion = "3";
 
     propagatedBuildInputs = [ cstruct ppxlib sexplib stdlib-shims ];
 

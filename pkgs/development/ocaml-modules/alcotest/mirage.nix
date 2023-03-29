@@ -5,7 +5,6 @@ buildDunePackage {
 
   inherit (alcotest) version src;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ alcotest lwt logs mirage-clock duration ];
 

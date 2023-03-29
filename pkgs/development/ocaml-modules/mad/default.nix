@@ -11,7 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-iJjANV2M68v3C3db1n9Y8V6yJKuDBDSjtMteamndN7U=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libmad ];

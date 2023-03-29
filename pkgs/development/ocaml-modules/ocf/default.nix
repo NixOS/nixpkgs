@@ -12,7 +12,6 @@ buildDunePackage rec {
     sha256 = "sha256:00ap3q5yjqmpk87lxqv1j2wkc7583ynhjr1jjrfn9r0j2h9pfd60";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ yojson ];
 

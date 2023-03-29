@@ -11,7 +11,6 @@ buildDunePackage rec {
     hash = "sha256-22+dZb3MC1W5Qvsz3+IHV1/XiGCRmJHTH+6IW2QX2hU=";
   };
 
-  duneVersion = "3";
 
   buildInputs = [ base stdio dune-configurator secp256k1 ];
 

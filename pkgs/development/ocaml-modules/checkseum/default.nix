@@ -10,7 +10,6 @@ buildDunePackage rec {
   pname = "checkseum";
 
   minimalOCamlVersion = "4.07";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";

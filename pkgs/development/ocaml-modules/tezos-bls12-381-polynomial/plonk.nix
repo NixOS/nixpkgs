@@ -13,7 +13,6 @@
 
 buildDunePackage rec {
   pname = "tezos-plonk";
-  duneVersion = "3";
 
   inherit (tezos-bls12-381-polynomial) version src;
 

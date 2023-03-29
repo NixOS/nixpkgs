@@ -8,7 +8,6 @@ buildDunePackage {
   pname = "uri-sexp";
   inherit (uri) version src meta;
 
-  duneVersion = "3";
 
   checkInputs = [ ounit ];
   propagatedBuildInputs = [ ppx_sexp_conv sexplib0 uri ];

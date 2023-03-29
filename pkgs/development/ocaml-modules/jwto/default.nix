@@ -6,7 +6,6 @@ buildDunePackage rec {
   pname = "jwto";
   version = "0.4.0";
 
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

@@ -8,7 +8,6 @@ buildDunePackage rec {
   version = "4.1.0";
 
   minimalOCamlVersion = "4.07";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-channel/releases/download/v${version}/mirage-channel-${version}.tbz";

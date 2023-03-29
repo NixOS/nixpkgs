@@ -3,7 +3,6 @@
 rec {
   version = "1.1.7";
 
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";

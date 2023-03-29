@@ -9,7 +9,6 @@ buildDunePackage rec {
     sha256 = "18alxyi6wlxqvb4lajjlbdfkgcajsmklxi9xqmpcz07j51knqa04";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ fmt ocaml_lwt ];
 

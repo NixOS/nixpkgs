@@ -7,7 +7,6 @@ buildDunePackage {
 
   inherit (macaddr) version src;
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ ppx_sexp_conv ];
 

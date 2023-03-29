@@ -8,7 +8,6 @@ buildDunePackage {
     substituteInPlace lwt/dune --replace '(libraries   bytes' '(libraries '
   '';
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ csv lwt ];
 

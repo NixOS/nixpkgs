@@ -14,7 +14,6 @@ buildDunePackage rec {
     hash = "sha256-0tjWRX2RXvbXg974Lzvl7C9W+S4gIU9Y7dY8nC/GDpw=";
   };
 
-  duneVersion = "3";
 
   propagatedBuildInputs = [ bos fpath ptime mirage-crypto x509 astring logs ];
 
