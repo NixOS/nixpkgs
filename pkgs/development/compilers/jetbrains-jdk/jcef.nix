@@ -11,7 +11,6 @@
 , lib
 , ant
 , ninja
-, clang
 , debugBuild ? false
 
 , glib
