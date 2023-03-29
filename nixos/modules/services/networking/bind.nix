@@ -87,7 +87,6 @@ let
                      };
                    ''
                 }
-                allow-query { any; };
                 ${extraConfig}
               };
             '')
