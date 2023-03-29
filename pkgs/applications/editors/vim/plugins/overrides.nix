@@ -301,6 +301,14 @@ self: super: {
     dependencies = with self; [ completion-nvim nvim-treesitter ];
   });
 
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
+    postInstall = ''
+      substituteInPlace $out/autoload/copilot/agent.vim \
+        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+    '';
+  });
+
   cpsm = super.cpsm.overrideAttrs (old: {
     nativeBuildInputs = [ cmake ];
     buildInputs = [
@@ -806,7 +814,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-GN7KM3fkeOcqmyUwsPMw499kS/eYqh8pbyPgMv4/NN4=";
+        cargoHash = "sha256-gnQNQlW/c1vzyR+HbYn7rpxZ1C6WXFcqpylIOTUMZ6g=";
 
         nativeBuildInputs = [ pkg-config ];
 

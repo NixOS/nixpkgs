@@ -713,12 +713,10 @@ with pkgs;
   dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
   dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
 
-  dotnet-runtime_3 = dotnetCorePackages.runtime_3_1;
   dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
   dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
   dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
 
-  dotnet-aspnetcore_3 = dotnetCorePackages.aspnetcore_3_1;
   dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
@@ -6380,6 +6378,8 @@ with pkgs;
 
   cloc = callPackage ../tools/misc/cloc { };
 
+  clolcat = callPackage ../tools/misc/clolcat { };
+
   cloog = callPackage ../development/libraries/cloog {
     isl = isl_0_14;
   };
@@ -9450,6 +9450,8 @@ with pkgs;
 
   l3afpad = callPackage ../applications/editors/l3afpad { };
 
+  leanify = callPackage ../tools/misc/leanify { };
+
   leatherman = callPackage ../development/libraries/leatherman { };
 
   ledit = callPackage ../tools/misc/ledit {
@@ -10926,6 +10928,10 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
+  patchance = python3Packages.callPackage ../applications/audio/patchance {
+    inherit (qt5) qttools;
+  };
+
   patatt = callPackage ../development/tools/patatt { };
 
   pcapfix = callPackage ../tools/networking/pcapfix { };
@@ -11367,6 +11373,10 @@ with pkgs;
   pywal = with python3Packages; toPythonApplication pywal;
 
   pystring = callPackage ../development/libraries/pystring { };
+
+  raysession = python3Packages.callPackage ../applications/audio/raysession {
+    inherit (qt5) qttools;
+  };
 
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -17278,6 +17288,8 @@ with pkgs;
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
   svls = callPackage ../development/tools/language-servers/svls { };
+
+  typst-lsp = callPackage ../development/tools/language-servers/typst-lsp { };
 
   vala-language-server = callPackage ../development/tools/language-servers/vala-language-server { };
 
@@ -25465,13 +25477,26 @@ with pkgs;
     postgresql_13
     postgresql_14
     postgresql_15
+
+    postgresql_11_jit
+    postgresql_12_jit
+    postgresql_13_jit
+    postgresql_14_jit
+    postgresql_15_jit
   ;
   postgresql = postgresql_14.override { this = postgresql; };
+  postgresql_jit = postgresql_14_jit.override { this = postgresql_jit; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
+  postgresqlJitPackages = recurseIntoAttrs postgresql_jit.pkgs;
   postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
   postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
+  postgresql11JitPackages = recurseIntoAttrs postgresql_11_jit.pkgs;
+  postgresql12JitPackages = recurseIntoAttrs postgresql_12_jit.pkgs;
+  postgresql13JitPackages = recurseIntoAttrs postgresql_13_jit.pkgs;
+  postgresql14JitPackages = recurseIntoAttrs postgresql_14_jit.pkgs;
+  postgresql15JitPackages = recurseIntoAttrs postgresql_15_jit.pkgs;
   postgresql14Packages = postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
@@ -30710,6 +30735,8 @@ with pkgs;
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
+  sleep-on-lan = callPackage ../tools/networking/sleep-on-lan { };
+
   slweb = callPackage ../applications/misc/slweb { };
 
   sonixd = callPackage ../applications/audio/sonixd { };
@@ -32138,10 +32165,7 @@ with pkgs;
 
   oroborus = callPackage ../applications/window-managers/oroborus { };
 
-  osm2pgsql = callPackage ../tools/misc/osm2pgsql {
-    # fmt_9 is not supported: https://github.com/openstreetmap/osm2pgsql/issues/1859
-    fmt = fmt_8;
-  };
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
@@ -33904,6 +33928,8 @@ with pkgs;
   tonelib-zoom = callPackage ../applications/audio/tonelib-zoom { };
 
   tonelib-metal = callPackage ../applications/audio/tonelib-metal { };
+
+  tonelib-noisereducer = callPackage ../applications/audio/tonelib-noisereducer { };
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
 
@@ -39150,6 +39176,8 @@ with pkgs;
   xorex = callPackage ../tools/security/xorex { };
 
   xbps = callPackage ../tools/package-management/xbps { };
+
+  zkg = callPackage ../tools/package-management/zkg { };
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 

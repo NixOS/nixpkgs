@@ -137,7 +137,7 @@ let
       maintainers = [ zagy ];
     };
 
-    machine = {...}:
+    nodes.machine = {...}:
       {
         services.postgresql = {
           enable = true;

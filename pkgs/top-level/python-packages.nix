@@ -1477,6 +1477,8 @@ self: super: with self; {
 
   btchip-python = callPackage ../development/python-modules/btchip-python { };
 
+  btest = callPackage ../development/python-modules/btest { };
+
   bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };

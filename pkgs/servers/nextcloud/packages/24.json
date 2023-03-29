@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "1gf1gn8n85dya47y286hwknms2pj0lhgj09c29gkzgzb4wipa3ww",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v3.5.5/calendar-v3.5.5.tar.gz",
-    "version": "3.5.5",
+    "sha256": "1cb3rjqgjysmirfvda4fqyr24ljh1203bzygmzzm9n26ji72636f",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v3.5.6/calendar-v3.5.6.tar.gz",
+    "version": "3.5.6",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "keeweb": {
-    "sha256": "a3281fcfdb4058971a3b5c838870a8d5b533445c999b8e921fb8758b216dadbc",
-    "url": "https://github.com/jhass/nextcloud-keeweb/releases/download/v0.6.10/keeweb-0.6.10.tar.gz",
-    "version": "0.6.10",
+    "sha256": "19wzp588p3a87bi7ajn2r8jmsjjzzc1g8bkpwkidv66gi87gv9sr",
+    "url": "https://github.com/jhass/nextcloud-keeweb/releases/download/v0.6.12/keeweb-0.6.12.tar.gz",
+    "version": "0.6.12",
     "description": "Open Keepass stores inside Nextcloud with Keeweb just by clicking on an *.kdbx file in your Nextcloud.",
     "homepage": "https://github.com/jhass/nextcloud-keeweb",
     "licenses": [
@@ -100,9 +100,9 @@
     ]
   },
   "mail": {
-    "sha256": "1agpdxf8lnsdxpk1nmypxam5p8i8xiyzsyb34cv2lksd2ziirmp5",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v1.15.2/mail-v1.15.2.tar.gz",
-    "version": "1.15.2",
+    "sha256": "1a697wf2lq596dk04acd6qpmx9immh6v8npj0kf43m31kc3hm0rs",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v1.15.3/mail-v1.15.3.tar.gz",
+    "version": "1.15.3",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "news": {
-    "sha256": "026ggjf6dqbjv8hnj6jj1nnqz0256ck2yg13zhln7zc84lhfzlfd",
-    "url": "https://github.com/nextcloud/news/releases/download/21.1.0/news.tar.gz",
-    "version": "21.1.0",
+    "sha256": "029rzfnqf2h37pw30hmclmvizz8v7r2sgqbs4gkp0kj0s6fx388z",
+    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta1/news.tar.gz",
+    "version": "21.2.0-beta1",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -130,8 +130,8 @@
     ]
   },
   "notify_push": {
-    "sha256": "1vfa68spnyfivcx0vp49mimf5xg7hsxnifd06imd1c0mw3nlfm4p",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.0/notify_push-v0.6.0.tar.gz",
+    "sha256": "0x3449bwrnkcpfimg9wfsi2fhrhlcwr7gn94hkyqhifc5qsyanvz",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.1/notify_push-v0.6.1.tar.gz",
     "version": "0.6.0",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
@@ -170,9 +170,9 @@
     ]
   },
   "spreed": {
-    "sha256": "1wih7gr2dxl69fdvarkgnxcwq47vbhwdmdvs8h70pqwrgss950hs",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v14.0.9/spreed-v14.0.9.tar.gz",
-    "version": "14.0.9",
+    "sha256": "1r2n312kxx6ymlwrvqsj230x4zsg6im4xrss04zagiflvfljr5da",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v14.0.10/spreed-v14.0.10.tar.gz",
+    "version": "14.0.10",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

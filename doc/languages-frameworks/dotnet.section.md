@@ -11,7 +11,7 @@ with import <nixpkgs> {};
 mkShell {
   name = "dotnet-env";
   packages = [
-    dotnet-sdk_3
+    dotnet-sdk
   ];
 }
 ```
@@ -27,36 +27,57 @@ mkShell {
   name = "dotnet-env";
   packages = [
     (with dotnetCorePackages; combinePackages [
-      sdk_3_1
       sdk_6_0
+      sdk_7_0
     ])
   ];
 }
 ```
 
-This will produce a dotnet installation that has the dotnet 3.1 6.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
+This will produce a dotnet installation that has the dotnet 6.0 7.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
 
 ```ShellSession
 $ dotnet --info
-.NET Core SDK (reflecting any global.json):
- Version:   3.1.101
- Commit:    b377529961
+.NET SDK:
+ Version:   7.0.202
+ Commit:    6c74320bc3
 
-...
+Środowisko uruchomieniowe:
+ OS Name:     nixos
+ OS Version:  23.05
+ OS Platform: Linux
+ RID:         linux-x64
+ Base Path:   /nix/store/n2pm44xq20hz7ybsasgmd7p3yh31gnh4-dotnet-sdk-7.0.202/sdk/7.0.202/
 
-.NET Core SDKs installed:
-  2.1.803 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/sdk]
-  3.0.102 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/sdk]
-  3.1.101 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/sdk]
+Host:
+  Version:      7.0.4
+  Architecture: x64
+  Commit:       0a396acafe
 
-.NET Core runtimes installed:
-  Microsoft.AspNetCore.All 2.1.15 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.All]
-  Microsoft.AspNetCore.App 2.1.15 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 3.0.2 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 3.1.1 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 2.1.15 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 3.0.2 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 3.1.1 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+.NET SDKs installed:
+  6.0.407 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/sdk]
+  7.0.202 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 6.0.15 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 7.0.4 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 6.0.15 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 7.0.4 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+
+Other architectures found:
+  None
+
+Environment variables:
+  Not set
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download
 ```
 
 ## dotnet-sdk vs dotnetCorePackages.sdk {#dotnet-sdk-vs-dotnetcorepackages.sdk}
@@ -119,8 +140,8 @@ in buildDotnetModule rec {
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
-  dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-runtime = dotnetCorePackages.net_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6.0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
   executables = []; # Don't install any executables.

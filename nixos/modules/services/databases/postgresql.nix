@@ -7,9 +7,18 @@ let
   cfg = config.services.postgresql;
 
   postgresql =
+    let
+      # ensure that
+      #   services.postgresql = {
+      #     enableJIT = true;
+      #     package = pkgs.postgresql_<major>;
+      #   };
+      # works.
+      base = if cfg.enableJIT && !cfg.package.jitSupport then cfg.package.withJIT else cfg.package;
+    in
     if cfg.extraPlugins == []
-      then cfg.package
-      else cfg.package.withPackages (_: cfg.extraPlugins);
+      then base
+      else base.withPackages (_: cfg.extraPlugins);
 
   toStr = value:
     if true == value then "yes"
@@ -41,6 +50,8 @@ in
     services.postgresql = {
 
       enable = mkEnableOption (lib.mdDoc "PostgreSQL Server");
+
+      enableJIT = mkEnableOption (lib.mdDoc "JIT support");
 
       package = mkOption {
         type = types.package;
@@ -435,19 +446,21 @@ in
         log_line_prefix = cfg.logLinePrefix;
         listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
         port = cfg.port;
+        jit = mkDefault (if cfg.enableJIT then "on" else "off");
       };
 
     services.postgresql.package = let
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
+        base = if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
+            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+            else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
+            else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
+            else mkThrow "9_5";
     in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
-            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
-            else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
-            else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
-            else mkThrow "9_5");
+      mkDefault (if cfg.enableJIT then base.withJIT else base);
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 

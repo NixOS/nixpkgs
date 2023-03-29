@@ -5,15 +5,16 @@
 , makeWrapper
 , electron
 , git
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.8.18";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-tD7uNSgcGMPyiA/HfOOZs3NRbWTrds0AdEXTaHYfUjk=";
+    hash = "sha256-5oX1LhqWvNiMF9ZI7BvpHe4bhB3vQp6dsjLYMQ9Jy+o=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/${pname}/resources/app
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
