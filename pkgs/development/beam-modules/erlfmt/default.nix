@@ -2,12 +2,12 @@
 
 rebar3Relx rec {
   pname = "erlfmt";
-  version = "1.1.0";
+  version = "1.2.0";
   releaseType = "escript";
   src = fetchFromGitHub {
     owner = "WhatsApp";
     repo = "erlfmt";
-    sha256 = "sha256-diZCyw4eR+h/Pc73HDfnFaXnNXwqu3XabTbeiWVPNPI=";
+    sha256 = "sha256-mma4QH6GlayTG5I9hW9wNZph/IJcCXjiY7Ft3hfxaPg=";
     rev = "v${version}";
   };
   meta = with lib; {
