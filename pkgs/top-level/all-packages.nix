@@ -11372,6 +11372,10 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring { };
 
+  raysession = python3Packages.callPackage ../applications/audio/raysession {
+    inherit (qt5) qttools;
+  };
+
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
