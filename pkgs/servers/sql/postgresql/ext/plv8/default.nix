@@ -138,5 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ marsam ];
     platforms = [ "x86_64-linux" ];
     license = licenses.postgresql;
+    broken = postgresql.jitSupport;
   };
 })
