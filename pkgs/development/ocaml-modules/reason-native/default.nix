@@ -1,10 +1,10 @@
-{ newScope, lib, fetchFromGitHub, callPackage, buildDunePackage, atdgen, junit, qcheck-core, re, reason, reason-native }:
+{ newScope, lib, fetchFromGitHub, callPackage, buildDunePackage, atdgen, junit, qcheck-core, re, reason, reason-native, fetchpatch }:
 
 let
   generic = (somePath:
     let
       prepkg = import somePath {
-        inherit callPackage cli buildDunePackage atdgen junit qcheck-core re reason;
+        inherit callPackage cli buildDunePackage atdgen junit qcheck-core re reason fetchpatch;
         inherit (reason-native) console file-context-printer fp pastel rely;
       };
     in
