@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "cogmasters";
     repo = "concord";
     rev = "v${version}";
-    sha256 = "sha256-+nuVyqA/V/J6DWAeIs9Pv90ry3px1gJsF460qvfSEH8=";
+    hash = "sha256-+nuVyqA/V/J6DWAeIs9Pv90ry3px1gJsF460qvfSEH8=";
   };
 
   buildInputs = [ curl ];
