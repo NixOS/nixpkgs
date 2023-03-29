@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.0.15";
+  version = "0.0.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yaleman";
     repo = "aussiebb";
-    rev = "v${version}";
-    hash = "sha256-V9yN05Bkv5vkHgXZ77ps3d6JS39M5iMuiijOGRBFi0U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dbu26QFboqVaSFYlTXsOFA4yhXXNcB4QBCA8PZTphns=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with the Aussie Broadband APIs";
     homepage = "https://github.com/yaleman/aussiebb";
+    changelog = "https://github.com/yaleman/pyaussiebb/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
