@@ -3,7 +3,6 @@
 , alsa-lib
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , gtkmm3
 , libepoxy
 , libpng
@@ -34,24 +33,15 @@ stdenv.mkDerivation rec {
       "snes9x-gtk"
     else
       "snes9x";
-  version = "1.62";
+  version = "1.62.1";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-RcxFNmUbJp0rUugWOqQa3Sy/Hh18ZPOeDTxC0JY5GJQ=";
+    hash = "sha256-y/tNJmmgigMEqjBWLyqxM/GQ2jcu4YXZjP0AbIjoPLg=";
   };
-
-  patches = [
-    # Fix cross-compilation, otherwise it fails to detect host compiler features
-    # Doesn't affect non CC builds
-    (fetchpatch {
-      url = "https://github.com/snes9xgit/snes9x/commit/f39ab408f4151c16d44e45470cc0736ffb2803f8.patch";
-      hash = "sha256-GMlHBsADEF+rycmEVgpWy220hZwld5D2e8fsYA7HblM=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

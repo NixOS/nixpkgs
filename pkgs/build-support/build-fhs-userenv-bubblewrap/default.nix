@@ -2,6 +2,7 @@
 
 args @ {
   name
+, version ? null
 , runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
@@ -19,11 +20,12 @@ args @ {
 
 with builtins;
 let
-  buildFHSEnv = callPackage ./env.nix { };
+  buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  env = buildFHSEnv (removeAttrs args [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "version"
   ]);
 
   etcBindEntries = let
@@ -102,7 +104,7 @@ let
     ro_mounts=()
     symlinks=()
     etc_ignored=()
-    for i in ${env}/*; do
+    for i in ${fhsenv}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
         :
@@ -115,8 +117,8 @@ let
       fi
     done
 
-    if [[ -d ${env}/etc ]]; then
-      for i in ${env}/etc/*; do
+    if [[ -d ${fhsenv}/etc ]]; then
+      for i in ${fhsenv}/etc/*; do
         path="/''${i##*/}"
         # NOTE: we're binding /etc/fonts and /etc/ssl/certs from the host so we
         # don't want to override it with a path from the FHS environment.
@@ -203,7 +205,11 @@ let
 
   bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
 
-in runCommandLocal name {
+  versionStr = lib.optionalString (version != null) ("-" + version);
+
+  nameAndVersion = name + versionStr;
+
+in runCommandLocal nameAndVersion {
   inherit meta;
 
   passthru = passthru // {
@@ -215,6 +221,7 @@ in runCommandLocal name {
       echo >&2 ""
       exit 1
     '';
+    inherit args fhsenv;
   };
 } ''
   mkdir -p $out/bin

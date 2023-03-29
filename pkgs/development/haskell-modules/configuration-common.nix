@@ -621,13 +621,20 @@ self: super: {
   Euterpea = doJailbreak super.Euterpea;
 
   # Install icons, metadata and cli program.
-  bustle = overrideCabal (drv: {
+  bustle = appendPatches [
+    # Fix build with libpcap 1.10.2
+    # https://gitlab.freedesktop.org/bustle/bustle/-/merge_requests/21
+    (pkgs.fetchpatch {
+      url = "https://gitlab.freedesktop.org/bustle/bustle/-/commit/77e2de892cd359f779c84739682431a66eb8cf31.patch";
+      hash = "sha256-sPb6/Z/ANids53aL9VsMHa/v5y+TA1ZY3jwAXlEH3Ec=";
+    })
+  ] (overrideCabal (drv: {
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
     postInstall = ''
       make install PREFIX=$out
     '';
-  }) super.bustle;
+  }) super.bustle);
 
   # Byte-compile elisp code for Emacs.
   ghc-mod = overrideCabal (drv: {

@@ -24,14 +24,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    sha256 = "sha256-f8ckTYfmwHt3g3n/D2U275G1nn7uG+2W+DIi6YmsvjQ=";
+    sha256 = "sha256-xE3T3iVXFaaTF90ehQiG6+dLXcsqrHeprSMUnlSsxkE=";
   };
 
-  cargoHash = "sha256-EVEl1hhaeYBXIMQTgl0tDIbhE3cUm8jiyDTeWtsNaq0=";
+  cargoHash = "sha256-eaG56FGz4smlqDPi/CJ0KB7NMEgp684X19PVWxGQutw=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -3,7 +3,7 @@
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, nim-unwrapped
-, nimble-unwrapped }:
+, nimble-unwrapped, Security }:
 
 let
   parseCpu = platform:
@@ -94,7 +94,8 @@ in {
       hash = "sha256-rO8LCrdzYE1Nc5S2hRntt0+zD0aRIpSyi8J+DHtLTcI=";
     };
 
-    buildInputs = [ boehmgc openssl pcre readline sqlite ];
+    buildInputs = [ boehmgc openssl pcre readline sqlite ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     patches = [
       ./NIM_CONFIG_DIR.patch

@@ -7,6 +7,7 @@
 , curl
 , fetchFromGitHub
 , ffmpeg
+, ffmpeg_4
 , fluidsynth
 , gettext
 , hexdump
@@ -755,7 +756,7 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"

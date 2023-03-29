@@ -430,7 +430,6 @@
   ./services/desktops/gvfs.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
-  ./services/desktops/pipewire/pipewire-media-session.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/profile-sync-daemon.nix
@@ -1064,6 +1063,7 @@
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
   ./services/security/aesmd.nix
+  ./services/security/authelia.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
@@ -1211,7 +1211,6 @@
   ./services/web-apps/zabbix.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/authelia.nix
   ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix

@@ -1,7 +1,6 @@
 { type
 , version
 , srcs
-, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
 , packages ? null
 }:
 
@@ -16,6 +15,7 @@ assert if type == "sdk" then packages != null else true;
 , makeWrapper
 , libunwind
 , openssl_1_1
+, icu
 , libuuid
 , zlib
 , libkrb5

@@ -56,6 +56,7 @@ let
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
+    "systemd-growfs@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
@@ -371,6 +372,7 @@ in {
       managerEnvironment.PATH = "/bin:/sbin";
 
       contents = {
+        "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 

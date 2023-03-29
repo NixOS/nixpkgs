@@ -1308,11 +1308,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXvMC = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
     pname = "libXvMC";
-    version = "1.0.12";
+    version = "1.0.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXvMC-1.0.12.tar.bz2";
-      sha256 = "1kbdjsvkm5l7axv7g477qj18sab2wnqhliy6197syzizgfbsfgbb";
+      url = "mirror://xorg/individual/lib/libXvMC-1.0.13.tar.xz";
+      sha256 = "0z35xqna3dnrfxgn9aa1y6jx7mrwsn8vi8dcwm3sg23qx9nvx7ha";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1564,11 +1564,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   mkfontscale = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
     pname = "mkfontscale";
-    version = "1.2.1";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/mkfontscale-1.2.1.tar.bz2";
-      sha256 = "1ixsnsm2mn0zy9ksdid0lj6irnhvasfik9mz8bbrs5sajzmra16a";
+      url = "mirror://xorg/individual/app/mkfontscale-1.2.2.tar.xz";
+      sha256 = "1i6mw97r2s1rb6spjj8fbdsgw6197smaqq2haqgnwhz73xdzpqwa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

@@ -178,6 +178,7 @@ python3Packages.buildPythonApplication {
   '';
 
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   #
   # Running `hp-diagnose_plugin -g` can be used to diagnose

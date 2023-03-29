@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "12.3.1";
+  version = "13.0.0";
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-SaLrE/eHxKnlm6BZYbcZZrbrUZMeHJ4eCcqMsFvyZ7I=";
+    hash = "sha256-UzUAprvBimk2POi0QZdFuRWEeGDp+MLmdUYR0UiIubs=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +41,10 @@ buildPythonPackage rec {
     pytestCheckHook
     hypothesis
   ];
-  disabledTests = [
-    # Failing "test_snapshots" parametrization: Output does not match the stored snapshot
-    # This test seems to be sensitive to ordering of dictionary items and the version of dependencies.
-    # the only difference between the stored snapshot and the produced documentation is a debug javascript comment
-    "html-demopackage_dir"
-    # snapshot tests mismatch with latest pygments version
-    "test_snapshots"
+  disabledTestPaths = [
+    # "test_snapshots" tries to match generated output against stored snapshots.
+    # They are highly sensitive dep versions, which we unlike upstream do not pin.
+    "test/test_snapshot.py"
   ];
 
   pytestFlagsArray = [

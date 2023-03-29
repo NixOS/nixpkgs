@@ -5,7 +5,7 @@
 , which
 , frei0r
 , opencolorio
-, ffmpeg-full
+, ffmpeg_4
 , CoreFoundation
 , cmake
 , wrapQtAppsHook
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    ffmpeg-full
+    ffmpeg_4
     frei0r
     opencolorio
     openimageio

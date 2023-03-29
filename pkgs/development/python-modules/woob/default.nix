@@ -1,29 +1,21 @@
 { lib
 , babel
 , buildPythonPackage
-, colorama
-, cssselect
-, feedparser
 , fetchFromGitLab
 , fetchpatch
-, gdata
 , gnupg
-, google-api-python-client
 , html2text
 , libyaml
 , lxml
-, mechanize
 , nose
 , packaging
-, pdfminer-six
+, pdm-pep517
 , pillow
 , prettytable
-, pyqt5
 , python-dateutil
 , pythonOlder
 , pyyaml
 , requests
-, simplejson
 , termcolor
 , testers
 , unidecode
@@ -32,8 +24,8 @@
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -41,35 +33,26 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
-    hash = "sha256-aPkMfPRDjPfHIlGDEvorGwk09yQuEWwOkJJUST0vLAs=";
+    hash = "sha256-qVE1FQK3+jBKIHW+s1iNZwy8Srb2kQhWNTlZyzc1/jE=";
   };
 
   nativeBuildInputs = [
     packaging
-    pyqt5
+    pdm-pep517
   ];
 
   propagatedBuildInputs = [
     babel
-    colorama
-    cssselect
     python-dateutil
-    feedparser
-    gdata
     gnupg
-    google-api-python-client
     html2text
     libyaml
     lxml
-    mechanize
     packaging
-    pdfminer-six
     pillow
     prettytable
-    pyqt5
     pyyaml
     requests
-    simplejson
     termcolor
     unidecode
   ];

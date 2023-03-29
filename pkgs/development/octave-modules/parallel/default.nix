@@ -14,6 +14,9 @@ buildOctavePackage rec {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
     sha256 = "1h8vw2r42393px6dk10y3lhpxl168r9d197f9whz6lbk2rg571pa";
   };
+  patches = [
+    ../database/c_verror.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -32,5 +35,8 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Parallel execution package";
+    # Although upstream has added an identical patch to that of ../database, it
+    # still won't build with octave>8.1
+    broken = true;
   };
 }

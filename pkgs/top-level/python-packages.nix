@@ -1477,6 +1477,8 @@ self: super: with self; {
 
   btchip-python = callPackage ../development/python-modules/btchip-python { };
 
+  btest = callPackage ../development/python-modules/btest { };
+
   bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
@@ -9962,6 +9964,10 @@ self: super: with self; {
   quantiphy-eval = callPackage ../development/python-modules/quantiphy-eval { };
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
+
+  quart = callPackage ../development/python-modules/quart { };
+
+  quart-cors = callPackage ../development/python-modules/quart-cors { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 

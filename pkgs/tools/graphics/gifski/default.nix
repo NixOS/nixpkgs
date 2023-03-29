@@ -11,7 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-P4t16rCKsL6FwDVXDC2XkgUGcAlWCPt1iXoBmhDZRzk=";
   };
 
-  cargoHash = "sha256-IAaaR4DWKnCd9IrqIR3v2dEv4IVEoBwBEJErqLRaVmA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ffmpeg-sys-next-4.4.0" = "sha256-TpO06VjSLCUe3NH7sr5YPfEF7C0EBBxQIQ2/SbVncnI=";
+    };
+  };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

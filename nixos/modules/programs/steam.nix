@@ -9,23 +9,36 @@ in {
     enable = mkEnableOption (lib.mdDoc "steam");
 
     package = mkOption {
-      type        = types.package;
-      default     = pkgs.steam.override {
-        extraLibraries = pkgs: with config.hardware.opengl;
-          if pkgs.stdenv.hostPlatform.is64bit
-          then [ package ] ++ extraPackages
-          else [ package32 ] ++ extraPackages32;
-      };
-      defaultText = literalExpression ''
-        pkgs.steam.override {
-          extraLibraries = pkgs: with config.hardware.opengl;
+      type = types.package;
+      default = pkgs.steam;
+      defaultText = literalExpression "pkgs.steam";
+      example = literalExpression ''
+        pkgs.steam-small.override {
+          extraEnv = {
+            MANGOHUD = true;
+            OBS_VKCAPTURE = true;
+            RADV_TEX_ANISO = 16;
+          };
+          extraLibraries = p: with p; [
+            atk
+          ];
+        }
+      '';
+      apply = steam: steam.override (prev: {
+        extraLibraries = pkgs: let
+          prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
+          additionalLibs = with config.hardware.opengl;
             if pkgs.stdenv.hostPlatform.is64bit
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
-        }
-      '';
+        in prevLibs ++ additionalLibs;
+      });
       description = lib.mdDoc ''
-        steam package to use.
+        The Steam package to use. Additional libraries are added from the system
+        configuration to ensure graphics work properly.
+
+        Use this option to customise the Steam package rather than adding your
+        custom Steam to {option}`environment.systemPackages` yourself.
       '';
     };
 

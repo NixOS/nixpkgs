@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "accessible-pygments";
-  version = "0.0.3";
+  version = "0.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CRe1B2RqazOT60kJGmJQb2sqOTX12V5NEkncUF+KTq4=";
+    hash = "sha256-57V6mxWVjpYBx+nrB6RAyBMoNUWiCXPyV0pfRT0OlT4=";
   };
 
   propagatedBuildInputs = [
