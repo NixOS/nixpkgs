@@ -3,7 +3,7 @@
 let mkOni2 = callPackage ./common.nix { };
 in mkOni2 rec {
   variant = "oni2";
-  license = {
+  license = lib.licenses.mit;
     fullName = "MIT";
     url = "https://github.com/onivim/oni2/blob/master/LICENSE.md";
     free = true;
