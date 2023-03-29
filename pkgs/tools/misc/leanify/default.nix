@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,14 @@ stdenv.mkDerivation rec {
     rev = "7847668ac5bf0df1d940b674bc8b907bd1b37044";
     hash = "sha256-KxVV7AW9sEfH4YTPDfeJk7fMMGh0eSkECXM/Mv9XqBA=";
   };
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "-flto" "" \
+      --replace "lib/LZMA/Alloc.o" "lib/LZMA/CpuArch.o lib/LZMA/Alloc.o"
+  '';
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   installPhase = ''
     runHook preInstall
@@ -35,6 +44,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.mynacol ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
   };
 }
