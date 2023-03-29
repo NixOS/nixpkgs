@@ -103,6 +103,10 @@ in clangStdenv.mkDerivation rec {
     ../scripts/install_fcitx5
   '';
 
+  preFixup = ''
+    wrapQtApp $out/lib/mozc/mozc_tool
+  '';
+
   meta = with lib; {
     description = "Fcitx5 Module of A Japanese Input Method for Chromium OS, Windows, Mac and Linux (the Open Source Edition of Google Japanese Input)";
     homepage = "https://github.com/fcitx/mozc";
