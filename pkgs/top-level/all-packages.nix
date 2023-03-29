@@ -39707,4 +39707,6 @@ with pkgs;
   duden = callPackage ../applications/misc/duden { };
 
   zf = callPackage ../tools/misc/zf { };
+
+  concord = callPackage ../development/libraries/concord { };
 }
