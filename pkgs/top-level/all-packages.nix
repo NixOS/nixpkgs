@@ -17287,6 +17287,8 @@ with pkgs;
 
   svls = callPackage ../development/tools/language-servers/svls { };
 
+  typst-lsp = callPackage ../development/tools/language-servers/typst-lsp { };
+
   vala-language-server = callPackage ../development/tools/language-servers/vala-language-server { };
 
   verible = callPackage ../development/tools/language-servers/verible { };
