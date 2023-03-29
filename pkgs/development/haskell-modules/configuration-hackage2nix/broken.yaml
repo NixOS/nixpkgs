@@ -1914,6 +1914,7 @@ broken-packages:
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
+  - guardian   # transitive dependency uses doctest, but doctest doesn't build with newer Cabal version
   - guess-combinator
   - gulcii
   - gw
