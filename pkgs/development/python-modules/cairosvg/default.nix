@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , isPy3k
 , cairocffi
 , cssselect2
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-sLmSnPXboAUXjXRqgDb88AJVUPSYylTbYYczIjhHg7w=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-27586.patch";
+      url = "https://github.com/Kozea/CairoSVG/commit/12d31c653c0254fa9d9853f66b04ea46e7397255.patch";
+      hash = "sha256-6ElTepPjEmhbv59jkzTnw+qhY7JlqS/lToIzZtfkh08=";
+    })
+  ];
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
