@@ -109,27 +109,51 @@
   "aarch64-linux": {
     "clion": {
       "update-channel": "CLion RELEASE",
-      "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/cpp/CLion-2023.1-aarch64.tar.gz",
+      "version": "2023.1",
+      "build_number": "231.8109.174",
+      "sha256": "20f08d682890f1be639d33084c65032b6c6c91ba2654d3156d608e7755e70b7e"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
-      "url-template": "https://download.jetbrains.com/datagrip/datagrip-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/datagrip/datagrip-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/datagrip/datagrip-2023.1-aarch64.tar.gz",
+      "version": "2023.1",
+      "build_number": "231.8109.163",
+      "sha256": "97538c4c888f666d53433191f1a5ea59a99c88b74044c3846ca51a54edb9228f"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
-      "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-223.8617.56-aarch64.tar.gz",
+      "version": "2022.3.2",
+      "build_number": "223.8617.56",
+      "sha256": "b1d1dc5b38df1cbfd6ace5c5bca8ecd6baec5d1d5d978e730e482b2779d0a02b"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
-      "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/go/goland-2022.3.4-aarch64.tar.gz",
+      "version": "2022.3.4",
+      "build_number": "223.8836.56",
+      "sha256": "5494d90b51e882fee1418424e255635cddad750a1d4fdcb1d68bfcb48e29ed63"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
-      "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1-aarch64.tar.gz",
+      "version": "2023.1",
+      "build_number": "231.8109.175",
+      "sha256": "03c628d45b4be9b7dc0654d43e06cbe98cf2a1aa2f3ea34a4e49d10dff054177"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
-      "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1-aarch64.tar.gz",
+      "version": "2023.1",
+      "build_number": "231.8109.175",
+      "sha256": "3916acf8ef7e5dae9d3f44b7dc372f988d87e4c4e2d5a15fa05b5a4563e65af7"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -137,27 +161,51 @@
     },
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
-      "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2022.3.3-aarch64.tar.gz",
+      "version": "2022.3.3",
+      "build_number": "223.8836.42",
+      "sha256": "2685999a43b7f730663b423c98a156310ba238c93038a4a82a63669205490df0"
     },
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2022.3.3-aarch64.tar.gz",
+      "version": "2022.3.3",
+      "build_number": "223.8836.43",
+      "sha256": "a147ea29927ec49a512098cfa81ef77f4a4943510478ed5525a31b3fe5e691b5"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.3.3-aarch64.tar.gz",
+      "version": "2022.3.3",
+      "build_number": "223.8836.43",
+      "sha256": "795217e215782bd7cf033deced13394b2273cd4c50010a09d1f158f61d3a4353"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
-      "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2022.3.3-aarch64.tar.gz",
+      "version": "2022.3.3",
+      "build_number": "223.8836.53",
+      "sha256": "4c1255d2ee8afdb08bdc490557ab54c91d84ebc117fdfed2715379b073fe8558"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
-      "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.1-aarch64.tar.gz",
+      "version": "2023.1",
+      "build_number": "231.8109.174",
+      "sha256": "e8ff57ff62b7ca9ab3873334b5ce86e83601dedafb0c8e48f0f69b9028f7907a"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
-      "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}-aarch64.tar.gz"
+      "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.1-aarch64.tar.gz",
+      "version": "2023.1",
+      "build_number": "231.8109.174",
+      "sha256": "1555a4c3b410399112b86d89a8b9662ec7a9e78f426aa4202e711df536d7b2bb"
     }
   },
   "x86_64-darwin": {
