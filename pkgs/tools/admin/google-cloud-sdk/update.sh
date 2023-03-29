@@ -6,7 +6,7 @@ BASE_URL="$CHANNEL_URL/downloads/google-cloud-sdk"
 
 # Version of Google Cloud SDK from
 # https://cloud.google.com/sdk/docs/release-notes
-VERSION="408.0.1"
+VERSION="424.0.0"
 
 function genMainSrc() {
     local url="${BASE_URL}-${VERSION}-${1}-${2}.tar.gz"
