@@ -10,6 +10,7 @@
 , ounit2
 , ocaml-migrate-parsetree
 , ocaml-migrate-parsetree-2
+, findlib
 }:
 
 let params =
@@ -32,14 +33,12 @@ buildDunePackage rec {
   pname = "ppx_deriving";
   inherit (params) version;
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-v${version}.tbz";
     inherit (params) sha256;
   };
 
-  strictDeps = true;
+  duneVersion = "3";
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ ppxlib ];
@@ -49,6 +48,7 @@ buildDunePackage rec {
     else ocaml-migrate-parsetree)
     ppx_derivers
     result
+    findlib
   ];
 
   doCheck = lib.versionOlder ocaml.version "5.0";

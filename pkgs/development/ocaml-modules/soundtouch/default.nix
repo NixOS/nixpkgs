@@ -11,6 +11,8 @@ buildDunePackage rec {
     sha256 = "sha256-81Mhk4PZx4jGrVIevzMslvVbKzipzDzHWnbtOjeZCI8=";
   };
 
+  duneVersion = "3";
+
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ soundtouch ];
 

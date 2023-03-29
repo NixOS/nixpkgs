@@ -13,6 +13,8 @@ buildDunePackage rec {
     sha256 = "sha256-oRxP1OM0pGdz8CB+ou7kbbrNaB1x9z9KTfciLsivFnI=";
   };
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ lame ];

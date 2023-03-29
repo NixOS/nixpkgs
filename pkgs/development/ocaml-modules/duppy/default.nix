@@ -11,6 +11,8 @@ buildDunePackage rec {
     sha256 = "132dawca1p5s965m40ldmnihlpgfm47y62kfbzgim7sgsdwxxw5y";
   };
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ ocaml_pcre ];
 
   meta = with lib; {

@@ -4,14 +4,14 @@ buildDunePackage rec {
   pname = "ladspa";
   version = "0.2.2";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ladspa";
     rev = "v${version}";
     sha256 = "1y83infjaz9apzyvaaqw331zqdysmn3bpidfab061v3bczv4jzbz";
   };
+
+  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ ladspaH ];

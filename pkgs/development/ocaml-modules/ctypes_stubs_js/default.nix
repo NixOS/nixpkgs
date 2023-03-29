@@ -18,6 +18,8 @@ buildDunePackage rec {
     sha256 = "sha256-OJIzg2hnwkXkQHd4bRR051eLf4HNWa/XExxbj46SyUs=";
   };
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ integers_stubs_js ];
   nativeCheckInputs = [
     nodejs

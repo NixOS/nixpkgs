@@ -11,7 +11,7 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.02";
-  useDune2 = true;
+  duneVersion = "3";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo dune-configurator ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];

@@ -4,14 +4,14 @@ buildDunePackage rec {
   pname = "lens";
   version = "1.2.5";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "pdonadeo";
     repo = "ocaml-lens";
     rev = "v${version}";
     sha256 = "1k23n7pa945fk6nbaq6nlkag5kg97wsw045ghz4gqp8b9i2im3vn";
   };
+
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.10";
   buildInputs = [ ppx_deriving ppxlib ];

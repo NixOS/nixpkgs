@@ -11,6 +11,8 @@ buildDunePackage rec {
     sha256 = "sha256-HhJdb4i9B4gz3emgDCDT4riQuAsY4uP/47biu7EZ+sk=";
   };
 
+  duneVersion = "3";
+
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libao ];
 

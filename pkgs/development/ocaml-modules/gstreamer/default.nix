@@ -11,6 +11,8 @@ buildDunePackage rec {
     sha256 = "0y8xi1q0ld4hrk96bn6jfh9slyjrxmnlhm662ynacp3yzalp8jji";
   };
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.isDarwin [ AppKit Foundation ];
   propagatedBuildInputs = [ glib.dev gst_all_1.gstreamer.dev gst_all_1.gst-plugins-base ];

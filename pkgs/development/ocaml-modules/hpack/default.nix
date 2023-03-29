@@ -16,6 +16,8 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.04";
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     angstrom
     faraday

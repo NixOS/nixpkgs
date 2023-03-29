@@ -2,6 +2,7 @@
 
 buildDunePackage {
   pname = "lablgtk3-gtkspell3";
+  duneVersion = "3";
   buildInputs = [ gtkspell3 ] ++ lablgtk3.buildInputs;
   propagatedBuildInputs = [ lablgtk3 ];
   inherit (lablgtk3) src version meta nativeBuildInputs;

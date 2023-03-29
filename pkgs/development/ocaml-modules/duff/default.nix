@@ -18,6 +18,8 @@ buildDunePackage rec {
     sha256 = "sha256-0eqpfPWNOHYjkcjXRnZUTUFF0/L9E+TNoOqKCETN5hI=";
   };
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ fmt ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";

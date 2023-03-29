@@ -13,6 +13,8 @@ buildDunePackage rec {
     sha256 = "sha256-ODTD3KceEnrEzD01CeuNg4BNKOtKZEpYaDIB+RIte1U=";
   };
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ lwt ];
 
   meta = {

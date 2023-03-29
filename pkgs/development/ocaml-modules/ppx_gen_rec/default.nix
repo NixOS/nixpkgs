@@ -10,7 +10,7 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.07";
-  useDune2 = true;
+  duneVersion = "3";
 
   buildInputs = [ ppxlib ];
 

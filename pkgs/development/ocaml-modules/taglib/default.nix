@@ -13,6 +13,8 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.05.0"; # Documented version 4.02.0. 4.05.0 actually required.
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ taglib zlib ];

@@ -4,6 +4,8 @@ buildDunePackage {
   pname = "caqti-driver-mariadb";
   inherit (caqti) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ caqti mariadb ];
 
   meta = caqti.meta // {

@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "ocf";
   version = "0.8.0";
-  useDune2 = true;
   minimalOCamlVersion = "4.03";
   src = fetchFromGitLab {
     domain = "framagit.org";
@@ -12,6 +11,8 @@ buildDunePackage rec {
     rev = version;
     sha256 = "sha256:00ap3q5yjqmpk87lxqv1j2wkc7583ynhjr1jjrfn9r0j2h9pfd60";
   };
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ yojson ];
 
