@@ -312,6 +312,24 @@ in
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
         '';
       };
+
+      removeLinuxDRM = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mkDoc ''
+          Linux 6.2 dropped some kernel symbols required on aarch64 required by zfs.
+          Enabling this option will bring them back to allow this kernel version.
+          Note that in some jurisdictions this may be illegal as it might be considered
+          removing copyright protection from the code.
+          See https://www.ifross.org/?q=en/artikel/ongoing-dispute-over-value-exportsymbolgpl-function for further information.
+
+          Using this option also requires to set this:
+
+          ```
+          boot.kernelPackages = (config.boot.zfs.package.override { removeLinuxDRM = true; }).latestCompatibleLinuxPackages;
+          ```
+        '';
+      };
     };
 
     services.zfs.autoSnapshot = {
@@ -642,6 +660,21 @@ in
 
       services.udev.packages = [ cfgZfs.package ]; # to hook zvol naming, etc.
       systemd.packages = [ cfgZfs.package ];
+
+      # Export kernel_neon_* symbols again.
+      # This change is necessary until ZFS figures out a solution
+      # with upstream or in their build system to fill the gap for
+      # this symbol.
+      # In the meantime, we restore what was once a working piece of code
+      # in the kernel.
+      boot.kernelPatches = lib.optional (cfgZfs.removeLinuxDRM && kernel.kernelAtLeast "6.2" && pkgs.stdenv.hostPlatform.system == "aarch64-linux") [{
+        name = "export-neon-symbols-as-gpl";
+        patch = pkgs.fetchpatch {
+          url = "https://github.com/torvalds/linux/commit/aaeca98456431a8d9382ecf48ac4843e252c07b3.patch";
+          hash = "sha256-L2g4G1tlWPIi/QRckMuHDcdWBcKpObSWSRTvbHRIwIk=";
+          revert = true;
+        };
+      }];
 
       systemd.services = let
         createImportService' = pool: createImportService {

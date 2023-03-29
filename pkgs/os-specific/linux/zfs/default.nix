@@ -14,6 +14,7 @@
 # Kernel dependencies
 , kernel ? null
 , enablePython ? true
+, removeLinuxDRM ? false
 
 # for determining the latest compatible linuxPackages
 , linuxPackages_6_1 ? pkgs.linuxKernel.packages.linux_6_1
@@ -238,11 +239,11 @@ in {
     #   zfs-2.1.9<=x<=2.1.10 is broken with aarch64-linux-6.2
     #   for future releases, please delete this condition.
     kernelCompatible =
-      if stdenv'.isx86_64
+      if (stdenv'.isx86_64 || removeLinuxDRM)
       then kernel.kernelOlder "6.3"
       else kernel.kernelOlder "6.2";
     latestCompatibleLinuxPackages =
-      if stdenv'.isx86_64
+      if (stdenv'.isx86_64 || removeLinuxDRM)
       then linuxPackages_6_2
       else linuxPackages_6_1;
 
