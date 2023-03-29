@@ -150,9 +150,11 @@ rec {
           echo -n "$text" > "$target"
         fi
 
-        eval "$checkPhase"
+        if [ -n "$executable" ]; then
+          chmod +x "$target"
+        fi
 
-        (test -n "$executable" && chmod +x "$target") || true
+        eval "$checkPhase"
       '';
 
   /*
@@ -411,7 +413,10 @@ rec {
         mkdir -p "$(dirname "$file")"
         cat $files > "$file"
 
-        (test -n "$executable" && chmod +x "$file") || true
+        if [ -n "$executable" ]; then
+          chmod +x "$file"
+        fi
+
         eval "$checkPhase"
       '';
 
