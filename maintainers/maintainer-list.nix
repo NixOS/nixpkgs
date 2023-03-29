@@ -10540,6 +10540,11 @@
     githubId = 6295090;
     name = "Mats";
   };
+  mynacol = {
+    github = "Mynacol";
+    githubId = 26695166;
+    name = "Paul Prechtel";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "Myrl";
