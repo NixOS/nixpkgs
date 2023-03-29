@@ -14,9 +14,9 @@ stdenv.mkDerivation  rec {
   };
 
   postPatch = ''
-    sed 's#/usr/local#$(out)#g' -i common.mak
-    sed 's#/usr/share/fonts/truetype/ttf-bitstream-vera#${ttf_bitstream_vera}/share/fonts/truetype#g' \
-      -i b_synth/Makefile
+    substituteInPlace common.mak \
+      --replace /usr/local "$out" \
+      --replace /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf_bitstream_vera}/share/fonts/truetype"
   '';
 
   nativeBuildInputs = [ pkg-config ];
@@ -24,6 +24,15 @@ stdenv.mkDerivation  rec {
     alsa-lib freetype ftgl libjack2 libX11 lv2 libGLU libGL
     ttf_bitstream_vera
   ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''(
+    set -x
+    test -e $out/bin/setBfreeUI
+  )'';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "A DSP tonewheel organ emulator";
