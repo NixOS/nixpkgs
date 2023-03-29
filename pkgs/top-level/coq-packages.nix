@@ -77,6 +77,7 @@ let
       mathcomp-character = self.mathcomp.character;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery {};
       mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
