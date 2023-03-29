@@ -1256,6 +1256,22 @@ let
         };
       };
 
+      github.vscode-github-actions = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-github-actions";
+          publisher = "github";
+          version = "0.25.3";
+          sha256 = "sha256-0Ag+xXVt+WBfN+7VmWILYU4RsVs+CBDBpMfUTczDCkI=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=github.vscode-github-actions";
+          homepage = "https://github.com/github/vscode-github-actions";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       github.vscode-pull-request-github = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pull-request-github";
