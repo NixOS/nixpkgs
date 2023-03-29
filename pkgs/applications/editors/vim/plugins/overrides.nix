@@ -301,6 +301,14 @@ self: super: {
     dependencies = with self; [ completion-nvim nvim-treesitter ];
   });
 
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
+    postInstall = ''
+      substituteInPlace $out/autoload/copilot/agent.vim \
+        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+    '';
+  });
+
   cpsm = super.cpsm.overrideAttrs (old: {
     nativeBuildInputs = [ cmake ];
     buildInputs = [
