@@ -1,6 +1,6 @@
 {
   lib, fetchgit, rustPlatform, pkg-config, openssl, fuse3, libuuid, acl,
-  libxcrypt, git,
+  libxcrypt, git, installShellFiles, sphinx, stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,11 +38,33 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [
     ./0001-re-route-dependencies-not-available-on-crates.io-to-.patch
+    ./0002-docs-drop-all-but-client-man-pages.patch
+    ./0003-docs-Add-target-path-fixup-variable.patch
   ];
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config
+  '';
+
+  postBuild = ''
+    make -C docs \
+      DEB_VERSION=${version} DEB_VERSION_UPSTREAM=${version} \
+      RUSTC_TARGET=${stdenv.targetPlatform.config} \
+      BUILD_MODE=release \
+      proxmox-backup-client.1 pxar.1
+  '';
+
+  postInstall = ''
+    installManPage docs/output/man/proxmox-backup-client.1
+    installShellCompletion --cmd proxmox-backup-client \
+      --bash debian/proxmox-backup-client.bc \
+      --zsh zsh-completions/_proxmox-backup-client
+
+    installManPage docs/output/man/pxar.1
+    installShellCompletion --cmd pxar \
+      --bash debian/pxar.bc \
+      --zsh zsh-completions/_pxar
   '';
 
   cargoLock = {
@@ -59,7 +81,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ git pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ git pkg-config rustPlatform.bindgenHook installShellFiles sphinx ];
   buildInputs = [ openssl fuse3 libuuid acl libxcrypt ];
 
   meta = with lib; {
