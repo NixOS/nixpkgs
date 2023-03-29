@@ -101,7 +101,7 @@ $ cd path/to/nixpkgs
 $ nix-build -A your-package.tests
 ```
 
-#### Package tests
+#### Package tests {#var-meta-tests-packages}
 
 Tests that are part of the source package are often executed in the `installCheckPhase`.
 
@@ -113,7 +113,7 @@ Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 
 For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
 
-#### NixOS tests
+#### NixOS tests {#var-meta-tests-nixos}
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 

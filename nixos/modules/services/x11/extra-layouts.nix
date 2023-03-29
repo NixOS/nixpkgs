@@ -121,7 +121,7 @@ in
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon
       # https://xkbcommon.org/doc/current/group__include-path.html
-      XKB_CONFIG_ROOT = "${xkb_patched}/etc/X11/xkb";
+      XKB_CONFIG_ROOT = config.services.xserver.xkbDir;
     };
 
     services.xserver = {
