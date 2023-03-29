@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pname = "mansrht-api";
     modRoot = "api";
     vendorHash = "sha256-K5EmZ4U+xItTR85+SCwhwg5KUGLkKHo9Nr2pkvmJpfo=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [
     srht

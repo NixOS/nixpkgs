@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pname = "hgsrht-api";
     modRoot = "api";
     vendorHash = "sha256-vuOYpnF3WjA6kOe9MVSuVMhJBQqCmIex+QUBJrP+VDs=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;

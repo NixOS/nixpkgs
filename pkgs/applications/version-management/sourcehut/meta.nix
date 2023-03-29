@@ -29,7 +29,7 @@ let
     pname = "metasrht-api";
     modRoot = "api";
     vendorHash = "sha256-D3stDSb99uXze49kKZgGrAq5Zmg6hkIzIpsQKlnKVtE=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
 in
 buildPythonPackage rec {

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pname = "listssrht-api";
     modRoot = "api";
     vendorHash = "sha256-E5Zzft9ANJT/nhhCuenZpdo3t9QYLmA+AyDyrbGectE=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   postPatch = ''
     substituteInPlace Makefile \

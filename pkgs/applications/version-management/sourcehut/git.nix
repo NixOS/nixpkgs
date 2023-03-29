@@ -24,7 +24,7 @@ let
     pname = "gitsrht-api";
     modRoot = "api";
     vendorHash = "sha256-LAYp0zgosZnFEbtxzjuTH9++0lbxhACr705HqXJz3D0=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   gitDispatch = buildGoModule {
     inherit src version;
