@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     rev = "v${version}";
-    sha256 = "sha256-jzQLQCD5kAl7G8S8ihW52JuQ/d5Ma+LQwznBGLI3+Ac=";
+    sha256 = "sha256-t+T3zerFvEdMYoe8GYSCGgwiXw528Lrs/EjPsXr6I98=";
   };
 
   vendorHash = null;

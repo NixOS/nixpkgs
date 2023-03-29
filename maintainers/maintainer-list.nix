@@ -10540,6 +10540,11 @@
     githubId = 6295090;
     name = "Mats";
   };
+  mynacol = {
+    github = "Mynacol";
+    githubId = 26695166;
+    name = "Paul Prechtel";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "Myrl";
@@ -14393,6 +14398,12 @@
     keys = [{
       fingerprint = "5D8B FA8B 286A C2EF 6EE4  8598 F742 B72C 8926 1A51";
     }];
+  };
+  stepech = {
+    name = "stepech";
+    github = "stepech";
+    githubId = 29132060;
+    matrix = "@stepech:matrix.org";
   };
   stephank = {
     email = "nix@stephank.nl";
