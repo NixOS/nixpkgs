@@ -39722,4 +39722,6 @@ with pkgs;
   duden = callPackage ../applications/misc/duden { };
 
   zf = callPackage ../tools/misc/zf { };
+
+  jja = callPackage ../tools/games/jja { };
 }
