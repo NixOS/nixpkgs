@@ -5,6 +5,7 @@
 , snapshotPath
 , autoPatchelfHook
 , python3
+, libxcrypt-legacy
 , ...
 }:
 
@@ -164,6 +165,7 @@ let
       nativeBuildInputs = [
         python3
         stdenv.cc.cc
+        libxcrypt-legacy
       ] ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
       ];
