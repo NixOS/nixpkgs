@@ -2,22 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , hypothesis
-, isPy27
+, pythonOlder
 , mock
 , nose2
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dpath";
   version = "2.1.5";
+  format = "setuptools";
 
-  disabled = isPy27; # uses python3 imports
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-zNlk24ObqtSqggYStLhzGwn0CiRdQBtyMVbOTvRbIrc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     hypothesis
