@@ -31,6 +31,8 @@
 , warzone2100
 , nixosTests
 
+, gitUpdater
+
 , withVideos ? false
 }:
 
@@ -113,6 +115,10 @@ stdenv.mkDerivation rec {
       command = "(warzone2100 --version || [ $? -eq 1 ])";
     };
     nixosTest = nixosTests.warzone2100;
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/Warzone2100/warzone2100";
   };
 
   meta = with lib; {
