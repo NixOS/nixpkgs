@@ -36,7 +36,6 @@ in
     fp = generic ./fp.nix;
     pastel = generic ./pastel.nix;
     pastel-console = generic ./pastel-console.nix;
-    qcheck-rely = generic ./qcheck-rely.nix;
     refmterr = generic ./refmterr.nix;
     rely = generic ./rely.nix;
     rely-junit-reporter = generic ./rely-junit-reporter.nix;
