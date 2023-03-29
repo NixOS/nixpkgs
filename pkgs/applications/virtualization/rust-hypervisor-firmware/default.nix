@@ -11,6 +11,11 @@ let
 
   target = ./. + "/${arch}-unknown-none.json";
 
+in
+
+assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
+
+let
   cross = import ../../../.. {
     system = hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
