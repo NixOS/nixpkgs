@@ -88,6 +88,13 @@ stdenv.mkDerivation ({
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Patch derived from archlinux (at the time of adding they're at 2.37),
+         https://github.com/archlinux/svntogit-packages/blob/packages/glibc/trunk/reenable_DT_HASH.patch
+
+        See https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991 for context.
+      */
+      ./reenable_DT_HASH.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
