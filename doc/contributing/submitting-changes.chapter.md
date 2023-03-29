@@ -290,7 +290,7 @@ Other examples of reasons are:
 - The previous download links were all broken
 - Crash when starting on some X11 systems
 
-#### Acceptable backport criteria
+#### Acceptable backport criteria {#acceptable-backport-criteria}
 
 The stable branch does have some changes which cannot be backported. Most notable are breaking changes. The desire is to have stable users be uninterrupted when updating packages.
 
