@@ -9,6 +9,7 @@
 , writeText
 , terraform-providers
 , fetchpatch
+, installShellFiles
 }:
 
 let
@@ -28,11 +29,37 @@ let
 
       ldflags = [ "-s" "-w" ];
 
+      subPackages = [ "." ];
+
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
           --replace "/bin/stty" "${coreutils}/bin/stty"
       '';
+
+      nativeBuildInputs = [ installShellFiles ];
+
+      preCheck = ''
+        export HOME=$TMPDIR
+        export TF_SKIP_REMOTE_TESTS=1
+      '';
+
+      # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
+      completionBash = "complete -C terraform terraform\n";
+      # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/zsh.go
+      completionZsh =  "complete -C terraform terraform\n";
+      # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/fish.go#L56
+      completionFish = ''
+        function __complete_terraform
+            set -lx COMP_LINE (commandline -cp)
+            test -z (commandline -ct)
+            and set COMP_LINE "$COMP_LINE "
+            terraform
+        end
+        complete -f -c terraform -a "(__complete_terraform)"
+      '';
+
+      passAsFile = [ "completionBash" "completionZsh" "completionFish" ];
 
       postInstall = ''
         # remove all plugins, they are part of the main binary now
@@ -41,32 +68,19 @@ let
             rm "$i"
           fi
         done
+
+        installShellCompletion --bash --name terraform $completionBashPath
+        installShellCompletion --zsh --name terraform $completionZshPath
+        installShellCompletion --fish --name terraform $completionFishPath
       '';
 
-      preCheck = ''
-        export HOME=$TMPDIR
-        export TF_SKIP_REMOTE_TESTS=1
-      '';
-
-      subPackages = [ "." ];
-
-      meta = with lib; {
+      meta = {
         description =
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
         changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
-        license = licenses.mpl20;
-        maintainers = with maintainers; [
-          Chili-Man
-          babariviere
-          kalbasit
-          marsam
-          maxeaubrey
-          timstott
-          zimbatm
-          zowoq
-          techknowlogick
-        ];
+        license = lib.licenses.mpl20;
+        maintainers = with lib.maintainers; [ Chili-Man babariviere kalbasit marsam maxeaubrey techknowlogick timstott zimbatm zowoq ];
       };
     } // attrs');
 
