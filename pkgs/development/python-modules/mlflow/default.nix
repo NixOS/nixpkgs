@@ -84,5 +84,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
+    knownVulnerabilities = [
+      "CVE-2023-1176"
+      "CVE-2023-1177"
+    ];
   };
 }
