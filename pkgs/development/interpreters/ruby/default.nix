@@ -51,7 +51,7 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeBinaryWrapper, buildRubyGem, defaultGemConfig
-      , baseRuby ? buildPackages.ruby_3_1.override {
+      , baseRuby ? buildPackages.ruby.override {
           docSupport = false;
           rubygemsSupport = false;
         }
