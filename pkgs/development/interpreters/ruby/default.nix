@@ -322,8 +322,8 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "7" "";
-    sha256 = "sha256-4QEn22kdf/NkAs/oj0GMjQJaPx7qkgRLFi3XLwuMe5A=";
+    version = rubyVersion "2" "7" "8" "";
+    sha256 = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
   };
 
   ruby_3_0 = generic {
