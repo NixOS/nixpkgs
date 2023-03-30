@@ -1,0 +1,13 @@
+diff --git a/libgfortran/io/async.h b/libgfortran/io/async.h
+index efd542a..d57722a 100644
+--- a/libgfortran/io/async.h
++++ b/libgfortran/io/async.h
+@@ -351,7 +351,7 @@ typedef struct async_unit
+   struct adv_cond work;
+   struct adv_cond emptysignal;
+   struct st_parameter_dt *pdt;
+-  pthread_t thread;
++  __gthread_t thread;
+   struct transfer_queue *head;
+   struct transfer_queue *tail;
+ 

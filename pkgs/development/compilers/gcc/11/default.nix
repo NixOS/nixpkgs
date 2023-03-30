@@ -87,7 +87,9 @@ let majorVersion = "11";
       ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
 
       # openjdk build fails without this on -march=opteron; is upstream in gcc12
-      ++ [ ./gcc-issue-103910.patch ];
+      ++ [ ./gcc-issue-103910.patch ]
+
+      ++ optional (langFortran && crossMingw) ../mingw-gfortran-no-pthread_t-alias.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";

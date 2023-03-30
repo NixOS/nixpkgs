@@ -121,7 +121,9 @@ let majorVersion = "12";
       ++ optional (stdenv.isDarwin && langAda) ../gnat-darwin-dylib-install-name.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch;
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
+
+      ++ optional (langFortran && crossMingw) ../mingw-gfortran-no-pthread_t-alias.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
