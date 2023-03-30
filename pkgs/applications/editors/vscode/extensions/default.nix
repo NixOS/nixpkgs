@@ -1276,8 +1276,13 @@ let
         mktplcRef = {
           name = "vscode-pull-request-github";
           publisher = "github";
-          version = "0.61.2023032418";
-          sha256 = "sha256-pCFq0lAMH3fno4/BtHJHhS4hX1KqxsPf4wEmAm66Y8E=";
+          # Stable versions are listed on the GitHub releases page and use a
+          # semver scheme, contrary to preview versions which are listed on
+          # the VSCode Marketplace and use a calver scheme. We should avoid
+          # using preview versions, because they can require insider versions
+          # of VS Code
+          version = "0.60.0";
+          sha256 = "sha256-VAoKNRYrzUXUQSDAX8NM17aknCUxMRsTRd5adQu+w/s=";
         };
         meta = { license = lib.licenses.mit; };
       };
