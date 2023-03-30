@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.6";
+  version = "0.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-oYYr7LuTvw7e99930vF7odl2dWA/QPOTEW02l8cqXlc=";
+    hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
   };
 
   nativeBuildInputs = [
