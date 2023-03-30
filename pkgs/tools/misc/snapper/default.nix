@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
+    make -C scripts install-data-local
     rm -r $out/etc/cron.*
     patchShebangs $out/lib/zypp/plugins/commit/*
     for file in \
