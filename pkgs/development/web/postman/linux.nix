@@ -138,6 +138,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     pushd $out/share/postman
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" postman
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" chrome_crashpad_handler
     for file in $(find . -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
       ORIGIN=$(patchelf --print-rpath $file); \
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
