@@ -4612,6 +4612,8 @@ self: super: with self; {
 
   icecream = callPackage ../development/python-modules/icecream { };
 
+  iceportal = callPackage ../development/python-modules/iceportal { };
+
   icmplib = callPackage ../development/python-modules/icmplib { };
 
   icnsutil = callPackage ../development/python-modules/icnsutil { };
