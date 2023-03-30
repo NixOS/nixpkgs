@@ -212,8 +212,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-  qtpim = callPackage ../development/libraries/qtpim { };
-
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
   qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
