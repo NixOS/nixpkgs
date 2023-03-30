@@ -11186,6 +11186,8 @@ with pkgs;
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
 
+  podman-desktop = callPackage ../applications/virtualization/podman-desktop {};
+
   pods = callPackage ../applications/virtualization/pods { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
@@ -39748,4 +39750,6 @@ with pkgs;
   duden = callPackage ../applications/misc/duden { };
 
   zf = callPackage ../tools/misc/zf { };
+
+  isolate = callPackage ../tools/security/isolate { };
 }

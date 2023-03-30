@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sgpt";
     homepage = "https://github.com/TheR1D/shell_gpt";
     description = "Access ChatGPT from your terminal";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ mglolenstine ];
   };

@@ -77,7 +77,12 @@ in stdenv.mkDerivation rec {
     updateScript = ./update.sh;
 
     tests = {
-      example = callPackage ./cypress-example-kitchensink { };
+      # We used to have a test here, but was removed because
+      #  - it broke, and ofborg didn't fail https://github.com/NixOS/ofborg/issues/629
+      #  - it had a large footprint in the repo; prefer RFC 92 or an ugly FOD fetcher?
+      #  - the author switched away from cypress.
+      # To provide a test once more, you may find useful information in
+      # https://github.com/NixOS/nixpkgs/pull/223903
     };
   };
 

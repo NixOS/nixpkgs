@@ -17,16 +17,20 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-server";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = sha256Hash;
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "psutil==" "psutil>=" \
-      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
-      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
-  '';
+  pythonRelaxDeps = [
+    "aiofiles"
+    "jsonschema"
+    "psutil"
+    "sentry-sdk"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiofiles
