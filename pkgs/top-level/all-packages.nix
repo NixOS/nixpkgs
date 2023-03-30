@@ -39735,4 +39735,6 @@ with pkgs;
   duden = callPackage ../applications/misc/duden { };
 
   zf = callPackage ../tools/misc/zf { };
+
+  isolate = callPackage ../tools/security/isolate { };
 }
