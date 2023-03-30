@@ -19,6 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ glfw capstone ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
+    ++ lib.optionals (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [ darwin.apple_sdk.frameworks.UniformTypeIdentifiers ]
     ++ lib.optionals stdenv.isLinux [ gtk3 tbb dbus ];
 
   env.NIX_CFLAGS_COMPILE = toString ([ ]
