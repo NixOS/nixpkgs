@@ -224,13 +224,6 @@ foreach my $u (@{$spec->{users}}) {
         }
     }
 
-    # Ensure home directory incl. ownership and permissions.
-    if ($u->{createHome} and !$is_dry) {
-        make_path($u->{home}, { mode => oct($u->{homeMode}) }) if ! -e $u->{home};
-        chown $u->{uid}, $u->{gid}, $u->{home};
-        chmod oct($u->{homeMode}), $u->{home};
-    }
-
     if (defined $u->{passwordFile}) {
         if (-e $u->{passwordFile}) {
             $u->{hashedPassword} = read_file($u->{passwordFile});
