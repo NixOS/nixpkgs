@@ -10333,6 +10333,8 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
+
   routes = callPackage ../development/python-modules/routes { };
 
   rova = callPackage ../development/python-modules/rova { };
@@ -11836,6 +11838,8 @@ self: super: with self; {
   torpy = callPackage ../development/python-modules/torpy { };
 
   torrequest = callPackage ../development/python-modules/torrequest { };
+
+  tortoise-tts = callPackage ../development/python-modules/tortoise-tts { };
 
   total-connect-client = callPackage ../development/python-modules/total-connect-client { };
 
