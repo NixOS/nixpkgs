@@ -30896,6 +30896,8 @@ with pkgs;
 
   ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
 
+  identity = callPackage ../applications/graphics/identity { };
+
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
   ii = callPackage ../applications/networking/irc/ii {
