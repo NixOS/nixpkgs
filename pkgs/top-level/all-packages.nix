@@ -26926,6 +26926,8 @@ with pkgs;
     then callPackage ../os-specific/linux/procps-ng { }
     else unixtools.procps;
 
+  procps4 = callPackage ../os-specific/linux/procps-ng/4.0.x.nix { };
+
   procdump = callPackage ../os-specific/linux/procdump { };
 
   prototool = callPackage ../development/tools/prototool { };
