@@ -89,9 +89,6 @@ stdenv.mkDerivation rec {
       libGLESv2 = lib.makeLibraryPath [
         xorg.libX11 xorg.libXext xorg.libxcb wayland
       ];
-      libsmartscreen = lib.makeLibraryPath [
-        libuuid stdenv.cc.cc.lib
-      ];
       libsmartscreenn = lib.makeLibraryPath [
         libuuid
       ];
@@ -125,10 +122,6 @@ stdenv.mkDerivation rec {
     patchelf \
       --set-rpath "${libPath.libGLESv2}" \
       opt/microsoft/${shortName}/libGLESv2.so
-
-    patchelf \
-      --set-rpath "${libPath.libsmartscreen}" \
-      opt/microsoft/${shortName}/libsmartscreen.so
 
     patchelf \
       --set-rpath "${libPath.libsmartscreenn}" \
