@@ -3310,6 +3310,8 @@ self: super: with self; {
 
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
+  farama-notifications = callPackage ../development/python-modules/farama-notifications { };
+
   fastai = callPackage ../development/python-modules/fastai { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
@@ -4272,6 +4274,8 @@ self: super: with self; {
 
   gym-notices = callPackage ../development/python-modules/gym-notices { };
 
+  gymnasium = callPackage ../development/python-modules/gymnasium { };
+
   gyp = callPackage ../development/python-modules/gyp { };
 
   h11 = callPackage ../development/python-modules/h11 { };
@@ -4923,6 +4927,8 @@ self: super: with self; {
   javaproperties = callPackage ../development/python-modules/javaproperties { };
 
   jax = callPackage ../development/python-modules/jax { };
+
+  jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
