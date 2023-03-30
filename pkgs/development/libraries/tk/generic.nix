@@ -38,9 +38,15 @@ tcl.mkTclDerivation {
     ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
+  buildInputs = [ ];
 
-  propagatedBuildInputs = [ libXft ];
+  propagatedBuildInputs = [
+    libXft
+  ] ++ lib.optionals enableAqua ([
+    darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optionals (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
+    darwin.apple_sdk.frameworks.UniformTypeIdentifiers
+  ]);
 
   enableParallelBuilding = true;
 
