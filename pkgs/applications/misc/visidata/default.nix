@@ -89,6 +89,11 @@ buildPythonApplication rec {
     bash dev/test.sh
   '';
 
+  postInstall = ''
+    dev/zsh-completion.py
+    install -Dm644 _${pname} -t $out/share/zsh/site-functions
+  '';
+
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
