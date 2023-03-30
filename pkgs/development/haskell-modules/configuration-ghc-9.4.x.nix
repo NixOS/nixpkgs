@@ -195,7 +195,7 @@ in {
   };
 
   # needed to build servant
-  http-api-data = super.http-api-data_0_5;
+  http-api-data = super.http-api-data_0_5_1;
   attoparsec-iso8601 = super.attoparsec-iso8601_1_1_0_0;
 
   # requires newer versions to work with GHC 9.4
