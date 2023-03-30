@@ -4272,6 +4272,8 @@ self: super: with self; {
 
   gym-notices = callPackage ../development/python-modules/gym-notices { };
 
+  gymnasium = callPackage ../development/python-modules/gymnasium { };
+
   gyp = callPackage ../development/python-modules/gyp { };
 
   h11 = callPackage ../development/python-modules/h11 { };
