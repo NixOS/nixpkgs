@@ -11756,7 +11756,7 @@ with pkgs;
   rmtrash = callPackage ../tools/misc/rmtrash { };
 
   roc-toolkit = callPackage ../development/libraries/audio/roc-toolkit {
-    scons = sconsPackages.scons_4_1_0;
+    scons = buildPackages.sconsPackages.scons_4_1_0;
   };
 
   rockbox-utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
