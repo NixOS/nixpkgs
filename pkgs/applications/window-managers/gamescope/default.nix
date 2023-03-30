@@ -31,7 +31,7 @@
 }:
 let
   pname = "gamescope";
-  version = "3.11.52-beta6";
+  version = "3.11.52-unstable-2023-03-22";
 
   vkroots = fetchFromGitHub {
     owner = "Joshua-Ashton";
@@ -44,39 +44,14 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "Plagman";
+    owner = "ValveSoftware";
     repo = "gamescope";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2gn6VQfmwwl86mmnRh+J1uxSIpA5x/Papq578seJ3n8=";
+    rev = "5d9ecd462e6d5939fc2697509f53bcb6aba7eb92";
+    hash = "sha256-1Ya59k60YmrJ1AWQ3eoWYBFjiz+RENBNc4FxK3GcgIQ=";
   };
 
   patches = [
     ./use-pkgconfig.patch
-
-    # https://github.com/Plagman/gamescope/pull/811
-    (fetchpatch {
-      name = "fix-openvr-dependency-name.patch";
-      url = "https://github.com/Plagman/gamescope/commit/557e56badec7d4c56263d3463ca9cdb195e368d7.patch";
-      sha256 = "sha256-9Y1tJ24EsdtZEOCEA30+FJBrdzXX+Nj3nTb5kgcPfBE=";
-    })
-    # https://github.com/Plagman/gamescope/pull/813
-    (fetchpatch {
-      name = "fix-openvr-include.patch";
-      url = "https://github.com/Plagman/gamescope/commit/1331b9f81ea4b3ae692a832ed85a464c3fd4c5e9.patch";
-      sha256 = "sha256-wDtFpM/nMcqSbIpR7K5Tyf0845r3l4kQHfwll1VL4Mc=";
-    })
-    # https://github.com/Plagman/gamescope/pull/812
-    (fetchpatch {
-      name = "bump-libdisplay-info-maximum-version.patch";
-      url = "https://github.com/Plagman/gamescope/commit/b430c5b9a05951755051fd4e41ce20496705fbbc.patch";
-      sha256 = "sha256-YHtwudMUHiE8i3ZbiC9gkSjrlS0/7ydjmJsY1a8ZI2E=";
-    })
-    # https://github.com/Plagman/gamescope/pull/824
-    (fetchpatch {
-      name = "update-libdisplay-info-pkgconfig-filename.patch";
-      url = "https://github.com/Plagman/gamescope/commit/5a672f09aa07c7c5d674789f3c685c8173e7a2cf.patch";
-      sha256 = "sha256-7NX54WIsJDvZT3C58N2FQasV9PJyKkJrLGYS1r4f+kc=";
-    })
   ];
 
   nativeBuildInputs = [
