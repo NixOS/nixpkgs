@@ -4922,6 +4922,8 @@ self: super: with self; {
 
   jax = callPackage ../development/python-modules/jax { };
 
+  jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
+
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
