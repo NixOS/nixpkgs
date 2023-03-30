@@ -147,7 +147,7 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  lens = doDistribute self.lens_5_2_1;
+  lens = doDistribute self.lens_5_2_2;
 
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
