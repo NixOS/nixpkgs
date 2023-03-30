@@ -742,6 +742,7 @@ mapAliases ({
 
   k3d = throw "k3d has been removed because it was broken and has seen no release since 2016"; # Added 2022-01-04
   k3s_1_23 = throw "k3s_1_23 has been deprecated in favor of the latest stable version"; # Added 2023-04-29
+  k3s_1_24 = throw "k3s_1_24 has been deprecated in favor of the latest stable version"; # Added 2023-04-29
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # Added 2020-11-06
   kafkacat = kcat; # Added 2021-10-07
   kbdKeymaps = throw "kbdKeymaps is not needed anymore since dvp and neo are now part of kbd"; # Added 2021-04-11
