@@ -6378,6 +6378,8 @@ with pkgs;
 
   cloc = callPackage ../tools/misc/cloc { };
 
+  clolcat = callPackage ../tools/misc/clolcat { };
+
   cloog = callPackage ../development/libraries/cloog {
     isl = isl_0_14;
   };
@@ -30733,6 +30735,8 @@ with pkgs;
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
+  sleep-on-lan = callPackage ../tools/networking/sleep-on-lan { };
+
   slweb = callPackage ../applications/misc/slweb { };
 
   sonixd = callPackage ../applications/audio/sonixd { };
@@ -32161,10 +32165,7 @@ with pkgs;
 
   oroborus = callPackage ../applications/window-managers/oroborus { };
 
-  osm2pgsql = callPackage ../tools/misc/osm2pgsql {
-    # fmt_9 is not supported: https://github.com/openstreetmap/osm2pgsql/issues/1859
-    fmt = fmt_8;
-  };
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
