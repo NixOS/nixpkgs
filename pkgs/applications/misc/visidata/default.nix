@@ -132,7 +132,7 @@ buildPythonApplication rec {
   '';
   postInstall = ''
     python dev/zsh-completion.py
-    install -Dm644 _${pname} -t $out/share/zsh/site-functions
+    install -Dm644 _visidata -t $out/share/zsh/site-functions
   '';
 
   pythonImportsCheck = ["visidata"];
