@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-5oX1LhqWvNiMF9ZI7BvpHe4bhB3vQp6dsjLYMQ9Jy+o=";
+    hash = "sha256-8jplCIylG1xbpp/VGnU06MwfqWe2E9iVQApZaWbhuVc=";
     name = "${pname}-${version}.AppImage";
   };
 

@@ -247,7 +247,6 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
- - LPFP
  - LPPaver
  - LambdaHack
  - LambdaINet
@@ -679,7 +678,7 @@ dont-distribute-packages:
  - ascii-superset_1_3_0_0
  - ascii-table
  - ascii-th_1_2_0_0
- - ascii_1_6_0_0
+ - ascii_1_7_0_0
  - asic
  - asil
  - assert4hs-hspec
@@ -741,6 +740,7 @@ dont-distribute-packages:
  - babylon
  - backblaze-b2-hs
  - backdropper
+ - balkon
  - ballast
  - bamboo
  - bamboo-launcher
@@ -1285,6 +1285,9 @@ dont-distribute-packages:
  - dobutokO3
  - dobutokO4
  - doc-review
+ - domain
+ - domain-aeson
+ - domain-cereal
  - domaindriven
  - dormouse-client
  - dovetail
@@ -2132,7 +2135,6 @@ dont-distribute-packages:
  - hexpat-iteratee
  - hfd
  - hfiar
- - hfoil
  - hfractal
  - hgalib
  - hgen
@@ -2200,7 +2202,6 @@ dont-distribute-packages:
  - hoppy-runtime
  - hoppy-std
  - horizon-gen-nix
- - horizon-spec
  - horizon-spec-lens
  - horizon-spec-pretty
  - hotswap
@@ -2570,8 +2571,6 @@ dont-distribute-packages:
  - ldapply
  - leaky
  - lean
- - learn-physics
- - learn-physics-examples
  - learning-hmm
  - legion
  - legion-discovery
@@ -2937,8 +2936,6 @@ dont-distribute-packages:
  - nomyx-library
  - nomyx-server
  - nonlinear-optimization-backprop
- - not-gloss
- - not-gloss-examples
  - notmuch-web
  - now-haskell
  - nri-env-parser
@@ -3073,6 +3070,10 @@ dont-distribute-packages:
  - peyotls
  - peyotls-codec
  - pg-entity
+ - phladiprelio-general-shared
+ - phladiprelio-general-simple
+ - phladiprelio-ukrainian-shared
+ - phladiprelio-ukrainian-simple
  - phonetic-languages-common
  - phonetic-languages-constraints
  - phonetic-languages-examples
@@ -3129,7 +3130,12 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
+ - polysemy-account
+ - polysemy-account-api
  - polysemy-conc
+ - polysemy-db
+ - polysemy-hasql
+ - polysemy-hasql-test
  - polysemy-http
  - polysemy-log
  - polysemy-log-co
@@ -3692,7 +3698,7 @@ dont-distribute-packages:
  - sparser
  - spartacon
  - spata
- - spatial-math
+ - spatial-math_0_5_0_1
  - specialize-th
  - spectral-clustering
  - speculation-transformers
@@ -3708,6 +3714,7 @@ dont-distribute-packages:
  - sproxy
  - sproxy-web
  - sproxy2
+ - sqel
  - sql-simple-mysql
  - sql-simple-pool
  - sql-simple-postgresql
@@ -4287,6 +4294,7 @@ dont-distribute-packages:
  - zerobin
  - zeromq3-conduit
  - zeroth
+ - zeugma
  - zifter-cabal
  - zifter-git
  - zifter-google-java-format

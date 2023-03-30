@@ -30894,6 +30894,8 @@ with pkgs;
 
   ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
 
+  identity = callPackage ../applications/graphics/identity { };
+
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
   ii = callPackage ../applications/networking/irc/ii {
@@ -32627,7 +32629,9 @@ with pkgs;
     enableDbusUi = false;
   };
 
-  parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
+  parsec-bin = callPackage ../applications/misc/parsec/bin.nix {
+    ffmpeg = ffmpeg_4;
+  };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 

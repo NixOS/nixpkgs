@@ -1914,6 +1914,7 @@ broken-packages:
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
+  - guardian   # transitive dependency uses doctest, but doctest doesn't build with newer Cabal version
   - guess-combinator
   - gulcii
   - gw
@@ -1942,7 +1943,6 @@ broken-packages:
   - hactor
   - hactors
   - haddock-api
-  - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
   - hadoop-formats
@@ -1975,6 +1975,7 @@ broken-packages:
   - HaLeX
   - halfs
   - half-space
+  - halide-haskell # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/212823532 at 2023-03-22
   - halipeto
   - halive
   - halma
@@ -2246,6 +2247,7 @@ broken-packages:
   - hfann
   - HFitUI
   - hfmt
+  - hfoil # failure building library in job https://hydra.nixos.org/build/213500290 at 2023-03-26
   - hfov
   - HFrequencyQueue
   - hfusion
@@ -2398,6 +2400,7 @@ broken-packages:
   - hops
   - hoq
   - horizon
+  - horizon-spec # dependency missing in job https://hydra.nixos.org/build/213500294 at 2023-03-26
   - horname
   - hosc-json
   - hosts-server
@@ -3035,6 +3038,7 @@ broken-packages:
   - leapseconds
   - learn
   - Learning
+  - learn-physics-examples # dependency missing in job https://hydra.nixos.org/build/213500293 at 2023-03-26
   - leetify
   - lendingclub
   - lens-datetime
@@ -3437,6 +3441,7 @@ broken-packages:
   - money
   - mongodb-queue
   - monitor
+  - monocypher # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/212811942 at 2023-03-22
   - mono-foldable
   - monoid
   - monoid-absorbing
@@ -3455,6 +3460,7 @@ broken-packages:
   - morphisms-objects
   - morte
   - mortred
+  - mosaico-lib # dependency missing in job https://hydra.nixos.org/build/212818174 at 2023-03-22
   - motor-reflection
   - mount
   - movie-monad
@@ -4095,6 +4101,7 @@ broken-packages:
   - pong-server
   - pontarius-xpmn
   - pool
+  - poolboy # test failure in job https://hydra.nixos.org/build/212819440 at 2023-03-26
   - pool-conduit
   - pop3-client
   - poppler
@@ -5336,6 +5343,7 @@ broken-packages:
   - th-pprint
   - threadmanager
   - threadscope
+  - thread-supervisor # test failure in job https://hydra.nixos.org/build/214156434 at 2023-03-29
   - threepenny-editors
   - threepenny-gui-contextmenu
   - threepenny-gui-flexbox
@@ -5929,6 +5937,7 @@ broken-packages:
   - YamlReference
   - yaml-rpc
   - yaml-union
+  - yaml-unscrambler # dependency missing in job https://hydra.nixos.org/build/212821989 at 2023-03-22
   - yampa2048
   - yampa-glfw
   - yampa-gloss
