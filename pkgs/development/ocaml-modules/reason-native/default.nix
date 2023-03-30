@@ -17,7 +17,7 @@ let
             rev = "a0ddab6ab25237961e32d8732b0a222ec2372d4a";
             hash = "sha256-s2N5OFTwIbKXcv05gQRaBMCHO1Mj563yhryPeo8jMh8=";
           };
-          duneVersion = "2";
+          duneVersion = "3";
           meta = with lib; {
             description = "Libraries for building and testing native Reason programs";
             downloadPage = "https://github.com/reasonml/reason-native";
