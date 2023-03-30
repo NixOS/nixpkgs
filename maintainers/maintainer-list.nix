@@ -3252,6 +3252,13 @@
       fingerprint = "2B1F 70F9 5F1B 48DA 2265 A7FA A6BC 8B8C EB31 659B";
     }];
   };
+  cyntheticfox = {
+    email = "houstdav000@gmail.com";
+    github = "cyntheticfox";
+    githubId = 17628961;
+    matrix = "@houstdav000:gh0st.ems.host";
+    name = "Cynthia Fox";
+  };
   cyounkins = {
     name = "Craig Younkins";
     email = "cyounkins@gmail.com";
@@ -6169,13 +6176,6 @@
     github = "hoppla20";
     githubId = 25618740;
     name = "Vincent Cui";
-  };
-  houstdav000 = {
-    email = "houstdav000@gmail.com";
-    github = "houstdav000";
-    githubId = 17628961;
-    matrix = "@houstdav000:gh0st.ems.host";
-    name = "David Houston";
   };
   hoverbear = {
     email = "operator+nix@hoverbear.org";
