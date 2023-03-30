@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    make test
-  '';
+  checkTarget = "test";
 
   meta = with lib; {
     homepage = "https://github.com/pganalyze/libpg_query";
