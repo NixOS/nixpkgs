@@ -14,13 +14,27 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+let
+  availableBinaries = {
+    x86_64-linux = {
+      platform = "linux-x64";
+      checksum = "sha256-26mkizwkF0qPX2+0rkjep28ZuNlLGPljCvVO73t34Lk=";
+    };
+    aarch64-linux = {
+      platform = "linux-arm64";
+      checksum = "sha256-gcf/MJ5aNUPoH6qz0n9vjviTec1rcxB0UzF+++6bUTs=";
+    };
+  };
+  inherit (stdenv.hostPlatform) system;
+  binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
+  inherit (binary) platform checksum;
+in stdenv.mkDerivation rec {
   pname = "cypress";
   version = "10.10.0";
 
   src = fetchzip {
-    url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "sha256-26mkizwkF0qPX2+0rkjep28ZuNlLGPljCvVO73t34Lk=";
+    url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
+    sha256 = checksum;
   };
 
   # don't remove runtime deps
@@ -73,7 +87,7 @@ stdenv.mkDerivation rec {
     mainProgram = "Cypress";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames availableBinaries;
     maintainers = with maintainers; [ tweber mmahut Crafter ];
   };
 }
