@@ -27,7 +27,6 @@
 , ninja
 , gcab
 , gnutls
-, pandoc
 , protobufc
 , python3
 , wrapGAppsNoGuiHook
@@ -170,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     gcab
     gnutls
-    pandoc
     protobufc # for protoc
     python
     wrapGAppsNoGuiHook
