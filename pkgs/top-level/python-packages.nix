@@ -7119,6 +7119,8 @@ self: super: with self; {
 
   pefile = callPackage ../development/python-modules/pefile { };
 
+  peft = callPackage ../development/python-modules/peft { };
+
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales git;
   };
