@@ -985,6 +985,8 @@ self: super: with self; {
 
   azure-mgmt-extendedlocation = callPackage ../development/python-modules/azure-mgmt-extendedlocation { };
 
+  azure-mgmt-frontdoor = callPackage ../development/python-modules/azure-mgmt-frontdoor { };
+
   azure-mgmt-hanaonazure = callPackage ../development/python-modules/azure-mgmt-hanaonazure { };
 
   azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
@@ -2671,6 +2673,8 @@ self: super: with self; {
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
+  django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
@@ -2876,6 +2880,8 @@ self: super: with self; {
   dpcontracts = callPackage ../development/python-modules/dpcontracts { };
 
   dpkt = callPackage ../development/python-modules/dpkt { };
+
+  draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
 
@@ -5303,6 +5309,8 @@ self: super: with self; {
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
+  l18n = callPackage ../development/python-modules/l18n { };
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   labgrid = callPackage ../development/python-modules/labgrid { };
@@ -7154,6 +7162,8 @@ self: super: with self; {
   perfplot = callPackage ../development/python-modules/perfplot { };
 
   periodictable = callPackage ../development/python-modules/periodictable { };
+
+  permissionedforms = callPackage ../development/python-modules/permissionedforms { };
 
   persim = callPackage ../development/python-modules/persim { };
 
@@ -11489,6 +11499,8 @@ self: super: with self; {
 
   telegraph = callPackage ../development/python-modules/telegraph { };
 
+  telepath = callPackage ../development/python-modules/telepath { };
+
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
   };
@@ -12414,6 +12426,12 @@ self: super: with self; {
   w3lib = callPackage ../development/python-modules/w3lib { };
 
   wadllib = callPackage ../development/python-modules/wadllib { };
+
+  wagtail = callPackage ../development/python-modules/wagtail { };
+
+  wagtail-factories = callPackage ../development/python-modules/wagtail-factories { };
+
+  wagtail-localize = callPackage ../development/python-modules/wagtail-localize { };
 
   waitress = callPackage ../development/python-modules/waitress { };
 
