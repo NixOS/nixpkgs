@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "22.1.0";
+  version = "23.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Tinche";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2itjGYusJT6sbCAgvKsI9IXeAOP7VQV0bpifFBZmnAo=";
+    hash = "sha256-ouBqqt0CJYxxQqbG9jn4p8zO+nKjqZgPjZpiZic67ss=";
   };
 
   nativeBuildInputs = [
