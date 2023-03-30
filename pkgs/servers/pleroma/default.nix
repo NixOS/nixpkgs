@@ -1,5 +1,5 @@
 { lib, beamPackages
-, fetchFromGitHub, fetchFromGitLab, fetchHex
+, fetchFromGitHub, fetchFromGitLab, fetchHex, fetchpatch
 , file, cmake
 , libxcrypt
 , nixosTests, writeText
@@ -17,6 +17,15 @@ beamPackages.mixRelease rec {
     rev = "v${version}";
     sha256 = "sha256-3iG2s7jVEnhq1kLLgtaHnFmLYBO2Xr5M5jjZfSNA9z4=";
   };
+
+  # TODO: Remove this patch for > 2.5.1
+  patches = [
+    (fetchpatch {
+      url = "https://git.pleroma.social/pleroma/pleroma/-/commit/5716654d127921d86b3aa8c9307ab9ac2ca6ab1b.patch";
+      sha256 = "sha256-dHU8Y9P6ppZ+w5zKV1zUOUysfAkjdFCqvHFApSYXSWY=";
+    })
+  ];
+
   stripDebug = false;
 
   mixNixDeps = import ./mix.nix {
@@ -160,13 +169,6 @@ beamPackages.mixRelease rec {
           mkdir config
           cp ${cfgFile} config/config.exs
         '';
-      };
-
-      crypt = let
-        version = prev.crypt.version;
-      in prev.crypt.override {
-        buildInputs = [ libxcrypt ];
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
       };
     });
   };
