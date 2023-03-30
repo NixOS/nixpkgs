@@ -22,6 +22,8 @@ self: super: with self; {
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
 
+  accelerate = callPackage ../development/python-modules/accelerate { };
+
   accuweather = callPackage ../development/python-modules/accuweather { };
 
   accupy = callPackage ../development/python-modules/accupy { };
