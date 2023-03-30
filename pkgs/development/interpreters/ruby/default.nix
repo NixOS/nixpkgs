@@ -112,14 +112,6 @@ let
               sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
             })
           ]
-          ++ ops (ver.majMin == "3.1") [
-            # Ruby 3.1.3 cannot find pkg-config in mkmf.rb
-            # https://bugs.ruby-lang.org/issues/19189
-            (fetchpatch {
-              url = "https://github.com/ruby/ruby/commit/613fca01486e47dee9364a2fd86b5f5e77fe23c8.patch";
-              sha256 = "sha256-0Ku7l6VEpcvxexL9QA5+mNER4v8gYZOJhAjhCL1WDpw=";
-            })
-          ]
           ++ ops (!atLeast30 && rubygemsSupport) [
             # We upgrade rubygems to a version that isn't compatible with the
             # ruby 2.7 installer. Backport the upstream fix.
@@ -332,8 +324,8 @@ in {
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "3" "";
-    sha256 = "sha256-XqSYo19M0Vh1IApS3eQrbrF54SZOF9eHMsOlfNHGq54=";
+    version = rubyVersion "3" "1" "4" "";
+    sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
   };
 
   ruby_3_2 = generic {
