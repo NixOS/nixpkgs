@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.99.6";
+  version = "0.99.7";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D25P254iaOsS0TyAKAiarDP37D4U9Dw7mdvUin/Qblc=";
+    sha256 = "sha256-bsvq48zTNafsQGFXVApCEWIL8H2RXiowalEu/W3DUu0=";
   };
 
   outputs = [ "out" "dev" ];
