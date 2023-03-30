@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Degl=${if x11Support then "yes" else "no"}"
+    "-Degl=${if (x11Support && !stdenv.isDarwin) then "yes" else "no"}"
     "-Dglx=${if x11Support then "yes" else "no"}"
     "-Dtests=${lib.boolToString doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
