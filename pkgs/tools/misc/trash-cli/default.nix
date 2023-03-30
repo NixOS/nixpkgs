@@ -43,6 +43,16 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
+  postInstall = ''
+    for bin in trash{,-{empty,list,put,restore}}; do
+      $out/bin/$bin --print-completion bash > $bin
+      install -Dm644 $bin -t $out/share/bash-completion/completions
+      $out/bin/$bin --print-completion zsh > _$bin
+      install -Dm644 _$bin -t $out/share/zsh/site-functions
+      $out/bin/$bin --print-completion tcsh > $bin.csh
+      install -Dm644 $bin.csh -t $out/etc/profile.d
+    done
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";
