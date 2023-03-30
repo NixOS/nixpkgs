@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";
     homepage = "http://www.ntop.org/products/ntop/";
+    changelog = "https://github.com/ntop/ntopng/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
