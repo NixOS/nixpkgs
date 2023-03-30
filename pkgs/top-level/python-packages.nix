@@ -2580,6 +2580,8 @@ self: super: with self; {
 
   django-celery-results = callPackage ../development/python-modules/django-celery-results { };
 
+  django-ckeditor = callPackage ../development/python-modules/django-ckeditor { };
+
   django_classytags = callPackage ../development/python-modules/django_classytags { };
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
@@ -4609,6 +4611,8 @@ self: super: with self; {
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   icecream = callPackage ../development/python-modules/icecream { };
+
+  iceportal = callPackage ../development/python-modules/iceportal { };
 
   icmplib = callPackage ../development/python-modules/icmplib { };
 
