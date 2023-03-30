@@ -17328,6 +17328,8 @@ with pkgs;
 
   apng2gif = callPackage ../tools/graphics/apng2gif { };
 
+  gif2apng = callPackage ../tools/graphics/gif2apng { };
+
   kt = callPackage ../tools/misc/kt { };
 
   argbash = callPackage ../development/tools/misc/argbash { };
