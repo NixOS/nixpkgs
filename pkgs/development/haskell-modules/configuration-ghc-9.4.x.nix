@@ -125,7 +125,7 @@ in {
   hedgehog = doDistribute (dontHaddock super.hedgehog_1_2);
   # tasty-hedgehog > 1.3 necessary to work with hedgehog 1.2:
   # https://github.com/qfpl/tasty-hedgehog/pull/63
-  tasty-hedgehog = self.tasty-hedgehog_1_4_0_0;
+  tasty-hedgehog = self.tasty-hedgehog_1_4_0_1;
 
   # https://github.com/dreixel/syb/issues/38
   syb = dontCheck super.syb;
