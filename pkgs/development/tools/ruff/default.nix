@@ -40,6 +40,12 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--package=ruff_cli" ];
   cargoTestFlags = cargoBuildFlags;
 
+  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    export JEMALLOC_SYS_WITH_LG_VADDR=48
+  '';
+
   postInstall = ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
