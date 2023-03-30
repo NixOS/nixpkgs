@@ -139,7 +139,7 @@ buildPythonApplication rec {
   };
 
   postInstall = ''
-    dev/zsh-completion.py
+    python dev/zsh-completion.py
     install -Dm644 _${pname} -t $out/share/zsh/site-functions
   '';
 
