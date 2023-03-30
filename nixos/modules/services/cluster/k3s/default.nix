@@ -139,8 +139,8 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ];
-      wants = [ "network.service" "firewall.service" ];
+      after = [ "firewall.service" "network-online.target" ];
+      wants = [ "firewall.service" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
