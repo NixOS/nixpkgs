@@ -3818,6 +3818,8 @@ with pkgs;
     charles4
   ;
 
+  cpu_rec = callPackage ../tools/security/cpu_rec {};
+
   libquotient = libsForQt5.callPackage ../development/libraries/libquotient { };
 
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
