@@ -21,6 +21,8 @@
 , ghc_filesystem
 , msaClientID ? ""
 , jdks ? [ jdk17 jdk8 ]
+, gamemodeSupport ? true
+, gamemode
 }:
 
 let
@@ -51,7 +53,9 @@ stdenv.mkDerivation rec {
     quazip
     ghc_filesystem
     tomlplusplus
-  ] ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
+  ]
+  ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland
+  ++ lib.optional gamemodeSupport gamemode.dev;
 
   cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
     ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
@@ -67,7 +71,7 @@ stdenv.mkDerivation rec {
   qtWrapperArgs =
     let
       libpath = with xorg;
-        lib.makeLibraryPath [
+        lib.makeLibraryPath ([
           libX11
           libXext
           libXcursor
@@ -78,7 +82,7 @@ stdenv.mkDerivation rec {
           glfw
           openal
           stdenv.cc.cc.lib
-        ];
+        ] ++ lib.optional gamemodeSupport gamemode.lib);
     in
     [
       "--set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath}"
