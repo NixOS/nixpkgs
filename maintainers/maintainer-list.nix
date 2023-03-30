@@ -2978,6 +2978,13 @@
     githubId = 298705;
     name = "Cyril Cohen";
   };
+  colamaroro = {
+    name = "Corentin Rondier";
+    email = "github@rondier.io";
+    github = "colamaroro";
+    githubId = 12484955;
+    matrix = "@colamaroro:lovelyrad.io";
+  };
   cole-h = {
     name = "Cole Helbling";
     email = "cole.e.helbling@outlook.com";
