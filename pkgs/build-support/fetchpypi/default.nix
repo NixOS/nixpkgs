@@ -12,7 +12,7 @@ let
 
     computeSourceUrl = {pname, version, extension ? "tar.gz"}:
     # Fetch a source tarball.
-      "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.${extension}";
+      "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${builtins.replaceStrings ["-"] ["_"] pname}-${version}.${extension}";
 
     compute = (if format == "wheel" then computeWheelUrl
       else if format == "setuptools" then computeSourceUrl
