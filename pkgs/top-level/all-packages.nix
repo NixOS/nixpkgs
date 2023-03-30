@@ -404,6 +404,8 @@ with pkgs;
 
   chatgpt-cli = callPackage ../tools/misc/chatgpt-cli { };
 
+  chatgpt-retrieval-plugin = callPackage ../servers/chatgpt-retrieval-plugin { };
+
   checkov = callPackage ../development/tools/analysis/checkov {
     python3 = python311;
   };
