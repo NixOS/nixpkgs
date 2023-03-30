@@ -17330,6 +17330,8 @@ with pkgs;
 
   gif2apng = callPackage ../tools/graphics/gif2apng { };
 
+  apngopt = callPackage ../tools/graphics/apngopt { };
+
   kt = callPackage ../tools/misc/kt { };
 
   argbash = callPackage ../development/tools/misc/argbash { };
