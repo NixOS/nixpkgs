@@ -1974,12 +1974,6 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
-  bigzilla = {
-    email = "m.billyzaelani@gmail.com";
-    github = "bigzilla";
-    githubId = 20436235;
-    name = "Billy Zaelani Malik";
-  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
@@ -10030,6 +10024,12 @@
     keys = [{
       fingerprint = "D520 AC8D 7C96 9212 5B2B  BD3A 1AFD 1025 6B3C 714D";
     }];
+  };
+  minizilla = {
+    email = "m.billyzaelani@gmail.com";
+    github = "minizilla";
+    githubId = 20436235;
+    name = "Billy Zaelani Malik";
   };
   mir06 = {
     email = "armin.leuprecht@uni-graz.at";
