@@ -12,6 +12,7 @@
 , fixDarwinDylibNames
 , CoreFoundation
 , Security
+, SystemConfiguration
 , libiconv
 }:
 
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security
+    SystemConfiguration
     libiconv
   ];
 
