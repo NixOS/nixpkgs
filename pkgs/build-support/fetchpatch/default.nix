@@ -71,7 +71,7 @@ fetchurl ({
     fi
 
     ${patchutils}/bin/filterdiff \
-      -p1 \
+      -p1 --format=unified \
       ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
       ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
       "$tmpfile" > "$out"
