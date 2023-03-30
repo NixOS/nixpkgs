@@ -13,12 +13,12 @@ buildPythonPackage rec {
   version = "23.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ouBqqt0CJYxxQqbG9jn4p8zO+nKjqZgPjZpiZic67ss=";
   };
 
@@ -45,10 +45,10 @@ buildPythonPackage rec {
     "aiofiles"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ fridh ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }
