@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     ./remove-duplicate-dependency.patch
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    name = "${pname}-${version}";
-    hash = "sha256-ZvoWdcutMnotwapFRZlvZQaebpEKarzCR2Fh5xOGluw=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "uniffi-0.21.0" = "sha256-blKCfCsSNtr8NtO7Let7VJ/9oGuW9Eu8j9A6/oHUcP0=";
+    };
   };
 
   nativeBuildInputs = [
