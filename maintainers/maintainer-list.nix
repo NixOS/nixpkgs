@@ -2010,6 +2010,12 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+  bksalman = {
+    name = "Salman Abuhaimed";
+    email = "salman.f.abuhaimed@gmail.com";
+    github = "BKSalman";
+    githubId = 85521119;
+  };
   blaggacao = {
     name = "David Arnold";
     email = "dar@xoe.solutions";
