@@ -1,0 +1,217 @@
+From 3bc2fded658031f7b9b1e05a5f036b440e230c90 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Thu, 30 Mar 2023 11:58:05 +0200
+Subject: [PATCH] bootctl: clean up handling of files with no version
+ information
+
+get_file_version() would return:
+- various negative errors if the file could not be accessed or if it was not a
+  regular file
+- 0/NULL if the file was too small
+- -ESRCH or -EINVAL if the file did not contain the marker
+- -ENOMEM or permissions errors
+-  1 if the marker was found
+
+bootctl status iterates over /EFI/{systemd,BOOT}/*.efi and checks if the files
+contain a systemd-boot version tag. Resource or permission errors should be
+fatal, but lack of version information should be silently ignored.
+
+OTOH, when updating or installing bootloader files, the version is expected
+to be present.
+
+get_file_version() is changed to return -ESRCH if the version is unavailable,
+and other errnos for permission or resource errors.
+
+The logging is reworked to always display an error if encountered, but also
+to log the status at debug level what the result of the version inquiry is.
+This makes it figure out what is going on:
+  /efi/EFI/systemd/systemd-bootx64.efi: EFI binary LoaderInfo marker: "systemd-boot 253-6.fc38"
+  /efi/EFI/BOOT/BOOTfbx64.efi: EFI binary has no LoaderInfo marker.
+  /efi/EFI/BOOT/BOOTIA32.EFI: EFI binary has no LoaderInfo marker.
+  /efi/EFI/BOOT/BOOTX64.EFI: EFI binary LoaderInfo marker: "systemd-boot 253-6.fc38"
+
+Replaces #27034.
+Fixes https://github.com/NixOS/nixpkgs/issues/223579.
+---
+ src/boot/bootctl-install.c | 26 ++++++++++++++------------
+ src/boot/bootctl-status.c  | 14 +++++++++++---
+ src/boot/bootctl-util.c    | 33 +++++++++++++++++----------------
+ 3 files changed, 42 insertions(+), 31 deletions(-)
+
+diff --git a/src/boot/bootctl-install.c b/src/boot/bootctl-install.c
+index a50f984a2363..dc8596fa05aa 100644
+--- a/src/boot/bootctl-install.c
++++ b/src/boot/bootctl-install.c
+@@ -189,29 +189,29 @@ static int version_check(int fd_from, const char *from, int fd_to, const char *t
+         assert(to);
+ 
+         r = get_file_version(fd_from, &a);
++        if (r == -ESRCH)
++                return log_notice_errno(r, "Source file \"%s\" does not carry version information!", from);
+         if (r < 0)
+                 return r;
+-        if (r == 0)
+-                return log_notice_errno(SYNTHETIC_ERRNO(EREMOTE),
+-                                       "Source file \"%s\" does not carry version information!",
+-                                       from);
+ 
+         r = get_file_version(fd_to, &b);
++        if (r == -ESRCH)
++                return log_notice_errno(r, "Skipping \"%s\", it's owned by another boot loader (no version info found).",
++                                        to);
+         if (r < 0)
+                 return r;
+-        if (r == 0 || compare_product(a, b) != 0)
+-                return log_notice_errno(SYNTHETIC_ERRNO(EREMOTE),
+-                                        "Skipping \"%s\", since it's owned by another boot loader.",
+-                                        to);
++        if (compare_product(a, b) != 0)
++                return log_notice_errno(SYNTHETIC_ERRNO(ESRCH),
++                                        "Skipping \"%s\", it's owned by another boot loader.", to);
+ 
+         r = compare_version(a, b);
+         log_debug("Comparing versions: \"%s\" %s \"%s", a, comparison_operator(r), b);
+         if (r < 0)
+                 return log_warning_errno(SYNTHETIC_ERRNO(ESTALE),
+-                                         "Skipping \"%s\", since newer boot loader version in place already.", to);
++                                         "Skipping \"%s\", newer boot loader version in place already.", to);
+         if (r == 0)
+                 return log_info_errno(SYNTHETIC_ERRNO(ESTALE),
+-                                      "Skipping \"%s\", since same boot loader version in place already.", to);
++                                      "Skipping \"%s\", same boot loader version in place already.", to);
+ 
+         return 0;
+ }
+@@ -415,7 +415,7 @@ static int install_binaries(const char *esp_path, const char *arch, bool force)
+                 k = copy_one_file(esp_path, de->d_name, force);
+                 /* Don't propagate an error code if no update necessary, installed version already equal or
+                  * newer version, or other boot loader in place. */
+-                if (arg_graceful && IN_SET(k, -ESTALE, -EREMOTE))
++                if (arg_graceful && IN_SET(k, -ESTALE, -ESRCH))
+                         continue;
+                 if (k < 0 && r == 0)
+                         r = k;
+@@ -852,9 +852,11 @@ static int remove_boot_efi(const char *esp_path) {
+                         return log_error_errno(errno, "Failed to open \"%s/%s\" for reading: %m", p, de->d_name);
+ 
+                 r = get_file_version(fd, &v);
++                if (r == -ESRCH)
++                        continue;  /* No version information */
+                 if (r < 0)
+                         return r;
+-                if (r > 0 && startswith(v, "systemd-boot ")) {
++                if (startswith(v, "systemd-boot ")) {
+                         r = unlinkat(dirfd(d), de->d_name, 0);
+                         if (r < 0)
+                                 return log_error_errno(errno, "Failed to remove \"%s/%s\": %m", p, de->d_name);
+diff --git a/src/boot/bootctl-status.c b/src/boot/bootctl-status.c
+index cc0c3ad34ad8..3da647825901 100644
+--- a/src/boot/bootctl-status.c
++++ b/src/boot/bootctl-status.c
+@@ -207,7 +207,7 @@ static int enumerate_binaries(
+                 return log_error_errno(r, "Failed to read \"%s/%s\": %m", esp_path, path);
+ 
+         FOREACH_DIRENT(de, d, break) {
+-                _cleanup_free_ char *v = NULL;
++                _cleanup_free_ char *v = NULL, *filename = NULL;
+                 _cleanup_close_ int fd = -EBADF;
+ 
+                 if (!endswith_no_case(de->d_name, ".efi"))
+@@ -216,15 +216,22 @@ static int enumerate_binaries(
+                 if (prefix && !startswith_no_case(de->d_name, prefix))
+                         continue;
+ 
++                filename = path_join(p, de->d_name);
++                if (!filename)
++                        return log_oom();
++
+                 fd = openat(dirfd(d), de->d_name, O_RDONLY|O_CLOEXEC);
+                 if (fd < 0)
+-                        return log_error_errno(errno, "Failed to open \"%s/%s\" for reading: %m", p, de->d_name);
++                        return log_error_errno(errno, "Failed to open file for reading: %m");
+ 
+                 r = get_file_version(fd, &v);
++                if (r == -ESRCH) /* Not the file we are looking for. */
++                        continue;
+                 if (r < 0)
+                         return r;
+ 
+-                if (*previous) { /* let's output the previous entry now, since now we know that there will be one more, and can draw the tree glyph properly */
++                if (*previous) { /* Let's output the previous entry now, since now we know that there will be
++                                  * one more, and can draw the tree glyph properly. */
+                         printf("         %s %s%s\n",
+                                *is_first ? "File:" : "     ",
+                                special_glyph(SPECIAL_GLYPH_TREE_BRANCH), *previous);
+diff --git a/src/boot/bootctl-util.c b/src/boot/bootctl-util.c
+index 6cae9b4debc0..d93cc2031841 100644
+--- a/src/boot/bootctl-util.c
++++ b/src/boot/bootctl-util.c
+@@ -63,7 +63,7 @@ int get_file_version(int fd, char **ret) {
+         struct stat st;
+         char *buf;
+         const char *s, *e;
+-        char *x = NULL;
++        char *marker = NULL;
+         int r;
+ 
+         assert(fd >= 0);
+@@ -73,42 +73,43 @@ int get_file_version(int fd, char **ret) {
+                 return log_error_errno(errno, "Failed to stat EFI binary: %m");
+ 
+         r = stat_verify_regular(&st);
+-        if (r < 0)
+-                return log_error_errno(r, "EFI binary is not a regular file: %m");
+-
+-        if (st.st_size < 27 || file_offset_beyond_memory_size(st.st_size)) {
+-                *ret = NULL;
+-                return 0;
++        if (r < 0) {
++                log_debug_errno(r, "EFI binary is not a regular file, assuming no version information: %m");
++                return -ESRCH;
+         }
+ 
++        if (st.st_size < 27 || file_offset_beyond_memory_size(st.st_size))
++                return log_debug_errno(SYNTHETIC_ERRNO(ESRCH),
++                                       "EFI binary size too %s: %"PRIi64,
++                                       st.st_size < 27 ? "small" : "large", st.st_size);
++
+         buf = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+         if (buf == MAP_FAILED)
+-                return log_error_errno(errno, "Failed to memory map EFI binary: %m");
++                return log_error_errno(errno, "Failed to mmap EFI binary: %m");
+ 
+         s = mempmem_safe(buf, st.st_size - 8, "#### LoaderInfo: ", 17);
+         if (!s) {
+-                r = -ESRCH;
++                r = log_debug_errno(SYNTHETIC_ERRNO(ESRCH), "EFI binary has no LoaderInfo marker.");
+                 goto finish;
+         }
+ 
+         e = memmem_safe(s, st.st_size - (s - buf), " ####", 5);
+         if (!e || e - s < 3) {
+-                r = log_error_errno(SYNTHETIC_ERRNO(EINVAL), "Malformed version string.");
++                r = log_error_errno(SYNTHETIC_ERRNO(EINVAL), "EFI binary has malformed LoaderInfo marker.");
+                 goto finish;
+         }
+ 
+-        x = strndup(s, e - s);
+-        if (!x) {
++        marker = strndup(s, e - s);
++        if (!marker) {
+                 r = log_oom();
+                 goto finish;
+         }
+-        r = 1;
+ 
++        log_debug("EFI binary LoaderInfo marker: \"%s\"", marker);
++        r = 0;
++        *ret = marker;
+ finish:
+         (void) munmap(buf, st.st_size);
+-        if (r >= 0)
+-                *ret = x;
+-
+         return r;
+ }
+ 
+
