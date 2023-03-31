@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , autoconf
 , automake
 , kerberos
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     sasl
     curl
     xmlrpc_c
-    pkgconfig
+    pkg-config
     ding-libs
     p11-kit
     python3
