@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? "" }:
+{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
 
 let
   pname = "anki-bin";
