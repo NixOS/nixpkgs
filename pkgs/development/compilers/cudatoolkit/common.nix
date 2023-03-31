@@ -129,7 +129,7 @@ backendStdenv.mkDerivation rec {
     (lib.getLib libtiff)
     qt6Packages.qtwayland
     rdma-core
-    ucx
+    (ucx.override { enableCuda = false; }) # Avoid infinite recursion
     xorg.libxshmfence
     xorg.libxkbfile
   ] ++ (lib.optionals (lib.versionAtLeast version "12.1") (map lib.getLib ([

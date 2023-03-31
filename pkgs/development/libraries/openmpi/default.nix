@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx
-
+, config
 # Enable CUDA support
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false

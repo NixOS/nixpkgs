@@ -6,7 +6,8 @@
 , fixDarwinDylibNames
 , gmp
 , mpfr
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport or false
 , cudatoolkit
 }:
 
