@@ -3,6 +3,8 @@
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 
 stdenv.mkDerivation ({
+  __contentAddressed = true;
+
   buildInputs = buildInputs ++ [R gettext] ++
                 lib.optionals requireX [util-linux xvfb-run] ++
                 lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran libiconv];
