@@ -228,14 +228,14 @@ rec {
   noto-fonts-emoji-blob-bin =
     let
       pname = "noto-fonts-emoji-blob-bin";
-      version = "14.0.1";
+      version = "15.0";
     in
     stdenvNoCC.mkDerivation {
       inherit pname version;
 
       src = fetchurl {
         url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
-        hash = "sha256-w9s7uF6E6nomdDmeKB4ATcGB/5A4sTwDvwHT3YGXz8g=";
+        hash = "sha256-3MPWZ1A2ups171dNIiFTJ3C1vZiGy6I8ZF70aUfrePk=";
       };
 
       dontUnpack = true;
