@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
-  cudaSupport ? false, cudaPackages, magma,
+  config, cudaSupport ? config.cudaSupport or false, cudaPackages, magma,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,

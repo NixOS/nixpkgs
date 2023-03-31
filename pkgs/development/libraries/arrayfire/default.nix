@@ -19,7 +19,8 @@
 , clblas
 , doxygen
 , buildDocs ? false
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport or false
 , cudatoolkit
 , darwin
 }:

@@ -21,7 +21,8 @@
 , backports_weakref
 , tensorflow-estimator-bin
 , tensorboard
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport or false
 , cudaPackages ? {}
 , zlib
 , python

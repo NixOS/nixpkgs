@@ -40,8 +40,9 @@
 , snappy
 , zlib
 
+, config
   # CUDA flags:
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport or false
 , cudaPackages ? {}
 
   # MKL:

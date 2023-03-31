@@ -14,12 +14,14 @@
 , runCommand
 , fetchpatch
 
+, config
+
 # CUDA-only dependencies:
 , addOpenGLRunpath ? null
 , cudaPackages ? {}
 
 # CUDA flags:
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport or false
 }:
 
 let

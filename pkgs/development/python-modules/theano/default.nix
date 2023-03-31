@@ -11,8 +11,9 @@
 , setuptools
 , six
 , libgpuarray
-, cudaSupport ? false, cudaPackages ? {}
-, cudnnSupport ? false
+, config
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudnnSupport ? cudaSupport
 }:
 
 let

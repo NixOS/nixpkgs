@@ -30,7 +30,8 @@
 , svt-av1
 , vulkan-loader
 , libappindicator
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport or false
 , cudaPackages ? {}
 }:
 let
