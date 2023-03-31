@@ -20835,6 +20835,8 @@ with pkgs;
 
   iso-flags = callPackage ../data/icons/iso-flags { };
 
+  isoimagewriter = libsForQt5.callPackage ../tools/misc/isoimagewriter {};
+
   isort = with python3Packages; toPythonApplication isort;
 
   ispc = callPackage ../development/compilers/ispc {
