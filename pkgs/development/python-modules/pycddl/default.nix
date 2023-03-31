@@ -32,7 +32,7 @@ buildPythonPackage rec {
     # benchmarks too, otherwise they fail at import time due to the missing
     # dependency.
     rm tests/test_benchmarks.py
-    '';
+  '';
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
