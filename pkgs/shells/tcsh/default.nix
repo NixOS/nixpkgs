@@ -4,6 +4,7 @@
 , fetchpatch
 , libxcrypt
 , ncurses
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,11 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   buildInputs = [
     libxcrypt
     ncurses
