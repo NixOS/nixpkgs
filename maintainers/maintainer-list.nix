@@ -10678,6 +10678,12 @@
     githubId = 137805;
     name = "Alexander Tsvyashchenko";
   };
+  ne9z = {
+    email = "yuchen@apvc.uk";
+    github = "ne9z";
+    githubId = 77314501;
+    name = "Maurice Zhou";
+  };
   nebulka = {
     email = "arapun@proton.me";
     github = "nebulka1";
