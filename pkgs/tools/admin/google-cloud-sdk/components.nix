@@ -5,6 +5,7 @@
 , snapshotPath
 , autoPatchelfHook
 , python3
+, libxcrypt-legacy
 , ...
 }:
 
@@ -166,6 +167,9 @@ let
         stdenv.cc.cc
       ] ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
+      ];
+      buildInputs = [
+        libxcrypt-legacy
       ];
       passthru = {
         dependencies = filterForSystem dependencies;

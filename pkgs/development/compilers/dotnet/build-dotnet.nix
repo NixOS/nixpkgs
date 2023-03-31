@@ -14,7 +14,6 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl_1_1
 , icu
 , libuuid
 , zlib
@@ -61,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     zlib
     icu
     libkrb5
-    # this must be before curl for autoPatchElf to find it
-    # curl brings in its own openssl
-    openssl_1_1
     curl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 

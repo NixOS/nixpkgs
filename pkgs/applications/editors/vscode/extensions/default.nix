@@ -1256,12 +1256,33 @@ let
         };
       };
 
+      github.vscode-github-actions = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-github-actions";
+          publisher = "github";
+          version = "0.25.3";
+          sha256 = "sha256-0Ag+xXVt+WBfN+7VmWILYU4RsVs+CBDBpMfUTczDCkI=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=github.vscode-github-actions";
+          homepage = "https://github.com/github/vscode-github-actions";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       github.vscode-pull-request-github = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pull-request-github";
           publisher = "github";
-          version = "0.61.2023032418";
-          sha256 = "sha256-pCFq0lAMH3fno4/BtHJHhS4hX1KqxsPf4wEmAm66Y8E=";
+          # Stable versions are listed on the GitHub releases page and use a
+          # semver scheme, contrary to preview versions which are listed on
+          # the VSCode Marketplace and use a calver scheme. We should avoid
+          # using preview versions, because they can require insider versions
+          # of VS Code
+          version = "0.60.0";
+          sha256 = "sha256-VAoKNRYrzUXUQSDAX8NM17aknCUxMRsTRd5adQu+w/s=";
         };
         meta = { license = lib.licenses.mit; };
       };
@@ -2119,6 +2140,23 @@ let
           homepage = "https://github.com/NilsJPWerner/autoDocstring";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      nvarner.typst-lsp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "typst-lsp";
+          publisher = "nvarner";
+          version = "0.3.0";
+          sha256 = "sha256-ek5zXK4ecXwSPMJ4Ihy2l3PMxCdHwJN7dbwZfQVjNG8=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
+          description = "A VSCode extension for providing a language server for Typst";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp";
+          homepage = "https://github.com/nvarner/typst-lsp";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 
