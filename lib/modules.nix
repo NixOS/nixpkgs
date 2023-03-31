@@ -364,7 +364,7 @@ let
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
       loadModule = args: fallbackFile: fallbackKey: m:
         if isFunction m then
-          unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgsIfFunction fallbackKey m args)
+          unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgs fallbackKey m args)
         else if isAttrs m then
           if m._type or "module" == "module" then
             unifyModuleSyntax fallbackFile fallbackKey m
@@ -514,7 +514,10 @@ let
         class = m.class or null;
       };
 
-  applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
+  applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }:
+    if isFunction f then applyModuleArgs key f args else f;
+
+  applyModuleArgs = key: f: args@{ config, options, lib, ... }:
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -538,9 +541,7 @@ let
       # context on the explicit arguments of "args" too. This update
       # operator is used to make the "args@{ ... }: with args.lib;" notation
       # works.
-    in f (args // extraArgs)
-  else
-    f;
+    in f (args // extraArgs);
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
