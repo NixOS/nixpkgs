@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, cmake, pkg-config, alsa-lib ? null, carla ? null, fftwFloat, fltk13
+{ lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, alsa-lib ? null, carla ? null, fftwFloat, fltk13
 , fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
 , qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
@@ -37,9 +37,12 @@ mkDerivation rec {
     SDL # TODO: switch to SDL2 in the next version
   ];
 
-  patchPhase = ''
-     sed  -i "s/CARLA_EXPORT/CARLA_API_EXPORT/g" -i plugins/carlabase/carla.h;
-  '';
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/packages/lmms/trunk/lmms-carla-export.patch";
+      sha256 = "sha256-wlSewo93DYBN2PvrcV58dC9kpoo9Y587eCeya5OX+j4=";
+    })
+  ];
 
   cmakeFlags = [ "-DWANT_QT5=ON" ];
 
