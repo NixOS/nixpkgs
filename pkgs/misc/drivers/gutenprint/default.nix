@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ makeWrapper pkg-config ]
-    ++ lib.optional cupsSupport cups; # for cups-config
+    ++ lib.optionals cupsSupport [ cups perl ]; # for cups-config
   buildInputs =
     [ ijs zlib ]
     ++ lib.optionals gimp2Support [ gimp.gtk gimp ]
