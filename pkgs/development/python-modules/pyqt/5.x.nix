@@ -18,6 +18,7 @@
 , withWebSockets ? false
 , withLocation ? false
 , withSerialPort ? false
+, withTools ? false
 }:
 
 buildPythonPackage rec {
@@ -88,6 +89,7 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
   ;
 
   buildInputs = with libsForQt5; [
@@ -102,6 +104,7 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
   ;
 
   propagatedBuildInputs = [
@@ -134,6 +137,7 @@ buildPythonPackage rec {
     ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
     ++ lib.optional withLocation "PyQt5.QtPositioning"
     ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
+    ++ lib.optional withTools "PyQt5.QtDesigner"
   ;
 
   meta = with lib; {
