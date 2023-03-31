@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.53.0";
+  version = "1.78.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-kIW+aGYuS+JgOMsPbeLgPSgLFNKLSqHaZ1CHpjs/IVI=";
+    hash = "sha256-zfNW0Uuo0w+JXkBdpErqLJIpGRlbrpWSrNYruRbSKS8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,6 +29,9 @@ python3.pkgs.buildPythonApplication rec {
     watchdog
     typing-extensions
     regex
+    cfn-lint
+    ruamel-yaml
+    pyopenssl
   ];
 
   postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
@@ -37,14 +40,6 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   patches = [
-    # Click 8.1 removed `get_terminal_size`, recommending
-    # `shutil.get_terminal_size` instead.
-    # (https://github.com/pallets/click/pull/2130)
-    ./support-click-8-1.patch
-    # Werkzeug >= 2.1.0 breaks the `sam local start-lambda` command because
-    # aws-sam-cli uses a "WERKZEUG_RUN_MAIN" hack to suppress flask output.
-    # (https://github.com/cs01/gdbgui/issues/425)
-    ./use_forward_compatible_log_silencing.patch
   ];
 
   # fix over-restrictive version bounds
@@ -56,13 +51,14 @@ python3.pkgs.buildPythonApplication rec {
       --replace "cookiecutter~=1.7.2" "cookiecutter>=1.7.2" \
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "Flask~=1.1.4" "Flask~=2.0" \
+      --replace "Flask<2.1" "Flask #" \
       --replace "jmespath~=0.10.0" "jmespath" \
       --replace "MarkupSafe==2.0.1" "MarkupSafe #" \
-      --replace "PyYAML~=5.3" "PyYAML #" \
+      --replace "PyYAML>=5.4.1,==5.*" "PyYAML #" \
       --replace "regex==" "regex #" \
       --replace "requests==" "requests #" \
-      --replace "typing_extensions==" "typing-extensions #" \
+      --replace "typing_extensions~=" "typing-extensions #" \
+      --replace "cfn-lint~=" "cfn-lint #" \
       --replace "tzlocal==3.0" "tzlocal #" \
       --replace "tomlkit==0.7.2" "tomlkit #" \
       --replace "watchdog==" "watchdog #"
