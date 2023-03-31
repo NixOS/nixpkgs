@@ -4757,6 +4757,13 @@
     githubId = 454695;
     name = "Artur Taranchiev";
   };
+  examosa = {
+    email = "examosa@fastmail.com";
+    matrix = "@jamonith:matrix.org";
+    github = "examosa";
+    githubId = 23395221;
+    name = "Jules Amonith";
+  };
   exarkun = {
     email = "exarkun@twistedmatrix.com";
     github = "exarkun";
