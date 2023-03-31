@@ -17217,6 +17217,8 @@ self: super: with self; {
 
   yacs = callPackage ../development/python-modules/yacs { };
 
+  ydata-profiling = callPackage ../development/python-modules/ydata-profiling { };
+
   ydiff = callPackage ../development/python-modules/ydiff { };
 
   yeelight = callPackage ../development/python-modules/yeelight { };
