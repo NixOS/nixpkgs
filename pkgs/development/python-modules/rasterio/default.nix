@@ -98,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = teams.geospatial.members;
   };
 }
