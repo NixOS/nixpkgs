@@ -367,7 +367,7 @@ let
           unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgsIfFunction fallbackKey m args)
         else if isAttrs m then
           if m._type or "module" == "module" then
-            unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgsIfFunction fallbackKey m args)
+            unifyModuleSyntax fallbackFile fallbackKey m
           else if m._type == "if" || m._type == "override" then
             loadModule args fallbackFile fallbackKey { config = m; }
           else
