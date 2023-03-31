@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
 , singlePrec ? true
+, config
 , enableMpi ? false
-, enableCuda ? false
+, enableCuda ? config.cudaSupport or false
 , cpuAcceleration ? null
 }:
 

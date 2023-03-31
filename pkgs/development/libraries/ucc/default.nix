@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, libtool, automake, autoconf, ucx
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport or false
 , cudatoolkit
 , enableAvx ? stdenv.hostPlatform.avxSupport
 , enableSse41 ? stdenv.hostPlatform.sse4_1Support

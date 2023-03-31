@@ -1,6 +1,7 @@
 { cmake, cudatoolkit, fetchFromGitHub, gfortran, lib, llvmPackages, python3Packages, stdenv
+, config
 , enableCfp ? true
-, enableCuda ? false
+, enableCuda ? config.cudaSupport or false
 , enableFortran ? builtins.elem stdenv.targetPlatform.system gfortran.meta.platforms
 , enableOpenMP ? true
 , enablePython ? true

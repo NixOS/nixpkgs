@@ -2,7 +2,8 @@
 , x11Support ? false
 , libX11
 , cairo
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport or false
 , cudaPackages
 }:
 
