@@ -24001,6 +24001,17 @@ with pkgs;
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
   vte = callPackage ../development/libraries/vte { };
+  vte-with-sixel = vte.overrideAttrs (finalPkg: prevPkg: {
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "gnome";
+      repo = "vte";
+      rev = "9b41cd1014299d01111b64b705f013e28398821a";
+      hash = "sha256-7gWGuaSxzXmwvjKqclV3kRdf2dNSBDyO9+ArqZwqUl4=";
+    };
+    mesonFlags = prevPkg.mesonFlags ++ [ "-Dsixel=true" ];
+  });
+
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
