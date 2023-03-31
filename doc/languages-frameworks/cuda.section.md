@@ -12,8 +12,11 @@ compatible are available as well. For example, there can be a
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
 ```nix
-cudaSupport ? false
-cudaPackages ? {}
+{ config
+, cudaSupport ? config.cudaSupport or false
+, cudaPackages ? { }
+, ...
+}:
 ```
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
