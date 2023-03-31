@@ -504,6 +504,8 @@ with pkgs;
 
   deadnix = callPackage ../development/tools/deadnix { };
 
+  dra = callPackage ../applications/misc/dra { };
+
   dsq = callPackage ../tools/misc/dsq { };
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
