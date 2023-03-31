@@ -41,9 +41,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
     chmod -w $out/share/${pname}/resources/app/node_modules/dugite
 
+    mkdir -p $out/share/pixmaps
+    ln -s $out/share/${pname}/resources/app/icons/logseq.png $out/share/pixmaps/${pname}.png
+
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace Exec=Logseq Exec=${pname} \
-      --replace Icon=Logseq Icon=$out/share/${pname}/resources/app/icons/logseq.png
+      --replace Icon=Logseq Icon=${pname}
 
     runHook postInstall
   '';
