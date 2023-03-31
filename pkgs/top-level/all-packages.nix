@@ -34892,6 +34892,8 @@ with pkgs;
 
   yt-dlp = with python3Packages; toPythonApplication yt-dlp;
 
+  ytdlp-gui = callPackage ../applications/misc/ytdlp-gui { };
+
   yt-dlp-light = with python3Packages; toPythonApplication yt-dlp-light;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
