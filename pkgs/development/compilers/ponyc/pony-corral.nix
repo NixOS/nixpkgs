@@ -24,7 +24,7 @@ stdenv.mkDerivation ( rec {
     homepage = "https://www.ponylang.io";
     changelog = "https://github.com/ponylang/corral/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ redvers superherointj ];
+    maintainers = with maintainers; [ redvers ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 })

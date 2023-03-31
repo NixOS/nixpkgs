@@ -62,5 +62,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ houstdav000 ];
+  meta.maintainers = with maintainers; [ cyntheticfox ];
 }
