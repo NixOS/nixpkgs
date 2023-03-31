@@ -127,7 +127,7 @@ let
             (orig: { passthru = orig.passthru // passthru; })
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
-            inherit (terraform) name meta;
+            inherit (terraform) meta pname version;
             nativeBuildInputs = [ makeWrapper ];
 
             # Expose the passthru set with the override functions
