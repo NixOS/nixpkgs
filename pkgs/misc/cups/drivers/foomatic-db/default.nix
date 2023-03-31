@@ -11,7 +11,7 @@
 , patchPpdFilesHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "foomatic-db";
   version = "unstable-2022-10-03";
 
@@ -79,6 +79,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    changelog = "https://github.com/OpenPrinting/foomatic-db/blob/${src.rev}/ChangeLog";
     description = "OpenPrinting printer support database (free content)";
     downloadPage = "https://www.openprinting.org/download/foomatic/";
     homepage = "https://openprinting.github.io/projects/02-foomatic/";
