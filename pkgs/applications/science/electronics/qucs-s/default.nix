@@ -6,6 +6,7 @@
 , qtbase
 , qttools
 , qtsvg
+, qtwayland
 , wrapQtAppsHook
 , libX11
 , cmake
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ];
-  buildInputs = [ flex bison qtbase qttools qtsvg libX11 gperf adms ] ++ kernels;
+  buildInputs = [ flex bison qtbase qttools qtsvg qtwayland libX11 gperf adms ] ++ kernels;
 
   # Make custom kernels avaible from qucs-s
   qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
