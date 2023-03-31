@@ -11,15 +11,17 @@
 
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.55";
+  version = "1.56";
 
   disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-na8pnYIoawICbsVquzlmfYZtIagsVBudFOKJ62jSTGM=";
+    hash = "sha256-vNh9BupU6T+Gfa8fdt8r3/vqtTtfVDyrxM9GkFUcDcI=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
