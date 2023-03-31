@@ -3,9 +3,8 @@
 , fetchFromGitHub
 , stdenv
 , cmake
-, cudaPackages
+, cudaPackages ? { }
 , cudaSupport ? config.cudaSupport or false
-, cudaCapabilities ? [ "60" "70" "80" "86" ]
 , pythonSupport ? true
 , pythonPackages
 , llvmPackages
@@ -27,7 +26,8 @@
 let
   pname = "faiss";
   version = "1.7.2";
-  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages) cudatoolkit cudaFlags;
+  inherit (cudaFlags) cudaCapabilities dropDot;
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
     "-DFAISS_OPT_LEVEL=${optLevel}"
   ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCMAKE_CUDA_ARCHITECTURES=${builtins.concatStringsSep ";" (map dropDot cudaCapabilities)}"
   ];
 
 
@@ -100,6 +100,11 @@ stdenv.mkDerivation {
     addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
     addOpenGLRunpath $demos/bin/*
   '';
+
+  # Need buildPythonPackage for this one
+  # pythonCheckImports = [
+  #   "faiss"
+  # ];
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;
