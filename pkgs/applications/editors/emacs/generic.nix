@@ -136,7 +136,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
   nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals (srcRepo || withMacport) [ texinfo ]
     ++ lib.optionals srcRepo [ autoreconfHook ]
-    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+    ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls gettext jansson harfbuzz.dev ]
