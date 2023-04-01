@@ -11,6 +11,7 @@
 , useProfiles ? true
 , preferGtk2 ? false
 , settings32Bit ? false
+, ibtSupport ? false
 
 , prePatch ? ""
 , postPatch ? null
@@ -116,6 +117,7 @@ let
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
       compressFirmware = false;
+      ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
     } // optionalAttrs (!i686bundled) {
       inherit lib32;
     };
