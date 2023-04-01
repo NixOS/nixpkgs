@@ -49,8 +49,10 @@ let
         type = mkPkgsFromArgsType;
         description = "Returns `pkgs` from `system";
         internal = true;
-        default = args@{ system, overlays ? config.nixpkgs.overlays, ... }:
-          import ./. args;
+        default = args:
+          import ./. ({
+            localSystem = { system = builtins.currentSystem; };
+          } // args);
       };
 
       allPkgsPerSystem = mkOption {
@@ -59,7 +61,7 @@ let
         internal = true;
         default =
           let
-            mkPkgsFromSystem = system: mkPkgsFromArgs { inherit system; };
+            mkPkgsFromSystem = system: config.nixpkgs.mkPkgsFromArgs { inherit system; };
           in
           lib.genAttrs lib.systems.flakeExposed config.nixpkgs.mkPkgsFromSystem;
       };
