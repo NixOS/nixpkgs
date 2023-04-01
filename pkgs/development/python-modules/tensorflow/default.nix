@@ -20,6 +20,7 @@
 , cudaSupport ? false
 , cudaPackages ? { }
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
+, load_libstdcxx
 , mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
@@ -529,7 +530,15 @@ in buildPythonPackage {
     keras
     portpicker
     tblib
+    load_libstdcxx
   ];
+
+  pythonImportsCheck = [
+    "tensorflow"
+    "tensorflow.compat.v1"
+    "load_libstdcxx"
+  ];
+
   checkPhase = ''
     ${python.interpreter} <<EOF
     # A simple "Hello world"

@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+  load_libstdcxx,
   cudaSupport ? false, cudaPackages, magma,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
@@ -297,9 +298,20 @@ in buildPythonPackage rec {
 
   pythonImportsCheck = [
     "torch"
+
+    # Verify we can load a library built against the normal stdenv's libstdc++
+    # after loading `torch`
+    # This is important when e.g. building pytorch with the older
+    # nvcc-compatible gcc
+    "load_libstdcxx"
   ];
 
-  nativeCheckInputs = [ hypothesis ninja psutil ];
+  nativeCheckInputs = [
+    hypothesis
+    load_libstdcxx
+    ninja
+    psutil
+  ];
 
   checkPhase = with lib.versions; with lib.strings; concatStringsSep " " [
     "runHook preCheck"
