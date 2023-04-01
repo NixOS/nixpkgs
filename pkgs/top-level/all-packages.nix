@@ -546,6 +546,8 @@ with pkgs;
 
   frugal = callPackage ../development/tools/frugal { };
 
+  functiontrace-server = callPackage ../development/tools/functiontrace-server { };
+
   glade = callPackage ../development/tools/glade { };
 
   goda = callPackage ../development/tools/goda { };
@@ -5267,7 +5269,7 @@ with pkgs;
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync {
-    ffmpeg = ffmpeg-full;
+    ffmpeg = ffmpeg_4;
   };
 
   megacmd = callPackage ../applications/misc/megacmd { };
