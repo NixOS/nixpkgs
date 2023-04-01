@@ -51,7 +51,7 @@ let
         doCheck = false;
       });
       # Required by flask-1.1
-      jinja2 = super.jinja2.overridePythonAttrs (old: rec {
+      jinja2 = (super.jinja2.override { enableDocumentation = false; }).overridePythonAttrs (old: rec {
         version = "2.11.3";
         src = old.src.override {
           inherit version;
