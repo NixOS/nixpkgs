@@ -4700,6 +4700,12 @@
     githubId = 32169529;
     name = "Etienne Jean";
   };
+  ettom = {
+    email = "ettom22@hotmail.com";
+    github = "ettom";
+    githubId = 36895504;
+    name = "ettom";
+  };
   etu = {
     email = "elis@hirwing.se";
     matrix = "@etu:semi.social";
