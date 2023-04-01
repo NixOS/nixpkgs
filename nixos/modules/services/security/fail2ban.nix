@@ -248,16 +248,41 @@ in
         '';
       };
 
-    };
+      mail = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether to allow fail2ban send notification emails. Enabling this disables some sandboxing features of the fail2ban systemd service, which may reduce security. You should probably enable <option>services.postfix</option> or some other MTA for this to work. To send whois-lines (e.g., with <literal>action_mwl</literal>), add <literal>pkgs.whois</literal> to <option>fail2ban.extraPackages</option>.
+          '';
+        };
 
+        destemail = mkOption {
+          default = "";
+          type = types.str;
+          description = ''
+            E-mail address to which notification mails are sent.
+          '';
+        };
+
+        sender = mkOption {
+          default = "";
+          type = types.str;
+          description = ''
+            Sender address for notification mails.
+          '';
+        };
+      };
+    };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    warnings = mkIf (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
+    warnings = optionals (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
       "fail2ban can not be used without a firewall"
+    ] ++ optionals (cfg.mail.enable && cfg.mail.destemail == "") [
+      "fail2ban.mail is enabled but fail2ban.mail.destemail is not set"
     ];
 
     environment.systemPackages = [ cfg.package ];
@@ -280,13 +305,15 @@ in
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ]
+        ++ cfg.extraPackages
+        ++ optionals cfg.mail.enable [ pkgs.mailutils ];
 
       serviceConfig = {
         # Capabilities
         CapabilityBoundingSet = [ "CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
         # Security
-        NoNewPrivileges = true;
+        NoNewPrivileges = mkIf (!cfg.mail.enable) true;
         # Directory
         RuntimeDirectory = "fail2ban";
         RuntimeDirectoryMode = "0750";
@@ -295,7 +322,7 @@ in
         LogsDirectory = "fail2ban";
         LogsDirectoryMode = "0750";
         # Sandboxing
-        ProtectSystem = "strict";
+        ProtectSystem = mkIf (!cfg.mail.enable) "strict";
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
@@ -325,6 +352,12 @@ in
       # Actions
       banaction   = ${cfg.banaction}
       banaction_allports = ${cfg.banaction-allports}
+      ${optionalString cfg.mail.enable ''
+        # Mail
+        mta = mail
+        ${optionalString (cfg.mail.destemail != "") "destemail = ${cfg.mail.destemail}"}
+        ${optionalString (cfg.mail.sender != "") "sender = ${cfg.mail.sender}"}
+      ''}
     '';
     # Block SSH if there are too many failing connection attempts.
     # Benefits from verbose sshd logging to observe failed login attempts,
