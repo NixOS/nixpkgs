@@ -37054,6 +37054,8 @@ with pkgs;
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
 
+  coin-utils = callPackage ../development/libraries/science/math/coin-utils { };
+
   ecos = callPackage ../development/libraries/science/math/ecos { };
 
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
