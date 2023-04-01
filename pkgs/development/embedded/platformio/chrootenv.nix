@@ -3,7 +3,7 @@
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python3;
+      inherit (platformio-core) python;
     in
     (with pkgs; [
       platformio-core

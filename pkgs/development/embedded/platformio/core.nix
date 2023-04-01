@@ -162,6 +162,10 @@ with python3.pkgs; buildPythonApplication rec {
     "test_pkgmanifest.py::test_packages"
   ]);
 
+  passthru = {
+    python = python3;
+  };
+
   meta = with lib; {
     description = "An open source ecosystem for IoT development";
     homepage = "https://platformio.org";
