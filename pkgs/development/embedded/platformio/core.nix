@@ -3,12 +3,20 @@
 , fetchPypi
 , git
 , spdx-license-list-data
-, version, src
 }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "platformio";
-  inherit version src;
+
+  version = "6.1.6";
+
+  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v${version}";
+    sha256 = "sha256-BEeMfdmAWqFbQUu8YKKrookQVgmhfZBqXnzeb2gfhms=";
+  };
 
   outputs = [ "out" "udev" ];
 
