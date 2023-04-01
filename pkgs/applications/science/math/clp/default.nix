@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, coin-utils, zlib, osi }:
 
 stdenv.mkDerivation rec {
-  version = "1.17.6";
+  version = "1.17.7";
   pname = "clp";
-  src = fetchurl {
-    url = "https://www.coin-or.org/download/source/Clp/Clp-${version}.tgz";
-    sha256 = "0ap1f0lxppa6pnbc4bg7ih7a96avwaki482nig8w5fr3vg9wvkzr";
+  src = fetchFromGitHub {
+    owner = "coin-or";
+    repo = "Clp";
+    rev = "releases/${version}";
+    hash = "sha256-CfAK/UbGaWvyk2ZxKEgziVruzZfz7WMJVi/YvdR/UNA=";
   };
 
-  propagatedBuildInputs = [ zlib ];
+  nativeBuildInputs = [ pkg-config ];
+
+  propagatedBuildInputs = [ zlib coin-utils osi ];
 
   doCheck = true;
 
