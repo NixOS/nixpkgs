@@ -11,14 +11,13 @@
 , buildFHSUserEnv
 }:
 
-let
-  nextflow =
 stdenv.mkDerivation rec {
   pname = "nextflow";
   version = "22.10.6";
 
   src = fetchurl {
     url = "https://github.com/nextflow-io/nextflow/releases/download/v${version}/nextflow-${version}-all";
+    # hash = "sha256-xxzeYsKxWRnzr0W6CD+yjoAXwCN/AbN5P4HhH1oftnrjY=";
     hash = "sha256-zeYsKxWRnzr0W6CD+yjoAXwCN/AbN5P4HhH1oftnrjY=";
   };
 
@@ -65,13 +64,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nextflow";
     platforms = platforms.unix;
   };
-};
-in
-if stdenv.isLinux then
-  buildFHSUserEnv
-  {
-    name = "nextflow";
-    targetPkgs = pkgs: [ nextflow ];
-    runScript = "nextflow";
-  }
-else nextflow
+}
