@@ -65,8 +65,8 @@ with lib;
       start the graphical user interface.
     '';
 
-    # We run sshd by default. Login via root is only possible after adding a
-    # password via "passwd" or by adding a ssh key to /home/nixos/.ssh/authorized_keys.
+    # We run sshd by default. Login is only possible after adding a
+    # password via "passwd" or by adding a ssh key to ~/.ssh/authorized_keys.
     # The latter one is particular useful if keys are manually added to
     # installation device for head-less systems i.e. arm boards by manually
     # mounting the storage in a different system.
