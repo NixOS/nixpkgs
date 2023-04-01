@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.3.2";
+  version = "0.3.3";
   format = "other";
 
   src = fetchFromGitLab {
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "knuxify";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XvbfQtE8LsztQ2VByG2jLYND3qVpH6owdAgh3b//lI4=";
+    sha256 = "sha256-120voKmlEDsVSxNfqmwBvTB90dQUwnf2CtxvOKqi8+U=";
   };
 
   postPatch = ''
