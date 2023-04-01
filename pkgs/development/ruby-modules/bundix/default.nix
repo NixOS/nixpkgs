@@ -1,5 +1,12 @@
-{ buildRubyGem, fetchFromGitHub, makeWrapper, lib, bundler, nix,
-  nix-prefetch-git }:
+{ buildRubyGem
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, lib
+, bundler
+, nix
+, nix-prefetch-git
+}:
 
 buildRubyGem rec {
   inherit (bundler) ruby;
@@ -14,6 +21,14 @@ buildRubyGem rec {
     rev = version;
     sha256 = "sha256-iMp6Yj7TSWDqge3Lw855/igOWdTIuFH1LGeIN/cpq7U=";
   };
+
+  patches = [
+    # https://github.com/nix-community/bundix/pull/80
+    (fetchpatch {
+      url = "https://github.com/nix-community/bundix/commit/3d7820efdd77281234182a9b813c2895ef49ae1f.patch";
+      hash = "sha256-ShluCWfRQxR+vkXqa7Fh7+WHKf6vAsa9/DVeXjpAXLk=";
+    })
+  ];
 
   buildInputs = [ ruby bundler ];
   nativeBuildInputs = [ makeWrapper ];
