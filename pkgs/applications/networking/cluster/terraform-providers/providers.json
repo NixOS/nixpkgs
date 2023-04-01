@@ -593,6 +593,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "jetstream": {
+    "hash": "sha256-XFJo01AK5UCraIzi/KkOoVbZznJwaA8BrRAIomK3U7Q=",
+    "homepage": "https://registry.terraform.io/providers/nats-io/jetstream",
+    "owner": "nats-io",
+    "repo": "terraform-provider-jetstream",
+    "rev": "v0.0.34",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-vSIeSEzyJQzh9Aid/FWsF4xDYXMOhbsaLQ31mtfH7/Y="
+  },
   "kafka": {
     "hash": "sha256-p8KT6K9fcd0OFy+NoZyZzQxG13fIiyMJg2yNPKIWH60=",
     "homepage": "https://registry.terraform.io/providers/Mongey/kafka",
