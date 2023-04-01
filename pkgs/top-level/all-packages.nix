@@ -13820,6 +13820,8 @@ with pkgs;
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
+  clipboard-jh = callPackage ../tools/misc/clipboard-jh { };
+
   clipbuzz = callPackage ../tools/misc/clipbuzz { };
 
   xclip = callPackage ../tools/misc/xclip { };
