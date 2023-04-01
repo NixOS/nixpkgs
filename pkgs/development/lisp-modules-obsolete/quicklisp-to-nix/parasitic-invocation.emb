@@ -1,0 +1,1 @@
+  "<% @var filename %>" = quicklisp-to-nix-packages."<% @var host-filename %>";
