@@ -39368,6 +39368,8 @@ with pkgs;
 
   golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
 
+  golden-cheetah-bin = callPackage ../applications/misc/golden-cheetah-bin {};
+
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
   tomb = callPackage ../os-specific/linux/tomb { };
