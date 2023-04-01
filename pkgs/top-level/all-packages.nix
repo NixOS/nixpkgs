@@ -20845,6 +20845,8 @@ with pkgs;
 
   iso-flags = callPackage ../data/icons/iso-flags { };
 
+  isoimagewriter = libsForQt5.callPackage ../tools/misc/isoimagewriter {};
+
   isort = with python3Packages; toPythonApplication isort;
 
   ispc = callPackage ../development/compilers/ispc {
@@ -21253,7 +21255,7 @@ with pkgs;
   libdeflate = darwin.apple_sdk_11_0.callPackage ../development/libraries/libdeflate { };
 
   libdeltachat = callPackage ../development/libraries/libdeltachat {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
 
   libdevil = callPackage ../development/libraries/libdevil {

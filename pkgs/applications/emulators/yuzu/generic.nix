@@ -87,6 +87,11 @@ stdenv.mkDerivation rec {
   # making the build fail, as that path does not exist
   dontFixCmake = true;
 
+  # -Werror causes build failures for deprecation warnings introduced by transitive dependency updates
+  postPatch = ''
+    sed -i '/-Werror/d' src/common/CMakeLists.txt
+  '';
+
   cmakeFlags = [
     "-DYUZU_USE_BUNDLED_QT=OFF"
     "-DYUZU_USE_BUNDLED_FFMPEG=OFF"
