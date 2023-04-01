@@ -1352,6 +1352,8 @@ self: super: with self; {
 
   blis = callPackage ../development/python-modules/blis { };
 
+  blobfile = callPackage ../development/python-modules/blobfile { };
+
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
@@ -7233,6 +7235,8 @@ self: super: with self; {
 
   pixcat = callPackage ../development/python-modules/pixcat { };
 
+  pinecone-client = callPackage ../development/python-modules/pinecone-client { };
+
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
   pypemicro = callPackage ../development/python-modules/pypemicro { };
@@ -7497,6 +7501,8 @@ self: super: with self; {
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
+
+  python-pptx = callPackage ../development/python-modules/python-pptx { };
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
@@ -8553,6 +8559,8 @@ self: super: with self; {
   pymicrobot = callPackage ../development/python-modules/pymicrobot { };
 
   pymilter = callPackage ../development/python-modules/pymilter { };
+
+  pymilvus = callPackage ../development/python-modules/pymilvus { };
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
@@ -9912,6 +9920,8 @@ self: super: with self; {
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   qdldl = callPackage ../development/python-modules/qdldl { };
+
+  qdrant-client = callPackage ../development/python-modules/qdrant-client { };
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
@@ -11708,6 +11718,8 @@ self: super: with self; {
 
   tika = callPackage ../development/python-modules/tika { };
 
+  tiktoken = callPackage ../development/python-modules/tiktoken { };
+
   tikzplotlib = callPackage ../development/python-modules/tikzplotlib { };
 
   tiledb = callPackage ../development/python-modules/tiledb {
@@ -12495,6 +12507,8 @@ self: super: with self; {
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
+
+  weaviate-client = callPackage ../development/python-modules/weaviate-client { };
 
   web3 = callPackage ../development/python-modules/web3 { };
 

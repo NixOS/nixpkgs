@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "trufflehog";
-  version = "3.30.0";
+  version = "3.31.2";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
     repo = "trufflehog";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4h9obnh4+QNda0SoMPMFEyG0KnW4753RpXTPWi6yB34=";
+    hash = "sha256-IjnSQ7bIig19qxB2V28gcDOk7NJ0vvROHiinEVeeLTw=";
   };
 
-  vendorHash = "sha256-VBWzqfqte7aZ03HFW2L6wsEU84NBMTVrzKvdRUFGOro=";
+  vendorHash = "sha256-eeCIszgEWFKBqG/hBrGikqvm0/1+gsgrRfwtUd22cgc=";
 
   # Test cases run git clone and require network access
   doCheck = false;
