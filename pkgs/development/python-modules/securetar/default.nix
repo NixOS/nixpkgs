@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2022.02.0";
+  version = "2023.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pvizeli";
     repo = pname;
     rev = version;
-    hash = "sha256-FwQp08jwcGh07zpHqRNoUUmeLZJh78wI8wCXySi3Tdc=";
+    hash = "sha256-3bDboggvKbpWyjpUOrUmtJx3Nj/6Uvut2nEQLYJubDA=";
   };
 
   propagatedBuildInputs = [
