@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, pruneLibtoolFiles, flex, bison
+{ lib, stdenv, fetchurl
+, autoreconfHook, pkg-config, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
 , nftablesCompat ? true
 , fetchpatch
@@ -19,11 +20,18 @@ stdenv.mkDerivation rec {
       url = "https://git.netfilter.org/iptables/patch/?id=ed4082a7405a5838c205a34c1559e289949200cc";
       sha256 = "OdytFmHk+3Awu+sDQpGTl5/qip4doRblmW2vQzfNZiU=";
     })
+    (fetchurl {
+      name = "static.patch";
+      url = "https://lore.kernel.org/netfilter-devel/20230402232939.1060151-1-hi@alyssa.is/raw";
+      sha256 = "PkH+1HbJjBb3//ffBe0XUQok1lBwgj/STL8Ppu/28f4=";
+    })
   ];
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ pkg-config pruneLibtoolFiles flex bison ];
+  nativeBuildInputs = [
+    autoreconfHook pkg-config pruneLibtoolFiles flex bison
+  ];
 
   buildInputs = [ libmnl libnetfilter_conntrack libnfnetlink libnftnl libpcap ];
 
