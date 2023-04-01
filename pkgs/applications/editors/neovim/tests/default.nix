@@ -169,7 +169,7 @@ rec {
 
   nvim_with_gitsigns_plugin = neovim.override {
     extraName = "-with-gitsigns-plugin";
-    configure.packages.plugins = {
+   configure.packages.plugins = {
       start = [
         vimPlugins.gitsigns-nvim
       ];
@@ -260,13 +260,12 @@ rec {
       packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
 
       " Try to run Dashboard again, and throw if it fails
-      try
-        Dashboard
-        echo "Dashboard found"
-      catch /^Vim\%((\a\+)\)\=:E492/
+      let res = exists(':Dashboard')
+      if res == 0
         echo "Dashboard not found, throwing error"
         cquit 1
-      endtry
+      endif
+      cquit 0
     '';
   };
 
