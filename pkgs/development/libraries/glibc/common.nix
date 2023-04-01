@@ -30,6 +30,7 @@
 , libidn2
 , bison
 , python3Minimal
+, substitute
 }:
 
 { pname
@@ -88,6 +89,11 @@ stdenv.mkDerivation ({
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      (substitute {
+        src = ./dl-cache.patch;
+        replacements = [ "--replace" "@STORE_DIRECTORY@" "\"${builtins.storeDir}\"" ];
+      })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
