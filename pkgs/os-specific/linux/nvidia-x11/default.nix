@@ -30,6 +30,8 @@ rec {
     openSha256 = "sha256-O3XB8tNLmNkzrYoVyJVEE0IcE772lOdr8qn4rQHIupE=";
     settingsSha256 = "sha256-KUw31Am9Zfwk5QTs6th8+J3C4oUBacNgb7ZUNeV68W4=";
     persistencedSha256 = "sha256-jhBtsf9MXrkU/SsBndR1ESGUHhgUWiSH7R75swk3m40=";
+
+    ibtSupport = true;
   };
 
   latest = selectHighestVersion production (generic {
