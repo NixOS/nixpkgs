@@ -5,29 +5,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.8";
+  version = "1.8.9";
   pname = "iptables";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ccdYidxxBnZjFVPrFRHaAXe7qvG1USZbkS0jbD9RhZ8=";
+    url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
+    sha256 = "72Y5pDvoMlpPjqaBI/+sI2y2lujHhQG2ToEGr7AIyH8=";
   };
 
   patches = [
-    # xshared: Fix build for -Werror=format-security
     (fetchpatch {
-      url = "https://git.netfilter.org/iptables/patch/?id=b72eb12ea5a61df0655ad99d5048994e916be83a";
-      sha256 = "sha256-pnamqOagwNWoiwlxPnKCqSc2N7MP/eZlT7JiE09c8OE=";
-    })
-    # treewide: use uint* instead of u_int*
-    (fetchpatch {
-      url = "https://git.netfilter.org/iptables/patch/?id=f319389525b066b7dc6d389c88f16a0df3b8f189";
-      sha256 = "sha256-rOxCEWZoI8Ac5fQDp286YHAwvreUAoDVAbomboKrGyM=";
-    })
-    # fix Musl build
-    (fetchpatch {
-      url = "https://git.netfilter.org/iptables/patch/?id=0e7cf0ad306cdf95dc3c28d15a254532206a888e";
-      sha256 = "18mnvqfxzd7ifq3zjb4vyifcyadpxdi8iqcj8wsjgw23n49lgrbj";
+      name = "format-security.patch";
+      url = "https://git.netfilter.org/iptables/patch/?id=ed4082a7405a5838c205a34c1559e289949200cc";
+      sha256 = "OdytFmHk+3Awu+sDQpGTl5/qip4doRblmW2vQzfNZiU=";
     })
   ];
 
