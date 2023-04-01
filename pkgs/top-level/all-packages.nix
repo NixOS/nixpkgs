@@ -32913,6 +32913,8 @@ with pkgs;
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
+  proteus = callPackage ../applications/audio/proteus { };
+
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge {
     buildGoModule = buildGo119Module; # go 1.20 build failure
   };
