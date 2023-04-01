@@ -12750,11 +12750,6 @@
     githubId = 220211;
     name = "Renato Garcia";
   };
-  rencire = {
-    github = "rencire";
-    githubId = 546296;
-    name = "Eric Ren";
-  };
   renesat = {
     name = "Ivan Smolyakov";
     email = "smol.ivan97@gmail.com";
