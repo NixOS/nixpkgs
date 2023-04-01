@@ -1,0 +1,182 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Thomas Lamprecht <thomas@lamprecht.org>
+Date: Wed, 18 May 2022 08:41:14 +0200
+Subject: [PATCH] re-route dependencies not available on crates.io to git repos
+
+Signed-off-by: Thomas Lamprecht <thomas@lamprecht.org>
+---
+ Cargo.toml | 130 +++++++++--------------------------------------------
+ 1 file changed, 21 insertions(+), 109 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 0c86cd1b..7d5c282b 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -41,9 +41,6 @@ members = [
+ 
+     "proxmox-backup-banner",
+     "proxmox-backup-client",
+-    "proxmox-file-restore",
+-    "proxmox-restore-daemon",
+-    "proxmox-rrd",
+ 
+     "pxar-bin",
+ ]
+@@ -101,7 +98,6 @@ proxmox-rrd = { path = "proxmox-rrd" }
+ 
+ # regular crates
+ anyhow = "1.0"
+-apt-pkg-native = "0.3.2"
+ base64 = "0.13"
+ bitflags = "1.2.1"
+ bytes = "1.0"
+@@ -114,7 +110,6 @@ flate2 = "1.0"
+ foreign-types = "0.3"
+ futures = "0.3"
+ h2 = { version = "0.3", features = [ "stream" ] }
+-handlebars = "3.0"
+ hex = "0.4.3"
+ http = "0.2"
+ hyper = { version = "0.14", features = [ "full" ] }
+@@ -152,120 +147,37 @@ walkdir = "2"
+ xdg = "2.2"
+ zstd = { version = "0.6", features = [ "bindgen" ] }
+ 
+-[dependencies]
+-anyhow.workspace = true
+-apt-pkg-native.workspace = true
+-base64.workspace = true
+-bitflags.workspace = true
+-bytes.workspace = true
+-cidr.workspace = true
+-crc32fast.workspace = true
+-crossbeam-channel.workspace = true
+-endian_trait.workspace = true
+-flate2.workspace = true
+-futures.workspace = true
+-h2.workspace = true
+-handlebars.workspace = true
+-hex.workspace = true
+-http.workspace = true
+-hyper.workspace = true
+-lazy_static.workspace = true
+-libc.workspace = true
+-log.workspace = true
+-nix.workspace = true
+-nom.workspace = true
+-num-traits.workspace = true
+-once_cell.workspace = true
+-openssl.workspace = true
+-pam-sys.workspace = true
+-pam.workspace = true
+-percent-encoding.workspace = true
+-regex.workspace = true
+-rustyline.workspace = true
+-serde.workspace = true
+-serde_json.workspace = true
+-siphasher.workspace = true
+-syslog.workspace = true
+-termcolor.workspace = true
+-thiserror.workspace = true
+-tokio = { workspace = true, features = [ "fs", "io-util", "io-std", "macros", "net", "parking_lot", "process", "rt", "rt-multi-thread", "signal", "time" ] }
+-tokio-openssl.workspace = true
+-tokio-stream.workspace = true
+-tokio-util = { workspace = true, features = [ "codec" ] }
+-tower-service.workspace = true
+-udev.workspace = true
+-url.workspace = true
+-walkdir.workspace = true
+-xdg.workspace = true
+-zstd.workspace = true
+-
+ #valgrind_request = { git = "https://github.com/edef1c/libvalgrind_request", version = "1.1.0", optional = true }
+ 
+-proxmox-async.workspace = true
+-proxmox-auth-api = { workspace = true, features = [ "api", "pam-authenticator" ] }
+-proxmox-compression.workspace = true
+-proxmox-http = { workspace = true, features = [ "client-trait", "proxmox-async", "rate-limited-stream" ] } # pbs-client doesn't use these
+-proxmox-io.workspace = true
+-proxmox-lang.workspace = true
+-proxmox-ldap.workspace = true
+-proxmox-metrics.workspace = true
+-proxmox-rest-server = { workspace = true, features = [ "rate-limited-stream" ] }
+-proxmox-router = { workspace = true, features = [ "cli", "server"] }
+-proxmox-schema = { workspace = true, features = [ "api-macro" ] }
+-proxmox-section-config.workspace = true
+-proxmox-serde = { workspace = true, features = [ "serde_json" ] }
+-proxmox-shared-memory.workspace = true
+-proxmox-sortable-macro.workspace = true
+-proxmox-subscription.workspace = true
+-proxmox-sys = { workspace = true, features = [ "timer" ] }
+-proxmox-tfa.workspace = true
+-proxmox-time.workspace = true
+-proxmox-uuid.workspace = true
+-
+-pathpatterns.workspace = true
+-proxmox-acme-rs.workspace = true
+-proxmox-apt.workspace = true
+-proxmox-openid.workspace = true
+-pxar.workspace = true
+-
+-pbs-api-types.workspace = true
+-pbs-buildcfg.workspace = true
+-pbs-client.workspace = true
+-pbs-config.workspace = true
+-pbs-datastore.workspace = true
+-pbs-key-config.workspace = true
+-pbs-tape.workspace = true
+-pbs-tools.workspace = true
+-proxmox-rrd.workspace = true
+-
+ # Local path overrides
+ # NOTE: You must run `cargo update` after changing this for it to take effect!
+ [patch.crates-io]
+ #proxmox-acme-rs = { path = "../proxmox-acme-rs" }
+-#proxmox-async = { path = "../proxmox/proxmox-async" }
+-#proxmox-auth-api = { path = "../proxmox/proxmox-auth-api" }
+-#proxmox-borrow = { path = "../proxmox/proxmox-borrow" }
+-#proxmox-compression = { path = "../proxmox/proxmox-compression" }
+-#proxmox-fuse = { path = "../proxmox-fuse" }
+-#proxmox-http = { path = "../proxmox/proxmox-http" }
+-#proxmox-io = { path = "../proxmox/proxmox-io" }
+-#proxmox-lang = { path = "../proxmox/proxmox-lang" }
+-#proxmox-rest-server = { path = "../proxmox/proxmox-rest-server" }
+-#proxmox-router = { path = "../proxmox/proxmox-router" }
+-#proxmox-schema = { path = "../proxmox/proxmox-schema" }
+-#proxmox-section-config = { path = "../proxmox/proxmox-section-config" }
+-#proxmox-serde = { path = "../proxmox/proxmox-serde" }
+-#proxmox-shared-memory = { path = "../proxmox/proxmox-shared-memory" }
+-#proxmox-subscription = { path = "../proxmox/proxmox-subscription" }
+-#proxmox-sys = { path = "../proxmox/proxmox-sys" }
+-#proxmox-tfa = { path = "../proxmox/proxmox-tfa" }
+-#proxmox-time = { path = "../proxmox/proxmox-time" }
+-#proxmox-uuid = { path = "../proxmox/proxmox-uuid" }
++proxmox-async = { path = "../proxmox/proxmox-async" }
++proxmox-auth-api = { path = "../proxmox/proxmox-auth-api" }
++proxmox-borrow = { path = "../proxmox/proxmox-borrow" }
++proxmox-compression = { path = "../proxmox/proxmox-compression" }
++proxmox-fuse = { path = "../proxmox-fuse" }
++proxmox-http = { path = "../proxmox/proxmox-http" }
++proxmox-io = { path = "../proxmox/proxmox-io" }
++proxmox-lang = { path = "../proxmox/proxmox-lang" }
++proxmox-rest-server = { path = "../proxmox/proxmox-rest-server" }
++proxmox-router = { path = "../proxmox/proxmox-router" }
++proxmox-schema = { path = "../proxmox/proxmox-schema" }
++proxmox-section-config = { path = "../proxmox/proxmox-section-config" }
++proxmox-serde = { path = "../proxmox/proxmox-serde" }
++proxmox-shared-memory = { path = "../proxmox/proxmox-shared-memory" }
++proxmox-sortable-macro = { path = "../proxmox/proxmox-sortable-macro" }
++proxmox-subscription = { path = "../proxmox/proxmox-subscription" }
++proxmox-sys = { path = "../proxmox/proxmox-sys" }
++proxmox-tfa = { path = "../proxmox/proxmox-tfa" }
++proxmox-time = { path = "../proxmox/proxmox-time" }
++proxmox-uuid = { path = "../proxmox/proxmox-uuid" }
+ 
+ #proxmox-apt = { path = "../proxmox-apt" }
+ #proxmox-openid = { path = "../proxmox-openid-rs" }
+ 
+-#pxar = { path = "../pxar" }
++pxar = { path = "../pxar" }
+ 
+ [features]
+ default = []

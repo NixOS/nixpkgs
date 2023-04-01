@@ -2,7 +2,6 @@
 
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
 , gi-docgen
 , pkg-config
@@ -28,7 +27,6 @@
 , ninja
 , gcab
 , gnutls
-, pandoc
 , protobufc
 , python3
 , wrapGAppsNoGuiHook
@@ -124,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.8.12";
+  version = "1.8.13";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-a4F7skyukl4jW3apGi1ie/EcuGlkZoszyZdtLFuJewA=";
+    hash = "sha256-UBKFC/hq4kkrjkuHTqIimbR332Vk/X4VQeYROGeAVi8=";
   };
 
   patches = [
@@ -171,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     gcab
     gnutls
-    pandoc
     protobufc # for protoc
     python
     wrapGAppsNoGuiHook

@@ -2757,6 +2757,15 @@
     githubId = 2245737;
     name = "Christopher Mark Poole";
   };
+  christoph-heiss = {
+    email = "christoph@c8h4.io";
+    github = "christoph-heiss";
+    githubId = 7571069;
+    name = "Christoph Heiss";
+    keys = [{
+      fingerprint = "9C56 1D64 30B2 8D6B DCBC 9CEB 73D5 E7FD EE3D E49A";
+    }];
+  };
   chuahou = {
     email = "human+github@chuahou.dev";
     github = "chuahou";
