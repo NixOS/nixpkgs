@@ -100,6 +100,46 @@ self: super: {
     guardian
   ;
 
+  #######################################
+  ### HASKELL-LANGUAGE-SERVER SECTION ###
+  #######################################
+
+  haskell-language-server = (lib.pipe super.haskell-language-server [
+    dontCheck
+    (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
+    # Allow hls-call-hierarchy >= 1.2 which requires only a bound adjustment
+    (appendPatch (fetchpatch {
+      name = "hls-allow-hls-call-hierarchy-1.2.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/05b248dfacc307c3397b334635cb38298aee9563.patch";
+      includes = [ "haskell-language-server.cabal" ];
+      sha256 = "1v0zi1lv92p6xq54yw9swzaf24dxsi9lpk10sngg3ka654ikm7j5";
+    }))
+  ]).overrideScope (lself: lsuper: {
+    # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
+    # because some packages, like ormolu, need a newer Cabal version.
+    # ghc-paths is special because it depends on Cabal for building
+    # its Setup.hs, and therefor declares a Cabal dependency, but does
+    # not actually use it as a build dependency.
+    # That means ghc-paths can just use the ghc included Cabal version,
+    # without causing package-db incoherence and we should do that because
+    # otherwise we have different versions of ghc-paths
+    # around with have the same abi-hash, which can lead to confusions and conflicts.
+    ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
+  });
+
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+    hlint = enableCabalFlag "ghc-lib" super.hlint;
+    apply-refact = self.apply-refact_0_11_0_0;
+  };
+
+  # For -f-auto see cabal.project in haskell-language-server.
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
+
+  ###########################################
+  ### END HASKELL-LANGUAGE-SERVER SECTION ###
+  ###########################################
+
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
@@ -1513,56 +1553,6 @@ self: super: {
     })
   ] super.binary-strict;
 
-  haskell-language-server = (lib.pipe super.haskell-language-server [
-    dontCheck
-    (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
-    # Allow hls-call-hierarchy >= 1.2 which requires only a bound adjustment
-    (appendPatch (fetchpatch {
-      name = "hls-allow-hls-call-hierarchy-1.2.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/05b248dfacc307c3397b334635cb38298aee9563.patch";
-      includes = [ "haskell-language-server.cabal" ];
-      sha256 = "1v0zi1lv92p6xq54yw9swzaf24dxsi9lpk10sngg3ka654ikm7j5";
-    }))
-  ]).overrideScope (lself: lsuper: {
-    # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
-    # because some packages, like ormolu, need a newer Cabal version.
-    # ghc-paths is special because it depends on Cabal for building
-    # its Setup.hs, and therefor declares a Cabal dependency, but does
-    # not actually use it as a build dependency.
-    # That means ghc-paths can just use the ghc included Cabal version,
-    # without causing package-db incoherence and we should do that because
-    # otherwise we have different versions of ghc-paths
-    # around with have the same abi-hash, which can lead to confusions and conflicts.
-    ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-  });
-
-  hls-hlint-plugin = super.hls-hlint-plugin.override {
-    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-    hlint = enableCabalFlag "ghc-lib" super.hlint;
-    apply-refact = self.apply-refact_0_11_0_0;
-  };
-
-  # For -f-auto see cabal.project in haskell-language-server.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
-
-  # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
-  hls-eval-plugin = dontCheck super.hls-eval-plugin;
-
-  # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
-  hls-refine-imports-plugin = dontCheck super.hls-refine-imports-plugin;
-
-  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
-  hls-explicit-imports-plugin = dontCheck super.hls-explicit-imports-plugin;
-
-  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
-  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
-
-  # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
-  hls-refactor-plugin = dontCheck super.hls-refactor-plugin;
-
-  # tests require network
-  ghcide = dontCheck super.ghcide;
-
   # 2020-11-15: nettle tests are pre MonadFail change
   # https://github.com/stbuehler/haskell-nettle/issues/10
   nettle = dontCheck super.nettle;
@@ -2088,16 +2078,6 @@ self: super: {
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
-
-  # 2021-09-14: Tests are flaky.
-  hls-splice-plugin = dontCheck super.hls-splice-plugin;
-
-  # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
-  hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
-
-  # Necesssary .txt files are not included in sdist.
-  # https://github.com/haskell/haskell-language-server/pull/2887
-  hls-change-type-signature-plugin = dontCheck super.hls-change-type-signature-plugin;
 
   # 2022-12-30: Restrictive upper bound on optparse-applicative
   retrie = doJailbreak super.retrie;
