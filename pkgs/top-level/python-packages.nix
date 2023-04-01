@@ -5652,6 +5652,8 @@ self: super: with self; {
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
+  load_libstdcxx = callPackage ../development/python-modules/python-imports-check-libstdcxx { };
+
   loca = callPackage ../development/python-modules/loca { };
 
   localimport = callPackage ../development/python-modules/localimport { };
