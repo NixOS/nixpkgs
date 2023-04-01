@@ -246,6 +246,8 @@ with pkgs;
     python3 = python39;
   };
 
+  ariang = callPackage ../servers/ariang { };
+
   mov-cli = callPackage ../applications/video/mov-cli { };
 
   ani-cli = callPackage ../applications/video/ani-cli { };
