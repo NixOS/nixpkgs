@@ -44,6 +44,18 @@ stdenv.mkDerivation rec {
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
     sed -i 's:/usr/lib/mysql:${libmysqlclient}/lib/mysql:' configure.ac
+
+    # libxcrypt does not support DES hashes anymore, so replace the DES hash for
+    # the test password 'guessme' needed for the test suite with a SHA512 hash.
+    # The test suite does some automatic copying and variable substitution, so to
+    # avoid issues with the dollar signs at the start of the hash we let the
+    # substitution do its work.
+    substituteInPlace testsuite/etc/passwd.in \
+      --replace 'abld/G2Q2Le2w'  '$MU_GUESSME_PASSWORD_HASH'
+
+    # Hash generated via `nix run nixpkgs#openssl -- passwd -6 guessme`
+    sed -i '42i set MU_GUESSME_PASSWORD_HASH {$6$mZ27mnSqzVkPjKlH$nohlP.90RI2lQW81F5CHb7jwmj7x6yDX6/LhLL1ycRJeIjfA0ojMWZ7vaB.XauhNOHx8P5b08Gs4z6pHvg33t/}' \
+      testsuite/lib/mailutils.exp
   '';
 
   nativeBuildInputs = [
