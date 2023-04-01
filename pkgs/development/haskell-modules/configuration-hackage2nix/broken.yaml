@@ -3726,7 +3726,6 @@ broken-packages:
   - opaleye-trans
   - open-adt
   - OpenAFP
-  - openai-hs
   - openapi3
   - openapi3-code-generator
   - openapi-petstore
