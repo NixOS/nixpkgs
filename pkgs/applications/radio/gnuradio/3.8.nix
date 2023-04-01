@@ -25,7 +25,6 @@
 , SDL
 , gsl
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -203,7 +202,7 @@ let
       runtime = [ gsl ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
     };
   };

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-wireguard";
-  version = "0.1.20";
+  version = "0.1.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "decathorpe";
     repo = "mitmproxy_wireguard";
     rev = "refs/tags/${version}";
-    hash = "sha256-Oq3jF4XeT58rad0MWmqucZZHVAshhA8PViQ+2Q9Shgc=";
+    hash = "sha256-479JCAxc6bK5X8nKKyzLvmuxPYPj5M19sZiO9vaK0DM=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-HIChSAVztTmftwLhCWeLX2afqXAIHp3pmVWeW4yFZ+0=";
+    hash = "sha256-3reDkpnLTS32MZvvbRzDJovzUPAZmn2WRThmmeHGVXY=";
   };
 
   # Module has no tests, only a test client
