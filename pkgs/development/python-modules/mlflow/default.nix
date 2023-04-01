@@ -83,5 +83,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/mlflow/mlflow";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
+    knownVulnerabilities = [
+      "CVE-2023-1176"
+      "CVE-2023-1177"
+    ];
   };
 }
