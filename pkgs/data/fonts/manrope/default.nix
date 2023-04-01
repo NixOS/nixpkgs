@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source modern sans-serif font family";
-    homepage = "https://github.com/sharanda/manrope";
+    homepage = "https://www.gent.media/manrope";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
