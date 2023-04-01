@@ -497,6 +497,16 @@ rec {
     ];
   };
 
+  test = eggDerivation {
+    name = "test-1.2";
+
+    src = fetchegg {
+      name = "test";
+      version = "1.2";
+      sha256 = "005bcb0ae0dbab2144fe72effb8f3f9ada593bfdf29aa1c44fae7f6b1b51b5ec";
+    };
+  };
+
   uri-common = eggDerivation {
     name = "uri-common-2.0";
 
