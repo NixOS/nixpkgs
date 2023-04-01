@@ -5269,7 +5269,7 @@ with pkgs;
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync {
-    ffmpeg = ffmpeg-full;
+    ffmpeg = ffmpeg_4;
   };
 
   megacmd = callPackage ../applications/misc/megacmd { };
