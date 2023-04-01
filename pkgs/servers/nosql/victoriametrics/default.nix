@@ -42,5 +42,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ yorickvp ivan ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
+    mainProgram = "victoria-metrics";
   };
 }
