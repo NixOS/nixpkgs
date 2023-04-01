@@ -9,6 +9,7 @@
 , writeText
 , terraform-providers
 , fetchpatch
+, installShellFiles
 }:
 
 let
@@ -34,6 +35,8 @@ let
           --replace "/bin/stty" "${coreutils}/bin/stty"
       '';
 
+      nativeBuildInputs = [ installShellFiles ];
+
       postInstall = ''
         # remove all plugins, they are part of the main binary now
         for i in $out/bin/*; do
@@ -41,6 +44,9 @@ let
             rm "$i"
           fi
         done
+
+        # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
+        installShellCompletion --bash --name terraform <(echo complete -C terraform terraform)
       '';
 
       preCheck = ''
