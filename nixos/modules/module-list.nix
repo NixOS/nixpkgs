@@ -563,6 +563,7 @@
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
   ./services/mail/sympa.nix
+  ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix

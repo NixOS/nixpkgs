@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, pydbus, pyliblo, pyqt5, qttools, which }:
+{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, qttools, which }:
 
 buildPythonApplication rec {
   pname = "raysession";
@@ -23,12 +23,16 @@ buildPythonApplication rec {
     qttools # lrelease to build translations.
     which   # which to find lrelease.
   ];
-
+  buildInputs = [ libjack2 ];
   propagatedBuildInputs = [ pydbus pyliblo pyqt5 ];
 
   dontWrapQtApps = true; # The program is a python script.
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  makeWrapperArgs = [
+    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ libjack2 ])
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/raysession/src" "$out $pythonPath"

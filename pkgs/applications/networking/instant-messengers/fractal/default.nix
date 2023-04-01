@@ -34,10 +34,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-/vPadtyiYDX0PdneMxc0oSWb5OYnikevqajl3WgZiGA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-RbJPhmZLRS4evvzzYQOYWnlxKUd4oC2Dh2GK5X5IF8Q=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "either-1.5.99" = "sha256-Lmv9OPZKEb7tmkN+7Mua2nx0xmZwm3d1W623UKUlPeg=";
+      "gettext-rs-0.4.2" = "sha256-wyZ1bf0oFcQo8gEi2GEalRUoKMoJYHysu79qcfjd4Ng=";
+      "sourceview4-0.2.0" = "sha256-RuCg05/qjkPri1QUd5acsGVqJtGvM5OO8/R+Nibxoa4=";
+    };
   };
 
   nativeBuildInputs = [
