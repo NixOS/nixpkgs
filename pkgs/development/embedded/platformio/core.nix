@@ -10,6 +10,8 @@ with python3.pkgs; buildPythonApplication rec {
   pname = "platformio";
   inherit version src;
 
+  outputs = [ "out" "udev" ];
+
   patches = [
     ./fix-searchpath.patch
     ./use-local-spdx-license-list.patch
@@ -59,6 +61,13 @@ with python3.pkgs; buildPythonApplication rec {
     jsondiff
     pytestCheckHook
   ];
+
+  # Install udev rules into a separate output so all of platformio-core is not a dependency if
+  # you want to use the udev rules on NixOS but not install platformio in your system packages.
+  postInstall = ''
+    mkdir -p $udev/lib/udev/rules.d/99-platformio-udev.rules
+    cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+  '';
 
   disabledTestPaths = [
     "tests/commands/pkg/test_install.py"

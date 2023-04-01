@@ -16,7 +16,7 @@ let
   self = {
     platformio-core = python3Packages.callPackage ./core.nix { inherit version src; };
 
-    platformio-chrootenv = callPackage ./chrootenv.nix { inherit version src; };
+    platformio-chrootenv = callPackage ./chrootenv.nix { };
   };
 
 in
