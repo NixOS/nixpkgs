@@ -24393,6 +24393,35 @@ with pkgs;
     texLive = null;
   };
 
+  ## DEPRECATED, will be removed in a future release
+
+  clwrapperFunction = callPackage ../development/lisp-modules-obsolete/clwrapper;
+
+  wrapLisp_old = lisp: clwrapperFunction { inherit lisp; };
+
+  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/lisp-packages.nix {
+    inherit clwrapper;
+  };
+
+  lispPackages = recurseIntoAttrs (quicklispPackages //
+    (lispPackagesFor (wrapLisp_old sbcl)));
+
+  quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/quicklisp-to-nix.nix {
+    inherit clwrapper;
+  };
+  quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old clisp));
+  quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old sbcl));
+  quicklispPackagesECL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ecl));
+  quicklispPackagesCCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ccl));
+  quicklispPackagesABCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old abcl));
+  quicklispPackagesGCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old gcl));
+  quicklispPackages = quicklispPackagesSBCL;
+
+  # Alternative lisp-modules implementation
+  lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new-obsolete/lisp-packages.nix {});
+
+  ## End of DEPRECATED
+
   wrapLisp = callPackage ../development/lisp-modules/nix-cl.nix {};
 
   # Armed Bear Common Lisp
