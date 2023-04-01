@@ -306,6 +306,8 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting {};
 
+  beebeep = libsForQt5.callPackage ../applications/office/beebeep {};
+
   bakelite = callPackage ../tools/backup/bakelite { };
 
   benthos = callPackage ../development/tools/benthos {};
