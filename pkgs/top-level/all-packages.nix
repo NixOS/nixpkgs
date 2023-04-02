@@ -1563,6 +1563,8 @@ with pkgs;
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  memos = callPackage ../servers/memos { };
+
   midimonster = callPackage ../tools/audio/midimonster { };
 
   midi-trigger = callPackage ../applications/audio/midi-trigger { };
