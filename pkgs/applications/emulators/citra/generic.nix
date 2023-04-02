@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_BOOST=ON"
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
     "-DCITRA_USE_BUNDLED_QT=OFF"
-    "-DCITRA_USE_BUNDLED_SDL2=OFF"
+    "-DUSE_SYSTEM_SDL2=ON"
 
     # We dont want to bother upstream with potentially outdated compat reports
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
