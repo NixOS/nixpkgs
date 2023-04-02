@@ -192,8 +192,6 @@ in
 
   inherit (primary-src) src;
 
-  outputs = [ "out" "dev" ];
-
   env.NIX_CFLAGS_COMPILE = toString ([
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
@@ -387,9 +385,6 @@ in
     cp ${substituteAll {src = ./soffice-template.desktop; app="Calc";    ext="ods"; type="spreadsheet"; }} $out/share/templates/soffice.ods.desktop
     cp ${substituteAll {src = ./soffice-template.desktop; app="Impress"; ext="odp"; type="presentation";}} $out/share/templates/soffice.odp.desktop
     cp ${substituteAll {src = ./soffice-template.desktop; app="Draw";    ext="odg"; type="drawing";     }} $out/share/templates/soffice.odg.desktop
-
-    mkdir -p $dev
-    cp -r include $dev
   '';
 
   # Wrapping is done in ./wrapper.nix
