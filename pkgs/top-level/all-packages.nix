@@ -244,6 +244,8 @@ with pkgs;
     python3 = python39;
   };
 
+  ankisyncd-rs = callPackage ../servers/ankisyncd-rs { };
+
   ariang = callPackage ../servers/ariang { };
 
   mov-cli = callPackage ../applications/video/mov-cli { };
