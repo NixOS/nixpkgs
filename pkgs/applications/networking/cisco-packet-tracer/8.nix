@@ -23,10 +23,11 @@
 , nss
 , requireFile
 , xorg
+, wayland
 }:
 
 let
-  version = "8.2.0";
+  version = "8.2.1";
 
   ptFiles = stdenv.mkDerivation {
     name = "PacketTracer8Drv";
@@ -35,7 +36,7 @@ let
     dontUnpack = true;
     src = requireFile {
       name = "CiscoPacketTracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
-      sha256 = "1b19885d59f6130ee55414fb02e211a1773460689db38bfd1ac7f0d45117ed16";
+      sha256 = "428338ac32a474d4c9e930433c202cfa5d7b24b9eca50165972f41eb484e07ba";
       url = "https://www.netacad.com";
     };
 
@@ -57,6 +58,7 @@ let
       makeWrapper
       nspr
       nss
+      wayland
     ] ++ (with xorg; [
       libICE
       libSM
