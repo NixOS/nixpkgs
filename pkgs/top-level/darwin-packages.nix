@@ -235,12 +235,17 @@ impure-cmds // appleSourcePackages // chooseLibs // {
             ../../nixos/modules/profiles/macos-builder.nix
           ];
 
+          services.macos-builder = {
+            enable = true;
+            diskSize = 20 * 1024; # 20 GB (this is also the default)
+            memorySize = 3 * 1024; # 3 GB (this is also the default)
+          };
+
           virtualisation.host = { inherit pkgs; };
         };
 
         system = toGuest stdenv.hostPlatform.system;
       };
-
     in
       nixos.config.system.build.macos-builder-installer;
 })

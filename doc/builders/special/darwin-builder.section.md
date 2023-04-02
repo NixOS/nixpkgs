@@ -7,7 +7,7 @@ This requires macOS version 12.4 or later.
 This also requires that port 22 on your machine is free (since Nix does not
 permit specifying a non-default SSH port for builders).
 
-You will also need to be a trusted user for your Nix installation.  In other
+You will also need to be a trusted user for your Nix installation. In other
 words, your `/etc/nix/nix.conf` should have something like:
 
 ```
@@ -60,4 +60,38 @@ builders-use-substitutes = true
 
 ```ShellSession
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
+```
+
+## As a NixOS module
+
+The `darwin.builder` bootstrapper runs a NixOS module with sensible defaults for
+two settings:
+
+- `services.macos-builder.diskSize` &mdash; The disk space used by the VM in MB,
+  with a default of 20 \* 1024 (20 GB).
+- `services.macos-builder.memorySize` &mdash; The memory used by the VM in MB,
+  with a default of 3 \* 1024 (3 GB).
+
+To provide different values for these settings, you need to use the builder as a
+NixOS VM on your own. Here's an example configuration:
+
+```nix
+{ modulesPath, pkgs, ... }:
+
+{
+  imports = [
+    # The builder module
+    "${modulesPath}/profiles/macos-builder.nix"
+    # Other modules
+  ];
+
+  services.macos-builder = {
+    enable = true; # Run the builder
+    services.macos-builder.diskSize = 50 * 1024; # 50 GB instead of 20
+    services.macos-builder.memorySize = 8 * 1024; # 8 GB instead of 3
+  };
+  virtualisation.host = { inherit pkgs; };
+
+  # Other settings
+}
 ```
