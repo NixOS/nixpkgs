@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python3
 , nix-update-script
+, dasel
 }:
 
 python3Packages.buildPythonApplication {
@@ -22,13 +23,20 @@ python3Packages.buildPythonApplication {
     substituteInPlace pyproject.toml \
       --replace 'python-dotenv = "^0.21.1"' 'python-dotenv = "*"' \
       --replace 'python-multipart = "^0.0.6"' 'python-multipart = "^0.0.5"' \
-      --replace 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"'
+      --replace 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"' \
+      --replace 'packages = [{include = "server"}]' 'packages = [{include = "server"}, {include = "models"}, {include = "datastore"}, {include = "services"}]'
+
+    substituteInPlace server/main.py \
+      --replace 'directory=".well-known"' 'directory="/var/lib/chatgpt-retrieval-plugin/.well-known"' \
+      --replace '0.0.0.0' '127.0.0.1' \
+      --replace '8000' '8080'
+
+    ${dasel}/bin/dasel put -t string -f pyproject.toml -v '.well-known/*' '.tool.poetry.include.[]'
   '';
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
   ];
-
 
   propagatedBuildInputs = with python3.pkgs; [
     fastapi
