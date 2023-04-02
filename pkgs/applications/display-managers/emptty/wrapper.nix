@@ -1,4 +1,5 @@
 { stdenvNoCC
+, stdenv
 , makeWrapper
 , emptty-unwrapped
 , additionalPathEntries ? [ ]
@@ -38,4 +39,13 @@ stdenvNoCC.mkDerivation {
         $out/bin/emptty \
         --prefix PATH ":" ${runtimePath}
   '';
+
+  meta = with lib; {
+    description = "Dead simple CLI Display Manager on TTY";
+    homepage = "https://github.com/tvrzna/emptty";
+    license = licenses.mit;
+    maintainers = with maintainers; [ the-argus ];
+    # many undefined functions
+    broken = stdenv.isDarwin;
+  };
 }
