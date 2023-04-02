@@ -8344,6 +8344,12 @@
     githubId = 2422454;
     name = "Kai Wohlfahrt";
   };
+  kylehendricks = {
+    name = "Kyle Hendricks";
+    email = "kyle-github@mail.hendricks.nu";
+    github = "kylehendricks";
+    githubId = 981958;
+  };
   kyleondy = {
     email = "kyle@ondy.org";
     github = "KyleOndy";
