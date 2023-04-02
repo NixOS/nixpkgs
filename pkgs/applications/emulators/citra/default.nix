@@ -30,13 +30,13 @@ in {
 
   canary = libsForQt5.callPackage ./generic.nix rec {
     pname = "citra-canary";
-    version = "2146";
+    version = "2440";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-canary";
       rev = "canary-${version}";
-      sha256 = "1wnym0nklngimf5gaaa2703nz4g5iy572wlgp88h67rrh9b4f04r";
+      sha256 = "06f2qnvywyaf8jc43jrzjhfshj3k21ggk8wdrvd9wjsmrryvqgbz";
       fetchSubmodules = true;
     };
 
