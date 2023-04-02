@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFdk "-DENABLE_FDK=ON";
 
   postPatch = ''
+    # Fix file not found when looking in var/empty instead of opt
+    mkdir externals/dynarmic/src/dynarmic/ir/var
+    ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
+
     # Prep compatibilitylist
     ln -s ${compat-list} ./dist/compatibility_list/compatibility_list.json
 
