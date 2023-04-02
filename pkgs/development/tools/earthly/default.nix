@@ -2,21 +2,27 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.6.23";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "sha256-RbLAnk2O7wqY0OQLprWuRDUWMicqcLOPia+7aRuXbsk=";
+    sha256 = "sha256-b7at8Hjt3ZH7UjD1FLgQ4C1TE+XLqm7+WI4aBn1tikI=";
   };
 
-  vendorSha256 = "sha256-MDyQ9Wn5A5F5CQCfEXzkXZi/Fg6sT/Ikv+Y7fvLY8LA=";
+  vendorSha256 = "sha256-CXbS7MSq2fwm5M325szZogW+qDEMuDidlMt89Cm3Gg4=";
 
   ldflags = [
     "-s" "-w"
     "-X main.Version=v${version}"
     "-X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}"
+  ];
+
+  # These packages should not be required for the CLI binary to build, without these the CLI seems to work as expected
+  excludedPackages = [
+    "ast"
+    "util/deltautil"
   ];
 
   BUILDTAGS = "dfrunmount dfrunsecurity dfsecrets dfssh dfrunnetwork";
@@ -29,7 +35,6 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/debugger $out/bin/earthly-debugger
-    mv $out/bin/shellrepeater $out/bin/earthly-shellrepeater
   '';
 
   meta = with lib; {
