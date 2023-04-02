@@ -5,23 +5,23 @@
 }:
 
 let
-  # Mirror of https://api.yuzu-emu.org/gamedb, last updated 2022-08-13
+  # Mirror of https://api.yuzu-emu.org/gamedb, last updated 2023-04-01
   # Please make sure to update this when updating yuzu!
   compat-list = fetchurl {
     name = "yuzu-compat-list";
-    url = "https://raw.githubusercontent.com/flathub/org.yuzu_emu.yuzu/d83401d2ee3fd5e1922e31baed1f3bdb1c0f036c/compatibility_list.json";
-    sha256 = "sha256-anOmO7NscHDsQxT03+YbJEyBkXjhcSVGgKpDwt//GHw=";
+    url = "https://raw.githubusercontent.com/flathub/org.yuzu_emu.yuzu/43eab3333a82fe54916afa7f418161bdf751a5ad/compatibility_list.json";
+    sha256 = "sha256-AVL7wEqEnjfTVxfF8Nd2Cm7cD9WvFGjk9kAlx4f6usE=";
   };
 in {
   mainline = libsForQt5.callPackage ./generic.nix rec {
     pname = "yuzu-mainline";
-    version = "1245";
+    version = "1390";
 
     src = fetchFromGitHub {
       owner = "yuzu-emu";
       repo = "yuzu-mainline";
       rev = "mainline-0-${version}";
-      sha256 = "sha256-lWXlY1KQC067MvCRUFhmr0c7KDrHDuwJOhIWMKw1f+A=";
+      sha256 = "sha256-XsB5jGRGRNkmuTqTqwWy8k+iEISP39sXBuHj/Oe5YS8=";
       fetchSubmodules = true;
     };
 
@@ -30,13 +30,13 @@ in {
 
   early-access = libsForQt5.callPackage ./generic.nix rec {
     pname = "yuzu-ea";
-    version = "2945";
+    version = "3493";
 
     src = fetchFromGitHub {
       owner = "pineappleEA";
       repo = "pineapple-src";
       rev = "EA-${version}";
-      sha256 = "sha256-/051EtQxhB5oKH/JxZZ2AjnxOBcRxCBIwd4Qr8lq7Ok=";
+      sha256 = "sha256-gELa/Q/A5H8UrBFEBr3btxinD9VdST0+FDFY0WlVl1U=";
       fetchSubmodules = true;
     };
 

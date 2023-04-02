@@ -11,11 +11,11 @@
 , wrapQtAppsHook
 , alsa-lib
 , boost
-, catch2
+, catch2_3
 , cmake
 , doxygen
 , ffmpeg
-, fmt_8
+, fmt_9
 , glslang
 , libjack2
 , libopus
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     boost
-    catch2
+    catch2_3
     ffmpeg
-    fmt_8
+    fmt_9
     glslang
     libjack2
     libopus
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     udev
     zlib
     zstd
+    vulkan-headers
   ];
 
   doCheck = true;
@@ -97,6 +98,7 @@ stdenv.mkDerivation rec {
     "-DYUZU_USE_BUNDLED_FFMPEG=OFF"
     "-DYUZU_USE_BUNDLED_OPUS=OFF"
     "-DYUZU_USE_EXTERNAL_SDL2=OFF"
+    "-DYUZU_USE_EXTERNAL_VULKAN_HEADERS=OFF"
 
     "-DENABLE_QT_TRANSLATION=ON"
     "-DYUZU_USE_QT_WEB_ENGINE=ON"
