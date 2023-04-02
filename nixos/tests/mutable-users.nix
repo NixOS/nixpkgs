@@ -69,5 +69,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         for file in files_to_check:
             assert machine.succeed(f"sha256sum {file}") == expected_hashes[file]
             assert machine.succeed(f"stat {file}") == expected_stats[file]
+
+    with subtest("activate does change things"):
+        machine.succeed("/run/current-system/bin/switch-to-configuration test")
+        machine.succeed('test -e /home/dry-test') # home WAS recreated
   '';
 })
