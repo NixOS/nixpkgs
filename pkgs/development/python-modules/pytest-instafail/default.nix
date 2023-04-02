@@ -15,10 +15,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pytest_instafail" ];
-  meta = {
+
+  meta = with lib; {
     description = "pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
     homepage = "https://github.com/pytest-dev/pytest-instafail";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.jacg ];
+    changelog = "https://github.com/pytest-dev/pytest-instafail/blob/v${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jacg ];
   };
 }
