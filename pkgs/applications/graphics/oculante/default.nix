@@ -14,25 +14,27 @@
 , stdenv
 , gtk3
 , darwin
+, perl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.6.41";
+  version = "0.6.58";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2pXfdR5KUD6IUasxyUptxLSLDcvJtwJwOmhHD3I7op8=";
+    sha256 = "sha256-Cs7f6RSOoZFOtQWH67l3A6kv/o2lN5NOn+BEasV03RU=";
   };
 
-  cargoHash = "sha256-F/NKTsDRfoueVrwlq/RkBR6wNn79NiuT2InAR+XPbqw=";
+  cargoLock.lockFile = ./Cargo.lock;
 
   nativeBuildInputs = [
     cmake
     pkg-config
     nasm
+    perl
   ];
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access

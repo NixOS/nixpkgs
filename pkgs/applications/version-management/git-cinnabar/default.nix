@@ -1,46 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, makeWrapper
-, curl, libiconv, mercurial, zlib
-, CoreServices
+{ stdenv, lib, fetchFromGitHub, pkg-config, rustPlatform
+, bzip2, curl, zlib, zstd, libiconv, CoreServices
 }:
-
-let
-  python3 = mercurial.python;
-in
 
 stdenv.mkDerivation rec {
   pname = "git-cinnabar";
-  version = "0.5.11";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     rev = version;
-    sha256 = "sha256-64ofKGeHwCqiZHOA6MrYrN2eV/qqClcjerDuSqsjKDg=";
+    sha256 = "IV7K/49IN2HMek247GWr5ybZRozHsnCm8RItC9sqFXc=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoconf makeWrapper ];
-  buildInputs = [ curl zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
+  nativeBuildInputs = [
+    pkg-config rustPlatform.cargoSetupHook rustPlatform.rust.cargo
+  ];
 
-  # Ignore submodule status failing due to no git in environment.
-  makeFlags = [ "SUBMODULE_STATUS=yes" ];
+  buildInputs = [ bzip2 curl zlib zstd ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sha256 = "YWhGAp64GAlySgUvDrD6qaNlc09swe1xCkvEpFR1ytg=";
+  };
+
+  ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin $out/libexec
-    install git-cinnabar-helper $out/bin
-    install git-cinnabar git-remote-hg $out/libexec
-    cp -r cinnabar mercurial $out/libexec
-
-    for pythonBin in git-cinnabar git-remote-hg; do
-        makeWrapper $out/libexec/$pythonBin $out/bin/$pythonBin \
-            --prefix PATH : ${lib.getBin python3}/bin \
-            --set PYTHONPATH ${mercurial}/${python3.sitePackages}
-    done
-
+    mkdir -p $out/bin
+    install -v target/release/git-cinnabar $out/bin
+    ln -sv git-cinnabar $out/bin/git-remote-hg
     runHook postInstall
   '';
 

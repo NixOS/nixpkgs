@@ -5,6 +5,8 @@ args@
 , name ? ""
 , developerProgram ? false
 , runPatches ? []
+, autoPatchelfHook
+, autoAddOpenGLRunpathHook
 , addOpenGLRunpath
 , alsa-lib
 , expat
@@ -16,15 +18,25 @@ args@
 , glibc
 , gtk2
 , lib
+, libxkbcommon
+, libkrb5
+, krb5
 , makeWrapper
 , ncurses5
+, numactl
+, nss
 , perl
-, python3
+, python3 # FIXME: CUDAToolkit 10 may still need python27
+, pulseaudio
 , requireFile
 , backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
+, wayland
 , xorg
 , zlib
+, freeglut
+, libGLU
+, libsForQt5
 }:
 
 backendStdenv.mkDerivation rec {
@@ -52,12 +64,82 @@ backendStdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "doc" ];
 
-  nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
-  buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+    addOpenGLRunpath
+    autoPatchelfHook
+    autoAddOpenGLRunpathHook
+  ] ++ lib.optionals (lib.versionOlder version "11") [
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+    gdk-pixbuf
+
+    # For autoPatchelf
+    ncurses5
+    expat
+    python3
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    xorg.libXdamage
+    xorg.libxcb
+    xorg.xcbutilimage
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
+    xorg.xcbutilkeysyms
+    pulseaudio
+    libxkbcommon
+    libkrb5
+    krb5
+    gtk2
+    glib
+    fontconfig
+    freetype
+    numactl
+    nss
+    unixODBC
+    alsa-lib
+    wayland
+  ] ++ lib.optionals (lib.versionOlder version "11") [
+    libsForQt5.qt5.qtwebengine
+    freeglut
+    libGLU
+  ];
+
+  # Prepended to runpaths by autoPatchelf.
+  # The order inherited from older rpath preFixup code
   runtimeDependencies = [
-    ncurses5 expat python3 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsa-lib
+    (placeholder "lib")
+    (placeholder "out")
+    "${placeholder "out"}/nvvm"
+    # Is it not handled by autoPatchelf automatically?
+    "${lib.getLib backendStdenv.cc.cc}/lib64"
+    "${placeholder "out"}/jre/lib/amd64/jli"
+    "${placeholder "out"}/lib64"
+    "${placeholder "out"}/nvvm/lib64"
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    # This is the hardware-dependent userspace driver that comes from
+    # nvidia_x11 package. It must be deployed at runtime in
+    # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
+    # than pinned in runpath
+    "libcuda.so.1"
+
+    # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
+    # older
+    # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
+    # - do we even want to use nvidia-shipped libssl?
+    "libcom_err.so.2"
   ];
 
   unpackPhase = ''
@@ -196,62 +278,6 @@ backendStdenv.mkDerivation rec {
     done
   '';
 
-  preFixup =
-    let rpath = lib.concatStringsSep ":" [
-      (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
-
-      # The path to libstdc++ and such
-      #
-      # `backendStdenv` is the cuda-compatible toolchain that we pick in
-      # extension.nix; we hand it to NVCC to use as a back-end, and we link
-      # cudatoolkit's binaries against its libstdc++
-      "${backendStdenv.cc.cc.lib}/lib64"
-
-      "$out/jre/lib/amd64/jli"
-      "$out/lib64"
-      "$out/nvvm/lib64"
-    ];
-    in
-    ''
-      while IFS= read -r -d $'\0' i; do
-        if ! isELF "$i"; then continue; fi
-        echo "patching $i..."
-        if [[ ! $i =~ \.so ]]; then
-          patchelf \
-            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-        fi
-        if [[ $i =~ libcudart ]]; then
-          patchelf --remove-rpath $i
-        else
-          patchelf --set-rpath "${rpath}" --force-rpath $i
-        fi
-      done < <(find $out $lib $doc -type f -print0)
-    '' + lib.optionalString (lib.versionAtLeast version "11") ''
-      for file in $out/target-linux-x64/*.so; do
-        echo "patching $file..."
-        patchelf --set-rpath "${rpath}:\$ORIGIN" $file
-      done
-    '';
-
-  # Set RPATH so that libcuda and other libraries in
-  # /run/opengl-driver(-32)/lib can be found. See the explanation in
-  # addOpenGLRunpath.  Don't try to figure out which libraries really need
-  # it, just patch all (but not the stubs libraries). Note that
-  # --force-rpath prevents changing RPATH (set above) to RUNPATH.
-  postFixup = ''
-    addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
-  '' + lib.optionalString (lib.versionAtLeast version "11") ''
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
-    addOpenGLRunpath $out/target-linux-x64/*
-  '' +
-  # Prune broken symlinks which can cause problems with consumers of this package.
-  ''
-    while read -r -d "" file; do
-      echo "Found and removing broken symlink $file"
-      rm "$file"
-    done < <(find "$out" "$lib" "$doc" -xtype l -print0)
-  '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so
   # temporarily disabling the install check.  This should be set to true
