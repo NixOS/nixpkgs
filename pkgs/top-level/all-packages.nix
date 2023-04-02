@@ -10316,6 +10316,17 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
+  nvidia-thrust = callPackage ../development/libraries/nvidia-thrust { };
+
+  nvidia-thrust-intel = callPackage ../development/libraries/nvidia-thrust {
+    hostSystem = "TBB";
+    deviceSystem = if config.cudaSupport or false then "CUDA" else "TBB";
+  };
+
+  nvidia-thrust-cuda = callPackage ../development/libraries/nvidia-thrust {
+    deviceSystem = "CUDA";
+  };
+
   miller = callPackage ../tools/text/miller { };
 
   milu = callPackage ../applications/misc/milu { };
@@ -37812,6 +37823,11 @@ with pkgs;
     # faiss wants the "-doxygen" option
     # available only since swig4
     swig = swig4;
+  };
+
+  faissWithCuda = faiss.override {
+    cudaSupport = true;
+    nvidia-thrust = nvidia-thrust-cuda;
   };
 
   fityk = callPackage ../applications/science/misc/fityk { };
