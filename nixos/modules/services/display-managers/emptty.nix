@@ -3,6 +3,7 @@ let
   inherit (lib) mkIf mkOption mkEnableOption types mkDefault;
   inherit (builtins) mapAttrs;
   inherit (lib.strings) optionalString;
+  inherit (pkgs) emptty;
   cfg = config.services.xserver.displayManager.emptty;
 
   defaultConfig = {
@@ -86,7 +87,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.emptty;
+        default = emptty;
+        defaultText = lib.mdDoc "pkgs.emptty";
         description = lib.mdDoc "Derivation to use for emptty.";
       };
 
