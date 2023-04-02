@@ -2757,6 +2757,15 @@
     githubId = 2245737;
     name = "Christopher Mark Poole";
   };
+  christoph-heiss = {
+    email = "christoph@c8h4.io";
+    github = "christoph-heiss";
+    githubId = 7571069;
+    name = "Christoph Heiss";
+    keys = [{
+      fingerprint = "9C56 1D64 30B2 8D6B DCBC 9CEB 73D5 E7FD EE3D E49A";
+    }];
+  };
   chuahou = {
     email = "human+github@chuahou.dev";
     github = "chuahou";
@@ -4700,6 +4709,12 @@
     githubId = 32169529;
     name = "Etienne Jean";
   };
+  ettom = {
+    email = "ettom22@hotmail.com";
+    github = "ettom";
+    githubId = 36895504;
+    name = "ettom";
+  };
   etu = {
     email = "elis@hirwing.se";
     matrix = "@etu:semi.social";
@@ -4725,6 +4740,13 @@
     keys = [{
       fingerprint = "8129 5B85 9C5A F703 C2F4  1E29 2D1D 402E 1776 3DD6";
     }];
+  };
+  evan-goode = {
+    email = "mail@evangoo.de";
+    name = "Evan Goode";
+    github = "evan-goode";
+    githubId = 7495216;
+    matrix = "@goode:matrix.org";
   };
   evanjs = {
     email = "evanjsx@gmail.com";
