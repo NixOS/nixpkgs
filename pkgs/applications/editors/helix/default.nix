@@ -12,7 +12,12 @@ rustPlatform.buildRustPackage rec {
     stripRoot = false;
   };
 
-  cargoSha256 = "sha256-+KnBQA7gYLu2O/5vbY5cdEj9hni0Cn3cWPYswBi4934=";
+  cargoLock = {
+    lockFile = "${src}/Cargo.lock";
+    outputHashes = {
+      "tree-sitter-0.20.9" = "sha256-/PaFaASOT0Z8FpipX5uiRCjnv1kyZtg4B9+TnHA0yTY=";
+    };
+  };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
