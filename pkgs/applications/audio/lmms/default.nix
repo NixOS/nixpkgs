@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, cmake, pkg-config, alsa-lib ? null, fftwFloat, fltk13
+{ lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, alsa-lib ? null, carla ? null, fftwFloat, fltk13
 , fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
 , qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
@@ -18,6 +18,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake qttools pkg-config ];
 
   buildInputs = [
+    carla
     alsa-lib
     fftwFloat
     fltk13
@@ -34,6 +35,13 @@ mkDerivation rec {
     qtbase
     qtx11extras
     SDL # TODO: switch to SDL2 in the next version
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/cf64acc45e3264c6923885867e2dbf8b7586a36b/trunk/lmms-carla-export.patch";
+      sha256 = "sha256-wlSewo93DYBN2PvrcV58dC9kpoo9Y587eCeya5OX+j4=";
+    })
   ];
 
   cmakeFlags = [ "-DWANT_QT5=ON" ];
