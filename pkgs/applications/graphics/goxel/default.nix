@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://guillaumechereau.github.io/goxel/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tilpner ];
+    maintainers = with maintainers; [ tilpner fgaz ];
   };
 }
