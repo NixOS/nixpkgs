@@ -74,6 +74,10 @@ in buildPythonPackage rec {
   doCheck = false;
   # doCheck = !stdenv.isDarwin;
 
+  # force regeneration of generated code in source distributions
+  # https://github.com/cython/cython/issues/5089
+  setupHook = ./setup-hook.sh;
+
   meta = {
     changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
