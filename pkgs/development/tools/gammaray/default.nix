@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "GammaRay";
+  pname = "gammaray";
   version = "2.11.3";
 
   src = fetchFromGitHub {

@@ -36,7 +36,8 @@ let
     );
   '';
   configFile = pkgs.writeText "config.php" ''
-    ${strings.fileContents "${pkgs.cloudlog}/install/config/config.php"}
+    <?php
+    include('${pkgs.cloudlog}/install/config/config.php');
     $config['datadir'] = "${cfg.dataDir}/";
     $config['base_url'] = "${cfg.baseUrl}";
     ${cfg.extraConfig}
