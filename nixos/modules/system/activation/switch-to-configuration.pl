@@ -125,14 +125,11 @@ EOF
 # virtual console 1 and we restart the "tty1" unit.
 $SIG{PIPE} = "IGNORE";
 
-# Replacement for Net::DBus that calls busctl of the current systemd, parses
-# it's json output and returns the response using only core modules to reduce
-# dependencies on perlPackages in baseSystem
-sub busctl_call_systemd1_mgr {
-    my (@args) = @_;
+sub call_systemd_dbus_api {
+    my ($api_name, @args) = @_;
     my $cmd = [
-        "$cur_systemd/busctl", "--json=short", "call", "org.freedesktop.systemd1",
-        "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager",
+        "$cur_systemd/busctl", "--json=short", "call", "org.freedesktop.${api_name}",
+        "/org/freedesktop/${api_name}", "org.freedesktop.${api_name}.Manager",
         @args
     ];
 
@@ -142,6 +139,15 @@ sub busctl_call_systemd1_mgr {
     my $res = decode_json(join "", @$stdout);
     return $res;
 }
+
+sub busctl_call_systemd1_mgr {
+    my (@args) = @_;
+    return call_systemd_dbus_api("systemd1", @args);
+}
+
+# Replacement for Net::DBus that calls busctl of the current systemd, parses
+# it's json output and returns the response using only core modules to reduce
+# dependencies on perlPackages in baseSystem
 
 # Asks the currently running systemd instance via dbus which units are active.
 # Returns a hash where the key is the name of each unit and the value a hash
@@ -487,16 +493,11 @@ sub compare_nspawn_units {
     return 0;
 }
 
-
-my $active_containers = `machinectl list`;
-sub is_container_running {
-    my ($name) = @_;
-    if (index($active_containers, $name) != -1) {
-        return 1;
-    }
-    return 0;
+sub list_running_nspawn_machines {
+    my $raw = call_systemd_dbus_api("machine1", qw/ListMachines/)->{data}->[0];
+    my %running_machines = map { $_->[0] => 1 } grep { $_->[0] ne ".host" } @{$raw};
+    return %running_machines;
 }
-
 
 # Called when a unit exists in both the old systemd and the new system and the units
 # differ. This figures out of what units are to be stopped, restarted, reloaded, started, and skipped.
@@ -623,6 +624,7 @@ my %units_to_filter; # units not shown
 my @current_nspawn_units = glob("/etc/systemd/nspawn/*.nspawn");
 my @new_nspawn_units = glob("$out/etc/systemd/nspawn/*.nspawn");
 my %current_units_cmp = map { $_ => 1 } @current_nspawn_units;
+my %running_containers = list_running_nspawn_machines();
 foreach my $new_unit_file (@new_nspawn_units) {
     my $container_name = basename($new_unit_file);
     $container_name =~ s/\.nspawn//;
@@ -651,7 +653,7 @@ foreach my $new_unit_file (@new_nspawn_units) {
 |Reload  |1      |Y     |-      |
 =cut
         if ($strategy ne "restart" and ($changed == 0 or $strategy eq "reload")) {
-            if (is_container_running($container_name) == 1) {
+            if (exists($running_containers{$container_name})) {
                 $units_to_reload{$unit_name} = 1;
             }
         } elsif ($changed == 1) {
