@@ -4,14 +4,12 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
-, symlinkJoin
 , CoreFoundation
 , AppKit
 , libfido2
 , nodejs
 , openssl
 , pkg-config
-, protobuf
 , Security
 , stdenv
 , xdg-utils
@@ -24,7 +22,8 @@
 , version
 , hash
 , vendorHash
-, cargoHash
+, cargoHash ? null
+, cargoLock ? null
 , yarnHash
 }:
 let
@@ -39,7 +38,7 @@ let
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    inherit cargoHash;
+    inherit cargoHash cargoLock;
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
