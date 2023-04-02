@@ -7,8 +7,6 @@ let
   cfg = config.services.xserver.displayManager.emptty;
 
   defaultConfig = {
-    # note that XORG_ARGS is not included here
-    # config.services.xserver.displayManager.xserverArgs should be used instead
     TTY_NUMBER = 1;
     SWITCH_TTY = true;
     PRINT_ISSUE = true;
@@ -106,6 +104,14 @@ in
 
       configuration = mkOption {
         default = defaultConfig;
+        description = lib.mdDoc ''
+          Configuration options which are passed to emptty as environment
+          variables. Each option is documented in [emptty's README.md](https://github.com/tvrzna/emptty/blob/master/README.md)
+
+          The ``XORG_ARGS`` options is not included here;
+          ``config.services.xserver.displayManager.xserverArgs`` should be used
+          instead.
+        '';
         type = types.submodule {
           options = {
             TTY_NUMBER = mkOption {
