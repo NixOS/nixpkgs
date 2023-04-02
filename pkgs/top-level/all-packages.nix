@@ -26204,6 +26204,10 @@ with pkgs;
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
+  gasket = callPackage ../os-specific/linux/gasket {
+    inherit (linuxPackages) kernel;
+  };
+
   gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
