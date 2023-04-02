@@ -448,6 +448,7 @@
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
+  ./services/display-managers/emptty.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
