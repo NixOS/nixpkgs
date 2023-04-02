@@ -1,5 +1,5 @@
 { branch ? "mainline"
-, libsForQt5
+, qt6Packages
 , fetchFromGitHub
 , fetchurl
 }:
@@ -12,8 +12,9 @@ let
     url = "https://raw.githubusercontent.com/flathub/org.yuzu_emu.yuzu/43eab3333a82fe54916afa7f418161bdf751a5ad/compatibility_list.json";
     sha256 = "sha256-AVL7wEqEnjfTVxfF8Nd2Cm7cD9WvFGjk9kAlx4f6usE=";
   };
-in {
-  mainline = libsForQt5.callPackage ./generic.nix rec {
+in
+{
+  mainline = qt6Packages.callPackage ./generic.nix rec {
     pname = "yuzu-mainline";
     version = "1390";
 
@@ -21,22 +22,22 @@ in {
       owner = "yuzu-emu";
       repo = "yuzu-mainline";
       rev = "mainline-0-${version}";
-      sha256 = "sha256-XsB5jGRGRNkmuTqTqwWy8k+iEISP39sXBuHj/Oe5YS8=";
-      fetchSubmodules = true;
+      sha256 = "sha256-Qfc4d66PVyiGn8UsKoMWX+4eyjjeTotO1KjrMlUbXws=";
+      #fetchSubmodules = true;
     };
 
     inherit branch compat-list;
   };
 
-  early-access = libsForQt5.callPackage ./generic.nix rec {
+  early-access = qt6Packages.callPackage ./generic.nix rec {
     pname = "yuzu-ea";
-    version = "3493";
+    version = "3492";
 
     src = fetchFromGitHub {
       owner = "pineappleEA";
       repo = "pineapple-src";
       rev = "EA-${version}";
-      sha256 = "sha256-gELa/Q/A5H8UrBFEBr3btxinD9VdST0+FDFY0WlVl1U=";
+      sha256 = "sha256-ZKDo7+S30oMbkWrnWUssrdGPej0LAcIsUoSyCwT8aIY=";
       fetchSubmodules = true;
     };
 

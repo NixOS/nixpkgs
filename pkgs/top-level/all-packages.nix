@@ -2402,12 +2402,12 @@ with pkgs;
 
   yuzu-mainline = import ../applications/emulators/yuzu {
     branch = "mainline";
-    inherit libsForQt5 fetchFromGitHub fetchurl;
+    inherit qt6Packages fetchFromGitHub fetchurl;
   };
 
   yuzu-early-access = import ../applications/emulators/yuzu {
     branch = "early-access";
-    inherit libsForQt5 fetchFromGitHub fetchurl;
+    inherit qt6Packages fetchFromGitHub fetchurl;
   };
 
   ### APPLICATIONS/EMULATORS/COMMANDERX16
@@ -4590,6 +4590,8 @@ with pkgs;
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   dynamic-wallpaper = callPackage ../tools/graphics/dynamic-wallpaper { };
+
+  dynarmic = callPackage ../development/compilers/dynarmic{ };
 
   dyncall = callPackage ../development/libraries/dyncall { };
 
@@ -34657,6 +34659,8 @@ with pkgs;
   };
 
   xborders = callPackage ../tools/X11/xborders { };
+
+  xbyak = callPackage ../development/compilers/xbyak { };
 
   xxh = callPackage ../tools/networking/xxh { };
 

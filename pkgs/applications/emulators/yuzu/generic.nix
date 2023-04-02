@@ -40,6 +40,16 @@
 , vulkan-loader
 , zlib
 , zstd
+, discord-rpc
+, enet
+, inih
+, llvm
+, shaderc
+, httplib
+, openssl
+, cubeb
+, xbyak
+, dynarmic
 }:
 
 stdenv.mkDerivation rec {
@@ -80,9 +90,18 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     vulkan-headers
+    vulkan-loader
+    discord-rpc
+    enet
+    inih
+    llvm
+    shaderc
+    httplib
+    openssl
+    cubeb
+    xbyak
+    dynarmic
   ];
-
-  doCheck = true;
 
   # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
   # making the build fail, as that path does not exist
@@ -101,19 +120,13 @@ stdenv.mkDerivation rec {
     "-DYUZU_USE_EXTERNAL_VULKAN_HEADERS=OFF"
 
     "-DENABLE_QT_TRANSLATION=ON"
+    "-DENABLE_QT6=ON"
     "-DYUZU_USE_QT_WEB_ENGINE=ON"
     "-DUSE_DISCORD_PRESENCE=ON"
 
     # We dont want to bother upstream with potentially outdated compat reports
     "-DYUZU_ENABLE_COMPATIBILITY_REPORTING=OFF"
     "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # We provide this deterministically
-  ];
-
-  qtWrapperArgs = [
-    # Fixes vulkan detection
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
-    # Without yuzu doesnt start on wayland. See https://github.com/yuzu-emu/yuzu/issues/6088
-    "--set QT_QPA_PLATFORM xcb"
   ];
 
   preConfigure = ''
@@ -132,12 +145,13 @@ stdenv.mkDerivation rec {
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
   '';
 
-  passthru.updateScript = runCommandLocal "yuzu-${branch}-updateScript" {
-    script = substituteAll {
-      src = ./update.sh;
-      inherit branch;
-    };
-  } "install -Dm755 $script $out";
+  passthru.updateScript = runCommandLocal "yuzu-${branch}-updateScript"
+    {
+      script = substituteAll {
+        src = ./update.sh;
+        inherit branch;
+      };
+    } "install -Dm755 $script $out";
 
   meta = with lib; {
     homepage = "https://yuzu-emu.org";
@@ -153,7 +167,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl3Plus
       # Icons
-      asl20 mit cc0
+      asl20
+      mit
+      cc0
     ];
     maintainers = with maintainers; [
       ashley
