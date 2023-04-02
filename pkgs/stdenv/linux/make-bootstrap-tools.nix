@@ -2,6 +2,10 @@
 
 let
   libc = pkgs.stdenv.cc.libc;
+  patchelf = pkgs.patchelf.overrideAttrs(previousAttrs: {
+    NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+    NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+  });
 in with pkgs; rec {
 
 
