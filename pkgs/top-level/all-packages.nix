@@ -29644,7 +29644,9 @@ with pkgs;
   # If you turn this into "real" alias again, please add it to pkgs/top-level/packages-config.nix again too
   emacsPackages = emacs.pkgs;
 
-  emptty = callPackage ../applications/display-managers/emptty { };
+  emptty-unwrapped = callPackage ../applications/display-managers/emptty { };
+
+  emptty = callPackage ../applications/display-managers/emptty/wrapper.nix { };
 
   endeavour = callPackage ../applications/office/endeavour { };
 
