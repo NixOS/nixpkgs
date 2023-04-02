@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel lnl7 AndersonTorres ];
+    maintainers = with maintainers; [ ttuegel lnl7 AndersonTorres tmarkus ];
     platforms = platforms.all;
     broken = (qt5UI && stdenv.isDarwin);
   };
