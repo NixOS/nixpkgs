@@ -41,6 +41,7 @@ in
 stdenv.mkDerivation rec {
   pname = "lua";
   inherit version;
+  outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
@@ -132,6 +133,9 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua-${luaversion}.pc"
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
+
+    # Make documentation outputs of different versions co-installable.
+    mv $out/share/doc/lua $out/share/doc/lua-$version
   '';
 
   # copied from python
