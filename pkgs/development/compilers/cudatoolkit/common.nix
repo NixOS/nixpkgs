@@ -311,6 +311,7 @@ backendStdenv.mkDerivation rec {
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
+    maintainers = teams.cuda.members;
   };
 }
 
