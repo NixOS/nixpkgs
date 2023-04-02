@@ -972,6 +972,11 @@ self: super: builtins.intersectAttrs super {
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   };
+  cachix_1_3_3 = super.cachix_1_3_3.override {
+    nix = self.hercules-ci-cnix-store.nixPackage;
+    fsnotify = dontCheck super.fsnotify_0_4_1_0;
+    hnix-store-core = super.hnix-store-core_0_6_1_0;
+  };
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
