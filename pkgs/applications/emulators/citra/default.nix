@@ -15,13 +15,13 @@ let
 in {
   nightly = libsForQt5.callPackage ./generic.nix rec {
     pname = "citra-nightly";
-    version = "1765";
+    version = "1873";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-nightly";
       rev = "nightly-${version}";
-      sha256 = "0d3dfh63cmsy5idbypdz3ibydmb4a35sfv7qmxxlcpc390pp9cvq";
+      sha256 = "1csn9n1s2mvxwk2mahwm8mc4zgn40im374hcsqgz8gaxjkmnx288";
       fetchSubmodules = true;
     };
 
