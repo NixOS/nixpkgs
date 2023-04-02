@@ -11,7 +11,7 @@
 ,
 }:
 buildGoModule rec {
-  pname = "emptty";
+  pname = "emptty-unwrapped";
   version = "0.9.1";
 
   src = fetchFromGitHub {
