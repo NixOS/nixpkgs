@@ -31319,6 +31319,10 @@ with pkgs;
 
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
 
+  kubectl-view-allocations = callPackage ../applications/networking/cluster/kubectl-view-allocations {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
