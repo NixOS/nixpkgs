@@ -149,6 +149,7 @@ in with pkgs; rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
+        cp -d ${isl.out}/lib/libisl*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
