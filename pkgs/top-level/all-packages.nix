@@ -22640,9 +22640,7 @@ with pkgs;
 
   mtxclient = callPackage ../development/libraries/mtxclient { };
 
-  mu = callPackage ../tools/networking/mu {
-    texinfo = texinfo4;
-  };
+  mu = callPackage ../tools/networking/mu { };
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
