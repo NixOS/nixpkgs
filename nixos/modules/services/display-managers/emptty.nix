@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkIf mkOption mkEnableOption types mkDefault;
+  inherit (lib) mkIf mkOption mkEnableOption types mkDefault literalExpression;
   inherit (builtins) mapAttrs;
   inherit (lib.strings) optionalString;
   inherit (pkgs) emptty;
@@ -86,7 +86,7 @@ in
       package = mkOption {
         type = types.package;
         default = emptty;
-        defaultText = lib.mdDoc "pkgs.emptty";
+        defaultText = literalExpression "pkgs.emptty";
         description = lib.mdDoc "Derivation to use for emptty.";
       };
 
