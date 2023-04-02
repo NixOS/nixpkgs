@@ -86,7 +86,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.myPackages.emptty;
+        default = pkgs.emptty;
         description = lib.mdDoc "Derivation to use for emptty.";
       };
 
