@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 jq ];
   buildInputs = [ libX11 libXext zlib ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=array-bounds"
     "-Wno-error=uninitialized"

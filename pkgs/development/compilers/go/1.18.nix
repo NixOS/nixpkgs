@@ -155,12 +155,12 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
-  '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
+  '' else lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
     rm -rf bin/*_*
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
-  '' else "");
+  '');
 
   installPhase = ''
     runHook preInstall
@@ -180,6 +180,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;

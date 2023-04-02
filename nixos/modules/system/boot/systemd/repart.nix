@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.boot.initrd.systemd.repart;
+  cfg = config.systemd.repart;
+  initrdCfg = config.boot.initrd.systemd.repart;
 
   writeDefinition = name: partitionConfig: pkgs.writeText
     "${name}.conf"
@@ -24,45 +25,59 @@ let
   '';
 in
 {
-  options.boot.initrd.systemd.repart = {
-    enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
+  options = {
+    boot.initrd.systemd.repart.enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
       description = lib.mdDoc ''
-        Grow and add partitions to a partition table a boot time in the initrd.
+        Grow and add partitions to a partition table at boot time in the initrd.
         systemd-repart only works with GPT partition tables.
+
+        To run systemd-repart after the initrd, see
+        `options.systemd.repart.enable`.
       '';
     };
 
-    partitions = lib.mkOption {
-      type = with lib.types; attrsOf (attrsOf (oneOf [ str int bool ]));
-      default = { };
-      example = {
-        "10-root" = {
-          Type = "root";
-        };
-        "20-home" = {
-          Type = "home";
-          SizeMinBytes = "512M";
-          SizeMaxBytes = "2G";
-        };
+    systemd.repart = {
+      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
+        description = lib.mdDoc ''
+          Grow and add partitions to a partition table.
+          systemd-repart only works with GPT partition tables.
+
+          To run systemd-repart while in the initrd, see
+          `options.boot.initrd.systemd.repart.enable`.
+        '';
       };
-      description = lib.mdDoc ''
-        Specify partitions as a set of the names of the definition files as the
-        key and the partition configuration as its value. The partition
-        configuration can use all upstream options. See <link
-        xlink:href="https://www.freedesktop.org/software/systemd/man/repart.d.html"/>
-        for all available options.
-      '';
+
+      partitions = lib.mkOption {
+        type = with lib.types; attrsOf (attrsOf (oneOf [ str int bool ]));
+        default = { };
+        example = {
+          "10-root" = {
+            Type = "root";
+          };
+          "20-home" = {
+            Type = "home";
+            SizeMinBytes = "512M";
+            SizeMaxBytes = "2G";
+          };
+        };
+        description = lib.mdDoc ''
+          Specify partitions as a set of the names of the definition files as the
+          key and the partition configuration as its value. The partition
+          configuration can use all upstream options. See <link
+          xlink:href="https://www.freedesktop.org/software/systemd/man/repart.d.html"/>
+          for all available options.
+        '';
+      };
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    # Link the definitions into /etc so that they are included in the
-    # /nix/store of the sysroot. This also allows the user to run the
-    # systemd-repart binary after activation manually while automatically
-    # picking up the definition files.
+  config = lib.mkIf (cfg.enable || initrdCfg.enable) {
+    # Always link the definitions into /etc so that they are also included in
+    # the /nix/store of the sysroot during early userspace (i.e. while in the
+    # initrd).
     environment.etc."repart.d".source = definitionsDirectory;
 
-    boot.initrd.systemd = {
+    boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"
       ];
@@ -73,7 +88,7 @@ in
 
       # Override defaults in upstream unit.
       services.systemd-repart = {
-        # Unset the coniditions as they cannot be met before activation because
+        # Unset the conditions as they cannot be met before activation because
         # the definition files are not stored in the expected locations.
         unitConfig.ConditionDirectoryNotEmpty = [
           " " # required to unset the previous value.
@@ -97,5 +112,12 @@ in
         after = [ "sysroot.mount" ];
       };
     };
+
+    systemd = lib.mkIf cfg.enable {
+      additionalUpstreamSystemUnits = [
+        "systemd-repart.service"
+      ];
+    };
   };
+
 }

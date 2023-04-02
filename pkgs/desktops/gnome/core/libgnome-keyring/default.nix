@@ -2,15 +2,12 @@
 , testers
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnome-keyring";
   version = "3.12.0";
-in
-stdenv.mkDerivation (finalAttrs: {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgnome-keyring/${lib.versions.majorMinor finalAttrs.version}/libgnome-keyring-${finalAttrs.version}.tar.xz";
     sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
   };
 
@@ -26,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     pkgConfigModules = [ "gnome-keyring-1" ];
-    inherit (glib.meta) platforms maintainers;
+    platforms = lib.platforms.unix;
+    maintainers = [];
 
     longDescription = ''
       gnome-keyring is a program that keeps password and other secrets for

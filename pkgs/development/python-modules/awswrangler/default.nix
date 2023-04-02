@@ -58,8 +58,10 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "gremlinpython"
     "numpy"
+    "openpyxl"
     "pandas"
     "pg8000"
+    "pyarrow"
   ];
 
   nativeCheckInputs = [ moto pytestCheckHook ];

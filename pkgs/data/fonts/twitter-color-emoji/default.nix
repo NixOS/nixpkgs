@@ -94,9 +94,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Color emoji font with a flat visual style, designed and used by Twitter";
     longDescription = ''
-      A bitmap color emoji font built from the Twitter Emoji for
-      Everyone artwork with support for ZWJ, skin tone diversity and country
-      flags.
+      A bitmap color emoji font built from Twitter's Twemoji emoji set
+      with support for ZWJ, skin tone diversity and country flags.
 
       This font uses Google’s CBDT format making it work on Android and Linux graphical stack.
     '';

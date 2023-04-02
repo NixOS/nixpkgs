@@ -11,6 +11,7 @@
 , ki18n
 , kiconthemes
 , kio
+, kitemmodels
 , plasma-framework
 , kservice
 , ktexteditor
@@ -33,6 +34,7 @@ mkDerivation {
     ki18n
     kiconthemes
     kio
+    kitemmodels
     plasma-framework
     kservice
     ktexteditor

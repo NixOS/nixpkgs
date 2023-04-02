@@ -1,6 +1,6 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , gccForLibs, preLibcCrossHeaders
-, libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 # This is the default binutils, but with *this* version of LLD rather
@@ -36,11 +36,22 @@ let
   llvm_meta = {
     license     = lib.licenses.ncsa;
     maintainers = lib.teams.llvm.members;
-    platforms   = lib.platforms.all;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.m68k ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc buildLlvmTools; });
+    callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
@@ -69,13 +80,13 @@ let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libclang = callPackage ./clang {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
@@ -220,7 +231,7 @@ let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc; });
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
     compiler-rt-libc = callPackage ./compiler-rt {
@@ -246,25 +257,37 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-    };
-
     libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      # CMake will "require" a compiler capable of compiling C++ programs
+      # cxx-header's build does not actually use one so it doesn't really matter
+      # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
-        stdenv = stdenv_;
         headersOnly = true;
       };
+
+      # `libcxxabi` *doesn't* need a compiler with a working C++ stdlib but it
+      # *does* need a relatively modern C++ compiler (see:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/index.html#platform-and-compiler-support).
+      #
+      # So, we use the clang from this LLVM package set, like libc++
+      # "boostrapping builds" do:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/BuildingLibcxx.html#bootstrapping-build
+      #
+      # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
+      # on macOS, depends on `libcxxabi`, thus forming a cycle.
+      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
     in callPackage ./libcxxabi {
       stdenv = stdenv_;
       inherit llvm_meta cxx-headers;
+    };
+
+    # Like `libcxxabi` above, `libcxx` requires a fairly modern C++ compiler,
+    # so: we use the clang from this LLVM package set instead of the regular
+    # stdenv's compiler.
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ./libunwind {

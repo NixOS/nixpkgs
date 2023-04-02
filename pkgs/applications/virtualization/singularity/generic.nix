@@ -52,6 +52,9 @@ in
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
 , enableSeccomp ? true
   # Whether the configure script treat SUID support as default
+  # When equal to enableSuid, it supress the --with-suid / --without-suid build flag
+  # It can be set to `null` to always pass either --with-suid or --without-suided
+  # Type: null or boolean
 , defaultToSuid ? true
   # Whether to compile with SUID support
 , enableSuid ? false
@@ -73,7 +76,7 @@ in
 
 let
   defaultPathOriginal = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
-  privileged-un-utils = if ((isNull newuidmapPath) && (isNull newgidmapPath)) then null else
+  privileged-un-utils = if ((newuidmapPath == null) && (newgidmapPath == null)) then null else
   (runCommandLocal "privileged-un-utils" { } ''
     mkdir -p "$out/bin"
     ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
@@ -131,8 +134,7 @@ buildGoModule {
     "--runstatedir=/var/run"
   ]
   ++ lib.optional (!enableSeccomp) "--without-seccomp"
-  ++ lib.optional (defaultToSuid && !enableSuid) "--without-suid"
-  ++ lib.optional (!defaultToSuid && enableSuid) "--with-suid"
+  ++ lib.optional (enableSuid != defaultToSuid) (if enableSuid then "--with-suid" else "--without-suid")
   ++ extraConfigureFlags
   ;
 
@@ -210,10 +212,10 @@ buildGoModule {
         rm "$file"
       done
     ''}
-    ${lib.optionalString enableSuid (lib.warnIf (isNull starterSuidPath) "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial." ''
+    ${lib.optionalString enableSuid (lib.warnIf (starterSuidPath == null) "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial." ''
       chmod +x $out/libexec/${projectName}/bin/starter-suid
     '')}
-    ${lib.optionalString (enableSuid && !isNull starterSuidPath) ''
+    ${lib.optionalString (enableSuid && (starterSuidPath != null)) ''
       mv "$out"/libexec/${projectName}/bin/starter-suid{,.orig}
       ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
     ''}

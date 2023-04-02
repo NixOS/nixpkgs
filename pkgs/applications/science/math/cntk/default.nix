@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
   OMPI_CXX = "g++";
 
   # Uses some deprecated tensorflow functions
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   buildInputs = [ openblas opencv3 libzip boost protobuf mpi ]
              ++ lib.optional cudaSupport cudatoolkit

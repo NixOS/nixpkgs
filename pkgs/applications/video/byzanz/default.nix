@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
+  env.NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=incompatible-pointer-types"
   ];

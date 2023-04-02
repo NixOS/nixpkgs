@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mgbellemare";
     repo = "Arcade-Learning-Environment";
-    rev = "v${version}";
-    sha256 = "sha256-OPAtCc2RapK1lALTKHd95bkigxcZ9bcONu32I/91HIg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-B2AxhlzvBy1lJ3JttJjImgTjMtEUyZBv+xHU2IC7BVE=";
   };
 
   patches = [

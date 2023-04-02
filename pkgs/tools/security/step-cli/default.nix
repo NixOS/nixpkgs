@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "step-cli";
-  version = "0.23.2";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d21TQRPRDEDYj7Fqf7R7mHj2tLPd/EXNkeL56KyLgIg=";
+    hash = "sha256-RNuYqmfMrIrWodrn7lpM0YO+HVxz+gKr5IregRqo5ak=";
   };
 
   ldflags = [
@@ -25,7 +25,7 @@ buildGoModule rec {
     rm command/certificate/remote_test.go
   '';
 
-  vendorHash = "sha256-Oh8tldLuM3j17OUX1TkgyOL9Ae/x1H8FrB2lNbtZ8pI=";
+  vendorHash = "sha256-drIVwsqgJsYDXSuu5AhnBnKwwgkhVyNS/HS9FcoJeLM=";
 
   meta = with lib; {
     description = "A zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";

@@ -14,7 +14,7 @@
 , bzip2
 , dbus
 , dtv-scan-tables
-, ffmpeg
+, ffmpeg_4
 , gettext
 , gnutar
 , gzip
@@ -64,7 +64,7 @@ in stdenv.mkDerivation {
     avahi
     bzip2
     dbus
-    ffmpeg
+    ffmpeg_4 # depends on libav
     gettext
     gzip
     libiconv
@@ -75,13 +75,13 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
     # Needed with GCC 12 but unrecognized with GCC 9
     "-Wno-error=use-after-free"
-  ];
+  ]);
 
   configureFlags = [
     # disable dvbscan, as having it enabled causes a network download which

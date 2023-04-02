@@ -615,6 +615,7 @@ in
       s3_endpoint = null;
       s3_http_continue_timeout = null;
       s3_install_cors_rule = null;
+      s3_asset_cdn_url = null;
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
@@ -647,6 +648,9 @@ in
       multisite_config_path = "config/multisite.yml";
       enable_long_polling = null;
       long_polling_interval = null;
+      preload_link_header = false;
+      redirect_avatar_requests = false;
+      pg_force_readonly_mode = false;
     };
 
     services.redis.servers.discourse =
@@ -1011,6 +1015,7 @@ in
         notification_email = cfg.mail.notificationEmailAddress;
         contact_email = cfg.mail.contactEmailAddress;
       };
+      security.force_https = tlsEnabled;
       email = {
         manual_polling_enabled = cfg.mail.incoming.enable;
         reply_by_email_enabled = cfg.mail.incoming.enable;

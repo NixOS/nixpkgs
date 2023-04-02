@@ -8,7 +8,8 @@
 , glib
 , gdk-pixbuf
 , gnome
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 }:
 
@@ -41,10 +42,6 @@ stdenv.mkDerivation rec {
     docbook-xsl-ns
     glib # for glib-mkenums needed during the build
   ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
-
-  buildInputs = lib.optionals withIntrospection [
     gobject-introspection
   ];
 

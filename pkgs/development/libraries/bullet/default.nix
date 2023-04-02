@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
   meta = with lib; {

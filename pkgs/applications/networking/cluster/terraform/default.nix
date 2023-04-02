@@ -9,21 +9,22 @@
 , writeText
 , terraform-providers
 , fetchpatch
+, installShellFiles
 }:
 
 let
-  generic = { version, sha256, vendorSha256 ? null, ... }@attrs:
-    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "vendorSha256" ];
+  generic = { version, hash, vendorHash ? null, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "hash" "vendorHash" ];
     in
     buildGoModule ({
       pname = "terraform";
-      inherit version vendorSha256;
+      inherit version vendorHash;
 
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "terraform";
         rev = "v${version}";
-        inherit sha256;
+        inherit hash;
       };
 
       ldflags = [ "-s" "-w" ];
@@ -34,6 +35,8 @@ let
           --replace "/bin/stty" "${coreutils}/bin/stty"
       '';
 
+      nativeBuildInputs = [ installShellFiles ];
+
       postInstall = ''
         # remove all plugins, they are part of the main binary now
         for i in $out/bin/*; do
@@ -41,6 +44,9 @@ let
             rm "$i"
           fi
         done
+
+        # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
+        installShellCompletion --bash --name terraform <(echo complete -C terraform terraform)
       '';
 
       preCheck = ''
@@ -168,9 +174,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.3.8";
-    sha256 = "sha256-AXLk5s3qu3QZ1aXx/FwPNq3hM26skBj0wyn/x8nVMkE=";
-    vendorSha256 = "sha256-CE6jNBvM0980+R0e5brK5lMrkad+91qTt9mp2h3NZyY=";
+    version = "1.4.4";
+    hash = "sha256-Fg9NDV063gWi9Na144jjkK7E8ysE2GR4IYT6qjTgnqw=";
+    vendorHash = "sha256-3ZQcWatJlQ6NVoPL/7cKQO6+YCSM3Ld77iLEQK3jBDE=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

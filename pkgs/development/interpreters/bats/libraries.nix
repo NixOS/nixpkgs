@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub }: {
-  bats-assert = stdenv.mkDerivation {
+  bats-assert = stdenv.mkDerivation rec {
     pname = "bats-assert";
-    version = "2.0.0";
+    version = "2.1.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-assert";
-      rev = "v2.0.0";
-      sha256 = "sha256-whSbAj8Xmnqclf78dYcjf1oq099ePtn4XX9TUJ9AlyQ=";
+      rev = "v${version}";
+      sha256 = "sha256-opgyrkqTwtnn/lUjMebbLfS/3sbI2axSusWd5i/5wm4=";
     };
     dontBuild = true;
     installPhase = ''
@@ -23,13 +23,13 @@
     };
   };
 
-  bats-file = stdenv.mkDerivation {
+  bats-file = stdenv.mkDerivation rec {
     pname = "bats-file";
     version = "0.3.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-file";
-      rev = "v0.3.0";
+      rev = "v${version}";
       sha256 = "sha256-3xevy0QpwNZrEe+2IJq58tKyxQzYx8cz6dD2nz7fYUM=";
     };
     dontBuild = true;
@@ -47,13 +47,13 @@
     };
   };
 
-  bats-support = stdenv.mkDerivation {
+  bats-support = stdenv.mkDerivation rec {
     pname = "bats-support";
     version = "0.3.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-support";
-      rev = "v0.3.0";
+      rev = "v${version}";
       sha256 = "sha256-4N7XJS5XOKxMCXNC7ef9halhRpg79kUqDuRnKcrxoeo=";
     };
     dontBuild = true;

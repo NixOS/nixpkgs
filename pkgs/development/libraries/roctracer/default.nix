@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=array-bounds"
   ];

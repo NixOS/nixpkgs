@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "shlib";
     rev = "v${version}";
-    sha256 = "sha256-2fwRxa64QXKJuhYwt9Z4BxhTeq1iwbd/IznfxPUjeSM=";
+    hash = "sha256-2fwRxa64QXKJuhYwt9Z4BxhTeq1iwbd/IznfxPUjeSM=";
   };
 
   pythonImportsCheck = [ "shlib" ];

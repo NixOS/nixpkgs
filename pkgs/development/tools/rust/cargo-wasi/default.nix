@@ -9,15 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-wasi";
-  version = "0.1.26";
+  version = "0.1.27";
 
   src = fetchCrate {
     inherit version;
     pname = "cargo-wasi-src";
-    sha256 = "sha256-/u5GKqGwJWS6Gzc1WZ7O5ZSHHGoqBVZ4jQDEIfAyciE=";
+    sha256 = "sha256-u6+Fn/j2cvpBqTIfyPC8jltcCKGimFcu4NiMFCAfmwg=";
   };
 
-  cargoSha256 = "sha256-eF3HrulY7HrKseCYyZyC2EuWboFvmia2qLymBxvopKI=";
+  cargoHash = "sha256-Hi5Z5TmiHXp7YrqXfbwACKEximksQRhdoMGU1iLmXOk=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   # Checks need to be disabled here because the current test suite makes assumptions
   # about the surrounding environment that aren't Nix friendly. See these lines for specifics:
-  # https://github.com/bytecodealliance/cargo-wasi/blob/0.1.26/tests/tests/support.rs#L13-L18
+  # https://github.com/bytecodealliance/cargo-wasi/blob/0.1.27/tests/tests/support.rs#L13-L18
   doCheck = false;
 
   meta = with lib; {

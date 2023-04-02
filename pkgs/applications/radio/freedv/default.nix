@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.7";
+  version = "1.8.8.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-N9LZCf2YAhVgxnQWgCB9TqGNpUGP1ZqpLmbYIaQsn08=";
+    hash = "sha256-zFfPXI15XnzHSG1hrMQz82aAVOc/Qqr1FHUrmaTLOk0=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
     "-DUNITTEST=ON"
   ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DAPPLE_OLD_XCODE"
-  ];
+  ]);
 
   doCheck = true;
 

@@ -11,15 +11,17 @@
 , useProfiles ? true
 , preferGtk2 ? false
 , settings32Bit ? false
+, ibtSupport ? false
 
 , prePatch ? ""
+, postPatch ? null
 , patches ? []
 , broken ? false
 , brokenOpen ? broken
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which
+, kernel ? null, perl, nukeReferences, which, libarchive
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -68,7 +70,7 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
-    inherit prePatch;
+    inherit prePatch postPatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
@@ -97,8 +99,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    buildInputs = [ which ];
-    nativeBuildInputs = [ perl nukeReferences ]
+    nativeBuildInputs = [ perl nukeReferences which libarchive ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
@@ -116,6 +117,7 @@ let
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
       compressFirmware = false;
+      ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
     } // optionalAttrs (!i686bundled) {
       inherit lib32;
     };
@@ -127,8 +129,7 @@ let
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
       maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-      # proprietary driver currently does not support X86_KERNEL_IBT, which is scheduled to be added in linux 6.2
-      broken = broken || (kernel != null && kernel.kernelAtLeast "6.2");
+      inherit broken;
     };
   };
 

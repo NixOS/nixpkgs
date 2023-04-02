@@ -29,10 +29,10 @@ let
       # Apptainer doesn't depend on conmon
       conmon = null;
 
-      # defaultToSuid becomes false since Apptainer 1.1.0
-      # https://github.com/apptainer/apptainer/pull/495
-      # https://github.com/apptainer/apptainer/releases/tag/v1.1.0
-      defaultToSuid = false;
+      # Apptainer builders require explicit --with-suid / --without-suid flag
+      # when building on a system with disabled unprivileged namespace.
+      # See https://github.com/NixOS/nixpkgs/pull/215690#issuecomment-1426954601
+      defaultToSuid = null;
     };
 
   singularity = callPackage

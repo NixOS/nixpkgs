@@ -44,6 +44,7 @@ with lib;
         The hidepid module was removed, since the underlying machinery
         is broken when using cgroups-v2.
     '')
+    (mkRemovedOptionModule [ "services" "baget" "enable" ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
@@ -105,6 +106,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "openfire" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
+
+    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Plesae use fcitx5 instead")
 
     # Do NOT add any option renames here, see top of the file
   ];

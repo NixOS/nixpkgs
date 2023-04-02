@@ -41,7 +41,7 @@ makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spl
   useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
 
   selectAttrs = attrs: names:
-    lib.listToAttrs (lib.concatMap (n: if attrs ? "${n}" then [(lib.nameValuePair n attrs."${n}")] else []) names);
+    lib.listToAttrs (lib.concatMap (n: lib.optionals (attrs ? "${n}") [(lib.nameValuePair n attrs."${n}")]) names);
 
   chooseLibs = (
     # There are differences in which libraries are exported. Avoid evaluation
@@ -121,7 +121,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   checkReexportsHook = pkgs.makeSetupHook {
     name = "darwin-check-reexports-hook";
-    deps = [ pkgs.darwin.print-reexports ];
+    propagatedBuildInputs = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
@@ -142,7 +142,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
     name = "auto-sign-darwin-binaries-hook";
-    deps = [ self.signingUtils ];
+    propagatedBuildInputs = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
   maloader = callPackage ../os-specific/darwin/maloader {

@@ -39,14 +39,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.251";
+  version = "0.252";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-x+QV4gunnERBHyYB2fXJ2LvMv437Z2omvk+fYkmZfqA=";
+    hash = "sha256-snef00pTbukiLQp8eAMfuIqNV3l0wP1+KlpFnS3iKFg=";
   };
 
   outputs = [ "out" "tools" ];
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
       --subst-var-by mamePath "$out/opt/mame"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=use-after-free"
   ];
 

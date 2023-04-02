@@ -3,7 +3,7 @@
 , buildPythonPackage
 , urllib3
 , geojson
-, isPy3k
+, pythonOlder
 , sqlalchemy
 , pytestCheckHook
 , pytz
@@ -12,12 +12,14 @@
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.29.0";
-  disabled = !isPy3k;
+  version = "0.30.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SywW/b4DnVeSzzRiHbDaKTjcuwDnkwrK6vFfaQVIZhQ=";
+    hash = "sha256-8xraDCFZbpJZsh3sO5VlSHwnEfH4u4AJZkXA+L4TB60=";
   };
 
   propagatedBuildInputs = [
@@ -32,8 +34,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # network access
+    # the following tests require network access
     "test_layer_from_uri"
+    "test_additional_settings"
+    "test_basic"
+    "test_cluster"
+    "test_default_settings"
+    "test_dynamic_http_port"
+    "test_environment_variables"
+    "test_verbosity"
   ];
 
   disabledTestPaths = [
@@ -44,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
     description = "A Python client library for CrateDB";
+    changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
   };

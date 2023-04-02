@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "tinkerpop";
     rev = version;
-    sha256 = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
+    hash = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
   };
 
   sourceRoot = "source/gremlin-python/src/main/python";
@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
     substituteInPlace setup.py \
       --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp' \
-      --replace 'importlib-metadata<5.0.0' 'importlib-metadata'
+      --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
+      --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';
 
   # setup-requires requirements

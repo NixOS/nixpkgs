@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.gromacs.org";
+    homepage = "https://www.gromacs.org";
     license = licenses.gpl2;
     description = "Molecular dynamics software package";
     longDescription = ''

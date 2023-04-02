@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace stdc++ c++
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
     "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal

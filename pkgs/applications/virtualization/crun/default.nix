@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.8";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    hash = "sha256-8R9cja8Blk+7Sp25bJ9t9e0TvazD41livK+KKAwRpLg=";
+    hash = "sha256-to4DP8cJakqLSjrMm6Y2vfYBZ9KgSMHxOULTF3vzu0g=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
+    changelog = "https://github.com/containers/crun/releases/tag/${version}";
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
     license = licenses.gpl2Plus;

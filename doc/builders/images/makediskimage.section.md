@@ -12,12 +12,12 @@ Whereas for many web servers, applications, it is possible to work with a Nix st
 
 NixOS tests also use this function when preparing the VM. The `cptofs` method is used when `virtualisation.useBootLoader` is false (the default). Otherwise the second method is used.
 
-## Features
+## Features {#sec-make-disk-image-features}
 
 For reference, read the function signature source code for documentation on arguments: <https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix>.
 Features are separated in various sections depending on if you opt for a Nix-store only image or a full NixOS image.
 
-### Common
+### Common {#sec-make-disk-image-features-common}
 
 - arbitrary NixOS configuration
 - automatic or bound disk size: `diskSize` parameter, `additionalSpace` can be set when `diskSize` is `auto` to add a constant of disk space
@@ -29,7 +29,7 @@ Features are separated in various sections depending on if you opt for a Nix-sto
 - the current nixpkgs can be realized as a channel in the disk image, which will change the hash of the image when the sources are updated
 - additional store paths can be provided through `additionalPaths`
 
-### Full NixOS image
+### Full NixOS image {#sec-make-disk-image-features-full-image}
 
 - arbitrary contents with permissions can be placed in the target filesystem using `contents`
 - a `/etc/nixpkgs/nixos/configuration.nix` can be provided through `configFile`
@@ -37,7 +37,7 @@ Features are separated in various sections depending on if you opt for a Nix-sto
 - EFI variables can be mutated during image production and the result is exposed in `$out`
 - boot partition size when partition table is `efi` or `hybrid`
 
-### On bit-to-bit reproducibility
+### On bit-to-bit reproducibility {#sec-make-disk-image-features-reproducibility}
 
 Images are **NOT** deterministic, please do not hesitate to try to fix this, source of determinisms are (not exhaustive) :
 
@@ -47,7 +47,7 @@ Images are **NOT** deterministic, please do not hesitate to try to fix this, sou
 
 A `deterministic` flag is available for best efforts determinism.
 
-## Usage
+## Usage {#sec-make-disk-image-usage}
 
 To produce a Nix-store only image:
 ```nix
@@ -101,6 +101,7 @@ in
     diskSize = "auto";
     additionalSpace = "0M"; # Defaults to 512M.
     copyChannel = false;
+    memSize = 2048; # Qemu VM memory size in megabytes. Defaults to 1024M.
   }
 ```
 

@@ -9,7 +9,7 @@
 , fluidsynth
 , glib
 , gtest
-, irr1
+, iir1
 , libGL
 , libGLU
 , libjack2
@@ -49,13 +49,10 @@ stdenv.mkDerivation (self: {
   ];
 
   buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_net
     alsa-lib
     fluidsynth
     glib
-    irr1
+    iir1
     libGL
     libGLU
     libjack2
@@ -66,10 +63,13 @@ stdenv.mkDerivation (self: {
     libslirp
     libsndfile
     opusfile
+    SDL2
+    SDL2_image
+    SDL2_net
     speexdsp
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${SDL2_image}/include/SDL2"
     "-I${SDL2_net}/include/SDL2"
   ];
@@ -91,13 +91,12 @@ stdenv.mkDerivation (self: {
     # original dosbox. Doing it this way allows us to work with frontends and
     # launchers that expect the binary to be named dosbox, but get out of the
     # way of vanilla dosbox if the user desires to install that as well.
-    mv $out/bin/dosbox $out/bin/${self.pname}
+    mv $out/bin/dosbox $out/bin/dosbox-staging
     makeWrapper $out/bin/dosbox-staging $out/bin/dosbox
 
-    # Create a symlink to dosbox manual instead of merely copying it
+    # Create a symlink to dosbox manual instead of copying it
     pushd $out/share/man/man1/
-    mv dosbox.1.gz ${self.pname}.1.gz
-    ln -s ${self.pname}.1.gz dosbox.1.gz
+    ln -s dosbox.1.gz dosbox-staging.1.gz
     popd
   '';
 
@@ -110,14 +109,10 @@ stdenv.mkDerivation (self: {
       existing DOSBox codebase while leveraging modern development tools and
       practices.
     '';
-    changelog = "https://github.com/dosbox-staging/dosbox-staging/releases/tag/v${self.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = [
-      lib.maintainers.joshuafern
-      lib.maintainers.AndersonTorres
-    ];
+    maintainers = with lib.maintainers; [ joshuafern AndersonTorres ];
     platforms = lib.platforms.unix;
     priority = 101;
   };
 })
-# TODO: report upstream about not finding extra SDL2 libraries
+# TODO: report upstream about not finding SDL2_net

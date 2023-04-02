@@ -296,6 +296,7 @@ broken-packages:
   - azure-email
   - azurify
   - b9
+  - babl # wants pkg-config dependency `babl`, but pkgs.babl's pkg-config file is called babl-0.1.pc
   - backprop
   - backstop
   - backtracking-exceptions
@@ -426,6 +427,7 @@ broken-packages:
   - bitx-bitcoin
   - bizzlelude-js
   - bkr
+  - blagda
   - blakesum
   - blas
   - blaze-html-hexpat
@@ -470,7 +472,9 @@ broken-packages:
   - brians-brain
   - brick-dropdownmenu
   - brick-filetree
+  - brick-list-search #  failure  in job https://hydra.nixos.org/build/211236614 at 2023-03-13
   - bricks-internal
+  - brick-tabular-list
   - brillig
   - brittany
   - broadcast-chan-tests
@@ -485,6 +489,7 @@ broken-packages:
   - bson-generics
   - bson-mapping
   - bsparse
+  - btree-concurrent # dependency missing in job https://hydra.nixos.org/build/211250233 at 2023-03-13
   - btrfs
   - buffer
   - buffer-builder-aeson
@@ -729,6 +734,7 @@ broken-packages:
   - clone-all
   - closure
   - cloudfront-signer
+  - clplug #  failure  in job https://hydra.nixos.org/build/211239834 at 2023-03-13
   - clr-inline
   - clr-typed
   - cluss
@@ -1127,7 +1133,6 @@ broken-packages:
   - dia-base
   - diagrams-boolean
   - diagrams-builder
-  - diagrams-gtk
   - diagrams-pdf
   - diagrams-qrcode
   - diagrams-rubiks-cube
@@ -1235,7 +1240,6 @@ broken-packages:
   - drmaa
   - drone
   - dropbox
-  - drunken-bishop
   - dsc
   - ds-kanren
   - dsmc
@@ -1383,7 +1387,6 @@ broken-packages:
   - ert
   - escape-artist
   - escoger
-  - espial
   - esqueleto-pgcrypto
   - ess
   - essence-of-live-coding
@@ -1419,6 +1422,7 @@ broken-packages:
   - exinst
   - exists
   - exitcode
+  - exon # dependency missing in job https://hydra.nixos.org/build/210848638 at 2023-02-28
   - exp-cache
   - exp-extended
   - explain
@@ -1458,6 +1462,7 @@ broken-packages:
   - fastedit
   - fastly
   - fast-nats
+  - fastparser # failure building library in job https://hydra.nixos.org/build/211240748 at 2023-03-13
   - fastpbkdf2
   - FastPush
   - fast-tagsoup-utf8-only
@@ -1909,6 +1914,7 @@ broken-packages:
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
+  - guardian   # transitive dependency uses doctest, but doctest doesn't build with newer Cabal version
   - guess-combinator
   - gulcii
   - gw
@@ -1937,7 +1943,6 @@ broken-packages:
   - hactor
   - hactors
   - haddock-api
-  - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
   - hadoop-formats
@@ -1970,6 +1975,7 @@ broken-packages:
   - HaLeX
   - halfs
   - half-space
+  - halide-haskell # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/212823532 at 2023-03-22
   - halipeto
   - halive
   - halma
@@ -2241,6 +2247,7 @@ broken-packages:
   - hfann
   - HFitUI
   - hfmt
+  - hfoil # failure building library in job https://hydra.nixos.org/build/213500290 at 2023-03-26
   - hfov
   - HFrequencyQueue
   - hfusion
@@ -2393,6 +2400,7 @@ broken-packages:
   - hops
   - hoq
   - horizon
+  - horizon-spec # dependency missing in job https://hydra.nixos.org/build/213500294 at 2023-03-26
   - horname
   - hosc-json
   - hosts-server
@@ -2618,6 +2626,7 @@ broken-packages:
   - hwhile
   - hw-json-demo
   - hw-json-lens
+  - hw-json-simd
   - hworker
   - hw-playground-linear
   - hw-prim-bits
@@ -2882,7 +2891,9 @@ broken-packages:
   - jvm-binary
   - jvm-parser
   - JYU-Utils
+  - k8s-wrapper # test failure in job https://hydra.nixos.org/build/211254982 at 2023-03-13
   - kademlia
+  - kafka-client # dependency missing in job https://hydra.nixos.org/build/211238496 at 2023-03-13
   - kafka-client-sync
   - kalman
   - Kalman
@@ -2994,7 +3005,6 @@ broken-packages:
   - language-sh
   - language-sqlite
   - language-sygus
-  - language-tl
   - language-typescript
   - language-webidl
   - laop
@@ -3006,6 +3016,7 @@ broken-packages:
   - LATS
   - launchdarkly-server-sdk
   - launchpad-control
+  - lawful-classes-hedgehog
   - lawless-concurrent-machines
   - layers
   - layout
@@ -3027,6 +3038,7 @@ broken-packages:
   - leapseconds
   - learn
   - Learning
+  - learn-physics-examples # dependency missing in job https://hydra.nixos.org/build/213500293 at 2023-03-26
   - leetify
   - lendingclub
   - lens-datetime
@@ -3284,6 +3296,7 @@ broken-packages:
   - medium-sdk-haskell
   - meep
   - megalisp
+  - megastore #  failure  in job https://hydra.nixos.org/build/211239200 at 2023-03-13
   - melf
   - mellon-core
   - melody
@@ -3357,8 +3370,10 @@ broken-packages:
   - ml-w
   - mm2
   - mmsyn2
+  - mmsyn4
   - mmsyn7l
   - mmsyn7ukr-array
+  - mmsyn7ukr-common
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
@@ -3426,12 +3441,14 @@ broken-packages:
   - money
   - mongodb-queue
   - monitor
+  - monocypher # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/212811942 at 2023-03-22
   - mono-foldable
   - monoid
   - monoid-absorbing
   - monoid-owns
   - monoidplus
   - monoids
+  - monoid-statistics
   - monopati
   - monus
   - monzo
@@ -3443,6 +3460,7 @@ broken-packages:
   - morphisms-objects
   - morte
   - mortred
+  - mosaico-lib # dependency missing in job https://hydra.nixos.org/build/212818174 at 2023-03-22
   - motor-reflection
   - mount
   - movie-monad
@@ -3592,6 +3610,7 @@ broken-packages:
   - neural-network-hmatrix
   - newbase60
   - newhope
+  - newline # dependency missing in job https://hydra.nixos.org/build/211250825 at 2023-03-13
   - newports
   - newsletter
   - newt
@@ -3877,9 +3896,9 @@ broken-packages:
   - PasswordGenerator
   - passwords
   - pasta
+  - pasta-curves
   - pastis
   - pasty
-  - patat
   - patches-vector
   - Pathfinder
   - pathfindingcore
@@ -4082,6 +4101,7 @@ broken-packages:
   - pong-server
   - pontarius-xpmn
   - pool
+  - poolboy # test failure in job https://hydra.nixos.org/build/212819440 at 2023-03-26
   - pool-conduit
   - pop3-client
   - poppler
@@ -4183,6 +4203,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - process-sequential
   - procrastinating-variable
   - procstat
   - product-isomorphic
@@ -4276,6 +4297,7 @@ broken-packages:
   - quantification
   - quantum-arrow
   - quarantimer
+  - qudb # failure building executable 'qudb' in job https://hydra.nixos.org/build/211250260 at 2023-03-13
   - quenya-verb
   - querystring-pickle
   - questioner
@@ -4283,6 +4305,8 @@ broken-packages:
   - QuickAnnotate
   - quickbooks
   - quickcheck-arbitrary-template
+  - quickcheck-groups
+  - quickcheck-lockstep # dependency missing in job https://hydra.nixos.org/build/210845914 at 2023-02-28
   - quickcheck-monoid-subclasses
   - quickcheck-property-comb
   - quickcheck-property-monad
@@ -4370,6 +4394,7 @@ broken-packages:
   - records
   - records-sop
   - record-wrangler
+  - recover-rtti
   - recursors
   - red-black-record
   - redis-glob
@@ -4582,6 +4607,7 @@ broken-packages:
   - sandlib
   - sandman
   - sarasvati
+  - sasha # dependency missing in job https://hydra.nixos.org/build/211237944 at 2023-03-13
   - sat
   - satchmo-backends
   - satchmo-minisat
@@ -4905,7 +4931,8 @@ broken-packages:
   - snaplet-typed-sessions
   - snap-loader-dynamic
   - snap-predicates
-  - snappy
+  - snappy-conduit
+  - snappy-iteratee
   - snap-routes
   - snap-stream
   - snap-testing
@@ -5199,7 +5226,6 @@ broken-packages:
   - tamarin-prover-utils
   - Tape
   - tapioca
-  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-autocollect
@@ -5244,8 +5270,6 @@ broken-packages:
   - tempus
   - ten
   - tensor
-  - tensorflow
-  - tensorflow-opgen
   - tensor-safe
   - termbox-bindings
   - termination-combinators
@@ -5319,6 +5343,7 @@ broken-packages:
   - th-pprint
   - threadmanager
   - threadscope
+  - thread-supervisor # test failure in job https://hydra.nixos.org/build/214156434 at 2023-03-29
   - threepenny-editors
   - threepenny-gui-contextmenu
   - threepenny-gui-flexbox
@@ -5790,6 +5815,7 @@ broken-packages:
   - whiskers
   - whois
   - why3
+  - wide-word-instances # failure building library in job https://hydra.nixos.org/build/211245524 at 2023-03-13
   - WikimediaParser
   - willow
   - windns
@@ -5911,6 +5937,7 @@ broken-packages:
   - YamlReference
   - yaml-rpc
   - yaml-union
+  - yaml-unscrambler # dependency missing in job https://hydra.nixos.org/build/212821989 at 2023-03-22
   - yampa2048
   - yampa-glfw
   - yampa-gloss
@@ -5991,6 +6018,7 @@ broken-packages:
   - yoda
   - Yogurt
   - youtube
+  - yst
   - yu-auth
   - yu-core
   - yuiGrid

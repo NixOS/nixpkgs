@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "0.4.3.20220106";
-  format = "setuptools";
+  version = "0.6.0.20230303";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JustAnotherArchivist";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gphNT1IYSiAw22sqHlV8Rm4WRP4EWUvP0UkITuepmMc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FY8byS+0yAhNSRxWsrsQMR5kdZmnHutru5Z6SWVfpiE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

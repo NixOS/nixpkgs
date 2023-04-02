@@ -35,8 +35,7 @@
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
-  binPath = lib.makeBinPath ([
-  ] ++ lib.optionals stdenv.isLinux [
+  binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
@@ -62,13 +61,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.4.1";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-Uha5ueOGNmG2f+1I89uFQKA3pSSp1d02FGy86Fc2eWE=";
+    hash = "sha256-rLXq+sveSxeoD3gyXSnfgGFx6alOBKSRCdDHGwwvPm4=";
   };
 
   patches = [
@@ -94,7 +93,7 @@ buildGoModule rec {
     systemd
   ];
 
-  HELPER_BINARIES_DIR = "${helpersBin}/bin";
+  HELPER_BINARIES_DIR = "${PREFIX}/libexec/podman"; # used in buildPhase & installPhase
   PREFIX = "${placeholder "out"}";
 
   buildPhase = ''
@@ -117,6 +116,8 @@ buildGoModule rec {
       make install.bin install.systemd
     ''}
     make install.completions install.man
+    mkdir -p ${HELPER_BINARIES_DIR}
+    ln -s ${helpersBin}/bin/* ${HELPER_BINARIES_DIR}
     wrapProgram $out/bin/podman \
       --prefix PATH : ${lib.escapeShellArg binPath}
     runHook postInstall
@@ -144,6 +145,11 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    longDescription = ''
+      Podman (the POD MANager) is a tool for managing containers and images, volumes mounted into those containers, and pods made from groups of containers. Podman runs containers on Linux, but can also be used on Mac and Windows systems using a Podman-managed virtual machine. Podman is based on libpod, a library for container lifecycle management that is also contained in this repository. The libpod library provides APIs for managing containers, pods, container images, and volumes.
+
+      To install on NixOS, please use the option `virtualisation.podman.enable = true`.
+    '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;

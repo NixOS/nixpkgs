@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 hamlib ];

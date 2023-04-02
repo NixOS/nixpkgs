@@ -1,18 +1,18 @@
-{ lib, python38Packages, fetchPypi
-, fftw, alsa-lib, pulseaudio, wxPython_4_0 }:
+{ lib, python39Packages, fetchPypi
+, fftw, alsa-lib, pulseaudio, pyusb, wxPython_4_2 }:
 
-python38Packages.buildPythonApplication rec {
+python39Packages.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.1.73";
+  version = "4.2.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37dfb02a32341025c086b07d66ddf1608d4ee1ae1c62fb51f87c97662f13e0d8";
+    sha256 = "sha256-eF/3++wRG0JulVTT+GvtqleBPkzLSZeu+RfHDI1xfOY=";
   };
 
   buildInputs = [ fftw alsa-lib pulseaudio ];
 
-  propagatedBuildInputs = [ wxPython_4_0 ];
+  propagatedBuildInputs = [ pyusb wxPython_4_2 ];
 
   doCheck = false;
 

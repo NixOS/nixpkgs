@@ -11,7 +11,7 @@
 , openal
 , SDL2
 , boost
-, ffmpeg
+, ffmpeg_4
 , Cocoa
 , OpenAL }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU libGL bullet glm libmad openal SDL2 boost ffmpeg
+    sfml libGLU libGL bullet glm libmad openal SDL2 boost ffmpeg_4
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with lib; {

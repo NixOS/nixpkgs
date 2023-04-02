@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jodal";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-bvRjFpXufGygTgPfEOJOCXFbMy3dNlrTHlGoaIG/Fbs=";
+    hash = "sha256-bvRjFpXufGygTgPfEOJOCXFbMy3dNlrTHlGoaIG/Fbs=";
   };
 
   nativeBuildInputs = [

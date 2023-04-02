@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "A wayland based logout menu";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
 # TODO: shell completions

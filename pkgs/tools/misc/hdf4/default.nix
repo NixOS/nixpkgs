@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , fixDarwinDylibNames
@@ -95,13 +96,15 @@ stdenv.mkDerivation rec {
     "NC_TEST-nctest"
   ];
 
-  checkPhase = let excludedTestsRegex = if (excludedTests != [])
-    then "(" + (lib.concatStringsSep "|" excludedTests) + ")"
-    else ""; in ''
-    runHook preCheck
-    ctest -E "${excludedTestsRegex}" --output-on-failure
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+    in
+    ''
+      runHook preCheck
+      ctest -E "${excludedTestsRegex}" --output-on-failure
+      runHook postCheck
+    '';
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -117,7 +120,7 @@ stdenv.mkDerivation rec {
       szip
       javaSupport
       jdk
-    ;
+      ;
   };
 
   meta = with lib; {

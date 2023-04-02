@@ -21,6 +21,7 @@ let
     isBool
     isFunction
     isList
+    isPath
     isString
     length
     mapAttrs
@@ -44,6 +45,9 @@ let
     showFiles
     showOption
     unknownModule
+    ;
+  inherit (lib.strings)
+    isConvertibleWithToString
     ;
 
   showDeclPrefix = loc: decl: prefix:
@@ -403,7 +407,7 @@ rec {
             key = module.key;
             module = module;
             modules = collectedImports.modules;
-            disabled = module.disabledModules ++ collectedImports.disabled;
+            disabled = (if module.disabledModules != [] then [{ file = module._file; disabled = module.disabledModules; }] else []) ++ collectedImports.disabled;
           }) initialModules);
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
@@ -412,10 +416,30 @@ rec {
       # modules recursively. It returns the final list of unique-by-key modules
       filterModules = modulesPath: { disabled, modules }:
         let
-          moduleKey = m: if isString m && (builtins.substring 0 1 m != "/")
-            then toString modulesPath + "/" + m
-            else toString m;
-          disabledKeys = map moduleKey disabled;
+          moduleKey = file: m:
+            if isString m
+            then
+              if builtins.substring 0 1 m == "/"
+              then m
+              else toString modulesPath + "/" + m
+
+            else if isConvertibleWithToString m
+            then
+              if m?key && m.key != toString m
+              then
+                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
+              else
+                toString m
+
+            else if m?key
+            then
+              m.key
+
+            else if isAttrs m
+            then throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
+            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${builtins.typeOf m}.";
+
+          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
         in map (attrs: attrs.module) (builtins.genericClosure {
           startSet = keyFilter modules;

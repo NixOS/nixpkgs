@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "notifications-python-client";
-  version = "6.4.1";
+  version = "8.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alphagov";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-HEHerdwplsPAld23Al8sUARu4T5IJLmY5kucAz2791c=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-feATZS7PG9IKY6ooPztA49WykQ/Bt67frSe3PpbiCLc=";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the GOV.UK Notify API";
     homepage = "https://github.com/alphagov/notifications-python-client";
+    changelog = "https://github.com/alphagov/notifications-python-client/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

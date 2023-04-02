@@ -53,13 +53,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "4.0-rc1";
+  version = "4.0.1-stable";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "c4fb119f03477ad9a494ba6cdad211b35a8efcce";
-    hash = "sha256-YJrm3or4QSzs+MDc06gY6TvUtWRgLST8RkdsomY8lZk=";
+    rev = version;
+    hash = "sha256-0PDKZ92PJo9N5oP56/Z8bzhVhfO7IHdtQ5rMj5Difto=";
   };
 
   nativeBuildInputs = [
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ twey shiryel ];
   };
 }

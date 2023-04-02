@@ -9,7 +9,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: let
     # Switching network stacks entirely isn't really possible. So just reboot
     # (to simulate the update, a bootloader which boots into the new config is needed).
     virtualisation.useBootLoader = true;
-    virtualisation.persistentBootDisk = true;
+    virtualisation.persistBootDevice = true;
     boot.loader = {
       efi.canTouchEfiVariables = false;
       grub = {

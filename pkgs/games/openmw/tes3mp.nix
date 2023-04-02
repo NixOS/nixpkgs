@@ -3,13 +3,9 @@
 , cmake
 , openmw
 , fetchFromGitHub
-, formats
 , luajit
 , makeWrapper
 , symlinkJoin
-, mygui
-, crudini
-, bullet
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
@@ -18,16 +14,21 @@ let
   # raknet could also be split into dev and lib outputs
   raknet = stdenv.mkDerivation {
     pname = "raknet";
-    version = "unstable-2018-07-14";
+    version = "unstable-2020-01-19";
 
     src = fetchFromGitHub {
       owner = "TES3MP";
       repo = "CrabNet";
       # usually fixed:
       # https://github.com/GrimKriegor/TES3MP-deploy/blob/d2a4a5d3acb64b16d9b8ca85906780aeea8d311b/tes3mp-deploy.sh#L589
-      rev = "4eeeaad2f6c11aeb82070df35169694b4fb7b04b";
-      sha256 = "0p0li9l1i5lcliswm5w9jql0zff9i6fwhiq0bl130m4i7vpr4cr3";
+      rev = "19e66190e83f53bcdcbcd6513238ed2e54878a21";
+      sha256 = "WIaJkSQnoOm9T7GoAwmWl7fNg79coIo/ILUsWcbH+lA=";
     };
+
+    cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DCRABNET_ENABLE_DLL=OFF"
+    ];
 
     nativeBuildInputs = [ cmake ];
 
@@ -38,14 +39,14 @@ let
 
   coreScripts = stdenv.mkDerivation {
     pname = "corescripts";
-    version = "unstable-2020-07-27";
+    version = "0.8.1";
 
     src = fetchFromGitHub {
       owner = "TES3MP";
       repo = "CoreScripts";
       # usually latest in stable branch (e.g. 0.7.1)
-      rev = "3c2d31595344db586d8585db0ef1fc0da89898a0";
-      sha256 = "sha256-m/pt2Et58HOMc1xqllGf4hjPLXNcc14+X0h84ouZDeg=";
+      rev = "6ae0a2a5d16171de3764817a7f8b1067ecde3def";
+      sha256 = "8j/Sr9IRMNFPEVfFzdb42PckHS3KW7FH7x7rRxIh5gY=";
     };
 
     buildCommand = ''
@@ -59,20 +60,19 @@ let
   # case the scripts or wrapper scripts change.
   unwrapped = openmw.overrideAttrs (oldAttrs: rec {
     pname = "openmw-tes3mp-unwrapped";
-    version = "unstable-2020-08-07";
+    version = "0.8.1";
 
     src = fetchFromGitHub {
       owner = "TES3MP";
-      repo = "openmw-tes3mp";
+      repo = "TES3MP";
       # usually latest in stable branch (e.g. 0.7.1)
-      rev = "ce5df6d18546e37aac9746d99c00d27a7f34b00d";
-      sha256 = "sha256-xLslShNA6rVFl9kt6BNGDpSYMpO25jBTCteLJoSTXdg=";
+      rev = "68954091c54d0596037c4fb54d2812313b7582a1";
+      sha256 = "8/bV4sw7Q8l8bDTHGQ0t4owf6J6h9q468JFx4KegY5o=";
     };
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
 
-    buildInputs = (builtins.map (x: if x.pname or "" == "bullet" then bullet else x) oldAttrs.buildInputs)
-      ++ [ luajit ];
+    buildInputs = oldAttrs.buildInputs ++ [ luajit ];
 
     cmakeFlags = oldAttrs.cmakeFlags ++ [
       "-DBUILD_OPENCS=OFF"
@@ -89,7 +89,7 @@ let
     # https://github.com/TES3MP/openmw-tes3mp/issues/552
     patches = oldAttrs.patches ++ [ ./tes3mp.patch ];
 
-    NIX_CFLAGS_COMPILE = "-fpermissive";
+    env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
     preConfigure = ''
       substituteInPlace files/version.in \
@@ -108,16 +108,24 @@ let
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ peterhoeg ];
       platforms = [ "x86_64-linux" "i686-linux" ];
-      broken = true;
     };
   });
 
-  cfgFile = (formats.ini { }).generate "tes3mp-server.cfg" {
-    Plugins.home = "${coreScripts}/share/openmw-tes3mp/CoreScripts";
-  };
+  tes3mp-server-run = ''
+    config="''${XDG_CONFIG_HOME:-''$HOME/.config}"/openmw
+    data="''${XDG_DATA_HOME:-''$HOME/.local/share}"/openmw
+    if [[ ! -f "$config"/tes3mp-server.cfg && ! -d "$data"/server ]]; then
+      mkdir -p "$config"
+      echo [Plugins] > "$config"/tes3mp-server.cfg
+      echo "home = $data/server" >> "$config"/tes3mp-server.cfg
+      mkdir -p "$data"
+      cp -r ${coreScripts}/share/openmw-tes3mp/CoreScripts "$data"/server
+      chmod -R u+w "$data"/server
+    fi
+  '';
 
 in
-symlinkJoin rec {
+symlinkJoin {
   name = "openmw-tes3mp-${unwrapped.version}";
   inherit (unwrapped) version meta;
 
@@ -125,18 +133,14 @@ symlinkJoin rec {
 
   paths = [ unwrapped ];
 
-  # crudini --merge will create the file if it doesn't exist
   postBuild = ''
     mkdir -p $out/bin
-
-    dir=\''${XDG_CONFIG_HOME:-\$HOME/.config}/openmw
 
     makeWrapper ${unwrapped}/libexec/tes3mp-browser $out/bin/tes3mp-browser \
       --chdir "$out/bin"
 
     makeWrapper ${unwrapped}/libexec/tes3mp-server $out/bin/tes3mp-server \
-      --run "mkdir -p $dir" \
-      --run "${crudini}/bin/crudini --merge $dir/${cfgFile.name} < ${cfgFile}" \
+      --run '${tes3mp-server-run}' \
       --chdir "$out/bin"
   '';
 }

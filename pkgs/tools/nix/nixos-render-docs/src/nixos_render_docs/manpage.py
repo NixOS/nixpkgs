@@ -1,4 +1,4 @@
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, cast, Iterable, Optional
 
@@ -6,7 +6,6 @@ import re
 
 import markdown_it
 from markdown_it.token import Token
-from markdown_it.utils import OptionsDict
 
 from .md import Renderer
 
@@ -75,8 +74,6 @@ class List:
 # horizontal motion in a line) we do attempt to copy the style of mdoc(7) semantic requests
 # as appropriate for each markup element.
 class ManpageRenderer(Renderer):
-    __output__ = "man"
-
     # whether to emit mdoc .Ql equivalents for inline code or just the contents. this is
     # mainly used by the options manpage converter to not emit extra quotes in defaults
     # and examples where it's already clear from context that the following text is code.
@@ -90,9 +87,8 @@ class ManpageRenderer(Renderer):
     _list_stack: list[List]
     _font_stack: list[str]
 
-    def __init__(self, manpage_urls: Mapping[str, str], href_targets: dict[str, str],
-                 parser: Optional[markdown_it.MarkdownIt] = None):
-        super().__init__(manpage_urls, parser)
+    def __init__(self, manpage_urls: Mapping[str, str], href_targets: dict[str, str]):
+        super().__init__(manpage_urls)
         self._href_targets = href_targets
         self._link_stack = []
         self._do_parbreak_stack = []
@@ -126,36 +122,27 @@ class ManpageRenderer(Renderer):
         self._leave_block()
         return ".RE"
 
-    def render(self, tokens: Sequence[Token], options: OptionsDict,
-               env: MutableMapping[str, Any]) -> str:
+    def render(self, tokens: Sequence[Token]) -> str:
         self._do_parbreak_stack = [ False ]
         self._font_stack = [ "\\fR" ]
-        return super().render(tokens, options, env)
+        return super().render(tokens)
 
-    def text(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-             env: MutableMapping[str, Any]) -> str:
+    def text(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return man_escape(token.content)
-    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
+    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._maybe_parbreak()
-    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ""
-    def hardbreak(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def hardbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ".br"
-    def softbreak(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def softbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return " "
-    def code_inline(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                    env: MutableMapping[str, Any]) -> str:
+    def code_inline(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         s = _protect_spaces(man_escape(token.content))
         return f"\\fR\\(oq{s}\\(cq\\fP" if self.inline_code_is_quoted else s
-    def code_block(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
-        return self.fence(token, tokens, i, options, env)
-    def link_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def code_block(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self.fence(token, tokens, i)
+    def link_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         href = cast(str, token.attrs['href'])
         self._link_stack.append(href)
         text = ""
@@ -164,8 +151,7 @@ class ManpageRenderer(Renderer):
             text = self._href_targets[href]
         self._font_stack.append("\\fB")
         return f"\\fB{text}\0 <"
-    def link_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
+    def link_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         href = self._link_stack.pop()
         text = ""
         if self.link_footnotes is not None:
@@ -177,8 +163,7 @@ class ManpageRenderer(Renderer):
             text = "\\fR" + man_escape(f"[{idx}]")
         self._font_stack.pop()
         return f">\0 {text}{self._font_stack[-1]}"
-    def list_item_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
+    def list_item_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._enter_block()
         lst = self._list_stack[-1]
         maybe_space = '' if lst.compact or not lst.first_item_seen else '.sp\n'
@@ -192,36 +177,28 @@ class ManpageRenderer(Renderer):
             f'.RS {lst.width}\n'
             f"\\h'-{len(head) + 1}'\\fB{man_escape(head)}\\fP\\h'1'\\c"
         )
-    def list_item_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def list_item_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._leave_block()
         return ".RE"
-    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.append(List(width=4, compact=bool(token.meta['compact'])))
         return self._maybe_parbreak()
-    def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                          env: MutableMapping[str, Any]) -> str:
+    def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.pop()
         return ""
-    def em_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def em_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._font_stack.append("\\fI")
         return "\\fI"
-    def em_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def em_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._font_stack.pop()
         return self._font_stack[-1]
-    def strong_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                    env: MutableMapping[str, Any]) -> str:
+    def strong_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._font_stack.append("\\fB")
         return "\\fB"
-    def strong_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def strong_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._font_stack.pop()
         return self._font_stack[-1]
-    def fence(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-              env: MutableMapping[str, Any]) -> str:
+    def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         s = man_escape(token.content).rstrip('\n')
         return (
             '.sp\n'
@@ -231,8 +208,7 @@ class ManpageRenderer(Renderer):
             '.fi\n'
             '.RE'
         )
-    def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         maybe_par = self._maybe_parbreak("\n")
         self._enter_block()
         return (
@@ -240,62 +216,44 @@ class ManpageRenderer(Renderer):
             ".RS 4\n"
             f"\\h'-3'\\fI\\(lq\\(rq\\fP\\h'1'\\c"
         )
-    def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+    def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._leave_block()
         return ".RE"
-    def note_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def note_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_open("Note")
-    def note_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
+    def note_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_close()
-    def caution_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def caution_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_open( "Caution")
-    def caution_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def caution_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_close()
-    def important_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
+    def important_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_open( "Important")
-    def important_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def important_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_close()
-    def tip_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def tip_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_open( "Tip")
-    def tip_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def tip_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_close()
-    def warning_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def warning_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_open( "Warning")
-    def warning_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def warning_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._admonition_close()
-    def dl_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def dl_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ".RS 4"
-    def dl_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def dl_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ".RE"
-    def dt_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def dt_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ".PP"
-    def dt_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def dt_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ""
-    def dd_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def dd_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._enter_block()
         return ".RS 4"
-    def dd_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def dd_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._leave_block()
         return ".RE"
-    def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def myst_role(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if token.meta['name'] in [ 'command', 'env', 'option' ]:
             return f'\\fB{man_escape(token.content)}\\fP'
         elif token.meta['name'] in [ 'file', 'var' ]:
@@ -306,23 +264,18 @@ class ManpageRenderer(Renderer):
             return f'\\fB{man_escape(page)}\\fP\\fR({man_escape(section)})\\fP'
         else:
             raise NotImplementedError("md node not supported yet", token)
-    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         # mdoc knows no anchors so we can drop those, but classes must be rejected.
         if 'class' in token.attrs:
-            return super().attr_span_begin(token, tokens, i, options, env)
+            return super().attr_span_begin(token, tokens, i)
         return ""
-    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return ""
-    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in manpages", token)
-    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in manpages", token)
-    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                          env: MutableMapping[str, Any]) -> str:
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         # max item head width for a number, a dot, and one leading space and one trailing space
         width = 3 + len(str(cast(int, token.meta['end'])))
         self._list_stack.append(
@@ -330,7 +283,6 @@ class ManpageRenderer(Renderer):
                  next_idx = cast(int, token.attrs.get('start', 1)),
                  compact  = bool(token.meta['compact'])))
         return self._maybe_parbreak()
-    def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                           env: MutableMapping[str, Any]) -> str:
+    def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.pop()
         return ""

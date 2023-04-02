@@ -21,7 +21,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =  lib.optionals stdenv.isDarwin [ darwin.Security ];
 
-  cargoSha256 = "1nv6g8rmjjbwqmjkrpqncypqvx5c7xp2zlx5h6rw2j9d1wlys0v5";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "arenatree-0.1.1" = "sha256-b3VVbYnWsjSjFMxvkfpJt13u+VC6baOIWD4qm1Gco4Q=";
+      "rnix-0.4.1" = "sha256-C1L/qXk6AimH7COrBlqpUA3giftaOYm/qNxs7rQgETA=";
+    };
+  };
 
   meta = with lib; {
     description = "Generate documentation for Nix functions";

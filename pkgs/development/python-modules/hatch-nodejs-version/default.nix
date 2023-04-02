@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "agoose77";
     repo = "hatch-nodejs-version";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-txF392XiRqHndTEYw6QVk12Oqw9E6cOwF81hUyp2oh4=";
+    hash = "sha256-txF392XiRqHndTEYw6QVk12Oqw9E6cOwF81hUyp2oh4=";
   };
 
   propagatedBuildInputs = [

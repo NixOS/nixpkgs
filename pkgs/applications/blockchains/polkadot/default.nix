@@ -1,24 +1,21 @@
-{ clang
-, fetchFromGitHub
+{ fetchFromGitHub
 , lib
-, llvmPackages
 , protobuf
 , rocksdb
 , rustPlatform
 , stdenv
-, writeShellScriptBin
 , Security
 , SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.37";
+  version = "0.9.40";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    hash = "sha256-/mgJNjliPUmMkhT/1oiX9+BJHfY3SMsKfFv9HCyWRQQ=";
+    hash = "sha256-gwifWhGsStC8vhMxc+LWSvs/av8c04cdWv7iszIQ/k8=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -34,7 +31,13 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-o+APFYKgA3zjQSGrkpnyf5LEBBqvZtcfWlzCk6nL02A=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "binary-merkle-tree-4.0.0-dev" = "sha256-YxCAFrLWTmGjTFzNkyjE+DNs2cl4IjAlB7qz0KPN1vE=";
+      "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 

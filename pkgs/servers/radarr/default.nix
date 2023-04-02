@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
+    changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edwtjo purcell ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

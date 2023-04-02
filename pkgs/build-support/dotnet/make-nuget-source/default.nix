@@ -30,9 +30,7 @@ let
     meta.licence = let
       depLicenses = lib.splitString "\n" (builtins.readFile "${nuget-source}/share/licenses");
     in (lib.flatten (lib.forEach depLicenses (spdx:
-      if (spdx != "")
-        then lib.getLicenseFromSpdxId spdx
-        else []
+      lib.optionals (spdx != "") (lib.getLicenseFromSpdxId spdx)
     )));
   };
 in nuget-source

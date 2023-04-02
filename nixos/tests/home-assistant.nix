@@ -22,22 +22,23 @@ in {
       enable = true;
       inherit configDir;
 
-      # tests loading components by overriding the package
+      # provide dependencies through package overrides
       package = (pkgs.home-assistant.override {
         extraPackages = ps: with ps; [
           colorama
         ];
-        extraComponents = [ "zha" ];
-      }).overrideAttrs (oldAttrs: {
-        doInstallCheck = false;
+        extraComponents = [
+          # test char-tty device allow propagation into the service
+          "zha"
+         ];
       });
 
-      # tests loading components from the module
+      # provide component dependencies explicitly from the module
       extraComponents = [
-        "wake_on_lan"
+        "mqtt"
       ];
 
-      # test extra package passing from the module
+      # provide package for postgresql support
       extraPackages = python3Packages: with python3Packages; [
         psycopg2
       ];
@@ -111,36 +112,38 @@ in {
   };
 
   testScript = { nodes, ... }: let
-    system = nodes.hass.config.system.build.toplevel;
+    system = nodes.hass.system.build.toplevel;
   in
   ''
-    import re
     import json
 
     start_all()
 
-    # Parse the package path out of the systemd unit, as we cannot
-    # access the final package, that is overridden inside the module,
-    # by any other means.
-    pattern = re.compile(r"path=(?P<path>[\/a-z0-9-.]+)\/bin\/hass")
-    response = hass.execute("systemctl show -p ExecStart home-assistant.service")[1]
-    match = pattern.search(response)
-    assert match
-    package = match.group('path')
 
-
-    def get_journal_cursor(host) -> str:
-        exit, out = host.execute("journalctl -u home-assistant.service -n1 -o json-pretty --output-fields=__CURSOR")
+    def get_journal_cursor() -> str:
+        exit, out = hass.execute("journalctl -u home-assistant.service -n1 -o json-pretty --output-fields=__CURSOR")
         assert exit == 0
         return json.loads(out)["__CURSOR"]
 
 
-    def wait_for_homeassistant(host, cursor):
-        host.wait_until_succeeds(f"journalctl --after-cursor='{cursor}' -u home-assistant.service | grep -q 'Home Assistant initialized in'")
+    def get_journal_since(cursor) -> str:
+        exit, out = hass.execute(f"journalctl --after-cursor='{cursor}' -u home-assistant.service")
+        assert exit == 0
+        return out
+
+
+    def get_unit_property(property) -> str:
+        exit, out = hass.execute(f"systemctl show --property={property} home-assistant.service")
+        assert exit == 0
+        return out
+
+
+    def wait_for_homeassistant(cursor):
+        hass.wait_until_succeeds(f"journalctl --after-cursor='{cursor}' -u home-assistant.service | grep -q 'Home Assistant initialized in'")
 
 
     hass.wait_for_unit("home-assistant.service")
-    cursor = get_journal_cursor(hass)
+    cursor = get_journal_cursor()
 
     with subtest("Check that YAML configuration file is in place"):
         hass.succeed("test -L ${configDir}/configuration.yaml")
@@ -148,18 +151,21 @@ in {
     with subtest("Check the lovelace config is copied because lovelaceConfigWritable = true"):
         hass.succeed("test -f ${configDir}/ui-lovelace.yaml")
 
-    with subtest("Check extraComponents and extraPackages are considered from the package"):
-        hass.succeed(f"grep -q 'colorama' {package}/extra_packages")
-        hass.succeed(f"grep -q 'zha' {package}/extra_components")
-
-    with subtest("Check extraComponents and extraPackages are considered from the module"):
-        hass.succeed(f"grep -q 'psycopg2' {package}/extra_packages")
-        hass.succeed(f"grep -q 'wake_on_lan' {package}/extra_components")
-
     with subtest("Check that Home Assistant's web interface and API can be reached"):
-        wait_for_homeassistant(hass, cursor)
+        wait_for_homeassistant(cursor)
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
+
+    with subtest("Check that optional dependencies are in the PYTHONPATH"):
+        env = get_unit_property("Environment")
+        python_path = env.split("PYTHONPATH=")[1].split()[0]
+        for package in ["colorama", "paho-mqtt", "psycopg2"]:
+            assert package in python_path, f"{package} not in PYTHONPATH"
+
+    with subtest("Check that declaratively configured components get setup"):
+        journal = get_journal_since(cursor)
+        for domain in ["emulated_hue", "wake_on_lan"]:
+            assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check that capabilities are passed for emulated_hue to bind to port 80"):
         hass.wait_for_open_port(80)
@@ -169,25 +175,28 @@ in {
         hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
 
     with subtest("Check service reloads when configuration changes"):
-      # store the old pid of the process
-      pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
-      cursor = get_journal_cursor(hass)
-      hass.succeed("${system}/specialisation/differentName/bin/switch-to-configuration test")
-      new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
-      assert pid == new_pid, "The PID of the process should not change between process reloads"
-      wait_for_homeassistant(hass, cursor)
+        pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+        cursor = get_journal_cursor()
+        hass.succeed("${system}/specialisation/differentName/bin/switch-to-configuration test")
+        new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+        assert pid == new_pid, "The PID of the process should not change between process reloads"
+        wait_for_homeassistant(cursor)
 
-    with subtest("check service restarts when package changes"):
-      pid = new_pid
-      cursor = get_journal_cursor(hass)
-      hass.succeed("${system}/specialisation/newFeature/bin/switch-to-configuration test")
-      new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
-      assert pid != new_pid, "The PID of the process shoudl change when the HA binary changes"
-      wait_for_homeassistant(hass, cursor)
+    with subtest("Check service restarts when dependencies change"):
+        pid = new_pid
+        cursor = get_journal_cursor()
+        hass.succeed("${system}/specialisation/newFeature/bin/switch-to-configuration test")
+        new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+        assert pid != new_pid, "The PID of the process should change when its PYTHONPATH changess"
+        wait_for_homeassistant(cursor)
+
+    with subtest("Check that new components get setup after restart"):
+        journal = get_journal_since(cursor)
+        for domain in ["esphome"]:
+            assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check that no errors were logged"):
-        output_log = hass.succeed("cat ${configDir}/home-assistant.log")
-        assert "ERROR" not in output_log
+        hass.fail("journalctl -u home-assistant -o cat | grep -q ERROR")
 
     with subtest("Check systemd unit hardening"):
         hass.log(hass.succeed("systemctl cat home-assistant.service"))

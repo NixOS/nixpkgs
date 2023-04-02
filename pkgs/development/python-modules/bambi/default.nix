@@ -4,9 +4,11 @@
 , fetchFromGitHub
 , pytestCheckHook
 , arviz
+, blackjax
 , formulae
 , graphviz
 , numpy
+, numpyro
 , pandas
 , pymc
 , scipy
@@ -14,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.9.3";
+  version = "0.10.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f/4CrFmma+Lc6wZm+YyDupDWfPAtuRsZdRf28sYUWTk=";
+    hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
   };
 
   propagatedBuildInputs = [
@@ -35,14 +37,16 @@ buildPythonPackage rec {
 
   preCheck = ''export HOME=$(mktemp -d)'';
 
-  nativeCheckInputs = [ graphviz pytestCheckHook ];
+  nativeCheckInputs = [
+    blackjax
+    graphviz
+    numpyro
+    pytestCheckHook
+  ];
   disabledTests = [
     # attempt to fetch data:
     "test_data_is_copied"
     "test_predict_offset"
-    # require blackjax (not in Nixpkgs), numpyro, and jax:
-    "test_logistic_regression_categoric_alternative_samplers"
-    "test_regression_alternative_samplers"
   ];
 
   pythonImportsCheck = [ "bambi" ];

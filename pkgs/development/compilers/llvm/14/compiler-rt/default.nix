@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -81,6 +81,12 @@ stdenv.mkDerivation {
     ./darwin-targetconditionals.patch
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     ./armv7l.patch
+    # Fix build on armv6l
+    ../../common/compiler-rt/armv6-mcr-dmb.patch
+    ../../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+    ../../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+    ../../common/compiler-rt/armv6-scudo-no-yield.patch
+    ../../common/compiler-rt/armv6-scudo-libatomic.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

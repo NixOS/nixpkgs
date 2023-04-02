@@ -77,6 +77,9 @@ import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
       machine.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
       machine.succeed("k3s kubectl delete -f ${testPodYaml}")
 
+      # regression test for #176445
+      machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
+
       machine.shutdown()
     '';
   })

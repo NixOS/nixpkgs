@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "xmlrunner";
     repo = "unittest-xml-reporting";
     rev = version;
-    sha256 = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
+    hash = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
   };
 
   propagatedBuildInputs = [

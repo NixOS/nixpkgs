@@ -58,13 +58,13 @@ let
     owner = "ibis-project";
     repo = "testing-data";
     rev = "3c39abfdb4b284140ff481e8f9fbb128b35f157a";
-    sha256 = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
+    hash = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "ibis";
     owner = "ibis-project";
-    rev = version;
-    hash = "sha256-G3kMd6Jyib7ZXHFP6t2CEPlDD5n5zHE2jq/0he3U4Nk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ipnMymf+BOpG9iGWO47no47m4nLIBbqLdbzlevuxeBw=";
   };
 
   nativeBuildInputs = [
@@ -112,6 +112,10 @@ buildPythonPackage rec {
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
+    # these will be fixed in ibis-framework 5.0.0
+    "--deselect=ibis/backends/tests/test_string.py::test_string"
+    "--deselect=ibis/backends/tests/test_register.py::test_csv_reregister_schema"
+    "--deselect=ibis/backends/tests/test_client.py::test_list_databases"
   ];
 
   # remove when sqlalchemy backend no longer uses deprecated methods

@@ -169,7 +169,7 @@ stdenv.mkDerivation ({
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
 
   env = {
-    linuxHeaders = if withLinuxHeaders then linuxHeaders else "";
+    linuxHeaders = lib.optionalString withLinuxHeaders linuxHeaders;
     inherit (stdenv) is64bit;
     # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
     # prevent a retained dependency on the bootstrap tools in the stdenv-linux

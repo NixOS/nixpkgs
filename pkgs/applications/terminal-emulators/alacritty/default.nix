@@ -49,16 +49,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2jNE0UdPXfOyAfPPVKhdBpuVVw4IpwWQ+RLQlJNnK0Y=";
+    hash = "sha256-2MiFsOZpAlDVC4h3m3HHlMr2ytL/z47vrTwUMoHdegI=";
   };
 
-  cargoSha256 = "sha256-t6ckX0PYI8UHfXhGRpcX8ly3DzE9A6i9P6f3Ny3DBzw=";
+  cargoSha256 = "sha256-4liPfNJ2JGniz8Os4Np+XSXCJBHND13XLPWDy3Gc/F8=";
 
   auditable = true; # TODO: remove when this is the default
 
@@ -134,7 +134,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne mic92 ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne mic92 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };

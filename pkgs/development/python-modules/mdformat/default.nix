@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
+    hash = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
   };
 
   nativeBuildInputs = [

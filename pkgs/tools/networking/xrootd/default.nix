@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xrootd";
-  version = "5.5.2";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-2zVCOcjL8TUbo38Dx7W8431ziouzuAdCfogsIMSOOmQ=";
+    hash = "sha256-6yjZ50ZTXfKcfYwuuAwqXOWsVucpNRWEC9F3rcYSRXQ=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];

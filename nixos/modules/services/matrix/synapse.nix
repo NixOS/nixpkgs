@@ -60,7 +60,7 @@ in {
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
-      <nixpkgs/nixos/tests/matrix-synapse.nix>
+      <nixpkgs/nixos/tests/matrix/synapse.nix>
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
     (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
@@ -711,7 +711,7 @@ in {
 
             If you
             - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
+              for this can be found in <nixpkgs/nixos/tests/matrix/synapse.nix>
             - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
               to your configuration.
 
@@ -755,8 +755,8 @@ in {
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
         ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
-          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
-          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+          chown matrix-synapse:matrix-synapse ${cfg.settings.signing_key_path}
+          chmod 0600 ${cfg.settings.signing_key_path}
         '')) ];
         ExecStart = ''
           ${cfg.package}/bin/synapse_homeserver \

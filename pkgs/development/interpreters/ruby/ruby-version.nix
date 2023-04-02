@@ -55,9 +55,9 @@ let
         self.majMinTiny + (
           if self.patchLevel != null then
             "-p${self.patchLevel}"
-          else if self.tail != "" then
-            "-${self.tail}"
-          else "");
+          else
+            lib.optionalString (self.tail != "") "-${self.tail}"
+        );
     };
 in
   rubyVersion

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   #     `ht_globals'; collector.o:/build/libipfix_110209/collector/../libmisc/misc.h:111: first defined here
   # TODO: drop the workaround when fix ix released:
   #   https://sourceforge.net/p/libipfix/code/ci/a501612c6b8ac6f2df16b366f7a92211382bae6b/
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     homepage = "https://libipfix.sourceforge.net/";

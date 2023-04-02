@@ -470,6 +470,8 @@ In that case, `numpy` is chosen from the generic `python3Packages`.
 
 The following options can be used when writing tests.
 
-```{=docbook}
-<xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
+```{=include=} options
+id-prefix: test-opt-
+list-id: test-options-list
+source: @NIXOS_TEST_OPTIONS_JSON@
 ```

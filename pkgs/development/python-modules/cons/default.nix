@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "pythological";
     repo = "python-cons";
     rev = "fbeedfc8a3d1bff4ba179d492155cdd55538365e";
-    sha256 = "sha256-ivHFep9iYPvyiBIZKMAzqrLGnQkeuxd0meYMZwZFFH0=";
+    hash = "sha256-ivHFep9iYPvyiBIZKMAzqrLGnQkeuxd0meYMZwZFFH0=";
   };
 
   propagatedBuildInputs = [

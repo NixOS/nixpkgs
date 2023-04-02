@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-DRUBY_LIB_INSTALL=${placeholder "out"}/lib/ruby"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami yaml-cpp openssl ruby util-linux ];

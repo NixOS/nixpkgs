@@ -9,8 +9,7 @@ let
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
-      # include pkgs.zfs by default in the wrapped podman used by the module so it is cached
-      ++ (if (builtins.elem "zfs" config.boot.supportedFilesystems) then [ config.boot.zfs.package ] else [ pkgs.zfs ]);
+      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
   });
 
   # Provides a fake "docker" binary mapping to podman
@@ -143,6 +142,7 @@ in
     defaultNetwork.settings = lib.mkOption {
       type = json.type;
       default = { };
+      example = lib.literalExpression "{ dns_enabled = true; }";
       description = lib.mdDoc ''
         Settings for podman's default network.
       '';
@@ -150,7 +150,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
+  config = lib.mkIf cfg.enable
     {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
@@ -236,6 +236,5 @@ in
           '';
         }
       ];
-    }
-  ]);
+    };
 }

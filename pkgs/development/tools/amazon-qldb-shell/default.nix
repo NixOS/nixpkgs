@@ -26,7 +26,12 @@ let
     buildInputs = [ llvmPackages.libclang ]
       ++ lib.optional stdenv.isDarwin Security;
 
-    cargoSha256 = "sha256-y3dNEa2U9mwsENPda44zweszlk4UJXGtfeH+er8mi0U=";
+    cargoLock = {
+      lockFile = ./Cargo.lock;
+      outputHashes = {
+        "amazon-qldb-driver-0.1.0" = "sha256-az0rANBcryHHnpGWvo15TGGW4KMUULZHaj5msIHts14=";
+      };
+    };
 
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 

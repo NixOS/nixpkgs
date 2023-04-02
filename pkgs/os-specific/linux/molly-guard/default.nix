@@ -11,10 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dpkg ];
 
-  sourceRoot = ".";
-
   unpackCmd = ''
-    dpkg-deb -x "$src" .
+    dpkg-deb -x "$src" source
   '';
 
   installPhase = ''

@@ -12,13 +12,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
+    sha256 = "sha256-3boPoq/wm0af0DqEWcUCUyCmVFopVMitRHJI1xsjAWM=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
     description = "Lightweight implementation of some Unix command line utilities";

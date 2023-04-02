@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.2.3";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IaeUtv0vdgqddm1o++SUZTT2Xom3Pom4icVQOYVVi4Y=";
+    hash = "sha256-Zszme9xjW5spBmUQR0OSwM/A2V24rdpAENyM3Y4EYlA=";
   };
 
   postPatch = ''

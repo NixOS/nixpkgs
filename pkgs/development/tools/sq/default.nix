@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "sq";
-  version = "0.20.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mJp4lb4pzjdjodHk2zLAEePn+oIPI/vTtU0YOIbmWDY=";
+    sha256 = "sha256-FYEgCXXcVhm6vv1QT8UqCBo+/o0dAPwbR3ZNB72MrGI=";
   };
 
-  vendorSha256 = "sha256-8kk+KCanbnsizGRjF3qcxCBxC7Sx0zfptQFTETZp89E=";
+  vendorHash = "sha256-Kcl0/txbq7+xA6826SzSrZx4L02GHcXG5ciKmkrtWLI=";
 
   proxyVendor = true;
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=${version}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${version}"
   ];
 
   postInstall = ''
@@ -34,7 +34,10 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = sq; };
+    version = testers.testVersion {
+      package = sq;
+      version = "v${version}";
+    };
   };
 
   meta = with lib; {

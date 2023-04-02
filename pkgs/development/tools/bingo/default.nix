@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "bingo";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
     rev = "v${version}";
-    hash = "sha256-s+vdtMzeHUtUlmMlvgnK83RYoMqS3GqrTnu7LssIK6A=";
+    hash = "sha256-YvBRI1i7ICnacYQv7rNDuUnqhuLXJ4eAZhT0ce3vFuU=";
   };
 
   vendorHash = "sha256-28p1g+p+guJ0x4/5QDGsGN6gDnZkE4AKF/2cFgNjPDM=";

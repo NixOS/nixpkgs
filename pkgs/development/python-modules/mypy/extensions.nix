@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy_extensions";
     rev = version;
-    sha256 = "sha256-JjhbxX5DBAbcs1o2fSWywz9tot792q491POXiId+NyI=";
+    hash = "sha256-JjhbxX5DBAbcs1o2fSWywz9tot792q491POXiId+NyI=";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
-    homepage = "http://www.mypy-lang.org";
+    homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
   };

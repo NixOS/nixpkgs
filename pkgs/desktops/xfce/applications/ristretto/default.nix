@@ -11,9 +11,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.12.4";
+  version = "0.13.0";
+  odd-unstable = false;
 
-  sha256 = "sha256-pspS9zRvDOMz4+Ud43uT4gsDQhB51bwmaXPXcGlOhsY=";
+  sha256 = "sha256-K1cC5NnRv/C5ZiwMAmaQ8qxvlxHRsJ4F1TgR9CN8Qgc=";
 
   buildInputs = [
     glib
@@ -24,7 +25,7 @@ mkXfceDerivation {
     xfconf
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with lib; {
     description = "A fast and lightweight picture-viewer for the Xfce desktop environment";

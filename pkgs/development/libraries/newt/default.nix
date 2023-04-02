@@ -36,16 +36,25 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
+  configureFlags = lib.optionals stdenv.isDarwin [
+    "--disable-nls"
+  ];
+
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libnewt.so.${version} $out/lib/libnewt.so.${version}
+    install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
+  '';
 
   meta = with lib; {
     homepage = "https://pagure.io/newt";
     description = "Library for color text mode, widget based user interfaces";
 
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.viric ];
   };
 }

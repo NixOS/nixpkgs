@@ -1,13 +1,13 @@
 {
-  "version": "3.148.0",
+  "version": "3.150.7",
   "appimage": {
     "x86_64-linux": {
-      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.148.0/standard-notes-3.148.0-linux-x86_64.AppImage",
-      "hash": "sha512-Nzvzl3O7/AXj/Sr5CMfmLktx+w9OUHPZmHH8pxx5GYhmjAgYCh2V0w1iPe5G7/nJpx+jSBJXSKq3jR3wYCeXWA=="
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.150.7/standard-notes-3.150.7-linux-x86_64.AppImage",
+      "hash": "sha512-uJJloClRiyBneNrRjsRnq0AiSlJyZFrS97bdkDU89Oz0GCaVjQMnAz87gPu9H45qqjQyIogtOnd6Wpkw2/5WJA=="
     },
     "aarch64-linux": {
-      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.148.0/standard-notes-3.148.0-linux-arm64.AppImage",
-      "hash": "sha512-Owwc0WRlATTYZYrUtW6iZK8gXktHstDclqHmo5GZ1AAqB7/W9qTuQ2LNMjfL0kAzIQw/JCBfxvDCG9DjEM6eYA=="
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.150.7/standard-notes-3.150.7-linux-arm64.AppImage",
+      "hash": "sha512-rzMu2VsrQJmaQFSJjyMLcL2/jXvMAQgzrOw179fGOPBKP+LA6hQ7XYBXL/abb9ZwAz5NO/uV6QUS8HDciKtIZw=="
     }
   }
 }

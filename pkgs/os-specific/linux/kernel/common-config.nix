@@ -36,10 +36,7 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = mkMerge [
-        (whenOlder "5.2" (if (features.debug or false) then yes else no))
-        (whenBetween "5.2" "5.18" yes)
-      ];
+      DEBUG_INFO                = yes;
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -62,6 +59,8 @@ let
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
+
+      GDB_SCRIPTS               = yes;
     };
 
     power-management = {
@@ -70,12 +69,22 @@ let
       PM_ADVANCED_DEBUG                = yes;
       PM_WAKELOCKS                     = yes;
       POWERCAP                         = yes;
+      # ACPI Firmware Performance Data Table Support
+      ACPI_FPDT                        = whenAtLeast "5.12" (option yes);
+      # ACPI Heterogeneous Memory Attribute Table Support
+      ACPI_HMAT                        = whenAtLeast "5.2" (option yes);
+      # ACPI Platform Error Interface
+      ACPI_APEI                        = (option yes);
+      # APEI Generic Hardware Error Source
+      ACPI_APEI_GHES                   = (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
       X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
+      # Intel DPTF (Dynamic Platform and Thermal Framework) Support
+      ACPI_DPTF                        = whenAtLeast "5.10" yes;
     };
 
     external-firmware = {
@@ -273,9 +282,18 @@ let
       DRM_SIMPLEDRM = whenAtLeast "5.14" no;
     };
 
+    fonts = {
+      FONTS = yes;
+      # Default fonts enabled if FONTS is not set
+      FONT_8x8 = yes;
+      FONT_8x16 = yes;
+      # High DPI font
+      FONT_TER16x32 = whenAtLeast "5.0" yes;
+    };
+
     video = {
       DRM_LEGACY = no;
-      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
@@ -632,6 +650,9 @@ let
       XEN_SAVE_RESTORE            = option yes;
       XEN_SCRUB_PAGES             = whenOlder "4.19" yes;
       XEN_SELFBALLOONING          = whenOlder "5.3" yes;
+
+      # Enable device detection on virtio-mmio hypervisors
+      VIRTIO_MMIO_CMDLINE_DEVICES = yes;
     };
 
     media = {
@@ -945,7 +966,7 @@ let
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
       ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};
-      ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID =                { optional = true; tristate = whenBetween "5.0" "5.19" "y";};
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};

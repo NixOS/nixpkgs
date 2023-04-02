@@ -45,7 +45,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
-  version = "1.0.6.163";
+  version = "1.0.8.170";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-BbNk/YfTx/J8ApgdiY/thnD2MFUUCSQt/CMjkewLcL0=";
-      armv7l-linux  = "sha256-fp4YM2BgyTr4vvxw5FaqKyGm608q8fOpB3gAgPA9UQ4=";
-      x86_64-linux  = "sha256-sLRdU/UW2JORAUOPzmr+VUkcLoesrshjdLvDCizX0iM=";
+      aarch64-linux = "sha256-FHE87B34QSc7rcKHE3wkZq1VzcZeKWh68rlIIMDRmm8=";
+      armv7l-linux  = "sha256-OqomlL7IFHyQQULbdbf5I0dRXdy3lDHY4ej2P1OZgzo=";
+      x86_64-linux  = "sha256-QNcWMVZ4bTXPLFEtD35hP2LbuNntvF2e9Wk2knt4TBY=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -94,6 +94,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://hexler.net/kodelife";

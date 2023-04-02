@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "tkrajina";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Fkl2dte1WkPi2hBOdT23BMfNflR0j4GeNH86d46WNQk=";
+    hash = "sha256-Fkl2dte1WkPi2hBOdT23BMfNflR0j4GeNH86d46WNQk=";
   };
 
   propagatedBuildInputs = [ lxml ];

@@ -8,7 +8,7 @@ in appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ libutil ];
 
-  NIX_CFLAGS_COMPILE = "-I.";
+  env.NIX_CFLAGS_COMPILE = "-I.";
   NIX_LDFLAGS = "-lutil";
   patchPhase = ''
     # ugly hacks for missing headers

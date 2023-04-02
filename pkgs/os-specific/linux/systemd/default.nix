@@ -3,6 +3,7 @@
 { stdenv
 , lib
 , nixosTests
+, pkgsCross
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
@@ -63,6 +64,7 @@
 , withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
 , kexec-tools
 , bashInteractive
+, bash
 , libmicrohttpd
 , libfido2
 , p11-kit
@@ -80,8 +82,10 @@
 , bpftools
 , libbpf
 
+, withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
+, withAudit ? true
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -92,15 +96,18 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
+, withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+, withLibidn2 ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
+, withPam ? true
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
@@ -127,19 +134,20 @@
 assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
+assert withHomed -> withPam;
 
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.5";
+  version = "253.1";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1667246393";
+  releaseTimestamp = "1676488940";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
@@ -148,7 +156,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-cNZRTuYFMR1z6KpELeQoJahMhRl4fKuRuc3xXH3KzlM=";
+    hash = "sha256-PyAhkLxDkT5gVocCXh8bst6PBgguASjnA82xinQOtjw=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -163,19 +171,18 @@ stdenv.mkDerivation {
     ./0004-Look-for-fsck-in-the-right-place.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
     ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0008-Fix-hwdb-paths.patch
-    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-add-rootprefix-to-lookup-dir-paths.patch
-    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0016-pkg-config-derive-prefix-from-prefix.patch
-    ./0017-inherit-systemd-environment-when-calling-generators.patch
-    ./0018-core-don-t-taint-on-unmerged-usr.patch
-    ./0019-tpm2_context_init-fix-driver-name-checking.patch
+    ./0007-Fix-hwdb-paths.patch
+    ./0008-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0009-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0010-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0011-add-rootprefix-to-lookup-dir-paths.patch
+    ./0012-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0013-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0014-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0015-pkg-config-derive-prefix-from-prefix.patch
+    ./0016-inherit-systemd-environment-when-calling-generators.patch
+    ./0017-core-don-t-taint-on-unmerged-usr.patch
+    ./0018-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -276,7 +283,7 @@ stdenv.mkDerivation {
           # Systemd does this decision during configure time and uses ifdef's to
           # enable specific branches. We can safely ignore (nuke) the libidn "v1"
           # libraries.
-          { name = "libidn2.so.0"; pkg = libidn2; }
+          { name = "libidn2.so.0"; pkg = opt withLibidn2 libidn2; }
           { name = "libidn.so.12"; pkg = null; }
           { name = "libidn.so.11"; pkg = null; }
 
@@ -293,6 +300,9 @@ stdenv.mkDerivation {
           # inspect-elf support
           { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
           { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
+
+          # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
+          { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
         ];
 
       patchDlOpen = dl:
@@ -302,8 +312,8 @@ stdenv.mkDerivation {
         if dl.pkg == null then ''
           # remove the dependency on the library by replacing it with an invalid path
           for file in $(grep -lr '"${dl.name}"' src); do
-            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
-            substituteInPlace "$file" --replace '"${dl.name}"' '"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
+            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
+            substituteInPlace "$file" --replace '"${dl.name}"' '"${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
           done
         '' else ''
           # ensure that the library we provide actually exists
@@ -339,7 +349,7 @@ stdenv.mkDerivation {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm)
+    patchShebangs tools test src/!(rpm|kernel-install) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -362,6 +372,7 @@ stdenv.mkDerivation {
       docbook_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_45
+      bash
       (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
     ]
     ++ lib.optionals withLibBPF [
@@ -373,33 +384,33 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      acl
-      audit
-      kmod
       libxcrypt
       libcap
-      libidn2
       libuuid
       linuxHeaders
-      pam
+      bashInteractive # for patch shebangs
     ]
 
-    ++ lib.optional wantGcrypt libgcrypt
+    ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
+    ++ lib.optional withAcl acl
     ++ lib.optional withApparmor libapparmor
+    ++ lib.optional withAudit audit
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
+    ++ lib.optional withKmod kmod
+    ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit ]
+    ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
@@ -421,6 +432,7 @@ stdenv.mkDerivation {
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpam=${lib.boolToString withPam}"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
@@ -432,7 +444,9 @@ stdenv.mkDerivation {
     "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dacl=${lib.boolToString withAcl}"
     "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Daudit=${lib.boolToString withAudit}"
     "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
@@ -458,7 +472,7 @@ stdenv.mkDerivation {
     "-Dsplit-usr=false"
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
-    "-Dlibidn2=true"
+    "-Dlibidn2=${lib.boolToString withLibidn2}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -485,7 +499,6 @@ stdenv.mkDerivation {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
     "-Dumount-path=${util-linux}/bin/umount"
@@ -496,6 +509,9 @@ stdenv.mkDerivation {
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
     "-Dman=true"
+
+    # Temporary disable the ukify tool. see https://github.com/NixOS/nixpkgs/pull/216826#issuecomment-1465228824
+    "-Dukify=false"
 
     "-Defi=${lib.boolToString withEfi}"
     "-Dgnu-efi=${lib.boolToString withEfi}"
@@ -519,6 +535,9 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dgshadow=false"
     "-Didn=false"
+  ] ++ lib.optionals withKmod [
+    "-Dkmod=true"
+    "-Dkmod-path=${kmod}/bin/kmod"
   ];
   preConfigure =
     let
@@ -553,7 +572,6 @@ stdenv.mkDerivation {
           replacement = "${coreutils}/bin/cat";
           where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
-        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
@@ -587,6 +605,8 @@ stdenv.mkDerivation {
             "src/import/pull-tar.c"
           ];
         }
+      ] ++ lib.optionals withKmod [
+        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
       ];
 
       # { replacement, search, where } -> List[str]
@@ -630,7 +650,7 @@ stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
@@ -658,7 +678,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     mkdir -p $out/example/systemd
-    mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+    mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system
@@ -674,6 +694,8 @@ stdenv.mkDerivation {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
+  '' + lib.optionalString withKmod ''
+    mv $out/lib/modules-load.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip
@@ -695,6 +717,10 @@ stdenv.mkDerivation {
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    # 'or p' is for manually specified buildPackages as they dont have __spliced
+    (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
+
   passthru = {
     # The interface version prevents NixOS from switching to an
     # incompatible systemd at runtime.  (Switching across reboots is
@@ -704,10 +730,11 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;
+      cross = pkgsCross.aarch64-multiplatform.systemd;
     };
   };
 
@@ -722,4 +749,4 @@ stdenv.mkDerivation {
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk mic92 ];
   };
-}
+})

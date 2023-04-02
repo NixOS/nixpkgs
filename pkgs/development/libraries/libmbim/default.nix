@@ -1,46 +1,65 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
+, meson
+, ninja
 , pkg-config
 , glib
 , python3
+, help2man
 , systemd
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, bash-completion
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.26.4";
+  version = "1.28.4";
 
   outputs = [ "out" "dev" "man" ];
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/libmbim/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9ojOxMRYahdXX14ydEjOYvIADvagfJ5FiYc9SmhWitk=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mobile-broadband";
+    repo = "libmbim";
+    rev = version;
+    hash = "sha256-aaYjvJ2OMTzkUyqWCyHdmsKJ3VGqBmKQzb1DWK/1cPU=";
   };
 
-  configureFlags = [
-    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    (lib.enableFeature withIntrospection "introspection")
+  mesonFlags = [
+    "-Dudevdir=${placeholder "out"}/lib/udev"
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
     python3
+    help2man
     gobject-introspection
   ];
 
   buildInputs = [
     glib
     systemd
+    bash-completion
   ];
 
   doCheck = true;
 
+  postPatch = ''
+    patchShebangs \
+      build-aux/mbim-codegen/mbim-codegen
+  '';
+
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/libmbim/";
     description = "Library for talking to WWAN modems and devices which speak the Mobile Interface Broadband Model (MBIM) protocol";
+    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/raw/${version}/NEWS";
+    maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

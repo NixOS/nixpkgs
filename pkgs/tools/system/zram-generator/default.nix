@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rust
 , rustPlatform
 , pkg-config
 , ronn
@@ -9,7 +10,7 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "zram-generator";
   version = "1.1.2";
 
@@ -20,23 +21,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-n+ZOWU+sPq9DcHgzQWTxxfMmiz239qdetXypqdy33cM=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
-
   # RFE: Include Cargo.lock in sources
   # https://github.com/systemd/zram-generator/issues/65
+  cargoLock.lockFile = ./Cargo.lock;
+
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
+    substituteInPlace Makefile \
+      --replace 'target/$(BUILDTYPE)' 'target/${rust.toRustTargetSpec stdenv.hostPlatform}/$(BUILDTYPE)'
     substituteInPlace src/generator.rs \
       --replace 'Command::new("systemd-detect-virt")' 'Command::new("${systemd}/bin/systemd-detect-virt")' \
       --replace 'Command::new("modprobe")' 'Command::new("${kmod}/bin/modprobe")'
   '';
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
     pkg-config
     ronn
   ];
@@ -45,7 +43,16 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  makeFlags = [
+  preBuild = ''
+    # embedded into the binary at build time
+    # https://github.com/systemd/zram-generator/blob/v1.1.2/Makefile#LL11-L11C56
+    export SYSTEMD_UTIL_DIR=$($PKG_CONFIG --variable=systemdutildir systemd)
+  '';
+
+  dontCargoInstall = true;
+
+  installFlags = [
+    "-o program" # already built by cargoBuildHook
     "PREFIX=$(out)"
     "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/lib/systemd/system"
     "SYSTEMD_SYSTEM_GENERATOR_DIR=$(out)/lib/systemd/system-generators"

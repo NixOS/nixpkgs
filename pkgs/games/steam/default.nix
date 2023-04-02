@@ -5,7 +5,7 @@
 let
   steamPackagesFun = self: let
     inherit (self) callPackage;
-  in {
+  in rec {
     steamArch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
                 else if stdenv.hostPlatform.system == "i686-linux" then "i386"
                 else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
@@ -21,6 +21,7 @@ let
         else null;
       inherit buildFHSUserEnv;
     };
+    steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
     steamcmd = callPackage ./steamcmd.nix { };
   };
   keep = self: { };

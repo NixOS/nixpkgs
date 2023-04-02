@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nanum";
-  version = "20170925";
+  version = "20200506";
 
   src = fetchurl {
     url = "mirror://ubuntu/pool/universe/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
-    hash = "sha256-GlVXH9YUU3wHMkNoz5miBv7N2oUEbwUXlcVoElQ9++4=";
+    hash = "sha256-FXgDdIGYFRJQo898sDrvhE5AjpyYhJ3YieGRhGqsrUs=";
   };
 
   installPhase = ''

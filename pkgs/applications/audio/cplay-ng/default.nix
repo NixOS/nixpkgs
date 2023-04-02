@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cplay-ng";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "cplay-ng";
     rev = version;
-    hash = "sha256-pmuZ1NgrQKEJLoJEVC9wp5deFWc6DiX5DpnISeOOw4k=";
+    hash = "sha256-M9WpB59AWSaGMnGrO37Fc+7O6pVBc2BDAv/BGlPmo8E=";
   };
 
   nativeBuildInputs = [

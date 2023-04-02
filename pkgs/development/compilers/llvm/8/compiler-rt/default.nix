@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"

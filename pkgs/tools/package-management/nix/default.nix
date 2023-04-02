@@ -53,6 +53,13 @@ let
     sha256 = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
   };
 
+  patch-non-existing-output = fetchpatch {
+    # https://github.com/NixOS/nix/pull/7283
+    name = "fix-requires-non-existing-output.patch";
+    url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+    sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+  };
+
 in lib.makeExtensible (self: {
   nix_2_3 = (common rec {
     version = "2.3.16";
@@ -82,12 +89,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
     patches = [
       ./patches/flaky-tests.patch
-      (fetchpatch {
-        # https://github.com/NixOS/nix/pull/7283
-        name = "fix-requires-non-existing-output.patch";
-        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-      })
+      patch-non-existing-output
       patch-monitorfdhup
       patch-sqlite-exception
     ];
@@ -98,20 +100,15 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
     patches = [
       ./patches/flaky-tests.patch
-      (fetchpatch {
-        # https://github.com/NixOS/nix/pull/7283
-        name = "fix-requires-non-existing-output.patch";
-        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-      })
+      patch-non-existing-output
       patch-monitorfdhup
       patch-sqlite-exception
     ];
   };
 
   nix_2_12 = common {
-    version = "2.12.0";
-    sha256 = "sha256-sQ9C101CL/eVN5JgH91ozHFWU4+bXr8/Fi/8NQk6xRI=";
+    version = "2.12.1";
+    sha256 = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
     patches = [
       ./patches/flaky-tests.patch
       patch-monitorfdhup
@@ -120,11 +117,16 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_13 = common {
-    version = "2.13.2";
-    sha256 = "sha256-MtVatZVsV+dtjdD4AC4bztrnDFas+WZYHzQMt41FwzU=";
+    version = "2.13.3";
+    sha256 = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+  };
+
+  nix_2_14 = common {
+    version = "2.14.1";
+    sha256 = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
   };
 
   stable = self.nix_2_13;
 
-  unstable = self.stable;
+  unstable = self.nix_2_14;
 })

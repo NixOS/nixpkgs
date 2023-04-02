@@ -30,7 +30,7 @@
 , expat
 , libid3tag
 , libopus
-, ffmpeg
+, ffmpeg_4
 , soundtouch
 , pcre
 , portaudio
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
+  env.NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
 
   # tenacity only looks for ffmpeg at runtime, so we need to link it in manually
   NIX_LDFLAGS = toString [
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     expat
-    ffmpeg
+    ffmpeg_4
     file
     flac
     glib

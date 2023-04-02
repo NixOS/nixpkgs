@@ -27,6 +27,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
 }:
 
 # Make sure we get GNU sed.
@@ -48,6 +49,7 @@ with builtins;
 
 let majorVersion = "11";
     version = "${majorVersion}.3.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -114,7 +116,9 @@ let majorVersion = "11";
         enableLTO
         enableMultilib
         enablePlugin
+        disableGdbPlugin
         enableShared
+        disableBootstrap
         fetchpatch
         fetchurl
         gettext
@@ -195,10 +199,10 @@ stdenv.mkDerivation ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   ''
   + (
-    if targetPlatform != hostPlatform || stdenv.cc.libc != null then
+    lib.optionalString (targetPlatform != hostPlatform || stdenv.cc.libc != null)
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
-      let
+      (let
         libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
         (
@@ -216,8 +220,8 @@ stdenv.mkDerivation ({
         ''
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
-        )
-    else "")
+        ))
+    )
       + lib.optionalString targetPlatform.isAvr ''
             makeFlagsArray+=(
                '-s' # workaround for hitting hydra log limit
@@ -245,9 +249,11 @@ stdenv.mkDerivation ({
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
-  buildFlags = optional
-    (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
-    (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+  buildFlags =
+    let target =
+          lib.optionalString (profiledCompiler) "profiled" +
+          lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+    in lib.optional (target != "") target;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
@@ -280,6 +286,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

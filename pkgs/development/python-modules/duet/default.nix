@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "duet";
     rev = "v${version}";
-    sha256 = "sha256-9CTAupAxZI1twoLpgr7VfECw70QunE6pk+SskiT3JDw=";
+    hash = "sha256-9CTAupAxZI1twoLpgr7VfECw70QunE6pk+SskiT3JDw=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "graspologic";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-EmbCA4JpY2OIwXrRWjBxA4iNm0ddQODjoGmHIYgvAWs=";
+    hash = "sha256-EmbCA4JpY2OIwXrRWjBxA4iNm0ddQODjoGmHIYgvAWs=";
   };
 
   propagatedBuildInputs = [

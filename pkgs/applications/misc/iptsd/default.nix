@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B5d1OjrRB164BYtFzZoZ3I4elZSKpHg0PCBiwXPnqLs=";
+    hash = "sha256-IwvoqmqJTM6xtEp7AzLgT4dZgRsmXYmu6Zivx3oSm+Q=";
   };
 
   nativeBuildInputs = [

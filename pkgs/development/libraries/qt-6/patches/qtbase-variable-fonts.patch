@@ -1,0 +1,26 @@
+From 9ba9c690fb16188ff524b53def104e68e45cf5c3 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Tue, 21 Mar 2023 15:48:49 +0800
+Subject: [PATCH] Deal with a font face at index 0 as Regular for Variable
+ fonts
+
+Reference: https://bugreports.qt.io/browse/QTBUG-111994
+---
+ src/gui/text/unix/qfontconfigdatabase.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/gui/text/unix/qfontconfigdatabase.cpp b/src/gui/text/unix/qfontconfigdatabase.cpp
+index 9b60cf2963..5a42ef6a68 100644
+--- a/src/gui/text/unix/qfontconfigdatabase.cpp
++++ b/src/gui/text/unix/qfontconfigdatabase.cpp
+@@ -554,6 +554,7 @@ void QFontconfigDatabase::populateFontDatabase()
+             FcObjectSetAdd(os, *p);
+             ++p;
+         }
++        FcPatternAddBool(pattern, FC_VARIABLE, FcFalse);
+         fonts = FcFontList(nullptr, pattern, os);
+         FcObjectSetDestroy(os);
+         FcPatternDestroy(pattern);
+-- 
+2.39.2
+

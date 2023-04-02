@@ -16,7 +16,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sTzr9OOXu6FFQrzQIzOLb/LBUaOhKqvKie7L+XLLNho=";
+    hash = "sha256-sTzr9OOXu6FFQrzQIzOLb/LBUaOhKqvKie7L+XLLNho=";
   };
 
   patches = [
@@ -25,7 +25,8 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [ glibcLocales ];
 
-  buildInputs = [ ft pillow ];
+  buildInputs = [ ft ];
+  propagatedBuildInputs = [ pillow ];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -1,48 +1,4 @@
-# pkgs/development/haskell-modules/configuration-hackage2nix.yaml
-
-compiler: ghc-9.2.4
-
-core-packages:
-  - Cabal-3.6.3.0
-  - array-0.5.4.0
-  - base-4.16.3.0
-  - binary-0.8.9.0
-  - bytestring-0.11.3.1
-  - containers-0.6.5.1
-  - deepseq-1.4.6.1
-  - directory-1.3.6.2
-  - exceptions-0.10.4
-  - filepath-1.4.2.2
-  - ghc-9.2.4
-  - ghc-bignum-1.2
-  - ghc-boot-9.2.4
-  - ghc-boot-th-9.2.4
-  - ghc-compact-0.1.0.0
-  - ghc-heap-9.2.4
-  - ghc-prim-0.8.0
-  - ghci-9.2.4
-  - haskeline-0.8.2
-  - hpc-0.6.1.0
-  - integer-gmp-1.1
-  - libiserv-9.2.4
-  - mtl-2.2.2
-  - parsec-3.1.15.0
-  - pretty-1.1.3.6
-  - process-1.6.13.2
-  - rts-1.0.2
-  - stm-2.5.0.2
-  - template-haskell-2.18.0.0
-  - terminfo-0.4.1.5
-  - text-1.2.5.0
-  - time-1.11.1.1
-  - transformers-0.5.6.2
-  - unix-2.7.2.2
-  - xhtml-3000.2.2.1
-
-  # Hack: The following package is a core package of GHCJS. If we don't declare
-  # it, then hackage2nix will generate a Hackage database where all dependants
-  # of this library are marked as "broken".
-  - ghcjs-base-0
+# pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml
 
 # This is a list of packages with versions from the latest Stackage LTS release.
 #
@@ -88,13 +44,18 @@ default-package-overrides:
   - shake-cabal < 0.2.2.3
   # needed as long as we have pandoc < 3.0, i.e. stackage lts 20
   - pandoc-crossref < 0.3.15.0
+  # Needs to match hspec which is tracked in stackage
+  - hspec-api < 2.10
 
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
-  - Cabal == 3.2.*                      # required for cabal-install etc.
+  - Cabal == 3.2.*                      # required for cabal2spec
   - Cabal == 3.4.*                      # required for cabal-install etc.
-  - Cabal == 3.6.*                      # required for cabal-install-parsers etc.
+  - Cabal == 3.6.*
+  - Cabal-syntax == 3.8.*               # required for cabal-install{,-parsers}
+  - Cabal == 3.8.*                      # required for cabal-install{,-parsers}
+  - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
   - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
@@ -105,7 +66,6 @@ extra-packages:
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
   - brick-skylighting < 1.0             # 2022-08-13: needed by matterhorn-50200.17.0 to match brick
-  - brick == 1.3                        # 2022-11-03: needed by swarm 0.2.0.0
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
@@ -121,15 +81,18 @@ extra-packages:
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib == 9.4.*                    # 2023-03-17: preserve for GHC 9.4
   - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib-parser == 9.4.*             # 2023-03-17: preserve for GHC 9.4
   - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
-  - ghc-lib-parser-ex >= 9.2.0.3 && < 9.2.1 # 2022-07-13: needed by hlint 3.4.1
+  - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
+  - hermes-json == 0.2.*                # 2023-03-22: for nix-output-monitor-2.0.0.5
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
@@ -164,6 +127,8 @@ extra-packages:
   - commonmark-extensions < 0.2.3.3     # 2022-12-17: required by emanote 1.0.0.0 (to avoid a bug in 0.2.3.3)
   - ShellCheck == 0.8.0                 # 2022-12-28: required by haskell-ci 0.14.3
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
+  - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
+  - primitive == 0.7.4.0                # 2023-03-04: primitive 0.8 is not compatible with too many packages on ghc 9.4 as of now
 
 package-maintainers:
   abbradar:
@@ -191,7 +156,9 @@ package-maintainers:
   centromere:
     - nfc
   dalpd:
+    - espial
     - ghc-vis
+    - patat
     - svgcairo
   domenkozar:
     - cachix
@@ -274,6 +241,8 @@ package-maintainers:
     - wstunnel
   gridaphobe:
     - located-base
+  iblech:
+    - Agda
   ivanbrennan:
     - xmonad
     - xmonad-contrib
@@ -592,6 +561,7 @@ supported-platforms:
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
   HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
+  hs-swisstable-hashtables-class:               [ platforms.x86_64 ] # depends on swisstable, which Needs AVX2
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
@@ -617,6 +587,7 @@ supported-platforms:
   scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
   scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
+  swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
   Win32-console:                                [ platforms.windows ]

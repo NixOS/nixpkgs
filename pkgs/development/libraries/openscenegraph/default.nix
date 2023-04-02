@@ -23,7 +23,7 @@
   sdlSupport ? false, SDL2,
   restSupport ? false, asio,
   withApps ? false,
-  withExamples ? false, fltk, wxGTK30,
+  withExamples ? false, fltk,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
-    ++ lib.optionals withExamples [ fltk wxGTK30 ]
+    ++ lib.optionals withExamples [ fltk ]
     ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
     ++ lib.optional (restSupport || colladaSupport) boost
   ;

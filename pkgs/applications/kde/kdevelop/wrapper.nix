@@ -1,7 +1,7 @@
-{ symlinkJoin, kdevelop-unwrapped, plugins ? null }:
+{ lib, symlinkJoin, kdevelop-unwrapped, plugins ? null }:
 
 symlinkJoin {
   name = "kdevelop-with-plugins";
 
-  paths = [ kdevelop-unwrapped ] ++ (if plugins != null then plugins else []);
+  paths = [ kdevelop-unwrapped ] ++ (lib.optionals (plugins != null) plugins);
 }

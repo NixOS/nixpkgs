@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fbthrift";
-  version = "2023.01.30.00";
+  version = "2023.03.20.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fbthrift";
     rev = "v${version}";
-    sha256 = "sha256-poXe2EF4ZcqOZza1WUSAO2cA655jiWpqdo3YYrzAk7I=";
+    sha256 = "sha256-jCgdo7jE5QlRK5f2S6XEVM4+TPWI//4DKG/fDMFzgzg=";
   };
 
   nativeBuildInputs = [

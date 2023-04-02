@@ -8,7 +8,6 @@
 , libXft
 , libXinerama
 , conf ? null
-, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xnotify";
-    rev = "58c7d5763c3fb1c32a76560c85d20a25f59d4687";
-    sha256 = "sha256-BSZesuBGAWYp3IMiiZi6CAyZEiz3sBJLQe6/JnxviLs=";
+    rev = "v${version}";
+    hash = "sha256-RfnmiAEFTPqQZursyVPDIZ6J3KBouvaaxyhTc1liqBc=";
   };
 
   buildInputs = [
@@ -39,8 +38,6 @@ stdenv.mkDerivation rec {
     optionalString (conf != null) "cp ${configFile} config.h";
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A tool to read notifications from stdin and pop them up on the screen";

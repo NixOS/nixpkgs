@@ -362,7 +362,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.openFirewall -> !isNull cfg.config;
+        assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
       }
     ];
@@ -409,6 +409,7 @@ in {
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
       ;
+      environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = lib.unique ([

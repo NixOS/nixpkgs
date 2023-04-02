@@ -50,7 +50,7 @@ let
     autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addOpenGLRunpath }:
       makeSetupHook {
         name = "auto-add-opengl-runpath-hook";
-        deps = [
+        propagatedBuildInputs = [
           addOpenGLRunpath
         ];
       } ../development/compilers/cudatoolkit/auto-add-opengl-runpath-hook.sh

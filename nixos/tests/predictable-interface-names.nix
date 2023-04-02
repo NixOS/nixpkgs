@@ -13,7 +13,7 @@ in pkgs.lib.listToAttrs (builtins.map ({ predictable, withNetworkd }: {
   name = pkgs.lib.optionalString (!predictable) "un" + "predictable"
        + pkgs.lib.optionalString withNetworkd "Networkd";
   value = makeTest {
-    name = "${if predictable then "" else "un"}predictableInterfaceNames${if withNetworkd then "-with-networkd" else ""}";
+    name = "${pkgs.lib.optionalString (!predictable) "un"}predictableInterfaceNames${pkgs.lib.optionalString withNetworkd "-with-networkd"}";
     meta = {};
 
     nodes.machine = { lib, ... }: {

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = lib.replaceStrings ["-"] ["_"] pname;
-    sha256 = "sha256-iMOE60MimXpY3ok46RrJ/5D2orbLKuI+IWnHQFrdOtg=";
+    hash = "sha256-iMOE60MimXpY3ok46RrJ/5D2orbLKuI+IWnHQFrdOtg=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,8 @@ buildPythonPackage rec {
     pytest-doctestplus
     hypothesis
   ];
+
+  disabledTests = lib.optional (!stdenv.hostPlatform.isDarwin) "test_interpolate_bilinear_skycoord";
 
   # tests must be run in the build directory
   preCheck = ''

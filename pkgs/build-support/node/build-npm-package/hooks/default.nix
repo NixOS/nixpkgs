@@ -26,7 +26,7 @@
   npmInstallHook = makeSetupHook
     {
       name = "npm-install-hook";
-      deps = [ buildPackages.makeWrapper ];
+      propagatedBuildInputs = [ buildPackages.makeWrapper ];
       substitutions = {
         hostNode = "${nodejs}/bin/node";
         jq = "${buildPackages.jq}/bin/jq";

@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.7.1";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-crKTxlueE8NGjAqu625iFvp35UK2U7+9kl8rpbzf0gs=";
+    hash = "sha256-Wuq49deZKhIHHhxgxgzxxY/3aQcJVCJ0ofGwDrUcHkY=";
   };
 
   postPatch = ''

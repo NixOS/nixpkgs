@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  # Disable parallel install due to missing depends:
+  #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
+  enableParallelInstalling = false;
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt

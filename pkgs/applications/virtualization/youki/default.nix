@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "youki";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XwapCfu6Me0xSe+qFz9BFRYpQvG+ztb6QyhGejYRPb4=";
+    sha256 = "sha256-00eSXRPy0lQKEabl569gY770viPyB2sEnq1uaT3peE0=";
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
@@ -33,9 +33,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "youki" ];
   cargoTestFlags = [ "-p" "youki" ];
 
-  cargoSha256 = "sha256-PT1kVo4gQFH9sIprEoAioNvDL/soMHcA2utEiQJPS/0=";
-
-  doCheck = false; # test failed
+  cargoSha256 = "sha256-9EgexnsxHxLTXGRbUJZtJEoCeD425zRLfCiIqrXQJkU=";
 
   meta = with lib; {
     description = "A container runtime written in Rust";

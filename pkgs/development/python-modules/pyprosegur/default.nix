@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Spxzyn0gZ1TIHrtt7W0j6VwKnm2Km5vLGZZ//HINyBA=";
+    hash = "sha256-Spxzyn0gZ1TIHrtt7W0j6VwKnm2Km5vLGZZ//HINyBA=";
   };
 
   propagatedBuildInputs = [

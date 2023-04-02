@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7tr3Hy87vt/Ew42hrUiXRUzl69R5LhponJecKFPtwFo=";
+    hash = "sha256-7tr3Hy87vt/Ew42hrUiXRUzl69R5LhponJecKFPtwFo=";
   };
   patches = [
     # should be included in next release
@@ -29,7 +29,7 @@ buildPythonPackage rec {
         "docs/basic_hdbscan.rst"
         "docs/how_hdbscan_works.rst"
       ];
-      sha256 = "sha256-t0D4OsHEcMwmBZM8Mk1N0uAKi6ra+TOzEks9/efsvWI=";
+      hash = "sha256-t0D4OsHEcMwmBZM8Mk1N0uAKi6ra+TOzEks9/efsvWI=";
     })
   ];
 

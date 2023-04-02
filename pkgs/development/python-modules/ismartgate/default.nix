@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , buildPythonPackage
 , click
 , defusedxml
@@ -29,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-o2yzMxrF0WB6MbeL1Tuf0Sq4wS4FDIWZZx1x2rvwLmY=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner>=5.2",' ""
+  '';
+
   propagatedBuildInputs = [
     click
     defusedxml
@@ -39,17 +43,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytest-asyncio
     pytest-raises
     pytestCheckHook
     respx
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner>=5.2",' ""
-  '';
 
   pythonImportsCheck = [
     "ismartgate"
@@ -58,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to work with the ismartgate and gogogate2 API";
     homepage = "https://github.com/bdraco/ismartgate";
+    changelog = "https://github.com/bdraco/ismartgate/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

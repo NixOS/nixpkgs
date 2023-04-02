@@ -1,4 +1,4 @@
-{ stdenv, pkgs }:
+{ stdenv, pkgs, lib }:
 
 # ordering should match defaultNativeBuildInputs
 
@@ -91,7 +91,7 @@
     '';
   };
   # TODO: add multiple-outputs
-  # TODO: move patch-shebangs test from pkgs/test/patch-shebangs/default.nix to here
+  patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =
     let
       libFoo = pkgs.writeText "libFoo" ''
@@ -115,7 +115,7 @@
     name = "test-reproducible-builds";
     buildCommand = ''
       # can't be tested more precisely because the value of random-seed changes depending on the output
-      [[ $NIX_CFLAGS_COMPILE =~ "-frandom-seed=" ]]
+      [[ $env.NIX_CFLAGS_COMPILE =~ "-frandom-seed=" ]]
       touch $out
     '';
   };

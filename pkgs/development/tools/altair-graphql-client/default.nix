@@ -2,11 +2,11 @@
 
 let
   pname = "altair";
-  version = "5.0.14";
+  version = "5.0.19";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-gd7aSBNhTO1ira76lL+1apLlXYXRfGWAbGAsJEUtEqw=";
+    sha256 = "sha256-ziJz9bJm4TxKzpGOBv1JwTnjgmloGBa9SCAUbg0WoLU=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

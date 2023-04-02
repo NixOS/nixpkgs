@@ -1019,7 +1019,7 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+* In the `buildPhase`, it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
   build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
 * In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
@@ -1117,7 +1117,7 @@ with import <nixpkgs> {};
 in python.withPackages(ps: [ps.blaze])).env
 ```
 
-#### Optional extra dependencies
+#### Optional extra dependencies {#python-optional-dependencies}
 
 Some packages define optional dependencies for additional features. With
 `setuptools` this is called `extras_require` and `flit` calls it
@@ -1546,7 +1546,7 @@ of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
 
 ```shell
-${python.interpreter} setup.py install_data --install-dir=$out --root=$out
+${python.pythonForBuild.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data\_files/d' setup.py
 ```
 
@@ -1801,14 +1801,14 @@ The following rules are desired to be respected:
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
 
-## Package set maintenance
+## Package set maintenance {#python-package-set-maintenance}
 
 The whole Python package set has a lot of packages that do not see regular
 updates, because they either are a very fragile component in the Python
 ecosystem, like for example the `hypothesis` package, or packages that have
 no maintainer, so maintenance falls back to the package set maintainers.
 
-### Updating packages in bulk
+### Updating packages in bulk {#python-package-bulk-updates}
 
 There is a tool to update alot of python libraries in bulk, it exists at
 `maintainers/scripts/update-python-libraries` with this repository.
@@ -1821,6 +1821,11 @@ hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 Updating packages in bulk leads to lots of breakages, which is why a
 stabilization period on the `python-unstable` branch is required.
 
+If a package is fragile and often breaks during these bulks updates, it
+may be reasonable to set `passthru.skipBulkUpdate = true` in the
+derivation. This decision should not be made on a whim and should
+always be supported by a qualifying comment.
+
 Once the branch is sufficiently stable it should normally be merged
 into the `staging` branch.
 
@@ -1831,7 +1836,7 @@ would be:
 $ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
 ```
 
-## CPython Update Schedule
+## CPython Update Schedule {#python-cpython-update-schedule}
 
 With [PEP 602](https://www.python.org/dev/peps/pep-0602/), CPython now
 follows a yearly release cadence. In nixpkgs, all supported interpreters

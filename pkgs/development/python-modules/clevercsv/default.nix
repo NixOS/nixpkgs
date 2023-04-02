@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, cchardet
 , chardet
+, faust-cchardet
 , pandas
 , regex
 , tabview
@@ -12,24 +12,19 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.7.5";
+  version = "0.7.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zpnUw0ThYbbYS7CYgsi0ZL1qxbY4B1cy2NhrUU9uzig=";
+    hash = "sha256-mdsznhxTykEGZAFvTRZTCM11fR4tkwfpa95k7udE33c=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "packaging>=23.0" "packaging"
-  '';
-
   propagatedBuildInputs = [
-    cchardet
     chardet
+    faust-cchardet
     pandas
     regex
     tabview
@@ -69,7 +64,7 @@ buildPythonPackage rec {
       with CSV files.
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
-    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

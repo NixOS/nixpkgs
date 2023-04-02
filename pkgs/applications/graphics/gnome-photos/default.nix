@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , at-spi2-core
 , babl
 , dbus
@@ -45,6 +46,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./installed-tests-path.patch
+
+    # Support babel 0.1.100
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/64c6f733a44bac5b7f08445a686c000681f93f5f.patch";
+      hash = "sha256-iB5qCcDEH8pEX42ypEGJ9QMJWE8VXirv5JfdC1jP218=";
+    })
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/9db32c3508a8c5d357a053d5f8278c34b4df18f3.patch";
+      hash = "sha256-iz6gSu5rUBZ3Ki5GSRVuLcwX0LRQvJT17XmXQ7WJSmI=";
+    })
   ];
 
   nativeBuildInputs = [

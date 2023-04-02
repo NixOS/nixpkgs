@@ -63,8 +63,8 @@ stdenv.mkDerivation (self: {
 
   preBuild = ''
     makeFlagsArray+=(
-      XWAYLAND=${if enableXWayland then "-DXWAYLAND" else ""}
-      XLIBS=${if enableXWayland then "xcb\\ xcb-icccm" else ""}
+      XWAYLAND=${lib.optionalString enableXWayland "-DXWAYLAND"}
+      XLIBS=${lib.optionalString enableXWayland "xcb\\ xcb-icccm"}
     )
   '';
 

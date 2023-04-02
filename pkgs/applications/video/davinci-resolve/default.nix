@@ -17,6 +17,7 @@
 , libarchive
 , libxcrypt
 , python2
+, aprutil
 }:
 
 let
@@ -127,6 +128,7 @@ let
             addOpenGLRunpath "$program"
           fi
         done
+        ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
       '';
     }
   );
@@ -159,6 +161,7 @@ buildFHSUserEnv {
     python2
     # currently they want python 3.6 which is EOL
     #python3
+    aprutil
   ];
 
   runScript = "${bash}/bin/bash ${

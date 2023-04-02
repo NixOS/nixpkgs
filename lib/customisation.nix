@@ -176,7 +176,7 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg (lib.head missingArgs);
 
-    in if missingArgs == [] then makeOverridable f allArgs else throw error;
+    in if missingArgs == [] then makeOverridable f allArgs else abort error;
 
 
   /* Like callPackage, but for a function that returns an attribute
@@ -213,7 +213,14 @@ rec {
             outputSpecified = true;
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
-          };
+          } //
+            # TODO: give the derivation control over the outputs.
+            #       `overrideAttrs` may not be the only attribute that needs
+            #       updating when switching outputs.
+            lib.optionalAttrs (passthru?overrideAttrs) {
+              # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+              overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
+            };
         };
 
       outputsList = map outputToAttrListElement outputs;

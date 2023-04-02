@@ -10,9 +10,12 @@ in {
 
     address = mkOption {
       type = types.str;
-      default = "";
-      description = mdDoc "Bind address. Corresponds to the `-a` flag.";
-      example = "localhost";
+      default = "localhost";
+      description = mdDoc ''
+        Bind address. Corresponds to the `-a` flag.
+        Set to `""` to bind to all addresses.
+      '';
+      example = "[::1]";
     };
 
     port = mkOption {

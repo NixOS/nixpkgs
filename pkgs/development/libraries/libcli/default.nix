@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "AR=${stdenv.cc.targetPrefix}ar" "PREFIX=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=address"
   ];

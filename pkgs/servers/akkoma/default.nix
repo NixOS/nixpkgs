@@ -9,14 +9,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
-    hash = "sha256-Apt+6nI4zOCyRb5msPt5UF9vyaendyaOjrYBMl0DqRY=";
+    hash = "sha256-Ovi2AnfkeCDlv3INomPxu8R1ARexOzZHC8dOLucrDaQ=";
   };
 
   postPatch = ''
@@ -52,24 +52,16 @@ beamPackages.mixRelease rec {
           sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
         };
       };
-      crypt = beamPackages.buildRebar3 rec {
-        name = "crypt";
-        version = "0.4.3";
+      credo = beamPackages.buildMix rec {
+        name = "credo";
+        version = "1.7.0-dev";
 
         src = fetchFromGitHub {
-          owner = "msantos";
-          repo = "crypt";
-          rev = "f75cd55325e33cbea198fb41fe41871392f8fb76";
-          sha256 = "sha256-ZYhZTe7cTITkl8DZ4z2IOlxTX5gnbJImu/lVJ2ZjR1o=";
+          owner = "rrrene";
+          repo = "credo";
+          rev = "1c1b99ea41a457761383d81aaf6a606913996fe7";
+          hash = "sha256-NdOg6p2J1D8VGGWabAMLs/qRVbi4BzN2DTHci++dJnA=";
         };
-
-        buildInputs = [ libxcrypt ];
-
-        postInstall = ''
-          mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so
-        '';
-
-        beamDeps = with final; [ elixir_make ];
       };
       elasticsearch = beamPackages.buildMix rec {
         name = "elasticsearch";
@@ -81,17 +73,6 @@ beamPackages.mixRelease rec {
           repo = "elasticsearch-elixir";
           rev = "6cd946f75f6ab9042521a009d1d32d29a90113ca";
           hash = "sha256-CtmQHVl+VTpemne+nxbkYGcErrgCo+t3ZBPbkFSpyF0=";
-        };
-      };
-      gettext = beamPackages.buildMix {
-        name = "gettext";
-        version = "0.19.1";
-
-        src = fetchFromGitHub {
-          owner = "tusooa";
-          repo = "gettext";
-          rev = "72fb2496b6c5280ed911bdc3756890e7f38a4808";
-          hash = "sha256-V0qmE+LcAbVoWsJmWE4fwrduYFIZ5BzK/sGzgLY3eH0=";
         };
       };
       linkify = beamPackages.buildMix rec {
@@ -119,20 +100,6 @@ beamPackages.mixRelease rec {
         };
 
         beamDeps = with final; [ phoenix_view temple ];
-      };
-      remote_ip = beamPackages.buildMix rec {
-        name = "remote_ip";
-        version = "0.1.5";
-
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
-          repo = "remote_ip";
-          rev = "b647d0deecaa3acb140854fe4bda5b7e1dc6d1c8";
-          sha256 = "0c7vmakcxlcs3j040018i7bfd6z0yq6fjfig02g5fgakx398s0x6";
-        };
-        beamDeps = with final; [ combine plug inet_cidr ];
       };
       search_parser = beamPackages.buildMix rec {
         name = "search_parser";

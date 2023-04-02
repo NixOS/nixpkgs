@@ -43,13 +43,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2022.7";
+  version = "2023.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-i+KpJhyU6LnsQRM4D/xID4WYJF+zIaAJutT65LgiQR8=";
+    sha256 = "sha256-zrB4h1Wgv/VzjURUNVL7+IPPcd9IG6o8pyiNp6QCu4U=";
   };
 
   patches = [

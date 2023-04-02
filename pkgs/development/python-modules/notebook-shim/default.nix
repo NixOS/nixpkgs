@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jupyter";
     repo = "notebook_shim";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/z4vXSBqeL2wSqJ0kFNgU0TSGUGByhxHNya8EO55+7s=";
+    hash = "sha256-/z4vXSBqeL2wSqJ0kFNgU0TSGUGByhxHNya8EO55+7s=";
   };
 
   nativeBuildInputs = [ hatchling ];

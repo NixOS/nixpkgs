@@ -2,24 +2,31 @@
 , aiowinreg
 , buildPythonPackage
 , colorama
-, fetchPypi
+, fetchFromGitHub
 , pycryptodomex
 , pythonOlder
+, setuptools
 , tqdm
 , unicrypto
 }:
 
 buildPythonPackage rec {
   pname = "aesedb";
-  version = "0.1.1";
-  format = "setuptools";
+  version = "0.1.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pnbzPVXr3qgBH7t5wNR+jbTdQGMdnLpV+xfgQjdc+7A=";
+  src = fetchFromGitHub {
+    owner = "skelsec";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-TXGRXo3754dEgRotDO5vSl9vj119Xday/176yem3cqk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiowinreg

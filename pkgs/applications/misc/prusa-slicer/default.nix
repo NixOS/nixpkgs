@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.5.0";
+  version = "2.5.1";
 
   nativeBuildInputs = [
     cmake
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   # Disable compiler warnings that clutter the build log.
   # It seems to be a known issue for Eigen:
   # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
+  env.NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "sha256-wLe+5TFdkgQ1mlGYgp8HBzugeONSne17dsBbwblILJ4=";
+    sha256 = "sha256-ZeCofpBtsIBPRcjeJSEjOj+yNOOmYQA91/NLZwB2GUs=";
     rev = "version_${version}";
   };
 

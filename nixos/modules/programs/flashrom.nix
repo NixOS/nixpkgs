@@ -22,6 +22,5 @@ in
   config = mkIf cfg.enable {
     services.udev.packages = [ cfg.package ];
     environment.systemPackages = [ cfg.package ];
-    users.groups.flashrom = { };
   };
 }

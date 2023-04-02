@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, pythonRelaxDepsHook
 , setuptools
 , click
 , requests
@@ -34,7 +35,12 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   propagatedBuildInputs = [

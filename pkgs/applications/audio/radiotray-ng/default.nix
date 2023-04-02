@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
+  # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   nativeCheckInputs = [ gtest ];
   doCheck = !stdenv.isAarch64; # single failure that I can't explain
 

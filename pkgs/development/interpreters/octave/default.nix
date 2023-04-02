@@ -15,7 +15,7 @@
 , portaudio
 , libX11
 , graphicsmagick
-, pcre
+, pcre2
 , pkg-config
 , libGL
 , libGLU
@@ -112,12 +112,12 @@ let
   };
 
   self = mkDerivation rec {
-    version = "7.3.0";
+    version = "8.1.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-bhSkZJ1wr0WrZg+Mu/ZFqvHsM/JfiL/aRpfLF+RAxPU=";
+      sha256 = "sha256-gFIHTRew72Q9A33oqziWcsdSuyAe6c6k36aYWPtqIT8=";
     };
 
     buildInputs = [
@@ -127,7 +127,7 @@ let
       flex
       qhull
       graphicsmagick
-      pcre
+      pcre2
       fltk
       zlib
       curl
@@ -186,7 +186,7 @@ let
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
     # See https://savannah.gnu.org/bugs/?50339
-    F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
+    F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
 
     configureFlags = [
       "--with-blas=blas"

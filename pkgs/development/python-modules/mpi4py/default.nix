@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-F4WPLrxiMiDQEg0fqNQo0DPd50nEvDWzPYGmatf5NIA=";
+    hash = "sha256-F4WPLrxiMiDQEg0fqNQo0DPd50nEvDWzPYGmatf5NIA=";
   };
 
   passthru = {

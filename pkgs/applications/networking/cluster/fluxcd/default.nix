@@ -1,9 +1,9 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles, stdenv }:
 
 let
-  version = "0.39.0";
-  sha256 = "1mxzafv4p6n2r62nsr4py74z8jw42hm6ypm9kkfw3bfz5db7xhav";
-  manifestsSha256 = "0wri6xzd603ll7ncn4af4xv5px1yg91m133m0dlrrzrb3izgiky0";
+  version = "0.41.2";
+  sha256 = "0c4in6k6l9kjskcapi6gap9jkbrrfd106z6nbs48afr30cv2wp24";
+  manifestsSha256 = "0kc9s5289s5b1slk2w3sr28yk9hg3lmrpy00mw3im3k6aqgrk9j0";
 
   manifests = fetchzip {
     url =
@@ -23,13 +23,14 @@ in buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "sha256-IyWXCunOCVDV/OHf3py/g0UbIByYhnIHDlEDxIkBLZI=";
+  vendorSha256 = "sha256-ez4yaFZ5JROdu9boN5wI/XGMqLo8OKW6b0FZsJeFw4w=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
-  '';
 
-  patches = [ ./patches/disable-tests-ssh_key.patch ];
+    # disable tests that require network access
+    rm source/cmd/flux/create_secret_git_test.go
+  '';
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -65,7 +66,7 @@ in buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 jlesquembre superherointj ];
+    maintainers = with maintainers; [ bryanasdev000 jlesquembre ];
     mainProgram = "flux";
   };
 }

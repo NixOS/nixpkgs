@@ -242,7 +242,7 @@ let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
         else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
@@ -322,7 +322,7 @@ let
         }"
     else
       "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if config.checkMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+  checkMeta = meta: lib.optionals config.checkMeta (lib.remove null (lib.mapAttrsToList checkMetaAttr meta));
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
@@ -368,7 +368,18 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      let toPretty = lib.generators.toPretty {
+            allowPrettyValues = true;
+            indent = "  ";
+          };
+      in { valid = "no"; reason = "unsupported";
+           errormsg = ''
+             is not available on the requested hostPlatform:
+               hostPlatform.config = "${hostPlatform.config}"
+               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+            '';
+         }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
 

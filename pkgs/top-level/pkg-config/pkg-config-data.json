@@ -445,6 +445,11 @@
         "openssl"
       ]
     },
+    "libcurl": {
+      "attrPath": [
+        "curl"
+      ]
+    },
     "libecpg": {
       "attrPath": [
         "postgresql"

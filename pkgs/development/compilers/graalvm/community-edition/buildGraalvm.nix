@@ -4,29 +4,51 @@
 , autoPatchelfHook
 , cairo
 , cups
+, darwin
 , fontconfig
-, Foundation
 , glib
 , gtk3
-, gtkSupport ? stdenv.isLinux
 , makeWrapper
 , setJavaClassPath
 , unzip
 , xorg
 , zlib
-}:
-{ javaVersion
+  # extra params
+, javaVersion
 , meta ? { }
 , products ? [ ]
-, ... } @ args:
+, gtkSupport ? stdenv.isLinux
+, ...
+} @ args:
 
 let
+  extraArgs = builtins.removeAttrs args [
+    "lib"
+    "stdenv"
+    "alsa-lib"
+    "autoPatchelfHook"
+    "cairo"
+    "cups"
+    "darwin"
+    "fontconfig"
+    "glib"
+    "gtk3"
+    "makeWrapper"
+    "setJavaClassPath"
+    "unzip"
+    "xorg"
+    "zlib"
+    "javaVersion"
+    "meta"
+    "products"
+    "gtkSupport"
+  ];
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
-  mapProducts = key: default: (map (p: p.${key} or default) products);
+  mapProducts = key: default: (map (p: p.graalvmPhases.${key} or default) products);
   concatProducts = key: lib.concatStringsSep "\n" (mapProducts key "");
 
-  graalvmXXX-ce = stdenv.mkDerivation (args // {
+  graalvmXXX-ce = stdenv.mkDerivation ({
     pname = "graalvm${javaVersion}-ce";
 
     unpackPhase = ''
@@ -71,7 +93,7 @@ let
       ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin Foundation;
+      ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -98,8 +120,7 @@ let
     '' + concatProducts "postInstall";
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
-      # Find all executables in any directory that contains '/bin/'
-      for bin in $(find "$out" -executable -type f -wholename '*/bin/*'); do
+      for bin in $(find "$out/bin" -executable -type f); do
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       done
     '' + concatProducts "preFixup";
@@ -108,6 +129,12 @@ let
     doInstallCheck = true;
     installCheckPhase = ''
       runHook preInstallCheck
+
+      ${# broken in darwin
+        lib.optionalString stdenv.isLinux ''
+        echo "Testing Jshell"
+        echo '1 + 1' | $out/bin/jshell
+      ''}
 
       echo ${
         lib.escapeShellArg ''
@@ -136,7 +163,6 @@ let
     };
 
     meta = with lib; ({
-      inherit platforms;
       homepage = "https://www.graalvm.org/";
       description = "High-Performance Polyglot VM";
       license = with licenses; [ upl gpl2Classpath bsd3 ];
@@ -144,5 +170,6 @@ let
       mainProgram = "java";
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
     } // meta);
-  });
-in graalvmXXX-ce
+  } // extraArgs);
+in
+graalvmXXX-ce

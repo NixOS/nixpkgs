@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "wireservice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
+    hash = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
   };
 
   propagatedBuildInputs = [

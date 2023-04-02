@@ -1,4 +1,4 @@
-{ buildDunePackage, git
+{ buildDunePackage, fetchpatch, git
 , rresult, result, bigstringaf
 , fmt, bos, fpath, uri, digestif, logs, lwt
 , mirage-clock, mirage-clock-unix, astring, awa, cmdliner

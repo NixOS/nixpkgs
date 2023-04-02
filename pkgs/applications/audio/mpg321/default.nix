@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: volume.o:/build/mpg321-0.3.2-orig/mpg321.h:119: multiple definition of
   #     `loop_remaining'; mpg321.o:/build/mpg321-0.3.2-orig/mpg321.h:119: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   configureFlags =
     [ ("--enable-alsa=" + (if stdenv.isLinux then "yes" else "no")) ]

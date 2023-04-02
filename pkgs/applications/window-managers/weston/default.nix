@@ -6,6 +6,7 @@
 , pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
 , libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
+, buildDemo ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "078y14ff9wmmbzq314f7bq1bxx0rc12xy4j362n60iamr56qs4x6";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
     cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     "-Dremoting=false" # TODO
     "-Dpipewire=${lib.boolToString (pipewire != null)}"
     "-Dimage-webp=${lib.boolToString (libwebp != null)}"
-    "-Ddemo-clients=false"
+    (lib.mesonBool "demo-clients" buildDemo)
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
     # TODO:

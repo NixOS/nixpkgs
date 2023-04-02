@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "0.18.1";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,14 +28,8 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wgRZwafAF05LtwjH6SVKzsY7bKeZ6lUlM3dB5PdOn1E=";
+    hash = "sha256-Kewd6/4yawpRuyCe8Na0BGUMo59tr2fc97VlGbVJ8mI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "docutils>=0.15,<0.19" "docutils>=0.15" \
-      --replace "sphinx>=4,<6" "sphinx"
-  '';
 
   nativeBuildInputs = [ flit-core ];
 
@@ -49,14 +43,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "myst_parser" ];
-
   nativeCheckInputs = [
     beautifulsoup4
     pytest-param-files
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
+  ] ++ markdown-it-py.optional-dependencies.linkify;
+
+  pythonImportsCheck = [
+    "myst_parser"
   ];
 
   disabledTests = [
@@ -69,11 +65,15 @@ buildPythonPackage rec {
     "test_docutils_roles"
     # sphinx 6.0 expectation mismatches
     "test_sphinx_directives"
+    # sphinx 5.3 expectation mismatches
+    "test_render"
+    "test_includes"
   ];
 
   meta = with lib; {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
+    changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ loicreynier ];
   };

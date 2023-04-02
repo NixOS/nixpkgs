@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "parsy";
     owner = "python-parsy";
     rev = "v${version}";
-    sha256 = "sha256-FislrLb+u4T5m/eEER7kazZHJKEwPHe+Vg/YDJp4PyM=";
+    hash = "sha256-FislrLb+u4T5m/eEER7kazZHJKEwPHe+Vg/YDJp4PyM=";
   };
 
   nativeCheckInputs = [

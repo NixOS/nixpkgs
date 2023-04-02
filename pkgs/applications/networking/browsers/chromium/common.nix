@@ -38,6 +38,8 @@
 , libepoxy
 # postPatch:
 , glibc # gconv + locale
+# postFixup:
+, vulkan-loader
 
 # Package customization:
 , cupsSupport ? true, cups ? null
@@ -324,7 +326,7 @@ let
     # Don't spam warnings about unknown warning options. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       buildCommand = target: ''
@@ -341,10 +343,10 @@ let
     in lib.concatStringsSep "\n" commands;
 
     postFixup = ''
-      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      # Make sure that libGLESv2 and libvulkan are found by dlopen.
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {

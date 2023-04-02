@@ -5,16 +5,14 @@
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi, libbs2b, game-music-emu
+, libarchive, opusfile, soxr, wavpack
 # output plugins
-, alsa-lib, libpulseaudio, pipewire
+, alsa-lib, libpulseaudio, pipewire, libjack2
 # effect plugins
 , libsamplerate
 }:
 
 # Additional plugins that can be added:
-#  wavpack (https://www.wavpack.com/)
-#  Ogg Opus support
-#  JACK audio support
 #  ProjectM visualization plugin
 
 # To make MIDI work we must tell Qmmp what instrument configuration to use (and
@@ -45,8 +43,9 @@ stdenv.mkDerivation rec {
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi libbs2b game-music-emu
+      libarchive opusfile soxr wavpack
       # output plugins
-      alsa-lib libpulseaudio pipewire
+      alsa-lib libpulseaudio pipewire libjack2
       # effect plugins
       libsamplerate
     ];

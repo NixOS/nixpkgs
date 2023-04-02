@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     openssl
     slang
     zip
-  ] ++ lib.optional x11Support [ libX11 ]
+  ] ++ lib.optionals x11Support [ libX11 ]
     ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;

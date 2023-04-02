@@ -273,6 +273,9 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
+          Note that the {option}`hashedPassword` option will override
+          this option if both are set.
+
           ${hashedPasswordDescription}
         '';
       };
@@ -291,6 +294,9 @@ let
           is world-readable in the Nix store, so it should only be
           used for guest accounts or passwords that will be changed
           promptly.
+
+          Note that the {option}`password` option will override this
+          option if both are set.
         '';
       };
 
@@ -533,7 +539,9 @@ in {
 
   ###### implementation
 
-  config = {
+  config = let
+    cryptSchemeIdPatternGroup = "(${lib.concatStringsSep "|" pkgs.libxcrypt.enabledCryptSchemeIds})";
+  in {
 
     users.users = {
       root = {
@@ -595,15 +603,16 @@ in {
       text = ''
         users=()
         while IFS=: read -r user hash tail; do
-          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
             users+=("$user")
           fi
         done </etc/shadow
 
         if (( "''${#users[@]}" )); then
           echo "
-        WARNING: The following user accounts rely on password hashes that will
-        be removed in NixOS 23.05. They should be renewed as soon as possible."
+        WARNING: The following user accounts rely on password hashing algorithms
+        that have been removed. They need to be renewed as soon as possible, as
+        they do prevent their users from logging in."
           printf ' - %s\n' "''${users[@]}"
         fi
       '';
@@ -693,7 +702,20 @@ in {
               users.groups.${user.name} = {};
             '';
           }
-        ]
+        ] ++ (map (shell: {
+            assertion = (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
+            message = ''
+              users.users.${user.name}.shell is set to ${shell}, but
+              programs.${shell}.enable is not true. This will cause the ${shell}
+              shell to lack the basic nix directories in its PATH and might make
+              logging in as that user impossible. You can fix it with:
+              programs.${shell}.enable = true;
+            '';
+          }) [
+          "fish"
+          "xonsh"
+          "zsh"
+        ])
     ));
 
     warnings =
@@ -710,7 +732,7 @@ in {
         let
           sep = "\\$";
           base64 = "[a-zA-Z0-9./]+";
-          id = "[a-z0-9-]+";
+          id = cryptSchemeIdPatternGroup;
           value = "[a-zA-Z0-9/+.-]+";
           options = "${id}(=${value})?(,${id}=${value})*";
           scheme  = "${id}(${sep}${options})?";

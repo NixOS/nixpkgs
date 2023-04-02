@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "catboost";
     repo = "catboost";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-bqnUHTTRan/spA5y4LRt/sIUYpP3pxzdN/4wHjzgZVY=";
+    hash = "sha256-bqnUHTTRan/spA5y4LRt/sIUYpP3pxzdN/4wHjzgZVY=";
   };
 
   nativeBuildInputs = [ clang_12 ];

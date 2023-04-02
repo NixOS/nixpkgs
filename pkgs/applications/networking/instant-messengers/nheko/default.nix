@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nheko";
-  version = "0.11.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    hash = "sha256-2sN5lVjJ/CPH9U6NfZkAYZUTT+YDgPOy9dTVGp0svkg=";
+    hash = "sha256-2daXxTbpSUlig47y901JOkWRxbZGH4qrvNMepJbvS3o=";
   };
 
   nativeBuildInputs = [
@@ -82,9 +82,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   preFixup = lib.optionalString voipSupport ''
     # add gstreamer plugins path to the wrapper

@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcl";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = "${pname}-${version}";
-    sha256 = "0jhvciaw43y6iqqk7hyxnfhn1b4bsw5fpy04s01r5pkcsjjbdbqc";
+    sha256 = "sha256-JDiDAmdpwUR3Sff63ehyvetIFXAgGOrI+HEaZ5lURps=";
   };
 
   # remove attempt to prevent (x86/x87-specific) extended precision use

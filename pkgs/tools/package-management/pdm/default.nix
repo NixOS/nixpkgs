@@ -7,6 +7,15 @@ let
     # 3. Ansible being unable to upgrade to a later version of resolvelib
     # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
     packageOverrides = self: super: {
+      installer = super.installer.overridePythonAttrs (attrs: rec {
+        version = "0.6.0";
+        src = fetchFromGitHub {
+          owner = "pradyunsg";
+          repo = "installer";
+          rev = version;
+          hash = "sha256-IXznSrc/4LopgZDGFSC6cAOCbts+siKpdl5SvN1FFvA=";
+        };
+      });
       resolvelib = super.resolvelib.overridePythonAttrs (attrs: rec {
         version = "0.9.0";
         src = fetchFromGitHub {
@@ -24,14 +33,18 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.3.4";
+  version = "2.4.6";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zaSNM5Ey4oI2MtUPYBHG0PCMgJdasVatwkjaRBrT1RQ=";
+    hash = "sha256-g+fQxq2kwhNXXEJG2n5n4f9GMkmmLsjpHoay152fcVQ=";
   };
+
+  nativeBuildInputs = [
+    pdm-pep517
+  ];
 
   propagatedBuildInputs = [
     blinker
@@ -40,9 +53,6 @@ buildPythonApplication rec {
     findpython
     installer
     packaging
-    pdm-pep517
-    pep517
-    pip
     platformdirs
     pyproject-hooks
     python-dotenv
@@ -50,20 +60,22 @@ buildPythonApplication rec {
     resolvelib
     rich
     shellingham
-    tomli
     tomlkit
     unearth
     virtualenv
   ]
   ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.8") [
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    pytest-rerunfailures
     pytest-xdist
   ];
 
@@ -83,8 +95,11 @@ buildPythonApplication rec {
     "test_use_invalid_wrapper_python"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://pdm.fming.dev";
+    changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

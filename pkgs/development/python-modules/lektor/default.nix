@@ -10,6 +10,7 @@
 , importlib-metadata
 , inifile
 , jinja2
+, markupsafe
 , marshmallow
 , marshmallow-dataclass
 , mistune
@@ -19,8 +20,10 @@
 , pytest-mock
 , pytest-pylint
 , pytestCheckHook
+, python
 , pythonOlder
 , python-slugify
+, pytz
 , requests
 , setuptools
 , typing-inspect
@@ -30,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "3.4.0b2";
+  version = "3.4.0b4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +42,7 @@ buildPythonPackage rec {
     owner = "lektor";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5w3tT0celHgjmLlsM3sdBdYlXx57z3kMePVGSQkOP7M=";
+    hash = "sha256-O0bTmJqRymrQuHW19Y7/Kp+2XlbmDzcjl/jDACDlCSk=";
   };
 
   propagatedBuildInputs = [
@@ -51,12 +54,14 @@ buildPythonPackage rec {
     flask
     inifile
     jinja2
+    markupsafe
     marshmallow
     marshmallow-dataclass
     mistune
     pip
     pyopenssl
     python-slugify
+    pytz
     requests
     setuptools
     typing-inspect
@@ -72,9 +77,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "typing.inspect < 0.8.0" "typing.inspect"
+  postInstall = ''
+    cp -r lektor/translations "$out/${python.sitePackages}/lektor/"
   '';
 
   pythonImportsCheck = [
@@ -89,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A static content management system";
     homepage = "https://www.getlektor.com/";
+    changelog = "https://github.com/lektor/lektor/blob/v${version}/CHANGES.md";
     license = licenses.bsd0;
     maintainers = with maintainers; [ costrouc ];
   };

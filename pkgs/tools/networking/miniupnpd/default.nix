@@ -1,21 +1,21 @@
-{ stdenv, lib, fetchurl, iptables, libuuid, openssl, pkg-config
+{ stdenv, lib, fetchurl, iptables-legacy, libuuid, openssl, pkg-config
 , which, iproute2, gnused, coreutils, gawk, makeWrapper
 , nixosTests
 }:
 
 let
-  scriptBinEnv = lib.makeBinPath [ which iproute2 iptables gnused coreutils gawk ];
+  scriptBinEnv = lib.makeBinPath [ which iproute2 iptables-legacy gnused coreutils gawk ];
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
-  version = "2.3.1";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
-    sha256 = "0crv975qqppnj27jba96yysq2911y49vjd74sp9vnjb54z0d9pyi";
+    sha256 = "sha256-b9cBn5Nv+IxB58gi9G8QtRvXLWZZePZYZIPedbMMNr8=";
   };
 
-  buildInputs = [ iptables libuuid openssl ];
+  buildInputs = [ iptables-legacy libuuid openssl ];
   nativeBuildInputs= [ pkg-config makeWrapper ];
 
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     bittorrent-integration = nixosTests.bittorrent;
+    inherit (nixosTests) upnp;
   };
 
   meta = with lib; {
