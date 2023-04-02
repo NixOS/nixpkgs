@@ -384,4 +384,6 @@ in
         };
       };
     };
+
+  meta.maintainers = with lib.maintainers; [ the-argus ];
 }
