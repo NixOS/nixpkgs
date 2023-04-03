@@ -1,4 +1,5 @@
-{ llvmPackages
+{ stdenv
+, llvmPackages
 , lib
 , fetchFromGitHub
 , cmake
@@ -13,7 +14,7 @@
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
-llvmPackages.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "halide";
   version = "15.0.0";
 
@@ -25,6 +26,8 @@ llvmPackages.stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];
+
+  doCheck = true;
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
