@@ -163,31 +163,26 @@ buildPythonPackage {
   ];
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
-  preConfigure =
-    ''
-      export CC="${backendStdenv.cc}/bin/cc";
-      export CXX="${backendStdenv.cc}/bin/c++";
-    ''
+  preConfigure = ''
+    export CC="${backendStdenv.cc}/bin/cc";
+    export CXX="${backendStdenv.cc}/bin/c++";
+
     # Upstream's setup.py tries to write cache somewhere in ~/
-    + ''
-      export HOME=$TMPDIR
-    ''
+    export HOME=$TMPDIR
+
     # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
-    + ''
-      echo "" >> python/setup.cfg
-      echo "[build_ext]" >> python/setup.cfg
-      echo "base-dir=$PWD" >> python/setup.cfg
-    ''
+    echo "
+    [build_ext]
+    base-dir=$PWD" >> python/setup.cfg
+
     # The rest (including buildPhase) is relative to ./python/
-    + ''
-      cd python/
-    ''
+    cd python/
+
     # Work around download_and_copy_ptxas()
-    + ''
-      dst_cuda="$PWD/triton/third_party/cuda/bin"
-      mkdir -p "$dst_cuda"
-      ln -s "${ptxas}" "$dst_cuda/"
-    '';
+    dst_cuda="$PWD/triton/third_party/cuda/bin"
+    mkdir -p "$dst_cuda"
+    ln -s "${ptxas}" "$dst_cuda/"
+  '';
 
   # CMake is run by setup.py instead
   dontUseCmakeConfigure = true;
