@@ -11,7 +11,6 @@
   bash,
   runtimeShell,
   singularity,
-  storeDir ? builtins.storeDir,
 }:
 rec {
   shellScript =
@@ -80,11 +79,13 @@ rec {
 
             # Run root script
             ${lib.optionalString (runAsRoot != null) ''
-              mkdir -p ./${storeDir}
-              mount --rbind ${storeDir} ./${storeDir}
+              mkdir -p ./${builtins.storeDir}
+              mount --rbind "${builtins.storeDir}" ./${builtins.storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
-              umount -R ./${storeDir}
+              umount -R ./${builtins.storeDir}
             ''}
+
+            if grep "^substitut"
 
             # Build /bin and copy across closure
             mkdir -p bin ./${builtins.storeDir}
