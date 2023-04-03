@@ -36,7 +36,7 @@ lib.runTests (
 # sanity check before committing :).
 
 (with lib.systems.doubles; {
-  testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows ++ embedded ++ mmix ++ js ++ genode ++ redox);
+  testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows ++ embedded ++ mmix ++ js ++ genode ++ redox ++ serenity);
 
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv6l-netbsd" "armv6l-none" "armv7a-linux" "armv7a-netbsd" "armv7l-linux" "armv7l-netbsd" "arm-none" "armv7a-darwin" ];
   testarmv7 = mseteq armv7 [ "armv7a-darwin" "armv7a-linux" "armv7l-linux" "armv7a-netbsd" "armv7l-netbsd" ];
@@ -48,7 +48,7 @@ lib.runTests (
   testriscv32 = mseteq riscv32 [ "riscv32-linux" "riscv32-netbsd" "riscv32-none" ];
   testriscv64 = mseteq riscv64 [ "riscv64-linux" "riscv64-netbsd" "riscv64-none" ];
   tests390x = mseteq s390x [ "s390x-linux" "s390x-none" ];
-  testx86_64 = mseteq x86_64 [ "x86_64-linux" "x86_64-darwin" "x86_64-freebsd13" "x86_64-genode" "x86_64-redox" "x86_64-openbsd" "x86_64-netbsd" "x86_64-cygwin" "x86_64-solaris" "x86_64-windows" "x86_64-none" ];
+  testx86_64 = mseteq x86_64 [ "x86_64-linux" "x86_64-darwin" "x86_64-freebsd13" "x86_64-genode" "x86_64-redox" "x86_64-openbsd" "x86_64-netbsd" "x86_64-cygwin" "x86_64-solaris" "x86_64-windows" "x86_64-serenity" "x86_64-none" ];
 
   testcygwin = mseteq cygwin [ "i686-cygwin" "x86_64-cygwin" ];
   testdarwin = mseteq darwin [ "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin" ];
@@ -61,7 +61,8 @@ lib.runTests (
   testnetbsd = mseteq netbsd [ "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd" "i686-netbsd" "m68k-netbsd" "mipsel-netbsd" "powerpc-netbsd" "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd" ];
   testopenbsd = mseteq openbsd [ "i686-openbsd" "x86_64-openbsd" ];
   testwindows = mseteq windows [ "i686-cygwin" "x86_64-cygwin" "i686-windows" "x86_64-windows" ];
-  testunix = mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox);
+  testserenity = mseteq serenity [ "x86_64-serenity" ];
+  testunix = mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox ++ serenity);
 })
 
 // {

@@ -51,6 +51,9 @@ let
     # Redox
     "x86_64-redox"
 
+    # Serenity
+    "x86_64-serenity"
+
     # WASI
     "wasm64-wasi" "wasm32-wasi"
 
@@ -110,6 +113,7 @@ in {
   unix          = filterDoubles predicates.isUnix;
   wasi          = filterDoubles predicates.isWasi;
   redox         = filterDoubles predicates.isRedox;
+  serenity      = filterDoubles predicates.isSerenity;
   windows       = filterDoubles predicates.isWindows;
   genode        = filterDoubles predicates.isGenode;
 
