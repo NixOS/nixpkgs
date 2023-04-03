@@ -36909,6 +36909,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  blast-bin = callPackage ../applications/science/biology/blast/bin.nix { };
+
   bpp-core = callPackage ../development/libraries/science/biology/bpp-core {
     stdenv = gcc10StdenvCompat;
   };
