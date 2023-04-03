@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An abstract base class to a generic linear programming (LP) solver";
     homepage = "https://github.com/coin-or/Osi";
-    license = licenses.epl10;
+    license = licenses.epl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
