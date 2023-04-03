@@ -1,0 +1,13 @@
+diff --git a/Jamroot b/Jamroot
+index 83dfcbb..cc4eb62 100755
+--- a/Jamroot
++++ b/Jamroot
+@@ -84,7 +84,7 @@ else if [ os.name ] in LINUX MACOSX FREEBSD
+     local lib = $(prefix)/lib ;
+ 
+     local names = liblua5.1 liblua51 liblua libluajit-5.1 ;
+-    local extensions = .a .so ;
++    local extensions = .a .so .dylib ;
+ 
+     library = [ GLOB $(lib)/lua51 $(lib)/lua5.1 $(lib)/lua $(lib) :
+         $(names)$(extensions) ] ;

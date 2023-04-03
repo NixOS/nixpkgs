@@ -5,13 +5,13 @@ stdenv.mkDerivation rec {
   version = "0.9.1";
 
   src = fetchFromGitHub {
-    owner = "luabind";
+    owner = "juspay";
     repo = "luabind";
-    rev = "v${version}";
-    sha256 = "sha256-sK1ca2Oj9yXdmxyXeDO3k8YZ1g+HxIXLhvdTWdPDdag=";
+    rev = "darwin";
+    sha256 = "sha256-U2kJ/aMszto9hmcDDhabqaB63WmLpjMn5AEJ31j+RbI=";
   };
 
-  patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ];
+  # patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ./0.9.1_darwin_dylib.patch ];
 
   buildInputs = [ boost-build lua boost ];
 
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/luabind/luabind";
     description = "A library that helps you create bindings between C++ and Lua";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
