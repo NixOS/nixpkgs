@@ -2,7 +2,7 @@
 , stdenv
 , runCommand
 , vmTools
-, writeReferencesToFile
+, writeMultipleReferencesToFile
 , writeScript
 , e2fsprogs
 , gawk
@@ -20,22 +20,6 @@ rec {
       ${text}
     '';
 
-  mkLayer =
-    { name
-    , contents ? [ ]
-      # May be "apptainer" instead of "singularity"
-    , projectName ? (singularity.projectName or "singularity")
-    }:
-    runCommand "${projectName}-layer-${name}"
-      {
-        inherit contents;
-      } ''
-      mkdir $out
-      for f in $contents ; do
-        cp -ra $f $out/
-      done
-    '';
-
   buildImage =
     let
       defaultSingularity = singularity;
@@ -50,18 +34,13 @@ rec {
     }:
     let
       projectName = singularity.projectName or "singularity";
-      layer = mkLayer {
-        inherit name;
-        contents = contents ++ [ bash runScriptFile ];
-        inherit projectName;
-      };
       runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
       runScriptFile = shellScript "run-script.sh" runScript;
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.img"
           {
             buildInputs = [ singularity e2fsprogs util-linux gawk ];
-            layerClosure = writeReferencesToFile layer;
+            layerClosure = writeMultipleReferencesToFile (contents ++ [ bash runScriptFile ]);
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
