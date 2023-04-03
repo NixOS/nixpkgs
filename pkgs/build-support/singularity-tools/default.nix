@@ -37,7 +37,7 @@ rec {
       runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
       runScriptFile = shellScript "run-script.sh" runScript;
       result = vmTools.runInLinuxVM (
-        runCommand "${projectName}-image-${name}.img"
+        runCommand "${projectName}-image-${name}.sif"
           {
             buildInputs = [ singularity e2fsprogs util-linux gawk ];
             layerClosure = writeMultipleReferencesToFile (contents ++ [ bash runScriptFile ]);
