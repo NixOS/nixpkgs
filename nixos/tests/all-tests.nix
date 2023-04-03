@@ -640,6 +640,7 @@ in {
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
   timezone = handleTest ./timezone.nix {};
+  timidity = handleTest ./timidity {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinywl = handleTest ./tinywl.nix {};
