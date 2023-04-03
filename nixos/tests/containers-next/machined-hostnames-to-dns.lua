@@ -6,6 +6,7 @@ local function nspawn_to_dns(state, req)
   local qry = req:current()
 
   local name = string.gmatch(kres.dname2str(qry.sname), "[^\\.]+")()
+  name = string.gsub(name, "-", "_2d")
   local dns_query_msg = ldbus.message.new_method_call(
     'org.freedesktop.machine1',
     '/org/freedesktop/machine1/machine/' .. name,
