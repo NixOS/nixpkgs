@@ -153,6 +153,8 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight.";
     homepage = "https://github.com/LizardByte/Sunshine";
