@@ -165,7 +165,8 @@ in {
     };
 
     depsBuildBuild = [ nim-unwrapped ];
-    buildInputs = [ openssl ];
+    buildInputs = [ openssl ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
 
