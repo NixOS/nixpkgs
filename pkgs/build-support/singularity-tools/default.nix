@@ -1,16 +1,16 @@
-{ runCommand
-, lib
+{ lib
 , stdenv
-, storeDir ? builtins.storeDir
-, writeScript
-, singularity
-, writeClosure
-, bash
+, runCommand
 , vmTools
+, writeClosure
+, writeScript
+, e2fsprogs
 , gawk
 , util-linux
+, bash
 , runtimeShell
-, e2fsprogs
+, singularity
+, storeDir ? builtins.storeDir
 }:
 rec {
   shellScript = name: text:
