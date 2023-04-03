@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, system ? builtins.currentSystem, ovftoolBundles ? {}
-, requireFile, autoPatchelfHook, makeWrapper, unzip
+, requireFile, autoPatchelfHook, fixDarwinDylibNames, makeWrapper, unzip
 , glibc, c-ares, libxcrypt, expat, icu60, xercesc, zlib
 }:
 
@@ -9,13 +9,31 @@ let
   ovftoolZipUnpackPhase = ''
     runHook preUnpack
     unzip ${ovftoolSource}
-    extracted=ovftool/
-    if [ -d "$extracted" ]; then
-      echo "ovftool extracted successfully" >&2
-    else
-      echo "Could not find $extracted - are you sure this is ovftool?" >&2
+    dirs=(ovftool 'VMWare OVF Tool')
+    found=""
+    for dir in "''${dirs[@]}"; do
+      if [ -d "$dir/" ]; then
+        found="$dir"
+        echo "ovftool extracted successfully" >&2
+        break
+      fi
+    done
+
+    if [ -z "$found" ]; then
+      echo "Could not find the root extract directory - are you sure this is ovftool?" >&2
       exit 1
     fi
+
+    if [ "$found" != ovftool ]; then
+      # Make sure the root is just named 'ovftool' for the installPhase.
+      mv "$found" ovftool
+    fi
+
+    if [ -d ovftool/lib ]; then
+      # Libs are here on OS X.
+      mv ovftool/lib/* ovftool/
+    fi
+
     runHook postUnpack
   '';
 
@@ -32,6 +50,12 @@ let
       filename = "VMware-ovftool-${version}-lin.x86_64.zip";
       url = "${baseUrl}/f87355ff-f7a9-4532-b312-0be218a92eac/b2916af6-9f4f-4112-adac-49d1d6c81f63/${filename}";
       sha256 = "1fkm18yfkkm92m7ccl6b4nxy5lagwwldq56b567091a5sgad38zw";
+      unpackPhase = ovftoolZipUnpackPhase;
+    };
+    "x86_64-darwin" = rec {
+      filename = "VMware-ovftool-${version}-mac.x64.zip";
+      url = "${baseUrl}/d2a12d16-4a0d-4d1e-a460-36fd93268974/144ab954-cb82-4d9e-bd10-08af46debfd9/${filename}";
+      sha256 = "0lfd3sr8mvfpf829bygmfmwldwp1pl8ds29z9g8wjqxkdlsfjvb2";
       unpackPhase = ovftoolZipUnpackPhase;
     };
   };
@@ -59,16 +83,18 @@ stdenv.mkDerivation rec {
   # `./result/bin/ovftool https://channels.nixos.org/nixos-unstable/latest-nixos-x86_64-linux.ova nixos.ovf`
   # Some dependencies are not loaded until operations actually occur!
   buildInputs = [
-    glibc
     libxcrypt
     c-ares
     expat
     icu60
     xercesc
     zlib
-  ];
+  ] ++ (lib.optional stdenv.isLinux glibc);
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper unzip
+  ] ++ (lib.optional stdenv.isLinux autoPatchelfHook)
+    ++ (lib.optional stdenv.isDarwin fixDarwinDylibNames);
 
   preferLocalBuild = true;
 
@@ -76,17 +102,28 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ovftoolSystem.unpackPhase;
 
-  # Expects a directory named 'ovftool' containing the ovftool install.
+  # Expects a directory named 'ovftool' or 'VMWare OVF Tool' containing the ovftool install.
   # Based on https://aur.archlinux.org/packages/vmware-ovftool/
   # with the addition of a libexec directory and a Nix-style binary wrapper.
   installPhase = ''
     runHook preInstall
+    # Ensure we're in the staging directory
     if [ -d ovftool ]; then
-      # Ensure we're in the staging directory
       cd ovftool
     fi
+
     # libraries
     install -m 755 -d "$out/lib/${pname}"
+
+    # Echoes a platform compatible dylib/.so name.
+    nameOf() {
+        local version="$2"
+        if [ -n "$version" ]; then
+            version=".$version"
+        fi
+        echo ${if stdenv.isDarwin then ''"lib$1$version"*".dylib"'' else ''"lib$1.so$version"*''}
+    }
+
     # These all appear to be VMWare proprietary except for libgoogleurl and libcurl.
     # The rest of the libraries that the installer extracts are omitted here,
     # and provided in buildInputs. Since libcurl depends on VMWare's OpenSSL,
@@ -96,13 +133,15 @@ stdenv.mkDerivation rec {
     # FIXME: tell VMware to use a modern version of OpenSSL.
     #
     install -m 644 -t "$out/lib/${pname}" \
-      libgoogleurl.so.59 \
-      libssoclient.so \
-      libvim-types.so libvmacore.so libvmomi.so \
-      libcurl.so.4 libcrypto.so.1.0.2 libssl.so.1.0.2
+      "$(nameOf googleurl 59)" \
+      "$(nameOf ssoclient)" \
+      "$(nameOf vim-types)" "$(nameOf vmacore)" "$(nameOf vmomi)" \
+      "$(nameOf curl 4)" "$(nameOf crypto 1.0.2)" "$(nameOf ssl 1.0.2)"
     # libexec binaries
     install -m 755 -d "$out/libexec/${pname}"
-    install -m 755 -t "$out/libexec/${pname}" ovftool.bin
+
+    ovftool_bin=${if stdenv.isDarwin then "ovftool" else "ovftool.bin"}
+    install -m 755 -t "$out/libexec/${pname}" $ovftool_bin
     install -m 644 -t "$out/libexec/${pname}" icudt44l.dat
     # libexec resources
     for subdir in "certs" "env" "env/en" "schemas/DMTF" "schemas/vmware"; do
@@ -119,14 +158,16 @@ stdenv.mkDerivation rec {
     # binary wrapper; note that LC_CTYPE is defaulted to en_US.UTF-8 by
     # VMWare's wrapper script. We use C.UTF-8 instead.
     install -m 755 -d "$out/bin"
-    makeWrapper "$out/libexec/${pname}/ovftool.bin" "$out/bin/ovftool" \
+    makeWrapper "$out/libexec/${pname}/$ovftool_bin" "$out/bin/ovftool" \
       --set-default LC_CTYPE C.UTF-8 \
-      --prefix LD_LIBRARY_PATH : "$out/lib"
+      --prefix ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${if stdenv.isDarwin then "$out/lib/ovftool" else "$out/lib"}
+    ${lib.optionalString stdenv.isDarwin ''fixDarwinDylibNames "$out/libexec/${pname}/$ovftool_bin"''}
     runHook postInstall
   '';
 
   preFixup = ''
-    addAutoPatchelfSearchPath "$out/lib"
+    ${lib.optionalString stdenv.isLinux ''addAutoPatchelfSearchPath "$out/lib"''}
+    ${lib.optionalString stdenv.isDarwin ''fixDarwinDylibNames "$out/lib/ovftool"/*.dylib''}
   '';
 
   doInstallCheck = true;
