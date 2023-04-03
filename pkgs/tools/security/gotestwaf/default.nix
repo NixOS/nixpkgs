@@ -5,16 +5,19 @@
 
 buildGoModule rec {
   pname = "gotestwaf";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c627bxx0mlxhc1fsd2k3x1lm5855pl215m88la662d70559z6k8";
+    hash = "sha256-waYX7DMyLW0eSzpFRyiCJQdYLFGaAKSlvGYrdcRfCl4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
+
+  # Some tests require networking as of v0.4.0
+  doCheck = false;
 
   postFixup = ''
     # Rename binary
