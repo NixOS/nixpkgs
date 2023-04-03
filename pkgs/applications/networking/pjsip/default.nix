@@ -98,6 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
         install_name_tool -id $lib "''${change_args[@]}" $lib
       fi
     done
+
+    # Rewrite library references for all executables.
+    find "$out" -executable -type f | while read executable; do
+      install_name_tool "''${change_args[@]}" "$executable"
+    done
   '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
