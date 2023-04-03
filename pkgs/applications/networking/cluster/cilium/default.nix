@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles }:
 
 buildGoModule rec {
   pname = "cilium-cli";
@@ -10,6 +10,14 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-libZapDj6Y/tGJEXAX3iZH2+pS64dg7IUsgTxT0Z6JA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-28114.patch";
+      url = "https://github.com/cilium/cilium-cli/commit/fb1427025764e1eebc4a7710d902c4f22cae2610.patch";
+      hash = "sha256-WHWtv/GP4AhaZBx0WheTCBaZNdnzr8KNqwfKK2BtheY=";
+    })
+  ];
 
   vendorSha256 = null;
 
