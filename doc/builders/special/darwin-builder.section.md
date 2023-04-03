@@ -61,3 +61,74 @@ builders-use-substitutes = true
 ```ShellSession
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
+
+## Example flake usage
+
+```
+{
+  inputs = {
+    nixpkgs.url = "path:/Users/geraint.ballinger/Documents/personal/nixpkgs";
+    nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
+  };
+
+  outputs = { self, darwin, nixpkgs, ... }@inputs:
+  let
+
+    inherit (darwin.lib) darwinSystem;
+    pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+    system = pkgs.stdenv.hostPlatform.system;
+    linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
+
+    darwin-builder = import "${nixpkgs}/nixos" {
+      system = linuxSystem;
+      configuration = {
+        imports = [
+          "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
+        ];
+        virtualisation.host.pkgs = pkgs;
+      };
+    };
+  in {
+
+    darwinConfigurations = rec {
+      machine1 = darwinSystem rec {
+        inherit system;
+        modules = [
+          {
+            nix.distributedBuilds = true;
+            nix.buildMachines = [{
+              hostName = "ssh://builder@localhost";
+              system = linuxSystem;
+              maxJobs = 4;
+              supportedFeatures = [ "kvm" "benchmark" "bigparallel" ];
+            }];
+
+            launchd.daemons.darwin-builder = {
+              command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
+              path = [ "/usr/bin" pkgs.coreutils pkgs.nix ];
+              serviceConfig = {
+                KeepAlive = true;
+                RunAtLoad = true;
+                StandardOutPath = "/var/log/darwin-builder.log";
+                StandardErrorPath = "/var/log/darwin-builder.log";
+              };
+            };
+          }
+        ];
+      };
+    };
+
+  };
+}
+```
+
+## Reconfiguring the builder
+
+Initially you should not change the builder configuration else you will not be
+able to use the binary cache. However, after you have the builder running locally
+you may use it to build a modified builder with additional storage or memory.
+To do this, import the `macos-builder` module into your nix configuration and
+edit the `virtualisation.darwin-builder.*` parameters as desired and rebuild.
+
