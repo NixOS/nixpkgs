@@ -733,8 +733,9 @@ in {
           sep = "\\$";
           base64 = "[a-zA-Z0-9./]+";
           id = cryptSchemeIdPatternGroup;
+          name = "[a-z0-9-]+";
           value = "[a-zA-Z0-9/+.-]+";
-          options = "${id}(=${value})?(,${id}=${value})*";
+          options = "${name}(=${value})?(,${name}=${value})*";
           scheme  = "${id}(${sep}${options})?";
           content = "${base64}${sep}${base64}(${sep}${base64})?";
           mcf = "^${sep}${scheme}${sep}${content}$";
