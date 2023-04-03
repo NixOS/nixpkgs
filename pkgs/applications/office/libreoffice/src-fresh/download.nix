@@ -98,11 +98,11 @@
     md5name = "89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7-cppunit-1.15.1.tar.gz";
   }
   {
-    name = "curl-7.88.1.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/curl-7.88.1.tar.xz";
-    sha256 = "1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f";
+    name = "curl-8.0.1.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/curl-8.0.1.tar.xz";
+    sha256 = "0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0";
     md5 = "";
-    md5name = "1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f-curl-7.88.1.tar.xz";
+    md5name = "0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0-curl-8.0.1.tar.xz";
   }
   {
     name = "libe-book-0.1.3.tar.xz";
