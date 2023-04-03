@@ -107,6 +107,7 @@ in {
       };
       container1 = {
         sharedNix = false;
+        activation.strategy = "restart";
         nixpkgs = ../../..;
         zone = "foo";
         network.v6.addrPool = lib.mkForce [];

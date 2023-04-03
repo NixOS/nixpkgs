@@ -25,20 +25,21 @@ let
       };
     '';
 
-  radvd.enable = "" != stringAsChars (x: if x == " " || x == "\n" then "" else x) radvd.config;
-
-  radvd.config = ''
-    ${concatMapStrings
-      (x: mkRadvdSection "veth" x cfg.${x}.network.v6.addrPool)
-      (filter
-        (n: cfg.${n}.network != null && cfg.${n}.zone == null)
-        (attrNames cfg))
-    }
-    ${concatMapStrings
-      (x: mkRadvdSection "zone" x config.nixos.containers.zones.${x}.v6.addrPool)
-      (attrNames config.nixos.containers.zones)
-    }
-  '';
+  interfaces.containers = attrNames cfg;
+  interfaces.zones = attrNames config.nixos.containers.zones;
+  radvd = {
+    enable = with interfaces; containers != [] || zones != [];
+    config = concatStringsSep "\n" [
+      (concatMapStrings
+        (x: mkRadvdSection "veth" x cfg.${x}.network.v6.addrPool)
+        (filter
+          (n: cfg.${n}.network != null && cfg.${n}.zone == null)
+          (attrNames cfg)))
+      (concatMapStrings
+        (x: mkRadvdSection "zone" x config.nixos.containers.zones.${x}.v6.addrPool)
+        (attrNames config.nixos.containers.zones))
+    ];
+  };
 
   mkMatchCfg = type: name:
     assert elem type [ "veth" "zone" ]; {
@@ -55,9 +56,6 @@ let
     EmitLLDP = "customer-bridge";
     IPv6AcceptRA = "no";
   };
-
-  recUpdate3 = a: b: c:
-    recursiveUpdate a (recursiveUpdate b c);
 
   mkStaticNetOpts = v:
     assert elem v [ 4 6 ]; {
@@ -304,10 +302,11 @@ in {
 
           network = mkOption {
             type = types.nullOr (types.submodule {
-              options = recUpdate3
+              options = foldl recursiveUpdate {} [
                 (mkNetworkingOpts "veth")
                 (mkStaticNetOpts 4)
-                (mkStaticNetOpts 6);
+                (mkStaticNetOpts 6)
+              ];
             });
             default = null;
             description = lib.mdDoc ''
@@ -372,8 +371,8 @@ in {
       { assertion = config.networking.useNetworkd;
         message = "Only networkd is supported!";
       }
-    ] ++ (flip concatMap (attrNames config.nixos.containers.instances) (n: let inst = cfg.${n}; in [
-      { assertion = inst.zone != null -> (config.nixos.containers.zones != null && config.nixos.containers.zones ? ${inst.zone});
+    ] ++ (foldlAttrs (acc: n: inst: acc ++ [
+      { assertion = inst.zone != null -> (config.nixos.containers.zones != null && config.nixos.containers.zones?${inst.zone});
         message = ''
           No configuration found for zone `${inst.zone}'!
           (Invalid container: ${n})
@@ -385,18 +384,16 @@ in {
           container `${n}' already uses zone `${inst.zone}'!
         '';
       }
-      { assertion = !inst.sharedNix -> inst.activation.strategy != "reload";
+      { assertion = !inst.sharedNix -> ! (elem inst.activation.strategy [ "reload" "dynamic" ]);
         message = ''
           Cannot reload a container with `sharedNix' disabled! As soon as the
           `BindReadOnly='-options change, a config activation can't be done without a reboot
           (affected: ${n})!
         '';
       }
-    ]));
+    ]) [ ] cfg);
 
-    services.radvd = {
-      inherit (radvd) config enable;
-    };
+    services = { inherit radvd; };
 
     systemd = {
       network.networks = mkMerge
@@ -428,10 +425,8 @@ in {
 
       nspawn = mapAttrs (const mkContainer) images;
       targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
-      services = listToAttrs (flip map (attrNames cfg) (container:
-        let
-          inherit (cfg.${container}) activation credentials;
-        in nameValuePair "systemd-nspawn@${container}" {
+      services = flip mapAttrs' cfg (container: { activation, credentials, ... }:
+        nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
             if [ ! -d /var/lib/machines/${container} ]; then
               mkdir -p /var/lib/machines/${container}/{etc,var,nix/var/nix}
@@ -482,7 +477,7 @@ in {
             })
           ];
         }
-      ));
+      );
     };
   };
 }
