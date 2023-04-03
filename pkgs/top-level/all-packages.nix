@@ -8627,6 +8627,8 @@ with pkgs;
 
   ioccheck = callPackage ../tools/security/ioccheck { };
 
+  iocextract = with python3Packages; toPythonApplication iocextract;
+
   ioping = callPackage ../tools/system/ioping { };
 
   ior = callPackage ../tools/system/ior { };
