@@ -39,6 +39,6 @@ buildFishPlugin rec {
     description = "Augment your fish command line with fzf key bindings";
     homepage = "https://github.com/PatrickF1/fzf.fish";
     license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ pacien natsukium ];
   };
 }
