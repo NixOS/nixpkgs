@@ -1,5 +1,6 @@
 { lib
 , undmg
+, makeWrapper
 , fetchurl
 , stdenvNoCC
 }:
@@ -13,15 +14,23 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-YOmTf50UUvvh4noWnmV6WsoWSua0tpWTgLTg+Cdr3bQ=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ undmg makeWrapper ];
 
   sourceRoot = ".";
-  # Create bin/ directory just so we can escape it from the mainProgram. nix run
-  # xxx hard-codes /bin/ as a prefix to the binary path, so going to a parent
-  # using .. requires the /bin/ directory to exist, even if empty.
   installPhase = ''
-    mkdir -p $out/Applications $out/bin
+    runHook preInstall
+
+    mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    mkdir -p $out/bin
+    for bin in $out/Applications/UTM.app/Contents/MacOS/*; do
+      # Symlinking `UTM` doesn't work; seems to look for files in the wrong
+      # place
+      makeWrapper $bin "$out/bin/$(basename $bin)"
+    done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -49,7 +58,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://mac.getutm.app/";
     changelog = "https://github.com/utmapp/${pname}/releases/tag/v${version}";
-    mainProgram = "../Applications/UTM.app/Contents/MacOS/UTM";
+    mainProgram = "UTM";
     license = licenses.apsl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
