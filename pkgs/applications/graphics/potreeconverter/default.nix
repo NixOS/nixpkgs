@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  fixupPhase = ''
+    runHook preFixup
+    ln -s $src/resources $out/bin/resources
+    runHook postFixup
+  '';
   meta = with lib; {
     description = "Create multi res point cloud to use with potree";
     homepage = "https://github.com/potree/PotreeConverter";
