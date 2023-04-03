@@ -13,7 +13,6 @@
   bashInteractive,
   runtimeShell,
   singularity,
-  storeDir ? builtins.storeDir,
 }:
 
 let
@@ -83,10 +82,10 @@ rec {
 
             # Run root script
             ${lib.optionalString (runAsRoot != null) ''
-              mkdir -p ./${storeDir}
-              mount --rbind ${storeDir} ./${storeDir}
+              mkdir -p ./${builtins.storeDir}
+              mount --rbind "${builtins.storeDir}" ./${builtins.storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
-              umount -R ./${storeDir}
+              umount -R ./${builtins.storeDir}
             ''}
 
             # Build /bin and copy across closure
