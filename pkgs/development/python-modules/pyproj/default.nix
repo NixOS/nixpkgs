@@ -84,6 +84,22 @@ buildPythonPackage rec {
     "test_transformer_group__download_grids"
   ];
 
+  pythonImportsCheck = [
+    "pyproj"
+    "pyproj.crs"
+    "pyproj.transformer"
+    "pyproj.geod"
+    "pyproj.proj"
+    "pyproj.database"
+    "pyproj.list"
+    "pyproj.datadir"
+    "pyproj.network"
+    "pyproj.sync"
+    "pyproj.enums"
+    "pyproj.aoi"
+    "pyproj.exceptions"
+  ];
+
   meta = {
     description = "Python interface to PROJ library";
     homepage = "https://github.com/pyproj4/pyproj";
