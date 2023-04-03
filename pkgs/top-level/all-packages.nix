@@ -32240,6 +32240,8 @@ with pkgs;
   p4d = callPackage ../applications/version-management/p4d { };
   p4v = callPackage ../applications/version-management/p4v { };
 
+  parson = callPackage ../development/libraries/parson { };
+
   partio = callPackage ../development/libraries/partio { };
 
   pc-ble-driver = callPackage ../development/libraries/pc-ble-driver {
