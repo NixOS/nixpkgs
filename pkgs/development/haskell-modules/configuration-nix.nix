@@ -168,6 +168,9 @@ self: super: builtins.intersectAttrs super {
     # Necesssary .txt files are not included in sdist.
     # https://github.com/haskell/haskell-language-server/pull/2887
     hls-change-type-signature-plugin
+
+    # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
+    hls-retrie-plugin
   ;
 
   ###########################################

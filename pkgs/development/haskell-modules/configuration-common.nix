@@ -107,13 +107,6 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
-    # Allow hls-call-hierarchy >= 1.2 which requires only a bound adjustment
-    (appendPatch (fetchpatch {
-      name = "hls-allow-hls-call-hierarchy-1.2.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/05b248dfacc307c3397b334635cb38298aee9563.patch";
-      includes = [ "haskell-language-server.cabal" ];
-      sha256 = "1v0zi1lv92p6xq54yw9swzaf24dxsi9lpk10sngg3ka654ikm7j5";
-    }))
   ]).overrideScope (lself: lsuper: {
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
@@ -123,7 +116,7 @@ self: super: {
     # That means ghc-paths can just use the ghc included Cabal version,
     # without causing package-db incoherence and we should do that because
     # otherwise we have different versions of ghc-paths
-    # around with have the same abi-hash, which can lead to confusions and conflicts.
+    # around which have the same abi-hash, which can lead to confusions and conflicts.
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
   });
 
@@ -132,6 +125,13 @@ self: super: {
     hlint = enableCabalFlag "ghc-lib" super.hlint;
     apply-refact = self.apply-refact_0_11_0_0;
   };
+
+  hls-test-utils = appendPatch (fetchpatch {
+    name = "hls-test-utils-ghcide-1.10-compat.patch";
+    url = "https://github.com/haskell/haskell-language-server/commit/014c8f90249f11a8dfa1286e67d452ccfb42b2d0.patch";
+    relative = "hls-test-utils";
+    hash = "sha256-sBuqSmgCQSgbXV6KPEZcIP09wbx81q5xjSg7/slH2HQ=";
+  }) super.hls-test-utils;
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
