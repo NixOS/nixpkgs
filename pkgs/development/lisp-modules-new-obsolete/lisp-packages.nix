@@ -85,7 +85,8 @@ let
   #
   # Wrapper around stdenv.mkDerivation for building ASDF systems.
   #
-  build-asdf-system = makeOverridableLispPackage (
+  build-asdf-system =
+    (makeOverridableLispPackage (
     { pname,
       version,
       src ? null,
@@ -256,7 +257,7 @@ let
         (builtins.concatLists
           (lib.catAttrs "propagatedBuildInputs"
             (builtins.concatLists [[args] lispLibs nativeLibs javaLibs])));
-    })));
+    }))));
 
   # Build the set of lisp packages using `lisp`
   # These packages are defined manually for one reason or another:
