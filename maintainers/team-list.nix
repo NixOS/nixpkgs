@@ -718,7 +718,6 @@ with lib.maintainers; {
   rust = {
     members = [
       figsoda
-      lnl7
       mic92
       tjni
       winter
