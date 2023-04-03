@@ -445,7 +445,7 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
-      maintainers = with maintainers; [ jyp abbradar ];
+      maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
       broken = !(xlaSupport -> cudaSupport);
     } // lib.optionalAttrs stdenv.isDarwin {
