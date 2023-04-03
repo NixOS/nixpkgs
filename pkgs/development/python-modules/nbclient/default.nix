@@ -16,11 +16,12 @@
 , testpath
 , traitlets
 , xmltodict
+, flaky
 }:
 
 let nbclient = buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ let nbclient = buildPythonPackage rec {
     owner = "jupyter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2H6Oi1tK/GrtfMTR1j12tZdRzQkFUxXzMSpfCtGPyWE=";
+    hash = "sha256-XUHbwDycxOhGLkVgerJQkUCZDjmpcBk5TcI4B2Hka2E=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,7 @@ let nbclient = buildPythonPackage rec {
     pytestCheckHook
     testpath
     xmltodict
+    flaky
   ];
 
   preCheck = ''
