@@ -16,8 +16,11 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ undmg ];
 
   sourceRoot = ".";
+  # Create bin/ directory just so we can escape it from the mainProgram. nix run
+  # xxx hard-codes /bin/ as a prefix to the binary path, so going to a parent
+  # using .. requires the /bin/ directory to exist, even if empty.
   installPhase = ''
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r *.app $out/Applications
   '';
 
@@ -46,7 +49,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://mac.getutm.app/";
     changelog = "https://github.com/utmapp/${pname}/releases/tag/v${version}";
-    mainProgram = "UTM";
+    mainProgram = "../Applications/UTM.app/Contents/MacOS/UTM";
     license = licenses.apsl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
