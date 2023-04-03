@@ -4103,6 +4103,16 @@
     githubId = 1931963;
     name = "David Sferruzza";
   };
+  dsuetin = {
+    name = "Danil Suetin";
+    email = "suetin085@gmail.com";
+    matrix = "@dani0854:matrix.org";
+    github = "dani0854";
+    githubId = 32674935;
+    keys = [{
+      fingerprint = "6CC2 D713 6703 0D86 CA29  C71F 23B5 AA6F A374 F2FE";
+    }];
+  };
   dsymbol = {
     name = "dsymbol";
     github = "dsymbol";
