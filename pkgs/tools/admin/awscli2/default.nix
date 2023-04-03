@@ -9,8 +9,8 @@
 }:
 
 let
-  py = python3.override {
-    packageOverrides = self: super: {
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (self: super: {
       ipython = super.ipython.overridePythonAttrs (oldAttrs: rec {
         pname = "ipython";
         version = "8.5.0";
@@ -31,7 +31,7 @@ let
           hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
         };
       });
-    };
+    });
   };
 
 in
