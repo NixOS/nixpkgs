@@ -43,9 +43,9 @@
 } @ args:
 
 let
-  version = "2.35";
-  patchSuffix = "-224";
-  sha256 = "sha256-USNzL2tnzNMZMF79OZlx1YWSEivMKmUYob0lEN0M9S4=";
+  version = "2.37";
+  patchSuffix = "-8";
+  sha256 = "sha256-Ilfv8RGhgV109GhW2q9AsBnB5VMVbGnUi6DL/Bu5GkM=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,14 +59,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.35/master && git describe
-          glibc-2.35-210-ge123f08ad5
-          $ git show --minimal --reverse glibc-2.35.. | gzip -9n --rsyncable - > 2.35-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.36/master && git describe
+          glibc-2.37-8-g590d0e089b
+          $ git show --minimal --reverse glibc-2.37.. | gzip -9n --rsyncable - > 2.37-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
+          $ zdiff -u 2.37-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.37-master.patch.gz
        */
-      ./2.35-master.patch.gz
+      ./2.37-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -88,6 +88,13 @@ stdenv.mkDerivation ({
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Patch derived from archlinux (at the time of adding they're at 2.37),
+         https://github.com/archlinux/svntogit-packages/blob/packages/glibc/trunk/reenable_DT_HASH.patch
+
+        See https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991 for context.
+      */
+      ./reenable_DT_HASH.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
