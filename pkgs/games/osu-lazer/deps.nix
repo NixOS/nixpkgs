@@ -130,7 +130,7 @@
   (fetchNuGet { pname = "ppy.ManagedBass"; version = "2022.1216.0"; sha256 = "19nnj1hq2v21mrplnivjr9c4y3wg4hhfnc062sjgzkmiv1cchvf8"; })
   (fetchNuGet { pname = "ppy.ManagedBass.Fx"; version = "2022.1216.0"; sha256 = "1vw573mkligpx9qiqasw1683cqaa1kgnxhlnbdcj9c4320b1pwjm"; })
   (fetchNuGet { pname = "ppy.ManagedBass.Mix"; version = "2022.1216.0"; sha256 = "185bpvgbnd8y20r7vxb1an4pd1aal9b7b5wvmv3knz0qg8j0chd9"; })
-  (fetchNuGet { pname = "ppy.osu.Framework"; version = "2023.402.1"; sha256 = "14421r4wcbzxqi9s9b9v6yrx6swv1lf3arjxvmkv6byfakzv6mzq"; })
+  (fetchNuGet { pname = "ppy.osu.Framework"; version = "2023.403.0"; sha256 = "1jwa6zm8sk3nicflna43ab2p91yapsnqw2baxpbm829qzvrw7yfz"; })
   (fetchNuGet { pname = "ppy.osu.Framework.NativeLibs"; version = "2022.525.0"; sha256 = "1zsqj3xng06bb46vg79xx35n2dsh3crqg951r1ga2gxqzgzy4nk0"; })
   (fetchNuGet { pname = "ppy.osu.Framework.SourceGeneration"; version = "2022.1222.1"; sha256 = "1pwwsp4rfzl6166mhrn5lsnyazpckhfh1m6ggf9d1lw2wb58vxfr"; })
   (fetchNuGet { pname = "ppy.osu.Game.Resources"; version = "2023.402.0"; sha256 = "1yi48dnsi8lg0i5hhmk9yqjzhwsjrch6gm8jdr5rxkfxwbkk6i7s"; })
