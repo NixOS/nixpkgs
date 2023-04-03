@@ -3,6 +3,7 @@
 , recurseIntoAttrs
 , nixosTests
 , config
+, fetchPypi
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -24,6 +25,18 @@ let
       todosrht = self.callPackage ./todo.nix { };
 
       scmsrht = self.callPackage ./scm.nix { };
+
+      # sourcehut is not (yet) compatible with SQLAlchemy 2.x
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+        nativeCheckInputs = with super; [ pytestCheckHook mock ];
+        disabledTestPaths = [];
+      });
     };
   };
 in
