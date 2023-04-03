@@ -27144,7 +27144,6 @@ with pkgs;
     withHomed = false;
     withHwdb = false;
     withImportd = false;
-    withKmod = false;
     withLibBPF = false;
     withLibidn2 = false;
     withLocaled = false;
