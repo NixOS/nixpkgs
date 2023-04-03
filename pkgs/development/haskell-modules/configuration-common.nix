@@ -176,6 +176,20 @@ self: super: {
       relative = "plugins/hls-stylish-haskell-plugin";
       hash = "sha256-GtN9t5zMOROCDSLiscLZ5GmqDV+ql9R2z/+W++C2h2Q=";
     }) super.hls-stylish-haskell-plugin) else super.hls-stylish-haskell-plugin;
+
+  hie-compat = if lib.versionAtLeast super.ghc.version "9.6" then overrideCabal
+    (drv: {
+      prePatch = drv.prePatch or "" + ''
+        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+      '';
+    })
+    (appendPatch (fetchpatch {
+      name = "hie-compat-9.6-compat.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/191bda61fef34696a793503e639a53003ff70660.patch";
+      relative = "hie-compat";
+      hash = "sha256-z81+fwxwZ8BQWGRqTnh3XlQ6AG7EiaahdKjT+0lFu1Q=";
+    }) super.hie-compat) else super.hie-compat;
+
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 

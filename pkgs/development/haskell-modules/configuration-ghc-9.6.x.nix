@@ -125,4 +125,46 @@ self: super: {
   # Test suite doesn't compile with base-4.18 / GHC 9.6
   # https://github.com/dreixel/syb/issues/40
   syb = dontCheck super.syb;
+
+  # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
+  #
+  haskell-language-server = super.haskell-language-server.override {
+    hls-ormolu-plugin = null;
+    hls-floskell-plugin = null;
+    hls-fourmolu-plugin = null;
+    hls-hlint-plugin = null;
+    hls-stylish-haskell-plugin = null;
+  };
+
+  MonadRandom = super.MonadRandom_0_6;
+  unix-compat = super.unix-compat_0_7;
+  lifted-base = dontCheck super.lifted-base;
+  hw-fingertree = dontCheck super.hw-fingertree;
+  hw-prim = dontCheck (doJailbreak super.hw-prim);
+  stm-containers = dontCheck super.stm-containers;
+  regex-tdfa = dontCheck super.regex-tdfa;
+  rebase = doJailbreak super.rebase_1_20;
+  rerebase = doJailbreak super.rerebase_1_20;
+  hiedb = dontCheck super.hiedb;
+  lucid = doJailbreak (dontCheck super.lucid);
+  retrie = dontCheck (super.retrie);
+
+  ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
+   HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
+  ]) super.ghc-exactprint_1_7_0_0);
+
+  inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
+    hls-cabal-plugin
+    algebraic-graphs
+    co-log-core
+    lens
+    cryptohash-sha1
+    cryptohash-md5
+    ghc-trace-events
+    tasty-hspec
+    constraints-extras
+    tree-diff
+    implicit-hie-cradle
+    focus
+    hie-compat;
 }
