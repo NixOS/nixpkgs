@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20220913";
+  version = "20230403";
 
   src = fetchGit {
     url = "https://git.tartarus.org/simon/puzzles.git";
-    rev = "27dd36e3e642d255702789423bb001b3ff08e8e3";
+    rev = "8d3a93ce47237114a88d8bed81ab175994eb9a6b";
   };
 
   sgt-puzzles-menu = fetchurl {
