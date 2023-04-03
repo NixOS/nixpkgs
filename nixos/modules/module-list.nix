@@ -1039,6 +1039,7 @@
   ./services/networking/wg-quick.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
+  ./services/networking/wstunnel.nix
   ./services/networking/x2goserver.nix
   ./services/networking/xandikos.nix
   ./services/networking/xinetd.nix
