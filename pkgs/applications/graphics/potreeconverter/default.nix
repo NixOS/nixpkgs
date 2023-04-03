@@ -29,8 +29,16 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace ./CMakeLists.txt \
       --replace "find_package(TBB REQUIRED)" ""
+
+    # prevent inheriting permissions from /nix/store when copying
+    substituteInPlace Converter/src/main.cpp --replace \
+      'fs::copy(templateDir, pagedir, fs::copy_options::overwrite_existing | fs::copy_options::recursive)' 'string cmd = "cp --no-preserve=mode -r " + templateDir + " " + pagedir; system(cmd.c_str());'
+
+    runHook postPatch
   '';
 
   installPhase = ''
@@ -53,6 +61,7 @@ stdenv.mkDerivation rec {
     ln -s $src/resources $out/bin/resources
     runHook postFixup
   '';
+
   meta = with lib; {
     description = "Create multi res point cloud to use with potree";
     homepage = "https://github.com/potree/PotreeConverter";
