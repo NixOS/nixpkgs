@@ -492,6 +492,8 @@ with pkgs;
 
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
 
+  dae = callPackage ../tools/networking/dae { };
+
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
@@ -3227,6 +3229,8 @@ with pkgs;
   dontgo403 = callPackage ../tools/security/dontgo403 { };
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
+
+  dooit = callPackage ../tools/misc/dooit { };
 
   doona = callPackage ../tools/security/doona { };
 
@@ -10315,6 +10319,17 @@ with pkgs;
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
+
+  nvidia-thrust = callPackage ../development/libraries/nvidia-thrust { };
+
+  nvidia-thrust-intel = callPackage ../development/libraries/nvidia-thrust {
+    hostSystem = "TBB";
+    deviceSystem = if config.cudaSupport or false then "CUDA" else "TBB";
+  };
+
+  nvidia-thrust-cuda = callPackage ../development/libraries/nvidia-thrust {
+    deviceSystem = "CUDA";
+  };
 
   miller = callPackage ../tools/text/miller { };
 
@@ -28634,6 +28649,7 @@ with pkgs;
   };
 
   aeolus = callPackage ../applications/audio/aeolus { };
+  aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
   aewan = callPackage ../applications/editors/aewan { };
 
@@ -30371,7 +30387,7 @@ with pkgs;
 
   linvstmanager = qt5.callPackage ../applications/audio/linvstmanager { };
 
-  deadd-notification-center = callPackage ../applications/misc/deadd-notification-center { };
+  deadd-notification-center = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../applications/misc/deadd-notification-center { });
 
   lollypop = callPackage ../applications/audio/lollypop { };
 
@@ -37812,6 +37828,11 @@ with pkgs;
     # faiss wants the "-doxygen" option
     # available only since swig4
     swig = swig4;
+  };
+
+  faissWithCuda = faiss.override {
+    cudaSupport = true;
+    nvidia-thrust = nvidia-thrust-cuda;
   };
 
   fityk = callPackage ../applications/science/misc/fityk { };

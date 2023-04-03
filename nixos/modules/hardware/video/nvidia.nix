@@ -27,7 +27,7 @@ let
   nvidiaSettings = cfg.nvidiaSettings;
   busIDType = types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
 
-  ibtSupport = cfg.open || (nvidia.ibtSupport or false);
+  ibtSupport = cfg.open || (nvidia_x11.ibtSupport or false);
 in
 
 {

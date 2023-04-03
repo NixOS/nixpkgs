@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.79.0";
+  version = "2.83.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V3wK6uHrPHVOrLkSLTadZ2Cf73WbxqT6Fsr+q08wAZs=";
+    hash = "sha256-0HUJ8bLSskJzY7RU25lvehXhdRpIz8ryhCcFBWDdUc8=";
   };
 
   propagatedBuildInputs = [

@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, ninja
 , jdk8
 , jdk17
 , zlib
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7tptHKWkbdxTn6VIPxXE1K3opKRiUW2zv9r6J05dcS8=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 ninja wrapQtAppsHook ];
   buildInputs = [
     qtbase
     qtsvg
