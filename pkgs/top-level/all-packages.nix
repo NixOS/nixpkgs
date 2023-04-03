@@ -30372,7 +30372,9 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  freenet = callPackage ../applications/networking/p2p/freenet { };
+  freenet = callPackage ../applications/networking/p2p/freenet {
+    gradle = gradle_7;
+  };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
 
