@@ -1,17 +1,20 @@
 {
-  runCommand,
   lib,
+  # Build helpers
   stdenv,
-  storeDir ? builtins.storeDir,
-  writeScript,
-  singularity,
-  writeClosure,
-  bash,
+  runCommand,
   vmTools,
+  writeClosure,
+  writeScript,
+  # Native build inputs
+  e2fsprogs,
   gawk,
   util-linux,
+  # Build inputs
+  bash,
   runtimeShell,
-  e2fsprogs,
+  singularity,
+  storeDir ? builtins.storeDir,
 }:
 rec {
   shellScript =
@@ -44,9 +47,9 @@ rec {
       name,
       contents ? [ ],
       diskSize ? 1024,
-      runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-      runAsRoot ? null,
       memSize ? 1024,
+      runAsRoot ? null,
+      runScript ? "#!${stdenv.shell}\nexec /bin/sh",
       singularity ? defaultSingularity,
     }:
     let
