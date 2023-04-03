@@ -5,9 +5,11 @@
 , writeMultipleReferencesToFile
 , writeScript
 , writeShellScriptBin
+, writeText
 , e2fsprogs
 , util-linux
 , bash
+, coreutils
 , runtimeShell
 , singularity
 , storeDir ? builtins.storeDir
@@ -278,4 +280,81 @@ rec {
 
   #   in
   #   result;
+
+  inherit (import ./definition-lib.nix { inherit lib; })
+    knownPrimarySectionNamesDefault
+    knownAppSectionNamesDefault
+    toSingularityDef
+    ;
+
+  contentsToDef =
+    { contents ? [ ]
+    , definitionOverrider ? null
+    }:
+    let
+      layerClosure = writeMultipleReferencesToFile (contents ++ [ bash coreutils ]);
+    in
+    (
+      if lib.isFunction definitionOverrider then
+        definitionOverrider
+      else if builtins.isAttrs definitionOverrider then
+        (d: lib.recursiveUpdate d definitionOverrider)
+      else
+        lib.id
+    ) {
+      header.Bootstrap = "scratch";
+      setup = ''
+        mkdir -p ''${SINGULARITY_ROOTFS}/${storeDir}
+        for f in $(cat ${layerClosure}) ; do
+          cp -r "$f" "''${SINGULARITY_ROOTFS}/${storeDir}"
+        done
+        mkdir -p "''${SINGULARITY_ROOTFS}/bin"
+        "${coreutils}/bin/ln" -s "${runtimeShell}" "''${SINGULARITY_ROOTFS}/bin/sh"
+        mkdir -p "''${SINGULARITY_ROOTFS}/usr/bin"
+        "${coreutils}/bin/ln" -s "${coreutils}/bin/env" "''${SINGULARITY_ROOTFS}/usr/bin/env"
+      '';
+      environment = {
+        PATH = "${lib.makeBinPath contents}:\${PATH:-}";
+      };
+      labels = {
+        inherit layerClosure;
+      };
+    };
+
+  buildImageFromDef =
+    args@{ name
+    , definition ? contentsToDef { inherit contents definitionOverrider; }
+    , contents ? [ ]
+    , definitionOverrider ? null
+    , executableFlags ? [ ]
+    , buildImageFlags ? [ ]
+    , singularity ? defaultSingularity
+    , toSingularityDefArgs ? { }
+    , ...
+    }:
+    let
+      # May be "apptainer" instead of "singularity"
+      projectName = singularity.projectName or "singularity";
+      definitionFile = writeText "${name}.def" (toSingularityDef toSingularityDefArgs definition);
+      # Pass for users who want to build from the command line instead of inside a VM.
+      buildscriptPackage = writeShellScriptBin "build-image" ''
+        if [ "$#" -lt 1 ]; then
+          echo "Expect IMAGE_PATH" >&2
+          exit 1
+        fi
+        pathSIF="$1"
+        shift
+        ${lib.toUpper projectName}ENV_PATH="$PATH" "${singularity}/bin/${projectName}" ${toString executableFlags} build ${toString buildImageFlags} "$@" "$pathSIF" "${definitionFile}"
+      '';
+    in
+    (runCommand "${projectName}-image-${name}.sif"
+      (removeAttrs args [ "name" "contents" "definition" "definitionOverrider" ] // {
+        inherit executableFlags buildImageFlags;
+        passthru = args.passthru or { } // {
+          inherit singularity definition definitionFile buildscriptPackage;
+          layerClosure = definition.labels.layerClosure or null;
+        };
+      }) ''
+      "${buildscriptPackage}/bin/${buildscriptPackage.meta.mainProgram}" "$out" $buildImageFlags "''${buildImageFlagsArray[@]}"
+    '');
 }
