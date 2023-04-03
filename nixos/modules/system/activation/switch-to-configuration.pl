@@ -140,14 +140,13 @@ sub call_systemd_dbus_api {
     return $res;
 }
 
+# Replacement for Net::DBus that calls busctl of the current systemd, parses
+# it's json output and returns the response using only core modules to reduce
+# dependencies on perlPackages in baseSystem
 sub busctl_call_systemd1_mgr {
     my (@args) = @_;
     return call_systemd_dbus_api("systemd1", @args);
 }
-
-# Replacement for Net::DBus that calls busctl of the current systemd, parses
-# it's json output and returns the response using only core modules to reduce
-# dependencies on perlPackages in baseSystem
 
 # Asks the currently running systemd instance via dbus which units are active.
 # Returns a hash where the key is the name of each unit and the value a hash
