@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, installShellFiles, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
@@ -12,6 +12,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [ psutil six ];
+
+  nativeBuildInputs = with python3Packages; [
+    installShellFiles
+    shtab
+  ];
 
   nativeCheckInputs = with python3Packages; [
     mock
@@ -44,13 +49,10 @@ python3Packages.buildPythonApplication rec {
     runHook postInstallCheck
   '';
   postInstall = ''
-    for bin in trash{,-{empty,list,put,restore}}; do
-      $out/bin/$bin --print-completion bash > $bin
-      install -Dm644 $bin -t $out/share/bash-completion/completions
-      $out/bin/$bin --print-completion zsh > _$bin
-      install -Dm644 _$bin -t $out/share/zsh/site-functions
-      $out/bin/$bin --print-completion tcsh > $bin.csh
-      install -Dm644 $bin.csh -t $out/etc/profile.d
+    for bin in trash-empty trash-list trash-restore trash-put trash; do
+      installShellCompletion --cmd "$bin" \
+        --bash <("$out/bin/$bin" --print-completion bash) \
+        --zsh  <("$out/bin/$bin" --print-completion zsh)
     done
   '';
 
