@@ -138,8 +138,54 @@ self: super: {
     hash = "sha256-sBuqSmgCQSgbXV6KPEZcIP09wbx81q5xjSg7/slH2HQ=";
   }) super.hls-test-utils;
 
+  hls-rename-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal 
+    (drv: {
+      prePatch = drv.prePatch or "" + ''
+        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+      '';
+    })
+    (appendPatch (fetchpatch {
+      name = "hls-rename-ghc-9.4-compat.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/472947cdb9e711f6ef889bba3b83b0dd44a1b6bc.patch";
+      relative = "plugins/hls-rename-plugin";
+      hash = "sha256-WPhCQmn3rjCOiQFJz23QQ84zfm43FNll0BfsNK5pkG0=";
+    }) super.hls-rename-plugin) else super.hls-rename-plugin;
+
+  hls-floskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal 
+    (drv: {
+      prePatch = drv.prePatch or "" + ''
+        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+      '';
+    })
+    (appendPatch (fetchpatch {
+      name = "hls-floskell-ghc-9.4-compat.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/ddc67b2d4d719623b657aa54db20bf58c58a5d4a.patch";
+      relative = "plugins/hls-floskell-plugin";
+      hash = "sha256-n2vuzGbdvhW6I8c7Q22SuNIKSX2LwGNBTVyLLHJIsiU=";
+    }) super.hls-floskell-plugin) else super.hls-floskell-plugin;
+
+  hls-stylish-haskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal 
+    (drv: {
+      prePatch = drv.prePatch or "" + ''
+        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+      '';
+    })
+    (appendPatch (fetchpatch {
+      name = "hls-stylish-haskell-ghc-9.4-compat.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/ddc67b2d4d719623b657aa54db20bf58c58a5d4a.patch";
+      relative = "plugins/hls-stylish-haskell-plugin";
+      hash = "sha256-GtN9t5zMOROCDSLiscLZ5GmqDV+ql9R2z/+W++C2h2Q=";
+    }) super.hls-stylish-haskell-plugin) else super.hls-stylish-haskell-plugin;
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
+
+  # For -fghc-lib see cabal.project in haskell-language-server.
+  stylish-haskell = if lib.versionAtLeast super.ghc.version "9.2"
+    then enableCabalFlag "ghc-lib"
+      (if lib.versionAtLeast super.ghc.version "9.4"
+       then super.stylish-haskell_0_14_4_0
+       else super.stylish-haskell)
+    else super.stylish-haskell;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###

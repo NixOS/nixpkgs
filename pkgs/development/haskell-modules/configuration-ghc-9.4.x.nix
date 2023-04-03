@@ -184,16 +184,6 @@ in {
   })
     self.ghc-exactprint_1_6_1_1;
 
-  # 2023-02-01: plugins disabled for hls 1.9.0.0 based on
-  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
-  haskell-language-server = super.haskell-language-server.override {
-    hls-eval-plugin = null;
-    hls-ormolu-plugin = null;     # This plugin is supposed to work, but fails to compile.
-    hls-floskell-plugin = null;   # This plugin is supposed to work, but fails to compile.
-    hls-rename-plugin = null;     # This plugin is supposed to work, but fails to compile.
-    hls-stylish-haskell-plugin = null;
-  };
-
   # needed to build servant
   http-api-data = super.http-api-data_0_5_1;
   attoparsec-iso8601 = super.attoparsec-iso8601_1_1_0_0;
@@ -221,7 +211,7 @@ in {
   ormolu = doDistribute self.ormolu_0_5_3_0;
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu_0_11_0_0);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_0_0);
 
   # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
   # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
