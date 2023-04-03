@@ -11,17 +11,16 @@
 , Security
 , python3
 , pythonSupport ? true
-, pjsip
 , runCommand
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
   version = "2.13";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = finalAttrs.pname;
     repo = "pjproject";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
   };
 
@@ -64,8 +63,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
-    mkdir -p $out/share/${pname}-${version}/samples
-    cp pjsip-apps/bin/samples/*/* $out/share/${pname}-${version}/samples
+    mkdir -p $out/share/${finalAttrs.pname}-${finalAttrs.version}/samples
+    cp pjsip-apps/bin/samples/*/* $out/share/${finalAttrs.pname}-${finalAttrs.version}/samples
   '' + lib.optionalString pythonSupport ''
     (cd pjsip-apps/src/swig/python && \
       python setup.py install --prefix=$py
@@ -115,4 +114,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})
