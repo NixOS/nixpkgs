@@ -9,20 +9,20 @@
 , setuptools
 
 # patched in
-, fetchpatch
 , geos
 , gdal
 , withGdal ? false
 
-# propagated
+# propagates
 , asgiref
-, backports-zoneinfo
 , sqlparse
+
+# extras
+, argon2-cffi
+, bcrypt
 
 # tests
 , aiosmtpd
-, argon2-cffi
-, bcrypt
 , docutils
 , geoip2
 , jinja2
@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.1.7";
+  version = "4.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RPcUuBxfGQ2dLdrQGlMv5QL6AcTLj68dCB9CZO0V3Ng=";
+    hash = "sha256-w24qsSgk4qw2r6iyUVpwxTx3QvDW6u+nMR7DeVWNuZc=";
   };
 
   patches = [
@@ -74,9 +74,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asgiref
     sqlparse
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
+
+  passthru.optional-dependencies = {
+    argon2 = [
+      argon2-cffi
+    ];
+    bcrypt = [
+      bcrypt
+    ];
+  };
 
   # Fails to import asgiref in ~200 tests
   # ModuleNotFoundError: No module named 'asgiref'
@@ -84,9 +91,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiosmtpd
-    argon2-cffi
-    asgiref
-    bcrypt
     docutils
     geoip2
     jinja2
@@ -102,7 +106,7 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   checkPhase = ''
     runHook preCheck
