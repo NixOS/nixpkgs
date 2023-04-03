@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "PotreeConverter";
-  version = "unstable-2022-08-04";
+  version = "unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "potree";
     repo = "PotreeConverter";
-    rev = "758bbac98a662de5e57d2280675e11cc76241688";
-    sha256 = "sha256-pDdV2/edYhhBWs153hSy1evI3cXD0Xq9nrEsw3JNcH4=";
+    rev = "af4666fa1090983d8ce7c11dcf49ba19eda90995";
+    sha256 = "sha256-QYNY+/v6mBEJFiv3i2QS+zqkgWJqeqXSqNoh+ChAiQA=";
   };
 
   buildInputs = [
