@@ -65,7 +65,7 @@ rec {
             ''}
 
             # Build /bin and copy across closure
-            mkdir -p bin ./${builtins.storeDir}
+            mkdir -p bin ./${storeDir}
             for f in $(cat $layerClosure) ; do
               cp -ar $f ./$f
             done
