@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, imagemagick
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
 
 , gitUpdater
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-Y1D9oLqO4al+1OXV9QhlzlZxSZtcQJtBQAzXqyhBFKI=";
   };
+
+  nativeBuildInputs = [ imagemagick ];
 
   buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
 
@@ -37,6 +39,13 @@ stdenv.mkDerivation rec {
 
     install -Dm644 -t $out/share/fheroes2/files/lang $PWD/files/lang/*.mo
     install -Dm644 -t $out/share/fheroes2/files/data $PWD/files/data/resurrection.h2d
+
+    install -Dm644 -t $out/share/applications $PWD/script/packaging/common/fheroes2.desktop
+
+    for size in 16 24 32 48 64 128; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -resize "$size"x"$size" $PWD/src/resources/fheroes2.png $out/share/icons/hicolor/"$size"x"$size"/apps/fheroes2.png
+    done;
 
     runHook postInstall
   '';
