@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, gotestwaf
+, testers
 }:
 
 buildGoModule rec {
@@ -19,10 +21,20 @@ buildGoModule rec {
   # Some tests require networking as of v0.4.0
   doCheck = false;
 
+  ldflags = [
+    "-X github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
+  ];
+
   postFixup = ''
     # Rename binary
     mv $out/bin/cmd $out/bin/${pname}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    command = "gotestwaf --version";
+    package = gotestwaf;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Tool for API and OWASP attack simulation";
