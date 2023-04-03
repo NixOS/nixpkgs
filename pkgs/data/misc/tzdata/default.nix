@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2022g";
+  version = "2023a";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-      hash = "sha256-RJHbgoGulKhNk55Ce92D3DifJnZNJ9mlxS14LBZ2RHg=";
+      hash = "sha256-oqJ+23r1o4TPzv2une+tan7SPz8s/a89U5TB6CmXELw=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-      hash = "sha256-lhC7C5ZW/0BMNhpB8yhtpTBktUadhPAMnLIxTIYU2nQ=";
+      hash = "sha256-bczNJqE6S3HFPlc6C/MrmN5GeqMxa4Lf0l//22yfxGo=";
     })
   ];
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_SETENV=0"
     "CFLAGS+=-DHAVE_SYMLINK=0"
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];

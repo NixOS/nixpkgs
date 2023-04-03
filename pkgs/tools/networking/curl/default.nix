@@ -58,11 +58,21 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    ./7.87.0-noproxy-tailmatch.patch
     ./7.79.1-darwin-no-systemconfiguration.patch
+    # curl 7.86.0 fixes
     ./CVE-2022-43551.patch
     ./CVE-2022-43552.patch
+    # curl 7.88.0 fixes
     ./CVE-2023-23915.patch # also fixes CVE-2023-23914
     ./CVE-2023-23916.patch
+    # curl 8.0.0 fixes
+    ./CVE-2023-27533.patch
+    ./CVE-2023-27534.patch
+    ./CVE-2023-27535.patch
+    ./CVE-2023-27536.patch
+    ./CVE-2023-27537.patch
+    ./CVE-2023-27538.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
