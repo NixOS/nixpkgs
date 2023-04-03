@@ -1,4 +1,5 @@
 { lib
+, testers
 , stdenv
 , fetchFromGitHub
 , fetchpatch
@@ -101,6 +102,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "pjsua --version";
+  };
+
+  passthru.tests.pkg-config = testers.hasPkgConfigModule {
+    package = finalAttrs.finalPackage;
+    moduleName = "libpjproject";
+  };
 
   passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
     ${(python3.withPackages (pkgs: [ pkgs.pjsua2 ])).interpreter} -c "import pjsua2" > $out
