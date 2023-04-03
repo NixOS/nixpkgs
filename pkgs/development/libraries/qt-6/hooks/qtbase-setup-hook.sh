@@ -61,7 +61,7 @@ else # Only set up Qt once.
             QTTOOLSPATH="${QTTOOLSPATH}${QTTOOLSPATH:+:}$1/libexec"
         fi
     }
-    envBuildHostHooks+=(qtToolsHook)
+    addEnvHooks "$hostOffset" qtToolsHook
 
     postPatchMkspecs() {
         # Prevent this hook from running multiple times
