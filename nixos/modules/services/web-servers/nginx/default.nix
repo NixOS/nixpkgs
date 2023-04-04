@@ -125,6 +125,16 @@ let
         + ";"
       );
 
+  errorLogString = { file, logLevel, stderr ? [], ... }:
+    (if stderr then "
+      error_log stderr;"
+    else "
+      error_log "
+        + optionalString (file != null) "${file} "
+        + optionalString (logLevel != "error") "${logLevel}"
+        + ";"
+    );
+
   commonHttpConfig = ''
       # Load mime types.
       include ${cfg.defaultMimeTypes};
@@ -264,6 +274,7 @@ let
       ''}
 
       ${concatMapStringsSep "\n" accessLogString cfg.accessLogs}
+      ${concatMapStringsSep "\n" errorLogString cfg.errorLogs}
 
       ${cfg.commonHttpConfig}
 
@@ -417,6 +428,7 @@ let
           ${mkBasicAuth vhostName vhost}
 
           ${concatMapStringsSep "\n" accessLogString vhost.accessLogs}
+          ${concatMapStringsSep "\n" errorLogString vhost.errorLogs}
 
           ${mkLocations vhost.locations}
 
@@ -448,6 +460,7 @@ let
       ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${optionalString (config.return != null) "return ${config.return};"}
       ${concatMapStringsSep "\n" accessLogString config.accessLogs}
+      ${concatMapStringsSep "\n" errorLogString config.errorLogs}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
       ${mkBasicAuth "sublocation" config}
@@ -1016,6 +1029,32 @@ in
           less compression) and 9 (slowest, best compression).
           By default, the buffer size is equal to 64K bytes, and the compression
           level is set to 1.
+        '';
+      };
+
+      errorLogs = mkOption {
+        type = with types; listOf (submodule { options = {
+          file = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = lib.mdDoc "Set the file for a log write.";
+          };
+          logLevel = mkOption {
+            type = types.enum [ "debug" "info" "notice" "warn" "error" "crit" "alert" "emerg" ];
+            default = "error";
+            description = lib.mdDoc "Set the level for a log write.";
+          };
+          stderr = mkOption {
+            type = bool;
+            default = false;
+            description = lib.mdDoc "Selects the standard error file.";
+          };
+        }; });
+        default = [];
+        description = lib.mdDoc ''
+          Configures logging. Several logs can be specified on the same configuration level.
+          The second parameter determines the level of logging.
+          If this parameter is omitted then `error` is used.
         '';
       };
 

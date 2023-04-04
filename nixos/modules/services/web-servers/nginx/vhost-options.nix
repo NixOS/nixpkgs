@@ -359,6 +359,32 @@ with lib;
       '';
     };
 
+    errorLogs = mkOption {
+      type = with types; listOf (submodule { options = {
+        file = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = lib.mdDoc "Set the file for a log write.";
+        };
+        logLevel = mkOption {
+          type = types.enum [ "debug" "info" "notice" "warn" "error" "crit" "alert" "emerg" ];
+          default = "error";
+          description = lib.mdDoc "Set the level for a log write.";
+        };
+        stderr = mkOption {
+          type = bool;
+          default = false;
+          description = lib.mdDoc "Selects the standard error file.";
+        };
+      }; });
+      default = [];
+      description = lib.mdDoc ''
+        Configures logging. Several logs can be specified on the same configuration level.
+        The second parameter determines the level of logging.
+        If this parameter is omitted then `error` is used.
+      '';
+    };
+
     locations = mkOption {
       type = types.attrsOf (types.submodule (import ./location-options.nix {
         inherit lib config;
