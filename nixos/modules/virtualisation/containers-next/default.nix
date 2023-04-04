@@ -158,7 +158,10 @@ let
       filesConfig = mkMerge [
         { PrivateUsersChown = mkDefault "yes"; }
         (mkIf config.sharedNix {
-          BindReadOnly = [ "/nix/store" "/nix/var/nix/db" "/nix/var/nix/daemon-socket" ];
+          BindReadOnly = [ "/nix/store" ] ++ optional config.mountDaemonSocket "/nix/var/nix/db";
+        })
+        (mkIf (config.sharedNix && config.mountDaemonSocket) {
+          Bind = [ "/nix/var/nix/daemon-socket" ];
         })
       ];
       networkConfig = mkMerge [
@@ -219,6 +222,8 @@ in {
               be mounted into the container rather than the entire store.
             '';
           };
+
+          mountDaemonSocket = mkEnableOption "daemon-socket in the container";
 
           timeoutStartSec = mkOption {
             type = types.str;
