@@ -1,0 +1,35 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -208,12 +208,11 @@
+ 
+ find_library(LIBREADLINE NAMES libreadline${CMAKE_STATIC_LIBRARY_SUFFIX} readline)
+ find_library(LIBHISTORY NAMES libhistory${CMAKE_STATIC_LIBRARY_SUFFIX} history)
+-find_library(LIBTERMCAP NAMES libtermcap${CMAKE_STATIC_LIBRARY_SUFFIX} termcap)
+-if(LIBREADLINE AND LIBHISTORY AND LIBTERMCAP)
++if(LIBREADLINE AND LIBHISTORY)
+     message(STATUS "Building FTL with readline support: YES")
+     target_compile_definitions(FTL PRIVATE LUA_USE_READLINE)
+     target_compile_definitions(pihole-FTL PRIVATE LUA_USE_READLINE)
+-    target_link_libraries(pihole-FTL ${LIBREADLINE} ${LIBHISTORY} ${LIBTERMCAP})
++    target_link_libraries(pihole-FTL ${LIBREADLINE} ${LIBHISTORY})
+ else()
+     message(STATUS "Building FTL with readline support: NO")
+ endif()
+--- a/src/lua/CMakeLists.txt
++++ b/src/lua/CMakeLists.txt
+@@ -71,13 +71,13 @@
+ target_compile_definitions(lua PRIVATE LUA_USE_POSIX)
+ 
+ # Set the default path that Lua uses to look for Lua libraries.
+-target_compile_definitions(lua PRIVATE LUA_PATH_DEFAULT="/opt/pihole/libs/?.lua")
++target_compile_definitions(lua PRIVATE LUA_PATH_DEFAULT="/var/empty/pihole/libs/?.lua")
+ 
+ if(LUA_DL STREQUAL "true")
+     target_compile_definitions(lua PRIVATE LUA_USE_DLOPEN)
+ endif()
+ 
+-if(LIBREADLINE AND LIBHISTORY AND LIBTERMCAP)
++if(LIBREADLINE AND LIBHISTORY)
+     message(STATUS "Embedded LUA will use readline for history: YES")
+     target_compile_definitions(lua PRIVATE LUA_USE_READLINE)
+ else()
