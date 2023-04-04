@@ -7,7 +7,7 @@
 , boost169
 , pinnedBoost ? boost169
 , llvmPackages
-, llvmPackages_5
+, llvmPackages_8
 , gmp
 , emacs
 , jre_headless
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_C_COMPILER=${llvmPackages.clang}/bin/clang"
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DMOZART_BOOST_USE_STATIC_LIBS=OFF"
-    "-DCMAKE_PROGRAM_PATH=${llvmPackages_5.clang}/bin"
+    "-DCMAKE_PROGRAM_PATH=${llvmPackages_8.clang}/bin"
     # Rationale: Nix's cc-wrapper needs to see a compile flag (like -c) to
     # infer that it is not a linking call, and stop trashing the command line
     # with linker flags.
@@ -71,9 +71,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pinnedBoost
-    llvmPackages_5.llvm
-    llvmPackages_5.clang
-    llvmPackages_5.clang-unwrapped
+    llvmPackages_8.llvm
+    llvmPackages_8.clang
+    llvmPackages_8.clang-unwrapped
     gmp
     emacs
     jre_headless
