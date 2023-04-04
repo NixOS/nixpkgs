@@ -220,6 +220,15 @@ in {
             '';
           };
 
+          timeoutStartSec = mkOption {
+            type = types.str;
+            default = "90s";
+            description = ''
+              Timeout for the startup of the container. Corresponds to `DefaultTimeoutStartSec`
+              of {manpage}`systemd.system(5)`.
+            '';
+          };
+
           ephemeral = mkEnableOption "ephemeral container" // {
             description = lib.mdDoc ''
               `ephemeral` means that the container's rootfs will be wiped
@@ -436,7 +445,7 @@ in {
 
       nspawn = mapAttrs (const mkContainer) images;
       targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
-      services = flip mapAttrs' cfg (container: { activation, credentials, ... }:
+      services = flip mapAttrs' cfg (container: { activation, timeoutStartSec, credentials, ... }:
         nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
             if [ ! -d /var/lib/machines/${container} ]; then
@@ -449,7 +458,7 @@ in {
           before = [ "machines.target" ];
 
           serviceConfig = mkMerge [
-            {
+            { TimeoutStartSec = timeoutStartSec;
               # Inherit settings from `systemd-nspawn@.service`.
               # Workaround since settings from `systemd-nspawn@.service`-settings are not
               # picked up if an override exists and `systemd-nspawn@ldap` exists.
