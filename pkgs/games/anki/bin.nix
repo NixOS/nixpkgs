@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd }:
+{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
 
 let
   pname = "anki-bin";
@@ -57,7 +57,7 @@ let
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
-      exec ${unpacked}/bin/anki
+      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs }
     '';
 
     extraInstallCommands = ''
