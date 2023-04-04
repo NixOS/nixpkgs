@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "lupa";
-  version = "1.14.1";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0P1OYK0Un+JckFMOKg4DKkKm8EVfKcoO24Fw1ux1HG4=";
+    hash = "sha256-rT/vSGvnrd3TSf6anDk3iQYTEs+Y68UztIm+NPSEy3k=";
   };
 
   nativeBuildInputs = [ cython ];
