@@ -1478,6 +1478,7 @@ self: super: {
       "coc-cmake"
       "coc-css"
       "coc-diagnostic"
+      "coc-dictionary"
       "coc-docker"
       "coc-emmet"
       "coc-eslint"
