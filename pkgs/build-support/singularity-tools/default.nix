@@ -15,6 +15,10 @@
   singularity,
   storeDir ? builtins.storeDir,
 }:
+
+let
+  defaultSingularity = singularity;
+in
 rec {
   shellScript =
     name: text:
@@ -39,9 +43,6 @@ rec {
     '';
 
   buildImage =
-    let
-      defaultSingularity = singularity;
-    in
     {
       name,
       contents ? [ ],
