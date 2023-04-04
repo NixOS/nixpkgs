@@ -4,6 +4,7 @@
 , vmTools
 , writeMultipleReferencesToFile
 , writeScript
+, writeShellScriptBin
 , e2fsprogs
 , util-linux
 , bash
@@ -16,48 +17,38 @@ let
   defaultSingularity = singularity;
 in
 rec {
-  shellScript = name: text:
-    writeScript name ''
-      #!${runtimeShell}
-      set -e
-      ${text}
-    '';
-
-  buildImage =
+  buildSandboxFromContents =
+    let
+      shellScript = name: text:
+        writeScript name ''
+          #!${runtimeShell}
+          set -e
+          ${text}
+        '';
+    in
     { name
     , contents ? [ ]
-    , diskSize ? 1024
     , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
     , runAsRoot ? null
-    , memSize ? 512
-    , singularity ? defaultSingularity
+    , projectName ? singularity.projectName or "singularity"
     }:
     let
-      projectName = singularity.projectName or "singularity";
+      layerClosure = writeMultipleReferencesToFile (contents ++ [ bash runScriptFile ]);
       runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
       runScriptFile = shellScript "run-script.sh" runScript;
-      result = vmTools.runInLinuxVM (
-        runCommand "${projectName}-image-${name}.sif"
-          {
-            buildInputs = [ singularity e2fsprogs util-linux ];
-            layerClosure = writeMultipleReferencesToFile (contents ++ [ bash runScriptFile ]);
-            preVM = vmTools.createEmptyImage {
-              size = diskSize;
-              fullName = "${projectName}-run-disk";
-            };
-            inherit memSize;
-          }
+      buildscriptPackage =
+        writeShellScriptBin "build-sandbox"
           ''
-            rm -rf $out
-            mkdir disk
-            mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
-            mount /dev/${vmTools.hd} disk
-            mkdir -p disk/img
-            cd disk/img
+            if [ "$#" -lt 1 ]; then
+              echo "Expect SANDBOX_PATH" >&2
+              exit 1
+            fi
+            pathSandbox="$1"
+            cd "$pathSandbox"
             mkdir proc sys dev
 
-            # Run root script
             ${lib.optionalString (runAsRoot != null) ''
+              # Run root script
               mkdir -p ./${storeDir}
               mount --rbind ${storeDir} ./${storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
@@ -66,8 +57,8 @@ rec {
 
             # Build /bin and copy across closure
             mkdir -p bin ./${storeDir}
-            for f in $(cat $layerClosure) ; do
-              cp -ar $f ./$f
+            for f in $(cat ${layerClosure}) ; do
+              cp -r $f ./$f
             done
 
             for c in ${toString contents} ; do
@@ -88,14 +79,203 @@ rec {
             # Fill out .${projectName}.d
             mkdir -p .${projectName}.d/env
             touch .${projectName}.d/env/94-appsbase.sh
-
-            cd ..
-            mkdir -p /var/lib/${projectName}/mnt/{container,final,overlay,session,source}
-            echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
-            echo > /etc/resolv.conf
-            TMPDIR=$(pwd -P) ${projectName} build $out ./img
-          '');
-
+          '';
     in
-    result;
+    runCommand "${projectName}-sandbox-${name}"
+      {
+        passthru = {
+          inherit
+            buildscriptPackage
+            layerClosure
+            projectName
+            runAsRoot
+            runScript
+            ;
+        };
+      } ''
+      runHook preImageBuild
+      mkdir -p "$out"
+      "${buildscriptPackage}/bin/${buildscriptPackage.meta.mainProgram}" "$out"
+      runHook postImageBuild
+    '';
+
+  buildImageFromSandbox =
+    { name
+    , sandbox ? ""
+    , contents ? [ ]
+    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
+    , runAsRoot ? null
+    , singularity ? defaultSingularity
+    , executableFlags ? [ ]
+    , buildImageFlags ? [ ]
+    }:
+    let
+      projectName = singularity.projectName or "singularity";
+      sandboxFromContents = buildSandboxFromContents {
+        name = "from-contents";
+        inherit contents runScript runAsRoot projectName;
+      };
+      buildscriptPackage = writeShellScriptBin "build-image" ''
+        if [ "$#" -lt 1 ]; then
+          echo "Expect IMAGE_PATH" >&2
+          exit 1
+        fi
+        pathSIF="$1"
+        shift
+          ${if sandbox != "" then ''
+            pathSandbox=${sandbox}
+          '' else ''
+            pathSandbox="$(mktemp -t -d sandbox_XXXXXX)"
+            trap "rm -rf \"$pathSandbox\"" EXIT INT
+            "${sandboxFromContents.buildscriptPackage}/bin/${sandboxFromContents.buildscriptPackage.meta.mainProgram}" "$pathSandbox"
+          ''}
+          ${projectName} build "$pathSIF" "$pathSandbox"
+      '';
+    in
+    runCommand "${projectName}-image-${name}.sif"
+      {
+        buildInputs = [ singularity util-linux ];
+        passthru = {
+          sandbox = if (sandbox != "") then sandbox else sandboxFromContents;
+          layerClosure = if (sandbox != "") then sandbox.layerClosure else null;
+          inherit singularity;
+        };
+      }
+      ''
+        runHook preImageBuild
+        "${buildscriptPackage}/bin/${buildscriptPackage.meta.mainProgram}" "$out"
+        runHook postImageBuild
+      '';
+
+  buildImageInLinuxVM =
+    { diskSize ? 1024
+    , memSize ? 512
+    }:
+    image:
+    let
+      projectName = image.projectName or image.singularity.projectName or "singularity";
+    in
+    vmTools.runInLinuxVM (image.overrideAttrs (prevAttrs: {
+      buildInputs = prevAttrs.buildInputs or [ ] ++ [
+        e2fsprogs
+      ];
+      preVM = vmTools.createEmptyImage {
+        size = diskSize;
+        fullName = "${projectName}-run-disk";
+      };
+      preImageBuild = ''
+        rm -rf $out
+        mkdir disk
+        mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
+        mount /dev/${vmTools.hd} disk
+        mkdir -p /var/lib/${projectName}/mnt/{container,final,overlay,session,source}
+        echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
+        echo > /etc/resolv.conf
+        TMPDIR="$(realpath disk)"; export TMPDIR
+        cd disk
+      '';
+    }));
+
+  buildImage =
+    { name
+    , contents ? [ ]
+    , diskSize ? 1024
+    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
+    , runAsRoot ? null
+    , memSize ? 512
+    , singularity ? defaultSingularity
+    }:
+    buildImageInLinuxVM
+      {
+        inherit diskSize memSize;
+      }
+      (buildImageFromSandbox {
+        inherit name contents runScript runAsRoot singularity;
+      });
+
+  # shellScript = name: text:
+  #   writeScript name ''
+  #     #!${runtimeShell}
+  #     set -e
+  #     ${text}
+  #   '';
+
+  # buildImage =
+  #   let
+  #     defaultSingularity = singularity;
+  #   in
+  #   { name
+  #   , contents ? [ ]
+  #   , diskSize ? 1024
+  #   , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
+  #   , runAsRoot ? null
+  #   , memSize ? 512
+  #   , singularity ? defaultSingularity
+  #   }:
+  #   let
+  #     projectName = singularity.projectName or "singularity";
+  #     runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
+  #     runScriptFile = shellScript "run-script.sh" runScript;
+  #     result = vmTools.runInLinuxVM (
+  #       runCommand "${projectName}-image-${name}.sif"
+  #         {
+  #           buildInputs = [ singularity e2fsprogs util-linux ];
+  #           layerClosure = writeMultipleReferencesToFile (contents ++ [ bash runScriptFile ]);
+  #           preVM = vmTools.createEmptyImage {
+  #             size = diskSize;
+  #             fullName = "${projectName}-run-disk";
+  #           };
+  #           inherit memSize;
+  #         }
+  #         ''
+  #           rm -rf $out
+  #           mkdir disk
+  #           mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
+  #           mount /dev/${vmTools.hd} disk
+  #           mkdir -p disk/img
+  #           cd disk/img
+  #           mkdir proc sys dev
+
+  #           # Run root script
+  #           ${lib.optionalString (runAsRoot != null) ''
+  #             mkdir -p ./${storeDir}
+  #             mount --rbind ${storeDir} ./${storeDir}
+  #             unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
+  #             umount -R ./${storeDir}
+  #           ''}
+
+  #           # Build /bin and copy across closure
+  #           mkdir -p bin ./${storeDir}
+  #           for f in $(cat $layerClosure) ; do
+  #             cp -ar $f ./$f
+  #           done
+
+  #           for c in ${toString contents} ; do
+  #             for f in $c/bin/* ; do
+  #               if [ ! -e bin/$(basename $f) ] ; then
+  #                 ln -s $f bin/
+  #               fi
+  #             done
+  #           done
+
+  #           # Create runScript and link shell
+  #           if [ ! -e bin/sh ]; then
+  #             ln -s ${runtimeShell} bin/sh
+  #           fi
+  #           mkdir -p .${projectName}.d
+  #           ln -s ${runScriptFile} .${projectName}.d/runscript
+
+  #           # Fill out .${projectName}.d
+  #           mkdir -p .${projectName}.d/env
+  #           touch .${projectName}.d/env/94-appsbase.sh
+
+  #           cd ..
+  #           mkdir -p /var/lib/${projectName}/mnt/{container,final,overlay,session,source}
+  #           echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
+  #           echo > /etc/resolv.conf
+  #           TMPDIR=$(pwd -P) ${projectName} build $out ./img
+  #         '');
+
+  #   in
+  #   result;
 }
