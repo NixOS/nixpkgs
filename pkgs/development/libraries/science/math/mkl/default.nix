@@ -142,10 +142,15 @@ in stdenvNoCC.mkDerivation ({
 
     # CMake config
     cp -r opt/intel/oneapi/mkl/${mklVersion}/lib/cmake $out/lib
+
+    # pkgconfig
+    # sdl: library for choosing mkl threading library at runtime
+    install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/mkl-sdl.pc
+    install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/compiler/${openmpVersion}/lib/pkgconfig/openmp.pc
   '' +
     (if enableStatic then ''
       install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.a
-      install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/tools/pkgconfig/*.pc
+      install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*static*.pc
     '' else ''
       cp opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so* $out/lib
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*dynamic*.pc
