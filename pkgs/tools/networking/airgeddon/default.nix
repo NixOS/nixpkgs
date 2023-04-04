@@ -29,7 +29,6 @@
 , bettercap
 , bully
 , crunch
-, dhcp
 , dnsmasq
 , ettercap
 , hashcat
@@ -94,7 +93,6 @@ let
     wireshark-cli
   ] ++ lib.optionals supportEvilTwin [
     bettercap
-    dhcp
     dnsmasq
     ettercap
     hostapd
