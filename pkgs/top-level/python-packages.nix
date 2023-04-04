@@ -2669,6 +2669,10 @@ self: super: with self; {
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
 
+  django-nine = callPackage ../development/python-modules/django-nine { };
+
+  django-nonefield = callPackage ../development/python-modules/django-nonefield { };
+
   django_nose = callPackage ../development/python-modules/django_nose { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
