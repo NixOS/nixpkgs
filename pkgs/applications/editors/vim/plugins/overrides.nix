@@ -1528,6 +1528,7 @@ self: super: {
       "coc-vetur"
       "coc-vimlsp"
       "coc-vimtex"
+      "coc-word"
       "coc-wxml"
       "coc-yaml"
       "coc-yank"
