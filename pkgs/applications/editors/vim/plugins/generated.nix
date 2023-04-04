@@ -941,6 +941,18 @@ final: prev:
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
+  blamer-nvim = buildVimPluginFrom2Nix {
+    pname = "blamer.nvim";
+    version = "2021-11-17";
+    src = fetchFromGitHub {
+      owner = "APZelos";
+      repo = "blamer.nvim";
+      rev = "f4eb22a9013642c411725fdda945ae45f8d93181";
+      sha256 = "1czjagkfjw57f2nvjjgbma1gcy1ylcd68dyfc5ivr2wc6fdw5lks";
+    };
+    meta.homepage = "https://github.com/APZelos/blamer.nvim/";
+  };
+
   blueballs-neovim = buildVimPluginFrom2Nix {
     pname = "blueballs-neovim";
     version = "2021-11-28";
