@@ -13619,6 +13619,8 @@ with pkgs;
 
   ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
 
+  ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
+
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
