@@ -97,6 +97,7 @@
 , "coc-sqlfluff"
 , "coc-syntax"
 , "coc-tabnine"
+, "coc-tag"
 , "coc-texlab"
 , "coc-toml"
 , "coc-tslint"

@@ -1518,6 +1518,7 @@ self: super: {
       "coc-sumneko-lua"
       "coc-syntax"
       "coc-tabnine"
+      "coc-tag"
       "coc-texlab"
       "coc-toml"
       "coc-tslint"
