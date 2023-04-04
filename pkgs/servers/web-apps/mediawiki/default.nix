@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.mediawiki = nixosTests.mediawiki;
+  passthru.tests = {
+    inherit (nixosTests.mediawiki) mysql postgresql;
+  };
 
   meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";
