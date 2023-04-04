@@ -11,6 +11,10 @@
 , singularity
 , storeDir ? builtins.storeDir
 }:
+
+let
+  defaultSingularity = singularity;
+in
 rec {
   shellScript = name: text:
     writeScript name ''
@@ -20,9 +24,6 @@ rec {
     '';
 
   buildImage =
-    let
-      defaultSingularity = singularity;
-    in
     { name
     , contents ? [ ]
     , diskSize ? 1024
