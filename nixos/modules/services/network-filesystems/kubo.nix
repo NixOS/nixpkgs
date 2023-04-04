@@ -320,7 +320,7 @@ in
           ipfs --offline config replace -
       '';
       postStop = mkIf cfg.autoMount ''
-        # After an unclean shutdown the fuse mounts at ${cfg.ipnsMountDir} and ${cfg.ipfsMountDir} are locked
+        # After an unclean shutdown the fuse mounts at cfg.ipnsMountDir and cfg.ipfsMountDir are locked
         umount --quiet '${cfg.ipnsMountDir}' '${cfg.ipfsMountDir}' || true
       '';
       serviceConfig = {
