@@ -56,7 +56,7 @@ let
       nativeLibs = [ pkgs.glib pkgs.gobject-introspection ];
     });
     cl-mysql = super.cl-mysql.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.mysql-client ];
+      nativeLibs = [ pkgs.mariadb.client ];
     });
     clsql-postgresql = super.clsql-postgresql.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.postgresql.lib ];
@@ -68,7 +68,7 @@ let
       nativeLibs = [ pkgs.webkitgtk ];
     });
     dbd-mysql = super.dbd-mysql.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.mysql-client ];
+      nativeLibs = [ pkgs.mariadb.client ];
     });
     lla = super.lla.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.openblas ];
