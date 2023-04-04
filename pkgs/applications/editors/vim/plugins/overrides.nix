@@ -1487,6 +1487,7 @@ self: super: {
       "coc-flutter"
       "coc-git"
       "coc-go"
+      "coc-gocode"
       "coc-haxe"
       "coc-highlight"
       "coc-html"
