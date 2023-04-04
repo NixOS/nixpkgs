@@ -1481,6 +1481,7 @@ self: super: {
       "coc-dictionary"
       "coc-docker"
       "coc-emmet"
+      "coc-emoji"
       "coc-eslint"
       "coc-explorer"
       "coc-flutter"
