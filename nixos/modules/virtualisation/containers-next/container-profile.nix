@@ -20,7 +20,7 @@
     };
     dhcpConfig.UseTimezone = "yes";
     networkConfig = {
-      DHCP = "yes";
+      DHCP = lib.mkDefault "yes";
       LLDP = "yes";
       EmitLLDP = "customer-bridge";
       LinkLocalAddressing = mkDefault "ipv6";

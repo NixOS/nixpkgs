@@ -45,6 +45,18 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: let
       hostAddresses = [ "10.231.141.1/24" ];
     };
   };
+
+  instances.static = {
+    activation.strategy = "dynamic";
+    zone = "foo";
+    network = {
+      v4 = {
+        static.containerPool = [ "10.231.142.2/24" ];
+        addrPool = lib.mkForce [];
+      };
+      v6.addrPool = lib.mkForce [];
+    };
+  };
 in {
   name = "container-tests";
   meta = with pkgs.lib.maintainers; {
@@ -59,7 +71,14 @@ in {
         interfaces.eth0.useDHCP = true;
       };
 
-      nixos.containers = lib.mkDefault { inherit instances; };
+      nixos.containers = {
+        instances = lib.mkDefault instances;
+        zones.foo = {
+          hostAddresses = [ "10.231.142.1/24" ];
+          v4.addrPool = [];
+          v6.addrPool = [];
+        };
+      };
 
       specialisation = rec {
         configchange.configuration = { lib, pkgs, ... }: {
@@ -119,10 +138,12 @@ in {
         for i in ['dynamic', 'teststop', 'restart', 'reload']:
             assert i in available, f"Expected machine {i} in `machinectl output!"
 
-        for j in range(136, 142):
+        for j in range(136, 143):
             machine.wait_until_succeeds(f"ping -c3 10.231.{str(j)}.2 >&2")
 
         machine.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
+
+        machine.succeed("systemd-run -M static --pty --quiet -- /bin/sh --login -c 'networkctl | grep host0 | grep configured'")
 
         for m in ['reload', 'restart']:
             machine.fail(

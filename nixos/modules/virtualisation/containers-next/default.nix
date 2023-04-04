@@ -25,6 +25,8 @@ let
       };
     '';
 
+  zoneCfg = config.nixos.containers.zones;
+
   interfaces.containers = attrNames cfg;
   interfaces.zones = attrNames config.nixos.containers.zones;
   radvd = {
@@ -349,9 +351,17 @@ in {
                 ./container-profile.nix
                 ({ pkgs, ... }: {
                   networking.hostName = name;
-                  systemd.network.networks."20-host0" = {
-                    address = mkIf (config.network != null)
-                      (with config.network; v4.static.containerPool ++ v6.static.containerPool);
+                  systemd.network.networks."20-host0" = mkIf (config.network != null) {
+                    address = with config.network; v4.static.containerPool ++ v6.static.containerPool;
+                    networkConfig = mkIf (
+                      config.zone != null
+                        && zoneCfg.${config.zone}.v4.addrPool == []
+                        && zoneCfg.${config.zone}.v6.addrPool == []
+                      || config.network.v4.addrPool == []
+                        && config.network.v6.addrPool == []
+                    ) {
+                      DHCP = "no";
+                    };
                   };
                 })
               ] ++ x;
@@ -429,10 +439,10 @@ in {
                 config.network.v4.static.hostAddresses
               ++ optionals (config.network.v6.static.hostAddresses != null)
                 config.network.v6.static.hostAddresses;
-              networkConfig = mkNetworkCfg (config.network.v4.addrPool != []) {
-                v4Nat = config.network.v4.nat;
-                v6Nat = config.network.v6.nat;
-              };
+            networkConfig = mkNetworkCfg (config.network.v4.addrPool != []) {
+              v4Nat = config.network.v4.nat;
+              v6Nat = config.network.v6.nat;
+            };
           };
         }) { } cfg
         // foldlAttrs (acc: name: zone: acc // {
