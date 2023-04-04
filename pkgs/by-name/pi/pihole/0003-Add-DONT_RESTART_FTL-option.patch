@@ -1,0 +1,47 @@
+From 0d2f5257c9ebb3a3f65dca2de4c81f13ea36e9ee Mon Sep 17 00:00:00 2001
+From: williamvds <william@williamvds.me>
+Date: Sat, 1 Apr 2023 19:30:46 +0100
+Subject: [PATCH 3/4] Add DONT_RESTART_FTL option
+
+To prevent the gravity script from restarting pihole-FTL when this is undesired.
+
+The pihole-FTL NixOS module uses a setup service that runs the gravity script
+before pihole-FTL is started. Restarting pihole-FTL in this setup service would
+cause an infinite loop.
+---
+ gravity.sh | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/gravity.sh b/gravity.sh
+index 6f54f29..90a9671 100755
+--- a/gravity.sh
++++ b/gravity.sh
+@@ -857,10 +857,12 @@ gravity_Cleanup() {
+ 
+   echo -e "${OVER}  ${TICK} ${str}"
+ 
+-  # Only restart DNS service if offline
+-  if ! systemctl is-active --quiet pihole-ftl; then
+-    "${PIHOLE_COMMAND}" restartdns
+-    dnsWasOffline=true
++  if [[ ${DONT_RESTART_FTL:0} != 1 ]]; then
++      # Only restart DNS service if offline
++      if ! systemctl is-active --quiet pihole-ftl; then
++        "${PIHOLE_COMMAND}" restartdns
++        dnsWasOffline=true
++      fi
+   fi
+ 
+   # Print Pi-hole status if an error occurred
+@@ -1032,7 +1034,7 @@ chmod g+w "${piholeDir}" "${gravityDBfile}"
+ gravity_ShowCount
+ 
+ # Determine if DNS has been restarted by this instance of gravity
+-if [[ -z "${dnsWasOffline:-}" ]]; then
++if [[ -z "${dnsWasOffline:-}" && ${DONT_RESTART_FTL:0} != 1 ]]; then
+   "${PIHOLE_COMMAND}" restartdns reload
+ fi
+ 
+-- 
+2.40.1
+
