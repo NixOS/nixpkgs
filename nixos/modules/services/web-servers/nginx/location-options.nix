@@ -111,6 +111,52 @@ with lib;
       '';
     };
 
+    accessLogs = mkOption {
+      type = with types; listOf (submodule { options = {
+        file = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = lib.mdDoc "Set the file for a log write.";
+        };
+        format = mkOption {
+          type = str;
+          default = "combined";
+          description = lib.mdDoc "Set the format for a log write.";
+        };
+        buffer = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc "Set the buffer size for a log write.";
+        };
+        gzip = mkOption {
+          type = types.nullOr types.int;
+          default = null;
+          description = lib.mdDoc "Set the compression level for a log write.";
+        };
+        flush = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc "Set the flush time for a log write.";
+        };
+        off = mkOption {
+          type = bool;
+          default = false;
+          description = lib.mdDoc "Cancels all access_log directives on the current level.";
+        };
+      }; });
+      default = [];
+      description = lib.mdDoc ''
+        Sets the path, format, and configuration for a buffered log write.
+        Several logs can be specified on the same configuration level.
+        If either the buffer or gzip parameter is used, writes to log will be buffered.
+        If the gzip parameter is used, then the buffered data will be compressed before
+        writing to the file. The compression level can be set between 1 (fastest,
+        less compression) and 9 (slowest, best compression).
+        By default, the buffer size is equal to 64K bytes, and the compression
+        level is set to 1.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
