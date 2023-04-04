@@ -1,0 +1,83 @@
+From 97da0068d79c93ef6df7caa084ac5ba408ebeb04 Mon Sep 17 00:00:00 2001
+From: williamvds <william@williamvds.me>
+Date: Sat, 1 Apr 2023 19:17:19 +0100
+Subject: [PATCH 2/4] Patch and remove unsupported commands
+
+Don't rely on sourcing the install script. Copy the required functions
+(valid_ip and valid_ip6) to the script that needs it.
+
+Remove some unsupported maintenance commands, particularly the ones which
+reinstall, update, and uninstall pihole. This is managed by NixOS, after all.
+---
+ advanced/Scripts/webpage.sh | 1 +
+ pihole                      | 9 +++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/advanced/Scripts/webpage.sh b/advanced/Scripts/webpage.sh
+index 5ccdf73..011597b 100755
+--- a/advanced/Scripts/webpage.sh
++++ b/advanced/Scripts/webpage.sh
+@@ -603,6 +603,7 @@ Interfaces:
+ }
+ 
+ Teleporter() {
++    unsupportedFunc
+     local filename
+     filename="${args[2]}"
+     if [[ -z "${filename}" ]]; then
+diff --git a/pihole b/pihole
+index ae2d589..14c7746 100755
+--- a/pihole
++++ b/pihole
+@@ -61,6 +61,7 @@ debugFunc() {
+ }
+ 
+ flushFunc() {
++  unsupportedFunc
+   "${PI_HOLE_SCRIPT_DIR}"/piholeLogFlush.sh "$@"
+   exit 0
+ }
+@@ -71,6 +72,7 @@ arpFunc() {
+ }
+ 
+ updatePiholeFunc() {
++  unsupportedFunc
+   if [ -n "${DOCKER_VERSION}" ]; then
+     unsupportedFunc
+   else
+@@ -107,6 +109,7 @@ chronometerFunc() {
+ 
+ 
+ uninstallFunc() {
++  unsupportedFunc
+   if [ -n "${DOCKER_VERSION}" ]; then
+     unsupportedFunc
+   else
+@@ -401,6 +404,7 @@ tailFunc() {
+ }
+ 
+ piholeCheckoutFunc() {
++  unsupportedFunc
+   if [[ "$2" == "-h" ]] || [[ "$2" == "--help" ]]; then
+     echo "Usage: pihole checkout [repo] [branch]
+ Example: 'pihole checkout master' or 'pihole checkout core dev'
+@@ -445,13 +449,14 @@ tricorderFunc() {
+ }
+ 
+ updateCheckFunc() {
++  unsupportedFunc
+   "${PI_HOLE_SCRIPT_DIR}"/updatecheck.sh "$@"
+   exit 0
+ }
+ 
+ unsupportedFunc(){
+-  echo "Function not supported in Docker images"
+-  exit 0
++  echo "Function not supported in NixOS"
++  exit 1
+ }
+ 
+ helpFunc() {
+-- 
+2.40.1
+
