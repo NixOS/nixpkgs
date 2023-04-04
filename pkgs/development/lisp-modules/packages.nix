@@ -550,6 +550,24 @@ let
     ];
   };
 
+  _40ants-doc-test = super._40ants-doc-test.overrideLispAttrs (o: {
+    lispLibs = o.lispLibs ++ (with self; [
+      swank
+      slynk
+      spinneret
+      cl-fad
+      dexador
+      log4cl
+      tmpdir
+      trivial-extract
+      lass
+      xml-emitter
+      stem
+      jonathan
+      docs-config
+    ]);
+  });
+
   });
 
 in packages
