@@ -46,6 +46,10 @@ in
 , openssl
 , squashfsTools
 , squashfuse
+  # Test dependencies
+, singularity-tools
+, cowsay
+, hello
   # Overridable configurations
 , enableNvidiaContainerCli ? true
   # Compile with seccomp support
@@ -83,7 +87,7 @@ let
     ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
   '');
 in
-buildGoModule {
+(buildGoModule {
   inherit pname version src;
 
   # Override vendorHash with the output got from
@@ -235,4 +239,14 @@ buildGoModule {
     maintainers = with maintainers; [ jbedo ShamrockLee ];
     mainProgram = projectName;
   } // extraMeta;
-}
+}).overrideAttrs (finalAttrs: prevAttrs: {
+  passthru = prevAttrs.passthru or { } // {
+    tests = {
+      image-hello-cowsay = singularity-tools.buildImage {
+        name = "hello-cowsay";
+        contents = [ hello cowsay ];
+        singularity = finalAttrs.finalPackage;
+      };
+    };
+  };
+})
