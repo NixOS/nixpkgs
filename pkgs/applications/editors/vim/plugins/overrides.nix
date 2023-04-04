@@ -1500,6 +1500,7 @@ self: super: {
       "coc-markdownlint"
       "coc-metals"
       "coc-neosnippet"
+      "coc-omni"
       "coc-pairs"
       "coc-prettier"
       "coc-pyright"
