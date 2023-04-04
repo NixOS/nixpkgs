@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, wrapGAppsHook, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     sha512 = "339r2q13nnpwi7gjd1axc6z2gycfm9gwz3x9dnqyaqd1g3rw7nk6nfbp6bmpkr68lfq1jfgvqwnimcgs84rsi7nmgsiabv3cz0673wv";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook squashfsTools ];
+  nativeBuildInputs = [ wrapGAppsHook makeShellWrapper squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -144,13 +144,14 @@ stdenv.mkDerivation {
         --set-rpath $rpath $out/share/spotify/spotify
 
       librarypath="${lib.makeLibraryPath deps}:$libdir"
-      wrapProgram $out/share/spotify/spotify \
+      wrapProgramShell $out/share/spotify/spotify \
         ''${gappsWrapperArgs[@]} \
         ${lib.optionalString (deviceScaleFactor != null) ''
           --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
         ''} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin"
+        --prefix PATH : "${gnome.zenity}/bin" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
       # fix Icon line in the desktop file (#48062)
       sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
