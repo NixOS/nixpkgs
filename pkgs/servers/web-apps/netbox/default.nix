@@ -1,7 +1,5 @@
 { lib
-, pkgs
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 , python3
 
@@ -18,7 +16,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
     pname = "netbox";
-    version = "3.4.6";
+    version = "3.4.7";
 
     format = "other";
 
@@ -26,7 +24,7 @@ py.pkgs.buildPythonApplication rec {
       owner = "netbox-community";
       repo = pname;
       rev = "refs/tags/v${version}";
-      hash = "sha256-j2Iwh+yGp0xMnZ+Fh7kepb5xzT3GRNhaAiztITgPuws=";
+      hash = "sha256-pWHGyzLc0tqfehWbCMF1l96L1pewb5FXBUkw9EqPtP8=";
     };
 
     patches = [
