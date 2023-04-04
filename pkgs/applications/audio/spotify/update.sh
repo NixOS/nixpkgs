@@ -78,6 +78,7 @@ sed --regexp-extended \
 # try to build the updated version
 #
 
+export NIXPKGS_ALLOW_UNFREE=1
 if ! nix-build -A spotify "$nixpkgs"; then
   echo "The updated spotify failed to build."
   exit 1
