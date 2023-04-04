@@ -58,6 +58,7 @@ let
         qtdeclarative
         qtdoc
         qtimageformats
+        qtlocation
         qtlottie
         qtmultimedia
         qtnetworkauth
@@ -90,6 +91,7 @@ let
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
+      qtlocation = callPackage ./modules/qtlocation.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
