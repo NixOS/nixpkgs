@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    sha256 = "sha256-5KpxBusJCuwrfFWHbrRKlH6Ic7YivYqz2m+BCbNfZp0=";
+    sha256 = "sha256-qTu0vS9K6rrr/0SXKpGC9P1QSN/AN7hyO/4DrGvhxWM=";
   };
 
   postPatch = ''
