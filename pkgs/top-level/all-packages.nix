@@ -18015,6 +18015,8 @@ with pkgs;
 
   license_finder = callPackage ../development/tools/license_finder { };
 
+  license-scanner = callPackage ../development/tools/license-scanner { };
+
   Literate = callPackage ../development/tools/literate-programming/Literate { };
 
   md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
