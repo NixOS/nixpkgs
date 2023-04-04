@@ -1,7 +1,9 @@
-{ lib, boringssl, stdenv, fetchgit, fetchFromGitHub, fetchurl, cmake, zlib, perl, libevent }:
-let
-  versions = lib.importJSON ./versions.json;
+{
+  lib, boringssl, stdenv, fetchgit, fetchFromGitHub, fetchurl, cmake, zlib, perl, libevent,
+  versions ? (builtins.fromJSON (builtins.readFile ./versions.json))
+}:
 
+let
   fetchGitilesPatch = { name, url, sha256 }:
     fetchurl {
       url = "${url}%5E%21?format=TEXT";

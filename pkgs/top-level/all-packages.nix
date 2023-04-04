@@ -9441,12 +9441,7 @@ with pkgs;
 
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
-  invidious = callPackage ../servers/invidious {
-    # needs a specific version of lsquic
-    lsquic = callPackage ../servers/invidious/lsquic.nix { };
-    # normally video.js is downloaded at build time
-    videojs = callPackage ../servers/invidious/videojs.nix { };
-  };
+  invidious = callPackage ../servers/invidious { };
 
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
