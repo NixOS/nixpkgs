@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.3.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    sha256 = "sha256-xdogl2WDuQXeLFuBY1u7PSpaoVI9HKScOdxHZ3+whIg=";
+    sha256 = "sha256-nqM+5EfNpWRydkvT58KyBHzSyBT4W5CbT00MaOShXiM=";
   };
 
   nativeBuildInputs = [
