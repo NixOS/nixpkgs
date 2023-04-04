@@ -55,10 +55,13 @@ let
         qt5compat
         qtcharts
         qtconnectivity
+        qtdatavis3d
         qtdeclarative
         qtdoc
         qtgrpc
+        qthttpserver
         qtimageformats
+        qtlanguageserver
         qtlocation
         qtlottie
         qtmultimedia
@@ -68,8 +71,12 @@ let
         qtserialbus
         qtserialport
         qtshadertools
+        qtspeech
         qtquick3d
+        qtquick3dphysics
         qtquickeffectmaker
+        qtquicktimeline
+        qtremoteobjects
         qtsvg
         qtscxml
         qttools
