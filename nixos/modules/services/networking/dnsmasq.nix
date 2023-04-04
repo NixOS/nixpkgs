@@ -118,6 +118,12 @@ in
         '';
       };
 
+      configFile = mkOption {
+        type = types.package;
+        default = dnsmasqConf;
+        internal = true;
+      };
+
     };
 
   };
@@ -171,7 +177,7 @@ in
         serviceConfig = {
           Type = "dbus";
           BusName = "uk.org.thekelleys.dnsmasq";
-          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
+          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${cfg.configFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           PrivateTmp = true;
           ProtectSystem = true;
