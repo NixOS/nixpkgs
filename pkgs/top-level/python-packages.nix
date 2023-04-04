@@ -2210,10 +2210,10 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/Cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.0a11";
+    version = "3.0.0b2";
     src = old.src.override {
       inherit version;
-      hash = "sha256-5GckkfsxVGuau2Nnf2OOc4CF3JMhOYFwlW72+/wOFyY=";
+      hash = "sha256-bEKAZWV56STBGURyR2ZLsi+v7cfezKWTqOogvdV9Z1U=";
     };
     patches = [ ];
   });
@@ -5001,6 +5001,8 @@ self: super: with self; {
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
+
+  jiwer = callPackage ../development/python-modules/jiwer { };
 
   jmespath = callPackage ../development/python-modules/jmespath { };
 
