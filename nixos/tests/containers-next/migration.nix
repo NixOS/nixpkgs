@@ -188,6 +188,10 @@ in {
         machine.succeed(
             "systemd-run -M test2 --pty --quiet -- /bin/sh --login -c 'cat /root/tmpfile | grep foobar'"
         )
+        machine.succeed("test 0 = $(stat /var/lib/nixos-containers/test2/root/tmpfile -c %u)")
+        machine.succeed(
+            "systemd-run -M test2 --pty --quiet -- /bin/sh --login -c 'test 0 = $(stat /root/tmpfile -c %u)'"
+        )
 
     with subtest("Prepare migration"):
         machine.succeed("machinectl poweroff test1")
@@ -216,6 +220,10 @@ in {
 
         machine.succeed(
             "systemd-run -M test2 --pty --quiet -- /bin/sh --login -c 'cat /root/tmpfile | grep foobar'"
+        )
+        machine.succeed("test 60000 -lt $(stat /var/lib/machines/test2/root/tmpfile -c %u)")
+        machine.succeed(
+            "systemd-run -M test2 --pty --quiet -- /bin/sh --login -c 'test 0 = $(stat /root/tmpfile -c %u)'"
         )
 
         machine.succeed("nixos-container start test3")
