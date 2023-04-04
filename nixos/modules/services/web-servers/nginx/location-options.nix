@@ -133,6 +133,29 @@ with lib;
       '';
     };
 
+    errorLogs = mkOption {
+      type = with types; listOf (submodule { options = {
+        file = mkOption { type = types.nullOr types.path; default = null; description = lib.mdDoc "Set the file for a log write"; };
+        logLevel = mkOption {
+          type = types.enum [ "debug" "info" "notice" "warn" "error" "crit" "alert" "emerg" ];
+          default = "error";
+          description = lib.mdDoc "Set the level for a log write";
+        };
+        stderr =  mkOption { type = bool; default = false; description = lib.mdDoc "Selects the standard error file"; };
+      }; });
+      default = [];
+      description = lib.mdDoc ''
+        Configures logging. Several logs can be specified on the same configuration level.
+        The second parameter determines the level of logging, and can be one of
+        the following: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`,
+        or `emerg. Log levels above are listed in the order of increasing severity. Setting a
+        certain log level will cause all messages of the specified and more severe log
+        levels to be logged. For example, the default level `error` will cause `error`,
+        `crit`, `alert`, and `emerg` messages to be logged.
+        If this parameter is omitted then `error` is used.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
