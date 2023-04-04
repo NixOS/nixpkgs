@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cinny-desktop";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchurl {
     url = "https://github.com/cinnyapp/cinny-desktop/releases/download/v${version}/Cinny_desktop-x86_64.deb";
-    sha256 = "sha256-ibUXNGgc23ndTqQKD0np5EH1T3xipVAmETbIy7akqkg=";
+    sha256 = "sha256-Bh7qBlHh2bQ6y2HnI4TtxMU6N3t04tr1Juoul2KMrqs=";
   };
 
   nativeBuildInputs = [
