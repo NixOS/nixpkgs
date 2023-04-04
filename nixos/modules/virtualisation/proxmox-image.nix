@@ -128,6 +128,15 @@ with lib;
         any specific VMID.
       '';
     };
+    diskSize = mkOption {
+      type = with types; either (enum [ "auto" ]) int;
+      default = "auto";
+      example = 4096;
+      description = lib.mdDoc ''
+        Size of disk image. Unit is MB.
+      '';
+    };
+
   };
 
   config = let
@@ -140,7 +149,8 @@ with lib;
       ${lib.concatStrings (lib.mapAttrsToList cfgLine properties)}
       #qmdump#map:virtio0:drive-virtio0:local-lvm:raw:
     '';
-    inherit (cfg) partitionTableType;
+    inherit (cfg) partitionTableType diskSize;
+
     supportEfi = partitionTableType == "efi" || partitionTableType == "hybrid";
     supportBios = partitionTableType == "legacy" || partitionTableType == "hybrid" || partitionTableType == "legacy+gpt";
     hasBootPartition = partitionTableType == "efi" || partitionTableType == "hybrid";
@@ -166,7 +176,7 @@ with lib;
     ];
     system.build.VMA = import ../../lib/make-disk-image.nix {
       name = "proxmox-${cfg.filenameSuffix}";
-      inherit partitionTableType;
+      inherit partitionTableType diskSize;
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
         vma = (pkgs.qemu_kvm.override {
@@ -207,11 +217,13 @@ with lib;
         });
       in
       ''
-        ${vma}/bin/vma create "vzdump-qemu-${cfg.filenameSuffix}.vma" \
+        ${vma}/bin/vma create "$out/vzdump-qemu-${cfg.filenameSuffix}.vma" \
           -c ${cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)}/qemu-server.conf drive-virtio0=$diskImage
+        ${vma}/bin/vma list "$out/vzdump-qemu-${cfg.filenameSuffix}.vma"
+
         rm $diskImage
-        ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
-        mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
+        ${pkgs.zstd}/bin/zstd "$out/vzdump-qemu-${cfg.filenameSuffix}.vma"
+        rm "$out/vzdump-qemu-${cfg.filenameSuffix}.vma"
 
         mkdir -p $out/nix-support
         echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
