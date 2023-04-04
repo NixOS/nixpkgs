@@ -34093,6 +34093,8 @@ with pkgs;
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
+  systray-x = libsForQt5.callPackage ../applications/networking/mailreaders/systray-x { } ;
+
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
     # and enable
