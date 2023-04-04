@@ -1499,6 +1499,7 @@ self: super: {
       "coc-ltex"
       "coc-markdownlint"
       "coc-metals"
+      "coc-neosnippet"
       "coc-pairs"
       "coc-prettier"
       "coc-pyright"
