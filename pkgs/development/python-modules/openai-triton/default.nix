@@ -26,6 +26,18 @@ let
   version = "2.0.0";
 
   inherit (cudaPackages) cuda_cudart backendStdenv;
+
+  # A time may come we'll want to be cross-friendly
+  #
+  # Short explanation: we need pkgsTargetTarget, because we use string
+  # interpolation instead of buildInputs.
+  #
+  # Long explanation: OpenAI/triton downloads and vendors a copy of NVidia's
+  # ptxas compiler. We're not running this ptxas on the build machine, but on
+  # the user's machine, i.e. our Target platform. The second "Target" in
+  # pkgsTargetTarget maybe doesn't matter, because ptxas compiles programs to
+  # be executed on the GPU.
+  # Cf. https://nixos.org/manual/nixpkgs/unstable/#sec-cross-infra
   ptxas = "${pkgsTargetTarget.cudaPackages.cuda_nvcc}/bin/ptxas";
 
   llvm = (llvmPackages.llvm.override {
