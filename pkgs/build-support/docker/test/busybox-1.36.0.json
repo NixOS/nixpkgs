@@ -1,0 +1,7 @@
+{
+  "imageName": "busybox",
+  "imageDigest": "sha256:7b3ccabffc97de872a30dfd234fd972a66d247c8cfc69b0550f276481852627c",
+  "sha256": "0p1h0gq1s8fv7pjbg48vj0n68nc7r4p03z7rar1im014q9c5nsi4",
+  "finalImageName": "busybox",
+  "finalImageTag": "1.36.0"
+}
