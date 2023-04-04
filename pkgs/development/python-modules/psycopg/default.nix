@@ -148,7 +148,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     psycopg-c
-  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
