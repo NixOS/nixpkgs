@@ -11,30 +11,41 @@ in {
   # of containers hosted on a different server.
   nodes.client = { pkgs, ... }: {
     virtualisation.vlans = [ 1 ];
+    networking.useNetworkd = true;
     networking.firewall.extraCommands = ''
       ip46tables -A INPUT -i eth1 -j ACCEPT
     '';
     systemd.network.networks."10-eth1" = {
       matchConfig.Name = "eth1";
-      networkConfig = {
-        IPForward = "yes";
-        IPv6AcceptRA = "yes";
-      };
       address = [ "fd23::1/64" ];
       routes = [
         { routeConfig.Destination = "fd24::1/64"; }
       ];
     };
-    networking = {
-      useNetworkd = true;
-      useDHCP = false;
-      interfaces.eth0.useDHCP = true;
-    };
   };
 
   # Demo server which hosts nspawn machines.
   nodes.server = { pkgs, lib, config, ... }: {
+    ### Basic networking parts to get the setup up and running
+
     virtualisation.vlans = [ 1 ];
+    networking = {
+      firewall.allowedTCPPorts = [ 80 ];
+      useNetworkd = true;
+    };
+
+    # `server' is supposed to use `fd24::1/64`. However the test network in QEMU
+    # doesn't take care of neighbour resolution via NDP. To work around this, `server'
+    # proxies NDP traffic of container IPs.
+    services.ndppd = {
+      enable = true;
+      proxies.eth1.rules."fd24::2/64" = {};
+    };
+
+    # Needed to make sure that the DHCPServer of `systemd-networkd' properly works and
+    # can assign IPv4 addresses to containers.
+    time.timeZone = "Europe/Berlin";
+    networking.firewall.allowedUDPPorts = [ 53 67 68 546 547 ];
 
     # Local authoritative DNS server. Used to confirm how DNS is handled by nspawn by default.
     services.bind = {
@@ -60,8 +71,7 @@ in {
       ];
     };
 
-    networking.firewall.allowedTCPPorts = [ 80 ];
-
+    # Reverse-proxy to expose the contents of container0:80
     services.nginx = {
       enable = true;
       virtualHosts."localhost" = {
@@ -69,89 +79,12 @@ in {
       };
     };
 
-    # Several nspawn machines to test different things:
-    # * `container0': assign ULA IPv6 address (to demonstrate public addrs) and
-    #   let nginx listen on it.
-    # * `container1': mount needed paths into the VM rather than sharing a full store.
-    nixos.containers.instances = {
-      container0 = {
-        network.v6.static = {
-          containerPool = [ "fd24::2/64" ];
-          hostAddresses = [
-            "fd24::3/64"
-          ];
-        };
-        network.v6.addrPool = lib.mkForce [];
-        credentials = [
-          {
-            id = "snens";
-            path = "${pkgs.writeText "totallysecret" "abc"}";
-          }
-        ];
-        system-config = { pkgs, ... }: {
-          networking.firewall.allowedTCPPorts = [ 80 ];
-          systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            snakeOilPublicKey
-          ];
-          services.nginx = {
-            enable = true;
-            virtualHosts."localhost" = {
-              listen = [
-                { addr = "[fd24::2]"; port = 80; ssl = false; }
-              ];
-            };
-          };
-        };
-      };
-      container1 = {
-        sharedNix = false;
-        activation.strategy = "restart";
-        nixpkgs = ../../..;
-        zone = "foo";
-        network.v6.addrPool = lib.mkForce [];
-        network.v4.addrPool = lib.mkForce [];
-        network.v4.static.containerPool = [ "10.100.200.10/24" ];
-        system-config = { pkgs, ... }: {
-          environment.systemPackages = [ pkgs.hello pkgs.nmap pkgs.dnsutils ];
-          systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-          systemd.network.networks."20-host0".networkConfig.DNS = "fd24::1";
-        };
-      };
-      container2 = {
-        zone = "foo";
-        network.v6.addrPool = lib.mkForce [];
-        network.v4.addrPool = lib.mkForce [];
-        network.v4.static.containerPool = [ "10.100.200.11/24" ];
-      };
-      publicnet = {};
-
-      ephemeral = {
-        ephemeral = true;
-        network = {};
-      };
-    };
-
-    environment.etc."container-exposed-nginx-hosts".text = with lib;
-      concatStringsSep " " (attrNames config.nixos.containers.instances.container0.system-config.config.services.nginx.virtualHosts);
-
-    systemd.nspawn.container2.execConfig.ResolvConf = "bind-host";
-
-    systemd.nspawn.publicnet.networkConfig.VirtualEthernet = "no";
-
-    nixos.containers.zones = {
-      foo.hostAddresses = [ "10.100.200.1/24" ];
-    };
-
-    systemd.network.networks."20-ve-container1".networkConfig.DNS = "fd24::1";
+    # IPv4/IPv6 connectivity in the test network
     systemd.network.networks."10-eth1" = {
       matchConfig.Name = "eth1";
       address = [ "fd24::1/64" ];
-      networkConfig.IPv6ProxyNDP = "yes";
       networkConfig = {
         IPForward = "yes";
-        IPv6AcceptRA = "yes";
         DNS = "fd24::1";
       };
       routes = [
@@ -159,30 +92,85 @@ in {
       ];
     };
 
+    ### Eval test to make sure that we can query options of containers during evaluation
+
+    environment.etc."container-exposed-nginx-hosts".text = with lib;
+      concatStringsSep " "
+        (attrNames config.nixos.containers.instances.container0.system-config.config.services.nginx.virtualHosts);
+
+    ### Test containers + corresponding zones
+
+    # container0: use ULA IPv6 addr and let nginx listen to it. Used
+    #  to demonstrate that containers can serve to the outer network.
     systemd.network.networks."20-ve-container0".routes = [
       { routeConfig.Destination = "fd24::2"; }
     ];
-
-    networking = {
-      useNetworkd = true;
-      useDHCP = false;
-      interfaces.eth0.useDHCP = true;
+    nixos.containers.instances.container0 = {
+      network.v6.static = {
+        containerPool = [ "fd24::2/64" ];
+        hostAddresses = [ "fd24::3/64" ];
+      };
+      network.v6.addrPool = lib.mkForce [];
+      credentials = [
+        { id = "snens";
+          path = "${pkgs.writeText "totallysecret" "abc"}";
+        }
+      ];
+      system-config = { pkgs, ... }: {
+        networking.firewall.allowedTCPPorts = [ 80 ];
+        systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+        services.openssh.enable = true;
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+        services.nginx = {
+          enable = true;
+          virtualHosts."localhost" = {
+            listen = [
+              { addr = "[fd24::2]"; port = 80; ssl = false; }
+            ];
+          };
+        };
+      };
     };
 
-    # `server' is supposed to use `fd24::1/64`. However the test network in QEMU
-    # doesn't take care of neighbour resolution via NDP. To work around this, `server'
-    # proxies NDP traffic of container IPs.
-    services.ndppd = {
-      enable = true;
-      proxies.eth1.rules."fd24::2/64" = {};
+    # container1: mount only needed store-paths into the container rather than sharing the full store
+    #  and to test DNS from the host network.
+    systemd.network.networks."20-ve-container1".networkConfig.DNS = "fd24::1";
+    nixos.containers.instances.container1 = {
+      sharedNix = false;
+      activation.strategy = "restart";
+      nixpkgs = ../../..;
+      zone = "foo";
+      network.v6.addrPool = lib.mkForce [];
+      network.v4.addrPool = lib.mkForce [];
+      network.v4.static.containerPool = [ "10.100.200.10/24" ];
+      system-config = { pkgs, ... }: {
+        environment.systemPackages = [ pkgs.hello pkgs.nmap pkgs.dnsutils ];
+        systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+        systemd.network.networks."20-host0".networkConfig.DNS = "fd24::1";
+      };
     };
 
-    programs.mtr.enable = true;
+    # container2: to test virtual zones and special resolv.conf behavior.
+    nixos.containers.zones.foo.hostAddresses = [ "10.100.200.1/24" ];
+    systemd.nspawn.container2.execConfig.ResolvConf = "bind-host";
+    nixos.containers.instances.container2 = {
+      zone = "foo";
+      network.v6.addrPool = lib.mkForce [];
+      network.v4.addrPool = lib.mkForce [];
+      network.v4.static.containerPool = [ "10.100.200.11/24" ];
+    };
 
-    # Needed to make sure that the DHCPServer of `systemd-networkd' properly works and
-    # can assign IPv4 addresses to containers.
-    time.timeZone = "Europe/Berlin";
-    networking.firewall.allowedUDPPorts = [ 53 67 68 546 547 ];
+    # publicnet: share the network with the host entirely, i.e. no new namespace.
+    nixos.containers.instances.publicnet = {};
+    systemd.nspawn.publicnet.networkConfig.VirtualEthernet = "no";
+
+    # ephemeral: containers with state cleared after a reboot.
+    nixos.containers.instances.ephemeral = {
+      ephemeral = true;
+      network = {};
+    };
   };
 
   testScript = ''

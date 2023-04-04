@@ -1,44 +1,48 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }: let
   instances.dynamic = {
     activation.strategy = "dynamic";
-    network.v4.static.containerPool = [ "10.231.136.2/24" ];
-    network.v4.static.hostAddresses = [ "10.231.136.1/24" ];
+    network.v4.static = {
+      containerPool = [ "10.231.136.2/24" ];
+      hostAddresses = [ "10.231.136.1/24" ];
+    };
   };
 
   instances.teststop = {
-    network.v4.static.containerPool = [ "10.231.137.2/24" ];
-    network.v4.static.hostAddresses = [ "10.231.137.1/24" ];
+    network.v4.static = {
+      containerPool = [ "10.231.137.2/24" ];
+      hostAddresses = [ "10.231.137.1/24" ];
+    };
   };
 
   instances.restart = {
     activation.strategy = "restart";
-    network.v4.static.containerPool = [ "10.231.138.2/24" ];
-    network.v4.static.hostAddresses = [ "10.231.138.1/24" ];
+    network.v4.static = {
+      containerPool = [ "10.231.138.2/24" ];
+      hostAddresses = [ "10.231.138.1/24" ];
+    };
   };
 
   instances.reload = {
     activation.strategy = "reload";
-    network.v4.static.containerPool = [ "10.231.139.2/24" ];
-    network.v4.static.hostAddresses = [ "10.231.139.1/24" ];
+    network.v4.static = {
+      containerPool = [ "10.231.139.2/24" ];
+      hostAddresses = [ "10.231.139.1/24" ];
+    };
   };
 
   instances.none = {
     activation.strategy = "none";
-    network.v4.static.containerPool = [ "10.231.140.2/24" ];
-    network.v4.static.hostAddresses = [ "10.231.140.1/24" ];
+    network.v4.static = {
+      containerPool = [ "10.231.140.2/24" ];
+      hostAddresses = [ "10.231.140.1/24" ];
+    };
   };
 
   instances.dynamic2 = {
     activation.strategy = "dynamic";
-    network.v4.static.containerPool = [ "10.231.141.2/24" ];
-    network.v4.static.hostAddresses = [ "10.231.141.1/24" ];
-  };
-
-  testvm = { ... }: {
-    networking = {
-      useDHCP = false;
-      useNetworkd = true;
-      interfaces.eth0.useDHCP = true;
+    network.v4.static = {
+      containerPool = [ "10.231.141.2/24" ];
+      hostAddresses = [ "10.231.141.1/24" ];
     };
   };
 in {
@@ -47,84 +51,90 @@ in {
     maintainers = [ ma27 ];
   };
 
-  nodes = rec {
-    base = { ... }: {
-      imports = [ testvm ];
-      nixos.containers = { inherit instances; };
-    };
-    configchange = { lib, pkgs, ... }: {
-      imports = [ testvm ];
-      nixos.containers.instances = lib.mkMerge [
-        (lib.filterAttrs (name: lib.const (name != "teststop")) instances)
-        {
-          dynamic.system-config = {
-            services.nginx = {
-              enable = true;
-              virtualHosts."localhost" = {
-                listen = [
-                  { addr = "10.231.136.2"; port = 80; ssl = false; }
-                ];
-              };
-            };
-            networking.firewall.allowedTCPPorts = [ 80 ];
-          };
-        }
-        {
-          dynamic2.system-config = {
-            services.nginx.enable = true;
-          };
-        }
-      ];
+  nodes = {
+    machine = { ... }: {
+      networking = {
+        useDHCP = false;
+        useNetworkd = true;
+        interfaces.eth0.useDHCP = true;
+      };
 
-      systemd.nspawn.restart.filesConfig.BindReadOnly = [ "/etc:/foo" ];
-      systemd.nspawn.reload.filesConfig.BindReadOnly = [ "/etc:/foo" ];
-    };
-    configchange2 = {
-      imports = [ configchange ];
-      systemd.nspawn.dynamic.filesConfig.BindReadOnly = [ "/etc:/foo" ];
-      nixos.containers.instances = {
-        new = {
-          network.v4.static.containerPool = [ "10.231.150.2/24" ];
-          network.v4.static.hostAddresses = [ "10.231.150.1/24" ];
+      nixos.containers = lib.mkDefault { inherit instances; };
+
+      specialisation = rec {
+        configchange.configuration = { lib, pkgs, ... }: {
+          nixos.containers.instances = lib.mkMerge [
+            (lib.filterAttrs (name: lib.const (name != "teststop")) instances)
+            {
+              dynamic.system-config = {
+                services.nginx = {
+                  enable = true;
+                  virtualHosts."localhost" = {
+                    listen = [
+                      { addr = "10.231.136.2"; port = 80; ssl = false; }
+                    ];
+                  };
+                };
+                networking.firewall.allowedTCPPorts = [ 80 ];
+              };
+            }
+            {
+              dynamic2.system-config = {
+                services.nginx.enable = true;
+              };
+            }
+          ];
+
+          systemd.nspawn.restart.filesConfig.BindReadOnly = [ "/etc:/foo" ];
+          systemd.nspawn.reload.filesConfig.BindReadOnly = [ "/etc:/foo" ];
         };
-        restart = {
-          network.v4.static.containerPool = [ "10.231.151.2/24" ];
-          network.v4.static.hostAddresses = [ "10.231.151.1/24" ];
+        configchange2.configuration = { lib, pkgs, ... }: {
+          imports = [ configchange.configuration ];
+          systemd.nspawn.dynamic.filesConfig.BindReadOnly = [ "/etc:/foo" ];
+          nixos.containers.instances = {
+            new = {
+              network.v4.static.containerPool = [ "10.231.150.2/24" ];
+              network.v4.static.hostAddresses = [ "10.231.150.1/24" ];
+            };
+            restart = {
+              network.v4.static.containerPool = [ "10.231.151.2/24" ];
+              network.v4.static.hostAddresses = [ "10.231.151.1/24" ];
+            };
+          };
         };
       };
     };
   };
 
   testScript = { nodes, ... }: let
-    change = nodes.configchange.config.system.build.toplevel;
-    change2 = nodes.configchange2.config.system.build.toplevel;
+    switchTo = sp: "${nodes.machine.config.system.build.toplevel}/specialisation/${sp}/bin/switch-to-configuration test";
   in ''
     from typing import Dict, List
-    base.start()
-    base.wait_for_unit("network.target")
-    base.wait_for_unit("machines.target")
+    machine.start()
+    machine.wait_for_unit("network.target")
+    machine.wait_for_unit("machines.target")
 
     with subtest("Initial state"):
-        available = base.succeed("machinectl")
+        available = machine.succeed("machinectl")
         for i in ['dynamic', 'teststop', 'restart', 'reload']:
             assert i in available, f"Expected machine {i} in `machinectl output!"
 
         for j in range(136, 142):
-            base.wait_until_succeeds(f"ping -c3 10.231.{str(j)}.2 >&2")
+            machine.wait_until_succeeds(f"ping -c3 10.231.{str(j)}.2 >&2")
 
-        base.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
+        machine.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
 
         for m in ['reload', 'restart']:
-            base.fail(
+            machine.fail(
                 f"systemd-run -M {m} --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
             )
 
     with subtest("Activate changes"):
-        base.succeed("machinectl stop dynamic2")
-        act_output = base.succeed(
-            "${change}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
+        machine.succeed("machinectl stop dynamic2")
+        act_output = machine.succeed(
+            "${switchTo "configchange"} 2>&1 | tee /dev/stderr"
         ).split('\n')
-        base.succeed("sleep 10")
+        machine.succeed("sleep 10")
 
         units: Dict[str, List[str]] = {}
         for state in ['stopping', 'starting', 'restarting', 'reloading']:
@@ -154,32 +164,32 @@ in {
         assert "systemd-nspawn@none.service" not in act_output
 
     with subtest("Check for successful activation"):
-        base.wait_until_succeeds("curl 10.231.136.2 -sSf --connect-timeout 10")
-        base.fail("ping -c3 10.231.137.2 -c3")
+        machine.wait_until_succeeds("curl 10.231.136.2 -sSf --connect-timeout 10")
+        machine.fail("ping -c3 10.231.137.2 -c3")
 
-        base.wait_until_succeeds("ping -c3 10.231.138.2 >&2")
-        base.succeed(
+        machine.wait_until_succeeds("ping -c3 10.231.138.2 >&2")
+        machine.succeed(
             "systemd-run -M restart --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
         # A reload is forced for this machine, but a reload doesn't refresh bind mounts.
-        base.fail(
+        machine.fail(
             "systemd-run -M reload --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
     with subtest("More changes"):
-        base.succeed(
-            "${change2}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
+        machine.succeed(
+            "${switchTo "configchange2"} 2>&1 | tee /dev/stderr"
         )
 
-        base.wait_until_succeeds("ping -c3 10.231.136.2 >&2")
+        machine.wait_until_succeeds("ping -c3 10.231.136.2 >&2")
 
-        base.succeed(
+        machine.succeed(
             "systemd-run -M dynamic --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
-        base.wait_until_succeeds("ping -c3 10.231.150.2 >&2")
+        machine.wait_until_succeeds("ping -c3 10.231.150.2 >&2")
 
-    base.shutdown()
+    machine.shutdown()
   '';
 })

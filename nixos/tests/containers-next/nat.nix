@@ -3,8 +3,16 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
   meta.maintainers = with lib.maintainers; [ ma27 ];
 
   nodes = {
-    client = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.tcpdump ];
+    client = {
+      networking.useNetworkd = true;
+      systemd.network.networks."10-eth1" = {
+        matchConfig.Name = "eth1";
+        address = [ "fd23::1/64" "192.168.1.1/24" ];
+        routes = [
+          { routeConfig.Destination = "fd24::1/64"; }
+        ];
+      };
+
       # Check for NAT by making sure that only the host's addresses can ping
       # this machine.
       networking.firewall.extraCommands = ''
@@ -12,48 +20,26 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
         ip6tables -A INPUT -p icmp -s fd24::1 -j ACCEPT
         ip46tables -A INPUT -p icmp -j REJECT
       '';
+    };
+
+    host = {
       networking.useNetworkd = true;
       systemd.network.networks."10-eth1" = {
         matchConfig.Name = "eth1";
-        networkConfig = {
-          IPForward = "yes";
-          IPv6AcceptRA = "yes";
-        };
-        address = [ "fd23::1/64" "192.168.1.1/24" ];
-        routes = [
-          { routeConfig.Destination = "fd24::1/64"; }
-        ];
-      };
-    };
-    host = {
-      systemd.network.networks."10-eth1" = {
-        matchConfig.Name = "eth1";
         address = [ "fd24::1/64" "192.168.1.2/24" ];
-        networkConfig.IPv6ProxyNDP = "yes";
-        networkConfig = {
-          IPForward = "yes";
-          IPv6AcceptRA = "yes";
-          DNS = "fd24::1";
-        };
+        networkConfig.IPForward = "yes";
         routes = [
           { routeConfig.Destination = "fd23::1/64"; }
         ];
       };
+
       networking.firewall.allowedUDPPorts = [ 53 67 68 546 547 ];
-      networking.useNetworkd = true;
-      nixos.containers.instances = {
-        withnat = {
-          network = {
-            v4.nat = true;
-            v6.nat = true;
-          };
-        };
-        nonat = {
-          network = {
-            v4.nat = false;
-            v6.nat = false;
-          };
-        };
+
+      nixos.containers.instances = with lib; mapAttrs (const (nat: {
+        network = lib.genAttrs [ "v4" "v6" ] (const { inherit nat; });
+      })) {
+        withnat = true;
+        nonat = false;
       };
     };
   };
