@@ -40,7 +40,7 @@ let
 
   pythonInputs = with python3.pkgs; [
     six
-    ldap
+    python-ldap
     dns
     netaddr
     netifaces
