@@ -809,6 +809,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/autoload_cscope.vim/";
   };
 
+  autosave-nvim = buildVimPluginFrom2Nix {
+    pname = "autosave.nvim";
+    version = "2022-10-13";
+    src = fetchFromGitHub {
+      owner = "nullishamy";
+      repo = "autosave.nvim";
+      rev = "406a09c1ce679bc6fbde47d6ec61c753632b55f0";
+      sha256 = "0f3rp80hwf6v2kw2hg5jysz9j4946bmwpbk6hxpw89b1vcgny66v";
+    };
+    meta.homepage = "https://github.com/nullishamy/autosave.nvim/";
+  };
+
   awesome-vim-colorschemes = buildVimPluginFrom2Nix {
     pname = "awesome-vim-colorschemes";
     version = "2022-05-04";
