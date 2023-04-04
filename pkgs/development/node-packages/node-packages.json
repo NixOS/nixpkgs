@@ -95,6 +95,7 @@
 , "coc-stylelint"
 , "coc-sumneko-lua"
 , "coc-sqlfluff"
+, "coc-syntax"
 , "coc-tabnine"
 , "coc-texlab"
 , "coc-toml"

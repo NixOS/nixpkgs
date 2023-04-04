@@ -1516,6 +1516,7 @@ self: super: {
       "coc-sqlfluff"
       "coc-stylelint"
       "coc-sumneko-lua"
+      "coc-syntax"
       "coc-tabnine"
       "coc-texlab"
       "coc-toml"
