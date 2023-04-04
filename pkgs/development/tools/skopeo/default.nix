@@ -72,7 +72,7 @@ buildGoModule rec {
     changelog = "https://github.com/containers/skopeo/releases/tag/${src.rev}";
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
-    maintainers = with maintainers; [ lewo ] ++ teams.podman.members;
+    maintainers = with maintainers; [ lewo developer-guy ] ++ teams.podman.members;
     license = licenses.asl20;
   };
 }
