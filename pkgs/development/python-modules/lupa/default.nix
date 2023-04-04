@@ -20,6 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Lua in Python";
     homepage = "https://github.com/scoder/lupa";
+    changelog = "https://github.com/scoder/lupa/blob/lupa-${version}/CHANGES.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
