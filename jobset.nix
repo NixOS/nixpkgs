@@ -10,10 +10,10 @@ in
 
 {
   container-tests = {
-    general = release.tests.containers-next;
-    migration = release.tests.containers-next-migration;
-    activation = release.tests.containers-next-config-activation;
-    imperative = release.tests.containers-next-imperative;
-    wireguard = release.tests.containers-next-wireguard;
+    general = release.tests.containers-next.basic;
+    migration = release.tests.containers-next.migration;
+    activation = release.tests.containers-next.config-activation;
+    imperative = release.tests.containers-next.imperative;
+    wireguard = release.tests.containers-next.wireguard;
   };
 }
