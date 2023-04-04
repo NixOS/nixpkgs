@@ -9,5 +9,6 @@
   imperative = import ./imperative.nix { inherit system pkgs; };
   macvlan = import ./macvlan.nix { inherit system pkgs; };
   migration = import ./migration.nix { inherit system pkgs; };
+  nat = import ./nat.nix { inherit system pkgs; };
   wireguard = import ./wireguard.nix { inherit system pkgs; };
 }

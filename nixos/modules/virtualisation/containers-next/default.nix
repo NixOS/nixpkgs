@@ -47,10 +47,14 @@ let
       Driver = if type == "veth" then "veth" else "bridge";
     };
 
-  mkNetworkCfg = dhcp: nat: {
+  mkNetworkCfg = dhcp: { v4Nat, v6Nat }: {
     LinkLocalAddressing = mkDefault "ipv6";
     DHCPServer = yesNo dhcp;
-    IPMasquerade = yesNo nat;
+    IPMasquerade =
+      if v4Nat && v6Nat then "both"
+      else if v4Nat then "ipv4"
+      else if v6Nat then "ipv6"
+      else "no";
     IPForward = "yes";
     LLDP = "yes";
     EmitLLDP = "customer-bridge";
@@ -111,15 +115,14 @@ let
             ```
           '';
         };
-      } // (optionalAttrs (v == 4) {
         nat = mkOption {
-          default = true;
+          default = false;
           type = types.bool;
           description = lib.mdDoc ''
             Whether to set-up a basic NAT to enable internet access for the nspawn containers.
           '';
         };
-      });
+      };
     in
       assert elem type [ "veth" "zone" ]; {
         v4 = mkIPOptions 4;
@@ -412,7 +415,10 @@ in {
                 config.network.v4.static.hostAddresses
               ++ optionals (config.network.v6.static.hostAddresses != null)
                 config.network.v6.static.hostAddresses;
-            networkConfig = mkNetworkCfg (config.network.v4.addrPool != []) config.network.v4.nat;
+              networkConfig = mkNetworkCfg (config.network.v4.addrPool != []) {
+                v4Nat = config.network.v4.nat;
+                v6Nat = config.network.v6.nat;
+              };
           };
         }) { } cfg
         // foldlAttrs (acc: name: zone: acc // {
@@ -421,7 +427,10 @@ in {
             address = zone.v4.addrPool
               ++ zone.v6.addrPool
               ++ zone.hostAddresses;
-            networkConfig = mkNetworkCfg true zone.v4.nat;
+            networkConfig = mkNetworkCfg true {
+              v4Nat = zone.v4.nat;
+              v6Nat = zone.v6.nat;
+            };
           };
         }) { } config.nixos.containers.zones;
 
