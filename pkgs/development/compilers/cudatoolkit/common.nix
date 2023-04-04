@@ -204,6 +204,7 @@ backendStdenv.mkDerivation rec {
 
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+      rm $out/host-linux-x64/libstdc++.so*
     ''}
 
     rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
