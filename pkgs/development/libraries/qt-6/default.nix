@@ -68,6 +68,7 @@ let
         qtserialport
         qtshadertools
         qtquick3d
+        qtquickeffectmaker
         qtsvg
         qtscxml
         qttools
@@ -108,6 +109,7 @@ let
       };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
+      qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };
