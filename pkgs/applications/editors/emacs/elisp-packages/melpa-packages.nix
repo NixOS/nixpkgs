@@ -314,6 +314,33 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
+        jinx = super.jinx.overrideAttrs (old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+          ];
+
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+          postBuild = ''
+            pushd working/jinx
+            NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+            $CC -shared -o jinx-mod.so jinx-mod.c -lenchant-2
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
+            install -m444 --target-directory=$outd jinx-mod.so
+            rm $outd/jinx-mod.c $outd/emacs-module.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
         libgit = super.libgit.overrideAttrs(attrs: {
           nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
           buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
@@ -409,6 +436,8 @@ let
         orgit = buildWithGit super.orgit;
 
         orgit-forge = buildWithGit super.orgit-forge;
+
+        ox-rss = buildWithGit super.ox-rss;
 
         # upstream issue: missing file header
         mhc = super.mhc.override {

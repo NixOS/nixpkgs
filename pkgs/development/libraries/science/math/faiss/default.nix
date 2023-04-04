@@ -1,21 +1,24 @@
 { lib
 , config
 , fetchFromGitHub
+, symlinkJoin
 , stdenv
 , cmake
-, cudaPackages
+, cudaPackages ? { }
 , cudaSupport ? config.cudaSupport or false
-, cudaCapabilities ? [ "60" "70" "80" "86" ]
+, nvidia-thrust
+, useThrustSourceBuild ? true
 , pythonSupport ? true
 , pythonPackages
 , llvmPackages
+, boost
 , blas
 , swig
 , addOpenGLRunpath
 , optLevel ? let
     optLevels =
-      lib.optional stdenv.hostPlatform.avx2Support "avx2"
-      ++ lib.optional stdenv.hostPlatform.sse4_1Support "sse4"
+      lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
+      ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
       ++ [ "generic" ];
   in
   # Choose the maximum available optimization level
@@ -24,10 +27,31 @@
 , runCommand
 }:
 
+assert cudaSupport -> nvidia-thrust.cudaSupport;
+
 let
   pname = "faiss";
   version = "1.7.2";
-  inherit (cudaPackages) cudatoolkit;
+
+  inherit (cudaPackages) cudaFlags;
+  inherit (cudaFlags) cudaCapabilities dropDot;
+
+  cudaJoined = symlinkJoin {
+    name = "cuda-packages-unsplit";
+    paths = with cudaPackages; [
+      cuda_cudart # cuda_runtime.h
+      libcublas
+      libcurand
+    ] ++ lib.optionals useThrustSourceBuild [
+      nvidia-thrust
+    ] ++ lib.optionals (!useThrustSourceBuild) [
+      cuda_cccl
+    ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
+      cuda_profiler_api # cuda_profiler_api.h
+    ] ++ lib.optionals (!(cudaPackages ? cuda_profiler_api)) [
+      cuda_nvprof # cuda_profiler_api.h
+    ];
+  };
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -50,6 +74,8 @@ stdenv.mkDerivation {
     pythonPackages.wheel
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
+  ] ++ lib.optionals cudaSupport [
+    cudaJoined
   ];
 
   propagatedBuildInputs = lib.optionals pythonSupport [
@@ -57,7 +83,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudatoolkit
+    cudaPackages.cuda_nvcc
     addOpenGLRunpath
   ] ++ lib.optionals pythonSupport [
     pythonPackages.python
@@ -72,7 +98,8 @@ stdenv.mkDerivation {
     "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
     "-DFAISS_OPT_LEVEL=${optLevel}"
   ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCMAKE_CUDA_ARCHITECTURES=${builtins.concatStringsSep ";" (map dropDot cudaCapabilities)}"
+    "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
   ];
 
 
@@ -100,6 +127,11 @@ stdenv.mkDerivation {
     addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
     addOpenGLRunpath $demos/bin/*
   '';
+
+  # Need buildPythonPackage for this one
+  # pythonCheckImports = [
+  #   "faiss"
+  # ];
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;

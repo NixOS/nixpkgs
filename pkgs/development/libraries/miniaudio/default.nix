@@ -4,15 +4,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "miniaudio";
-  version = "0.11.11";
+  version = "0.11.14";
 
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
-    rev = "a0dc1037f99a643ff5fad7272cd3d6461f2d63fa";
+    rev = "9a7663496fc06f7a9439c752fd7666ca93328c20";
     # upstream does not maintain tags:
     # https://github.com/mackron/miniaudio/issues/273#issuecomment-783861269
-    hash = "sha256-jOvDZk76hDvZ1RQ9O34kVeW0n95BT9+BE6fNhdekI5s=";
+    hash = "sha256-v/Eo4/CYcpB4tbOoy1gPqk6PUvkQIZNWrweG3l5EcMk=";
   };
 
   installPhase = ''

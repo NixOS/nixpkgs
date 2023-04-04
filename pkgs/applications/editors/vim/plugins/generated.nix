@@ -809,6 +809,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/autoload_cscope.vim/";
   };
 
+  autosave-nvim = buildVimPluginFrom2Nix {
+    pname = "autosave.nvim";
+    version = "2022-10-13";
+    src = fetchFromGitHub {
+      owner = "nullishamy";
+      repo = "autosave.nvim";
+      rev = "406a09c1ce679bc6fbde47d6ec61c753632b55f0";
+      sha256 = "0f3rp80hwf6v2kw2hg5jysz9j4946bmwpbk6hxpw89b1vcgny66v";
+    };
+    meta.homepage = "https://github.com/nullishamy/autosave.nvim/";
+  };
+
   awesome-vim-colorschemes = buildVimPluginFrom2Nix {
     pname = "awesome-vim-colorschemes";
     version = "2022-05-04";
@@ -939,6 +951,18 @@ final: prev:
       sha256 = "1hfly2vxhhvjdiwgfz58hr3523kf9z71i78vk168n3kdqp5vkwrp";
     };
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
+  };
+
+  blamer-nvim = buildVimPluginFrom2Nix {
+    pname = "blamer.nvim";
+    version = "2021-11-17";
+    src = fetchFromGitHub {
+      owner = "APZelos";
+      repo = "blamer.nvim";
+      rev = "f4eb22a9013642c411725fdda945ae45f8d93181";
+      sha256 = "1czjagkfjw57f2nvjjgbma1gcy1ylcd68dyfc5ivr2wc6fdw5lks";
+    };
+    meta.homepage = "https://github.com/APZelos/blamer.nvim/";
   };
 
   blueballs-neovim = buildVimPluginFrom2Nix {

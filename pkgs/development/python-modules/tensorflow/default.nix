@@ -445,9 +445,30 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
-      maintainers = with maintainers; [ jyp abbradar ];
+      maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
       broken = !(xlaSupport -> cudaSupport);
+      knownVulnerabilities = [
+        "CVE-2023-27579"
+        "CVE-2023-25801"
+        "CVE-2023-25676"
+        "CVE-2023-25675"
+        "CVE-2023-25674"
+        "CVE-2023-25673"
+        "CVE-2023-25671"
+        "CVE-2023-25670"
+        "CVE-2023-25669"
+        "CVE-2023-25668"
+        "CVE-2023-25667"
+        "CVE-2023-25665"
+        "CVE-2023-25666"
+        "CVE-2023-25664"
+        "CVE-2023-25663"
+        "CVE-2023-25662"
+        "CVE-2023-25660"
+        "CVE-2023-25659"
+        "CVE-2023-25658"
+      ];
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s

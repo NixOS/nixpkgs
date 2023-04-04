@@ -18,6 +18,8 @@ let
 
     alcotest-mirage = callPackage ../development/ocaml-modules/alcotest/mirage.nix {};
 
+    algaeff = callPackage ../development/ocaml-modules/algaeff { };
+
     alsa = callPackage ../development/ocaml-modules/alsa { };
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };

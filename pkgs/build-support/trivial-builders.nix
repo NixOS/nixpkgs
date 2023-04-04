@@ -132,13 +132,12 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , allowSubstitutes ? false
+    , preferLocalBuild ? true
     }:
     runCommand name
-      { inherit text executable checkPhase meta;
+      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -324,6 +323,8 @@ rec {
       inherit name;
       executable = true;
       destination = "/bin/${name}";
+      allowSubstitutes = true;
+      preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
         set -o errexit

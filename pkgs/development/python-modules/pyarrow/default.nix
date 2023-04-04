@@ -17,6 +17,7 @@
 , pytest-lazy-fixture
 , pkg-config
 , scipy
+, fetchpatch
 , setuptools-scm
 }:
 
@@ -83,6 +84,15 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   __darwinAllowLocalNetworking = true;
+
+  # fix on current master
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/apache/arrow/commit/bce43175aa8cfb4534d3efbcc092f697f25f0f5a.patch";
+      hash = "sha256-naOAQjQgSKIoCAGCKr7N4dCkOMtweAdfggGOQKDY3k0=";
+      stripLen = 1;
+    })
+  ];
 
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES

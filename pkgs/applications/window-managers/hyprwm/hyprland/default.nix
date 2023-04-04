@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   outputs = [
@@ -83,7 +84,6 @@ stdenv.mkDerivation rec {
       udis86
       wayland
       wayland-protocols
-      wayland-scanner
       pciutils
       (wlroots.override { inherit enableXWayland hidpiXWayland nvidiaPatches; })
     ]
