@@ -36,7 +36,9 @@ in
 , conmon
 , coreutils
 , cryptsetup
+, e2fsprogs
 , fakeroot
+, fuse2fs ? e2fsprogs.fuse2fs
 , go
 , gpgme
 , libseccomp
@@ -117,6 +119,12 @@ in
     which
   ];
 
+  # Search inside the project sources
+  # and see the `control` file of the Debian package from upstream repos
+  # for build-time dependencies and run-time utilities
+  # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
+  # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
+
   buildInputs = [
     bash # To patch /bin/sh shebangs.
     conmon
@@ -124,8 +132,7 @@ in
     gpgme
     libuuid
     openssl
-    squashfsTools
-    squashfuse
+    squashfsTools # Required at build time by SingularityCE
   ]
   ++ lib.optional enableNvidiaContainerCli nvidia-docker
   ++ lib.optional enableSeccomp libseccomp
@@ -149,6 +156,7 @@ in
     coreutils
     cryptsetup # cryptsetup
     fakeroot
+    fuse2fs # Mount ext3 filesystems
     go
     privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
