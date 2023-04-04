@@ -225,12 +225,12 @@ in {
             '';
           };
 
-          mountDaemonSocket = mkEnableOption "daemon-socket in the container";
+          mountDaemonSocket = mkEnableOption (lib.mdDoc "daemon-socket in the container");
 
           timeoutStartSec = mkOption {
             type = types.str;
             default = "90s";
-            description = ''
+            description = lib.mdDoc ''
               Timeout for the startup of the container. Corresponds to `DefaultTimeoutStartSec`
               of {manpage}`systemd.system(5)`.
             '';
