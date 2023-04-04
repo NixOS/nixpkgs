@@ -1095,9 +1095,9 @@ lib.composeManyExtensions [
             else if (lib.versionOlder old.version "0.28.0" && lib.versionAtLeast old.version "0.27.0") then
               pkgs.llvmPackages_7.llvm
             else if (lib.versionOlder old.version "0.27.0" && lib.versionAtLeast old.version "0.23.0") then
-              pkgs.llvmPackages_6.llvm
+              throw "LLVM6 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
             else if (lib.versionOlder old.version "0.23.0" && lib.versionAtLeast old.version "0.21.0") then
-              pkgs.llvmPackages_5.llvm
+              throw "LLVM5 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
             else
               pkgs.llvm; # Likely to fail.
         in
