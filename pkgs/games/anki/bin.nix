@@ -53,6 +53,8 @@ let
   fhsUserEnvAnki = buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
     name = "anki";
 
+    inherit version;
+
     # Dependencies of anki
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
 
@@ -70,17 +72,9 @@ let
 
     inherit meta passthru;
   });
-
-  fhsUserEnvAnkiWithVersion = fhsUserEnvAnki.overrideAttrs (oldAttrs: {
-    # buildFHSUserEnv doesn't have an easy way to set the version of the
-    # resulting derivation, so we manually override it here.  This makes
-    # it clear to end users the version of anki-bin.  Without this, users
-    # might assume anki-bin is an old version of Anki.
-    name = "${pname}-${version}";
-  });
 in
 
-if stdenv.isLinux then fhsUserEnvAnkiWithVersion
+if stdenv.isLinux then fhsUserEnvAnki
 else stdenv.mkDerivation {
   inherit pname version passthru;
 
