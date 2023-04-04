@@ -4787,6 +4787,8 @@ with pkgs;
 
   dblatexFull = dblatex.override { enableAllFeatures = true; };
 
+  gladtex = callPackage ../tools/typesetting/tex/gladtex { };
+
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
