@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -17,6 +18,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
   ];
+
+  postFixup = lib.optionalString (!stdenv.targetPlatform.isWindows) ''
+    find $out -name '*.exe' -delete
+  '';
 
   pythonImportsCheck = [
     "distlib"
@@ -39,4 +44,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ lnl7 ];
   };
 }
-
