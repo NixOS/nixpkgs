@@ -5,7 +5,7 @@
 , fetchurl
 , autoPatchelfHook
 , rpmextract
-, libxcrypt
+, libxcrypt-legacy
 , openssl
 , zlib
 , lvm2  # LVM image backup and restore functions (optional)
@@ -117,7 +117,7 @@ let
       rpmextract
     ];
     buildInputs = [
-      libxcrypt
+      libxcrypt-legacy
       openssl
       stdenv.cc.cc
       zlib
