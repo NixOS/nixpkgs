@@ -5000,6 +5000,8 @@ self: super: with self; {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  jiwer = callPackage ../development/python-modules/jiwer { };
+
   jmespath = callPackage ../development/python-modules/jmespath { };
 
   jmp = callPackage ../development/python-modules/jmp { };
