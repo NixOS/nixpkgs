@@ -371,7 +371,7 @@ in {
       { assertion = config.networking.useNetworkd;
         message = "Only networkd is supported!";
       }
-    ] ++ (foldlAttrs (acc: n: inst: acc ++ [
+    ] ++ foldlAttrs (acc: n: inst: acc ++ [
       { assertion = inst.zone != null -> (config.nixos.containers.zones != null && config.nixos.containers.zones?${inst.zone});
         message = ''
           No configuration found for zone `${inst.zone}'!
@@ -391,13 +391,19 @@ in {
           (affected: ${n})!
         '';
       }
-    ]) [ ] cfg);
+      { assertion = (inst.zone != null && inst.network != null) -> (inst.network.v4.static.hostAddresses ++ inst.network.v6.static.hostAddresses) == [];
+        message = ''
+          Container ${n} is in zone ${inst.zone}, but also attempts to define
+          it's one host-side addresses. Use the host-side addresses of the zone instead.
+        '';
+      }
+    ]) [ ] cfg;
 
     services = { inherit radvd; };
 
     systemd = {
-      network.networks = mkMerge
-        ((flip mapAttrsToList cfg (name: config: optionalAttrs (config.network != null && config.zone == null) {
+      network.networks =
+        foldlAttrs (acc: name: config: acc // optionalAttrs (config.network != null && config.zone == null) {
           "20-${ifacePrefix "veth"}-${name}" = {
             matchConfig = mkMatchCfg "veth" name;
             address = config.network.v4.addrPool
@@ -408,20 +414,16 @@ in {
                 config.network.v6.static.hostAddresses;
             networkConfig = mkNetworkCfg (config.network.v4.addrPool != []) config.network.v4.nat;
           };
-        }))
-        ++ (flip mapAttrsToList config.nixos.containers.zones (name: zone: {
+        }) { } cfg
+        // foldlAttrs (acc: name: zone: acc // {
           "20-${ifacePrefix "zone"}-${name}" = {
             matchConfig = mkMatchCfg "zone" name;
             address = zone.v4.addrPool
               ++ zone.v6.addrPool
-              ++ zone.hostAddresses
-              ++ (flatten (flip mapAttrsToList cfg
-                (name: config: optionals (config.zone != null && config.network != null)
-                  (config.network.v4.static.hostAddresses ++ config.network.v6.static.hostAddresses)
-                )));
+              ++ zone.hostAddresses;
             networkConfig = mkNetworkCfg true zone.v4.nat;
           };
-        })));
+        }) { } config.nixos.containers.zones;
 
       nspawn = mapAttrs (const mkContainer) images;
       targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
@@ -469,11 +471,11 @@ in {
             (mkIf (elem activation.strategy [ "reload" "dynamic" ]) {
               ExecReload = if activation.reloadScript != null
                 then "${activation.reloadScript}"
-                else "${pkgs.writeShellScriptBin "activate" ''
+                else "${pkgs.writeShellScript "activate" ''
                   pid=$(machinectl show ${container} --value --property Leader)
                   ${pkgs.util-linux}/bin/nsenter -t "$pid" -m -u -U -i -n -p \
                     -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
-                ''}/bin/activate";
+                ''}";
             })
           ];
         }
