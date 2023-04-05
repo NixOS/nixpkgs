@@ -81,14 +81,12 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
     pkgs = nixpkgs.legacyPackages."${system}";
     linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
 
-    darwin-builder = import "${nixpkgs}/nixos" {
+    darwin-builder = nixpkgs.nixosSystem {
       system = linuxSystem;
-      configuration = {
-        imports = [
-          "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
-        ];
-        virtualisation.host.pkgs = pkgs;
-      };
+      modules = [
+        "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
+        { virtualisation.host.pkgs = pkgs; }
+      ];
     };
   in {
 
