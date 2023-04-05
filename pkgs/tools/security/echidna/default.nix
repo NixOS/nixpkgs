@@ -6,17 +6,18 @@
 , hashable, hevm, hpack, html-entities, lens, ListLike, MonadRandom, mtl
 , optparse-applicative, process, random, semver, tasty, tasty-hunit
 , tasty-quickcheck, text, transformers, unix, unliftio, unordered-containers
-, vector, vector-instances, vty, yaml
+, vector, vector-instances, vty, yaml, code-page, html-conduit, http-conduit
+, with-utf8, xml-conduit
 }:
 mkDerivation rec {
   pname = "echidna";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-8bChe+qA4DowfuwsR5wLckb56fXi102g8vL2gAH/kYE=";
+    sha256 = "sha256-2Big7mg/ZdpLZgd26l0SjlgMNjwgIbkF41qmU8uoOlE=";
   };
 
   isLibrary = true;
@@ -26,7 +27,7 @@ mkDerivation rec {
     data-has directory exceptions extra filepath hashable hevm html-entities
     lens ListLike MonadRandom mtl optparse-applicative process random semver
     text transformers unix unliftio unordered-containers vector vector-instances
-    vty yaml
+    vty yaml code-page html-conduit http-conduit with-utf8 xml-conduit
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = libraryHaskellDepends;
