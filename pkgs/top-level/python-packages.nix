@@ -3939,6 +3939,8 @@ self: super: with self; {
 
   glad =  callPackage ../development/python-modules/glad { };
 
+  glad2 =  callPackage ../development/python-modules/glad2 { };
+
   glances-api = callPackage ../development/python-modules/glances-api { };
 
   glcontext = callPackage ../development/python-modules/glcontext { };
