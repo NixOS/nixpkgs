@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute2,python3, jq, xorg, wmctrl, xdotool, xclip, xpra }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute2,python3, jq, wmctrl, xdotool, xclip, xpra }:
 stdenv.mkDerivation rec {
   pname = "x11docker";
   version = "7.6.0";
