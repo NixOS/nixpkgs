@@ -5,7 +5,6 @@
 , writeMultipleReferencesToFile
 , writeScript
 , e2fsprogs
-, gawk
 , util-linux
 , bash
 , runtimeShell
@@ -39,7 +38,7 @@ rec {
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.sif"
           {
-            buildInputs = [ singularity e2fsprogs util-linux gawk ];
+            buildInputs = [ singularity e2fsprogs util-linux ];
             layerClosure = writeMultipleReferencesToFile (contents ++ [ bash runScriptFile ]);
             preVM = vmTools.createEmptyImage {
               size = diskSize;
