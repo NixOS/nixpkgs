@@ -5,7 +5,9 @@
 , fetchFromGitHub
 , addOpenGLRunpath
 , cmake
+, config
 , cudaPackages ? { }
+, cudaSupport ? config.cudaSupport or false
 , llvmPackages
 , pybind11
 , gtest
@@ -128,9 +130,9 @@ buildPythonPackage {
     let
       # Bash was getting weird without linting,
       # but basically upstream contains [cc, ..., "-lcuda", ...]
-      # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
+      # and we replace it with [..., "-L/run/opengl-driver/lib", "-L$stubs", "-lcuda", ...]
       old = [ "-lcuda" ];
-      new = [ "-lcuda" "-L${addOpenGLRunpath.driverLink}" "-L${cuda_cudart}/lib/stubs/" ];
+      new = [ "-L${addOpenGLRunpath.driverLink}" ] ++ lib.optionals cudaSupport [ "-L${cuda_cudart}/lib/stubs/" "-lcuda" ];
 
       quote = x: ''"${x}"'';
       oldStr = lib.concatMapStringsSep ", " quote old;
@@ -142,7 +144,7 @@ buildPythonPackage {
     ''
   )
   # Triton seems to be looking up cuda.h
-  + ''
+  + lib.optionalString cudaSupport ''
     sed -i 's|cu_include_dir = os.path.join.*$|cu_include_dir = "${cuda_cudart}/include"|' python/triton/compiler.py
   '';
 
@@ -174,11 +176,7 @@ buildPythonPackage {
     filelock
   ];
 
-  # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure = ''
-    export CC="${backendStdenv.cc}/bin/cc";
-    export CXX="${backendStdenv.cc}/bin/c++";
-
     # Upstream's setup.py tries to write cache somewhere in ~/
     export HOME=$TMPDIR
 
@@ -193,7 +191,16 @@ buildPythonPackage {
     # Work around download_and_copy_ptxas()
     dst_cuda="$PWD/triton/third_party/cuda/bin"
     mkdir -p "$dst_cuda"
-    ln -s "${ptxas}" "$dst_cuda/"
+  ''
+  + lib.optionalString (!cudaSupport) ''
+    touch $dst_cuda/ptxas
+  ''
+  + lib.optionalString cudaSupport ''
+    ln -s "${ptxas}" "$dst_cuda/ptxas"
+
+    # Avoid GLIBCXX mismatch with other cuda-enabled python packages
+    export CC="${backendStdenv.cc}/bin/cc";
+    export CXX="${backendStdenv.cc}/bin/c++";
   '';
 
   # CMake is run by setup.py instead
@@ -209,6 +216,7 @@ buildPythonPackage {
     # Setuptools (?) strips runpath and +x flags. Let's just restore the symlink
     ''
       rm -f ${ptxasDestination}
+    '' + lib.optionalString cudaSupport ''
       ln -s ${ptxas} ${ptxasDestination}
     '';
 
@@ -230,9 +238,13 @@ buildPythonPackage {
     # "triton.language"
   ];
 
-  # Ultimately, torch is our test suite:
-  passthru.tests = {
-    inherit torchWithRocm;
+  passthru = {
+    inherit cudaSupport;
+
+    # Ultimately, torch is our test suite:
+    tests = {
+      inherit torchWithRocm;
+    };
   };
 
   pythonRemoveDeps = [

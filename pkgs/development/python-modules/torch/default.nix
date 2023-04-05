@@ -56,6 +56,7 @@ let
 in
 
 assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
+assert cudaSupport -> openai-triton.cudaSupport;
 
 # confirm that cudatoolkits are sync'd across dependencies
 assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
