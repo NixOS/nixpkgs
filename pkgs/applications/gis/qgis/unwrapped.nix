@@ -29,6 +29,7 @@
 , qt3d
 , qscintilla
 , qtlocation
+, qtmultimedia
 , qtserialport
 , qtxmlpatterns
 , withGrass ? true
@@ -73,14 +74,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.28.3";
+  version = "3.30.1";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-nXauZSC78BX1fcx0SXniwQpRmdSLfoqZ5jlbXeHgRGI=";
+    hash = "sha256-MB0EQVJO5WLgqjdh8A7X45CpNvf7239wkZWciNfY3gY=";
   };
 
   passthru = {
@@ -111,6 +112,7 @@ in mkDerivation rec {
     qtkeychain
     qscintilla
     qtlocation
+    qtmultimedia
     qtserialport
     qtxmlpatterns
     qt3d
