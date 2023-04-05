@@ -35929,6 +35929,8 @@ with pkgs;
 
   harmonist = callPackage ../games/harmonist { };
 
+  hase = callPackage ../games/hase { };
+
   hedgewars = libsForQt5.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
