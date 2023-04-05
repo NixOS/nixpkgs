@@ -90,8 +90,8 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
     };
   in {
 
-    darwinConfigurations = rec {
-      machine1 = darwinSystem rec {
+    darwinConfigurations = {
+      machine1 = darwinSystem {
         inherit system;
         modules = [
           {
