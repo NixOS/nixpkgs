@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, boost-build, lua, boost }:
+{ lib, stdenv, fetchFromGitHub, boost-build, lua, boost, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "luabind";
@@ -7,19 +7,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Oberon00";
     repo = "luabind";
-    rev = "v${version}";
-    sha256 = "sha256-U2kJ/aMszto9hmcDDhabqaB63WmLpjMn5AEJ31j+RbI=";
+    rev = "49814f6b47ed99e273edc5198a6ebd7fa19e813a";
+    sha256 = "sha256-JcOsoQHRvdzF2rsZBW6egOwIy7+7C4wy0LiYmbV590Q";
   };
 
   # patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ./0.9.1_darwin_dylib.patch ];
 
-  buildInputs = [ boost-build lua boost ];
+  buildInputs = [ boost-build lua boost cmake ];
 
   propagatedBuildInputs = [ lua ];
 
-  buildPhase = "LUA_PATH=${lua} bjam release";
+  buildPhase = "LUA_PATH=${lua} cmake .";
 
-  installPhase = "LUA_PATH=${lua} bjam --prefix=$out release install";
+#  installPhase = "LUA_PATH=${lua} bjam --prefix=$out release install";
 
   passthru = {
     inherit lua;
