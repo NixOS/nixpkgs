@@ -33811,6 +33811,8 @@ with pkgs;
     syncthing-discovery
     syncthing-relay;
 
+  syncthing-cli = callPackage ../applications/networking/syncthing-cli { };
+
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
@@ -36389,8 +36391,6 @@ with pkgs;
   stardust = callPackage ../games/stardust { };
 
   starspace = callPackage ../applications/science/machine-learning/starspace { };
-
-  stc = callPackage ../applications/networking/stc { };
 
   stockfish = callPackage ../games/stockfish { };
 
