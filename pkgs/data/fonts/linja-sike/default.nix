@@ -12,7 +12,7 @@ fetchurl {
     install -D $downloadedFile $out/share/fonts/opentype/linja-sike.otf
   '';
 
-  sha256 = "sha256-TJcKIK6byBb9/zyoKHTmhMpOGwHYG/ZPmm72huSO/Yo=";
+  sha256 = "sha256-LkjG1Oao/LqKwI+eRZPzShTh7lz5DkooltXm7vxZC9w=";
 
   meta = with lib; {
     description = "An extensive sitelen pona font by lipamanka";
