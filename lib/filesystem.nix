@@ -19,7 +19,18 @@ in
 {
 
   /*
-    Returns the type of a path: regular (for file), symlink, or directory.
+    The type of a path. The path needs to exist and be accessible.
+    The result is either "directory" for a directory, "regular" for a regular file, "symlink" for a symlink, or "unknown" for anything else.
+
+    Type:
+      pathType :: Path -> String
+
+    Example:
+      pathType /.
+      => "directory"
+
+      pathType /some/file.nix
+      => "regular"
   */
   pathType = path:
     if ! pathExists path
@@ -34,13 +45,39 @@ in
     else (readDir (dirOf path)).${baseNameOf path};
 
   /*
-    Returns true if the path exists and is a directory, false otherwise.
+    Whether a path exists and is a directory.
+
+    Type:
+      pathIsDirectory :: Path -> Bool
+
+    Example:
+      pathIsDirectory /.
+      => true
+
+      pathIsDirectory /this/does/not/exist
+      => false
+
+      pathIsDirectory /some/file.nix
+      => false
   */
   pathIsDirectory = path:
     pathExists path && pathType path == "directory";
 
   /*
-    Returns true if the path exists and is a regular file, false otherwise.
+    Whether a path exists and is a regular file, meaning not a symlink or any other special file type.
+
+    Type:
+      pathIsRegularFile :: Path -> Bool
+
+    Example:
+      pathIsRegularFile /.
+      => false
+
+      pathIsRegularFile /this/does/not/exist
+      => false
+
+      pathIsRegularFile /some/file.nix
+      => true
   */
   pathIsRegularFile = path:
     pathExists path && pathType path == "regular";
