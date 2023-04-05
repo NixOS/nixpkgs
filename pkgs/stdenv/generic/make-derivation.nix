@@ -195,16 +195,13 @@ let
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = let
-    # not ready for this by default
-    supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
-  in if stdenv.hostPlatform.isMusl &&
+  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
       # Except when:
       #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
       #    - static armv7l, where compilation fails.
       !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-    then supportedHardeningFlags'
-    else lib.remove "pie" supportedHardeningFlags';
+    then supportedHardeningFlags
+    else lib.remove "pie" supportedHardeningFlags;
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
