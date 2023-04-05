@@ -138,7 +138,7 @@ let
       rm -f .bazelversion
     '';
 
-    bazelTarget = "//build:build_wheel";
+    bazelTargets = [ "//build:build_wheel" ];
 
     removeRulesCC = false;
 
