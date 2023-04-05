@@ -6,7 +6,6 @@
   writeClosure,
   writeScript,
   e2fsprogs,
-  gawk,
   util-linux,
   bash,
   runtimeShell,
@@ -59,7 +58,6 @@ rec {
               singularity
               e2fsprogs
               util-linux
-              gawk
             ];
             layerClosure = writeClosure contents;
             preVM = vmTools.createEmptyImage {
