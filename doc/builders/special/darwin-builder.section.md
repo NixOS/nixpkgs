@@ -100,7 +100,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
               hostName = "ssh://builder@localhost";
               system = linuxSystem;
               maxJobs = 4;
-              supportedFeatures = [ "kvm" "benchmark" "bigparallel" ];
+              supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
             }];
 
             launchd.daemons.darwin-builder = {
