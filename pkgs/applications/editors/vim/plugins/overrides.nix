@@ -121,6 +121,10 @@
 
 self: super: {
 
+  autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
+    dependencies = with super; [ plenary-nvim ];
+  });
+
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
