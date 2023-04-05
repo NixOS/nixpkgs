@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "cmark-gfm";
-  version = "0.29.0.gfm.9";
+  version = "0.29.0.gfm.10";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "cmark-gfm";
     rev = version;
-    sha256 = "sha256-goQtLaiLCyEqVItPfH3e/pFroQWZuVT5oxLs1/GwdoU=";
+    sha256 = "sha256-8TGwxZB/sT+VmQ0eIwK8rHJrCZXvpG69t+HA3aFz5h8=";
   };
 
   nativeBuildInputs = [ cmake ];
