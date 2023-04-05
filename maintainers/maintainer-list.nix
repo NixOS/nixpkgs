@@ -11360,6 +11360,11 @@
     githubId = 357005;
     name = "Marco Orovecchia";
   };
+  orthros = {
+    github = "orthros";
+    githubId = 7820716;
+    name = "orthros";
+  };
   osener = {
     email = "ozan@ozansener.com";
     github = "osener";
