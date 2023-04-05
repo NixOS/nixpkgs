@@ -2,24 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuckr";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "RaphGL";
     repo = "Tuckr";
     rev = version;
-    sha256 = "sha256-mpI0iAGMIzGGdObH5bfyA3iioNdquzLDZoSWxbAOsJ0=";
+    sha256 = "sha256-47qnBGCiPWJGF4QcqjzmDIZWlCO3xE3QyIF6nSPGWAc=";
   };
 
-  cargoPatches = [ ./update-cargo-lock.diff ];
+  cargoHash = "sha256-IX7ZX4fKBK0wS7nlSdf/bVGzXl2GU7qwwmtPMoOe/m8=";
 
-  cargoSha256 = "sha256-tm8fS8IWxWF4Vh+3QaCiruglZijdOic34vfAyxflDNM=";
+  # Cargo.lock is outdated
+  preConfigure = ''
+    cargo update --offline
+  '';
 
   doCheck = false; # test result: FAILED. 5 passed; 3 failed;
 
   meta = with lib; {
     description = "A super powered replacement for GNU Stow";
     homepage = "https://github.com/RaphGL/Tuckr";
+    changelog = "https://github.com/RaphGL/Tuckr/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mimame ];
   };

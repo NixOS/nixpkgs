@@ -1,23 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , numpy
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "3.20.0";
+  version = "3.21.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JZl3I1X0bdQ2alz2zozPo6AyIvCLHDlklNRb9clYGNE=";
+    hash = "sha256-VRPE+1QLKGy5W99ia5BuPNtmH/eoXulApS8n8SdQSaQ=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ numpy ];
 
-  # tests are not included in pypi distributions and would require lots of
-  # optional dependencies
-  doCheck = false;
+  nativeCheckInputs = [ lxml ];
+
+  checkPhase = ''
+    # Disable test_load because requires loading models which aren't part of the tarball
+    substituteInPlace tests/test_minimal.py --replace "test_load" "disable_test_load"
+    python tests/test_minimal.py
+  '';
 
   pythonImportsCheck = [ "trimesh" ];
 

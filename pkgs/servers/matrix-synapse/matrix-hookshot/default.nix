@@ -35,7 +35,7 @@ mkYarnPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-WolkDSS5wPxtltKzq4Er2nAQ0GrsF3imim3/Ge4eguQ=";
+    sha256 = data.cargoHash;
   };
 
   packageResolutions = {

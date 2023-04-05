@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, buildPackages
+, pkgsBuildBuild
+, pkgsBuildHost
 , cmake
 , glib
 , icu
@@ -13,6 +14,7 @@
 , python3
 , tzdata
 , fixDarwinDylibNames
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable pkgsBuildHost
 , gobject-introspection
 , vala
 }:
@@ -31,20 +33,24 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+
+  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # provides ical-glib-src-generator that runs during build
+    libical
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
     perl
     pkg-config
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
     # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # provides ical-glib-src-generator that runs during build
-    libical
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
@@ -63,10 +69,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_GTK_DOC=False"
-    "-DGOBJECT_INTROSPECTION=True"
-    "-DICAL_GLIB_VAPI=True"
+    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
+    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
+    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
 
   patches = [

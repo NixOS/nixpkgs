@@ -4,7 +4,7 @@
 , fetchpatch
 , webtest
 , pyramid
-, Mako
+, mako
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ webtest ];
-  propagatedBuildInputs = [ pyramid Mako ];
+  propagatedBuildInputs = [ pyramid mako ];
 
   meta = with lib; {
     homepage = "https://github.com/Pylons/pyramid_mako";

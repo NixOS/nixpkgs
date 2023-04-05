@@ -9,7 +9,7 @@
 , makeWrapper
 , tesseract4
 , leptonica
-, ffmpeg
+, ffmpeg_4
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ]
     ++ lib.optional (!stdenv.isLinux) libiconv
-    ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
+    ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg_4 ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH:

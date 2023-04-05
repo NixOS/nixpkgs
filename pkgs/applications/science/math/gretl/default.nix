@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gretl";
-  version = "2022c";
+  version = "2023a";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/${pname}-${version}.tar.xz";
-    sha256 = "sha256-4QAQTNqbfIX6K3CdtKcVONtCWrkTRvGl2ZXGR1eyQdA=";
+    sha256 = "sha256-T1UwQhw/Tr/juYqVJBkst2LRBCIXPLvVd0N+QCJcVtM=";
   };
 
   buildInputs = [
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
+  # Missing install depends:
+  #  cp: cannot stat '...-gretl-2022c/share/gretl/data/plotbars': Not a directory
+  #  make[1]: *** [Makefile:73: install_datafiles] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "A software package for econometric analysis";

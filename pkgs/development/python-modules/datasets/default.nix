@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.10.1";
+  version = "2.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CLzEJchNKmwfN1ZRQfCFusXDSgvHilwnM0KkcX822MI=";
+    hash = "sha256-vnKd7KapejcZN1RHNMpH4rrpz2P2DcfiyI33I0wiE+0=";
   };
 
   postPatch = ''

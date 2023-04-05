@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-T9jNvGjRpCHyG7fg2edtUPaktQTTULp4ZAXa9TbpDCE=";
+    hash = "sha256-T9jNvGjRpCHyG7fg2edtUPaktQTTULp4ZAXa9TbpDCE=";
   };
 
   # setup.cfg tries to pull in nonexistent LICENSE.txt file

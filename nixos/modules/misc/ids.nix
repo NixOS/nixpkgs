@@ -338,7 +338,7 @@ in
       lidarr = 306;
       slurm = 307;
       kapacitor = 308;
-      solr = 309;
+      # solr = 309; removed 2023-03-16
       alerta = 310;
       minetest = 311;
       rss2email = 312;
@@ -648,7 +648,7 @@ in
       lidarr = 306;
       slurm = 307;
       kapacitor = 308;
-      solr = 309;
+      # solr = 309; removed 2023-03-16
       alerta = 310;
       minetest = 311;
       rss2email = 312;

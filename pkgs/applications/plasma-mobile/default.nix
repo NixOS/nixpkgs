@@ -28,9 +28,6 @@ See also `pkgs/applications/kde` as this is what this is based on.
 }:
 
 let
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
-
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
@@ -51,11 +48,10 @@ let
           meta // {
             homepage = meta.homepage or "https://www.plasma-mobile.org/";
             platforms = meta.platforms or lib.platforms.linux;
-            broken = meta.broken or broken;
           };
       });
 
-  packages = self: with self;
+  packages = self:
     let
       callPackage = self.newScope {
         inherit mkDerivation;
@@ -79,7 +75,7 @@ let
       plasma-settings = callPackage ./plasma-settings.nix {};
       plasmatube = callPackage ./plasmatube {};
       qmlkonsole = callPackage ./qmlkonsole.nix {};
-      spacebar = callPackage ./spacebar.nix { inherit srcs; };
+      spacebar = callPackage ./spacebar.nix {};
       tokodon = callPackage ./tokodon.nix {};
     };
 

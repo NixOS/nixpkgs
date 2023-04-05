@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitcoinunlimited.info/";
     maintainers = with maintainers; [ DmitryTsygankov ];
     license = licenses.mit;
-    broken = stdenv.isDarwin;
+    broken = true;
     platforms = platforms.unix;
   };
 }

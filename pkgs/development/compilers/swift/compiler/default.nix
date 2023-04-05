@@ -619,7 +619,12 @@ in stdenv.mkDerivation {
     # Swift has a separate resource root from Clang, but locates the Clang
     # resource root via subdir or symlink. Provide a default here, but we also
     # patch Swift to prefer NIX_CC if set.
-    ln -s ${clang}/resource-root $lib/lib/swift/clang
+    #
+    # NOTE: We don't symlink directly here, because that'd add a run-time dep
+    # on the full Clang compiler to every Swift executable. The copy here is
+    # just copying the 3 symlinks inside to smaller closures.
+    mkdir $lib/lib/swift/clang
+    cp -P ${clang}/resource-root/* $lib/lib/swift/clang/
 
     ${lib.optionalString stdenv.isDarwin ''
     # Install required library for ObjC interop.

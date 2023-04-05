@@ -21,7 +21,7 @@ buildPythonPackage rec {
     # https://github.com/bivab/smbus-cffi/pull/24
     (fetchpatch {
       url = "https://github.com/bivab/smbus-cffi/commit/ba79ae174a9d84e767d95f165c43ee212b1bbb92.patch";
-      sha256 = "sha256-WtRuK5y6fWDEhm0Xy5XqS5yCkn7vXXYtjlOjS90gla4=";
+      hash = "sha256-WtRuK5y6fWDEhm0Xy5XqS5yCkn7vXXYtjlOjS90gla4=";
     })
   ];
 

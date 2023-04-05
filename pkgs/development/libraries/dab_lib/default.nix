@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation {
   pname = "dab_lib";
-  version = "unstable-2021-12-28";
+  version = "unstable-2023-03-02";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";
     repo = "dab-cmdline";
-    rev = "d23adb3616bb11d98a909aceecb5a3b9507a674c";
-    sha256 = "sha256-n/mgsldgXEOLHZEL1cmsqXgFXByWoMeNXNoDWqPpipA=";
+    rev = "d615e2ba085f91dc7764cc28dfc4c9df49ee1a93";
+    hash = "sha256-KSkOg0a5iq+13kClQqj+TaEP/PsLUrm8bMmiJEAZ+C4=";
   };
 
   sourceRoot = "source/library/";
@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/JvanKatwijk/dab-cmdline";
     license = licenses.gpl2;
     maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

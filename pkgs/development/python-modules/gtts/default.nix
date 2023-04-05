@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pndurette";
     repo = "gTTS";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dbIcx6U5TIy3CteUGrZqcWqOJoZD2HILaJmKDY+j/II=";
+    hash = "sha256-dbIcx6U5TIy3CteUGrZqcWqOJoZD2HILaJmKDY+j/II=";
   };
 
   propagatedBuildInputs = [

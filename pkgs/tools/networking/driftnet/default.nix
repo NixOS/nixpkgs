@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "driftnet";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-szmezYnszlRanq8pMD0CIGA+zTYGSwSHcDaZ2Gx1KCA=";
+    hash = "sha256-lMn60vtOMPs1Tr+SnAOUZDrNIO7gEXdHpizjXiEkkoM=";
   };
 
   enableParallelBuilding = true;

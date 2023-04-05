@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , python
 , proj
 , pythonOlder
@@ -33,6 +34,23 @@ buildPythonPackage rec {
       src = ./001.proj.patch;
       proj = proj;
       projdev = proj.dev;
+    })
+    # update tests for PROJ 9.2
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/59d16f57387bbd09b4d61ab95ac520cfec103af1.patch";
+      hash = "sha256-pSDkb+c02KNNlGPwBN/9TQdVJorLr2xvvFB92h84OsQ=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/dd06b3fee4eaafe80da3414560107ecdda42f5e0.patch";
+      hash = "sha256-6CFVdtovfGqWGXq4auX2DtY7sT4Y0amTJ7phjq5emYM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/9283f962e4792da2a7f05ba3735c1ed7f3479502.patch";
+      hash = "sha256-GVYXOAQBHL5WkAF7OczHyGxo7vq8LmT7I/R1jUPCxi4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/9dfbb2465296cc8f0de2ff1d68a9b65f7cef52e1.patch";
+      hash = "sha256-F+qS9JZF0JjqyapFhEhIcZ/WHJyfI3jiMC8K7uTpWUA=";
     })
   ];
 

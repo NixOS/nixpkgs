@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "language-tags";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "OnroerendErfgoed";
     repo = "language-tags";
-    rev = version;
-    sha256 = "sha256-4Ira3EMS64AM8I3SLmUm+m6V5vwtDYf8WDmVDvI+ZOw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T9K290seKhQLqW36EfA9kn3WveKCmyjN4Mx2j50qIEk=";
   };
 
   nativeCheckInputs = [

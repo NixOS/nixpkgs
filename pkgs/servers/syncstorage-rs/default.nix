@@ -47,7 +47,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoHash = "sha256-OPPU1SKR+zNmJ1NNAv4B3C9FOF/Ddg53genUkVwNgSs=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "deadpool-0.5.2" = "sha256-V3v03t8XWA6rA8RaNunq2kh2U+6Lc2C2moKdaF2bmEc=";
+    };
+  };
 
   buildFeatures = [ "grpcio/openssl" ];
 

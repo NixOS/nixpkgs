@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "skyfielders";
     repo = "python-skyfield";
     rev = version;
-    sha256 = "sha256-aoSkuLhZcEy+13EJQOBHV2/rgmN6aZQHqfj4OOirOG0=";
+    hash = "sha256-aoSkuLhZcEy+13EJQOBHV2/rgmN6aZQHqfj4OOirOG0=";
   };
 
   propagatedBuildInputs = [ certifi numpy sgp4 jplephem ];

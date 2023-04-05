@@ -3,10 +3,10 @@
 rec {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "111.0";
+    version = "111.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "cdb300fdbb2b60068b0fc10a18df587b417e484901d36f52dd174d320d3440a42b02ea000f325c5781fd8853a5171b1a5184562fb535ece90619e4c64d46bb82";
+      sha512 = "b16c9399a19cb1de2d865a023d54fbe71c23a363ea4d36cd58f41f64f7ad04bc1b9d8a8448943417516e17337e0ee2afd370c29a72b51b0947161f4ffab6935f";
     };
 
     meta = {
@@ -24,6 +24,62 @@ rec {
     tests = [ nixosTests.firefox ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
+    };
+  };
+
+  firefox-beta = buildMozillaMach rec {
+    pname = "firefox-beta";
+    version = "112.0b9";
+    applicationName = "Mozilla Firefox Beta";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "95d17d5c7415d98b24d41b4419c76adb757f552957a69126c0031cb1c8f16a55b765f66b2e7a45531a643d5c713dea883bde4d436b82cb6661b44f113e890127";
+    };
+
+    meta = {
+      description = "A web browser built from Firefox Beta Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ jopejoe1 ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-beta ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-beta-unwrapped";
+      versionSuffix = "b[0-9]*";
+    };
+  };
+
+  firefox-devedition = buildMozillaMach rec {
+    pname = "firefox-devedition";
+    version = "112.0b9";
+    applicationName = "Mozilla Firefox Developer Edition";
+    branding = "browser/branding/aurora";
+    src = fetchurl {
+      url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "d798803dca258007d355a181263b803365a13385a1bc09bdada07336add019bd36db197cdfa3749240f563641167a9d9e5c0539e58ecd369f575a219a4064b74";
+    };
+
+    meta = {
+      description = "A web browser built from Firefox Developer Edition source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ jopejoe1 ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-devedition ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-devedition-unwrapped";
+      versionSuffix = "b[0-9]*";
+      baseUrl = "https://archive.mozilla.org/pub/devedition/releases/";
     };
   };
 

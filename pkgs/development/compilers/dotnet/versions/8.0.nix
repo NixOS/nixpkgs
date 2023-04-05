@@ -1,9 +1,8 @@
-{ buildAspNetCore, buildNetRuntime, buildNetSdk, icu }:
+{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v8.0 (preview)
 {
   aspnetcore_8_0 = buildAspNetCore {
-    inherit icu;
     version = "8.0.0-preview.1.23112.2";
     srcs = {
       x86_64-linux = {
@@ -26,7 +25,6 @@
   };
 
   runtime_8_0 = buildNetRuntime {
-    inherit icu;
     version = "8.0.0-preview.1.23110.8";
     srcs = {
       x86_64-linux = {
@@ -49,7 +47,6 @@
   };
 
   sdk_8_0 = buildNetSdk {
-    inherit icu;
     version = "8.0.100-preview.1.23115.2";
     srcs = {
       x86_64-linux = {

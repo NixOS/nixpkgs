@@ -15,6 +15,7 @@
 , xkbcommon
 , xorg
 , pytestCheckHook
+, qtile
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TvYhxiAbK+mpcEE9y79WH96dzeDnvI0xPaUxSYQqyHE=";
+    hash = "sha256-TvYhxiAbK+mpcEE9y79WH96dzeDnvI0xPaUxSYQqyHE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -40,6 +41,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "wlroots" ];
+
+  passthru.tests = { inherit qtile; };
 
   meta = with lib; {
     homepage = "https://github.com/flacjacket/pywlroots";

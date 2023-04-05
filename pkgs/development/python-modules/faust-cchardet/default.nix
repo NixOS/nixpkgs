@@ -7,6 +7,7 @@
 , setuptools
 , wheel
 , pytestCheckHook
+, python
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,12 @@ buildPythonPackage rec {
     setuptools
     wheel
   ];
+
+  postFixup = ''
+    # fake cchardet distinfo, so packages that depend on cchardet
+    # accept it as a drop-in replacement
+    ln -s $out/${python.sitePackages}/{faust_,}cchardet-${version}.dist-info
+  '';
 
   pythonImportsCheck = [
     "cchardet"

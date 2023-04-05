@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    broken = lib.versionOlder qtbase.version "5.14";
     maintainers = [ maintainers.romildo ];
   };
 }

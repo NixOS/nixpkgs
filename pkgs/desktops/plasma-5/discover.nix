@@ -28,6 +28,7 @@
 , kitemmodels
 , knewstuff
 , kpurpose
+, kuserfeedback
 , kwindowsystem
 , kxmlgui
 , plasma-framework
@@ -61,6 +62,7 @@ mkDerivation {
     kitemmodels
     knewstuff
     kpurpose
+    kuserfeedback
     kwindowsystem
     kxmlgui
     plasma-framework

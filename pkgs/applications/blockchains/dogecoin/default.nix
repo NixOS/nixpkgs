@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo offline ];
     platforms = platforms.unix;
+    broken = true;
   };
 }

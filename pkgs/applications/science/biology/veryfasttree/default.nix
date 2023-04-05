@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name   = "veryfasttree";
+  pname   = "veryfasttree";
   version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "citiususc";
-    repo = "${name}";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-AOzbxUnrn1qgscjdOKf4dordnSKtIg3nSVaYWK1jbuc=";
   };

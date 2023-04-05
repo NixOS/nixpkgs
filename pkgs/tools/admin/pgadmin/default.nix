@@ -3,10 +3,8 @@
 , fetchurl
 , zlib
 , mkYarnModules
-, sphinx
 , nixosTests
 , pkgs
-, fetchPypi
 , postgresqlTestHook
 , postgresql
 , server-mode ? true
@@ -14,11 +12,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.20";
+  version = "6.21";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-6aQvg98LymZGAgAcNX5Xhw/aRdE5h4HOCPS+kQnkstU=";
+    hash = "sha256-9ErMhxzixyiwcwcduLP63JfM3rNy0W/3w0b+BbQAjUA=";
   };
 
   yarnDeps = mkYarnModules {
@@ -36,21 +34,32 @@ let
     # flask-security-too 4.1.5 is incompatible with flask-babel 3.x
     flask-babel = prev.flask-babel.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.0";
-      src = fetchPypi {
+      src = prev.fetchPypi {
         inherit pname version;
-        sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+        hash = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
       };
       nativeBuildInputs = [ ];
       format = "setuptools";
       outputs = [ "out" ];
+      patches = [ ];
     });
-    # flask 2.2 is incompatible with pgadmin 6.18
+    # flask-babel 2.0.0 is incompatible with babel > 2.11.0
+    babel = prev.babel.overridePythonAttrs (oldAttrs: rec {
+      version = "2.11.0";
+      src = prev.fetchPypi {
+        pname = "Babel";
+        inherit version;
+        hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+      };
+      propagatedBuildInputs = [ prev.pytz ];
+    });
+    # pgadmin 6.21 is incompatible with flask 2.2
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.1.3";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
+        hash = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
     # flask 2.1.3 is incompatible with flask-sqlalchemy > 3
@@ -62,7 +71,23 @@ let
         hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
       };
     });
-    # pgadmin 6.19 is incompatible with the major flask-security-too update to 5.0.x
+    # flask-sqlalchemy 2.5.1 is incompatible with sqlalchemy > 1.4.45
+    sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      version = "1.4.45";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-/WmFCGAJOj9p/v4KtW0EHt/f4YUQtT2aLq7LovFfp5U=";
+      };
+    });
+    # flask-security-too 4.1.5 is incompatible with flask-wtf > 1.0.1
+    flask-wtf = prev.flask-wtf.overridePythonAttrs (oldAttrs: rec {
+      version = "1.0.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-NP5cb+4PabUOMPgaO36haqFJKncf6a0JdNFkYQwJpsk=";
+      };
+    });
+    # pgadmin 6.21 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
@@ -106,6 +131,8 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
+    # fix extra_require error with "*" in match
+    sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req"
     ${lib.optionalString (!server-mode) ''

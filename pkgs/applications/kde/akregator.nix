@@ -4,6 +4,7 @@
   qtwebengine,
   grantlee,
   kcmutils, kcrash, kiconthemes, knotifyconfig, kparts, ktexteditor,
+  kuserfeedback,
   kwindowsystem,
   akonadi, akonadi-mime, grantleetheme, kontactinterface, libkdepim, libkleo,
   messagelib, syndication
@@ -23,7 +24,9 @@ mkDerivation {
 
     grantlee
 
-    kcmutils kcrash kiconthemes knotifyconfig kparts ktexteditor kwindowsystem
+    kcmutils kcrash kiconthemes knotifyconfig kparts ktexteditor
+    kuserfeedback
+    kwindowsystem
 
     akonadi akonadi-mime grantleetheme kontactinterface libkdepim libkleo
     messagelib syndication

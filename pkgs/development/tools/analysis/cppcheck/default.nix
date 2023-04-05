@@ -8,6 +8,7 @@
 , docbook_xsl
 , docbook_xml_dtd_45
 , which
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-wr2O9EqDvHaMQwnjFLLtP1XxfUwFa/P6gGqYNNPVyaA=";
   };
 
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config installShellFiles libxslt docbook_xsl docbook_xml_dtd_45 which python3 ];
   buildInputs = [ pcre (python3.withPackages (ps: [ps.pygments])) ];
-  nativeBuildInputs = [ installShellFiles libxslt docbook_xsl docbook_xml_dtd_45 which ];
 
   makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
 
@@ -30,16 +32,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
+  '';
+
   postBuild = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
   '';
 
-  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
-
   postInstall = ''
     installManPage cppcheck.1
   '';
+
+  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   doInstallCheck = true;
   installCheckPhase = ''

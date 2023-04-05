@@ -4,6 +4,7 @@
   kactivities, kconfig, kcrash, kdbusaddons, kguiaddons, kiconthemes, ki18n,
   kinit, kio, kitemmodels, kjobwidgets, knewstuff, knotifications, konsole,
   kparts, ktexteditor, kwindowsystem, kwallet, kxmlgui, libgit2,
+  kuserfeedback,
   plasma-framework, qtscript, threadweaver
 }:
 
@@ -33,6 +34,7 @@ mkDerivation {
     qtscript kconfig kcrash kguiaddons kiconthemes kinit kjobwidgets kparts
     kxmlgui kdbusaddons kwallet kitemmodels knotifications threadweaver
     knewstuff
+    kuserfeedback
   ];
   propagatedUserEnvPkgs = [ konsole ];
 }

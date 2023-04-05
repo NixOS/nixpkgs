@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "3.3.0";
+  version = "4.1.0";
 
   disabled = pythonOlder "3.7";
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
+    hash = "sha256-MD8Piwgm+WStEKX+LP0sCezRI4gdHmHis/XMJ8Vuw04=";
   };
 
   postPatch = ''

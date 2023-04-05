@@ -773,6 +773,7 @@ self: super:
           "--with-apple-applications-dir=\${out}/Applications"
           "--with-bundle-id-prefix=org.nixos.xquartz"
           "--with-sha1=CommonCrypto"
+          "--without-dtrace" # requires Command Line Tools for Xcode
         ];
         preConfigure = ''
           mkdir -p $out/Applications

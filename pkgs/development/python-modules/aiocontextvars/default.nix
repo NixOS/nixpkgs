@@ -1,10 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest-runner
 , pytestCheckHook
 , pytest-asyncio
-, sqlalchemy
 , isPy27
 }:
 
@@ -21,13 +19,10 @@ buildPythonPackage rec {
     sha256 = "0a2gmrm9csiknc8n3si67sgzffkydplh9d7ga1k87ygk2aj22mmk";
   };
 
-  buildInputs = [
-    pytest-runner
-  ];
-
-  propagatedBuildInputs = [
-    sqlalchemy
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook

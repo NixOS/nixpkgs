@@ -86,6 +86,7 @@ let
   mkService = name: keyboard: nameValuePair (mkName name) {
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
+      Type = "notify";
       ExecStart = ''
         ${getExe cfg.package} \
           --cfg ${mkConfig name keyboard} \
@@ -123,8 +124,7 @@ let
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
       ProtectProc = "invisible";
-      RestrictAddressFamilies =
-        if (keyboard.port == null) then "none" else [ "AF_INET" ];
+      RestrictAddressFamilies = [ "AF_UNIX" ] ++ optional (keyboard.port != null) "AF_INET";
       RestrictNamespaces = true;
       RestrictRealtime = true;
       SystemCallArchitectures = [ "native" ];

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PTX5huYdusPV6xCBW+8sFwusuPtZBH1vVApvcQU7Dlc=";
+    hash = "sha256-PTX5huYdusPV6xCBW+8sFwusuPtZBH1vVApvcQU7Dlc=";
   };
 
   nativeBuildInputs = [

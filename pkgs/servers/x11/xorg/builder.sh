@@ -37,5 +37,6 @@ fi
 
 
 enableParallelBuilding=1
+enableParallelInstalling=1
 
 genericBuild

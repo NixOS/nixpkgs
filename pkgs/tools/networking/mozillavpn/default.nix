@@ -9,8 +9,8 @@
 , python3
 , qt5compat
 , qtbase
-, qtcharts
 , qtnetworkauth
+, qtsvg
 , qttools
 , qtwebsockets
 , rustPlatform
@@ -21,13 +21,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.13.1";
+  version = "2.14.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-moXCtAFJyNkotYxBZSRP24tNHy5Rb6YW7mSKHDn9oXk=";
+    hash = "sha256-xWm21guI+h0bKd/rEyxVMyxypCitLWEbVy7TaVBKh4o=";
   };
 
   netfilter-go-modules = (buildGoModule {
@@ -40,19 +40,19 @@ let
     inherit src;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-/gRP7Th2HnoEQU8psf0797Tq6md4+P5zR13z3U9xlrI=";
+    hash = "sha256-XW47EnNHm5JUWCqDU/iHB6ZRGny4v5x7Fs/1dv5TfzM=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-IBT7qTNbGVutR90wUhm7+9tLehDfrYDHTDkBz8hD6G0=";
+    hash = "sha256-CNPL1Orn+ZbX0HL+CHMaoXPI9G8MoC+hY8pJTJlWH1U=";
   };
   vpngleanDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-vpnglean";
     preBuild = "cd vpnglean";
-    hash = "sha256-vQDXsoKyawdVFIQZfH8LD+ehGk692ZcAwtou4OoqLNI=";
+    hash = "sha256-5vazbCqzJG6iA0MFaTNha42jb1pgLhr0P9I8rQxSKtw=";
   };
 
 in
@@ -64,8 +64,8 @@ stdenv.mkDerivation {
     polkit
     qt5compat
     qtbase
-    qtcharts
     qtnetworkauth
+    qtsvg
     qtwebsockets
   ];
   nativeBuildInputs = [

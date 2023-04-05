@@ -10,7 +10,7 @@ args@{
 , bazelBuildFlags ? []
 , bazelTestFlags ? []
 , bazelFetchFlags ? []
-, bazelTarget
+, bazelTargets
 , bazelTestTargets ? []
 , buildAttrs
 , fetchAttrs
@@ -69,11 +69,11 @@ let
     '';
 in
 stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTarget bazelTestTargets;
+  inherit name bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTargets bazelTestTargets;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps.tar.gz";
-    inherit bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTarget bazelTestTargets;
+    inherit bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTargets bazelTestTargets;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
@@ -94,21 +94,18 @@ stdenv.mkDerivation (fBuildAttrs // {
     buildPhase = fFetchAttrs.buildPhase or ''
       runHook preBuild
 
-      # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables].
-      # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
-      # https://github.com/bazelbuild/bazel/issues/6502
-      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-      USER=homeless-shelter \
-      bazel \
-        --batch \
-        --output_base="$bazelOut" \
-        --output_user_root="$bazelUserRoot" \
-        ${if fetchConfigured then "build --nobuild" else "fetch"} \
-        --loading_phase_threads=1 \
-        $bazelFlags \
-        $bazelFetchFlags \
-        ${bazelTarget} \
-        ${lib.strings.concatStringsSep " " bazelTestTargets}
+      ${
+        bazelCmd {
+          cmd = if fetchConfigured then "build --nobuild" else "fetch";
+          additionalFlags = [
+            # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
+            # https://github.com/bazelbuild/bazel/issues/6502
+            "--loading_phase_threads=1"
+            "$bazelFetchFlags"
+          ];
+          targets = bazelTargets ++ bazelTestTargets;
+        }
+      }
 
       runHook postBuild
     '';
@@ -232,7 +229,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       bazelCmd {
         cmd = "build";
         additionalFlags = bazelBuildFlags;
-        targets = [bazelTarget];
+        targets = bazelTargets;
       }
     }
     runHook postBuild

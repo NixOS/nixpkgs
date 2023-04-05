@@ -1,28 +1,43 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, python, coverage, lsof, glibcLocales, coreutils, pytestCheckHook }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, python
+, lsof
+, glibcLocales
+, coreutils
+, pytestCheckHook
+ }:
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "1.14.3";
+  version = "2.0.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5ARbbHMtnOddVxx59awiNO3Zrk9fqdWbCXBQgr3KGMc=";
+  src = fetchFromGitHub {
+    owner = "amoffat";
+    repo = "sh";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qMYaGNEvv2z47IHFGqb64TRpN3JHycpEmhYhDjrUi6s=";
   };
 
-  postPatch = ''
-    sed -i 's#/usr/bin/env python#${python.interpreter}#' test.py
-    sed -i 's#/bin/sleep#${coreutils.outPath}/bin/sleep#' test.py
-  '';
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  nativeCheckInputs = [ coverage lsof glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/test.py"
+  ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-    HOME=$(mktemp -d)
+    export HOME=$(mktemp -d)
   '';
-
-  pytestFlagsArray = [ "test.py" ];
 
   disabledTests = [
     # Disable tests that fail on Hydra
@@ -30,6 +45,8 @@ buildPythonPackage rec {
     "test_piped_exception1"
     "test_piped_exception2"
     "test_unicode_path"
+    # fails to import itself after modifying the environment
+    "test_environment"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable tests that fail on Darwin sandbox
     "test_background_exception"

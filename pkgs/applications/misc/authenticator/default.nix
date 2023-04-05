@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , appstream-glib
-, clang
 , desktop-file-utils
 , meson
 , ninja
@@ -14,7 +13,6 @@
 , gst_all_1
 , gtk4
 , libadwaita
-, libclang
 , openssl
 , pipewire
 , sqlite
@@ -24,20 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "authenticator";
-  version = "4.1.6";
+  version = "4.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
     rev = version;
-    hash = "sha256-fv7Np3haRCJABlJocKuu+1jevHYrdo+VyiQBpRmHs2g=";
+    hash = "sha256-Nv4QE6gyh42Na/stAgTIapV8GQuUHCdL6IEO//J8dV8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-8GddlDM1lU365GXdrKNhO331/y1p3Om5uZfVLy8TBGI=";
+    hash = "sha256-IS9jdr19VvgX6M1OqM6rjE8veujZcwBuOTuDm5mDXso=";
   };
 
   nativeBuildInputs = [
@@ -80,5 +78,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ austinbutler ];
     platforms = lib.platforms.linux;
+    # Fails to build on aarch64 with error
+    # "a label can only be part of a statement and a declaration is not a statement"
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

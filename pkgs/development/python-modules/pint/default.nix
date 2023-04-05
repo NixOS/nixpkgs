@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Pint";
-    sha256 = "sha256-OHzwQHjcff5KcIAzuq1Uq2HYKrBsTuPUkiseRdViYGc=";
+    hash = "sha256-OHzwQHjcff5KcIAzuq1Uq2HYKrBsTuPUkiseRdViYGc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

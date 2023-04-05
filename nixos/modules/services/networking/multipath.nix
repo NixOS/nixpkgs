@@ -513,22 +513,22 @@ in {
         ${indentLines 2 devices}
         }
 
-        ${optionalString (!isNull defaults) ''
+        ${optionalString (defaults != null) ''
           defaults {
           ${indentLines 2 defaults}
           }
         ''}
-        ${optionalString (!isNull blacklist) ''
+        ${optionalString (blacklist != null) ''
           blacklist {
           ${indentLines 2 blacklist}
           }
         ''}
-        ${optionalString (!isNull blacklist_exceptions) ''
+        ${optionalString (blacklist_exceptions != null) ''
           blacklist_exceptions {
           ${indentLines 2 blacklist_exceptions}
           }
         ''}
-        ${optionalString (!isNull overrides) ''
+        ${optionalString (overrides != null) ''
           overrides {
           ${indentLines 2 overrides}
           }

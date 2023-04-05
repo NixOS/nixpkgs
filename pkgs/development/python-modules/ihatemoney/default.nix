@@ -23,7 +23,7 @@
 , idna
 , itsdangerous
 , jinja2
-, Mako
+, mako
 , markupsafe
 , python-dateutil
 , pytz
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uQgZBbpqqbZYHpR+GwHWX0c7di2rVvEz0jPRY6+BkkQ=";
+    hash = "sha256-uQgZBbpqqbZYHpR+GwHWX0c7di2rVvEz0jPRY6+BkkQ=";
   };
 
   propagatedBuildInputs = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     idna
     itsdangerous
     jinja2
-    Mako
+    mako
     markupsafe
     psycopg2
     python-dateutil

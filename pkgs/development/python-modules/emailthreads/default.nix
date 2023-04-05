@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "emersion";
     repo = "python-emailthreads";
     rev = "v${version}";
-    sha256 = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
+    hash = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];

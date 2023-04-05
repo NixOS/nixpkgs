@@ -9,7 +9,7 @@
 , fluidsynth
 , glib
 , gtest
-, irr1
+, iir1
 , libGL
 , libGLU
 , libjack2
@@ -52,7 +52,7 @@ stdenv.mkDerivation (self: {
     alsa-lib
     fluidsynth
     glib
-    irr1
+    iir1
     libGL
     libGLU
     libjack2

@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "vaidik";
     repo = "commentjson";
     rev = "v${version}";
-    sha256 = "sha256-dPnIcv7TIeyG7rU938w7FrDklmaGuPpXz34uw/JjOgY=";
+    hash = "sha256-dPnIcv7TIeyG7rU938w7FrDklmaGuPpXz34uw/JjOgY=";
   };
 
   postPatch = ''

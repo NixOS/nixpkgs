@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.5.0";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    hash = "sha256-9/mzh8lRBjd7d9oEyG1XGWmOdgPEFCVjHZxDnAhYDwc=";
+    hash = "sha256-x/tHCDplC45XEaBaf0aQ0w8AS1SorXtYilJoiOcBDtM=";
   };
 
   postUnpack = ''
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     plexapi
     pulsectl
     pycairo
-    PyChromecast
+    pychromecast
     pylast
     pygobject3
     pylyrics

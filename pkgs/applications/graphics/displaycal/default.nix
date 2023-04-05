@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     wxPython_4_2
     dbus-python
     distro
-    PyChromecast
+    pychromecast
     send2trash
   ];
 

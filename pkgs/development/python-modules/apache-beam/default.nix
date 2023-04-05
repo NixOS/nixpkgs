@@ -200,6 +200,8 @@ buildPythonPackage rec {
     "test_get_output_batch_type"
     "test_pformat_namedtuple_with_unnamed_fields"
     "test_row_coder_fail_early_bad_schema"
+    # See https://github.com/apache/beam/issues/26004.
+    "test_batch_encode_decode"
   ];
 
   meta = with lib; {

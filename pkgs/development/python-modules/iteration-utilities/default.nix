@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "MSeifert04";
     repo = "iteration_utilities";
     rev = "v${version}";
-    sha256 = "sha256-Q/ZuwAf+NPikN8/eltwaUilnLw4DKFm864tUe6GLDak=";
+    hash = "sha256-Q/ZuwAf+NPikN8/eltwaUilnLw4DKFm864tUe6GLDak=";
   };
 
   nativeCheckInputs = [

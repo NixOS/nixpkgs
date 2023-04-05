@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "remcohaszing";
     repo = "pywakeonlan";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7BDE7TmTT8rSaG0rEn5QwH+izGWA2PeQzxpGiv7+3fo=";
+    hash = "sha256-7BDE7TmTT8rSaG0rEn5QwH+izGWA2PeQzxpGiv7+3fo=";
   };
 
   nativeBuildInputs = [

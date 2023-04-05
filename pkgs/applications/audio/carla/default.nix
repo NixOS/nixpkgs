@@ -26,13 +26,13 @@ assert withQt -> wrapQtAppsHook != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J0C3GLdlLMkm3LHl6l3OI2rA73A6z5MMcNJ1I1T0pbI=";
+    hash = "sha256-St0+avF9/UzQj8T1eZq5HSmxnaK9+BXSuufyX0NJYbU=";
   };
 
   nativeBuildInputs = [

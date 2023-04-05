@@ -72,15 +72,13 @@ stdenv.mkDerivation rec {
       rm -rf ~/node_modules/.cache
 
       # Create missing static gzip and brotli files
-      gzip -9 -n -c ~/public/assets/500.html > ~/public/assets/500.html.gz
-      gzip -9 -n -c ~/public/packs/report.html > ~/public/packs/report.html.gz
-      find ~/public/assets -maxdepth 1 -type f -name ".*.json" | while read file; do
-        gzip -9 -n -c $file > $file.gz
-      done
-      brotli --best -f ~/public/packs/report.html -o ~/public/packs/report.html.br
-      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' | while read file; do
-        brotli --best -f $file -o $file.br
-      done
+      gzip --best --keep ~/public/assets/500.html
+      gzip --best --keep ~/public/packs/report.html
+      find ~/public/assets -maxdepth 1 -type f -name '.*.json' \
+        -exec gzip --best --keep --force {} ';'
+      brotli --best --keep ~/public/packs/report.html
+      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' \
+        -exec brotli --best --keep {} ';'
     '';
 
     installPhase = ''
@@ -107,15 +105,16 @@ stdenv.mkDerivation rec {
       fi
     done
 
+    # Remove execute permissions
+    chmod 0444 public/emoji/*.svg
+
     # Create missing static gzip and brotli files
-    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(css|js|svg|txt|xml)' | while read file; do
-      gzip -9 -n -c $file > $file.gz
-      brotli --best -f $file -o $file.br
-    done
-    find public/emoji -type f -name "*.svg" | while read file; do
-      gzip -9 -n -c $file > $file.gz
-      brotli --best -f $file -o $file.br
-    done
+    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(css|js|svg|txt|xml)' \
+      -exec gzip --best --keep --force {} ';' \
+      -exec brotli --best --keep {} ';'
+    find public/emoji -type f -name '.*.svg' \
+      -exec gzip --best --keep --force {} ';' \
+      -exec brotli --best --keep {} ';'
     ln -s assets/500.html.gz public/500.html.gz
     ln -s assets/500.html.br public/500.html.br
     ln -s packs/sw.js.gz public/sw.js.gz

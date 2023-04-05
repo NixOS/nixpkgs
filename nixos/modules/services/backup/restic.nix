@@ -303,8 +303,8 @@ in
               then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
               else "--files-from ${filesFromTmpFile}";
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
-              (resticCmd + " forget --prune --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.checkOpts))
+              (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
+              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -314,6 +314,7 @@ in
           in
           nameValuePair "restic-backups-${name}" ({
             environment = {
+              RESTIC_CACHE_DIR = "%C/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
@@ -332,7 +333,7 @@ in
             restartIfChanged = false;
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
+              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";

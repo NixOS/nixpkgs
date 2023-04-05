@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "tpaviot";
     repo = "pythonocc-core";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-YybpwiCeBnwZfYS6ZxUbycHFn2DlqYxcNMylRN5ihFM=";
+    hash = "sha256-YybpwiCeBnwZfYS6ZxUbycHFn2DlqYxcNMylRN5ihFM=";
   };
 
   postPatch = ''

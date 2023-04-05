@@ -29,7 +29,7 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/gopass-jsonapi \
-      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+      --prefix PATH : "${gopass.wrapperPath}"
   '';
 
   meta = with lib; {

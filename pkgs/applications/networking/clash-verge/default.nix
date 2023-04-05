@@ -7,17 +7,16 @@
 , openssl
 , webkitgtk
 , udev
-, libappindicator-gtk3
 , libayatana-appindicator
 }:
 
 stdenv.mkDerivation rec {
   pname = "clash-verge";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/zzzgydi/clash-verge/releases/download/v${version}/clash-verge_${version}_amd64.deb";
-    hash = "sha256-uiw9kcXJ4ZEu+naUbUrgN/zBYE2bSWVPmMQ+HiAP4D4=";
+    hash = "sha256-HaBr1QHU3SZix3NFEkTmMrGuk/J1dfP3Lhst79rkUl0=";
   };
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     (lib.getLib udev)
-    libappindicator-gtk3
     libayatana-appindicator
   ];
 

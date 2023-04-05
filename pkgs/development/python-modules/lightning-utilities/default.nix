@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.5.0";
+  version = "0.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J73sUmX1a7ww+rt1vwBt9P0Xbeoxag6jR0W63xEySCI=";
+    hash = "sha256-uwmX+/SK2zBkZQbN/t/DZ3i+XbdAJ/RM+Q649QwMUz0=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +49,21 @@ buildPythonPackage rec {
     "lightning_utilities.core.imports.RequirementCache"
     "lightning_utilities.core.imports.compare_version"
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
+    # weird doctests fail on imports, but providing the dependency
+    # fails another test
+    "lightning_utilities.core.imports.ModuleAvailableCache"
+    "lightning_utilities.core.imports.requires"
   ];
 
   disabledTestPaths = [
     "docs"
+    # doctests that expect docs.txt in the wrong location
+    "src/lightning_utilities/install/requirements.py"
+  ];
 
+  pytestFlagsArray = [
+    # warns about distutils removal in python 3.12
+    "-W" "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

@@ -16,8 +16,4 @@ mkDerivation {
   cmakeFlags = [
     "-DKIMAGEFORMATS_HEIF=ON"
   ];
-
-  meta = with lib; {
-    broken = versionOlder qtbase.version "5.14";
-  };
 }

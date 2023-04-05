@@ -30,9 +30,15 @@ lib.makeScope newScope (self:
 
     chroma = callPackage ../development/nim-packages/chroma { };
 
+    coap = callPackage  ../development/nim-packages/coap { };
+
     docopt = callPackage ../development/nim-packages/docopt { };
 
+    eris = callPackage ../development/nim-packages/eris { };
+
     flatty = callPackage ../development/nim-packages/flatty { };
+
+    freedesktop_org = callPackage ../development/nim-packages/freedesktop_org { };
 
     frosty = callPackage ../development/nim-packages/frosty { };
 
@@ -73,6 +79,8 @@ lib.makeScope newScope (self:
 
     pixie = callPackage ../development/nim-packages/pixie { };
 
+    preserves = callPackage ../development/nim-packages/preserves { };
+
     redis = callPackage ../development/nim-packages/redis { };
 
     redpool = callPackage ../development/nim-packages/redpool { };
@@ -94,6 +102,8 @@ lib.makeScope newScope (self:
     snappy =
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
 
+    nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
+
     spry = callPackage ../development/nim-packages/spry { };
 
     spryvm = callPackage ../development/nim-packages/spryvm { };
@@ -101,6 +111,8 @@ lib.makeScope newScope (self:
     stew = callPackage ../development/nim-packages/stew { };
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
+
+    syndicate = callPackage ../development/nim-packages/syndicate { };
 
     taps = callPackage ../development/nim-packages/taps { };
 

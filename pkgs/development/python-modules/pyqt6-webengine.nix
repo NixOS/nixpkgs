@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-THHBMIYKvNEeBMr7IuM5g/qaOu6DI8UZCbFaFwGCjiE=";
+    hash = "sha256-THHBMIYKvNEeBMr7IuM5g/qaOu6DI8UZCbFaFwGCjiE=";
   };
 
   # fix include path and increase verbosity

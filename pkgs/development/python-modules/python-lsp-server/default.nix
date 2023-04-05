@@ -161,5 +161,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pylsp";
   };
 }

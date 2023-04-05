@@ -1,8 +1,8 @@
 diff --git a/setuptools/_distutils/cygwinccompiler.py b/setuptools/_distutils/cygwinccompiler.py
-index 2c4da5b5..e2cd8803 100644
+index 47efa377..5cdbbe10 100644
 --- a/setuptools/_distutils/cygwinccompiler.py
 +++ b/setuptools/_distutils/cygwinccompiler.py
-@@ -97,14 +97,19 @@ class CygwinCCompiler(UnixCCompiler):
+@@ -101,14 +101,19 @@ class CygwinCCompiler(UnixCCompiler):
          self.cxx = os.environ.get('CXX', 'g++')
  
          self.linker_dll = self.cc
@@ -22,7 +22,7 @@ index 2c4da5b5..e2cd8803 100644
          )
  
          # Include the appropriate MSVC runtime library if Python was built
-@@ -136,9 +141,12 @@ class CygwinCCompiler(UnixCCompiler):
+@@ -140,9 +145,12 @@ class CygwinCCompiler(UnixCCompiler):
                  raise CompileError(msg)
          else:  # for other files use the C-compiler
              try:
@@ -38,7 +38,7 @@ index 2c4da5b5..e2cd8803 100644
              except DistutilsExecError as msg:
                  raise CompileError(msg)
  
-@@ -275,9 +283,12 @@ class Mingw32CCompiler(CygwinCCompiler):
+@@ -278,9 +286,12 @@ class Mingw32CCompiler(CygwinCCompiler):
          self.set_executables(
              compiler='%s -O -Wall' % self.cc,
              compiler_so='%s -mdll -O -Wall' % self.cc,
@@ -50,12 +50,12 @@ index 2c4da5b5..e2cd8803 100644
 +            linker_so_cxx='%s %s' % (self.linker_dll_cxx, shared_option)
          )
  
-         # Maybe we should also append -mthreads, but then the finished
+     def runtime_library_dir_option(self, dir):
 diff --git a/setuptools/_distutils/sysconfig.py b/setuptools/_distutils/sysconfig.py
-index 3dd8185f..cb374a94 100644
+index a40a7231..e5aad4f4 100644
 --- a/setuptools/_distutils/sysconfig.py
 +++ b/setuptools/_distutils/sysconfig.py
-@@ -289,6 +289,7 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -297,6 +297,7 @@ def customize_compiler(compiler):  # noqa: C901
              cflags,
              ccshared,
              ldshared,
@@ -63,7 +63,7 @@ index 3dd8185f..cb374a94 100644
              shlib_suffix,
              ar,
              ar_flags,
-@@ -298,11 +299,14 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -306,11 +307,14 @@ def customize_compiler(compiler):  # noqa: C901
              'CFLAGS',
              'CCSHARED',
              'LDSHARED',
@@ -78,7 +78,7 @@ index 3dd8185f..cb374a94 100644
          if 'CC' in os.environ:
              newcc = os.environ['CC']
              if 'LDSHARED' not in os.environ and ldshared.startswith(cc):
-@@ -314,19 +318,27 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -322,19 +326,27 @@ def customize_compiler(compiler):  # noqa: C901
              cxx = os.environ['CXX']
          if 'LDSHARED' in os.environ:
              ldshared = os.environ['LDSHARED']
@@ -107,7 +107,7 @@ index 3dd8185f..cb374a94 100644
          if 'AR' in os.environ:
              ar = os.environ['AR']
          if 'ARFLAGS' in os.environ:
-@@ -335,13 +347,17 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -343,13 +355,17 @@ def customize_compiler(compiler):  # noqa: C901
              archiver = ar + ' ' + ar_flags
  
          cc_cmd = cc + ' ' + cflags
@@ -127,10 +127,10 @@ index 3dd8185f..cb374a94 100644
          )
  
 diff --git a/setuptools/_distutils/unixccompiler.py b/setuptools/_distutils/unixccompiler.py
-index 4ab771a4..17abac83 100644
+index 6ca2332a..5ac64128 100644
 --- a/setuptools/_distutils/unixccompiler.py
 +++ b/setuptools/_distutils/unixccompiler.py
-@@ -116,9 +116,12 @@ class UnixCCompiler(CCompiler):
+@@ -115,9 +115,12 @@ class UnixCCompiler(CCompiler):
          'preprocessor': None,
          'compiler': ["cc"],
          'compiler_so': ["cc"],
@@ -144,7 +144,7 @@ index 4ab771a4..17abac83 100644
          'archiver': ["ar", "-cr"],
          'ranlib': None,
      }
-@@ -182,8 +185,13 @@ class UnixCCompiler(CCompiler):
+@@ -181,8 +184,13 @@ class UnixCCompiler(CCompiler):
  
      def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
          compiler_so = compiler_fixup(self.compiler_so, cc_args + extra_postargs)
@@ -159,7 +159,7 @@ index 4ab771a4..17abac83 100644
          except DistutilsExecError as msg:
              raise CompileError(msg)
  
-@@ -251,7 +259,8 @@ class UnixCCompiler(CCompiler):
+@@ -250,7 +258,8 @@ class UnixCCompiler(CCompiler):
                  # building an executable or linker_so (with shared options)
                  # when building a shared library.
                  building_exe = target_desc == CCompiler.EXECUTABLE

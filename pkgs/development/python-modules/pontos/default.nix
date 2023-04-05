@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.3.5";
+  version = "23.3.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Eb9mX04ws+FhiRw5j1XsEhjm5ZdYFCbA5pntgb4z//M=";
+    hash = "sha256-cs+UeE5QRL/yzFABpMQ4masbLHwG++Ipu5GidXJ1Y0E=";
   };
 
   nativeBuildInputs = [

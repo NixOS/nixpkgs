@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/google/or-tools/commit/a26602f24781e7bfcc39612568aa9f4010bb9736.patch";
       hash = "sha256-gM0rW0xRXMYaCwltPK0ih5mdo3HtX6mKltJDHe4gbLc=";
     })
+    # Backport fix in cmake test configuration where pip installs newer version from PyPi over local build,
+    #  breaking checkPhase: https://github.com/google/or-tools/issues/3260
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/edd1544375bd55f79168db315151a48faa548fa0.patch";
+      hash = "sha256-S//1YM3IoRCp3Ghg8zMF0XXgIpVmaw4gH8cVb9eUbqM=";
+    })
   ];
 
   cmakeFlags = [
@@ -48,7 +54,7 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
@@ -104,6 +110,6 @@ stdenv.mkDerivation rec {
       Google's software suite for combinatorial optimization.
     '';
     maintainers = with maintainers; [ andersk ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

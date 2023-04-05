@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://coady.github.io/multimethod/";
     changelog = "https://github.com/coady/multimethod/tree/v${version}#changes";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

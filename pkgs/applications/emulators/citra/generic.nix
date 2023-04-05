@@ -20,7 +20,7 @@
 , enableCubeb ? true, libpulseaudio
 , enableFfmpegAudioDecoder ? true
 , enableFfmpegVideoDumper ? true
-, ffmpeg
+, ffmpeg_4
 , useDiscordRichPresence ? true, rapidjson
 , enableFdk ? false, fdk_aac
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableSdl2 SDL2
     ++ lib.optional enableQtTranslation qttools
     ++ lib.optional enableCubeb libpulseaudio
-    ++ lib.optional (enableFfmpegAudioDecoder || enableFfmpegVideoDumper) ffmpeg
+    ++ lib.optional (enableFfmpegAudioDecoder || enableFfmpegVideoDumper) ffmpeg_4
     ++ lib.optional useDiscordRichPresence rapidjson
     ++ lib.optional enableFdk fdk_aac;
 

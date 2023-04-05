@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "django-rest-framework";
     rev = version;
-    sha256 = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+    hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
   };
 
   propagatedBuildInputs = [

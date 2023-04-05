@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
-  version = "unstable-2022-10-26";
+  version = "unstable-2023-03-18";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "af77f12554be9cc4b9e8b639df26f2659dd30500";
-    sha256 = "sha256-ajMOC1wyTVUOvP0rOt/uO6+1+S4bIAc1jWQ8Uwbzrn8=";
+    rev = "265b31ae22c6e1d20b01295aaa7bcf28fd31a5cf";
+    sha256 = "sha256-+iGvdjXvhk5mN8jp3u+M9fICKFqbtyZCx+WjQszaB1o=";
   };
 
   # Drop test that fails on musl (?)

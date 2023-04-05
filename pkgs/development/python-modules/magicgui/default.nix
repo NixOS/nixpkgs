@@ -20,7 +20,7 @@
     owner = "napari";
     repo = "magicgui";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-fVfBQaaT8/lUGqZRXjOPgvkC01Izb8Sxqn7RCqnW9bo=";
+    hash = "sha256-fVfBQaaT8/lUGqZRXjOPgvkC01Izb8Sxqn7RCqnW9bo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

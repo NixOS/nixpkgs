@@ -7,6 +7,7 @@
 }:
 { name
 , version
+, pos ? __curPos
 , files
 , source
 , dependencies ? { }
@@ -45,6 +46,7 @@ pythonPackages.callPackage
       isSource = source != null;
       isGit = isSource && source.type == "git";
       isUrl = isSource && source.type == "url";
+      isWheelUrl = isSource && source.type == "url" && lib.strings.hasSuffix ".whl" source.url;
       isDirectory = isSource && source.type == "directory";
       isFile = isSource && source.type == "file";
       isLegacy = isSource && source.type == "legacy";
@@ -61,6 +63,8 @@ pythonPackages.callPackage
               inherit pythonPackages pyProject;
             } else [ ];
 
+      pname = normalizePackageName name;
+      preferWheel' = preferWheel && pname != "wheel";
       fileInfo =
         let
           isBdist = f: lib.strings.hasSuffix "whl" f.file;
@@ -69,7 +73,9 @@ pythonPackages.callPackage
           binaryDist = selectWheel fileCandidates;
           sourceDist = builtins.filter isSdist fileCandidates;
           eggs = builtins.filter isEgg fileCandidates;
-          entries = (if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
+          # the `wheel` package cannot be built from a wheel, since that requires the wheel package
+          # this causes a circular dependency so we special-case ignore its `preferWheel` attribute value
+          entries = (if preferWheel' then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
           lockFileEntry = (
             if lib.length entries > 0 then builtins.head entries
             else throw "Missing suitable source/wheel file entry for ${name}"
@@ -89,13 +95,12 @@ pythonPackages.callPackage
             else (builtins.elemAt (lib.strings.splitString "-" name) 2);
         };
 
-      format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
+      format = if isWheelUrl then "wheel" else if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
 
       hooks = python.pkgs.callPackage ./hooks { };
     in
     buildPythonPackage {
-      pname = normalizePackageName name;
-      version = version;
+      inherit pname version;
 
       # Circumvent output separation (https://github.com/NixOS/nixpkgs/pull/190487)
       format = if format == "pyproject" then "poetry2nix" else format;
@@ -108,6 +113,7 @@ pythonPackages.callPackage
       nativeBuildInputs = [
         hooks.poetry2nixFixupHook
       ]
+      ++ lib.optional (!pythonPackages.isPy27) hooks.poetry2nixPythonRequiresPatchHook
       ++ lib.optional (isLocked && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
       ++ lib.optionals (format == "wheel") [
         hooks.wheelUnpackHook
@@ -147,6 +153,8 @@ pythonPackages.callPackage
         in
         builtins.map (n: pythonPackages.${normalizePackageName n}) depAttrs;
 
+      inherit pos;
+
       meta = {
         broken = ! isCompatible (poetryLib.getPythonVersion python) python-versions;
         license = [ ];
@@ -155,6 +163,7 @@ pythonPackages.callPackage
 
       passthru = {
         inherit args;
+        preferWheel = preferWheel';
       };
 
       # We need to retrieve kind from the interpreter and the filename of the package
@@ -174,10 +183,17 @@ pythonPackages.callPackage
               }
             ))
           )
+        else if isWheelUrl then
+          builtins.fetchurl
+            {
+              inherit (source) url;
+              sha256 = fileInfo.hash;
+            }
         else if isUrl then
           builtins.fetchTarball
             {
               inherit (source) url;
+              sha256 = fileInfo.hash;
             }
         else if isDirectory then
           (poetryLib.cleanPythonSources { src = localDepPath; })

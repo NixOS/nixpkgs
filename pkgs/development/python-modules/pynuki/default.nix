@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pynuki";
-  version = "1.6.1";
+  version = "1.6.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = pname;
-    rev = version;
-    hash = "sha256-iGP8Bs5Jg8Xu1gAhpbB5lfrZjsF7X+lIt4dJP3fdhD8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-I0eAhgThSBEmJF6mYw+0Bh1kCUqEMFnCx+4n7l3Hf14=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for nuki.io bridges";
     homepage = "https://github.com/pschmitt/pynuki";
+    changelog = "https://github.com/pschmitt/pynuki/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

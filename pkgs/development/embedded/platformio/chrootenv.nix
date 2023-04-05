@@ -4,9 +4,9 @@ let
   pio-pkgs = pkgs:
     let
       python = pkgs.python3;
-      platformio = python.pkgs.callPackage ./core.nix { inherit version src; };
     in
     (with pkgs; [
+      platformio-core
       zlib
       git
       xdg-user-dirs
@@ -15,7 +15,6 @@ let
       setuptools
       pip
       bottle
-      platformio
     ]);
 
 in

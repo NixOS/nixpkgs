@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' else null;
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -77,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   doCheck = false; # needs X11

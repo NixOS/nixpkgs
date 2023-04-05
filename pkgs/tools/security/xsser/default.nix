@@ -22,10 +22,6 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace /usr/share share
   '';
 
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [

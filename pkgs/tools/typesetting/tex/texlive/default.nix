@@ -133,17 +133,17 @@ let
   # (https://tug.org/historic/).
   urlPrefixes = [
     # tlnet-final snapshot
-    #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
-    #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
+    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+    "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
     # Daily snapshots hosted by one of the texlive release managers
-    "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+    #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
   ];
 
   tlpdb = fetchurl {
-    # use the same mirror(s) as urlPrefixes below
+    # use the same mirror(s) as urlPrefixes above
     urls = map (up: "${up}/../tlpkg/texlive.tlpdb.xz") urlPrefixes;
-    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
+    hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
   };
 
   tlpdb-nix = runCommand "tlpdb.nix" {

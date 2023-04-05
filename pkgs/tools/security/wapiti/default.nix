@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.6";
+  version = "3.1.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-b377nPXvpxg+WDNgjxm2RoJ5jNt7MTES2Bspxsvo/wc=";
+    hash = "sha256-muAugc0BgVSER2LSRv7ATbCqpXID8/WH+hfhmtoS36o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     humanize
     importlib-metadata
     loguru
-    Mako
+    mako
     markupsafe
     mitmproxy
     six

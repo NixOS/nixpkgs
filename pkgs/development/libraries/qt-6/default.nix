@@ -59,6 +59,7 @@ let
           ./patches/qtbase-qmake-mkspecs-mac.patch
           ./patches/qtbase-qmake-pkg-config.patch
           ./patches/qtbase-tzdir.patch
+          ./patches/qtbase-variable-fonts.patch
           # Remove symlink check causing build to bail out and fail.
           # https://gitlab.kitware.com/cmake/cmake/-/issues/23251
           (fetchpatch {

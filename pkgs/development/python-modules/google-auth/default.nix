@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.15.0";
+  version = "2.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cvEqbPyWjXVNe9qzacXFwWAyEG5S0yxt/YSE5MAabR8=";
+    hash = "sha256-X9FwmGvOa/17tchFxLg2LtseDLqQHgYhlug/i7XV0yw=";
   };
 
   propagatedBuildInputs = [
@@ -95,6 +95,8 @@ buildPythonPackage rec {
     "tests/transport/test_urllib3.py"
     "tests/transport/test__custom_tls_signer.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Google Auth Python Library";

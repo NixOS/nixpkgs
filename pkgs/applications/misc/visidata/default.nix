@@ -2,25 +2,41 @@
 , lib
 , buildPythonApplication
 , fetchFromGitHub
-, python-dateutil
-, pandas
-, requests
-, lxml
-, openpyxl
-, xlrd
-, h5py
-, odfpy
-, psycopg2
-, pyshp
+# python requirements
+, beautifulsoup4
+, boto3
+, faker
 , fonttools
-, pyyaml
-, pdfminer-six
-, vobject
-, tabulate
-, wcwidth
-, zstandard
-, setuptools
+, h5py
 , importlib-metadata
+, lxml
+, matplotlib
+, numpy
+, odfpy
+, openpyxl
+, pandas
+, pdfminer-six
+, praw
+, psutil
+, psycopg2
+, pyarrow
+, pyshp
+, pypng
+, python-dateutil
+, pyyaml
+, requests
+, seaborn
+, setuptools
+, sh
+, tabulate
+, urllib3
+, vobject
+, wcwidth
+, xlrd
+, xlwt
+, zstandard
+, zulip
+# other
 , git
 , withPcap ? true, dpkt, dnslib
 , withXclip ? stdenv.isLinux, xclip
@@ -29,13 +45,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.10.2";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    hash = "sha256-OKCrlUWHgbaLZJPVvs9lnw4cD27pRoO7F9oel1NzT6A=";
+    hash = "sha256-G/9paJFJsRfIxMJ2hbuVS7pxCfSUCK69DNV2DHi60qA=";
   };
 
   propagatedBuildInputs = [
@@ -47,11 +63,13 @@ buildPythonApplication rec {
     lxml
     openpyxl
     xlrd
+    xlwt
     h5py
     psycopg2
+    boto3
     pyshp
     #mapbox-vector-tile
-    #pypng
+    pypng
     fonttools
     #sas7bdat
     #xport
@@ -66,6 +84,22 @@ buildPythonApplication rec {
     wcwidth
     zstandard
     odfpy
+    urllib3
+    pyarrow
+    seaborn
+    matplotlib
+    sh
+    psutil
+    numpy
+
+    #requests_cache
+    beautifulsoup4
+
+    faker
+    praw
+    zulip
+    #pyairtable
+
     setuptools
     importlib-metadata
   ] ++ lib.optionals withPcap [ dpkt dnslib ]
@@ -81,18 +115,24 @@ buildPythonApplication rec {
   checkPhase = ''
     runHook preCheck
     # disable some tests which require access to the network
-    rm tests/load-http.vd            # http
-    rm tests/graph-cursor-nosave.vd  # http
-    rm tests/messenger-nosave.vd     # dns
+    rm -f tests/load-http.vd            # http
+    rm -f tests/graph-cursor-nosave.vd  # http
+    rm -f tests/messenger-nosave.vd     # dns
 
     # tests use git to compare outputs to references
     git init -b "test-reference"
-    git config user.name "nobody"; git config user.email "no@where"
-    git add .; git commit -m "test reference"
+    git config user.name "nobody"
+    git config user.email "no@where"
+    git add .
+    git commit -m "test reference"
 
     substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
     bash dev/test.sh
     runHook postCheck
+  '';
+  postInstall = ''
+    python dev/zsh-completion.py
+    install -Dm644 _visidata -t $out/share/zsh/site-functions
   '';
 
   pythonImportsCheck = ["visidata"];

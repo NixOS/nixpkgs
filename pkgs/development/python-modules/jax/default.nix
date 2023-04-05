@@ -69,6 +69,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+    # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
+    #  requested in astype is not available, and will be truncated to
+    # dtype float32. (With numpy 1.24)
+    "testKde3"
+    "testKde5"
+    "testKde6"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705

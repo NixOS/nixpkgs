@@ -11,6 +11,7 @@
 , pyproj
 , pyshp
 , python
+, pythonRelaxDepsHook
 , setuptools
 }:
 
@@ -30,8 +31,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     geos
+    pythonRelaxDepsHook
     setuptools
   ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     basemap-data

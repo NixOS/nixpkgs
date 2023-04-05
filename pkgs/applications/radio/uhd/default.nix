@@ -6,6 +6,7 @@
 , pkg-config
 # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
 , boost
+, ncurses
 , enableCApi ? true
 # requires numpy
 , enablePythonApi ? false
@@ -83,8 +84,8 @@ stdenv.mkDerivation rec {
     ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
-  # Python + Mako are always required for the build itself but not necessary for runtime.
-  pythonEnv = python3.withPackages (ps: with ps; [ Mako ]
+  # Python + mako are always required for the build itself but not necessary for runtime.
+  pythonEnv = python3.withPackages (ps: with ps; [ mako ]
     ++ optionals (enablePythonApi) [ numpy setuptools ]
     ++ optionals (enableUtils) [ requests six ]
   );
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
     # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
     # pythonEnv for runtime as well. The utilities' runtime dependencies are
     # handled at the environment
+    ++ optionals (enableExamples) [ ncurses ncurses.dev ]
     ++ optionals (enablePythonApi || enableUtils) [ pythonEnv ]
     ++ optionals (enableDpdk) [ dpdk ]
   ;
@@ -124,7 +126,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
-    ++ optionals (enableUtils) [ "moveUdevRules" ]
+    ++ optionals (enableUtils && stdenv.targetPlatform.isLinux) [ "moveUdevRules" ]
   ;
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`

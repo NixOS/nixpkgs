@@ -16,6 +16,7 @@
 , vulkan-loader
 , alsa-lib
 , libpulseaudio
+, libxcrypt-legacy
 , libGL
 , numactl
 , libX11
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
     alsa-lib
     libpulseaudio
+    libxcrypt-legacy
     libGL
     numactl
     libX11

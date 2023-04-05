@@ -22,6 +22,6 @@ fi
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-sed -ri "s| sha256.+ # odoo| sha256 = \"$(nix-prefetch-url --type sha256 "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.tar.gz")\"; # odoo|g" default.nix
+sed -ri "s| hash.+ # odoo| hash = \"$(nix-prefetch-url --type sha256 "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.tar.gz")\"; # odoo|g" default.nix
 sed -ri "s| odoo_version.+| odoo_version = \"$VERSION\";|" default.nix
 sed -ri "s| odoo_release.+| odoo_release = \"$RELEASE\";|" default.nix

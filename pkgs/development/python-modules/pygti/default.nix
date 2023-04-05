@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vigonotion";
     repo = "pygti";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-5Pc6gAI3xICS+f7tYwC9OVOAHJSW8AGPOvPYs0/6/iI=";
+    hash = "sha256-5Pc6gAI3xICS+f7tYwC9OVOAHJSW8AGPOvPYs0/6/iI=";
   };
 
   nativeBuildInputs = [

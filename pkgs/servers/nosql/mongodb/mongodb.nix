@@ -116,6 +116,9 @@ in stdenv.mkDerivation rec {
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
+  '' + lib.optionalString (versionOlder version "5.0") ''
+    # remove -march overriding, we know better.
+    sed -i 's/env.Append.*-march=.*$/pass/' SConstruct
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
@@ -186,5 +189,6 @@ in stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    broken = (versionOlder version "6.0" && stdenv.system == "aarch64-darwin");
   };
 }

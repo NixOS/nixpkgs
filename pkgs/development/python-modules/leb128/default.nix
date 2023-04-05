@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "mohanson";
     repo = "leb128";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-zK14LPziBkvXAMzuPbcg/47caO/5GEYA9txAzCGfpS8=";
+    hash = "sha256-zK14LPziBkvXAMzuPbcg/47caO/5GEYA9txAzCGfpS8=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs:
     dxvk64 = if stdenv.isDarwin then pkgsCross.mingwW64.dxvk_1 else pkgsCross.mingwW64.dxvk_2;
   in
   {
-    name = "dxvk";
+    pname = "dxvk";
     inherit (dxvk64) version;
 
     outputs = [ "out" "bin" "lib" ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-cim";
-  version = "3.4";
+  version = "3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cim";
     rev = "refs/tags/${version}";
-    hash = "sha256-RlkTsAvX+9c69JBy+DZbcCfAvcCnWDisgdQQMBkphtg=";
+    hash = "sha256-VRHnDLyHZEzeEFK+2MNQibekIlb+tsBEjUbT5tI/tIs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

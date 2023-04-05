@@ -18,7 +18,12 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  cargoSha256 = "8ZMdbJvedDqoDr2rhKM1TMB5N4aRde04x/9H212fe68=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "timer-0.2.0" = "sha256-yofy6Wszf6EwNGGdVDWNG0RcbpvBgv5/BdOjAFxghwc=";
+    };
+  };
 
   meta = with lib; {
     description = "Minimal wallpaper daemon for Wayland";

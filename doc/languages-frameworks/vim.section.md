@@ -166,8 +166,8 @@ in
 
 If your package requires building specific parts, use instead `pkgs.vimUtils.buildVimPlugin`.
 
-### Specificities for some plugins
-#### Treesitter
+### Specificities for some plugins {#vim-plugin-specificities}
+#### Treesitter {#vim-plugin-treesitter}
 
 By default `nvim-treesitter` encourages you to download, compile and install
 the required Treesitter grammars at run time with `:TSInstall`. This works
@@ -244,7 +244,7 @@ Alternatively, set the number of processes to a lower count to avoid rate-limiti
 ./pkgs/applications/editors/vim/plugins/update.py --proc 1
 ```
 
-## How to maintain an out-of-tree overlay of vim plugins ?
+## How to maintain an out-of-tree overlay of vim plugins ? {#vim-out-of-tree-overlays}
 
 You can use the updater script to generate basic packages out of a custom vim
 plugin list:

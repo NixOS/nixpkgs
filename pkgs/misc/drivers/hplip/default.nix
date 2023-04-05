@@ -127,6 +127,9 @@ python3Packages.buildPythonApplication {
       -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
       -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \
       -e "s,ExecStart=/usr/bin/python /usr/bin/hp-config_usb_printer,ExecStart=$out/bin/hp-config_usb_printer,g" \
+      -e s,Exec=/usr/bin/hp-uiscan,Exec=hp-uiscan,g \
+      -e s,Icon=/usr/share/icons/Humanity/devices/48/printer.svg,Icon=printer,g \
+      -e s,Icon=@abs_datadir@/hplip/data/images/128x128/hp_logo.png,Icon=hp_logo,g \
       {} +
 
     echo 'AUTOMAKE_OPTIONS = foreign' >> Makefile.am
@@ -175,12 +178,19 @@ python3Packages.buildPythonApplication {
   '';
 
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   #
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
-  postInstall = lib.optionalString withPlugin ''
+  postInstall = ''
+    for resolution in 16x16 32x32 64x64 128x128 256x256; do
+      mkdir -p $out/share/icons/hicolor/$resolution/apps
+      ln -s $out/share/hplip/data/images/$resolution/hp_logo.png \
+        $out/share/icons/hicolor/$resolution/apps/hp_logo.png
+    done
+  '' + lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 

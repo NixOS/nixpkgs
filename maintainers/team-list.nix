@@ -221,6 +221,7 @@ with lib.maintainers; {
 
   docs = {
     members = [
+      asymmetric
       ryantm
     ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
@@ -292,6 +293,9 @@ with lib.maintainers; {
       mic92
       zowoq
       qbit
+    ];
+    githubTeams = [
+      "golang"
     ];
     scope = "Maintain Golang compilers.";
     shortName = "Go";
@@ -422,13 +426,31 @@ with lib.maintainers; {
     shortName = "Linux Kernel";
   };
 
+  lisp = {
+    members = [
+      raskin
+      lukego
+      nagy
+      uthar
+    ];
+    githubTeams = [
+      "lisp"
+    ];
+    scope = "Maintain the Lisp ecosystem.";
+    shortName = "lisp";
+    enableFeatureFreezePing = true;
+  };
+
   llvm = {
     members = [
-      ericson2314
-      sternenseemann
-      lovek323
       dtzWill
+      ericson2314
+      lovek323
       primeos
+      qyliss
+      raitobezarius
+      rrbutani
+      sternenseemann
     ];
     scope = "Maintain LLVM package sets and related packages";
     shortName = "LLVM";
@@ -714,11 +736,13 @@ with lib.maintainers; {
   rust = {
     members = [
       figsoda
-      lnl7
       mic92
       tjni
       winter
       zowoq
+    ];
+    githubTeams = [
+      "rust"
     ];
     scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";
     shortName = "Rust";

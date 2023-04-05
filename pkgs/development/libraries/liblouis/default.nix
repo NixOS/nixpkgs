@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-On5PbBgvDAeD41oGb5EKBtKvi/VXnLsVrTMX7tcwnq4=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -39,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     # lou_checkYaml
     libyaml
-    # maketable.d
+  ];
+
+  nativeCheckInputs = [
     perl
   ];
 

@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.6";
+  version = "2.0.7";
   pname = "pydispatcher";
 
   src = fetchPypi {
     pname = "PyDispatcher";
     inherit version;
-    hash = "sha256-PX5PQ8cAAKHcox+SaU6Z0BAZNPpuq11UVadYhY2G35U=";
+    hash = "sha256-t3fGrQgNwbrXSkwp1qRpFPpnAaxw+UsNZvvP3mL1vjE=";
   };
 
   nativeCheckInputs = [

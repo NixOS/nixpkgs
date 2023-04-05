@@ -17,7 +17,12 @@ buildRustPackage rec {
   # Needed so bindgen can find libclang.so
   LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
 
-  cargoSha256 = "sha256-cAhLI5IES6FM3/rjHjokLq5pCoA08K/8lpdAeSNrTFs=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "qml-0.0.9" = "sha256-ILqvUaH7nSu2JtEs8ox7KroOzYnU5ai44k1HE4Bz5gg=";
+    };
+  };
 
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 

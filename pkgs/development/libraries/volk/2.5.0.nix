@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "gnuradio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kI4IuO6TLplo5lLAGIPWQWtePcjIEWB9XaJDA6WlqSg=";
+    sha256 = "sha256-XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3
-    python3.pkgs.Mako
+    python3.pkgs.mako
   ];
 
   doCheck = true;
@@ -58,4 +58,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

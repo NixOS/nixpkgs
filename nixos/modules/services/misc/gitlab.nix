@@ -156,7 +156,7 @@ let
       };
       extra = {};
       uploads.storage_path = cfg.statePath;
-      pages = {
+      pages = optionalAttrs cfg.pages.enable {
         enabled = cfg.pages.enable;
         port = 8090;
         host = cfg.pages.settings.pages-domain;

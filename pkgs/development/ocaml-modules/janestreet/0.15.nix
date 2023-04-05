@@ -254,6 +254,15 @@ with self;
     propagatedBuildInputs = [ async_websocket cohttp-async ppx_jane uri-sexp ];
   };
 
+  cohttp_static_handler = janePackage {
+    duneVersion = "3";
+    pname = "cohttp_static_handler";
+    version = "0.15.0";
+    hash = "sha256-ENaH8ChvjeMc9WeNIhkeNBB7YK9vB4lw95o6FFZI1ys=";
+    meta.description = "A library for easily creating a cohttp handler for static files";
+    propagatedBuildInputs = [ cohttp-async ];
+  };
+
   core = janePackage {
     pname = "core";
     version = "0.15.1";

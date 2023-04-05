@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "frugal";
-  version = "3.16.14";
+  version = "3.16.15";
 
   src = fetchFromGitHub {
     owner = "Workiva";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6U4mYS5ukcOaxGeIiI2UFYlz0PpjKdtQH9cOshYRUg0=";
+    sha256 = "sha256-h5uBkScWCBG/yvv43lykBoSdyuIAMbrsUpCNVCPgnx4=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-CbneZtwGab5dlGASZqa69Y70fXgt4PJzAODPJlcpJoA=";
+  vendorHash = "sha256-bkGlheOwy7SbH1cKPAQek2s6TZKc0jp/lGKxDRrxKas=";
 
   meta = with lib; {
     description = "Thrift improved";

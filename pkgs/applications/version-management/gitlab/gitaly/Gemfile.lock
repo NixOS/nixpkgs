@@ -40,7 +40,7 @@ GEM
     ffi (1.15.5)
     gitaly (15.5.0)
       grpc (~> 1.0)
-    gitlab-labkit (0.31.0)
+    gitlab-labkit (0.31.1)
       actionpack (>= 5.0.0, < 8.0.0)
       activesupport (>= 5.0.0, < 8.0.0)
       grpc (>= 1.37)
@@ -56,7 +56,7 @@ GEM
       with_env (= 1.1.0)
       xml-simple (~> 1.1.5)
     gitlab-markup (1.8.1)
-    google-protobuf (3.21.12)
+    google-protobuf (3.22.2)
     googleapis-common-protos-types (1.4.0)
       google-protobuf (~> 3.14)
     grpc (1.42.0)
@@ -104,7 +104,7 @@ GEM
       method_source (~> 1.0)
     public_suffix (4.0.7)
     racc (1.6.2)
-    rack (2.2.6.2)
+    rack (2.2.6.3)
     rack-test (2.0.2)
       rack (>= 1.3)
     rails-dom-testing (2.0.3)
@@ -167,7 +167,7 @@ GEM
     sentry-raven (3.1.2)
       faraday (>= 1.0)
     thor (1.1.0)
-    thrift (0.17.0)
+    thrift (0.18.1)
     tomlrb (2.0.1)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
@@ -187,10 +187,10 @@ DEPENDENCIES
   activesupport (~> 6.1.7.2)
   factory_bot
   gitaly (~> 15.5.0)
-  gitlab-labkit (~> 0.31)
+  gitlab-labkit (~> 0.31, >= 0.31.1)
   gitlab-license_finder
   gitlab-markup (~> 1.8.0)
-  google-protobuf (~> 3.21.12)
+  google-protobuf (~> 3.22.2)
   grpc (~> 1.42.0)
   licensee (~> 9.15)
   nokogiri (~> 1.14)
@@ -204,4 +204,4 @@ DEPENDENCIES
   sentry-raven (~> 3.1)
 
 BUNDLED WITH
-   2.4.6
+   2.4.8

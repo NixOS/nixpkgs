@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "systemd";
     repo = "python-systemd";
     rev = "v${version}";
-    sha256 = "sha256-8p4m4iM/z4o6PHRQIpuSXb64tPTWGlujEYCDVLiIt2o=";
+    hash = "sha256-8p4m4iM/z4o6PHRQIpuSXb64tPTWGlujEYCDVLiIt2o=";
   };
 
   nativeBuildInputs = [

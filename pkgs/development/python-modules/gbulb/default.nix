@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "beeware";
     repo = "gbulb";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-AdZSvxix0cpoFQSrslGl+hB/s6Nh0EsWMQmXZAJVJOg=";
+    hash = "sha256-AdZSvxix0cpoFQSrslGl+hB/s6Nh0EsWMQmXZAJVJOg=";
   };
 
   propagatedBuildInputs = [

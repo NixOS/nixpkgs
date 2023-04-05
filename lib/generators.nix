@@ -422,7 +422,7 @@ ${expr "" v}
       (if v then "True" else "False")
     else if isFunction v then
       abort "generators.toDhall: cannot convert a function to Dhall"
-    else if isNull v then
+    else if v == null then
       abort "generators.toDhall: cannot convert a null to Dhall"
     else
       builtins.toJSON v;

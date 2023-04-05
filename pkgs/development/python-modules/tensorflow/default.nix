@@ -140,14 +140,14 @@ let
       (fetchpatch {
         name = "tensorflow-rules_cc-libtool-path.patch";
         url = "https://github.com/bazelbuild/rules_cc/commit/8c427ab30bf213630dc3bce9d2e9a0e29d1787db.diff";
-        sha256 = "sha256-C4v6HY5+jm0ACUZ58gBPVejCYCZfuzYKlHZ0m2qDHCk=";
+        hash = "sha256-C4v6HY5+jm0ACUZ58gBPVejCYCZfuzYKlHZ0m2qDHCk=";
       })
 
       # https://github.com/bazelbuild/rules_cc/pull/124
       (fetchpatch {
         name = "tensorflow-rules_cc-install_name_tool-path.patch";
         url = "https://github.com/bazelbuild/rules_cc/commit/156497dc89100db8a3f57b23c63724759d431d05.diff";
-        sha256 = "sha256-NES1KeQmMiUJQVoV6dS4YGRxxkZEjOpFSCyOq9HZYO0=";
+        hash = "sha256-NES1KeQmMiUJQVoV6dS4YGRxxkZEjOpFSCyOq9HZYO0=";
       })
     ];
     postPatch = "popd";
@@ -385,7 +385,7 @@ let
     ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
-    bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
+    bazelTargets = [ "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow" ];
 
     removeRulesCC = false;
     # Without this Bazel complaints about sandbox violations.
@@ -445,9 +445,30 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
-      maintainers = with maintainers; [ jyp abbradar ];
+      maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
       broken = !(xlaSupport -> cudaSupport);
+      knownVulnerabilities = [
+        "CVE-2023-27579"
+        "CVE-2023-25801"
+        "CVE-2023-25676"
+        "CVE-2023-25675"
+        "CVE-2023-25674"
+        "CVE-2023-25673"
+        "CVE-2023-25671"
+        "CVE-2023-25670"
+        "CVE-2023-25669"
+        "CVE-2023-25668"
+        "CVE-2023-25667"
+        "CVE-2023-25665"
+        "CVE-2023-25666"
+        "CVE-2023-25664"
+        "CVE-2023-25663"
+        "CVE-2023-25662"
+        "CVE-2023-25660"
+        "CVE-2023-25659"
+        "CVE-2023-25658"
+      ];
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s

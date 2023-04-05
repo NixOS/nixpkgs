@@ -1,24 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
+, hatch-vcs
 , openssh
 , ps
 , psutil
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.8.0";
+  version = "1.8.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-SqZO9qYOtBB+KWP0DLsImI64QTTpYKzWMYwSua9k2S0=";
+    hash = "sha256-5nRI9y2Y7itkqDdLRSX4qWfh96WmhqdP1Eo7HLoRHaQ=";
   };
 
   postPatch = ''
@@ -29,7 +31,8 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   nativeCheckInputs = [

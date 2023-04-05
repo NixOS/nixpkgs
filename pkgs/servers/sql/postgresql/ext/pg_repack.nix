@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       exclusive lock on the processed tables during processing. pg_repack is efficient to boot,
       with performance comparable to using CLUSTER directly.
     '';
+    homepage = "https://github.com/reorg/pg_repack";
     license = licenses.bsd3;
     maintainers = with maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
-    inherit (src.meta) homepage;
   };
 }

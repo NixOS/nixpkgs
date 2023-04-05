@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "OpenPaperwork";
     repo = "pyocr";
     rev = version;
-    sha256 = "sha256-gIn50H9liQcTb7SzoWnBwm5LTvkr+R+5OPvITls1B/w=";
+    hash = "sha256-gIn50H9liQcTb7SzoWnBwm5LTvkr+R+5OPvITls1B/w=";
   };
 
   patches = [

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UTL7g9tIXtMVeBRq5Fdw5VqUB9H/LaobASwHlFPoO2s=";
+    hash = "sha256-UTL7g9tIXtMVeBRq5Fdw5VqUB9H/LaobASwHlFPoO2s=";
   };
 
   propagatedBuildInputs = [

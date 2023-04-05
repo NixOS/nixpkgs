@@ -23,7 +23,7 @@ symlinkJoin {
     fixSymlink () {
      local link=$1
      local target=$(readlink $link);
-     local newtarget=$(sed "s@/nix/store/[^/]*/@$out/@" <<< "$target")
+     local newtarget=$(sed "s@${builtins.storeDir}/[^/]*/@$out/@" <<< "$target")
      if [[ $target != $newtarget ]] && [[ -d $newtarget ]]; then
        echo fixing link to point to $newtarget instead of $target
        rm $link
@@ -35,7 +35,7 @@ symlinkJoin {
     fixSymlink $out/lib/systemd/user
     for i in $out/share/dbus-1/services/*.service $out/lib/systemd/user/*.service; do
       echo fixing service file $i to point to $out
-      sed -i "s@/nix/store/[^/]*/@$out/@" $i
+      sed -i "s@${builtins.storeDir}/[^/]*/@$out/@" $i
     done
   '';
 }

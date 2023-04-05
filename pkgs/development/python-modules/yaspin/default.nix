@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yaspin";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pavdmyt";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Z+L0SaRe/uN20KS25Di40AjHww9QUjkFaw0Jgbe9yPg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TURfjhEqkg8TT7dsoIOn2iAeD7+lX8+s9hItritf1GU=";
   };
 
   nativeBuildInputs = [

@@ -58,13 +58,13 @@ buildPythonPackage rec {
     (fetchpatch {
       # https://github.com/crossbario/autobahn-python/pull/1604
       url = "https://github.com/crossbario/autobahn-python/commit/ffe679fae4ebcdde964d4ee88cb82a9c65c40529.patch";
-      sha256 = "sha256-QNnQkxMZJsFbiYUp4Os+dWo7jdCa96+kyb/2HxSMU8k=";
+      hash = "sha256-QNnQkxMZJsFbiYUp4Os+dWo7jdCa96+kyb/2HxSMU8k=";
     })
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-i0Yuouaq1rTcDtRfuAC2y/6wMl5/5pg5B/Ei8r5KH+k=";
+    hash = "sha256-i0Yuouaq1rTcDtRfuAC2y/6wMl5/5pg5B/Ei8r5KH+k=";
   };
 
   postPatch = ''

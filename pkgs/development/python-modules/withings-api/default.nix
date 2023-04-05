@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "vangorra";
     repo = "python_withings_api";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
+    hash = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
   };
 
   postPatch = ''

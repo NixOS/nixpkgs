@@ -171,7 +171,11 @@ in
                 "/ip4/0.0.0.0/tcp/4001"
                 "/ip6/::/tcp/4001"
                 "/ip4/0.0.0.0/udp/4001/quic"
+                "/ip4/0.0.0.0/udp/4001/quic-v1"
+                "/ip4/0.0.0.0/udp/4001/quic-v1/webtransport"
                 "/ip6/::/udp/4001/quic"
+                "/ip6/::/udp/4001/quic-v1"
+                "/ip6/::/udp/4001/quic-v1/webtransport"
               ];
               description = lib.mdDoc "Where Kubo listens for incoming p2p connections";
             };

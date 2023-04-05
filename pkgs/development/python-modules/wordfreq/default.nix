@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "LuminosoInsight";
     repo = "wordfreq";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ANOBbQWLB35Vz6oil6QZDpsNpKHeKUJnDKA5Q9JRVdE=";
+    hash = "sha256-ANOBbQWLB35Vz6oil6QZDpsNpKHeKUJnDKA5Q9JRVdE=";
    };
 
   propagatedBuildInputs = [

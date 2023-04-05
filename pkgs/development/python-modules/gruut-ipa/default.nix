@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "rhasspy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q2UKELoG8OaAPxIrZNCpXgeWZ2fCzb3g3SOVzCm/gg0=";
+    hash = "sha256-Q2UKELoG8OaAPxIrZNCpXgeWZ2fCzb3g3SOVzCm/gg0=";
   };
 
   postPatch = ''

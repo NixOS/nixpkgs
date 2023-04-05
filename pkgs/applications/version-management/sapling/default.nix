@@ -166,15 +166,20 @@ python3Packages.buildPythonApplication {
 
   HGNAME = "sl";
   SAPLING_OSS_BUILD = "true";
-  SAPLING_VERSION = version;
   SAPLING_VERSION_HASH = versionHash;
+
+  # Python setuptools version 66 and newer does not support upstream Sapling's
+  # version numbers (e.g. "0.2.20230124-180750-hf8cd450a"). Change the version
+  # number to something supported by setuptools (e.g. "0.2.20230124").
+  # https://github.com/facebook/sapling/issues/571
+  SAPLING_VERSION = builtins.elemAt (builtins.split "-" version) 0;
 
   # just a simple check phase, until we have a running test suite. this should
   # help catch issues like lack of a LOCALE_ARCHIVE setting (see GH PR #202760)
   doCheck = true;
   installCheckPhase = ''
-    echo -n "testing sapling version; should be \"${version}\"... "
-    $out/bin/sl version | grep -qw "${version}"
+    echo -n "testing sapling version; should be \"$SAPLING_VERSION\"... "
+    $out/bin/sl version | grep -qw "$SAPLING_VERSION"
     echo "OK!"
   '';
 

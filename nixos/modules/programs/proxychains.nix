@@ -51,6 +51,10 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "installing proxychains configuration");
 
+      package = mkPackageOptionMD pkgs "proxychains" {
+        example = "pkgs.proxychains-ng";
+      };
+
       chain = {
         type = mkOption {
           type = types.enum [ "dynamic" "strict" "random" ];
@@ -159,7 +163,7 @@ in {
       };
 
     environment.etc."proxychains.conf".text = configFile;
-    environment.systemPackages = [ pkgs.proxychains ];
+    environment.systemPackages = [ cfg.package ];
   };
 
 }

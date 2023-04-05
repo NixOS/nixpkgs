@@ -20,13 +20,13 @@ let
   '';
 in buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.28.6";
+  version = "0.28.7";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-tNV1GQsUG5BGTNGB0VBUa0Yxqv/HsRSlRfEU4KNd29w=";
+    hash = "sha256-AxRgoXPiFFFHQSj5/jU55hwWzHtutfjmD2IKGxYwd0A=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -15,7 +15,8 @@ let
       inherit sha256;
     };
 
-    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
+    # This patch is only necessary for NC version <26.
+    patches = lib.optional (lib.versionOlder major "26") (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch");
 
     passthru.tests = nixosTests.nextcloud;
 
@@ -38,26 +39,19 @@ let
     };
   };
 in {
-  nextcloud23 = throw ''
-    Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud24;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  '';
-
   nextcloud24 = generic {
-    version = "24.0.10";
-    sha256 = "sha256-B6+0gO9wn39BpcR0IsIuMa81DH8TWuDOlTZR9O1qRbk=";
+    version = "24.0.11";
+    sha256 = "sha256-ipsg4rulhRnatEW9VwUJLvOEtX5ZiK7MXK3AU8Q9qIo=";
   };
 
   nextcloud25 = generic {
-    version = "25.0.4";
-    sha256 = "sha256-wyUeAIOpQwPi1piLNS87Mwgqeacmsw/3RnCbD+hpoaY=";
+    version = "25.0.5";
+    sha256 = "sha256-xtxjLYPGK9V0GvUzXcE7awzeYQZNPNmlHuDmtHeMqaU=";
+  };
+
+  nextcloud26 = generic {
+    version = "26.0.0";
+    sha256 = "sha256-8WMVA2Ou6TZuy1zVJZv2dW7U8HPOp4tfpRXK2noNDD0=";
   };
 
   # tip: get the sha with:

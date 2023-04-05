@@ -7,6 +7,8 @@
 , pkg-config
 , asciidoc
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , python3
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
   '';
 
+  strictDeps = true;
+
   depsBuildBuild = [
     pkg-config
   ];
@@ -52,12 +56,14 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoc
     gettext
+    glib
     libxslt
     wrapGAppsNoGuiHook
-    gobject-introspection
     docbook-xsl-nons
     docbook_xml_dtd_45
     (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -75,8 +81,14 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
+  nativeCheckInputs = [
+    dbus
+  ];
+
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonBool "test_utils" withIntrospection)
   ] ++ (
     let
       # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159

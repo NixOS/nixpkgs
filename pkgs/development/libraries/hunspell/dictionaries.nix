@@ -828,14 +828,14 @@ rec {
   th_TH = th-th;
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
-    version = "experimental-2021-12-20";
+    version = "experimental-2023-03-01";
     dictFileName = "th_TH";
     readmeFile = "README.md";
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
-      rev = "f119e58e5f6954965d6abd683e7d4c4b9be2684f";
-      sha256 = "sha256-hwqKvuLxbtzxfyQ5YhC/sdb3QQwxCfzgDOHeatxDjxM=";
+      rev = "9c09f1b7c0eb4d04b9f6f427901686c5c3d9fa54";
+      sha256 = "1wszpnbgj31k72x1vvcfkzcpmxsncdpqsi3zagah7swilpi7cqm4";
     };
     meta = with lib; {
       description = "Hunspell dictionary for Central Thai (Thailand)";
@@ -901,5 +901,17 @@ rec {
       maintainers = with maintainers; [ somasis ];
       platforms = platforms.all;
     };
+  };
+
+  /* POLISH */
+
+  pl_PL = pl-pl;
+  pl-pl = mkDictFromLibreOffice {
+    shortName = "pl-pl";
+    dictFileName = "pl_PL";
+    shortDescription = "Polish (Poland)";
+    readmeFile = "README_en.txt";
+    # the README doesn't specify versions of licenses :/
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
 }

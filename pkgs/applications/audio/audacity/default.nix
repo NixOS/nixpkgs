@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11.0") ''
+    sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
   nativeBuildInputs = [
@@ -93,9 +95,6 @@ stdenv.mkDerivation rec {
     ffmpeg_4
     file
     flac
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ] ++ [
     gtk3
     lame
     libid3tag
@@ -135,6 +134,7 @@ stdenv.mkDerivation rec {
     libuuid
     util-linux
   ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
     CoreAudioKit # for portaudio
     libpng
     libjpeg

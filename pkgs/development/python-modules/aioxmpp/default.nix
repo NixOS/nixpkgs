@@ -10,6 +10,7 @@
 , pyasn1
 , pyasn1-modules
 , pyopenssl
+, pytz
 , sortedcollections
 , tzlocal
 , pytestCheckHook
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     pyasn1
     pyasn1-modules
     pyopenssl
+    pytz
     sortedcollections
     tzlocal
   ];

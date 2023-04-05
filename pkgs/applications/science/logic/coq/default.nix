@@ -53,7 +53,7 @@ let
    "8.15.2".sha256     = "sha256:0qibbvzrhsvs6w3zpkhyclndp29jnr6bs9i5skjlpp431jdjjfqd";
    "8.16.0".sha256   = "sha256-3V6kL9j2rn5FHBxq1mtmWWTZS9X5cAyvtUsS6DaM+is=";
    "8.16.1".sha256   = "sha256-n7830+zfZeyYHEOGdUo57bH6bb2/SZs8zv8xJhV+iAc=";
-   "8.17+rc1".sha256   = "sha256-BsVgYa2fAYqRmQNSaY/YSiZhqkmwM+xbE5T4FHOEqkc=";
+   "8.17.0".sha256   = "sha256-TGwm7S6+vkeZ8cidvp8pkiAd9tk008jvvPvYgfEOXhM=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -70,7 +70,7 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '';
-  ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
+  ocamlPackages = if customOCamlPackages != null then customOCamlPackages
     else with versions; switch coq-version [
       { case = range "8.16" "8.17"; out = ocamlPackages_4_14; }
       { case = range "8.14" "8.15"; out = ocamlPackages_4_12; }

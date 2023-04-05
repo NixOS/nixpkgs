@@ -8,6 +8,8 @@
 , watchdog
 , execnb
 , ghapi
+, pyyaml
+, quarto
 , pythonOlder
 }:
 
@@ -22,7 +24,18 @@ buildPythonPackage rec {
     sha256 = "sha256-ITMCmuAb1lXONbP5MREpk8vfNSztoTEmT87W1o+fbIU=";
   };
 
-  propagatedBuildInputs = [ fastprogress fastcore asttokens astunparse watchdog execnb ghapi ];
+  propagatedBuildInputs = [
+    fastprogress
+    fastcore
+    asttokens
+    astunparse
+    watchdog
+    execnb
+    ghapi
+    pyyaml
+    quarto
+  ];
+
   # no real tests
   doCheck = false;
   pythonImportsCheck = [ "nbdev" ];

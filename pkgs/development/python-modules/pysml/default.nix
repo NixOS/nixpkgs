@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mtdcr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pUbRttH/ksYcE1qZJAQWhuKk4+40w5xsul0TTqq1g3s=";
+    hash = "sha256-pUbRttH/ksYcE1qZJAQWhuKk4+40w5xsul0TTqq1g3s=";
   };
 
   nativeBuildInputs = [

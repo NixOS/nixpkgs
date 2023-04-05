@@ -1,5 +1,5 @@
 { lib, python39Packages, fetchPypi
-, fftw, alsa-lib, pulseaudio, pyusb, wxPython_4_0 }:
+, fftw, alsa-lib, pulseaudio, pyusb, wxPython_4_2 }:
 
 python39Packages.buildPythonApplication rec {
   pname = "quisk";
@@ -12,7 +12,7 @@ python39Packages.buildPythonApplication rec {
 
   buildInputs = [ fftw alsa-lib pulseaudio ];
 
-  propagatedBuildInputs = [ pyusb wxPython_4_0 ];
+  propagatedBuildInputs = [ pyusb wxPython_4_2 ];
 
   doCheck = false;
 

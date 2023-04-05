@@ -7,18 +7,18 @@
 , pango
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "regreet";
-  version = "unstable-2023-02-27";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
-    rev = "2bbabe90f112b4feeb0aea516c265daaec8ccf2a";
-    hash = "sha256-71ji4x/NUE4qmBuO5PkWTPE1a0uPXqJSwW1Ai1amPJE=";
+    rev = version;
+    hash = "sha256-9Wae2sYiRpWYXdBKsSNKhG5RhIun/Ro9xIV4yl1/pUc=";
   };
 
-  cargoHash = "sha256-rz2eMMhoMtzBXCH6ZJOvGuYLeHSWga+Ebc4+ZO8Kk1g=";
+  cargoHash = "sha256-yDfUD5Uag3UM/2Q7ofvh6iGcB3n21m1gKo7SKqTWamc=";
 
   buildFeatures = [ "gtk4_8" ];
 

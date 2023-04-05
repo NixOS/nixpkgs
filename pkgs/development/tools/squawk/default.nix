@@ -8,39 +8,19 @@
 , rustPlatform
 , stdenv
 }:
-let
-  # The query parser produces a slightly different AST between major versions
-  # and Squawk is not capable of handling >=14 correctly yet.
-  libpg_query13 = libpg_query.overrideAttrs (_: rec {
-    version = "13-2.2.0";
-    src = fetchFromGitHub {
-      owner = "pganalyze";
-      repo = "libpg_query";
-      rev = version;
-      hash = "sha256-gEkcv/j8ySUYmM9lx1hRF/SmuQMYVHwZAIYOaCQWAFs=";
-    };
-  });
-in
+
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "0.21.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ObaYGGTAGGLOAji86Q5R9fqbCGg6GP0A3iheNLgzezY=";
+    hash = "sha256-WhlFqsFJBVtGrB6MWenCZi0eUorglb7PUbOf16JCybk=";
   };
 
-  cargoHash = "sha256-VOGgwBKcJK7x+PwvzvuVu9Zd1G8t9UoC/Me3G6bdtrk=";
-
-  cargoPatches = [
-    ./correct-Cargo.lock.patch
-  ];
-
-  patches = [
-    ./fix-postgresql-version-in-snapshot-test.patch
-  ];
+  cargoHash = "sha256-Ul5D+xZjNNZl83jQeU4jJId5dZLVWbtZv05c40KMctU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -57,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = 1;
 
-  LIBPG_QUERY_PATH = libpg_query13;
+  LIBPG_QUERY_PATH = libpg_query;
 
   meta = with lib; {
     description = "Linter for PostgreSQL, focused on migrations";

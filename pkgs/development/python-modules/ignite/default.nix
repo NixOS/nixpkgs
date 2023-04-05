@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iuaBuKoKlt7F7Z7fbVOZAUAoFnU3AOxYC/ANgqoQksU=";
+    hash = "sha256-iuaBuKoKlt7F7Z7fbVOZAUAoFnU3AOxYC/ANgqoQksU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];

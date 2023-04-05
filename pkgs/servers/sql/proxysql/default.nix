@@ -25,6 +25,7 @@
 , pcre
 , perl
 , python3
+, prometheus-cpp
 , re2
 , zlib
 , texinfo
@@ -32,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proxysql";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = pname;
     rev = version;
-    hash = "sha256-psQzKycavS9xr24wGiRkr255IXW79AoG9fUEBkvPMZk=";
+    hash = "sha256-Z85/oSV2TUKEoum09G6OHNw6K/Evt1wMCcleTcc96EY=";
   };
 
   patches = [
@@ -115,12 +116,13 @@ stdenv.mkDerivation rec {
           { f = "libssl"; p = openssl; }
           { f = "lz4"; p = lz4; }
           { f = "pcre"; p = pcre; }
+          { f = "prometheus-cpp"; p = prometheus-cpp; }
           { f = "re2"; p = re2; }
         ]
       )}
 
     pushd libhttpserver
-    tar xf libhttpserver-0.18.1.tar.gz
+    tar xf libhttpserver-*.tar.gz
     sed -i s_/bin/pwd_${coreutils}/bin/pwd_g libhttpserver/configure.ac
     popd
 
@@ -129,9 +131,8 @@ stdenv.mkDerivation rec {
     ln -s ${nlohmann_json.src}/single_include/nlohmann/json.hpp .
     popd
 
-    pushd prometheus-cpp
-    tar xf v0.9.0.tar.gz
-    replace_dep prometheus-cpp/3rdparty "${civetweb.src}" civetweb
+    pushd prometheus-cpp/prometheus-cpp/3rdparty
+    replace_dep . "${civetweb.src}" civetweb
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
@@ -145,6 +146,10 @@ stdenv.mkDerivation rec {
     popd
 
     pushd libdaemon/libdaemon
+    autoreconf
+    popd
+
+    pushd pcre/pcre
     autoreconf
     popd
 

@@ -27,9 +27,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zZk2RVghhKxETSVv/Jtv8Wq6+ITx/BudE/o7h4jKk5M=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sha256 = "sha256-3drsOmlmy1xXRWg7WMDNN+iuVmPYf60sDLIdCvu4rEw=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ecflash-0.1.0" = "sha256-W613wbW54R65/rs6oiPAH/qov2OVEjMMszpUJdX4TxI=";
+      "system76-firmware-1.0.45" = "sha256-2ougRwPvdet5nIKcFGElBRrsxukW8jMNCBw3C68VJ+Q=";
+    };
   };
 
   postPatch = ''

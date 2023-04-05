@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "matthewwardrop";
     repo = "formulaic";
     rev = "v${version}";
-    sha256 = "sha256-sIvHTuUS/nkcDjRgZCoEOY2negIOsarzH0PeXJsavWc=";
+    hash = "sha256-sIvHTuUS/nkcDjRgZCoEOY2negIOsarzH0PeXJsavWc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "formulaic" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     "tests/transforms/test_poly.py"

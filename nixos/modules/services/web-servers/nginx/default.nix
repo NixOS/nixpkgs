@@ -184,8 +184,9 @@ let
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
-      ${optionalString cfg.recommendedGzipSettings ''
+      ${optionalString cfg.recommendedGzipSettings
+        # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+      ''
         gzip on;
         gzip_static on;
         gzip_vary on;
@@ -193,6 +194,14 @@ let
         gzip_min_length 256;
         gzip_proxied expired no-cache no-store private auth;
         gzip_types ${lib.concatStringsSep " " compressMimeTypes};
+      ''}
+
+      ${optionalString cfg.recommendedZstdSettings ''
+        zstd on;
+        zstd_comp_level 9;
+        zstd_min_length 256;
+        zstd_static on;
+        zstd_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
       ${optionalString cfg.recommendedProxySettings ''
@@ -303,12 +312,15 @@ let
             else defaultListen;
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
-          (if ssl && vhost.http3 then "
-          # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 "
+          # UDP listener for QUIC transport protocol.
+          (if ssl && vhost.quic then "
+            listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
-          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
+          + optionalString (extraParameters != []) (concatStringsSep " " (
+            let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
+                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            in filter isCompatibleParameter extraParameters))
           + ";" else "")
           + "
 
@@ -355,6 +367,10 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.quic) ''
+            http3 ${if vhost.http3 then "on" else "off"};
+            http3_hq ${if vhost.http3_hq then "on" else "off"};
+          ''}
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
@@ -376,9 +392,10 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.http3) ''
+          ${optionalString (hasSSL && vhost.quic && vhost.http3)
             # Advertise that HTTP/3 is available
-            add_header Alt-Svc 'h3=":443"; ma=86400' always;
+          ''
+            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -468,7 +485,8 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+          Enable recommended brotli settings.
+          Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/).
 
           This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
         '';
@@ -479,6 +497,18 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Enable recommended gzip settings.
+          Learn more about compression in Gzip format [here](https://docs.nginx.com/nginx/admin-guide/web-server/compression/).
+        '';
+      };
+
+      recommendedZstdSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended zstd settings.
+          Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
+
+          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -1009,13 +1039,22 @@ in
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
         '';
       }
+
+      {
+        assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
+        message = ''
+          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+        '';
+      }
     ] ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
     }) dependentCertNames;
 
-    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli;
+    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
+      ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

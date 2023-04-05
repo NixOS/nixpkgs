@@ -41,14 +41,14 @@ buildPythonPackage rec {
     owner = "rhasspy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
+    hash = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "dateparser~=1.0.0" "dateparser" \
       --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines"
+      --replace "jsonlines~=1.2.0" "jsonlines" \
+      --replace "networkx>=2.5.0,<3.0.0" "networkx"
   '';
 
   propagatedBuildInputs = [

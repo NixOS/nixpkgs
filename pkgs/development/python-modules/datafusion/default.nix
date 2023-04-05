@@ -35,12 +35,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XYXZMorPs2Ue7E38DASd4rmxvX0wlx8A6sCpAbYUh4I=";
+    hash = "sha256-XYXZMorPs2Ue7E38DASd4rmxvX0wlx8A6sCpAbYUh4I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src pname version;
-    sha256 = "sha256-6mPdKwsEN09Gf4eNsd/v3EBHVezHmff/KYB2lsXgzcA=";
+    hash = "sha256-6mPdKwsEN09Gf4eNsd/v3EBHVezHmff/KYB2lsXgzcA=";
   };
 
   nativeBuildInputs = with rustPlatform; [

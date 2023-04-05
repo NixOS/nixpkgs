@@ -40,7 +40,7 @@ with python.pkgs; buildPythonApplication rec {
     autobahn
     fb-re2
     websockets
-    cchardet
+    faust-cchardet
   ];
 
   checkPhase = ''

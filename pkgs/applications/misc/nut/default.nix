@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   pname = "nut";
-  version = "2.7.4";
+  version = "2.8.0";
 
   src = fetchurl {
-    url = "https://networkupstools.org/source/2.7/${pname}-${version}.tar.gz";
+    url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
     sha256 = "19r5dm07sfz495ckcgbfy0pasx0zy3faa0q7bih69lsjij8q43lq";
   };
 

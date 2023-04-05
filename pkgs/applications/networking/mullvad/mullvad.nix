@@ -28,7 +28,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-UozgUsew6MRplahTW/y688R2VetO50UGQevmVo8/QNs=";
   };
 
-  cargoHash = "sha256-/DYEG/8FlDbyWsvnxM+0tbKG4/DbwEnNX2KiC3ryyGI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "udp-over-tcp-0.2.0" = "sha256-h44xrmRAlfy1Br0PAtZAzOwSMptaUatjXysA/l2Kff8=";
+    };
+  };
 
   patches = [
     # https://github.com/mullvad/mullvadvpn-app/pull/4389

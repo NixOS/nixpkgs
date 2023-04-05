@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-chef";
-  version = "0.1.51";
+  version = "0.1.52";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-K9oryItevSABbklaX5KKvKHuebFX8B0AgnizlpDhM5o=";
+    sha256 = "sha256-eUFQT2zYABRtTqWxMi+AyU1ZHdt8+B1nMC0Sz6IK6+w=";
   };
 
-  cargoHash = "sha256-KRhgYN8YMfotjkWAYP9RITbH9hudkakpWk53YZe9+Ks=";
+  cargoHash = "sha256-uzuITRUvAOsuFaq+dkO8tRyozwUt4xB/3BP3mNCxr2g=";
 
   meta = with lib; {
     description = "A cargo-subcommand to speed up Rust Docker builds using Docker layer caching";

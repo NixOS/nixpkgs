@@ -31,10 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-civHj8a5LYV3XaAjSJBdn15+8sdO/yLlWBXCNW56plA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    src = finalAttrs.src;
-    sha256 = "sha256-vgqyFdc1m53SYqnYE6JLp1/tK7rFrohYOT/BTO6fUI0=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "news-flash-2.2.2" = "sha256-LN5VhJk+NGTR0fohI0LmfeLDS9IkfVE7IFIzmSPF4u0=";
+      "newsblur_api-0.2.0" = "sha256-+3AobEX+RtBRgX1TIr4rRX0ngJvNVp1oXzkbhppi73M=";
+    };
   };
 
   patches = [

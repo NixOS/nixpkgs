@@ -78,5 +78,6 @@ clangStdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "decoder";
     maintainers = with maintainers; [ zendo ];
+    broken = true;
   };
 }

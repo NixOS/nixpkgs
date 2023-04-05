@@ -1,33 +1,57 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, ipython
+, packaging
+, tornado
+, jupyter-core
 , jupyterlab_server
+, jupyter-server
+, jupyter-server-ydoc
 , notebook
+, jinja2
+, tomli
 , pythonOlder
 , jupyter-packaging
+, pythonRelaxDepsHook
 , nbclassic
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.5.3";
+  version = "3.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UeiJRIrhlO7vjlD2P1xPSH9yj0d77+Q26XSWcvdRHb4=";
+    hash = "sha256-Nz6c+4py7dKUvhTxZmJWOiIM7PD7Jt56qxr5optom4I=";
   };
 
   nativeBuildInputs = [
     jupyter-packaging
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "jupyter-ydoc"
+    "jupyter-server-ydoc"
   ];
 
   propagatedBuildInputs = [
+    ipython
+    packaging
+    tornado
+    jupyter-core
     jupyterlab_server
-    notebook
+    jupyter-server
+    jupyter-server-ydoc
     nbclassic
+    notebook
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   makeWrapperArgs = [

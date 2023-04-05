@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1tV3pVEC5sIjT0tjbujU7l41Jx7PQ1dCn4B1r94C9xE=";
+    hash = "sha256-1tV3pVEC5sIjT0tjbujU7l41Jx7PQ1dCn4B1r94C9xE=";
   };
 
   nativeBuildInputs = [ setuptools-git ];

@@ -144,7 +144,7 @@ class StartCommand:
         self,
         monitor_socket_path: Path,
         shell_socket_path: Path,
-        allow_reboot: bool = False,  # TODO: unused, legacy?
+        allow_reboot: bool = False,
     ) -> str:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
@@ -152,16 +152,14 @@ class StartCommand:
             display_opts += " -nographic"
 
         # qemu options
-        qemu_opts = ""
-        qemu_opts += (
-            ""
-            if allow_reboot
-            else " -no-reboot"
+        qemu_opts = (
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
             " -device virtio-rng-pci"
             " -serial stdio"
         )
+        if not allow_reboot:
+            qemu_opts += " -no-reboot"
         # TODO: qemu script already catpures this env variable, legacy?
         qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
@@ -195,9 +193,10 @@ class StartCommand:
         shared_dir: Path,
         monitor_socket_path: Path,
         shell_socket_path: Path,
+        allow_reboot: bool,
     ) -> subprocess.Popen:
         return subprocess.Popen(
-            self.cmd(monitor_socket_path, shell_socket_path),
+            self.cmd(monitor_socket_path, shell_socket_path, allow_reboot),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -312,7 +311,6 @@ class Machine:
 
     start_command: StartCommand
     keep_vm_state: bool
-    allow_reboot: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -337,13 +335,11 @@ class Machine:
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
-        allow_reboot: bool = False,
         callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
-        self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
@@ -741,9 +737,10 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        word_pattern = re.compile(r"^\w+$")
-        if word_pattern.match(filename):
-            filename = os.path.join(self.out_dir, f"{filename}.png")
+        if "." not in filename:
+            filename += ".png"
+        if "/" not in filename:
+            filename = os.path.join(self.out_dir, filename)
         tmp = f"{filename}.ppm"
 
         with self.nested(
@@ -874,7 +871,7 @@ class Machine:
         self.process.stdin.write(chars.encode())
         self.process.stdin.flush()
 
-    def start(self) -> None:
+    def start(self, allow_reboot: bool = False) -> None:
         if self.booted:
             return
 
@@ -898,6 +895,7 @@ class Machine:
             self.shared_dir,
             self.monitor_path,
             self.shell_path,
+            allow_reboot,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
@@ -945,6 +943,15 @@ class Machine:
         self.log("forced crash")
         self.send_monitor_command("quit")
         self.wait_for_shutdown()
+
+    def reboot(self) -> None:
+        """Press Ctrl+Alt+Delete in the guest.
+
+        Prepares the machine to be reconnected which is useful if the
+        machine was started with `allow_reboot = True`
+        """
+        self.send_key(f"ctrl-alt-delete")
+        self.connected = False
 
     def wait_for_x(self) -> None:
         """Wait until it is possible to connect to the X server.  Note that

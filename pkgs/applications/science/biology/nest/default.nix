@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nest";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    sha256 = "sha256-wmn5LOOHlSuyPdV6O6v7j10dxdcvqpym6MfveZdL+dU=";
+    hash = "sha256-+wjsZxW2l0WGyGTm/6vyzPEeqCfyxJml9oP/zn6W1L0=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Alternative to autoPatchElf, moves libraries where
     # Nest expects them to be
-    find $out/lib/nest -type f -exec ln -s {} $out/lib \;
+    find $out/lib/nest -exec ln -s {} $out/lib \;
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "NEST is a command line tool for simulating neural networks";
     homepage = "https://www.nest-simulator.org/";
-    license = licenses.gpl2;
+    changelog = "https://github.com/nest/nest-simulator/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jiegec davidcromp ];
     platforms = platforms.unix;
   };

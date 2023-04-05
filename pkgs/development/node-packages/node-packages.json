@@ -152,6 +152,7 @@
 , "git-ssb"
 , "git-standup"
 , "@gitbeaker/cli"
+, "@githubnext/github-copilot-cli"
 , "gitmoji-cli"
 , "glob"
 , "gramma"

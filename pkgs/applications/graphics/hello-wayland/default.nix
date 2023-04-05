@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "hello-wayland-unstable";
-  version = "2020-07-27";
+  pname = "hello-wayland";
+  version = "unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hello-wayland";
-    rev = "501d0851cfa7f21c780c0eb52f0a6b23f02918c5";
-    sha256 = "0dz6przqp57kw8ycja3gw6jp9x12217nwbwdpgmvw7jf0lzhk4xr";
+    rev = "f6a8203309977af03cda94765dd61367c189bea6";
+    sha256 = "FNtc6OApW/epAFortvujNVWJJVI44IY+Pa0qU0QdecA=";
   };
 
   nativeBuildInputs = [ imagemagick pkg-config ];

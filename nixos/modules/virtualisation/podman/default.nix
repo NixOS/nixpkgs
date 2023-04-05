@@ -142,6 +142,7 @@ in
     defaultNetwork.settings = lib.mkOption {
       type = json.type;
       default = { };
+      example = lib.literalExpression "{ dns_enabled = true; }";
       description = lib.mdDoc ''
         Settings for podman's default network.
       '';
@@ -149,7 +150,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
+  config = lib.mkIf cfg.enable
     {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
@@ -235,6 +236,5 @@ in
           '';
         }
       ];
-    }
-  ]);
+    };
 }

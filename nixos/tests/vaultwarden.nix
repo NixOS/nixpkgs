@@ -121,6 +121,8 @@ let
                   driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_confirm-master-password').send_keys(
                       '${userPassword}'
                   )
+                  if driver.find_element(By.CSS_SELECTOR, 'input#checkForBreaches').is_selected():
+                      driver.find_element(By.CSS_SELECTOR, 'input#checkForBreaches').click()
 
                   driver.find_element(By.XPATH, "//button[contains(., 'Create account')]").click()
 
@@ -133,9 +135,9 @@ let
                   )
                   driver.find_element(By.XPATH, "//button[contains(., 'Log in')]").click()
 
-                  wait.until(EC.title_contains("Vaultwarden Web Vault"))
+                  wait.until(EC.title_contains("Vaults"))
 
-                  driver.find_element(By.XPATH, "//button[contains(., 'Add item')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'New item')]").click()
 
                   driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
                       'secrets'

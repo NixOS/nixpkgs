@@ -107,7 +107,7 @@ in {
     ];
 
     services.grafana.settings.rendering = mkIf cfg.provisionGrafana {
-      url = "http://localhost:${toString cfg.settings.service.port}/render";
+      server_url = "http://localhost:${toString cfg.settings.service.port}/render";
       callback_url = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
     };
 

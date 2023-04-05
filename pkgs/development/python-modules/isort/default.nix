@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "isort";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8ija4xWWZuYkElXLdziV7ulN8dubIsChcZQ5dx9hfO0=";
+    hash = "sha256-8ija4xWWZuYkElXLdziV7ulN8dubIsChcZQ5dx9hfO0=";
   };
 
   nativeBuildInputs = [

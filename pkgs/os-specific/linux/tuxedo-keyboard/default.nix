@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
+{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders, pahole }:
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "h6+br+JPEItym83MaVt+xo6o/zMtTv8+wsBoTeYa2AM=";
   };
 
-  buildInputs = [ linuxHeaders ];
+  buildInputs = [
+    pahole
+    linuxHeaders
+  ];
 
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 

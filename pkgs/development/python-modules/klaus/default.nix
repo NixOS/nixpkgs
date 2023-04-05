@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kQcza2beyekJhRT9RwSdMIkeyapcUDtjgkapK3rocvg=";
+    hash = "sha256-kQcza2beyekJhRT9RwSdMIkeyapcUDtjgkapK3rocvg=";
   };
 
   prePatch = ''

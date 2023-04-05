@@ -18,15 +18,15 @@
 , zlib
 }:
 let
-  py3 = python3.withPackages (p: [ p.Mako ]);
+  py3 = python3.withPackages (p: [ p.mako ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "23.02";
+  version = "23.02.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "sha256-uvk7sApIwlrkH8eERBetf/nsAkN2d35T/IEtICFflzY=";
+    sha256 = "sha256-fHGBwf79Q0DSLs/b+Lhg9kdIQzDn5rJYEB9yLkLbxlE=";
   };
 
   # when building on darwin we need dawin.cctools to provide the correct libtool

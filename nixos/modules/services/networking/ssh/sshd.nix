@@ -19,7 +19,7 @@ let
         else if true  ==   v then "yes"
         else if false ==   v then "no"
         else if isList     v then concatStringsSep "," v
-        else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+        else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
 
   # dont use the "=" operator
   settingsFormat = (pkgs.formats.keyValue {

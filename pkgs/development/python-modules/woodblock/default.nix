@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "A framework to generate file carving test data";
     homepage = "https://github.com/fkie-cad/woodblock";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

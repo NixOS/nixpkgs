@@ -14,6 +14,8 @@
 , pcaudiolib
 , sonicSupport ? true
 , sonic
+, alsa-plugins
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
+  nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn makeWrapper ];
 
   buildInputs = lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
+    wrapProgram $out/bin/espeak-ng \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
   passthru = {

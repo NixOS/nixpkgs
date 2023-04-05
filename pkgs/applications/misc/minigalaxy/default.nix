@@ -31,18 +31,14 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  # Cannot find GSettings schemas when opening settings,
-  # probably https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     glib-networking
-    gobject-introspection
     gtk3
   ];
 
@@ -64,6 +60,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # Run Linux games using the Steam Runtime by using steam-run in the wrapper
+  # FIXME: not working with makeBinaryWrapper
   postFixup = ''
     sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run}/bin/steam-run#' -i $out/bin/minigalaxy
   '';

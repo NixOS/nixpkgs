@@ -25,7 +25,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace 'requests-toolbelt = "^0.9.1"' 'requests-toolbelt = "*"'
   '';
 
   buildInputs = [

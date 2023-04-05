@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/f4exb/dsdcc";
     license = licenses.gpl3;
     maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

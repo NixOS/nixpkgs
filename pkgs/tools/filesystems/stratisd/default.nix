@@ -10,6 +10,7 @@
 , cryptsetup
 , util-linux
 , udev
+, lvm2
 , systemd
 , xfsprogs
 , thin-provisioning-tools
@@ -25,18 +26,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PM+griFtuFT9g+Pqx33frWrucVCXSzfyWAJJXAzrMtI=";
+    hash = "sha256-vnN0SO3KbmSQPDGqn4hnrVSxv5ebSDTOoPim1EKWweQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-P5GKMNifnEvGcsg0hGZn6hg3/S44fUIzqf5Qjp4R/EM=";
+    hash = "sha256-Cl/6A3SNMKWzuu1JLYgzzXc8XSp+ws+YtAvfPCXZGEA=";
   };
 
   postPatch = ''
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     cryptsetup
     util-linux
     udev
+    lvm2
   ];
 
   EXECUTABLES_PATHS = lib.makeBinPath ([

@@ -4,6 +4,15 @@ with lib;
 
 let
   cfg = config.services.jicofo;
+
+  # HOCON is a JSON superset that some jitsi-meet components use for configuration
+  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
+    else if isAttrs x && x ? __hocon_unquoted_string then x.__hocon_unquoted_string
+    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
+    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
+    else builtins.toJSON x;
+
+  configFile = pkgs.writeText "jicofo.conf" (toHOCON cfg.config);
 in
 {
   options.services.jicofo = with types; {
@@ -68,22 +77,34 @@ in
     };
 
     config = mkOption {
-      type = attrsOf str;
+      type = (pkgs.formats.json {}).type;
       default = { };
       example = literalExpression ''
         {
-          "org.jitsi.jicofo.auth.URL" = "XMPP:jitsi-meet.example.com";
+          jicofo.bridge.max-bridge-participants = 42;
         }
       '';
       description = lib.mdDoc ''
-        Contents of the {file}`sip-communicator.properties` configuration file for jicofo.
+        Contents of the {file}`jicofo.conf` configuration file.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    services.jicofo.config = mapAttrs (_: v: mkDefault v) {
-      "org.jitsi.jicofo.BRIDGE_MUC" = cfg.bridgeMuc;
+    services.jicofo.config = {
+      jicofo = {
+        bridge.brewery-jid = cfg.bridgeMuc;
+        xmpp = rec {
+          client = {
+            hostname = cfg.xmppHost;
+            username = cfg.userName;
+            domain = cfg.userDomain;
+            password = { __hocon_envvar = "JICOFO_AUTH_PASS"; };
+            xmpp-domain = if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain;
+          };
+          service = client;
+        };
+      };
     };
 
     users.groups.jitsi-meet = {};
@@ -93,6 +114,7 @@ in
         "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "jicofo";
         "-Djava.util.logging.config.file" = "/etc/jitsi/jicofo/logging.properties";
+        "-Dconfig.file" = configFile;
       };
     in
     {
@@ -101,18 +123,13 @@ in
       after = [ "network.target" ];
 
       restartTriggers = [
-        config.environment.etc."jitsi/jicofo/sip-communicator.properties".source
+        configFile
       ];
       environment.JAVA_SYS_PROPS = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps);
 
       script = ''
-        ${pkgs.jicofo}/bin/jicofo \
-          --host=${cfg.xmppHost} \
-          --domain=${if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain} \
-          --secret=$(cat ${cfg.componentPasswordFile}) \
-          --user_name=${cfg.userName} \
-          --user_domain=${cfg.userDomain} \
-          --user_password=$(cat ${cfg.userPasswordFile})
+        export JICOFO_AUTH_PASS="$(<${cfg.userPasswordFile})"
+        exec "${pkgs.jicofo}/bin/jicofo"
       '';
 
       serviceConfig = {
@@ -140,10 +157,7 @@ in
       };
     };
 
-    environment.etc."jitsi/jicofo/sip-communicator.properties".source =
-      pkgs.writeText "sip-communicator.properties" (
-        generators.toKeyValue {} cfg.config
-      );
+    environment.etc."jitsi/jicofo/sip-communicator.properties".text = "";
     environment.etc."jitsi/jicofo/logging.properties".source =
       mkDefault "${pkgs.jicofo}/etc/jitsi/jicofo/logging.properties-journal";
   };

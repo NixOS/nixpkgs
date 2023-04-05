@@ -151,7 +151,7 @@ let
         (builtins.filter
           ({ prefix, path }: "NETRC" == prefix)
           builtins.nixPath);
-      netrc_file = lib.optionalString (pathParts != [ ]) (builtins.head pathParts).path;
+      netrc_file = if (pathParts != [ ]) then (builtins.head pathParts).path else "";
     in
     pkgs.runCommand file
       {

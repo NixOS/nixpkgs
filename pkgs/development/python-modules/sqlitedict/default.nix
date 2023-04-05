@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "sqlitedict";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GfvvkQ6a75UBPn70IFOvjvL1MedSc4siiIjA3IsQnic=";
+    hash = "sha256-GfvvkQ6a75UBPn70IFOvjvL1MedSc4siiIjA3IsQnic=";
   };
 
   preCheck = ''

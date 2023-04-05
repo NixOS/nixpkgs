@@ -18,7 +18,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EuhnI7N8Ry6qV4q3QxdHdTuJ7F4gIA3a9NZnb33KWZ8=";
   };
 
-  cargoHash = "sha256-2FEtYnIRg4s92K8Kr123tuZqUsGOauel2JdeSF0bFGo=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "netavark_proxy-0.1.0" = "sha256-Rhnry2Y33ogpK1hQSyWD90BDzIJHzlgn8vtHu2t3KLw=";
+    };
+  };
 
   nativeBuildInputs = [ installShellFiles mandown protobuf ];
 

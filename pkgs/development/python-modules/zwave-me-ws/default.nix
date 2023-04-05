@@ -1,22 +1,15 @@
 { lib
-, aiohttp
-, aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-engineio
-, python-socketio
 , pythonOlder
+, requests
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "zwave-me-ws";
-  version = "0.3.1";
+  version = "0.3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +18,7 @@ buildPythonPackage rec {
     owner = "Z-Wave-Me";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DfQh9wuYx/gCyW3ONk8wwDOgbp8Pifx3nwDgS5NZFhI=";
+    hash = "sha256-d/Y2rZArBywTQE1vsE/B5bEPb48kcEqhDP/xfxJBzJs=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    requests
     websocket-client
   ];
 

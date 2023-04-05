@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -44,6 +45,11 @@ buildPythonPackage rec {
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    # Darwin issue: OSError: [Errno 24] Too many open files
+    ulimit -n 1024
+  '';
 
   pythonImportsCheck = [ "pygls" ];
 

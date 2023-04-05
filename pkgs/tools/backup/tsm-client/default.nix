@@ -105,10 +105,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.17.0";
+    version = "8.1.17.2";
     src = fetchurl {
       url = mkSrcUrl version;
-      hash = "sha512-MP8BjnESFoEzl6jdhtuwX9PolDF7o4QL7i1NeDV0ltIJMUOqSeAULpTJ1bbErJokJSbrj41kDwMVI+ZuAUb1eA==";
+      hash = "sha512-DZCXb3fZO2VYJJJUdjGt9TSdrYNhf8w7QMgEERzX8xb74jjA+UPNI2dbNCeja/vrgRYLYipWZPyjTQJmkxlM/g==";
     };
     inherit meta passthru;
 

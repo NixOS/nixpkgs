@@ -8,13 +8,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "nrfutil";
-  version = "6.1.6";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
-    rev = "v${version}";
-    sha256 = "sha256-UiGNNJxNSpIzpeYMlzocLG2kuetl8xti5A3n6zz0lcY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
   };
 
   propagatedBuildInputs = [

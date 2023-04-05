@@ -365,6 +365,8 @@ in
     ];
 
     services.gitea.settings = {
+      "cron.update_checker".ENABLED = lib.mkDefault false;
+
       database = mkMerge [
         {
           DB_TYPE = cfg.database.type;

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchurl
 , cmake
-, ffmpeg
+, ffmpeg_4
 , libdrm
 , libglvnd
 , libffi
@@ -76,13 +76,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.5.0";
+  version = "1.3.5.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-RPuhcLJ5Ad41SFPjJBdghcNBPIGzZBeVWTjySWOp0KA=";
+    hash = "sha256-QxRtslteGb45xlLclyg5i5+w2+QGTgieAJeqjjCvaIA=";
   };
 
   outputs = [ "out" "lib" ];
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_4
     libdrm
     libffi
     libglvnd

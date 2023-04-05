@@ -3,7 +3,7 @@
 , buildPythonPackage
 , debugger
 , fetchPypi
-, Mako
+, mako
 , packaging
 , pysocks
 , pygments
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7qZ9GC+RcEiDkpmNmy8d67dYiTgFBVAfB3B2RfrH5xI=";
+    hash = "sha256-7qZ9GC+RcEiDkpmNmy8d67dYiTgFBVAfB3B2RfrH5xI=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Mako
+    mako
     packaging
     pysocks
     pygments

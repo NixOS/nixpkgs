@@ -4,7 +4,7 @@
 , docutils
 , sphinx
 , readthedocs-sphinx-ext
-, sphinx-jquery
+, sphinxcontrib-jquery
 , pytestCheckHook
 , pythonRelaxDepsHook
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
     inherit version;
-    sha256 = "sha256-oNi9Gi7VLgszjL4ZxLLu88XnoEh2l1PaxqnwWce2Qbg=";
+    hash = "sha256-oNi9Gi7VLgszjL4ZxLLu88XnoEh2l1PaxqnwWce2Qbg=";
   };
 
   preBuild = ''
@@ -28,12 +28,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docutils
     sphinx
-    sphinx-jquery
+    sphinxcontrib-jquery
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pythonRelaxDepsHook
     readthedocs-sphinx-ext
   ];
 

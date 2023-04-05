@@ -6,7 +6,7 @@
 , lib
 , nlohmann_json
 , pybind11
-, PyVirtualDisplay
+, pyvirtualdisplay
 , sfml
 , substituteAll
 }:
@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   buildInputs = [ sfml ];
 
-  # hydra-core and PyVirtualDisplay are not declared as dependences but they are requirements
-  propagatedBuildInputs = [ hydra-core PyVirtualDisplay ];
+  # hydra-core and pyvirtualdisplay are not declared as dependences but they are requirements
+  propagatedBuildInputs = [ hydra-core pyvirtualdisplay ];
 
   # Test suite requires hydra-submitit-launcher which is not packaged as of 2022-01-02
   doCheck = false;

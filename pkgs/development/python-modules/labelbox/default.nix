@@ -5,6 +5,8 @@
 , geojson
 , google-api-core
 , imagesize
+, nbconvert
+, nbformat
 , ndjson
 , numpy
 , opencv
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.34.0";
+  version = "3.38.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -37,12 +39,12 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-x/XvcGiFS//f/le3JAd2n/tuUy9MBrCsISpkIkCCNis=";
+    hash = "sha256-AyQPI19As49GML3kVXtHtRNOKthrpkQ7MCmww+F6owc=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "-s -vv -x --reruns 5 --reruns-delay 10 --durations=20" "-s -vv -x --durations=20"
+      --replace "--reruns 5 --reruns-delay 10" ""
   '';
 
   nativeBuildInputs = [
@@ -79,6 +81,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    nbconvert
+    nbformat
     pytest-cases
     pytestCheckHook
   ] ++ passthru.optional-dependencies.data;
@@ -88,6 +92,11 @@ buildPythonPackage rec {
     "tests/integration"
     # Missing requirements
     "tests/data"
+  ];
+
+  pytestFlagsArray = [
+    # see tox.ini
+    "-k 'not notebooks'"
   ];
 
   pythonImportsCheck = [

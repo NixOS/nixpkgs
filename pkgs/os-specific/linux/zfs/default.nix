@@ -210,7 +210,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin ];
+        maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -238,11 +238,11 @@ in {
     #   zfs-2.1.9<=x<=2.1.10 is broken with aarch64-linux-6.2
     #   for future releases, please delete this condition.
     kernelCompatible =
-      if kernel.stdenv.isx86_64
+      if stdenv'.isx86_64
       then kernel.kernelOlder "6.3"
       else kernel.kernelOlder "6.2";
     latestCompatibleLinuxPackages =
-      if kernel.stdenv.isx86_64
+      if stdenv'.isx86_64
       then linuxPackages_6_2
       else linuxPackages_6_1;
 
@@ -250,11 +250,19 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.10-staging-2023-03-02";
-    rev = "9d2e5c14b2f94c91aa389799bd9e80e1098263e7";
+    version = "2.1.10-staging-2023-03-15";
+    rev = "a5c469c5f380b09705ad0bee15e2ca7a5f78213c";
 
-    sha256 = "sha256-E+nLmmSSPtGDjqBQp2GXJsYR2zCEpcxU0/9BD5QHdnA=";
+    sha256 = "sha256-CdPuyZMXFzANEdnsr/rB5ckkT8X5uziniY5vmRCKl1U=";
 
     isUnstable = true;
+
+    # Necessary for 6.2.8+ and 6.3 compatibility, see https://github.com/openzfs/zfs/issues/14658
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/openzfs/zfs/pull/14668.patch";
+        hash = "sha256-PR7hxxdjLkjszADdw0R0JRmBPfDlsXG6D+VfC7QzEhk=";
+      })
+    ];
   };
 }

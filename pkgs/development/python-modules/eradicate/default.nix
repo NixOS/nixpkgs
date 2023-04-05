@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "wemake-services";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-pVjvzW3UVeLMLLYcU0SIE19GEHFmouoA/JKSweTZSGo=";
+    hash = "sha256-pVjvzW3UVeLMLLYcU0SIE19GEHFmouoA/JKSweTZSGo=";
   };
 
   nativeCheckInputs = [

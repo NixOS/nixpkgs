@@ -26,10 +26,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZryzNlEj/2JTp5FJiDzXN9v1DvczfebqEOrJP+dKaRw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "sha256-OgvlRnii4T4HcFPiGkcLcagyHCg+lWXCXQ9XdXjHDbQ=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "containers-api-0.7.0" = "sha256-S6uDIjxFxHNqt1GK4Z+ZSTxjChNP1R5ASrO24/2oDi0=";
+      "podman-api-0.8.0" = "sha256-Gq1xcqqQZPqQ3+VEyfbdiBxeiaYiluXIa6E0el/sUIo=";
+    };
   };
 
   nativeBuildInputs = [

@@ -48,6 +48,7 @@
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
+    commonmark
     yarl
     asyncpg
     ruamel-yaml

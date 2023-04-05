@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "readstat";
+  pname = "readstat";
   version = "1.1.9";
 
   src = fetchFromGitHub {

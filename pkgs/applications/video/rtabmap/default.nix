@@ -60,5 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ckie ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

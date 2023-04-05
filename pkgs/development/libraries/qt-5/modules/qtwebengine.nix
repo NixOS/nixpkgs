@@ -221,6 +221,7 @@ qtModule {
     Prefix = ..
     EOF
 
+  '' + ''
     # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';

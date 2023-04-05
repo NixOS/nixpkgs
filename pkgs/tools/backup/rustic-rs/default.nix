@@ -2,27 +2,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic-rs";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "v${version}";
-    hash = "sha256-irN5enJ0nyyzrLvnLXm7YhyEJ3nz9PQukzAfUrKmOzY=";
+    hash = "sha256-r4hOjX/LKv2wX720FMEztUo9rf2hDBLfcHtENSZNA3U=";
   };
 
-  cargoHash = "sha256-wJuWeoS45ikP12S2o6aB2Iogw5HomXzCIjkFbp3rSR4=";
+  cargoHash = "sha256-sNxD8rDkfUw5aVhRYpYftpPMiWhiTYDdShlVZvx2BHk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
+  ## v0.5.0 panics when trying to generate zsh completions due to a bug.
+  ## See https://github.com/rustic-rs/rustic/issues/533
+  ## and https://github.com/rustic-rs/rustic/pull/536
   postInstall = ''
-    for shell in {ba,fi,z}sh; do
+    for shell in {ba,fi}sh; do
       $out/bin/rustic completions $shell > rustic.$shell
     done
 
-    installShellCompletion rustic.{ba,fi,z}sh
+    installShellCompletion rustic.{ba,fi}sh
   '';
 
   meta = {

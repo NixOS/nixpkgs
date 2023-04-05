@@ -2,7 +2,7 @@
 , python3, pipewire, libpulseaudio, xdg-utils, electron_22, makeDesktopItem }:
 
 buildNpmPackage rec {
-  name = "webcord";
+  pname = "webcord";
   version = "4.1.1";
 
   src = fetchFromGitHub {
@@ -22,10 +22,6 @@ buildNpmPackage rec {
   libPath = lib.makeLibraryPath [
     pipewire
     libpulseaudio
-  ];
-
-  binPath = lib.makeBinPath [
-    xdg-utils
   ];
 
   # npm install will error when electron tries to download its binary
@@ -49,9 +45,10 @@ buildNpmPackage rec {
 
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
+    # Add xdg-utils to path via suffix, per PR #181171
     makeWrapper '${electron_22}/bin/electron' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
-      --prefix PATH : "${binPath}" \
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
       --add-flags $out/lib/node_modules/webcord/
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "GhostofGoes";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-n4WpEbkaYUS0aGdZKO5T/cuDr5OxauiuOAAdK56/+AM=";
+    hash = "sha256-5g7FSdlwGeohbjOX3ErTKn83VDFtWV7fVq6zziAjCq0=";
   };
 
   nativeCheckInputs = [
@@ -37,6 +37,8 @@ buildPythonPackage rec {
     "test_cli_multiple_debug_levels"
     # Disable test that require network access
     "test_uuid_lanscan_iface"
+    # Mocking issue
+    "test_initialize_method_cache_valid_types"
   ];
 
   pythonImportsCheck = [

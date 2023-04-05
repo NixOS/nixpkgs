@@ -4,30 +4,34 @@
 , pythonOlder
 , fetchFromGitHub
 , installShellFiles
+, build
 , cachecontrol
 , cleo
 , crashtest
 , dulwich
 , filelock
 , html5lib
+, installer
 , jsonschema
 , keyring
+, lockfile
 , packaging
 , pexpect
 , pkginfo
 , platformdirs
 , poetry-core
 , poetry-plugin-export
+, pyproject-hooks
 , requests
 , requests-toolbelt
 , shellingham
 , tomlkit
 , trove-classifiers
+, urllib3
 , virtualenv
 , xattr
 , tomli
 , importlib-metadata
-, backports-cached-property
 , cachy
 , deepdiff
 , flatdict
@@ -40,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.3.2";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +53,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-12EiEGI9Vkb6EUY/W2KWeLigxWra1Be4ozvi8njBpEU=";
+    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
   };
 
   nativeBuildInputs = [
@@ -57,25 +61,30 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    build
     cachecontrol
     cleo
     crashtest
     dulwich
     filelock
     html5lib
+    installer
     jsonschema
     keyring
+    lockfile
     packaging
     pexpect
     pkginfo
     platformdirs
     poetry-core
     poetry-plugin-export
+    pyproject-hooks
     requests
     requests-toolbelt
     shellingham
     tomlkit
     trove-classifiers
+    urllib3
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
@@ -83,8 +92,6 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    backports-cached-property
   ] ++ cachecontrol.optional-dependencies.filecache;
 
   postInstall = ''
@@ -129,6 +136,11 @@ buildPythonPackage rec {
     "lock"
     # fs permission errors
     "test_builder_should_execute_build_scripts"
+    # poetry.installation.chef.ChefBuildError: Backend 'poetry.core.masonry.api' is not available.
+    "test_prepare_sdist"
+    "test_prepare_directory"
+    "test_prepare_directory_with_extensions"
+    "test_prepare_directory_editable"
   ] ++ lib.optionals (pythonAtLeast "3.10") [
     # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
     "test_info_setup_complex_pep517_error"

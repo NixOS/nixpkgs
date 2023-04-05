@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, FormEncode
+, formencode
 , pastedeploy
 , paste
 , pydispatcher
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    FormEncode
+    formencode
     paste
     pastedeploy
     pydispatcher

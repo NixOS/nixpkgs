@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "22.1.8";
+  version = "23.1.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-0R7u5zKQuI6o2kKn2TUN7fq6hWzkrkTljARa2eyqL3M=";
+    sha256 = "sha256-+5Rh9cuf6l4H6RiCMRsMiLQ+iEOwF+usBeta9pqjTBU=";
   };
 
   depsBuildBuild = [
@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
   ];
   mesonFlags = [
     (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
     (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
     (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")

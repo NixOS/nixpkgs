@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w31e8cJvdep/ZzmDBCfdCZotrPunQBl1cTTWjs3sE1w=";
+    sha256 = "sha256-zLCL64yX7i/mtUf8CkgrSwb6zZ7vhR1Dw8eUH/vgFT4=";
   };
 
   format = "other";
@@ -50,6 +50,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/SoongNoonien/mpdevil";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ apfelkuchen6 ];
   };
 }

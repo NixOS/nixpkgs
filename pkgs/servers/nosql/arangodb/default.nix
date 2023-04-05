@@ -25,7 +25,7 @@ let
     else "core";
 
   targetArch =
-    if isNull targetArchitecture
+    if targetArchitecture == null
     then defaultTargetArchitecture
     else targetArchitecture;
 in

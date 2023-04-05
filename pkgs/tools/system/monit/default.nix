@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, darwin
 , bison
 , flex
 , zlib
@@ -20,10 +21,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Gs6InAGDRzqdcBYN9lM7tuEzjcE1T1koUHgD4eKoY7U=";
   };
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [ bison flex ] ++
+    lib.optional stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.DiskArbitration
+    ];
+
   buildInputs = [ zlib.dev libxcrypt ] ++
     lib.optionals useSSL [ openssl ] ++
     lib.optionals usePAM [ pam ];
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace "-framework System" "-lSystem"
+  '';
 
   configureFlags = [
     (lib.withFeature usePAM "pam")
@@ -43,6 +52,6 @@ stdenv.mkDerivation rec {
     description = "Monitoring system";
     license = lib.licenses.agpl3;
     maintainers = with lib.maintainers; [ raskin wmertens ryantm ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib; platforms.linux ++ platforms.darwin;
   };
 }

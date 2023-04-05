@@ -5,8 +5,8 @@ let
   cfg = config.services.undervolt;
 
   mkPLimit = limit: window:
-    if (isNull limit && isNull window) then null
-    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+    if (limit == null && window == null) then null
+    else assert asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
   cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)

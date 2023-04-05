@@ -106,7 +106,7 @@ let
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
-          osxMatches = [ "12_0" "11_0" "10_15" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
+          osxMatches = [ "12_0" "11_0" "10_15" "10_14" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
           linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "manylinux_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);

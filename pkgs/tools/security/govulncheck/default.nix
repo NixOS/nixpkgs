@@ -1,17 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "govulncheck";
-  version = "unstable-2023-02-17";
+  version = "unstable-2023-03-22";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "b91abcc5ae3c412965b4c8131c4373040c69e1b7";
-    sha256 = "sha256-DYeG7SbjoH7rLD+Q0/5VC85bT2x7YxB4tAj1wmHkI4A=";
+    rev = "f2d9b5a6e023e7cd80347eb7ebca02ae19b28903";
+    sha256 = "sha256-zaeCEgFlv3Oxm4dIT/Evevww05JYEecekXO9UtIKLkU=";
   };
 
-  vendorSha256 = "sha256-+luU71QHNs7xxXQOLtd+Ka8+ETv5sA+gv+4g7Ogm5TI=";
+  vendorSha256 = "sha256-RxdiZ3NN+EWVCiBPI0VIDuRI1/h4rnU4KCNn2WwZL7Q=";
 
   subPackages = [ "cmd/govulncheck" ];
 
@@ -27,9 +27,9 @@ buildGoModule rec {
     # - tries to builds govulncheck again
     rm cmd/govulncheck/main_command_118_test.go
     # - does go builds of example go files
-    rm vulncheck/binary_test.go
+    rm internal/vulncheck/binary_test.go
     # - just have resolution issues
-    rm vulncheck/{source,vulncheck}_test.go
+    rm internal/vulncheck/{source,vulncheck}_test.go
     rm internal/govulncheck/callstacks_test.go
   '';
 
@@ -61,6 +61,6 @@ buildGoModule rec {
       reported for a Linux build.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk SuperSandro2000 ];
   };
 }

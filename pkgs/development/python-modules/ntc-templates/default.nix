@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-uEGl245tmc+W/9G+IclSNu76VTJ7w3zw6BQkhmGgEnY=";
+    hash = "sha256-uEGl245tmc+W/9G+IclSNu76VTJ7w3zw6BQkhmGgEnY=";
   };
 
   nativeBuildInputs = [

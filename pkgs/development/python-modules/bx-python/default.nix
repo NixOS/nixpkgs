@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "bxlab";
     repo = "bx-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Pi4hV3FatCXoXY3nNgqm5UfWYIrpP/v5PzzCi3gmIbE=";
+    hash = "sha256-Pi4hV3FatCXoXY3nNgqm5UfWYIrpP/v5PzzCi3gmIbE=";
   };
 
   nativeBuildInputs = [ cython ];

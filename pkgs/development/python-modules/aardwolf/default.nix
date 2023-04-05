@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , arc4
 , asn1crypto
 , asn1tools
@@ -7,6 +8,7 @@
 , buildPythonPackage
 , colorama
 , fetchFromGitHub
+, iconv
 , minikerberos
 , pillow
 , pyperclip
@@ -20,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.1";
+  version = "0.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,15 +30,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    rev = "86c4b511e0dfeeb767081902af2244f6297a68eb";
-    hash = "sha256-ULczCJWVLrj0is6UYZxJNyLV6opzoJAFStqsjEmjaIA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xz3461QgZ2tySj2cTlKQ5faYQDSECvbk1U6QCbzM86w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "source/aardwolf/utils/rlers";
     name = "${pname}-${version}";
-    hash = "sha256-F6NLWc5B577iH0uKAdj2y2TtQfo4eeXkMIK6he1tpvQ=";
+    hash = "sha256-JGXTCCyC20EuUX0pP3xSZG3qFB5jRL7+wW2YRC3EiCc=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     tqdm
     unicrypto
     winsspi
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    iconv
   ];
 
   # Module doesn't have tests
@@ -74,6 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous RDP protocol implementation";
     homepage = "https://github.com/skelsec/aardwolf";
+    changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

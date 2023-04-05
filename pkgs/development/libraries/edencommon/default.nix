@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "edencommon";
-  version = "2023.02.13.00";
+  version = "2023.03.06.00";
 
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
     rev = "v${version}";
-    sha256 = "sha256-WxxE7ePZuNkSKRQG5Vni51xrrZT6BsKwwvhzykQf9X4=";
+    sha256 = "sha256-m54TaxThWe6bUa6Q1t+e99CLFOvut9vq9RSmimTNuaU=";
   };
 
   nativeBuildInputs = [ cmake ];

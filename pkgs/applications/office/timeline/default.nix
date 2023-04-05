@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
   version = "2.6.0";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
@@ -18,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems ];
 
   pythonPath = with python3.pkgs; [
-    wxPython_4_0
+    wxPython_4_2
     humblewx
     icalendar
     markdown

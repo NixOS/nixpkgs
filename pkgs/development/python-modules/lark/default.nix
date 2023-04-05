@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "lark-parser";
     repo = "lark";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-drvF+0PSOdrha2rfpntrM8xIbeb0S7eNtfioxkdjEKw=";
+    hash = "sha256-drvF+0PSOdrha2rfpntrM8xIbeb0S7eNtfioxkdjEKw=";
   };
 
   # Optional import, but fixes some re known bugs & allows advanced regex features

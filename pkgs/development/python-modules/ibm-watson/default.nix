@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jvDkAwuDFgo7QlZ8N7TNVsY7+aXdIDc50uIIoO+5MLs=";
+    hash = "sha256-jvDkAwuDFgo7QlZ8N7TNVsY7+aXdIDc50uIIoO+5MLs=";
   };
 
   propagatedBuildInputs = [

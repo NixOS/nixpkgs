@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "strenum";
-  version = "0.4.9";
+  version = "0.4.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "irgeek";
     repo = "StrEnum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tElXpwyjrgTw9eHqGPgXakY+G9JXkBQYG7jSZSjv6P0=";
+    hash = "sha256-OkNV4kUXGgYPGuyylGOtAr0e0spgZQ1MrftKKL2HmV8=";
   };
 
   postPatch = ''

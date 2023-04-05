@@ -171,7 +171,7 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
+  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
   # Turn a derivation into its outPath without a string context attached.
@@ -186,27 +186,35 @@ let
                                   ++ buildInputs ++ propagatedBuildInputs
                                   ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
   dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
-  supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+
+  hardeningDisable' = if lib.any (x: x == "fortify") hardeningDisable
+    # disabling fortify implies fortify3 should also be disabled
+    then lib.unique (hardeningDisable ++ [ "fortify3" ])
+    else hardeningDisable;
+  supportedHardeningFlags = [ "fortify" "fortify3" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-                            # Except when:
-                            #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-                            #    - static armv7l, where compilation fails.
-                            !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-                          then supportedHardeningFlags
-                          else lib.remove "pie" supportedHardeningFlags;
+  defaultHardeningFlags = let
+    # not ready for this by default
+    supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
+  in if stdenv.hostPlatform.isMusl &&
+      # Except when:
+      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+      #    - static armv7l, where compilation fails.
+      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
+    then supportedHardeningFlags'
+    else lib.remove "pie" supportedHardeningFlags';
   enabledHardeningOptions =
-    if builtins.elem "all" hardeningDisable
+    if builtins.elem "all" hardeningDisable'
     then []
-    else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
+    else lib.subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    if lib.isDerivation dep || dep == null || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
     else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
     else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
@@ -433,6 +441,7 @@ else let
     } // lib.optionalAttrs (enableParallelBuilding) {
       inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
+      enableParallelInstalling = attrs.enableParallelInstalling or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {

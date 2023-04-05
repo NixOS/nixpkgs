@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, cmake, python3, fixDarwinDylibNames, version
+, cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
 , libcxxabi, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     patchShebangs utils/cat_files.py
   '';
 
-  nativeBuildInputs = [ cmake python3 ]
+  nativeBuildInputs = [ cmake ninja python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
-  buildFlags = lib.optional headersOnly "generate-cxx-headers";
+  ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
   preInstall = lib.optionalString (stdenv.isDarwin && !headersOnly) ''

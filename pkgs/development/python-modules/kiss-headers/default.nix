@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "Ousret";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-xPjw/uJTmvmQZDrI3i1KTUeAZuDF1mc13hvFBl8Erh0=";
+    hash = "sha256-xPjw/uJTmvmQZDrI3i1KTUeAZuDF1mc13hvFBl8Erh0=";
   };
 
   propagatedBuildInputs = [ requests ];
