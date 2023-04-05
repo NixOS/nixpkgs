@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.9";
+  version = "0.10.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bn2QrbsfqUJim84vH5tt5T6h3YsGAlgu9GCMiNQ0OHQ=";
+    hash = "sha256-NnoVrSt6MTTcNup1e+/1v5JoHCYcycuQH4rHLzXJt+Y=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
