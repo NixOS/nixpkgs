@@ -26809,6 +26809,10 @@ with pkgs;
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
+  nushellPlugins = callPackage ../shells/nushell/plugins {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+  };
+
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
     else unixtools.nettools;
