@@ -7,6 +7,7 @@ let
     isPath
     split
     match
+    typeOf
     ;
 
   inherit (lib.lists)
@@ -18,6 +19,7 @@ let
     all
     concatMap
     foldl'
+    take
     ;
 
   inherit (lib.strings)
@@ -100,6 +102,22 @@ let
     # An empty string is not a valid relative path, so we need to return a `.` when we have no components
     (if components == [] then "." else concatStringsSep "/" components);
 
+  # Type: Path -> { root :: Path, components :: [ String ] }
+  #
+  # Deconstruct a path value type into:
+  # - root: The filesystem root of the path, generally `/`
+  # - components: All the path's components
+  #
+  # This is similar to `splitString "/" (toString path)` but safer
+  # because it can distinguish different filesystem roots
+  deconstructPath =
+    let
+      recurse = components: base:
+        # If the parent of a path is the path itself, then it's a filesystem root
+        if base == dirOf base then { root = base; inherit components; }
+        else recurse ([ (baseNameOf base) ] ++ components) (dirOf base);
+    in recurse [];
+
 in /* No rec! Add dependencies on this file at the top. */ {
 
   /* Append a subpath string to a path.
@@ -154,6 +172,54 @@ in /* No rec! Add dependencies on this file at the top. */ {
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
+
+  /*
+  Whether the second path is a prefix of the first path, or equal to it.
+  Throws an error if the paths don't share the same filesystem root.
+
+  Laws:
+
+  - Equivalent to whether some subpath exists that can be appended to the first path to get the second path:
+
+        hasPrefix p q <-> exists s . append p s == q
+
+  - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values
+
+  Type:
+    hasPrefix :: Path -> Path -> Bool
+
+  Example:
+    hasPrefix /foo /foo/bar
+    => true
+    hasPrefix /foo /foo
+    => true
+    hasPrefix /foo/bar /foo
+    => false
+    hasPrefix /. /foo
+    => true
+  */
+  hasPrefix =
+    path1:
+    assert assertMsg
+      (isPath path1)
+      "lib.path.hasPrefix: First argument is of type ${typeOf path1}, but a path was expected";
+    let
+      path1Deconstructed = deconstructPath path1;
+    in
+      path2:
+      assert assertMsg
+        (isPath path2)
+        "lib.path.hasPrefix: Second argument is of type ${typeOf path2}, but a path was expected";
+      let
+        path2Deconstructed = deconstructPath path2;
+      in
+        assert assertMsg
+        (path1Deconstructed.root == path2Deconstructed.root) ''
+          lib.path.hasPrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
+              first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
+              second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
+        take (length path1Deconstructed.components) path2Deconstructed.components == path1Deconstructed.components;
+
 
   /* Whether a value is a valid subpath string.
 
