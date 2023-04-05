@@ -8608,6 +8608,19 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-z.nvim/";
   };
 
+  telescope-zf-native-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-zf-native.nvim";
+    version = "2023-03-15";
+    src = fetchFromGitHub {
+      owner = "natecraddock";
+      repo = "telescope-zf-native.nvim";
+      rev = "beb34b6c48154ec117930180f257a5592606d48f";
+      sha256 = "1lkgsjmmj006zwvrpr1w48pii1wrzxxanhhl1r302vll62frx94n";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/natecraddock/telescope-zf-native.nvim/";
+  };
+
   telescope-zoxide = buildVimPluginFrom2Nix {
     pname = "telescope-zoxide";
     version = "2023-02-08";
