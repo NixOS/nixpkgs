@@ -36,6 +36,9 @@
 , alsa-lib
 , graphene
 , protobuf
+, autoconf
+, automake
+, libtool
 , ...
 }:
 
@@ -85,8 +88,16 @@ in
   };
 
   evdev-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs =
+      [ pkg-config
+        python3 autoconf automake libtool  # used only if HOST!=TARGET
+      ];
     buildInputs = [ libevdev ];
+
+    # This prevents libevdev's build.rs from trying to `git fetch` when HOST!=TARGET
+    prePatch = ''
+      touch libevdev/.git
+    '';
   };
 
   expat-sys = attrs: {
