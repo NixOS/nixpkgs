@@ -9477,8 +9477,6 @@ self: super: with self; {
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
-  python-forecastio = callPackage ../development/python-modules/python-forecastio { };
-
   python-frontmatter = callPackage ../development/python-modules/python-frontmatter { };
 
   python-gammu = callPackage ../development/python-modules/python-gammu { };
