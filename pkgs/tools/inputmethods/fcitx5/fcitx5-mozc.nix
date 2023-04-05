@@ -87,7 +87,8 @@ in clangStdenv.mkDerivation rec {
     python build_mozc.py build -c Release \
       server/server.gyp:mozc_server \
       gui/gui.gyp:mozc_tool \
-      unix/fcitx5/fcitx5.gyp:fcitx5-mozc
+      unix/fcitx5/fcitx5.gyp:fcitx5-mozc \
+      unix/emacs/emacs.gyp:mozc_emacs_helper
   '';
 
   installPhase = ''
@@ -101,6 +102,7 @@ in clangStdenv.mkDerivation rec {
     install -d $out/share/fcitx5/inputmethod
     install -d $out/lib/fcitx5
     ../scripts/install_fcitx5
+    install -D -m 755 out_linux/Release/mozc_emacs_helper $out/lib/mozc/mozc_emacs_helper
   '';
 
   meta = with lib; {
