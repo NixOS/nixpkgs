@@ -8,7 +8,6 @@
 , gevent
 , httptools
 , httpx
-, isPy3k
 , pook
 , pytest-mock
 , pytestCheckHook

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , mock
 , psutil

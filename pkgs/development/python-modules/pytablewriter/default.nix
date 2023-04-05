@@ -4,7 +4,6 @@
 , dataproperty
 , mbstrdecoder
 , pathvalidate
-, setuptools
 , tabledata
 , tcolorpy
 , typepy

@@ -3,7 +3,6 @@
 , fetchPypi
 , glibcLocales
 , isPy3k
-, pythonOlder
 , pytestCheckHook
 , curio
 }:

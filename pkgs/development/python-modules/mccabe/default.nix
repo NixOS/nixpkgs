@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, hypothesis
-, hypothesmith
 , python
 }:
 

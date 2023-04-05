@@ -1,6 +1,5 @@
 { lib
 , pythonOlder
-, pythonAtLeast
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch

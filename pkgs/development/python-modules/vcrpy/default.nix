@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, mock
 , pytest-httpbin
 , pytestCheckHook
 , pythonOlder

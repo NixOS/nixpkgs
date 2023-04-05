@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, python
 , proj
 , pythonOlder
 , substituteAll

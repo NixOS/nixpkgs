@@ -2,7 +2,6 @@
 , buildPythonPackage
 , cython
 , fetchFromGitHub
-, fetchpatch
 , matplotlib
 , mock
 , numpy

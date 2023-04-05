@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, python
 , pythonOlder
 , pytest
 , unittestCheckHook

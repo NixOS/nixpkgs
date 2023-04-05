@@ -9,7 +9,6 @@
 , oscrypto
 , requests
 , uritools
-, openssl
 , pytest-asyncio
 , pytestCheckHook
 }:

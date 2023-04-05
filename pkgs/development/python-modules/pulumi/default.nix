@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , protobuf
 , dill
 , grpcio

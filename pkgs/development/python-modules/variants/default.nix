@@ -1,7 +1,5 @@
 { buildPythonPackage
-, isPy27
 , fetchPypi
-, pytest-runner
 , setuptools-scm
 , pytestCheckHook
 , six

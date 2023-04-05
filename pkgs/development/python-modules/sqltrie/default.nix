@@ -5,7 +5,6 @@
 , pythonOlder
 , pygtrie
 , orjson
-, python
 , setuptools-scm
 }:
 

@@ -2,10 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , scikit-build-core
-, distlib
 , pytestCheckHook
-, pyproject-metadata
-, pathspec
 , pybind11
 , cmake
 , LASzip

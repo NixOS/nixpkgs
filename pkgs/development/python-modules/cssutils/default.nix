@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , pythonOlder
-, fetchpatch
 , fetchPypi
 , setuptools
 , setuptools-scm

@@ -1,7 +1,5 @@
 { lib
 , buildPythonPackage
-, python3
-, bash
 , cmake
 , fetchFromGitHub
 , gtest

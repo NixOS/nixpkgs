@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , h5py
 , pytestCheckHook
 , netcdf4

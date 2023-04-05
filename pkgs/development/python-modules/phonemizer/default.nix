@@ -9,7 +9,6 @@
 , dlinfo
 , typing-extensions
 , espeak-ng
-, pytestCheckHook
 , pytest-cov
 }:
 

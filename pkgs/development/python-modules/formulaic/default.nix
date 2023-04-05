@@ -4,7 +4,6 @@
 , pytestCheckHook
 , hatchling
 , hatch-vcs
-, git
 , astor
 , interface-meta
 , numpy

@@ -20,7 +20,6 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
-, rasterio
 , requests
 , shapely
 , tqdm

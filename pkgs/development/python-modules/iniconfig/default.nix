@@ -2,7 +2,6 @@
 , buildPythonPackage
 , substituteAll
 , fetchPypi
-, hatch-vcs
 , hatchling
 }:
 

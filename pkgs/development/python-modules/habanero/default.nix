@@ -4,7 +4,6 @@
 , setuptools-scm
 , requests
 , tqdm
-, nose
 , vcrpy
 , pytestCheckHook
 , pythonOlder

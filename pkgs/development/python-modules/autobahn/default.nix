@@ -11,7 +11,6 @@
 , cryptography
 , ecdsa
 , eth-abi
-, eth-account
 , flatbuffers
 , jinja2
 , hkdf
@@ -36,7 +35,6 @@
 , rlp
 , service-identity
 , spake2
-, twisted
 , txaio
 , ujson
   # , web3

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel-yaml
+, pytestCheckHook, numpy, arrow, ruamel-yaml
 , lz4, cloudpickle
 }:
 

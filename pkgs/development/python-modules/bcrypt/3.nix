@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , setuptools
-, isPyPy
 , fetchPypi
 , pythonOlder
 , cffi

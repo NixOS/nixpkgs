@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPyPy
 , objgraph
 , psutil
 , pytestCheckHook

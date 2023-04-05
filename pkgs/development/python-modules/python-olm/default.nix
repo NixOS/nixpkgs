@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, olm
+{ buildPythonPackage, isPy3k, olm
 , cffi
 , future
 , aspectlib

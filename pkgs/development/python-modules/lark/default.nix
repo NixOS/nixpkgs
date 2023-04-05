@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , regex
 , pytestCheckHook
 , js2py

@@ -18,7 +18,6 @@
 , websockets
 # , eth-tester
 # , py-geth
-, pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
 }:

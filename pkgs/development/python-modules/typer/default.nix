@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , colorama
-, fetchpatch
 , fetchPypi
 , flit-core
 , click

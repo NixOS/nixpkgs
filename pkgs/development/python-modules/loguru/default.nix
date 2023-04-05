@@ -3,7 +3,6 @@
 , aiocontextvars
 , buildPythonPackage
 , colorama
-, fetchpatch
 , fetchFromGitHub
 , freezegun
 , mypy

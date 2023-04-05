@@ -1,11 +1,7 @@
 { lib
-, stdenv
-, buildPythonPackage
 , pythonOlder
 , fetchPypi
-, isPyPy
-, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
-, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+, pytestCheckHook
 # for passthru.tests
 , imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:

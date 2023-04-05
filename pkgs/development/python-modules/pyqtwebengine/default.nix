@@ -5,7 +5,7 @@
 }:
 
 let
-  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
+  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 sip pyqt-builder;
   inherit (darwin) autoSignDarwinBinariesHook;
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";

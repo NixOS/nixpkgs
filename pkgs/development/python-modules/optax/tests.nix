@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , dm-haiku
 , pytest-xdist
 , pytestCheckHook

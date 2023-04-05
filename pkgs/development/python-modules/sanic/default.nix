@@ -11,7 +11,6 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, pythonAtLeast
 , sanic-routing
 , sanic-testing
 , setuptools

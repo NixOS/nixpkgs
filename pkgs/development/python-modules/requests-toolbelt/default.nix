@@ -1,10 +1,8 @@
 { lib
 , betamax
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , mock
-, pyopenssl
 , pytestCheckHook
 , requests
 }:

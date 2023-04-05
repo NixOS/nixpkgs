@@ -2,9 +2,7 @@
 , aiohttp
 , apispec
 , buildPythonPackage
-, callPackage
 , fetchFromGitHub
-, fetchPypi
 , jinja2
 , packaging
 , pytest-aiohttp

@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage
-, python, isPy3k, unittestCheckHook }:
+, isPy3k, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "emailthreads";

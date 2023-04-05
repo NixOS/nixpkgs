@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
-, python
 , openblas
 , blas
 , lapack # build segfaults with 64-bit blas

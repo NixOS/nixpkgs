@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, python
 , pytestCheckHook
 , pythonOlder
 , six

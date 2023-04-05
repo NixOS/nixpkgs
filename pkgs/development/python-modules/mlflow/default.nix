@@ -6,7 +6,6 @@
 , databricks-cli
 , docker
 , entrypoints
-, fetchpatch
 , fetchPypi
 , flask
 , gitpython

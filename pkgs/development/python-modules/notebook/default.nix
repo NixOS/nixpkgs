@@ -5,7 +5,6 @@
 , fetchPypi
 , argon2-cffi
 , glibcLocales
-, mock
 , jinja2
 , tornado
 , ipython_genutils

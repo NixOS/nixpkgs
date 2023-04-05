@@ -11,7 +11,6 @@
 , dask
 , pytestCheckHook
 , pytest-astropy
-, astropy-helpers
 , setuptools-scm
 }:
 

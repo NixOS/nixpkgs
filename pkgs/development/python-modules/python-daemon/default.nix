@@ -7,7 +7,6 @@
 , testscenarios
 , testtools
 , twine
-, python
 , pythonOlder
 , fetchpatch
 }:

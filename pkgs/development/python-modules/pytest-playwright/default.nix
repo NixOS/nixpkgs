@@ -4,7 +4,6 @@
 , playwright
 , pytest
 , pytest-base-url
-, pytestCheckHook
 , python-slugify
 , pythonOlder
 , setuptools-scm

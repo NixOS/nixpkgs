@@ -3,7 +3,6 @@
 , fetchPypi
 , isPy27
 , setuptools-scm
-, vcver
 , pytestCheckHook
 }:
 

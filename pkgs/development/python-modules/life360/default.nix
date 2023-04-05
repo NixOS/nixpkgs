@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , pythonOlder
 }:
 

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{ lib, fetchPypi, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";

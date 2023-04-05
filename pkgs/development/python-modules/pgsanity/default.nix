@@ -1,5 +1,4 @@
 { lib
-, python
 , fetchPypi
 , buildPythonPackage
 , postgresql

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , dvc-render
 , fetchFromGitHub
-, pytestCheckHook
 , pythonOlder
 , ruamel-yaml
 , setuptools

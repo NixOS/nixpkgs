@@ -4,7 +4,6 @@
 , apache-beam
 , asttokens
 , blinker
-, botocore
 , bottle
 , buildPythonPackage
 , celery
@@ -15,13 +14,11 @@
 , falcon
 , fetchFromGitHub
 , flask
-, flask-login
 , gevent
 , httpx
 , jsonschema
 , mock
 , pure-eval
-, pyramid
 , pyrsistent
 , pyspark
 , pytest-forked
@@ -33,7 +30,6 @@
 , sanic
 , sqlalchemy
 , tornado
-, trytond
 , urllib3
 , werkzeug
 }:

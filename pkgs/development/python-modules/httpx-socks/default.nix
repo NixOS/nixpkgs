@@ -1,7 +1,6 @@
 { lib
 , async-timeout
 , buildPythonPackage
-, curio
 , fetchFromGitHub
 , flask
 , httpcore
@@ -12,7 +11,6 @@
 , pytestCheckHook
 , python-socks
 , pythonOlder
-, sniffio
 , starlette
 , trio
 , yarl

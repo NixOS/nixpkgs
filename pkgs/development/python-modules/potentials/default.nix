@@ -10,7 +10,6 @@
 , matplotlib
 , numpy
 , pandas
-, pytestCheckHook
 , pythonOlder
 , requests
 , scipy

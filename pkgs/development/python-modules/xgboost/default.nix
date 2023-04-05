@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , pythonOlder
 , cmake
 , numpy

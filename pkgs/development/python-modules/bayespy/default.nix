@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , pytestCheckHook, nose, glibcLocales, fetchpatch
 , numpy, scipy, matplotlib, h5py }:
 

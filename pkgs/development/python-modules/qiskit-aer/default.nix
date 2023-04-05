@@ -25,7 +25,6 @@
 , fixtures
 , pytest-timeout
 , qiskit-terra
-, setuptools
 , testtools
 }:
 

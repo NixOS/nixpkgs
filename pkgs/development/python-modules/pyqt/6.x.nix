@@ -1,7 +1,5 @@
 { lib
-, stdenv
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , pkg-config
 , dbus

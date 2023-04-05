@@ -18,10 +18,8 @@
 , autoPatchelfHook
 , buildPythonPackage
 , config
-, cudnn ? cudaPackages.cudnn
 , fetchurl
 , flatbuffers
-, isPy39
 , lib
 , python
 , scipy

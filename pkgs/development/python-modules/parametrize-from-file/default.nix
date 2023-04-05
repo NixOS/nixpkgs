@@ -3,7 +3,6 @@
 , fetchPypi
 , fetchpatch
 , pytestCheckHook
-, coveralls
 , numpy
 , decopatch
 , more-itertools

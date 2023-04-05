@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , stdenv
 , darwin
-, pytestCheckHook
 , pythonOlder
 , rustPlatform
 , setuptools-rust

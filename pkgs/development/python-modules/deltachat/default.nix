@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , pythonOlder
 , pkg-config
 , pkgconfig

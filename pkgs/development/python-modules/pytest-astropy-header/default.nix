@@ -1,9 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytest
-, pytest-cov
 , pytestCheckHook
 , numpy
 , setuptools-scm

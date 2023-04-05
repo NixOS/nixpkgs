@@ -1,12 +1,9 @@
-{ stdenv
-, fetchPypi
+{ fetchPypi
 , buildPythonPackage
 , future
 , packbits
 , pillow
 , pyusb
-, pytest
-, mock
 , click
 , attrs
 , lib

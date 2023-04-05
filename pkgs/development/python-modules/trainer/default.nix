@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
-, pythonAtLeast
-
 , coqpit
 , fsspec
 , torch-bin

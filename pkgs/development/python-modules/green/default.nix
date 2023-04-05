@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, django
 , colorama
 , coverage
 , unidecode

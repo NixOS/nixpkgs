@@ -5,7 +5,6 @@
 , fetchpatch
 , pytestCheckHook
 , pythonOlder
-, pythonAtLeast
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio

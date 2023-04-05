@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
 
 buildPythonPackage rec {
   pname = "pyres";

@@ -3,10 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, python
-, lsof
-, glibcLocales
-, coreutils
 , pytestCheckHook
  }:
 

@@ -11,7 +11,6 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
 , websockets
 }:
 

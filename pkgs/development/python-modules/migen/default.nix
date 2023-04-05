@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , colorama
 }:

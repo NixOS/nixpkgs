@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, poetry-core
 , pythonOlder
 }:
 

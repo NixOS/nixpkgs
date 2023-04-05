@@ -4,7 +4,6 @@
 , twisted
 , passlib
 , pyparsing
-, service-identity
 , six
 , zope_interface
 , pythonOlder

@@ -5,7 +5,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, protobuf
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder

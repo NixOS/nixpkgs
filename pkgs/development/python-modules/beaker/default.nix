@@ -14,7 +14,6 @@
 , pycrypto
 , cryptography
 , isPy27
-, isPy3k
 , funcsigs ? null
 , pycryptopp ? null
 }:

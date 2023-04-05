@@ -10,7 +10,6 @@
 
 # runtime
 , packaging
-, toml
 , tomli
 
 # docs

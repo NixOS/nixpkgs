@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 , fonttools
 , defcon

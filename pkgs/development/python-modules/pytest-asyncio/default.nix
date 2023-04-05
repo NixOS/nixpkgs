@@ -2,10 +2,7 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
-, flaky
-, hypothesis
 , pytest
-, pytestCheckHook
 , pythonOlder
 , setuptools-scm
 }:

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
-, python
 , libosmium
 , protozero
 , boost

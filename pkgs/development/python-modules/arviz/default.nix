@@ -7,13 +7,11 @@
 , numba
 , numpy
 , pandas
-, pytest
 , setuptools
 , cloudpickle
 , pytestCheckHook
 , scipy
 , packaging
-, typing-extensions
 , pythonOlder
 , xarray
 , xarray-einstats

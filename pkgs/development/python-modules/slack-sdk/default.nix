@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , aiodns
 , aiohttp
 , boto3

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , isPyPy
 , pythonOlder
 , fetchPypi
@@ -14,12 +13,9 @@
 , typing-extensions
 
 # optionals
-, aiosqlite
-, asyncmy
 , asyncpg
 , cx_oracle
 , mariadb
-, mypy
 , mysql-connector
 , mysqlclient
 , oracledb
@@ -28,7 +24,6 @@
 , psycopg2
 , psycopg2cffi
 # TODO: pymssql
-, pymysql
 , pyodbc
 # TODO: sqlcipher3
 

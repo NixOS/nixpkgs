@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
-, pytestCheckHook
 , pythonOlder
 , spur
 }:

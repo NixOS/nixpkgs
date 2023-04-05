@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , opencv4
 , ceres-solver

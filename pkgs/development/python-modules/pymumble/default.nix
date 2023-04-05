@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , opuslib
 , protobuf
 , pytestCheckHook

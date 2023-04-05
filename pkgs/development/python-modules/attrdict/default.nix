@@ -4,7 +4,6 @@
 , coverage
 , pythonOlder
 , nose
-, pytestCheckHook
 , six
 }:
 

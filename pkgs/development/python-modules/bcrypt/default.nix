@@ -3,7 +3,6 @@
 , rustPlatform
 , setuptools
 , setuptools-rust
-, isPyPy
 , fetchPypi
 , pythonOlder
 , cffi

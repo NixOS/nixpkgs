@@ -1,8 +1,6 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
-, runCommand
 , setuptools
 }:
 

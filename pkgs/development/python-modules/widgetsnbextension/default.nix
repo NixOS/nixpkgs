@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , jupyter-packaging
-, notebook
 , ipywidgets
 }:
 

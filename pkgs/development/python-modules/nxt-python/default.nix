@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchgit
-, isPy3k
 , pyusb
 , pybluez
 , pytest

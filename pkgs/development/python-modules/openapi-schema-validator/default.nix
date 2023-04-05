@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
-, isodate
 , jsonschema
 , rfc3339-validator
 }:

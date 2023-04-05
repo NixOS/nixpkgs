@@ -11,7 +11,6 @@
 # Check Inputs
 , aiohttp
 , psutil
-, pyopenssl
 , pytest-forked
 , pytestCheckHook
 }:

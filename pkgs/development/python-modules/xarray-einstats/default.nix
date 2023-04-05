@@ -5,7 +5,6 @@
 , flit-core
 , numba
 , numpy
-, pandas
 , pytestCheckHook
 , pythonOlder
 , scipy

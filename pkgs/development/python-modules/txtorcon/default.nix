@@ -5,15 +5,11 @@
 , cryptography
 , fetchPypi
 , geoip
-, idna
 , incremental
 , lsof
 , mock
-, pyopenssl
 , pytestCheckHook
-, python
 , pythonOlder
-, service-identity
 , twisted
 , zope_interface
 }:

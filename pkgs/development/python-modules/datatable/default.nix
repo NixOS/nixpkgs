@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pipInstallHook
-, writeText
 , blessed
 , docutils
 , libcxx

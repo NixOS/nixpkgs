@@ -5,7 +5,6 @@
 , decorator
 , fetchPypi
 , numpy
-, pytestCheckHook
 , pythonOlder
 , scipy
 , six

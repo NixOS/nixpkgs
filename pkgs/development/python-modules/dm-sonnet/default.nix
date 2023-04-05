@@ -1,5 +1,4 @@
 { lib
-, absl-py
 , buildPythonPackage
 , dm-tree
 , docutils

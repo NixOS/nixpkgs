@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
 , poetry-core
 , httpx
 , pydicom

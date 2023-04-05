@@ -10,7 +10,6 @@
 , pythonOlder
 , setuptools
 , voluptuous
-, websocket-client
 , xmltodict
 }:
 

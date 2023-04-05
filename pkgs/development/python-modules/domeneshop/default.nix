@@ -3,9 +3,6 @@
 , fetchPypi
 , pythonOlder
 , urllib3
-, pyopenssl
-, cryptography
-, idna
 , certifi
 }:
 

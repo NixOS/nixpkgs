@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pillow
 , scipy
 , numpy

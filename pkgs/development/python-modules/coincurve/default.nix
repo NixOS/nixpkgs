@@ -8,7 +8,6 @@
 , libtool
 , pkg-config
 , pytestCheckHook
-, python
 , pythonOlder
 , secp256k1
 }:

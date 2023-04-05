@@ -8,10 +8,6 @@
 , numpy
 , python-dateutil
 , pytz
-, scipy
-, sqlalchemy
-, tables
-, xlrd
 , xlwt
 # Test inputs
 , glibcLocales

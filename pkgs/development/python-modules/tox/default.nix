@@ -7,7 +7,6 @@
 , py
 , six
 , virtualenv
-, setuptools-scm
 , toml
 , tomli
 , filelock

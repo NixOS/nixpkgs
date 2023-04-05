@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , fetchpatch
 , jsonschema
-, mock
 , parameterized
 , pydantic
 , pytest-env

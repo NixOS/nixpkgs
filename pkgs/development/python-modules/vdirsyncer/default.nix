@@ -11,7 +11,6 @@
 , hypothesis
 , pytestCheckHook
 , pytest-subtesthack
-, setuptools-scm
 , aiostream
 , aiohttp-oauthlib
 , aiohttp

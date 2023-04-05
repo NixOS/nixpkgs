@@ -14,7 +14,6 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
-, pythonAtLeast
 , requests
 , scipy
 , setuptools

@@ -13,7 +13,7 @@
 }:
 
 let
-  old-openfst = openfst.overrideAttrs (prev: {
+  old-openfst = openfst.overrideAttrs (_prev: {
     version = "kag-unstable-2022-05-06";
 
     src = fetchFromGitHub {

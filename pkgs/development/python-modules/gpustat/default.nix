@@ -5,7 +5,6 @@
 , mockito
 , nvidia-ml-py
 , psutil
-, pytest-runner
 , pythonRelaxDepsHook
 , pytestCheckHook
 }:

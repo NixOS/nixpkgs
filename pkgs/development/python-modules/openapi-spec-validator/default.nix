@@ -16,7 +16,6 @@
 , requests
 
 # tests
-, mock
 , pytestCheckHook
 }:
 

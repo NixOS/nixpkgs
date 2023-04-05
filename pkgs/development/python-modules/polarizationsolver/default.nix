@@ -1,7 +1,6 @@
 { buildPythonPackage
 , lib
 , fetchFromGitLab
-, python
 , numpy
 , scipy
 , periodictable
