@@ -21246,6 +21246,8 @@ with pkgs;
 
   libdnf = callPackage ../tools/package-management/libdnf { };
 
+  libdovi = callPackage ../development/libraries/libdovi { };
+
   libdrm = callPackage ../development/libraries/libdrm { };
 
   libdv = callPackage ../development/libraries/libdv { };
