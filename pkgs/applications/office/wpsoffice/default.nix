@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mlatus th0rgal rewine ];

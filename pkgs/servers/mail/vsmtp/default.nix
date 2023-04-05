@@ -8,18 +8,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-iyjtSeus1gctylYfXAEqpwZNPg/KU/lXv82Wi0h5mAM=";
+    hash = "sha256-dRw5Q6bejaAJCnoR9j2wBU+L+p1pk1Tnxtm0WcRyOaY=";
   };
 
-  cargoHash = "sha256-N4cxAFAFtYnd1/wdomm0VYosDY5uy+0z9pRGThSMbG4=";
+  cargoHash = "sha256-RYHn9kZZApgXWTExAHl9ZnCsuvqnnb67unmvd4Pnwz0=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildFeatures = [
+    "telemetry"
+    "journald"
+    "syslog"
+  ];
 
   # tests do not run well in the nix sandbox
   doCheck = false;

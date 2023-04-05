@@ -49,7 +49,7 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ MP2E devins2518 artturin infinidoge ];
+    maintainers = with maintainers; [ MP2E artturin infinidoge ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
   package =

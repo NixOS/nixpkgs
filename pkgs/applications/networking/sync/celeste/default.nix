@@ -29,16 +29,16 @@ let
   };
 in rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.4.6";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-VEyQlycpqsGKqtV/QvqBfVHqQhl/H6HsWPRDBtQO3qM=";
+    hash = "sha256-pFtyfKGPlwum/twGXi/e82BjINy6/MMvvmVfrwWHTQg=";
   };
 
-  cargoHash = "sha256-fqt0XklJJAXi2jO7eo0tIwRo2Y3oM56qYwoaelKY8iU=";
+  cargoHash = "sha256-wcgu4KApkn68Tpk3PQ9Tkxif++/8CmS4f8AOOpCA/X8=";
 
   patches = [
     (substituteAll {
