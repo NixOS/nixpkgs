@@ -77,8 +77,8 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
   let
 
     inherit (darwin.lib) darwinSystem;
-    pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-    system = pkgs.stdenv.hostPlatform.system;
+    system = "aarch64-darwin";
+    pkgs = nixpkgs.legacyPackages."${system}";
     linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
 
     darwin-builder = import "${nixpkgs}/nixos" {
