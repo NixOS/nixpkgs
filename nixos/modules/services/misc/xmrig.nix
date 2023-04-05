@@ -3,9 +3,16 @@
 
 let
   cfg = config.services.xmrig;
+  settings =
+    if cfg.cuda.enable then {
+      cuda.enabled = true;
+      cuda.loader = "${pkgs.xmrig-cuda}/lib/libxmrig-cuda.so";
+      cuda.nvml = "/run/opengl-driver/lib/libnvidia-ml.so";
+    } // cfg.settings
+    else cfg.settings;
 
   json = pkgs.formats.json { };
-  configFile = json.generate "config.json" cfg.settings;
+  configFile = json.generate "config.json" settings;
 in
 
 with lib;
@@ -46,6 +53,20 @@ with lib;
           XMRig configuration. Refer to
           <https://xmrig.com/docs/miner/config>
           for details on supported values.
+        '';
+      };
+
+      cuda.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Enable CUDA plugin.";
+      };
+      cuda.archectictures = mkOption {
+        type = types.listOf types.int;
+        default = [ 30 35 60 70 75 80 ];
+        description = lib.mdDoc ''
+          List of supported CUDA versions.
+          Select for your GPU: https://developer.nvidia.com/cuda-gpus#compute
         '';
       };
     };
