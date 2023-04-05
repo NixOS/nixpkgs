@@ -1,10 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pythonAtLeast, python }:
 
 buildPythonPackage rec {
   pname = "asynctest";
   version = "0.13.0";
 
-  disabled = pythonOlder "3.5";
+  # https://github.com/Martiusweb/asynctest/issues/161
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
