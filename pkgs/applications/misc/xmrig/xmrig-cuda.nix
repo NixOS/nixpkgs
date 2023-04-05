@@ -1,17 +1,25 @@
 { stdenv
-, autoAddOpenGLRunpathHook
 , fetchFromGitHub
 , cmake
 , pkgs
 , tree
-, cudaArch ? 61
+, cudaPackages ? { }
 }:
+
+with cudaPackages;
 
 let
   libcudaDir = "/run/opengl-driver/lib";
+  inherit (cudaPackages)
+    autoAddOpenGLRunpathHook
+    backendStdenv
+    cudaFlags;
+
+  inherit (cudaFlags) dropDot cudaCapabilities;
+
+  CUDA_ARCH = builtins.concatStringsSep ";" (map dropDot cudaCapabilities);
 in
-stdenv.mkDerivation rec {
-  inherit (pkgs.cudaPackages) cudatoolkit cuda_cudart;
+backendStdenv.mkDerivation rec {
 
   version = "6.17.0";
   pname = "xmrig-cuda";
@@ -22,22 +30,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vRVLmMgCG42btm0jcteZiftchjRZotBgT98znQV0I+k=";
   };
 
-  nativeBuildInputs = [ cmake autoAddOpenGLRunpathHook ];
+  nativeBuildInputs = [
+    cmake
+    autoAddOpenGLRunpathHook
+    cuda_nvcc
+    cuda_cccl
+  ];
 
   buildInputs = [
-    cudatoolkit
     cuda_cudart
+    cuda_nvrtc
   ];
 
   cmakeFlags = [
-    "-DCUDA_TOOLKIT_ROOT_DIR=${cudatoolkit}"
-    "-DLIBCUDA_LIBRARY_DIR=${libcudaDir}"
-    "-DCUDA_LIB=${libcudaDir}/libcuda.so"
-    "-DCUDA_CUDA_LIBRARY=${libcudaDir}/libcuda.so"
-    "-DCUDA_CUDART_LIBRARY=${cuda_cudart}/lib/libcudart.so"
-    "-DLIBNVRTC_LIBRARY_DIR=${cudatoolkit}/lib"
-    "-DCUDA_NVRTC_LIB=${cudatoolkit}/lib/libnvrtc.so" # or from cuda_nvrtc?
-    "-DCUDA_ARCH=${builtins.toString cudaArch}"
+    "WITH_CUDA=ON"
+    "WITH_NVML=ON"
+    # "-DCUDA_TOOLKIT_ROOT_DIR=${cudatoolkit}"
+    # "-DLIBCUDA_LIBRARY_DIR=${libcudaDir}"
+    "-DCUDA_LIB=${cuda_cudart}/lib/stubs/libcuda.so"
+    # "-DCUDA_CUDA_LIBRARY=${libcudaDir}/libcuda.so"
+    # "-DCUDA_CUDART_LIBRARY=${cuda_cudart}/lib/libcudart.so"
+    # "-DLIBNVRTC_LIBRARY_DIR=${cudatoolkit}/lib"
+    # "-DCUDA_NVRTC_LIB=${cudatoolkit}/lib/libnvrtc.so" # or from cuda_nvrtc?
+    "-DCUDA_ARCH=${CUDA_ARCH}"
   ];
 
   installPhase = ''
