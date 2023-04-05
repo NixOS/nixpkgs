@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -34,15 +35,35 @@ buildPythonPackage rec {
       --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  doCheck = false; # the *entire* test suite requires network access
-  nativeCheckInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  propagatedBuildInputs = [
+    numpy
+    netcdf4
+    pandas
+    packaging
+    xarray
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mpl
+    ghostscript
+    ipython
+  ];
+
+  # The *entire* test suite requires network access
+  doCheck = false;
+
   postBuild = ''
     export HOME=$TMP
   '';
-  pythonImportsCheck = [ "pygmt" ];
+
+  pythonImportsCheck = [
+    "pygmt"
+  ];
 
   meta = with lib; {
     description = "A Python interface for the Generic Mapping Tools";
