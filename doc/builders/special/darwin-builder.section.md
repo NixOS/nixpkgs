@@ -67,10 +67,9 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
 {
   inputs = {
-    nixpkgs.url = "path:/Users/geraint.ballinger/Documents/personal/nixpkgs";
-    nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
     darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, darwin, nixpkgs, ... }@inputs:
@@ -81,7 +80,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
     pkgs = nixpkgs.legacyPackages."${system}";
     linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
 
-    darwin-builder = nixpkgs.nixosSystem {
+    darwin-builder = nixpkgs.lib.nixosSystem {
       system = linuxSystem;
       modules = [
         "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
@@ -105,7 +104,6 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 
             launchd.daemons.darwin-builder = {
               command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
-              path = [ "/usr/bin" pkgs.coreutils pkgs.nix ];
               serviceConfig = {
                 KeepAlive = true;
                 RunAtLoad = true;
@@ -127,6 +125,25 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 Initially you should not change the builder configuration else you will not be
 able to use the binary cache. However, after you have the builder running locally
 you may use it to build a modified builder with additional storage or memory.
-To do this, import the `macos-builder` module into your nix configuration and
-edit the `virtualisation.darwin-builder.*` parameters as desired and rebuild.
+
+To do this, you just need to set the `virtualisation.darwin-builder.*` parameters as
+in the example below and rebuild.
+
+```
+    darwin-builder = nixpkgs.lib.nixosSystem {
+      system = linuxSystem;
+      modules = [
+        "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
+        {
+          virtualisation.host.pkgs = pkgs;
+          virtualisation.darwin-builder.diskSize = 5120;
+          virtualisation.darwin-builder.memorySize = 1024;
+          virtualisation.darwin-builder.hostPort = 33022;
+          virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
+        }
+      ];
+```
+
+You may make any other changes to your VM in this attribute set. For example,
+you could enable Docker or X11 forwarding to your Darwin host.
 

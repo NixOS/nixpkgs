@@ -7,6 +7,8 @@ let
 
   keyType = "ed25519";
 
+  cfg = config.virtualisation.darwin-builder;
+
 in
 
 {
@@ -55,6 +57,23 @@ in
         stop garbage collection on the runner
       '';
     };
+    workingDirectory = mkOption {
+       default = ".";
+       type = types.str;
+       example = "/var/lib/darwin-builder";
+       description = ''
+         The working directory to use to run the script. When running
+         as part of a flake will need to be set to a non read-only filesystem.
+       '';
+    };
+    hostPort = mkOption {
+      default = 22;
+      type = types.int;
+      example = 31022;
+      description = ''
+        The localhost host port to forward TCP to the guest port.
+      '';
+    };
   };
 
   config = {
@@ -86,9 +105,9 @@ in
     nix.settings = {
       auto-optimise-store = true;
 
-      min-free = config.virtualisation.darwin-builder.min-free;
+      min-free = cfg.min-free;
 
-      max-free = config.virtualisation.darwin-builder.max-free;
+      max-free = cfg.max-free;
 
       trusted-users = [ "root" user ];
     };
@@ -120,7 +139,13 @@ in
 
         hostPkgs = config.virtualisation.host.pkgs;
 
-        script = hostPkgs.writeShellScriptBin "create-builder" ''
+  script = hostPkgs.writeShellScriptBin "create-builder" (
+          # When running as non-interactively as part of a DarwinConfiguration the working directory
+          # must be set to a writeable directory.
+        (if cfg.workingDirectory != "." then ''
+          ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
+          cd "${cfg.workingDirectory}"
+  '' else "") + ''
           KEYS="''${KEYS:-./keys}"
           ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
           PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
@@ -132,8 +157,8 @@ in
           if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
             (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
           fi
-          KEYS="$(nix-store --add "$KEYS")" ${config.system.build.vm}/bin/run-nixos-vm
-        '';
+          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${config.system.build.vm}/bin/run-nixos-vm
+        '');
 
       in
       script.overrideAttrs (old: {
@@ -173,12 +198,12 @@ in
     '';
 
     virtualisation = {
-      diskSize = config.virtualisation.darwin-builder.diskSize;
+      diskSize = cfg.diskSize;
 
-      memorySize = config.virtualisation.darwin-builder.memorySize;
+      memorySize = cfg.memorySize;
 
       forwardPorts = [
-        { from = "host"; guest.port = 22; host.port = 22; }
+        { from = "host"; guest.port = 22; host.port = cfg.hostPort; }
       ];
 
       # Disable graphics for the builder since users will likely want to run it
