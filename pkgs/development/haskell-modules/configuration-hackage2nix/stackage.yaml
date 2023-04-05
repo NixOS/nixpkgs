@@ -2902,7 +2902,6 @@ default-package-overrides:
   - Win32-notify ==0.3.0.3
   - windns ==0.1.0.1
   - witch ==1.1.6.1
-with-compiler: ghc-9.2.7
   - withdependencies ==0.3.0
   - witherable ==0.4.2
   - within ==0.2.0.1
