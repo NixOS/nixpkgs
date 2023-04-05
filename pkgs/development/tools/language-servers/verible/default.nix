@@ -74,7 +74,7 @@ buildBazelPackage rec {
 
   bazel = bazel_4;
   removeRulesCC = false;
-  bazelTarget = ":install-binaries";
+  bazelTargets = [ ":install-binaries" ];
   bazelTestTargets = [ "//..." ];
   bazelBuildFlags = [
     "-c opt"
