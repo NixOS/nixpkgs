@@ -625,7 +625,8 @@ rec {
         lib.strings.removePrefix: The first argument (${toString prefix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any prefix in such a case.
             This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
+            This behavior is deprecated and will throw an error in the future.
+            You might want to use `lib.path.removePrefix` instead, which correctly supports paths.''
     (let
       preLen = stringLength prefix;
       sLen = stringLength str;
