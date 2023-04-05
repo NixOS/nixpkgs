@@ -2,12 +2,38 @@
 { lib }:
 
 let
+  inherit (builtins)
+    getAttr
+    readDir
+    pathExists
+    ;
+
   inherit (lib.strings)
     hasPrefix
+    ;
+
+  inherit (lib.filesystem)
+    pathType
     ;
 in
 
 {
+
+  /*
+    Returns the type of a path: regular (for file), symlink, or directory.
+  */
+  pathType = path: getAttr (baseNameOf path) (readDir (dirOf path));
+
+  /*
+    Returns true if the path exists and is a directory, false otherwise.
+  */
+  pathIsDirectory = path: if pathExists path then (pathType path) == "directory" else false;
+
+  /*
+    Returns true if the path exists and is a regular file, false otherwise.
+  */
+  pathIsRegularFile = path: if pathExists path then (pathType path) == "regular" else false;
+
   /*
     A map of all haskell packages defined in the given path,
     identified by having a cabal file with the same name as the
