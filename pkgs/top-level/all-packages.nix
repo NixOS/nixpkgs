@@ -34955,7 +34955,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  xmp = callPackage ../applications/audio/xmp { };
+  xmp = callPackage ../applications/audio/xmp {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   xnee = callPackage ../tools/X11/xnee { };
 
