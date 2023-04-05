@@ -1,5 +1,5 @@
 { stdenv, lib, darwin, fetchFromGitHub
-, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone, dbus
+, tbb, glfw, pkg-config, freetype, Carbon, AppKit, capstone, dbus, hicolor-icon-theme
 }:
 
 let
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ glfw capstone ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
     ++ lib.optionals (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [ darwin.apple_sdk.frameworks.UniformTypeIdentifiers ]
-    ++ lib.optionals stdenv.isLinux [ gtk3 tbb dbus ];
+    ++ lib.optionals stdenv.isLinux [ tbb dbus hicolor-icon-theme freetype ];
 
   env.NIX_CFLAGS_COMPILE = toString ([ ]
     # Apple's compiler finds a format string security error on
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = lib.optional disableLTO "-fno-lto";
 
   buildPhase = ''
-    make -j $NIX_BUILD_CORES -C profiler/build/unix release
+    make -j $NIX_BUILD_CORES -C profiler/build/unix release LEGACY=1
     make -j $NIX_BUILD_CORES -C import-chrome/build/unix/ release
     make -j $NIX_BUILD_CORES -C capture/build/unix/ release
     make -j $NIX_BUILD_CORES -C update/build/unix/ release
