@@ -22,7 +22,12 @@ in
     Returns the type of a path: regular (for file), symlink, or directory.
   */
   pathType = path:
-    (readDir (dirOf path)).${baseNameOf path};
+    # The filesystem root is the only path where `dirOf / == /` and
+    # `baseNameOf /` is not valid. We can detect this and directly return
+    # "directory", since we know the filesystem root can't be anything else.
+    if dirOf path == path
+    then "directory"
+    else (readDir (dirOf path)).${baseNameOf path};
 
   /*
     Returns true if the path exists and is a directory, false otherwise.
