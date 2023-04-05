@@ -46,6 +46,7 @@ checkPathType() {
     fi
 }
 
+checkPathType "/" '"directory"'
 checkPathType "$PWD/directory" '"directory"'
 checkPathType "$PWD/regular" '"regular"'
 checkPathType "$PWD/symlink" '"symlink"'
@@ -62,6 +63,7 @@ checkPathIsDirectory() {
     fi
 }
 
+checkPathIsDirectory "/" "true"
 checkPathIsDirectory "$PWD/directory" "true"
 checkPathIsDirectory "$PWD/regular" "false"
 checkPathIsDirectory "$PWD/symlink" "false"
@@ -79,6 +81,7 @@ checkPathIsRegularFile() {
     fi
 }
 
+checkPathIsRegularFile "/" "false"
 checkPathIsRegularFile "$PWD/directory" "false"
 checkPathIsRegularFile "$PWD/regular" "true"
 checkPathIsRegularFile "$PWD/symlink" "false"
