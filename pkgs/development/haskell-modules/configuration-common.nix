@@ -1157,7 +1157,18 @@ self: super: {
       jailbreak = assert drv.version == "1.0.9" && drv.revision == "1"; true;
     }) super.dhall-nixpkgs);
 
-  stack = self.generateOptparseApplicativeCompletions [ "stack" ] super.stack;
+  stack =
+    self.generateOptparseApplicativeCompletions
+      [ "stack" ]
+      (super.stack.override {
+        # stack needs to use an exact hpack version.  When changing or removing
+        # this override, double-check the upstream stack release to confirm
+        # that we are using the correct hpack version. See
+        # https://github.com/NixOS/nixpkgs/issues/223390 for more information.
+        #
+        # hpack tests fail because of https://github.com/sol/hpack/issues/528
+        hpack = dontCheck self.hpack_0_35_0;
+      });
 
   # Too strict version bound on hashable-time.
   # Tests require newer package version.
