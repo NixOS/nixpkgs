@@ -636,6 +636,8 @@ with pkgs;
 
   ptouch-print = callPackage ../misc/ptouch-print { };
 
+  pwru = callPackage ../tools/networking/pwru { };
+
   demoit = callPackage ../servers/demoit { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
