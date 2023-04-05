@@ -8187,6 +8187,12 @@
     github = "konradmalik";
     githubId = 13033392;
   };
+  konst-aa = {
+    email = "konstantin.astafurov@gmail.com";
+    github = "konst-aa";
+    githubId = 40547702;
+    name = "Konstantin Astafurov";
+  };
   koozz = {
     email = "koozz@linux.com";
     github = "koozz";
