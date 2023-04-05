@@ -29,6 +29,7 @@ let
     gio-qt = callPackage ./library/gio-qt { };
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
+    util-dfm = callPackage ./library/util-dfm { };
 
     #### CORE
     dde-control-center = callPackage ./core/dde-control-center { };
