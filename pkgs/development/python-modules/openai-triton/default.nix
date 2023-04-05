@@ -1,26 +1,26 @@
-{ lib
+{ addOpenGLRunpath
 , buildPythonPackage
-, python
-, fetchpatch
-, fetchFromGitHub
-, addOpenGLRunpath
 , cmake
 , config
 , cudaPackages ? { }
 , cudaSupport ? config.cudaSupport or false
-, llvmPackages
-, pybind11
+, fetchFromGitHub
+, fetchpatch
+, filelock
 , gtest
-, zlib
-, ncurses
+, lib
 , libxml2
 , lit
-, filelock
-, torchWithRocm
+, llvmPackages
+, ncurses
+, pkgsTargetTarget
+, pybind11
 , pytest
 , pytestCheckHook
+, python
 , pythonRelaxDepsHook
-, pkgsTargetTarget
+, torchWithRocm
+, zlib
 }:
 
 let
