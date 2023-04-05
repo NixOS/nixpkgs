@@ -36390,6 +36390,8 @@ with pkgs;
 
   starspace = callPackage ../applications/science/machine-learning/starspace { };
 
+  stc = callPackage ../applications/networking/stc { };
+
   stockfish = callPackage ../games/stockfish { };
 
   steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam {
