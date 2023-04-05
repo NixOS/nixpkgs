@@ -294,6 +294,9 @@ with lib.maintainers; {
       zowoq
       qbit
     ];
+    githubTeams = [
+      "golang"
+    ];
     scope = "Maintain Golang compilers.";
     shortName = "Go";
     enableFeatureFreezePing = true;
