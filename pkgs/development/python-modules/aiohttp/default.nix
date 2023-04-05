@@ -23,6 +23,7 @@
 , freezegun
 , gunicorn
 , pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , re-assert
 , trustme
@@ -79,6 +80,7 @@ buildPythonPackage rec {
     freezegun
     gunicorn
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
