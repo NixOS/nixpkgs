@@ -3,7 +3,6 @@
 
 let
   inherit (builtins)
-    getAttr
     readDir
     pathExists
     ;
@@ -22,17 +21,20 @@ in
   /*
     Returns the type of a path: regular (for file), symlink, or directory.
   */
-  pathType = path: getAttr (baseNameOf path) (readDir (dirOf path));
+  pathType = path:
+    (readDir (dirOf path)).${baseNameOf path};
 
   /*
     Returns true if the path exists and is a directory, false otherwise.
   */
-  pathIsDirectory = path: if pathExists path then (pathType path) == "directory" else false;
+  pathIsDirectory = path:
+    pathExists path && pathType path == "directory";
 
   /*
     Returns true if the path exists and is a regular file, false otherwise.
   */
-  pathIsRegularFile = path: if pathExists path then (pathType path) == "regular" else false;
+  pathIsRegularFile = path:
+    pathExists path && pathType path == "regular";
 
   /*
     A map of all haskell packages defined in the given path,
