@@ -294,6 +294,9 @@ with lib.maintainers; {
       zowoq
       qbit
     ];
+    githubTeams = [
+      "golang"
+    ];
     scope = "Maintain Golang compilers.";
     shortName = "Go";
     enableFeatureFreezePing = true;
@@ -722,6 +725,9 @@ with lib.maintainers; {
       tjni
       winter
       zowoq
+    ];
+    githubTeams = [
+      "rust"
     ];
     scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";
     shortName = "Rust";
