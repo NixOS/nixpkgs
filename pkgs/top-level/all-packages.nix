@@ -38913,6 +38913,8 @@ with pkgs;
 
   unityhub = callPackage ../development/tools/unityhub { };
 
+  upspin-ui = callPackage ../applications/file-managers/upspin-ui { };
+
   urbit = callPackage ../misc/urbit { };
 
   usb-reset = callPackage ../applications/misc/usb-reset { };
