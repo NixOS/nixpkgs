@@ -44,6 +44,9 @@ pkgs.runCommand "nixpkgs-lib-tests" {
     echo "Running lib/tests/modules.sh"
     bash lib/tests/modules.sh
 
+    echo "Running lib/tests/filesystem.sh"
+    TEST_LIB=$PWD/lib bash lib/tests/filesystem.sh
+
     echo "Running lib/tests/sources.sh"
     TEST_LIB=$PWD/lib bash lib/tests/sources.sh
 
