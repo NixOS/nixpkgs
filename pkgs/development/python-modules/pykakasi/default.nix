@@ -9,6 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jaconv
     deprecated
+    setuptools # imports pkg_resources
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
