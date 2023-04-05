@@ -138,7 +138,7 @@ self: super: {
     hash = "sha256-sBuqSmgCQSgbXV6KPEZcIP09wbx81q5xjSg7/slH2HQ=";
   }) super.hls-test-utils;
 
-  hls-rename-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal 
+  hls-rename-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
     (drv: {
       prePatch = drv.prePatch or "" + ''
         "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
@@ -151,7 +151,7 @@ self: super: {
       hash = "sha256-WPhCQmn3rjCOiQFJz23QQ84zfm43FNll0BfsNK5pkG0=";
     }) super.hls-rename-plugin) else super.hls-rename-plugin;
 
-  hls-floskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal 
+  hls-floskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
     (drv: {
       prePatch = drv.prePatch or "" + ''
         "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
@@ -164,7 +164,7 @@ self: super: {
       hash = "sha256-n2vuzGbdvhW6I8c7Q22SuNIKSX2LwGNBTVyLLHJIsiU=";
     }) super.hls-floskell-plugin) else super.hls-floskell-plugin;
 
-  hls-stylish-haskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal 
+  hls-stylish-haskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
     (drv: {
       prePatch = drv.prePatch or "" + ''
         "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
