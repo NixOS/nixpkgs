@@ -726,6 +726,9 @@ with lib.maintainers; {
       winter
       zowoq
     ];
+    githubTeams = [
+      "rust"
+    ];
     scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";
     shortName = "Rust";
     enableFeatureFreezePing = true;
