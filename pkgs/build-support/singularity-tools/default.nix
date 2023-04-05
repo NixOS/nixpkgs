@@ -8,7 +8,6 @@
   writeScript,
   # Native build inputs
   e2fsprogs,
-  gawk,
   util-linux,
   # Build inputs
   bash,
@@ -63,7 +62,6 @@ rec {
               singularity
               e2fsprogs
               util-linux
-              gawk
             ];
             strictDeps = true;
             layerClosure = writeClosure contents;
