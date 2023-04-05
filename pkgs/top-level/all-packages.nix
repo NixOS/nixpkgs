@@ -12474,6 +12474,8 @@ with pkgs;
 
   ssocr = callPackage ../applications/misc/ssocr { };
 
+  sss-cli = callPackage ../tools/security/sss-cli { };
+
   ssss = callPackage ../tools/security/ssss { };
 
   stabber = callPackage ../misc/stabber { };
