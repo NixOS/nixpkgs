@@ -426,6 +426,21 @@ with lib.maintainers; {
     shortName = "Linux Kernel";
   };
 
+  lisp = {
+    members = [
+      raskin
+      lukego
+      nagy
+      uthar
+    ];
+    githubTeams = [
+      "lisp"
+    ];
+    scope = "Maintain the Lisp ecosystem.";
+    shortName = "lisp";
+    enableFeatureFreezePing = true;
+  };
+
   llvm = {
     members = [
       dtzWill
