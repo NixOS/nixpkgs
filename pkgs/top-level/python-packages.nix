@@ -8372,6 +8372,8 @@ self: super: with self; {
 
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
 
+  pyinstaller-hooks-contrib = callPackage ../development/python-modules/pyinstaller-hooks-contrib { };
+
   pyinsteon = callPackage ../development/python-modules/pyinsteon { };
 
   pyinstrument = callPackage ../development/python-modules/pyinstrument { };
