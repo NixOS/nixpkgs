@@ -6,7 +6,10 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.0.7";
+  # The websites spotdl (sometimes indirectly) deals with are a moving target.
+  # That means that downloads do occasionally break. Because of that, updates
+  # should always be backported to the latest stable release.
+  version = "4.1.3";
 
   format = "pyproject";
 
@@ -14,8 +17,14 @@ python3.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+hkdrPi3INs16SeAl+iXOE9KFDzG/TYXB3CDd8Tigwk=";
+    hash = "sha256-XsOecKwSgLWasZw3A4LKSSwEfq93oQM9IrsAIR2M28o=";
   };
+
+  patches = [
+    # fix redundant unconditional network access for all tests
+    # see spotdl issue #1789 -- should be included in next (or 2nd next?) release
+    ./0001-utils-search.py-lazily-initalize-YTMusic-client.patch
+  ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core

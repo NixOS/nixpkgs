@@ -1,0 +1,55 @@
+From c83aa3c01d29561605e0b41c9924dfee4f909ec4 Mon Sep 17 00:00:00 2001
+From: ckie <git-525ff67@ckie.dev>
+Date: Wed, 5 Apr 2023 16:16:44 +0300
+Subject: [PATCH] utils/search.py: lazily initalize YTMusic() client
+
+---
+ spotdl/utils/search.py | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/spotdl/utils/search.py b/spotdl/utils/search.py
+index ec8c158..df0adc0 100644
+--- a/spotdl/utils/search.py
++++ b/spotdl/utils/search.py
+@@ -33,7 +33,14 @@
+ ]
+ 
+ logger = logging.getLogger(__name__)
+-client = YTMusic()
++
++client = None
++def get_ytm_client() -> YTMusic:
++    if client is None:
++        client = YTMusic()
++    # type: ignore
++    return client
++
+ 
+ 
+ class QueryError(Exception):
+@@ -356,11 +363,11 @@ def create_ytm_album(url: str, fetch_songs: bool = True) -> Album:
+     if "?list=" not in url or not url.startswith("https://music.youtube.com/"):
+         raise ValueError(f"Invalid album url: {url}")
+ 
+-    browse_id = client.get_album_browse_id(url.split("?list=")[1].split("&")[0])
++    browse_id = get_ytm_client().get_album_browse_id(url.split("?list=")[1].split("&")[0])
+     if browse_id is None:
+         raise ValueError(f"Invalid album url: {url}")
+ 
+-    album = client.get_album(browse_id)
++    album = get_ytm_client().get_album(browse_id)
+ 
+     if album is None:
+         raise ValueError(f"Couldn't fetch album: {url}")
+@@ -412,7 +419,7 @@ def create_ytm_playlist(url: str, fetch_songs: bool = True) -> Playlist:
+         playlist_id = url.split("/browse/")[1]
+     else:
+         playlist_id = url.split("?list=")[1]
+-    playlist = client.get_playlist(playlist_id, None)  # type: ignore
++    playlist = get_ytm_client().get_playlist(playlist_id, None)  # type: ignore
+ 
+     if playlist is None:
+         raise ValueError(f"Couldn't fetch playlist: {url}")
+-- 
+2.39.2
+
