@@ -23686,6 +23686,8 @@ with pkgs;
 
   spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt { };
 
+  sparrow3d = callPackage ../development/libraries/sparrow3d {};
+
   spdk = callPackage ../development/libraries/spdk { };
 
   speechd = callPackage ../development/libraries/speechd { };
