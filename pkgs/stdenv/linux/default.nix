@@ -341,6 +341,13 @@ in
             #
             name = "xgcc";
 
+            # xgcc uses ld linked against nixpkgs' glibc and gcc built
+            # against bootstrapTools glibc. We can't allow loading
+            #   $out/libexec/gcc/x86_64-unknown-linux-gnu/13.0.1/liblto_plugin.so
+            # to mix libc.so:
+            #   ...-binutils-patchelfed-ld-2.40/bin/ld: ...-xgcc-13.0.0/libexec/gcc/x86_64-unknown-linux-gnu/13.0.1/liblto_plugin.so:
+            #     error loading plugin: ...-bootstrap-tools/lib/libpthread.so.0: undefined symbol: __libc_vfork, version GLIBC_PRIVATE
+            enableLTO = false;
           })).overrideAttrs (a: {
 
             # This signals to cc-wrapper (as overridden above in this file) to add `--sysroot`
