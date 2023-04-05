@@ -205,6 +205,15 @@ cfglumina = """  # Enable the X11 windowing system.
 
 """
 
+cfgbudgie = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the Budgie Desktop environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.budgie.enable = true;
+
+"""
+
 cfgkeymap = """  # Configure keymap in X11
   services.xserver = {
     layout = "@@kblayout@@";
@@ -459,6 +468,8 @@ def run():
         cfg += cfglxqt
     elif gs.value("packagechooser_packagechooser") == "lumina":
         cfg += cfglumina
+    elif gs.value("packagechooser_packagechooser") == "budgie":
+        cfg += cfgbudgie
 
     if (gs.value("keyboardLayout") is not None and gs.value("keyboardVariant") is not None):
         cfg += cfgkeymap
