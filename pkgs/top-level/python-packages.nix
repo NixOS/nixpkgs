@@ -5949,6 +5949,8 @@ self: super: with self; {
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
+  meraki = callPackage ../development/python-modules/meraki { };
+
   mercantile = callPackage ../development/python-modules/mercantile { };
 
   mercurial = toPythonModule (pkgs.mercurial.override {
