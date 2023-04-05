@@ -341,6 +341,10 @@ in
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
         rm -f ${smokepingHome}/cropper
         ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
+        rm -f ${smokepingHome}/css
+        ln -s ${cfg.package}/htdocs/css ${smokepingHome}/css
+        rm -f ${smokepingHome}/js
+        ln -s ${cfg.package}/htdocs/js ${smokepingHome}/js
         rm -f ${smokepingHome}/smokeping.fcgi
         ln -s ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
