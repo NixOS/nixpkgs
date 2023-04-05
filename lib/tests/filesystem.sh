@@ -51,6 +51,7 @@ checkPathType "$PWD/directory" '"directory"'
 checkPathType "$PWD/regular" '"regular"'
 checkPathType "$PWD/symlink" '"symlink"'
 checkPathType "$PWD/fifo" '"unknown"'
+checkPathType "$PWD/non-existent" "error: evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'"
 
 checkPathIsDirectory() {
     local path=$1
