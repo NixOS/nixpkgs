@@ -48,6 +48,7 @@ buildPythonPackage rec {
     description = "A Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
     # pygmt.exceptions.GMTCLibNotFoundError: Error loading the GMT shared library '/nix/store/r3xnnqgl89vrnq0kzxx0bmjwzks45mz8-gmt-6.1.1/lib/libgmt.dylib'
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ sikmir ];
