@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.9.1";
 
   src = fetchFromGitHub {
-    owner = "juspay";
+    owner = "Oberon00";
     repo = "luabind";
-    rev = "darwin";
+    rev = "v${version}";
     sha256 = "sha256-U2kJ/aMszto9hmcDDhabqaB63WmLpjMn5AEJ31j+RbI=";
   };
 
