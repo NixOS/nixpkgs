@@ -111,6 +111,30 @@ let
     }
   ''));
 
+  accessLogString = { file, format, buffer, gzip, flush, off ? [], ... }:
+    (if off then "
+      access_log off;"
+    else "
+      access_log "
+        + optionalString (file != null) "${file} "
+        + optionalString (buffer != null || gzip != null || (buffer != null && flush != null)) "${format} "
+        + optionalString (buffer != null) "buffer=${buffer} "
+        + optionalString (gzip == 1) "gzip "
+        + optionalString (gzip != 1 && gzip != null) "gzip=${toString gzip} "
+        + optionalString (buffer != null && flush != null) "flush=${flush} "
+        + ";"
+      );
+
+  errorLogString = { file, logLevel, stderr ? [], ... }:
+    (if stderr then "
+      error_log stderr;"
+    else "
+      error_log "
+        + optionalString (file != null) "${file} "
+        + optionalString (logLevel != "error") "${logLevel}"
+        + ";"
+    );
+
   commonHttpConfig = ''
       # Load mime types.
       include ${cfg.defaultMimeTypes};
@@ -248,6 +272,9 @@ let
                                           inactive=${cfg.proxyCache.inactive}
                                           max_size=${cfg.proxyCache.maxSize};
       ''}
+
+      ${concatMapStringsSep "\n" accessLogString cfg.accessLogs}
+      ${concatMapStringsSep "\n" errorLogString cfg.errorLogs}
 
       ${cfg.commonHttpConfig}
 
@@ -400,6 +427,9 @@ let
 
           ${mkBasicAuth vhostName vhost}
 
+          ${concatMapStringsSep "\n" accessLogString vhost.accessLogs}
+          ${concatMapStringsSep "\n" errorLogString vhost.errorLogs}
+
           ${mkLocations vhost.locations}
 
           ${vhost.extraConfig}
@@ -429,6 +459,8 @@ let
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${optionalString (config.return != null) "return ${config.return};"}
+      ${concatMapStringsSep "\n" accessLogString config.accessLogs}
+      ${concatMapStringsSep "\n" errorLogString config.errorLogs}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
       ${mkBasicAuth "sublocation" config}
@@ -951,6 +983,51 @@ in
               keepalive 16;
             '''';
           };
+        '';
+      };
+
+      accessLogs = mkOption {
+        type = with types; listOf (submodule { options = {
+          file = mkOption { type = types.nullOr types.path; default = null; description = lib.mdDoc "Set the file for a log write"; };
+          format = mkOption { type = str; default = "combined"; description = lib.mdDoc "Set the format for a log write"; };
+          buffer = mkOption { type = types.nullOr types.str; default = null; description = lib.mdDoc "Set the buffer size for a log write"; };
+          gzip = mkOption { type = types.nullOr types.int; default = null; description = lib.mdDoc "Set the compression level for a log write"; };
+          flush = mkOption { type = types.nullOr types.str; default = null; description = lib.mdDoc "Set the flush time for a log write"; };
+          off = mkOption { type = bool; default = false; description = lib.mdDoc "Cancels all access_log directives on the current level"; };
+        }; });
+        default = [];
+        description = lib.mdDoc ''
+          Sets the path, format, and configuration for a buffered log write. Several
+          logs can be specified on the same configuration level.
+          If either the buffer or gzip parameter is used, writes to log will be buffered.
+          If the gzip parameter is used, then the buffered data will be compressed before
+          writing to the file. The compression level can be set between 1 (fastest,
+          less compression) and 9 (slowest, best compression).
+          By default, the buffer size is equal to 64K bytes, and the compression
+          level is set to 1.
+        '';
+      };
+
+      errorLogs = mkOption {
+        type = with types; listOf (submodule { options = {
+          file = mkOption { type = types.nullOr types.path; default = null; description = lib.mdDoc "Set the file for a log write"; };
+          logLevel = mkOption {
+            type = types.enum [ "debug" "info" "notice" "warn" "error" "crit" "alert" "emerg" ];
+            default = "error";
+            description = lib.mdDoc "Set the level for a log write";
+          };
+          stderr =  mkOption { type = bool; default = false; description = lib.mdDoc "Selects the standard error file"; };
+        }; });
+        default = [];
+        description = lib.mdDoc ''
+          Configures logging. Several logs can be specified on the same configuration level.
+          The second parameter determines the level of logging, and can be one of
+          the following: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`,
+          or `emerg. Log levels above are listed in the order of increasing severity. Setting a
+          certain log level will cause all messages of the specified and more severe log
+          levels to be logged. For example, the default level `error` will cause `error`,
+          `crit`, `alert`, and `emerg` messages to be logged.
+          If this parameter is omitted then `error` is used.
         '';
       };
 
