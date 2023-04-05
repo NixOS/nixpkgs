@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorHash = "sha256-P4xr7zVTwBRVoPxtKn3FNV7Vp6lI4uWdTJyXwex8Fe4=";
 
-  doCheck = false;
-
   meta = with lib; {
     description = "Official command line tool for Vultr services";
     homepage = "https://github.com/vultr/vultr-cli";
