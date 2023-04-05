@@ -13,7 +13,7 @@
 
 let
   inherit (pkgs) fetchpatch fetchpatch2 lib;
-  inherit (lib) throwIfNot versionOlder;
+  inherit (lib) throwIfNot versionOlder versions;
 in
 
 with haskellLib;
@@ -2607,4 +2607,9 @@ self: super: {
   # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
   # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
   tomland = doJailbreak super.tomland;
+
+  # 2023-04-05: The last version to support libsoup-2.4, required for
+  # compatability with other gi- packages.
+  # Take another look when gi-webkit2 updates as it may have become compatible with libsoup-3
+  gi-soup = assert versions.major self.gi-webkit2.version == "4"; self.gi-soup_2_4_28;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
