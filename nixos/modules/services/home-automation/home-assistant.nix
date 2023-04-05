@@ -505,6 +505,7 @@ in {
           "mysensors"
           "nad"
           "numato"
+          "otbr"
           "rflink"
           "rfxtrx"
           "scsgate"
