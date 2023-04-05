@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libogg libvorbis libmad ];
 
+  makeFlags = [
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"  # for cross
+  ];
+
   meta = with lib; {
     homepage = "https://streamripper.sourceforge.net/";
     description = "Application that lets you record streaming mp3 to your hard drive";
