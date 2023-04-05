@@ -32838,6 +32838,8 @@ with pkgs;
 
   pfsshell = callPackage ../tools/misc/pfsshell { };
 
+  phantomsocks = callPackage ../tools/networking/phantomsocks { };
+
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
