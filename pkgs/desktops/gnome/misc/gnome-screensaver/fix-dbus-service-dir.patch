@@ -1,0 +1,11 @@
+--- a/configure.ac  2019-01-20 20:28:01.309231507 +0100
++++ b/configure.ac  2019-01-20 20:31:54.927978927 +0100
+@@ -137,7 +137,7 @@
+ 
+ # Find out where the session service file goes
+ # The sad sed hack is recomended by section 27.10 of the automake manual.
+-DBUS_SESSION_SERVICE_DIR=`pkg-config --variable session_bus_services_dir dbus-1 | sed -e 's,/usr/share,${datarootdir},g'`
++DBUS_SESSION_SERVICE_DIR=`pkg-config --variable session_bus_services_dir dbus-1 --define-variable 'datadir=${datadir}'`
+ AC_SUBST(DBUS_SESSION_SERVICE_DIR)
+ 
+ dnl ---------------------------------------------------------------------------

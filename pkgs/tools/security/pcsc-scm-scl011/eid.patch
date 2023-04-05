@@ -1,0 +1,28 @@
+diff --git a/proprietary/SCLGENERIC.bundle/Contents/Info.plist b/proprietary/SCLGENERIC.bundle/Contents/Info.plist
+index 412d6b9..5d1c6cc 100755
+--- a/proprietary/SCLGENERIC.bundle/Contents/Info.plist
++++ b/proprietary/SCLGENERIC.bundle/Contents/Info.plist
+@@ -34,6 +34,7 @@
+ 		<string>0x04E6</string>		
+ 		<string>0x04E6</string>
+ 		<string>0x04E6</string>
++		<string>0x04E6</string>
+ 	</array>
+ 
+ 	<key>ifdProductID</key>
+@@ -42,6 +43,7 @@
+ 		<string>0x5291</string>
+ 		<string>0x5290</string>
+ 		<string>0x5293</string>
++		<string>0x5292</string>
+ 	</array>
+ 
+ 	<key>ifdFriendlyName</key>
+@@ -50,6 +52,7 @@
+ 		<string>SCL010 Contactless Reader</string>
+ 		<string>SCR331CL-NTTCom</string>
+ 		<string>SCL011G Contactless Reader</string>
++		<string>SCM Microsystems, Inc. SCL011 RFID reader</string>
+ 	</array>
+ 
+ </dict>

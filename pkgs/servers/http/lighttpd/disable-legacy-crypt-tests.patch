@@ -1,0 +1,37 @@
+diff --git a/tests/mod-fastcgi.t b/tests/mod-fastcgi.t
+index 25016e60..e0427046 100755
+--- a/tests/mod-fastcgi.t
++++ b/tests/mod-fastcgi.t
+@@ -79,7 +79,7 @@ EOF
+ 	ok($tf->handle_http($t) == 0, 'FastCGI + bin-copy-environment');
+ 
+ SKIP: {
+-	skip "no crypt-des under openbsd", 2 if $^O eq 'openbsd';
++	skip "no crypt-des", 2;
+ 
+ 	$t->{REQUEST}  = ( <<EOF
+ GET /get-server-env.php?env=REMOTE_USER HTTP/1.0
+diff --git a/tests/request.t b/tests/request.t
+index f56a4300..36e67b88 100755
+--- a/tests/request.t
++++ b/tests/request.t
+@@ -1105,7 +1105,7 @@ $t->{RESPONSE} = [ { 'HTTP-Protocol' => 'HTTP/1.0', 'HTTP-Status' => 200 } ];
+ ok($tf->handle_http($t) == 0, 'Basic-Auth: Valid Auth-token - plain');
+ 
+ SKIP: {
+-	skip "no crypt-des under openbsd", 2 if $^O eq 'openbsd';
++	skip "no crypt-des", 2;
+ $t->{REQUEST}  = ( <<EOF
+ GET /server-config HTTP/1.0
+ Host: auth-htpasswd.example.org
+@@ -1162,9 +1162,7 @@ $t->{RESPONSE} = [ { 'HTTP-Protocol' => 'HTTP/1.0', 'HTTP-Status' => 401 } ];
+ ok($tf->handle_http($t) == 0, 'Basic-Auth: Valid Auth-token - htpasswd (apr-md5, wrong password)');
+ 
+ SKIP: {
+-	skip "no crypt-md5 under cygwin", 1 if $^O eq 'cygwin';
+-	skip "no crypt-md5 under darwin", 1 if $^O eq 'darwin';
+-	skip "no crypt-md5 under openbsd",1 if $^O eq 'openbsd';
++	skip "no crypt-md5", 1;
+ $t->{REQUEST}  = ( <<EOF
+ GET /server-config HTTP/1.0
+ Host: auth-htpasswd.example.org

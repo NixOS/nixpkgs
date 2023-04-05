@@ -1,0 +1,24 @@
+From 87885de957aa3f891fe963503c94685675c24f49 Mon Sep 17 00:00:00 2001
+From: grindhold <grindhold@gmx.net>
+Date: Wed, 27 Apr 2022 19:16:42 +0200
+Subject: [PATCH] fix import of QPainterPath
+
+---
+ ElmerGUI/Application/twod/renderarea.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/ElmerGUI/Application/twod/renderarea.cpp b/ElmerGUI/Application/twod/renderarea.cpp
+index 4c2515c5..65128ea9 100644
+--- a/ElmerGUI/Application/twod/renderarea.cpp
++++ b/ElmerGUI/Application/twod/renderarea.cpp
+@@ -38,6 +38,7 @@
+  *                                                                           *
+  *****************************************************************************/
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QMouseEvent>
+ #include <QFile>
+ #include <QTextStream>
+-- 
+2.33.3
+

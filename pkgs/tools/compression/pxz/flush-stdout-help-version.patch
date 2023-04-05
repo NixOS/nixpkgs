@@ -1,0 +1,32 @@
+From bba741ccd0f0a65cd9bfdd81504ebe5840fd37ad Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Tue, 22 Mar 2022 08:01:10 -0500
+Subject: [PATCH] pxz: flush stdout before exec'ing xz, ensure our messages are
+ printed
+
+Without this, they're presently dropped on my system when pxz
+is piped to something, as in `pxz --help|less` or `pxz --version|cat`.
+---
+ pxz.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pxz.c b/pxz.c
+index 4240b6e..3b53cfa 100644
+--- a/pxz.c
++++ b/pxz.c
+@@ -184,10 +184,12 @@ void parse_args( int argc, char **argv, char **envp ) {
+ 					"  -D, --context-size  per-thread compression context size as a multiple\n"
+ 					"                      of dictionary size. Default is 3.\n\n"
+ 					"Usage and other options are same as in XZ:\n\n");
++				fflush(stdout);
+ 				run_xz(argv, envp);
+ 				break;
+ 			case 'V':
+ 				printf("Parallel PXZ "PXZ_VERSION" (build "PXZ_BUILD_DATE")\n");
++				fflush(stdout);
+ 				run_xz(argv, envp);
+ 				break;
+ 			case 'g':
+-- 
+2.35.1
+

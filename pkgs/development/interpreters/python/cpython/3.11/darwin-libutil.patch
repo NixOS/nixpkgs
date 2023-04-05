@@ -1,0 +1,13 @@
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 40229bce0f..3cc604930e 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -7258,7 +7258,7 @@ os_sched_getaffinity_impl(PyObject *module, pid_t pid)
+ #ifdef HAVE_UTMP_H
+ #include <utmp.h>
+ #endif /* HAVE_UTMP_H */
+-#elif defined(HAVE_LIBUTIL_H)
++#elif defined(HAVE_LIBUTIL_H) && !defined(__APPLE__)
+ #include <libutil.h>
+ #elif defined(HAVE_UTIL_H)
+ #include <util.h>

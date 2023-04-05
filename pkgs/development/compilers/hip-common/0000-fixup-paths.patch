@@ -1,0 +1,129 @@
+diff --git a/bin/hipcc.pl b/bin/hipcc.pl
+index da9559b..7aaa540 100755
+--- a/bin/hipcc.pl
++++ b/bin/hipcc.pl
+@@ -185,7 +185,7 @@ if ($HIP_PLATFORM eq "amd") {
+     chomp($HIP_CLANG_TARGET);
+ 
+     if (! defined $HIP_CLANG_INCLUDE_PATH) {
+-        $HIP_CLANG_INCLUDE_PATH = abs_path("$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION/include");
++        $HIP_CLANG_INCLUDE_PATH = abs_path("@clang@/resource-root/include");
+     }
+     if (! defined $HIP_INCLUDE_PATH) {
+         $HIP_INCLUDE_PATH = "$HIP_PATH/include";
+@@ -206,8 +206,8 @@ if ($HIP_PLATFORM eq "amd") {
+         print ("HIP_CLANG_TARGET=$HIP_CLANG_TARGET\n");
+     }
+ 
+-    $HIPCXXFLAGS .= " -isystem \"$HIP_CLANG_INCLUDE_PATH/..\"";
+-    $HIPCFLAGS .= " -isystem \"$HIP_CLANG_INCLUDE_PATH/..\"";
++    $HIPCXXFLAGS .= " -isystem \"$HIP_CLANG_INCLUDE_PATH\"";
++    $HIPCFLAGS .= " -isystem \"$HIP_CLANG_INCLUDE_PATH\"";
+     $HIPLDFLAGS .= " -L\"$HIP_LIB_PATH\"";
+     if ($isWindows) {
+       $HIPLDFLAGS .= " -lamdhip64";
+@@ -625,7 +625,7 @@ if($HIP_PLATFORM eq "amd"){
+             $targetsStr = $ENV{HCC_AMDGPU_TARGET};
+         } elsif (not $isWindows) {
+             # Else try using rocm_agent_enumerator
+-            $ROCM_AGENT_ENUM = "${ROCM_PATH}/bin/rocm_agent_enumerator";
++            $ROCM_AGENT_ENUM = "@rocminfo@/bin/rocm_agent_enumerator";
+             $targetsStr = `${ROCM_AGENT_ENUM} -t GPU`;
+             $targetsStr =~ s/\n/,/g;
+         }
+@@ -724,16 +724,16 @@ if ($HIP_PLATFORM eq "amd") {
+ 
+     if (not $isWindows  and not $compileOnly) {
+       if ($linkType eq 0) {
+-        $toolArgs = " -L$HIP_LIB_PATH -lamdhip64 -L$ROCM_PATH/lib -lhsa-runtime64 -ldl -lnuma " . ${toolArgs};
++        $toolArgs = " -L$HIP_LIB_PATH -lamdhip64 -L@rocm_runtime@/lib -lhsa-runtime64 -ldl -lnuma " . ${toolArgs};
+       } else {
+         $toolArgs = ${toolArgs} . " -Wl,-rpath=$HIP_LIB_PATH:$ROCM_PATH/lib -lamdhip64 ";
+       }
+       # To support __fp16 and _Float16, explicitly link with compiler-rt
+-      $HIP_CLANG_BUILTIN_LIB="$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION/lib/$HIP_CLANG_TARGET/libclang_rt.builtins.a";
++      $HIP_CLANG_BUILTIN_LIB="@clang@/resource-root/lib/$HIP_CLANG_TARGET/libclang_rt.builtins.a";
+       if (-e $HIP_CLANG_BUILTIN_LIB) {
+-        $toolArgs .= " -L$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION/lib/$HIP_CLANG_TARGET -lclang_rt.builtins "
++        $toolArgs .= " -L@clang@/resource-root/lib/$HIP_CLANG_TARGET -lclang_rt.builtins "
+       } else {
+-        $toolArgs .= " -L$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION/lib/linux -lclang_rt.builtins-x86_64 "
++        $toolArgs .= " -L@clang@/resource-root/lib/linux -lclang_rt.builtins-x86_64 "
+       }
+     }
+ }
+diff --git a/bin/hipconfig.pl b/bin/hipconfig.pl
+index 5ddb8e9..6a76a2e 100755
+--- a/bin/hipconfig.pl
++++ b/bin/hipconfig.pl
+@@ -77,7 +77,7 @@ if ($HIP_COMPILER eq "clang") {
+     $CPP_CONFIG = " -D__HIP_PLATFORM_HCC__= -D__HIP_PLATFORM_AMD__=";
+ 
+     $HIP_PATH_INCLUDE = $HIP_PATH."/include";
+-    $HIP_CLANG_INCLUDE = $HIP_CLANG_PATH."/../lib/clang/".$HIP_CLANG_VERSION;
++    $HIP_CLANG_INCLUDE = "@clang@/resource-root/include";
+     if($isWindows) {
+         $CPP_CONFIG .= " -I\"$HIP_PATH_INCLUDE\" -I\"$HIP_CLANG_INCLUDE\"";
+     } else {
+@@ -168,7 +168,7 @@ if (!$printed or $p_full) {
+             print ("HIP_CLANG_PATH   : $HIP_CLANG_PATH\n");
+             if ($isWindows) {
+                 system("\"$HIP_CLANG_PATH/clang++\" --version");
+-                system("\"$HIP_CLANG_PATH/llc\" --version");
++                system("\"@llvm@/bin/llc\" --version");
+                 printf("hip-clang-cxxflags : ");
+                 $win_output = `perl \"$HIP_PATH/bin/hipcc\" --cxxflags`;
+                 printf("$win_output \n");
+@@ -177,7 +177,7 @@ if (!$printed or $p_full) {
+                 printf("$win_output \n");
+             } else {
+                 system("$HIP_CLANG_PATH/clang++ --version");
+-                system("$HIP_CLANG_PATH/llc --version");
++                system("@llvm@/bin/llc --version");
+                 print ("hip-clang-cxxflags : ");
+                 system("$HIP_PATH/bin/hipcc --cxxflags");
+                 printf("\n");
+@@ -219,8 +219,8 @@ if (!$printed or $p_full) {
+         system ("uname -a");
+     }
+ 
+-    if (-e "/usr/bin/lsb_release") {
+-        system ("/usr/bin/lsb_release -a");
++    if (-e "@lsb_release@/bin/lsb_release") {
++        system ("@lsb_release@/bin/lsb_release -a");
+     }
+ 
+     print "\n" ;
+diff --git a/hip-lang-config.cmake.in b/hip-lang-config.cmake.in
+index 9250a68..f6e27b7 100644
+--- a/hip-lang-config.cmake.in
++++ b/hip-lang-config.cmake.in
+@@ -71,8 +71,8 @@ get_filename_component(_IMPORT_PREFIX "${_DIR}/../../../" REALPATH)
+ 
+ 
+ #need _IMPORT_PREFIX to be set #FILE_REORG_BACKWARD_COMPATIBILITY
+-file(GLOB HIP_CLANG_INCLUDE_SEARCH_PATHS "${_IMPORT_PREFIX}/../llvm/lib/clang/*/include")
+-file(GLOB HIP_CLANG_INCLUDE_SEARCH_PATHS_REORG "${_IMPORT_PREFIX}/llvm/lib/clang/*/include")
++file(GLOB HIP_CLANG_INCLUDE_SEARCH_PATHS "@clang@/resource-root/include")
++file(GLOB HIP_CLANG_INCLUDE_SEARCH_PATHS_REORG "@clang@/resource-root/include")
+ find_path(HIP_CLANG_INCLUDE_PATH __clang_cuda_math.h
+     HINTS ${HIP_CLANG_INCLUDE_SEARCH_PATHS}
+           ${HIP_CLANG_INCLUDE_SEARCH_PATHS_REORG}
+@@ -89,7 +89,7 @@ find_path(HSA_HEADER hsa/hsa.h
+   PATHS
+     "${_IMPORT_PREFIX}/../include" #FILE_REORG_BACKWARD_COMPATIBILITY
+     "${_IMPORT_PREFIX}/include"
+-    "${ROCM_PATH}/include"
++    "@rocm_runtime@/include"
+ )
+ 
+ if (NOT HSA_HEADER)
+@@ -97,7 +97,7 @@ if (NOT HSA_HEADER)
+ endif()
+ 
+ get_filename_component(HIP_COMPILER_INSTALL_PATH ${CMAKE_HIP_COMPILER} DIRECTORY)
+-file(GLOB HIP_CLANGRT_LIB_SEARCH_PATHS "${HIP_COMPILER_INSTALL_PATH}/../lib/clang/*/lib/*")
++file(GLOB HIP_CLANGRT_LIB_SEARCH_PATHS "@clang@/resource-root/lib/*")
+ find_library(CLANGRT_BUILTINS
+     NAMES
+       clang_rt.builtins

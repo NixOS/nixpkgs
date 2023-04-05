@@ -1,0 +1,26 @@
+From caf736f4b84808393b0d7030ae6128a3322a71e2 Mon Sep 17 00:00:00 2001
+From: Tobias Mueller <tobiasmue@gnome.org>
+Date: Mon, 12 Apr 2010 13:01:42 +0000
+Subject: test-unique: Resolve format string issues
+
+Provide a proper literal format string to not expose potential vulnerabilites.
+Fixes bug 615522.
+---
+diff --git a/tests/test-unique.c b/tests/test-unique.c
+index b7cde45..c9958c9 100644
+--- a/tests/test-unique.c
++++ b/tests/test-unique.c
+@@ -82,9 +82,11 @@ app_message_cb (UniqueApp         *app,
+                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_MESSAGE_INFO,
+                                    GTK_BUTTONS_CLOSE,
++                                   "%s",
+                                    title);
+   if (message)
+     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
++                                              "%s",
+                                               message);
+ 
+   gtk_window_set_urgency_hint (GTK_WINDOW (dialog), TRUE);
+--
+cgit v0.9

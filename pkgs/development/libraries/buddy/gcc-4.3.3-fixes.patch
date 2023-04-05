@@ -1,0 +1,22 @@
+diff -uwr buddy-2.4.orig/examples/bddcalc/parser.yxx buddy-2.4/examples/bddcalc/parser.yxx
+--- buddy-2.4.orig/examples/bddcalc/parser.yxx	2009-07-02 17:12:48.000000000 +0200
++++ buddy-2.4/examples/bddcalc/parser.yxx	2009-07-02 17:18:36.000000000 +0200
+@@ -7,6 +7,7 @@
+
+ %{
+ #include <string>
++#include <cstdlib>
+ #include <stdarg.h>
+ #include <fstream>
+ #include <getopt.h>
+diff -uwr buddy-2.4.orig/src/bddtest.cxx buddy-2.4/src/bddtest.cxx
+--- buddy-2.4.orig/src/bddtest.cxx	2009-07-02 17:12:48.000000000 +0200
++++ buddy-2.4/src/bddtest.cxx	2009-07-02 17:14:05.000000000 +0200
+@@ -28,6 +28,7 @@
+ ========================================================================*/
+
+ #include <string>
++#include <cstdlib>
+ #include "bdd.h"
+ #include "bvec.h"
+
