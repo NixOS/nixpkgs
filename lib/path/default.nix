@@ -108,6 +108,12 @@ in /* No rec! Add dependencies on this file at the top. */ {
     More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
     and that the second argument is a valid subpath string (see `lib.path.subpath.isValid`).
 
+    Laws:
+
+    - Not influenced by subpath normalisation
+
+        append p s == append p (subpath.normalise s)
+
     Type:
       append :: Path -> String -> Path
 
