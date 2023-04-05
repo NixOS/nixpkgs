@@ -25,7 +25,7 @@ assert builtins.elem hostSystem [ "CPP" "OMP" "TBB" ];
 
 let
   pname = "nvidia-thrust";
-  version = "1.16.0";
+  version = "2.1.0";
 
   inherit (cudaPackages) backendStdenv cudaFlags;
   cudaCapabilities = map cudaFlags.dropDot cudaFlags.cudaCapabilities;
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     repo = "thrust";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-/EyznxWKuHuvHNjq+SQg27IaRbtkjXR2zlo2YgCWmUQ=";
+    hash = "sha256-U9WgRZva7R/bNOF5VZTvIwIQDQDD3/bRO08j2TPLl9Q=";
   };
 
   # NVIDIA's "compiler hacks" seem like work-arounds for legacy toolchains and
