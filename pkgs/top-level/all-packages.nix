@@ -27987,6 +27987,8 @@ with pkgs;
 
   linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin { };
 
+  linja-sike = callPackage ../data/fonts/linja-sike { };
+
   linux-manual = callPackage ../data/documentation/linux-manual { };
 
   lklug-sinhala = callPackage ../data/fonts/lklug-sinhala { };
