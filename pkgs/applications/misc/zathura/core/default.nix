@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
     gettext wrapGAppsHook libxml2 check appstream-glib
+    texlive.bin.core
   ];
 
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
-    texlive.bin.core
   ] ++ lib.optional stdenv.isLinux libseccomp
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
