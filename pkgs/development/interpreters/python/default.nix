@@ -130,10 +130,10 @@
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "10";
+        patch = "11";
         suffix = "";
       };
-      sha256 = "sha256-BBnpCFv1G3pnIAmz9Q2/GFms3xi6cl0OwZqlyFA/DqM=";
+      sha256 = "sha256-PDvDBIMDchyQSgPrgya2Mekh8RzDvimIRWpC8RXa8Ew=";
     };
   };
 
