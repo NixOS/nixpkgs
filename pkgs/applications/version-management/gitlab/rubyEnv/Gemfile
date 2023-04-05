@@ -33,9 +33,6 @@ gem 'sprockets', '~> 3.7.0'
 
 gem 'view_component', '~> 2.74.1'
 
-# Default values for AR models
-gem 'default_value_for', '~> 3.4.0'
-
 # Supported DBs
 gem 'pg', '~> 1.4.5'
 
@@ -143,14 +140,12 @@ gem 'carrierwave', '~> 1.3'
 gem 'mini_magick', '~> 4.10.1'
 
 # for backups
-gem 'fog-aws', '~> 3.15'
+gem 'fog-aws', '~> 3.18'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
 gem 'fog-google', '~> 1.19', require: 'fog/google'
 gem 'fog-local', '~> 0.8'
-gem 'fog-openstack', '~> 1.0'
-gem 'fog-rackspace', '~> 0.1.1'
 # NOTE:
 # the fog-aliyun gem since v0.4 pulls in aliyun-sdk transitively, which monkey-patches
 # the rest-client gem to drop the Content-Length header field for chunked transfers,
@@ -182,7 +177,7 @@ gem 'seed-fu', '~> 2.3.7'
 gem 'elasticsearch-model', '~> 7.2'
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation'
 gem 'elasticsearch-api',   '7.13.3'
-gem 'aws-sdk-core', '~> 3.170.0'
+gem 'aws-sdk-core', '~> 3.170.1'
 gem 'aws-sdk-cloudformation', '~> 1'
 gem 'aws-sdk-s3', '~> 1.119.1'
 gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
@@ -199,13 +194,13 @@ gem 'rdoc', '~> 6.3.2'
 gem 'org-ruby', '~> 0.9.12'
 gem 'creole', '~> 0.5.0'
 gem 'wikicloth', '0.8.1'
-gem 'asciidoctor', '~> 2.0.17'
+gem 'asciidoctor', '~> 2.0.18'
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.16'
-gem 'asciidoctor-kroki', '~> 0.7.0', require: false
-gem 'rouge', '~> 3.30.0'
+gem 'asciidoctor-kroki', '~> 0.8.0', require: false
+gem 'rouge', '~> 4.1.0'
 gem 'truncato', '~> 0.7.12'
-gem 'nokogiri', '~> 1.14.1'
+gem 'nokogiri', '~> 1.14.2'
 
 # Calendar rendering
 gem 'icalendar'
@@ -292,7 +287,7 @@ gem 'asana', '~> 0.10.13'
 gem 'ruby-fogbugz', '~> 0.3.0'
 
 # Kubernetes integration
-gem 'kubeclient', '~> 4.9.3', path: 'vendor/gems/kubeclient'
+gem 'kubeclient', '~> 4.11.0'
 
 # Sanitize user input
 gem 'sanitize', '~> 6.0'
@@ -310,7 +305,7 @@ gem 'licensee', '~> 9.15'
 gem 'charlock_holmes', '~> 0.7.7'
 
 # Detect mime content type from content
-gem 'ruby-magic', '~> 0.5'
+gem 'ruby-magic', '~> 0.6'
 
 # Faster blank
 gem 'fast_blank'
@@ -348,7 +343,7 @@ gem 'pg_query', '~> 2.2', '>= 2.2.1'
 
 gem 'premailer-rails', '~> 1.10.3'
 
-gem 'gitlab-labkit', '~> 0.30.1'
+gem 'gitlab-labkit', '~> 0.31.1'
 gem 'thrift', '>= 0.16.0'
 
 # I18n
@@ -363,17 +358,20 @@ gem 'batch-loader', '~> 2.0.1'
 # Perf bar
 gem 'peek', '~> 1.1'
 
+# Google Cloud Profiler support
+gem 'cloud_profiler_agent', '~> 0.0.0', path: 'vendor/gems/cloud_profiler_agent', require: false
+
 # Snowplow events tracking
 gem 'snowplow-tracker', '~> 0.8.0'
 
 # Metrics
 gem 'webrick', '~> 1.6.1', require: false
-gem 'prometheus-client-mmap', '~> 0.17', require: 'prometheus/client'
+gem 'prometheus-client-mmap', '~> 0.19', require: 'prometheus/client'
 
 gem 'warning', '~> 1.3.0'
 
 group :development do
-  gem 'lefthook', '~> 1.2.9', require: false
+  gem 'lefthook', '~> 1.3.3', require: false
   gem 'rubocop'
   gem 'solargraph', '~> 0.47.2', require: false
 
@@ -416,7 +414,7 @@ group :development, :test do
   gem 'bundler-audit', '~> 0.7.0.1', require: false
 
   # Benchmarking & profiling
-  gem 'benchmark-ips', '~> 2.3.0', require: false
+  gem 'benchmark-ips', '~> 2.11.0', require: false
   gem 'benchmark-memory', '~> 0.1', require: false
 
   gem 'knapsack', '~> 1.21.1'
@@ -436,7 +434,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 3.7.0', require: false
+  gem 'gitlab-dangerfiles', '~> 3.8.0', require: false
 end
 
 group :development, :test, :coverage do
@@ -456,7 +454,7 @@ group :test do
   gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.6'
   gem 'rspec-benchmark', '~> 0.6.0'
-  gem 'rspec-parameterized', require: false
+  gem 'rspec-parameterized', '~> 1.0', require: false
 
   gem 'capybara', '~> 3.35.3'
   gem 'capybara-screenshot', '~> 1.0.22'
@@ -472,6 +470,7 @@ group :test do
   gem 'test-prof', '~> 1.0.7'
   gem 'rspec_junit_formatter'
   gem 'guard-rspec'
+  gem 'axe-core-rspec'
 
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false
@@ -486,7 +485,7 @@ gem 'gitlab-mail_room', '~> 0.0.9', require: 'mail_room'
 gem 'email_reply_trimmer', '~> 0.1'
 gem 'html2text'
 
-gem 'stackprof', '~> 0.2.21', require: false
+gem 'stackprof', '~> 0.2.23', require: false
 gem 'rbtrace', '~> 0.4', require: false
 gem 'memory_profiler', '~> 1.0', require: false
 gem 'activerecord-explain-analyze', '~> 0.1', require: false
@@ -518,7 +517,7 @@ gem 'kas-grpc', '~> 0.0.2'
 
 gem 'grpc', '~> 1.42.0'
 
-gem 'google-protobuf', '~> 3.21', '>= 3.21.12'
+gem 'google-protobuf', '~> 3.22', '>= 3.22.2'
 
 gem 'toml-rb', '~> 2.2.0'
 
@@ -566,7 +565,7 @@ gem 'oj-introspect', '~> 0.7'
 gem 'multi_json', '~> 1.14.1'
 gem 'yajl-ruby', '~> 1.4.3', require: 'yajl'
 
-gem 'webauthn', '~> 2.3'
+gem 'webauthn', '~> 3.0'
 
 # IPAddress utilities
 gem 'ipaddress', '~> 0.8.3'
@@ -588,8 +587,18 @@ gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite'
 gem 'arr-pm', '~> 0.0.12'
 
 # Apple plist parsing
-gem 'CFPropertyList'
+gem 'CFPropertyList', '~> 3.0.0'
 gem 'app_store_connect'
 
 # For phone verification
 gem 'telesignenterprise', '~> 2.2'
+
+# Ruby 3 extracts net-protocol into a separate gem, while Ruby 2 has it built-in
+# This condition installs the gem only for Ruby 3 to avoid warnings on Ruby 2
+# Can be removed when support for Ruby 2 is dropped
+install_if -> { Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.0.0") } do
+  # BufferedIO patch
+  gem 'net-protocol', '~> 0.1.3'
+end
+
+gem 'duo_api', '~> 1.3'

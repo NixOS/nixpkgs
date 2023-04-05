@@ -1,9 +1,8 @@
-{ buildAspNetCore, buildNetRuntime, buildNetSdk, icu }:
+{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v6.0 (active)
 {
   aspnetcore_6_0 = buildAspNetCore {
-    inherit icu;
     version = "6.0.15";
     srcs = {
       x86_64-linux = {
@@ -26,7 +25,6 @@
   };
 
   runtime_6_0 = buildNetRuntime {
-    inherit icu;
     version = "6.0.15";
     srcs = {
       x86_64-linux = {
@@ -49,7 +47,6 @@
   };
 
   sdk_6_0 = buildNetSdk {
-    inherit icu;
     version = "6.0.407";
     srcs = {
       x86_64-linux = {

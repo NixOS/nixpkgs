@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "formulaic" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     "tests/transforms/test_poly.py"

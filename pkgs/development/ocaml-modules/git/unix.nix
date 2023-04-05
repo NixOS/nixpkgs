@@ -14,13 +14,6 @@ buildDunePackage {
   pname = "git-unix";
   inherit (git) version src;
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mirage/ocaml-git/commit/b708db8319cc456a5640618210d740a1e00468e9.patch";
-      hash = "sha256-Fe+eDhU/beZT/8br8XmOhHYJowaVEha16eGqyuu2Zr4=";
-    })
-  ];
-
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 

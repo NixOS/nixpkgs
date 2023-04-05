@@ -359,6 +359,13 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
   }) super.ghcide;
 
+  # Tests execute goldplate
+  goldplate = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/goldplate:$PATH"
+    '';
+  }) super.goldplate;
+
   # At least on 1.3.4 version on 32-bit architectures tasty requires
   # unbounded-delays via .cabal file conditions.
   tasty = overrideCabal (drv: {
@@ -910,7 +917,7 @@ self: super: builtins.intersectAttrs super {
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
   hercules-ci-cnix-store = (super.hercules-ci-cnix-store.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }).overrideAttrs (_: {
-    passthru.nixPackage = pkgs.nixVersions.nix_2_12;
+    passthru.nixPackage = pkgs.nixVersions.nix_2_14;
   });
 
   # the testsuite fails because of not finding tsc without some help
@@ -1074,14 +1081,6 @@ self: super: builtins.intersectAttrs super {
 
   # Wants to execute cabal-install to (re-)build itself
   hint = dontCheck super.hint;
-
-  # Make sure that Cabal 3.8.* can be built as-is
-  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override ({
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
-    # Use process core package when possible
-    process = self.process_1_6_17_0;
-  }));
 
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed

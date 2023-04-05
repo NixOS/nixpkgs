@@ -27,6 +27,7 @@
 , pyserial
 , ruamel-yaml
 , sly
+, typing-extensions
 , pytestCheckHook
 , voluptuous
 }:
@@ -52,8 +53,10 @@ buildPythonPackage rec {
     "cmsis-pack-manager"
     "deepmerge"
     "jinja2"
+    "pycryptodome"
     "pylink-square"
     "pyocd"
+    "typing-extensions"
   ];
 
   pythonRemoveDeps = [
@@ -85,6 +88,7 @@ buildPythonPackage rec {
     pyserial
     ruamel-yaml
     sly
+    typing-extensions
   ];
 
   nativeCheckInputs = [

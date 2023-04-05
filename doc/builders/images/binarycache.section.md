@@ -6,7 +6,7 @@ Nix packages are most commonly shared between machines using [HTTP, SSH, or S3](
 
 Note that this function is meant for advanced use-cases. The more idiomatic way to work with flat-file binary caches is via the [nix-copy-closure](https://nixos.org/manual/nix/stable/command-ref/nix-copy-closure.html) command. You may also want to consider [dockerTools](#sec-pkgs-dockerTools) for your containerization needs.
 
-## Example
+## Example {#sec-pkgs-binary-cache-example}
 
 The following derivation will construct a flat-file binary cache containing the closure of `hello`.
 

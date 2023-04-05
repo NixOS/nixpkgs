@@ -4,20 +4,21 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4ww2AlDoFZASRMq05a92FSzl8rrtu3xO4vjvGWYn9rA=";
+    hash = "sha256-IHYg3X1LBH7Ne83j0caJHHkBDMy7EcMKSFd0U5sHabI=";
   };
 
-  vendorHash = "sha256-fj6W4+YTJpemNgdfIvnUy82sPU99Uh18nCou/7cjF1o=";
+  vendorHash = "sha256-J9KGtAZ+J7EJKJOEEH44bhG8Gln8Gv87ryB3nswxDO0=";
 
   tags = [
     "with_quic"
@@ -50,6 +51,8 @@ buildGoModule rec {
       --fish <(${emulator} $out/bin/sing-box completion fish) \
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";

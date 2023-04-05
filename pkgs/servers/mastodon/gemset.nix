@@ -353,15 +353,14 @@
     version = "1.0.0";
   };
   blurhash = {
-    dependencies = ["ffi"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rs61mwdiyriq8mb8na2sfrqzz8igls04md63ajyhk4yj8d2j0sz";
+      sha256 = "057afgqy73n8vm7k3cr4pbwm1hhqnm58lp4x7bgm5wzbs39m7xf8";
       type = "gem";
     };
-    version = "0.1.6";
+    version = "0.1.7";
   };
   bootsnap = {
     dependencies = ["msgpack"];

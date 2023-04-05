@@ -16,23 +16,23 @@
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.03.22",
-    "hash": "sha256-IoucMftNzDSOU3R6vyWTjfM9UVJrUSiHe5Kt1Ax05fg="
+    "rev": "2023.03.28",
+    "hash": "sha256-24WOYnPb5MyEXHv3+E2MDisE5aHCTopulyqD2NFMaQU="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2023.03.14",
-    "hash": "sha256-75ndPG3nSM7Y/jEZFPmKfQMnFrARe1DNva1HoDHxqAE="
+    "rev": "2023.03.28",
+    "hash": "sha256-nY3f72xK8luBQuFSCE7r+tP9Y3on8K4ULKW5WfKOs7E="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.03.06",
-    "hash": "sha256-JQURgyFfzKL8RC2wJmubFrXmpCeGWDkz1jXl4wBwhJ8="
+    "rev": "2023.03.28",
+    "hash": "sha256-kaQAoNP9gRzkQsaQHBiMt6KheuTg/2cnWwUClPy8xoY="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2023.01.18",
-    "hash": "sha256-SLZIDcrLwvhkJY92e/wtSsoY5SrjghcumbdpuVdK4iE="
+    "rev": "2023.03.28",
+    "hash": "sha256-fisjVB0AtqW24ZO6LIO5FKlTdoe8/zxnfuaEilllbVw="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",

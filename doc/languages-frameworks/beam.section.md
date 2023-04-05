@@ -281,11 +281,11 @@ mkShell {
 }
 ```
 
-### Using an overlay
+### Using an overlay {#beam-using-overlays}
 
 If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in nixpkgs, you can override attributes such as `version` (and the corresponding `hash`) and then use this overlay in your development environment:
 
-#### `shell.nix`
+#### `shell.nix` {#beam-using-overlays-shell.nix}
 
 ```nix
 let

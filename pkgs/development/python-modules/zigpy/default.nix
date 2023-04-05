@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aiosqlite
-, asynctest
 , buildPythonPackage
 , crccheck
 , cryptography
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   version = "0.53.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     freezegun
     pytest-asyncio
     pytest-timeout

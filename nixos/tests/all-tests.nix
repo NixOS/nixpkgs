@@ -112,6 +112,7 @@ in {
   btrbk-doas = handleTest ./btrbk-doas.nix {};
   btrbk-no-timer = handleTest ./btrbk-no-timer.nix {};
   btrbk-section-order = handleTest ./btrbk-section-order.nix {};
+  budgie = handleTest ./budgie.nix {};
   buildbot = handleTest ./buildbot.nix {};
   buildkite-agents = handleTest ./buildkite-agents.nix {};
   caddy = handleTest ./caddy.nix {};
@@ -565,6 +566,7 @@ in {
   postfixadmin = handleTest ./postfixadmin.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
+  postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   powerdns = handleTest ./powerdns.nix {};
   powerdns-admin = handleTest ./powerdns-admin.nix {};

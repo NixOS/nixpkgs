@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , bleak
 , click
 , buildPythonPackage
@@ -15,12 +14,12 @@ buildPythonPackage rec {
   version = "0.4.11";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-FNiq/dbh5PMTxnKCKDSHEvllehAEUYvWZS+OyP3lSW8=";
   };
 
@@ -37,8 +36,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
   pythonImportsCheck = [

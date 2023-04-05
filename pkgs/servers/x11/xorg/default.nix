@@ -3324,11 +3324,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgserver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, openssl, libX11, libXau, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile }: stdenv.mkDerivation {
     pname = "xorg-server";
-    version = "21.1.7";
+    version = "21.1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xserver/xorg-server-21.1.7.tar.xz";
-      sha256 = "1fvpb1wr4bjksr1ag77mcvsz87qb947dn85blrn34lpcs0nhpinr";
+      url = "mirror://xorg/individual/xserver/xorg-server-21.1.8.tar.xz";
+      sha256 = "0lmimvaw9x0ymdhjfqsrbx689bcapy8c24ajw9705j2harrxpaiq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

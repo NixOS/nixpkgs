@@ -19,7 +19,6 @@
 , speex
 , speexdsp
 , cppzmq
-, zeromq
 }:
 
 gnuradio3_8.pkgs.mkDerivation rec {
@@ -67,7 +66,6 @@ gnuradio3_8.pkgs.mkDerivation rec {
     libftdi
     libsndfile
     cppzmq
-    zeromq
     gnuradio3_8.qwt
   ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
     thrift

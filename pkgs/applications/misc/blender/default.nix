@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libXi, libX11, libXext, libXrender
+, ilmbase, libepoxy, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.3.1";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-KtpI8L+KDKgCuYfXV0UgEuH48krPTSNFOwnC1ZURjMo=";
+    hash = "sha256-JHxMEignDJAQ9HIcmFy1tiirUKvPnyZ4Ywc3FC7rkcM=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
       pugixml
       potrace
       libharu
+      libepoxy
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender

@@ -102,6 +102,8 @@ lib.makeScope newScope (self:
     snappy =
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
 
+    nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
+
     spry = callPackage ../development/nim-packages/spry { };
 
     spryvm = callPackage ../development/nim-packages/spryvm { };

@@ -19,6 +19,7 @@
 , kdeclarative
 , plasma-framework
 , plasma-wayland-protocols
+, plasma-workspace
 , kio
 , qtbase
 }:
@@ -45,5 +46,6 @@ mkDerivation {
     kdeclarative
     plasma-framework
     plasma-wayland-protocols
+    plasma-workspace
   ];
 }

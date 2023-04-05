@@ -11,6 +11,7 @@
 , useProfiles ? true
 , preferGtk2 ? false
 , settings32Bit ? false
+, ibtSupport ? false
 
 , prePatch ? ""
 , postPatch ? null
@@ -20,7 +21,7 @@
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which
+, kernel ? null, perl, nukeReferences, which, libarchive
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -98,8 +99,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    buildInputs = [ which ];
-    nativeBuildInputs = [ perl nukeReferences ]
+    nativeBuildInputs = [ perl nukeReferences which libarchive ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
@@ -117,6 +117,7 @@ let
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
       compressFirmware = false;
+      ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
     } // optionalAttrs (!i686bundled) {
       inherit lib32;
     };

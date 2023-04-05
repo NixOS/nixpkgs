@@ -5,7 +5,9 @@
 , libuuid
 , libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
+, qt5
 , libdrm, mesa
+, vulkan-loader
 , nss, nspr
 , patchelf, makeWrapper
 , wayland, pipewire
@@ -43,13 +45,16 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ patchelf makeWrapper ];
 
+  dontWrapQtApps = true;
+
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
+    qt5.qtbase
     freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
-    libdrm mesa
+    libdrm mesa vulkan-loader
     wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio;
@@ -67,6 +72,10 @@ in stdenv.mkDerivation rec {
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \
         opt/${vivaldiName}/$f
+    done
+
+    for f in libGLESv2.so libqt5_shim.so ; do
+      patchelf --set-rpath "${libPath}" opt/${vivaldiName}/$f
     done
   '' + lib.optionalString proprietaryCodecs ''
     ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
@@ -100,6 +109,8 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
+      --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''

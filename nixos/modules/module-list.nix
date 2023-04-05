@@ -562,6 +562,7 @@
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
   ./services/mail/sympa.nix
+  ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
@@ -1063,6 +1064,7 @@
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
   ./services/security/aesmd.nix
+  ./services/security/authelia.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
@@ -1136,6 +1138,7 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/coder.nix
   ./services/web-apps/changedetection-io.nix
+  ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
@@ -1210,7 +1213,6 @@
   ./services/web-apps/zabbix.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/authelia.nix
   ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix

@@ -89,7 +89,7 @@
 , gssSupport ? true, libkrb5
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
@@ -103,11 +103,11 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport, curl
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
 
 # digital rights managemewnt
 

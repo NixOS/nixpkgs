@@ -1,25 +1,28 @@
 { lib
 , stdenv
 , fetchurl
+, unzip
 , zlib
 , enableUnfree ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "glucose" + lib.optionalString enableUnfree "-syrup";
-  version = "4.1";
+  version = "4.2.1";
 
   src = fetchurl {
-    url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup-${version}.tgz";
-    hash = "sha256-Uaoc8b7SsU8VQ7CZ6FpW3RqSvjfm4+sMSh/Yg9XMUCk=";
+    url = "https://www.labri.fr/perso/lsimon/downloads/softwares/glucose-${version}.zip";
+    hash = "sha256-J0J9EKC/4cCiZr/y4lz+Hm7OcmJmMIIWzQ+4c+KhqXg=";
   };
 
-  sourceRoot = "glucose-syrup-${version}/${if enableUnfree then "parallel" else "simp"}";
+  sourceRoot = "glucose-${version}/sources/${if enableUnfree then "parallel" else "simp"}";
 
   postPatch = ''
     substituteInPlace Main.cc \
       --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
   '';
+
+  nativeBuildInputs = [ unzip ];
 
   buildInputs = [ zlib ];
 

@@ -13,11 +13,11 @@
 
 buildOctavePackage rec {
   pname = "ltfat";
-  version = "2.3.1";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0gghh5a4w649ff776wvidfvqas87m0n7rqs960pid1d11bnyqqrh";
+    sha256 = "sha256-CFLqlHrTwQzCvpPAtQigCVL3Fs8V05Tmh6nkEsnaV2I=";
   };
 
   patches = [

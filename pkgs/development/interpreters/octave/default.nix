@@ -15,7 +15,7 @@
 , portaudio
 , libX11
 , graphicsmagick
-, pcre
+, pcre2
 , pkg-config
 , libGL
 , libGLU
@@ -112,12 +112,12 @@ let
   };
 
   self = mkDerivation rec {
-    version = "7.3.0";
+    version = "8.1.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-bhSkZJ1wr0WrZg+Mu/ZFqvHsM/JfiL/aRpfLF+RAxPU=";
+      sha256 = "sha256-gFIHTRew72Q9A33oqziWcsdSuyAe6c6k36aYWPtqIT8=";
     };
 
     buildInputs = [
@@ -127,7 +127,7 @@ let
       flex
       qhull
       graphicsmagick
-      pcre
+      pcre2
       fltk
       zlib
       curl

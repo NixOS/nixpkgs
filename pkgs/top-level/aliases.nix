@@ -1,5 +1,22 @@
 lib: self: super:
 
+### Deprecated aliases - for backward compatibility
+### Please maintain this list in ASCIIbetical ordering.
+### Hint: the "sections" are delimited by ### <letter> ###
+
+# These aliases should not be used within nixpkgs, but exist to improve
+# backward compatibility in projects outside of nixpkgs. See the
+# documentation for the `allowAliases` option for more background.
+
+# A script to convert old aliases to throws and remove old
+# throws can be found in './maintainers/scripts/remove-old-aliases.py'.
+
+# Add 'preserve, reason: reason why' after the date if the alias should not be removed.
+# Try to keep them to a minimum.
+# valid examples of what to preserve:
+#   distro aliases such as:
+#     debian-package-name -> nixos-package-name
+
 with self;
 
 let
@@ -30,19 +47,6 @@ let
           (checkInPkgs n alias)))
       aliases;
 in
-
-### Deprecated aliases - for backward compatibility
-### Please maintain this list in ASCIIbetical ordering.
-### Hint: the "sections" are delimited by ### <letter> ###
-
-# A script to convert old aliases to throws and remove old
-# throws can be found in './maintainers/scripts/remove-old-aliases.py'.
-
-# Add 'preserve, reason: reason why' after the date if the alias should not be removed.
-# Try to keep them to a minimum.
-# valid examples of what to preserve:
-#   distro aliases such as:
-#     debian-package-name -> nixos-package-name
 
 mapAliases ({
   # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
@@ -407,6 +411,12 @@ mapAliases ({
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # Added 2021-01-17
   elasticsearch7-oss = throw "elasticsearch7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # Added 2021-06-09
 
+  elasticsearch-oss = throw "elasticsearch-oss has been removed because there is no oss version of elasticsearch anymore. Use opensearch instead."; # Added 2022-10-04
+  elasticsearch6 = throw "elasticsearch6 has been removed because it reached end of life"; # Added 2022-10-04
+  elasticsearch6-oss = throw "elasticsearch6-oss has been removed because it reached end of life"; # Added 2022-10-04
+  elasticsearch6Plugins = throw "elasticsearch6Plugins has been removed because it reached end of life"; # Added 2022-10-04
+  elasticsearch7Plugins = elasticsearchPlugins;
+
   # Electron
   electron_3 = throw "electron_3 has been removed in favor of newer versions"; # added 2022-01-06
   electron_4 = throw "electron_4 has been removed in favor of newer versions"; # added 2022-01-06
@@ -465,6 +475,7 @@ mapAliases ({
   ffadoFull = throw "'ffadoFull' has been renamed to/replaced by 'ffado'"; # Converted to throw 2022-02-22
   ffmpeg-sixel = throw "ffmpeg-sixel has been removed, because it was an outdated/unmaintained fork of ffmpeg"; # Added 2022-03-23";
   ffmpeg_3 = throw "ffmpeg_3 was removed from nixpkgs, because it was an outdated and insecure release"; # added 2022-01-17
+  filebeat6 = throw "filebeat6 has been removed because it reached end of life"; # Added 2022-10-04
   finger_bsd = bsd-finger;
   fingerd_bsd = bsd-fingerd;
   firefox-esr-68 = throw "Firefox 68 ESR was removed because it reached end of life with its final release 68.12esr on 2020-08-25";
@@ -511,9 +522,9 @@ mapAliases ({
   fuse2fs = if stdenv.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
   fwupdate = throw "fwupdate was merged into fwupd"; # Added 2020-05-19
 
-  fcitx = throw "fcitx4 is deprecated, please use fcitx5 instead."; # Added 2023-03-13
-  fcitx-engines = throw "fcitx4 is deprecated, please use fcitx5 instead."; # Added 2023-03-13
-  fcitx-configtools = throw "fcitx4 is deprecated, please use fcitx5 instead."; # Added 2023-03-13
+  fcitx = throw "fcitx is deprecated, please use fcitx5 instead."; # Added 2023-03-13
+  fcitx-engines = throw "fcitx-engines is deprecated, please use fcitx5 instead."; # Added 2023-03-13
+  fcitx-configtool = throw "fcitx-configtool is deprecated, please use fcitx5 instead."; # Added 2023-03-13
 
   ### G ###
 
@@ -653,6 +664,7 @@ mapAliases ({
   haxe_3_4 = throw "'haxe_3_4' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
   hdr-plus = throw "hdr-plus has been removed because it is unmaintained, often breaks and no longer consumed as a dependency"; # Added 2022-11-08
   heapster = throw "Heapster is now retired. See https://github.com/kubernetes-retired/heapster/blob/master/docs/deprecation.md"; # Added 2022-04-05
+  heartbeat6 = throw "heartbeat6 has been removed because it reached end of life"; # Added 2022-10-04
   heimdalFull = throw "'heimdalFull' has been renamed to/replaced by 'heimdal'"; # Converted to throw 2022-02-22
   heme = throw "heme has been removed: upstream is gone"; # added 2022-02-06
   hepmc = hepmc2; # Added 2019-08-05
@@ -723,7 +735,9 @@ mapAliases ({
   jellyfin_10_5 = throw "Jellyfin 10.5 is no longer supported and contains a security vulnerability. Please upgrade to a newer version"; # Added 2021-04-26
   jira-cli = throw "jira-cli was removed because it is no longer maintained"; # Added 2023-02-28
   joseki = throw "'joseki' has been renamed to/replaced by 'apache-jena-fuseki'"; # Converted to throw 2022-02-22
-  journalbeat7 = throw "journalbeat has been removed upstream. Use filebeat with the journald input instead";
+  journalbeat = throw "journalbeat7 has been removed upstream. Use filebeat with the journald input instead"; # Added 2022-10-04
+  journalbeat6 = throw "journalbeat6 has been removed because it reached end of life"; # Added 2022-10-04
+  journalbeat7 = throw "journalbeat7 has been removed upstream. Use filebeat with the journald input instead"; # Added 2022-10-04
 
   # Julia
   julia_07 = throw "julia_07 has been deprecated in favor of the latest LTS version"; # Added 2020-09-15
@@ -948,6 +962,8 @@ mapAliases ({
 
   loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   lobster-two = google-fonts; # Added 2021-07-22
+  logstash6 = throw "logstash6 has been removed because it reached end of life"; # Added 2022-10-04
+  logstash6-oss = throw "logstash6 has been removed because it reached end of life"; # Added 2022-10-04
   love_0_7 = throw "love_0_7 was removed because it is a very old version and no longer used by any package in nixpkgs"; # Added 2022-01-15
   love_0_8 = throw "love_0_8 was removed because it is a very old version and no longer used by any package in nixpkgs"; # Added 2022-01-15
   love_0_9 = throw "love_0_9 was removed because was broken for a long time and no longer used by any package in nixpkgs"; # Added 2022-01-15
@@ -986,6 +1002,7 @@ mapAliases ({
   mesos = throw "mesos has been removed from nixpkgs, as it's unmaintained"; # Added 2020-08-15
   mess = mame; # Added 2019-10-30
   metal = throw "metal has been removed due to lack of maintainers";
+  metricbeat6 = throw "metricbeat6 has been removed because it reached end of life"; # Added 2022-10-04
   mididings = throw "mididings has been removed from nixpkgs as it doesn't support recent python3 versions and its upstream stopped maintaining it"; # Added 2022-01-12
   midoriWrapper = throw "'midoriWrapper' has been renamed to/replaced by 'midori'"; # Converted to throw 2022-02-22
   mime-types = mailcap; # Added 2022-01-21
@@ -1073,6 +1090,7 @@ mapAliases ({
   nfsUtils = throw "'nfsUtils' has been renamed to/replaced by 'nfs-utils'"; # Converted to throw 2022-02-22
   nginxUnstable = throw "'nginxUnstable' has been renamed to/replaced by 'nginxMainline'"; # Converted to throw 2022-02-22
   nilfs_utils = throw "'nilfs_utils' has been renamed to/replaced by 'nilfs-utils'"; # Converted to throw 2022-02-22
+  nitrokey-udev-rules = libnitrokey; # Added 2023-03-25
   nix-direnv-flakes = nix-direnv;
   nix-review = nixpkgs-review; # Added 2019-12-22
   nixFlakes = nixVersions.stable; # Added 2021-05-21

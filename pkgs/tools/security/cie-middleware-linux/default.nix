@@ -6,7 +6,7 @@
 , meson
 , ninja
 , pkg-config
-, gradle
+, gradle_7
 , curl
 , cryptopp
 , fontconfig
@@ -28,6 +28,8 @@ let
     rev = "${version}-podofo";
     sha256 = "sha256-Kyr9OTiY6roJ/wVJS/1aWfrrzDNQbuRTJQqo0akbMUU=";
   };
+
+  gradle = gradle_7;
 
   # Shared libraries needed by the Java application
   libraries = lib.makeLibraryPath [ ghostscript ];

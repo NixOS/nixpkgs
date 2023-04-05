@@ -30,6 +30,7 @@ let
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
 
     #### CORE
+    dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
@@ -39,6 +40,7 @@ let
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-camera = callPackage ./apps/deepin-camera { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
+    deepin-clone = callPackage ./apps/deepin-clone { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };

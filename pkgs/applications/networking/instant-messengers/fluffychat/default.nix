@@ -1,22 +1,31 @@
 { lib
-, fetchFromGitLab
-, flutter2
-, olm
+, stdenv
+, fetchzip
 , imagemagick
+, autoPatchelfHook
+, gtk3
+, libsecret
+, jsoncpp
+, wrapGAppsHook
 , makeDesktopItem
 }:
 
-flutter2.mkFlutterApp rec {
-  pname = "fluffychat";
-  version = "1.2.0";
+let
+  version = "1.10.0";
+  # map of nix platform -> expected url platform
+  platformMap = {
+    x86_64-linux = "linux-x86";
+    aarch64-linux = "linux-arm64";
+  };
+in
+stdenv.mkDerivation {
+  inherit version;
+  name = "fluffychat";
 
-  vendorHash = "sha256-1PDX023WXRmRe/b1L+6Du91BvGwYNp3YATqYSQdPrRY=";
-
-  src = fetchFromGitLab {
-    owner = "famedly";
-    repo = "fluffychat";
-    rev = "v${version}";
-    hash = "sha256-PJH3jMQc6u9R6Snn+9rNN8t+8kt6l3Xt7zKPbpqj13E=";
+  src = fetchzip {
+    url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
+    stripRoot = false;
+    sha256 = "sha256-SbzTEMeJRFEUN0nZF9hL0UEzTWl1VtHVPIx/AGgQvM8=";
   };
 
   desktopItem = makeDesktopItem {
@@ -28,45 +37,27 @@ flutter2.mkFlutterApp rec {
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
 
-  buildInputs = [
-    olm
-  ];
+  buildInputs = [ gtk3 libsecret jsoncpp ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook imagemagick ];
 
-  nativeBuildInputs = [
-    imagemagick
-  ];
+  installPhase = ''
+    mkdir -p $out/bin
+    mkdir -p $out/share
+    mv * $out/share
 
-  flutterExtraFetchCommands = ''
-    M=$(echo $TMP/.pub-cache/hosted/pub.dartlang.org/matrix-*)
-    sed -i $M/scripts/prepare.sh \
-      -e "s|/usr/lib/x86_64-linux-gnu/libolm.so.3|/bin/sh|g"  \
-      -e "s|if which flutter >/dev/null; then|exit; if which flutter >/dev/null; then|g"
+    ln -s $out/share/fluffychat $out/bin/fluffychat
 
-    pushd $M
-    bash scripts/prepare.sh
-    popd
-  '';
-
-  # replace olm dummy path
-  postConfigure = ''
-    M=$(echo $depsFolder/.pub-cache/hosted/pub.dartlang.org/matrix-*)
-    ln -sf ${olm}/lib/libolm.so.3 $M/ffi/olm/libolm.so
-  '';
-
-  postInstall = ''
-    FAV=$out/app/data/flutter_assets/assets/favicon.png
+    FAV=$out/share/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
     mkdir $out/share/applications
     cp $desktopItem/share/applications/*.desktop $out/share/applications
-
-    for s in 24 32 42 64 128 256 512; do
+    for size in 24 32 42 64 128 256 512; do
       D=$ICO/hicolor/''${s}x''${s}/apps
       mkdir -p $D
-      convert $FAV -resize ''${s}x''${s} $D/fluffychat.png
+      convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
-
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
   '';
@@ -75,7 +66,8 @@ flutter2.mkFlutterApp rec {
     description = "Chat with your friends (matrix client)";
     homepage = "https://fluffychat.im/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ mkg20001 gilice ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

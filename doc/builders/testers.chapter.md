@@ -178,7 +178,7 @@ letting NixOS invoke Nixpkgs anew.
 If a test machine needs to set NixOS options under `nixpkgs`, it must set only the
 `nixpkgs.pkgs` option.
 
-### Parameter
+### Parameter {#tester-nixosTest-parameter}
 
 A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-tests), or path to it. Example:
 
@@ -200,7 +200,7 @@ A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-te
 }
 ```
 
-### Result
+### Result {#tester-nixosTest-result}
 
 A derivation that runs the VM test.
 

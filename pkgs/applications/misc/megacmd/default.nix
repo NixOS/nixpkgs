@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-EPY2BjTECia0eBGmv8tmeil1WibIA6R+DK7MmOMufLw=";
+    sha256 = "sha256-X8ysTVr4oZS3VHuCyq96J6TL9nvtAT/HVnMyz5iXSXo=";
     fetchSubmodules = true;
   };
 

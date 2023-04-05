@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mpd-discord-rpc";
-  version = "1.5.4b";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SMAllqxfae8bNLBkxsY4OmjoIzxFZ0dwIRYconlNZ18=";
+    sha256 = "sha256-FYI0TlYyoT9h4fVjR1kp2Rn5qVppQhy6o09mPptTEMo=";
   };
 
   cargoLock = {

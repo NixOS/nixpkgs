@@ -5,15 +5,16 @@
 , makeWrapper
 , electron
 , git
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.8.18";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-tD7uNSgcGMPyiA/HfOOZs3NRbWTrds0AdEXTaHYfUjk=";
+    hash = "sha256-8jplCIylG1xbpp/VGnU06MwfqWe2E9iVQApZaWbhuVc=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -40,9 +41,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
     chmod -w $out/share/${pname}/resources/app/node_modules/dugite
 
+    mkdir -p $out/share/pixmaps
+    ln -s $out/share/${pname}/resources/app/icons/logseq.png $out/share/pixmaps/${pname}.png
+
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace Exec=Logseq Exec=${pname} \
-      --replace Icon=Logseq Icon=$out/share/${pname}/resources/app/icons/logseq.png
+      --replace Icon=Logseq Icon=${pname}
 
     runHook postInstall
   '';
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/${pname}/resources/app
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";

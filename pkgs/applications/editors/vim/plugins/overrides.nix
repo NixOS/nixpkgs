@@ -121,6 +121,10 @@
 
 self: super: {
 
+  autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
+    dependencies = with super; [ plenary-nvim ];
+  });
+
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
@@ -299,6 +303,14 @@ self: super: {
 
   completion-treesitter = super.completion-treesitter.overrideAttrs (old: {
     dependencies = with self; [ completion-nvim nvim-treesitter ];
+  });
+
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
+    postInstall = ''
+      substituteInPlace $out/autoload/copilot/agent.vim \
+        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+    '';
   });
 
   cpsm = super.cpsm.overrideAttrs (old: {
@@ -806,7 +818,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-GN7KM3fkeOcqmyUwsPMw499kS/eYqh8pbyPgMv4/NN4=";
+        cargoHash = "sha256-gnQNQlW/c1vzyR+HbYn7rpxZ1C6WXFcqpylIOTUMZ6g=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1346,6 +1358,13 @@ self: super: {
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
     buildInputs = [ python3 ];
+    patchPhase = ''
+      substituteInPlace plugin/wakatime.vim \
+        --replace 'autocmd BufEnter,VimEnter' \
+                  'autocmd VimEnter' \
+        --replace 'autocmd CursorMoved,CursorMovedI' \
+                  'autocmd CursorMoved,CursorMovedI,BufEnter'
+    '';
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {

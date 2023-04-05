@@ -210,7 +210,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin raitobezarius ];
+        maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -256,5 +256,13 @@ in {
     sha256 = "sha256-CdPuyZMXFzANEdnsr/rB5ckkT8X5uziniY5vmRCKl1U=";
 
     isUnstable = true;
+
+    # Necessary for 6.2.8+ and 6.3 compatibility, see https://github.com/openzfs/zfs/issues/14658
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/openzfs/zfs/pull/14668.patch";
+        hash = "sha256-PR7hxxdjLkjszADdw0R0JRmBPfDlsXG6D+VfC7QzEhk=";
+      })
+    ];
   };
 }

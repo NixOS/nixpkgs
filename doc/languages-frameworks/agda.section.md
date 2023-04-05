@@ -216,7 +216,7 @@ you can test whether it builds correctly by writing in a comment:
 @ofborg build agdaPackages.iowa-stdlib
 ```
 
-### Maintaining Agda packages
+### Maintaining Agda packages {#agda-maintaining-packages}
 
 As mentioned before, the aim is to have a compatible, and up-to-date package set.
 These two conditions sometimes exclude each other:

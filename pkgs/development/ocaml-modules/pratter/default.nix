@@ -12,6 +12,7 @@ buildDunePackage rec {
   pname = "pratter";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "gabrielhdt";
