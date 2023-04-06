@@ -41,7 +41,7 @@ let
   pythonInputs = with python3.pkgs; [
     six
     python-ldap
-    dns
+    dnspython
     netaddr
     netifaces
     gssapi
@@ -52,7 +52,7 @@ let
     lxml
     dbus-python
     cryptography
-    memcached
+    python-memcached
     qrcode
     pyusb
     yubico
