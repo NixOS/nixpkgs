@@ -322,6 +322,7 @@ in
     assert            isFromBootstrapFiles prevStage.gcc-unwrapped;
     assert            isFromBootstrapFiles prevStage.coreutils;
     assert            isFromBootstrapFiles prevStage.gnugrep;
+    assert isBuiltByBootstrapFilesCompiler prevStage.patchelf;
     stageFun prevStage {
       name = "bootstrap-stage-xgcc";
       overrides = final: prev: {
@@ -399,6 +400,7 @@ in
     assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
     assert            isFromBootstrapFiles prevStage.coreutils;
     assert            isFromBootstrapFiles prevStage.gnugrep;
+    assert            isFromBootstrapFiles prevStage.patchelf;
     stageFun prevStage {
     name = "bootstrap-stage2";
 
@@ -476,6 +478,7 @@ in
     assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
     assert            isFromBootstrapFiles prevStage.coreutils;
     assert            isFromBootstrapFiles prevStage.gnugrep;
+    assert        isBuiltByNixpkgsCompiler prevStage.patchelf;
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [ gmp isl_0_20 libmpc mpfr ]);
     stageFun prevStage {
     name = "bootstrap-stage3";
@@ -516,6 +519,7 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
     assert     isFromBootstrapFiles prevStage.coreutils;
     assert     isFromBootstrapFiles prevStage.gnugrep;
+    assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     stageFun prevStage {
     name = "bootstrap-stage4";
 
@@ -576,6 +580,7 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
+    assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     {
     inherit config overlays;
     stdenv = import ../generic rec {
@@ -665,5 +670,6 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
+    assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     { inherit (prevStage) config overlays stdenv; })
 ]
