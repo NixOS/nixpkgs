@@ -1,33 +1,9 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchPypi
 , makeWrapper
 , pythonOlder
-, python
-, twisted
-, jinja2
-, msgpack
-, zope_interface
-, sqlalchemy
-, alembic
-, python-dateutil
-, txaio
-, autobahn
-, pyjwt
-, pyyaml
-, treq
-, txrequests
-, pypugjs
-, boto3
-, moto
-, mock
-, lz4
-, setuptoolsTrial
-, buildbot-worker
+, python3
 , buildbot-pkg
-, buildbot-plugins
-, parameterized
 , git
 , openssh
 , glibcLocales
@@ -35,7 +11,19 @@
 }:
 
 let
-  withPlugins = plugins: buildPythonPackage {
+  python = python3.override {
+    packageOverrides = (self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.47";
+        src = self.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-lfwC9/wfMZmqpHqKdXQ3E0z2GOnZlMhO/9U/Uww4WG8=";
+        };
+      });
+    });
+  };
+  withPlugins = plugins: python.pkgs.buildPythonPackage {
     pname = "${package.pname}-with-plugins";
     inherit (package) version;
     format = "other";
@@ -61,19 +49,19 @@ let
     };
   };
 
-  package = buildPythonPackage rec {
+  package = python.pkgs.buildPythonPackage rec {
     pname = "buildbot";
     version = "3.7.0";
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
 
-    src = fetchPypi {
+    src = python.pkgs.fetchPypi {
       inherit pname version;
       hash = "sha256-YMLT1SP6NenJIUVTvr58GVrtNXHw+bhfgMpZu3revG4=";
     };
 
-    propagatedBuildInputs = [
+    propagatedBuildInputs = with python.pkgs; [
       # core
       twisted
       jinja2
@@ -87,10 +75,10 @@ let
       pyjwt
       pyyaml
     ]
-      # tls
-      ++ twisted.optional-dependencies.tls;
+    # tls
+    ++ twisted.optional-dependencies.tls;
 
-    nativeCheckInputs = [
+    nativeCheckInputs = with python.pkgs; [
       treq
       txrequests
       pypugjs
@@ -149,4 +137,5 @@ let
       broken = stdenv.isDarwin;
     };
   };
-in package
+in
+package
