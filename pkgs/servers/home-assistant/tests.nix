@@ -39,25 +39,24 @@ let
   };
 
   extraDisabledTests = {
-    roku = [
-      # homeassistant.components.roku.media_player:media_player.py:428 Media type music is not supported with format None (mime: audio/x-matroska)
-      "test_services_play_media_audio"
+    vesync = [
+      # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
+      "test_async_get_config_entry_diagnostics__single_humidifier"
+      "test_async_get_device_diagnostics__single_fan"
     ];
   };
 
   extraPytestFlagsArray = {
     dnsip = [
-      # AssertionError: assert <FlowResultType.FORM: 'form'> == <FlowResultTy...create_entry'>
+      # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
     ];
     history_stats = [
       # Flaky: AssertionError: assert '0.0' == '12.0'
       "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
     ];
-    logbook = [
-      "--deselect tests/components/logbook/test_websocket_api.py::test_recorder_is_far_behind "
-    ];
     modbus = [
+      # homeassistant.components.modbus.modbus:modbus.py:317 Pymodbus: modbusTest: Modbus Error: test connect exception
       "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
     ];
     modem_callerid = [
