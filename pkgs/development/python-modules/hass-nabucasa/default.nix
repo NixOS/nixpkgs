@@ -44,8 +44,6 @@ buildPythonPackage rec {
     warrant
   ];
 
-  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
-
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
