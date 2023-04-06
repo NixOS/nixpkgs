@@ -82,6 +82,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           )
 
       with subtest("Open Console"):
+          # Close the Activities view so that Shell can correctly track the focused window.
+          machine.send_key("esc")
+
           machine.succeed(
               "${launchConsole}"
           )
