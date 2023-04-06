@@ -977,7 +977,7 @@ self: super: builtins.intersectAttrs super {
       owner = "cachix";
       repo = "cachix";
       rev = "v1.4.2";
-      sha256 = "sha256-EjBM5O+wXJhthRU/Nd9VFe7x5O93nx0pMt3jx0Ow=";
+      sha256 = "sha256-EjfBM5O+wXJhthRU/Nd9VFue7xo5O93nx0pMt3jx0Ow=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
