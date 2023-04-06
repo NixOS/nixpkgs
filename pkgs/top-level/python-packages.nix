@@ -1312,6 +1312,8 @@ self: super: with self; {
 
   bitmath = callPackage ../development/python-modules/bitmath { };
 
+  bitsandbytes = callPackage ../development/python-modules/bitsandbytes { };
+
   bitstring = callPackage ../development/python-modules/bitstring { };
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
