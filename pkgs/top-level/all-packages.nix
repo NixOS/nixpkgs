@@ -38081,6 +38081,8 @@ with pkgs;
 
   alpnpass = callPackage ../applications/networking/alpnpass { };
 
+  amdctl = callPackage ../os-specific/linux/amdctl { };
+
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
