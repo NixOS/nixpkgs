@@ -1,8 +1,8 @@
-{ stdenv
-, lib
+{ lib
 , isPyPy
 , pythonOlder
 , fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 
 # build
@@ -40,14 +40,16 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.6";
+  version = "2.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "sqlalchemy";
+    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-0WlRZ7Kv6owtZB+PDFKk+8dxEL4p3QQrRPq8eQd2PqM=";
   };
 
   nativeBuildInputs =[
