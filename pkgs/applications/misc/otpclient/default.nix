@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
-  version = "3.1.5";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/1nycFh/slcfztfaZA6p9rZTWS4/vkb/Sovc94zlfCI=";
+    sha256 = "sha256-v7TvdS0IlfB4oKdaEh7Z3AFJDV1bOMiX5vVD7VhIMCE=";
   };
 
   buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar protobuf protobufc libsecret qrencode libuuid ];
