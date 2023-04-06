@@ -148,6 +148,7 @@ in
     bash
     coreutils
     cryptsetup # cryptsetup
+    fakeroot
     go
     privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
@@ -195,10 +196,7 @@ in
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "${lib.makeBinPath [
-        fakeroot
-        squashfsTools # Singularity (but not Apptainer) expects unsquashfs from the host PATH
-      ]}"
+      --prefix PATH : "''${defaultPathInputs// /\/bin:}"
     # Make changes in the config file
     ${lib.optionalString enableNvidiaContainerCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
