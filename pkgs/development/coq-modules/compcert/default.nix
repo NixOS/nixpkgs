@@ -1,11 +1,13 @@
-{ lib, fetchzip, mkCoqDerivation
-, coq, flocq, compcert
-, ocamlPackages, fetchpatch, makeWrapper, coq2html
+{ lib, mkCoqDerivation
+, coq, flocq
+, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null
 }:
 
-let compcert = mkCoqDerivation rec {
+let compcert = 
+  let ocamlPackages = coq.ocamlPackages; in
+  mkCoqDerivation {
 
   pname = "compcert";
   owner = "AbsInt";
