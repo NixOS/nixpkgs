@@ -832,6 +832,23 @@ let
         };
       };
 
+      devsense.profiler-php-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "profiler-php-vscode";
+          publisher = "devsense";
+          version = "1.33.12924";
+          sha256 = "sha256-6+spMS+oypq8KFW5vsoy0Cmn7RD5L1JQnHSyJAvYhTk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
+          description = "A visual studio code extension for PHP and XDebug profiling and inspecting.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.profiler-php-vscode";
+          homepage = "https://github.com/DEVSENSE/phptools-docs";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
