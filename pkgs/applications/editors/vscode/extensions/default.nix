@@ -798,6 +798,23 @@ let
         };
       };
 
+      devsense.composer-php-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "composer-php-vscode";
+          publisher = "devsense";
+          version = "1.33.12924";
+          sha256 = "sha256-9Uz8B4qQ57gfETitzRAVEq/Ou/s3jOF/p2EyEDo1jP8=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
+          description = "A visual studio code extension for full development integration for Composer, the PHP package manager.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.composer-php-vscode";
+          homepage = "https://github.com/DEVSENSE/phptools-docs";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
