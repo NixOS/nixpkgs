@@ -37,6 +37,7 @@
 , supportMultimedia ? true # PDF multimedia
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
+, supportDvi ? stdenv.buildPlatform.canExecute stdenv.hostPlatform # texlive does not cross-compile
 , withLibsecret ? true
 }:
 
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     libxml2
     pango
     poppler
+  ] ++ lib.optionals supportDvi [
     texlive.bin.core # kpathsea for DVI support
   ] ++ lib.optionals withLibsecret [
     libsecret
@@ -100,6 +102,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
+    (lib.mesonEnable "dvi" supportDvi)
   ] ++ lib.optionals (!withLibsecret) [
     "-Dkeyring=disabled"
   ] ++ lib.optionals (!supportMultimedia) [
