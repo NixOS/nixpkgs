@@ -14,6 +14,7 @@
 , typing-extensions
 
 # optionals
+, aiomysql
 , aiosqlite
 , asyncmy
 , asyncpg
@@ -63,7 +64,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = rec {
+  passthru.optional-dependencies = lib.fix (self: {
     asyncio = [
       greenlet
     ];
@@ -102,7 +103,7 @@ buildPythonPackage rec {
     ];
     postgresql_asyncpg = [
       asyncpg
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     postgresql_psycopg2binary = [
       psycopg2
     ];
@@ -117,18 +118,18 @@ buildPythonPackage rec {
     ];
     aiomysql = [
       aiomysql
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     asyncmy = [
       asyncmy
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     aiosqlite = [
       aiosqlite
       typing-extensions
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     sqlcipher = [
       # TODO: sqlcipher3
     ];
-  };
+  });
 
   nativeCheckInputs = [
     pytest-xdist
