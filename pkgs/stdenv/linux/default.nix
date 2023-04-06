@@ -458,6 +458,14 @@ in
           '';
         };
       };
+
+      # TODO(amjoseph): It is not yet entirely clear why this is necessary.
+      # Something strange is going on with xgcc and libstdc++ on pkgsMusl.
+      patchelf = super.patchelf.overrideAttrs(previousAttrs:
+        lib.optionalAttrs super.stdenv.hostPlatform.isMusl {
+          NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or "") + " -static-libstdc++";
+        });
+
     };
 
     # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
