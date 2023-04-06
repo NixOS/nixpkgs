@@ -80,7 +80,7 @@ in lib.init bootStages ++ [
              (hostPlatform.isLinux && !buildPlatform.isLinux)
              [ buildPackages.patchelf ]
         ++ lib.optional
-             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode || p.isSerenity;
                in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
         ;

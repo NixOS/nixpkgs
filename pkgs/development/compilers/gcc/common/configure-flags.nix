@@ -229,6 +229,14 @@ let
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ lib.optionals (targetPlatform.libc == "serenity") [
+      "--enable-initfini-array"
+      "--enable-threads=posix"
+      "--with-linker-hash-style=gnu"
+      "--disable-nls"
+      # provided by libc
+      "--disable-libssp"
+    ]
     ++ lib.optional (targetPlatform.libc == "musl")
       # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
       "--disable-libmpx"
