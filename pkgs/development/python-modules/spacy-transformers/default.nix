@@ -2,6 +2,7 @@
 , callPackage
 , fetchPypi
 , buildPythonPackage
+, pythonRelaxDepsHook
 , torch
 , pythonOlder
 , spacy
@@ -22,12 +23,20 @@ buildPythonPackage rec {
     hash = "sha256-Up9ZlLlAM0CDXEYDI95KsLzA0TBz/uZFqEgZLmNIABA=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
     torch
     spacy
     spacy-alignments
     srsly
     transformers
+  ];
+
+  pythonRelaxDeps = [
+    "transformers"
   ];
 
   # Test fails due to missing arguments for trfs2arrays().

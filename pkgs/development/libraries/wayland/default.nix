@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
-    platforms = if withLibraries then platforms.linux else platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
 

@@ -16,16 +16,16 @@
 
 buildGo120Module rec {
   pname = "evcc";
-  version = "0.114.1";
+  version = "0.115.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-c+XHSO6waDyju8oXFWGYeaCCqyaYdU2JLXr+NDXijdU=";
+    hash = "sha256-vA2HpkzNuHulUUZKL6Wm2Y052v4JdC5V8hADq78rK5c=";
   };
 
-  vendorHash = "sha256-O58Y9mfHmNUWtHmdO3hvZQbFlcqfZs0GmQDcx2RKRUs=";
+  vendorHash = "sha256-/TqA2WTNJ3cSrqLgEly1KHGvMA/MQ+p364G0ne0ezfQ=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
@@ -62,10 +62,6 @@ buildGo120Module rec {
     "-w"
   ];
 
-  npmInstallFlags = [
-    "--legacy-peer-deps"
-  ];
-
   preBuild = ''
     make ui
   '';
@@ -75,6 +71,10 @@ buildGo120Module rec {
   preCheck = ''
     # requires network access
     rm meter/template_test.go
+    rm charger/template_test.go
+    rm vehicle/template_test.go
+    # times out (since 0.115.0, bisected to 31ab90e6381b30278731bd01effa62bdfb884ebc)
+    rm util/templates/render_testing.go
   '';
 
   passthru = {
