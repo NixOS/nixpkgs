@@ -73,7 +73,11 @@ backendStdenv.mkDerivation rec {
   ] ++ lib.optionals (lib.versionOlder version "11") [
     libsForQt5.wrapQtAppsHook
   ];
-  buildInputs = [
+  buildInputs = lib.optionals (lib.versionOlder version "11") [
+    libsForQt5.qt5.qtwebengine
+    freeglut
+    libGLU
+  ] ++ [
     # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
     gdk-pixbuf
 
@@ -109,10 +113,6 @@ backendStdenv.mkDerivation rec {
     unixODBC
     alsa-lib
     wayland
-  ] ++ lib.optionals (lib.versionOlder version "11") [
-    libsForQt5.qt5.qtwebengine
-    freeglut
-    libGLU
   ];
 
   # Prepended to runpaths by autoPatchelf.
