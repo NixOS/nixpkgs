@@ -6559,6 +6559,8 @@ with pkgs;
 
   curlie = callPackage ../tools/networking/curlie { };
 
+  trurl = callPackage ../tools/networking/trurl { };
+
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
 
