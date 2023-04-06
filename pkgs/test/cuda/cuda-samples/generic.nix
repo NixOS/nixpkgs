@@ -1,14 +1,18 @@
 { lib
-, stdenv
+, cudaPackages
+, gcc11Stdenv
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
 , cudatoolkit
 , pkg-config
 , sha256
+, glfw3
+, freeimage
 }:
-
-stdenv.mkDerivation rec {
+let
+  stdenv = cudaPackages.backendStdenv;
+in stdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
 
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config addOpenGLRunpath ];
+  nativeBuildInputs = [ pkg-config addOpenGLRunpath glfw3 freeimage ];
 
   buildInputs = [ cudatoolkit ];
 
