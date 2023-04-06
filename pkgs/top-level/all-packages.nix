@@ -22328,6 +22328,8 @@ with pkgs;
     doCheck = false;
   };
 
+  libffi-wasm-ghc = callPackage ../development/libraries/libffi-wasm-ghc { };
+
   libfreeaptx = callPackage ../development/libraries/libfreeaptx { };
 
   libfreefare = callPackage ../development/libraries/libfreefare {
