@@ -396,6 +396,8 @@ mapAliases ({
 
   electrum-dash = throw "electrum-dash has been removed from nixpkgs as the project is abandoned"; # Added 2022-01-01
 
+  elixir_ls = elixir-ls; # Added 2023-03-20
+
   # Emacs
   emacs28NativeComp = emacs28; # Added 2022-06-08
   emacs28Packages = emacs28.pkgs; # Added 2021-10-04
