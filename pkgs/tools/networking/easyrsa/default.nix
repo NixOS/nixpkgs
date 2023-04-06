@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, openssl_1_1, runtimeShell }:
 
 let
   version = "3.0.8";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     install -D -m755 easyrsa3/easyrsa $out/bin/easyrsa
     substituteInPlace $out/bin/easyrsa \
       --subst-var out \
-      --subst-var-by openssl ${openssl.bin}/bin/openssl
+      --subst-var-by openssl ${openssl_1_1.bin}/bin/openssl
 
     # Helper utility
     cat > $out/bin/easyrsa-init <<EOF

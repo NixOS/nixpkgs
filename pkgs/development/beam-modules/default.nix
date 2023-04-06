@@ -72,7 +72,7 @@ let
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-      elixir_ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
+      elixir-ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
 
       lfe = lfe_1_3;
       lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
