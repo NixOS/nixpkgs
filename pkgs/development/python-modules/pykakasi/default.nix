@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , deprecated
-, fetchFromGitHub
+, fetchFromGitea
 , importlib-metadata
 , jaconv
 , py-cpuinfo
@@ -19,7 +19,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "miurahr";
     repo = pname;
     rev = "refs/tags/v${version}";
@@ -59,8 +60,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
-    homepage = "https://github.com/miurahr/pykakasi";
-    changelog = "https://github.com/miurahr/pykakasi/releases/tag/v${version}";
+    homepage = "https://codeberg.org/miurahr/pykakasi";
+    changelog = "https://codeberg.org/miurahr/pykakasi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
