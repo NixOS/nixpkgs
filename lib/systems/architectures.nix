@@ -4,6 +4,10 @@ rec {
   # gcc.arch to its features (as in /proc/cpuinfo)
   features = {
     default        = [ ];
+    # x86_64 Generic
+    x86-64-v2      = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
+    x86-64-v3      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2"          "fma"        ];
+    x86-64-v4      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2" "avx512" "fma"        ];
     # x86_64 Intel
     westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -39,9 +43,15 @@ rec {
 
   # a superior CPU has all the features of an inferior and is able to build and test code for it
   inferiors = {
+    default        = [ ];
+
+    # x86_64 Generic
+    x86-64-v2      = [ ];
+    x86-64-v3      = [ "x86-64-v2"      ] ++ inferiors.x86-64-v2;
+    x86-64-v4      = [ "x86-64-v3"      ] ++ inferiors.x86-64-v3;
+
     # x86_64 Intel
     # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-    default        = [ ];
     westmere       = [ ];
     sandybridge    = [ "westmere"       ] ++ inferiors.westmere;
     ivybridge      = [ "sandybridge"    ] ++ inferiors.sandybridge;
