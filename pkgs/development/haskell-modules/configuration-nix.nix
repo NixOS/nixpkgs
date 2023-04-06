@@ -971,10 +971,23 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
-  cachix = super.cachix.override {
+ cachix = overrideCabal (drv: {
+    version = "1.4.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.4.2";
+      sha256 = "sha256-EjBM5O+wXJhthRU/Nd9VFe7x5O93nx0pMt3jx0Ow=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+    postPatch = ''
+      sed -i 's/1.4.1/1.4.2/' cachix.cabal
+    '';
+  }) (super.cachix.override {
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
-  };
+  });
+
   cachix_1_3_3 = super.cachix_1_3_3.override {
     nix = self.hercules-ci-cnix-store.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
