@@ -88,10 +88,11 @@ in
   };
 
   evdev-sys = attrs: {
-    nativeBuildInputs =
-      [ pkg-config
-        python3 autoconf automake libtool  # used only if HOST!=TARGET
-      ];
+    nativeBuildInputs = [
+      pkg-config
+    ] ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+      python3 autoconf automake libtool
+    ];
     buildInputs = [ libevdev ];
 
     # This prevents libevdev's build.rs from trying to `git fetch` when HOST!=TARGET
