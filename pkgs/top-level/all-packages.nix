@@ -18426,6 +18426,8 @@ with pkgs;
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
+  meraki-cli = python3Packages.callPackage ../tools/admin/meraki-cli { };
+
   python-matter-server = with python3Packages; toPythonApplication python-matter-server;
 
   minify = callPackage ../development/web/minify { };
