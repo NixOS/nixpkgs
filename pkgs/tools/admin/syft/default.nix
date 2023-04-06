@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.75.0";
+  version = "0.76.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/PQza+pSIww3CzYcqEB7Ep8yHns62xh52EoqZodBPPI=";
+    hash = "sha256-PJrGie65XIKJ3HXvBDUFzKgN1EGfjgb+x97eUVwxV8w=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -22,7 +22,7 @@ buildGoModule rec {
   };
   # hash mismatch with darwin
   proxyVendor = true;
-  vendorHash = "sha256-le660nqfrqW1a79tlY4/UKqN06zHkUpAVPQhYPqNJLU=";
+  vendorHash = "sha256-HHYKcsJ1NAGM7/CO+XiCvhfTw4mRZicDqf4/D3Tys+A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -75,6 +75,6 @@ buildGoModule rec {
       vulnerability detection when used with a scanner tool like Grype.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy ];
   };
 }
