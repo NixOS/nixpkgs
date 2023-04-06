@@ -196,6 +196,11 @@ stdenv.mkDerivation rec {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
     })
+    # patch to build with recent libplacebo
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/-/merge_requests/3027.patch";
+      hash = "sha256-aV+YT1l0ND/USoIIpxcPhdIlP/06J2FxVW4uArS8j88=";
+    })
   ];
 
   postPatch = ''
