@@ -179,6 +179,9 @@ rec {
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";
+    gcc = {
+      enableMultilib = true;
+    };
   };
   armhf-embedded = {
     config = "arm-none-eabihf";
