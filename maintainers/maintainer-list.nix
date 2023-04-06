@@ -7294,6 +7294,13 @@
     githubId = 7910815;
     name = "Alex McGrath";
   };
+  lykos153 = {
+    email = "silvio@booq.org";
+    matrix = "@silvio:booq.org";
+    github = "Lykos153";
+    githubId = 6453662;
+    name = "Silvio Ankermann";
+  };
   lynty = {
     email = "ltdong93+nix@gmail.com";
     github = "lynty";
