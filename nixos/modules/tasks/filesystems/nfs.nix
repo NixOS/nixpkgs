@@ -14,9 +14,6 @@ let
 
   idmapdConfFile = format.generate "idmapd.conf" cfg.idmapd.settings;
   nfsConfFile = pkgs.writeText "nfs.conf" cfg.extraConfig;
-  requestKeyConfFile = pkgs.writeText "request-key.conf" ''
-    create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
-  '';
 
   cfg = config.services.nfs;
 
@@ -82,12 +79,18 @@ in
 
     systemd.packages = [ pkgs.nfs-utils ];
 
-    environment.systemPackages = [ pkgs.keyutils ];
-
     environment.etc = {
       "idmapd.conf".source = idmapdConfFile;
       "nfs.conf".source = nfsConfFile;
-      "request-key.conf".source = requestKeyConfFile;
+    };
+
+    programs.keyutils = {
+      enable = true;
+      keyPrograms = [{
+        op = "create";
+        type = "id_resolver";
+        command = "${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d";
+      }];
     };
 
     systemd.services.nfs-blkmap =
