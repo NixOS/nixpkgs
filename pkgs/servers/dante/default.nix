@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pbahkj43rx7rmv2x40mf5p3g3x9d6i2sz7pzglarf54w5ghd2j1";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isMips64 autoreconfHook;
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc libxcrypt ];
 
   configureFlags = if !stdenv.isDarwin
