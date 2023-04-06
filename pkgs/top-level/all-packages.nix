@@ -1459,6 +1459,8 @@ with pkgs;
 
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
+  etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
+
   copier = callPackage ../tools/misc/copier { };
 
   gamemode = callPackage ../tools/games/gamemode {
