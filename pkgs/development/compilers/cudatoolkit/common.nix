@@ -78,7 +78,7 @@ backendStdenv.mkDerivation rec {
     autoAddOpenGLRunpathHook
   ] ++ lib.optionals (lib.versionOlder version "11") [
     libsForQt5.wrapQtAppsHook
-  ] ++ lib.optionals (lib.versions.major version == "12") [
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
     qt6Packages.wrapQtAppsHook
   ];
   buildInputs = lib.optionals (lib.versionOlder version "11") [
@@ -121,7 +121,7 @@ backendStdenv.mkDerivation rec {
     unixODBC
     alsa-lib
     wayland
-  ] ++ lib.optionals (lib.versions.major version == "12") [
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
     (lib.getLib libtiff)
     qt6Packages.qtwayland
     rdma-core
@@ -220,8 +220,8 @@ backendStdenv.mkDerivation rec {
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
     ''}
-      ${lib.optionalString (lib.versions.major version == "12")
-      # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/ivw2ss2ppafxww0f935dvqij5xkgvczz-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
+      ${lib.optionalString (lib.versionAtLeast version "11.8")
+      # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
       # we only ship libtiff.so.6, so let's use qt plugins built by Nix.
       # TODO: don't copy, come up with a symlink-based "merge"
     ''
