@@ -30774,6 +30774,8 @@ with pkgs;
 
   hugo = callPackage ../applications/misc/hugo { };
 
+  hexo = callPackage ../applications/misc/hexo { };
+
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
   go-org = callPackage ../applications/misc/go-org { };
