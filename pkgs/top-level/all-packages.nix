@@ -3804,6 +3804,8 @@ with pkgs;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
+  bilibili = callPackage ../applications/video/bilibili { };
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   binwalk = with python3Packages; toPythonApplication binwalk;
@@ -14578,6 +14580,8 @@ with pkgs;
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
+  gbforth = callPackage ../development/compilers/gbforth { };
+
   inherit (let
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
@@ -18644,6 +18648,12 @@ with pkgs;
 
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
+  };
+
+  qtcreator-qt6 = qt6Packages.callPackage ../development/tools/qtcreator/qt6.nix {
+    inherit (linuxPackages) perf;
+    stdenv = llvmPackages_14.stdenv;
+    llvmPackages = llvmPackages_14;
   };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
@@ -29127,6 +29137,8 @@ with pkgs;
 
   bristol = callPackage ../applications/audio/bristol { };
 
+  brlcad = callPackage ../applications/graphics/brlcad { };
+
   bjumblr = callPackage ../applications/audio/bjumblr { };
 
   bschaffl = callPackage ../applications/audio/bschaffl { };
@@ -34577,7 +34589,7 @@ with pkgs;
   inherit (wayfireApplications) wayfire wcm;
   wayfireApplications-unwrapped = recurseIntoAttrs (
     (callPackage ../applications/window-managers/wayfire/applications.nix { }).
-    extend (_: _: { wlroots = wlroots_0_14; })
+    extend (_: _: { wlroots = wlroots_0_16; })
   );
   wayfirePlugins = recurseIntoAttrs (
     callPackage ../applications/window-managers/wayfire/plugins.nix {
@@ -37192,6 +37204,8 @@ with pkgs;
   };
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
+
+  coin-utils = callPackage ../development/libraries/science/math/coin-utils { };
 
   ecos = callPackage ../development/libraries/science/math/ecos { };
 

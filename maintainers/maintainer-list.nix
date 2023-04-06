@@ -6985,6 +6985,12 @@
     githubId = 17029738;
     name = "Jean-Charles Quillet";
   };
+  jedsek = {
+    email = "jedsek@qq.com";
+    github = "jedsek";
+    githubId = 63626406;
+    name = "Jedsek";
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
