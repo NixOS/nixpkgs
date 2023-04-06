@@ -22534,7 +22534,9 @@ with pkgs;
   # See https://github.com/NixOS/nixpkgs/issues/218232
   # Major versions should be bumped when they have proven to be reasonably stable
   # FIXME: split up libgbm properly
-  mesa = mesa_23_0_1;
+  # darwin: deferred until stabilized; e.g. see around:
+  #   https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/21859
+  mesa = if stdenv.isDarwin then mesa_22_3_7 else mesa_23_0_1;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
