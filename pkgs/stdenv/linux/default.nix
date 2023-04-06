@@ -326,8 +326,7 @@ in
     stageFun prevStage {
       name = "bootstrap-stage-xgcc";
       overrides = final: prev: {
-        inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl;
-        patchelf = bootstrapTools;
+        inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl patchelf;
         ${localSystem.libc} = getLibc prevStage;
         gmp      = prev.gmp.override { cxx = false; };
         gcc-unwrapped =
@@ -400,7 +399,7 @@ in
     assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
     assert            isFromBootstrapFiles prevStage.coreutils;
     assert            isFromBootstrapFiles prevStage.gnugrep;
-    assert            isFromBootstrapFiles prevStage.patchelf;
+    assert isBuiltByBootstrapFilesCompiler prevStage.patchelf;
     stageFun prevStage {
     name = "bootstrap-stage2";
 
