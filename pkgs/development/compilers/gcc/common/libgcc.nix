@@ -6,7 +6,7 @@
 }:
 
 let
-  enableLibGccOutput = (with stdenv; targetPlatform == hostPlatform) && !langJit;
+  enableLibGccOutput = (with stdenv; targetPlatform == hostPlatform) && !langJit && !stdenv.hostPlatform.isDarwin;
 in
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];

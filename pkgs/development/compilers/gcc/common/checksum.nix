@@ -7,7 +7,7 @@
 }:
 
 let
-  enableChecksum = (with stdenv; buildPlatform == hostPlatform && hostPlatform == targetPlatform) && langC && langCC;
+  enableChecksum = (with stdenv; buildPlatform == hostPlatform && hostPlatform == targetPlatform) && langC && langCC && !stdenv.hostPlatform.isDarwin;
 in
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs enableChecksum {
   outputs = previousAttrs.outputs ++ lib.optionals enableChecksum [ "checksum" ];
