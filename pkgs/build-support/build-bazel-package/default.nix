@@ -44,7 +44,15 @@ args@{
 }:
 
 let
-  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
+  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ] // {
+    name = name;
+    bazelFlags = bazelFlags;
+    bazelBuildFlags = bazelBuildFlags;
+    bazelTestFlags = bazelTestFlags;
+    bazelFetchFlags = bazelFetchFlags;
+    bazelTestTargets = bazelTestTargets;
+    dontAddBazelOpts = dontAddBazelOpts;
+  };
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
   bazelCmd = { cmd, additionalFlags, targets }:
@@ -69,11 +77,9 @@ let
     '';
 in
 stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTargets bazelTestTargets;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps.tar.gz";
-    inherit bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTargets bazelTestTargets;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
@@ -103,7 +109,7 @@ stdenv.mkDerivation (fBuildAttrs // {
             "--loading_phase_threads=1"
             "$bazelFetchFlags"
           ];
-          targets = bazelTargets ++ bazelTestTargets;
+          targets = fFetchAttrs.bazelTargets ++ fFetchAttrs.bazelTestTargets;
         }
       }
 
@@ -187,8 +193,6 @@ stdenv.mkDerivation (fBuildAttrs // {
     done
   '' + fBuildAttrs.preConfigure or "";
 
-  inherit dontAddBazelOpts;
-
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
@@ -221,15 +225,15 @@ stdenv.mkDerivation (fBuildAttrs // {
       bazelCmd {
         cmd = "test";
         additionalFlags =
-          ["--test_output=errors"] ++  bazelTestFlags;
-        targets = bazelTestTargets;
+          ["--test_output=errors"] ++ fBuildAttrs.bazelTestFlags;
+        targets = fBuildAttrs.bazelTestTargets;
       }
     }
     ${
       bazelCmd {
         cmd = "build";
-        additionalFlags = bazelBuildFlags;
-        targets = bazelTargets;
+        additionalFlags = fBuildAttrs.bazelBuildFlags;
+        targets = fBuildAttrs.bazelTargets;
       }
     }
     runHook postBuild

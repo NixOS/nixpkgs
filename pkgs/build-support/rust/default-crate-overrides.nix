@@ -35,6 +35,7 @@
 , libevdev
 , alsa-lib
 , graphene
+, protobuf
 , ...
 }:
 
@@ -205,6 +206,10 @@ in
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
+  };
+
+  prost-build = attr: {
+    nativeBuildInputs = [ protobuf ];
   };
 
   rdkafka-sys = attr: {
