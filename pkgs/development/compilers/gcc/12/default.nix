@@ -56,7 +56,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
-    disableBootstrap = true;
+    disableBootstrap = !stdenv.hostPlatform.isDarwin;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
