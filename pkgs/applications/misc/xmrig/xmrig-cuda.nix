@@ -9,7 +9,6 @@
 with cudaPackages;
 
 let
-  libcudaDir = "/run/opengl-driver/lib";
   inherit (cudaPackages)
     autoAddOpenGLRunpathHook
     backendStdenv
@@ -32,9 +31,9 @@ backendStdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    autoAddOpenGLRunpathHook
     cuda_nvcc
     cuda_cccl
+    autoAddOpenGLRunpathHook
   ];
 
   buildInputs = [
@@ -43,15 +42,9 @@ backendStdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "WITH_CUDA=ON"
-    "WITH_NVML=ON"
-    # "-DCUDA_TOOLKIT_ROOT_DIR=${cudatoolkit}"
-    # "-DLIBCUDA_LIBRARY_DIR=${libcudaDir}"
+    "-DWITH_CUDA=ON"
+    "-DWITH_NVML=ON"
     "-DCUDA_LIB=${cuda_cudart}/lib/stubs/libcuda.so"
-    # "-DCUDA_CUDA_LIBRARY=${libcudaDir}/libcuda.so"
-    # "-DCUDA_CUDART_LIBRARY=${cuda_cudart}/lib/libcudart.so"
-    # "-DLIBNVRTC_LIBRARY_DIR=${cudatoolkit}/lib"
-    # "-DCUDA_NVRTC_LIB=${cudatoolkit}/lib/libnvrtc.so" # or from cuda_nvrtc?
     "-DCUDA_ARCH=${CUDA_ARCH}"
   ];
 
