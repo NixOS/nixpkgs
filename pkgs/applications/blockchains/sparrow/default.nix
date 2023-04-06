@@ -158,7 +158,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  inherit pname version src;
+  inherit version src;
+  pname = "sparrow-unwrapped";
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   desktopItems = [

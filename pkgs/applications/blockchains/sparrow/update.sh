@@ -23,4 +23,4 @@ sha256sum -c --ignore-missing manifest.txt
 sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$depname")
 popd
 
-update-source-version sparrow "$version" "$sha256"
+update-source-version sparrow-unwrapped "$version" "$sha256"
