@@ -26973,6 +26973,8 @@ with pkgs;
 
   powertop = callPackage ../os-specific/linux/powertop { };
 
+  powertop-unstable = callPackage ../os-specific/linux/powertop-unstable { };
+
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
   prayer = callPackage ../servers/prayer { };
