@@ -815,6 +815,23 @@ let
         };
       };
 
+      devsense.phptools-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "phptools-vscode";
+          publisher = "devsense";
+          version = "1.33.12924";
+          sha256 = "sha256-ImaGkIe+MTO/utfVh3Giu0+jTSN0mmhgg6LvOod1suE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.phptools-vscode/changelog";
+          description = "A visual studio code extension for full development integration for the PHP language.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.phptools-vscode";
+          homepage = "https://github.com/DEVSENSE/phptools-docs";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
