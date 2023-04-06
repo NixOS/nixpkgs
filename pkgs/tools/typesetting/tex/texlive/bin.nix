@@ -41,7 +41,7 @@ let
     '' +
     # when cross compiling, we must use himktables from PATH
     # (i.e. from buildPackages.texlive.bin.core.dev)
-    lib.optionalString (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))  ''
+    lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)  ''
       sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
     ''
 ;
@@ -85,7 +85,7 @@ core = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
     texlive.bin.core
@@ -238,7 +238,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         else
           extraConfig=""
         fi
-  '' + lib.optionalString (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
     # results of the tests performed by the configure scripts are
     # toolchain-dependent, so native components and cross components cannot use
     # the same cached test results.
