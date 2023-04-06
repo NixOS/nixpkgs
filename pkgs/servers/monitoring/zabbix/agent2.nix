@@ -1,6 +1,6 @@
 { lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl, pcre, zlib }:
 
-import ./versions.nix ({ version, sha256 }:
+import ./versions.nix ({ version, sha256, vendorSha256 ? throw "unsupported version ${version} for zabbix-agent2", ... }:
   buildGoModule {
     pname = "zabbix-agent2";
     inherit version;
@@ -12,7 +12,7 @@ import ./versions.nix ({ version, sha256 }:
 
     modRoot = "src/go";
 
-    vendorSha256 = "1417qi061xc4m55z0vz420fr7qpi24kw5yj9wq7iic92smakgkjn";
+    inherit vendorSha256;
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];

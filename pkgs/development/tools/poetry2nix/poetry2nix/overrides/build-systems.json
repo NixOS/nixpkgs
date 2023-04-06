@@ -1245,6 +1245,9 @@
   "autobahn": [
     "setuptools"
   ],
+  "autodoc": [
+    "setuptools"
+  ],
   "autoflake": [
     "hatchling"
   ],
@@ -3641,6 +3644,9 @@
   ],
   "databricks-sql-connector": [
     "poetry-core"
+  ],
+  "dataclass-wizard": [
+    "setuptools"
   ],
   "dataclasses-json": [
     "setuptools"
@@ -6137,7 +6143,18 @@
     "setuptools"
   ],
   "gitlint": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.19"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "0.19"
+    },
+    {
+      "buildSystem": "hatch-vcs",
+      "from": "0.19"
+    }
   ],
   "gitlint-core": [
     {
@@ -7946,7 +7963,13 @@
     "setuptools"
   ],
   "jupyter-ydoc": [
-    "hatchling"
+    {
+      "buildSystem": "hatchling"
+    },
+    {
+      "buildSystem": "hatch-nodejs-version",
+      "from": "0.2.3"
+    }
   ],
   "jupyterhub": [
     "setuptools"
@@ -8180,6 +8203,9 @@
   ],
   "kubernetes": [
     "setuptools"
+  ],
+  "kubernetes-stubs": [
+    "poetry"
   ],
   "l18n": [
     "setuptools"
@@ -11600,6 +11626,9 @@
   "psycopg": [
     "setuptools"
   ],
+  "psycopg-pool": [
+    "setuptools"
+  ],
   "psycopg2": [
     "setuptools"
   ],
@@ -12211,6 +12240,9 @@
     "setuptools"
   ],
   "pydroid-ipcam": [
+    "setuptools"
+  ],
+  "pydruid": [
     "setuptools"
   ],
   "pydsdl": [
@@ -14381,7 +14413,8 @@
     "setuptools"
   ],
   "python-multipart": [
-    "setuptools"
+    "setuptools",
+    "hatchling"
   ],
   "python-mystrom": [
     "setuptools"
@@ -16221,6 +16254,9 @@
   "simple-salesforce": [
     "setuptools"
   ],
+  "simple-term-menu": [
+    "setuptools"
+  ],
   "simple-websocket-server": [
     "setuptools"
   ],
@@ -16832,6 +16868,9 @@
   "sqlmap": [
     "setuptools"
   ],
+  "sqlmodel": [
+    "poetry-core"
+  ],
   "sqlobject": [
     "setuptools"
   ],
@@ -16976,7 +17015,7 @@
     "setuptools"
   ],
   "strawberry-graphql": [
-    "poetry-core",
+    "poetry",
     "setuptools"
   ],
   "streamdeck": [
@@ -18059,10 +18098,16 @@
   "types-cachetools": [
     "setuptools"
   ],
+  "types-click": [
+    "setuptools"
+  ],
   "types-colorama": [
     "setuptools"
   ],
   "types-cryptography": [
+    "setuptools"
+  ],
+  "types-dataclasses": [
     "setuptools"
   ],
   "types-dateutil": [
@@ -18096,6 +18141,12 @@
     "setuptools"
   ],
   "types-orjson": [
+    "setuptools"
+  ],
+  "types-paramiko": [
+    "setuptools"
+  ],
+  "types-pillow": [
     "setuptools"
   ],
   "types-pkg-resources": [
