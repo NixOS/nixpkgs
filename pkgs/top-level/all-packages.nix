@@ -2626,6 +2626,8 @@ with pkgs;
 
   iqueue = callPackage ../development/libraries/iqueue { };
 
+  llama-cpp = callPackage ../tools/misc/llama-cpp { };
+
   lifecycled = callPackage ../tools/misc/lifecycled { };
 
   lilo = callPackage ../tools/misc/lilo { };
