@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , pytest-aiohttp
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -42,6 +43,9 @@ buildPythonPackage rec {
     "test_snitun_single_runner_throttling"
     # ConnectionResetError: [Errno 54] Connection reset by peer
     "test_peer_listener_timeout"
+  ] ++ lib.optional (pythonAtLeast "3.11") [
+    # TypeError: Passing coroutines is forbidden, use tasks explicitly.
+    "test_snitun_runner_updown"
   ];
 
   pythonImportsCheck = [ "snitun" ];
