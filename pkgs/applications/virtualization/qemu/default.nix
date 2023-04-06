@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-W0nOJod0Ta1JSukKiYxSIEo0BuhNBySCoeG+hU7rIVc=";
+    sha256 = "jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
-    chmod +x ./scripts/shaderinclude.pl
+    chmod +x ./scripts/shaderinclude.py
     patchShebangs .
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
