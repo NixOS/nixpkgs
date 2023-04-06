@@ -1382,6 +1382,8 @@ with pkgs;
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
+  aichat = callPackage ../tools/misc/aichat { };
+
   aide = callPackage ../tools/security/aide { };
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
@@ -1830,6 +1832,8 @@ with pkgs;
   git-annex-utils = callPackage ../applications/version-management/git-annex-utils { };
 
   git-appraise = callPackage ../applications/version-management/git-appraise { };
+
+  git-archive-all = python3.pkgs.callPackage ../applications/version-management/git-archive-all { };
 
   git-backup = callPackage ../applications/version-management/git-backup {
     openssl = openssl_1_1;
@@ -18592,6 +18596,8 @@ with pkgs;
     };
   }));
 
+  pnpm-lock-export = callPackage ../development/web/pnpm-lock-export { };
+
   portableService = callPackage ../build-support/portable-service { };
 
   polar = callPackage ../tools/misc/polar { };
@@ -26831,6 +26837,10 @@ with pkgs;
   };
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
+
+  nushellPlugins = callPackage ../shells/nushell/plugins {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+  };
 
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
@@ -39471,6 +39481,8 @@ with pkgs;
   );
 
   zoneminder = callPackage ../servers/zoneminder { };
+
+  zrok = callPackage ../tools/networking/zrok { };
 
   xcp = callPackage ../tools/misc/xcp { };
 

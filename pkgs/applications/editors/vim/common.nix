@@ -10,6 +10,7 @@ rec {
   };
 
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   hardeningDisable = [ "fortify" ];
 
