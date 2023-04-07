@@ -24,13 +24,13 @@ let
   version = {
     x86_64-linux = "21.9.0.0.0";
     aarch64-linux = "19.10.0.0.0";
-    x86_64-darwin = "19.3.0.0.0";
+    x86_64-darwin = "19.8.0.0.0";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   directory = {
     x86_64-linux = "219000";
     aarch64-linux = "191000";
-    x86_64-darwin = "193000";
+    x86_64-darwin = "198000";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # hashes per component and architecture
@@ -50,11 +50,11 @@ let
       odbc = "sha256-T+RIIKzZ9xEg/E72pfs5xqHz2WuIWKx/oRfDrQbw3ms=";
     };
     x86_64-darwin = {
-      basic = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
-      sdk = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
-      sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
-      tools = "b2bc474f98da13efdbc77fd05f559498cd8c08582c5b9038f6a862215de33f2c";
-      odbc = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
+      basic = "sha256-V+1BmPOhDYPNXdwkcsBY1MOwt4Yka66/a7/HORzBIIc=";
+      sdk = "sha256-D6iuTEQYqmbOh1z5LnKN16ga6vLmjnkm4QK15S/Iukw=";
+      sqlplus = "sha256-08uoiwoKPZmTxLZLYRVp0UbN827FXdhOukeDUXvTCVk=";
+      tools = "sha256-1xFFGZapFq9ogGQ6ePSv4PrXl5qOAgRZWAp4mJ5uxdU=";
+      odbc = "sha256-S6+5P4daK/+nXwoHmOkj4DIkHtwdzO5GOkCCI612bRY=";
     };
   }.${stdenv.hostPlatform.system} or throwSystem;
 
