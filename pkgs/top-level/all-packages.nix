@@ -1382,6 +1382,8 @@ with pkgs;
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
+  aichat = callPackage ../tools/misc/aichat { };
+
   aide = callPackage ../tools/security/aide { };
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
@@ -1831,6 +1833,8 @@ with pkgs;
 
   git-appraise = callPackage ../applications/version-management/git-appraise { };
 
+  git-archive-all = python3.pkgs.callPackage ../applications/version-management/git-archive-all { };
+
   git-backup = callPackage ../applications/version-management/git-backup {
     openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -2239,8 +2243,7 @@ with pkgs;
 
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
-  mgba = callPackage ../applications/emulators/mgba {
-  };
+  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
@@ -4791,6 +4794,8 @@ with pkgs;
 
   gladtex = callPackage ../tools/typesetting/tex/gladtex { };
 
+  latex2mathml = with python3Packages; toPythonApplication latex2mathml;
+
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
@@ -6553,6 +6558,8 @@ with pkgs;
 
   curlie = callPackage ../tools/networking/curlie { };
 
+  trurl = callPackage ../tools/networking/trurl { };
+
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
 
@@ -7043,9 +7050,7 @@ with pkgs;
 
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
 
-  tracy = callPackage ../development/tools/tracy {
-    inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
-  };
+  tracy = callPackage ../development/tools/tracy { };
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
@@ -8636,9 +8641,7 @@ with pkgs;
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
-  ipget = callPackage ../applications/networking/ipget {
-    buildGoModule = buildGo118Module; # build fails with 1.19
-  };
+  ipget = callPackage ../applications/networking/ipget { };
 
   i-pi = with python3Packages; toPythonApplication i-pi;
 
@@ -17669,8 +17672,6 @@ with pkgs;
 
   cheat = callPackage ../applications/misc/cheat { };
 
-  chefdk = callPackage ../development/tools/chefdk { };
-
   matter-compiler = callPackage ../development/compilers/matter-compiler { };
 
   cfr = callPackage ../development/tools/java/cfr { };
@@ -18425,6 +18426,8 @@ with pkgs;
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
+  meraki-cli = python3Packages.callPackage ../tools/admin/meraki-cli { };
+
   python-matter-server = with python3Packages; toPythonApplication python-matter-server;
 
   minify = callPackage ../development/web/minify { };
@@ -18593,6 +18596,8 @@ with pkgs;
       vanilla = true;
     };
   }));
+
+  pnpm-lock-export = callPackage ../development/web/pnpm-lock-export { };
 
   portableService = callPackage ../build-support/portable-service { };
 
@@ -21255,6 +21260,8 @@ with pkgs;
   libdnet = callPackage ../development/libraries/libdnet { };
 
   libdnf = callPackage ../tools/package-management/libdnf { };
+
+  libdovi = callPackage ../development/libraries/libdovi { };
 
   libdrm = callPackage ../development/libraries/libdrm { };
 
@@ -26048,7 +26055,6 @@ with pkgs;
 
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix {}).${version};
-    agent2 = (callPackages ../servers/monitoring/zabbix/agent2.nix {}).${version};
     proxy-mysql = (callPackages ../servers/monitoring/zabbix/proxy.nix { mysqlSupport = true; }).${version};
     proxy-pgsql = (callPackages ../servers/monitoring/zabbix/proxy.nix { postgresqlSupport = true; }).${version};
     proxy-sqlite = (callPackages ../servers/monitoring/zabbix/proxy.nix { sqliteSupport = true; }).${version};
@@ -26058,12 +26064,15 @@ with pkgs;
 
     # backwards compatibility
     server = server-pgsql;
+  } // lib.optionalAttrs ( version != "v40" ) {  # agent2 is not supported in v4
+    agent2 = (callPackages ../servers/monitoring/zabbix/agent2.nix {}).${version};
   };
 
+  zabbix60 = recurseIntoAttrs (zabbixFor "v60");
   zabbix50 = recurseIntoAttrs (zabbixFor "v50");
   zabbix40 = dontRecurseIntoAttrs (zabbixFor "v40");
 
-  zabbix = zabbix50;
+  zabbix = zabbix60;
 
   zipkin = callPackage ../servers/monitoring/zipkin { };
 
@@ -26818,6 +26827,10 @@ with pkgs;
   };
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
+
+  nushellPlugins = callPackage ../shells/nushell/plugins {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+  };
 
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
@@ -28858,6 +28871,8 @@ with pkgs;
   atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
 
   inherit (atomPackages) atom atom-beta;
+
+  pulsar = callPackage ../applications/editors/pulsar { };
 
   asap = callPackage ../tools/audio/asap { };
 
@@ -36734,6 +36749,8 @@ with pkgs;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
 
+  gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
+
   gnome-text-editor = callPackage ../desktops/gnome/apps/gnome-text-editor { };
 
   gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
@@ -38080,6 +38097,8 @@ with pkgs;
   acpilight = callPackage ../misc/acpilight { };
 
   alpnpass = callPackage ../applications/networking/alpnpass { };
+
+  amdctl = callPackage ../os-specific/linux/amdctl { };
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
@@ -39451,6 +39470,8 @@ with pkgs;
   );
 
   zoneminder = callPackage ../servers/zoneminder { };
+
+  zrok = callPackage ../tools/networking/zrok { };
 
   xcp = callPackage ../tools/misc/xcp { };
 

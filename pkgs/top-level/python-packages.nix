@@ -3939,6 +3939,8 @@ self: super: with self; {
 
   glad =  callPackage ../development/python-modules/glad { };
 
+  glad2 =  callPackage ../development/python-modules/glad2 { };
+
   glances-api = callPackage ../development/python-modules/glances-api { };
 
   glcontext = callPackage ../development/python-modules/glcontext { };
@@ -5340,6 +5342,8 @@ self: super: with self; {
   laspy = callPackage ../development/python-modules/laspy { };
 
   laszip = callPackage ../development/python-modules/laszip { };
+
+  latex2mathml = callPackage ../development/python-modules/latex2mathml { };
 
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
@@ -9477,8 +9481,6 @@ self: super: with self; {
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
-  python-forecastio = callPackage ../development/python-modules/python-forecastio { };
-
   python-frontmatter = callPackage ../development/python-modules/python-frontmatter { };
 
   python-gammu = callPackage ../development/python-modules/python-gammu { };
@@ -10530,6 +10532,8 @@ self: super: with self; {
   schema = callPackage ../development/python-modules/schema { };
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
+
+  schemdraw = callPackage ../development/python-modules/schemdraw { };
 
   schiene = callPackage ../development/python-modules/schiene { };
 
@@ -12935,6 +12939,10 @@ self: super: with self; {
   zfec = callPackage ../development/python-modules/zfec { };
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
+
+  ziafont = callPackage ../development/python-modules/ziafont { };
+
+  ziamath = callPackage ../development/python-modules/ziamath { };
 
   zict = callPackage ../development/python-modules/zict { };
 

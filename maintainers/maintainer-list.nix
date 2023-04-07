@@ -2992,6 +2992,13 @@
     githubId = 298705;
     name = "Cyril Cohen";
   };
+  colamaroro = {
+    name = "Corentin Rondier";
+    email = "github@rondier.io";
+    github = "colamaroro";
+    githubId = 12484955;
+    matrix = "@colamaroro:lovelyrad.io";
+  };
   cole-h = {
     name = "Cole Helbling";
     email = "cole.e.helbling@outlook.com";
@@ -4152,7 +4159,7 @@
   };
   dylanmtaylor = {
     email = "dylan@dylanmtaylor.com";
-    github = "dylamtaylor";
+    github = "dylanmtaylor";
     githubId = 277927;
     name = "Dylan Taylor";
   };
@@ -10566,6 +10573,12 @@
     github = "illdefined";
     githubId = 772914;
     name = "Mikael Voss";
+  };
+  mwdomino = {
+    email = "matt@dominey.io";
+    github = "mwdomino";
+    githubId = 46284538;
+    name = "Matt Dominey";
   };
   mwolfe = {
     email = "corp@m0rg.dev";
