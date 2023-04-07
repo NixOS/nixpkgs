@@ -29,6 +29,7 @@ args@
 , python3 # FIXME: CUDAToolkit 10 may still need python27
 , pulseaudio
 , requireFile
+, stdenv
 , backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
 , wayland
@@ -136,8 +137,8 @@ backendStdenv.mkDerivation rec {
     (placeholder "lib")
     (placeholder "out")
     "${placeholder "out"}/nvvm"
-    # Is it not handled by autoPatchelf automatically?
-    "${lib.getLib backendStdenv.cc.cc}/lib64"
+    # NOTE: use the same libstdc++ as the rest of nixpkgs, not from backendStdenv
+    "${lib.getLib stdenv.cc.cc}/lib64"
     "${placeholder "out"}/jre/lib/amd64/jli"
     "${placeholder "out"}/lib64"
     "${placeholder "out"}/nvvm/lib64"
@@ -219,6 +220,7 @@ backendStdenv.mkDerivation rec {
 
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+      rm $out/host-linux-x64/libstdc++.so*
     ''}
       ${lib.optionalString (lib.versionAtLeast version "11.8")
       # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
