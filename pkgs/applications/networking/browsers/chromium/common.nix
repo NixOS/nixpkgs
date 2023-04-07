@@ -29,7 +29,9 @@
 , glib, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
 , mesa
-, pciutils, protobuf, speechd, libXdamage, at-spi2-core
+, pciutils, protobuf
+, speechSupport ? true, speechd
+, libXdamage, at-spi2-core
 , pipewire
 , libva
 , libdrm, wayland, libxkbcommon # Ozone

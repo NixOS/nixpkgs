@@ -18,7 +18,7 @@
 , withAlsa ? false, alsa-lib
 , withOss ? false
 , withFlite ? true, flite
-, withEspeak ? true, espeak, sonic, pcaudiolib
+, withEspeak ? !espeak.meta.broken, espeak, sonic, pcaudiolib
 , mbrola
 , withPico ? true, svox
 }:
