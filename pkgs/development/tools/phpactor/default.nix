@@ -19,9 +19,11 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+    patchShebangs ./bin/phpactor
+
     substituteInPlace composer.json \
       --replace '"config": {' '"config": { "autoloader-suffix": "Phpactor",' \
-      --replace '"name": "phpactor/phpactor",' '"name": "phpactor/phpactor", "version": "${version}",'
+      --replace '"name": "phpactor/phpactor",' '"name": "phpactor/phpactor", "version": "${src.rev}",'
 
     composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
@@ -42,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHash = {
       aarch64-linux = "sha256-DeTJV0kBV83vJXgrK7qiTHxXjBQY+SNwj1HhFi48cMw=";
-      x86_64-linux = "sha256-UCXrSXcNHHnVOizm0U099iwGEGWkpFZe0NyoKRJ0jaA=";
+      x86_64-linux = "sha256-6TrevEWIlsv3D3hp5x8vrbgP0wuSmahxFe2yapFaAAE=";
       x86_64-darwin = "sha256-IERtY7Eb1OMDagnblKMIk33Z0VO/qnhhI0UIAlTnDCY=";
     }.${stdenvNoCC.system};
 
