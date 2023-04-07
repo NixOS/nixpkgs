@@ -15700,6 +15700,7 @@ let
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz";
       hash = "sha256-aDAuxkaDNUfUEL4o4JZ223UAb0qlihHzvbRP/pnw8CQ=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     meta = {
       description = "Runtime module handling";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
