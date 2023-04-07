@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, addOpenGLRunpath, ... }:
 
 
 let
@@ -7,7 +7,7 @@ let
     if cfg.cuda.enable then {
       cuda.enabled = true;
       cuda.loader = "${pkgs.xmrig-cuda}/lib/libxmrig-cuda.so";
-      cuda.nvml = "/run/opengl-driver/lib/libnvidia-ml.so";
+      cuda.nvml = "${addOpenGLRunpath.driverLink}/lib/libnvidia-ml.so";
     } // cfg.settings
     else cfg.settings;
 
@@ -60,14 +60,6 @@ with lib;
         type = types.bool;
         default = false;
         description = lib.mdDoc "Enable CUDA plugin.";
-      };
-      cuda.archectictures = mkOption {
-        type = types.listOf types.int;
-        default = [ 30 35 60 70 75 80 ];
-        description = lib.mdDoc ''
-          List of supported CUDA versions.
-          Select for your GPU: https://developer.nvidia.com/cuda-gpus#compute
-        '';
       };
     };
   };
