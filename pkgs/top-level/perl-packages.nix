@@ -25123,6 +25123,7 @@ let
     };
     # libbtparse.so: cannot open shared object file (aarch64 only)
     patches = [ ../development/perl-modules/TextBibTeX-use-lib-on-aarch64.patch ];
+    nativeBuildInputs = [ buildPackages.perl ];
     perlPreHook = "export LD=$CC";
     perlPostHook = lib.optionalString stdenv.isDarwin ''
       oldPath="$(pwd)/btparse/src/libbtparse.dylib"
