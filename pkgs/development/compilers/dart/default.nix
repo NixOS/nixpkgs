@@ -6,6 +6,7 @@
 , darwin
 , sources ? import ./sources.nix {inherit fetchurl;}
 , version ? sources.versionUsed
+, callPackage
 }:
 
 assert sources != null && (builtins.isAttrs sources);
@@ -28,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
   dontStrip = true;
   passthru = {
+    mkDartApp = callPackage ../../../build-support/dart/default.nix {};
+    fetchPackage = callPackage ../../../build-support/dart/fetchPackage.nix;
+    fetchGitPackage = callPackage ../../../build-support/fetchGitPackage.nix;
+
     updateScript = ./update.sh;
     tests = {
       testCreate = runCommand "dart-test-create" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
