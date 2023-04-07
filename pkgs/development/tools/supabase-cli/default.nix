@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "sha256-BTUeGaWWkq1kMGInpu/zlJ7lFSSoiPlTDS/jjKe/uD4=";
   };
 
-  vendorSha256 = "sha256-P0smUEw6nI2KTrvPCn2Dxm3mrM6f/O4i8P6P0UuDXzo=";
+  vendorSha256 = "sha256-PAsmUEw6nI2KTrvPCn2Dxm3mrM6f/O4i8P6P0UuDXzo=";
 
   ldflags = [ "-s" "-w" "-X" "github.com/supabase/cli/cmd.version=${version}" ];
 
