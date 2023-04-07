@@ -133,13 +133,6 @@ self = stdenv.mkDerivation {
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-
-    # FIXME: submitted upstream at https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/22133
-    # Remove when no longer applicable
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/1457f1b752f59258c0b33558619b0063b4ce6280.diff";
-      hash = "sha256-WFemyfmCWY4rJMfGxVZdYeGQvGcOTEDMrRt5OIWp348=";
-    })
   ];
 
   postPatch = ''
