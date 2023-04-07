@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, libxml2, libzip }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, libxml2, libzip
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "ebook-tools";
@@ -11,6 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libxml2 libzip ];
+
+  preConfigure = ''
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config --cflags libzip)"
+  '';
 
   meta = with lib; {
     homepage = "http://ebook-tools.sourceforge.net";
