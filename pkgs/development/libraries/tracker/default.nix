@@ -101,7 +101,8 @@ stdenv.mkDerivation rec {
     "-Dsystemd_user_services=false"
   ];
 
-  doCheck = true;
+  # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
+  doCheck = !stdenv.isi686;
 
   postPatch = ''
     chmod +x \
