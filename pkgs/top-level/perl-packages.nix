@@ -18864,7 +18864,10 @@ let
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
-    perlPreHook = "export LD=$CC";
+    nativeBuildInputs = [ buildPackages.perl ];
+    preConfigure = ''
+      makeMakerFlags="CC=$CC LD=$CC";
+    '';
     meta = {
       description = "Validate method/function parameters";
       homepage = "https://metacpan.org/release/Params-Validate";
