@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.1.6";
+  version = "3.1.7";
 
   src =
     let
