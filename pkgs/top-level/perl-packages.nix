@@ -19034,6 +19034,7 @@ let
       url = "mirror://cpan/authors/id/J/JT/JTBRAUN/Parse-RecDescent-1.967015.tar.gz";
       hash = "sha256-GUMzaky1TxeIpzPwgnwMVdtDENXq4V5UJjnJ3YVlbjc=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     meta = {
       description = "Generate Recursive-Descent Parsers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
