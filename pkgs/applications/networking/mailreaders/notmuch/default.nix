@@ -13,7 +13,7 @@
 , ruby
 , testers
 , which, dtach, openssl, bash, gdb, man, git
-, withEmacs ? true
+, withEmacs ? !emacs.meta.broken
 , withRuby ? true
 , withSfsexp ? true # also installs notmuch-git, which requires sexp-support
 }:
