@@ -19,7 +19,6 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    patchShebangs .
     substituteInPlace composer.json \
       --replace '"config": {' '"config": { "autoloader-suffix": "Phpactor",' \
       --replace '"name": "phpactor/phpactor",' '"name": "phpactor/phpactor", "version": "${version}",'
@@ -44,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-xNxhmPgdYLWxzmYk6srVEFwe39EfPDS79yuIuTxVDGY=";
+  outputHash = "sha256-UCXrSXcNHHnVOizm0U099iwGEGWkpFZe0NyoKRJ0jaA=";
 
   meta = {
     description = "Mainly a PHP Language Server";
