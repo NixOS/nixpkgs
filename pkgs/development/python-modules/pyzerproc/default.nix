@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.11";
+  version = "0.4.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FNiq/dbh5PMTxnKCKDSHEvllehAEUYvWZS+OyP3lSW8=";
+    hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 
   postPatch = ''
