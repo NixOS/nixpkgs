@@ -456,6 +456,8 @@ self: super: with self; {
 
   amqtt = callPackage ../development/python-modules/amqtt { };
 
+  ancp-bids = callPackage ../development/python-modules/ancp-bids { };
+
   android-backup = callPackage ../development/python-modules/android-backup { };
 
   androidtv = callPackage ../development/python-modules/androidtv { };
@@ -10428,6 +10430,8 @@ self: super: with self; {
   };
 
   rtoml = callPackage ../development/python-modules/rtoml { };
+
+  rtp = callPackage ../development/python-modules/rtp { };
 
   rtree = callPackage ../development/python-modules/rtree {
     inherit (pkgs) libspatialindex;
