@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (!xdg-utils.meta.broken) ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
       # patchelf generates an ELF that binutils' "strip" doesn't like:
       #    strip: not enough room for program headers, try linking with -N
       # As a workaround, strip manually before running patchelf.
-      strip -S $out/bin/alacritty
+      $STRIP -S $out/bin/alacritty
 
       patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
