@@ -98,11 +98,6 @@ in
           type = types.submodule {
             freeformType = format.type;
             options = {
-              datadir = mkOption {
-                type = types.path;
-                default = "/var/lib/i2pd";
-                description = mdDoc "Path to storage of i2pd data (RouterInfos, destinations keys, peer profiles, etc ...)";
-              };
               loglevel = mkOption {
                 type = types.enum [ "debug" "info" "warn" "error" ];
                 default = "error";
@@ -115,7 +110,7 @@ in
                 Note that integer bandwith will be rounded.
                 If not set, {command}`i2pd` defaults to 32KBps.'';
             };
-            config = mapAttrsRecursive mkDefault {
+            config = mapAttrsRecursive (_: mkDefault) {
               http.enabled = true;
               httpproxy.enabled = true;
               socksproxy.enabled = true;
@@ -183,6 +178,23 @@ in
       };
     };
 
+  imports =
+    let
+      # Replicates `mkRemovedOptionModule`
+      deprecate = message: options:
+        [
+          ({ config, ... }: {
+            config.assertions = forEach options (option: {
+              assertion = ! hasAttrByPath (splitString "." option) config;
+              message = "The option definition `config.${option}` no longer has any effect; please remove it.\n${message}";
+            });
+          })
+        ];
+    in
+    deprecate "This option is defined by the module implementation."
+      (map (v: "services.i2pd.config.${v}")
+        [ "conf" "tunconf" "pidfile" "log" "logfile" "datadir" "daemon" "service" ]);
+
   ###### Implementation ######
 
   config =
@@ -249,36 +261,25 @@ in
             sleep 2
             [ -z "$(cat /build/check-output)" ] && (cp ${configPath} $out; exit 0) || exit 1
           '';
-
-      i2pdCliArgs = cli.toGNUCommandLineShell { } {
-        "datadir" = cfg.config.datadir;
-        "conf" = validate.config
-          (format.config.generate "i2pd.conf" cfg.config);
-        "tunconf" = format.tunnels.generate "i2pd-tunnels.conf"
-          (mapAttrs' (k: v: nameValuePair "out-${k}" (v // { "type" = "client"; })) cfg.outTunnels
-            // mapAttrs' (k: v: nameValuePair "in-${k}" (v // { "type" = "server"; })) cfg.inTunnels);
-      };
     in
     mkIf cfg.enable {
-
-      users.users.i2pd = {
-        group = "i2pd";
-        description = "I2Pd User";
-        home = cfg.config.datadir;
-        createHome = true; # TODO: Create dir with systemd
-        uid = config.ids.uids.i2pd;
-      };
-
-      users.groups.i2pd.gid = config.ids.gids.i2pd;
-
       systemd.services.i2pd = {
         description = "Minimal I2P router";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = "i2pd";
-          WorkingDirectory = cfg.config.datadir;
-          ExecStart = "${cfg.package}/bin/i2pd ${i2pdCliArgs}";
+          User = "i2pd-dyn";
+          DynamicUser = true;
+          StateDirectory = [ "i2pd" ];
+          ExecStart = "${cfg.package}/bin/i2pd ${
+            cli.toGNUCommandLineShell { } {
+              "datadir" =  "%S/i2pd"; # Must be unescaped. "%S" is systemd state directory (usually `/var/lib`)
+              "conf" = validate.config
+                (format.config.generate "i2pd.conf" cfg.config);
+              "tunconf" = format.tunnels.generate "i2pd-tunnels.conf"
+                (mapAttrs' (k: v: nameValuePair "out-${k}" (v // { "type" = "client"; })) cfg.outTunnels
+                  // mapAttrs' (k: v: nameValuePair "in-${k}" (v // { "type" = "server"; })) cfg.inTunnels);
+            }}";
           ## Auto restart
           Restart = if cfg.autoRestart then "on-failure" else "no";
           ## Graceful shutdown
@@ -306,7 +307,6 @@ in
           ProcSubset = "pid";
           PrivateMounts = true;
           PrivateUsers = true;
-          ReadWritePaths = cfg.config.datadir;
           RemoveIPC = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
