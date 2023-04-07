@@ -25163,6 +25163,7 @@ let
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-2.00.tar.gz";
       hash = "sha256-jMvZGVgFIi2ZWEQRTQ5ZW7JM4Yj4UoTb8lYIAxHLssI=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     meta = {
       description = "Comma-separated values manipulator (using XS or PurePerl)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
