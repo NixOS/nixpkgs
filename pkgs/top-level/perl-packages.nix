@@ -18738,6 +18738,7 @@ let
       url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.39.tar.gz";
       hash = "sha256-kWX1VREuCASTzg6RKd4Ihtowslk/s1Oiq9HHay0mIbU=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     buildInputs = [ CPANMetaCheck TestFatal TestNeeds TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
     meta = {
