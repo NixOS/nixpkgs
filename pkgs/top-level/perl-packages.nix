@@ -15027,6 +15027,7 @@ let
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-Charset-1.012.2.tar.gz";
       hash = "sha256-h4x3nAJWxZFma9BsDN5MDXgg7uuY/RGDCCrumh57HRM=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     meta = {
       description = "Charset Information for MIME";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
