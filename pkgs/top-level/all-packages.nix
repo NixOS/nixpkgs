@@ -16115,6 +16115,22 @@ with pkgs;
 
   gnat = gnat12;
 
+  gnat6 = wrapCC (gcc6.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnat-bootstrap =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat-bootstrap4
+      else buildPackages.gnat6;
+  });
+
   gnat11 = wrapCC (gcc11.cc.override {
     name = "gnat";
     langC = true;
