@@ -305,7 +305,7 @@ let
       hash = "sha256-c7RSRPC1w25TMsM1abgqGrLDPiY/HQB4XSADvK7GjbM=";
     };
     strictDeps = true;
-    nativeBuildInputs = [ pkgs.pkg-config ];
+    nativeBuildInputs = [ buildPackages.perl buildPackages.pkg-config ];
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.libxml2 MojoDOM58 SortVersions Test2Suite URI ];
     meta = {
