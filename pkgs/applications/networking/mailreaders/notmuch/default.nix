@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, makeWrapper
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, makeWrapper
 , pkg-config, gnupg
 , xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
@@ -28,6 +33,8 @@ stdenv.mkDerivation rec {
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
     pythonPackages.cffi
+    gnupg
+    perl
   ] ++ lib.optional withEmacs emacs
     ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp makeWrapper;
@@ -40,6 +47,19 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp sfsexp;
 
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/notmuch/patches/0001-configure-detect-version-by-compiler-for-build.patch";
+      hash = "sha256-Xs4hw3BPXBh8jGmx6UZsnuiosBCtjo8MWQlWAAgqKgg=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/notmuch/patches/0005-configure-drop-gmime-session-key-extraction-support-.patch";
+      hash = "sha256-FXnNtkTqV7ZSIObQSwGu6THX0Rgvj4WeJySTIcJea1Y=";
+    })
+  ];
+
+  XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
+
   postPatch = ''
     patchShebangs configure test/
 
@@ -49,12 +69,20 @@ stdenv.mkDerivation rec {
     # do not override CFLAGS of the Makefile created by mkmf
     substituteInPlace bindings/Makefile.local \
       --replace 'CFLAGS="$(CFLAGS) -pipe -fno-plt -fPIC"' ""
+    substituteInPlace configure \
+      --replace 'pkg-config' "${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
+    substituteInPlace configure \
+      --replace './_check_x509_validity' 'true'
+    substituteInPlace configure \
+      --replace './_check_session_keys' 'true'
+
   '' + lib.optionalString withEmacs ''
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
       --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
   '';
 
+  CC_FOR_BUILD="${buildPackages.stdenv.cc}/bin/cc";
   configureFlags = [
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
@@ -124,6 +152,8 @@ stdenv.mkDerivation rec {
   + lib.optionalString withSfsexp ''
     cp notmuch-git $out/bin/notmuch-git
     wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
+  '' + ''
+    mkdir -p $info
   '';
 
   passthru = {
