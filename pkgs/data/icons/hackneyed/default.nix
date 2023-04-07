@@ -1,4 +1,4 @@
-{ lib, fetchzip, stdenvNoCC, fetchFromGitLab, xcursorgen, imagemagick6, inkscape }:
+{ lib, stdenvNoCC, fetchFromGitLab, fetchpatch, imagemagick, inkscape, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hackneyed";
@@ -8,10 +8,13 @@ stdenvNoCC.mkDerivation rec {
     owner = "Enthymeme";
     repo = "hackneyed-x11-cursors";
     rev = version;
-    sha256 = "sha256-Wtrw/EzxCj4cAyfdBp0OJE4+c6FouW7+b6nFTLxdXNY=";
+    hash = "sha256-Wtrw/EzxCj4cAyfdBp0OJE4+c6FouW7+b6nFTLxdXNY=";
   };
 
-  buildInputs = [ imagemagick6 inkscape xcursorgen ];
+  # Backport ImageMagick 7 support; remove on the next release
+  patches = [ ./imagemagick-7.patch ];
+
+  buildInputs = [ imagemagick inkscape xcursorgen ];
 
   postPatch = ''
     patchShebangs *.sh

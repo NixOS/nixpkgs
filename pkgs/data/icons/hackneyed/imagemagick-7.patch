@@ -1,0 +1,45 @@
+From 91168872fb65c35b1273f294475552a954147ebb Mon Sep 17 00:00:00 2001
+From: Richard Ferreira <richardleoferreira@outlook.com>
+Date: Fri, 24 Mar 2023 17:54:21 -0300
+Subject: [PATCH] quick-and-dirty ImageMagick 7 port
+
+---
+ Makefile  | 4 +++-
+ png2cur.c | 6 +++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 047428f..2b74dcb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -432,7 +432,9 @@ all.large.left: $(LCURSORS_LARGE) $(COMMON_LARGE) $(LCURSORS_ANIMATED_LARGE) $(C
+ 	$(XCURSORGEN) $< $@
+ 
+ png2cur: png2cur.c
+-	$(CC) -std=c99 -Wall -Werror -pedantic -g -o png2cur png2cur.c -lm `pkg-config --cflags --libs libpng MagickWand`
++	$(CC) -std=c99 -Wall -Werror -pedantic -g -o png2cur png2cur.c \
++		-lm `pkg-config --cflags --libs libpng MagickWand` \
++		-DWAND_VERSION="`pkg-config --modversion MagickWand|tr -d .`"
+ 
+ animaker: animaker.c
+ 	$(CC) -std=c99 -Wall -Werror -pedantic -g -o animaker animaker.c
+diff --git a/png2cur.c b/png2cur.c
+index 99e99f1..71b416f 100644
+--- a/png2cur.c
++++ b/png2cur.c
+@@ -47,7 +47,11 @@
+ #include <png.h>
+ #include <sys/stat.h>
+ #include <math.h>
+-#include <wand/magick_wand.h>
++#if WAND_VERSION >= 700
++# include <MagickWand/MagickWand.h>
++#else
++# include <wand/magick_wand.h>
++#endif
+ 
+ #define ICONMAX			1024
+ #define PNG_BYTES		8
+-- 
+GitLab
+
