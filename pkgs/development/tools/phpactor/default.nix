@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
       --replace '"config": {' '"config": { "autoloader-suffix": "Phpactor",' \
       --replace '"name": "phpactor/phpactor",' '"name": "phpactor/phpactor", "version": "${version}",'
 
-    composer install --no-interaction --optimize-autoloader --no-dev
+    composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
     runHook postBuild
   '';
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-kqwXaxNKCJNT/qWWqW2EUaM7BPlM4jrV+dGegD2J/uQ=";
+  outputHash = "sha256-xNxhmPgdYLWxzmYk6srVEFwe39EfPDS79yuIuTxVDGY=";
 
   meta = {
     description = "Mainly a PHP Language Server";
