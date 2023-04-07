@@ -40,12 +40,12 @@ buildPythonApplication rec {
     cachecontrol
     cyclonedx-python-lib
     html5lib
-    lockfile
     packaging
     pip-api
     pip-requirements-parser
     rich
-  ];
+    toml
+  ] ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     pretend
