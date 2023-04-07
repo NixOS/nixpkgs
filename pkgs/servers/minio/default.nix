@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, fetchpatch }:
 
 let
   # The web client verifies, that the server version is a valid datetime string:
@@ -23,6 +23,14 @@ buildGoModule rec {
     rev = "RELEASE.${version}";
     sha256 = "sha256-sABNzhyfBNU5pWyE/VWHUzuSyKsx0glj01ectJPakV8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-25812.patch";
+      url = "https://github.com/minio/minio/commit/a7188bc9d0f0a5ae05aaf1b8126bcd3cb3fdc485.patch";
+      sha256 = "sha256-9y7cua6r2hp+cK+rn2b4FMbHbmVXudFTt8ZffUEpkMQ=";
+    })
+  ];
 
   vendorSha256 = "sha256-wB3UiuptT6D0CIUlHC1d5k0rjIxNeh5yAWOmYpyLGmA=";
 
