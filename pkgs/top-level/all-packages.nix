@@ -16755,7 +16755,7 @@ with pkgs;
   php80Extensions = recurseIntoAttrs php80.extensions;
   php80Packages = recurseIntoAttrs php80.packages;
 
-  phpactor = callPackage ../development/tools/phpactor { inherit (__splicedPackages.phpPackages) composer; };
+  phpactor = callPackage ../development/tools/phpactor { };
 
   picoc = callPackage ../development/interpreters/picoc { };
 

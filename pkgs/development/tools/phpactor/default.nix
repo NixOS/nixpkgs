@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, php, composer }:
+{ lib, stdenvNoCC, fetchFromGitHub, php }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "phpactor";
@@ -12,7 +12,10 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    composer
+    php.packages.composer
+  ];
+
+  buildInputs = [
     php
   ];
 
@@ -25,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
       --replace '"config": {' '"config": { "autoloader-suffix": "Phpactor",' \
       --replace '"name": "phpactor/phpactor",' '"name": "phpactor/phpactor", "version": "${src.rev}",'
 
-    composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
+    ${php.packages.composer}/bin/composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
     runHook postBuild
   '';
@@ -44,7 +47,7 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHash = {
       aarch64-linux = "sha256-DeTJV0kBV83vJXgrK7qiTHxXjBQY+SNwj1HhFi48cMw=";
-      x86_64-linux = "sha256-6TrevEWIlsv3D3hp5x8vrbgP0wuSmahxFe2yapFaAAE=";
+      x86_64-linux = "sha256-2ddQ0jrNPuiiFRw9kxhnNwcA1GYKpCBlgo0/p+W/q+c=";
       x86_64-darwin = "sha256-IERtY7Eb1OMDagnblKMIk33Z0VO/qnhhI0UIAlTnDCY=";
     }.${stdenvNoCC.system};
 
