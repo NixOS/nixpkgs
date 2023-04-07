@@ -54,7 +54,7 @@ buildGoModule rec {
     description = "Like Prometheus, but for logs";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
-    maintainers = with maintainers; [ willibutz globin mmahut ];
+    maintainers = with maintainers; [ willibutz globin mmahut indeednotjames ];
     platforms = platforms.unix;
   };
 }
