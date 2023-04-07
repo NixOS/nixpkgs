@@ -11886,6 +11886,8 @@ with pkgs;
 
   s3-credentials = with python3Packages; toPythonApplication s3-credentials;
 
+  s3scanner = callPackage ../tools/security/s3scanner { };
+
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
   s5cmd = callPackage ../tools/networking/s5cmd { };
