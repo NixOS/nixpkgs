@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     libuuid
     parted
@@ -60,11 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
 
   meta = with lib; {
     description = "Disk and partition backup/restore tool";
