@@ -12506,6 +12506,15 @@
     githubId = 1024891;
     name = "Jens Nolte";
   };
+  quentin = {
+    email = "quentin@mit.edu";
+    github = "quentinmit";
+    githubId = 115761;
+    name = "Quentin Smith";
+    keys = [{
+      fingerprint = "1C71 A066 5400 AACD 142E  B1A0 04EE 05A8 FCEF B697";
+    }];
+  };
   quentini = {
     email = "quentini@airmail.cc";
     github = "QuentinI";
