@@ -19,31 +19,21 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2023.2";
+  version = "2023.3";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-UozgUsew6MRplahTW/y688R2VetO50UGQevmVo8/QNs=";
+    hash = "sha256-as/d14xVTqJvb+QxzEyZWh1EMRVpE8cDQRbdc4R4pcU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "udp-over-tcp-0.2.0" = "sha256-h44xrmRAlfy1Br0PAtZAzOwSMptaUatjXysA/l2Kff8=";
+      "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
     };
   };
-
-  patches = [
-    # https://github.com/mullvad/mullvadvpn-app/pull/4389
-    # can be removed after next release
-    (fetchpatch {
-      name = "mullvad-version-dont-check-git.patch";
-      url = "https://github.com/mullvad/mullvadvpn-app/commit/8062cc74fc94bbe073189e78328901606c859d41.patch";
-      hash = "sha256-1BhCId0J1dxhPM3oOmhZB+07N+k1GlvAT1h6ayfx174=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
