@@ -1,4 +1,16 @@
-{ lib, stdenv, libgcrypt, curl, gnutls, pkg-config, libiconv, libintl, version, src, meta ? {} }:
+{ lib
+, stdenv
+, libgcrypt
+, curl
+, gnutls
+, pkg-config
+, libiconv
+, libintl
+, version
+, src
+, meta ? {}
+, patches ? []
+}:
 
 let
   meta_ = meta;
@@ -6,7 +18,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libmicrohttpd";
-  inherit version src;
+  inherit version src patches;
 
   outputs = [ "out" "dev" "devdoc" "info" ];
   nativeBuildInputs = [ pkg-config ];
