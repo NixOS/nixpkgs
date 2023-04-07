@@ -6408,6 +6408,7 @@ let
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-1.28.tar.gz";
       hash = "sha256-bGBNjFycJzm3jgU4pAIoO4Kx30GeYL7yCwSEPkWEut4=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     buildInputs = [ CPANMetaCheck FileShareDirInstall IPCSystemSimple PathTiny Test2PluginNoWarnings Test2Suite TestFileShareDir ];
     propagatedBuildInputs = [ FileShareDir ParamsValidationCompiler Specio namespaceautoclean ];
     meta = {
