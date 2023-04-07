@@ -16034,9 +16034,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
   cargo-cross = callPackage ../development/tools/rust/cargo-cross { };
-  cargo-deny = callPackage ../development/tools/rust/cargo-deny {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-deny = callPackage ../development/tools/rust/cargo-deny { };
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell {
     inherit (darwin.apple_sdk.frameworks) Security;
