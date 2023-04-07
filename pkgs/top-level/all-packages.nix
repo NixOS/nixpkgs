@@ -27426,6 +27426,13 @@ with pkgs;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
+  v4l2-relayd-ipu6 = callPackage ../os-specific/linux/v4l2-relayd {
+    icamerasrc = gst_all_1.icamerasrc-ipu6;
+  };
+  v4l2-relayd-ipu6ep = callPackage ../os-specific/linux/v4l2-relayd {
+    icamerasrc = gst_all_1.icamerasrc-ipu6ep;
+  };
+
   vendir = callPackage ../development/tools/vendir { };
 
   vndr = callPackage ../development/tools/vndr { };
