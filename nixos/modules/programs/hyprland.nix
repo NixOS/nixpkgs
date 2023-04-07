@@ -60,9 +60,6 @@ in
     environment = {
       systemPackages = [ cfg.package ];
 
-      sessionVariables = {
-        NIXOS_OZONE_WL = mkDefault "1";
-      };
     };
 
     fonts.enableDefaultFonts = mkDefault true;
