@@ -92,7 +92,7 @@ def get_channel_dependencies(version):
 
 def get_latest_ungoogled_chromium_tag():
     """Returns the latest ungoogled-chromium tag using the GitHub API."""
-    api_tag_url = 'https://api.github.com/repos/Eloston/ungoogled-chromium/tags?per_page=1'
+    api_tag_url = 'https://api.github.com/repos/ungoogled-software/ungoogled-chromium/tags'
     with urlopen(api_tag_url) as http_response:
         tag_data = json.load(http_response)
         return tag_data[0]['name']
@@ -111,7 +111,7 @@ def get_latest_ungoogled_chromium_build():
 
 def get_ungoogled_chromium_gn_flags(revision):
     """Returns ungoogled-chromium's GN build flags for the given revision."""
-    gn_flags_url = f'https://raw.githubusercontent.com/Eloston/ungoogled-chromium/{revision}/flags.gn'
+    gn_flags_url = f'https://raw.githubusercontent.com/ungoogled-software/ungoogled-chromium/{revision}/flags.gn'
     return urlopen(gn_flags_url).read().decode()
 
 
@@ -209,7 +209,7 @@ with urlopen(RELEASES_URL) as resp:
         if channel_name == 'stable':
             channel['chromedriver'] = get_matching_chromedriver(channel['version'])
         elif channel_name == 'ungoogled-chromium':
-            ungoogled_repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
+            ungoogled_repo_url = 'https://github.com/ungoogled-software/ungoogled-chromium.git'
             channel['deps']['ungoogled-patches'] = {
                 'rev': release['ungoogled_tag'],
                 'sha256': nix_prefetch_git(ungoogled_repo_url, release['ungoogled_tag'])['sha256']

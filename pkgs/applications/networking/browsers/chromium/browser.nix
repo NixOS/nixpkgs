@@ -82,7 +82,7 @@ mkChromiumDerivation (base: rec {
       of source code for Google Chrome (which has some additional features).
     '';
     homepage = if ungoogled
-      then "https://github.com/Eloston/ungoogled-chromium"
+      then "https://github.com/ungoogled-software/ungoogled-chromium"
       else "https://www.chromium.org/";
     maintainers = with lib.maintainers; if ungoogled
       then [ squalus primeos michaeladler ]
