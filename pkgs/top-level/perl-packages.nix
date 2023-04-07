@@ -13490,6 +13490,7 @@ let
       url = "mirror://cpan/authors/id/P/PE/PEVANS/List-UtilsBy-0.11.tar.gz";
       hash = "sha256-+t30O0vCHbjkwOiaJuXyP+YmzeNJHsZRtqozhif1d1o=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     meta = {
       description = "Higher-order list utility functions";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
