@@ -8132,6 +8132,8 @@ self: super: with self; {
 
   pydevd = callPackage ../development/python-modules/pydevd { };
 
+  pydevtool = callPackage ../development/python-modules/pydevtool { };
+
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
