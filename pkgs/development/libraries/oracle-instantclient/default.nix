@@ -22,13 +22,13 @@ let
 
   # determine the version number, there might be different ones per architecture
   version = {
-    x86_64-linux = "19.16.0.0.0";
+    x86_64-linux = "21.9.0.0.0";
     aarch64-linux = "19.10.0.0.0";
     x86_64-darwin = "19.3.0.0.0";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   directory = {
-    x86_64-linux = "1916000";
+    x86_64-linux = "219000";
     aarch64-linux = "191000";
     x86_64-darwin = "193000";
   }.${stdenv.hostPlatform.system} or throwSystem;
@@ -36,11 +36,11 @@ let
   # hashes per component and architecture
   hashes = {
     x86_64-linux = {
-      basic = "sha256-Sq1rWvbC1YME7EjSYPaP2g+1Xxxkk4ZkGaBmLo2cKcQ=";
-      sdk = "sha256-yJ8f/Hlq6vZoPxv+dfY4z1E7rWvcqlK+ou0SU0KKlEI=";
-      sqlplus = "sha256-C44srukpCB9et9UWm59daJmU83zr0HAktnWv7R42Irw=";
-      tools = "sha256-GP4E1REIoU3lctVYmLsAiwTJEvGRpCmOFlRuZk+A8HE=";
-      odbc = "sha256-JECxK7Ia1IJtve2goZJdTkvm5NJjqB2rc6k5BXUt3oA=";
+      basic = "sha256-wiygUvZFYvjp5pndv3b9yTPxe8sC5HZkJ7jZqO1Mss8=";
+      sdk = "sha256-ehqHV52yLRe8ehrKqpLaN0HnN3zjHU7WrfjtqvQadgY=";
+      sqlplus = "sha256-tYvoG+7l5jXyTpxFUYZXaHCT0xGDeah78AinJ2qIsE8=";
+      tools = "sha256-6K2Ni0ZqqpqCrGFrBD06s0QNjNEDtNPrvDQ1U97lTKY=";
+      odbc = "sha256-yTANMLhaEqm9/ZEVqhEn1Gl8eJukgvqpqdaMRjxWxgs=";
     };
     aarch64-linux = {
       basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dylanmtaylor ];
     hydraPlatforms = [ ];
   };
 }
