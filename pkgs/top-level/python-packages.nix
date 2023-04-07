@@ -1587,6 +1587,10 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  calysto = callPackage ../development/python-modules/calysto { };
+
+  calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
+
   camel-converter = callPackage ../development/python-modules/camel-converter { };
 
   can = callPackage ../development/python-modules/can { };
@@ -12841,6 +12845,8 @@ self: super: with self; {
   yark = callPackage ../development/python-modules/yark { };
 
   yarl = callPackage ../development/python-modules/yarl { };
+
+  yasi = toPythonModule (callPackage ../development/python-modules/yasi { });
 
   yaspin = callPackage ../development/python-modules/yaspin { };
 
