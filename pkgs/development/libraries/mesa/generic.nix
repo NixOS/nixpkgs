@@ -1,4 +1,4 @@
-{ version, hash }:
+{ version, hash ? "" }:
 
 { stdenv, lib, fetchurl
 , meson, pkg-config, ninja

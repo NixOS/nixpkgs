@@ -22520,13 +22520,13 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  mesa_23_0_1 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.1.nix {
+  mesa_23_0_2 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.2.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
   # Bump this immediately on patches; wait a bit for minor versions
   mesa_22 = mesa_22_3_7;
-  mesa_23 = mesa_23_0_1;
+  mesa_23 = mesa_23_0_2;
   # Bump on staging only, tonnes of packages depend on it.
   # See https://github.com/NixOS/nixpkgs/issues/218232
   # Major versions should be bumped when they have proven to be reasonably stable
