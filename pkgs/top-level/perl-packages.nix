@@ -20740,6 +20740,7 @@ let
       url = "mirror://cpan/authors/id/S/SA/SANKO/Readonly-2.05.tar.gz";
       hash = "sha256-SyNUJJGvAQ1EpcfIYSRHOKzHSrq65riDjTVN+xlGK14=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     buildInputs = [ ModuleBuildTiny ];
     meta = {
       description = "Facility for creating read-only scalars, arrays, hashes";
