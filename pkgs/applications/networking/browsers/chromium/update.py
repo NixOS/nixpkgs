@@ -90,17 +90,21 @@ def get_channel_dependencies(version):
     }
 
 
-def get_latest_ungoogled_chromium_tag():
-    """Returns the latest ungoogled-chromium tag using the GitHub API."""
+def get_latest_ungoogled_chromium_tag(linux_stable_versions):
+    """Returns the latest ungoogled-chromium tag for linux using the GitHub API."""
     api_tag_url = 'https://api.github.com/repos/ungoogled-software/ungoogled-chromium/tags'
     with urlopen(api_tag_url) as http_response:
-        tag_data = json.load(http_response)
-        return tag_data[0]['name']
+        tags = json.load(http_response)
+        for tag in tags:
+            if not tag['name'].split('-')[0] in linux_stable_versions:
+                continue
+
+            return tag['name']
 
 
-def get_latest_ungoogled_chromium_build():
+def get_latest_ungoogled_chromium_build(linux_stable_versions):
     """Returns a dictionary for the latest ungoogled-chromium build."""
-    tag = get_latest_ungoogled_chromium_tag()
+    tag = get_latest_ungoogled_chromium_tag(linux_stable_versions)
     version = tag.split('-')[0]
     return {
         'name': 'chrome/platforms/linux/channels/ungoogled-chromium/versions/',
@@ -162,9 +166,12 @@ last_channels = load_json(JSON_PATH)
 print(f'GET {RELEASES_URL}', file=sys.stderr)
 with urlopen(RELEASES_URL) as resp:
     releases = json.load(resp)['releases']
-    releases.append(get_latest_ungoogled_chromium_build())
+
+    linux_stable_versions = [release['version'] for release in releases if release['name'].startswith('chrome/platforms/linux/channels/stable/versions/')]
+    releases.append(get_latest_ungoogled_chromium_build(linux_stable_versions))
+
     for release in releases:
-        channel_name = re.findall("chrome\/platforms\/.*\/channels\/(.*)\/versions\/", release['name'])[0]
+        channel_name = re.findall("chrome\/platforms\/linux\/channels\/(.*)\/versions\/", release['name'])[0]
 
         # If we've already found a newer release for this channel, we're
         # no longer interested in it.
@@ -192,18 +199,9 @@ with urlopen(RELEASES_URL) as resp:
                 f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
                 f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
         except subprocess.CalledProcessError:
-            if (channel_name == 'ungoogled-chromium' and 'sha256' in channel and
-                    release['version'].split('.')[0] == last_channels['stable']['version'].split('.')[0]):
-                # Sometimes ungoogled-chromium is updated to a newer tag than
-                # the latest stable Chromium version. In this case we'll set
-                # sha256bin64 to null and the Nixpkgs code will fall back to
-                # the latest stable Google Chrome (only required for
-                # Widevine/DRM which is disabled by default):
-                channel['sha256bin64'] = None
-            else:
-                # This release isn't actually available yet.  Continue to
-                # the next one.
-                continue
+            # This release isn't actually available yet.  Continue to
+            # the next one.
+            continue
 
         channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':
