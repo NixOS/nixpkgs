@@ -423,7 +423,7 @@
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v5.20.0",
+    "rev": "v5.21.1",
     "spdx": "MIT",
     "vendorHash": null
   },
