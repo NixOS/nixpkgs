@@ -197,9 +197,10 @@ stdenv.mkDerivation rec {
       sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
     })
     # patch to build with recent libplacebo
+    # https://code.videolan.org/videolan/vlc/-/merge_requests/3027
     (fetchpatch {
-      url = "https://code.videolan.org/videolan/vlc/-/merge_requests/3027.patch";
-      hash = "sha256-aV+YT1l0ND/USoIIpxcPhdIlP/06J2FxVW4uArS8j88=";
+      url = "https://code.videolan.org/videolan/vlc/-/commit/65ea8d19d91ac1599a29e8411485a72fe89c45e2.patch";
+      hash = "sha256-Zz+g75V6X9OZI3sn614K9Uenxl3WtRHKSdLkWP3b17w=";
     })
   ];
 
