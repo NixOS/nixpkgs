@@ -10429,6 +10429,8 @@ self: super: with self; {
 
   rtoml = callPackage ../development/python-modules/rtoml { };
 
+  rtp = callPackage ../development/python-modules/rtp { };
+
   rtree = callPackage ../development/python-modules/rtree {
     inherit (pkgs) libspatialindex;
   };
