@@ -23,10 +23,6 @@ stdenv.mkDerivation (self: {
     hash = "sha256-1cSXWD8jpW1VJZDTDOkIabczqbaDCOWsyaUSGtsKsUM=";
   };
 
-  patches = [
-    ./000-disable-failing-test-cases.diff
-  ];
-
   nativeBuildInputs = [
     binutils-unwrapped
     harec
