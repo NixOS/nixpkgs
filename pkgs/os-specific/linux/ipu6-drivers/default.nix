@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-TKo04+fqY64SdDuWApuzRXBnaAW2DReubwFRsdfJMWM=";
   };
 
+  patches = [
+    # https://github.com/intel/ipu6-drivers/pull/84
+    ./pr-84-unpatched-upstream-compatiblity.patch
+  ];
+
   postPatch = ''
     cp --no-preserve=mode --recursive --verbose \
       ${ivsc-driver.src}/backport-include \
@@ -47,6 +52,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelOlder "5.15";
+    broken = kernel.kernelOlder "6.1.7";
   };
 }
