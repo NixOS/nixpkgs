@@ -2243,8 +2243,7 @@ with pkgs;
 
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
-  mgba = callPackage ../applications/emulators/mgba {
-  };
+  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
@@ -4797,6 +4796,8 @@ with pkgs;
 
   gladtex = callPackage ../tools/typesetting/tex/gladtex { };
 
+  latex2mathml = with python3Packages; toPythonApplication latex2mathml;
+
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
@@ -6558,6 +6559,8 @@ with pkgs;
   curl-impersonate-bin = callPackage ../tools/networking/curl-impersonate { };
 
   curlie = callPackage ../tools/networking/curlie { };
+
+  trurl = callPackage ../tools/networking/trurl { };
 
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
@@ -8640,9 +8643,7 @@ with pkgs;
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
-  ipget = callPackage ../applications/networking/ipget {
-    buildGoModule = buildGo118Module; # build fails with 1.19
-  };
+  ipget = callPackage ../applications/networking/ipget { };
 
   i-pi = with python3Packages; toPythonApplication i-pi;
 
@@ -18425,6 +18426,8 @@ with pkgs;
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
+  meraki-cli = python3Packages.callPackage ../tools/admin/meraki-cli { };
+
   python-matter-server = with python3Packages; toPythonApplication python-matter-server;
 
   minify = callPackage ../development/web/minify { };
@@ -21267,6 +21270,8 @@ with pkgs;
   libdnet = callPackage ../development/libraries/libdnet { };
 
   libdnf = callPackage ../tools/package-management/libdnf { };
+
+  libdovi = callPackage ../development/libraries/libdovi { };
 
   libdrm = callPackage ../development/libraries/libdrm { };
 
@@ -28879,6 +28884,8 @@ with pkgs;
   atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
 
   inherit (atomPackages) atom atom-beta;
+
+  pulsar = callPackage ../applications/editors/pulsar { };
 
   asap = callPackage ../tools/audio/asap { };
 
@@ -36762,6 +36769,8 @@ with pkgs;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
 
+  gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
+
   gnome-text-editor = callPackage ../desktops/gnome/apps/gnome-text-editor { };
 
   gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
@@ -38108,6 +38117,8 @@ with pkgs;
   acpilight = callPackage ../misc/acpilight { };
 
   alpnpass = callPackage ../applications/networking/alpnpass { };
+
+  amdctl = callPackage ../os-specific/linux/amdctl { };
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
