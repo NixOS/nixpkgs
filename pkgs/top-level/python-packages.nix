@@ -2681,6 +2681,8 @@ self: super: with self; {
 
   django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
 
+  django-payments = callPackage ../development/python-modules/django-payments { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
