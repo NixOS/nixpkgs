@@ -25,9 +25,6 @@ stdenvNoCC.mkDerivation rec {
 
     composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
-    sha256sum composer.lock
-    cat composer.lock
-
     runHook postBuild
   '';
 
@@ -43,7 +40,11 @@ stdenvNoCC.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-UCXrSXcNHHnVOizm0U099iwGEGWkpFZe0NyoKRJ0jaA=";
+  outputHash = {
+      aarch64-linux = "sha256-DeTJV0kBV83vJXgrK7qiTHxXjBQY+SNwj1HhFi48cMw=";
+      x86_64-linux = "sha256-UCXrSXcNHHnVOizm0U099iwGEGWkpFZe0NyoKRJ0jaA=";
+      x86_64-darwin = "sha256-IERtY7Eb1OMDagnblKMIk33Z0VO/qnhhI0UIAlTnDCY=";
+    }.${stdenvNoCC.system};
 
   meta = {
     description = "Mainly a PHP Language Server";
