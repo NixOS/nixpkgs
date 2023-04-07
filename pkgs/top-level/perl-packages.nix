@@ -8797,6 +8797,7 @@ let
       url = "mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-LibBuilder-0.08.tar.gz";
       hash = "sha256-xRFx4G3lMDnwvKHZemRx7DeUH/Weij0csXDr3SVztdI=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     perlPreHook = "export LD=$CC";
     meta = {
       description = "A tool to build C libraries";
