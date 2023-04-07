@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          sha256 = "sha256-WmPR+c36HKvpsV7T3VQ4scUX5SswqqwofXsJD1Aza+w=";
+          sha256 = "sha256-c0ejSivQbxpPUQ6P0YUya3q1EJ1yF4RFGur11BMwz3o=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          sha256 = "sha256-5r3F1ip2arMB+7FLJUd1tnFL5+Qz7xGrPJg6/I21zio=";
+          sha256 = "sha256-4yqe4eIO4AxsZNYCn99KTBqjQURB+G+gpT0Q17pcEvU=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
