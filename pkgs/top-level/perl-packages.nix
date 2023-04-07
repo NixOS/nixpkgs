@@ -18240,7 +18240,7 @@ let
     preConfigure = ''
       mkdir openssl
       ln -s ${lib.getLib pkgs.openssl}/lib openssl
-      ln -s ${pkgs.openssl.bin}/bin openssl
+      ln -s ${buildPackages.openssl.bin}/bin openssl
       ln -s ${pkgs.openssl.dev}/include openssl
       export OPENSSL_PREFIX=$(realpath openssl)
     '';
