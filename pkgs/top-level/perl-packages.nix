@@ -255,6 +255,7 @@ let
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.37.tar.gz";
       hash = "sha256-MAC8vphIJkP3a7z/zkL9SPJMY6ZFf4qiwWlfSBrJ7VE=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny PkgConfig ];
     buildInputs = [ DevelHide Test2Suite ];
     meta = {
