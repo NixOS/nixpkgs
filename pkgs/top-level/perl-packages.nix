@@ -13269,6 +13269,7 @@ let
       url = "mirror://cpan/authors/id/A/AL/ALINKE/Lingua-Translit-0.28.tar.gz";
       hash = "sha256-ET+R2PwsYwQ3FTpJ+3pSsCOvj2J47ZbAcLH2CCS46uE=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     doCheck = false;
     meta = {
       description = "Transliterates text between writing systems";
