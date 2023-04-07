@@ -6795,6 +6795,8 @@ self: super: with self; {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
+  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
+
   openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openant = callPackage ../development/python-modules/openant { };
@@ -11848,6 +11850,7 @@ self: super: with self; {
   torchWithCuda = self.torch.override {
     magma = pkgs.magma-cuda;
     cudaSupport = true;
+    rocmSupport = false;
   };
 
   torchWithoutCuda = self.torch.override {
@@ -11857,6 +11860,7 @@ self: super: with self; {
   torchWithRocm = self.torch.override {
     magma = pkgs.magma-hip;
     rocmSupport = true;
+    cudaSupport = false;
   };
 
   torchWithoutRocm = self.torch.override {

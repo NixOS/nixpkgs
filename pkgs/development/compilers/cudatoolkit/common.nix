@@ -219,6 +219,7 @@ backendStdenv.mkDerivation rec {
 
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+      rm $out/host-linux-x64/libstdc++.so*
     ''}
       ${lib.optionalString (lib.versionAtLeast version "11.8")
       # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
