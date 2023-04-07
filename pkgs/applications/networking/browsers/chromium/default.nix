@@ -213,8 +213,10 @@ in stdenv.mkDerivation {
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 
+  '' + lib.optionalString (!xdg-utils.meta.broken) ''
     # Mainly for xdg-open but also other xdg-* tools (this is only a fallback; \$PATH is suffixed so that other implementations can be used):
     export PATH="\$PATH\''${PATH:+:}${xdg-utils}/bin"
+  '' + ''
 
     .
     w
