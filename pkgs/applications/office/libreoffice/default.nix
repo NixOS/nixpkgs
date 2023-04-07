@@ -349,6 +349,7 @@ in
       sed -e /CppunitTest_sw_layoutwriter/d -i sw/Module_sw.mk
       sed -e /CppunitTest_sw_htmlimport/d -i sw/Module_sw.mk
       sed -e /CppunitTest_sw_core_layout/d -i sw/Module_sw.mk
+      sed -e /CppunitTest_sw_uiwriter6/d -i sw/Module_sw.mk
       sed -e /CppunitTest_sdext_pdfimport/d -i sdext/Module_sdext.mk
       sed -e /CppunitTest_vcl_pdfexport/d -i vcl/Module_vcl.mk
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx"
