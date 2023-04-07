@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libogg libvorbis libmad ];
 
   makeFlags = [
-    "AR=${stdenv.cc.bintools.targetPrefix}ar"  # for cross
+    "AR:=$(AR)"
   ];
 
   meta = with lib; {
