@@ -5961,6 +5961,8 @@ self: super: with self; {
 
   meraki = callPackage ../development/python-modules/meraki { };
 
+  mercadopago = callPackage ../development/python-modules/mercadopago { };
+
   mercantile = callPackage ../development/python-modules/mercantile { };
 
   mercurial = toPythonModule (pkgs.mercurial.override {
