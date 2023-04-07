@@ -27336,6 +27336,10 @@ let
     buildInputs = [ AlienBuild AlienLibxml2 ]
       ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
     propagatedBuildInputs = [ XMLSAX ];
+    nativeBuildInputs = [ buildPackages.perl ];
+    preConfigure = ''
+      makeMakerFlags="CC=$CC LD=$LD";
+    '';
     meta = {
       description = "Perl Binding for libxml2";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
