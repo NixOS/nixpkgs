@@ -8317,6 +8317,8 @@ with pkgs;
 
   harmonia = callPackage ../tools/package-management/harmonia { };
 
+  hayagriva = callPackage ../tools/typesetting/hayagriva { };
+
   hcl2json = callPackage ../applications/misc/hcl2json { };
 
   hcxtools = callPackage ../tools/security/hcxtools { };
@@ -16034,9 +16036,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
   cargo-cross = callPackage ../development/tools/rust/cargo-cross { };
-  cargo-deny = callPackage ../development/tools/rust/cargo-deny {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-deny = callPackage ../development/tools/rust/cargo-deny { };
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -27426,6 +27426,13 @@ with pkgs;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
+  v4l2-relayd-ipu6 = callPackage ../os-specific/linux/v4l2-relayd {
+    icamerasrc = gst_all_1.icamerasrc-ipu6;
+  };
+  v4l2-relayd-ipu6ep = callPackage ../os-specific/linux/v4l2-relayd {
+    icamerasrc = gst_all_1.icamerasrc-ipu6ep;
+  };
+
   vendir = callPackage ../development/tools/vendir { };
 
   vndr = callPackage ../development/tools/vndr { };
@@ -33362,6 +33369,8 @@ with pkgs;
 
   rke = callPackage ../applications/networking/cluster/rke { };
 
+  rke2 = callPackage ../applications/networking/cluster/rke2 { };
+
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
@@ -33515,8 +33524,6 @@ with pkgs;
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
 
   SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
-
-  slmenu = callPackage ../applications/misc/slmenu { };
 
   slop = callPackage ../tools/misc/slop { };
 
@@ -34638,6 +34645,8 @@ with pkgs;
     libwebp = null;
     xwayland = null;
     pipewire = null;
+    buildDemo = false;
+    buildRemoting = false;
   };
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {

@@ -2,35 +2,45 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, libgit2_1_5
 , openssl
+, zlib
 , zstd
 , stdenv
 , curl
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deny";
-  version = "0.13.7";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = pname;
     rev = version;
-    sha256 = "sha256-E9tFzac6WkEGfsXj1nykQAR20+5Pi5xMd82MeDed9qg=";
+    hash = "sha256-6RmC54DsL31/SBrA16p+iub7VTQvc1nG+ml+6Xaj0NM=";
   };
 
-  # enable pkg-config feature of zstd
-  cargoPatches = [ ./zstd-pkg-config.patch ];
-
-  cargoSha256 = "sha256-E3Gg7PwBNVkvX2vqtbCxz0kbe1ZWrcAWxj6OJtENBe0=";
+  cargoHash = "sha256-u3hv1phSwZ4oILFMWIAqWhdt0jI8ao3gje1WZA3ZFo8=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ curl Security ];
+  buildInputs = [
+    libgit2_1_5
+    openssl
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   buildNoDefaultFeatures = true;
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   # tests require internet access
   doCheck = false;

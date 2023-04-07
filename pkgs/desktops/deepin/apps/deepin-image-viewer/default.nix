@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     dtkwidget
+    qt5integration
     qt5platform-plugins
     gio-qt
     udisks2-qt5
@@ -70,11 +71,6 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
 
   meta = with lib; {
     description = "An image viewing tool with fashion interface and smooth performance";
