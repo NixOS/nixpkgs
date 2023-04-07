@@ -148,7 +148,11 @@ let
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
-      pciutils protobuf speechd libXdamage at-spi2-core
+      pciutils protobuf
+    ] ++ lib.optional speechSupport [
+      speechd
+    ] ++ [
+      libXdamage at-spi2-core
       pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
