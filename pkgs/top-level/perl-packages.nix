@@ -27367,7 +27367,18 @@ let
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.99.tar.gz";
       hash = "sha256-En4XqHf7YeR7nouHv42q0xM5pioAEh+XUdUitDiw9/A=";
     };
-    nativeBuildInputs = [ pkgs.pkg-config ];
+    patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      (fetchpatch {
+        # Remove the 'have_library()' check. It breaks cross compilation.
+        # The checked for libxslt and libexslt are pulled in via buildInputs and
+        # therefore do exist, anyway.
+        url = "https://raw.githubusercontent.com/void-linux/void-packages/5c37bd5f21c4be14761d85c98c996b2d11ae80c4/srcpkgs/perl-XML-LibXSLT/patches/fix-cross-remove-have_library.patch";
+        hash = "sha256-ejSdl3HVrMgWLmJK9YEioeheTVJ1J4OHMiQP1oZAsqI=";
+      });
+    preConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      makeMakerFlags="CC=$CC LD=$LD INC=-I${pkgs.libxml2.dev}/include/libxml2";
+    '';
+    nativeBuildInputs = [ buildPackages.perl buildPackages.pkg-config ];
     buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
