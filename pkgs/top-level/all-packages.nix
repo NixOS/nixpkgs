@@ -30896,6 +30896,8 @@ with pkgs;
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
+  sleek = callPackage ../applications/office/sleek { };
+
   sleep-on-lan = callPackage ../tools/networking/sleep-on-lan { };
 
   slweb = callPackage ../applications/misc/slweb { };

@@ -1,0 +1,16 @@
+diff --git a/package.json b/package.json
+index 66b30a9..dfd2a51 100755
+--- a/package.json
++++ b/package.json
+@@ -46,10 +46,7 @@
+       "icon": "assets/icons/sleek.png",
+       "category": "ProjectManagement",
+       "target": [
+-        "deb",
+-        "freebsd",
+-        "rpm",
+-        "AppImage"
++        "dir"
+       ]
+     },
+     "mac": {
