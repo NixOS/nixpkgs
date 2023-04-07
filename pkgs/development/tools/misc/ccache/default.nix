@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       passthru = {
         isClang = unwrappedCC.isClang or false;
         isGNU = unwrappedCC.isGNU or false;
+        version = unwrappedCC.version;
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];
