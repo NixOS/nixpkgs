@@ -15346,6 +15346,7 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz";
       hash = "sha256-fVgP9qzgy+VVvza4bcjqIyWBUwy+quoJvMtXtVeX8Rw=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     buildInputs = [ FileShareDir ];
     propagatedBuildInputs = [ ExtUtilsHelpers ExtUtilsInstallPaths ];
     meta = {
