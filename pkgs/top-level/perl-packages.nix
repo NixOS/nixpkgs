@@ -1586,6 +1586,7 @@ let
       url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.24.tar.gz";
       hash = "sha256-A6o9/l0KpkcalvQ/6DGBedGXlNSmQHCPAoj5IW7HrMY=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     propagatedBuildInputs = [ ModuleImplementation SubExporterProgressive ];
     meta = {
       description = "Execute code after a scope finished compilation";
