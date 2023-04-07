@@ -2838,18 +2838,7 @@ with pkgs;
 
   audiowaveform = callPackage ../tools/audio/audiowaveform { };
 
-  authenticator = callPackage ../applications/misc/authenticator rec {
-    # Remove when GTK is upgraded past 4.8
-    # https://github.com/NixOS/nixpkgs/issues/216770
-    gtk4 = pkgs.gtk4.overrideAttrs (_: rec {
-      version = "4.9.4";
-      src = fetchurl {
-        url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-        sha256 = "sha256-kaOv1YQB1OXYHjCwjuPxE6R2j/EBQDNqcqMmx3JyvjA=";
-      };
-    });
-    wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
-   };
+  authenticator = callPackage ../applications/misc/authenticator { };
 
   authelia = callPackage ../servers/authelia { };
 
@@ -21253,6 +21242,8 @@ with pkgs;
 
   libdecor = callPackage ../development/libraries/libdecor { };
 
+  libdex = callPackage ../development/libraries/libdex { };
+
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
@@ -24115,7 +24106,7 @@ with pkgs;
     libsoup = libsoup_3;
   };
 
-  webkitgtk_5_0 = webkitgtk.override {
+  webkitgtk_6_0 = webkitgtk.override {
     libsoup = libsoup_3;
     gtk3 = gtk4;
   };
@@ -32284,7 +32275,7 @@ with pkgs;
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
   newsflash = callPackage ../applications/networking/feedreaders/newsflash {
-    webkitgtk = webkitgtk_5_0;
+    webkitgtk = webkitgtk_6_0;
   };
 
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus { };
