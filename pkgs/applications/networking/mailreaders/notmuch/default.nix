@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/notmuch/patches/0001-configure-detect-version-by-compiler-for-build.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/8c1f637c706483577a22c8d4f2d06d5f041c9093/srcpkgs/notmuch/patches/0001-configure-detect-version-by-compiler-for-build.patch";
       hash = "sha256-Xs4hw3BPXBh8jGmx6UZsnuiosBCtjo8MWQlWAAgqKgg=";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/notmuch/patches/0005-configure-drop-gmime-session-key-extraction-support-.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/8c1f637c706483577a22c8d4f2d06d5f041c9093/srcpkgs/notmuch/patches/0005-configure-drop-gmime-session-key-extraction-support-.patch";
       hash = "sha256-FXnNtkTqV7ZSIObQSwGu6THX0Rgvj4WeJySTIcJea1Y=";
     })
   ];
