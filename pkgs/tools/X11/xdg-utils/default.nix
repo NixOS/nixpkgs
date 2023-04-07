@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }
