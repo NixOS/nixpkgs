@@ -3,6 +3,7 @@
 , fetchurl
 , ffmpeg-headless
 , stateDirectory ? "/var/lib/castopod"
+, nixosTests
 }:
 stdenv.mkDerivation {
   pname = "castopod";
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
     cp -r . $out/share/castopod
   '';
 
+  passthru.tests.castopod = nixosTests.castopod;
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
