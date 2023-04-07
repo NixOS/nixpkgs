@@ -27542,6 +27542,7 @@ let
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-1.02.tar.gz";
       hash = "sha256-RQbDhwQ6pqd7RV8A9XQJ83IKp+VTSVqyU1JjtO0eoSo=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAXBase ];
     postInstall = ''
       perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
