@@ -24000,6 +24000,10 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEEJO/Test-LeakTrace-0.16.tar.gz";
       hash = "sha256-Xwie7ZFfHsjHQ/bSd3w+zQygHfL3ueEAONMWlSWD5AM=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
+    preConfigure = ''
+      makeMakerFlags="CC=$CC LD=$CC";
+    '';
     meta = {
       description = "Traces memory leaks";
       homepage = "https://metacpan.org/release/Test-LeakTrace";
