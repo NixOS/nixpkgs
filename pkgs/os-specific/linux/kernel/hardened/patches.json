@@ -32,31 +32,31 @@
     "5.15": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-5.15.104-hardened1.patch",
-            "sha256": "0gz3csflp34aadrgmlhy4y3sybxdlzvb2wsss9yb9l5zikxm2h1c",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.15.104-hardened1/linux-hardened-5.15.104-hardened1.patch"
+            "name": "linux-hardened-5.15.105-hardened1.patch",
+            "sha256": "0hkg9198ljp7hv5n5wv6dg2fh042wxlm1mzfk5adfylyl7rrm7js",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.15.105-hardened1/linux-hardened-5.15.105-hardened1.patch"
         },
-        "sha256": "0m3bscml2mvafbj5k9a3qa8akfxms8wfpzsr687lfblr17735ibi",
-        "version": "5.15.104"
+        "sha256": "0kz4ymaqb1kpniqq2mwv3z8rirz5yyf1c9m648kqblij0djkgd81",
+        "version": "5.15.105"
     },
     "5.4": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-5.4.238-hardened1.patch",
-            "sha256": "0fj3q8ykf9fi179hjspi5zq5bzxmn154g5nsdcvnphmizvlzy1qg",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.238-hardened1/linux-hardened-5.4.238-hardened1.patch"
+            "name": "linux-hardened-5.4.239-hardened1.patch",
+            "sha256": "12lmajxli4v84h3197xzyj21hyqdn4v596c24iirg72xch3ca5hw",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.239-hardened1/linux-hardened-5.4.239-hardened1.patch"
         },
-        "sha256": "07x9ibcshsm451qcpawv3l0z7g8w8jg79h6dfdmbm3jrhpdb58kh",
-        "version": "5.4.238"
+        "sha256": "0nw02lqkvachksyan4n11q0g6jhm1ii7d5zs276n46891ypn80m9",
+        "version": "5.4.239"
     },
     "6.1": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.1.21-hardened1.patch",
-            "sha256": "04sksmh4zym2z8bjg8hdr1zv1fv1r08z1b5kyl7rm9b1ic3gd39w",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.21-hardened1/linux-hardened-6.1.21-hardened1.patch"
+            "name": "linux-hardened-6.1.22-hardened1.patch",
+            "sha256": "1nwjchs8jlishdcxc4f5834d7p03f1iiyhbp1gv2j1b48qrlf17l",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.22-hardened1/linux-hardened-6.1.22-hardened1.patch"
         },
-        "sha256": "0fnr2pw4pi0vnkpv8hfipya09cgdz6ghks7p6vdl2d71dawb2g5k",
-        "version": "6.1.21"
+        "sha256": "1a7xkjqj13q5dgk1gml27kdzs381p0z203alamd0wkgprr0r3s1b",
+        "version": "6.1.22"
     }
 }
