@@ -9599,6 +9599,7 @@ let
       url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.118.tar.gz";
       hash = "sha256-O7KiC6Nd+VjcCk8jBvwF2QPYuMTePIvu/OF3OdKByVg=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ FileShareDirInstall ];
     meta = {
