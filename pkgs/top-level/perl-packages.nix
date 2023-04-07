@@ -13473,6 +13473,7 @@ let
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-SomeUtils-0.58.tar.gz";
       hash = "sha256-lur7NZM50ivyot5CEpiEejxA9qKLbUQAXQll2oalRp0=";
     };
+    nativeBuildInputs = [ buildPackages.perl ];
     buildInputs = [ TestLeakTrace ];
     propagatedBuildInputs = [ ModuleImplementation ];
     meta = {
