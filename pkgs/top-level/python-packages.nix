@@ -3733,6 +3733,8 @@ self: super: with self; {
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
+  functiontrace = callPackage ../development/python-modules/functiontrace { };
+
   functools32 = callPackage ../development/python-modules/functools32 { };
 
   funcy = callPackage ../development/python-modules/funcy { };
