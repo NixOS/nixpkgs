@@ -667,6 +667,7 @@
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
   ./services/misc/prowlarr.nix
+  ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
   ./services/misc/readarr.nix
