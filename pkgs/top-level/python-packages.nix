@@ -12842,6 +12842,8 @@ self: super: with self; {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  yasi = toPythonModule (callPackage ../development/python-modules/yasi { });
+
   yaspin = callPackage ../development/python-modules/yaspin { };
 
   yaswfp = callPackage ../development/python-modules/yaswfp { };
