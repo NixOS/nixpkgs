@@ -1587,6 +1587,8 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  calysto = callPackage ../development/python-modules/calysto { };
+
   camel-converter = callPackage ../development/python-modules/camel-converter { };
 
   can = callPackage ../development/python-modules/can { };
