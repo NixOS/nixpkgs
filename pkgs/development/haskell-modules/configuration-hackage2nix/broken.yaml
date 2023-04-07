@@ -715,6 +715,7 @@ broken-packages:
   - cld2
   - Clean
   - clean-unions
+  - clerk # failure building library in job https://hydra.nixos.org/build/214864491 at 2023-04-07
   - clevercss
   - clexer
   - CLI
@@ -928,6 +929,7 @@ broken-packages:
   - crdt
   - crdt-event-fold
   - credential-store
+  - crem # test failure in job https://hydra.nixos.org/build/214604824 at 2023-04-07
   - critbit
   - criterion-cmp
   - criterion-compare
@@ -973,6 +975,7 @@ broken-packages:
   - currency-convert
   - curry-base
   - CurryDB
+  - curryer-rpc # dependency missing in job https://hydra.nixos.org/build/214772339 at 2023-04-07
   - curry-frontend
   - curryrs
   - curves
@@ -1401,6 +1404,7 @@ broken-packages:
   - eved
   - event
   - event-driven
+  - eventlog2html #  failure  in job https://hydra.nixos.org/build/214597490 at 2023-04-07
   - eventsource-api
   - eventsourced
   - eventstore
@@ -1446,6 +1450,7 @@ broken-packages:
   - ez-couch
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
+  - factory # test failure in job https://hydra.nixos.org/build/214600338 at 2023-04-07
   - facts
   - fadno-braids
   - fadno-xml
@@ -1810,6 +1815,7 @@ broken-packages:
   - git-repair
   - gitter
   - git-vogue
+  - gi-webkitwebprocessextension # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/215220491 at 2023-04-07
   - glade
   - glapp
   - glaze
@@ -2413,6 +2419,7 @@ broken-packages:
   - hpapi
   - hpasteit
   - HPath
+  - hpath-directory # failure building library in job https://hydra.nixos.org/build/214497909 at 2023-04-07
   - hpc-coveralls
   - hpg
   - HPi
@@ -2491,6 +2498,8 @@ broken-packages:
   - hslogger-template
   - hs-logo
   - hslua-examples
+  - hslua-repl # dependency missing in job https://hydra.nixos.org/build/214605872 at 2023-04-07
+  - hslua-typing # dependency missing in job https://hydra.nixos.org/build/214600262 at 2023-04-07
   - hsluv-haskell
   - hsmagick
   - hsmodetweaks
@@ -2571,6 +2580,7 @@ broken-packages:
   - htssets
   - http2-client-exe
   - http2-grpc-types
+  - http3 # dependency missing in job https://hydra.nixos.org/build/214603147 at 2023-04-07
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -2867,6 +2877,7 @@ broken-packages:
   - jsonresume
   - json-rpc-generic
   - json-rpc-server
+  - json-rpc # test failure in job https://hydra.nixos.org/build/214602304 at 2023-04-07
   - jsonrpc-tinyclient
   - json-schema
   - jsonschema-gen
@@ -2930,6 +2941,7 @@ broken-packages:
   - kickass-torrents-dump-parser
   - kickchan
   - kind-generics-deriving
+  - kind-integer # failure building library in job https://hydra.nixos.org/build/214501345 at 2023-04-07
   - kleene-list
   - kmn-programming
   - kmonad
@@ -3076,6 +3088,7 @@ broken-packages:
   - liboath-hs
   - liboleg
   - libpafe
+  - libphonenumber # dependency missing in job https://hydra.nixos.org/build/214497968 at 2023-04-07
   - libpq
   - librandomorg
   - libsecp256k1
@@ -3341,6 +3354,7 @@ broken-packages:
   - mida
   - midi-simple
   - midi-utils
+  - mighty-metropolis # test failure in job https://hydra.nixos.org/build/214599789 at 2023-04-07
   - migrant-postgresql-simple
   - mikmod
   - mikrokosmos
@@ -3726,7 +3740,6 @@ broken-packages:
   - opaleye-trans
   - open-adt
   - OpenAFP
-  - openai-hs
   - openapi3
   - openapi3-code-generator
   - openapi-petstore
@@ -4015,6 +4028,7 @@ broken-packages:
   - pipes-errors
   - pipes-interleave
   - pipes-io
+  - pipes-network-ws # failure building library in job https://hydra.nixos.org/build/214504366 at 2023-04-07
   - pipes-protolude
   - pipes-rt
   - pipes-s3
@@ -4674,6 +4688,7 @@ broken-packages:
   - selenium
   - selinux
   - Semantique
+  - semaphore-compat # dependency missing in job https://hydra.nixos.org/build/214509429 at 2023-04-07
   - semdoc
   - semialign-extras
   - semibounded-lattices
@@ -5577,6 +5592,7 @@ broken-packages:
   - unicode-prelude
   - unicode-symbols
   - unicode-tricks
+  - uniform-json # failure building test suite 'json-test' in job https://hydra.nixos.org/build/214602707 at 2023-04-07
   - union-map
   - uniprot-kb
   - uniqueid
@@ -5839,6 +5855,7 @@ broken-packages:
   - wordchoice
   - wordify
   - Wordlint
+  - wordlist # dependency missing in job https://hydra.nixos.org/build/214500004 at 2023-04-07
   - wordn
   - WordNet
   - WordNet-ghc74
@@ -5944,6 +5961,7 @@ broken-packages:
   - yampa-glut
   - yampa-sdl2
   - YampaSynth
+  - yampa-test # dependency missing in job https://hydra.nixos.org/build/214864510 at 2023-04-07
   - yandex-translate
   - yaop
   - yapb
