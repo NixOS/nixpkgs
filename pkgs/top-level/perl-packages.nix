@@ -13456,8 +13456,9 @@ let
       hash = "sha256-6M5G1XwXnuzYdYKT6UAP8wCq8g/v4KnRW5/iMCucskI=";
     };
     preConfigure = ''
-      export LD=$CC
+      makeMakerFlags="CC=$CC LD=$CC";
     '';
+    nativeBuildInputs = [ buildPackages.perl ];
     meta = {
       description = "Provide the stuff missing in List::Util in XS";
       homepage = "https://metacpan.org/release/List-MoreUtils-XS";
