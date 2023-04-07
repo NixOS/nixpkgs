@@ -8,17 +8,17 @@
 }:
 
 buildGoModule rec {
-  version = "2.7.4";
+  version = "2.8.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-afa4uInoNyEgNDJ7nB1yr+YYoOsU+S7XWhKvkeApgRQ=";
+    hash = "sha256-RPa3G1zrWzunyQOdNUQ/dZGJ/7sh2OGvoEqeYaT7Qv0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     # TODO split every executable into its own package
