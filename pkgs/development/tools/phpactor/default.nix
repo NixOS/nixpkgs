@@ -16,6 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
     inherit src version;
 
+    # See https://github.com/NixOS/nix/issues/6660
     dontPatchShebangs = true;
 
     nativeBuildInputs = [
@@ -43,11 +44,7 @@ stdenvNoCC.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = {
-        aarch64-linux = "sha256-DeTJV0kBV83vJXgrK7qiTHxXjBQY+SNwj1HhFi48cMw=";
-        x86_64-linux = "sha256-7N6PGtk+pEzw7jsJzQ4s5jVOOiY6OW/1dAYnhOy2grE=";
-        x86_64-darwin = "sha256-IERtY7Eb1OMDagnblKMIk33Z0VO/qnhhI0UIAlTnDCY=";
-      }.${stdenvNoCC.system};
+    outputHash = "sha256-7N6PGtk+pEzw7jsJzQ4s5jVOOiY6OW/1dAYnhOy2grE=";
   };
 
   buildInputs = [
@@ -59,9 +56,9 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    cp -r ${vendor}/vendor .
     mkdir -p $out/share/php/phpactor $out/bin
     cp -r . $out/share/php/phpactor
+    cp -r ${vendor}/vendor $out/share/php/phpactor
     ln -s $out/share/php/phpactor/bin/phpactor $out/bin/phpactor
 
     runHook postInstall
