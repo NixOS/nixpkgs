@@ -89,6 +89,11 @@ stdenv.mkDerivation rec {
         -e 's|systemd-tmpfiles|true|g' \
         -i initsystems/systemd/Makefile
 
+    # Fix systemd detection on NixOS
+    sed -e 's|\(-a ! -x /bin/journalctl\)|\1 -a ! -x /run/current-system/sw/bin/journalctl|g' \
+        -e 's|\(-o ! -x /bin/journalctl\)|\1 -o ! -x /run/current-system/sw/bin/journalctl|g' \
+        -i programs/barf/barf.in
+
     # Fix the ipsec program from crushing the PATH
     sed -e 's|\(PATH=".*"\):.*$|\1:$PATH|' -i programs/ipsec/ipsec.in
 
