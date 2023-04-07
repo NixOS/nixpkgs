@@ -26,6 +26,9 @@ stdenvNoCC.mkDerivation rec {
 
     composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
+    sha256sum composer.lock
+    cat composer.lock
+
     runHook postBuild
   '';
 
