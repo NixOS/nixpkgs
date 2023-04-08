@@ -50,6 +50,9 @@
 , CoreMedia
 , withUnfree ? false
 
+# tries to compile and run generate_argument_docbook.c
+, withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+
 , buildPackages
 }:
 
@@ -175,6 +178,7 @@ stdenv.mkDerivation rec {
     WITH_JPEG = (libjpeg_turbo != null);
     WITH_OPENH264 = (openh264 != null);
     WITH_OSS = false;
+    WITH_MANPAGES = withManPages;
     WITH_PCSC = (pcsclite != null);
     WITH_PULSE = (libpulseaudio != null);
     WITH_SERVER = buildServer;
