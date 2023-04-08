@@ -29,7 +29,6 @@ in
 rec {
   mkNoto =
     { pname
-    , weights
     , variants ? [ ]
     , longDescription ? notoLongDescription
     }:
@@ -47,17 +46,31 @@ rec {
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
       installPhase = ''
-        # We copy in reverse preference order -- unhinted first, then
-        # hinted -- to get the "best" version of each font while
+        # We check availability in order of variable -> otf -> ttf
+        # unhinted -- the hinted versions use autohint
         # maintaining maximum coverage.
         #
-        # TODO: install OpenType, variable versions?
-        local out_ttf=$out/share/fonts/truetype/noto
+        # We have a mix of otf and ttf fonts
+        local out_font=$out/share/fonts/noto
       '' + (if _variants == [ ] then ''
-        install -m444 -Dt $out_ttf fonts/*/hinted/ttf/*-${weights}.ttf
+        for folder in $(ls -d fonts/*/); do
+          if [[ -d "$folder"unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
+          elif [[ -d "$folder"unhinted/otf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
+          fi
+        done
       '' else ''
         for variant in $_variants; do
-          install -m444 -Dt $out_ttf fonts/$variant/hinted/ttf/*-${weights}.ttf
+          if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
+          elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
+          fi
         done
       '');
 
@@ -112,12 +125,10 @@ rec {
 
   noto-fonts = mkNoto {
     pname = "noto-fonts";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
   };
 
   noto-fonts-lgc-plus = mkNoto {
     pname = "noto-fonts-lgc-plus";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
     variants = [
       "Noto Sans"
       "Noto Serif"
@@ -133,11 +144,6 @@ rec {
       custom Noto package with custom variants, see the `mkNoto`
       helper function.
     '';
-  };
-
-  noto-fonts-extra = mkNoto {
-    pname = "noto-fonts-extra";
-    weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
   };
 
   noto-fonts-cjk-sans = mkNotoCJK {
