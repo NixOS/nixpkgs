@@ -2,14 +2,44 @@
 
 with lib;
 let
-  # TODO: Secrets handling
-
   # Simular to types.enum of `attrNames attrset` but maps merged result to `attrset.${value}`
   attrEnum = attrset:
     types.enum (attrNames attrset) // {
       merge = loc: defs: attrset.${mergeEqualOption loc defs};
       functor = types.enum.functor // { type = attrEnum; payload = attrset; binOp = a: b: a // b; };
     };
+
+  /* Credential handling pipeline:
+  *   # Buildtime
+  *     * User calls `mkSecret` for every credential he want to be substituted at runtime
+  *     * Credential placeholder (after `credential.finalize`) is propagated in config to `/nix/store`
+  *   # Runtime
+  *     * Systemd ensures that given path is presented (`RequiresMountsFor` and `AssertPathExists`)
+  *     * Systemd reads credential to `$CREDENTIALS_DIRECTORY/<id>`
+  *     * Script copies config files from `/nix/store` to `/tmp` and tries to substitute credentials from `$CREDENTIALS_DIRECTORY`
+  */
+  credential = rec {
+    attributeName = "_credentialFilePath";
+    type = types.addCheck types.attrs (hasAttr attributeName) // {
+      merge = loc: defs: {
+        ${attributeName} = rec {
+          id = builtins.hashString "sha256" path;
+          path = (mergeEqualOption loc defs).${attributeName};
+        };
+      };
+    };
+    # Escaped credential format: `start + runtimePath + stop`
+    start = "@";
+    stop = "@";
+    # Substitute all credentials with placeholder
+    finalize =
+      mapAttrsRecursiveCond
+        (attrs: ! type.check attrs)
+        (_: attrs:
+          if isAttrs attrs && type.check attrs
+          then (start + attrs.${attributeName}.id + stop)
+          else attrs);
+  };
 in
 {
   ###### Interface #####
@@ -20,7 +50,7 @@ in
       format = rec {
         type =
           with types;
-          let base = [ bool int str ]; in
+          let base = [ bool int str credential.type ]; in
           attrsOf (nullOr (oneOf (base ++ [ (listOf (oneOf base)) type ])))
           // { description = "nested (bool, int, string or list of bool, int or string)"; };
       };
@@ -37,7 +67,10 @@ in
         # https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#i2cp-parameters
         i2cp = {
           leaseSetType = attrEnum'
-            { "standard" = 3; "encrypted" = 5; }
+            {
+              "standard" = 3;
+              "encrypted" = 5;
+            }
             "Type of LeaseSet to be sent";
           leaseSetEncType = attrEnum'
             {
@@ -140,7 +173,7 @@ in
           freeformType = format.type;
           options = {
             host = mkOption {
-              type = types.str;
+              type = types.either types.str credential.type;
               description = mdDoc "IP address of server (on this address i2pd will send data from I2P)";
             };
             port = mkOption {
@@ -168,13 +201,34 @@ in
               description = mdDoc "Port of client tunnel (on this port i2pd will receive data)";
             };
             destination = mkOption {
-              type = types.str;
+              type = types.either types.str credential.type;
               description = mdDoc "Remote endpoint, I2P hostname or b32.i2p address";
             };
             inherit (templates) signaturetype;
           } // templates.i2cp;
         });
         default = { };
+      };
+
+      # Auxilary function
+      mkSecret = mkOption {
+        type = types.anything // { description = "Function that takes absolute path to runtime credential"; };
+        readOnly = true;
+        default = path:
+          if types.path.check path
+          then { "${credential.attributeName}" = path; }
+          else throw "Argument is not of type `lib.types.path`";
+        description = mdDoc ''
+          Pass content of file at runtime to any free-formed option.
+          Files are being read by `systemd` daemon so no explicit file permissions configuration necessary.
+          Uses `systemd.system-credentials(7)` logic.
+        '';
+        example =
+          ''
+            {
+              outTunnels."example".destination = with config.services.i2pd; mkSecret "/run/secrets/example-tunnel-destination";
+            }
+          '';
       };
     };
 
@@ -261,24 +315,74 @@ in
             sleep 2
             [ -z "$(cat /build/check-output)" ] && (cp ${configPath} $out; exit 0) || exit 1
           '';
+
+      # List of all provided credentials: `[ { id = ...; path = ...; } ... ]`
+      credentials =
+        let
+          scan = attrs:
+            forEach
+              (collect (credential.type.check) attrs)
+              (getAttr credential.attributeName);
+        in
+        concatMap scan [ cfg.config cfg.inTunnels cfg.outTunnels ];
+
     in
     mkIf cfg.enable {
       systemd.services.i2pd = {
         description = "Minimal I2P router";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        # Ensure all credential files are presented
+        unitConfig = {
+          AssertPathExists = map (getAttr "path") credentials;
+          RequiresMountsFor = map (getAttr "path") credentials;
+        };
+
         serviceConfig = {
+          # Dynamic user
           User = "i2pd-dyn";
           DynamicUser = true;
           StateDirectory = [ "i2pd" ];
+
+          # Load credentials
+          LoadCredential = forEach credentials (cred: "${cred.id}:${cred.path}");
+          ExecStartPre =
+            "${pkgs.writeShellScriptBin "i2pd-load-credentials"
+              ''
+                set -e -o errexit -o pipefail -o nounset -o errtrace
+                ids=($(ls "$CREDENTIALS_DIRECTORY"))
+                # For every cli argument
+                for arg in $@; do
+                  # Split argument at "=", assign first part to `out` and second part to `in`
+                  arg=(${"$"}{arg//=/ }); out="${"$"}{arg[0]}"; in="${"$"}{arg[1]}"
+                  # Clone file, assign permissions
+                  cp "$in" "$out"; chmod u=rw,g=,o= "$out"
+                  # Try substitute all known credentials
+                  for id in "${"$"}{ids[@]}"; do
+                    ${pkgs.replace-secret}/bin/replace-secret ${credential.start}"$id"${credential.stop} "$CREDENTIALS_DIRECTORY/$id" "$out"
+                  done
+                done
+              ''
+              }/bin/i2pd-load-credentials ${escapeShellArgs [
+                ("%T/conf=" + # "%T" is temporary directory (usually `/tmp`)
+                  validate.config
+                    (format.config.generate "i2pd.conf" (credential.finalize cfg.config)))
+                ("%T/tunconf=" +
+                  format.tunnels.generate "i2pd-tunnels.conf"
+                    (mapAttrs'
+                      (k: v: nameValuePair "out-${k}" (v // { "type" = "client"; }))
+                      (credential.finalize cfg.outTunnels)
+                    // mapAttrs'
+                      (k: v: nameValuePair "in-${k}" (v // { "type" = "server"; }))
+                      (credential.finalize cfg.inTunnels)))
+              ]
+            }";
+
           ExecStart = "${cfg.package}/bin/i2pd ${
             cli.toGNUCommandLineShell { } {
-              "datadir" =  "%S/i2pd"; # Must be unescaped. "%S" is systemd state directory (usually `/var/lib`)
-              "conf" = validate.config
-                (format.config.generate "i2pd.conf" cfg.config);
-              "tunconf" = format.tunnels.generate "i2pd-tunnels.conf"
-                (mapAttrs' (k: v: nameValuePair "out-${k}" (v // { "type" = "client"; })) cfg.outTunnels
-                  // mapAttrs' (k: v: nameValuePair "in-${k}" (v // { "type" = "server"; })) cfg.inTunnels);
+              "datadir" = "%S/i2pd"; # "%S" is state directory (usually `/var/lib`)
+              "conf"    = "%T/conf";
+              "tunconf" = "%T/tunconf";
             }}";
           ## Auto restart
           Restart = if cfg.autoRestart then "on-failure" else "no";
