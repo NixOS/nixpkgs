@@ -107,7 +107,7 @@ let
 
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
-    '' + lib.optionalString (deleteVendor == true) ''
+    '' + lib.optionalString deleteVendor ''
       if [ ! -d vendor ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -174,7 +174,7 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED;
+    inherit CGO_ENABLED enableParallelBuilding;
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -312,8 +312,6 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go go-modules vendorSha256 vendorHash; };
-
-    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information
