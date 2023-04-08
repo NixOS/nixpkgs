@@ -28721,6 +28721,8 @@ with pkgs;
 
   acorn = callPackage ../applications/networking/cluster/acorn { };
 
+  activityWatch = callPackage ../applications/misc/activitywatch { };
+
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
   adl = callPackage ../applications/video/adl { };
