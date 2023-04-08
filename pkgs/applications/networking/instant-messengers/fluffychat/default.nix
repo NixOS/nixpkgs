@@ -13,15 +13,14 @@
 }:
 
 let
-  version = "1.10.0";
   # map of nix platform -> expected url platform
   platformMap = {
     x86_64-linux = "linux-x86";
     aarch64-linux = "linux-arm64";
   };
 in
-stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation rec {
+  version = "1.10.0";
   name = "fluffychat";
 
   src = fetchzip {
