@@ -5,12 +5,12 @@
 , icu
 , stdenv
 , openssl
+, coreutils
 }:
 let
   inherit (stdenv.hostPlatform) system;
 
-  version = "1.25.0";
-
+  version = "1.25.4";
 
   vsixInfo =
     let
@@ -27,7 +27,7 @@ let
         ".debugger/arm64/vsdbg"
       ];
       omniSharpBins = [
-        ".omnisharp/1.39.0-net6.0/OmniSharp"
+        ".omnisharp/1.39.4-net6.0/OmniSharp"
       ];
       razorBins = [
         ".razor/createdump"
@@ -37,22 +37,22 @@ let
       {
         x86_64-linux = {
           url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-linux-x64.vsix";
-          sha256 = "1cqqjg8q6v56b19aabs9w1kxly457mpm0akbn5mis9nd1mrdmydl";
+          sha256 = "08k0wxyj8wz8npw1yqrkdpbvwbnrdnsngdkrd2p5ayn3v608ifc2";
           binaries = linuxDebuggerBins ++ omniSharpBins ++ razorBins;
         };
         aarch64-linux = {
           url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-linux-arm64.vsix";
-          sha256 = "0nsjgrb7y4w71w1gnrf50ifwbmjidi4vrw2fyfmch7lgjl8ilnhd";
-          binaries = linuxDebuggerBins ++ omniSharpBins; # Linux aarch64 version has no Razor Language Server
+          sha256 = "09r2d463dk35905f2c3msqzxa7ylcf0ynhbp3n6d12y3x1200pr2";
+          binaries = linuxDebuggerBins ++ omniSharpBins ++ razorBins;
         };
         x86_64-darwin = {
           url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-darwin-x64.vsix";
-          sha256 = "01qn398vmjfi9imzlmzm0qi7y2h214wx6a8la088lfkhyj3gfjh8";
+          sha256 = "0mp550kq33zwmlvrhymwnixl4has62imw3ia5z7a01q7mp0w9wpn";
           binaries = darwinX86DebuggerBins ++ omniSharpBins ++ razorBins;
         };
         aarch64-darwin = {
           url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-darwin-arm64.vsix";
-          sha256 = "020j451innh7jzarbv1ij57rfmqnlngdxaw6wdgp8sjkgbylr634";
+          sha256 = "08406xz2raal8f10bmnkz1mwdfprsbkjxzc01v0i4sax1hr2a2yl";
           binaries = darwinAarch64DebuggerBins ++ darwinX86DebuggerBins ++ omniSharpBins ++ razorBins;
         };
       }.${system} or (throw "Unsupported system: ${system}");
@@ -87,6 +87,11 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     # However, this really would better be fixed upstream.
     sed -i \
       -E -e 's/(this\._pipePath=[a-zA-Z0-9_]+\.join\()([a-zA-Z0-9_]+\.getExtensionPath\(\)[^,]*,)/\1require("os").tmpdir(), "'"$ext_unique_id"'"\+/g' \
+      "$PWD/dist/extension.js"
+
+    # Fix reference to uname
+    sed -i \
+      -E -e 's_uname -m_${coreutils}/bin/uname -m_g' \
       "$PWD/dist/extension.js"
 
     patchelf_add_icu_as_needed() {
