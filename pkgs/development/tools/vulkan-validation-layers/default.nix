@@ -30,13 +30,12 @@ stdenv.mkDerivation rec {
   outputs = ["out" "headers"];
   outputInclude = "headers";
 
-  src = (assert (lib.all (pkg: pkg.version == version) [vulkan-headers glslang spirv-tools spirv-headers]);
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "Vulkan-ValidationLayers";
-      rev = "sdk-${version}";
-      hash = "sha256-viVceH8qFz6Cl/RlMMWZnMIdzULELlnIvtPZ87ySs2M=";
-    });
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "Vulkan-ValidationLayers";
+    rev = "sdk-${version}";
+    hash = "sha256-viVceH8qFz6Cl/RlMMWZnMIdzULELlnIvtPZ87ySs2M=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -85,5 +84,6 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
+    broken = (lib.all (pkg: pkg.version != version) [vulkan-headers glslang spirv-tools spirv-headers]);
   };
 }

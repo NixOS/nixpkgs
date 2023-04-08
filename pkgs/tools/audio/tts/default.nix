@@ -1,8 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , espeak-ng
+, tts
 }:
 
 let
@@ -114,6 +114,10 @@ python.pkgs.buildPythonApplication rec {
       ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
     )
   '';
+
+  # tests get stuck when run in nixpkgs-review, tested in passthru
+  doCheck = false;
+  passthru.tests.pytest = tts.overridePythonAttrs (_: { doCheck = true; });
 
   nativeCheckInputs = with python.pkgs; [
     espeak-ng

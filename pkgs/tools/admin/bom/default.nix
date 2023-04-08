@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "bom";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HgBpEIUaeVCMkbu1KtBh0LGZQGFLyj3rF0cYDt8vDRk=";
+    sha256 = "sha256-/a+0kQn2m5JFxhlgs1pUeyWwwqVFrRbYCyUfcLsNGz8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorSha256 = "sha256-m5IK/+mbwGSX8tQUMED8+H52o89QOJk8mhUXumZm+wo=";
+  vendorSha256 = "sha256-+dFHVIE3YFQVgYwEDtUWJAfHSnBZox8qejJtuIMPS2I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
