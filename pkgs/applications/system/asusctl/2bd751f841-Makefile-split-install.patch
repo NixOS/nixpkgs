@@ -1,0 +1,47 @@
+From 2bd751f8414f04f044dd504d4f27690c8f2f987e Mon Sep 17 00:00:00 2001
+From: Cole Mickens <cole.mickens@gmail.com>
+Date: Sun, 9 Apr 2023 18:44:55 -0500
+Subject: [PATCH] Makefile: split install into install-{program,data}
+
+---
+ Makefile | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 316ee13..ecdb364 100644
+--- a/Makefile
++++ b/Makefile
+@@ -38,16 +38,18 @@ clean:
+ distclean:
+ 	rm -rf .cargo vendor vendor.tar.xz
+ 
+-install:
++install-program:
+ 	$(INSTALL_PROGRAM) "./target/release/$(BIN_ROG)" "$(DESTDIR)$(bindir)/$(BIN_ROG)"
+-	$(INSTALL_DATA) "./rog-control-center/data/$(BIN_ROG).desktop" "$(DESTDIR)$(datarootdir)/applications/$(BIN_ROG).desktop"
+-	$(INSTALL_DATA) "./rog-control-center/data/$(BIN_ROG).png" "$(DESTDIR)$(datarootdir)/icons/hicolor/512x512/apps/$(BIN_ROG).png"
+-	cd rog-aura/data/layouts && find . -type f -name "*.ron" -exec $(INSTALL_DATA) "{}" "$(DESTDIR)$(datarootdir)/rog-gui/layouts/{}" \;
+ 
+ 	$(INSTALL_PROGRAM) "./target/release/$(BIN_C)" "$(DESTDIR)$(bindir)/$(BIN_C)"
+ 	$(INSTALL_PROGRAM) "./target/release/$(BIN_D)" "$(DESTDIR)$(bindir)/$(BIN_D)"
+ 	$(INSTALL_PROGRAM) "./target/release/$(BIN_U)" "$(DESTDIR)$(bindir)/$(BIN_U)"
+ 
++install-data:
++	$(INSTALL_DATA) "./rog-control-center/data/$(BIN_ROG).desktop" "$(DESTDIR)$(datarootdir)/applications/$(BIN_ROG).desktop"
++	$(INSTALL_DATA) "./rog-control-center/data/$(BIN_ROG).png" "$(DESTDIR)$(datarootdir)/icons/hicolor/512x512/apps/$(BIN_ROG).png"
++	cd rog-aura/data/layouts && find . -type f -name "*.ron" -exec $(INSTALL_DATA) "{}" "$(DESTDIR)$(datarootdir)/rog-gui/layouts/{}" \;
++
+ 	$(INSTALL_DATA) "./data/$(BIN_D).rules" "$(DESTDIR)$(libdir)/udev/rules.d/99-$(BIN_D).rules"
+ 	$(INSTALL_DATA) "./rog-aura/data/$(LEDCFG)" "$(DESTDIR)$(datarootdir)/asusd/$(LEDCFG)"
+ 	$(INSTALL_DATA) "./data/$(BIN_D).conf" "$(DESTDIR)$(datarootdir)/dbus-1/system.d/$(BIN_D).conf"
+@@ -71,6 +73,8 @@ install:
+ 
+ 	cd rog-anime/data && find "./anime" -type f -exec $(INSTALL_DATA) "{}" "$(DESTDIR)$(datarootdir)/asusd/{}" \;
+ 
++install: install-program install-data
++
+ uninstall:
+ 	rm -f "$(DESTDIR)$(bindir)/$(BIN_ROG)"
+ 	rm -r "$(DESTDIR)$(datarootdir)/applications/$(BIN_ROG).desktop"
+-- 
+GitLab
