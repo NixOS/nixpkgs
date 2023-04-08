@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     install -Dm555 eigenmath "$out/bin/eigenmath"
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib;{
     description = "Computer algebra system written in C";
