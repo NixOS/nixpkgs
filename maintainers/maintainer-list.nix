@@ -6661,6 +6661,12 @@
       fingerprint = "6BD3 7248 30BD 941E 9180  C1A3 3A33 FA4C 82ED 674F";
     }];
   };
+  ivanmoreau = {
+    email = "Iván Molina Rebolledo";
+    github = "ivanmoreau";
+    githubId = 10843250;
+    name = "ivan@ivmoreau.com";
+  };
   ivan-timokhin = {
     email = "nixpkgs@ivan.timokhin.name";
     name = "Ivan Timokhin";
