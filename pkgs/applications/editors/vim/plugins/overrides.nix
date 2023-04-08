@@ -706,7 +706,7 @@ self: super: {
   });
 
   noice-nvim = super.noice-nvim.overrideAttrs(old: {
-    dependencies = with self; [ nui-nvim nvim-notify ];
+    dependencies = with self; [ nui-nvim ];
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
