@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fnott";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
-    license = licenses.mit;
+    license = with licenses; [ mit zlib ];
     maintainers = with maintainers; [ polykernel ];
     platforms = platforms.linux;
   };
