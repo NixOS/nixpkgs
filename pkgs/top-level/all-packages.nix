@@ -28366,6 +28366,8 @@ with pkgs;
 
   sweet = callPackage ../data/themes/sweet { };
 
+  sweet-nova = callPackage ../data/themes/sweet-nova { };
+
   shared-mime-info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
