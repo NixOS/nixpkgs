@@ -19,10 +19,7 @@
 #
 # if vendorHash is null, then we won't fetch any dependencies and
 # rely on the vendor folder within the source.
-, vendorHash ? "_unset"
-# same as vendorHash, but outputHashAlgo is hardcoded to sha256
-# so regular base32 sha256 hashes work
-, vendorSha256 ? "_unset"
+, vendorHash ? args'.vendorSha256 or (throw "buildGoModule: vendorHash is missing")
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
 # Whether to fetch (go mod download) and proxy the vendor directory.
@@ -52,23 +49,12 @@
 , ... }@args':
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
-assert (vendorSha256 == "_unset" && vendorHash == "_unset") -> throw "either `vendorHash` or `vendorSha256` is required";
-assert (vendorSha256 != "_unset" && vendorHash != "_unset") -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
+assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
 
 let
-  hasAnyVendorHash = (vendorSha256 != null && vendorSha256 != "_unset") || (vendorHash != null && vendorHash != "_unset");
-  vendorHashType =
-    if hasAnyVendorHash then
-      if vendorSha256 != null && vendorSha256 != "_unset" then
-        "sha256"
-      else
-        "sri"
-    else
-      null;
-
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
 
-  go-modules = if hasAnyVendorHash then stdenv.mkDerivation (let modArgs = {
+  go-modules = if (vendorHash != null) then stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
 
@@ -114,7 +100,7 @@ let
       fi
     '' + ''
       if [ -d vendor ]; then
-        echo "vendor folder exists, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        echo "vendor folder exists, please set 'vendorHash = null;' in your expression"
         exit 10
       fi
 
@@ -144,7 +130,7 @@ let
     ''}
 
       if ! [ "$(ls -A $out)" ]; then
-        echo "vendor folder is empty, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        echo "vendor folder is empty, please set 'vendorHash = null;' in your expression"
         exit 10
       fi
 
@@ -155,14 +141,9 @@ let
   }; in modArgs // (
       {
         outputHashMode = "recursive";
-      } // (if (vendorHashType == "sha256") then {
-        outputHashAlgo = "sha256";
-        outputHash = vendorSha256;
-      } else {
         outputHash = vendorHash;
-      }) // (lib.optionalAttrs (vendorHashType == "sri" && vendorHash == "") {
-        outputHashAlgo = "sha256";
-      })
+        outputHashAlgo = if args' ? vendorSha256 || vendorHash == "" then "sha256" else null;
+      }
   ) // overrideModAttrs modArgs) else "";
 
   package = stdenv.mkDerivation (args // {
@@ -182,7 +163,7 @@ let
       export GOPROXY=off
       export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString hasAnyVendorHash ''
+    '' + lib.optionalString (vendorHash != null) ''
       ${if proxyVendor then ''
         export GOPROXY=file://${go-modules}
       '' else ''
@@ -309,7 +290,7 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules vendorSha256 vendorHash; };
+    passthru = passthru // { inherit go go-modules vendorHash; } // { inherit (args') vendorSha256; };
 
     meta = {
       # Add default meta information
