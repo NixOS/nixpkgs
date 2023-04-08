@@ -42,10 +42,10 @@ backendStdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWITH_CUDA=ON"
-    "-DWITH_NVML=ON"
-    "-DCUDA_LIB=${cuda_cudart}/lib/stubs/libcuda.so"
     "-DCUDA_ARCH=${CUDA_ARCH}"
+    "-DCUDA_LIB=${cuda_cudart}/lib/stubs/libcuda.so"
+    "-DLIBNVRTC_LIBRARY_DIR=${cuda_nvrtc}/lib"
+    "-DCUDA_NVRTC_LIB=${cuda_nvrtc}/lib/libnvrtc.so"
   ];
 
   installPhase = ''
