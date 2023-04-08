@@ -1,9 +1,12 @@
 { lib
-, python3
+, buildPythonPackage
 , fetchFromGitHub
+, metakernel
+, pytestCheckHook
+, yasi
 }:
 
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "calysto-scheme";
   version = "1.4.7";
   format = "setuptools";
@@ -15,9 +18,13 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-5InImTbucggjf/tl8K31ZtLrwu5hqvggl7sYb0eqIEg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     yasi
     metakernel
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "calysto_scheme" ];
