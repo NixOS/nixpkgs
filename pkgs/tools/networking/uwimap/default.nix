@@ -9,12 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "0a2a00hbakh0640r2wdpnwr8789z59wnk7rfsihh3j0vbhmmmqak";
   };
 
-  makeFlags = [ (if stdenv.isDarwin
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    (if stdenv.isDarwin
     then "osx"
-    else "lnp") ]  # Linux with PAM modules;
-    # -fPIC is required to compile php with imap on x86_64 systems
-    ++ lib.optional stdenv.isx86_64 "EXTRACFLAGS=-fPIC"
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "CC=${stdenv.hostPlatform.config}-gcc" "RANLIB=${stdenv.hostPlatform.config}-ranlib" ];
+    else "lnp") # Linux with PAM modules;
+  ] ++ lib.optional stdenv.isx86_64 "EXTRACFLAGS=-fPIC"; # -fPIC is required to compile php with imap on x86_64 systems
+
 
   hardeningDisable = [ "format" ];
 
@@ -32,6 +34,10 @@ stdenv.mkDerivation rec {
     sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
     sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
     sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${lib.getLib openssl}/lib,'
+  '';
+
+  preConfigure = ''
+    makeFlagsArray+=("ARRC=${stdenv.cc.targetPrefix}ar rc")
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
@@ -55,11 +61,4 @@ stdenv.mkDerivation rec {
   passthru = {
     withSSL = true;
   };
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-  # This is set here to prevent rebuilds on native compilation.
-  # Configure phase is a no-op there, because this package doesn't use ./configure scripts.
-  configurePhase = ''
-    echo "Cross-compilation, injecting make flags"
-    makeFlagsArray+=("ARRC=${stdenv.hostPlatform.config}-ar rc")
-  '';
 }
