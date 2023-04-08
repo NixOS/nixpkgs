@@ -1,11 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# propagates
 , chardet
+, regex
+, packaging
+
+# optionals
 , faust-cchardet
 , pandas
-, regex
 , tabview
+# TODO: , wilderness
+
+# tests
 , python
 , pytestCheckHook
 }:
@@ -24,15 +32,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     chardet
-    faust-cchardet
-    pandas
     regex
-    tabview
+    packaging
   ];
+
+  passthru.optional-dependencies = {
+    full = [
+      faust-cchardet
+      pandas
+      tabview
+      # TODO: wilderness
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.full;
 
   pythonImportsCheck = [
     "clevercsv"
