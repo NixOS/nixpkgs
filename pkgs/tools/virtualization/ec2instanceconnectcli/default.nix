@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ec2instanceconnectcli";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VaCyCnEhSx1I3bNo57p0IXf92+tO1tT7KSUXzO1IyIU=";
+    sha256 = "sha256-/U59a6od0JI27VHX+Bvue/7tQy+iwU+g8yt9/GgdoH4=";
   };
 
   propagatedBuildInputs = [ boto3 cryptography ];
