@@ -90,5 +90,6 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     license = lib.licenses.bsd2;
     inherit (edk2.meta) platforms;
     maintainers = [ lib.maintainers.raitobezarius ];
+    broken = stdenv.isx86_64 && stdenv.isDarwin;
   };
 })
