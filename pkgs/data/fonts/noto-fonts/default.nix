@@ -24,8 +24,6 @@ let
     Google’s answer to tofu. The name noto is to convey the idea that
     Google’s goal is to see “no more tofu”.  Noto has multiple styles and
     weights, and freely available to all.
-
-    This package also includes the Arimo, Cousine, and Tinos fonts.
   '';
 in
 rec {
@@ -37,13 +35,13 @@ rec {
     }:
     stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "20201206-phase3";
+      version = "23.4.1";
 
       src = fetchFromGitHub {
-        owner = "googlefonts";
-        repo = "noto-fonts";
-        rev = "v${version}";
-        hash = "sha256-x60RvCRFLoGe0CNvswROnDkIsUFbWH+/laN8q2qkUPk=";
+        owner = "notofonts";
+        repo = "notofonts.github.io";
+        rev = "noto-monthly-release-${version}";
+        hash = "sha256-hiBbhcwktacuoYJnZcsh7Aej5QIrBNkqrel2NhjNjCU=";
       };
 
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
@@ -56,16 +54,10 @@ rec {
         # TODO: install OpenType, variable versions?
         local out_ttf=$out/share/fonts/truetype/noto
       '' + (if _variants == [ ] then ''
-        install -m444 -Dt $out_ttf archive/unhinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf archive/hinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf unhinted/*/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf hinted/*/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf fonts/*/hinted/ttf/*-${weights}.ttf
       '' else ''
         for variant in $_variants; do
-          install -m444 -Dt $out_ttf archive/unhinted/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf archive/hinted/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf unhinted/*/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf hinted/*/$variant/*-${weights}.ttf
+          install -m444 -Dt $out_ttf fonts/$variant/hinted/ttf/*-${weights}.ttf
         done
       '');
 
@@ -75,7 +67,7 @@ rec {
         inherit longDescription;
         license = licenses.ofl;
         platforms = platforms.all;
-        maintainers = with maintainers; [ mathnerd314 emily ];
+        maintainers = with maintainers; [ mathnerd314 emily jopejoe1 ];
       };
     };
 
@@ -129,8 +121,6 @@ rec {
     variants = [
       "Noto Sans"
       "Noto Serif"
-      "Noto Sans Display"
-      "Noto Serif Display"
       "Noto Sans Mono"
       "Noto Music"
       "Noto Sans Symbols"
