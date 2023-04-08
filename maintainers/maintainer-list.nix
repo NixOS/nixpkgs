@@ -3679,6 +3679,12 @@
     githubId = 706758;
     name = "Christian Gerbrandt";
   };
+  derdennisop = {
+    email = "dennish@wuitz.de";
+    github = "derdennisop";
+    githubId = 52411861;
+    name = "Dennis";
+  };
   derekcollison = {
     email = "derek@nats.io";
     github = "derekcollison";

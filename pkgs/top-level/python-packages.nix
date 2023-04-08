@@ -2687,6 +2687,8 @@ self: super: with self; {
 
   django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
 
+  django-payments = callPackage ../development/python-modules/django-payments { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
@@ -5968,6 +5970,8 @@ self: super: with self; {
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
   meraki = callPackage ../development/python-modules/meraki { };
+
+  mercadopago = callPackage ../development/python-modules/mercadopago { };
 
   mercantile = callPackage ../development/python-modules/mercantile { };
 
