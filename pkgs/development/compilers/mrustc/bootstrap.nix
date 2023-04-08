@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     # Use shared mrustc/minicargo/llvm instead of rebuilding them
     "MRUSTC=${mrustc}/bin/mrustc"
-    "MINICARGO=${mrustc-minicargo}/bin/minicargo"
+    #"MINICARGO=${mrustc-minicargo}/bin/minicargo"  # FIXME: uncomment this so minicargo doesn't get rebuilt
     "LLVM_CONFIG=${llvm_12.dev}/bin/llvm-config"
     "RUSTC_TARGET=${rust.toRustTarget stdenv.targetPlatform}"
   ];
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     export OUTDIR_SUF=-${rustcVersion}
     export RUSTC_VERSION=${rustcVersion}
     export MRUSTC_TARGET_VER=${mrustcTargetVersion}
+    export MRUSTC_PATH=${mrustc}/bin/mrustc
 
     echo minicargo.mk: libs
     make -f minicargo.mk "''${flagsArray[@]}" LIBS
