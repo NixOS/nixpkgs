@@ -91,18 +91,6 @@ super: lib.trivial.pipe super [
     ];
   }))
 
-  (patchExtension "shell-volume-mixer@derhofbauer.at" (old: {
-    patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/shell-volume-mixer_at_derhofbauer.at.patch;
-        inherit pulseaudio;
-        inherit python3;
-      })
-    ];
-
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
-  }))
-
   (patchExtension "tophat@fflewddur.github.io" (old: {
     patches = [
       (substituteAll {
