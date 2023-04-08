@@ -12,9 +12,9 @@ buildGoModule rec {
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "loki";
+    rev = "v${version}";
     hash = "sha256-RPa3G1zrWzunyQOdNUQ/dZGJ/7sh2OGvoEqeYaT7Qv0=";
   };
 
@@ -48,13 +48,10 @@ buildGoModule rec {
     "-X ${t}.Revision=unknown"
   ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Like Prometheus, but for logs";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     maintainers = with maintainers; [ willibutz globin mmahut indeednotjames ];
-    platforms = platforms.unix;
   };
 }
