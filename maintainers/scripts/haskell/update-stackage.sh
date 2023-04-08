@@ -40,6 +40,7 @@ sed -r \
     -e 's|^constraints:||' \
     -e 's|^ +|  - |' \
     -e 's|,$||' \
+    -e '/^with-compiler:/d' \
     -e '/installed$/d' \
     -e '/^$/d' \
     < "${tmpfile}" | sort --ignore-case >"${tmpfile_new}"
