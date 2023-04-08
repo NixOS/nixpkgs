@@ -36554,6 +36554,8 @@ with pkgs;
 
   typespeed = callPackage ../games/typespeed { };
 
+  typescript-formatter = callPackage ../development/tools/typescript-formatter { };
+
   uchess = callPackage ../games/uchess { };
 
   ufoai = callPackage ../games/ufoai { };
