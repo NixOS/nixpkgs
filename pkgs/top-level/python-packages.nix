@@ -4668,8 +4668,6 @@ self: super: with self; {
     inherit (pkgs) igraph;
   };
 
-  ihatemoney = callPackage ../development/python-modules/ihatemoney { };
-
   ijson = callPackage ../development/python-modules/ijson { };
 
   ilua = callPackage ../development/python-modules/ilua { };
