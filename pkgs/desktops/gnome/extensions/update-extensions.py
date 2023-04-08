@@ -19,6 +19,7 @@ supported_versions = {
     "41": "41",
     "42": "42",
     "43": "43",
+    "44": "44",
 }
 
 # Some type alias to increase readability of complex compound types
