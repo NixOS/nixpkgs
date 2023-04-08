@@ -7,7 +7,8 @@
 
 let
   inherit (llvmPackages) stdenv;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "odin";
   version = "0.13.0";
 
@@ -52,6 +53,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://odin-lang.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ luc65r ];
-    platforms = platforms.x86_64;
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }
