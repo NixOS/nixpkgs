@@ -2,7 +2,7 @@
 , buildPythonPackage
 , cairocffi
 , cython
-, fetchFromGitHub
+, fetchPypi
 , igraph
 , leidenalg
 , pandas
@@ -20,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.8.7";
+  version = "0.8.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "jboynyc";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BBndY+3leJBxiImuyRL7gMD5eocE4i96+97I9hDEwec=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-rjXEiaPYctrONIZz1Dd5OSDw5z8D2FPXi5TneKizFUQ=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +46,6 @@ buildPythonPackage rec {
     toolz
     tqdm
     wasabi
-  ];
-
-  # Deselect test of experimental feature that fails due to having an
-  # additional dependency.
-  disabledTests = [
-    "test_context"
   ];
 
   nativeCheckInputs = [
