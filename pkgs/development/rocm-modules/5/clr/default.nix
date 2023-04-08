@@ -147,8 +147,11 @@ in stdenv.mkDerivation (finalAttrs: {
     };
 
     impureTests = {
-      clr-icd = callPackage ./test.nix {
+      rocm-smi = callPackage ./test-rocm-smi.nix {
         inherit rocm-smi;
+        clr = finalAttrs.finalPackage;
+      };
+      opencl-example = callPackage ./test-opencl-example.nix {
         clr = finalAttrs.finalPackage;
       };
     };
