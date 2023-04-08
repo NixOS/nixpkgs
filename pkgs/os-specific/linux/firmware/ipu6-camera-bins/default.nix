@@ -1,6 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, autoPatchelfHook
+, expat
+, zlib
 
 # Pick one of
 # - ipu6 (Tiger Lake)
@@ -10,16 +13,23 @@
 
 stdenv.mkDerivation {
   pname = "${ipuVersion}-camera-bin";
-  version = "unstable-2022-11-12";
+  version = "unstable-2023-02-08";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-bins";
-    rev = "4694ba7ee51652d29ef41e7fde846b83a2a1c53b";
-    hash = "sha256-XPT3dbV6Kl1/TEeiQESF4Q4s95hjtiv4VLlqlahQXqE=";
+    rev = "276859fc6de83918a32727d676985ec40f31af2b";
+    hash = "sha256-QnedM2UBbGyd2wIF762Mi+VkDZYtC6MifK4XGGxlUzw=";
   };
 
   sourceRoot = "source/${ipuVersion}";
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    stdenv.cc.cc.lib
+    expat
+    zlib
+  ];
 
   installPhase = ''
     runHook preInstall

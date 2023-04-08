@@ -1,4 +1,4 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib, stdenv
+{ haskellPackages, mkDerivation, fetchFromGitHub, fetchpatch, lib, stdenv
 # the following are non-haskell dependencies
 , makeWrapper, which, maude, graphviz, glibcLocales
 }:
@@ -66,6 +66,14 @@ in
 mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
   isExecutable = true;
+
+  patches = [
+    # Backport of https://github.com/tamarin-prover/tamarin-prover/pull/536 to 1.6.1
+    (fetchpatch {
+      url = "https://github.com/tamarin-prover/tamarin-prover/commit/95fbace0c5cbea57b5f320f6bb4d0387a4beab8d.patch";
+      sha256 = "sha256-Wjf7C208kcskEN1op//HQZnhoZopKQS42JvE8kV5NhI=";
+    })
+  ];
 
   # strip out unneeded deps manually
   doHaddock = false;
