@@ -14834,13 +14834,13 @@ with pkgs;
   gcc_latest = gcc12;
 
   # Use the same GCC version as the one from stdenv by default
-  gfortran = wrapCC (gcc.cc.override {
+  gfortran = wrapCCWith { grossHackForStagingNext = true; cc = (gcc.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
     langC = false;
     profiledCompiler = false;
-  });
+  }); };
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
