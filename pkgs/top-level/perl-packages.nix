@@ -9015,6 +9015,9 @@ let
       url = "mirror://cpan/authors/id/K/KI/KIMRYAN/File-BaseDir-0.08.tar.gz";
       hash = "sha256-wGX80+LyKudpk3vMlxuR+AKU1QCfrBQL+6g799NTBeM=";
     };
+    nativeBuildInputs =
+      # Override default intepreter perl.mini, which do not support dynamic linking
+      lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.perl;
     configurePhase = ''
       runHook preConfigure
       perl Build.PL PREFIX="$out" prefix="$out"
