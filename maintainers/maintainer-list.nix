@@ -3822,6 +3822,18 @@
     githubId = 6884440;
     name = "Ding Xiang Fei";
   };
+  d-xo = {
+    email = "hi@d-xo.org";
+    github = "d-xo";
+    githubId = 6689924;
+    name = "David Terry";
+  };
+  dylanmtaylor = {
+    email = "dylan@dylanmtaylor.com";
+    github = "dylamtaylor";
+    githubId = 277927;
+    name = "Dylan Taylor";
+  };
   dysinger = {
     email = "tim@dysinger.net";
     github = "dysinger";
