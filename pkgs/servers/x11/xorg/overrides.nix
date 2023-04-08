@@ -851,6 +851,11 @@ self: super:
             url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/0ba6d8c37071131a49790243cdac55392ecf71ec.diff";
             sha256 = "sha256-/+IuGk09OYVEIB/Y+DTKf7kfHyukEFX/6u1FDIGJieY=";
           })
+        ] ++ [
+          (fpgit "fb51d5dd53b02422ea3b6f36bd017488d41f472d"
+            "TyScXYJE+zHOovDrSiTUWuWg8nbCt/IIkNEPVRst/0Q="
+            "CVE-2023-1393"
+          )
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
